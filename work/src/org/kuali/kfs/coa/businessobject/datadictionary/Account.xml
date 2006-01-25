@@ -96,7 +96,7 @@
 								sourceClassName="org.kuali.module.chart.bo.Org" 
 								sourceAttributeName="organizationCode" />
 
-			<attributeReference name="accountTypeCode" 
+			<attributeReference name="accountType.accountTypeCode" 
 								sourceClassName="org.kuali.module.chart.bo.AcctType" 
 								sourceAttributeName="accountTypeCode">
 				<label>Account Type Code</label>
@@ -147,7 +147,7 @@
 				<description>Financial Higher Education Function Code</description>
 			</attribute>
 			
-			<attributeReference name="accountRestrictedStatusCode" 
+			<attributeReference name="accountRestrictedStatus.accountRestrictedStatusCode" 
 								sourceClassName="org.kuali.module.chart.bo.RestrictedStatus" 
 								sourceAttributeName="accountRestrictedStatusCode">
 				<label>Account Restricted Status Code</label>
@@ -204,7 +204,7 @@
 				<description>Account Street Address</description>
 			</attribute>
 			
-			<attributeReference name="accountZipCode" 
+			<attributeReference name="postalZipCode.postalZipCode" 
 								sourceClassName="org.kuali.core.bo.PostalZipCode" 
 								sourceAttributeName="postalZipCode">
 				<label>Account Zip Code</label>
@@ -216,19 +216,19 @@
 			<attributeReference name="reportsToAccount.chartOfAccounts.chartOfAccountsCode" 
 								sourceClassName="org.kuali.module.chart.bo.Chart" 
 								sourceAttributeName="chartOfAccountsCode">
-				<label>Reports To Chart Of Accounts Code</label>
-				<shortLabel>RptsToChart</shortLabel>
-				<summary>Reports To Chart Of Accounts Code</summary>
-				<description>Reports To Chart Of Accounts Code</description>
+				<label>Fringe Benefit Chart Of Accounts Code</label>
+				<shortLabel>FringeChart</shortLabel>
+				<summary>Fringe Benefit Chart Of Accounts Code</summary>
+				<description>Fringe Benefit Chart Of Accounts Code</description>
 			</attributeReference>
 			
 			<attributeReference name="reportsToAccount.accountNumber" 
 								sourceClassName="org.kuali.module.chart.bo.Account" 
 								sourceAttributeName="accountNumber">
-				<label>Reports To Account Number</label>
-				<shortLabel>RptsToAcct</shortLabel>
-				<summary>Reports To Account Number</summary>
-				<description>Reports To Account Number</description>
+				<label>Fringe Benefit Account Number</label>
+				<shortLabel>FringeAcct</shortLabel>
+				<summary>Fringe Benefit Account Number</summary>
+				<description>Fringe Benefit Account Number</description>
 			</attributeReference>
 			
 			<attributeReference name="accountCreateDate" 
@@ -450,7 +450,7 @@
 				<description>Account In Financial Processing</description>
 			</attributeReference>
 			
-			<attributeReference name="budgetRecordingLevelCode" 
+			<attributeReference name="budgetRecordingLevel.code" 
 								sourceClassName="org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode" 
 								sourceAttributeName="code">
 				<label>Budget Record Level Code</label>
@@ -459,7 +459,7 @@
 				<description>Budget Record Level Code</description>
 			</attributeReference>
 			
-			<attributeReference name="accountSufficientFundsCode" 
+			<attributeReference name="sufficientFundsCode.code" 
 								sourceClassName="org.kuali.module.chart.bo.codes.SufficientFundsCode" 
 								sourceAttributeName="code">
 				<label>Account Sufficient Funds Code</label>
