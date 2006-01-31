@@ -2,7 +2,6 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 	<bean id="glScrubberStep" class="org.kuali.module.gl.batch.ScrubberStep">
-		<property name="originEntryService"><ref bean="glOriginEntryService" /></property>
 		<property name="scrubberService"><ref bean="glScrubberService" /></property>
 	</bean>
 
@@ -35,10 +34,11 @@
 		<property name="dateTimeService"><ref bean="dateTimeService" /></property>
 		<property name="offsetDefinitionService"><ref bean="offsetDefinitionService" /></property>
 		<property name="objectCodeService"><ref bean="objectCodeService" /></property>
-		<property name="chartService"><ref bean="chartService" /></property>
 		<property name="accountService"><ref bean="accountService" /></property>
 		<property name="kualiConfigurationService"><ref bean="kualiConfigurationService" /></property>
 		<property name="universityDateDao"><ref bean="universityDateDao" /></property>
+		<property name="originEntryGroupService"><ref bean="glOriginEntryGroupService" /></property>
+		<property name="persistenceService"><ref bean="persistenceService"/></property>
 	</bean>
 
 	<bean id="glPosterService" class="org.kuali.module.gl.service.impl.PosterServiceImpl">
@@ -56,6 +56,7 @@
 		<property name="posterReport"><ref bean="glPosterReport" /></property>
 		<property name="verifyTransaction"><ref bean="glVerifyTransaction" /></property>
 		<property name="originEntryService"><ref bean="glOriginEntryService" /></property>
+		<property name="originEntryGroupService"><ref bean="glOriginEntryGroupService" /></property>
 		<property name="dateTimeService"><ref bean="dateTimeService" /></property>
 		<property name="reversalDao"><ref bean="glReversalDao" /></property>
 		<property name="universityDateDao"><ref bean="universityDateDao" /></property>
@@ -73,9 +74,11 @@
 
 	<bean id="glOriginEntryService" class="org.kuali.module.gl.service.impl.OriginEntryServiceImpl">
 		<property name="originEntryDao"><ref bean="glOriginEntryDao" /></property>
+		<property name="originEntryGroupService"><ref bean="glOriginEntryGroupService" /></property>
 	</bean>
 
 	<bean id="glOriginEntryGroupService" class="org.kuali.module.gl.service.impl.OriginEntryGroupServiceImpl">
+		<property name="originEntryGroupDao"><ref bean="glOriginEntryGroupDao"/></property>
 	</bean>
 		
 	<bean id="glNightlyOutService" class="org.kuali.module.gl.service.impl.NightlyOutServiceImpl">
@@ -147,6 +150,10 @@
 		<property name="jcdAlias"><value>dataSource</value></property>
 	</bean>
 
+	<bean id="glOriginEntryGroupDao" class="org.kuali.module.gl.dao.ojb.OriginEntryGroupDaoOjb">
+		<property name="jcdAlias"><value>dataSource</value></property>
+	</bean>
+
 	<bean id="glBalanceDao" class="org.kuali.module.gl.dao.ojb.BalanceDaoOjb">
 		<property name="jcdAlias"><value>dataSource</value></property>
 	</bean>
@@ -162,4 +169,9 @@
 	<bean id="glReversalDao" class="org.kuali.module.gl.dao.ojb.ReversalDaoOjb">
 		<property name="jcdAlias"><value>dataSource</value></property>
 	</bean>
+<!-- Can't run project right now, so this is commented out.  When I can run it, I'll uncomment it.
+   <bean id="glUnitTestSqlDao" class="org.kuali.module.gl.dao.jdbc.UnitTestSqlDaoJdbc">
+      <property name="dataSource"><ref bean="dataSource"/></property>
+   </bean>
+-->
 </beans>
