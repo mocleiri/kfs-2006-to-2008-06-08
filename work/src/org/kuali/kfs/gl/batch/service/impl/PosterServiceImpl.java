@@ -30,14 +30,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.AccountingPeriod;
+import org.kuali.module.chart.bo.IcrAutomatedEntry;
+import org.kuali.module.chart.bo.IndirectCostRecoveryThreshold;
 import org.kuali.module.chart.dao.IcrAutomatedEntryDao;
 import org.kuali.module.chart.dao.IndirectCostRecoveryThresholdDao;
 import org.kuali.module.chart.service.AccountingPeriodService;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.batch.poster.PosterReport;
 import org.kuali.module.gl.batch.poster.VerifyTransaction;
+import org.kuali.module.gl.bo.ExpenditureTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Reversal;
@@ -46,12 +51,13 @@ import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.ExpenditureTransactionDao;
 import org.kuali.module.gl.dao.ReversalDao;
 import org.kuali.module.gl.dao.UniversityDateDao;
+import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.PosterService;
 
 /**
  * @author jsissom
- *  
+ * @version $Id: PosterServiceImpl.java,v 1.5.2.1 2006-01-31 19:01:18 rkirkend Exp $
  */
 public class PosterServiceImpl implements PosterService {
   private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
@@ -60,6 +66,7 @@ public class PosterServiceImpl implements PosterService {
   private VerifyTransaction verifyTransaction;
   private PosterReport posterReportService;
   private OriginEntryService originEntryService;
+  private OriginEntryGroupService originEntryGroupService;
   private DateTimeService dateTimeService;
   private ReversalDao reversalDao;
   private UniversityDateDao universityDateDao;
@@ -120,7 +127,7 @@ public class PosterServiceImpl implements PosterService {
       case PosterService.MODE_ENTRIES:
         validEntrySourceCode = OriginEntrySource.MAIN_POSTER_VALID;
         invalidEntrySourceCode = OriginEntrySource.MAIN_POSTER_ERROR;
-        groups = originEntryService.getGroupsToPost(runDate);
+        groups = originEntryGroupService.getGroupsToPost(runDate);
         break;
       case PosterService.MODE_REVERSAL:
         validEntrySourceCode = OriginEntrySource.REVERSAL_POSTER_VALID;
@@ -129,15 +136,15 @@ public class PosterServiceImpl implements PosterService {
       case PosterService.MODE_ICR:
         validEntrySourceCode = OriginEntrySource.ICR_POSTER_VALID;
         invalidEntrySourceCode = OriginEntrySource.ICR_POSTER_ERROR;
-        groups = originEntryService.getIcrGroupsToPost(runDate);
+        groups = originEntryGroupService.getIcrGroupsToPost(runDate);
         break;
       default:
         throw new IllegalArgumentException("Invalid poster mode " + mode);
     }
 
     // Create new Groups for output transactions
-    validGroup = originEntryService.createGroup(runDate, validEntrySourceCode, true, false, false);
-    invalidGroup = originEntryService.createGroup(runDate, invalidEntrySourceCode, false, false, false);
+    validGroup = originEntryGroupService.createGroup(runDate, validEntrySourceCode, true, true, false);
+    invalidGroup = originEntryGroupService.createGroup(runDate, invalidEntrySourceCode, false, true, false);
 
     Map reportError = new HashMap();
 
@@ -162,15 +169,19 @@ public class PosterServiceImpl implements PosterService {
         while (entries.hasNext()) {
           Transaction tran = (Transaction) entries.next();
 
-          process(tran,mode,reportSummary,reportError,invalidGroup,validGroup,runUniversityDate);
+          postTransaction(tran,mode,reportSummary,reportError,invalidGroup,validGroup,runUniversityDate);
         }
+
+        // Mark this group so we don't process it again next time the poster runs
+        group.setProcess(Boolean.FALSE);
+        originEntryGroupService.save(group);
       }
     } else {
       LOG.debug("postEntries() Processing reversal transactions");
       while (reversalTransactions.hasNext()) {
         Transaction tran = (Transaction)reversalTransactions.next();
 
-        process(tran,mode,reportSummary,reportError,invalidGroup,validGroup,runUniversityDate);
+        postTransaction(tran,mode,reportSummary,reportError,invalidGroup,validGroup,runUniversityDate);
       }
     }
 
@@ -178,7 +189,7 @@ public class PosterServiceImpl implements PosterService {
     posterReportService.generateReport(reportError, reportSummary, runDate, mode);
   }
 
-  private void process(Transaction tran,int mode,Map reportSummary,Map reportError,OriginEntryGroup invalidGroup,OriginEntryGroup validGroup,UniversityDate runUniversityDate) {
+  private void postTransaction(Transaction tran,int mode,Map reportSummary,Map reportError,OriginEntryGroup invalidGroup,OriginEntryGroup validGroup,UniversityDate runUniversityDate) {
 
     List errors = new ArrayList();
 
@@ -200,10 +211,10 @@ public class PosterServiceImpl implements PosterService {
       reversal = new Reversal(tran);
 
       // Revese the debit/credit code
-      if ("D".equals(reversal.getTransactionDebitCreditCode())) {
-        reversal.setTransactionDebitCreditCode("C");
-      } else if ("C".equals(reversal.getTransactionDebitCreditCode())) {
-        reversal.setTransactionDebitCreditCode("D");
+      if (Constants.GL_DEBIT_CODE.equals(reversal.getTransactionDebitCreditCode())) {
+        reversal.setTransactionDebitCreditCode(Constants.GL_CREDIT_CODE);
+      } else if (Constants.GL_CREDIT_CODE.equals(reversal.getTransactionDebitCreditCode())) {
+        reversal.setTransactionDebitCreditCode(Constants.GL_DEBIT_CODE);
       }
 
       UniversityDate udate = universityDateDao.getByPrimaryKey(reversal.getFinancialDocumentReversalDate());
@@ -213,12 +224,12 @@ public class PosterServiceImpl implements PosterService {
 
         AccountingPeriod ap = accountingPeriodService.getByPeriod(reversal.getUniversityFiscalPeriodCode(),reversal.getUniversityFiscalYear());
         if ( ap != null ) {
-          if ( "C".equals(ap.getUniversityFiscalPeriodStatusCode()) ) {
+          if ( Constants.ACCOUNTING_PERIOD_STATUS_CLOSED.equals(ap.getUniversityFiscalPeriodStatusCode()) ) {
             reversal.setUniversityFiscalYear(runUniversityDate.getUniversityFiscalYear());
             reversal.setUniversityFiscalPeriodCode(runUniversityDate.getUniversityFiscalAccountingPeriod());
           }
           reversal.setFinancialDocumentReversalDate(null);
-          String newDescription = "AUTO REVERSAL-" + reversal.getTransactionLedgerEntryDesc();
+          String newDescription = Constants.GL_REVERSAL_DESCRIPTION_PREFIX + reversal.getTransactionLedgerEntryDesc();
           if ( newDescription.length() > 40 ) {
             newDescription = newDescription.substring(0,39);
           }
@@ -249,7 +260,7 @@ public class PosterServiceImpl implements PosterService {
       for (Iterator posterIter = transactionPosters.iterator(); posterIter.hasNext();) {
         PostTransaction poster = (PostTransaction) posterIter.next();
         if ( poster instanceof VerifyTransaction ) {
-          VerifyTransaction vt = (VerifyTransaction)poster;
+          //VerifyTransaction vt = (VerifyTransaction)poster;
 
           errors.addAll(verifyTransaction.verifyTransaction(tran));
         }
@@ -277,6 +288,8 @@ public class PosterServiceImpl implements PosterService {
             addReporting(reportSummary, poster.getDestinationName(), "U");
           } else if (actionCode.indexOf("D") >= 0) {
             addReporting(reportSummary, poster.getDestinationName(), "D");
+          } else if (actionCode.indexOf("S") >= 0) {
+            addReporting(reportSummary, poster.getDestinationName(), "S");            
           }
         }
       }
@@ -287,11 +300,53 @@ public class PosterServiceImpl implements PosterService {
       if ( mode == PosterService.MODE_REVERSAL ) {
         reversalDao.delete( (Reversal)originalTransaction );
       }
-    }    
+    }
   }
 
   public void generateIcrTransactions() {
     LOG.debug("generateIcrTransactions() started");
+
+    Iterator expenditureTransactions = expenditureTransactionDao.getAllExpenditureTransactions();
+    while ( expenditureTransactions.hasNext() ) {
+      ExpenditureTransaction et = (ExpenditureTransaction)expenditureTransactions;
+
+      KualiDecimal amountRemaining = et.getAccountObjectDirectCostAmount();
+
+      Collection thresholds = indirectCostRecoveryThresholdDao.getByAccount(et.getChartOfAccountsCode(),et.getAccountNumber());
+      for (Iterator iter = thresholds.iterator(); iter.hasNext();) {
+        IndirectCostRecoveryThreshold threshold = (IndirectCostRecoveryThreshold)iter.next();
+        if ( threshold.getAwardThresholdAmount().compareTo(threshold.getAwardAccumulatedCostAmount()) > 0 ) {
+          // 1596 - 1654
+          KualiDecimal availableCostAmount = threshold.getAwardThresholdAmount().subtract(threshold.getAwardAccumulatedCostAmount());
+          // subtract previous amount?  What is that?
+
+          if ( amountRemaining.compareTo(availableCostAmount) <= 0 ) {
+
+          }
+        } else {
+          // 1656 - 1687
+        }
+      }
+
+      // TODO Create entry to move the money
+
+      Collection icrEntries = icrAutomatedEntryDao.getEntriesBySeries(et.getUniversityFiscalYear(),et.getAccount().getFinancialIcrSeriesIdentifier(),et.getBalanceTypeCode());
+      int count = icrEntries.size();
+      for (Iterator icrIter = icrEntries.iterator(); icrIter.hasNext();) {
+        IcrAutomatedEntry icrEntry = (IcrAutomatedEntry)icrIter.next();
+        
+        // TODO Calculate percentage
+        // TODO Create entry for destination
+        if ( count == 1) {
+          // TODO Do rounding
+        }
+
+        count--;
+      }
+    }
+
+    // TODO Print report
+    String title = "Poster ICR Transaction Generation Report";
   }
 
   private void addReporting(Map reporting, String destination, String operation) {
@@ -318,6 +373,10 @@ public class PosterServiceImpl implements PosterService {
 
   public void setOriginEntryService(OriginEntryService oes) {
     originEntryService = oes;
+  }
+
+  public void setOriginEntryGroupService(OriginEntryGroupService oes) {
+    originEntryGroupService = oes;
   }
 
   public void setDateTimeService(DateTimeService dts) {
