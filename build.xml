@@ -243,7 +243,7 @@
 		<mkdir dir="${plugin.build}" />
 		<mkdir dir="${plugin.build}/lib" />
 		<mkdir dir="${plugin.build}/classes" />
-		<mkdir dir="${plugin.build}/meta-inf" />
+		<mkdir dir="${plugin.build}/META-INF" />
 		<copy todir="${plugin.build}/lib">
 			<fileset dir="${lib.directory}">
 				<exclude name="workflow-client-2.1.jar" />
@@ -264,7 +264,7 @@
 			<fileset file="${build.config.directory}/workflow/workflow-config.properties"/>
 		</copy>
 
-		<copy todir="${plugin.build}/meta-inf">
+		<copy todir="${plugin.build}/META-INF">
 			<fileset file="${build.config.directory}/workflow/workflow.xml"/>
 		</copy>
 		<zip destfile="en-plugins.zip" basedir="${plugin.build}" />
@@ -292,7 +292,7 @@
 			<fileset file="${build.config.directory}/workflow/workflow-config.properties" />
 		</copy>
 
-		<copy todir="${plugin.deploy.directory}/kul/meta-inf" overwrite="true">
+		<copy todir="${plugin.deploy.directory}/kul/META-INF" overwrite="true">
 			<fileset file="${build.config.directory}/workflow/workflow.xml" />
 		</copy>
 	</target>
