@@ -228,14 +228,6 @@
 		<foreignkey field-ref="accountManagerSystemIdentifier" />
 	</reference-descriptor>
 
-	<reference-descriptor name="accountGuideline"
-		class-ref="org.kuali.module.chart.bo.AccountGuideline"
-		auto-retrieve="true" auto-update="none" auto-delete="none"
-		proxy="true">
-		<foreignkey field-ref="chartOfAccountsCode" />
-		<foreignkey field-ref="accountNumber" />
-	</reference-descriptor>
-
 	<reference-descriptor name="postalZipCode" 
 		class-ref="org.kuali.core.bo.PostalZipCode" 
 		auto-retrieve="true" auto-update="none" auto-delete="none" 
@@ -257,6 +249,28 @@
 		<foreignkey field-ref="accountSufficientFundsCode" />
 	</reference-descriptor>
 	
+	<reference-descriptor 
+		name="accountGuideline"
+		class-ref="org.kuali.module.chart.bo.AccountGuideline" 
+		auto-retrieve="true"
+		auto-update="none" 
+		auto-delete="none" 
+		proxy="true">
+		<foreignkey field-ref="chartOfAccountsCode" />
+		<foreignkey field-ref="accountNumber" />
+	</reference-descriptor>
+
+	<reference-descriptor 
+		name="accountDescription"
+		class-ref="org.kuali.module.chart.bo.AccountDescription" 
+		auto-retrieve="true"
+		auto-update="none" 
+		auto-delete="none" 
+		proxy="true">
+		<foreignkey field-ref="chartOfAccountsCode" />
+		<foreignkey field-ref="accountNumber" />
+	</reference-descriptor>
+
 	<collection-descriptor name="subAccounts"
 		element-class-ref="org.kuali.module.chart.bo.SubAccount"
 		collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList"
@@ -949,7 +963,7 @@
 </class-descriptor>
 
 <!-- 
-	<class-descriptor class="org.kuali.module.chart.bo.codes.BudgetAggregationCode" table="KULUNT.CA_BDGT_AGGR_T" >
+	<class-descriptor class="org.kuali.module.chart.bo.codes.BudgetAggregationCode" table="CA_BDGT_AGGR_T" >
 	<field-descriptor name="code" column="FOBJ_BDGT_AGGR_CD" jdbc-type="VARCHAR" primarykey="true" />
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
 	<field-descriptor name="active" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
@@ -959,7 +973,7 @@
 
 <class-descriptor
 	class="org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode"
-	table="KULUNT.CA_MNXFR_ELIM_T">
+	table="CA_MNXFR_ELIM_T">
 	<field-descriptor name="code" column="FOBJ_MNXFR_ELIM_CD"
 		jdbc-type="VARCHAR" primarykey="true" />
 	<field-descriptor name="versionNumber" column="VER_NBR"
@@ -973,7 +987,7 @@
 
 <class-descriptor
 	class="org.kuali.module.chart.bo.codes.FederalFundedCode"
-	table="KULUNT.CA_FED_FND_T">
+	table="CA_FED_FND_T">
 	<field-descriptor name="code" column="FIN_FED_FUNDED_CD"
 		jdbc-type="VARCHAR" primarykey="true" />
 	<field-descriptor name="versionNumber" column="VER_NBR"
@@ -1084,13 +1098,6 @@
 		class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true"
 		auto-update="none" auto-delete="none" proxy="true">
 		<foreignkey field-ref="chartOfAccountsCode" />
-	</reference-descriptor>
-	<reference-descriptor name="financialEliminationsObject"
-		class-ref="org.kuali.module.chart.bo.ObjectCodeCurrent"
-		auto-retrieve="true" auto-update="none" auto-delete="none"
-		proxy="true">
-		<foreignkey field-ref="chartOfAccountsCode" />
-		<foreignkey field-ref="financialEliminationsObjectCode" />
 	</reference-descriptor>
 </class-descriptor>
 
@@ -1333,7 +1340,7 @@
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.chart.bo.AccountingPeriod"
-	table="KULUNT.SH_ACCT_PERIOD_T">
+	table="SH_ACCT_PERIOD_T">
 	<field-descriptor name="budgetRollover" column="BDGT_ROLLOVER_IND"
 		jdbc-type="VARCHAR"
 		conversion="org.kuali.core.util.OjbCharBooleanConversion" />
@@ -1724,7 +1731,7 @@
 
 <class-descriptor
 	class="org.kuali.module.chart.bo.codes.ICRTypeCode"
-	table="KULUNT.CA_ICR_TYPE_T">
+	table="CA_ICR_TYPE_T">
 	<field-descriptor name="code" column="ACCT_ICR_TYP_CD"
 		jdbc-type="VARCHAR" primarykey="true" />
 	<field-descriptor name="name" column="ACCT_ICR_TYP_DESC"
@@ -1733,4 +1740,36 @@
 		jdbc-type="BIGINT" locking="true" />
 	<field-descriptor name="objectId" column="OBJ_ID"
 		jdbc-type="VARCHAR" index="true" />
+</class-descriptor>
+
+<class-descriptor class="org.kuali.module.chart.bo.AccountDescription" table="CA_ACCT_DESC_T">
+	<field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="campusDescription" column="CAMPUS_DESC" jdbc-type="VARCHAR"/>
+	<field-descriptor name="organizationDescription" column="ORG_DESC" jdbc-type="VARCHAR"/>
+	<field-descriptor name="responsibilityCenterDesc" column="RC_DESC" jdbc-type="VARCHAR"/>
+	<field-descriptor name="campusCode" column="CAMPUS_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="buildingCode" column="BLDG_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
+	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+	
+	<reference-descriptor name="building" 
+		class-ref="org.kuali.core.bo.Building" 
+		auto-retrieve="true" 
+		auto-update="none" 
+		auto-delete="none" 
+		proxy="true">
+		<foreignkey field-ref="campusCode" />
+		<foreignkey field-ref="buildingCode" />
+	</reference-descriptor>
+</class-descriptor>
+
+<class-descriptor class="org.kuali.module.chart.bo.ObjectCodeRestrictions" table="CA_OBJ_CD_RSTRC_T">
+	<field-descriptor name="finObjRestrictedGroupingName" column="FINOBJ_RSTRGRPG_NM" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="finObjRestrictedColumnName" column="FINOBJ_RSTR_COL_NM" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="finObjValueRestrictedCode" column="FINOBJ_VAL_RSTR_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="finObjRestrictionOperatorCd" column="FINOBJ_RSTR_OPR_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="finObjRestrictedGroupingCode" column="FINOBJ_RSTRGRPG_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
+	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 </class-descriptor>
