@@ -25,8 +25,6 @@ package org.kuali.module.gl.service.impl;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,45 +32,34 @@ import java.util.Map;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
-import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.OriginEntryDao;
-import org.kuali.module.gl.dao.ojb.OriginEntryDaoOjb;
+import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 
 /**
  * @author jsissom
- *
+ * @version $Id: OriginEntryServiceImpl.java,v 1.2.4.1 2006-01-31 19:01:18 rkirkend Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
   private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
 
   private OriginEntryDao originEntryDao;
+  private OriginEntryGroupService originEntryGroupService;
+
+  public void setOriginEntryDao(OriginEntryDao oed) {
+    originEntryDao = oed;
+  }
+
+  public void setOriginEntryGroupService(OriginEntryGroupService oegs) {
+    originEntryGroupService = oegs;
+  }
 
   /**
    * 
    */
   public OriginEntryServiceImpl() {
     super();
-    originEntryDao = new OriginEntryDaoOjb();
-  }
-
-  public Collection getGroupsToPost(Date postDate) {
-    LOG.debug("getGroupsToPost() started");
-    
-    return originEntryDao.getPosterGroups(postDate,OriginEntrySource.SCRUBBER_VALID);
-  }
-
-  public Collection getIcrGroupsToPost(Date postDate) {
-    LOG.debug("getIcrGroupsToPost() started");
-
-    return originEntryDao.getPosterGroups(postDate,OriginEntrySource.ICR_POSTER_VALID);
-  }
-
-  public Collection getGroupsToScrub(Date scrubDate) {
-    LOG.debug("getGroupsToScrub() started");
-
-    return originEntryDao.getScrubberGroups(scrubDate);
   }
 
   public Iterator getEntriesByGroup(OriginEntryGroup oeg) {
@@ -81,21 +68,6 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     Map criteria = new HashMap();
     criteria.put("group.id",oeg.getId());
     return originEntryDao.getMatchingEntries(criteria);
-  }
-
-  public OriginEntryGroup createGroup(java.util.Date date,String sourceCode, boolean valid, boolean processed, boolean scrub) {
-    LOG.debug("createGroup() started");
-
-    OriginEntryGroup oeg = new OriginEntryGroup();
-    oeg.setDate(new java.sql.Date(date.getTime()));
-    oeg.setProcessed(new Boolean(processed));
-    oeg.setScrub(new Boolean(scrub));
-    oeg.setSourceCode(sourceCode);
-    oeg.setValid(new Boolean(valid));
-
-    originEntryDao.saveGroup(oeg);
-
-    return oeg;
   }
 
   public void createEntry(Transaction tran,OriginEntryGroup group) {
@@ -107,15 +79,11 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     originEntryDao.saveOriginEntry(e);
   }
 
-  public void setOriginEntryDao(OriginEntryDao oed) {
-    originEntryDao = oed;
-  }
-
   public void loadFlatFile(String filename,String groupSourceCode,boolean valid,boolean processed,boolean scrub) {
     LOG.debug("loadFlatFile() started");
 
     java.util.Date groupDate = new java.util.Date();
-    OriginEntryGroup newGroup = createGroup(groupDate,groupSourceCode,valid,processed,scrub);
+    OriginEntryGroup newGroup = originEntryGroupService.createGroup(groupDate,groupSourceCode,valid,processed,scrub);
 
     BufferedReader input = null;
     try {

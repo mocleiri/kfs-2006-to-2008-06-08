@@ -22,8 +22,6 @@
  */
 package org.kuali.module.gl.dao.ojb;
 
-import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -31,13 +29,12 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.gl.bo.OriginEntry;
-import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.OriginEntryDao;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryDaoOjb.java,v 1.2 2006-01-16 16:47:35 jsissom Exp $
+ * @version $Id: OriginEntryDaoOjb.java,v 1.2.4.1 2006-01-31 19:01:24 rkirkend Exp $
  * 
  */
 
@@ -49,34 +46,6 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
    */
   public OriginEntryDaoOjb() {
     super();
-  }
-
-  /**
-   * 
-   */
-  public Collection getPosterGroups(Date groupDate,String groupSourceCode) {
-    LOG.debug("getPosterGroups() started");
-
-    Criteria criteria = new Criteria();
-//    criteria.addGreaterOrEqualThan("date",new java.sql.Date(groupDate.getTime()));
-    criteria.addEqualTo("sourceCode",groupSourceCode);
-
-    QueryByCriteria qbc = QueryFactory.newQuery(OriginEntryGroup.class,criteria);
-    return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
-  }
-
-  /**
-   * 
-   */
-  public Collection getScrubberGroups(Date groupDate) {
-    LOG.debug("getScrubberGroups() started");
-
-    Criteria criteria = new Criteria();
-    criteria.addLessOrEqualThan("date",groupDate);
-    criteria.addEqualTo("scrub",Boolean.TRUE);
-
-    QueryByCriteria qbc = QueryFactory.newQuery(OriginEntryGroup.class,criteria);
-    return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);    
   }
 
   /**
@@ -94,15 +63,6 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
 
     QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class,criteria);
     return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
-  }
-
-  /**
-   * 
-   */
-  public void saveGroup(OriginEntryGroup group) {
-    LOG.debug("saveGroup() started");
-
-    getPersistenceBrokerTemplate().store(group);
   }
 
   /**
