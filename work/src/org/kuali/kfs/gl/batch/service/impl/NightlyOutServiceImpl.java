@@ -23,16 +23,13 @@
 package org.kuali.module.gl.service.impl;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.Iterator;
 
 import org.kuali.core.service.DateTimeService;
-
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
-
 import org.kuali.module.gl.service.GeneralLedgerPendingEntryService;
 import org.kuali.module.gl.service.NightlyOutService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
@@ -55,6 +52,10 @@ public class NightlyOutServiceImpl implements NightlyOutService {
      *  
      */
     public NightlyOutServiceImpl() {
+    }
+
+    public void deleteCopiedPendingLedgerEntries() {
+      // TODO Write this
     }
 
     /**
@@ -94,7 +95,7 @@ public class NightlyOutServiceImpl implements NightlyOutService {
         Date today = new Date(dateTimeService.getCurrentTimestamp().getTime());
         String groupSourceCode = OriginEntrySource.GENERATE_BY_EDOC;
         
-        OriginEntryGroup group = originEntryService.createGroup(today, groupSourceCode, true,
+        OriginEntryGroup group = originEntryGroupService.createGroup(today, groupSourceCode, true,
                 true, true);
         return group;
     }
@@ -104,48 +105,8 @@ public class NightlyOutServiceImpl implements NightlyOutService {
      */
     private void saveAsOriginEntry(GeneralLedgerPendingEntry pendingEntry,
             OriginEntryGroup group) {
-        OriginEntry originEntry = new OriginEntry();
-
-        // Map the pending entry into origin entry
-        originEntry.setAccountNumber(pendingEntry.getAccountNumber());
-        originEntry.setFinancialBalanceTypeCode(pendingEntry.getFinancialBalanceTypeCode());
-        originEntry.setBudgetYear(pendingEntry.getBudgetYear());
-        originEntry.setChartOfAccountsCode(pendingEntry.getChartOfAccountsCode());
-        originEntry.setTransactionDebitCreditCode(pendingEntry.getTransactionDebitCreditCode());
-        originEntry.setFinancialDocumentNumber(pendingEntry.getFinancialDocumentNumber());
-
-        Timestamp reversalDate = pendingEntry.getFinancialDocumentReversalDate();
-        if (reversalDate != null) {
-            originEntry.setFinancialDocumentReversalDate(new Date(reversalDate.getTime()));
-        }
-        originEntry.setFinancialDocumentTypeCode(pendingEntry.getFinancialDocumentTypeCode());
-        originEntry.setTransactionEncumbranceUpdtCd(pendingEntry
-                .getTransactionEncumbranceUpdtCd());
-        originEntry.setFinancialObjectCode(pendingEntry.getFinancialObjectCode());
-        originEntry.setFinancialObjectTypeCode(pendingEntry.getFinancialObjectTypeCode());
-        originEntry.setOrganizationDocumentNumber(pendingEntry
-                .getOrganizationDocumentNumber());
-        originEntry.setOrganizationReferenceId(pendingEntry.getOrganizationReferenceId());
-        originEntry.setFinancialSystemOriginationCode(pendingEntry.getOriginCode());
-        originEntry.setProjectCode(pendingEntry.getProjectCode());
-        originEntry.setFinancialDocumentReferenceNbr(pendingEntry
-                .getFinancialDocumentReferenceNbr());
-        originEntry.setReferenceFinDocumentTypeCode(pendingEntry
-                .getReferenceFinDocumentTypeCode());
-        originEntry.setFinSystemRefOriginationCode(pendingEntry.getFinSystemRefOriginationCode());
-        originEntry.setSubAccountNumber(pendingEntry.getSubAccountNumber());
-        originEntry.setFinancialSubObjectCode(pendingEntry.getFinancialSubObjectCode());
-        originEntry.setTransactionDate(new Date(pendingEntry.getTransactionDate()
-                .getTime()));
-        originEntry.setTrnEntryLedgerSequenceNumber(pendingEntry
-                .getTrnEntryLedgerSequenceNumber());
-        originEntry.setTransactionLedgerEntryAmount(pendingEntry
-                .getTransactionLedgerEntryAmount());
-        originEntry.setTransactionLedgerEntryDesc(pendingEntry
-                .getTransactionLedgerEntryDesc());
-        originEntry.setUniversityFiscalPeriodCode(pendingEntry
-                .getUniversityFiscalPeriodCode());
-        originEntry.setUniversityFiscalYear(pendingEntry.getUniversityFiscalYear());
+        OriginEntry originEntry = new OriginEntry(pendingEntry);
+        originEntry.setGroup(group);
 
         originEntryService.createEntry(originEntry, group);
     }
@@ -158,7 +119,7 @@ public class NightlyOutServiceImpl implements NightlyOutService {
      */
     private void updatePendingEntryAfterCopy(GeneralLedgerPendingEntry pendingEntry) {
         pendingEntry.setFinancialDocumentApprovedCode("X");
-        pendingEntry.setTransactionDate(dateTimeService.getCurrentTimestamp());
+        pendingEntry.setTransactionDate(new Date(dateTimeService.getCurrentDate().getTime()));
         generalLedgerPendingEntryService.save(pendingEntry);
     }
 

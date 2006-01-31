@@ -22,7 +22,6 @@
  */
 package org.kuali.module.gl.service;
 
-import java.sql.Timestamp;
 import java.util.Iterator;
 
 import org.kuali.core.util.KualiDecimal;
@@ -106,6 +105,7 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBaseWithSprin
     private GeneralLedgerPendingEntry createGeneralLedgerPendingEntry() {
         GeneralLedgerPendingEntry generalLedgerPendingEntry = new GeneralLedgerPendingEntry();
 
+        generalLedgerPendingEntry.setFinancialSystemOriginationCode("01");
         generalLedgerPendingEntry.setFinancialDocumentNumber(docHeaderId);
         generalLedgerPendingEntry.setChartOfAccountsCode("BA");
         generalLedgerPendingEntry.setFinancialObjectCode("1130");
@@ -117,7 +117,7 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBaseWithSprin
                 .setTransactionLedgerEntryAmount(new KualiDecimal("8.8"));
         generalLedgerPendingEntry.setTransactionLedgerEntryDesc("9");
         generalLedgerPendingEntry.setTransactionDebitCreditCode("D");
-        generalLedgerPendingEntry.setTransactionDate(new Timestamp(0));
+        generalLedgerPendingEntry.setTransactionDate(new java.sql.Date(new java.util.Date().getTime()));
         generalLedgerPendingEntry.setFinancialDocumentTypeCode("12");
         generalLedgerPendingEntry.setTrnEntryLedgerSequenceNumber(new Integer(1));
         return generalLedgerPendingEntry;
