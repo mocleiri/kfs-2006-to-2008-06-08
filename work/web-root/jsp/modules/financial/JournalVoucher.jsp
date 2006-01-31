@@ -5,7 +5,9 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
 <%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd" %>
 <c:set var="journalVoucherAttributes" value="${DataDictionary['KualiJournalVoucherDocument'].attributes}" />
-<kul:documentPage showDocumentInfo="true" 
+<c:set var="readOnly" value="${!empty KualiForm.editingMode['viewOnly']}" />
+
+<kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiJournalVoucherDocument" htmlFormAction="financialJournalVoucher" renderMultipart="true" showTabButtons="true">
 		<html:hidden property="document.nextSourceLineNumber"/>
 		<kul:hiddenDocumentFields />
@@ -22,10 +24,14 @@
                 <th width="35%" class="bord-l-b">
                   <div align="right">
                     <kul:htmlAttributeLabel attributeEntry="${journalVoucherAttributes.accountingPeriod}" useShortLabel="false" />
-                    &nbsp;
                   </div>
                 </th>
                 <td class="datacell-nowrap">
+                    <c:if test="${readOnly}">
+                        ${KualiForm.accountingPeriod.universityFiscalPeriodName}
+                        <html:hidden property="selectedAccountingPeriod" />
+                    </c:if>
+                    <c:if test="${!readOnly}">
                 	   	<SCRIPT type="text/javascript">
 						<!--
 						    function submitForChangedAccountingPeriod() {
@@ -50,16 +56,24 @@
 						<html:submit value="refresh" alt="press this button to refresh the page after changing the accounting period" />
 						</NOSCRIPT>
 						<kul:lookup boClassName="org.kuali.module.chart.bo.AccountingPeriod" hideReturnLink="true" />
+                    </c:if>
                 </td>
               </tr>
               <tr>
                 <th width="35%" class="bord-l-b">
                   <div align="right">
                   	<kul:htmlAttributeLabel attributeEntry="${journalVoucherAttributes.balanceTypeCode}" useShortLabel="false" />
-                  	&nbsp;
                   </div>
                 </th>
                 <td class="datacell-nowrap">
+                    <html:hidden property="originalBalanceType" value="${KualiForm.selectedBalanceType.code}" />
+                    <html:hidden property="selectedBalanceType.financialOffsetGenerationIndicator" />
+                    <c:if test="${readOnly}">
+                        ${KualiForm.selectedBalanceType.financialBalanceTypeName}
+						<html:hidden property="selectedBalanceType.code" />
+						<html:hidden property="selectedBalanceType.name" />
+                    </c:if>
+                    <c:if test="${!readOnly}">
                         <SCRIPT type="text/javascript">
 						<!--
 						    function submitForChangedBalanceType() {
@@ -67,8 +81,6 @@
 						    }
 						//-->
 						</SCRIPT>
-						<html:hidden property="originalBalanceType" value="${KualiForm.selectedBalanceType.code}" />
-						<html:hidden property="selectedBalanceType.financialOffsetGenerationIndicator" />
 		        		<select name="selectedBalanceType.code" onchange="submitForChangedBalanceType()">
 							<c:forEach items="${KualiForm.balanceTypes}" var="balanceType">
 							  <c:choose>
@@ -85,15 +97,23 @@
 						<html:submit value="refresh" alt="press this button to refresh the page after changing the balance type" />
 						</NOSCRIPT>
 						<kul:lookup boClassName="org.kuali.module.chart.bo.codes.BalanceTyp" fieldConversions="code:selectedBalanceType.code" lookupParameters="selectedBalanceType.code:code" />
+                    </c:if>
                 </td>
               </tr>
               <tr>
                 <th width="35%" class="bord-l-b">
                     <div align="right">
                     	<kul:htmlAttributeLabel attributeEntry="${journalVoucherAttributes.reversalDate}" useShortLabel="false" />
-                  		&nbsp;
                   	</div></th>
-                <td class="datacell-nowrap"><kul:dateInputNoAttributeEntry property="document.reversalDate" maxLength="10" size="10" /></td>
+                <td class="datacell-nowrap">
+                    <c:if test="${readOnly}">
+                        ${document.reversalDate}
+						<html:hidden property="document.reversalDate" />
+                    </c:if>
+                    <c:if test="${!readOnly}">
+                        <kul:dateInputNoAttributeEntry property="document.reversalDate" maxLength="10" size="10" />
+                    </c:if>
+                </td>
               </tr>
             </tbody>
           </table>

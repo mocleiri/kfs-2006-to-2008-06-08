@@ -29,7 +29,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryGroup.java,v 1.1 2006-01-14 19:35:58 abyrne Exp $
+ * @version $Id: OriginEntryGroup.java,v 1.1.6.1 2006-01-31 19:01:18 rkirkend Exp $
  *
  */
 
@@ -39,7 +39,7 @@ public class OriginEntryGroup extends BusinessObjectBase {
   private Date date;
   private String sourceCode;
   private Boolean valid;
-  private Boolean processed;
+  private Boolean process;
   private Boolean scrub;
 
   private OriginEntrySource source;
@@ -77,11 +77,11 @@ public class OriginEntryGroup extends BusinessObjectBase {
   public void setId(Integer id) {
     this.id = id;
   }
-  public Boolean getProcessed() {
-    return processed;
+  public Boolean getProcess() {
+    return process;
   }
-  public void setProcessed(Boolean processed) {
-    this.processed = processed;
+  public void setProcess(Boolean process) {
+    this.process = process;
   }
   public Boolean getScrub() {
     return scrub;

@@ -20,17 +20,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.kuali.module.gl.dao;
+package org.kuali.module.kra.service;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
+import org.kuali.core.util.OjbCollectionAware;
+import org.kuali.module.kra.document.ResearchDocument;
 
-import org.kuali.module.gl.bo.OriginEntryGroup;
+/**
+ * This class...
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ */
+public interface ResearchDocumentService extends OjbCollectionAware {
+    
+    /**
+     * This method will prepare a research document for being saved.  This will include cleansing lists of deleted items and removing dependencies of deleted items.
+     * 
+     */
+    public void prepareResearchDocumentForSave(ResearchDocument researchDocument);
 
-public interface OriginEntryGroupDao {
-	public Collection getMatchingGroups(Map searchCriteria); 
-	public Collection getPosterGroups(Date groupDate,String groupSourceCode);
-	public Collection getScrubberGroups(Date groupDate);
-	public void save(OriginEntryGroup group);
 }

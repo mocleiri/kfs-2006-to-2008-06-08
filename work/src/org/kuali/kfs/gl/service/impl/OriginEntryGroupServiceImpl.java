@@ -24,21 +24,33 @@ package org.kuali.module.gl.service.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.kuali.module.gl.bo.OriginEntryGroup;
+import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.dao.OriginEntryGroupDao;
-import org.kuali.module.gl.dao.ojb.OriginEntryGroupDaoOjb;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 
+/**
+ * @author Laran Evans <lc278@cs.cornell.edu>
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.1.6.1 2006-01-31 19:01:18 rkirkend Exp $
+ * 
+ */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
+	private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
+	private OriginEntryGroupDao originEntryGroupDao;
 
 	public OriginEntryGroupServiceImpl() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-	
+
+  public void setOriginEntryGroupDao(OriginEntryGroupDao oegd) {
+    originEntryGroupDao = oegd;
+  }
+
 	/**
 	 * 
 	 * @return the List of all origin entry groups that have a process indicator of false.
@@ -46,9 +58,8 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
 	 */
 	public Collection getOriginEntryGroupsPendingProcessing() {
 		Map criteria = new HashMap();
-		criteria.put("processed", Boolean.FALSE);
-		OriginEntryGroupDao dao = new OriginEntryGroupDaoOjb();
-		return Collections.unmodifiableCollection(dao.getMatchingGroups(criteria));
+		criteria.put("process", Boolean.FALSE);
+		return Collections.unmodifiableCollection(originEntryGroupDao.getMatchingGroups(criteria));
 	}
 
 	/**
@@ -57,14 +68,53 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
 	 * @return
 	 */
 	public OriginEntryGroup getOriginEntryGroup(String groupId) {
-		OriginEntryGroupDao dao = new OriginEntryGroupDaoOjb();
 		Map criteria = new HashMap();
-		criteria.put("ORIGIN_ENTRY_GRP_ID", groupId);
-		Collection matches = dao.getMatchingGroups(criteria);
-		if(null != matches) {
-			return (OriginEntryGroup) matches.iterator().next();
+		criteria.put("entryGroupId", groupId);
+		Collection matches = originEntryGroupDao.getMatchingGroups(criteria);
+    Iterator i = matches.iterator();
+    if ( i.hasNext() ) {
+			return (OriginEntryGroup)i.next();
 		}
 		return null;
 	}
 
+
+	  public OriginEntryGroup createGroup(java.util.Date date,String sourceCode, boolean valid, boolean process, boolean scrub) {
+	    LOG.debug("createGroup() started");
+
+	    OriginEntryGroup oeg = new OriginEntryGroup();
+	    oeg.setDate(new java.sql.Date(date.getTime()));
+	    oeg.setProcess(new Boolean(process));
+	    oeg.setScrub(new Boolean(scrub));
+	    oeg.setSourceCode(sourceCode);
+	    oeg.setValid(new Boolean(valid));
+
+	    originEntryGroupDao.save(oeg);
+
+	    return oeg;
+	  }
+
+	  public Collection getGroupsToPost(Date postDate) {
+	    LOG.debug("getGroupsToPost() started");
+
+	    return originEntryGroupDao.getPosterGroups(postDate,OriginEntrySource.SCRUBBER_VALID);
+	  }
+
+	  public Collection getIcrGroupsToPost(Date postDate) {
+	    LOG.debug("getIcrGroupsToPost() started");
+
+	    return originEntryGroupDao.getPosterGroups(postDate,OriginEntrySource.ICR_POSTER_VALID);
+	  }
+
+	  public Collection getGroupsToScrub(Date scrubDate) {
+	    LOG.debug("getGroupsToScrub() started");
+
+	    return originEntryGroupDao.getScrubberGroups(scrubDate);
+	  }
+
+    public void save(OriginEntryGroup group) {
+      LOG.debug("save() started");
+
+      originEntryGroupDao.save(group);
+    }
 }
