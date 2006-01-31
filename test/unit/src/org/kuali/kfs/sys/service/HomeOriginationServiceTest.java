@@ -20,15 +20,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.kuali.module.chart.dao;
+package org.kuali.core.service;
 
-import java.util.Collection;
+import org.kuali.core.bo.HomeOrigination;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBaseWithSpring;
 
 /**
- * @author jsissom
- *
+ * This class tests the Home Origination service.
  */
-public interface IcrAutomatedEntryDao {
-  public Long getCount(Integer universityFiscalYear,String financialSeriesId,String balanceTypeCode);
-  public Collection getEntriesBySeries(Integer universityFiscalYear,String financialSeriesId,String balanceTypeCode);
+public class HomeOriginationServiceTest extends KualiTestBaseWithSpring {
+    private HomeOriginationService homeOriginationService;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        homeOriginationService = SpringServiceLocator.getHomeOriginationService();
+    }
+
+    public void testGetHomeOrigination() {
+        HomeOrigination homeOrigination = homeOriginationService.getHomeOrigination();
+        assertNotNull("Home Origination object cannot be retrieved", homeOrigination);
+        assertEquals("Home Origination Code should be 01", "01", homeOrigination.getFinSystemHomeOriginationCode());
+    }
 }
