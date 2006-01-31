@@ -31,14 +31,27 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.kuali.core.bo.PostalZipCode;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.maintenance.Maintainable;
 import org.kuali.core.rule.PreRulesCheck;
 import org.kuali.core.rule.event.PreRulesCheckEvent;
+import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.SubFundGroup;
 
 public class AccountPreRules implements PreRulesCheck {
+
+    private static final String CHART_MAINTENANCE_EDOC = "ChartMaintenanceEDoc";
+    private static final String DEFAULT_STATE_CODE = "Account.Defaults.StateCode";
+    private static final String DEFAULT_ACCOUNT_TYPE_CODE = "Account.Defaults.AccountType";
+    
+    private KualiConfigurationService configService;
+    private Account oldAccount;
+    private Account newAccount;
+    
+    public AccountPreRules() {
+        configService = SpringServiceLocator.getKualiConfigurationService();
+    }
 
     /**
      * This processes certain rules that need to occur at the UI level or actually need to modify the Account object
@@ -47,10 +60,34 @@ public class AccountPreRules implements PreRulesCheck {
      */
     public boolean processPreRuleChecks(ActionForm form, HttpServletRequest request, PreRulesCheckEvent event) {
         MaintenanceDocument document = (MaintenanceDocument) event.getDocument();
+        setupConvenienceObjects(document);
         newAccountDefaults(document);
         setStateFromZip(document);
         setRestrictedCodeDefaults(document);
         return true;
+    }
+    
+    /**
+     * 
+     * This method sets the convenience objects like newAccount and oldAccount, so you
+     * have short and easy handles to the new and old objects contained in the 
+     * maintenance document.
+     * 
+     * It also calls the BusinessObjectBase.refresh(), which will attempt to load 
+     * all sub-objects from the DB by their primary keys, if available.
+     * 
+     * @param document - the maintenanceDocument being evaluated
+     * 
+     */
+    private void setupConvenienceObjects(MaintenanceDocument document) {
+        
+        //	setup oldAccount convenience objects, make sure all possible sub-objects are populated
+        oldAccount = (Account) document.getOldMaintainableObject().getBusinessObject();
+        oldAccount.refresh();
+
+        //	setup newAccount convenience objects, make sure all possible sub-objects are populated
+        newAccount = (Account) document.getNewMaintainableObject().getBusinessObject();
+        newAccount.refresh();
     }
     
     /**
@@ -63,10 +100,16 @@ public class AccountPreRules implements PreRulesCheck {
      */
     private void setRestrictedCodeDefaults(MaintenanceDocument document) {
         
-        Account newAccount = (Account) document.getNewMaintainableObject().getBusinessObject();
-        SubFundGroup subFundGroup = newAccount.getSubFundGroup();
-        String fundGroupCode = subFundGroup.getFundGroupCode();
-        String restrictedStatusCode = newAccount.getAccountRestrictedStatusCode();
+        SubFundGroup subFundGroup;
+        String fundGroupCode = "";
+        
+        //	if subFundGroupCode was not entered, then we have nothing 
+        // to do here, so exit
+        if (ObjectUtils.isNull(newAccount.getSubFundGroup()) || 
+                StringUtils.isEmpty(newAccount.getSubFundGroupCode())) {
+            return;
+        }
+        fundGroupCode = newAccount.getSubFundGroup().getFundGroupCode();
        
         if (!StringUtils.isEmpty(fundGroupCode)) {
             
@@ -95,39 +138,58 @@ public class AccountPreRules implements PreRulesCheck {
      * @param maintenanceDocument
      */
     private void newAccountDefaults(MaintenanceDocument maintenanceDocument) {
-        Maintainable newMaintainable = maintenanceDocument.getNewMaintainableObject();
-        Account account = (Account) newMaintainable.getBusinessObject();
+        
         //On new Accounts acct_effect_date is defaulted to the doc creation date
-        if (account.getAccountEffectiveDate() == null) {
+        if (newAccount.getAccountEffectiveDate() == null) {
             Timestamp ts = maintenanceDocument.getDocumentHeader().getWorkflowDocument().getCreateDate();
             if (ts != null) {
-                account.setAccountEffectiveDate(ts);
+                newAccount.setAccountEffectiveDate(ts);
             }
         }
         
         //On new Accounts acct_state_cd is defaulted to the value of "IN"
-        if (StringUtils.isEmpty(account.getAccountStateCode())) {
-            account.setAccountStateCode("IN");
+        if (StringUtils.isEmpty(newAccount.getAccountStateCode())) {
+            String defaultStateCode = configService.getApplicationParameterValue(CHART_MAINTENANCE_EDOC, 
+    				DEFAULT_STATE_CODE);
+    		if (StringUtils.isEmpty(defaultStateCode)) {
+    			throw new RuntimeException("Expected ConfigurationService.ApplicationParameterValue was not found " + 
+    										"for ScriptName = '" + CHART_MAINTENANCE_EDOC + "' and " + 
+    										"Parameter = '" + DEFAULT_STATE_CODE + "'");
+    		}
+            newAccount.setAccountStateCode(defaultStateCode);
         }
         
         //if the account type code is left blank it will default to NA.
-        if (StringUtils.isEmpty(account.getAccountTypeCode())) {
-            account.setAccountTypeCode("NA");
+        if (StringUtils.isEmpty(newAccount.getAccountTypeCode())) {
+            String defaultAccountTypeCode = configService.getApplicationParameterValue(CHART_MAINTENANCE_EDOC, 
+    				DEFAULT_ACCOUNT_TYPE_CODE);
+    		if (StringUtils.isEmpty(defaultAccountTypeCode)) {
+    			throw new RuntimeException("Expected ConfigurationService.ApplicationParameterValue was not found " + 
+    										"for ScriptName = '" + CHART_MAINTENANCE_EDOC + "' and " + 
+    										"Parameter = '" + DEFAULT_ACCOUNT_TYPE_CODE + "'");
+    		}
+            newAccount.setAccountTypeCode(defaultAccountTypeCode);
         }
     }
     
+    //	lookup state and city from populated zip, set the values on the form
     private void setStateFromZip(MaintenanceDocument maintenanceDocument) {
-        Maintainable newMaintainable = maintenanceDocument.getNewMaintainableObject();
-        Account account = (Account) newMaintainable.getBusinessObject();
         
-        //acct_zip_cd, acct_state_cd, acct_city_nm all are populated by looking up the zip code and getting the state and city from that
-        if (!StringUtils.isEmpty(account.getAccountZipCode())) {
+        //	acct_zip_cd, acct_state_cd, acct_city_nm all are populated by looking up 
+        // the zip code and getting the state and city from that
+        if (!StringUtils.isEmpty(newAccount.getAccountZipCode())) {
 
-            //TODO - lookup state and city from populated zip
             HashMap primaryKeys = new HashMap();
-            primaryKeys.put("postalZipCode", account.getAccountZipCode());
-            PostalZipCode zip = (PostalZipCode)SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(PostalZipCode.class, primaryKeys);
-            //TODO- now what do i do with this exactly?
+            primaryKeys.put("postalZipCode", newAccount.getAccountZipCode());
+            PostalZipCode zip = (PostalZipCode) SpringServiceLocator.getBusinessObjectService()
+            									.findByPrimaryKey(PostalZipCode.class, primaryKeys);
+            
+            //TODO: finish this
+            
+            //	set the state field
+            
+            //	set the city field
+            
         }
     }
 
