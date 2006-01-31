@@ -64,9 +64,13 @@
 <c:set var="useXmlHttp" value="${(!readOnly) && (!empty detailFunction)}" />
 <%-- test to see if we are dealing with the extra JV fields here --%>
 <c:set var="specialRequiredField" value="${(field eq 'referenceOriginCode') || (field eq 'referenceNumber') || (field eq 'referenceTypeCode')}" />
-<td class="${dataCellCssClass}" nowrap align="${cellAlign}" valign="top" colspan="${columnCount}">
+<td class="${dataCellCssClass}" valign="top" colspan="${columnCount}">
+<span class="nowrap">
     <c:if test="${!empty labelFontWeight}">
-        <span style="font-weight: ${labelFontWeight}"><c:if test="${specialRequiredField}"><font color="red">*&nbsp;</font></c:if><kul:htmlAttributeLabel attributeEntry="${attributes[field]}" useShortLabel="true" /></span>
+        <span style="font-weight: ${labelFontWeight}"><kul:htmlAttributeLabel attributeEntry="${attributes[field]}" useShortLabel="true" forceRequired="${specialRequiredField}" /></span>
+        <%-- The following nbsp has breakable space around it, but nevertheless it accomplishes something,
+            by preventing this label from touching its input control (consistent with the cellpadding for
+            labels that are not in the same cell as their input control).  --%>
         &nbsp;
     </c:if>
 
@@ -109,7 +113,7 @@
                 />
         </c:if>
     </c:if>
-
+</span>
     <c:if test="${empty labelFontWeight}">
         <fin:accountingLineDataCellDetail
             detailField="${detailField}"
