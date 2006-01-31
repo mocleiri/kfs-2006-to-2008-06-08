@@ -41,12 +41,7 @@ public class NightlyOutServiceTest extends KualiTestBaseWithSpring{
         }
     }
     
-    public void testCopyPendingLedgerEntry(){
-        try{
-            int numberOfEntries = nightlyOutService.copyApprovedPendingLedgerEntries();
-        }
-        catch(Exception e){
-            assertTrue("Fail to copy pending ledger entries", true);
-        }
+    public void testCopyPendingLedgerEntry() throws Exception {
+      int numberOfEntries = nightlyOutService.copyApprovedPendingLedgerEntries();
     }
 }
