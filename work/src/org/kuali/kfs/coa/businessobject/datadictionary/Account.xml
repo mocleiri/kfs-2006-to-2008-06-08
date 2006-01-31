@@ -15,7 +15,7 @@
 				<field attributeName="accountName" />
 				<field attributeName="accountFiscalOfficerUser.personName" />
 				<field attributeName="organization.organizationCode" />
-				<field attributeName="accountTypeCode" />
+				<field attributeName="accountType.accountTypeCode" />
 				<field attributeName="accountCreateDate" />
 				<field attributeName="accountExpirationDate" />
 				<field attributeName="accountClosedIndicator" />
@@ -36,7 +36,7 @@
 				<lookupField attributeName="chartOfAccounts.chartOfAccountsCode" required="false" />
 				<lookupField attributeName="accountName" required="false" />
 				<lookupField attributeName="organization.organizationCode" required="false" />
-				<lookupField attributeName="accountTypeCode" required="false" />
+				<lookupField attributeName="accountType.accountTypeCode" required="false" />
 				<lookupField attributeName="accountClosedIndicator" />			
 			</lookupFields>
 
@@ -47,7 +47,7 @@
 				<field attributeName="chartOfAccounts.chartOfAccountsCode" />			
 				<field attributeName="accountName" />
 				<field attributeName="organization.organizationCode" />
-				<field attributeName="accountTypeCode" />
+				<field attributeName="accountType.accountTypeCode" />
 				<field attributeName="accountCreateDate" />
 				<field attributeName="accountExpirationDate" />
 				<field attributeName="accountClosedIndicator" />			
@@ -106,12 +106,8 @@
 			</attributeReference>
 
 			<attributeReference name="accountPhysicalCampus.campusCode" 
-								sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" 
-								sourceAttributeName="twoDigitTextCode">
-				<label>Account Physical Campus Code</label>
-				<shortLabel>CampusCd</shortLabel>
-				<summary>Account Physical Campus Code</summary>
-				<description>Account Physical Campus Code</description>
+								sourceClassName="org.kuali.module.chart.bo.Campus" 
+								sourceAttributeName="campusCode">
 			</attributeReference>
 
 			<attributeReference name="subFundGroup.subFundGroupCode" 
@@ -596,6 +592,26 @@
 				<summary>Account Purpose Text</summary>
 				<description>A textual description of the Account Purpose.</description>
 			</attributeReference>
+			
+			<attributeReference name="accountDescription.campusDescription" 
+								sourceClassName="org.kuali.module.chart.bo.AccountDescription" 
+								sourceAttributeName="campusDescription" />
+			
+			<attributeReference name="accountDescription.organizationDescription" 
+								sourceClassName="org.kuali.module.chart.bo.AccountDescription" 
+								sourceAttributeName="organizationDescription" />
+			
+			<attributeReference name="accountDescription.responsibilityCenterDesc" 
+								sourceClassName="org.kuali.module.chart.bo.AccountDescription" 
+								sourceAttributeName="responsibilityCenterDesc" />
+			
+			<attributeReference name="accountDescription.campusCode" 
+								sourceClassName="org.kuali.module.chart.bo.AccountDescription" 
+								sourceAttributeName="campusCode" />
+			
+			<attributeReference name="accountDescription.buildingCode" 
+								sourceClassName="org.kuali.module.chart.bo.AccountDescription" 
+								sourceAttributeName="buildingCode" />
 			
 		</attributes>
 
