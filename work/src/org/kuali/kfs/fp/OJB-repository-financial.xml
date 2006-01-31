@@ -1,5 +1,5 @@
 <!--  INTERNAL BILLING DOCUMENT MAPPINGS -->
-<class-descriptor class="org.kuali.module.financial.document.InternalBillingDocument" table="KULUNT.FP_INT_BILL_DOC_T">
+<class-descriptor class="org.kuali.module.financial.document.InternalBillingDocument" table="FP_INT_BILL_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
@@ -40,7 +40,7 @@
     </collection-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.financial.bo.InternalBillingItem" table="KULUNT.FP_INT_BILL_ITM_T">
+<class-descriptor class="org.kuali.module.financial.bo.InternalBillingItem" table="FP_INT_BILL_ITM_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="itemSequenceId" column="FDOC_ITM_NBR" jdbc-type="INTEGER" primarykey="true" autoincrement="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
@@ -53,7 +53,7 @@
 </class-descriptor>
 
 <!--  SERVICE BILLING DOCUMENT MAPPINGS -->
-<class-descriptor class="org.kuali.module.financial.document.ServiceBillingDocument" table="KULUNT.FP_SVC_BILL_DOC_T">
+<class-descriptor class="org.kuali.module.financial.document.ServiceBillingDocument" table="FP_SVC_BILL_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
@@ -95,7 +95,7 @@
 </class-descriptor>
 
 <!-- AUXILIARY VOUCHER DOCUMENT -->
-<class-descriptor class="org.kuali.module.financial.document.AuxiliaryVoucherDocument" table="KULUNT.FP_ACRL_VCHR_DOC_T">
+<class-descriptor class="org.kuali.module.financial.document.AuxiliaryVoucherDocument" table="FP_ACRL_VCHR_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber"       column="FDOC_NBR"         jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="explanation"            column="FDOC_EXPLAIN_TXT"   jdbc-type="VARCHAR" />
@@ -132,7 +132,7 @@
 </class-descriptor>
 
 <!-- PRE-ENCUMBERANCE DOCUMENT -->
-<class-descriptor class="org.kuali.module.financial.document.PreEncumbranceDocument" table="KULUNT.FP_PRE_ENCUM_DOC_T">
+<class-descriptor class="org.kuali.module.financial.document.PreEncumbranceDocument" table="FP_PRE_ENCUM_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR"
 			primarykey="true"/>
@@ -179,7 +179,7 @@
 
 
 <!-- DIST OF INCOME AND EXPENSE MAPPINGS -->
-<class-descriptor class="org.kuali.module.financial.document.DistributionOfIncomeAndExpenseDocument" table="KULUNT.FP_DISTRIB_DOC_T">
+<class-descriptor class="org.kuali.module.financial.document.DistributionOfIncomeAndExpenseDocument" table="FP_DISTRIB_DOC_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
@@ -237,7 +237,7 @@
 </class-descriptor>
 
 <!-- GENERAL ERROR CORRECTION DOCUMENT MAPPINGS -->
-<class-descriptor class="org.kuali.module.financial.document.GeneralErrorCorrectionDocument" table="KULUNT.FP_ERROR_COR_DOC_T">
+<class-descriptor class="org.kuali.module.financial.document.GeneralErrorCorrectionDocument" table="FP_ERROR_COR_DOC_T">
 	<!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
@@ -399,7 +399,7 @@
 </class-descriptor>
 
 <!-- JOURNAL VOUCHER DOCUMENT MAPPINGS -->
-<class-descriptor class="org.kuali.module.financial.document.JournalVoucherDocument" table="KULUNT.FP_JRNL_VCHR_DOC_T">
+<class-descriptor class="org.kuali.module.financial.document.JournalVoucherDocument" table="FP_JRNL_VCHR_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
@@ -489,7 +489,7 @@
 </class-descriptor>
 
 <!--  CASH RECEIPT DOCUMENT MAPPINGS -->
-<class-descriptor class="org.kuali.module.financial.document.CashReceiptDocument" table="KULUNT.FP_CASH_RCPT_DOC_T">
+<class-descriptor class="org.kuali.module.financial.document.CashReceiptDocument" table="FP_CASH_RCPT_DOC_T">
     <!--   common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
@@ -549,7 +549,7 @@
     </collection-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.financial.bo.CheckBase" table="KULUNT.FP_CHECKS_T">
+<class-descriptor class="org.kuali.module.financial.bo.CheckBase" table="FP_CHECKS_T">
 	<field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true"/>
 	<field-descriptor name="amount" column="FDOC_CHCK_AMT" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" jdbc-type="DECIMAL" />
 	<field-descriptor name="description" column="FDOC_CHCK_DESC" jdbc-type="VARCHAR" />
@@ -601,7 +601,7 @@
 </class-descriptor>
 
 <!-- SERVICE BILLING CONTROL MAPPING -->
-<class-descriptor class="org.kuali.module.financial.bo.ServiceBillingControl" table="KULUNT.FP_SB_CTRL_T">
+<class-descriptor class="org.kuali.module.financial.bo.ServiceBillingControl" table="FP_SB_CTRL_T">
     <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" primarykey="true"/>
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR"/>
@@ -648,7 +648,7 @@
 </class-descriptor>
 
 <!--  GENERATED MAPPING -->
-<class-descriptor class="org.kuali.module.financial.document.NonCheckDisbursementDocument" table="KULUNT.FP_NCHK_DSBRSDOC_T">
+<class-descriptor class="org.kuali.module.financial.document.NonCheckDisbursementDocument" table="FP_NCHK_DSBRSDOC_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true"/>
 	<field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="nextSourceLineNumber" column="FDOC_NXT_LINE_NBR" jdbc-type="INTEGER" />
@@ -856,49 +856,6 @@
 	<field-descriptor name="name" column="DV_TAX_CTRL_NM" jdbc-type="VARCHAR"/>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.financial.bo.FisUser" table="FP_FIS_USER_T">
-	<field-descriptor name="personUniversalIdentifier" column="PERSON_UNVL_ID" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="personOriginationCode" column="PERSON_ORIGIN_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personUpdateAbilityCode" column="PRSN_UPDT_ABLTY_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personActiveIndicator" column="PERSON_ACTIVE_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanFieldTFConversion"/>
-	<field-descriptor name="personInFinancialProcessCode" column="PRSN_IN_FP_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personApprovalChartOfAcctCd" column="PRSN_APRV_COA_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personApprovalRcCode" column="PRSN_APRV_RC_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personUpdateAbilityNumber" column="PRSN_UPDTABLTY_NBR" jdbc-type="BIGINT"/>
-	<field-descriptor name="personUserIdentifier" column="PERSON_USER_ID" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personName" column="PERSON_NM" jdbc-type="VARCHAR"/>
-	<field-descriptor name="employeeStatusCode" column="EMP_STAT_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="employeeTypeCode" column="EMP_TYPE_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="emplid" column="EMPLID" jdbc-type="VARCHAR"/>
-	<field-descriptor name="deptid" column="DEPTID" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personEmailAddress" column="PRSN_EMAIL_ADDR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personFirstName" column="PRSN_1ST_NM" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personLastName" column="PRSN_LST_NM" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personCampusAddress" column="PRSN_CMP_ADDR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personLocalPhoneNumber" column="PRSN_LOC_PHN_NBR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="personBaseSalaryAmount" column="PRSN_BASE_SLRY_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-	<reference-descriptor name="personUniversal" class-ref="org.kuali.core.bo.user.UniversalUser" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="personUniversalIdentifier" />
-	</reference-descriptor>
-	<reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="chartOfAccountsCode" />
-	</reference-descriptor>
-	<reference-descriptor name="organization" class-ref="org.kuali.module.chart.bo.Org" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="chartOfAccountsCode" />
-		<foreignkey field-ref="organizationCode" />
-	</reference-descriptor>
-	<reference-descriptor name="personApprovalChartOfAcct" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="personApprovalChartOfAcctCd" />
-	</reference-descriptor>
-	<reference-descriptor name="personApprovalRc" class-ref="org.kuali.module.chart.bo.ResponsibilityCenter" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="personApprovalRcCode" />
-	</reference-descriptor>
-</class-descriptor>
-
 <class-descriptor class="org.kuali.module.financial.bo.NonResidentAlienTaxPercent" table="FP_NRA_TAX_PCT_T">
 	<field-descriptor name="incomeClassCode" column="INC_CLS_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="incomeTaxTypeCode" column="INC_TAX_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
@@ -915,8 +872,8 @@
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="dvConferenceDestinationName" column="DV_CONF_DEST_NM" jdbc-type="VARCHAR"/>
-	<field-descriptor name="disbVchrConferenceStartDate" column="DV_CONF_STRT_DT" jdbc-type="TIMESTAMP"/>
-	<field-descriptor name="disbVchrConferenceEndDate" column="DV_CONF_END_DT" jdbc-type="TIMESTAMP"/>
+	<field-descriptor name="disbVchrConferenceStartDate" column="DV_CONF_STRT_DT" jdbc-type="DATE"/>
+	<field-descriptor name="disbVchrConferenceEndDate" column="DV_CONF_END_DT" jdbc-type="DATE"/>
 	<field-descriptor name="disbVchrConferenceTotalAmt" column="DV_CONF_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="disbVchrExpenseCode" column="DV_EXP_CD" jdbc-type="VARCHAR"/>
 	
@@ -924,11 +881,6 @@
         <orderby name="financialDocumentLineNumber" sort="ASC"/>
         <inverse-foreignkey field-ref="financialDocumentNumber"/>
     </collection-descriptor>
-    
-	<reference-descriptor name="financialDocument" class-ref="org.kuali.module.financial.document.DisbursementVoucherDocument" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="financialDocumentNumber" />
-	</reference-descriptor>
-
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.financial.bo.TravelCompanyCode" table="FP_DV_TRVL_CO_NM_T">
@@ -1034,10 +986,6 @@
         <orderby name="financialDocumentLineNumber" sort="ASC"/>
         <inverse-foreignkey field-ref="financialDocumentNumber"/>
   </collection-descriptor>
-    
-	<reference-descriptor name="financialDocument" class-ref="org.kuali.module.financial.document.DisbursementVoucherDocument" auto-retrieve="true" auto-update="none" auto-delete="none">
-    <foreignkey field-ref="financialDocumentNumber" />
-  </reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeExpense" table="FP_DV_NONEMP_EXP_T">
@@ -1049,10 +997,6 @@
 	<field-descriptor name="disbVchrExpenseCompanyName" column="DV_EXP_CO_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="disbVchrExpenseAmount" column="DV_EXP_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	
-	<reference-descriptor name="financialDocument" class-ref="org.kuali.module.financial.document.DisbursementVoucherDocument" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="financialDocumentNumber" />
-	</reference-descriptor>
-	
 	<reference-descriptor name="disbVchrExpense" class-ref="org.kuali.module.financial.bo.TravelExpenseTypeCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="disbVchrExpenseCode" />
 	</reference-descriptor>
@@ -1061,6 +1005,15 @@
 		<foreignkey field-ref="disbVchrExpenseCompanyName" />
 	</reference-descriptor>
 </class-descriptor>
+
+<class-descriptor class="org.kuali.module.financial.bo.TravelPerDiem" table="FP_DV_DIEM_T">
+	<field-descriptor name="fiscalYear" column="UNIV_FISCAL_YR" jdbc-type="INTEGER" primarykey="true"/>
+	<field-descriptor name="perDiemCountryName" column="DV_DIEM_CNTRY_NM" jdbc-type="VARCHAR" primarykey="true"/>
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
+	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+	<field-descriptor name="perDiemRate" column="DV_DIEM_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
+	<field-descriptor name="perDiemCountryText" column="DV_DIEM_CNTRY_TXT" jdbc-type="VARCHAR"/>
+</class-descriptor>	
 
 <class-descriptor class="org.kuali.module.financial.bo.DisbursementVoucherPreConferenceRegistrant" table="FP_DV_PRECNF_REG_T">
 	<field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
@@ -1071,11 +1024,6 @@
 	<field-descriptor name="dvConferenceRegistrantName" column="DV_CONF_RGSTRNT_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dvPreConferenceRequestNumber" column="DV_PRECONF_RQST_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="disbVchrExpenseAmount" column="DV_EXP_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-	
-  
-	<reference-descriptor name="financialDocument" class-ref="org.kuali.module.financial.document.DisbursementVoucherDocument" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="financialDocumentNumber" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.financial.bo.DisbursementVoucherWireTransfer" table="FP_DV_WIRE_TRNFR_T">
