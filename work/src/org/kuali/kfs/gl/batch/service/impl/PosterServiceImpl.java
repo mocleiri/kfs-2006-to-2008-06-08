@@ -22,6 +22,8 @@
  */
 package org.kuali.module.gl.service.impl;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -35,14 +37,13 @@ import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.IcrAutomatedEntry;
-import org.kuali.module.chart.bo.IndirectCostRecoveryThreshold;
 import org.kuali.module.chart.dao.IcrAutomatedEntryDao;
-import org.kuali.module.chart.dao.IndirectCostRecoveryThresholdDao;
 import org.kuali.module.chart.service.AccountingPeriodService;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.batch.poster.PosterReport;
 import org.kuali.module.gl.batch.poster.VerifyTransaction;
 import org.kuali.module.gl.bo.ExpenditureTransaction;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Reversal;
@@ -57,7 +58,7 @@ import org.kuali.module.gl.service.PosterService;
 
 /**
  * @author jsissom
- * @version $Id: PosterServiceImpl.java,v 1.5.2.1 2006-01-31 19:01:18 rkirkend Exp $
+ * @version $Id: PosterServiceImpl.java,v 1.5.2.2 2006-02-02 15:38:08 rkirkend Exp $
  */
 public class PosterServiceImpl implements PosterService {
   private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
@@ -65,6 +66,7 @@ public class PosterServiceImpl implements PosterService {
   private List transactionPosters;
   private VerifyTransaction verifyTransaction;
   private PosterReport posterReportService;
+  private PosterReport icrGenerationReportService;
   private OriginEntryService originEntryService;
   private OriginEntryGroupService originEntryGroupService;
   private DateTimeService dateTimeService;
@@ -73,7 +75,8 @@ public class PosterServiceImpl implements PosterService {
   private AccountingPeriodService accountingPeriodService;
   private ExpenditureTransactionDao expenditureTransactionDao;
   private IcrAutomatedEntryDao icrAutomatedEntryDao;
-  private IndirectCostRecoveryThresholdDao indirectCostRecoveryThresholdDao;
+
+  // private IndirectCostRecoveryThresholdDao indirectCostRecoveryThresholdDao;
 
   /**
    *  
@@ -89,7 +92,7 @@ public class PosterServiceImpl implements PosterService {
     LOG.debug("postMainEntries() started");
     postEntries(PosterService.MODE_ENTRIES);
   }
-  
+
   /**
    * Post reversal GL entries to GL tables.
    */
@@ -303,50 +306,238 @@ public class PosterServiceImpl implements PosterService {
     }
   }
 
+  /**
+   * This step reads the expenditure table and uses the data to generate Indirect Cost Recovery
+   * transactions.
+   */
   public void generateIcrTransactions() {
     LOG.debug("generateIcrTransactions() started");
 
+    Date runDate = dateTimeService.getCurrentDate();
+
+    OriginEntryGroup group = originEntryGroupService.createGroup(runDate,OriginEntrySource.ICR_TRANSACTIONS,true,true,false);
+
+    Map reportErrors = new HashMap();
+
+    // Build the summary map so all the possible combinations of destination &
+    // operation
+    // are included in the summary part of the report.
+    Map reportSummary = new HashMap();
+    reportSummary.put("GL_EXPEND_TRAN_T,R",new Integer(0));
+    reportSummary.put("GL_EXPEND_TRAN_T,D",new Integer(0));
+    reportSummary.put("GL_EXPEND_TRAN_T,K",new Integer(0));
+    reportSummary.put("GL_ORIGIN_ENTRY_T,G",new Integer(0));
+
+    KualiDecimal onehundred = new KualiDecimal("100");
+    KualiDecimal warningMaxDifference = new KualiDecimal("0.05"); // TODO Put this in APC
+
     Iterator expenditureTransactions = expenditureTransactionDao.getAllExpenditureTransactions();
     while ( expenditureTransactions.hasNext() ) {
-      ExpenditureTransaction et = (ExpenditureTransaction)expenditureTransactions;
+      ExpenditureTransaction et = (ExpenditureTransaction)expenditureTransactions.next();
+      addReporting(reportSummary,"GL_EXPEND_TRAN_T","R");
 
-      KualiDecimal amountRemaining = et.getAccountObjectDirectCostAmount();
+      KualiDecimal transactionAmount = et.getAccountObjectDirectCostAmount();
+      KualiDecimal distributionPercent = KualiDecimal.ZERO;
+      KualiDecimal distributionAmount = KualiDecimal.ZERO;
+      KualiDecimal distributedAmount = KualiDecimal.ZERO;
 
-      Collection thresholds = indirectCostRecoveryThresholdDao.getByAccount(et.getChartOfAccountsCode(),et.getAccountNumber());
-      for (Iterator iter = thresholds.iterator(); iter.hasNext();) {
-        IndirectCostRecoveryThreshold threshold = (IndirectCostRecoveryThreshold)iter.next();
-        if ( threshold.getAwardThresholdAmount().compareTo(threshold.getAwardAccumulatedCostAmount()) > 0 ) {
-          // 1596 - 1654
-          KualiDecimal availableCostAmount = threshold.getAwardThresholdAmount().subtract(threshold.getAwardAccumulatedCostAmount());
-          // subtract previous amount?  What is that?
+      Collection automatedEntries = icrAutomatedEntryDao.getEntriesBySeries(et.getUniversityFiscalYear(),et.getAccount().getFinancialIcrSeriesIdentifier(),et.getBalanceTypeCode());
+      int automatedEntriesCount = automatedEntries.size();
+      if ( automatedEntries.size() > 0) {
+        int count = 0;
+        for (Iterator icrIter = automatedEntries.iterator(); icrIter.hasNext();) {
+          IcrAutomatedEntry icrEntry = (IcrAutomatedEntry)icrIter.next();
+          count++;
 
-          if ( amountRemaining.compareTo(availableCostAmount) <= 0 ) {
+          KualiDecimal generatedTransactionAmount = null;
 
+          if ( icrEntry.getAwardIndrCostRcvyEntryNbr().intValue() == 1 ) {
+            // Line 1 must have the total percentage of the transaction to distribute
+            distributionPercent = icrEntry.getAwardIndrCostRcvyRatePct();
+            distributionAmount = transactionAmount.multiply(new KualiDecimal(distributionPercent.toString())).divide(onehundred);
+
+            generatedTransactionAmount = distributionAmount;
+          } else {
+            generatedTransactionAmount = transactionAmount.multiply(new KualiDecimal(icrEntry.getAwardIndrCostRcvyRatePct().toString())).divide(onehundred);
+            distributedAmount = distributedAmount.add(generatedTransactionAmount);
+
+            // Do we need to round?  Round on the last one
+            if ( automatedEntriesCount == (count+1) ) {
+              KualiDecimal difference = distributionAmount.subtract(distributedAmount);
+              
+              if ( difference.compareTo(KualiDecimal.ZERO) != 0 ) {
+                if ( difference.abs().compareTo(warningMaxDifference) >= 0 ) {
+                  // TODO Rounding warning
+                }
+                distributedAmount.add(difference);
+              }
+            }
           }
-        } else {
-          // 1656 - 1687
+
+          generateTransaction(et,icrEntry,generatedTransactionAmount,runDate,group);
+          addReporting(reportSummary,"GL_ORIGIN_ENTRY_T","G");
+          addReporting(reportSummary,"GL_ORIGIN_ENTRY_T","G");
         }
       }
 
-      // TODO Create entry to move the money
-
-      Collection icrEntries = icrAutomatedEntryDao.getEntriesBySeries(et.getUniversityFiscalYear(),et.getAccount().getFinancialIcrSeriesIdentifier(),et.getBalanceTypeCode());
-      int count = icrEntries.size();
-      for (Iterator icrIter = icrEntries.iterator(); icrIter.hasNext();) {
-        IcrAutomatedEntry icrEntry = (IcrAutomatedEntry)icrIter.next();
-        
-        // TODO Calculate percentage
-        // TODO Create entry for destination
-        if ( count == 1) {
-          // TODO Do rounding
-        }
-
-        count--;
-      }
+      // Delete expenditure record
+      expenditureTransactionDao.delete(et);
+      addReporting(reportSummary,"GL_EXPEND_TRAN_T","D");
     }
 
     // TODO Print report
-    String title = "Poster ICR Transaction Generation Report";
+    icrGenerationReportService.generateReport(reportErrors,reportSummary,runDate,0);
+  }
+
+  private void generateTransaction(ExpenditureTransaction et,IcrAutomatedEntry icrEntry,KualiDecimal generatedTransactionAmount,Date runDate,OriginEntryGroup group) {
+    OriginEntry e = new OriginEntry();
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD");
+
+    // @ means we use the field from the expenditure entry, # means we use the ICR field from the account record, otherwise, use
+    // the field in the icrEntry
+    if ( "@".equals(icrEntry.getFinancialObjectCode()) || "#".equals(icrEntry.getFinancialObjectCode()) ) {
+      e.setFinancialObjectCode(et.getObjectCode());
+      e.setFinancialSubObjectCode(et.getSubObjectCode());
+    } else {
+      e.setFinancialObjectCode(icrEntry.getFinancialObjectCode());
+      if ( "@".equals(icrEntry.getFinancialSubObjectCode()) ) {
+        e.setFinancialSubObjectCode(et.getSubObjectCode());
+      } else {
+        e.setFinancialSubObjectCode(et.getSubObjectCode());
+      }
+    }
+
+    if ( "@".equals(icrEntry.getAccountNumber()) ) {
+      e.setAccountNumber(et.getAccountNumber());
+      e.setChartOfAccountsCode(et.getChartOfAccountsCode());
+      e.setSubAccountNumber(et.getSubAccountNumber());
+    } else if ( "#".equals(icrEntry.getAccountNumber()) ) {
+      e.setAccountNumber(et.getAccount().getIndirectCostRecoveryAcctNbr());
+      e.setChartOfAccountsCode(et.getAccount().getChartOfAccountsCode());
+      e.setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
+    } else {
+      e.setAccountNumber(icrEntry.getAccountNumber());
+      e.setSubAccountNumber(icrEntry.getSubAccountNumber());
+      e.setChartOfAccountsCode(icrEntry.getChartOfAccountsCode());
+    }
+
+    e.setFinancialDocumentTypeCode("ICR");
+    e.setFinancialSystemOriginationCode("MF");
+    e.setFinancialDocumentNumber(sdf.format(runDate));
+    if ( Constants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator()) ) {
+      e.setTransactionLedgerEntryDesc(getChargeDescription(icrEntry.getAwardIndrCostRcvyRatePct(),et.getObjectCode(),et.getAccount().getAcctIndirectCostRcvyTypeCd(),et.getAccountObjectDirectCostAmount()));
+    } else {
+      e.setTransactionLedgerEntryDesc(getOffsetDescription(icrEntry.getAwardIndrCostRcvyRatePct(),et.getAccountObjectDirectCostAmount(),et.getChartOfAccountsCode(),et.getAccountNumber()));
+    }
+    e.setTransactionDate(new java.sql.Date(runDate.getTime()));
+    e.setTransactionDebitCreditCode(icrEntry.getTransactionDebitIndicator());
+    e.setFinancialBalanceTypeCode(et.getBalanceTypeCode());
+    e.setUniversityFiscalYear(et.getUniversityFiscalYear());
+    e.setUniversityFiscalPeriodCode(et.getUniversityFiscalAccountingPeriod());
+
+    e.setTransactionLedgerEntryAmount(generatedTransactionAmount);
+    
+    if ( et.getBalanceTypeCode().equals(et.getOption().getExtrnlEncumFinBalanceTypCd()) || 
+        et.getBalanceTypeCode().equals(et.getOption().getIntrnlEncumFinBalanceTypCd()) ||
+        et.getBalanceTypeCode().equals(et.getOption().getPreencumbranceFinBalTypeCd()) ||
+        et.getBalanceTypeCode().equals("CE") ) {
+      e.setFinancialDocumentNumber("ICR");
+    }
+    e.setProjectCode(et.getProjectCode());
+    if ( "--------".equals(et.getOrganizationReferenceId()) ) {
+      e.setOrganizationReferenceId(null);
+    } else {
+      e.setOrganizationReferenceId(et.getOrganizationReferenceId());
+    }
+
+    originEntryService.createEntry(e,group);
+
+    // Now generate Offset
+    e = new OriginEntry(e);
+    if ( Constants.GL_DEBIT_CODE.equals(e.getTransactionDebitCreditCode()) ) {
+      e.setTransactionDebitCreditCode(Constants.GL_CREDIT_CODE);
+    } else {
+      e.setTransactionDebitCreditCode(Constants.GL_DEBIT_CODE);
+    }
+    e.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
+    e.setFinancialObjectCode(icrEntry.getOffsetBalanceSheetObjectCodeNumber());
+
+    if ( icrEntry.getOffsetBalanceSheetObjectCode() == null ) {
+      // TODO Warning because offset object code not valid
+    } else {
+      e.setFinancialObjectTypeCode(icrEntry.getOffsetBalanceSheetObjectCode().getFinancialObjectTypeCode());
+    }
+
+    if ( Constants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator()) ) {
+      e.setTransactionLedgerEntryDesc(getChargeDescription(icrEntry.getAwardIndrCostRcvyRatePct(),et.getObjectCode(),et.getAccount().getAcctIndirectCostRcvyTypeCd(),et.getAccountObjectDirectCostAmount()));
+    } else {
+      e.setTransactionLedgerEntryDesc(getOffsetDescription(icrEntry.getAwardIndrCostRcvyRatePct(),et.getAccountObjectDirectCostAmount(),et.getChartOfAccountsCode(),et.getAccountNumber()));
+    }
+
+    originEntryService.createEntry(e,group);
+  }
+
+// I don't understand thresholds so I removed this code.
+//
+//  Collection thresholds = indirectCostRecoveryThresholdDao.getByAccount(et.getChartOfAccountsCode(),et.getAccountNumber());
+//  for (Iterator iter = thresholds.iterator(); iter.hasNext();) {
+//    IndirectCostRecoveryThreshold threshold = (IndirectCostRecoveryThreshold)iter.next();
+//    if ( threshold.getAwardThresholdAmount().compareTo(threshold.getAwardAccumulatedCostAmount()) > 0 ) {
+//      // 1596 - 1654
+//      KualiDecimal availableCostAmount = threshold.getAwardThresholdAmount().subtract(threshold.getAwardAccumulatedCostAmount());
+//      // subtract previous amount?  What is that?
+//
+//      if ( amountRemaining.compareTo(availableCostAmount) <= 0 ) {
+//
+//      }
+//    } else {
+//      // 1656 - 1687
+//    }
+//  }
+
+  private String getChargeDescription(KualiDecimal rate,String objectCode,String type,KualiDecimal amount) {
+    NumberFormat nf = NumberFormat.getInstance();
+
+    StringBuffer desc = new StringBuffer("CHG ");
+    nf.setMaximumFractionDigits(3);
+    nf.setMinimumFractionDigits(3);
+    nf.setMaximumIntegerDigits(2);
+    nf.setMinimumIntegerDigits(1);
+    desc.append(nf.format(rate));
+    desc.append("% ON ");
+    desc.append(objectCode);
+    desc.append(" (");
+    desc.append(type);
+    desc.append(") ");
+    nf.setMaximumFractionDigits(2);
+    nf.setMinimumFractionDigits(2);
+    nf.setMaximumIntegerDigits(11);
+    nf.setMinimumIntegerDigits(1);
+    desc.append(nf.format(amount));
+    return desc.toString();
+  }
+
+  private String getOffsetDescription(KualiDecimal rate,KualiDecimal amount,String chartOfAccountsCode,String accountNumber) {
+    NumberFormat nf = NumberFormat.getInstance();
+
+    StringBuffer desc = new StringBuffer("RCV ");
+    nf.setMaximumFractionDigits(3);
+    nf.setMinimumFractionDigits(3);
+    nf.setMaximumIntegerDigits(2);
+    nf.setMinimumIntegerDigits(1);
+    desc.append(nf.format(rate));
+    desc.append("% ON ");
+    nf.setMaximumFractionDigits(2);
+    nf.setMinimumFractionDigits(2);
+    nf.setMaximumIntegerDigits(11);
+    nf.setMinimumIntegerDigits(1);
+    desc.append(nf.format(amount));
+    desc.append(" FRM ");
+    desc.append(chartOfAccountsCode);
+    desc.append("-");
+    desc.append(accountNumber);
+    return desc.toString();
   }
 
   private void addReporting(Map reporting, String destination, String operation) {
@@ -369,6 +560,10 @@ public class PosterServiceImpl implements PosterService {
 
   public void setPosterReport(PosterReport prs) {
     posterReportService = prs;
+  }
+
+  public void setIcrGenerationReport(PosterReport prs) {
+    icrGenerationReportService = prs;
   }
 
   public void setOriginEntryService(OriginEntryService oes) {
@@ -403,7 +598,7 @@ public class PosterServiceImpl implements PosterService {
     icrAutomatedEntryDao = iaed;
   }
 
-  public void setIndirectCostRecoveryThresholdDao(IndirectCostRecoveryThresholdDao icrtd) {
-      indirectCostRecoveryThresholdDao = icrtd;
-  }
+//  public void setIndirectCostRecoveryThresholdDao(IndirectCostRecoveryThresholdDao icrtd) {
+//      indirectCostRecoveryThresholdDao = icrtd;
+//  }
 }

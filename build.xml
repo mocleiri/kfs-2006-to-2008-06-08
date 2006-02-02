@@ -272,7 +272,7 @@
 
 	<target name="dev-deploy-plugin" depends="make-source">
 
-		<copy todir="${plugin.deploy.directory}/kul/lib">
+		<copy todir="${plugin.deploy.directory}/kuali/lib">
 			<fileset dir="${lib.directory}">
 				<exclude name="workflow-client-2.1.jar" />
 				<exclude name="jta-1.0.1b.jar" />
@@ -283,16 +283,16 @@
 				<exclude name="jdom.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${plugin.deploy.directory}/kul/classes">
+		<copy todir="${plugin.deploy.directory}/kuali/classes">
 			<fileset dir="${war.classes.directory}" />
 		</copy>
 		<!-- overwrite the web app workflow-config.propertis this is necessary until we can figure out
 					how to get the web services running in the plugin -->
-		<copy todir="${plugin.deploy.directory}/kul/classes" overwrite="true">
+		<copy todir="${plugin.deploy.directory}/kuali/classes" overwrite="true">
 			<fileset file="${build.config.directory}/workflow/workflow-config.properties" />
 		</copy>
 
-		<copy todir="${plugin.deploy.directory}/kul/META-INF" overwrite="true">
+		<copy todir="${plugin.deploy.directory}/kuali/META-INF" overwrite="true">
 			<fileset file="${build.config.directory}/workflow/workflow.xml" />
 		</copy>
 	</target>
