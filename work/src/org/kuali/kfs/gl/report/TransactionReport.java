@@ -109,11 +109,6 @@ public class TransactionReport {
   public void generateReport(Map reportErrors, Map reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
     LOG.debug("generateReport() started");
 
-    for (Iterator iter = reportSummary.keySet().iterator(); iter.hasNext();) {
-      String key = (String)iter.next();
-      System.out.println(key + " = " + reportSummary.get(key));
-    }
-
     Font headerFont = FontFactory.getFont(FontFactory.COURIER,8,Font.BOLD);
     Font textFont = FontFactory.getFont(FontFactory.COURIER,8,Font.NORMAL);
 
@@ -169,13 +164,15 @@ public class TransactionReport {
         } else {
           msg.append(pieces[0]);
         }
-        msg.append(" records ");
-
-        String word = (String)operations.get(pieces[1]);
-        if ( word == null ) {
-          msg.append("processed");
-        } else {
-          msg.append(word);
+        if (pieces.length > 1) {
+            msg.append(" records ");
+    
+            String word = (String)operations.get(pieces[1]);
+            if ( word == null ) {
+              msg.append("processed");
+            } else {
+              msg.append(word);
+            }
         }
         msg.append(":");
 
@@ -197,7 +194,7 @@ public class TransactionReport {
       
       document.add(summary);
 
-      if ( reportErrors.size() > 0 ) {
+      if ( reportErrors != null && reportErrors.size() > 0 ) {
         float[] warningWidths = {4,3,6,5,5,4,5,5,4,5,5,9,4,36};
         PdfPTable warnings = new PdfPTable(warningWidths);
         warnings.setHeaderRows(2);
