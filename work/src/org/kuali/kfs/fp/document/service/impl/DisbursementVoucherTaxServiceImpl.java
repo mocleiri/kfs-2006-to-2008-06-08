@@ -46,7 +46,6 @@ import org.kuali.module.financial.bo.Payee;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
 import org.kuali.module.financial.rules.DisbursementVoucherDocumentRule;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
-import org.kuali.module.financial.rules.TransactionalDocumentRuleBase;
 import org.kuali.module.financial.service.DisbursementVoucherTaxService;
 
 /**
@@ -436,13 +435,13 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
         }
 
         /* check total cannot be negative */
-        if (TransactionalDocumentRuleBase.ZERO.compareTo(document.getDisbVchrCheckTotalAmount()) == 1) {
+        if (Constants.ZERO.compareTo(document.getDisbVchrCheckTotalAmount()) == 1) {
             errors.put("document.disbVchrCheckTotalAmount", KeyConstants.ERROR_NEGATIVE_CHECK_TOTAL);
             return false;
         }
 
         /* total accounting lines cannot be negative */
-        if (TransactionalDocumentRuleBase.ZERO.compareTo(document.getSourceTotal()) == 1) {
+        if (Constants.ZERO.compareTo(document.getSourceTotal()) == 1) {
             errors.put(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_NEGATIVE_ACCOUNTING_TOTAL);
             return false;
         }
