@@ -176,9 +176,9 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         }
 
         /* if no documentation is selected, must be a note explaining why */
-        if (NO_DOCUMENTATION_LOCATION.equals(document.getDisbVchrDocumentationLocCode())
+        if (NO_DOCUMENTATION_LOCATION.equals(document.getDisbursementVoucherDocumentationLocationCode())
                 && (document.getDocumentHeader().getNotes() == null || document.getDocumentHeader().getNotes().size() == 0)) {
-            errors.put("disbVchrDocumentationLocCode", KeyConstants.ERROR_DV_NO_DOCUMENTATION_NOTE);
+            errors.put("disbursementVoucherDocumentationLocationCode", KeyConstants.ERROR_DV_NO_DOCUMENTATION_NOTE);
         }
 
         /* if special handling indicated, must be a note exlaining why */
@@ -503,12 +503,12 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         ErrorMap errors = GlobalVariables.getErrorMap();
 
         /* check total cannot be negative */
-        if (ZERO.compareTo(document.getDisbVchrCheckTotalAmount()) == 1) {
+        if (Constants.ZERO.compareTo(document.getDisbVchrCheckTotalAmount()) == 1) {
             errors.put("document.disbVchrCheckTotalAmount", KeyConstants.ERROR_NEGATIVE_CHECK_TOTAL);
         }
 
         /* total accounting lines cannot be negative */
-        if (ZERO.compareTo(document.getSourceTotal()) == 1) {
+        if (Constants.ZERO.compareTo(document.getSourceTotal()) == 1) {
             errors.put(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_NEGATIVE_ACCOUNTING_TOTAL);
         }
 
