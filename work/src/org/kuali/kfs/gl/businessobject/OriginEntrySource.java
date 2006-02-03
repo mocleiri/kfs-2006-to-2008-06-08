@@ -26,7 +26,7 @@ import org.kuali.core.bo.KualiCodeBase;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntrySource.java,v 1.2.2.1 2006-01-31 19:01:18 rkirkend Exp $
+ * @version $Id: OriginEntrySource.java,v 1.2.2.2 2006-02-03 20:53:30 rkirkend Exp $
  * 
  */
 

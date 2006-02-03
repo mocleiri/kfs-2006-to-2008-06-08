@@ -53,8 +53,12 @@ public class TransactionalDocumentRuleUtilTest
     private static long ONE_DAY_MILLIS = 86400000;
     
     private String _balanceTypeActual;
+    private String _btcAttrName;
+
     private String _annualBalancePeriodCode;
+    private String _apcAttrName;
     private Integer _currentFiscalYear;
+    
 
     public void runTest() throws Throwable {
         try {
@@ -159,6 +163,46 @@ public class TransactionalDocumentRuleUtilTest
     }
     
     /**
+     * Fixture method for getting the property name of a 
+     * <code>{@link BalanceTyp}</code> for displaying errors.
+     *
+     * @return String
+     */
+    public String getBalanceTypeCodeAttributeName() {
+        return _btcAttrName;
+    }
+
+    /**
+     * Fixture method for getting the property name of a 
+     * <code>{@link BalanceTyp}</code> for displaying errors.
+     *
+     * @param n 
+     */
+    public void setBalanceTypeCodeAttributeName( String n ) {
+        _btcAttrName = n;
+    }
+
+    /**
+     * Fixture method for getting the property name of an 
+     * <code>{@link AccountingPeriod}</code> for displaying errors.
+     *
+     * @return String
+     */
+    public String getAccountingPeriodCodeAttributeName() {
+        return _apcAttrName;
+    }
+
+    /**
+     * Fixture method for getting the property name of an 
+     * <code>{@link AccountingPeriod}</code> for displaying errors.
+     *
+     * @param n 
+     */
+    public void setAccountingPeriodCodeAttributeName( String n ) {
+        _apcAttrName = n;
+    }
+    
+    /**
      * Fixture accessor method for an open 
      * <code>{@link AccountingPeriod}</code> instance.
      *
@@ -250,7 +294,7 @@ public class TransactionalDocumentRuleUtilTest
         
         assertEquals( new Boolean( TransactionalDocumentRuleUtil
                                    .isValidBalanceType( balanceType, 
-                                                        getErrorPropertyName() ) ),
+                                                        getBalanceTypeCodeAttributeName() ) ),
                       new Boolean( expected ) );
     }
 
@@ -296,7 +340,7 @@ public class TransactionalDocumentRuleUtilTest
                                                     boolean expected ) {
         assertEquals( new Boolean( TransactionalDocumentRuleUtil
                                    .isValidOpenAccountingPeriod( period, 
-                                                                 getErrorPropertyName() ) ), 
+                                                                 getAccountingPeriodCodeAttributeName() ) ), 
                       new Boolean( expected ) );
     }
 
