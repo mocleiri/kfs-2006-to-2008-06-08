@@ -39,7 +39,7 @@ import org.kuali.module.gl.service.OriginEntryService;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryServiceImpl.java,v 1.2.4.1 2006-01-31 19:01:18 rkirkend Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.2.4.2 2006-02-03 20:53:25 rkirkend Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
   private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
