@@ -29,7 +29,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryGroup.java,v 1.1.6.1 2006-01-31 19:01:18 rkirkend Exp $
+ * @version $Id: OriginEntryGroup.java,v 1.1.6.2 2006-02-03 20:53:30 rkirkend Exp $
  *
  */
 

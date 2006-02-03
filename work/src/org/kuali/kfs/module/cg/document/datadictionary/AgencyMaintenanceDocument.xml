@@ -18,7 +18,7 @@
         </authorizations>
 
 		<documentTypeName>KualiContractsAndGrantsAgencyMaintenanceDocument</documentTypeName>
-		<documentTypeCode>AM</documentTypeCode>
+		<documentTypeCode>AGCY</documentTypeCode>
 
 		<label>Contracts And Grants Agency Maintenance Document</label>
 		<shortLabel>CGAgencyMaintDoc</shortLabel>
@@ -41,6 +41,7 @@
 					<maintainableField name="inStateIndicator" />
 					<maintainableField name="indirectAmount" />
 					<maintainableField name="reportsToAgency.agencyNumber" />
+					<maintainableField name="versionNumber" />
 				</maintainableItems>
 	        </maintainableSection>
 	    </maintainableSections>

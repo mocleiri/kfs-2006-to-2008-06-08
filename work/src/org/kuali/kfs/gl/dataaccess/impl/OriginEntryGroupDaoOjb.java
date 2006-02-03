@@ -36,7 +36,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupDaoOjb.java,v 1.1.6.1 2006-01-31 19:01:24 rkirkend Exp $
+ * @version $Id: OriginEntryGroupDaoOjb.java,v 1.1.6.2 2006-02-03 20:53:51 rkirkend Exp $
  * 
  */
 

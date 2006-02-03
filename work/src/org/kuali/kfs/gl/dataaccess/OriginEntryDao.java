@@ -29,7 +29,7 @@ import org.kuali.module.gl.bo.OriginEntry;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryDao.java,v 1.1.6.1 2006-01-31 19:01:20 rkirkend Exp $
+ * @version $Id: OriginEntryDao.java,v 1.1.6.2 2006-02-03 20:53:30 rkirkend Exp $
  */
 public interface OriginEntryDao {
 	public Iterator getMatchingEntries(Map searchCriteria);

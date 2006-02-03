@@ -18,7 +18,7 @@
         </authorizations>
 
 		<documentTypeName>KualiFundGroupMaintenanceDocument</documentTypeName>
-		<documentTypeCode>FGM</documentTypeCode>
+		<documentTypeCode>FGRP</documentTypeCode>
 
 		<label>Fund Group Maintenance Document</label>
 		<shortLabel>FundGroupMainDoc</shortLabel>
@@ -37,6 +37,7 @@
 		            <maintainableField name="name" required="true" />
 		            <maintainableField name="financialReportingSortCode" required="true" />
 		            <maintainableField name="active" required="false" />
+		            <maintainableField name="versionNumber" />
                 </maintainableItems>
 	        </maintainableSection>
 	    </maintainableSections>

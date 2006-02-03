@@ -20,7 +20,7 @@
     </authorizations>
 
     <documentTypeName>KualiOrganizationMaintenanceDocument</documentTypeName>
-    <documentTypeCode>OMD</documentTypeCode>
+    <documentTypeCode>ORGN</documentTypeCode>
 
     <label>Organization Maintenance Document</label>
     <shortLabel>OrgMainDoc</shortLabel>
@@ -63,6 +63,7 @@
           <maintainableField
             name="organizationManagerUniversal.personUniversalIdentifier" />
           <maintainableField name="organizationStreetAddress" />
+          <maintainableField name="versionNumber" />
         </maintainableItems>
       </maintainableSection>
     </maintainableSections>

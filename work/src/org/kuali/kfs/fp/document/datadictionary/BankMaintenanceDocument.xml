@@ -18,7 +18,7 @@
         </authorizations>
 
 		<documentTypeName>KualiBankMaintenanceDocument</documentTypeName>
-		<documentTypeCode>BKM</documentTypeCode>
+		<documentTypeCode>BANK</documentTypeCode>
 
 		<label>Bank Maintenance Document</label>
 		<shortLabel>BankMaintDoc</shortLabel>
@@ -35,7 +35,8 @@
 	        	<maintainableItems>
 	            	<maintainableField name="financialDocumentBankCode" required="true" />
 	            	<maintainableField name="financialDocumentBankName" required="true" />
-	            	<maintainableField name="financialDocumentBankShortNm" required="true"/>          	                   
+	            	<maintainableField name="financialDocumentBankShortNm" required="true"/>
+	            	<maintainableField name="versionNumber" />          	                   
 	         	</maintainableItems>
 	        </maintainableSection>
 	    </maintainableSections>

@@ -18,7 +18,7 @@
         </authorizations>
 
 		<documentTypeName>KualiOffsetDefinitionMaintenanceDocument</documentTypeName>
-		<documentTypeCode>ODM</documentTypeCode>
+		<documentTypeCode>OFSD</documentTypeCode>
 		<label>Offset Definition Maintenance Document</label>
 		<shortLabel>OffsetDefMaintDoc</shortLabel>
 		<summary>Offset Definition Maintenance Document</summary>
@@ -42,6 +42,7 @@
 					<maintainableField name="financialDocumentTypeCode" required="true" />
 					<maintainableField name="financialBalanceTypeCode" required="true" />
 					<maintainableField name="financialObject.financialObjectCode" required="true" />
+					<maintainableField name="versionNumber" />
 
                 </maintainableItems>
 			</maintainableSection>

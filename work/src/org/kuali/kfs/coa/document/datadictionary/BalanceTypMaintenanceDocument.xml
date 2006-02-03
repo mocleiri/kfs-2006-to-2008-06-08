@@ -18,7 +18,7 @@
         </authorizations>
 
 		<documentTypeName>KualiBalanceTypeMaintenanceDocument</documentTypeName>
-		<documentTypeCode>BTM</documentTypeCode>
+		<documentTypeCode>BTYP</documentTypeCode>
 		<label>Balance Type Maintenance Document</label>
 		<shortLabel>BalanceTypeMaintDoc</shortLabel>
 		<summary>Balance Type Maintenance Document</summary>
@@ -36,6 +36,7 @@
 					<maintainableField name="financialBalanceTypeShortNm" required="true" />
 					<maintainableField name="financialOffsetGenerationIndicator" required="true" />
 					<maintainableField name="finBalanceTypeEncumIndicator" />
+					<maintainableField name="versionNumber" />
                 </maintainableItems>
 			</maintainableSection>
 		</maintainableSections>
