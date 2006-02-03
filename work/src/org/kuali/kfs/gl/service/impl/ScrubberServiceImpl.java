@@ -54,11 +54,12 @@ import org.kuali.module.gl.dao.UniversityDateDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.ScrubberService;
+import org.kuali.module.gl.util.Summary;
 import org.springframework.util.StringUtils;
 
 /**
  * @author Anthony Potts
- * @version $Id: ScrubberServiceImpl.java,v 1.4.2.2 2006-02-02 15:38:08 rkirkend Exp $
+ * @version $Id: ScrubberServiceImpl.java,v 1.4.2.3 2006-02-03 20:53:25 rkirkend Exp $
  */
 
 public class ScrubberServiceImpl implements ScrubberService {
@@ -82,7 +83,7 @@ public class ScrubberServiceImpl implements ScrubberService {
     OriginEntryGroup errorGroup;
     OriginEntryGroup expiredGroup;
     Map batchError;
-    Map reportSummary;
+    List reportSummary;
     List transactionErrors;
 
     private OriginEntry previousEntry;
@@ -91,6 +92,7 @@ public class ScrubberServiceImpl implements ScrubberService {
     private String wsExpiredChart;
     private String wsExpiredAccount;
     private boolean eof;
+    private boolean groupError;
     
     private int writeSwitchStatusCD = 0;
 
@@ -110,7 +112,7 @@ public class ScrubberServiceImpl implements ScrubberService {
         LOG.debug("beginning scrubber process");
         
         batchError = new HashMap();
-        reportSummary = new HashMap();
+        reportSummary = new ArrayList();
         
         // setup an object to hold the "default" date information
         runDate = new Date(dateTimeService.getCurrentDate().getTime());
@@ -130,19 +132,25 @@ public class ScrubberServiceImpl implements ScrubberService {
 
         LOG.debug("number of groups to scrub: " + groupsToScrub.size());
 
+        /* Scrub all of the OriginEntryGroups waiting to be scrubbed as of runDate.
+         */
         for (Iterator groupIterator = groupsToScrub.iterator(); groupIterator.hasNext();) {
             OriginEntryGroup grp = (OriginEntryGroup) groupIterator.next();
+            groupError = false;
+            ++scrubberUtil.groupsRead;
             
             LOG.debug("start group: " + grp.getId() + " - source: " + grp.getSourceCode());
 
             for (Iterator entryIterator = originEntryService.getEntriesByGroup(grp); entryIterator.hasNext();) {
-                ++scrubberUtil.originCount;
+                ++scrubberUtil.groupEntryCount;
                 eof = !entryIterator.hasNext();
                 OriginEntry entry = (OriginEntry) entryIterator.next();
-                LOG.debug("group: " + grp.getId() + " - entry number: " + scrubberUtil.originCount + " - entry id: " + entry.getObjectId());
+                LOG.debug("group: " + grp.getId() + " - entry number: " + scrubberUtil.groupEntryCount + " - entry id: " + entry.getObjectId());
+                
+                // Scrub the entry in the context of the previously scrubbed entry.
                 processUnitOfWork(entry, previousEntry);
             }
-            scrubberUtil.recordsRead += scrubberUtil.originCount;
+            scrubberUtil.recordsRead += scrubberUtil.groupEntryCount;
             
             grp.setProcess(new Boolean(false));
             originEntryGroupService.save(grp);
@@ -151,18 +159,19 @@ public class ScrubberServiceImpl implements ScrubberService {
         }
 
         // write out report and errors
-        reportSummary.put("UNSCRUBBED RECORDS READ", new Integer(scrubberUtil.recordsRead));
-        reportSummary.put("SCRUBBED RECORDS WRITTEN", new Integer(scrubberUtil.scrubbedRecordsWriteCount));
-        reportSummary.put("ERROR RECORDS WRITTEN", new Integer(scrubberUtil.errorWriteCount));
-        reportSummary.put("OFFSET ENTRIES GENERATED", new Integer(scrubberUtil.offsetCount));
-        reportSummary.put("ELIMINATION ENTRIES GENERATED", new Integer(scrubberUtil.eliminationCount));
-        reportSummary.put("CAPITALIZATION ENTRIES GENERATED", new Integer(scrubberUtil.camsCount));
-        reportSummary.put("LIABLITY ENTRIES GENERATED", new Integer(scrubberUtil.liabCount));
-        reportSummary.put("PLANT INDEBTEDNESS ENTRIES GENERATED", new Integer(scrubberUtil.plantIndebtednessCount));
-        reportSummary.put("COST SHARE ENTRIES GENERATED", new Integer(scrubberUtil.costShareCount));
-        reportSummary.put("COST SHARE ENC ENTRIES GENERATED", new Integer(scrubberUtil.costShareEncCount));
-        reportSummary.put("TOTAL OUTPUT RECORDS WRITTEN", new Integer(scrubberUtil.totalWriteCount));
-        reportSummary.put("EXPIRED ACCOUNTS FOUND", new Integer(scrubberUtil.expiredAccountCount));
+        reportSummary.add(new Summary(1, "UNSCRUBBED RECORDS READ", new Integer(scrubberUtil.recordsRead)));
+        reportSummary.add(new Summary(2, "GROUPS READ", new Integer(scrubberUtil.groupsRead)));
+        reportSummary.add(new Summary(3, "SCRUBBED RECORDS WRITTEN", new Integer(scrubberUtil.scrubbedRecordsWriteCount)));
+        reportSummary.add(new Summary(4, "ERROR RECORDS WRITTEN", new Integer(scrubberUtil.errorWriteCount)));
+        reportSummary.add(new Summary(5, "OFFSET ENTRIES GENERATED", new Integer(scrubberUtil.offsetCount)));
+        reportSummary.add(new Summary(6, "ELIMINATION ENTRIES GENERATED", new Integer(scrubberUtil.eliminationCount)));
+        reportSummary.add(new Summary(7, "CAPITALIZATION ENTRIES GENERATED", new Integer(scrubberUtil.camsCount)));
+        reportSummary.add(new Summary(8, "LIABLITY ENTRIES GENERATED", new Integer(scrubberUtil.liabCount)));
+        reportSummary.add(new Summary(9, "PLANT INDEBTEDNESS ENTRIES GENERATED", new Integer(scrubberUtil.plantIndebtednessCount)));
+        reportSummary.add(new Summary(10, "COST SHARE ENTRIES GENERATED", new Integer(scrubberUtil.costShareCount)));
+        reportSummary.add(new Summary(11, "COST SHARE ENC ENTRIES GENERATED", new Integer(scrubberUtil.costShareEncCount)));
+        reportSummary.add(new Summary(12, "TOTAL OUTPUT RECORDS WRITTEN", new Integer(scrubberUtil.totalWriteCount)));
+        reportSummary.add(new Summary(13, "EXPIRED ACCOUNTS FOUND", new Integer(scrubberUtil.expiredAccountCount)));
         scrubberReportService.generateReport(null, reportSummary, runDate, 0);
         
 /*      
@@ -176,17 +185,41 @@ public class ScrubberServiceImpl implements ScrubberService {
         LOG.debug("exiting scrubber process");
     }
 
+    /**
+     * 
+     * @param originEntry
+     * @param previousEntry
+     * @return
+     */
     private OriginEntry processUnitOfWork(OriginEntry originEntry, OriginEntry previousEntry) { /* 2500-process-unit-of-work */
+    	// Errors are recorded on a per-entry basis.
         transactionErrors = new ArrayList();
 
         OriginEntry workingEntry = null;
         
-        // first, need to see if the key fields are the same as last unit of
-        // work (for performance reasons)
+        // First, need to see if the key fields are the same as last 
+        // unit of work. This has historically been done for 
+        // performance reasons dating back to FIS where instead of
+        // processing Objects or database rows (as we are essentially
+        // doing here), lines of a text file were processed. The lines
+        // in the file had to be sorted to group them together by the
+        // first 51 characters of the line. This is essentially the 
+        // same thing as grouping entries under a document. This 
+        // functionality may or may not have any impact on performance
+        // as it is implemented here. It is needed at this point to 
+        // allow individual entries to be grouped into a unit of work.
+        // If the equivalent of the first 51 characters of the line in
+        // the legacy text file implementation match the first 51 
+        // characters of the entry processed immediately prior to this
+        // one, fields are copied from the previous entry into the  
+        // entry currently being processed. 
         checkUnitOfWork(originEntry, workingEntry);
 
         workingEntry = new OriginEntry();
 
+        // If the sub account number is empty, set it to dashes. 
+        // Otherwise set the workingEntry sub account number to the
+        // sub account number of the input origin entry.
         if (StringUtils.hasText(originEntry.getSubAccountNumber()) && !Constants.DASHES_SUB_ACCOUNT_NUMBER.equals(originEntry.getSubAccountNumber())) {
             workingEntry.setSubAccountNumber(originEntry.getSubAccountNumber());
         } else {
@@ -260,25 +293,33 @@ public class ScrubberServiceImpl implements ScrubberService {
             workingEntry.setDocumentType(originEntry.getDocumentType());
         }
 
-        checkGLObject(originEntry.getOrigination(), kualiConfigurationService.getPropertyString(KeyConstants.ERROR_ORIGIN_CODE_NOT_FOUND));
+        if (checkGLObject(originEntry.getOrigination(), kualiConfigurationService.getPropertyString(KeyConstants.ERROR_ORIGIN_CODE_NOT_FOUND))) {
+            workingEntry.setOrigination(originEntry.getOrigination());
+        }
+        workingEntry.setFinancialSystemOriginationCode(originEntry.getFinancialSystemOriginationCode());
 
         if (!StringUtils.hasText(originEntry.getFinancialDocumentNumber())) {
             transactionErrors.add(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_DOCUMENT_NUMBER_REQUIRED));
         }
 
-        checkGLObject(originEntry.getChart(), kualiConfigurationService.getPropertyString(KeyConstants.ERROR_CHART_NOT_FOUND));
+        if (checkGLObject(originEntry.getChart(), kualiConfigurationService.getPropertyString(KeyConstants.ERROR_CHART_NOT_FOUND))) {
+            workingEntry.setChart(originEntry.getChart());
+        }
+        workingEntry.setChartOfAccountsCode(originEntry.getChartOfAccountsCode());
 
         if (originEntry.getChart() != null && !originEntry.getChart().isFinChartOfAccountActiveIndicator()) {
             transactionErrors.add(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_CHART_NOT_ACTIVE));
         }
 
-        checkGLObject(originEntry.getAccount(), kualiConfigurationService.getPropertyString(KeyConstants.ERROR_ACCOUNT_NOT_FOUND));
-
+        if (checkGLObject(originEntry.getAccount(), kualiConfigurationService.getPropertyString(KeyConstants.ERROR_ACCOUNT_NOT_FOUND))) {
+            workingEntry.setAccount(originEntry.getAccount());
+        }
+        workingEntry.setAccountNumber(originEntry.getAccountNumber());
         
         if ("ACLO".equals(originEntry.getFinancialDocumentTypeCode())) { // TODO: move to properties ANNUAL_CLOSING
             resolveAccount(originEntry, workingEntry);
         } else {
-            wsAccountChange = originEntry.getAccountNumber(); 
+            wsAccountChange = originEntry.getAccountNumber();
         }
         
         if (!wsAccountChange.equals(workingEntry.getAccountNumber()) && originEntry.getAccount() != null) {
@@ -531,6 +572,12 @@ public class ScrubberServiceImpl implements ScrubberService {
         return workingEntry;
     }// End of method
     
+    /**
+     * 
+     * @param glObject
+     * @param errorMessage
+     * @return
+     */
     private boolean checkGLObject(Object glObject, String errorMessage) {
         if (glObject == null) {
             if (StringUtils.hasText(errorMessage)) {
@@ -613,18 +660,42 @@ public class ScrubberServiceImpl implements ScrubberService {
     /**
      * 2510-CHECK-UOW
      * 
-     * The purpose of this method is to determine wether or not an offset entry should
-     * be generated. It uses the "unit of work to make this decision. The unit of work
-     * is made up of the following fields document type code, origin code, document number, 
-     * chart of accounts code, accountnumber, subaccount number, balance type, dcoument 
-     * reversal date, fiscal period. If the unit of work for the current transaction is
-     * different than the unit of work of the previous transaction and the offset
-     * accumulator is not equal to zero then an offset should be generated. Note, offsets
-     * will not be generated for journal vouchers or if there were document errors. The
-     * actual offset transaction is built in the method 3000-offset and then written
-     * to the database in this method.
+     * The purpose of this method is to determine wether or not an 
+     * offset entry should be generated. It uses the "unit of work" 
+     * to make this decision. 
+     * 
+     * The unit of work is made up of the following fields: 
+     * <ul>
+     * 		<li>document type code</li>
+     * 		<li>origin code</li>
+     * 		<li>document number</li>
+     * 		<li>chart of accounts code</li>
+     * 		<li>account number</li>
+     * 		<li>sub-account number</li>
+     * 		<li>balance type</li>
+     * 		<li>dcoument reversal date</li>
+     * 		<li>fiscal period</li>
+     * </ul>
+     * 
+     * If the unit of work for the current transaction is different 
+     * than the unit of work of the previous transaction and the offset
+     * accumulator is not equal to zero then an offset should be 
+     * generated. 
+     * 
+     * Note, offsets will not be generated if:
+     * <ul>
+     * 		<li>the document type of the entry corresponds to a journal 
+     * 			voucher</li>
+     * 		<li>the document type of the entry corresponds to an annual 
+     * 			closing</li>
+     * 		<li>there were any errors in processing to this point</li> 
+     * </ul>
+     * 
+     * The actual offset transaction is built in the method 3000-offset 
+     * and then written to the database in this method.
      *  
-     * This method is also responsible for initializing any work field used in the scrubber.
+     * This method is also responsible for initializing any work field 
+     * used in the scrubber.
      * 
      * @param originEntry
      * @param workingEntry
@@ -637,6 +708,7 @@ public class ScrubberServiceImpl implements ScrubberService {
             return;
         }
         
+        // Check the key fields
         if(!eof && originEntry.getFinancialDocumentTypeCode().equals(previousEntry.getFinancialDocumentTypeCode()) &&
                     originEntry.getFinancialSystemOriginationCode().equals(previousEntry.getFinancialSystemOriginationCode()) &&
                     originEntry.getFinancialDocumentNumber().equals(previousEntry.getFinancialDocumentNumber()) &&
@@ -649,7 +721,7 @@ public class ScrubberServiceImpl implements ScrubberService {
             return;
         }
 
-        if (scrubberUtil.originCount == 1) {
+        if (scrubberUtil.groupEntryCount == 1) {
             copyPrimaryFields(originEntry, previousEntry);
             initScrubberValues();
             return;
@@ -661,6 +733,12 @@ public class ScrubberServiceImpl implements ScrubberService {
         if(scrubberUtil.offsetAmountAccumulator.isNonZero() &&
                 batchError.size() == 0 &&
                 !"JV".equals(workingEntry.getFinancialDocumentTypeCode())) {
+        	
+        	// FIXME: Need to implement logic to account for annual closing documents
+        	// FIXME: here as well.
+        	// FIXME: add the following line to the if statement above.
+        	// FIXME: && !"ACLO".equals(workingEntry.getFinancialDocumentTypeCode())
+        	
             generateOffset(workingEntry);
             this.writeSwitchStatusCD = ScrubberUtil.FROM_OFFSET;
             
