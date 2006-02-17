@@ -1,6 +1,0 @@
-kuali-*.war
-dist
-.clover
-${test.temp.directory}
-${test.xml.results.directory}
-*.zip
