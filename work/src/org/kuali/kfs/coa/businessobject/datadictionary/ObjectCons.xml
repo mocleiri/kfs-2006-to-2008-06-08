@@ -9,7 +9,7 @@
 		<inquiry>
 			<title>Object Code Restrictions Inquiry</title>
 			<inquiryFields>
-				<field attributeName="chartOfAccountsCode" />
+				<field attributeName="chartOfAccounts.chartOfAccountsCode" />
 				<field attributeName="finConsolidationObjectCode" />	
 				<field attributeName="finConsolidationObjectName" />
 				<field attributeName="finConsolidationObjShortName" />
@@ -30,7 +30,7 @@
 			<defaultSort attributeName="finConsolidationObjectCode" sortAscending="true" />
 
 			<lookupFields>
-				<lookupField attributeName="chartOfAccountsCode" required="false" />
+				<lookupField attributeName="chartOfAccounts.chartOfAccountsCode" required="false" />
 				<lookupField attributeName="finConsolidationObjectCode" required="false" />
 				<lookupField attributeName="finConsolidationObjectName" required="false" />	
 				<lookupField attributeName="finConsolidationObjShortName" required="false" />	
@@ -38,7 +38,7 @@
 			</lookupFields>
 
 			<resultFields>
-				<field attributeName="chartOfAccountsCode" />
+				<field attributeName="chartOfAccounts.chartOfAccountsCode" />
 				<field attributeName="finConsolidationObjectCode" />	
 				<field attributeName="finConsolidationObjectName" />
 				<field attributeName="finConsolidationObjShortName" />
@@ -50,22 +50,16 @@
 
 		<attributes>
 
-			<attributeReference name="chartOfAccountsCode" 
+			<attributeReference name="chartOfAccounts.chartOfAccountsCode" 
 								sourceClassName="org.kuali.module.chart.bo.Chart" 
-								sourceAttributeName="chartOfAccountsCode">
-								
-				<required>true</required>
-				<control>
-					<select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder"/>					
-				</control>
-			</attributeReference>
+								sourceAttributeName="chartOfAccountsCode" />
 			
 			<attribute name="finConsolidationObjectCode" forceUppercase="true">
                 <label>Consolidation Object Code</label>
                 <shortLabel>Cons Code</shortLabel>
 
                 <maxLength>4</maxLength>
-				<required>true</required>
+
                 <control>
                     <text size="4" />
                 </control>
@@ -79,7 +73,7 @@
                 <shortLabel>Long Name</shortLabel>
 
                 <maxLength>40</maxLength>
-				<required>true</required>
+
                 <control>
                     <text size="40" />
                 </control>
@@ -93,7 +87,7 @@
                 <shortLabel>Short Name</shortLabel>
 
                 <maxLength>12</maxLength>
-				<required>true</required>
+
                 <control>
                     <text size="12" />
                 </control>
@@ -113,7 +107,7 @@
 
 				<maxLength>4</maxLength>
 				<validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
-				<required>true</required>
+
 				<control>
 					<text size="4" />
 				</control>
@@ -130,7 +124,7 @@
         		
         		<maxLength>2</maxLength>
         		<validationPattern><numeric /></validationPattern>
-        		<required>true</required>
+        		
         		<control>
         			<text size="2" />
         		</control>

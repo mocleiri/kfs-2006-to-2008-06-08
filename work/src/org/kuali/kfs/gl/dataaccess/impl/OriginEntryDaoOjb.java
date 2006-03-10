@@ -22,7 +22,6 @@
  */
 package org.kuali.module.gl.dao.ojb;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -35,7 +34,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryDaoOjb.java,v 1.10 2006-03-09 15:35:03 larevans Exp $
+ * @version $Id: OriginEntryDaoOjb.java,v 1.2.4.2 2006-02-03 20:53:51 rkirkend Exp $
  * 
  */
 
@@ -63,25 +62,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
     }
 
     QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class,criteria);
-    qbc.addOrderByAscending("entryId");
     return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
-  }
-
-  /**
-   * This method should only be used in unit tests.  It loads all the 
-   * gl_origin_entry_t rows in memory into a collection.  This won't 
-   * work for production because there would be too many rows to load
-   * into memory.
-   * 
-   * @return
-   */
-  public Collection testingGetAllEntries() {
-    LOG.debug("testingGetAllEntries() started");
-
-    Criteria criteria = new Criteria();
-    QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class,criteria);
-    qbc.addOrderByAscending("entryId");
-    return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);    
   }
 
   /**
@@ -89,28 +70,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
    */
   public void saveOriginEntry(OriginEntry entry) {
     LOG.debug("saveOriginEntry() started");
-    
-    if(null != entry 
-    && null != entry.getTransactionLedgerEntryDesc()
-    && 40 < entry.getTransactionLedgerEntryDesc().length()) {
-        
-        entry.setTransactionLedgerEntryDesc(entry.getTransactionLedgerEntryDesc().substring(0, 40));
-        
-    }
 
     getPersistenceBrokerTemplate().store(entry);
-  }
-
-  public void deleteMatchingEntries(Map searchCriteria) {
-      LOG.debug("deleteMatchingEntries() started");
-      
-      Criteria criteria = new Criteria();
-      for (Iterator iter = searchCriteria.keySet().iterator(); iter.hasNext();) {
-        String element = (String)iter.next();
-        criteria.addEqualTo(element, searchCriteria.get(element));
-      }
-
-      QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class,criteria);
-      getPersistenceBrokerTemplate().deleteByQuery(qbc);
   }
 }

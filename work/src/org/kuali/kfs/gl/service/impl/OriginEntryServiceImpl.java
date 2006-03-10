@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
@@ -38,7 +39,7 @@ import org.kuali.module.gl.service.OriginEntryService;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryServiceImpl.java,v 1.8 2006-02-12 16:17:27 jsissom Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.2.4.2 2006-02-03 20:53:25 rkirkend Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
   private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -62,21 +63,12 @@ public class OriginEntryServiceImpl implements OriginEntryService {
   }
 
   public Iterator getEntriesByGroup(OriginEntryGroup oeg) {
-      LOG.debug("getEntriesByGroup() started");
+    LOG.debug("getEntriesByGroup() started");
 
-      Map criteria = new HashMap();
-      criteria.put("group.id",oeg.getId());
-      return originEntryDao.getMatchingEntries(criteria);
-    }
-
-  public Iterator getEntriesByDocument(OriginEntryGroup oeg, String documentNumber) {
-      LOG.debug("getEntriesByGroup() started");
-
-      Map criteria = new HashMap();
-      criteria.put("entryGroupId",oeg.getId());
-      criteria.put("financialDocumentNumber",documentNumber);
-      return originEntryDao.getMatchingEntries(criteria);
-    }
+    Map criteria = new HashMap();
+    criteria.put("group.id",oeg.getId());
+    return originEntryDao.getMatchingEntries(criteria);
+  }
 
   public void createEntry(Transaction tran,OriginEntryGroup group) {
     LOG.debug("createEntry() started");
@@ -98,7 +90,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
       input = new BufferedReader( new FileReader(filename) );
       String line = null;
       while (( line = input.readLine()) != null) {
-        OriginEntry entry = new OriginEntry(line);
+        Entry entry = new Entry(line);
         createEntry(entry,newGroup);
       }
     } catch (Exception ex) {
@@ -111,20 +103,5 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         }
       } catch (IOException ex) { }
     }
-  }
-
-  public void removeScrubberDocumentEntries(OriginEntryGroup validGroup, OriginEntryGroup errorGroup, OriginEntryGroup expiredGroup, String documentNumber) {
-      Map criteria = new HashMap();
-      criteria.put("financialDocumentNumber", documentNumber);
-      criteria.put("entryGroupId", validGroup.getId());
-      originEntryDao.deleteMatchingEntries(criteria);
-      criteria = new HashMap();
-      criteria.put("financialDocumentNumber", documentNumber);
-      criteria.put("entryGroupId", errorGroup.getId());
-      originEntryDao.deleteMatchingEntries(criteria);
-      criteria = new HashMap();
-      criteria.put("financialDocumentNumber", documentNumber);
-      criteria.put("entryGroupId", expiredGroup.getId());
-      originEntryDao.deleteMatchingEntries(criteria);
   }
 }

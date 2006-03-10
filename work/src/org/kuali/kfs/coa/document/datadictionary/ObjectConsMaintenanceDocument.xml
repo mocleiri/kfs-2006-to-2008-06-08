@@ -7,8 +7,8 @@
 	<maintenanceDocument>
 		<businessObjectClass>org.kuali.module.chart.bo.ObjectCons</businessObjectClass>
 		<maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-		<businessRulesClass>org.kuali.module.chart.rules.ObjectConsRule</businessRulesClass>
-    	<documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+
+    	<documentAuthorizerClass>org.kuali.core.document.DocumentAuthorizerBase</documentAuthorizerClass>
 
         <authorizations>
             <authorization action="initiate">
@@ -29,16 +29,11 @@
 			<field attributeName="chartOfAccountsCode" />
 			<field attributeName="finConsolidationObjectCode" />					
 		</lockingKeys>	 		
-
-   		<defaultExistenceChecks>
-   			<reference  attributeName="chartOfAccounts" 
-   						attributeToHighlightOnFail="chartOfAccountsCode" />
-   		</defaultExistenceChecks>
 		
 		<maintainableSections>
-			<maintainableSection title="Object Consolidation">
+			<maintainableSection title="Object Consolitation">
                 <maintainableItems>
-					<maintainableField name="chartOfAccountsCode" required="true" />
+					<maintainableField name="chartOfAccounts.chartOfAccountsCode" required="true" />
 					<maintainableField name="finConsolidationObjectCode" required="true" />
 					<maintainableField name="finConsolidationObjShortName" required="true"  />
 					<maintainableField name="finConsolidationObjectName" required="true" />
