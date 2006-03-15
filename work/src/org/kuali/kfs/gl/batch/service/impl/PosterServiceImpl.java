@@ -56,18 +56,14 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.PosterService;
 import org.kuali.module.gl.util.Summary;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * @author jsissom
- * @version $Id: PosterServiceImpl.java,v 1.23 2006-03-06 13:42:19 jsissom Exp $
+ * @version $Id: PosterServiceImpl.java,v 1.5.2.3 2006-02-03 20:53:26 rkirkend Exp $
  */
-public class PosterServiceImpl implements PosterService,BeanFactoryAware {
+public class PosterServiceImpl implements PosterService {
   private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
 
-  private BeanFactory beanFactory;
   private List transactionPosters;
   private VerifyTransaction verifyTransaction;
   private PosterReport posterReportService;
@@ -80,6 +76,7 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
   private AccountingPeriodService accountingPeriodService;
   private ExpenditureTransactionDao expenditureTransactionDao;
   private IcrAutomatedEntryDao icrAutomatedEntryDao;
+
   // private IndirectCostRecoveryThresholdDao indirectCostRecoveryThresholdDao;
 
   /**
@@ -134,7 +131,7 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
       case PosterService.MODE_ENTRIES:
         validEntrySourceCode = OriginEntrySource.MAIN_POSTER_VALID;
         invalidEntrySourceCode = OriginEntrySource.MAIN_POSTER_ERROR;
-        groups = originEntryGroupService.getGroupsToPost();
+        groups = originEntryGroupService.getGroupsToPost(runDate);
         break;
       case PosterService.MODE_REVERSAL:
         validEntrySourceCode = OriginEntrySource.REVERSAL_POSTER_VALID;
@@ -143,7 +140,7 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
       case PosterService.MODE_ICR:
         validEntrySourceCode = OriginEntrySource.ICR_POSTER_VALID;
         invalidEntrySourceCode = OriginEntrySource.ICR_POSTER_ERROR;
-        groups = originEntryGroupService.getIcrGroupsToPost();
+        groups = originEntryGroupService.getIcrGroupsToPost(runDate);
         break;
       default:
         throw new IllegalArgumentException("Invalid poster mode " + mode);
@@ -167,9 +164,6 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
     }
 
     // Process all the groups or reversalTransactions
-    // NOTE (laran): this seems like a wierd check. I think what you're doing would
-    // be more clearly written as:
-    // if(PosterService.MODE_ENTRIES == mode || PosterService.MODE_ICR == mode) {
     if ( groups != null ) {
       LOG.debug("postEntries() Processing groups");
       for (Iterator iter = groups.iterator(); iter.hasNext();) {
@@ -237,12 +231,9 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
     // If these are reversal entries, we need to reverse the entry and
     // modify a few fields
     if (mode == PosterService.MODE_REVERSAL) {
-    	// NOTE (laran): should this be a cast instead of a new Reversal?
-    	// Reversal implements Transaction and the Reversals coming from the Poster
-    	// are loaded just prior to this.
       reversal = new Reversal(tran);
 
-      // Reverse the debit/credit code
+      // Revese the debit/credit code
       if (Constants.GL_DEBIT_CODE.equals(reversal.getTransactionDebitCreditCode())) {
         reversal.setTransactionDebitCreditCode(Constants.GL_CREDIT_CODE);
       } else if (Constants.GL_CREDIT_CODE.equals(reversal.getTransactionDebitCreditCode())) {
@@ -279,17 +270,6 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
       errors = verifyTransaction.verifyTransaction(tran);
     }
 
-    // Now check each poster to see if it needs to verify the transaction.  If
-    // it returns errors, we won't post it
-    for (Iterator posterIter = transactionPosters.iterator(); posterIter.hasNext();) {
-      PostTransaction poster = (PostTransaction) posterIter.next();
-      if ( poster instanceof VerifyTransaction ) {
-        VerifyTransaction vt = (VerifyTransaction)poster;
-
-        errors.addAll(vt.verifyTransaction(tran));
-      }
-    }
-
     if (errors.size() > 0) {
       // Error on this transaction
       reportError.put(tran, errors);
@@ -297,33 +277,51 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
 
       originEntryService.createEntry(tran, invalidGroup);
     } else {
-      // No error so post it
+      // Now check each poster to see if it needs to verify the transaction.  If
+      // it returns errors, we won't post it
+      errors = new ArrayList();
       for (Iterator posterIter = transactionPosters.iterator(); posterIter.hasNext();) {
         PostTransaction poster = (PostTransaction) posterIter.next();
-        String actionCode = poster.post(tran, mode, runUniversityDate.getUniversityDate());
+        if ( poster instanceof VerifyTransaction ) {
+          //VerifyTransaction vt = (VerifyTransaction)poster;
 
-        if (actionCode.startsWith("E") ) {
-          errors = new ArrayList();
-          errors.add(actionCode);
-          reportError.put(tran, errors);
-        } else if (actionCode.indexOf("I") >= 0) {
-          addReporting(reportSummary, poster.getDestinationName(), "I");
-        } else if (actionCode.indexOf("U") >= 0) {
-          addReporting(reportSummary, poster.getDestinationName(), "U");
-        } else if (actionCode.indexOf("D") >= 0) {
-          addReporting(reportSummary, poster.getDestinationName(), "D");
-        } else if (actionCode.indexOf("S") >= 0) {
-          addReporting(reportSummary, poster.getDestinationName(), "S");            
+          errors.addAll(verifyTransaction.verifyTransaction(tran));
         }
       }
 
-      if ( errors.size() == 0 ) {
-        originEntryService.createEntry(tran, validGroup);
+      if ( errors.size() > 0) {
+        // Error on this transaction
+        reportError.put(tran, errors);
+        addReporting(reportSummary, "WARNING", "S");
 
-        // Delete the reversal entry
-        if ( mode == PosterService.MODE_REVERSAL ) {
-          reversalDao.delete( (Reversal)originalTransaction );
+        originEntryService.createEntry(tran, invalidGroup);
+      } else {
+        // No error so post it
+        for (Iterator posterIter = transactionPosters.iterator(); posterIter.hasNext();) {
+          PostTransaction poster = (PostTransaction) posterIter.next();
+          String actionCode = poster.post(tran, mode, runUniversityDate.getUniversityDate());
+
+          if (actionCode.startsWith("E") ) {
+            errors = new ArrayList();
+            errors.add(actionCode);
+            reportError.put(tran, errors);
+          } else if (actionCode.indexOf("I") >= 0) {
+            addReporting(reportSummary, poster.getDestinationName(), "I");
+          } else if (actionCode.indexOf("U") >= 0) {
+            addReporting(reportSummary, poster.getDestinationName(), "U");
+          } else if (actionCode.indexOf("D") >= 0) {
+            addReporting(reportSummary, poster.getDestinationName(), "D");
+          } else if (actionCode.indexOf("S") >= 0) {
+            addReporting(reportSummary, poster.getDestinationName(), "S");            
+          }
         }
+      }
+
+      originEntryService.createEntry(tran, validGroup);
+
+      // Delete the reversal entry
+      if ( mode == PosterService.MODE_REVERSAL ) {
+        reversalDao.delete( (Reversal)originalTransaction );
       }
     }
   }
@@ -392,7 +390,7 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
             }
           }
 
-          generateTransaction(et,icrEntry,generatedTransactionAmount,runDate,group,reportErrors);
+          generateTransaction(et,icrEntry,generatedTransactionAmount,runDate,group);
           reportOriginEntryGenerated = reportOriginEntryGenerated + 2;
         }
       }
@@ -411,15 +409,7 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
     icrGenerationReportService.generateReport(reportErrors,summary,runDate,0);
   }
 
-  /**
-   * 
-   * @param et
-   * @param icrEntry
-   * @param generatedTransactionAmount
-   * @param runDate
-   * @param group
-   */
-  private void generateTransaction(ExpenditureTransaction et,IcrAutomatedEntry icrEntry,KualiDecimal generatedTransactionAmount,Date runDate,OriginEntryGroup group,Map reportErrors) {
+  private void generateTransaction(ExpenditureTransaction et,IcrAutomatedEntry icrEntry,KualiDecimal generatedTransactionAmount,Date runDate,OriginEntryGroup group) {
     OriginEntry e = new OriginEntry();
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD");
@@ -493,18 +483,12 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
     e.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
     e.setFinancialObjectCode(icrEntry.getOffsetBalanceSheetObjectCodeNumber());
 
-/*  Cannot use icrEntry reference objects because Chart, Account,
- * Sub Account, etc may have special values.
- *   
     if ( icrEntry.getOffsetBalanceSheetObjectCode() == null ) {
-      List warnings = new ArrayList();
-      warnings.add("Offset Object Code is invalid");
-      reportErrors.put(e,warnings);
+      // TODO Warning because offset object code not valid
     } else {
       e.setFinancialObjectTypeCode(icrEntry.getOffsetBalanceSheetObjectCode().getFinancialObjectTypeCode());
     }
 
- */   
     if ( Constants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator()) ) {
       e.setTransactionLedgerEntryDesc(getChargeDescription(icrEntry.getAwardIndrCostRcvyRatePct(),et.getObjectCode(),et.getAccount().getAcctIndirectCostRcvyTypeCd(),et.getAccountObjectDirectCostAmount()));
     } else {
@@ -632,23 +616,6 @@ public class PosterServiceImpl implements PosterService,BeanFactoryAware {
 
   public void setIcrAutomatedEntryDao(IcrAutomatedEntryDao iaed) {
     icrAutomatedEntryDao = iaed;
-  }
-
-  /* (non-Javadoc)
-   * @see org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
-   */
-  public void setBeanFactory(BeanFactory bf) throws BeansException {
-    beanFactory = bf;
-  }
-
-  public void init() {
-    LOG.debug("init() started");
-
-    // If we are in test mode
-    if ( beanFactory.containsBean("testDateTimeService") ) {
-      dateTimeService = (DateTimeService)beanFactory.getBean("testDateTimeService");
-      posterReportService = (PosterReport)beanFactory.getBean("testPosterReport");
-    }
   }
 
 //  public void setIndirectCostRecoveryThresholdDao(IndirectCostRecoveryThresholdDao icrtd) {
