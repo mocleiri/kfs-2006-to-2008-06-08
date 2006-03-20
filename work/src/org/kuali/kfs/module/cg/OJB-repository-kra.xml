@@ -483,36 +483,6 @@
 
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.kra.bo.OtherCostShare" table="ER_OTHR_CST_SHR_T">
-  <field-descriptor name="proposalCostShareSeqNbr" column="PRPSL_CSHR_SEQ_NBR" jdbc-type="INTEGER" primarykey="true" index="true"/>
-  <field-descriptor name="proposalNumber" column="PRPSL_NBR" jdbc-type="BIGINT" primarykey="true" index="true"/>
-  <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR"/>
-  <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-  <field-descriptor name="proposalCostShareSourceName" column="PRPSL_CSHR_SRC_NM" jdbc-type="VARCHAR"/>
-  <field-descriptor name="proposalCostShareTypeCode" column="PRPSL_CSHR_TYP_CD" jdbc-type="VARCHAR"/>
-  <field-descriptor name="proposalCostShareAmount" column="PRPSL_CST_SHR_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.kra.bo.UniversityCostSharing" table="ER_UNIV_CST_SHR_T">
-  <field-descriptor name="proposalCostShareSeqNbr" column="PRPSL_CSHR_SEQ_NBR" jdbc-type="INTEGER" primarykey="true" index="true"/>
-  <field-descriptor name="proposalNumber" column="PRPSL_NBR" jdbc-type="BIGINT" primarykey="true" index="true"/>
-  <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR"/>
-  <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-  <field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" index="true"/>
-  <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" index="true"/>
-  <field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR" index="true"/>
-  <field-descriptor name="proposalCostShareAmount" column="PRPSL_CST_SHR_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-  <field-descriptor name="proposalCostShareDescription" column="PRPSL_CST_SHR_DESC" jdbc-type="VARCHAR"/>
-  <field-descriptor name="universityCostShareTypeCode" column="UNIV_CST_SHR_TYP_CD" jdbc-type="VARCHAR"/>
-  <reference-descriptor name="account" class-ref="org.kuali.module.chart.bo.Account" auto-retrieve="true" auto-update="false" auto-delete="false">
-    <foreignkey field-ref="chartOfAccountsCode" />
-    <foreignkey field-ref="accountNumber" />
-  </reference-descriptor>
-  <reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="false" auto-delete="false">
-    <foreignkey field-ref="chartOfAccountsCode" />
-  </reference-descriptor>
-</class-descriptor>
-
 <class-descriptor class="org.kuali.module.kra.bo.BudgetBaseCode" table="ER_BDGT_BASE_CD_T">
   <field-descriptor name="budgetBaseCode" column="BDGT_BASE_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
   <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR"/>
@@ -576,15 +546,6 @@
     <foreignkey field-ref="documentHeaderId" />
     <foreignkey field-ref="budgetPeriodSequenceNumber" />
   </reference-descriptor>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.kra.bo.BudgetModularDescription" table="ER_BDGT_MOD_DESC_T">
-  <field-descriptor name="documentHeaderId" column="ER_REF_TRACK_NBR" jdbc-type="VARCHAR" index="true"/>
-  <field-descriptor name="budgetModularSequenceNumber" column="BDGT_MOD_SEQ_NBR" jdbc-type="INTEGER" primarykey="true" index="true"/>
-  <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR"/>
-  <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-  <field-descriptor name="budgetModularDescription" column="BDGT_MOD_DESC" jdbc-type="VARCHAR"/>
-  <field-descriptor name="budgetModularDescriptionTypeCode" column="BDGT_MOD_DESC_TYP_CD" jdbc-type="VARCHAR"/>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.kra.bo.BudgetModularPeriod" table="ER_BDGT_MOD_PRD_T">
