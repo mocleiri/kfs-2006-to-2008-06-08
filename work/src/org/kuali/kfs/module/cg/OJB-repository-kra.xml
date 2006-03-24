@@ -367,8 +367,8 @@
 
 <class-descriptor class="org.kuali.module.kra.bo.BudgetPeriodThirdPartyCostShare" table="ER_BDGT_PRD_3RD_CST_SHR_T">
   <field-descriptor name="documentHeaderId" column="ER_REF_TRACK_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-  <field-descriptor name="budgetPeriodSequenceNumber" column="BDGT_PRD_SEQ_NBR" jdbc-type="INTEGER" primarykey="true" index="true"/>
   <field-descriptor name="budgetThirdPartyCostShareSequenceNumber" column="BDGT_3RD_PRTY_CST_SHR_SEQ_NBR" jdbc-type="INTEGER" primarykey="true" index="true"/>
+  <field-descriptor name="budgetPeriodSequenceNumber" column="BDGT_PRD_SEQ_NBR" jdbc-type="INTEGER" primarykey="true" index="true"/>  
   <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR"/>
   <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
   <field-descriptor name="budgetThirdPartyCostShareAmount" column="BDGT_3RD_PRTY_CST_SHR_AMT" jdbc-type="INTEGER"/>
