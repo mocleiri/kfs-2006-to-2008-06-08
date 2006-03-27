@@ -574,8 +574,8 @@
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.kra.bo.AppointmentTypeEffectiveDate" table="ER_APPT_TYP_EFF_DT_T">
-  <field-descriptor name="appointmentTypeCode" column="UNIV_APPT_TYP_CD" jdbc-type="VARCHAR" index="true"/>
-  <field-descriptor name="universityFiscalYear" column="UNIV_FISCAL_YR" jdbc-type="INTEGER" index="true"/>
+  <field-descriptor name="appointmentTypeCode" column="UNIV_APPT_TYP_CD" jdbc-type="VARCHAR" primarykey="true"/>
+  <field-descriptor name="universityFiscalYear" column="UNIV_FISCAL_YR" jdbc-type="INTEGER" primarykey="true"/>
   <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
   <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
   <field-descriptor name="appointmentTypeBeginDate" column="APPT_TYP_BEG_DT" jdbc-type="DATE"/>
