@@ -119,6 +119,9 @@
         <property name="budgetPeriodDao">
             <ref bean="budgetPeriodDao" />
         </property>
+        <property name="appointmentTypeDao">
+            <ref bean="appointmentTypeDao" />
+        </property>
     </bean>
     <bean id="budgetCostShareService" class="org.kuali.module.kra.service.impl.BudgetCostShareServiceImpl">
         <property name="budgetNonpersonnelService">
