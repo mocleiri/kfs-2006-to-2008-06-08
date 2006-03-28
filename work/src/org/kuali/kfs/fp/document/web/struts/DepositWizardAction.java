@@ -104,7 +104,7 @@ public class DepositWizardAction extends KualiAction {
      * @param response
      * @return ActionForward
      */
-    public ActionForward createDeposit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+    public ActionForward createDeposit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         DepositWizardForm depositDocumentWizardForm = (DepositWizardForm) form;
 
         // make sure something was selected

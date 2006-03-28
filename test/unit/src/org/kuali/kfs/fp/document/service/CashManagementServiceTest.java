@@ -776,7 +776,7 @@ public class CashManagementServiceTest extends KualiTestBaseWithSpring {
     // }
 
     private CashReceiptDocument buildCashReceiptDoc(String workgroupName, String description, String status)
-            throws WorkflowException, UserNotFoundException {
+            throws WorkflowException, UserNotFoundException, Exception {
         CashReceiptDocument crDoc = (CashReceiptDocument) docService.getNewDocument(CashReceiptDocument.class);
 
         crDoc.getDocumentHeader().setFinancialDocumentDescription(description);
