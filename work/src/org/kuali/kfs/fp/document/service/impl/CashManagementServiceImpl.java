@@ -76,7 +76,7 @@ public class CashManagementServiceImpl implements CashManagementService {
      *      java.lang.String)
      */
     public CashManagementDocument createCashManagementDocument(String documentDescription, List verifiedCashReceipts,
-            String workgroupName) throws WorkflowException {
+            String workgroupName) throws WorkflowException, Exception {
         CashManagementDocument cmDoc = null;
 
         // check and lock cash drawer
