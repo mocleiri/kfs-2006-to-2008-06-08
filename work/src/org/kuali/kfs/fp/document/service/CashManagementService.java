@@ -45,7 +45,7 @@ public interface CashManagementService {
      * @param workgroupName
      * @return new CashManagementDocument
      */
-    public CashManagementDocument createCashManagementDocument(String documentDescription, List verifiedCashReceipts, String workgroupName) throws WorkflowException;
+    public CashManagementDocument createCashManagementDocument(String documentDescription, List verifiedCashReceipts, String workgroupName) throws WorkflowException, Exception;
 
 
     /**
