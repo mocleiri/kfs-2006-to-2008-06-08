@@ -46,7 +46,7 @@ public class ResearchDocumentServiceImpl extends PersistenceBrokerTemplate imple
     /**
      * @see org.kuali.module.kra.service.ResearchDocumentService#prepareResearchDocumentForSave(org.kuali.module.kra.document.ResearchDocument)
      */
-    public void prepareResearchDocumentForSave(ResearchDocument researchDocument) throws WorkflowException, Exception {
+    public void prepareResearchDocumentForSave(ResearchDocument researchDocument) throws WorkflowException {
         if (researchDocument instanceof BudgetDocument) {
             BudgetDocument budgetDocument = (BudgetDocument)researchDocument;
             budgetService.prepareBudgetForSave(budgetDocument);
