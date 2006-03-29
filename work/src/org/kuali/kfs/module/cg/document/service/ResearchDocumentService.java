@@ -37,6 +37,6 @@ public interface ResearchDocumentService extends OjbCollectionAware {
      * This method will prepare a research document for being saved.  This will include cleansing lists of deleted items and removing dependencies of deleted items.
      * 
      */
-    public void prepareResearchDocumentForSave(ResearchDocument researchDocument) throws WorkflowException, Exception;
+    public void prepareResearchDocumentForSave(ResearchDocument researchDocument) throws WorkflowException;
 
 }
