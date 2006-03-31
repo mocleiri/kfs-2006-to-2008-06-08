@@ -60,10 +60,7 @@
     
     <bean id="budgetModularService" class="org.kuali.module.kra.service.impl.BudgetModularServiceImpl">
         <property name="budgetNonpersonnelService">
-        		<ref bean="budgetNonpersonnelService" />
-        </property>
-        <property name="budgetPersonnelService">
-        		<ref bean="budgetPersonnelService" />
+        	<ref bean="budgetNonpersonnelService" />
         </property>
     </bean>
     
