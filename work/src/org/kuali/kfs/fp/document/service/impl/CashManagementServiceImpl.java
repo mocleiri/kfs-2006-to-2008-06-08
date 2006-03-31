@@ -76,7 +76,7 @@ public class CashManagementServiceImpl implements CashManagementService {
      *      java.lang.String)
      */
     public CashManagementDocument createCashManagementDocument(String documentDescription, List verifiedCashReceipts,
-            String workgroupName) throws WorkflowException {
+            String workgroupName) throws WorkflowException, Exception {
         CashManagementDocument cmDoc = null;
 
         // check and lock cash drawer
@@ -116,55 +116,8 @@ public class CashManagementServiceImpl implements CashManagementService {
         return cmDoc;
     }
 
-
     /**
-     * @see org.kuali.module.financial.service.CashManagementService#finalizeCashManagementDocument(org.kuali.module.financial.document.CashManagementDocument)
-     */
-    public void finalizeCashManagementDocument(CashManagementDocument cmDoc) {
-        // when CashManagementDocument goes to final
-        // 1. for each CashReceipt of each associated Deposit, change the CashReceipt's status to APPROVED "A"
-        for (Iterator eachDeposit = cmDoc.getDeposits().iterator(); eachDeposit.hasNext();) {
-            Deposit dep = (Deposit) eachDeposit.next();
-
-            List receipts = retrieveCashReceipts(dep);
-            for (Iterator eachReceipt = receipts.iterator(); eachReceipt.hasNext();) {
-                CashReceiptDocument receipt = (CashReceiptDocument) eachReceipt.next();
-
-                receipt.getDocumentHeader().setFinancialDocumentStatusCode(Constants.DOCUMENT_STATUS_CD_APPROVED_PROCESSED);
-                documentService.updateDocument(receipt);
-            }
-        }
-
-        // 2. Open the cash drawer.
-        openCashDrawer(cmDoc.getWorkgroupName());
-
-        // 3. Change the status of the CMD to APPROVED "A"
-        cmDoc.getDocumentHeader().setFinancialDocumentStatusCode(Constants.DOCUMENT_STATUS_CD_APPROVED_PROCESSED);
-        getDocumentService().updateDocument(cmDoc);
-    }
-
-
-    /**
-     * @see org.kuali.module.financial.service.CashManagementService#cancelCashManagementDocument(org.kuali.module.financial.document.CashManagementDocument)
-     */
-    public void cancelCashManagementDocument(CashManagementDocument cmDoc) {
-        // when a CashManagementDocument meets with an untimely demise, unwind everything involved
-        // 1. cancel each deposit (which handles resetting the CashReceipt statii)
-        for (Iterator eachDeposit = cmDoc.getDeposits().iterator(); eachDeposit.hasNext();) {
-            Deposit dep = (Deposit) eachDeposit.next();
-            cancelDeposit(dep);
-        }
-
-        // 2. Open the cash drawer.
-        openCashDrawer(cmDoc.getWorkgroupName());
-
-        // 3. Change the status of the CMD to something, probably
-        // getDocumentHeader().setFinancialDocumentStatusCode(Constants.DOCUMENT_STATUS_CD_APPROVED_PROCESSED);
-    }
-
-
-    /**
-     * Convenience wrapper around CashDrawerService call
+     * This method is a helper for the closeCashDrawer service.
      * 
      * @param workgroupName
      */
@@ -178,16 +131,11 @@ public class CashManagementServiceImpl implements CashManagementService {
     }
 
     /**
-     * Convenience wrapper around CashDrawerService call
+     * This method is a helper for the openCashDrawer service.
      * 
      * @param workgroupName
      */
     private void openCashDrawer(String workgroupName) {
-        CashDrawer drawer = cashDrawerService.getByWorkgroupName(workgroupName);
-        if ((drawer != null) && StringUtils.equals(drawer.getStatusCode(), Constants.CashDrawerConstants.STATUS_OPEN)) {
-            throw new InvalidCashDrawerState("cash drawer for workgroup '" + workgroupName + "' is already open");
-        }
-
         cashDrawerService.openCashDrawer(workgroupName);
     }
 
@@ -300,22 +248,16 @@ public class CashManagementServiceImpl implements CashManagementService {
             // retrieve CashReceipts, for later use
             List cashReceipts = retrieveCashReceipts(deposit);
             if (!cashReceipts.isEmpty()) {
-                // delete join records
+                // delete join records (which should auto-delete the related
+                // CRHeaders)
                 Map controlCriteria = new HashMap();
                 controlCriteria.put("financialDocumentDepositNumber", deposit.getFinancialDocumentNumber());
                 controlCriteria.put("financialDocumentDepositLineNumber", deposit.getFinancialDocumentDepositLineNumber());
                 businessObjectService.deleteMatching(DepositCashReceiptControl.class, controlCriteria);
 
-                // clean up CRDocs and CRHeaders
+                // clean up CRDocs
                 for (Iterator i = cashReceipts.iterator(); i.hasNext();) {
                     CashReceiptDocument crDoc = (CashReceiptDocument) i.next();
-
-                    // delete CRHeaders
-                    Map crHeaderCriteria = new HashMap();
-                    crHeaderCriteria.put("financialDocumentNumber", crDoc.getFinancialDocumentNumber());
-                    businessObjectService.deleteMatching(CashReceiptHeader.class, crHeaderCriteria);
-
-                    // reset CRDoc status
                     DocumentHeader dh = crDoc.getDocumentHeader();
                     dh.setFinancialDocumentStatusCode(Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
 
@@ -455,7 +397,7 @@ public class CashManagementServiceImpl implements CashManagementService {
 
         Map queryCriteria = buildCriteriaMap(verificationUnitWorkgroupName);
         List documents = new ArrayList(getBusinessObjectService().findMatchingOrderBy(CashReceiptDocument.class, queryCriteria,
-                PropertyConstants.FINANCIAL_DOCUMENT_NUMBER, true));
+                Constants.FINANCIAL_DOCUMENT_NUMBER_PROPERTY_NAME, true));
 
         // now populate each CR doc with its workflow document
         for (Iterator i = documents.iterator(); i.hasNext();) {
