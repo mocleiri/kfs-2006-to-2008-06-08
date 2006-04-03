@@ -7,13 +7,13 @@
     <businessObject businessObjectClass="org.kuali.module.gl.bo.AccountBalance">
         <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
-            <title>Available Account Balance</title>
+            <title>Available Balance Lookup</title>
             <inquiryFields>
 				<field attributeName="universityFiscalYear"/>
 				<field attributeName="chartOfAccountsCode"/>
 				<field attributeName="accountNumber"/>
-				<field attributeName="objectCode"/>
 				<field attributeName="subAccountNumber"/>
+				<field attributeName="objectCode"/>
 				<field attributeName="subObjectCode"/>             
 				<field attributeName="currentBudgetLineBalanceAmount"/>
 				<field attributeName="accountLineActualsBalanceAmount"/>
@@ -24,8 +24,8 @@
 		
         <lookup>
         	<lookupableID>glAccountBalanceLookupable</lookupableID>
-			<title>Available Account Balance</title>
-			
+			<title>Available Balance Lookup</title>
+
 			<instructions>Lookup Available Account Balance for the specific account.</instructions>			
 			<defaultSort attributeName="objectCode" />
 			
@@ -60,8 +60,8 @@
 				<field attributeName="universityFiscalYear"/>
 				<field attributeName="chartOfAccountsCode"/>
 				<field attributeName="accountNumber"/>
-				<field attributeName="objectCode"/>
 				<field attributeName="subAccountNumber"/>
+				<field attributeName="objectCode"/>
 				<field attributeName="subObjectCode"/>             
 				<field attributeName="currentBudgetLineBalanceAmount"/>
 				<field attributeName="accountLineActualsBalanceAmount"/>
