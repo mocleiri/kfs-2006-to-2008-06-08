@@ -96,13 +96,13 @@
               <display:column class="infocell" sortable="${column.sortable}" title="${column.columnTitle}">
                 <a href="<c:out value="${column.propertyURL}"/>" target="blank">
                   <c:out value="${column.propertyValue}" />
-                </a>
+                </a>&nbsp;
               </display:column>
             </c:if>
 
             <c:if test="${column.propertyURL==\"\" || param['d-16544-e'] != null}">
               <display:column class="infocell" sortable="${column.sortable}" title="${column.columnTitle}" comparator="${column.comparator}">
-                <c:out value="${column.propertyValue}" />
+                <c:out value="${column.propertyValue}" />&nbsp;
               </display:column>
             </c:if>
           </c:if>
