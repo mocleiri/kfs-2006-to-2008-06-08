@@ -196,15 +196,18 @@
             					
 	        <attributeReference name="financialObject.financialObjectLevel.financialConsolidationObjectCode"
             					sourceClassName="org.kuali.module.chart.bo.ObjectCons" 
-            					sourceAttributeName="finConsolidationObjectCode"/> 	
-            					
+            					sourceAttributeName="finConsolidationObjectCode">
+            	<label>Consolidation Code</label>
+            	<shortLabel>Consolidation Code</shortLabel>
+            </attributeReference>
+
 			<attributeReference name="dummyBusinessObject.linkButtonOption"
             					sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" 
             					sourceAttributeName="linkButtonOption"> 
 			    <label>Lookup By Level</label>
                 <shortLabel>Lookup By Level</shortLabel>
                 <summary>Lookup By Level</summary>
-                <description>Lookup By Level ...</description>      					
+                <description>Drill down to a balance summary by level code.</description>	
             </attributeReference>
         </attributes>
     </businessObject>
