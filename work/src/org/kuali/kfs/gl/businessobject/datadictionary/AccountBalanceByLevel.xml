@@ -7,7 +7,7 @@
     <businessObject businessObjectClass="org.kuali.module.gl.bo.AccountBalanceByLevel">
         <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
-            <title>Available Account Balance By Level</title>
+            <title>Balances by Level Lookup</title>
             <inquiryFields>
 				<field attributeName="universityFiscalYear"/>
 				<field attributeName="chartOfAccountsCode"/>
@@ -24,8 +24,8 @@
 		
         <lookup>
 			<lookupableID>glAccountBalanceByLevelLookupable</lookupableID>
-			<title>Available Account Balance By Level</title>
-			
+			<title>Balances By Level Lookup</title>
+
 			<instructions>Lookup Available Account Balance for the specific account.</instructions>			
 			<defaultSort attributeName="accountNumber" />
 			
