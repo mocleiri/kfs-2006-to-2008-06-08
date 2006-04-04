@@ -7,7 +7,7 @@
     <businessObject businessObjectClass="org.kuali.module.gl.bo.CashBalance">
         <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
-            <title>Cash Balance</title>
+            <title>Cash Balances Lookup</title>
             <inquiryFields>
 				<field attributeName="universityFiscalYear"/>
 				<field attributeName="chartOfAccountsCode"/>
@@ -18,7 +18,7 @@
 		
         <lookup>
 	        <lookupableID>glCashBalanceLookupable</lookupableID>
-			<title>Cash Balance</title>			
+			<title>Cash Balances Lookup</title>			
 			<instructions>Lookup Cash Balance for the specific account.</instructions>
 			
 			<defaultSort attributeName="accountNumber" />
