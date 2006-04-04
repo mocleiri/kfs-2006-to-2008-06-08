@@ -172,11 +172,17 @@
 
             <attributeReference name="financialObject.financialObjectLevel.financialObjectLevelCode"
             					sourceClassName="org.kuali.module.chart.bo.ObjLevel" 
-            					sourceAttributeName="financialObjectLevelCode"/>  
-            					
+            					sourceAttributeName="financialObjectLevelCode">
+            	<label>Level Code</label>
+            	<shortLabel>Level Code</shortLabel>
+            </attributeReference>
+
 	        <attributeReference name="financialObject.financialObjectLevel.financialConsolidationObjectCode"
             					sourceClassName="org.kuali.module.chart.bo.ObjectCons" 
-            					sourceAttributeName="finConsolidationObjectCode"/>  	         
+            					sourceAttributeName="finConsolidationObjectCode">
+            	<label>Consolidation Code</label>
+            	<shortLabel>Consolidation Code</shortLabel>
+            </attributeReference>
 
 	        <attributeReference name="financialObject.financialObjectLevel.financialReportingSortCode"
 	                    		sourceClassName="org.kuali.module.chart.bo.ObjectType" 
