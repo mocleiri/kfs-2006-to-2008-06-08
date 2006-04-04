@@ -65,8 +65,8 @@
 				<field attributeName="accountNumber"/>
 				<field attributeName="subAccountNumber"/>
 				
-				<field attributeName="objectCode"/>
 				<field attributeName="financialObject.financialObjectLevelCode"/>
+				<field attributeName="objectCode"/>
 	                       
 				<field attributeName="currentBudgetLineBalanceAmount"/>
 				<field attributeName="accountLineActualsBalanceAmount"/>
