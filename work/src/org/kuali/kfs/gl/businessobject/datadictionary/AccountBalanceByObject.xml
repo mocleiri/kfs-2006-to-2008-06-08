@@ -21,7 +21,7 @@
 				<field attributeName="dummyBusinessObject.genericAmount"/>
             </inquiryFields>
         </inquiry>
-		
+
         <lookup>
 			<lookupableID>glAccountBalanceByObjectLookupable</lookupableID>
 			<title>Available Account Balance By Object</title>
@@ -170,11 +170,14 @@
             
             <attributeReference name="financialObject.financialObjectLevelCode"
             					sourceClassName="org.kuali.module.chart.bo.ObjLevel" 
-            					sourceAttributeName="financialObjectLevelCode"/> 
-            					
+            					sourceAttributeName="financialObjectLevelCode">
+            	<label>Level Code</label>
+            	<shortLabel>Level Code</shortLabel>
+            </attributeReference>
+
 	        <attributeReference name="financialObject.financialObjectLevel.financialReportingSortCode"
 	                    		sourceClassName="org.kuali.module.chart.bo.ObjLevel" 
-            					sourceAttributeName="financialReportingSortCode"/>             					
+            					sourceAttributeName="financialReportingSortCode"/>
 
 			<attributeReference name="dummyBusinessObject.linkButtonOption"
             					sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" 
