@@ -79,7 +79,7 @@
 	      <c:set var="offset" value="5"/>
 
 	      <display:table class="datatable-100" cellspacing="0"
-					cellpadding="0" name="${reqSearchResults}" id="row" export="true" pagesize="100" offset="${offset}"
+					cellpadding="0" name="${reqSearchResults}" id="row" export="false" pagesize="100" offset="${offset}"
 					requestURI="glAccountBalanceByConsolidationLookup.do?methodToCall=viewResults&reqSearchResultsActualSize=${reqSearchResultsActualSize}&searchResultKey=${searchResultKey}">
 	        <c:forEach items="${row.columns}" var="column" varStatus="status">
 	          <c:if test="${column.propertyURL!=\"\" && param['d-16544-e'] == null}">
@@ -104,31 +104,31 @@
 	          </c:if>
 	        </c:forEach>
 	      </display:table>
-		  
+
 		  <c:if test="${reqSearchResultsActualSize>4}" >
 		  <div style="float: right; width: 70%;"><br/><br/>
 		      <display:table class="datatable-100" cellspacing="0"
 						cellpadding="0" name="${reqSearchResults}" id="row" export="false" length="${offset-2}">
-						
+
 				<display:caption style="text-align: left; font-weight: bold;">Totals</display:caption>		
-		      
+
 		        <c:set var="indexOfbeginningColumn" value="5"/>
 		        <c:forEach items="${row.columns}" var="column" varStatus="status" 
 		        	begin="${indexOfbeginningColumn}" end="${indexOfbeginningColumn+4}">
-		        	
+
 		            <c:if test="${status.count == 1}">
 	                  <display:column class="infocell" title="Type">
 			            <c:out value="${column.propertyValue}" />
 			          </display:column>
 			        </c:if>
-		        	        
+
 		            <c:if test="${status.count != 1}">
 			            <display:column class="numbercell" title="${column.columnTitle}">
 			                <c:out value="${column.propertyValue}" />
 			            </display:column>
 			        </c:if>
 		        </c:forEach>
-		        
+
 		        <display:footer>
 		        	<tr>
 		        		<th colspan="${indexOfbeginningColumn-1}" class="infocell" style="text-align: right">
