@@ -9,9 +9,35 @@
 		<echoproperties/>
 	</target>
 
-	<target name="test-all" depends="init-test-all,test" description="Run all project tests and format results"/>
-
-    <target name="test-fast" depends="init-test-fast,test" description="Run fast project tests and format results"/>
+	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
+    <target name="test" depends="clean,make-tests" description="Run all project tests and format results">
+        <mkdir dir="${test.temp.directory}" />
+    	<mkdir dir="${test.xml.results.directory}" />
+        <junit showoutput="true" fork="true" forkmode="once" failureproperty="tests.failed" errorproperty="tests.errored" tempdir="${test.temp.directory}" maxmemory="512M">
+            <classpath>
+                <path refid="compile.tests.classpath" />
+                <pathelement location="${test.classes.directory}" />
+            </classpath>
+            <formatter type="xml"/>
+			<batchtest todir="${test.xml.results.directory}">
+		    	<fileset dir="${test.source.directory}">
+		            <include name="**/*Test.java"/>
+		            <exclude name="**/TransactionalDocumentRuleTest.java"/>
+		            <exclude name="**/PosterServiceTest.java"/>
+		    		<exclude name="**/${test.spring.shutdown}.java"/>
+		        </fileset>
+	        </batchtest>
+        	<test name="org.kuali.${test.spring.shutdown}" todir="${test.xml.results.directory}"/>
+        </junit>
+    	<mkdir dir="${test.html.results.directory}" />
+        <junitreport todir="${test.html.results.directory}">
+            <fileset dir="${test.xml.results.directory}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report format="frames" todir="${test.html.results.directory}" />
+        </junitreport>
+        <echo message="Generated test results: ${test.html.results.directory}/index.html" />
+    </target>
 	
 	<target name="clean" depends="clean-config" description="Remove all build output">
     	<delete dir="${metainf.directory}"/>
@@ -54,7 +80,7 @@
 		<zip basedir="${batch.directory}" destfile="${ant.project.name}-${build.environment}.zip"/>
 	</target>
 	
-	<target name="continuous-integration" depends="test-all" description="Run all tests and fail if there are failures or errors">
+	<target name="continuous-integration" depends="test" description="Run all tests and fail if there are failures or errors">
 		<fail if="tests.failed" message="Tests failed"/>
 	</target>
 			
@@ -252,59 +278,7 @@
             </fileset>
         </copy>
     </target>
-	
-	<target name="init-test-all" depends="init-project-properties">
-    	<fileset id="test.fileset" dir="${test.source.directory}">
-            <include name="**/*Test.java"/>
-            <exclude name="**/TransactionalDocumentRuleTest.java"/>
-            <exclude name="**/PosterServiceTest.java"/>
-    		<exclude name="**/${test.spring.shutdown}.java"/>
-        </fileset>
-	</target>
-	
-	<target name="init-test-fast" depends="init-project-properties">
-		<fileset id="test.fileset" dir="${test.source.directory}">
-	        <include name="**/*Test.java"/>
-			<exclude name="**/DocumentServiceTest.java"/>
-	        <exclude name="**/GeneralErrorCorrectionDocumentTest.java"/>
-	        <exclude name="**/KualiRuleServiceTest.java"/>
-	        <exclude name="**/NonCheckDisbursementDocumentTest.java"/>
-	        <exclude name="**/ProjectCodeMaintenanceDocumentTest.java"/>
-	        <exclude name="**/YearEndGeneralErrorCorrectionDocumentTest.java"/>
-	        <exclude name="**/YearEndTransferOfFundsDocumentTest.java"/>
-	        <exclude name="**/BusinessObjectEntryMapperTest.java"/>
-	        <exclude name="**/TransferOfFundsDocumentTest.java"/>
-	        <exclude name="**/TransactionalDocumentRuleTest.java"/>
-	        <exclude name="**/TransferOfFundsDocumentRuleTest.java"/>
-    		<exclude name="**/${test.spring.shutdown}.java"/>
-		</fileset>
-	</target>
-    	
-	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
-    <target name="test" depends="clean,make-tests">
-        <mkdir dir="${test.temp.directory}" />
-    	<mkdir dir="${test.xml.results.directory}" />
-        <junit showoutput="true" fork="true" forkmode="once" failureproperty="tests.failed" errorproperty="tests.errored" tempdir="${test.temp.directory}" maxmemory="512M">
-            <classpath>
-                <path refid="compile.tests.classpath" />
-                <pathelement location="${test.classes.directory}" />
-            </classpath>
-            <formatter type="xml"/>
-			<batchtest todir="${test.xml.results.directory}">
-	            <fileset refid="test.fileset"/>
-	        </batchtest>
-        	<test name="org.kuali.${test.spring.shutdown}" todir="${test.xml.results.directory}"/>
-        </junit>
-    	<mkdir dir="${test.html.results.directory}" />
-        <junitreport todir="${test.html.results.directory}">
-            <fileset dir="${test.xml.results.directory}">
-                <include name="TEST-*.xml" />
-            </fileset>
-            <report format="frames" todir="${test.html.results.directory}" />
-        </junitreport>
-        <echo message="Generated test results: ${test.html.results.directory}/index.html" />
-    </target>
-	
+		
 	<target name="make-plugin" depends="clean,make-source">
 		<copy todir="${plugin.lib.directory}">
 			<fileset dir="${lib.directory}" excludes="${workflow.exclude.library.list}"/>
@@ -329,13 +303,15 @@
 	</target>
 	
 	<target name="help" description="Describe public targets">
-		<echo>overview
-	the following configuration files are involved in the build process
-			build.xml
-			build.properties
-			build/*
-			${user.home}\${ant.project.name}-build.properties
-	you should start using this build script as follows
+		<echo>--- OVERVIEW ---
+			 
+	    	the following configuration files are involved in the build process
+			- build.xml
+			- build.properties
+			- build/*
+			- ${user.home}\${ant.project.name}-build.properties
+			
+			you should start using this build script as follows
 			- copy build/configurationFiles/userHomeDirectory/${ant.project.name}-build.properties to ${user.home}
 			- obtain the values for ${datasource.username}, ${datasource.password}, and ${webservices.keystore.password}
 			  for the dev environment from someone on the project, and put them in
@@ -345,70 +321,35 @@
 			  given build target
 			- follow the instructions associated with the dist-local target and run that target
 			- run the echo-properties target and review the results
-	if you are interested in doing the following once you are more familiar with ${ant.project.name}, you should
-		bring the change up with your development manager, send a note to kualidev@oncourse.iu.edu, or ask that
-		the change be discussed at a developer meeting before committing
-			- create a build/institutionProperties/${institution}-build.properties file to permanently customize the
-			  build process for ${institution}
-			- modify the other files involved in the build, the .project file, the .classpath file, or the jars in the
-			  lib directories
-	you can override the default log4j settings for your local deployments by copying 
-		build/configurationFiles/externalConfigDirectory/settings/${log4j.settings.file} to
-		${user.home}/${log4j.settings.file} and modifying as desired.  you will also need to run the dist-local target for this
-		change to take effect.
-		</echo>
-		<echo message="."/>
-		<echo>dist-local target
-	description:
-		prepares tokenized resources and local configuration files and deploys tomcat context file on development workstation
-	notes:
-		this target should be run each time you update the project from cvs, change files in build/tokenizedResources, 
+			
+			you can override the default log4j settings for your local deployments by copying
+			build/configurationFiles/externalConfigDirectory/settings/${log4j.settings.file} to
+			${user.home}/${log4j.settings.file} and modifying as desired.  you will also need to run the dist-local target for this
+			change to take effect.
+			
+			if you would like to suggest a configuration change, enter a Jira issue in the KULCFG project with the details
+			
+			--- TARGETS ---
+
+			dist-local: prepares tokenized resources and local configuration files and deploys tomcat context file on development workstation
+			- this target should be run each time you update the project from cvs, change files in build/tokenizedResources, 
 			or change property values in ${user.home}\${ant.project.name}-build.properties or 
 			build/institutionProperties/${institution}-build.properties
-		tomcat should not be running when you are executing this target
-		</echo>
-		<echo message="."/>
-		<echo>echo-properties target
-	description:
-		executes ant echoproperties task, thereby printing out all the properties that have been set
-		</echo>
-		<echo message="."/>
-		<echo>test-all target
-	description:
-		runs all project tests and generates results
-		</echo>
-		<echo message="."/>
-		<echo>test-fast target
-	description:
-		runs fast project tests and generates results
-	notes:
-		to exclude a new test that is taking a long time to run, add an entry to the test.fileset defined in the
-			init-test-fast target
-		</echo>
-		<echo message="."/>
-		<echo>clean target
-	description:
-		removes all build output
-		</echo>
-		<echo message="."/>
-		<echo>dist target
-	description:
-		builds war for remote deployment
-		</echo>
-		<echo message="."/>
-		<echo>dist-plugin target
-	description:
-		builds plugin zip for remote deployment
-		</echo>
-		<echo message="."/>
-		<echo>dist-batch target
-	description:
-		builds batch zip for remote deployment
-		</echo>
-		<echo message="."/>
-		<echo>continuous-integration target
-	description:
-		runs all project tests and fails if there are failures or errors
+			- tomcat should not be running when you are executing this target
+
+			echo-properties: executes ant echoproperties task, thereby printing out all the properties that have been set
+
+			test: runs all project tests and generates results
+
+			clean: removes all build output
+			
+			dist: builds war for remote deployment
+
+			dist-plugin: builds plugin zip for remote deployment
+
+			dist-batch: builds batch zip for remote deployment
+
+			continuous-integration: runs all project tests and fails if there are failures or errors
 		</echo>
 	</target>
 </project>
