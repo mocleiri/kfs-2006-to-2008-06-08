@@ -1,9 +1,22 @@
 <?xml version="1.0"?>
 <project name="kuali" default="dist-local" basedir=".">
 	<!-- run the help task to view usage instructions -->	
-	<target name="dist-local" if="is.local.build" depends="clean,filter,dist-plugin-local" description="Prepare local configuration files and tokenized resources and deploy tomcat context file on development workstation">
+	<target name="dist-local" if="is.local.build" depends="filter-local,filter-project" description="Prepare local configuration files and tokenized resources and deploy tomcat context file on development workstation">
     	<copy file="${metainf.directory}/${tomcat.context.file}" tofile="${appserver.config.dir}/${ant.project.name}-${build.environment}.xml" overwrite="true"/>
     </target>
+	
+	<target name="dist-workflow-local" if="is.local.build" depends="filter-workflow-local" description="Call the deploy target of the workflow project and compile and deploy the application plugin">
+		<ant dir="${workflow.project.directory}" target="deploy">
+			<property name="workflow.environment" value="${build.environment}"/>
+			<property name="tomcat5.home" value="${appserver.home}"/>
+			<property name="plugin.dir" value="${workflow.plugin.project.directory}"/>
+			<property name="institution" value="kul"/>
+		</ant>
+		<ant dir="${basedir}" target="make-plugin"/>
+		<copy todir="${plugin.deploy.directory}">
+			<fileset dir="${plugin.directory}"/>
+		</copy>
+	</target>
 
 	<target name="echo-properties" depends="init-filter-sets" description="Print all build properties that have been set">
 		<echoproperties/>
@@ -39,22 +52,9 @@
         <echo message="Generated test results: ${test.html.results.directory}/index.html" />
     </target>
 	
-	<target name="clean" depends="clean-config" description="Remove all build output">
-    	<delete dir="${metainf.directory}"/>
-		<delete file="${webinf.directory}/${web.xml.file}"/>
-		<delete>
-			<fileset dir="${source.directory}" includes="${tokenized.source.files}"/>
-    	</delete>
-		<delete dir="${war.directory}"/>
-		<delete dir="${batch.directory}"/>
-		<delete dir="${test.directory}"/>
-		<delete dir="${plugin.directory}"/>
-		<delete>
-			<fileset dir="." includes="*.war"/>
-		</delete>
-	</target>
+	<target name="clean" depends="clean-project,clean-local,clean-workflow-local" description="Remove all build output"/>
 	
-	<target name="dist" depends="clean,make-source" description="Build war and for remote deployment">
+	<target name="dist" depends="make-source" description="Build war and for remote deployment">
 		<copy todir="${war.directory}">
 			<fileset dir="${webroot.directory}" excludes="WEB-INF/classes/**/**"/>
 		</copy>
@@ -65,7 +65,7 @@
 		<zip destfile="en-plugins.zip" basedir="${plugin.directory}"/>
 	</target>
 	
-	<target name="dist-batch" depends="clean,make-source" description="Build batch zip for remote deployment">
+	<target name="dist-batch" depends="make-source" description="Build batch zip for remote deployment">
 		<copy todir="${batch.directory}">
 			<fileset dir="${batch.script.directory}"/>
 		</copy>
@@ -93,9 +93,6 @@
     	<property file="build.properties"/>
 		<condition property="load.institution.override.properties" value="true">
 			<available file="${build.institution.overrides.file}"/>
-		</condition>
-		<condition property="dist.plugin.local" value="true">
-			<equals arg1="${is.local.workflow.build}" arg2="true"/>
 		</condition>
 		<echo message="Loaded properties in ./build.properties and set dependent properties"/>
 	</target>
@@ -165,7 +162,7 @@
 	    	<filter token="datasource-username" value="${datasource.username}"/>
 	    	<filter token="datasource-password" value="${datasource.password}"/>
 			<filter token="keystore-password" value="${keystore.password}"/>
-		</filterset>
+		</filterset>	
 		<filterset id="batch.filterset">
 			<filter token="batch-logger" value="log4j.logger.org.kuali.module.gl=DEBUG${standard.out.appender.on}"/>
 		</filterset>
@@ -173,24 +170,45 @@
 			<filter token="variable-ojb-properties" value="${plugin.ojb.properties}"/>
 		</filterset>		
    	</target>
-
-	<target name="clean-config" if="is.local.build" depends="init-project-properties">
-		<delete file="${appserver.lib.dir}/${oracle.library.file}" failonerror="false"/>
-		<delete dir="${settings.directory}" failonerror="false"/>
-		<delete dir="${security.directory}" failonerror="false"/>
-		<delete dir="${logs.directory}" failonerror="false"/>
-		<delete failonerror="false">
-			<fileset dir="${plugin.deploy.directory}"/>
-		</delete>		
-        <delete failonerror="false">
-			<fileset dir="." includes="*.zip"/>
+	
+	<target name="clean-project" depends="init-project-properties">
+    	<delete dir="${metainf.directory}"/>
+		<delete file="${webinf.directory}/${web.xml.file}"/>
+		<delete>
+			<fileset dir="${source.directory}" includes="${tokenized.source.files}"/>
+    	</delete>
+		<delete dir="${war.directory}"/>
+		<delete dir="${batch.directory}"/>
+		<delete dir="${test.directory}"/>
+		<delete dir="${plugin.directory}"/>
+		<delete>
+			<fileset dir="." includes="*.war"/>
 		</delete>
+	</target>
+
+	<target name="clean-local" if="is.local.build" depends="init-project-properties">
+		<delete file="${appserver.lib.dir}/${oracle.library.file}" failonerror="false"/>
         <delete failonerror="false">
 			<fileset dir="${appserver.config.dir}" includes="${ant.project.name}-*.xml"/>
 		</delete>
+		<delete dir="${settings.directory}" failonerror="false"/>
+		<delete dir="${security.directory}" failonerror="false"/>
+		<delete dir="${logs.directory}" failonerror="false"/>	
+        <delete failonerror="false">
+			<fileset dir="." includes="*.zip"/>
+		</delete>
 	</target>	
 
-	<target name="filter" depends="init-filter-sets,filter-config">
+	<target name="clean-workflow-local" if="is.local.build" depends="init-project-properties">
+		<delete failonerror="false">
+			<fileset dir="${plugin.deploy.directory}"/>
+		</delete>
+		<delete dir="${workflow.settings.directory}" failonerror="false"/>
+		<delete dir="${workflow.security.directory}" failonerror="false"/>
+		<delete dir="${workflow.logs.directory}" failonerror="false"/>
+	</target>	
+
+	<target name="filter-project" depends="init-filter-sets,clean-project">
 		<mkdir dir="${metainf.directory}"/>
 		<copy file="${build.tokenized.resources.directory}/${tomcat.context.file}" todir="${metainf.directory}" overwrite="true">
             <filterset refid="general.filterset"/>
@@ -204,7 +222,7 @@
     	</copy>
     </target>
 	
-	<target name="filter-config" if="is.local.build" depends="init-project-properties">
+	<target name="filter-local" if="is.local.build" depends="init-filter-sets,clean-local">
 		<mkdir dir="${attachments.root.directory}/${build.environment}"/>
 		<copy file="${build.config.directory}/${oracle.library.file}" todir="${appserver.lib.dir}" overwrite="true"/>
 		<copy todir="${settings.directory}" overwrite="true">
@@ -231,7 +249,27 @@
 		<zip destfile="security.zip" basedir="${security.directory}"/>
 	</target>
 	
-    <target name="init-make-references" depends="filter">
+	<target name="filter-workflow-local" if="is.local.build" depends="init-filter-sets,clean-workflow-local">
+		<filterset id="workflow.filterset">
+        	<filter token="workflow-application" value="${workflow.application}"/>
+			<filter token="workflow-logs-directory" value="${workflow.logs.directory}/"/>
+		</filterset>
+		<copy todir="${workflow.settings.directory}" overwrite="true">
+			<fileset dir="${build.workflow.settings.directory}"/>
+			<filterset refid="workflow.filterset"/>
+		</copy>
+		<copy todir="${workflow.security.directory}" overwrite="true">
+			<fileset dir="${build.workflow.security.directory}" excludes="${workflow.webservices.keystore.file}"/>
+			<filterset refid="security.filterset"/>
+			<filterset refid="workflow.filterset"/>
+		</copy>
+		<copy file="${build.workflow.security.directory}/${workflow.webservices.keystore.file}" todir="${workflow.security.directory}" overwrite="true"/>
+    	<copy todir="${workflow.logs.directory}" overwrite="true">
+			<fileset dir="${build.workflow.logs.directory}"/>
+		</copy>
+	</target>
+	
+    <target name="init-make-references" depends="filter-project">
     	<path id="compile.source.classpath">
             <fileset dir="${appserver.lib.dir}" includes="*.jar"/>
             <fileset dir="${lib.directory}" includes="*.jar"/>
@@ -279,7 +317,7 @@
         </copy>
     </target>
 		
-	<target name="make-plugin" depends="clean,make-source">
+	<target name="make-plugin" depends="make-source">
 		<copy todir="${plugin.lib.directory}">
 			<fileset dir="${lib.directory}" excludes="${workflow.exclude.library.list}"/>
 		</copy>
@@ -292,13 +330,6 @@
 		<replaceregexp file="${plugin.classes.directory}/workflow-config.properties" flags="-s" match=".+" replace=""/>
 		<copy todir="${plugin.metainf.directory}">
 			<fileset file="${build.workflow.directory}/workflow.xml"/>
-		</copy>
-	</target>
-
-	<target name="dist-plugin-local" if="dist.plugin.local">
-		<ant dir="${basedir}" target="make-plugin"/>
-		<copy todir="${plugin.deploy.directory}">
-			<fileset dir="${plugin.directory}"/>
 		</copy>
 	</target>
 	
@@ -321,22 +352,28 @@
 			  given build target
 			- follow the instructions associated with the dist-local target and run that target
 			- run the echo-properties target and review the results
+			- click the "Run/Stop/Restart MyEclipse Application Servers" button in the "Java (default)" perspective in
+			eclipse to start tomcat
 			
 			you can override the default log4j settings for your local deployments by copying
 			build/configurationFiles/externalConfigDirectory/settings/${log4j.settings.file} to
-			${user.home}/${log4j.settings.file} and modifying as desired.  you will also need to run the dist-local target for this
-			change to take effect.
+			${user.home}/${log4j.settings.file} and modifying as desired.  you will also need to run the dist-local target
+			for this change to take effect.
 			
 			if you would like to suggest a configuration change, enter a Jira issue in the KULCFG project with the details
 			
 			--- TARGETS ---
 
 			dist-local: prepares tokenized resources and local configuration files and deploys tomcat context file on development workstation
-			- this target should be run each time you update the project from cvs, change files in build/tokenizedResources, 
-			or change property values in ${user.home}\${ant.project.name}-build.properties or 
-			build/institutionProperties/${institution}-build.properties
+			- this target should be run each time you update the project or change property values in ${user.home}\${ant.project.name}-build.properties
 			- tomcat should not be running when you are executing this target
-
+			
+			dist-workflow-local: calls the deploy target of the workflow project and compiles and deploys the application plugin
+			- you should only be running this target, if you are running workflow locally
+			- this target should be run each time you update ${basedir}, ${workflow.project.directory}, or ${workflow.plugin.project.directory}
+			from cvs, intentionally modify the application plugin, or change property values in ${user.home}\${ant.project.name}-build.properties
+			- tomcat should not be running when you are executing this target
+			
 			echo-properties: executes ant echoproperties task, thereby printing out all the properties that have been set
 
 			test: runs all project tests and generates results
