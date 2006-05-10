@@ -1,29 +1,16 @@
 <?xml version="1.0"?>
 <project name="kuali" default="dist-local" basedir=".">
 	<!-- run the help task to view usage instructions -->	
-	<target name="dist-local" if="is.local.build" depends="filter-local,filter-project" description="Prepare local configuration files and tokenized resources and deploy tomcat context file on development workstation">
+	<target name="dist-local" if="is.local.build" depends="filter-local,filter-project,dist-workflow-local" description="Prepare local configuration files and tokenized resources and deploy tomcat context file on development workstation">
     	<copy file="${metainf.directory}/${tomcat.context.file}" tofile="${appserver.config.dir}/${ant.project.name}-${build.environment}.xml" overwrite="true"/>
     </target>
 	
-	<target name="dist-workflow-local" if="is.local.build" depends="filter-workflow-local" description="Call the deploy target of the workflow project and compile and deploy the application plugin">
-		<ant dir="${workflow.project.directory}" target="deploy">
-			<property name="workflow.environment" value="${build.environment}"/>
-			<property name="tomcat5.home" value="${appserver.home}"/>
-			<property name="plugin.dir" value="${workflow.plugin.project.directory}"/>
-			<property name="institution" value="kul"/>
-		</ant>
-		<ant dir="${basedir}" target="make-plugin"/>
-		<copy todir="${plugin.deploy.directory}">
-			<fileset dir="${plugin.directory}"/>
-		</copy>
-	</target>
-
 	<target name="echo-properties" depends="init-filter-sets" description="Print all build properties that have been set">
 		<echoproperties/>
 	</target>
 
 	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
-    <target name="test" depends="clean,make-tests" description="Run all project tests and format results">
+    <target name="test" depends="make-tests" description="Run all project tests and format results">
         <mkdir dir="${test.temp.directory}" />
     	<mkdir dir="${test.xml.results.directory}" />
         <junit showoutput="true" fork="true" forkmode="once" failureproperty="tests.failed" errorproperty="tests.errored" tempdir="${test.temp.directory}" maxmemory="512M">
@@ -54,38 +41,11 @@
 	
 	<target name="clean" depends="clean-project,clean-local,clean-workflow-local" description="Remove all build output"/>
 	
-	<target name="dist" depends="make-source" description="Build war and for remote deployment">
-		<copy todir="${war.directory}">
-			<fileset dir="${webroot.directory}" excludes="WEB-INF/classes/**/**"/>
-		</copy>
-		<jar jarfile="${ant.project.name}-${build.environment}.war" basedir="${war.directory}" compress="false"/>
-    </target>
-	
-	<target name="dist-plugin" depends="make-plugin" description="Build plugin zip for remote deployment">
-		<zip destfile="en-plugins.zip" basedir="${plugin.directory}"/>
-	</target>
-	
-	<target name="dist-batch" depends="make-source" description="Build batch zip for remote deployment">
-		<copy todir="${batch.directory}">
-			<fileset dir="${batch.script.directory}"/>
-		</copy>
-		<copy todir="${batch.classes.directory}">
-			<fileset dir="${war.classes.directory}"/>
-		</copy>
-		<copy todir="${batch.lib.directory}">
-			<fileset dir="${lib.directory}"/>
-			<fileset file="${appserver.lib.dir}/servlet-api.jar"/>
-			<fileset file="${appserver.lib.dir}/${oracle.library.file}"/>
-		</copy>
-		<zip basedir="${batch.directory}" destfile="${ant.project.name}-${build.environment}.zip"/>
-	</target>
-	
-	<target name="continuous-integration" depends="test" description="Run all tests and fail if there are failures or errors">
-		<fail if="tests.failed" message="Tests failed"/>
-	</target>
-			
 	<target name="init-user-properties">
     	<property file="${user.home}/${ant.project.name}-build.properties"/>
+		<condition property="dist.workflow.local">
+			<equals arg1="${is.local.workflow.build}" arg2="true"/>
+		</condition>
 		<echo message="Loaded properties in ${user.home}/${ant.project.name}-build.properties"/>
 	</target>
 
@@ -200,6 +160,12 @@
 	</target>	
 
 	<target name="clean-workflow-local" if="is.local.build" depends="init-project-properties">
+        <delete failonerror="false">
+			<fileset dir="${appserver.config.dir}" includes="${workflow.application}-*"/>
+		</delete>
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${appserver.deploy.dir}" includes="${workflow.application}-*/**"/>
+		</delete>
 		<delete failonerror="false">
 			<fileset dir="${plugin.deploy.directory}"/>
 		</delete>
@@ -249,7 +215,7 @@
 		<zip destfile="security.zip" basedir="${security.directory}"/>
 	</target>
 	
-	<target name="filter-workflow-local" if="is.local.build" depends="init-filter-sets,clean-workflow-local">
+	<target name="filter-workflow-local" if="dist.workflow.local" depends="init-filter-sets,clean-workflow-local">
 		<filterset id="workflow.filterset">
         	<filter token="workflow-application" value="${workflow.application}"/>
 			<filter token="workflow-logs-directory" value="${workflow.logs.directory}/"/>
@@ -318,11 +284,11 @@
     </target>
 		
 	<target name="make-plugin" depends="make-source">
-		<copy todir="${plugin.lib.directory}">
-			<fileset dir="${lib.directory}" excludes="${workflow.exclude.library.list}"/>
-		</copy>
 		<copy todir="${plugin.classes.directory}">
 			<fileset dir="${war.classes.directory}"/>
+		</copy>
+		<copy todir="${plugin.lib.directory}">
+			<fileset dir="${lib.directory}" excludes="${workflow.exclude.library.list}"/>
 		</copy>
 		<copy file="${build.tokenized.resources.directory}/OJB.properties" todir="${plugin.classes.directory}" overwrite="true">
             <filterset refid="plugin.filterset"/>
@@ -331,6 +297,73 @@
 		<copy todir="${plugin.metainf.directory}">
 			<fileset file="${build.workflow.directory}/workflow.xml"/>
 		</copy>
+	</target>
+	
+	<target name="dist" depends="make-source">
+		<copy todir="${war.directory}">
+			<fileset dir="${webroot.directory}" excludes="WEB-INF/classes/**/**"/>
+		</copy>
+		<jar jarfile="${ant.project.name}-${build.environment}.war" basedir="${war.directory}" compress="false"/>
+    </target>
+	
+	<target name="dist-plugin" depends="make-plugin" description="Build plugin zip for remote deployment">
+		<zip destfile="en-plugins.zip" basedir="${plugin.directory}"/>
+	</target>
+	
+	<target name="dist-batch" depends="make-source">
+		<copy todir="${batch.directory}">
+			<fileset dir="${batch.script.directory}"/>
+		</copy>
+		<copy todir="${batch.classes.directory}">
+			<fileset dir="${war.classes.directory}"/>
+		</copy>
+		<copy todir="${batch.lib.directory}">
+			<fileset dir="${lib.directory}"/>
+			<fileset file="${appserver.lib.dir}/servlet-api.jar"/>
+			<fileset file="${appserver.lib.dir}/${oracle.library.file}"/>
+		</copy>
+		<zip basedir="${batch.directory}" destfile="${ant.project.name}-${build.environment}.zip"/>
+	</target>
+
+	<target name="dist-workflow-local" if="dist.workflow.local" depends="filter-workflow-local">
+		<copy file="${build.workflow.directory}/${workflow.application}-${build.environment}.war" todir="${appserver.deploy.dir}"/>
+		<!-- when we move to 2.2, we'll be able to make workflow watch the project directory instead of doing this -->
+		<copy todir="${plugin.classes.directory}">
+			<fileset dir="${classes.directory}"/>
+		</copy>
+		<copy todir="${classes.directory}" overwrite="true">
+			<fileset dir="${build.tokenized.resources.directory}" includes="${tokenized.source.files}"/>
+            <filterset refid="general.filterset"/>
+    	</copy>
+		<copy todir="${plugin.lib.directory}">
+			<fileset dir="${lib.directory}" excludes="${workflow.exclude.library.list}"/>
+		</copy>
+		<copy file="${build.tokenized.resources.directory}/OJB.properties" todir="${plugin.classes.directory}" overwrite="true">
+            <filterset refid="plugin.filterset"/>
+    	</copy>
+		<replaceregexp file="${plugin.classes.directory}/workflow-config.properties" flags="-s" match=".+" replace=""/>
+		<copy todir="${plugin.metainf.directory}">
+			<fileset file="${build.workflow.directory}/workflow.xml"/>
+		</copy>
+		<copy todir="${plugin.deploy.directory}">
+			<fileset dir="${plugin.directory}"/>
+		</copy>
+	</target>
+	
+	<target name="continuous-integration" depends="test">
+		<fail if="tests.failed" message="Tests failed"/>
+	</target>
+	
+	<!-- don't forget to temporarily change 2 props in the plugin dev tokens file, till we move to 2.2 -->
+	<target name="update-workflow-war" depends="init-project-properties">
+		<ant dir="${workflow.project.directory}" target="clean"/>
+		<ant dir="${workflow.project.directory}" target="dist">
+			<property name="workflow.environment" value="${build.environment}"/>
+			<property name="tomcat5.home" value="${appserver.home}"/>
+			<property name="plugin.dir" value="${workflow.plugin.project.directory}"/>
+			<property name="institution" value="kul"/>
+		</ant>
+		<copy file="${workflow.project.directory}/${workflow.application}-${build.environment}.war" todir="${build.workflow.directory}"/>
 	</target>
 	
 	<target name="help" description="Describe public targets">
@@ -365,13 +398,8 @@
 			--- TARGETS ---
 
 			dist-local: prepares tokenized resources and local configuration files and deploys tomcat context file on development workstation
-			- this target should be run each time you update the project or change property values in ${user.home}\${ant.project.name}-build.properties
-			- tomcat should not be running when you are executing this target
-			
-			dist-workflow-local: calls the deploy target of the workflow project and compiles and deploys the application plugin
-			- you should only be running this target, if you are running workflow locally
-			- this target should be run each time you update ${basedir}, ${workflow.project.directory}, or ${workflow.plugin.project.directory}
-			from cvs, intentionally modify the application plugin, or change property values in ${user.home}\${ant.project.name}-build.properties
+			- this target should be run each time you update the project, change property values in ${user.home}\${ant.project.name}-build.properties,
+			or make a change that you want to apply to the application workflow plugin
 			- tomcat should not be running when you are executing this target
 			
 			echo-properties: executes ant echoproperties task, thereby printing out all the properties that have been set
@@ -379,14 +407,6 @@
 			test: runs all project tests and generates results
 
 			clean: removes all build output
-			
-			dist: builds war for remote deployment
-
-			dist-plugin: builds plugin zip for remote deployment
-
-			dist-batch: builds batch zip for remote deployment
-
-			continuous-integration: runs all project tests and fails if there are failures or errors
-		</echo>
+			</echo>
 	</target>
 </project>
