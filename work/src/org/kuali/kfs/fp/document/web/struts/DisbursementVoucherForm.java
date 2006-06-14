@@ -22,23 +22,13 @@
  */
 package org.kuali.module.financial.web.struts.form;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.core.web.format.SimpleBooleanFormatter;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeExpense;
 import org.kuali.module.financial.bo.DisbursementVoucherPreConferenceRegistrant;
-import org.kuali.module.financial.bo.TravelPerDiem;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.module.financial.rules.DisbursementVoucherDocumentRule;
-import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 
 /**
  * This class is the action form for the Disbursement Voucher.
- * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class DisbursementVoucherForm extends KualiTransactionalDocumentFormBase {
@@ -48,12 +38,25 @@ public class DisbursementVoucherForm extends KualiTransactionalDocumentFormBase 
     private DisbursementVoucherNonEmployeeExpense newPrePaidNonEmployeeExpenseLine;
     private DisbursementVoucherPreConferenceRegistrant newPreConferenceRegistrantLine;
 
-    private String wireChargeMessage;
+    private String nraTaxLineNumbers;
 
     public DisbursementVoucherForm() {
         super();
-        setFormatterType("canPrintCoverSheet", SimpleBooleanFormatter.class);
         setDocument(new DisbursementVoucherDocument());
+    }
+
+    /**
+     * @return Returns the nraTaxLineNumbers.
+     */
+    public String getNraTaxLineNumbers() {
+        return nraTaxLineNumbers;
+    }
+
+    /**
+     * @param nraTaxLineNumbers The nraTaxLineNumbers to set.
+     */
+    public void setNraTaxLineNumbers(String nraTaxLineNumbers) {
+        this.nraTaxLineNumbers = nraTaxLineNumbers;
     }
 
     /**
@@ -97,52 +100,5 @@ public class DisbursementVoucherForm extends KualiTransactionalDocumentFormBase 
     public void setNewPrePaidNonEmployeeExpenseLine(DisbursementVoucherNonEmployeeExpense newPrePaidNonEmployeeExpenseLine) {
         this.newPrePaidNonEmployeeExpenseLine = newPrePaidNonEmployeeExpenseLine;
     }
-
-    /**
-     * @return Returns the wireChargeMessage.
-     */
-    public String getWireChargeMessage() {
-        return wireChargeMessage;
-    }
-
-    /**
-     * @param wireChargeMessage The wireChargeMessage to set.
-     */
-    public void setWireChargeMessage(String wireChargeMessage) {
-        this.wireChargeMessage = wireChargeMessage;
-    }
-
-    /**
-     * 
-     * determines if the DV document is in a state that allows printing of the cover sheet
-     * 
-     * @return
-     */
-    public boolean getCanPrintCoverSheet() {
-        DisbursementVoucherDocumentRule documentRule = new DisbursementVoucherDocumentRule();
-
-        return documentRule.isCoverSheetPrintable(getDocument());
-    }
-
-    /**
-     * Returns list of available travel expense type codes for rendering per diem link page.
-     * 
-     * @return
-     */
-    public List getTravelPerDiemCategoryCodes() {
-        Map criteria = new HashMap();
-        criteria.put("fiscalYear", SpringServiceLocator.getDateTimeService().getCurrentFiscalYear());
-
-        return (List) SpringServiceLocator.getKeyValuesService().findMatching(TravelPerDiem.class, criteria);
-    }
-
-    /**
-     * Returns the per diem link message from the parameters table.
-     * 
-     * @return
-     */
-    public String getTravelPerDiemLinkPageMessage() {
-        return SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.TRAVEL_PER_DIEM_MESSAGE_PARM_NM);
-    }
-
 }
+

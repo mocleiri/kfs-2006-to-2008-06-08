@@ -26,8 +26,6 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.bo.OriginationCode;
-import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -36,7 +34,7 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 /**
  * @author jsissom
- * 
+ *  
  */
 public class Encumbrance extends BusinessObjectBase {
     static final long serialVersionUID = -7494473472438516396L;
@@ -62,8 +60,6 @@ public class Encumbrance extends BusinessObjectBase {
     private Account account;
     private ObjectCode financialObject;
     private BalanceTyp balanceType;
-    private OriginationCode originationCode;
-    private Options option;
 
     private DummyBusinessObject dummyBusinessObject;
 
@@ -81,12 +77,11 @@ public class Encumbrance extends BusinessObjectBase {
         documentTypeCode = t.getFinancialDocumentTypeCode();
         originCode = t.getFinancialSystemOriginationCode();
         documentNumber = t.getFinancialDocumentNumber();
-        transactionEncumbranceDescription = t.getTransactionLedgerEntryDescription();
+        transactionEncumbranceDescription = t.getTransactionLedgerEntryDesc();
         transactionEncumbranceDate = t.getTransactionDate();
         accountLineEncumbranceAmount = new KualiDecimal("0");
         accountLineEncumbranceClosedAmount = new KualiDecimal("0");
         accountLineEncumbrancePurgeCode = " ";
-        this.dummyBusinessObject = new DummyBusinessObject();
     }
 
     protected LinkedHashMap toStringMapper() {
@@ -102,14 +97,6 @@ public class Encumbrance extends BusinessObjectBase {
         map.put("originCode", getOriginCode());
         map.put("documentNumber", getDocumentNumber());
         return map;
-    }
-
-    public OriginationCode getOriginationCode() {
-        return originationCode;
-    }
-
-    public void setOriginationCode(OriginationCode originationCode) {
-        this.originationCode = originationCode;
     }
 
     /**
@@ -134,9 +121,11 @@ public class Encumbrance extends BusinessObjectBase {
     }
 
     /**
-     * @param accountLineEncumbranceClearedAmount The accountLineEncumbranceClearedAmount to set.
+     * @param accountLineEncumbranceClearedAmount The accountLineEncumbranceClearedAmount
+     *        to set.
      */
-    public void setAccountLineEncumbranceClosedAmount(KualiDecimal accountLineEncumbranceClosedAmount) {
+    public void setAccountLineEncumbranceClosedAmount(
+            KualiDecimal accountLineEncumbranceClosedAmount) {
         this.accountLineEncumbranceClosedAmount = accountLineEncumbranceClosedAmount;
     }
 
@@ -316,9 +305,11 @@ public class Encumbrance extends BusinessObjectBase {
     }
 
     /**
-     * @param transactionEncumbranceDescription The transactionEncumbranceDescription to set.
+     * @param transactionEncumbranceDescription The transactionEncumbranceDescription to
+     *        set.
      */
-    public void setTransactionEncumbranceDescription(String transactionEncumbranceDescription) {
+    public void setTransactionEncumbranceDescription(
+            String transactionEncumbranceDescription) {
         this.transactionEncumbranceDescription = transactionEncumbranceDescription;
     }
 
@@ -424,23 +415,5 @@ public class Encumbrance extends BusinessObjectBase {
      */
     public void setDummyBusinessObject(DummyBusinessObject dummyBusinessObject) {
         this.dummyBusinessObject = dummyBusinessObject;
-    }
-
-    /**
-     * Gets the option attribute.
-     * 
-     * @return Returns the option.
-     */
-    public Options getOption() {
-        return option;
-    }
-
-    /**
-     * Sets the option attribute value.
-     * 
-     * @param option The option to set.
-     */
-    public void setOption(Options option) {
-        this.option = option;
     }
 }
