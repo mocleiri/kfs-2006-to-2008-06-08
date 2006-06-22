@@ -82,11 +82,6 @@ public class Org extends BusinessObjectBase {
     private Chart campusPlantChart;
     private PostalZipCode postalZip;
 
-    //  HRMS Org fields
-    private OrganizationExtension organizationExtension;
-    private String editHrmsUnitSectionBlank;
-    private String editHrmsUnitSection;
-
     // fields for mixed anonymous keys
     private String organizationDefaultAccountNumber;
     private String chartOfAccountsCode;
@@ -108,7 +103,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationCode attribute.
      * 
-     * @param organizationCode The organizationCode to set.
+     * @param - organizationCode The organizationCode to set.
      * 
      */
     public void setOrganizationCode(String organizationCode) {
@@ -128,7 +123,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationName attribute.
      * 
-     * @param organizationName The organizationName to set.
+     * @param - organizationName The organizationName to set.
      * 
      */
     public void setOrganizationName(String organizationName) {
@@ -148,7 +143,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationStreetAddress attribute.
      * 
-     * @param organizationStreetAddress The organizationStreetAddress to set.
+     * @param - organizationStreetAddress The organizationStreetAddress to set.
      * 
      */
     public void setOrganizationStreetAddress(String organizationStreetAddress) {
@@ -168,7 +163,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationCityName attribute.
      * 
-     * @param organizationCityName The organizationCityName to set.
+     * @param - organizationCityName The organizationCityName to set.
      * 
      */
     public void setOrganizationCityName(String organizationCityName) {
@@ -188,7 +183,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationStateCode attribute.
      * 
-     * @param organizationStateCode The organizationStateCode to set.
+     * @param - organizationStateCode The organizationStateCode to set.
      * 
      */
     public void setOrganizationStateCode(String organizationStateCode) {
@@ -208,7 +203,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationZipCode attribute.
      * 
-     * @param organizationZipCode The organizationZipCode to set.
+     * @param - organizationZipCode The organizationZipCode to set.
      * 
      */
     public void setOrganizationZipCode(String organizationZipCode) {
@@ -228,7 +223,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationBeginDate attribute.
      * 
-     * @param organizationBeginDate The organizationBeginDate to set.
+     * @param - organizationBeginDate The organizationBeginDate to set.
      * 
      */
     public void setOrganizationBeginDate(Date organizationBeginDate) {
@@ -248,7 +243,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationEndDate attribute.
      * 
-     * @param organizationEndDate The organizationEndDate to set.
+     * @param - organizationEndDate The organizationEndDate to set.
      * 
      */
     public void setOrganizationEndDate(Date organizationEndDate) {
@@ -268,7 +263,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationActiveIndicator attribute.
      * 
-     * @param organizationActiveIndicator The organizationActiveIndicator to set.
+     * @param - organizationActiveIndicator The organizationActiveIndicator to set.
      * 
      */
     public void setOrganizationActiveIndicator(boolean organizationActiveIndicator) {
@@ -288,7 +283,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationInFinancialProcessingIndicator attribute.
      * 
-     * @param organizationInFinancialProcessingIndicator The organizationInFinancialProcessingIndicator to set.
+     * @param - organizationInFinancialProcessingIndicator The organizationInFinancialProcessingIndicator to set.
      * 
      */
     public void setOrganizationInFinancialProcessingIndicator(boolean organizationInFinancialProcessingIndicator) {
@@ -308,7 +303,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the chartOfAccounts attribute.
      * 
-     * @param chartOfAccounts The chartOfAccounts to set.
+     * @param - chartOfAccounts The chartOfAccounts to set.
      * @deprecated
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -328,7 +323,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationDefaultAccount attribute.
      * 
-     * @param organizationDefaultAccount The organizationDefaultAccount to set.
+     * @param - organizationDefaultAccount The organizationDefaultAccount to set.
      * @deprecated
      */
     public void setOrganizationDefaultAccount(Account organizationDefaultAccount) {
@@ -348,7 +343,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationManagerUniversal attribute.
      * 
-     * @param organizationManagerUniversal The organizationManagerUniversal to set.
+     * @param - organizationManagerUniversal The organizationManagerUniversal to set.
      * @deprecated
      */
     public void setOrganizationManagerUniversal(UniversalUser organizationManagerUniversal) {
@@ -368,7 +363,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the responsibilityCenter attribute.
      * 
-     * @param responsibilityCenter The responsibilityCenter to set.
+     * @param - responsibilityCenter The responsibilityCenter to set.
      * @deprecated
      */
     public void setResponsibilityCenter(ResponsibilityCenter responsibilityCenter) {
@@ -388,7 +383,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationPhysicalCampus attribute.
      * 
-     * @param organizationPhysicalCampus The organizationPhysicalCampus to set.
+     * @param - organizationPhysicalCampus The organizationPhysicalCampus to set.
      * @deprecated
      */
     public void setOrganizationPhysicalCampus(Campus organizationPhysicalCampus) {
@@ -408,7 +403,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationType attribute.
      * 
-     * @param organizationType The organizationType to set.
+     * @param - organizationType The organizationType to set.
      * @deprecated
      */
     public void setOrganizationType(OrgType organizationType) {
@@ -428,7 +423,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the reportsToOrganization attribute.
      * 
-     * @param reportsToOrganization The reportsToOrganization to set.
+     * @param - reportsToOrganization The reportsToOrganization to set.
      * @deprecated
      */
     public void setReportsToOrganization(Org reportsToOrganization) {
@@ -448,7 +443,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the reportsToChartOfAccounts attribute.
      * 
-     * @param reportsToChartOfAccounts The reportsToChartOfAccounts to set.
+     * @param - reportsToChartOfAccounts The reportsToChartOfAccounts to set.
      * @deprecated
      */
     public void setReportsToChartOfAccounts(Chart reportsToChartOfAccounts) {
@@ -468,7 +463,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationPlantAccount attribute.
      * 
-     * @param organizationPlantAccount The organizationPlantAccount to set.
+     * @param - organizationPlantAccount The organizationPlantAccount to set.
      * @deprecated
      */
     public void setOrganizationPlantAccount(Account organizationPlantAccount) {
@@ -488,7 +483,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the campusPlantAccount attribute.
      * 
-     * @param campusPlantAccount The campusPlantAccount to set.
+     * @param - campusPlantAccount The campusPlantAccount to set.
      * @deprecated
      */
     public void setCampusPlantAccount(Account campusPlantAccount) {
@@ -508,7 +503,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationPlantChart attribute.
      * 
-     * @param organizationPlantChart The organizationPlantChart to set.
+     * @param - organizationPlantChart The organizationPlantChart to set.
      * @deprecated
      */
     public void setOrganizationPlantChart(Chart organizationPlantChart) {
@@ -528,7 +523,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the campusPlantChart attribute.
      * 
-     * @param campusPlantChart The campusPlantChart to set.
+     * @param - campusPlantChart The campusPlantChart to set.
      * @deprecated
      */
     public void setCampusPlantChart(Chart campusPlantChart) {
@@ -730,7 +725,7 @@ public class Org extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
@@ -758,53 +753,4 @@ public class Org extends BusinessObjectBase {
     public String getEditPlantAccountsSectionBlank() {
         return editPlantAccountsSectionBlank;
     }
-
-    /**
-     * Gets the editHrmsUnitSection attribute. 
-     * @return Returns the editHrmsUnitSection.
-     */
-    public final String getEditHrmsUnitSection() {
-        return editHrmsUnitSection;
-    }
-
-    /**
-     * Sets the editHrmsUnitSection attribute value.
-     * @param editHrmsUnitSection The editHrmsUnitSection to set.
-     */
-    public final void setEditHrmsUnitSection(String editHrmsUnitSection) {
-        this.editHrmsUnitSection = editHrmsUnitSection;
-    }
-
-    /**
-     * Gets the editHrmsUnitSectionBlank attribute. 
-     * @return Returns the editHrmsUnitSectionBlank.
-     */
-    public final String getEditHrmsUnitSectionBlank() {
-        return editHrmsUnitSectionBlank;
-    }
-
-    /**
-     * Sets the editHrmsUnitSectionBlank attribute value.
-     * @param editHrmsUnitSectionBlank The editHrmsUnitSectionBlank to set.
-     */
-    public final void setEditHrmsUnitSectionBlank(String editHrmsUnitSectionBlank) {
-        this.editHrmsUnitSectionBlank = editHrmsUnitSectionBlank;
-    }
-
-    /**
-     * Gets the organizationExtension attribute. 
-     * @return Returns the organizationExtension.
-     */
-    public final OrganizationExtension getOrganizationExtension() {
-        return organizationExtension;
-    }
-
-    /**
-     * Sets the organizationExtension attribute value.
-     * @param organizationExtension The organizationExtension to set.
-     */
-    public final void setOrganizationExtension(OrganizationExtension organizationExtension) {
-        this.organizationExtension = organizationExtension;
-    }
-    
 }

@@ -50,7 +50,7 @@
 
 	<kul:notes />
 
-	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
+	<kul:adHocRecipients />
 
 	<kul:routeLog />
 

@@ -22,13 +22,12 @@
  */
 package org.kuali.module.financial.web.struts.form;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.kuali.core.util.KualiDecimal;
+import javax.servlet.http.HttpServletRequest;
+
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.module.financial.bo.Deposit;
@@ -43,8 +42,8 @@ import org.kuali.module.financial.service.CashManagementService;
  */
 public class CashManagementForm extends KualiDocumentFormBase {
     private static final long serialVersionUID = 1L;
-    private static Logger LOG = Logger.getLogger(CashManagementForm.class);
-
+    // problem: I need one list of receiptSummaries foreach deposit
+    // ? create a DepositReceipts object which contains DepositSummaries, index 'em by depositLineNumber ?
     private List depositHelpers;
 
     /**
@@ -61,6 +60,18 @@ public class CashManagementForm extends KualiDocumentFormBase {
     }
 
     /**
+     * Overrides parent to call super and then make sure that the deposit helper list is populated.
+     * 
+     * @see org.kuali.core.web.struts.pojo.PojoForm#populate(javax.servlet.http.HttpServletRequest)
+     */
+    public void populate(HttpServletRequest request) {
+        super.populate(request);
+
+        populateDeposits();
+        populateDepositHelpers();
+    }
+
+    /**
      * @return cashManagementDocument
      */
     public CashManagementDocument getCashManagementDocument() {
@@ -69,17 +80,33 @@ public class CashManagementForm extends KualiDocumentFormBase {
 
 
     /**
-     * Creates a DepositHelper foreach Deposit associated with this form's document
+     * Completes population of each Deposit associated with this form's document
+     * 
      */
-    public void populateDepositHelpers() {
-        depositHelpers.clear();
-
+    public void populateDeposits() {
         List deposits = getCashManagementDocument().getDeposits();
         for (Iterator i = deposits.iterator(); i.hasNext();) {
             Deposit d = (Deposit) i.next();
 
-            DepositHelper dh = new DepositHelper(d);
-            depositHelpers.add(dh);
+            d.refresh();
+        }
+    }
+
+
+    /**
+     * Creates a DepositHelper foreach Deposit associated with this form's document
+     */
+    public void populateDepositHelpers() {
+        if (depositHelpers.isEmpty()) {
+            depositHelpers.clear();
+
+            List deposits = getCashManagementDocument().getDeposits();
+            for (Iterator i = deposits.iterator(); i.hasNext();) {
+                Deposit d = (Deposit) i.next();
+
+                DepositHelper dh = new DepositHelper(d);
+                depositHelpers.add(dh);
+            }
         }
     }
 
@@ -120,59 +147,42 @@ public class CashManagementForm extends KualiDocumentFormBase {
      */
     public static final class DepositHelper {
         private Integer depositLineNumber;
-        private List<CashReceiptSummary> cashReceiptSummarys;
+        private List cashReceipts;
 
         /**
          * Constructs a DepositHelper - default constructor used by PojoProcessor.
          */
         public DepositHelper() {
-            cashReceiptSummarys = new ArrayList<CashReceiptSummary>();
+            cashReceipts = new ArrayList();
             depositLineNumber = new Integer(1);
         }
 
         /**
-         * Constructs a DepositHelper
+         * Constructs a CashManagementForm.java.
          * 
          * @param deposit
          */
         public DepositHelper(Deposit deposit) {
-            depositLineNumber = deposit.getFinancialDocumentDepositLineNumber();
-
-            cashReceiptSummarys = new ArrayList<CashReceiptSummary>();
-
             CashManagementService cmService = SpringServiceLocator.getCashManagementService();
-            List<CashReceiptDocument> cashReceipts = cmService.retrieveCashReceipts(deposit);
-            for (CashReceiptDocument document : cashReceipts) {
-                cashReceiptSummarys.add(new CashReceiptSummary(document));
-            }
+            cashReceipts = cmService.retrieveCashReceipts(deposit);
+            depositLineNumber = deposit.getFinancialDocumentDepositLineNumber();
         }
 
         /**
          * @return List
          */
-        public List<CashReceiptSummary> getCashReceiptSummarys() {
-            return cashReceiptSummarys;
+        public List getCashReceipts() {
+            return cashReceipts;
         }
 
         /**
          * @param i
-         * @return CashReceiptSummary
+         * @return CashReceiptDocument
          */
-        public CashReceiptSummary getCashReceiptSummary(int index) {
-            extendCashReceiptSummarys(index + 1);
+        public CashReceiptDocument getCashReceipt(int i) {
+            CashReceiptDocument cd = (CashReceiptDocument) cashReceipts.get(i);
 
-            return cashReceiptSummarys.get(index);
-        }
-
-        /**
-         * Ensures that there are at least minSize entries in the cashReceiptSummarys list
-         * 
-         * @param minSize
-         */
-        private void extendCashReceiptSummarys(int minSize) {
-            while (cashReceiptSummarys.size() < minSize) {
-                cashReceiptSummarys.add(new CashReceiptSummary());
-            }
+            return cd;
         }
 
         /**
@@ -185,106 +195,8 @@ public class CashManagementForm extends KualiDocumentFormBase {
         /**
          * @see java.lang.Object#toString()
          */
-        @Override
         public String toString() {
-            return "deposit #" + depositLineNumber;
-        }
-    }
-
-    public static final class CashReceiptSummary {
-        private String documentNumber;
-        private String description;
-        private Timestamp createDate;
-        private KualiDecimal totalAmount;
-
-        /**
-         * Default constructor used by PojoProcessor.
-         */
-        public CashReceiptSummary() {
-        }
-
-        /**
-         * Constructs a CashReceiptSummary from the given CashReceiptDocument.
-         * 
-         * @param crd
-         */
-        public CashReceiptSummary(CashReceiptDocument crd) {
-            documentNumber = crd.getFinancialDocumentNumber();
-            description = crd.getDocumentHeader().getFinancialDocumentDescription();
-            createDate = crd.getDocumentHeader().getWorkflowDocument().getCreateDate();
-            totalAmount = crd.getSumTotalAmount();
-        }
-
-        /**
-         * @return current value of createDate.
-         */
-        public Timestamp getCreateDate() {
-            return createDate;
-        }
-
-        /**
-         * Sets the createDate attribute value.
-         * 
-         * @param createDate The createDate to set.
-         */
-        public void setCreateDate(Timestamp createDate) {
-            this.createDate = createDate;
-        }
-
-        /**
-         * @return current value of description.
-         */
-        public String getDescription() {
-            return description;
-        }
-
-        /**
-         * Sets the description attribute value.
-         * 
-         * @param description The description to set.
-         */
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        /**
-         * @return current value of documentNumber.
-         */
-        public String getDocumentNumber() {
-            return documentNumber;
-        }
-
-        /**
-         * Sets the documentNumber attribute value.
-         * 
-         * @param docNumber The documentNumber to set.
-         */
-        public void setDocumentNumber(String documentNumber) {
-            this.documentNumber = documentNumber;
-        }
-
-        /**
-         * @return current value of totalAmount.
-         */
-        public KualiDecimal getTotalAmount() {
-            return totalAmount;
-        }
-
-        /**
-         * Sets the totalAmount attribute value.
-         * 
-         * @param totalAmount The totalAmount to set.
-         */
-        public void setTotalAmount(KualiDecimal totalAmount) {
-            this.totalAmount = totalAmount;
-        }
-
-        /**
-         * @see java.lang.Object#toString()
-         */
-        @Override
-        public String toString() {
-            return "CRSummary " + getDocumentNumber();
+            return "deposit " + depositLineNumber;
         }
     }
 }

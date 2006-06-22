@@ -42,18 +42,18 @@ public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule {
      * 
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDocumentBalanceValid(org.kuali.core.document.TransactionalDocument)
      */
-    @Override
     protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
         AdvanceDepositDocument ad = (AdvanceDepositDocument) transactionalDocument;
 
-        boolean isValid = ad.getSumTotalAmount().isPositive();
+        // make sure that the deposits total is greater than zero
+        boolean isValid = ad.getSumTotalAmount().compareTo(Constants.ZERO) > 0;
         if (!isValid) {
             GlobalVariables.getErrorMap().put(PropertyConstants.NEW_ADVANCE_DEPOSIT, KeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_TOTAL_INVALID);
         }
 
         if (isValid) {
             // make sure the document is in balance
-            isValid = ad.getSourceTotal().equals(ad.getSumTotalAmount());
+            isValid = ad.getSourceTotal().compareTo(ad.getSumTotalAmount()) == 0;
 
             if (!isValid) {
                 GlobalVariables.getErrorMap().put(PropertyConstants.NEW_ADVANCE_DEPOSIT, KeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_OUT_OF_BALANCE);
@@ -68,7 +68,6 @@ public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule {
      * 
      * @see org.kuali.core.rule.DocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
      */
-    @Override
     protected boolean processCustomRouteDocumentBusinessRules(Document document) {
         boolean isValid = super.processCustomRouteDocumentBusinessRules(document);
 
@@ -102,7 +101,6 @@ public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule {
      * 
      * @see org.kuali.core.rule.DocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.Document)
      */
-    @Override
     protected boolean processCustomSaveDocumentBusinessRules(Document document) {
         boolean isValid = super.processCustomSaveDocumentBusinessRules(document);
 

@@ -38,7 +38,6 @@ import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 import org.kuali.module.chart.dao.AccountDao;
 import org.springframework.orm.ojb.PersistenceBrokerTemplate;
-import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 
 /**
@@ -47,7 +46,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 
-public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements AccountDao {
+public class AccountDaoOjb extends PersistenceBrokerTemplate implements AccountDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountDaoOjb.class);
 
     /**
@@ -65,7 +64,7 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
         criteria.addEqualTo("chartOfAccountsCode", chartOfAccountsCode);
         criteria.addEqualTo("accountNumber", accountNumber);
 
-        return (Account)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(Account.class, criteria));
+        return (Account) getObjectByQuery(QueryFactory.newQuery(Account.class, criteria));
     }
 
     /**
@@ -90,7 +89,7 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
         List fiscalOfficerResponsibilities = new ArrayList();
         Criteria criteria = new Criteria();
         criteria.addEqualTo("accountFiscalOfficerSystemIdentifier", kualiUser.getPersonUniversalIdentifier());
-        Collection accounts = getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Account.class, criteria));
+        Collection accounts = getCollectionByQuery(QueryFactory.newQuery(Account.class, criteria));
         for (Iterator iter = accounts.iterator(); iter.hasNext();) {
             Account account = (Account) iter.next();
             AccountResponsibility accountResponsibility = new AccountResponsibility(AccountResponsibility.FISCAL_OFFICER_RESPONSIBILITY, new KualiDecimal("0"), new KualiDecimal("0"), "", account);
@@ -106,7 +105,7 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
         List delegatedResponsibilities = new ArrayList();
         Criteria criteria = new Criteria();
         criteria.addEqualTo("accountDelegateSystemId", kualiUser.getPersonUniversalIdentifier());
-        Collection accountDelegates = getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Delegate.class, criteria));
+        Collection accountDelegates = getCollectionByQuery(QueryFactory.newQuery(Delegate.class, criteria));
         for (Iterator iter = accountDelegates.iterator(); iter.hasNext();) {
             Delegate accountDelegate = (Delegate) iter.next();
             if (accountDelegate.isAccountDelegateActiveIndicator()) {
@@ -128,6 +127,6 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
         LOG.debug("getAllAccounts() started");
 
         Criteria criteria = new Criteria();
-        return getPersistenceBrokerTemplate().getIteratorByQuery(QueryFactory.newQuery(Account.class, criteria));
+        return getIteratorByQuery(QueryFactory.newQuery(Account.class, criteria));
     }
 }

@@ -25,141 +25,111 @@
 
 package org.kuali.module.chart.bo;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.bo.PostalZipCode;
-import org.kuali.core.bo.State;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
-import org.kuali.module.chart.bo.codes.SufficientFundsCode;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class PriorYearAccount extends BusinessObjectBase implements AccountIntf {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PriorYearAccount.class);
+public class PriorYearAccount extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String accountNumber;
     private String accountName;
-    private boolean accountsFringesBnftIndicator;
-    private Timestamp accountRestrictedStatusDate;
-    private String accountCityName;
-    private String accountStateCode;
-    private String accountStreetAddress;
-    private String accountZipCode;
-    private Timestamp accountCreateDate;
-    private Timestamp accountEffectiveDate;
-    private Timestamp accountExpirationDate;
-    private Integer awardPeriodEndYear;
-    private String awardPeriodEndMonth;
-    private Integer awardPeriodBeginYear;
-    private String awardPeriodBeginMonth;
-    private String acctIndirectCostRcvyTypeCd;
-    private String acctCustomIndCstRcvyExclCd;
-    private String financialIcrSeriesIdentifier;
-    private boolean accountInFinancialProcessingIndicator;
-    private String budgetRecordingLevelCode;
-    private String accountSufficientFundsCode;
-    private boolean pendingAcctSufficientFundsIndicator;
-    private boolean extrnlFinEncumSufficntFndIndicator;
-    private boolean intrnlFinEncumSufficntFndIndicator;
-    private boolean finPreencumSufficientFundIndicator;
-    private boolean financialObjectivePrsctrlIndicator;
-    private String cgCatlfFedDomestcAssistNbr;
-    private boolean accountOffCampusIndicator;
-    private boolean accountClosedIndicator;
-    private String programCode;
-
-    private String accountFiscalOfficerSystemIdentifier;
-    private String accountsSupervisorySystemsIdentifier;
-    private String accountManagerSystemIdentifier;
+    private String accountFiscalOfficerUniversalIdentifier;
+    private String accountSupervisorUniversalId;
+    private String accountManagerUniversalId;
     private String organizationCode;
     private String accountTypeCode;
     private String accountPhysicalCampusCode;
     private String subFundGroupCode;
+    private String accountFringeBenefitCode;
     private String financialHigherEdFunctionCd;
     private String accountRestrictedStatusCode;
+    private Date accountRestrictedStatusDate;
+    private String accountCityName;
+    private String accountStateCode;
+    private String accountStreetAddress;
+    private String accountZipCode;
     private String reportsToChartOfAccountsCode;
     private String reportsToAccountNumber;
+    private Date accountCreateDate;
+    private Date accountEffectiveDate;
+    private Date accountExpirationDate;
     private String continuationFinChrtOfAcctCd;
     private String continuationAccountNumber;
+    private Integer awardPeriodEndYear;
+    private String awardPeriodEndMonth;
+    private Integer awardPeriodBeginYear;
+    private String awardPeriodBeginMonth;
     private String endowmentIncomeAcctFinCoaCd;
     private String endowmentIncomeAccountNumber;
     private String contractControlFinCoaCode;
     private String contractControlAccountNumber;
     private String incomeStreamFinancialCoaCode;
     private String incomeStreamAccountNumber;
+    private String acctIndirectCostRcvyTypeCd;
+    private String acctCustomIndCstRcvyExclCd;
+    private String financialIcrSeriesIdentifier;
     private String indirectCostRcvyFinCoaCode;
     private String indirectCostRecoveryAcctNbr;
+    private boolean accountInFinProcessingIndicator;
+    private String budgetRecordingLevelCode;
+    private String accountSufficientFundsCode;
+    private boolean pendingAcctSufficientFundsIndicator;
+    private boolean extrnlFinEncumSufficntFndIndicator;
+    private boolean intrnlFinEncumSufficntFndIndicator;
+    private boolean finPreencumSufficientFundIndicator;
+    private boolean finObjectPresenceControlIndicator;
+    private String cgCatlfFedDomestcAssistNbr;
+    private boolean accountOffCampusIndicator;
+    private boolean accountClosedIndicator;
+    private String programCode;
 
-    private Chart chartOfAccounts;
-    private Org organization;
-    private AcctType accountType;
-    private Campus accountPhysicalCampus;
-    private State accountState;
-    private SubFundGroup subFundGroup;
-    private HigherEdFunction financialHigherEdFunction;
-    private RestrictedStatus accountRestrictedStatus;
-    private Account reportsToAccount;
-    private Account continuationAccount;
+    private Chart chart;
+    private Campus campus;
+    private Chart reportsToChartOfAccounts;
+    private Account account;
+    private Chart continuationFinChrtOfAcct;
+    private Chart endowmentIncomeAcctFinCoa;
     private Account endowmentIncomeAccount;
     private Account contractControlAccount;
+    private Chart contractControlFinCoa;
+    private Chart incomeStreamFinancialCoa;
     private Account incomeStreamAccount;
     private Account indirectCostRecoveryAcct;
-    private UniversalUser accountFiscalOfficerUser;
-    private UniversalUser accountSupervisoryUser;
-    private UniversalUser accountManagerUser;
-    private PostalZipCode postalZipCode;
-    private BudgetRecordingLevelCode budgetRecordingLevel;
-    private SufficientFundsCode sufficientFundsCode;
+    private Chart indirectCostRcvyFinCoa;
     private Program program;
-    
-    //Several kinds of Dummy Attributes for dividing sections on Inquiry page
-    private String accountResponsibilitySectionBlank;
-    private String accountResponsibilitySection;
-    private String contractsAndGrantsSectionBlank;
-    private String contractsAndGrantsSection;
-    private String guidelinesAndPurposeSectionBlank;
-    private String guidelinesAndPurposeSection;
-    private String accountDescriptionSectionBlank;
-    private String accountDescriptionSection;
-        
-        
-        
-        
-    private AccountGuideline accountGuideline;
-    private AccountDescription accountDescription;
-    
-    private List subAccounts;
 
     /**
-     * Default no-arg constructor.
+     * Default constructor.
      */
     public PriorYearAccount() {
-    }
 
+    }
 
     /**
-     * This tells if this account is a C&G account.
+     * Gets the chartOfAccountsCode attribute.
      * 
-     * @return true if C&G account
+     * @return - Returns the chartOfAccountsCode
+     * 
      */
-    public boolean isInCg() {
-        // IF C&G is a sub fund group, use this line
-        // return "CG".equals(getSubFundGroupCode();
-
-        // IF C&G is a fund group, use this line
-        return "CG".equals(getSubFundGroup().getFundGroupCode());
+    public String getChartOfAccountsCode() {
+        return chartOfAccountsCode;
     }
+
+    /**
+     * Sets the chartOfAccountsCode attribute.
+     * 
+     * @param - chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
+     */
+    public void setChartOfAccountsCode(String chartOfAccountsCode) {
+        this.chartOfAccountsCode = chartOfAccountsCode;
+    }
+
 
     /**
      * Gets the accountNumber attribute.
@@ -174,12 +144,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the accountNumber attribute.
      * 
-     * @param accountNumber The accountNumber to set.
+     * @param - accountNumber The accountNumber to set.
      * 
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
+
 
     /**
      * Gets the accountName attribute.
@@ -194,32 +165,223 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the accountName attribute.
      * 
-     * @param accountName The accountName to set.
+     * @param - accountName The accountName to set.
      * 
      */
     public void setAccountName(String accountName) {
         this.accountName = accountName;
     }
 
+
     /**
-     * Gets the _AccountsFringesBnftIndicator_ attribute.
+     * Gets the accountFiscalOfficerUniversalIdentifier attribute.
      * 
-     * @return - Returns the _AccountsFringesBnftIndicator_
+     * @return - Returns the accountFiscalOfficerUniversalIdentifier
      * 
      */
-    public boolean isAccountsFringesBnftIndicator() {
-        return accountsFringesBnftIndicator;
+    public String getAccountFiscalOfficerUniversalIdentifier() {
+        return accountFiscalOfficerUniversalIdentifier;
     }
 
     /**
-     * Sets the _AccountsFringesBnftIndicator_ attribute.
+     * Sets the accountFiscalOfficerUniversalIdentifier attribute.
      * 
-     * @param _AccountsFringesBnftIndicator_ The _AccountsFringesBnftIndicator_ to set.
+     * @param - accountFiscalOfficerUniversalIdentifier The accountFiscalOfficerUniversalIdentifier to set.
      * 
      */
-    public void setAccountsFringesBnftIndicator(boolean _AccountsFringesBnftIndicator_) {
-        this.accountsFringesBnftIndicator = _AccountsFringesBnftIndicator_;
+    public void setAccountFiscalOfficerUniversalIdentifier(String accountFiscalOfficerUniversalIdentifier) {
+        this.accountFiscalOfficerUniversalIdentifier = accountFiscalOfficerUniversalIdentifier;
     }
+
+
+    /**
+     * Gets the accountSupervisorUniversalId attribute.
+     * 
+     * @return - Returns the accountSupervisorUniversalId
+     * 
+     */
+    public String getAccountSupervisorUniversalId() {
+        return accountSupervisorUniversalId;
+    }
+
+    /**
+     * Sets the accountSupervisorUniversalId attribute.
+     * 
+     * @param - accountSupervisorUniversalId The accountSupervisorUniversalId to set.
+     * 
+     */
+    public void setAccountSupervisorUniversalId(String accountSupervisorUniversalId) {
+        this.accountSupervisorUniversalId = accountSupervisorUniversalId;
+    }
+
+
+    /**
+     * Gets the accountManagerUniversalId attribute.
+     * 
+     * @return - Returns the accountManagerUniversalId
+     * 
+     */
+    public String getAccountManagerUniversalId() {
+        return accountManagerUniversalId;
+    }
+
+    /**
+     * Sets the accountManagerUniversalId attribute.
+     * 
+     * @param - accountManagerUniversalId The accountManagerUniversalId to set.
+     * 
+     */
+    public void setAccountManagerUniversalId(String accountManagerUniversalId) {
+        this.accountManagerUniversalId = accountManagerUniversalId;
+    }
+
+
+    /**
+     * Gets the organizationCode attribute.
+     * 
+     * @return - Returns the organizationCode
+     * 
+     */
+    public String getOrganizationCode() {
+        return organizationCode;
+    }
+
+    /**
+     * Sets the organizationCode attribute.
+     * 
+     * @param - organizationCode The organizationCode to set.
+     * 
+     */
+    public void setOrganizationCode(String organizationCode) {
+        this.organizationCode = organizationCode;
+    }
+
+
+    /**
+     * Gets the accountTypeCode attribute.
+     * 
+     * @return - Returns the accountTypeCode
+     * 
+     */
+    public String getAccountTypeCode() {
+        return accountTypeCode;
+    }
+
+    /**
+     * Sets the accountTypeCode attribute.
+     * 
+     * @param - accountTypeCode The accountTypeCode to set.
+     * 
+     */
+    public void setAccountTypeCode(String accountTypeCode) {
+        this.accountTypeCode = accountTypeCode;
+    }
+
+
+    /**
+     * Gets the accountPhysicalCampusCode attribute.
+     * 
+     * @return - Returns the accountPhysicalCampusCode
+     * 
+     */
+    public String getAccountPhysicalCampusCode() {
+        return accountPhysicalCampusCode;
+    }
+
+    /**
+     * Sets the accountPhysicalCampusCode attribute.
+     * 
+     * @param - accountPhysicalCampusCode The accountPhysicalCampusCode to set.
+     * 
+     */
+    public void setAccountPhysicalCampusCode(String accountPhysicalCampusCode) {
+        this.accountPhysicalCampusCode = accountPhysicalCampusCode;
+    }
+
+
+    /**
+     * Gets the subFundGroupCode attribute.
+     * 
+     * @return - Returns the subFundGroupCode
+     * 
+     */
+    public String getSubFundGroupCode() {
+        return subFundGroupCode;
+    }
+
+    /**
+     * Sets the subFundGroupCode attribute.
+     * 
+     * @param - subFundGroupCode The subFundGroupCode to set.
+     * 
+     */
+    public void setSubFundGroupCode(String subFundGroupCode) {
+        this.subFundGroupCode = subFundGroupCode;
+    }
+
+
+    /**
+     * Gets the accountFringeBenefitCode attribute.
+     * 
+     * @return - Returns the accountFringeBenefitCode
+     * 
+     */
+    public String getAccountFringeBenefitCode() {
+        return accountFringeBenefitCode;
+    }
+
+    /**
+     * Sets the accountFringeBenefitCode attribute.
+     * 
+     * @param - accountFringeBenefitCode The accountFringeBenefitCode to set.
+     * 
+     */
+    public void setAccountFringeBenefitCode(String accountFringeBenefitCode) {
+        this.accountFringeBenefitCode = accountFringeBenefitCode;
+    }
+
+
+    /**
+     * Gets the financialHigherEdFunctionCd attribute.
+     * 
+     * @return - Returns the financialHigherEdFunctionCd
+     * 
+     */
+    public String getFinancialHigherEdFunctionCd() {
+        return financialHigherEdFunctionCd;
+    }
+
+    /**
+     * Sets the financialHigherEdFunctionCd attribute.
+     * 
+     * @param - financialHigherEdFunctionCd The financialHigherEdFunctionCd to set.
+     * 
+     */
+    public void setFinancialHigherEdFunctionCd(String financialHigherEdFunctionCd) {
+        this.financialHigherEdFunctionCd = financialHigherEdFunctionCd;
+    }
+
+
+    /**
+     * Gets the accountRestrictedStatusCode attribute.
+     * 
+     * @return - Returns the accountRestrictedStatusCode
+     * 
+     */
+    public String getAccountRestrictedStatusCode() {
+        return accountRestrictedStatusCode;
+    }
+
+    /**
+     * Sets the accountRestrictedStatusCode attribute.
+     * 
+     * @param - accountRestrictedStatusCode The accountRestrictedStatusCode to set.
+     * 
+     */
+    public void setAccountRestrictedStatusCode(String accountRestrictedStatusCode) {
+        this.accountRestrictedStatusCode = accountRestrictedStatusCode;
+    }
+
 
     /**
      * Gets the accountRestrictedStatusDate attribute.
@@ -227,19 +389,20 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
      * @return - Returns the accountRestrictedStatusDate
      * 
      */
-    public Timestamp getAccountRestrictedStatusDate() {
+    public Date getAccountRestrictedStatusDate() {
         return accountRestrictedStatusDate;
     }
 
     /**
      * Sets the accountRestrictedStatusDate attribute.
      * 
-     * @param accountRestrictedStatusDate The accountRestrictedStatusDate to set.
+     * @param - accountRestrictedStatusDate The accountRestrictedStatusDate to set.
      * 
      */
-    public void setAccountRestrictedStatusDate(Timestamp accountRestrictedStatusDate) {
+    public void setAccountRestrictedStatusDate(Date accountRestrictedStatusDate) {
         this.accountRestrictedStatusDate = accountRestrictedStatusDate;
     }
+
 
     /**
      * Gets the accountCityName attribute.
@@ -254,12 +417,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the accountCityName attribute.
      * 
-     * @param accountCityName The accountCityName to set.
+     * @param - accountCityName The accountCityName to set.
      * 
      */
     public void setAccountCityName(String accountCityName) {
         this.accountCityName = accountCityName;
     }
+
 
     /**
      * Gets the accountStateCode attribute.
@@ -274,12 +438,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the accountStateCode attribute.
      * 
-     * @param accountStateCode The accountStateCode to set.
+     * @param - accountStateCode The accountStateCode to set.
      * 
      */
     public void setAccountStateCode(String accountStateCode) {
         this.accountStateCode = accountStateCode;
     }
+
 
     /**
      * Gets the accountStreetAddress attribute.
@@ -294,12 +459,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the accountStreetAddress attribute.
      * 
-     * @param accountStreetAddress The accountStreetAddress to set.
+     * @param - accountStreetAddress The accountStreetAddress to set.
      * 
      */
     public void setAccountStreetAddress(String accountStreetAddress) {
         this.accountStreetAddress = accountStreetAddress;
     }
+
 
     /**
      * Gets the accountZipCode attribute.
@@ -314,12 +480,55 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the accountZipCode attribute.
      * 
-     * @param accountZipCode The accountZipCode to set.
+     * @param - accountZipCode The accountZipCode to set.
      * 
      */
     public void setAccountZipCode(String accountZipCode) {
         this.accountZipCode = accountZipCode;
     }
+
+
+    /**
+     * Gets the reportsToChartOfAccountsCode attribute.
+     * 
+     * @return - Returns the reportsToChartOfAccountsCode
+     * 
+     */
+    public String getReportsToChartOfAccountsCode() {
+        return reportsToChartOfAccountsCode;
+    }
+
+    /**
+     * Sets the reportsToChartOfAccountsCode attribute.
+     * 
+     * @param - reportsToChartOfAccountsCode The reportsToChartOfAccountsCode to set.
+     * 
+     */
+    public void setReportsToChartOfAccountsCode(String reportsToChartOfAccountsCode) {
+        this.reportsToChartOfAccountsCode = reportsToChartOfAccountsCode;
+    }
+
+
+    /**
+     * Gets the reportsToAccountNumber attribute.
+     * 
+     * @return - Returns the reportsToAccountNumber
+     * 
+     */
+    public String getReportsToAccountNumber() {
+        return reportsToAccountNumber;
+    }
+
+    /**
+     * Sets the reportsToAccountNumber attribute.
+     * 
+     * @param - reportsToAccountNumber The reportsToAccountNumber to set.
+     * 
+     */
+    public void setReportsToAccountNumber(String reportsToAccountNumber) {
+        this.reportsToAccountNumber = reportsToAccountNumber;
+    }
+
 
     /**
      * Gets the accountCreateDate attribute.
@@ -327,19 +536,20 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
      * @return - Returns the accountCreateDate
      * 
      */
-    public Timestamp getAccountCreateDate() {
+    public Date getAccountCreateDate() {
         return accountCreateDate;
     }
 
     /**
      * Sets the accountCreateDate attribute.
      * 
-     * @param accountCreateDate The accountCreateDate to set.
+     * @param - accountCreateDate The accountCreateDate to set.
      * 
      */
-    public void setAccountCreateDate(Timestamp accountCreateDate) {
+    public void setAccountCreateDate(Date accountCreateDate) {
         this.accountCreateDate = accountCreateDate;
     }
+
 
     /**
      * Gets the accountEffectiveDate attribute.
@@ -347,19 +557,20 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
      * @return - Returns the accountEffectiveDate
      * 
      */
-    public Timestamp getAccountEffectiveDate() {
+    public Date getAccountEffectiveDate() {
         return accountEffectiveDate;
     }
 
     /**
      * Sets the accountEffectiveDate attribute.
      * 
-     * @param accountEffectiveDate The accountEffectiveDate to set.
+     * @param - accountEffectiveDate The accountEffectiveDate to set.
      * 
      */
-    public void setAccountEffectiveDate(Timestamp accountEffectiveDate) {
+    public void setAccountEffectiveDate(Date accountEffectiveDate) {
         this.accountEffectiveDate = accountEffectiveDate;
     }
+
 
     /**
      * Gets the accountExpirationDate attribute.
@@ -367,119 +578,63 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
      * @return - Returns the accountExpirationDate
      * 
      */
-    public Timestamp getAccountExpirationDate() {
+    public Date getAccountExpirationDate() {
         return accountExpirationDate;
     }
 
     /**
      * Sets the accountExpirationDate attribute.
      * 
-     * @param accountExpirationDate The accountExpirationDate to set.
+     * @param - accountExpirationDate The accountExpirationDate to set.
      * 
      */
-    public void setAccountExpirationDate(Timestamp accountExpirationDate) {
+    public void setAccountExpirationDate(Date accountExpirationDate) {
         this.accountExpirationDate = accountExpirationDate;
     }
 
+
     /**
+     * Gets the continuationFinChrtOfAcctCd attribute.
      * 
-     * This method determines whether the account is expired or not.
-     * 
-     * Note that if Expiration Date is the same as today, then this 
-     * will return false.  It will only return true if the account 
-     * expiration date is one day earlier than today or earlier.
-     * 
-     * Note that this logic ignores all time components when doing the 
-     * comparison.  It only does the before/after comparison based on 
-     * date values, not time-values.
-     * 
-     * @return - true or false based on the logic outlined above
+     * @return - Returns the continuationFinChrtOfAcctCd
      * 
      */
-    public boolean isExpired() {
-        LOG.debug("entering isExpired()");
-        //  dont even bother trying to test if the accountExpirationDate is null
-        if (this.accountExpirationDate == null) {
-            return false;
-        }
-        
-        return this.isExpired(SpringServiceLocator.getDateTimeService().getCurrentCalendar());
+    public String getContinuationFinChrtOfAcctCd() {
+        return continuationFinChrtOfAcctCd;
     }
-    
+
     /**
+     * Sets the continuationFinChrtOfAcctCd attribute.
      * 
-     * This method determines whether the account is expired or not.
-     * 
-     * Note that if Expiration Date is the same date as testDate, then this 
-     * will return false.  It will only return true if the account 
-     * expiration date is one day earlier than testDate or earlier.
-     * 
-     * Note that this logic ignores all time components when doing the 
-     * comparison.  It only does the before/after comparison based on 
-     * date values, not time-values.
-     * 
-     * @param testDate - Calendar instance with the date to test the Account's Expiration Date against.  
-     *                   This is most commonly set to today's date.
-     * @return - true or false based on the logic outlined above
+     * @param - continuationFinChrtOfAcctCd The continuationFinChrtOfAcctCd to set.
      * 
      */
-     public boolean isExpired(Calendar testDate) {
-         if (LOG.isDebugEnabled()) {
-             LOG.debug("entering isExpired("+testDate+")");
-         }
-
-        //  dont even bother trying to test if the accountExpirationDate is null
-        if (this.accountExpirationDate == null) {
-            return false;
-        }
-        
-        //  remove any time-components from the testDate
-        testDate = DateUtils.truncate(testDate, Calendar.DAY_OF_MONTH);
-        
-        //  get a calendar reference to the Account Expiration 
-        // date, and remove any time components
-        Calendar acctDate = Calendar.getInstance();
-        acctDate.setTime(this.accountExpirationDate);
-        acctDate = DateUtils.truncate(acctDate, Calendar.DAY_OF_MONTH);
-        
-        //  if the Account Expiration Date is before the testDate
-        if (acctDate.before(testDate)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    public void setContinuationFinChrtOfAcctCd(String continuationFinChrtOfAcctCd) {
+        this.continuationFinChrtOfAcctCd = continuationFinChrtOfAcctCd;
     }
-    
-     /**
-      * 
-      * This method determines whether the account is expired or not.
-      * 
-      * Note that if Expiration Date is the same date as testDate, then this 
-      * will return false.  It will only return true if the account 
-      * expiration date is one day earlier than testDate or earlier.
-      * 
-      * Note that this logic ignores all time components when doing the 
-      * comparison.  It only does the before/after comparison based on 
-      * date values, not time-values.
-      * 
-      * @param testDate - java.util.Date instance with the date to test the Account's Expiration Date against.  
-      *                   This is most commonly set to today's date.
-      * @return - true or false based on the logic outlined above
-      * 
-      */
-    public boolean isExpired(Date testDate) {
 
-        //  dont even bother trying to test if the accountExpirationDate is null
-        if (this.accountExpirationDate == null) {
-            return false;
-        }
-        
-        Calendar acctDate = Calendar.getInstance();
-        acctDate.setTime(testDate);
-        return isExpired(acctDate);
+
+    /**
+     * Gets the continuationAccountNumber attribute.
+     * 
+     * @return - Returns the continuationAccountNumber
+     * 
+     */
+    public String getContinuationAccountNumber() {
+        return continuationAccountNumber;
     }
-    
+
+    /**
+     * Sets the continuationAccountNumber attribute.
+     * 
+     * @param - continuationAccountNumber The continuationAccountNumber to set.
+     * 
+     */
+    public void setContinuationAccountNumber(String continuationAccountNumber) {
+        this.continuationAccountNumber = continuationAccountNumber;
+    }
+
+
     /**
      * Gets the awardPeriodEndYear attribute.
      * 
@@ -493,12 +648,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the awardPeriodEndYear attribute.
      * 
-     * @param awardPeriodEndYear The awardPeriodEndYear to set.
+     * @param - awardPeriodEndYear The awardPeriodEndYear to set.
      * 
      */
     public void setAwardPeriodEndYear(Integer awardPeriodEndYear) {
         this.awardPeriodEndYear = awardPeriodEndYear;
     }
+
 
     /**
      * Gets the awardPeriodEndMonth attribute.
@@ -513,12 +669,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the awardPeriodEndMonth attribute.
      * 
-     * @param awardPeriodEndMonth The awardPeriodEndMonth to set.
+     * @param - awardPeriodEndMonth The awardPeriodEndMonth to set.
      * 
      */
     public void setAwardPeriodEndMonth(String awardPeriodEndMonth) {
         this.awardPeriodEndMonth = awardPeriodEndMonth;
     }
+
 
     /**
      * Gets the awardPeriodBeginYear attribute.
@@ -533,12 +690,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the awardPeriodBeginYear attribute.
      * 
-     * @param awardPeriodBeginYear The awardPeriodBeginYear to set.
+     * @param - awardPeriodBeginYear The awardPeriodBeginYear to set.
      * 
      */
     public void setAwardPeriodBeginYear(Integer awardPeriodBeginYear) {
         this.awardPeriodBeginYear = awardPeriodBeginYear;
     }
+
 
     /**
      * Gets the awardPeriodBeginMonth attribute.
@@ -553,12 +711,139 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the awardPeriodBeginMonth attribute.
      * 
-     * @param awardPeriodBeginMonth The awardPeriodBeginMonth to set.
+     * @param - awardPeriodBeginMonth The awardPeriodBeginMonth to set.
      * 
      */
     public void setAwardPeriodBeginMonth(String awardPeriodBeginMonth) {
         this.awardPeriodBeginMonth = awardPeriodBeginMonth;
     }
+
+
+    /**
+     * Gets the endowmentIncomeAcctFinCoaCd attribute.
+     * 
+     * @return - Returns the endowmentIncomeAcctFinCoaCd
+     * 
+     */
+    public String getEndowmentIncomeAcctFinCoaCd() {
+        return endowmentIncomeAcctFinCoaCd;
+    }
+
+    /**
+     * Sets the endowmentIncomeAcctFinCoaCd attribute.
+     * 
+     * @param - endowmentIncomeAcctFinCoaCd The endowmentIncomeAcctFinCoaCd to set.
+     * 
+     */
+    public void setEndowmentIncomeAcctFinCoaCd(String endowmentIncomeAcctFinCoaCd) {
+        this.endowmentIncomeAcctFinCoaCd = endowmentIncomeAcctFinCoaCd;
+    }
+
+
+    /**
+     * Gets the endowmentIncomeAccountNumber attribute.
+     * 
+     * @return - Returns the endowmentIncomeAccountNumber
+     * 
+     */
+    public String getEndowmentIncomeAccountNumber() {
+        return endowmentIncomeAccountNumber;
+    }
+
+    /**
+     * Sets the endowmentIncomeAccountNumber attribute.
+     * 
+     * @param - endowmentIncomeAccountNumber The endowmentIncomeAccountNumber to set.
+     * 
+     */
+    public void setEndowmentIncomeAccountNumber(String endowmentIncomeAccountNumber) {
+        this.endowmentIncomeAccountNumber = endowmentIncomeAccountNumber;
+    }
+
+
+    /**
+     * Gets the contractControlFinCoaCode attribute.
+     * 
+     * @return - Returns the contractControlFinCoaCode
+     * 
+     */
+    public String getContractControlFinCoaCode() {
+        return contractControlFinCoaCode;
+    }
+
+    /**
+     * Sets the contractControlFinCoaCode attribute.
+     * 
+     * @param - contractControlFinCoaCode The contractControlFinCoaCode to set.
+     * 
+     */
+    public void setContractControlFinCoaCode(String contractControlFinCoaCode) {
+        this.contractControlFinCoaCode = contractControlFinCoaCode;
+    }
+
+
+    /**
+     * Gets the contractControlAccountNumber attribute.
+     * 
+     * @return - Returns the contractControlAccountNumber
+     * 
+     */
+    public String getContractControlAccountNumber() {
+        return contractControlAccountNumber;
+    }
+
+    /**
+     * Sets the contractControlAccountNumber attribute.
+     * 
+     * @param - contractControlAccountNumber The contractControlAccountNumber to set.
+     * 
+     */
+    public void setContractControlAccountNumber(String contractControlAccountNumber) {
+        this.contractControlAccountNumber = contractControlAccountNumber;
+    }
+
+
+    /**
+     * Gets the incomeStreamFinancialCoaCode attribute.
+     * 
+     * @return - Returns the incomeStreamFinancialCoaCode
+     * 
+     */
+    public String getIncomeStreamFinancialCoaCode() {
+        return incomeStreamFinancialCoaCode;
+    }
+
+    /**
+     * Sets the incomeStreamFinancialCoaCode attribute.
+     * 
+     * @param - incomeStreamFinancialCoaCode The incomeStreamFinancialCoaCode to set.
+     * 
+     */
+    public void setIncomeStreamFinancialCoaCode(String incomeStreamFinancialCoaCode) {
+        this.incomeStreamFinancialCoaCode = incomeStreamFinancialCoaCode;
+    }
+
+
+    /**
+     * Gets the incomeStreamAccountNumber attribute.
+     * 
+     * @return - Returns the incomeStreamAccountNumber
+     * 
+     */
+    public String getIncomeStreamAccountNumber() {
+        return incomeStreamAccountNumber;
+    }
+
+    /**
+     * Sets the incomeStreamAccountNumber attribute.
+     * 
+     * @param - incomeStreamAccountNumber The incomeStreamAccountNumber to set.
+     * 
+     */
+    public void setIncomeStreamAccountNumber(String incomeStreamAccountNumber) {
+        this.incomeStreamAccountNumber = incomeStreamAccountNumber;
+    }
+
 
     /**
      * Gets the acctIndirectCostRcvyTypeCd attribute.
@@ -573,12 +858,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the acctIndirectCostRcvyTypeCd attribute.
      * 
-     * @param acctIndirectCostRcvyTypeCd The acctIndirectCostRcvyTypeCd to set.
+     * @param - acctIndirectCostRcvyTypeCd The acctIndirectCostRcvyTypeCd to set.
      * 
      */
     public void setAcctIndirectCostRcvyTypeCd(String acctIndirectCostRcvyTypeCd) {
         this.acctIndirectCostRcvyTypeCd = acctIndirectCostRcvyTypeCd;
     }
+
 
     /**
      * Gets the acctCustomIndCstRcvyExclCd attribute.
@@ -593,12 +879,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the acctCustomIndCstRcvyExclCd attribute.
      * 
-     * @param acctCustomIndCstRcvyExclCd The acctCustomIndCstRcvyExclCd to set.
+     * @param - acctCustomIndCstRcvyExclCd The acctCustomIndCstRcvyExclCd to set.
      * 
      */
     public void setAcctCustomIndCstRcvyExclCd(String acctCustomIndCstRcvyExclCd) {
         this.acctCustomIndCstRcvyExclCd = acctCustomIndCstRcvyExclCd;
     }
+
 
     /**
      * Gets the financialIcrSeriesIdentifier attribute.
@@ -613,32 +900,77 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the financialIcrSeriesIdentifier attribute.
      * 
-     * @param financialIcrSeriesIdentifier The financialIcrSeriesIdentifier to set.
+     * @param - financialIcrSeriesIdentifier The financialIcrSeriesIdentifier to set.
      * 
      */
     public void setFinancialIcrSeriesIdentifier(String financialIcrSeriesIdentifier) {
         this.financialIcrSeriesIdentifier = financialIcrSeriesIdentifier;
     }
 
+
     /**
-     * Gets the accountInFinancialProcessingIndicator attribute.
+     * Gets the indirectCostRcvyFinCoaCode attribute.
      * 
-     * @return - Returns the accountInFinancialProcessingIndicator
+     * @return - Returns the indirectCostRcvyFinCoaCode
      * 
      */
-    public boolean getAccountInFinancialProcessingIndicator() {
-        return accountInFinancialProcessingIndicator;
+    public String getIndirectCostRcvyFinCoaCode() {
+        return indirectCostRcvyFinCoaCode;
     }
 
     /**
-     * Sets the accountInFinancialProcessingIndicator attribute.
+     * Sets the indirectCostRcvyFinCoaCode attribute.
      * 
-     * @param accountInFinancialProcessingIndicator The accountInFinancialProcessingIndicator to set.
+     * @param - indirectCostRcvyFinCoaCode The indirectCostRcvyFinCoaCode to set.
      * 
      */
-    public void setAccountInFinancialProcessingIndicator(boolean accountInFinancialProcessingIndicator) {
-        this.accountInFinancialProcessingIndicator = accountInFinancialProcessingIndicator;
+    public void setIndirectCostRcvyFinCoaCode(String indirectCostRcvyFinCoaCode) {
+        this.indirectCostRcvyFinCoaCode = indirectCostRcvyFinCoaCode;
     }
+
+
+    /**
+     * Gets the indirectCostRecoveryAcctNbr attribute.
+     * 
+     * @return - Returns the indirectCostRecoveryAcctNbr
+     * 
+     */
+    public String getIndirectCostRecoveryAcctNbr() {
+        return indirectCostRecoveryAcctNbr;
+    }
+
+    /**
+     * Sets the indirectCostRecoveryAcctNbr attribute.
+     * 
+     * @param - indirectCostRecoveryAcctNbr The indirectCostRecoveryAcctNbr to set.
+     * 
+     */
+    public void setIndirectCostRecoveryAcctNbr(String indirectCostRecoveryAcctNbr) {
+        this.indirectCostRecoveryAcctNbr = indirectCostRecoveryAcctNbr;
+    }
+
+
+    /**
+     * Gets the accountInFinProcessingIndicator attribute.
+     * 
+     * @return - Returns the accountInFinProcessingIndicator
+     * 
+     */
+    public boolean isAccountInFinProcessingIndicator() {
+        return accountInFinProcessingIndicator;
+    }
+
+
+    /**
+     * Sets the accountInFinProcessingIndicator attribute.
+     * 
+     * @param - accountInFinProcessingIndicator The accountInFinProcessingIndicator to set.
+     * 
+     */
+    public void setAccountInFinProcessingIndicator(boolean accountInFinProcessingIndicator) {
+        this.accountInFinProcessingIndicator = accountInFinProcessingIndicator;
+    }
+
 
     /**
      * Gets the budgetRecordingLevelCode attribute.
@@ -653,12 +985,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the budgetRecordingLevelCode attribute.
      * 
-     * @param budgetRecordingLevelCode The budgetRecordingLevelCode to set.
+     * @param - budgetRecordingLevelCode The budgetRecordingLevelCode to set.
      * 
      */
     public void setBudgetRecordingLevelCode(String budgetRecordingLevelCode) {
         this.budgetRecordingLevelCode = budgetRecordingLevelCode;
     }
+
 
     /**
      * Gets the accountSufficientFundsCode attribute.
@@ -673,12 +1006,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the accountSufficientFundsCode attribute.
      * 
-     * @param accountSufficientFundsCode The accountSufficientFundsCode to set.
+     * @param - accountSufficientFundsCode The accountSufficientFundsCode to set.
      * 
      */
     public void setAccountSufficientFundsCode(String accountSufficientFundsCode) {
         this.accountSufficientFundsCode = accountSufficientFundsCode;
     }
+
 
     /**
      * Gets the pendingAcctSufficientFundsIndicator attribute.
@@ -689,16 +1023,18 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     public boolean isPendingAcctSufficientFundsIndicator() {
         return pendingAcctSufficientFundsIndicator;
     }
-    
+
+
     /**
      * Sets the pendingAcctSufficientFundsIndicator attribute.
      * 
-     * @param pendingAcctSufficientFundsIndicator The pendingAcctSufficientFundsIndicator to set.
+     * @param - pendingAcctSufficientFundsIndicator The pendingAcctSufficientFundsIndicator to set.
      * 
      */
     public void setPendingAcctSufficientFundsIndicator(boolean pendingAcctSufficientFundsIndicator) {
         this.pendingAcctSufficientFundsIndicator = pendingAcctSufficientFundsIndicator;
     }
+
 
     /**
      * Gets the extrnlFinEncumSufficntFndIndicator attribute.
@@ -710,15 +1046,17 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
         return extrnlFinEncumSufficntFndIndicator;
     }
 
+
     /**
      * Sets the extrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @param extrnlFinEncumSufficntFndIndicator The extrnlFinEncumSufficntFndIndicator to set.
+     * @param - extrnlFinEncumSufficntFndIndicator The extrnlFinEncumSufficntFndIndicator to set.
      * 
      */
     public void setExtrnlFinEncumSufficntFndIndicator(boolean extrnlFinEncumSufficntFndIndicator) {
         this.extrnlFinEncumSufficntFndIndicator = extrnlFinEncumSufficntFndIndicator;
     }
+
 
     /**
      * Gets the intrnlFinEncumSufficntFndIndicator attribute.
@@ -730,15 +1068,17 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
         return intrnlFinEncumSufficntFndIndicator;
     }
 
+
     /**
      * Sets the intrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @param intrnlFinEncumSufficntFndIndicator The intrnlFinEncumSufficntFndIndicator to set.
+     * @param - intrnlFinEncumSufficntFndIndicator The intrnlFinEncumSufficntFndIndicator to set.
      * 
      */
     public void setIntrnlFinEncumSufficntFndIndicator(boolean intrnlFinEncumSufficntFndIndicator) {
         this.intrnlFinEncumSufficntFndIndicator = intrnlFinEncumSufficntFndIndicator;
     }
+
 
     /**
      * Gets the finPreencumSufficientFundIndicator attribute.
@@ -750,35 +1090,39 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
         return finPreencumSufficientFundIndicator;
     }
 
+
     /**
      * Sets the finPreencumSufficientFundIndicator attribute.
      * 
-     * @param finPreencumSufficientFundIndicator The finPreencumSufficientFundIndicator to set.
+     * @param - finPreencumSufficientFundIndicator The finPreencumSufficientFundIndicator to set.
      * 
      */
     public void setFinPreencumSufficientFundIndicator(boolean finPreencumSufficientFundIndicator) {
         this.finPreencumSufficientFundIndicator = finPreencumSufficientFundIndicator;
     }
 
-    /**
-     * Gets the _FinancialObjectivePrsctrlIndicator_ attribute.
-     * 
-     * @return - Returns the _FinancialObjectivePrsctrlIndicator_
-     * 
-     */
-    public boolean isFinancialObjectivePrsctrlIndicator() {
-        return financialObjectivePrsctrlIndicator;
-    }
 
     /**
-     * Sets the _FinancialObjectivePrsctrlIndicator_ attribute.
+     * Gets the finObjectPresenceControlIndicator attribute.
      * 
-     * @param _FinancialObjectivePrsctrlIndicator_ The _FinancialObjectivePrsctrlIndicator_ to set.
+     * @return - Returns the finObjectPresenceControlIndicator
      * 
      */
-    public void setFinancialObjectivePrsctrlIndicator(boolean _FinancialObjectivePrsctrlIndicator_) {
-        this.financialObjectivePrsctrlIndicator = _FinancialObjectivePrsctrlIndicator_;
+    public boolean isFinObjectPresenceControlIndicator() {
+        return finObjectPresenceControlIndicator;
     }
+
+
+    /**
+     * Sets the finObjectPresenceControlIndicator attribute.
+     * 
+     * @param - finObjectPresenceControlIndicator The finObjectPresenceControlIndicator to set.
+     * 
+     */
+    public void setFinObjectPresenceControlIndicator(boolean finObjectPresenceControlIndicator) {
+        this.finObjectPresenceControlIndicator = finObjectPresenceControlIndicator;
+    }
+
 
     /**
      * Gets the cgCatlfFedDomestcAssistNbr attribute.
@@ -793,12 +1137,13 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @param cgCatlfFedDomestcAssistNbr The cgCatlfFedDomestcAssistNbr to set.
+     * @param - cgCatlfFedDomestcAssistNbr The cgCatlfFedDomestcAssistNbr to set.
      * 
      */
     public void setCgCatlfFedDomestcAssistNbr(String cgCatlfFedDomestcAssistNbr) {
         this.cgCatlfFedDomestcAssistNbr = cgCatlfFedDomestcAssistNbr;
     }
+
 
     /**
      * Gets the accountOffCampusIndicator attribute.
@@ -806,19 +1151,20 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
      * @return - Returns the accountOffCampusIndicator
      * 
      */
-    public boolean isAccountOffCampusIndicator() {
+    public boolean getAccountOffCampusIndicator() {
         return accountOffCampusIndicator;
     }
 
     /**
      * Sets the accountOffCampusIndicator attribute.
      * 
-     * @param accountOffCampusIndicator The accountOffCampusIndicator to set.
+     * @param - accountOffCampusIndicator The accountOffCampusIndicator to set.
      * 
      */
     public void setAccountOffCampusIndicator(boolean accountOffCampusIndicator) {
         this.accountOffCampusIndicator = accountOffCampusIndicator;
     }
+
 
     /**
      * Gets the accountClosedIndicator attribute.
@@ -830,193 +1176,136 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
         return accountClosedIndicator;
     }
 
+
     /**
      * Sets the accountClosedIndicator attribute.
      * 
-     * @param accountClosedIndicator The accountClosedIndicator to set.
+     * @param - accountClosedIndicator The accountClosedIndicator to set.
      * 
      */
     public void setAccountClosedIndicator(boolean accountClosedIndicator) {
         this.accountClosedIndicator = accountClosedIndicator;
     }
 
+
     /**
-     * Gets the chartOfAccounts attribute.
+     * Gets the chart attribute.
      * 
-     * @return - Returns the chartOfAccounts
+     * @return - Returns the chart
      * 
      */
-    public Chart getChartOfAccounts() {
-        return chartOfAccounts;
+    public Chart getChart() {
+        return chart;
     }
 
     /**
-     * Sets the chartOfAccounts attribute.
+     * Sets the chart attribute.
      * 
-     * @param chartOfAccounts The chartOfAccounts to set.
+     * @param - chart The chart to set.
      * @deprecated
      */
-    public void setChartOfAccounts(Chart chartOfAccounts) {
-        this.chartOfAccounts = chartOfAccounts;
+    public void setChart(Chart chart) {
+        this.chart = chart;
     }
 
     /**
-     * Gets the organization attribute.
+     * Gets the campus attribute.
      * 
-     * @return - Returns the organization
+     * @return - Returns the campus
      * 
      */
-    public Org getOrganization() {
-        return organization;
+    public Campus getCampus() {
+        return campus;
     }
 
     /**
-     * Sets the organization attribute.
+     * Sets the campus attribute.
      * 
-     * @param organization The organization to set.
+     * @param - campus The campus to set.
      * @deprecated
      */
-    public void setOrganization(Org organization) {
-        this.organization = organization;
+    public void setCampus(Campus campus) {
+        this.campus = campus;
     }
 
     /**
-     * Gets the accountType attribute.
+     * Gets the reportsToChartOfAccounts attribute.
      * 
-     * @return - Returns the accountType
+     * @return - Returns the reportsToChartOfAccounts
      * 
      */
-    public AcctType getAccountType() {
-        return accountType;
+    public Chart getReportsToChartOfAccounts() {
+        return reportsToChartOfAccounts;
     }
 
     /**
-     * Sets the accountType attribute.
+     * Sets the reportsToChartOfAccounts attribute.
      * 
-     * @param accountType The accountType to set.
+     * @param - reportsToChartOfAccounts The reportsToChartOfAccounts to set.
      * @deprecated
      */
-    public void setAccountType(AcctType accountType) {
-        this.accountType = accountType;
+    public void setReportsToChartOfAccounts(Chart reportsToChartOfAccounts) {
+        this.reportsToChartOfAccounts = reportsToChartOfAccounts;
     }
 
     /**
-     * Gets the accountPhysicalCampus attribute.
+     * Gets the account attribute.
      * 
-     * @return - Returns the accountPhysicalCampus
+     * @return - Returns the account
      * 
      */
-    public Campus getAccountPhysicalCampus() {
-        return accountPhysicalCampus;
+    public Account getAccount() {
+        return account;
     }
 
     /**
-     * Sets the accountPhysicalCampus attribute.
+     * Sets the account attribute.
      * 
-     * @param accountPhysicalCampus The accountPhysicalCampus to set.
+     * @param - account The account to set.
      * @deprecated
      */
-    public void setAccountPhysicalCampus(Campus accountPhysicalCampus) {
-        this.accountPhysicalCampus = accountPhysicalCampus;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     /**
-     * Gets the accountState attribute
+     * Gets the continuationFinChrtOfAcct attribute.
      * 
-     * @return - Returns the accountState
+     * @return - Returns the continuationFinChrtOfAcct
+     * 
      */
-    public State getAccountState() {
-        return accountState;
+    public Chart getContinuationFinChrtOfAcct() {
+        return continuationFinChrtOfAcct;
     }
 
     /**
-     * Sets the accountState attribute
+     * Sets the continuationFinChrtOfAcct attribute.
      * 
-     * @param state
+     * @param - continuationFinChrtOfAcct The continuationFinChrtOfAcct to set.
      * @deprecated
      */
-    public void setAccountState(State state) {
-        this.accountState = state;
+    public void setContinuationFinChrtOfAcct(Chart continuationFinChrtOfAcct) {
+        this.continuationFinChrtOfAcct = continuationFinChrtOfAcct;
     }
 
     /**
-     * Gets the subFundGroup attribute.
+     * Gets the endowmentIncomeAcctFinCoa attribute.
      * 
-     * @return - Returns the subFundGroup
+     * @return - Returns the endowmentIncomeAcctFinCoa
      * 
      */
-    public SubFundGroup getSubFundGroup() {
-        return subFundGroup;
+    public Chart getEndowmentIncomeAcctFinCoa() {
+        return endowmentIncomeAcctFinCoa;
     }
 
     /**
-     * Sets the subFundGroup attribute.
+     * Sets the endowmentIncomeAcctFinCoa attribute.
      * 
-     * @param subFundGroup The subFundGroup to set.
+     * @param - endowmentIncomeAcctFinCoa The endowmentIncomeAcctFinCoa to set.
      * @deprecated
      */
-    public void setSubFundGroup(SubFundGroup subFundGroup) {
-        this.subFundGroup = subFundGroup;
-    }
-
-    /**
-     * Gets the financialHigherEdFunction attribute.
-     * 
-     * @return - Returns the financialHigherEdFunction
-     * 
-     */
-    public HigherEdFunction getFinancialHigherEdFunction() {
-        return financialHigherEdFunction;
-    }
-
-    /**
-     * Sets the financialHigherEdFunction attribute.
-     * 
-     * @param financialHigherEdFunction The financialHigherEdFunction to set.
-     * @deprecated
-     */
-    public void setFinancialHigherEdFunction(HigherEdFunction financialHigherEdFunction) {
-        this.financialHigherEdFunction = financialHigherEdFunction;
-    }
-
-    /**
-     * Gets the accountRestrictedStatus attribute.
-     * 
-     * @return - Returns the accountRestrictedStatus
-     * 
-     */
-    public RestrictedStatus getAccountRestrictedStatus() {
-        return accountRestrictedStatus;
-    }
-
-    /**
-     * Sets the accountRestrictedStatus attribute.
-     * 
-     * @param accountRestrictedStatus The accountRestrictedStatus to set.
-     * @deprecated
-     */
-    public void setAccountRestrictedStatus(RestrictedStatus accountRestrictedStatus) {
-        this.accountRestrictedStatus = accountRestrictedStatus;
-    }
-
-    /**
-     * Gets the reportsToAccount attribute.
-     * 
-     * @return - Returns the reportsToAccount
-     * 
-     */
-    public Account getReportsToAccount() {
-        return reportsToAccount;
-    }
-
-    /**
-     * Sets the reportsToAccount attribute.
-     * 
-     * @param reportsToAccount The reportsToAccount to set.
-     * @deprecated
-     */
-    public void setReportsToAccount(Account reportsToAccount) {
-        this.reportsToAccount = reportsToAccount;
+    public void setEndowmentIncomeAcctFinCoa(Chart endowmentIncomeAcctFinCoa) {
+        this.endowmentIncomeAcctFinCoa = endowmentIncomeAcctFinCoa;
     }
 
     /**
@@ -1032,7 +1321,7 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the endowmentIncomeAccount attribute.
      * 
-     * @param endowmentIncomeAccount The endowmentIncomeAccount to set.
+     * @param - endowmentIncomeAccount The endowmentIncomeAccount to set.
      * @deprecated
      */
     public void setEndowmentIncomeAccount(Account endowmentIncomeAccount) {
@@ -1052,13 +1341,52 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the contractControlAccount attribute.
      * 
-     * @param contractControlAccount The contractControlAccount to set.
+     * @param - contractControlAccount The contractControlAccount to set.
      * @deprecated
      */
     public void setContractControlAccount(Account contractControlAccount) {
         this.contractControlAccount = contractControlAccount;
     }
 
+    /**
+     * Gets the contractControlFinCoa attribute.
+     * 
+     * @return - Returns the contractControlFinCoa
+     * 
+     */
+    public Chart getContractControlFinCoa() {
+        return contractControlFinCoa;
+    }
+
+    /**
+     * Sets the contractControlFinCoa attribute.
+     * 
+     * @param - contractControlFinCoa The contractControlFinCoa to set.
+     * @deprecated
+     */
+    public void setContractControlFinCoa(Chart contractControlFinCoa) {
+        this.contractControlFinCoa = contractControlFinCoa;
+    }
+
+    /**
+     * Gets the incomeStreamFinancialCoa attribute.
+     * 
+     * @return - Returns the incomeStreamFinancialCoa
+     * 
+     */
+    public Chart getIncomeStreamFinancialCoa() {
+        return incomeStreamFinancialCoa;
+    }
+
+    /**
+     * Sets the incomeStreamFinancialCoa attribute.
+     * 
+     * @param - incomeStreamFinancialCoa The incomeStreamFinancialCoa to set.
+     * @deprecated
+     */
+    public void setIncomeStreamFinancialCoa(Chart incomeStreamFinancialCoa) {
+        this.incomeStreamFinancialCoa = incomeStreamFinancialCoa;
+    }
 
     /**
      * Gets the incomeStreamAccount attribute.
@@ -1073,7 +1401,7 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the incomeStreamAccount attribute.
      * 
-     * @param incomeStreamAccount The incomeStreamAccount to set.
+     * @param - incomeStreamAccount The incomeStreamAccount to set.
      * @deprecated
      */
     public void setIncomeStreamAccount(Account incomeStreamAccount) {
@@ -1093,504 +1421,36 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     /**
      * Sets the indirectCostRecoveryAcct attribute.
      * 
-     * @param indirectCostRecoveryAcct The indirectCostRecoveryAcct to set.
+     * @param - indirectCostRecoveryAcct The indirectCostRecoveryAcct to set.
      * @deprecated
      */
     public void setIndirectCostRecoveryAcct(Account indirectCostRecoveryAcct) {
         this.indirectCostRecoveryAcct = indirectCostRecoveryAcct;
     }
 
-
     /**
-     * @return Returns the accountFiscalOfficerUser.
+     * Gets the indirectCostRcvyFinCoa attribute.
+     * 
+     * @return - Returns the indirectCostRcvyFinCoa
+     * 
      */
-    public UniversalUser getAccountFiscalOfficerUser() {
-        return accountFiscalOfficerUser;
+    public Chart getIndirectCostRcvyFinCoa() {
+        return indirectCostRcvyFinCoa;
     }
 
-
     /**
-     * @param accountFiscalOfficerUser The accountFiscalOfficerUser to set.
+     * Sets the indirectCostRcvyFinCoa attribute.
+     * 
+     * @param - indirectCostRcvyFinCoa The indirectCostRcvyFinCoa to set.
      * @deprecated
      */
-    public void setAccountFiscalOfficerUser(UniversalUser accountFiscalOfficerUser) {
-        this.accountFiscalOfficerUser = accountFiscalOfficerUser;
+    public void setIndirectCostRcvyFinCoa(Chart indirectCostRcvyFinCoa) {
+        this.indirectCostRcvyFinCoa = indirectCostRcvyFinCoa;
     }
 
-
-    /**
-     * @return Returns the accountManagerUser.
-     */
-    public UniversalUser getAccountManagerUser() {
-        return accountManagerUser;
-    }
-
-
-    /**
-     * @param accountManagerUser The accountManagerUser to set.
-     * @deprecated
-     */
-    public void setAccountManagerUser(UniversalUser accountManagerUser) {
-        this.accountManagerUser = accountManagerUser;
-    }
-
-
-    /**
-     * @return Returns the accountSupervisoryUser.
-     */
-    public UniversalUser getAccountSupervisoryUser() {
-        return accountSupervisoryUser;
-    }
-
-
-    /**
-     * @param accountSupervisoryUser The accountSupervisoryUser to set.
-     * @deprecated
-     */
-    public void setAccountSupervisoryUser(UniversalUser accountSupervisoryUser) {
-        this.accountSupervisoryUser = accountSupervisoryUser;
-    }
-
-
-    /**
-     * @return Returns the continuationAccount.
-     */
-    public Account getContinuationAccount() {
-        return continuationAccount;
-    }
-
-
-    /**
-     * @param continuationAccount The continuationAccount to set.
-     * @deprecated
-     */
-    public void setContinuationAccount(Account continuationAccount) {
-        this.continuationAccount = continuationAccount;
-    }
-
-    /**
-     * @return Returns the program.
-     */
-    public Program getProgram() {
-        return program;
-    }
-
-    /**
-     * @param program The program to set.
-     * @deprecated
-     */
-    public void setProgram(Program program) {
-        this.program = program;
-    }
-    
-    /**
-     * @return Returns the accountGuideline.
-     */
-    public AccountGuideline getAccountGuideline() {
-        return accountGuideline;
-    }
-
-
-    /**
-     * @param accountGuideline The accountGuideline to set.
-     * @deprecated
-     */
-    public void setAccountGuideline(AccountGuideline accountGuideline) {
-        this.accountGuideline = accountGuideline;
-    }
-
-
-    /**
-     * Gets the accountDescription attribute. 
-     * @return Returns the accountDescription.
-     */
-    public AccountDescription getAccountDescription() {
-        return accountDescription;
-    }
-    
-    /**
-     * Sets the accountDescription attribute value.
-     * @param accountDescription The accountDescription to set.
-     */
-    public void setAccountDescription(AccountDescription accountDescription) {
-        this.accountDescription = accountDescription;
-    }
-    
-    /**
-     * @return Returns the subAccounts.
-     */
-    public List getSubAccounts() {
-        return subAccounts;
-    }
-
-
-    /**
-     * @param subAccounts The subAccounts to set.
-     */
-    public void setSubAccounts(List subAccounts) {
-        this.subAccounts = subAccounts;
-    }
-
-
-    /**
-     * @return Returns the chartOfAccountsCode.
-     */
-    public String getChartOfAccountsCode() {
-        return chartOfAccountsCode;
-    }
-
-
-    /**
-     * @param chartOfAccountsCode The chartOfAccountsCode to set.
-     */
-    public void setChartOfAccountsCode(String chartOfAccountsCode) {
-        this.chartOfAccountsCode = chartOfAccountsCode;
-    }
-
-
-    /**
-     * @return Returns the accountFiscalOfficerSystemIdentifier.
-     */
-    public String getAccountFiscalOfficerSystemIdentifier() {
-        return accountFiscalOfficerSystemIdentifier;
-    }
-
-    /**
-     * @param accountFiscalOfficerSystemIdentifier The accountFiscalOfficerSystemIdentifier to set.
-     */
-    public void setAccountFiscalOfficerSystemIdentifier(String accountFiscalOfficerSystemIdentifier) {
-        this.accountFiscalOfficerSystemIdentifier = accountFiscalOfficerSystemIdentifier;
-    }
-
-    /**
-     * @return Returns the accountManagerSystemIdentifier.
-     */
-    public String getAccountManagerSystemIdentifier() {
-        return accountManagerSystemIdentifier;
-    }
-
-    /**
-     * @param accountManagerSystemIdentifier The accountManagerSystemIdentifier to set.
-     */
-    public void setAccountManagerSystemIdentifier(String accountManagerSystemIdentifier) {
-        this.accountManagerSystemIdentifier = accountManagerSystemIdentifier;
-    }
-
-    /**
-     * @return Returns the accountPhysicalCampusCode.
-     */
-    public String getAccountPhysicalCampusCode() {
-        return accountPhysicalCampusCode;
-    }
-
-    /**
-     * @param accountPhysicalCampusCode The accountPhysicalCampusCode to set.
-     */
-    public void setAccountPhysicalCampusCode(String accountPhysicalCampusCode) {
-        this.accountPhysicalCampusCode = accountPhysicalCampusCode;
-    }
-
-    /**
-     * @return Returns the accountRestrictedStatusCode.
-     */
-    public String getAccountRestrictedStatusCode() {
-        return accountRestrictedStatusCode;
-    }
-
-    /**
-     * @param accountRestrictedStatusCode The accountRestrictedStatusCode to set.
-     */
-    public void setAccountRestrictedStatusCode(String accountRestrictedStatusCode) {
-        this.accountRestrictedStatusCode = accountRestrictedStatusCode;
-    }
-
-    /**
-     * @return Returns the accountsSupervisorySystemsIdentifier.
-     */
-    public String getAccountsSupervisorySystemsIdentifier() {
-        return accountsSupervisorySystemsIdentifier;
-    }
-
-    /**
-     * @param accountsSupervisorySystemsIdentifier The accountsSupervisorySystemsIdentifier to set.
-     */
-    public void setAccountsSupervisorySystemsIdentifier(String accountsSupervisorySystemsIdentifier) {
-        this.accountsSupervisorySystemsIdentifier = accountsSupervisorySystemsIdentifier;
-    }
-
-    /**
-     * @return Returns the accountTypeCode.
-     */
-    public String getAccountTypeCode() {
-        return accountTypeCode;
-    }
-
-    /**
-     * @param accountTypeCode The accountTypeCode to set.
-     */
-    public void setAccountTypeCode(String accountTypeCode) {
-        this.accountTypeCode = accountTypeCode;
-    }
-
-    /**
-     * @return Returns the continuationAccountNumber.
-     */
-    public String getContinuationAccountNumber() {
-        return continuationAccountNumber;
-    }
-
-    /**
-     * @param continuationAccountNumber The continuationAccountNumber to set.
-     */
-    public void setContinuationAccountNumber(String continuationAccountNumber) {
-        this.continuationAccountNumber = continuationAccountNumber;
-    }
-
-    /**
-     * @return Returns the continuationFinChrtOfAcctCd.
-     */
-    public String getContinuationFinChrtOfAcctCd() {
-        return continuationFinChrtOfAcctCd;
-    }
-
-    /**
-     * @param continuationFinChrtOfAcctCd The continuationFinChrtOfAcctCd to set.
-     */
-    public void setContinuationFinChrtOfAcctCd(String continuationFinChrtOfAcctCd) {
-        this.continuationFinChrtOfAcctCd = continuationFinChrtOfAcctCd;
-    }
-
-    /**
-     * @return Returns the contractControlAccountNumber.
-     */
-    public String getContractControlAccountNumber() {
-        return contractControlAccountNumber;
-    }
-
-    /**
-     * @param contractControlAccountNumber The contractControlAccountNumber to set.
-     */
-    public void setContractControlAccountNumber(String contractControlAccountNumber) {
-        this.contractControlAccountNumber = contractControlAccountNumber;
-    }
-
-    /**
-     * @return Returns the contractControlFinCoaCode.
-     */
-    public String getContractControlFinCoaCode() {
-        return contractControlFinCoaCode;
-    }
-
-    /**
-     * @param contractControlFinCoaCode The contractControlFinCoaCode to set.
-     */
-    public void setContractControlFinCoaCode(String contractControlFinCoaCode) {
-        this.contractControlFinCoaCode = contractControlFinCoaCode;
-    }
-
-    /**
-     * @return Returns the endowmentIncomeAccountNumber.
-     */
-    public String getEndowmentIncomeAccountNumber() {
-        return endowmentIncomeAccountNumber;
-    }
-
-    /**
-     * @param endowmentIncomeAccountNumber The endowmentIncomeAccountNumber to set.
-     */
-    public void setEndowmentIncomeAccountNumber(String endowmentIncomeAccountNumber) {
-        this.endowmentIncomeAccountNumber = endowmentIncomeAccountNumber;
-    }
-
-    /**
-     * @return Returns the endowmentIncomeAcctFinCoaCd.
-     */
-    public String getEndowmentIncomeAcctFinCoaCd() {
-        return endowmentIncomeAcctFinCoaCd;
-    }
-
-    /**
-     * @param endowmentIncomeAcctFinCoaCd The endowmentIncomeAcctFinCoaCd to set.
-     */
-    public void setEndowmentIncomeAcctFinCoaCd(String endowmentIncomeAcctFinCoaCd) {
-        this.endowmentIncomeAcctFinCoaCd = endowmentIncomeAcctFinCoaCd;
-    }
-
-    /**
-     * @return Returns the financialHigherEdFunctionCd.
-     */
-    public String getFinancialHigherEdFunctionCd() {
-        return financialHigherEdFunctionCd;
-    }
-
-    /**
-     * @param financialHigherEdFunctionCd The financialHigherEdFunctionCd to set.
-     */
-    public void setFinancialHigherEdFunctionCd(String financialHigherEdFunctionCd) {
-        this.financialHigherEdFunctionCd = financialHigherEdFunctionCd;
-    }
-
-    /**
-     * @return Returns the incomeStreamAccountNumber.
-     */
-    public String getIncomeStreamAccountNumber() {
-        return incomeStreamAccountNumber;
-    }
-
-    /**
-     * @param incomeStreamAccountNumber The incomeStreamAccountNumber to set.
-     */
-    public void setIncomeStreamAccountNumber(String incomeStreamAccountNumber) {
-        this.incomeStreamAccountNumber = incomeStreamAccountNumber;
-    }
-
-    /**
-     * @return Returns the incomeStreamFinancialCoaCode.
-     */
-    public String getIncomeStreamFinancialCoaCode() {
-        return incomeStreamFinancialCoaCode;
-    }
-
-    /**
-     * @param incomeStreamFinancialCoaCode The incomeStreamFinancialCoaCode to set.
-     */
-    public void setIncomeStreamFinancialCoaCode(String incomeStreamFinancialCoaCode) {
-        this.incomeStreamFinancialCoaCode = incomeStreamFinancialCoaCode;
-    }
-
-    /**
-     * @return Returns the indirectCostRcvyFinCoaCode.
-     */
-    public String getIndirectCostRcvyFinCoaCode() {
-        return indirectCostRcvyFinCoaCode;
-    }
-
-    /**
-     * @param indirectCostRcvyFinCoaCode The indirectCostRcvyFinCoaCode to set.
-     */
-    public void setIndirectCostRcvyFinCoaCode(String indirectCostRcvyFinCoaCode) {
-        this.indirectCostRcvyFinCoaCode = indirectCostRcvyFinCoaCode;
-    }
-
-    /**
-     * @return Returns the indirectCostRecoveryAcctNbr.
-     */
-    public String getIndirectCostRecoveryAcctNbr() {
-        return indirectCostRecoveryAcctNbr;
-    }
-
-    /**
-     * @param indirectCostRecoveryAcctNbr The indirectCostRecoveryAcctNbr to set.
-     */
-    public void setIndirectCostRecoveryAcctNbr(String indirectCostRecoveryAcctNbr) {
-        this.indirectCostRecoveryAcctNbr = indirectCostRecoveryAcctNbr;
-    }
-
-    /**
-     * @return Returns the organizationCode.
-     */
-    public String getOrganizationCode() {
-        return organizationCode;
-    }
-
-    /**
-     * @param organizationCode The organizationCode to set.
-     */
-    public void setOrganizationCode(String organizationCode) {
-        this.organizationCode = organizationCode;
-    }
-
-    /**
-     * @return Returns the reportsToAccountNumber.
-     */
-    public String getReportsToAccountNumber() {
-        return reportsToAccountNumber;
-    }
-
-    /**
-     * @param reportsToAccountNumber The reportsToAccountNumber to set.
-     */
-    public void setReportsToAccountNumber(String reportsToAccountNumber) {
-        this.reportsToAccountNumber = reportsToAccountNumber;
-    }
-
-    /**
-     * @return Returns the reportsToChartOfAccountsCode.
-     */
-    public String getReportsToChartOfAccountsCode() {
-        return reportsToChartOfAccountsCode;
-    }
-
-    /**
-     * @param reportsToChartOfAccountsCode The reportsToChartOfAccountsCode to set.
-     */
-    public void setReportsToChartOfAccountsCode(String reportsToChartOfAccountsCode) {
-        this.reportsToChartOfAccountsCode = reportsToChartOfAccountsCode;
-    }
-
-    /**
-     * @return Returns the subFundGroupCode.
-     */
-    public String getSubFundGroupCode() {
-        return subFundGroupCode;
-    }
-
-    /**
-     * @param subFundGroupCode The subFundGroupCode to set.
-     */
-    public void setSubFundGroupCode(String subFundGroupCode) {
-        this.subFundGroupCode = subFundGroupCode;
-    }
-
-    /**
-     * Gets the postalZipCode attribute. 
-     * @return Returns the postalZipCode.
-     */
-    public PostalZipCode getPostalZipCode() {
-        return postalZipCode;
-    }
-    
-    /**
-     * Sets the postalZipCode attribute value.
-     * @param postalZipCode The postalZipCode to set.
-     */
-    public void setPostalZipCode(PostalZipCode postalZipCode) {
-        this.postalZipCode = postalZipCode;
-    }
-    
-    /**
-     * Gets the budgetRecordingLevel attribute. 
-     * @return Returns the budgetRecordingLevel.
-     */
-    public BudgetRecordingLevelCode getBudgetRecordingLevel() {
-        return budgetRecordingLevel;
-    }
-    
-    /**
-     * Sets the budgetRecordingLevel attribute value.
-     * @param budgetRecordingLevel The budgetRecordingLevel to set.
-     */
-    public void setBudgetRecordingLevel(BudgetRecordingLevelCode budgetRecordingLevel) {
-        this.budgetRecordingLevel = budgetRecordingLevel;
-    }
-    
-    /**
-     * Gets the sufficientFundsCode attribute. 
-     * @return Returns the sufficientFundsCode.
-     */
-    public SufficientFundsCode getSufficientFundsCode() {
-        return sufficientFundsCode;
-    }
-    
-    /**
-     * Sets the sufficientFundsCode attribute value.
-     * @param sufficientFundsCode The sufficientFundsCode to set.
-     */
-    public void setSufficientFundsCode(SufficientFundsCode sufficientFundsCode) {
-        this.sufficientFundsCode = sufficientFundsCode;
-    }
-
     /**
+     * Gets the programCode attribute.
+     * 
      * @return Returns the programCode.
      */
     public String getProgramCode() {
@@ -1598,160 +1458,42 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     }
 
     /**
+     * Sets the programCode attribute value.
+     * 
      * @param programCode The programCode to set.
      */
     public void setProgramCode(String programCode) {
         this.programCode = programCode;
-    }    
-    
+    }
+
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * Gets the program attribute.
+     * 
+     * @return Returns the program.
+     */
+    public Program getProgram() {
+        return program;
+    }
+
+    /**
+     * Sets the program attribute value.
+     * 
+     * @param program The program to set.
+     * @deprecated
+     */
+    public void setProgram(Program program) {
+        this.program = program;
+    }
+
+    /**
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-
-        m.put("chartCode", this.chartOfAccountsCode);
+        m.put("chartOfAccountsCode", this.chartOfAccountsCode);
         m.put("accountNumber", this.accountNumber);
-
         return m;
     }
 
-
-    /**
-     * Implementing equals since I need contains to behave reasonably in a hashed datastructure.
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        boolean equal = false;
-
-        if (obj != null) {
-            if (this.getClass().equals(obj.getClass())) {
-                Account other = (Account) obj;
-
-                if (StringUtils.equals(this.getChartOfAccountsCode(), other.getChartOfAccountsCode())) {
-                    if (StringUtils.equals(this.getAccountNumber(), other.getAccountNumber())) {
-                        equal = true;
-                    }
-                }
-            }
-        }
-
-        return equal;
-    }
-
-    /**
-     * Calcluates hashCode based on current values of chartOfAccountsCode and accountNumber fields. Somewhat dangerous, since both
-     * of those fields are mutable, but I don't expect people to be editing those values directly for Accounts stored in hashed
-     * datastructures.
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode() {
-        String hashString = getChartOfAccountsCode() + "|" + getAccountNumber();
-
-        return hashString.hashCode();
-    }
-
-
-    /**
-     * Convenience method to make the primitive account fields from this Account easier to compare to the account fields from
-     * another Account or an AccountingLine
-     * 
-     * @return String representing the account associated with this Accounting
-     */
-    public String getAccountKey() {
-        String key = getChartOfAccountsCode() + ":" + getAccountNumber();
-        return key;
-    }
-    /**
-     * Gets the dummy attribute. 
-     * @return Returns the dummy.
-     */
-   
-    /**
-     * Gets the accountResponsibilitySection attribute. 
-     * @return Returns the accountResponsibilitySection.
-     */
-    public String getAccountResponsibilitySection() {
-        return accountResponsibilitySection;
-    }
-    /**
-     * Sets the accountResponsibilitySection attribute value.
-     * @param accountResponsibilitySection The accountResponsibilitySection to set.
-     */
-    public void setAccountResponsibilitySection(String accountResponsibilitySection) {
-        this.accountResponsibilitySection = accountResponsibilitySection;
-    }
-    /**
-     * Gets the contractsAndGrantsSection attribute. 
-     * @return Returns the contractsAndGrantsSection.
-     */
-    public String getContractsAndGrantsSection() {
-        return contractsAndGrantsSection;
-    }
-    /**
-     * Sets the contractsAndGrantsSection attribute value.
-     * @param contractsAndGrantsSection The contractsAndGrantsSection to set.
-     */
-    public void setContractsAndGrantsSection(String contractsAndGrantsSection) {
-        this.contractsAndGrantsSection = contractsAndGrantsSection;
-    }
-    /**
-     * Gets the accountDescriptionSection attribute. 
-     * @return Returns the accountDescriptionSection.
-     */
-    public String getAccountDescriptionSection() {
-        return accountDescriptionSection;
-    }
-    /**
-     * Sets the accountDescriptionSection attribute value.
-     * @param accountDescriptionSection The accountDescriptionSection to set.
-     */
-    public void setAccountDescriptionSection(String accountDescriptionSection) {
-        this.accountDescriptionSection = accountDescriptionSection;
-    }
-    /**
-     * Gets the guidelinesAndPurposeSection attribute. 
-     * @return Returns the guidelinesAndPurposeSection.
-     */
-    public String getGuidelinesAndPurposeSection() {
-        return guidelinesAndPurposeSection;
-    }
-    /**
-     * Sets the guidelinesAndPurposeSection attribute value.
-     * @param guidelinesAndPurposeSection The guidelinesAndPurposeSection to set.
-     */
-    public void setGuidelinesAndPurposeSection(String guidelinesAndPurposeSection) {
-        this.guidelinesAndPurposeSection = guidelinesAndPurposeSection;
-    }
-    /**
-     * Gets the accountResponsibilitySectionBlank attribute. 
-     * @return Returns the accountResponsibilitySectionBlank.
-     */
-    public String getAccountResponsibilitySectionBlank() {
-        return accountResponsibilitySectionBlank;
-    }
-    /**
-     * Gets the contractsAndGrantsSectionBlank attribute. 
-     * @return Returns the contractsAndGrantsSectionBlank.
-     */
-    public String getContractsAndGrantsSectionBlank() {
-        return contractsAndGrantsSectionBlank;
-    }
-    /**
-     * Gets the accountDescriptionSectionBlank attribute. 
-     * @return Returns the accountDescriptionSectionBlank.
-     */
-    public String getAccountDescriptionSectionBlank() {
-        return accountDescriptionSectionBlank;
-    }
-    /**
-     * Gets the guidelinesAndPurposeSectionBlank attribute. 
-     * @return Returns the guidelinesAndPurposeSectionBlank.
-     */
-    public String getGuidelinesAndPurposeSectionBlank() {
-        return guidelinesAndPurposeSectionBlank;
-    }
 
 }
