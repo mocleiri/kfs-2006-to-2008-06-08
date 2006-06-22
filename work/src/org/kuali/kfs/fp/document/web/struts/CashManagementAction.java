@@ -73,14 +73,12 @@ public class CashManagementAction extends KualiDocumentActionBase {
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#execute(org.apache.struts.action.ActionMapping,
      *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
-    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward dest = super.execute(mapping, form, request, response);
 
         CashManagementForm cmf = (CashManagementForm) form;
-        if (cmf.getDepositHelpers().isEmpty()) {
-            cmf.populateDepositHelpers();
-        }
+        cmf.populateDeposits();
+        cmf.populateDepositHelpers();
 
         return dest;
     }
@@ -94,7 +92,6 @@ public class CashManagementAction extends KualiDocumentActionBase {
      * @param kualiDocumentFormBase
      * @throws WorkflowException
      */
-    @Override
     protected void createDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
         KualiUser user = GlobalVariables.getUserSession().getKualiUser();
         String workgroupName = SpringServiceLocator.getCashReceiptService().getCashReceiptVerificationUnitForUser(user);
@@ -202,15 +199,11 @@ public class CashManagementAction extends KualiDocumentActionBase {
         CashManagementForm cmForm = (CashManagementForm) form;
         CashManagementDocument cmDoc = cmForm.getCashManagementDocument();
 
-        // validate cancelability
-        int depositIndex = getSelectedLine(request);
-        Deposit deposit = cmDoc.getDeposit(depositIndex);
-        if (StringUtils.equals(deposit.getDepositTypeCode(), DepositConstants.DEPOSIT_TYPE_INTERIM) && cmDoc.hasFinalDeposit()) {
-            throw new IllegalStateException("interim deposits cannot be canceled if the document already has a final deposit");
-        }
+        // TODO: check for authorization to cancel deposit
 
         // cancel the deposit
-        deposit = cmDoc.removeDeposit(depositIndex);
+        int depositIndex = getSelectedLine(request);
+        Deposit deposit = cmDoc.removeDeposit(depositIndex);
         SpringServiceLocator.getCashManagementService().cancelDeposit(deposit);
 
         // update the form

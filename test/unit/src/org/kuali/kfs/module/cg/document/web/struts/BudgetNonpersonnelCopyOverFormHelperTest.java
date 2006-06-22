@@ -53,8 +53,7 @@ public class BudgetNonpersonnelCopyOverFormHelperTest extends KualiTestBaseWithS
 
         String[] categories = { "CO", "CO", "FL" };
         String[] subCategories = { "C1", "C1", "F5" };
-        String[] subcontractorNumber = { "", "", "" };
-        budgetForm.getBudgetDocument().getBudget().setNonpersonnelItems(BudgetNonpersonnelTest.createBudgetNonpersonnel(categories, subCategories, subcontractorNumber));
+        budgetForm.getBudgetDocument().getBudget().setNonpersonnelItems(BudgetNonpersonnelTest.createBudgetNonpersonnel(categories, subCategories));
         budgetForm.setCurrentTaskNumber(new Integer(0));
         budgetForm.getBudgetDocument().getBudget().setPeriods(BudgetPeriodTest.createBudgetPeriods(5));
         budgetForm.getBudgetDocument().getBudget().setBudgetNonpersonnelInflationRate(new KualiDecimal(10));

@@ -45,7 +45,7 @@ public class NonCheckDisbursementDocument extends TransactionalDocumentBase {
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see TransactionalDocument#getSourceAccountingLinesSectionTitle();
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
@@ -55,7 +55,7 @@ public class NonCheckDisbursementDocument extends TransactionalDocumentBase {
     /**
      * Overrides the base implementation to return "To".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
+     * @see TransactionalDocument#getTargetAccountingLinesSectionTitle();
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {

@@ -46,7 +46,7 @@ public class GeneralErrorCorrectionDocument extends TransactionalDocumentBase {
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLineSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
@@ -56,7 +56,7 @@ public class GeneralErrorCorrectionDocument extends TransactionalDocumentBase {
     /**
      * Overrides the base implementation to return "To".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLineSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
