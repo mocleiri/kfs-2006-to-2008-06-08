@@ -26,7 +26,6 @@
 package org.kuali.module.financial.bo;
 
 import java.sql.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -35,7 +34,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
 
 /**
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
 
@@ -46,14 +45,14 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     private KualiDecimal disbVchrConferenceTotalAmt;
     private String disbVchrExpenseCode;
 
-
+    
     private List dvPreConferenceRegistrants;
 
     /**
      * Default no-arg constructor.
      */
     public DisbursementVoucherPreConferenceDetail() {
-        dvPreConferenceRegistrants = new TypedArrayList(DisbursementVoucherPreConferenceRegistrant.class);
+       dvPreConferenceRegistrants = new TypedArrayList(DisbursementVoucherPreConferenceRegistrant.class);
     }
 
     /**
@@ -88,7 +87,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     /**
      * Sets the financialDocumentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param - financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
     public void setFinancialDocumentNumber(String financialDocumentNumber) {
@@ -109,7 +108,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     /**
      * Sets the dvConferenceDestinationName attribute.
      * 
-     * @param dvConferenceDestinationName The dvConferenceDestinationName to set.
+     * @param - dvConferenceDestinationName The dvConferenceDestinationName to set.
      * 
      */
     public void setDvConferenceDestinationName(String dvConferenceDestinationName) {
@@ -130,7 +129,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     /**
      * Sets the disbVchrConferenceStartDate attribute.
      * 
-     * @param disbVchrConferenceStartDate The disbVchrConferenceStartDate to set.
+     * @param - disbVchrConferenceStartDate The disbVchrConferenceStartDate to set.
      * 
      */
     public void setDisbVchrConferenceStartDate(Date disbVchrConferenceStartDate) {
@@ -151,7 +150,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     /**
      * Sets the disbVchrConferenceEndDate attribute.
      * 
-     * @param disbVchrConferenceEndDate The disbVchrConferenceEndDate to set.
+     * @param - disbVchrConferenceEndDate The disbVchrConferenceEndDate to set.
      * 
      */
     public void setDisbVchrConferenceEndDate(Date disbVchrConferenceEndDate) {
@@ -165,23 +164,14 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
      * 
      */
     public KualiDecimal getDisbVchrConferenceTotalAmt() {
-        KualiDecimal totalConferenceAmount = new KualiDecimal(0);
-
-        if (dvPreConferenceRegistrants != null) {
-            for (Iterator iter = dvPreConferenceRegistrants.iterator(); iter.hasNext();) {
-                DisbursementVoucherPreConferenceRegistrant registrantLine = (DisbursementVoucherPreConferenceRegistrant) iter.next();
-                totalConferenceAmount = totalConferenceAmount.add(registrantLine.getDisbVchrExpenseAmount());
-            }
-        }
-
-        return totalConferenceAmount;
+        return disbVchrConferenceTotalAmt;
     }
 
 
     /**
      * Sets the disbVchrConferenceTotalAmt attribute.
      * 
-     * @param disbVchrConferenceTotalAmt The disbVchrConferenceTotalAmt to set.
+     * @param - disbVchrConferenceTotalAmt The disbVchrConferenceTotalAmt to set.
      * 
      */
     public void setDisbVchrConferenceTotalAmt(KualiDecimal disbVchrConferenceTotalAmt) {
@@ -202,7 +192,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     /**
      * Sets the disbVchrExpenseCode attribute.
      * 
-     * @param disbVchrExpenseCode The disbVchrExpenseCode to set.
+     * @param - disbVchrExpenseCode The disbVchrExpenseCode to set.
      * 
      */
     public void setDisbVchrExpenseCode(String disbVchrExpenseCode) {
@@ -210,7 +200,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
