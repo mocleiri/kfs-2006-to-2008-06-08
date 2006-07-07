@@ -53,7 +53,6 @@
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="programCode" column="PGM_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="budgetYearFundingSourceCode" column="BDGT_YR_FND_SRC_CD" jdbc-type="VARCHAR" />
 
     <reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="chartOfAccountsCode" />
