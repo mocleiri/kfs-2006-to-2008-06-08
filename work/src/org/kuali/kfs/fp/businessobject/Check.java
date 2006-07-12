@@ -26,7 +26,7 @@ import java.sql.Date;
 
 import org.apache.ojb.broker.PersistenceBrokerAware;
 import org.kuali.core.bo.BusinessObject;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 
 public interface Check extends BusinessObject, PersistenceBrokerAware {
@@ -94,14 +94,14 @@ public interface Check extends BusinessObject, PersistenceBrokerAware {
      * 
      * @return Returns the amount.
      */
-    public KualiDecimal getAmount();
+    public KualiDecimalMoney getAmount();
 
     /**
      * Sets the amount attribute value.
      * 
      * @param amount The amount to set.
      */
-    public void setAmount(KualiDecimal amount);
+    public void setAmount(KualiDecimalMoney amount);
 
     /**
      * Gets the financialDocumentNumber attribute.
