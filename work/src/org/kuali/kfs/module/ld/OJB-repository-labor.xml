@@ -11,7 +11,7 @@
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="csfDeleteCode" column="POS_CSF_DELETE_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="csfAmount" column="POS_CSF_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="csfAmount" column="POS_CSF_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
     <field-descriptor name="csfFullTimeEmploymentQuantity" column="POS_CSF_FTE_QTY" jdbc-type="INTEGER" />
     <field-descriptor name="csfTimePercent" column="POS_CSF_TM_PCT" jdbc-type="INTEGER" />
     <field-descriptor name="csfFundingStatusCode" column="POS_CSF_FNDSTAT_CD" jdbc-type="VARCHAR" />
@@ -134,7 +134,7 @@
     <field-descriptor name="sourceAccountNumber" column="SOURCE_ACCT_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="a21LaborPayrollAmount" column="A21_LBR_PYRL_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="a21LaborPayrollAmount" column="A21_LBR_PYRL_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
     <field-descriptor name="a21LaborDerivedPayrollCode" column="LBR_DRVD_PYRL_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="a21LaborDerivedPayrollPercent" column="LBR_DRVD_PYRL_PCT" jdbc-type="INTEGER" />
     <field-descriptor name="a21LaborCostSharingCode" column="A21LBR_CST_SHR_CD" jdbc-type="VARCHAR" />
@@ -187,7 +187,7 @@
     <field-descriptor name="a21LaborUpdatedCategory10Percent" column="LBR_UPDTCTGR10_PCT" jdbc-type="INTEGER" />
     <field-descriptor name="financialDocumentPostingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
     <field-descriptor name="costShareSourceSubAccountNumber" column="CST_SRCSUBACCT_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="a21LaborOriginalPayrollAmount" column="A21_LBRORIG_PY_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="a21LaborOriginalPayrollAmount" column="A21_LBRORIG_PY_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
     <reference-descriptor name="financialObject" class-ref="org.kuali.module.chart.bo.ObjectCode" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="financialDocumentPostingYear" />
         <foreignkey field-ref="chartOfAccountsCode" />

@@ -32,7 +32,7 @@ import org.kuali.Constants;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.OrganizationReversion;
 import org.kuali.module.chart.bo.OrganizationReversionCategory;
@@ -140,7 +140,7 @@ public class OrganizationReversionProcess {
                             }
                             else if ("EX".equals(bal.getBalanceTypeCode()) || "CE".equals(bal.getBalanceTypeCode()) || "IE".equals(bal.getBalanceTypeCode())) {
                                 // Encumbrance
-                                KualiDecimal amount = bal.getBeginningBalanceLineAmount().add(bal.getAccountLineAnnualBalanceAmount());
+                                KualiDecimalMoney amount = bal.getBeginningBalanceLineAmount().add(bal.getAccountLineAnnualBalanceAmount());
                                 if (amount.isPositive()) {
                                     unitOfWork.addEncumbranceAmount(cat.getOrganizationReversionCategoryCode(), amount);
                                 }
@@ -161,16 +161,16 @@ public class OrganizationReversionProcess {
     }
 
     private void writeActivity(Balance bal) {
-        if (unitOfWork.getTotalReversion().compareTo(KualiDecimal.ZERO) != 0) {
+        if (unitOfWork.getTotalReversion().compareTo(KualiDecimalMoney.ZERO) != 0) {
             writeReversion();
         }
-        if ((unitOfWork.getTotalCarryForward().compareTo(KualiDecimal.ZERO) != 0) && (!organizationReversion.isCarryForwardByObjectCodeIndicator())) {
+        if ((unitOfWork.getTotalCarryForward().compareTo(KualiDecimalMoney.ZERO) != 0) && (!organizationReversion.isCarryForwardByObjectCodeIndicator())) {
             writeCarryForward();
         }
-        if ((unitOfWork.getTotalCarryForward().compareTo(KualiDecimal.ZERO) != 0) && (organizationReversion.isCarryForwardByObjectCodeIndicator())) {
+        if ((unitOfWork.getTotalCarryForward().compareTo(KualiDecimalMoney.ZERO) != 0) && (organizationReversion.isCarryForwardByObjectCodeIndicator())) {
             writeMany();
         }
-        if (unitOfWork.getTotalCash().compareTo(KualiDecimal.ZERO) != 0) {
+        if (unitOfWork.getTotalCash().compareTo(KualiDecimalMoney.ZERO) != 0) {
             writeCash();
         }
     }
@@ -197,7 +197,7 @@ public class OrganizationReversionProcess {
         entry.setTransactionLedgerEntrySequenceNumber(1);
         entry.setTransactionLedgerEntryDescription("CASH REVERTED TO " + organizationReversion.getCashReversionAccountNumber());
         entry.setTransactionLedgerEntryAmount(unitOfWork.getTotalCash());
-        if (unitOfWork.getTotalCash().compareTo(KualiDecimal.ZERO) > 0) {
+        if (unitOfWork.getTotalCash().compareTo(KualiDecimalMoney.ZERO) > 0) {
             entry.setTransactionDebitCreditCode(Constants.GL_CREDIT_CODE);
         }
         else {
@@ -236,7 +236,7 @@ public class OrganizationReversionProcess {
         entry.setTransactionLedgerEntrySequenceNumber(1);
         entry.setTransactionLedgerEntryDescription("FUND BALANCE REVERTED TO " + organizationReversion.getCashReversionAccountNumber());
         entry.setTransactionLedgerEntryAmount(unitOfWork.getTotalCash().abs());
-        if (unitOfWork.getTotalCash().compareTo(KualiDecimal.ZERO) > 0) {
+        if (unitOfWork.getTotalCash().compareTo(KualiDecimalMoney.ZERO) > 0) {
             entry.setTransactionDebitCreditCode(Constants.GL_DEBIT_CODE);
         }
         else {
@@ -274,7 +274,7 @@ public class OrganizationReversionProcess {
         entry.setTransactionLedgerEntrySequenceNumber(1);
         entry.setTransactionLedgerEntryDescription("CASH REVERTED FROM " + unitOfWork.accountNbr + " " + unitOfWork.subAccountNbr);
         entry.setTransactionLedgerEntryAmount(unitOfWork.getTotalCash());
-        if (unitOfWork.getTotalCash().compareTo(KualiDecimal.ZERO) > 0) {
+        if (unitOfWork.getTotalCash().compareTo(KualiDecimalMoney.ZERO) > 0) {
             entry.setTransactionDebitCreditCode(Constants.GL_DEBIT_CODE);
         }
         else {
@@ -313,7 +313,7 @@ public class OrganizationReversionProcess {
         entry.setTransactionLedgerEntrySequenceNumber(1);
         entry.setTransactionLedgerEntryDescription("FUND BALANCE REVERTED FROM " + unitOfWork.accountNbr + " " + unitOfWork.subAccountNbr);
         entry.setTransactionLedgerEntryAmount(unitOfWork.getTotalCash());
-        if (unitOfWork.getTotalCash().compareTo(KualiDecimal.ZERO) > 0) {
+        if (unitOfWork.getTotalCash().compareTo(KualiDecimalMoney.ZERO) > 0) {
             entry.setTransactionDebitCreditCode(Constants.GL_CREDIT_CODE);
         }
         else {
@@ -340,7 +340,7 @@ public class OrganizationReversionProcess {
             CategoryAmount amount = unitOfWork.amounts.get(cat.getOrganizationReversionCategoryCode());
 
             if (!amount.getCarryForward().isZero()) {
-                KualiDecimal commonAmount = amount.getCarryForward();
+                KualiDecimalMoney commonAmount = amount.getCarryForward();
                 String commonObject = detail.getOrganizationReversionObjectCode();
 
                 OriginEntry entry = new OriginEntry();
@@ -570,7 +570,7 @@ public class OrganizationReversionProcess {
 
     private void calculateTotals(Balance bal) {
         // Initialize all the amounts before applying the proper rule
-        KualiDecimal totalAvailable = KualiDecimal.ZERO;
+        KualiDecimalMoney totalAvailable = KualiDecimalMoney.ZERO;
         for (Iterator iter = categoryList.iterator(); iter.hasNext();) {
             OrganizationReversionCategory category = (OrganizationReversionCategory) iter.next();
             OrganizationReversionCategoryLogic logic = categories.get(category.getOrganizationReversionCategoryCode());
@@ -583,11 +583,11 @@ public class OrganizationReversionProcess {
                 amount.setAvailable(amount.getActual().subtract(amount.getBudget()));
             }
             totalAvailable = totalAvailable.add(amount.getAvailable());
-            amount.setCarryForward(KualiDecimal.ZERO);
+            amount.setCarryForward(KualiDecimalMoney.ZERO);
         }
         unitOfWork.setTotalAvailable(totalAvailable);
         unitOfWork.setTotalReversion(totalAvailable);
-        unitOfWork.setTotalCarryForward(KualiDecimal.ZERO);
+        unitOfWork.setTotalCarryForward(KualiDecimalMoney.ZERO);
 
         if ((organizationReversion == null) || (!organizationReversion.getChartOfAccountsCode().equals(bal.getChartOfAccountsCode())) || (!organizationReversion.getOrganizationCode().equals(bal.getAccount().getOrganizationCode()))) {
             organizationReversion = organizationReversionService.getByPrimaryId(paramUniversityFiscalYear, bal.getChartOfAccountsCode(), bal.getAccount().getOrganizationCode());
@@ -616,7 +616,7 @@ public class OrganizationReversionProcess {
             String ruleCode = detail.getOrganizationReversionCode();
 
             if ("R1".equals(ruleCode) || "N1".equals(ruleCode) || "C1".equals(ruleCode)) {
-                if (amount.getAvailable().compareTo(KualiDecimal.ZERO) > 0) {
+                if (amount.getAvailable().compareTo(KualiDecimalMoney.ZERO) > 0) {
                     if (amount.getAvailable().compareTo(amount.getEncumbrance()) > 0) {
                         unitOfWork.addTotalCarryForward(amount.getEncumbrance());
                         amount.addCarryForward(amount.getEncumbrance());
@@ -627,7 +627,7 @@ public class OrganizationReversionProcess {
                         unitOfWork.addTotalCarryForward(amount.getAvailable());
                         amount.addCarryForward(amount.getAvailable());
                         unitOfWork.addTotalReversion(amount.getAvailable().negated());
-                        amount.setAvailable(KualiDecimal.ZERO);
+                        amount.setAvailable(KualiDecimalMoney.ZERO);
                     }
                 }
             }
@@ -636,24 +636,24 @@ public class OrganizationReversionProcess {
                 unitOfWork.addTotalCarryForward(amount.getCarryForward());
                 amount.addCarryForward(amount.getAvailable());
                 unitOfWork.addTotalReversion(amount.getAvailable().negated());
-                amount.setAvailable(KualiDecimal.ZERO);
+                amount.setAvailable(KualiDecimalMoney.ZERO);
             }
 
             if ("C1".equals(ruleCode) || "C2".equals(ruleCode)) {
-                if (amount.getAvailable().compareTo(KualiDecimal.ZERO) > 0) {
+                if (amount.getAvailable().compareTo(KualiDecimalMoney.ZERO) > 0) {
                     unitOfWork.addTotalCarryForward(amount.getAvailable());
                     amount.addCarryForward(amount.getAvailable());
                     unitOfWork.addTotalReversion(amount.getAvailable());
-                    amount.setAvailable(KualiDecimal.ZERO);
+                    amount.setAvailable(KualiDecimalMoney.ZERO);
                 }
             }
 
             if ("N1".equals(ruleCode) || "N2".equals(ruleCode)) {
-                if (amount.getAvailable().compareTo(KualiDecimal.ZERO) < 0) {
+                if (amount.getAvailable().compareTo(KualiDecimalMoney.ZERO) < 0) {
                     unitOfWork.addTotalCarryForward(amount.getAvailable());
                     amount.addCarryForward(amount.getAvailable());
                     unitOfWork.addTotalReversion(amount.getAvailable().negated());
-                    amount.setAvailable(KualiDecimal.ZERO);
+                    amount.setAvailable(KualiDecimalMoney.ZERO);
                 }
             }
         }

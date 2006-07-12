@@ -33,7 +33,7 @@ import java.util.Properties;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 
@@ -183,8 +183,8 @@ public class TestDataGenerator {
         else if (propertyTypeName.indexOf("Boolean") >= 0) {
             finalPropertyValue = new Boolean(propertyValue.trim());
         }
-        else if (propertyTypeName.indexOf("KualiDecimal") >= 0) {
-            finalPropertyValue = new KualiDecimal(propertyValue.trim());
+        else if (propertyTypeName.indexOf("KualiDecimalMoney") >= 0) {
+            finalPropertyValue = new KualiDecimalMoney(propertyValue.trim());
         }
 
         return finalPropertyValue;

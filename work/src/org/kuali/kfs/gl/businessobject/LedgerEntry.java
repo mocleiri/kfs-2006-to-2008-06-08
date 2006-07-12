@@ -22,7 +22,7 @@
  */
 package org.kuali.module.gl.util;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Anthony Potts
@@ -36,11 +36,11 @@ public class LedgerEntry {
     public Integer fiscalYear;
     public String period;
     public int recordCount;
-    public KualiDecimal debitAmount;
+    public KualiDecimalMoney debitAmount;
     public int debitCount;
-    public KualiDecimal creditAmount;
+    public KualiDecimalMoney creditAmount;
     public int creditCount;
-    public KualiDecimal noDCAmount;
+    public KualiDecimalMoney noDCAmount;
     public int noDCCount;
 
     /**
@@ -64,9 +64,9 @@ public class LedgerEntry {
         this.balanceType = balanceType;
         this.originCode = originCode;
 
-        this.creditAmount = KualiDecimal.ZERO;
-        this.debitAmount = KualiDecimal.ZERO;
-        this.noDCAmount = KualiDecimal.ZERO;
+        this.creditAmount = KualiDecimalMoney.ZERO;
+        this.debitAmount = KualiDecimalMoney.ZERO;
+        this.noDCAmount = KualiDecimalMoney.ZERO;
     }
 
     /**
@@ -110,7 +110,7 @@ public class LedgerEntry {
      * 
      * @return Returns the creditAmount.
      */
-    public KualiDecimal getCreditAmount() {
+    public KualiDecimalMoney getCreditAmount() {
         return creditAmount;
     }
 
@@ -119,7 +119,7 @@ public class LedgerEntry {
      * 
      * @param creditAmount The creditAmount to set.
      */
-    public void setCreditAmount(KualiDecimal creditAmount) {
+    public void setCreditAmount(KualiDecimalMoney creditAmount) {
         this.creditAmount = creditAmount;
     }
 
@@ -146,7 +146,7 @@ public class LedgerEntry {
      * 
      * @return Returns the debitAmount.
      */
-    public KualiDecimal getDebitAmount() {
+    public KualiDecimalMoney getDebitAmount() {
         return debitAmount;
     }
 
@@ -155,7 +155,7 @@ public class LedgerEntry {
      * 
      * @param debitAmount The debitAmount to set.
      */
-    public void setDebitAmount(KualiDecimal debitAmount) {
+    public void setDebitAmount(KualiDecimalMoney debitAmount) {
         this.debitAmount = debitAmount;
     }
 
@@ -200,7 +200,7 @@ public class LedgerEntry {
      * 
      * @return Returns the noDCAmount.
      */
-    public KualiDecimal getNoDCAmount() {
+    public KualiDecimalMoney getNoDCAmount() {
         return noDCAmount;
     }
 
@@ -209,7 +209,7 @@ public class LedgerEntry {
      * 
      * @param noDCAmount The noDCAmount to set.
      */
-    public void setNoDCAmount(KualiDecimal noDCAmount) {
+    public void setNoDCAmount(KualiDecimalMoney noDCAmount) {
         this.noDCAmount = noDCAmount;
     }
 

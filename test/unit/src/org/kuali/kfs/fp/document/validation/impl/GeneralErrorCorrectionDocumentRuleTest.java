@@ -32,7 +32,7 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.TransactionalDocumentRuleTestBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.financial.document.GeneralErrorCorrectionDocument;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.util.SufficientFundsItemHelper.SufficientFundsItem;
@@ -676,7 +676,7 @@ public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumen
 
     public void testProcessSourceAccountingLineSufficientFundsCheckingPreparation_isExpense_postive_lineAmount() {
         SourceAccountingLine line = (SourceAccountingLine) getSufficientFundsCheckingSourceExpense().createLine();
-        line.setAmount(new KualiDecimal("3.0"));
+        line.setAmount(new KualiDecimalMoney("3.0"));
 
         GeneralErrorCorrectionDocumentRule rule = new GeneralErrorCorrectionDocumentRule();
         SufficientFundsItem item = rule.processSourceAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -688,7 +688,7 @@ public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumen
     /**
      * These tests currently don't work. Something should be done during QA Period to get them to work public void
      * testProcessSourceAccountingLineSufficientFundsCheckingPreparation_isAsset__negative_lineAmount() { SourceAccountingLine line =
-     * (SourceAccountingLine) getSufficientFundsCheckingSourceAsset().createLine(); line.setAmount(new KualiDecimal("-3.0"));
+     * (SourceAccountingLine) getSufficientFundsCheckingSourceAsset().createLine(); line.setAmount(new KualiDecimalMoney("-3.0"));
      * 
      * GeneralErrorCorrectionDocumentRule rule = new GeneralErrorCorrectionDocumentRule(); SufficientFundsItem item =
      * rule.processSourceAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -699,7 +699,7 @@ public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumen
      * 
      * public void testProcessSourceAccountingLineSufficientFundsCheckingPreparation_isIncome_postive_lineAmount() {
      * SourceAccountingLine line = (SourceAccountingLine) getSufficientFundsCheckingSourceIncome().createLine(); line.setAmount(new
-     * KualiDecimal("3.0"));
+     * KualiDecimalMoney("3.0"));
      * 
      * GeneralErrorCorrectionDocumentRule rule = new GeneralErrorCorrectionDocumentRule(); SufficientFundsItem item =
      * rule.processSourceAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -708,7 +708,7 @@ public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumen
      * 
      * public void testProcessSourceAccountingLineSufficientFundsCheckingPreparation_isLiability__negative_lineAmount() {
      * SourceAccountingLine line = (SourceAccountingLine) getSufficientFundsCheckingSourceLiability().createLine();
-     * line.setAmount(new KualiDecimal("-3.0"));
+     * line.setAmount(new KualiDecimalMoney("-3.0"));
      * 
      * GeneralErrorCorrectionDocumentRule rule = new GeneralErrorCorrectionDocumentRule(); SufficientFundsItem item = rule
      * .processSourceAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -719,7 +719,7 @@ public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumen
      * 
      * public void testProcessTargetAccountingLineSufficientFundsCheckingPreparation_isExpense_postive_lineAmount() {
      * TargetAccountingLine line = (TargetAccountingLine) getSufficientFundsCheckingTargetExpense().createLine(); line.setAmount(new
-     * KualiDecimal("3.0"));
+     * KualiDecimalMoney("3.0"));
      * 
      * GeneralErrorCorrectionDocumentRule rule = new GeneralErrorCorrectionDocumentRule(); SufficientFundsItem item = rule
      * .processTargetAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -728,7 +728,7 @@ public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumen
      * 
      * public void testProcessTargetAccountingLineSufficientFundsCheckingPreparation_isAsset__negative_lineAmount() {
      * TargetAccountingLine line = (TargetAccountingLine) getSufficientFundsCheckingTargetAsset().createLine(); line.setAmount(new
-     * KualiDecimal("-3.0"));
+     * KualiDecimalMoney("-3.0"));
      * 
      * GeneralErrorCorrectionDocumentRule rule = new GeneralErrorCorrectionDocumentRule(); SufficientFundsItem item = rule
      * .processTargetAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -739,7 +739,7 @@ public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumen
      * 
      * public void testProcessTargetAccountingLineSufficientFundsCheckingPreparation_isIncome_postive_lineAmount() {
      * TargetAccountingLine line = (TargetAccountingLine) getSufficientFundsCheckingTargetIncome().createLine(); line.setAmount(new
-     * KualiDecimal("3.0"));
+     * KualiDecimalMoney("3.0"));
      * 
      * GeneralErrorCorrectionDocumentRule rule = new GeneralErrorCorrectionDocumentRule(); SufficientFundsItem item = rule
      * .processTargetAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -753,7 +753,7 @@ public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumen
      * 
      * public void testProcessTargetAccountingLineSufficientFundsCheckingPreparation_isLiability__negative_lineAmount() {
      * TargetAccountingLine line = (TargetAccountingLine) getSufficientFundsCheckingTargetLiability().createLine();
-     * line.setAmount(new KualiDecimal("-3.0"));
+     * line.setAmount(new KualiDecimalMoney("-3.0"));
      * 
      * GeneralErrorCorrectionDocumentRule rule = new GeneralErrorCorrectionDocumentRule(); SufficientFundsItem item = rule
      * .processTargetAccountingLineSufficientFundsCheckingPreparation(null, line);
