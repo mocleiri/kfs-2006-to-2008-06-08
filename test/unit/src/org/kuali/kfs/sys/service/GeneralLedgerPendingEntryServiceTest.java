@@ -24,7 +24,7 @@ package org.kuali.module.gl.service;
 
 import java.util.Iterator;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.test.KualiTestBaseWithSpring;
@@ -106,7 +106,7 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBaseWithSprin
         generalLedgerPendingEntry.setFinancialObjectTypeCode("AS");
         generalLedgerPendingEntry.setUniversityFiscalYear(new Integer(2005));
         generalLedgerPendingEntry.setUniversityFiscalPeriodCode("7");
-        generalLedgerPendingEntry.setTransactionLedgerEntryAmount(new KualiDecimal("8.8"));
+        generalLedgerPendingEntry.setTransactionLedgerEntryAmount(new KualiDecimalMoney("8.8"));
         generalLedgerPendingEntry.setTransactionLedgerEntryDescription("9");
         generalLedgerPendingEntry.setTransactionDebitCreditCode("D");
         generalLedgerPendingEntry.setTransactionDate(new java.sql.Date(new java.util.Date().getTime()));

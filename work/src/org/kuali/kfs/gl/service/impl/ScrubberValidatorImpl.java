@@ -35,7 +35,7 @@ import org.kuali.core.bo.OriginationCode;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.OriginationCodeService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.gl.bo.OriginEntry;
@@ -843,7 +843,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     public Message validateTransactionAmount(OriginEntry originEntry, OriginEntry workingEntry) {
         LOG.debug("validateTransactionAmount() started");
 
-        KualiDecimal amount = originEntry.getTransactionLedgerEntryAmount();
+        KualiDecimalMoney amount = originEntry.getTransactionLedgerEntryAmount();
         if (originEntry.getBalanceType() == null) {
             // We can't validate the amount without a balance type code
             return null;
