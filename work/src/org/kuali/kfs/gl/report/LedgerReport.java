@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
@@ -319,7 +319,7 @@ public class LedgerReport {
         if (number instanceof Integer) {
             decimalFormat.applyPattern("###,###");
         }
-        else if (number instanceof KualiDecimal) {
+        else if (number instanceof KualiDecimalMoney) {
             decimalFormat.applyPattern("###,##0.00");
         }
         return decimalFormat.format(number);
