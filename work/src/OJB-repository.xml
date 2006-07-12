@@ -11,7 +11,7 @@
 <!ENTITY labor SYSTEM "org/kuali/module/labor/OJB-repository-labor.xml">
 <!ENTITY cache SYSTEM "OJB-repository-cache.xml">
 <!ENTITY codes SYSTEM "org/kuali/module/chart/OJB-repository-codes.xml">
-<!ENTITY epic SYSTEM "org/kuali/module/purchasingaccountspayable/OJB-repository-purchasingaccountspayable.xml">
+<!ENTITY epic SYSTEM "org/kuali/module/purap/OJB-repository-purap.xml">
 ]>
 <descriptor-repository version="1.0">
     &core;
