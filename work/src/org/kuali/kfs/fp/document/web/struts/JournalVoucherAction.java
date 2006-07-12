@@ -42,7 +42,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.question.ConfirmationQuestion;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
@@ -352,7 +352,7 @@ public class JournalVoucherAction extends VoucherAction {
         // make sure that there is enough space in the list
         helperLines.ensureCapacity(sourceLines.size());
 
-        KualiDecimal ZERO = new KualiDecimal("0.00");
+        KualiDecimalMoney ZERO = new KualiDecimalMoney("0.00");
         for (int i = 0; i < sourceLines.size(); i++) {
             SourceAccountingLine sourceLine = (SourceAccountingLine) sourceLines.get(i);
             sourceLine.setAmount(ZERO);
@@ -394,7 +394,7 @@ public class JournalVoucherAction extends VoucherAction {
         ArrayList sourceLines = (ArrayList) jvDoc.getSourceAccountingLines();
         ArrayList helperLines = (ArrayList) journalVoucherForm.getVoucherLineHelpers();
 
-        KualiDecimal ZERO = new KualiDecimal("0.00");
+        KualiDecimalMoney ZERO = new KualiDecimalMoney("0.00");
         for (int i = 0; i < sourceLines.size(); i++) {
             VoucherAccountingLineHelper helperLine = (VoucherAccountingLineHelper) helperLines.get(i);
             SourceAccountingLine sourceLine = (SourceAccountingLine) sourceLines.get(i);
@@ -421,7 +421,7 @@ public class JournalVoucherAction extends VoucherAction {
         JournalVoucherDocument journalVoucherDocument = (JournalVoucherDocument) journalVoucherForm.getTransactionalDocument();
         if (journalVoucherDocument.getBalanceType().isFinancialOffsetGenerationIndicator()) {
             populateAllVoucherAccountingLineHelpers(journalVoucherForm);
-            KualiDecimal ZERO = new KualiDecimal("0.00");
+            KualiDecimalMoney ZERO = new KualiDecimalMoney("0.00");
             journalVoucherForm.setNewSourceLineCredit(ZERO);
             journalVoucherForm.setNewSourceLineDebit(ZERO);
         }
