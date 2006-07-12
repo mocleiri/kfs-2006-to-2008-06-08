@@ -29,7 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.util.LabelValueBean;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.SimpleBooleanFormatter;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
@@ -51,7 +51,7 @@ public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
     private static final String CAN_PRINT_COVERSHEET_SIG_STR = "isCoverSheetPrintingAllowed";
     private Check newCheck;
 
-    private KualiDecimal checkTotal;
+    private KualiDecimalMoney checkTotal;
 
     private String checkEntryMode;
     private List checkEntryModes;
@@ -100,14 +100,14 @@ public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
     /**
      * @param checkTotal
      */
-    public void setCheckTotal(KualiDecimal checkTotal) {
+    public void setCheckTotal(KualiDecimalMoney checkTotal) {
         this.checkTotal = checkTotal;
     }
 
     /**
-     * @return KualiDecimal
+     * @return KualiDecimalMoney
      */
-    public KualiDecimal getCheckTotal() {
+    public KualiDecimalMoney getCheckTotal() {
         return checkTotal;
     }
 
