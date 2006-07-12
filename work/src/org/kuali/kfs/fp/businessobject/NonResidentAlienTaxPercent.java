@@ -28,7 +28,7 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -37,7 +37,7 @@ public class NonResidentAlienTaxPercent extends BusinessObjectBase {
 
     private String incomeClassCode;
     private String incomeTaxTypeCode;
-    private KualiDecimal incomeTaxPercent;
+    private KualiDecimalMoney incomeTaxPercent;
 
     private TaxIncomeClassCode incomeClass;
 
@@ -96,7 +96,7 @@ public class NonResidentAlienTaxPercent extends BusinessObjectBase {
      * @return - Returns the incomeTaxPercent
      * 
      */
-    public KualiDecimal getIncomeTaxPercent() {
+    public KualiDecimalMoney getIncomeTaxPercent() {
         return incomeTaxPercent;
     }
 
@@ -107,7 +107,7 @@ public class NonResidentAlienTaxPercent extends BusinessObjectBase {
      * @param - incomeTaxPercent The incomeTaxPercent to set.
      * 
      */
-    public void setIncomeTaxPercent(KualiDecimal incomeTaxPercent) {
+    public void setIncomeTaxPercent(KualiDecimalMoney incomeTaxPercent) {
         this.incomeTaxPercent = incomeTaxPercent;
     }
 

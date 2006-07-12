@@ -24,7 +24,7 @@ package org.kuali.module.financial.service;
 
 import java.util.List;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
 
 /**
@@ -106,7 +106,7 @@ public interface DisbursementVoucherTaxService {
      * @param document
      * @return
      */
-    public KualiDecimal getNonResidentAlienTaxAmount(DisbursementVoucherDocument document);
+    public KualiDecimalMoney getNonResidentAlienTaxAmount(DisbursementVoucherDocument document);
 
     /**
      * Returns a List of Integer line numbers parsed from the line string.

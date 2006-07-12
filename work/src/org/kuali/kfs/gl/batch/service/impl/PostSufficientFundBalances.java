@@ -25,7 +25,7 @@ package org.kuali.module.gl.batch.poster.impl;
 import java.util.Date;
 
 import org.kuali.Constants;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.SufficientFundBalances;
 import org.kuali.module.gl.bo.Transaction;
@@ -91,9 +91,9 @@ public class PostSufficientFundBalances implements PostTransaction {
             sfBalance.setChartOfAccountsCode(t.getChartOfAccountsCode());
             sfBalance.setAccountNumber(t.getAccountNumber());
             sfBalance.setFinancialObjectCode(sufficientFundsObjectCode);
-            sfBalance.setAccountActualExpenditureAmt(KualiDecimal.ZERO);
-            sfBalance.setAccountEncumbranceAmount(KualiDecimal.ZERO);
-            sfBalance.setCurrentBudgetBalanceAmount(KualiDecimal.ZERO);
+            sfBalance.setAccountActualExpenditureAmt(KualiDecimalMoney.ZERO);
+            sfBalance.setAccountEncumbranceAmount(KualiDecimalMoney.ZERO);
+            sfBalance.setCurrentBudgetBalanceAmount(KualiDecimalMoney.ZERO);
         }
 
         if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(t.getAccount().getAccountSufficientFundsCode())) {
@@ -152,7 +152,7 @@ public class PostSufficientFundBalances implements PostTransaction {
     }
 
     // 2631-PROCESS-OBJTACCT-ACTUAL
-    private void updateExpendedAmount(String debitCreditCode, SufficientFundBalances bal, KualiDecimal amount) {
+    private void updateExpendedAmount(String debitCreditCode, SufficientFundBalances bal, KualiDecimalMoney amount) {
         if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             bal.setAccountActualExpenditureAmt(bal.getAccountActualExpenditureAmt().subtract(amount));
         }
@@ -163,7 +163,7 @@ public class PostSufficientFundBalances implements PostTransaction {
 
     // 2642-PROCESS-CASH-ENCUMBRANCE
     // 2632-PROCESS-OBJTACCT-ENCMBRNC
-    private void updateEncumbranceAmount(String debitCreditCode, SufficientFundBalances bal, KualiDecimal amount) {
+    private void updateEncumbranceAmount(String debitCreditCode, SufficientFundBalances bal, KualiDecimalMoney amount) {
         if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             bal.setAccountEncumbranceAmount(bal.getAccountEncumbranceAmount().subtract(amount));
         }
@@ -173,7 +173,7 @@ public class PostSufficientFundBalances implements PostTransaction {
     }
 
     // 2641-PROCESS-CASH-ACTUAL
-    private void updateBudgetAmount(String debitCreditCode, SufficientFundBalances bal, KualiDecimal amount) {
+    private void updateBudgetAmount(String debitCreditCode, SufficientFundBalances bal, KualiDecimalMoney amount) {
         if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             bal.setCurrentBudgetBalanceAmount(bal.getCurrentBudgetBalanceAmount().subtract(amount));
         }

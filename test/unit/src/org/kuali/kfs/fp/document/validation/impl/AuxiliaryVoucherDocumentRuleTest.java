@@ -339,7 +339,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     public final AccountingLineParameter getCashTargetLineParameter() {
         /*
          * return new AccountingLineParameter() .lineClassName(TargetAccountingLine.class.getName()) .chartOfAccounts("BA")
-         * .accountNumber("6044900") .projectCode("BOB") .amount(new KualiDecimal("100")) .currentFiscalYear(new Integer(2004))
+         * .accountNumber("6044900") .projectCode("BOB") .amount(new KualiDecimalMoney("100")) .currentFiscalYear(new Integer(2004))
          * .financialObjectCode("8000");
          */
         return _targetLine1;

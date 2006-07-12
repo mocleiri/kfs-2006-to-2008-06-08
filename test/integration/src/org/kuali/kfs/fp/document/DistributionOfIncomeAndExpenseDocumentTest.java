@@ -163,7 +163,7 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
      * private static final String MT_OBJ_CODE = "5197"; private static final String TN_OBJ_CODE = "9918"; private static final
      * String UNKNOWN_SUB_OBJ_CODE = "YYZZY"; private static final String SUB_OBJ_CODE = "SSS"; private static final String PROJECT =
      * "KUL3"; private static BalanceTyp BAL_TYP = new BalanceTyp(); private static final int YEAR = 2004; private static final
-     * KualiDecimal AMT1 = new KualiDecimal("2.50"); private static final KualiDecimal AMT2 = new KualiDecimal("5.20");
+     * KualiDecimalMoney AMT1 = new KualiDecimalMoney("2.50"); private static final KualiDecimalMoney AMT2 = new KualiDecimalMoney("5.20");
      * 
      * final private DistributionOfIncomeAndExpenseDocument createValidRulesDIDocument() throws Exception { // Get a new object,
      * unpopulated DistributionOfIncomeAndExpenseDocument didoc = (DistributionOfIncomeAndExpenseDocument) SpringServiceLocator

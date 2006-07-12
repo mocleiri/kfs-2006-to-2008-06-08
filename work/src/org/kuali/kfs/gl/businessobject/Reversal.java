@@ -31,7 +31,7 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.Options;
 import org.kuali.core.document.DocumentType;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.Chart;
@@ -64,7 +64,7 @@ public class Reversal extends BusinessObjectBase implements Transaction {
     private String financialDocumentNumber;
     private Integer transactionLedgerEntrySequenceNumber;
     private String transactionLedgerEntryDescription;
-    private KualiDecimal transactionLedgerEntryAmount;
+    private KualiDecimalMoney transactionLedgerEntryAmount;
     private String transactionDebitCreditCode;
     private Date transactionDate;
     private String organizationDocumentNumber;
@@ -404,7 +404,7 @@ public class Reversal extends BusinessObjectBase implements Transaction {
      * 
      * @return - Returns the transactionLedgerEntryAmount
      */
-    public KualiDecimal getTransactionLedgerEntryAmount() {
+    public KualiDecimalMoney getTransactionLedgerEntryAmount() {
         return transactionLedgerEntryAmount;
     }
 
@@ -413,7 +413,7 @@ public class Reversal extends BusinessObjectBase implements Transaction {
      * 
      * @param - transactionLedgerEntryAmount The transactionLedgerEntryAmount to set.
      */
-    public void setTransactionLedgerEntryAmount(KualiDecimal transactionLedgerEntryAmount) {
+    public void setTransactionLedgerEntryAmount(KualiDecimalMoney transactionLedgerEntryAmount) {
         this.transactionLedgerEntryAmount = transactionLedgerEntryAmount;
     }
 

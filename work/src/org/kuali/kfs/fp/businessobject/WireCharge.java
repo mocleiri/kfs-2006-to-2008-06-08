@@ -29,7 +29,7 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.Options;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -44,8 +44,8 @@ public class WireCharge extends BusinessObjectBase {
     private String accountNumber;
     private String incomeFinancialObjectCode;
     private String expenseFinancialObjectCode;
-    private KualiDecimal domesticChargeAmt;
-    private KualiDecimal foreignChargeAmt;
+    private KualiDecimalMoney domesticChargeAmt;
+    private KualiDecimalMoney foreignChargeAmt;
 
     private Options fiscalYear;
     private Chart chartOfAccounts;
@@ -171,7 +171,7 @@ public class WireCharge extends BusinessObjectBase {
      * @return - Returns the domesticChargeAmt
      * 
      */
-    public KualiDecimal getDomesticChargeAmt() {
+    public KualiDecimalMoney getDomesticChargeAmt() {
         return domesticChargeAmt;
     }
 
@@ -182,7 +182,7 @@ public class WireCharge extends BusinessObjectBase {
      * @param - domesticChargeAmt The domesticChargeAmt to set.
      * 
      */
-    public void setDomesticChargeAmt(KualiDecimal domesticChargeAmt) {
+    public void setDomesticChargeAmt(KualiDecimalMoney domesticChargeAmt) {
         this.domesticChargeAmt = domesticChargeAmt;
     }
 
@@ -192,7 +192,7 @@ public class WireCharge extends BusinessObjectBase {
      * @return - Returns the foreignChargeAmt
      * 
      */
-    public KualiDecimal getForeignChargeAmt() {
+    public KualiDecimalMoney getForeignChargeAmt() {
         return foreignChargeAmt;
     }
 
@@ -203,7 +203,7 @@ public class WireCharge extends BusinessObjectBase {
      * @param - foreignChargeAmt The foreignChargeAmt to set.
      * 
      */
-    public void setForeignChargeAmt(KualiDecimal foreignChargeAmt) {
+    public void setForeignChargeAmt(KualiDecimalMoney foreignChargeAmt) {
         this.foreignChargeAmt = foreignChargeAmt;
     }
 

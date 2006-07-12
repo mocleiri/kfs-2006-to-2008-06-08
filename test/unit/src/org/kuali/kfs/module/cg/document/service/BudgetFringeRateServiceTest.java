@@ -4,7 +4,7 @@
  */
 package org.kuali.module.kra.service;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.bo.BudgetFringeRate;
 import org.kuali.test.KualiTestBaseWithSession;
@@ -25,10 +25,10 @@ public class BudgetFringeRateServiceTest extends KualiTestBaseWithSession {
     private static final String KNOWN_DOCUMENT_TYPENAME = "KualiBudgetDocument";
     private static final Long UNKNOWN_DOCHEADERID = new Long(-1);
 
-    private static final KualiDecimal BAD_FRINGE_RATE = new KualiDecimal("20.50");
-    private static final KualiDecimal GOOD_FRINGE_RATE = new KualiDecimal("0.50");
-    private static final KualiDecimal BAD_COST_SHARE = new KualiDecimal("20.50");
-    private static final KualiDecimal GOOD_COST_SHARE = new KualiDecimal("0.50");
+    private static final KualiDecimalMoney BAD_FRINGE_RATE = new KualiDecimalMoney("20.50");
+    private static final KualiDecimalMoney GOOD_FRINGE_RATE = new KualiDecimalMoney("0.50");
+    private static final KualiDecimalMoney BAD_COST_SHARE = new KualiDecimalMoney("20.50");
+    private static final KualiDecimalMoney GOOD_COST_SHARE = new KualiDecimalMoney("0.50");
 
 
     private BudgetFringeRateService budgetFringeRateService;

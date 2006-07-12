@@ -22,7 +22,7 @@
  */
 package org.kuali.test;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 
 /**
@@ -77,7 +77,7 @@ public interface KualiTestConstants {
             public static final String OBJCODE_TARGET = "5000";
             public static final String SUBOBJCODE_TARGET = "A/R";
             public static final String PROJECT = "BOB";
-            public static final KualiDecimal LINEAMT = new KualiDecimal("21.12");
+            public static final KualiDecimalMoney LINEAMT = new KualiDecimalMoney("21.12");
             public static final String OBJECT_TYPE_CODE = "AS";
             public static final String DEBIT_CREDIT_CODE = "D";
             public static final String ENCUMBRANCE_UPDATE_CODE = "Y";
@@ -94,7 +94,7 @@ public interface KualiTestConstants {
         public static class Data4 {
             public static final String ACCOUNT = "1031400";
             public static final String ACCOUNT2 = "5731402";
-            public static final KualiDecimal AMOUNT = new KualiDecimal("2.50");
+            public static final KualiDecimalMoney AMOUNT = new KualiDecimalMoney("2.50");
             public static final String BALANCE_TYPE_CODE = "AC";
             public static final String CHART_CODE = "BL";
             public static final String CHART_CODE_UA = "UA";
