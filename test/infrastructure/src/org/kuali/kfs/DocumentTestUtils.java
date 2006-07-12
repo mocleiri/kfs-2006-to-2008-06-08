@@ -28,7 +28,7 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.DocumentNote;
 import org.kuali.core.exceptions.InfrastructureException;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.financial.bo.InternalBillingItem;
 
 /**
@@ -37,12 +37,12 @@ import org.kuali.module.financial.bo.InternalBillingItem;
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class DocumentTestUtils {
-    public static SourceAccountingLine createSourceLine(String documentHeaderId, String chartOfAccounts, String accountNumber, String subAccountNumber, String financialObjectCode, String financialSubObjectCode, String projectCode, int linePostingYear, KualiDecimal lineAmount, int sequenceNumber, String referenceNumber, String referenceTypeCode, String balanceTypeCode, String referenceOriginCode, String debitCreditCode, String encumbranceUpdateCode, String objectTypeCode) {
+    public static SourceAccountingLine createSourceLine(String documentHeaderId, String chartOfAccounts, String accountNumber, String subAccountNumber, String financialObjectCode, String financialSubObjectCode, String projectCode, int linePostingYear, KualiDecimalMoney lineAmount, int sequenceNumber, String referenceNumber, String referenceTypeCode, String balanceTypeCode, String referenceOriginCode, String debitCreditCode, String encumbranceUpdateCode, String objectTypeCode) {
 
         return (SourceAccountingLine) createLine(SourceAccountingLine.class, documentHeaderId, chartOfAccounts, accountNumber, subAccountNumber, financialObjectCode, financialSubObjectCode, projectCode, linePostingYear, lineAmount, sequenceNumber, referenceNumber, referenceTypeCode, balanceTypeCode, referenceOriginCode, debitCreditCode, encumbranceUpdateCode, objectTypeCode);
     }
 
-    public static TargetAccountingLine createTargetLine(String documentHeaderId, String chartOfAccounts, String accountNumber, String subAccountNumber, String financialObjectCode, String financialSubObjectCode, String projectCode, int linePostingYear, KualiDecimal lineAmount, int sequenceNumber, String referenceNumber, String referenceTypeCode, String balanceTypeCode, String referenceOriginCode, String debitCreditCode, String encumbranceUpdateCode, String objectTypeCode) {
+    public static TargetAccountingLine createTargetLine(String documentHeaderId, String chartOfAccounts, String accountNumber, String subAccountNumber, String financialObjectCode, String financialSubObjectCode, String projectCode, int linePostingYear, KualiDecimalMoney lineAmount, int sequenceNumber, String referenceNumber, String referenceTypeCode, String balanceTypeCode, String referenceOriginCode, String debitCreditCode, String encumbranceUpdateCode, String objectTypeCode) {
         return (TargetAccountingLine) createLine(TargetAccountingLine.class, documentHeaderId, chartOfAccounts, accountNumber, subAccountNumber, financialObjectCode, financialSubObjectCode, projectCode, linePostingYear, lineAmount, sequenceNumber, referenceNumber, referenceTypeCode, balanceTypeCode, referenceOriginCode, debitCreditCode, encumbranceUpdateCode, objectTypeCode);
     }
 
@@ -71,7 +71,7 @@ public class DocumentTestUtils {
      * 
      * @throws Exception
      */
-    private static AccountingLine createLine(Class lineClass, String documentHeaderId, String chartOfAccounts, String accountNumber, String subAccountNumber, String financialObjectCode, String financialSubObjectCode, String projectCode, int linePostingYear, KualiDecimal lineAmount, int sequenceNumber, String referenceNumber, String referenceTypeCode, String balanceTypeCode, String referenceOriginCode, String debitCreditCode, String encumbranceUpdateCode, String objectTypeCode) {
+    private static AccountingLine createLine(Class lineClass, String documentHeaderId, String chartOfAccounts, String accountNumber, String subAccountNumber, String financialObjectCode, String financialSubObjectCode, String projectCode, int linePostingYear, KualiDecimalMoney lineAmount, int sequenceNumber, String referenceNumber, String referenceTypeCode, String balanceTypeCode, String referenceOriginCode, String debitCreditCode, String encumbranceUpdateCode, String objectTypeCode) {
 
         AccountingLine line;
 
@@ -110,7 +110,7 @@ public class DocumentTestUtils {
      * 
      * @throws Exception
      */
-    public static AccountingLine createLineHelper(Class lineClass, String documentHeaderId, String chartOfAccounts, String accountNumber, String subAccountNumber, String financialObjectCode, String financialSubObjectCode, String projectCode, int linePostingYear, KualiDecimal lineAmount, int sequenceNumber, String referenceNumber, String referenceTypeCode, String balanceTypeCode, String referenceOriginCode, String debitCreditCode, String encumbranceUpdateCode, String objectTypeCode) {
+    public static AccountingLine createLineHelper(Class lineClass, String documentHeaderId, String chartOfAccounts, String accountNumber, String subAccountNumber, String financialObjectCode, String financialSubObjectCode, String projectCode, int linePostingYear, KualiDecimalMoney lineAmount, int sequenceNumber, String referenceNumber, String referenceTypeCode, String balanceTypeCode, String referenceOriginCode, String debitCreditCode, String encumbranceUpdateCode, String objectTypeCode) {
 
         Integer postingYear = new Integer(linePostingYear);
         AccountingLine line = null;
@@ -161,7 +161,7 @@ public class DocumentTestUtils {
         // item.setItemServiceDate( timestamp );
         item.setItemStockDescription(stockDescription);
         item.setItemStockNumber(stockNumber);
-        item.setItemUnitAmount(new KualiDecimal(unitAmount.toString()));
+        item.setItemUnitAmount(new KualiDecimalMoney(unitAmount.toString()));
         item.setUnitOfMeasureCode(unitOfMeasureCode);
 
         return item;

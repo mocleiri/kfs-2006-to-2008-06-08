@@ -22,7 +22,7 @@
  */
 package org.kuali.module.financial.bo;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * Interface to aid voucher documents for handling debit/credit amounts.
@@ -35,26 +35,26 @@ public interface VoucherAccountingLineHelper {
      * 
      * @return
      */
-    public KualiDecimal getCredit();
+    public KualiDecimalMoney getCredit();
 
     /**
      * This method sets the credit amount.
      * 
      * @param credit
      */
-    public void setCredit(KualiDecimal credit);
+    public void setCredit(KualiDecimalMoney credit);
 
     /**
      * This method retrieves the debit amount.
      * 
      * @return
      */
-    public KualiDecimal getDebit();
+    public KualiDecimalMoney getDebit();
 
     /**
      * This method sets the debit amount.
      * 
      * @param debit
      */
-    public void setDebit(KualiDecimal debit);
+    public void setDebit(KualiDecimalMoney debit);
 }

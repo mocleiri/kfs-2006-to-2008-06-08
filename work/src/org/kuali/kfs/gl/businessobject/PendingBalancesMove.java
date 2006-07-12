@@ -28,7 +28,7 @@ package org.kuali.module.gl.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -36,12 +36,12 @@ import org.kuali.core.util.KualiDecimal;
 public class PendingBalancesMove extends BusinessObjectBase {
 
     private String personUniversalIdentifier;
-    private KualiDecimal appropriationBudget;
-    private KualiDecimal appropriationActual;
-    private KualiDecimal appropriationEncumbrance;
-    private KualiDecimal pendingBudget;
-    private KualiDecimal pendingActual;
-    private KualiDecimal pendingEncumbrance;
+    private KualiDecimalMoney appropriationBudget;
+    private KualiDecimalMoney appropriationActual;
+    private KualiDecimalMoney appropriationEncumbrance;
+    private KualiDecimalMoney pendingBudget;
+    private KualiDecimalMoney pendingActual;
+    private KualiDecimalMoney pendingEncumbrance;
 
     /**
      * Default constructor.
@@ -77,7 +77,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @return - Returns the appropriationBudget
      * 
      */
-    public KualiDecimal getAppropriationBudget() {
+    public KualiDecimalMoney getAppropriationBudget() {
         return appropriationBudget;
     }
 
@@ -87,7 +87,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @param - appropriationBudget The appropriationBudget to set.
      * 
      */
-    public void setAppropriationBudget(KualiDecimal appropriationBudget) {
+    public void setAppropriationBudget(KualiDecimalMoney appropriationBudget) {
         this.appropriationBudget = appropriationBudget;
     }
 
@@ -98,7 +98,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @return - Returns the appropriationActual
      * 
      */
-    public KualiDecimal getAppropriationActual() {
+    public KualiDecimalMoney getAppropriationActual() {
         return appropriationActual;
     }
 
@@ -108,7 +108,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @param - appropriationActual The appropriationActual to set.
      * 
      */
-    public void setAppropriationActual(KualiDecimal appropriationActual) {
+    public void setAppropriationActual(KualiDecimalMoney appropriationActual) {
         this.appropriationActual = appropriationActual;
     }
 
@@ -119,7 +119,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @return - Returns the appropriationEncumbrance
      * 
      */
-    public KualiDecimal getAppropriationEncumbrance() {
+    public KualiDecimalMoney getAppropriationEncumbrance() {
         return appropriationEncumbrance;
     }
 
@@ -129,7 +129,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @param - appropriationEncumbrance The appropriationEncumbrance to set.
      * 
      */
-    public void setAppropriationEncumbrance(KualiDecimal appropriationEncumbrance) {
+    public void setAppropriationEncumbrance(KualiDecimalMoney appropriationEncumbrance) {
         this.appropriationEncumbrance = appropriationEncumbrance;
     }
 
@@ -140,7 +140,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @return - Returns the pendingBudget
      * 
      */
-    public KualiDecimal getPendingBudget() {
+    public KualiDecimalMoney getPendingBudget() {
         return pendingBudget;
     }
 
@@ -150,7 +150,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @param - pendingBudget The pendingBudget to set.
      * 
      */
-    public void setPendingBudget(KualiDecimal pendingBudget) {
+    public void setPendingBudget(KualiDecimalMoney pendingBudget) {
         this.pendingBudget = pendingBudget;
     }
 
@@ -161,7 +161,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @return - Returns the pendingActual
      * 
      */
-    public KualiDecimal getPendingActual() {
+    public KualiDecimalMoney getPendingActual() {
         return pendingActual;
     }
 
@@ -171,7 +171,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @param - pendingActual The pendingActual to set.
      * 
      */
-    public void setPendingActual(KualiDecimal pendingActual) {
+    public void setPendingActual(KualiDecimalMoney pendingActual) {
         this.pendingActual = pendingActual;
     }
 
@@ -182,7 +182,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @return - Returns the pendingEncumbrance
      * 
      */
-    public KualiDecimal getPendingEncumbrance() {
+    public KualiDecimalMoney getPendingEncumbrance() {
         return pendingEncumbrance;
     }
 
@@ -192,7 +192,7 @@ public class PendingBalancesMove extends BusinessObjectBase {
      * @param - pendingEncumbrance The pendingEncumbrance to set.
      * 
      */
-    public void setPendingEncumbrance(KualiDecimal pendingEncumbrance) {
+    public void setPendingEncumbrance(KualiDecimalMoney pendingEncumbrance) {
         this.pendingEncumbrance = pendingEncumbrance;
     }
 

@@ -25,7 +25,7 @@ package org.kuali.module.financial.document;
 import java.sql.Timestamp;
 
 import org.kuali.core.document.TransactionalDocument;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * Interface for voucher type documents that require debit/credit support
@@ -52,24 +52,24 @@ public interface VoucherDocument extends TransactionalDocument {
      * This method calculates the debit total for a voucher document keying off of the debit/debit code, only summing the accounting
      * lines with a debitDebitCode that matched the debit constant, and returns the results.
      * 
-     * @return KualiDecimal
+     * @return KualiDecimalMoney
      */
-    public KualiDecimal getDebitTotal();
+    public KualiDecimalMoney getDebitTotal();
 
     /**
      * This method calculates the credit total for a voucher document keying off of the debit/credit code, only summing the
      * accounting lines with a debitCreditCode that matched the debit constant, and returns the results.
      * 
-     * @return KualiDecimal
+     * @return KualiDecimalMoney
      */
-    public KualiDecimal getCreditTotal();
+    public KualiDecimalMoney getCreditTotal();
 
     /**
      * This method determines the "total" for the voucher document. If the selected balance type is an offset generation, then the
      * total is calculated by subtracting the debit accounting lines from the credit accounting lines. Otherwise, the total is just
      * the sum of all accounting line amounts.
      * 
-     * @return KualiDecimal the total of the voucher document.
+     * @return KualiDecimalMoney the total of the voucher document.
      */
-    public KualiDecimal getTotal();
+    public KualiDecimalMoney getTotal();
 }

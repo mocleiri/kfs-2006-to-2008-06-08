@@ -30,7 +30,7 @@ import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -52,7 +52,7 @@ public class CalculatedSalaryFoundationTracker extends BusinessObjectBase {
     private String emplid;
     private Timestamp csfCreateTimestamp;
     private String csfDeleteCode;
-    private KualiDecimal csfAmount;
+    private KualiDecimalMoney csfAmount;
     private Integer csfFullTimeEmploymentQuantity;
     private Integer csfTimePercent;
     private String csfFundingStatusCode;
@@ -291,7 +291,7 @@ public class CalculatedSalaryFoundationTracker extends BusinessObjectBase {
      * @return - Returns the csfAmount
      * 
      */
-    public KualiDecimal getCsfAmount() {
+    public KualiDecimalMoney getCsfAmount() {
         return csfAmount;
     }
 
@@ -301,7 +301,7 @@ public class CalculatedSalaryFoundationTracker extends BusinessObjectBase {
      * @param - csfAmount The csfAmount to set.
      * 
      */
-    public void setCsfAmount(KualiDecimal csfAmount) {
+    public void setCsfAmount(KualiDecimalMoney csfAmount) {
         this.csfAmount = csfAmount;
     }
 

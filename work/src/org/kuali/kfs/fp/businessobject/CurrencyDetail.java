@@ -28,7 +28,7 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -38,14 +38,14 @@ public class CurrencyDetail extends BusinessObjectBase {
     private String financialDocumentNumber;
     private String financialDocumentTypeCode;
     private String financialDocumentColumnTypeCode;
-    private KualiDecimal financialDocumentHundredDollarAmount;
-    private KualiDecimal financialDocumentFiftyDollarAmount;
-    private KualiDecimal financialDocumentTwentyDollarAmount;
-    private KualiDecimal financialDocumentTenDollarAmount;
-    private KualiDecimal financialDocumentFiveDollarAmount;
-    private KualiDecimal financialDocumentTwoDollarAmount;
-    private KualiDecimal financialDocumentOneDollarAmount;
-    private KualiDecimal financialDocumentOtherDollarAmount;
+    private KualiDecimalMoney financialDocumentHundredDollarAmount;
+    private KualiDecimalMoney financialDocumentFiftyDollarAmount;
+    private KualiDecimalMoney financialDocumentTwentyDollarAmount;
+    private KualiDecimalMoney financialDocumentTenDollarAmount;
+    private KualiDecimalMoney financialDocumentFiveDollarAmount;
+    private KualiDecimalMoney financialDocumentTwoDollarAmount;
+    private KualiDecimalMoney financialDocumentOneDollarAmount;
+    private KualiDecimalMoney financialDocumentOtherDollarAmount;
 
     /**
      * Default constructor.
@@ -123,7 +123,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentHundredDollarAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentHundredDollarAmount() {
+    public KualiDecimalMoney getFinancialDocumentHundredDollarAmount() {
         return financialDocumentHundredDollarAmount;
     }
 
@@ -133,7 +133,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @param - financialDocumentHundredDollarAmount The financialDocumentHundredDollarAmount to set.
      * 
      */
-    public void setFinancialDocumentHundredDollarAmount(KualiDecimal financialDocumentHundredDollarAmount) {
+    public void setFinancialDocumentHundredDollarAmount(KualiDecimalMoney financialDocumentHundredDollarAmount) {
         this.financialDocumentHundredDollarAmount = financialDocumentHundredDollarAmount;
     }
 
@@ -144,7 +144,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentFiftyDollarAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentFiftyDollarAmount() {
+    public KualiDecimalMoney getFinancialDocumentFiftyDollarAmount() {
         return financialDocumentFiftyDollarAmount;
     }
 
@@ -154,7 +154,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @param - financialDocumentFiftyDollarAmount The financialDocumentFiftyDollarAmount to set.
      * 
      */
-    public void setFinancialDocumentFiftyDollarAmount(KualiDecimal financialDocumentFiftyDollarAmount) {
+    public void setFinancialDocumentFiftyDollarAmount(KualiDecimalMoney financialDocumentFiftyDollarAmount) {
         this.financialDocumentFiftyDollarAmount = financialDocumentFiftyDollarAmount;
     }
 
@@ -165,7 +165,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentTwentyDollarAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentTwentyDollarAmount() {
+    public KualiDecimalMoney getFinancialDocumentTwentyDollarAmount() {
         return financialDocumentTwentyDollarAmount;
     }
 
@@ -175,7 +175,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @param - financialDocumentTwentyDollarAmount The financialDocumentTwentyDollarAmount to set.
      * 
      */
-    public void setFinancialDocumentTwentyDollarAmount(KualiDecimal financialDocumentTwentyDollarAmount) {
+    public void setFinancialDocumentTwentyDollarAmount(KualiDecimalMoney financialDocumentTwentyDollarAmount) {
         this.financialDocumentTwentyDollarAmount = financialDocumentTwentyDollarAmount;
     }
 
@@ -186,7 +186,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentTenDollarAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentTenDollarAmount() {
+    public KualiDecimalMoney getFinancialDocumentTenDollarAmount() {
         return financialDocumentTenDollarAmount;
     }
 
@@ -196,7 +196,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @param - financialDocumentTenDollarAmount The financialDocumentTenDollarAmount to set.
      * 
      */
-    public void setFinancialDocumentTenDollarAmount(KualiDecimal financialDocumentTenDollarAmount) {
+    public void setFinancialDocumentTenDollarAmount(KualiDecimalMoney financialDocumentTenDollarAmount) {
         this.financialDocumentTenDollarAmount = financialDocumentTenDollarAmount;
     }
 
@@ -207,7 +207,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentFiveDollarAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentFiveDollarAmount() {
+    public KualiDecimalMoney getFinancialDocumentFiveDollarAmount() {
         return financialDocumentFiveDollarAmount;
     }
 
@@ -217,7 +217,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @param - financialDocumentFiveDollarAmount The financialDocumentFiveDollarAmount to set.
      * 
      */
-    public void setFinancialDocumentFiveDollarAmount(KualiDecimal financialDocumentFiveDollarAmount) {
+    public void setFinancialDocumentFiveDollarAmount(KualiDecimalMoney financialDocumentFiveDollarAmount) {
         this.financialDocumentFiveDollarAmount = financialDocumentFiveDollarAmount;
     }
 
@@ -228,7 +228,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentTwoDollarAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentTwoDollarAmount() {
+    public KualiDecimalMoney getFinancialDocumentTwoDollarAmount() {
         return financialDocumentTwoDollarAmount;
     }
 
@@ -238,7 +238,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @param - financialDocumentTwoDollarAmount The financialDocumentTwoDollarAmount to set.
      * 
      */
-    public void setFinancialDocumentTwoDollarAmount(KualiDecimal financialDocumentTwoDollarAmount) {
+    public void setFinancialDocumentTwoDollarAmount(KualiDecimalMoney financialDocumentTwoDollarAmount) {
         this.financialDocumentTwoDollarAmount = financialDocumentTwoDollarAmount;
     }
 
@@ -249,7 +249,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentOneDollarAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentOneDollarAmount() {
+    public KualiDecimalMoney getFinancialDocumentOneDollarAmount() {
         return financialDocumentOneDollarAmount;
     }
 
@@ -259,7 +259,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @param - financialDocumentOneDollarAmount The financialDocumentOneDollarAmount to set.
      * 
      */
-    public void setFinancialDocumentOneDollarAmount(KualiDecimal financialDocumentOneDollarAmount) {
+    public void setFinancialDocumentOneDollarAmount(KualiDecimalMoney financialDocumentOneDollarAmount) {
         this.financialDocumentOneDollarAmount = financialDocumentOneDollarAmount;
     }
 
@@ -270,7 +270,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentOtherDollarAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentOtherDollarAmount() {
+    public KualiDecimalMoney getFinancialDocumentOtherDollarAmount() {
         return financialDocumentOtherDollarAmount;
     }
 
@@ -280,7 +280,7 @@ public class CurrencyDetail extends BusinessObjectBase {
      * @param - financialDocumentOtherDollarAmount The financialDocumentOtherDollarAmount to set.
      * 
      */
-    public void setFinancialDocumentOtherDollarAmount(KualiDecimal financialDocumentOtherDollarAmount) {
+    public void setFinancialDocumentOtherDollarAmount(KualiDecimalMoney financialDocumentOtherDollarAmount) {
         this.financialDocumentOtherDollarAmount = financialDocumentOtherDollarAmount;
     }
 

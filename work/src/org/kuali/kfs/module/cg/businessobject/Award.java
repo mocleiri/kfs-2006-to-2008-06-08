@@ -31,7 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -41,22 +41,22 @@ public class Award extends BusinessObjectBase {
     private Long proposalNumber;
     private Timestamp awardBeginningDate;
     private Timestamp awardEndingDate;
-    private KualiDecimal awardTotalAmount;
+    private KualiDecimalMoney awardTotalAmount;
     private String awardAddendumNumber;
-    private KualiDecimal awardAllocatedUniversityComputingServicesAmount;
+    private KualiDecimalMoney awardAllocatedUniversityComputingServicesAmount;
     private String agencyAwardNumber;
-    private KualiDecimal federalPassThroughFundedAmount;
+    private KualiDecimalMoney federalPassThroughFundedAmount;
     private Timestamp awardEntryDate;
-    private KualiDecimal agencyFuture1Amount;
-    private KualiDecimal agencyFuture2Amount;
-    private KualiDecimal agencyFuture3Amount;
+    private KualiDecimalMoney agencyFuture1Amount;
+    private KualiDecimalMoney agencyFuture2Amount;
+    private KualiDecimalMoney agencyFuture3Amount;
     private String awardDocumentNumber;
     private Timestamp awardLastUpdateDate;
     private boolean federalPassThroughIndicator;
     private String oldProposalNumber;
-    private KualiDecimal awardDirectCostAmount;
-    private KualiDecimal awardIndirectCostAmount;
-    private KualiDecimal federalFundedAmount;
+    private KualiDecimalMoney awardDirectCostAmount;
+    private KualiDecimalMoney awardIndirectCostAmount;
+    private KualiDecimalMoney federalFundedAmount;
     private Timestamp awardCreateTimestamp;
     private Timestamp awardClosingDate;
     private String proposalAwardTypeCode;
@@ -166,7 +166,7 @@ public class Award extends BusinessObjectBase {
      * @return - Returns the awardTotalAmount
      * 
      */
-    public KualiDecimal getAwardTotalAmount() {
+    public KualiDecimalMoney getAwardTotalAmount() {
         return awardTotalAmount;
     }
 
@@ -176,7 +176,7 @@ public class Award extends BusinessObjectBase {
      * @param - awardTotalAmount The awardTotalAmount to set.
      * 
      */
-    public void setAwardTotalAmount(KualiDecimal awardTotalAmount) {
+    public void setAwardTotalAmount(KualiDecimalMoney awardTotalAmount) {
         this.awardTotalAmount = awardTotalAmount;
     }
 
@@ -208,7 +208,7 @@ public class Award extends BusinessObjectBase {
      * @return - Returns the awardAllocatedUniversityComputingServicesAmount
      * 
      */
-    public KualiDecimal getAwardAllocatedUniversityComputingServicesAmount() {
+    public KualiDecimalMoney getAwardAllocatedUniversityComputingServicesAmount() {
         return awardAllocatedUniversityComputingServicesAmount;
     }
 
@@ -218,7 +218,7 @@ public class Award extends BusinessObjectBase {
      * @param - awardAllocatedUniversityComputingServicesAmount The awardAllocatedUniversityComputingServicesAmount to set.
      * 
      */
-    public void setAwardAllocatedUniversityComputingServicesAmount(KualiDecimal awardAllocatedUniversityComputingServicesAmount) {
+    public void setAwardAllocatedUniversityComputingServicesAmount(KualiDecimalMoney awardAllocatedUniversityComputingServicesAmount) {
         this.awardAllocatedUniversityComputingServicesAmount = awardAllocatedUniversityComputingServicesAmount;
     }
 
@@ -250,7 +250,7 @@ public class Award extends BusinessObjectBase {
      * @return - Returns the federalPassThroughFundedAmount
      * 
      */
-    public KualiDecimal getFederalPassThroughFundedAmount() {
+    public KualiDecimalMoney getFederalPassThroughFundedAmount() {
         return federalPassThroughFundedAmount;
     }
 
@@ -260,7 +260,7 @@ public class Award extends BusinessObjectBase {
      * @param - federalPassThroughFundedAmount The federalPassThroughFundedAmount to set.
      * 
      */
-    public void setFederalPassThroughFundedAmount(KualiDecimal federalPassThroughFundedAmount) {
+    public void setFederalPassThroughFundedAmount(KualiDecimalMoney federalPassThroughFundedAmount) {
         this.federalPassThroughFundedAmount = federalPassThroughFundedAmount;
     }
 
@@ -292,7 +292,7 @@ public class Award extends BusinessObjectBase {
      * @return - Returns the agencyFuture1Amount
      * 
      */
-    public KualiDecimal getAgencyFuture1Amount() {
+    public KualiDecimalMoney getAgencyFuture1Amount() {
         return agencyFuture1Amount;
     }
 
@@ -302,7 +302,7 @@ public class Award extends BusinessObjectBase {
      * @param - agencyFuture1Amount The agencyFuture1Amount to set.
      * 
      */
-    public void setAgencyFuture1Amount(KualiDecimal agencyFuture1Amount) {
+    public void setAgencyFuture1Amount(KualiDecimalMoney agencyFuture1Amount) {
         this.agencyFuture1Amount = agencyFuture1Amount;
     }
 
@@ -313,7 +313,7 @@ public class Award extends BusinessObjectBase {
      * @return - Returns the agencyFuture2Amount
      * 
      */
-    public KualiDecimal getAgencyFuture2Amount() {
+    public KualiDecimalMoney getAgencyFuture2Amount() {
         return agencyFuture2Amount;
     }
 
@@ -323,7 +323,7 @@ public class Award extends BusinessObjectBase {
      * @param - agencyFuture2Amount The agencyFuture2Amount to set.
      * 
      */
-    public void setAgencyFuture2Amount(KualiDecimal agencyFuture2Amount) {
+    public void setAgencyFuture2Amount(KualiDecimalMoney agencyFuture2Amount) {
         this.agencyFuture2Amount = agencyFuture2Amount;
     }
 
@@ -334,7 +334,7 @@ public class Award extends BusinessObjectBase {
      * @return - Returns the agencyFuture3Amount
      * 
      */
-    public KualiDecimal getAgencyFuture3Amount() {
+    public KualiDecimalMoney getAgencyFuture3Amount() {
         return agencyFuture3Amount;
     }
 
@@ -344,7 +344,7 @@ public class Award extends BusinessObjectBase {
      * @param - agencyFuture3Amount The agencyFuture3Amount to set.
      * 
      */
-    public void setAgencyFuture3Amount(KualiDecimal agencyFuture3Amount) {
+    public void setAgencyFuture3Amount(KualiDecimalMoney agencyFuture3Amount) {
         this.agencyFuture3Amount = agencyFuture3Amount;
     }
 
@@ -439,7 +439,7 @@ public class Award extends BusinessObjectBase {
      * @return - Returns the awardDirectCostAmount
      * 
      */
-    public KualiDecimal getAwardDirectCostAmount() {
+    public KualiDecimalMoney getAwardDirectCostAmount() {
         return awardDirectCostAmount;
     }
 
@@ -449,7 +449,7 @@ public class Award extends BusinessObjectBase {
      * @param - awardDirectCostAmount The awardDirectCostAmount to set.
      * 
      */
-    public void setAwardDirectCostAmount(KualiDecimal awardDirectCostAmount) {
+    public void setAwardDirectCostAmount(KualiDecimalMoney awardDirectCostAmount) {
         this.awardDirectCostAmount = awardDirectCostAmount;
     }
 
@@ -460,7 +460,7 @@ public class Award extends BusinessObjectBase {
      * @return - Returns the awardIndirectCostAmount
      * 
      */
-    public KualiDecimal getAwardIndirectCostAmount() {
+    public KualiDecimalMoney getAwardIndirectCostAmount() {
         return awardIndirectCostAmount;
     }
 
@@ -470,7 +470,7 @@ public class Award extends BusinessObjectBase {
      * @param - awardIndirectCostAmount The awardIndirectCostAmount to set.
      * 
      */
-    public void setAwardIndirectCostAmount(KualiDecimal awardIndirectCostAmount) {
+    public void setAwardIndirectCostAmount(KualiDecimalMoney awardIndirectCostAmount) {
         this.awardIndirectCostAmount = awardIndirectCostAmount;
     }
 
@@ -481,7 +481,7 @@ public class Award extends BusinessObjectBase {
      * @return - Returns the federalFundedAmount
      * 
      */
-    public KualiDecimal getFederalFundedAmount() {
+    public KualiDecimalMoney getFederalFundedAmount() {
         return federalFundedAmount;
     }
 
@@ -491,7 +491,7 @@ public class Award extends BusinessObjectBase {
      * @param - federalFundedAmount The federalFundedAmount to set.
      * 
      */
-    public void setFederalFundedAmount(KualiDecimal federalFundedAmount) {
+    public void setFederalFundedAmount(KualiDecimalMoney federalFundedAmount) {
         this.federalFundedAmount = federalFundedAmount;
     }
 

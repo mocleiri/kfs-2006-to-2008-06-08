@@ -22,7 +22,7 @@
  */
 package org.kuali.module.financial.bo;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * This helper class works in conjunction with the SourceAccountingLine bo to help build the UI for the Voucher. On the business
@@ -32,15 +32,15 @@ import org.kuali.core.util.KualiDecimal;
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class VoucherAccountingLineHelperBase implements VoucherAccountingLineHelper {
-    private KualiDecimal debit;
-    private KualiDecimal credit;
+    private KualiDecimalMoney debit;
+    private KualiDecimalMoney credit;
 
     /**
      * Constructs a <code>{@link VoucherAccountingLineHelperBase}</code> instance.
      */
     public VoucherAccountingLineHelperBase() {
-        this.credit = new KualiDecimal(0);
-        this.debit = new KualiDecimal(0);
+        this.credit = new KualiDecimalMoney(0);
+        this.debit = new KualiDecimalMoney(0);
     }
 
     /**
@@ -48,7 +48,7 @@ public class VoucherAccountingLineHelperBase implements VoucherAccountingLineHel
      * 
      * @return
      */
-    public KualiDecimal getCredit() {
+    public KualiDecimalMoney getCredit() {
         return credit;
     }
 
@@ -57,7 +57,7 @@ public class VoucherAccountingLineHelperBase implements VoucherAccountingLineHel
      * 
      * @param credit
      */
-    public void setCredit(KualiDecimal credit) {
+    public void setCredit(KualiDecimalMoney credit) {
         this.credit = credit;
     }
 
@@ -66,7 +66,7 @@ public class VoucherAccountingLineHelperBase implements VoucherAccountingLineHel
      * 
      * @return
      */
-    public KualiDecimal getDebit() {
+    public KualiDecimalMoney getDebit() {
         return debit;
     }
 
@@ -75,7 +75,7 @@ public class VoucherAccountingLineHelperBase implements VoucherAccountingLineHel
      * 
      * @param debit
      */
-    public void setDebit(KualiDecimal debit) {
+    public void setDebit(KualiDecimalMoney debit) {
         this.debit = debit;
     }
 }

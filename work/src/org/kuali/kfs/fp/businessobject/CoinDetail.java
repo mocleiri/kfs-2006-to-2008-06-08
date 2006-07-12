@@ -28,7 +28,7 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -38,13 +38,13 @@ public class CoinDetail extends BusinessObjectBase {
     private String financialDocumentNumber;
     private String financialDocumentTypeCode;
     private String financialDocumentColumnTypeCode;
-    private KualiDecimal financialDocumentFiftyCentAmount;
-    private KualiDecimal financialDocumentTwentyFiveCentAmount;
-    private KualiDecimal financialDocumentTenCentAmount;
-    private KualiDecimal financialDocumentFiveCentAmount;
-    private KualiDecimal financialDocumentOneCentAmount;
-    private KualiDecimal financialDocumentOtherCentAmount;
-    private KualiDecimal financialDocumentHundredCentAmount;
+    private KualiDecimalMoney financialDocumentFiftyCentAmount;
+    private KualiDecimalMoney financialDocumentTwentyFiveCentAmount;
+    private KualiDecimalMoney financialDocumentTenCentAmount;
+    private KualiDecimalMoney financialDocumentFiveCentAmount;
+    private KualiDecimalMoney financialDocumentOneCentAmount;
+    private KualiDecimalMoney financialDocumentOtherCentAmount;
+    private KualiDecimalMoney financialDocumentHundredCentAmount;
 
     /**
      * Default constructor.
@@ -122,7 +122,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentFiftyCentAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentFiftyCentAmount() {
+    public KualiDecimalMoney getFinancialDocumentFiftyCentAmount() {
         return financialDocumentFiftyCentAmount;
     }
 
@@ -132,7 +132,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @param - financialDocumentFiftyCentAmount The financialDocumentFiftyCentAmount to set.
      * 
      */
-    public void setFinancialDocumentFiftyCentAmount(KualiDecimal financialDocumentFiftyCentAmount) {
+    public void setFinancialDocumentFiftyCentAmount(KualiDecimalMoney financialDocumentFiftyCentAmount) {
         this.financialDocumentFiftyCentAmount = financialDocumentFiftyCentAmount;
     }
 
@@ -143,7 +143,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentTwentyFiveCentAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentTwentyFiveCentAmount() {
+    public KualiDecimalMoney getFinancialDocumentTwentyFiveCentAmount() {
         return financialDocumentTwentyFiveCentAmount;
     }
 
@@ -153,7 +153,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @param - financialDocumentTwentyFiveCentAmount The financialDocumentTwentyFiveCentAmount to set.
      * 
      */
-    public void setFinancialDocumentTwentyFiveCentAmount(KualiDecimal financialDocumentTwentyFiveCentAmount) {
+    public void setFinancialDocumentTwentyFiveCentAmount(KualiDecimalMoney financialDocumentTwentyFiveCentAmount) {
         this.financialDocumentTwentyFiveCentAmount = financialDocumentTwentyFiveCentAmount;
     }
 
@@ -164,7 +164,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentTenCentAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentTenCentAmount() {
+    public KualiDecimalMoney getFinancialDocumentTenCentAmount() {
         return financialDocumentTenCentAmount;
     }
 
@@ -174,7 +174,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @param - financialDocumentTenCentAmount The financialDocumentTenCentAmount to set.
      * 
      */
-    public void setFinancialDocumentTenCentAmount(KualiDecimal financialDocumentTenCentAmount) {
+    public void setFinancialDocumentTenCentAmount(KualiDecimalMoney financialDocumentTenCentAmount) {
         this.financialDocumentTenCentAmount = financialDocumentTenCentAmount;
     }
 
@@ -185,7 +185,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentFiveCentAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentFiveCentAmount() {
+    public KualiDecimalMoney getFinancialDocumentFiveCentAmount() {
         return financialDocumentFiveCentAmount;
     }
 
@@ -195,7 +195,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @param - financialDocumentFiveCentAmount The financialDocumentFiveCentAmount to set.
      * 
      */
-    public void setFinancialDocumentFiveCentAmount(KualiDecimal financialDocumentFiveCentAmount) {
+    public void setFinancialDocumentFiveCentAmount(KualiDecimalMoney financialDocumentFiveCentAmount) {
         this.financialDocumentFiveCentAmount = financialDocumentFiveCentAmount;
     }
 
@@ -206,7 +206,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentOneCentAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentOneCentAmount() {
+    public KualiDecimalMoney getFinancialDocumentOneCentAmount() {
         return financialDocumentOneCentAmount;
     }
 
@@ -216,7 +216,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @param - financialDocumentOneCentAmount The financialDocumentOneCentAmount to set.
      * 
      */
-    public void setFinancialDocumentOneCentAmount(KualiDecimal financialDocumentOneCentAmount) {
+    public void setFinancialDocumentOneCentAmount(KualiDecimalMoney financialDocumentOneCentAmount) {
         this.financialDocumentOneCentAmount = financialDocumentOneCentAmount;
     }
 
@@ -227,7 +227,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentOtherCentAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentOtherCentAmount() {
+    public KualiDecimalMoney getFinancialDocumentOtherCentAmount() {
         return financialDocumentOtherCentAmount;
     }
 
@@ -237,7 +237,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @param - financialDocumentOtherCentAmount The financialDocumentOtherCentAmount to set.
      * 
      */
-    public void setFinancialDocumentOtherCentAmount(KualiDecimal financialDocumentOtherCentAmount) {
+    public void setFinancialDocumentOtherCentAmount(KualiDecimalMoney financialDocumentOtherCentAmount) {
         this.financialDocumentOtherCentAmount = financialDocumentOtherCentAmount;
     }
 
@@ -248,7 +248,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentHundredCentAmount
      * 
      */
-    public KualiDecimal getFinancialDocumentHundredCentAmount() {
+    public KualiDecimalMoney getFinancialDocumentHundredCentAmount() {
         return financialDocumentHundredCentAmount;
     }
 
@@ -258,7 +258,7 @@ public class CoinDetail extends BusinessObjectBase {
      * @param - financialDocumentHundredCentAmount The financialDocumentHundredCentAmount to set.
      * 
      */
-    public void setFinancialDocumentHundredCentAmount(KualiDecimal financialDocumentHundredCentAmount) {
+    public void setFinancialDocumentHundredCentAmount(KualiDecimalMoney financialDocumentHundredCentAmount) {
         this.financialDocumentHundredCentAmount = financialDocumentHundredCentAmount;
     }
 
