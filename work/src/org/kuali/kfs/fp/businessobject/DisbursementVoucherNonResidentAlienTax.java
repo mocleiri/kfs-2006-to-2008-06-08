@@ -29,7 +29,7 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.lookup.keyvalues.TaxIncomeClassValuesFinder;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
@@ -37,8 +37,8 @@ import org.kuali.core.util.KualiDecimal;
 public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
 
     private String financialDocumentNumber;
-    private KualiDecimal federalIncomeTaxPercent;
-    private KualiDecimal stateIncomeTaxPercent;
+    private KualiDecimalMoney federalIncomeTaxPercent;
+    private KualiDecimalMoney stateIncomeTaxPercent;
     private String incomeClassCode;
     private String postalCountryCode;
     private boolean incomeTaxTreatyExemptCode;
@@ -84,7 +84,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
      * @return - Returns the federalIncomeTaxPercent
      * 
      */
-    public KualiDecimal getFederalIncomeTaxPercent() {
+    public KualiDecimalMoney getFederalIncomeTaxPercent() {
         return federalIncomeTaxPercent;
     }
 
@@ -95,7 +95,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
      * @param - federalIncomeTaxPercent The federalIncomeTaxPercent to set.
      * 
      */
-    public void setFederalIncomeTaxPercent(KualiDecimal federalIncomeTaxPercent) {
+    public void setFederalIncomeTaxPercent(KualiDecimalMoney federalIncomeTaxPercent) {
         this.federalIncomeTaxPercent = federalIncomeTaxPercent;
     }
 
@@ -105,7 +105,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
      * @return - Returns the stateIncomeTaxPercent
      * 
      */
-    public KualiDecimal getStateIncomeTaxPercent() {
+    public KualiDecimalMoney getStateIncomeTaxPercent() {
         return stateIncomeTaxPercent;
     }
 
@@ -116,7 +116,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
      * @param - stateIncomeTaxPercent The stateIncomeTaxPercent to set.
      * 
      */
-    public void setStateIncomeTaxPercent(KualiDecimal stateIncomeTaxPercent) {
+    public void setStateIncomeTaxPercent(KualiDecimalMoney stateIncomeTaxPercent) {
         this.stateIncomeTaxPercent = stateIncomeTaxPercent;
     }
 
