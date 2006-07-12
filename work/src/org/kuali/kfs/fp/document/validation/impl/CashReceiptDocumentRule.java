@@ -34,7 +34,7 @@ import org.kuali.core.rule.DeleteCheckRule;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.rule.UpdateCheckRule;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
@@ -59,7 +59,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      *      org.kuali.core.bo.AccountingLine)
      */
     public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
-        KualiDecimal amount = accountingLine.getAmount();
+        KualiDecimalMoney amount = accountingLine.getAmount();
 
         if (Constants.ZERO.compareTo(amount) == 0) { // amount == 0
             GlobalVariables.getErrorMap().put(Constants.AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
