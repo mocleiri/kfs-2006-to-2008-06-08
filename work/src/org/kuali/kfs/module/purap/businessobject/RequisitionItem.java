@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -41,7 +41,7 @@ public class RequisitionItem extends BusinessObjectBase {
 	private Integer itemLineNumber;
 	private String capitalAssetTransactionTypeCode;
 	private String itemUnitOfMeasureCode;
-	private KualiDecimal itemQuantity;
+	private KualiDecimalMoney itemQuantity;
 	private String itemCatalogNumber;
 	private String itemDescription;
 	private String itemCapitalAssetNoteText;
@@ -176,7 +176,7 @@ public class RequisitionItem extends BusinessObjectBase {
 	 * @return - Returns the itemQuantity
 	 * 
 	 */
-	public KualiDecimal getItemQuantity() { 
+	public KualiDecimalMoney getItemQuantity() { 
 		return itemQuantity;
 	}
 
@@ -186,7 +186,7 @@ public class RequisitionItem extends BusinessObjectBase {
 	 * @param - itemQuantity The itemQuantity to set.
 	 * 
 	 */
-	public void setItemQuantity(KualiDecimal itemQuantity) {
+	public void setItemQuantity(KualiDecimalMoney itemQuantity) {
 		this.itemQuantity = itemQuantity;
 	}
 

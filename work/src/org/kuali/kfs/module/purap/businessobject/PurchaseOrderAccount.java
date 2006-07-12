@@ -28,7 +28,7 @@ package org.kuali.module.purap.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.SubAccount;
@@ -49,8 +49,8 @@ public class PurchaseOrderAccount extends BusinessObjectBase {
 	private String projectCode;
 	private String organizationReferenceId;
 	private Integer accountLinePercent;
-	private KualiDecimal itemAccountOutstandingEncumbranceAmount;
-	private KualiDecimal itemAccountPaidAmount;
+	private KualiDecimalMoney itemAccountOutstandingEncumbranceAmount;
+	private KualiDecimalMoney itemAccountPaidAmount;
 
 	private Chart chartOfAccounts;
 	private Account account;
@@ -300,7 +300,7 @@ public class PurchaseOrderAccount extends BusinessObjectBase {
 	 * @return - Returns the itemAccountOutstandingEncumbranceAmount
 	 * 
 	 */
-	public KualiDecimal getItemAccountOutstandingEncumbranceAmount() { 
+	public KualiDecimalMoney getItemAccountOutstandingEncumbranceAmount() { 
 		return itemAccountOutstandingEncumbranceAmount;
 	}
 
@@ -310,7 +310,7 @@ public class PurchaseOrderAccount extends BusinessObjectBase {
 	 * @param - itemAccountOutstandingEncumbranceAmount The itemAccountOutstandingEncumbranceAmount to set.
 	 * 
 	 */
-	public void setItemAccountOutstandingEncumbranceAmount(KualiDecimal itemAccountOutstandingEncumbranceAmount) {
+	public void setItemAccountOutstandingEncumbranceAmount(KualiDecimalMoney itemAccountOutstandingEncumbranceAmount) {
 		this.itemAccountOutstandingEncumbranceAmount = itemAccountOutstandingEncumbranceAmount;
 	}
 
@@ -321,7 +321,7 @@ public class PurchaseOrderAccount extends BusinessObjectBase {
 	 * @return - Returns the itemAccountPaidAmount
 	 * 
 	 */
-	public KualiDecimal getItemAccountPaidAmount() { 
+	public KualiDecimalMoney getItemAccountPaidAmount() { 
 		return itemAccountPaidAmount;
 	}
 
@@ -331,7 +331,7 @@ public class PurchaseOrderAccount extends BusinessObjectBase {
 	 * @param - itemAccountPaidAmount The itemAccountPaidAmount to set.
 	 * 
 	 */
-	public void setItemAccountPaidAmount(KualiDecimal itemAccountPaidAmount) {
+	public void setItemAccountPaidAmount(KualiDecimalMoney itemAccountPaidAmount) {
 		this.itemAccountPaidAmount = itemAccountPaidAmount;
 	}
 

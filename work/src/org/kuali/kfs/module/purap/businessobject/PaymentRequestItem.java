@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -44,10 +44,10 @@ public class PaymentRequestItem extends BusinessObjectBase {
 	private String itemCatalogNumber;
 	private String itemAuxiliaryPartIdentifier;
 	private String itemUnitOfMeasureCode;
-	private KualiDecimal itemInvoicedQuantity;
+	private KualiDecimalMoney itemInvoicedQuantity;
 	private BigDecimal itemUnitPrice;
 	private BigDecimal purchaseOrderItemUnitPrice;
-	private KualiDecimal itemExtendedPrice;
+	private KualiDecimalMoney itemExtendedPrice;
 	private String capitalAssetTransactionTypeCode;
 	private String itemCapitalAssetNoteText;
 	private String purchaseOrderCommodityCode;
@@ -236,7 +236,7 @@ public class PaymentRequestItem extends BusinessObjectBase {
 	 * @return - Returns the itemInvoicedQuantity
 	 * 
 	 */
-	public KualiDecimal getItemInvoicedQuantity() { 
+	public KualiDecimalMoney getItemInvoicedQuantity() { 
 		return itemInvoicedQuantity;
 	}
 
@@ -246,7 +246,7 @@ public class PaymentRequestItem extends BusinessObjectBase {
 	 * @param - itemInvoicedQuantity The itemInvoicedQuantity to set.
 	 * 
 	 */
-	public void setItemInvoicedQuantity(KualiDecimal itemInvoicedQuantity) {
+	public void setItemInvoicedQuantity(KualiDecimalMoney itemInvoicedQuantity) {
 		this.itemInvoicedQuantity = itemInvoicedQuantity;
 	}
 
@@ -299,7 +299,7 @@ public class PaymentRequestItem extends BusinessObjectBase {
 	 * @return - Returns the itemExtendedPrice
 	 * 
 	 */
-	public KualiDecimal getItemExtendedPrice() { 
+	public KualiDecimalMoney getItemExtendedPrice() { 
 		return itemExtendedPrice;
 	}
 
@@ -309,7 +309,7 @@ public class PaymentRequestItem extends BusinessObjectBase {
 	 * @param - itemExtendedPrice The itemExtendedPrice to set.
 	 * 
 	 */
-	public void setItemExtendedPrice(KualiDecimal itemExtendedPrice) {
+	public void setItemExtendedPrice(KualiDecimalMoney itemExtendedPrice) {
 		this.itemExtendedPrice = itemExtendedPrice;
 	}
 
