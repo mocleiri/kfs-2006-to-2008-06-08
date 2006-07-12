@@ -27,7 +27,7 @@ import java.util.List;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
@@ -55,7 +55,7 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBaseWithFixtures
         line.setChartOfAccountsCode("UA");
         line.setAccountNumber("1912610");
         line.setFinancialObjectCode("5000");
-        line.setAmount(new KualiDecimal(100));
+        line.setAmount(new KualiDecimalMoney(100));
         line.setSequenceNumber(new Integer(1));
 
         dvDocument.getSourceAccountingLines().add(line);
@@ -69,9 +69,9 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBaseWithFixtures
      */
     public void testValidateNRA() throws Exception {
         // check tax is not created for attributes that it should not be generated for
-        dvDocument.setDisbVchrCheckTotalAmount(new KualiDecimal(100));
-        dvDocument.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(new KualiDecimal(0));
-        dvDocument.getDvNonResidentAlienTax().setStateIncomeTaxPercent(new KualiDecimal(0));
+        dvDocument.setDisbVchrCheckTotalAmount(new KualiDecimalMoney(100));
+        dvDocument.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(new KualiDecimalMoney(0));
+        dvDocument.getDvNonResidentAlienTax().setStateIncomeTaxPercent(new KualiDecimalMoney(0));
 
         // should not be generated for non-reportable
         dvDocument.getDvNonResidentAlienTax().setIncomeClassCode("N");
@@ -112,7 +112,7 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBaseWithFixtures
         GlobalVariables.getErrorMap().clear();
 
         // should not be generated if check amount is 0
-        dvDocument.setDisbVchrCheckTotalAmount(new KualiDecimal(0));
+        dvDocument.setDisbVchrCheckTotalAmount(new KualiDecimalMoney(0));
         dvDocument.getDvNonResidentAlienTax().setIncomeClassCode("F");
         dvDocument.getDvNonResidentAlienTax().setForeignSourceIncomeCode(false);
         dvDocument.getDvNonResidentAlienTax().setIncomeTaxTreatyExemptCode(false);
@@ -130,14 +130,14 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBaseWithFixtures
      * 
      */
     public void testGenerateNRATaxLines() {
-        KualiDecimal orginalCheckAmount = new KualiDecimal(100);
-        dvDocument.setDisbVchrCheckTotalAmount(new KualiDecimal(100));
+        KualiDecimalMoney orginalCheckAmount = new KualiDecimalMoney(100);
+        dvDocument.setDisbVchrCheckTotalAmount(new KualiDecimalMoney(100));
         dvDocument.getDvNonResidentAlienTax().setIncomeClassCode("F");
         dvDocument.getDvNonResidentAlienTax().setForeignSourceIncomeCode(false);
         dvDocument.getDvNonResidentAlienTax().setIncomeTaxTreatyExemptCode(false);
         dvDocument.getDvNonResidentAlienTax().setReferenceFinancialDocumentNumber("");
-        dvDocument.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(new KualiDecimal(14));
-        dvDocument.getDvNonResidentAlienTax().setStateIncomeTaxPercent(new KualiDecimal(3.4));
+        dvDocument.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(new KualiDecimalMoney(14));
+        dvDocument.getDvNonResidentAlienTax().setStateIncomeTaxPercent(new KualiDecimalMoney(3.4));
         dvDocument.getDvNonResidentAlienTax().setPostalCountryCode("USA");
 
         disbursementVoucherTaxService.processNonResidentAlienTax(dvDocument);
@@ -151,8 +151,8 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBaseWithFixtures
         // test clearning
         disbursementVoucherTaxService.clearNRATaxLines(dvDocument);
         assertEquals(1, dvDocument.getSourceAccountingLines().size());
-        assertEquals("Check total credited correctly", new KualiDecimal(100), dvDocument.getDisbVchrCheckTotalAmount());
-        assertEquals("Source total does not match check total", new KualiDecimal(100), dvDocument.getSourceTotal());
+        assertEquals("Check total credited correctly", new KualiDecimalMoney(100), dvDocument.getDisbVchrCheckTotalAmount());
+        assertEquals("Source total does not match check total", new KualiDecimalMoney(100), dvDocument.getSourceTotal());
 
 
         disbursementVoucherTaxService.processNonResidentAlienTax(dvDocument);
@@ -164,8 +164,8 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBaseWithFixtures
         assertEquals(3, dvDocument.getSourceAccountingLines().size());
 
         // validate debit of check total amount and accounting lines
-        assertEquals("Check total not debited correctly", new KualiDecimal(82.6), dvDocument.getDisbVchrCheckTotalAmount());
-        assertEquals("Source total does not match check total", new KualiDecimal(82.6), dvDocument.getSourceTotal());
+        assertEquals("Check total not debited correctly", new KualiDecimalMoney(82.6), dvDocument.getDisbVchrCheckTotalAmount());
+        assertEquals("Source total does not match check total", new KualiDecimalMoney(82.6), dvDocument.getSourceTotal());
         disbursementVoucherTaxService.clearNRATaxLines(dvDocument);
     }
 
@@ -180,17 +180,17 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBaseWithFixtures
         dvDocument.getDvNonResidentAlienTax().setPostalCountryCode("USA");
         dvDocument.getDvNonResidentAlienTax().setIncomeTaxGrossUpCode(true);
 
-        runGrossUpTest(new KualiDecimal(100), new KualiDecimal(14), new KualiDecimal(3.4));
-        runGrossUpTest(new KualiDecimal(50.55), new KualiDecimal(14), new KualiDecimal(3.4));
-        runGrossUpTest(new KualiDecimal(10), new KualiDecimal(14), new KualiDecimal(3.4));
-        runGrossUpTest(new KualiDecimal(12.82), new KualiDecimal(14), new KualiDecimal(3.4));
-        runGrossUpTest(new KualiDecimal(12.83), new KualiDecimal(14), new KualiDecimal(3.4));
-        runGrossUpTest(new KualiDecimal(12.84), new KualiDecimal(14), new KualiDecimal(3.4));
-        runGrossUpTest(new KualiDecimal(8456234.23), new KualiDecimal(14), new KualiDecimal(3.4));
+        runGrossUpTest(new KualiDecimalMoney(100), new KualiDecimalMoney(14), new KualiDecimalMoney(3.4));
+        runGrossUpTest(new KualiDecimalMoney(50.55), new KualiDecimalMoney(14), new KualiDecimalMoney(3.4));
+        runGrossUpTest(new KualiDecimalMoney(10), new KualiDecimalMoney(14), new KualiDecimalMoney(3.4));
+        runGrossUpTest(new KualiDecimalMoney(12.82), new KualiDecimalMoney(14), new KualiDecimalMoney(3.4));
+        runGrossUpTest(new KualiDecimalMoney(12.83), new KualiDecimalMoney(14), new KualiDecimalMoney(3.4));
+        runGrossUpTest(new KualiDecimalMoney(12.84), new KualiDecimalMoney(14), new KualiDecimalMoney(3.4));
+        runGrossUpTest(new KualiDecimalMoney(8456234.23), new KualiDecimalMoney(14), new KualiDecimalMoney(3.4));
     }
 
 
-    private void runGrossUpTest(KualiDecimal checkAmount, KualiDecimal federalTax, KualiDecimal stateTax) {
+    private void runGrossUpTest(KualiDecimalMoney checkAmount, KualiDecimalMoney federalTax, KualiDecimalMoney stateTax) {
         dvDocument.setDisbVchrCheckTotalAmount(checkAmount);
         dvDocument.getSourceAccountingLine(0).setAmount(checkAmount);
         dvDocument.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(federalTax);

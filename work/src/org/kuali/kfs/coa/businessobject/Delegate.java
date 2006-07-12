@@ -31,7 +31,7 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.DocumentType;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -44,8 +44,8 @@ public class Delegate extends BusinessObjectBase {
      * Default no-arg constructor.
      */
     public Delegate() {
-        this.finDocApprovalFromThisAmt = new KualiDecimal(0);
-        this.finDocApprovalToThisAmount = new KualiDecimal(0);
+        this.finDocApprovalFromThisAmt = new KualiDecimalMoney(0);
+        this.finDocApprovalToThisAmount = new KualiDecimalMoney(0);
         this.accountDelegateActiveIndicator = true;
     }
 
@@ -53,11 +53,11 @@ public class Delegate extends BusinessObjectBase {
     private String accountNumber;
     private String financialDocumentTypeCode;
     private String accountDelegateSystemId;
-    private KualiDecimal finDocApprovalFromThisAmt;
+    private KualiDecimalMoney finDocApprovalFromThisAmt;
     private boolean accountsDelegatePrmrtIndicator;
     private boolean accountDelegateActiveIndicator;
     private Timestamp accountDelegateStartDate;
-    private KualiDecimal finDocApprovalToThisAmount;
+    private KualiDecimalMoney finDocApprovalToThisAmount;
 
     private Chart chart;
     private Account account;
@@ -144,7 +144,7 @@ public class Delegate extends BusinessObjectBase {
      * @return - Returns the finDocApprovalFromThisAmt
      * 
      */
-    public KualiDecimal getFinDocApprovalFromThisAmt() {
+    public KualiDecimalMoney getFinDocApprovalFromThisAmt() {
         return finDocApprovalFromThisAmt;
     }
 
@@ -154,7 +154,7 @@ public class Delegate extends BusinessObjectBase {
      * @param - finDocApprovalFromThisAmt The finDocApprovalFromThisAmt to set.
      * 
      */
-    public void setFinDocApprovalFromThisAmt(KualiDecimal finDocApprovalFromThisAmt) {
+    public void setFinDocApprovalFromThisAmt(KualiDecimalMoney finDocApprovalFromThisAmt) {
         this.finDocApprovalFromThisAmt = finDocApprovalFromThisAmt;
     }
 
@@ -224,7 +224,7 @@ public class Delegate extends BusinessObjectBase {
      * @return - Returns the finDocApprovalToThisAmount
      * 
      */
-    public KualiDecimal getFinDocApprovalToThisAmount() {
+    public KualiDecimalMoney getFinDocApprovalToThisAmount() {
         return finDocApprovalToThisAmount;
     }
 
@@ -234,7 +234,7 @@ public class Delegate extends BusinessObjectBase {
      * @param - finDocApprovalToThisAmount The finDocApprovalToThisAmount to set.
      * 
      */
-    public void setFinDocApprovalToThisAmount(KualiDecimal finDocApprovalToThisAmount) {
+    public void setFinDocApprovalToThisAmount(KualiDecimalMoney finDocApprovalToThisAmount) {
         this.finDocApprovalToThisAmount = finDocApprovalToThisAmount;
     }
 

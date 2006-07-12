@@ -31,7 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.TypedArrayList;
 
 /**
@@ -43,7 +43,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     private String dvConferenceDestinationName;
     private Date disbVchrConferenceStartDate;
     private Date disbVchrConferenceEndDate;
-    private KualiDecimal disbVchrConferenceTotalAmt;
+    private KualiDecimalMoney disbVchrConferenceTotalAmt;
     private String disbVchrExpenseCode;
 
 
@@ -164,8 +164,8 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
      * @return - Returns the disbVchrConferenceTotalAmt
      * 
      */
-    public KualiDecimal getDisbVchrConferenceTotalAmt() {
-        KualiDecimal totalConferenceAmount = new KualiDecimal(0);
+    public KualiDecimalMoney getDisbVchrConferenceTotalAmt() {
+        KualiDecimalMoney totalConferenceAmount = new KualiDecimalMoney(0);
 
         if (dvPreConferenceRegistrants != null) {
             for (Iterator iter = dvPreConferenceRegistrants.iterator(); iter.hasNext();) {
@@ -184,7 +184,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
      * @param - disbVchrConferenceTotalAmt The disbVchrConferenceTotalAmt to set.
      * 
      */
-    public void setDisbVchrConferenceTotalAmt(KualiDecimal disbVchrConferenceTotalAmt) {
+    public void setDisbVchrConferenceTotalAmt(KualiDecimalMoney disbVchrConferenceTotalAmt) {
         this.disbVchrConferenceTotalAmt = disbVchrConferenceTotalAmt;
     }
 

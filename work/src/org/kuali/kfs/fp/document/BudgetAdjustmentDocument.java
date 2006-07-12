@@ -30,7 +30,7 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.exceptions.ApplicationParameterException;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
@@ -100,8 +100,8 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     /**
      * Returns the total current budget amount from the source lines.
      */
-    public KualiDecimal getSourceCurrentBudgetTotal() {
-        KualiDecimal currentBudgetTotal = new KualiDecimal(0);
+    public KualiDecimalMoney getSourceCurrentBudgetTotal() {
+        KualiDecimalMoney currentBudgetTotal = new KualiDecimalMoney(0);
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -114,8 +114,8 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     /**
      * Returns the total current budget amount from the target lines.
      */
-    public KualiDecimal getTargetCurrentBudgetTotal() {
-        KualiDecimal currentBudgetTotal = new KualiDecimal(0);
+    public KualiDecimalMoney getTargetCurrentBudgetTotal() {
+        KualiDecimalMoney currentBudgetTotal = new KualiDecimalMoney(0);
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
