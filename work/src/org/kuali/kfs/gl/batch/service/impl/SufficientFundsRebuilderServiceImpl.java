@@ -37,7 +37,7 @@ import org.kuali.core.dao.OptionsDao;
 import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.gl.batch.sufficientFunds.SufficientFundsReport;
@@ -256,7 +256,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
 
                     if (currentSfbl != null) {
                         // Only save if there is a balance in one of the 3 buckets
-                        if ((currentSfbl.getAccountActualExpenditureAmt().compareTo(KualiDecimal.ZERO) != 0) || (currentSfbl.getAccountEncumbranceAmount().compareTo(KualiDecimal.ZERO) != 0) || (currentSfbl.getCurrentBudgetBalanceAmount().compareTo(KualiDecimal.ZERO) != 0)) {
+                        if ((currentSfbl.getAccountActualExpenditureAmt().compareTo(KualiDecimalMoney.ZERO) != 0) || (currentSfbl.getAccountEncumbranceAmount().compareTo(KualiDecimalMoney.ZERO) != 0) || (currentSfbl.getCurrentBudgetBalanceAmount().compareTo(KualiDecimalMoney.ZERO) != 0)) {
 
                             sufficientFundBalancesDao.save(currentSfbl);
                             ++sfblInsertedCount;
@@ -269,9 +269,9 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
                     currentSfbl.setAccountNumber(sfrbAccount.getAccountNumber());
                     currentSfbl.setFinancialObjectCode(currentFinObjectCd);
                     currentSfbl.setAccountSufficientFundsCode(sfrbAccount.getAccountSufficientFundsCode());
-                    currentSfbl.setAccountActualExpenditureAmt(new KualiDecimal(0.0));
-                    currentSfbl.setAccountEncumbranceAmount(new KualiDecimal(0.0));
-                    currentSfbl.setCurrentBudgetBalanceAmount(new KualiDecimal(0.0));
+                    currentSfbl.setAccountActualExpenditureAmt(new KualiDecimalMoney(0.0));
+                    currentSfbl.setAccountEncumbranceAmount(new KualiDecimalMoney(0.0));
+                    currentSfbl.setCurrentBudgetBalanceAmount(new KualiDecimalMoney(0.0));
                 }
 
                 if ("CG".equalsIgnoreCase(sfrbAccount.getSubFundGroup().getFundGroupCode())) {
@@ -288,7 +288,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
 
             // save the last one
             if (currentSfbl != null) {
-                if ((currentSfbl.getAccountActualExpenditureAmt().compareTo(KualiDecimal.ZERO) != 0) || (currentSfbl.getAccountEncumbranceAmount().compareTo(KualiDecimal.ZERO) != 0) || (currentSfbl.getCurrentBudgetBalanceAmount().compareTo(KualiDecimal.ZERO) != 0)) {
+                if ((currentSfbl.getAccountActualExpenditureAmt().compareTo(KualiDecimalMoney.ZERO) != 0) || (currentSfbl.getAccountEncumbranceAmount().compareTo(KualiDecimalMoney.ZERO) != 0) || (currentSfbl.getCurrentBudgetBalanceAmount().compareTo(KualiDecimalMoney.ZERO) != 0)) {
                     sufficientFundBalancesDao.save(currentSfbl);
                     ++sfblInsertedCount;
                 }

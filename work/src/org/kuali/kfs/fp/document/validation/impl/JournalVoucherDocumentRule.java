@@ -62,7 +62,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.ObjectType;
@@ -231,8 +231,8 @@ public class JournalVoucherDocumentRule extends TransactionalDocumentRuleBase {
      *      org.kuali.core.bo.AccountingLine)
      */
     public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
-        KualiDecimal ZERO = new KualiDecimal(0);
-        KualiDecimal amount = accountingLine.getAmount();
+        KualiDecimalMoney ZERO = new KualiDecimalMoney(0);
+        KualiDecimalMoney amount = accountingLine.getAmount();
 
         JournalVoucherDocument jvDoc = (JournalVoucherDocument) document;
         jvDoc.refreshReferenceObject(BALANCE_TYPE);
@@ -462,7 +462,7 @@ public class JournalVoucherDocumentRule extends TransactionalDocumentRuleBase {
                 String accountNumber = sourceAccountingLine.getAccountNumber();
                 String financialObjectLevelCode = sourceAccountingLine.getObjectCode().getFinancialObjectLevelCode();
                 Integer fiscalYear = sourceAccountingLine.getPostingYear();
-                KualiDecimal lineAmount = sourceAccountingLine.getAmount();
+                KualiDecimalMoney lineAmount = sourceAccountingLine.getAmount();
                 String financialObjectTypeCode = sourceAccountingLine.getObjectTypeCode();
                 String sufficientFundsObjectCode = SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(chartOfAccountsCode, financialObjectCode, accountSufficientFundsCode, financialObjectLevelCode);
 

@@ -38,7 +38,7 @@ import org.kuali.PropertyConstants;
 import org.kuali.core.bo.user.KualiGroup;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.WebUtils;
 import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
@@ -152,7 +152,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
 
         try {
             // call service to calculate per diem
-            KualiDecimal perDiemAmount = SpringServiceLocator.getDisbursementVoucherTravelService().calculatePerDiemAmount(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDisbVchrPerdiemRate());
+            KualiDecimalMoney perDiemAmount = SpringServiceLocator.getDisbursementVoucherTravelService().calculatePerDiemAmount(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDisbVchrPerdiemRate());
 
             dvDocument.getDvNonEmployeeTravel().setDisbVchrPerdiemCalculatedAmt(perDiemAmount);
             dvDocument.getDvNonEmployeeTravel().setDisbVchrPerdiemActualAmount(perDiemAmount);
@@ -192,7 +192,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
 
         if (GlobalVariables.getErrorMap().isEmpty()) {
             // call service to calculate mileage amount
-            KualiDecimal mileageAmount = SpringServiceLocator.getDisbursementVoucherTravelService().calculateMileageAmount(dvDocument.getDvNonEmployeeTravel().getDvPersonalCarMileageAmount(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp());
+            KualiDecimalMoney mileageAmount = SpringServiceLocator.getDisbursementVoucherTravelService().calculateMileageAmount(dvDocument.getDvNonEmployeeTravel().getDvPersonalCarMileageAmount(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp());
 
             dvDocument.getDvNonEmployeeTravel().setDisbVchrMileageCalculatedAmt(mileageAmount);
             dvDocument.getDvNonEmployeeTravel().setDisbVchrPersonalCarAmount(mileageAmount);
