@@ -28,7 +28,7 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 /**
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
@@ -36,7 +36,7 @@ import org.kuali.core.util.KualiDecimal;
 public class TravelPerDiem extends BusinessObjectBase {
     private Integer fiscalYear;
     private String perDiemCountryName;
-    private KualiDecimal perDiemRate;
+    private KualiDecimalMoney perDiemRate;
     private String perDiemCountryText;
 
     /**
@@ -91,14 +91,14 @@ public class TravelPerDiem extends BusinessObjectBase {
     /**
      * @return Returns the perDiemRate.
      */
-    public KualiDecimal getPerDiemRate() {
+    public KualiDecimalMoney getPerDiemRate() {
         return perDiemRate;
     }
 
     /**
      * @param perDiemRate The perDiemRate to set.
      */
-    public void setPerDiemRate(KualiDecimal perDiemRate) {
+    public void setPerDiemRate(KualiDecimalMoney perDiemRate) {
         this.perDiemRate = perDiemRate;
     }
 
