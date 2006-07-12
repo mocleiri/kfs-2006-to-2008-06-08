@@ -32,7 +32,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.OriginationCode;
 import org.kuali.core.bo.user.Options;
 import org.kuali.core.document.DocumentType;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
@@ -47,7 +47,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: OriginEntry.java,v 1.29 2006-06-14 12:26:43 abyrne Exp $
+ * @version $Id: OriginEntry.java,v 1.29.2.1 2006-07-12 17:41:20 ckirsche Exp $
  */
 public class OriginEntry extends BusinessObjectBase implements Transaction {
     static final long serialVersionUID = -2498312988235747448L;
@@ -75,7 +75,7 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
     private String transactionDebitCreditCode;
     private String transactionEncumbranceUpdateCode;
     private Integer transactionLedgerEntrySequenceNumber;
-    private KualiDecimal transactionLedgerEntryAmount;
+    private KualiDecimalMoney transactionLedgerEntryAmount;
     private String transactionLedgerEntryDescription;
     private String universityFiscalPeriodCode;
     private Integer universityFiscalYear;
@@ -127,7 +127,7 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
         setUniversityFiscalPeriodCode(Constants.EMPTY_STRING);
 
         setTransactionLedgerEntrySequenceNumber(new Integer(1));
-        setTransactionLedgerEntryAmount(new KualiDecimal(0));
+        setTransactionLedgerEntryAmount(new KualiDecimalMoney(0));
         setTransactionLedgerEntryDescription(Constants.EMPTY_STRING);
         setTransactionDate(null);
         setTransactionDebitCreditCode(Constants.EMPTY_STRING);
@@ -249,7 +249,7 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
             setTransactionLedgerEntrySequenceNumber(null);
         }
         setTransactionLedgerEntryDescription(getValue(line, 51, 91));
-        setTransactionLedgerEntryAmount(new KualiDecimal(line.substring(91, 108).trim()));
+        setTransactionLedgerEntryAmount(new KualiDecimalMoney(line.substring(91, 108).trim()));
         setTransactionDebitCreditCode(line.substring(108, 109));
         setTransactionDate(parseDate(line.substring(109, 119), false));
         setOrganizationDocumentNumber(getValue(line, 119, 129));
@@ -584,11 +584,11 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
         this.transactionLedgerEntrySequenceNumber = transactionLedgerEntrySequenceNumber;
     }
 
-    public KualiDecimal getTransactionLedgerEntryAmount() {
+    public KualiDecimalMoney getTransactionLedgerEntryAmount() {
         return transactionLedgerEntryAmount;
     }
 
-    public void setTransactionLedgerEntryAmount(KualiDecimal transactionLedgerEntryAmount) {
+    public void setTransactionLedgerEntryAmount(KualiDecimalMoney transactionLedgerEntryAmount) {
         this.transactionLedgerEntryAmount = transactionLedgerEntryAmount;
     }
 
