@@ -7,7 +7,7 @@ package org.kuali.module.gl.bo;
 import java.sql.Date;
 
 import org.kuali.core.bo.user.Options;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -76,7 +76,7 @@ public interface Transaction {
 
     public Integer getTransactionLedgerEntrySequenceNumber();
 
-    public KualiDecimal getTransactionLedgerEntryAmount();
+    public KualiDecimalMoney getTransactionLedgerEntryAmount();
 
     public String getTransactionLedgerEntryDescription();
 

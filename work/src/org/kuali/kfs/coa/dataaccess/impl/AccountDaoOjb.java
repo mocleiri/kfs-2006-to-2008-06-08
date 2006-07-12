@@ -32,7 +32,7 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.core.AccountResponsibility;
 import org.kuali.core.bo.user.KualiUser;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
@@ -92,7 +92,7 @@ public class AccountDaoOjb extends PersistenceBrokerTemplate implements AccountD
         Collection accounts = getCollectionByQuery(QueryFactory.newQuery(Account.class, criteria));
         for (Iterator iter = accounts.iterator(); iter.hasNext();) {
             Account account = (Account) iter.next();
-            AccountResponsibility accountResponsibility = new AccountResponsibility(AccountResponsibility.FISCAL_OFFICER_RESPONSIBILITY, new KualiDecimal("0"), new KualiDecimal("0"), "", account);
+            AccountResponsibility accountResponsibility = new AccountResponsibility(AccountResponsibility.FISCAL_OFFICER_RESPONSIBILITY, new KualiDecimalMoney("0"), new KualiDecimalMoney("0"), "", account);
             fiscalOfficerResponsibilities.add(accountResponsibility);
         }
         return fiscalOfficerResponsibilities;
