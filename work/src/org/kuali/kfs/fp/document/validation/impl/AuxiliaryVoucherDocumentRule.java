@@ -65,7 +65,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.ObjLevel;
@@ -129,7 +129,7 @@ public class AuxiliaryVoucherDocumentRule extends TransactionalDocumentRuleBase 
      */
     public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
         boolean retval = true;
-        KualiDecimal amount = accountingLine.getAmount();
+        KualiDecimalMoney amount = accountingLine.getAmount();
 
         AuxiliaryVoucherDocument avDoc = (AuxiliaryVoucherDocument) document;
 
