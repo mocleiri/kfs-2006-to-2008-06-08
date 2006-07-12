@@ -35,7 +35,7 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.TransferOfFundsDocument;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
@@ -159,10 +159,10 @@ public class TransferOfFundsDocumentRule extends TransactionalDocumentRuleBase i
         lines.addAll(tofDoc.getTargetAccountingLines());
 
         // sum the from lines.
-        KualiDecimal mandatoryTransferFromAmount = new KualiDecimal(0);
-        KualiDecimal nonMandatoryTransferFromAmount = new KualiDecimal(0);
-        KualiDecimal mandatoryTransferToAmount = new KualiDecimal(0);
-        KualiDecimal nonMandatoryTransferToAmount = new KualiDecimal(0);
+        KualiDecimalMoney mandatoryTransferFromAmount = new KualiDecimalMoney(0);
+        KualiDecimalMoney nonMandatoryTransferFromAmount = new KualiDecimalMoney(0);
+        KualiDecimalMoney mandatoryTransferToAmount = new KualiDecimalMoney(0);
+        KualiDecimalMoney nonMandatoryTransferToAmount = new KualiDecimalMoney(0);
 
         for (Iterator i = lines.iterator(); i.hasNext();) {
             AccountingLine line = (AccountingLine) i.next();
@@ -260,7 +260,7 @@ public class TransferOfFundsDocumentRule extends TransactionalDocumentRuleBase i
         SufficientFundsItem item = null;
         String objectType = accountingLine.getObjectTypeCode();
         String offsetDebitCreditCode = null;
-        KualiDecimal lineAmount = accountingLine.getAmount();
+        KualiDecimalMoney lineAmount = accountingLine.getAmount();
         if (lineAmount == null) {
             throw new IllegalArgumentException("Invalid (null) line amount");
         }
@@ -276,7 +276,7 @@ public class TransferOfFundsDocumentRule extends TransactionalDocumentRuleBase i
                 }
             }
             else {
-                lineAmount = lineAmount.multiply(new KualiDecimal(Constants.NEGATIVE_ONE));
+                lineAmount = lineAmount.multiply(new KualiDecimalMoney(Constants.NEGATIVE_ONE));
                 if (accountingLine.isSourceAccountingLine()) {
                     offsetDebitCreditCode = Constants.GL_DEBIT_CODE;
                 }
