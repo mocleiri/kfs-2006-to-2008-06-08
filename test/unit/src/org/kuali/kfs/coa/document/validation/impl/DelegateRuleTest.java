@@ -27,7 +27,7 @@ import java.util.Calendar;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Delegate;
 
 /**
@@ -164,7 +164,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         delegate.setAccountNumber(ACCOUNT_GOOD_1);
         delegate.setFinancialDocumentTypeCode(DOCTYPE_GOOD_1);
         delegate.setAccountDelegateSystemId(USERID_GOOD_1);
-        delegate.setFinDocApprovalFromThisAmt(new KualiDecimal(BAD_FROM_AMT));
+        delegate.setFinDocApprovalFromThisAmt(new KualiDecimalMoney(BAD_FROM_AMT));
         delegate.refresh();
         return delegate;
     }
@@ -175,7 +175,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         delegate.setAccountNumber(ACCOUNT_GOOD_1);
         delegate.setFinancialDocumentTypeCode(DOCTYPE_GOOD_1);
         delegate.setAccountDelegateSystemId(USERID_GOOD_1);
-        delegate.setFinDocApprovalToThisAmount(new KualiDecimal(BAD_TO_AMT));
+        delegate.setFinDocApprovalToThisAmount(new KualiDecimalMoney(BAD_TO_AMT));
         delegate.refresh();
         return delegate;
     }
@@ -186,7 +186,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         delegate.setAccountNumber(ACCOUNT_GOOD_1);
         delegate.setFinancialDocumentTypeCode(DOCTYPE_GOOD_1);
         delegate.setAccountDelegateSystemId(USERID_GOOD_1);
-        delegate.setFinDocApprovalToThisAmount(new KualiDecimal(GOOD_FROM_AMT));
+        delegate.setFinDocApprovalToThisAmount(new KualiDecimalMoney(GOOD_FROM_AMT));
         delegate.setFinDocApprovalToThisAmount(null);
         delegate.refresh();
         return delegate;
@@ -199,7 +199,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         delegate.setFinancialDocumentTypeCode(DOCTYPE_GOOD_1);
         delegate.setAccountDelegateSystemId(USERID_GOOD_1);
         delegate.setFinDocApprovalFromThisAmt(null);
-        delegate.setFinDocApprovalToThisAmount(new KualiDecimal(GOOD_TO_AMT));
+        delegate.setFinDocApprovalToThisAmount(new KualiDecimalMoney(GOOD_TO_AMT));
         delegate.refresh();
         return delegate;
     }
@@ -210,8 +210,8 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         delegate.setAccountNumber(ACCOUNT_GOOD_1);
         delegate.setFinancialDocumentTypeCode(DOCTYPE_GOOD_1);
         delegate.setAccountDelegateSystemId(USERID_GOOD_1);
-        delegate.setFinDocApprovalFromThisAmt(new KualiDecimal(GOOD_FROM_AMT));
-        delegate.setFinDocApprovalToThisAmount(new KualiDecimal(BAD_TO_AMT_LESS_THAN));
+        delegate.setFinDocApprovalFromThisAmt(new KualiDecimalMoney(GOOD_FROM_AMT));
+        delegate.setFinDocApprovalToThisAmount(new KualiDecimalMoney(BAD_TO_AMT_LESS_THAN));
         delegate.refresh();
         return delegate;
     }

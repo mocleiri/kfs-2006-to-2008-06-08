@@ -30,7 +30,7 @@ import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.exceptions.TooFewFieldsException;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 
@@ -51,7 +51,7 @@ import org.kuali.module.financial.document.JournalVoucherDocument;
  */
 public class JournalVoucherAccountingLineParser extends AccountingLineParserBase {
 
-    private static final KualiDecimal ZERO = new KualiDecimal("0.00");
+    private static final KualiDecimalMoney ZERO = new KualiDecimalMoney("0.00");
     private static final String EXTERNAL_ENCUMBRANCE = "EX";
 
     private static final int EXTERNAL_ENCUMBRANCE_EXPECTED_FIELDS = 15;
@@ -101,7 +101,7 @@ public class JournalVoucherAccountingLineParser extends AccountingLineParserBase
         String orgRefId = parseOrganizationReferenceId(accountingLineData);
         String budgetYear = parseBudgetYear(accountingLineData);
         String overrideCode = parseOverrideCode(accountingLineData);
-        KualiDecimal amount;
+        KualiDecimalMoney amount;
         if (getExpectedFieldCount() > NON_OFFSET_GENERATION_EXPECTED_FIELDS) {
             StringBuffer debitOrCredit = new StringBuffer();
             amount = parseDebitCreditAmount(accountingLineData, debitOrCredit);
@@ -227,20 +227,20 @@ public class JournalVoucherAccountingLineParser extends AccountingLineParserBase
      * Extracts the Debit Amount from the parsed CSV data.
      * 
      * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link KualiDecimal}</code> instance of the debit amount
+     * @return <code>{@link KualiDecimalMoney}</code> instance of the debit amount
      */
-    private KualiDecimal parseDebitAmount(String[] lineData) {
-        return new KualiDecimal(parseField(lineData, DEBIT_AMOUNT_IDX));
+    private KualiDecimalMoney parseDebitAmount(String[] lineData) {
+        return new KualiDecimalMoney(parseField(lineData, DEBIT_AMOUNT_IDX));
     }
 
     /**
      * Extracts the Credit Amount from the parsed CSV data.
      * 
      * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link KualiDecimal}</code> instance of the credit amount
+     * @return <code>{@link KualiDecimalMoney}</code> instance of the credit amount
      */
-    private KualiDecimal parseCreditAmount(String[] lineData) {
-        return new KualiDecimal(parseField(lineData, CREDIT_AMOUNT_IDX));
+    private KualiDecimalMoney parseCreditAmount(String[] lineData) {
+        return new KualiDecimalMoney(parseField(lineData, CREDIT_AMOUNT_IDX));
     }
 
     /**
@@ -248,10 +248,10 @@ public class JournalVoucherAccountingLineParser extends AccountingLineParserBase
      * <code>parseDebitAmount()</code> and <code>parseCreditAmount</code>.
      * 
      * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link KualiDecimal}</code> instance of the amount.
+     * @return <code>{@link KualiDecimalMoney}</code> instance of the amount.
      */
-    private KualiDecimal parseDebitCreditAmount(String[] lineData, StringBuffer debitOrCredit) {
-        KualiDecimal amount = null;
+    private KualiDecimalMoney parseDebitCreditAmount(String[] lineData, StringBuffer debitOrCredit) {
+        KualiDecimalMoney amount = null;
         if (parseDebitAmount(lineData).compareTo(ZERO) != 0) {
             amount = parseDebitAmount(lineData);
             debitOrCredit.append(Constants.GL_DEBIT_CODE);

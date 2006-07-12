@@ -36,7 +36,7 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.KualiRuleService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjLevel;
 import org.kuali.module.chart.service.AccountService;
@@ -141,7 +141,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
      * @param documentClass
      * @return true is sufficientFunds were found
      */
-    private boolean checkSufficientFunds(List propertyNames, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, KualiDecimal amount, Class documentClass) {
+    private boolean checkSufficientFunds(List propertyNames, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, KualiDecimalMoney amount, Class documentClass) {
 
         if (universityFiscalYear == null) {
             throw new IllegalArgumentException("Invalid (null) universityFiscalYear");
@@ -184,9 +184,9 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         // fp_sasfc:32-1
         if (sfBalances == null) {
             sfBalances = new SufficientFundBalances();
-            sfBalances.setCurrentBudgetBalanceAmount(new KualiDecimal(0));
-            sfBalances.setAccountActualExpenditureAmt(new KualiDecimal(0));
-            sfBalances.setAccountEncumbranceAmount(new KualiDecimal(0));
+            sfBalances.setCurrentBudgetBalanceAmount(new KualiDecimalMoney(0));
+            sfBalances.setAccountActualExpenditureAmt(new KualiDecimalMoney(0));
+            sfBalances.setAccountEncumbranceAmount(new KualiDecimalMoney(0));
             sfBalances.setChartOfAccountsCode(chartOfAccountsCode);
             sfBalances.setAccountNumber(accountNumber);
             sfBalances.setAccountSufficientFundsCode(account.getAccountSufficientFundsCode());
@@ -210,16 +210,16 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
      * @param sufficientFundBalances
      * @return true if sufficent funds were found
      */
-    private boolean calculatePLEBuckets(List propertyNames, boolean isYearEndDocument, KualiDecimal lineAmount, String sufficientFundsObjectCode, SufficientFundBalances sufficientFundBalances) {
+    private boolean calculatePLEBuckets(List propertyNames, boolean isYearEndDocument, KualiDecimalMoney lineAmount, String sufficientFundsObjectCode, SufficientFundBalances sufficientFundBalances) {
         Integer universityFiscalYear = sufficientFundBalances.getUniversityFiscalYear();
         String chartOfAccountsCode = sufficientFundBalances.getChartOfAccountsCode();
         String accountNumber = sufficientFundBalances.getAccountNumber();
         String accountSufficientFundsCode = sufficientFundBalances.getAccountSufficientFundsCode();
-        KualiDecimal pendingActual = null;
-        KualiDecimal pendingEncumb = null;
-        KualiDecimal pendingBudget = null;
-        KualiDecimal pfyrBudget = null;
-        KualiDecimal pfyrEncum = null;
+        KualiDecimalMoney pendingActual = null;
+        KualiDecimalMoney pendingEncumb = null;
+        KualiDecimalMoney pendingBudget = null;
+        KualiDecimalMoney pfyrBudget = null;
+        KualiDecimalMoney pfyrEncum = null;
 
         // retrieve system options
         Options options = retrieveOptions(universityFiscalYear);
@@ -259,8 +259,8 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
      * @param sufficientFundsObjectCode
      * @return true if sufficient funds where found
      */
-    private boolean hasSufficientFunds(List propertyNames, boolean financialBeginBalanceLoadInd, KualiDecimal lineAmount, String sufficientFundsCode, KualiDecimal pfyrBudget, KualiDecimal pfyrEncum, KualiDecimal pendingActual, KualiDecimal pendingBudget, KualiDecimal pendingEncumb, SufficientFundBalances sufficientFundBalances, String sufficientFundsObjectCode) {
-        KualiDecimal available = new KualiDecimal(0);
+    private boolean hasSufficientFunds(List propertyNames, boolean financialBeginBalanceLoadInd, KualiDecimalMoney lineAmount, String sufficientFundsCode, KualiDecimalMoney pfyrBudget, KualiDecimalMoney pfyrEncum, KualiDecimalMoney pendingActual, KualiDecimalMoney pendingBudget, KualiDecimalMoney pendingEncumb, SufficientFundBalances sufficientFundBalances, String sufficientFundsObjectCode) {
+        KualiDecimalMoney available = new KualiDecimalMoney(0);
 
 
         if (StringUtils.equals(Constants.SF_TYPE_CASH_AT_ACCOUNT, sufficientFundsCode)) {
