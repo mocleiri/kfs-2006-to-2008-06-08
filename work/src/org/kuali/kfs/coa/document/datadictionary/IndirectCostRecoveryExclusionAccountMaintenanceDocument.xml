@@ -7,8 +7,8 @@
 	<maintenanceDocument>
 		<businessObjectClass>org.kuali.module.chart.bo.IndirectCostRecoveryExclusionAccount</businessObjectClass>
 		<maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-		<preRulesCheckClass>org.kuali.module.chart.rules.IndirectCostRecoveryExclusionAccountPreRules</preRulesCheckClass>
-   		<documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+
+   		<documentAuthorizerClass>org.kuali.core.document.DocumentAuthorizerBase</documentAuthorizerClass>
 
         <authorizations>
             <authorization action="initiate">
@@ -19,7 +19,7 @@
         </authorizations>
 
 		<documentTypeName>KualiIndirectCostRecoveryExclusionAccountMaintenanceDocument</documentTypeName>
-		<documentTypeCode>ICRA</documentTypeCode>
+		<documentTypeCode>IRM</documentTypeCode>
 		<label>Indirect Cost Recovery Exclusion Account Maintenance Document</label>
 		<shortLabel>ICRExclusionAccountMaintenanceDoc</shortLabel>
 		<summary>Indirect Cost Recovery Exclusion Account Maintenance Document</summary>
@@ -28,30 +28,19 @@
 		</description>
 		
         <lockingKeys>
-			<field attributeName="chartOfAccountsCode" />
-			<field attributeName="accountNumber" />
-			<field attributeName="financialObjectChartOfAccountCode" />
-			<field attributeName="financialObjectCode" />
+			<field attributeName="chartOfAccounts.chartOfAccountsCode" />
+			<field attributeName="account.accountNumber" />
+			<field attributeName="objectChartOfAccounts.chartOfAccountsCode" />
+			<field attributeName="object.financialObjectCode" />
 		</lockingKeys>	 		
-
-		<defaultExistenceChecks>
-			<reference  attributeName="chart" 
-						attributeToHighlightOnFail="chartOfAccountsCode" />
-			<reference  attributeName="account" 
-						attributeToHighlightOnFail="accountNumber" />
-			<reference  attributeName="financialObjectChartOfAccount" 
-						attributeToHighlightOnFail="financialObjectChartOfAccountCode" />
-			<reference  attributeName="objectCodeCurrent" 
-						attributeToHighlightOnFail="financialObjectCode" />			
-		</defaultExistenceChecks>	
-			
+		
 		<maintainableSections>
 			<maintainableSection title="Edit ICR Exclusion Account">
                 <maintainableItems>
-					<maintainableField name="chartOfAccountsCode" required="true" />
-					<maintainableField name="accountNumber" required="true" />
-					<maintainableField name="financialObjectChartOfAccountCode" required="true" />
-					<maintainableField name="financialObjectCode" required="true" />
+					<maintainableField name="chartOfAccounts.chartOfAccountsCode" required="true" />
+					<maintainableField name="account.accountNumber" required="true" />
+					<maintainableField name="objectChartOfAccounts.chartOfAccountsCode" required="true" />
+					<maintainableField name="object.financialObjectCode" required="true" />
 					<maintainableField name="versionNumber" />
                 </maintainableItems>
 			</maintainableSection>
