@@ -44,7 +44,7 @@ import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
@@ -542,11 +542,11 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
             /* for foreign source or treaty exempt, non reportable, tax percents must be 0 and gross indicator can not be checked */
             if (document.getDvNonResidentAlienTax().isForeignSourceIncomeCode() || document.getDvNonResidentAlienTax().isIncomeTaxTreatyExemptCode() || NRA_TAX_INCOME_CLASS_NON_REPORTABLE.equals(document.getDvNonResidentAlienTax().getIncomeClassCode())) {
 
-                if ((document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent() != null && !(new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent())))) {
+                if ((document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent() != null && !(new KualiDecimalMoney(0).equals(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent())))) {
                     errors.put(PropertyConstants.FEDERAL_INCOME_TAX_PERCENT, KeyConstants.ERROR_DV_FEDERAL_TAX_NOT_ZERO);
                 }
 
-                if ((document.getDvNonResidentAlienTax().getStateIncomeTaxPercent() != null && !(new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent())))) {
+                if ((document.getDvNonResidentAlienTax().getStateIncomeTaxPercent() != null && !(new KualiDecimalMoney(0).equals(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent())))) {
                     errors.put(PropertyConstants.STATE_INCOME_TAX_PERCENT, KeyConstants.ERROR_DV_STATE_TAX_NOT_ZERO);
                 }
 
@@ -630,21 +630,21 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
 
         /* total on nonemployee travel must equal Check Total */
         /* if tax has been take out, need to add back in the tax amount for the check */
-        KualiDecimal paidAmount = document.getDisbVchrCheckTotalAmount();
+        KualiDecimalMoney paidAmount = document.getDisbVchrCheckTotalAmount();
         paidAmount.add(SpringServiceLocator.getDisbursementVoucherTaxService().getNonResidentAlienTaxAmount(document));
         if (paidAmount.compareTo(document.getDvNonEmployeeTravel().getTotalTravelAmount()) != 0) {
             errors.putWithoutFullErrorPath(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_DV_TRAVEL_CHECK_TOTAL);
         }
 
         /* make sure per diem fields have not changed since the per diem amount calculation */
-        KualiDecimal calculatedPerDiem = SpringServiceLocator.getDisbursementVoucherTravelService().calculatePerDiemAmount(document.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), document.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), document.getDvNonEmployeeTravel().getDisbVchrPerdiemRate());
+        KualiDecimalMoney calculatedPerDiem = SpringServiceLocator.getDisbursementVoucherTravelService().calculatePerDiemAmount(document.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), document.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), document.getDvNonEmployeeTravel().getDisbVchrPerdiemRate());
         if (calculatedPerDiem.compareTo(document.getDvNonEmployeeTravel().getDisbVchrPerdiemCalculatedAmt()) != 0) {
             errors.putWithoutFullErrorPath(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_DV_PER_DIEM_CALC_CHANGE);
         }
 
         /* make sure mileage fields have not changed since the mileage amount calculation */
         if (document.getDvNonEmployeeTravel().getDisbVchrMileageCalculatedAmt() != null && document.getDvNonEmployeeTravel().getDisbVchrPersonalCarAmount() != null) {
-            KualiDecimal calculatedMileageAmount = SpringServiceLocator.getDisbursementVoucherTravelService().calculateMileageAmount(document.getDvNonEmployeeTravel().getDvPersonalCarMileageAmount(), document.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp());
+            KualiDecimalMoney calculatedMileageAmount = SpringServiceLocator.getDisbursementVoucherTravelService().calculateMileageAmount(document.getDvNonEmployeeTravel().getDvPersonalCarMileageAmount(), document.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp());
             if (calculatedMileageAmount.compareTo(document.getDvNonEmployeeTravel().getDisbVchrMileageCalculatedAmt()) != 0) {
                 errors.putWithoutFullErrorPath(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_DV_MILEAGE_CALC_CHANGE);
             }
@@ -675,7 +675,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
 
         /* total on prepaid travel must equal Check Total */
         /* if tax has been take out, need to add back in the tax amount for the check */
-        KualiDecimal paidAmount = document.getDisbVchrCheckTotalAmount();
+        KualiDecimalMoney paidAmount = document.getDisbVchrCheckTotalAmount();
         paidAmount.add(SpringServiceLocator.getDisbursementVoucherTaxService().getNonResidentAlienTaxAmount(document));
         if (paidAmount.compareTo(document.getDvPreConferenceDetail().getDisbVchrConferenceTotalAmt()) != 0) {
             errors.putWithoutFullErrorPath(Constants.GENERAL_PREPAID_TAB_ERRORS, KeyConstants.ERROR_DV_PREPAID_CHECK_TOTAL);
@@ -757,7 +757,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         String[] researchPaymentReasonCodes = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues(DV_DOCUMENT_PARAMETERS_GROUP_NM, RESEARCH_PAY_REASONS_PARM_NM);
 
         String researchPayLimit = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM);
-        KualiDecimal payLimit = new KualiDecimal(researchPayLimit);
+        KualiDecimalMoney payLimit = new KualiDecimalMoney(researchPayLimit);
 
         if (RulesUtils.makeSet(researchPaymentReasonCodes).contains(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode()) && document.getDisbVchrCheckTotalAmount().isGreaterEqual(payLimit) && !document.getDvPayeeDetail().isVendor()) {
             errors.put(PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYEE_ID_NUMBER, KeyConstants.ERROR_DV_RESEARCH_PAYMENT_PAYEE, payLimit.toString());
@@ -1214,7 +1214,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         String accountSufficientFundsCode = sourceAccountingLine.getAccount().getAccountSufficientFundsCode();
         String financialObjectCode = sourceAccountingLine.getFinancialObjectCode();
         String financialObjectLevelCode = sourceAccountingLine.getObjectCode().getFinancialObjectLevelCode();
-        KualiDecimal lineAmount = sourceAccountingLine.getAmount();
+        KualiDecimalMoney lineAmount = sourceAccountingLine.getAmount();
         Integer fiscalYear = sourceAccountingLine.getPostingYear();
         String financialObjectTypeCode = sourceAccountingLine.getObjectTypeCode();
 
