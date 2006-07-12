@@ -31,7 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.financial.document.CashManagementDocument;
 
 
@@ -45,7 +45,7 @@ public class Deposit extends BusinessObjectBase {
     // attributes
     private String depositTypeCode;
     private Date depositDate;
-    private KualiDecimal depositAmount;
+    private KualiDecimalMoney depositAmount;
     private String depositTicketNumber;
     // related objects and foreign keys
     private String depositBankCode;
@@ -135,7 +135,7 @@ public class Deposit extends BusinessObjectBase {
     /**
      * @return current value of depositAmount.
      */
-    public KualiDecimal getDepositAmount() {
+    public KualiDecimalMoney getDepositAmount() {
         return depositAmount;
     }
 
@@ -144,7 +144,7 @@ public class Deposit extends BusinessObjectBase {
      * 
      * @param depositAmount The depositAmount to set.
      */
-    public void setDepositAmount(KualiDecimal depositAmount) {
+    public void setDepositAmount(KualiDecimalMoney depositAmount) {
         this.depositAmount = depositAmount;
     }
 
