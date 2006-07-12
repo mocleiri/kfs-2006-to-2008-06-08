@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.RequisitionStatus">
+        <customAttributeEnabled>false</customAttributeEnabled>
+
+        <inquiry>
+            <title>Requisition Status Inquiry</title>
+
+            <inquiryFields>
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+                <field attributeName="requisitionStatusCode" />
+                <field attributeName="requisitionStatusDescription" />
+            </inquiryFields>
+        </inquiry>
+
+        <lookup>
+            <title>Requisition Status Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.RequisitionStatus">Create New</a>]]></menubar>
+
+            <instructions>Lookup an Requisition Status</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="FILL_IN" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
+                <lookupField attributeName="requisitionStatusCode" required="false" />
+                <lookupField attributeName="requisitionStatusDescription" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+                <field attributeName="requisitionStatusCode" />
+                <field attributeName="requisitionStatusDescription" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="dataObjectMaintenanceCodeActiveIndicator" forceUppercase="true">
+                <label>Data Object Maintenance Code Active Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>dataObjectMaintenanceCodeActiveIndicator</summary>
+                <description>dataObjectMaintenanceCodeActiveIndicator description...</description>
+			</attribute>
+
+            <attribute name="requisitionStatusCode" forceUppercase="true">
+                <label>Requisition Status Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>requisitionStatusCode</summary>
+                <description>requisitionStatusCode description...</description>
+			</attribute>
+
+            <attribute name="requisitionStatusDescription" forceUppercase="true">
+                <label>Requisition Status Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>requisitionStatusDescription</summary>
+                <description>requisitionStatusDescription description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

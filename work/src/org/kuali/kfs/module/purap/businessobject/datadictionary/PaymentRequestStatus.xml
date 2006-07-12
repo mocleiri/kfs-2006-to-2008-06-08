@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.PaymentRequestStatus">
+        <customAttributeEnabled>false</customAttributeEnabled>
+
+        <inquiry>
+            <title>Payment Request Status Inquiry</title>
+
+            <inquiryFields>
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+                <field attributeName="paymentRequestStatusCode" />
+                <field attributeName="paymentRequestStatusDescription" />
+            </inquiryFields>
+        </inquiry>
+
+        <lookup>
+            <title>Payment Request Status Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PaymentRequestStatus">Create New</a>]]></menubar>
+
+            <instructions>Lookup a Payment Request Status</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="FILL_IN" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
+                <lookupField attributeName="paymentRequestStatusCode" required="false" />
+                <lookupField attributeName="paymentRequestStatusDescription" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+                <field attributeName="paymentRequestStatusCode" />
+                <field attributeName="paymentRequestStatusDescription" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="dataObjectMaintenanceCodeActiveIndicator" forceUppercase="true">
+                <label>Data Object Maintenance Code Active Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>dataObjectMaintenanceCodeActiveIndicator</summary>
+                <description>dataObjectMaintenanceCodeActiveIndicator description...</description>
+			</attribute>
+
+            <attribute name="paymentRequestStatusCode" forceUppercase="true">
+                <label>Payment Request Status Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>paymentRequestStatusCode</summary>
+                <description>paymentRequestStatusCode description...</description>
+			</attribute>
+
+            <attribute name="paymentRequestStatusDescription" forceUppercase="true">
+                <label>Payment Request Status Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>paymentRequestStatusDescription</summary>
+                <description>paymentRequestStatusDescription description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>
