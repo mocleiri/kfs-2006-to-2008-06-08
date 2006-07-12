@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.Constants;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.module.financial.bo.CreditCardDetail;
@@ -48,7 +48,7 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
     private Integer nextCcCrLineNumber = new Integer(1);
 
     // monetary attributes
-    private KualiDecimal totalCreditCardAmount = new KualiDecimal(0);
+    private KualiDecimalMoney totalCreditCardAmount = new KualiDecimalMoney(0);
 
     /**
      * Default constructor that calls super.
@@ -60,9 +60,9 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
     /**
      * Gets the total credit card amount.
      * 
-     * @return KualiDecimal
+     * @return KualiDecimalMoney
      */
-    public KualiDecimal getTotalCreditCardAmount() {
+    public KualiDecimalMoney getTotalCreditCardAmount() {
         return totalCreditCardAmount;
     }
 
@@ -80,7 +80,7 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
      * 
      * @param creditCardAmount
      */
-    public void setTotalCreditCardAmount(KualiDecimal creditCardAmount) {
+    public void setTotalCreditCardAmount(KualiDecimalMoney creditCardAmount) {
         this.totalCreditCardAmount = creditCardAmount;
     }
 
@@ -158,7 +158,7 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
         // if the totalCreditCardAmount goes negative, bring back to zero.
         this.totalCreditCardAmount = this.totalCreditCardAmount.subtract(creditCardReceiptDetail.getCreditCardAdvanceDepositAmount());
         if (this.totalCreditCardAmount.isNegative()) {
-            this.totalCreditCardAmount = KualiDecimal.ZERO;
+            this.totalCreditCardAmount = KualiDecimalMoney.ZERO;
         }
     }
 
@@ -179,19 +179,19 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
     /**
      * This method returns the overall total of the document - the credit card total.
      * 
-     * @return KualiDecimal
+     * @return KualiDecimalMoney
      */
-    public KualiDecimal getSumTotalAmount() {
+    public KualiDecimalMoney getSumTotalAmount() {
         return this.totalCreditCardAmount;
     }
 
     /**
      * This method returns the sum of all of the credit card receipts for this document.
      * 
-     * @return KualiDecimal
+     * @return KualiDecimalMoney
      */
-    public KualiDecimal calculateCreditCardReceiptTotal() {
-        KualiDecimal total = KualiDecimal.ZERO;
+    public KualiDecimalMoney calculateCreditCardReceiptTotal() {
+        KualiDecimalMoney total = KualiDecimalMoney.ZERO;
         for (Iterator i = getCreditCardReceipts().iterator(); i.hasNext();) {
             CreditCardDetail c = (CreditCardDetail) i.next();
             if (null != c.getCreditCardAdvanceDepositAmount()) {
