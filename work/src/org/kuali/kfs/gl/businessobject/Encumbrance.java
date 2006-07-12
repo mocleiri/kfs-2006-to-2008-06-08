@@ -28,7 +28,7 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.OriginationCode;
 import org.kuali.core.bo.user.Options;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -53,8 +53,8 @@ public class Encumbrance extends BusinessObjectBase {
     private String documentNumber;
     private String transactionEncumbranceDescription;
     private Date transactionEncumbranceDate;
-    private KualiDecimal accountLineEncumbranceAmount;
-    private KualiDecimal accountLineEncumbranceClosedAmount;
+    private KualiDecimalMoney accountLineEncumbranceAmount;
+    private KualiDecimalMoney accountLineEncumbranceClosedAmount;
     private String accountLineEncumbrancePurgeCode;
     private Date timestamp;
 
@@ -83,8 +83,8 @@ public class Encumbrance extends BusinessObjectBase {
         documentNumber = t.getFinancialDocumentNumber();
         transactionEncumbranceDescription = t.getTransactionLedgerEntryDescription();
         transactionEncumbranceDate = t.getTransactionDate();
-        accountLineEncumbranceAmount = new KualiDecimal("0");
-        accountLineEncumbranceClosedAmount = new KualiDecimal("0");
+        accountLineEncumbranceAmount = new KualiDecimalMoney("0");
+        accountLineEncumbranceClosedAmount = new KualiDecimalMoney("0");
         accountLineEncumbrancePurgeCode = " ";
         this.dummyBusinessObject = new DummyBusinessObject();
     }
@@ -115,28 +115,28 @@ public class Encumbrance extends BusinessObjectBase {
     /**
      * @return Returns the accountLineEncumbranceAmount.
      */
-    public KualiDecimal getAccountLineEncumbranceAmount() {
+    public KualiDecimalMoney getAccountLineEncumbranceAmount() {
         return accountLineEncumbranceAmount;
     }
 
     /**
      * @param accountLineEncumbranceAmount The accountLineEncumbranceAmount to set.
      */
-    public void setAccountLineEncumbranceAmount(KualiDecimal accountLineEncumbranceAmount) {
+    public void setAccountLineEncumbranceAmount(KualiDecimalMoney accountLineEncumbranceAmount) {
         this.accountLineEncumbranceAmount = accountLineEncumbranceAmount;
     }
 
     /**
      * @return Returns the accountLineEncumbranceClearedAmount.
      */
-    public KualiDecimal getAccountLineEncumbranceClosedAmount() {
+    public KualiDecimalMoney getAccountLineEncumbranceClosedAmount() {
         return accountLineEncumbranceClosedAmount;
     }
 
     /**
      * @param accountLineEncumbranceClearedAmount The accountLineEncumbranceClearedAmount to set.
      */
-    public void setAccountLineEncumbranceClosedAmount(KualiDecimal accountLineEncumbranceClosedAmount) {
+    public void setAccountLineEncumbranceClosedAmount(KualiDecimalMoney accountLineEncumbranceClosedAmount) {
         this.accountLineEncumbranceClosedAmount = accountLineEncumbranceClosedAmount;
     }
 

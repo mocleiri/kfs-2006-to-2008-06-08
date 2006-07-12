@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import org.kuali.core.service.DateTimeService;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.gl.batch.poster.BalanceCalculator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.Balance;
@@ -62,13 +62,13 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
 
         String postType = "U";
 
-        KualiDecimal amount = t.getTransactionLedgerEntryAmount();
+        KualiDecimalMoney amount = t.getTransactionLedgerEntryAmount();
 
         // Subtract the amount if offset generation indicator & the debit/credit code isn't the same
         // as the one in the object type code table
         if (t.getBalanceType().isFinancialOffsetGenerationIndicator()) {
             if (!t.getTransactionDebitCreditCode().equals(t.getObjectType().getFinObjectTypeDebitcreditCd())) {
-                amount = amount.multiply(new KualiDecimal(-1));
+                amount = amount.multiply(new KualiDecimalMoney(-1));
             }
         }
 
@@ -115,9 +115,9 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
         // The pending entries haven't been scrubbed so there could be
         // bad data. This won't update a balance if the data it needs
         // is invalid
-        KualiDecimal amount = t.getTransactionLedgerEntryAmount();
+        KualiDecimalMoney amount = t.getTransactionLedgerEntryAmount();
         if (amount == null) {
-            amount = KualiDecimal.ZERO;
+            amount = KualiDecimalMoney.ZERO;
         }
 
         if (t.getObjectType() == null) {
@@ -134,7 +134,7 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
         // as the one in the object type code table
         if (t.getBalanceType().isFinancialOffsetGenerationIndicator()) {
             if (!t.getTransactionDebitCreditCode().equals(t.getObjectType().getFinObjectTypeDebitcreditCd())) {
-                amount = amount.multiply(new KualiDecimal(-1));
+                amount = amount.multiply(new KualiDecimalMoney(-1));
             }
         }
 

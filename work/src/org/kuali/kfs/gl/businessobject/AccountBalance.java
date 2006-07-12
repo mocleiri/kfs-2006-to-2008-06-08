@@ -29,7 +29,7 @@ import java.util.Map;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.Options;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -49,9 +49,9 @@ public class AccountBalance extends BusinessObjectBase {
     private String subAccountNumber;
     private String objectCode;
     private String subObjectCode;
-    private KualiDecimal currentBudgetLineBalanceAmount;
-    private KualiDecimal accountLineActualsBalanceAmount;
-    private KualiDecimal accountLineEncumbranceBalanceAmount;
+    private KualiDecimalMoney currentBudgetLineBalanceAmount;
+    private KualiDecimalMoney accountLineActualsBalanceAmount;
+    private KualiDecimalMoney accountLineEncumbranceBalanceAmount;
     private Date timestamp;
 
     private Chart chart;
@@ -75,9 +75,9 @@ public class AccountBalance extends BusinessObjectBase {
         subAccountNumber = t.getSubAccountNumber();
         objectCode = t.getFinancialObjectCode();
         subObjectCode = t.getFinancialSubObjectCode();
-        currentBudgetLineBalanceAmount = KualiDecimal.ZERO;
-        accountLineActualsBalanceAmount = KualiDecimal.ZERO;
-        accountLineEncumbranceBalanceAmount = KualiDecimal.ZERO;
+        currentBudgetLineBalanceAmount = KualiDecimalMoney.ZERO;
+        accountLineActualsBalanceAmount = KualiDecimalMoney.ZERO;
+        accountLineEncumbranceBalanceAmount = KualiDecimalMoney.ZERO;
 
         this.dummyBusinessObject = new DummyBusinessObject();
         this.financialObject = new ObjectCode();
@@ -91,9 +91,9 @@ public class AccountBalance extends BusinessObjectBase {
         this.accountNumber = accountNumber;
         subAccountNumber = (String) data.get("SUB_ACCT_NBR");
 
-        currentBudgetLineBalanceAmount = new KualiDecimal((BigDecimal) data.get("CURR_BDLN_BAL_AMT"));
-        accountLineActualsBalanceAmount = new KualiDecimal((BigDecimal) data.get("ACLN_ACTLS_BAL_AMT"));
-        accountLineEncumbranceBalanceAmount = new KualiDecimal((BigDecimal) data.get("ACLN_ENCUM_BAL_AMT"));
+        currentBudgetLineBalanceAmount = new KualiDecimalMoney((BigDecimal) data.get("CURR_BDLN_BAL_AMT"));
+        accountLineActualsBalanceAmount = new KualiDecimalMoney((BigDecimal) data.get("ACLN_ACTLS_BAL_AMT"));
+        accountLineEncumbranceBalanceAmount = new KualiDecimalMoney((BigDecimal) data.get("ACLN_ENCUM_BAL_AMT"));
 
         if ("Consolidation".equals(type)) {
             financialObject.getFinancialObjectType().setFinancialReportingSortCode((String) data.get("FIN_REPORT_SORT_CD"));
@@ -126,18 +126,18 @@ public class AccountBalance extends BusinessObjectBase {
     public AccountBalance(String title) {
         this();
         financialObject.getFinancialObjectLevel().setFinancialConsolidationObjectCode(title);
-        currentBudgetLineBalanceAmount = KualiDecimal.ZERO;
-        accountLineActualsBalanceAmount = KualiDecimal.ZERO;
-        accountLineEncumbranceBalanceAmount = KualiDecimal.ZERO;
+        currentBudgetLineBalanceAmount = KualiDecimalMoney.ZERO;
+        accountLineActualsBalanceAmount = KualiDecimalMoney.ZERO;
+        accountLineEncumbranceBalanceAmount = KualiDecimalMoney.ZERO;
     }
 
     public void fixVariance() {
         dummyBusinessObject.setGenericAmount(getVariance());
     }
 
-    public KualiDecimal getVariance() {
+    public KualiDecimalMoney getVariance() {
 
-        KualiDecimal variance = KualiDecimal.ZERO;
+        KualiDecimalMoney variance = KualiDecimalMoney.ZERO;
 
         // get the reporting sort code
         String reportingSortCode = financialObject.getFinancialObjectType().getFinancialReportingSortCode();
@@ -191,19 +191,19 @@ public class AccountBalance extends BusinessObjectBase {
         this.option = option;
     }
 
-    public KualiDecimal getAccountLineActualsBalanceAmount() {
+    public KualiDecimalMoney getAccountLineActualsBalanceAmount() {
         return accountLineActualsBalanceAmount;
     }
 
-    public void setAccountLineActualsBalanceAmount(KualiDecimal accountLineActualsBalanceAmount) {
+    public void setAccountLineActualsBalanceAmount(KualiDecimalMoney accountLineActualsBalanceAmount) {
         this.accountLineActualsBalanceAmount = accountLineActualsBalanceAmount;
     }
 
-    public KualiDecimal getAccountLineEncumbranceBalanceAmount() {
+    public KualiDecimalMoney getAccountLineEncumbranceBalanceAmount() {
         return accountLineEncumbranceBalanceAmount;
     }
 
-    public void setAccountLineEncumbranceBalanceAmount(KualiDecimal accountLineEncumbranceBalanceAmount) {
+    public void setAccountLineEncumbranceBalanceAmount(KualiDecimalMoney accountLineEncumbranceBalanceAmount) {
         this.accountLineEncumbranceBalanceAmount = accountLineEncumbranceBalanceAmount;
     }
 
@@ -223,11 +223,11 @@ public class AccountBalance extends BusinessObjectBase {
         this.chartOfAccountsCode = chartOfAccountsCode;
     }
 
-    public KualiDecimal getCurrentBudgetLineBalanceAmount() {
+    public KualiDecimalMoney getCurrentBudgetLineBalanceAmount() {
         return currentBudgetLineBalanceAmount;
     }
 
-    public void setCurrentBudgetLineBalanceAmount(KualiDecimal currentBudgetLineBalanceAmount) {
+    public void setCurrentBudgetLineBalanceAmount(KualiDecimalMoney currentBudgetLineBalanceAmount) {
         this.currentBudgetLineBalanceAmount = currentBudgetLineBalanceAmount;
     }
 
