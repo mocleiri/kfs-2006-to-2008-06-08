@@ -31,7 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.document.DocumentBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
@@ -45,8 +45,8 @@ public class CorrectionDocument extends DocumentBase {
     private String correctionSelectionCode;
     private String correctionFileDeleteCode;
     private Integer correctionRowCount;
-    private KualiDecimal correctionDebitTotalAmount;
-    private KualiDecimal correctionCreditTotalAmount;
+    private KualiDecimalMoney correctionDebitTotalAmount;
+    private KualiDecimalMoney correctionCreditTotalAmount;
     private String correctionInputFileName;
     private String correctionOutputFileName;
     private String correctionScriptText;
@@ -215,7 +215,7 @@ public class CorrectionDocument extends DocumentBase {
      * @return - Returns the correctionDebitTotalAmount
      * 
      */
-    public KualiDecimal getCorrectionDebitTotalAmount() {
+    public KualiDecimalMoney getCorrectionDebitTotalAmount() {
         return correctionDebitTotalAmount;
     }
 
@@ -225,7 +225,7 @@ public class CorrectionDocument extends DocumentBase {
      * @param - correctionDebitTotalAmount The correctionDebitTotalAmount to set.
      * 
      */
-    public void setCorrectionDebitTotalAmount(KualiDecimal correctionDebitTotalAmount) {
+    public void setCorrectionDebitTotalAmount(KualiDecimalMoney correctionDebitTotalAmount) {
         this.correctionDebitTotalAmount = correctionDebitTotalAmount;
     }
 
@@ -236,7 +236,7 @@ public class CorrectionDocument extends DocumentBase {
      * @return - Returns the correctionCreditTotalAmount
      * 
      */
-    public KualiDecimal getCorrectionCreditTotalAmount() {
+    public KualiDecimalMoney getCorrectionCreditTotalAmount() {
         return correctionCreditTotalAmount;
     }
 
@@ -246,7 +246,7 @@ public class CorrectionDocument extends DocumentBase {
      * @param - correctionCreditTotalAmount The correctionCreditTotalAmount to set.
      * 
      */
-    public void setCorrectionCreditTotalAmount(KualiDecimal correctionCreditTotalAmount) {
+    public void setCorrectionCreditTotalAmount(KualiDecimalMoney correctionCreditTotalAmount) {
         this.correctionCreditTotalAmount = correctionCreditTotalAmount;
     }
 

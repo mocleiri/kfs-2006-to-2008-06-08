@@ -26,7 +26,7 @@ package org.kuali.module.financial.bo;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.test.KualiTestBaseWithSpring;
 
 /**
@@ -36,7 +36,7 @@ import org.kuali.test.KualiTestBaseWithSpring;
  */
 public class CheckBaseTest extends KualiTestBaseWithSpring {
     CheckBase crchk = null;
-    public static final KualiDecimal AMOUNT = new KualiDecimal("100.27");
+    public static final KualiDecimalMoney AMOUNT = new KualiDecimalMoney("100.27");
     public static final String GUID = "123456789012345678901234567890123456";
     public static final Long VER_NBR = new Long(1);
     public static final Date DATE = new Date(System.currentTimeMillis());

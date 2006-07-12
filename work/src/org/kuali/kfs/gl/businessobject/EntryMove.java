@@ -29,7 +29,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -56,7 +56,7 @@ public class EntryMove extends BusinessObjectBase {
     private String financialDocumentNumber;
     private Integer transactionLedgerEntrySequenceNumber;
     private String transactionLedgerEntryDescription;
-    private KualiDecimal transactionLedgerEntryAmount;
+    private KualiDecimalMoney transactionLedgerEntryAmount;
     private String transactionDebitCreditCode;
     private Date transactionDate;
     private String organizationDocumentNumber;
@@ -402,7 +402,7 @@ public class EntryMove extends BusinessObjectBase {
      * @return - Returns the transactionLedgerEntryAmount
      * 
      */
-    public KualiDecimal getTransactionLedgerEntryAmount() {
+    public KualiDecimalMoney getTransactionLedgerEntryAmount() {
         return transactionLedgerEntryAmount;
     }
 
@@ -412,7 +412,7 @@ public class EntryMove extends BusinessObjectBase {
      * @param - transactionLedgerEntryAmount The transactionLedgerEntryAmount to set.
      * 
      */
-    public void setTransactionLedgerEntryAmount(KualiDecimal transactionLedgerEntryAmount) {
+    public void setTransactionLedgerEntryAmount(KualiDecimalMoney transactionLedgerEntryAmount) {
         this.transactionLedgerEntryAmount = transactionLedgerEntryAmount;
     }
 

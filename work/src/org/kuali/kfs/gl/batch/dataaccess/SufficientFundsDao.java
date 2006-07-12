@@ -2,7 +2,7 @@ package org.kuali.module.gl.dao;
 
 import java.util.List;
 
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 
 public interface SufficientFundsDao {
     /**
@@ -13,7 +13,7 @@ public interface SufficientFundsDao {
      * @param accountNumber
      * @return
      */
-    public KualiDecimal calculateM113PfyrBudget(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber);
+    public KualiDecimalMoney calculateM113PfyrBudget(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber);
 
     /**
      * fp_sasfc:55-2...60-3 m113 checking: calculates pfyr_encum
@@ -23,7 +23,7 @@ public interface SufficientFundsDao {
      * @param accountNumber
      * @return
      */
-    public KualiDecimal calculateM113PfyrEncum(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber);
+    public KualiDecimalMoney calculateM113PfyrEncum(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber);
 
     /**
      * fp_sasfc:61-2...78-3 m113 checking: calculate pend_actual
@@ -35,7 +35,7 @@ public interface SufficientFundsDao {
      * @param financialObjectCodeForCashInBank TODO
      * @return
      */
-    public KualiDecimal calculateM113PendActual(boolean financialBeginBalanceLoadInd, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, List specialFinancialObjectCodes, String financialObjectCodeForCashInBank);
+    public KualiDecimalMoney calculateM113PendActual(boolean financialBeginBalanceLoadInd, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, List specialFinancialObjectCodes, String financialObjectCodeForCashInBank);
 
     /**
      * fp_sasfc:99-1...125-2
@@ -49,7 +49,7 @@ public interface SufficientFundsDao {
      * @param expenditureCodes
      * @return
      */
-    public KualiDecimal calculatePendActual(boolean isYearEndDocument, String actualFinancialBalanceTypeCd, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String acctSufficientFundsFinObjCd, List expenditureCodes);
+    public KualiDecimalMoney calculatePendActual(boolean isYearEndDocument, String actualFinancialBalanceTypeCd, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String acctSufficientFundsFinObjCd, List expenditureCodes);
 
     /**
      * fp_sasfc: 126-2...140-2
@@ -63,7 +63,7 @@ public interface SufficientFundsDao {
      * @param expenditureCodes
      * @return
      */
-    public KualiDecimal calculatePendBudget(boolean isYearEndDocument, String budgetCheckingBalanceTypeCd, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String acctSufficientFundsFinObjCd, List expenditureCodes);
+    public KualiDecimalMoney calculatePendBudget(boolean isYearEndDocument, String budgetCheckingBalanceTypeCd, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String acctSufficientFundsFinObjCd, List expenditureCodes);
 
     /**
      * fp_sasfc: 141-2-166-2
@@ -79,7 +79,7 @@ public interface SufficientFundsDao {
      * @param expenditureCodes
      * @return
      */
-    public KualiDecimal calculatePendEncum(boolean isYearEndDocument, String extrnlEncumFinBalanceTypCd, String intrnlEncumFinBalanceTypCd, String preencumbranceFinBalTypeCd, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String acctSufficientFundsFinObjCd, List expenditureCodes);
+    public KualiDecimalMoney calculatePendEncum(boolean isYearEndDocument, String extrnlEncumFinBalanceTypCd, String intrnlEncumFinBalanceTypCd, String preencumbranceFinBalTypeCd, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String acctSufficientFundsFinObjCd, List expenditureCodes);
 
     /**
      * Purge table by year/chart

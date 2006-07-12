@@ -40,7 +40,7 @@ import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.question.ConfirmationQuestion;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
@@ -64,7 +64,7 @@ public class VoucherAction extends KualiTransactionalDocumentActionBase {
     // used to determine which way the change balance type action is switching
     // these are local constants only used within this action class
     // these should not be used outside of this class
-    protected static final KualiDecimal ZERO = new KualiDecimal("0.00");
+    protected static final KualiDecimalMoney ZERO = new KualiDecimalMoney("0.00");
 
     /**
      * We want to keep the bad data for the voucher.
@@ -133,8 +133,8 @@ public class VoucherAction extends KualiTransactionalDocumentActionBase {
             voucherForm.getVoucherLineHelpers().add(helperLine);
 
             // now reset the debit and credit fields for adds
-            voucherForm.setNewSourceLineDebit(new KualiDecimal(0));
-            voucherForm.setNewSourceLineCredit(new KualiDecimal(0));
+            voucherForm.setNewSourceLineDebit(new KualiDecimalMoney(0));
+            voucherForm.setNewSourceLineCredit(new KualiDecimalMoney(0));
         }
 
         return actionForward;
@@ -238,12 +238,12 @@ public class VoucherAction extends KualiTransactionalDocumentActionBase {
     protected VoucherAccountingLineHelper populateVoucherAccountingLineHelper(VoucherForm voucherForm) {
         VoucherAccountingLineHelper helperLine = new VoucherAccountingLineHelperBase();
 
-        KualiDecimal debitAmount = voucherForm.getNewSourceLineDebit();
+        KualiDecimalMoney debitAmount = voucherForm.getNewSourceLineDebit();
         if (debitAmount != null && StringUtils.isNotBlank(debitAmount.toString())) {
             helperLine.setDebit(debitAmount);
         }
 
-        KualiDecimal creditAmount = voucherForm.getNewSourceLineCredit();
+        KualiDecimalMoney creditAmount = voucherForm.getNewSourceLineCredit();
         if (creditAmount != null && StringUtils.isNotBlank(creditAmount.toString())) {
             helperLine.setCredit(creditAmount);
         }
@@ -345,12 +345,12 @@ public class VoucherAction extends KualiTransactionalDocumentActionBase {
     protected VoucherAccountingLineHelper populateNewVoucherAccountingLineHelper(VoucherForm voucherForm) {
         VoucherAccountingLineHelper helperLine = new VoucherAccountingLineHelperBase();
 
-        KualiDecimal debitAmount = voucherForm.getNewSourceLineDebit();
+        KualiDecimalMoney debitAmount = voucherForm.getNewSourceLineDebit();
         if (debitAmount != null && StringUtils.isNotBlank(debitAmount.toString())) {
             helperLine.setDebit(debitAmount);
         }
 
-        KualiDecimal creditAmount = voucherForm.getNewSourceLineCredit();
+        KualiDecimalMoney creditAmount = voucherForm.getNewSourceLineCredit();
         if (creditAmount != null && StringUtils.isNotBlank(creditAmount.toString())) {
             helperLine.setCredit(creditAmount);
         }

@@ -28,7 +28,7 @@ import org.apache.struts.action.ActionForm;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.rule.PreRulesCheck;
 import org.kuali.core.rule.event.PreRulesCheckEvent;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.chart.bo.Delegate;
 
@@ -70,12 +70,12 @@ public class DelegatePreRules implements PreRulesCheck {
 
         // FROM amount defaults to zero
         if (ObjectUtils.isNull(delegate.getFinDocApprovalFromThisAmt())) {
-            delegate.setFinDocApprovalFromThisAmt(new KualiDecimal(0));
+            delegate.setFinDocApprovalFromThisAmt(new KualiDecimalMoney(0));
         }
 
         // TO amount defaults to zero
         if (ObjectUtils.isNull(delegate.getFinDocApprovalToThisAmount())) {
-            delegate.setFinDocApprovalToThisAmount(new KualiDecimal(0));
+            delegate.setFinDocApprovalToThisAmount(new KualiDecimalMoney(0));
         }
     }
 
