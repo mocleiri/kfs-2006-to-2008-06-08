@@ -31,7 +31,7 @@ import org.kuali.Constants;
 import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.rule.AccountingLineRule;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
@@ -64,9 +64,9 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
     private Integer nextCheckSequenceId = new Integer(1);
 
     // monetary attributes
-    private KualiDecimal totalCashAmount = new KualiDecimal(0);
-    private KualiDecimal totalCheckAmount = new KualiDecimal(0);
-    private KualiDecimal totalCoinAmount = new KualiDecimal(0);
+    private KualiDecimalMoney totalCashAmount = new KualiDecimalMoney(0);
+    private KualiDecimalMoney totalCheckAmount = new KualiDecimalMoney(0);
+    private KualiDecimalMoney totalCoinAmount = new KualiDecimalMoney(0);
 
     /**
      * Initializes the array lists and line incrementers.
@@ -118,7 +118,7 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
      * 
      * @return Returns the totalCashAmount.
      */
-    public KualiDecimal getTotalCashAmount() {
+    public KualiDecimalMoney getTotalCashAmount() {
         return totalCashAmount;
     }
 
@@ -136,7 +136,7 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
      * 
      * @param cashAmount The totalCashAmount to set.
      */
-    public void setTotalCashAmount(KualiDecimal cashAmount) {
+    public void setTotalCashAmount(KualiDecimalMoney cashAmount) {
         this.totalCashAmount = cashAmount;
     }
 
@@ -198,7 +198,7 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
 
         this.nextCheckSequenceId = new Integer(this.nextCheckSequenceId.intValue() + 1);
 
-        KualiDecimal tca = this.totalCheckAmount;
+        KualiDecimalMoney tca = this.totalCheckAmount;
         this.totalCheckAmount = this.totalCheckAmount.add(check.getAmount());
     }
 
@@ -222,15 +222,15 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
      * 
      * @see org.kuali.core.document.TransactionalDocument#getSourceTotal()
      */
-    public KualiDecimal getSourceTotal() {
+    public KualiDecimalMoney getSourceTotal() {
         CashReceiptDocumentRule crDocRule = (CashReceiptDocumentRule) SpringServiceLocator.getKualiRuleService().getBusinessRulesInstance(this, AccountingLineRule.class);
-        KualiDecimal total = new KualiDecimal(0);
+        KualiDecimalMoney total = new KualiDecimalMoney(0);
         AccountingLineBase al = null;
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
 
-            KualiDecimal amount = al.getAmount();
+            KualiDecimalMoney amount = al.getAmount();
             if (amount != null) {
                 if (crDocRule.isDebit(al)) {
                     total = total.subtract(amount);
@@ -248,8 +248,8 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
      * 
      * @see org.kuali.core.document.TransactionalDocument#getTargetTotal()
      */
-    public KualiDecimal getTargetTotal() {
-        return new KualiDecimal(0);
+    public KualiDecimalMoney getTargetTotal() {
+        return new KualiDecimalMoney(0);
     }
 
     /**
@@ -263,7 +263,7 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
         // if the totalCheckAmount goes negative, bring back to zero.
         this.totalCheckAmount = this.totalCheckAmount.subtract(check.getAmount());
         if (this.totalCheckAmount.isNegative()) {
-            totalCheckAmount = KualiDecimal.ZERO;
+            totalCheckAmount = KualiDecimalMoney.ZERO;
         }
     }
 
@@ -308,7 +308,7 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
      * 
      * @return Returns the totalCheckAmount.
      */
-    public KualiDecimal getTotalCheckAmount() {
+    public KualiDecimalMoney getTotalCheckAmount() {
         return totalCheckAmount;
     }
 
@@ -326,9 +326,9 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
      * 
      * @param totalCheckAmount The totalCheckAmount to set.
      */
-    public void setTotalCheckAmount(KualiDecimal totalCheckAmount) {
+    public void setTotalCheckAmount(KualiDecimalMoney totalCheckAmount) {
         if (totalCheckAmount == null) {
-            this.totalCheckAmount = new KualiDecimal(0);
+            this.totalCheckAmount = new KualiDecimalMoney(0);
         }
         else {
             this.totalCheckAmount = totalCheckAmount;
@@ -340,7 +340,7 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
      * 
      * @return Returns the totalCoinAmount.
      */
-    public KualiDecimal getTotalCoinAmount() {
+    public KualiDecimalMoney getTotalCoinAmount() {
         return totalCoinAmount;
     }
 
@@ -358,16 +358,16 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
      * 
      * @param totalCoinAmount The totalCoinAmount to set.
      */
-    public void setTotalCoinAmount(KualiDecimal totalCoinAmount) {
+    public void setTotalCoinAmount(KualiDecimalMoney totalCoinAmount) {
         this.totalCoinAmount = totalCoinAmount;
     }
 
     /**
      * This method returns the overall total of the document - coin plus check plus cash.
      * 
-     * @return KualiDecimal
+     * @return KualiDecimalMoney
      */
-    public KualiDecimal getSumTotalAmount() {
+    public KualiDecimalMoney getSumTotalAmount() {
         return totalCoinAmount.add(totalCheckAmount).add(totalCashAmount);
     }
 
@@ -401,8 +401,8 @@ public class CashReceiptDocument extends TransactionalDocumentBase {
     /**
      * @return sum of the amounts of the current list of checks
      */
-    public KualiDecimal calculateCheckTotal() {
-        KualiDecimal total = KualiDecimal.ZERO;
+    public KualiDecimalMoney calculateCheckTotal() {
+        KualiDecimalMoney total = KualiDecimalMoney.ZERO;
         for (Iterator i = getChecks().iterator(); i.hasNext();) {
             Check c = (Check) i.next();
             if (null != c.getAmount()) {
