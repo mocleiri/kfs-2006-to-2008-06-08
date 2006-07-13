@@ -29,7 +29,7 @@
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="FILL_IN" />
+                    <sortAttribute attributeName="accountsPayableElectronicInvoiceLoadSummaryIdentifier" />
                 </sortAttributes>
             </defaultSort>
 

@@ -53,7 +53,7 @@
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="FILL_IN" />
+                    <sortAttribute attributeName="carrierCode" />
                 </sortAttributes>
             </defaultSort>
 
@@ -271,7 +271,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <textarea rows="5" cols=80/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
                 <summary>deliveryInstructionText</summary>
@@ -376,7 +376,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <textarea rows="5" cols=80/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
                 <summary>purchaseOrderGeneralDescription</summary>
@@ -436,7 +436,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <textarea rows="5" cols=80/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
                 <summary>shipmentReceivingNoteText</summary>

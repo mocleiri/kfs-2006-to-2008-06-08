@@ -55,7 +55,7 @@
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="FILL_IN" />
+                    <sortAttribute attributeName="invoiceCatalogNumber" />
                 </sortAttributes>
             </defaultSort>
 
@@ -337,7 +337,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <textarea rows="5" cols=80/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
                 <summary>invoiceItemShippingDescription</summary>
@@ -442,7 +442,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <textarea rows="5" cols=80/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
                 <summary>invoiceItemTaxDescription</summary>
@@ -532,7 +532,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <textarea rows="5" cols=80/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
                 <summary>invoiceReferenceItemDescription</summary>

@@ -30,7 +30,7 @@
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="FILL_IN" />
+                    <sortAttribute attributeName="creditMemoIdentifier" />
                 </sortAttributes>
             </defaultSort>
 

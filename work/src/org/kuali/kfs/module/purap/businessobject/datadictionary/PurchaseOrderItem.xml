@@ -46,7 +46,7 @@
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="FILL_IN" />
+                    <sortAttribute attributeName="capitalAssetTransactionTypeCode" />
                 </sortAttributes>
             </defaultSort>
 
@@ -188,7 +188,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <textarea rows="5" cols=80/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
                 <summary>itemAuxiliaryPartIdentifier</summary>
@@ -203,7 +203,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <textarea rows="5" cols=80/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
                 <summary>itemCapitalAssetNoteText</summary>
@@ -233,7 +233,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <textarea rows="5" cols=80/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
                 <summary>itemDescription</summary>
