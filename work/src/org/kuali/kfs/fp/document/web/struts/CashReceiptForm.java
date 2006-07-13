@@ -29,8 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.util.LabelValueBean;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
-import org.kuali.Constants.DocumentStatusCodes.CashReceipt;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.SimpleBooleanFormatter;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
@@ -39,6 +38,7 @@ import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CheckBase;
 import org.kuali.module.financial.document.CashManagementDocument;
 import org.kuali.module.financial.document.CashReceiptDocument;
+import org.kuali.module.financial.rules.CashReceiptDocumentRule;
 
 /**
  * This class is the action form for Cash Receipts.
@@ -51,7 +51,7 @@ public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
     private static final String CAN_PRINT_COVERSHEET_SIG_STR = "isCoverSheetPrintingAllowed";
     private Check newCheck;
 
-    private KualiDecimal checkTotal;
+    private KualiDecimalMoney checkTotal;
 
     private String checkEntryMode;
     private List checkEntryModes;
@@ -100,14 +100,14 @@ public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
     /**
      * @param checkTotal
      */
-    public void setCheckTotal(KualiDecimal checkTotal) {
+    public void setCheckTotal(KualiDecimalMoney checkTotal) {
         this.checkTotal = checkTotal;
     }
 
     /**
-     * @return KualiDecimal
+     * @return KualiDecimalMoney
      */
-    public KualiDecimal getCheckTotal() {
+    public KualiDecimalMoney getCheckTotal() {
         return checkTotal;
     }
 
@@ -192,10 +192,10 @@ public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
         String financialDocumentStatusMessage = "";
         CashReceiptDocument crd = getCashReceiptDocument();
         String financialDocumentStatusCode = crd.getDocumentHeader().getFinancialDocumentStatusCode();
-        if (financialDocumentStatusCode.equals(CashReceipt.VERIFIED)) {
+        if (financialDocumentStatusCode.equals(Constants.DocumentStatusCodes.CashReceipt.VERIFIED)) {
             financialDocumentStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashReceipt.MSG_VERIFIED_BUT_NOT_AWAITING_DEPOSIT);
         }
-        else if (financialDocumentStatusCode.equals(CashReceipt.INTERIM) || financialDocumentStatusCode.equals(CashReceipt.FINAL) ) {
+        else if (financialDocumentStatusCode.equals(Constants.DocumentStatusCodes.CashReceipt.DEPOSITED)) {
             CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getFinancialDocumentNumber());
             if (cmd != null) {
                 String cmdFinancialDocNbr = cmd.getFinancialDocumentNumber();
@@ -207,7 +207,7 @@ public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
                 financialDocumentStatusMessage = StringUtils.replace(financialDocumentStatusMessage, "{0}", loadCMDocUrl);
             }
         }
-        else if (financialDocumentStatusCode.equals(Constants.DocumentStatusCodes.APPROVED)) {
+        else if (financialDocumentStatusCode.equals(Constants.DocumentStatusCodes.PROCESSED)) {
             CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getFinancialDocumentNumber());
             if (cmd != null) {
                 String cmdFinancialDocNbr = cmd.getFinancialDocumentNumber();
@@ -252,6 +252,8 @@ public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
      * @return boolean
      */
     public boolean isCoverSheetPrintingAllowed() {
-        return SpringServiceLocator.getCashReceiptCoverSheetService().isCoverSheetPrintingAllowed(getCashReceiptDocument());
+        CashReceiptDocumentRule rule = new CashReceiptDocumentRule();
+
+        return rule.isCoverSheetPrintable((CashReceiptDocument) getDocument());
     }
 }

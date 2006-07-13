@@ -37,18 +37,15 @@ import static org.kuali.module.financial.rules.NonCheckDisbursementDocumentRuleC
 import static org.kuali.module.financial.rules.NonCheckDisbursementDocumentRuleConstants.RESTRICTED_SUB_FUND_GROUP_TYPE_CODES;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.Constants;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE;
-import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.util.SufficientFundsItemHelper.SufficientFundsItem;
 
 /**
@@ -63,7 +60,6 @@ public class NonCheckDisbursementDocumentRule extends TransactionalDocumentRuleB
      * 
      * @return String
      */
-    @Override
     protected String getDefaultSecurityGrouping() {
         return NON_CHECK_DISBURSEMENT_SECURITY_GROUPING;
     }
@@ -72,7 +68,7 @@ public class NonCheckDisbursementDocumentRule extends TransactionalDocumentRuleB
      * Overrides to consider the object types.<br/>
      * 
      * <p>
-     * Note: This <code>{@link org.kuali.core.document.Document} is always balanced because it only
+     * Note: This <code>{@link Document} is always balanced because it only
      * has From: lines.
      *
      * @see TransactionalDocumentRuleBase#isDocumentBalanceValid(TransactionalDocument)
@@ -99,14 +95,11 @@ public class NonCheckDisbursementDocumentRule extends TransactionalDocumentRuleB
     }
 
     /**
-     * @see IsDebitUtils#isDebitNotConsideringLineSectionOnlyPositiveAmounts(TransactionalDocumentRuleBase, TransactionalDocument,
-     *      AccountingLine)
-     * 
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
-     *      org.kuali.core.bo.AccountingLine)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDebit(org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) throws IllegalStateException {
-        return IsDebitUtils.isDebitNotConsideringLineSectionOnlyPositiveAmounts(this, transactionalDocument, accountingLine);
+    @Override
+    public boolean isDebit(AccountingLine accountingLine) throws IllegalStateException {
+        return isDebitConsideringSection(accountingLine);
     }
 
     /**
@@ -119,51 +112,6 @@ public class NonCheckDisbursementDocumentRule extends TransactionalDocumentRuleB
     @Override
     protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
         return true;
-    }
-    
-    /**
-     * @see TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument, AccountingLine,
-     *      GeneralLedgerPendingEntry)
-     */
-    @Override
-    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        explicitEntry.setTransactionLedgerEntryDescription(buildTransactionLedgerEntryDescriptionUsingRefOriginAndRefDocNumber(transactionalDocument, accountingLine));
-
-        // Clearing fields that are already handled by the parent algorithm - we don't actually want
-        // these to copy over from the accounting lines b/c they don't belond in the GLPEs
-        // if the aren't nulled, then GECs fail to post
-        explicitEntry.setReferenceFinancialDocumentNumber(null);
-        explicitEntry.setReferenceFinancialSystemOriginationCode(null);
-        explicitEntry.setReferenceFinancialDocumentTypeCode(null);
-    }
-    
-    /**
-     * Builds an appropriately formatted string to be used for the <code>transactionLedgerEntryDescription</code>. It is built
-     * using information from the <code>{@link AccountingLine}</code>.  Format is "01-12345: blah blah blah".
-     * 
-     * @param line
-     * @param transactionalDocument
-     * @return String
-     */
-    private String buildTransactionLedgerEntryDescriptionUsingRefOriginAndRefDocNumber(TransactionalDocument transactionalDocument, AccountingLine line) {
-        String description = "";
-        if(StringUtils.isBlank(line.getReferenceNumber())) {
-            throw new IllegalStateException("Reference Document Number is required and should be validated before this point.");
-        }
-        
-        description = Constants.ORIGIN_CODE_KUALI + line.getReferenceNumber();
-        
-        if(StringUtils.isNotBlank(line.getFinancialDocumentLineDescription())) {
-            description += ": " + line.getFinancialDocumentLineDescription();
-        } else {
-            description += ": " + transactionalDocument.getDocumentHeader().getFinancialDocumentDescription();
-        }
-        
-        if(description.length() > GENERAL_LEDGER_PENDING_ENTRY_CODE.GLPE_DESCRIPTION_MAX_LENGTH) {
-            description = description.substring(0, GENERAL_LEDGER_PENDING_ENTRY_CODE.GLPE_DESCRIPTION_MAX_LENGTH - 3) + "...";
-        }
-            
-        return description;
     }
 
     /**
@@ -268,14 +216,14 @@ public class NonCheckDisbursementDocumentRule extends TransactionalDocumentRuleB
         String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
         String financialObjectCode = accountingLine.getObjectCode().getFinancialObjectCode();
         String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
-        KualiDecimal lineAmount = getGeneralLedgerPendingEntryAmountForAccountingLine(accountingLine);
+        KualiDecimalMoney lineAmount = getGeneralLedgerPendingEntryAmountForAccountingLine(accountingLine);
         Integer fiscalYear = accountingLine.getPostingYear();
         String financialObjectTypeCode = accountingLine.getObjectTypeCode();
 
         // always credit
         String debitCreditCode = null;
 
-        if (isDebit(transactionalDocument, accountingLine)) {
+        if (isDebit(accountingLine)) {
             debitCreditCode = GL_CREDIT_CODE;
         }
         else {

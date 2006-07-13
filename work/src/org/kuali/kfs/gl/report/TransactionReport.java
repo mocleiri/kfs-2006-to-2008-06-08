@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.module.gl.bo.Transaction;
-import org.kuali.module.gl.service.impl.scrubber.Message;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -50,7 +49,7 @@ import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: TransactionReport.java,v 1.18 2006-06-21 02:57:26 jsissom Exp $
+ * @version $Id: TransactionReport.java,v 1.16 2006-06-14 12:27:10 abyrne Exp $
  */
 public class TransactionReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TransactionReport.class);
@@ -100,7 +99,7 @@ public class TransactionReport {
      * @param fileprefix
      * @param destinationDirectory
      */
-    public void generateReport(Map<Transaction,List<Message>> reportErrors, List<Summary> reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
+    public void generateReport(Map reportErrors, List reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
 
         Font headerFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
@@ -136,7 +135,7 @@ public class TransactionReport {
             summary.addCell(cell);
 
             for (Iterator iter = reportSummary.iterator(); iter.hasNext();) {
-                Summary s = (Summary)iter.next();
+                Summary s = (Summary) iter.next();
 
                 cell = new PdfPCell(new Phrase(s.getDescription(), textFont));
                 cell.setBorder(Rectangle.NO_BORDER);
@@ -208,14 +207,8 @@ public class TransactionReport {
 
                     List errors = (List) reportErrors.get(tran);
                     for (Iterator listIter = errors.iterator(); listIter.hasNext();) {
-                        String msg = null;
                         Object m = listIter.next();
-                        if ( m instanceof Message ) {
-                            Message mm = (Message)m;
-                            msg = mm.getMessage();
-                        } else {
-                            msg = m.toString();
-                        }
+                        String msg = m.toString();
 
                         if (first) {
                             first = false;

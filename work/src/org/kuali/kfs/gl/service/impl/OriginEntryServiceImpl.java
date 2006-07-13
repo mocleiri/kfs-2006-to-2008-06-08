@@ -22,20 +22,18 @@
  */
 package org.kuali.module.gl.service.impl;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.kuali.Constants;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
@@ -48,7 +46,7 @@ import org.kuali.module.gl.util.LedgerEntryHolder;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryServiceImpl.java,v 1.23 2006-07-11 17:16:31 jsissom Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.16.2.1 2006-07-12 17:41:24 ckirsche Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -106,19 +104,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public Iterator<OriginEntry> getEntriesByGroup(OriginEntryGroup originEntryGroup) {
         LOG.debug("getEntriesByGroup() started");
 
-        return originEntryDao.getEntriesByGroup(originEntryGroup,OriginEntryDao.SORT_DOCUMENT);
-    }
-
-    public Iterator<OriginEntry> getBadBalanceEntries(Collection groups) {
-        LOG.debug("getBadBalanceEntries() started");
-
-        return originEntryDao.getBadBalanceEntries(groups);
-    }
-
-    public Iterator<OriginEntry> getEntriesByGroupAccountOrder(OriginEntryGroup oeg) {
-        LOG.debug("getEntriesByGroupAccountOrder() started");
-
-        return originEntryDao.getEntriesByGroup(oeg,OriginEntryDao.SORT_ACCOUNT);
+        return originEntryDao.getEntriesByGroup(originEntryGroup);
     }
 
     /**
@@ -234,14 +220,10 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
     /**
      * 
-     * @see org.kuali.module.gl.service.OriginEntryService#getSummaryByGroupId(Collection)
+     * @see org.kuali.module.gl.service.OriginEntryService#getSummaryByGroupId(java.util.List)
      */
-    public LedgerEntryHolder getSummaryByGroupId(Collection groupIdList) {
+    public LedgerEntryHolder getSummaryByGroupId(List groupIdList, boolean calculateTotals) {
         LedgerEntryHolder ledgerEntryHolder = new LedgerEntryHolder();
-
-        if ( groupIdList.size() == 0 ) {
-            return ledgerEntryHolder;
-        }
 
         Iterator entrySummaryIterator = originEntryDao.getSummaryByGroupId(groupIdList);
         while (entrySummaryIterator.hasNext()) {
@@ -254,22 +236,24 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
     // create or update a ledger entry with the array of information from the given entry summary object
     private LedgerEntry buildLedgerEntry(Object[] entrySummary) {
-        // extract the data from an array and use them to populate a ledger entry
-        Object oFiscalYear = entrySummary[0];
-        Object oPeriodCode = entrySummary[1];
-        Object oBalanceType = entrySummary[2];
-        Object oOriginCode = entrySummary[3];
-        Object oDebitCreditCode = entrySummary[4];
-        Object oAmount = entrySummary[5];
-        Object oCount = entrySummary[6];
 
-        Integer fiscalYear = oFiscalYear != null ? new Integer(oFiscalYear.toString()) : null;
-        String periodCode = oPeriodCode != null ? oPeriodCode.toString() : "  ";
-        String balanceType = oBalanceType != null ? oBalanceType.toString() : "  ";
-        String originCode = oOriginCode != null ? oOriginCode.toString() : "  ";
-        String debitCreditCode = oDebitCreditCode != null ? oDebitCreditCode.toString() : " ";
-        KualiDecimal amount = oAmount != null ? new KualiDecimal(oAmount.toString()) : KualiDecimal.ZERO;
-        int count = oCount != null ? Integer.parseInt(oCount.toString()) : 0;
+        // extract the data from an array and use them to populate a ledger entry
+        int i = 0;
+        Object thisElement = entrySummary[i++];
+        Integer fiscalYear = thisElement != null ? new Integer(thisElement.toString()) : null;
+        thisElement = entrySummary[i++];
+        String periodCode = thisElement != null ? thisElement.toString() : "";
+
+        thisElement = entrySummary[i++];
+        String balanceType = thisElement != null ? thisElement.toString() : "";
+        thisElement = entrySummary[i++];
+        String originCode = thisElement != null ? thisElement.toString() : "";
+
+        thisElement = entrySummary[i++];
+        String debitCreditCode = thisElement != null ? thisElement.toString() : "";
+
+        KualiDecimalMoney amount = new KualiDecimalMoney(entrySummary[i++].toString());
+        int count = Integer.parseInt(entrySummary[i].toString());
 
         // construct a ledger entry with the information fetched from the given array
         LedgerEntry ledgerEntry = new LedgerEntry(fiscalYear, periodCode, balanceType, originCode);
@@ -289,34 +273,4 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         return ledgerEntry;
     }
-    //TODO
-    public void flatFile(String filename, Integer groupId, BufferedOutputStream bw) {
-        
-        
-        LOG.debug("exportFlatFile() started");
-
-        try {
-
-            OriginEntryGroup oeg = new OriginEntryGroup();
-            oeg.setId(groupId);
-            Iterator i = getEntriesByGroup(oeg);
-            while (i.hasNext()) {
-                OriginEntry e = (OriginEntry) i.next();
-                bw.write((e.getLine() + "\n").getBytes());
-            }
-        }
-        catch (IOException e) {
-            LOG.error("exportFlatFile() Error writing to file", e);
-        }
-                }
-        
-    public Collection getMatchingEntriesByCollection(Map searchCriteria){
-        return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
-        
-    }
-        
-    public OriginEntry getExactMatchingEntry(Integer entryId){
-        return originEntryDao.getExactMatchingEntry(entryId);
-    }
-    
 }
