@@ -56,7 +56,7 @@
 	<field-descriptor name="vendorLegacyBranchNumber" column="VNDR_LGCY_BRCH_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLegacyPayeeIdentifier" column="VNDR_LGCY_PAYEE_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLegacySystemNumber" column="VNDR_LGCY_TOPS_NBR" jdbc-type="VARCHAR"/>
-	<reference-descriptor name="vendorHeaderGenerated" class-ref="org.kuali.module.purap.bo.VendorHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="vendorHeaderGenerated" class-ref="org.kuali.module.purap.bo.VendorHeader" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
 		<foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
 	</reference-descriptor>
 	<reference-descriptor name="vendorStatus" class-ref="org.kuali.module.purap.bo.StatusType" auto-retrieve="true" auto-update="none" auto-delete="none">
