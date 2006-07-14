@@ -404,7 +404,7 @@
 	<field-descriptor name="vendorOwnershipDescription" column="VNDR_OWNR_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorSocialSecurityNumberAllowedIndicator" column="VNDR_SSN_ALLW_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorFeinAllowedIndicator" column="VNDR_FEIN_ALLW_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<field-descriptor name="vendorOwnerCategoryAllowedIndicator" column="VNDR_OWNR_CTGRY_ALLW_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
+	<field-descriptor name="vendorOwnershipCategoryAllowedIndicator" column="VNDR_OWNR_CTGRY_ALLW_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorTaxNumberRequiredIndicator" column="VNDR_TAX_NBR_RQRD_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorRouteToTaxAreaIndicator" column="VNDR_RTE_TAX_AREA_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorExclusionAutomaticApprovalIndicator" column="VNDR_EXCL_AUTO_APPRV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
@@ -1274,7 +1274,7 @@
 	<field-descriptor name="vendorOwnershipCategoryCode" column="VNDR_OWNR_CTGRY_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="vendorOwnerCategoryDescription" column="VNDR_OWNR_CTGRY_DESC" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorOwnershipCategoryDescription" column="VNDR_OWNR_CTGRY_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
 
