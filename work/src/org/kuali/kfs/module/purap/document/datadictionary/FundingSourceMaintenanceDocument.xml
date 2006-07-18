@@ -27,14 +27,14 @@
         <description>Document used to create or update Funding Source objects</description>
 
         <lockingKeys>
-            <field attributeName="FundingSourceCode" />
+            <field attributeName="fundingSourceCode" />
         </lockingKeys>
 
         <maintainableSections>
             <maintainableSection title="Edit Funding Source">
                 <maintainableItems>
-                    <maintainableField name="FundingSourceCode" required="true" />
-                	<maintainableField name="FundingSourceDescription" required="true" />
+                    <maintainableField name="fundingSourceCode" required="true" />
+                	<maintainableField name="fundingSourceDescription" required="true" />
                 	<maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
                 </maintainableItems>
             </maintainableSection>
