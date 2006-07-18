@@ -21,42 +21,28 @@
 
 			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.FundingSource">Create New</a>]]></menubar>
 
-            <instructions>Lookup an Funding Source</instructions>
+            <instructions>Lookup a Funding Source</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+                    <sortAttribute attributeName="fundingSourceDescription" />
                 </sortAttributes>
             </defaultSort>
 
             <lookupFields>
-                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
                 <lookupField attributeName="fundingSourceCode" required="false" />
                 <lookupField attributeName="fundingSourceDescription" required="false" />
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
-                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
                 <field attributeName="fundingSourceCode" />
                 <field attributeName="fundingSourceDescription" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
             </resultFields>
         </lookup>
 
         <attributes>
-
-            <attribute name="dataObjectMaintenanceCodeActiveIndicator" forceUppercase="true">
-                <label>Data Object Maintenance Code Active Indicator</label>
-                <shortLabel>Indicator</shortLabel>
-
-                <maxLength>1</maxLength>
-
-                <control>
-                    <checkbox />
-                </control>
-
-                <summary>dataObjectMaintenanceCodeActiveIndicator</summary>
-                <description>dataObjectMaintenanceCodeActiveIndicator description...</description>
-			</attribute>
 
             <attribute name="fundingSourceCode" forceUppercase="true">
                 <label>Funding Source Code</label>
@@ -86,6 +72,20 @@
 
                 <summary>fundingSourceDescription</summary>
                 <description>fundingSourceDescription description...</description>
+			</attribute>
+
+            <attribute name="dataObjectMaintenanceCodeActiveIndicator" forceUppercase="true">
+                <label>Code Active Indicator</label>
+                <shortLabel>Active Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>dataObjectMaintenanceCodeActiveIndicator</summary>
+                <description>dataObjectMaintenanceCodeActiveIndicator description...</description>
 			</attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
