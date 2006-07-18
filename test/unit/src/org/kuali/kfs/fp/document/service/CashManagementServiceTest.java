@@ -23,66 +23,60 @@
 package org.kuali.module.financial.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.Constants;
-import org.kuali.core.document.Document;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DocumentService;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.financial.bo.BankAccount;
-import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.bo.Deposit;
 import org.kuali.module.financial.document.CashManagementDocument;
 import org.kuali.module.financial.document.CashReceiptDocument;
-import org.kuali.module.financial.exceptions.CashDrawerStateException;
+import org.kuali.module.financial.exceptions.InvalidCashDrawerState;
 import org.kuali.module.financial.exceptions.InvalidCashReceiptState;
-import org.kuali.test.KualiTestBaseWithSession;
-import org.kuali.test.monitor.ChangeMonitor;
-import org.kuali.test.monitor.DocumentWorkflowStatusMonitor;
+import org.kuali.test.KualiTestBaseWithSpring;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
-public class CashManagementServiceTest extends KualiTestBaseWithSession {
-    static final String CMST_WORKGROUP = "CashManagementServiceTest";
+
+public class CashManagementServiceTest extends KualiTestBaseWithSpring {
+    private final Integer VALID_LINE_NUMBER = new Integer(1);
+    private final Integer VALID_LINE_NUMBER2 = new Integer(2);
+
+    private final String UNKNOWN_VERIFICATION_UNIT = "foo";
+    private final String KNOWN_VERIFICATION_UNIT = "someWorkgroup";
+
+    private final String KNOWN_CR_STATUS = Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED;
+    private final String UNKNOWN_CR_STATUS = "foo";
 
 
-    DocumentService documentService;
-    CashReceiptService cashReceiptService;
-    CashManagementService cashManagementService;
-    CashDrawerService cashDrawerService;
-    BusinessObjectService businessObjectService;
+    private CashManagementService cashManagementService;
+    private DocumentService docService;
+    private BusinessObjectService boService;
+    private CashDrawerService cashDrawerService;
 
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        documentService = SpringServiceLocator.getDocumentService();
-        cashReceiptService = SpringServiceLocator.getCashReceiptService();
         cashManagementService = SpringServiceLocator.getCashManagementService();
+        docService = SpringServiceLocator.getDocumentService();
+        boService = SpringServiceLocator.getBusinessObjectService();
         cashDrawerService = SpringServiceLocator.getCashDrawerService();
-        businessObjectService = SpringServiceLocator.getBusinessObjectService();
-    }
 
-    /**
-     * @see org.kuali.test.KualiTestBaseWithSpring#needsTestTransaction()
-     */
-    @Override
-    protected boolean needsTestTransaction() {
-        return false;
+        cashDrawerService.openCashDrawer(KNOWN_VERIFICATION_UNIT);
     }
 
 
-    final public void testCreateCashManagementDocument_blankUnitName() throws Exception {
+    public void testCreateCashManagementDocument_blankDescription() throws Exception {
         boolean failedAsExpected = false;
 
         try {
-            cashManagementService.createCashManagementDocument("    ", "foo", "cmst1");
+            changeCurrentUser("RJWEISS");
+            cashManagementService.createCashManagementDocument("  ", new ArrayList(), KNOWN_VERIFICATION_UNIT);
         }
         catch (IllegalArgumentException e) {
             failedAsExpected = true;
@@ -91,11 +85,13 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
         assertTrue(failedAsExpected);
     }
 
-    final public void testCreateCashManagementDocument_blankDocDescription() throws Exception {
+    public void testCreateCashManagementDocument_nullList() throws Exception {
         boolean failedAsExpected = false;
 
         try {
-            cashManagementService.createCashManagementDocument(CMST_WORKGROUP, null, "cmst2");
+            changeCurrentUser("RJWEISS");
+            cashManagementService.createCashManagementDocument("testCreateCashManagementDocument_null", null,
+                    KNOWN_VERIFICATION_UNIT);
         }
         catch (IllegalArgumentException e) {
             failedAsExpected = true;
@@ -104,498 +100,453 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
         assertTrue(failedAsExpected);
     }
 
-    final public void testCreateCashManagementDocument_valid() throws Exception {
-        String testDocumentId = null;
+    public void testCreateCashManagementDocument_emptyList() throws Exception {
+        boolean failedAsExpected = false;
 
         try {
-            deleteIfExists(CMST_WORKGROUP);
-            CashDrawer preDocCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, true);
-            assertTrue(preDocCD.isClosed());
-
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testCreate_valid", "cmst3");
-            assertNotNull(createdDoc);
-            testDocumentId = createdDoc.getFinancialDocumentNumber();
-
-            // save it separately
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, testDocumentId);
-            documentService.saveDocument(createdDoc, "saving it", null);
-            
-            // verify that the doc was saved
-            CashManagementDocument retrievedDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-            assertEquals("S", retrievedDoc.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus());
+            changeCurrentUser("RJWEISS");
+            cashManagementService.createCashManagementDocument("testCreateCashManagementDocument_empty", new ArrayList(),
+                    KNOWN_VERIFICATION_UNIT);
         }
-        finally {
-            // cancel the document
-            cleanupCancel(testDocumentId);
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
         }
+
+        assertTrue(failedAsExpected);
     }
 
-    final public void testCreateCashManagementDocument_cashDrawerAlreadyOpen() throws Exception {
+    public void testCreateCashManagementDocument_blankWorkgroupName() throws Exception {
+        CashReceiptDocument cr1 = null;
+        CashReceiptDocument cr2 = null;
+
         try {
-            deleteIfExists(CMST_WORKGROUP);
-            CashDrawer preDocCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, true);
-            assertTrue(preDocCD.isClosed());
-
-            // force the drawer open
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, "foo");
-
-            // fail creating the document since the CashDrawer is already open
             boolean failedAsExpected = false;
+
             try {
-                cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testCreate_validCollision 2", "cmst5");
+                changeCurrentUser("INEFF");
+                List crList = new ArrayList();
+                cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr128",
+                        Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+                crList.add(cr1);
+                cr2 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr131",
+                        Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+                crList.add(cr2);
+
+                changeCurrentUser("RJWEISS");
+                cashManagementService.createCashManagementDocument("testCreateCashManagementDocument_blank", crList, "  ");
             }
-            catch (CashDrawerStateException e) {
+            catch (IllegalArgumentException e) {
                 failedAsExpected = true;
             }
         }
         finally {
-            // delete the cashDrawer you created
-            deleteIfExists(CMST_WORKGROUP);
+            // cleanup (hide CRs from future tests)
+            updateCRDocStatus(cr1, "Z");
+            updateCRDocStatus(cr2, "Z");
         }
     }
 
-
-    final public void testCancelCashManagementDocument_validEmpty() throws Exception {
-        String testDocumentId = null;
+    public void testCreateCashManagementDocument_invalidReceiptState() throws Exception {
+        CashReceiptDocument cr1 = null;
+        CashReceiptDocument cr2 = null;
 
         try {
-            //
-            // create empty CMDoc
-            //
-            deleteIfExists(CMST_WORKGROUP);
-            CashDrawer preDocCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, false);
-            assertNull(preDocCD);
+            boolean failedAsExpected = false;
 
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testCreate_valid", "cmst3");
-            assertNotNull(createdDoc);
-            testDocumentId = createdDoc.getFinancialDocumentNumber();
+            try {
+                changeCurrentUser("INEFF");
+                List crList = new ArrayList();
+                cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr159",
+                        Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+                crList.add(cr1);
+                cr2 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr162", "Q");
+                crList.add(cr2);
 
-            // save it separately
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, testDocumentId);
-            documentService.saveDocument(createdDoc, "saving it", null);
-            
-            // verify it actually got saved
-            CashManagementDocument retrievedDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-            assertEquals("S", retrievedDoc.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus());
-
-
-            //
-            // cancel empty CMDoc
-            //
-            cashManagementService.cancelCashManagementDocument(createdDoc);
-
-            // verify that the cancellation closed the cash drawer
-            CashDrawer postCancelCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, false);
-            assertNotNull(postCancelCD);
-            assertEquals(postCancelCD.getStatusCode(), Constants.CashDrawerConstants.STATUS_CLOSED);
+                changeCurrentUser("RJWEISS");
+                cashManagementService.createCashManagementDocument("testCreateCashManagementDocument_blank", crList,
+                        KNOWN_VERIFICATION_UNIT);
+            }
+            catch (InvalidCashReceiptState e) {
+                failedAsExpected = true;
+            }
         }
         finally {
-            // cancel the document
-            cleanupCancel(testDocumentId);
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
+            // cleanup (hide CRs from future tests)
+            updateCRDocStatus(cr1, "Z");
+            updateCRDocStatus(cr2, "Z");
         }
     }
 
-
-    final public void testCancelCashManagementDocument_valid_interimOnly() throws Exception {
-        String testDocumentId = null;
+    public void testCreateCashManagementDocument_invalidDrawerState() throws Exception {
+        String workgroupName = KNOWN_VERIFICATION_UNIT;
+        CashReceiptDocument cr1 = null;
+        CashReceiptDocument cr2 = null;
 
         try {
-            //
-            // create a valid, empty CashManagementDocument
-            deleteIfExists(CMST_WORKGROUP);
-            CashDrawer preDocCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, true);
-            assertTrue(preDocCD.isClosed());
+            boolean failedAsExpected = false;
 
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testAddID_valid", null);
-            testDocumentId = createdDoc.getFinancialDocumentNumber();
+            try {
+                cashDrawerService.closeCashDrawer(workgroupName);
 
-            // save it separately
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, testDocumentId);
-            documentService.saveDocument(createdDoc, "saving it", null);
-            
-            //
-            // create Interim Deposit
+                changeCurrentUser("INEFF");
+                List crList = new ArrayList();
+                cr1 = buildCashReceiptDoc(workgroupName, "cr193",
+                        Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+                crList.add(cr1);
+                cr2 = buildCashReceiptDoc(workgroupName, "cr196",
+                        Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+                crList.add(cr2);
 
-            // create CashReceipts
+                changeCurrentUser("RJWEISS");
+                cashManagementService.createCashManagementDocument("testCreateCashManagementDocument_blank", crList, workgroupName);
+            }
+            catch (InvalidCashDrawerState e) {
+                failedAsExpected = true;
+            }
+        }
+        finally {
+            // cleanup (hide CRs from future tests, reopen the drawer)
+            updateCRDocStatus(cr1, "Z");
+            updateCRDocStatus(cr2, "Z");
+            cashDrawerService.openCashDrawer(workgroupName);
+        }
+    }
+
+    public void testCreateCashManagementDocument() throws Exception {
+        String workgroupName = KNOWN_VERIFICATION_UNIT;
+
+        // build the document
+        changeCurrentUser("INEFF");
+        List crList = new ArrayList();
+        CashReceiptDocument cr1 = buildCashReceiptDoc(workgroupName, "cr221",
+                Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+        crList.add(cr1);
+        CashReceiptDocument cr2 = buildCashReceiptDoc(workgroupName, "cr224",
+                Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+        crList.add(cr2);
+
+        changeCurrentUser("RJWEISS");
+        CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument("testCreateCashManagementDocument",
+                crList, workgroupName);
+
+        // retrieve it and look for components
+        CashManagementDocument retrievedDoc = (CashManagementDocument) docService.getByDocumentHeaderId(createdDoc
+                .getFinancialDocumentNumber());
+        assertNotNull(retrievedDoc);
+        assertFalse(retrievedDoc.getDeposits().isEmpty());
+
+        Deposit deposit = (Deposit) retrievedDoc.getDeposits().get(0);
+        List retrievedCRs = cashManagementService.retrieveCashReceipts(deposit);
+        assertEquals(2, retrievedCRs.size());
+
+        // cleanup (hide CRs from future tests, reopen the drawer)
+        for (Iterator i = retrievedCRs.iterator(); i.hasNext();) {
+            CashReceiptDocument cr = (CashReceiptDocument) i.next();
+            updateCRDocStatus(cr, "Z");
+        }
+        cashDrawerService.openCashDrawer(workgroupName);
+    }
+
+    public void testGetCashManagementDocumentByCashReceiptDocument() throws Exception {
+        String workgroupName = KNOWN_VERIFICATION_UNIT;
+
+        // build the document
+        changeCurrentUser("INEFF");
+        List crList = new ArrayList();
+        CashReceiptDocument cr1 = buildCashReceiptDoc(workgroupName, "cr256",
+                Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+        crList.add(cr1);
+
+        changeCurrentUser("RJWEISS");
+        CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument("testCreateCashManagementDocument",
+                crList, workgroupName);
+
+        // retrieve it and look for components
+        CashManagementDocument retrievedDoc = cashManagementService.getCashManagementDocumentByCashReceiptDocument(cr1);
+        assertNotNull(retrievedDoc);
+        assertFalse(retrievedDoc.getDeposits().isEmpty());
+
+        Deposit deposit = (Deposit) retrievedDoc.getDeposits().get(0);
+        List retrievedCRs = cashManagementService.retrieveCashReceipts(deposit);
+        assertEquals(1, retrievedCRs.size());
+
+        // cleanup (hide CRs from future tests, reopen the drawer)
+        for (Iterator i = retrievedCRs.iterator(); i.hasNext();) {
+            CashReceiptDocument cr = (CashReceiptDocument) i.next();
+            updateCRDocStatus(cr, "Z");
+        }
+        cashDrawerService.openCashDrawer(workgroupName);
+    }
+
+
+    public void testCreateDeposit_nullDocument() throws Exception {
+        boolean failedAsExpected = false;
+
+        try {
+            cashManagementService.createDeposit(null, VALID_LINE_NUMBER, new ArrayList(), KNOWN_VERIFICATION_UNIT);
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
+
+        assertTrue(failedAsExpected);
+    }
+
+    public void testCreateDeposit_nullLineNumber() throws Exception {
+        boolean failedAsExpected = false;
+
+        try {
+            cashManagementService.createDeposit(buildCashManagementDoc("testCreateDeposit_nullLineNumber"), null, new ArrayList(),
+                    KNOWN_VERIFICATION_UNIT);
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
+
+        assertTrue(failedAsExpected);
+    }
+
+    public void testCreateDeposit_nullList() throws Exception {
+        boolean failedAsExpected = false;
+
+        try {
+            cashManagementService.createDeposit(buildCashManagementDoc("testCreateDeposit_nullList"), VALID_LINE_NUMBER, null,
+                    KNOWN_VERIFICATION_UNIT);
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
+
+        assertTrue(failedAsExpected);
+    }
+
+    public void testCreateDeposit_emptyList() throws Exception {
+        boolean failedAsExpected = false;
+
+        try {
+            cashManagementService.createDeposit(buildCashManagementDoc("testCreateDeposit_emptyList"), VALID_LINE_NUMBER,
+                    new ArrayList(), KNOWN_VERIFICATION_UNIT);
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
+
+        assertTrue(failedAsExpected);
+    }
+
+    public void testCreateDeposit_blankWorkgroupName() throws Exception {
+        CashReceiptDocument cr1 = null;
+
+        try {
+            boolean failedAsExpected = false;
+
             changeCurrentUser("INEFF");
-            CashReceiptDocument cr1 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR1", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("25.00"), KualiDecimal.ZERO);
-            CashReceiptDocument cr2 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR2", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, KualiDecimal.ZERO, new KualiDecimal("25.00"));
-            CashReceiptDocument cr3 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR3", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("27.00"), new KualiDecimal("23.00"));
-
             List crList = new ArrayList();
+            cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr345",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
             crList.add(cr1);
-            crList.add(cr2);
-            crList.add(cr3);
 
-            // add interim deposit
-            changeCurrentUser("KHUNTLEY");
-            CashManagementDocument interimDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-            cashManagementService.addDeposit(interimDoc, VALID_DEPOSIT_TICKET, lookupBankAccount(), crList, false);
-
-
-            //
-            // verify addition
-            CashManagementDocument depositedDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-            {
-
-                // 1 deposit in document
-                List deposits = depositedDoc.getDeposits();
-                assertEquals(1, deposits.size());
-
-                // deposit exists in database
-                Map depositPK = new HashMap();
-                depositPK.put("financialDocumentNumber", testDocumentId);
-                depositPK.put("financialDocumentDepositLineNumber", new Integer(0));
-
-                assertEquals(1, businessObjectService.countMatching(Deposit.class, depositPK));
-
-                // deposit contains 3 CRs
-                Deposit deposit = depositedDoc.getDeposit(0);
-                List depositedReceiptControls = deposit.getDepositCashReceiptControl();
-                assertEquals(3, depositedReceiptControls.size());
-
-                // CRs are in appropriate state
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr1.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr2.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr3.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
+            try {
+                changeCurrentUser("RJWEISS");
+                cashManagementService.createDeposit(buildCashManagementDoc("testCreateDeposit_blankGroup"), VALID_LINE_NUMBER,
+                        crList, " ");
+            }
+            catch (IllegalArgumentException e) {
+                failedAsExpected = true;
             }
 
-            //
-            // cancel document
-            documentService.cancelDocument(depositedDoc, "testing CMS.cancel");
-
-            DocumentWorkflowStatusMonitor m = new DocumentWorkflowStatusMonitor(documentService, testDocumentId, "X");
-            assertTrue(ChangeMonitor.waitUntilChange(m, 300, 5));
-
-
-            {
-                //
-                // verify cancellation
-                CashManagementDocument postCanceledDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-
-
-                // document state is canceled
-                assertEquals("X", postCanceledDoc.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus());
-
-
-                // 0 deposits in document
-                List deposits = postCanceledDoc.getDeposits();
-                assertEquals(0, deposits.size());
-
-                // deposit doesn't exist in database
-                Map depositPK = new HashMap();
-                depositPK.put("financialDocumentNumber", testDocumentId);
-                depositPK.put("financialDocumentDepositLineNumber", new Integer(0));
-
-                assertEquals(0, businessObjectService.countMatching(Deposit.class, depositPK));
-
-                // cash receipts have been restored to appropriate state
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.VERIFIED, lookupCR(cr1.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.VERIFIED, lookupCR(cr2.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.VERIFIED, lookupCR(cr3.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-            }
+            assertTrue(failedAsExpected);
         }
         finally {
-            // cancel CMDoc
-            cleanupCancel(testDocumentId);
-
-            // clean up CRdoc
-            denatureCashReceipts(CMST_WORKGROUP);
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
+            updateCRDocStatus(cr1, "Z");
         }
     }
 
-
-    private static final String VALID_DEPOSIT_TICKET = "0 0 0 destruct 0";
-
-    final public void testAddInterimDeposit_nullDoc() throws Exception {
-        boolean failedAsExpected = false;
+    public void testCreateDeposit_unverifiedCRDoc() throws Exception {
+        CashReceiptDocument cr1 = null;
 
         try {
-            cashManagementService.addDeposit(null, VALID_DEPOSIT_TICKET, lookupBankAccount(), null, false);
-        }
-        catch (IllegalArgumentException e) {
-            failedAsExpected = true;
-        }
+            boolean failedAsExpected = false;
 
-        assertTrue(failedAsExpected);
-    }
-
-    final public void testAddInterimDeposit_nullCashReceiptList() throws Exception {
-        boolean failedAsExpected = false;
-
-        String docId = null;
-        try {
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testAddID_nCRL", null);
-            docId = createdDoc.getFinancialDocumentNumber();
-
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, docId);
-            documentService.saveDocument(createdDoc, "saving it", null);
-
-            cashManagementService.addDeposit(createdDoc, VALID_DEPOSIT_TICKET, lookupBankAccount(), null, false);
-        }
-        catch (IllegalArgumentException e) {
-            failedAsExpected = true;
-        }
-        finally {
-            if (docId != null) {
-                Document testDoc = documentService.getByDocumentHeaderId(docId);
-                documentService.cancelDocument(testDoc, "CMST cleanup");
-            }
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
-        }
-
-        assertTrue(failedAsExpected);
-    }
-
-    final public void testAddInterimDeposit_emptyCashReceiptList() throws Exception {
-        boolean failedAsExpected = false;
-
-        String docId = null;
-        try {
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testAddID_eCRL", null);
-            docId = createdDoc.getFinancialDocumentNumber();
-
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, docId);
-            documentService.saveDocument(createdDoc, "saving it", null);
-
-            cashManagementService.addDeposit(createdDoc, VALID_DEPOSIT_TICKET, lookupBankAccount(), new ArrayList(), false);
-        }
-        catch (IllegalArgumentException e) {
-            failedAsExpected = true;
-        }
-        finally {
-            if (docId != null) {
-                Document testDoc = documentService.getByDocumentHeaderId(docId);
-                documentService.cancelDocument(testDoc, "CMST cleanup");
-            }
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
-        }
-
-        assertTrue(failedAsExpected);
-    }
-
-    final public void testAddInterimDeposit_nullBank() throws Exception {
-        boolean failedAsExpected = false;
-
-        String docId = null;
-        try {
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testAddID_eCRL", null);
-            docId = createdDoc.getFinancialDocumentNumber();
-
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, docId);
-            documentService.saveDocument(createdDoc, "saving it", null);
-
-            cashManagementService.addDeposit(createdDoc, VALID_DEPOSIT_TICKET, null, new ArrayList(), false);
-        }
-        catch (IllegalArgumentException e) {
-            failedAsExpected = true;
-        }
-        finally {
-            if (docId != null) {
-                Document testDoc = documentService.getByDocumentHeaderId(docId);
-                documentService.cancelDocument(testDoc, "CMST cleanup");
-            }
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
-        }
-
-        assertTrue(failedAsExpected);
-    }
-
-    final public void testAddInterimDeposit_nonverifiedCashReceipt() throws Exception {
-        boolean failedAsExpected = false;
-
-        String testDocumentId = null;
-
-        try {
-            //
-            // create a valid, empty CashManagementDocument
-            deleteIfExists(CMST_WORKGROUP);
-            CashDrawer preDocCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, true);
-            assertTrue(preDocCD.isClosed());
-
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testAddID_nonverified", null);
-            testDocumentId = createdDoc.getFinancialDocumentNumber();
-
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, testDocumentId);
-            documentService.saveDocument(createdDoc, "saving it", null);
-
-            // retrieve the document, for future use
-            CashManagementDocument retrievedDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-
-            //
-            // create Interim Deposit
-
-            // create CashReceipt
             changeCurrentUser("INEFF");
-            CashReceiptDocument cr = buildCashReceiptDoc(CMST_WORKGROUP, "CMST nonverified CR", Constants.DocumentStatusCodes.CashReceipt.INTERIM, new KualiDecimal("25.00"), new KualiDecimal("75.00"));
-            changeCurrentUser("KHUNTLEY");
-
             List crList = new ArrayList();
-            crList.add(cr);
-
-            // add invalid interim deposit
-            cashManagementService.addDeposit(retrievedDoc, VALID_DEPOSIT_TICKET, lookupBankAccount(), crList, false);
-        }
-        catch (InvalidCashReceiptState e) {
-            failedAsExpected = true;
-        }
-        finally {
-            // cancel CMDoc
-            cleanupCancel(testDocumentId);
-
-            // clean up CRdoc
-            denatureCashReceipts(CMST_WORKGROUP);
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
-        }
-
-        assertTrue(failedAsExpected);
-    }
-
-    final public void testAddInterimDeposit_unsavedCMDoc() throws Exception {
-        boolean failedAsExpected = false;
-
-        String testDocumentId = null;
-
-        try {
-            //
-            // create a valid, empty CashManagementDocument
-            deleteIfExists(CMST_WORKGROUP);
-            CashDrawer preDocCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, true);
-            assertTrue(preDocCD.isClosed());
-
-            changeCurrentUser("KHUNTLEY");
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testAddID_nonverified", null);
-            testDocumentId = createdDoc.getFinancialDocumentNumber();
-
-            //
-            // create Interim Deposit
-
-            // create CashReceipt
-            changeCurrentUser("INEFF");
-            CashReceiptDocument cr = buildCashReceiptDoc(CMST_WORKGROUP, "CMST noncheck CR", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("25.00"), KualiDecimal.ZERO);
-            changeCurrentUser("KHUNTLEY");
-
-            List crList = new ArrayList();
-            crList.add(cr);
-
-            // add interim deposit
-            cashManagementService.addDeposit(createdDoc, VALID_DEPOSIT_TICKET, lookupBankAccount(), crList, false);
-        }
-        catch (IllegalStateException e) {
-            failedAsExpected = true;
-        }
-        finally {
-            // clean up CRdoc
-            denatureCashReceipts(CMST_WORKGROUP);
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
-        }
-
-        assertTrue(failedAsExpected);
-    }
-
-
-    final public void testAddInterimDeposit_valid() throws Exception {
-        String testDocumentId = null;
-
-        try {
-            //
-            // create a valid, empty CashManagementDocument
-            deleteIfExists(CMST_WORKGROUP);
-            CashDrawer preDocCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, true);
-            assertTrue(preDocCD.isClosed());
-
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testAddID_valid", null);
-            testDocumentId = createdDoc.getFinancialDocumentNumber();
-
-            // save it
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, testDocumentId);
-            documentService.saveDocument(createdDoc, "saving it", null);
-
-            // retrieve the document, for future use
-            CashManagementDocument retrievedDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-
-
-            //
-            // create Interim Deposit
-
-            // create CashReceipts
-            changeCurrentUser("INEFF");
-            CashReceiptDocument cr1 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR1", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("25.00"), KualiDecimal.ZERO);
-            CashReceiptDocument cr2 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR2", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, KualiDecimal.ZERO, new KualiDecimal("25.00"));
-            CashReceiptDocument cr3 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR3", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("27.00"), new KualiDecimal("23.00"));
-
-            List crList = new ArrayList();
+            cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr373",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
             crList.add(cr1);
+            CashReceiptDocument cr2 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "foo", "Z");
             crList.add(cr2);
-            crList.add(cr3);
 
-            // add interim deposit
-            changeCurrentUser("KHUNTLEY");
-            cashManagementService.addDeposit(retrievedDoc, VALID_DEPOSIT_TICKET, lookupBankAccount(), crList, false);
+            try {
+                changeCurrentUser("RJWEISS");
+                cashManagementService.createDeposit(buildCashManagementDoc("testCreateDeposit_unverifiedCR"), VALID_LINE_NUMBER,
+                        crList, " ");
+            }
+            catch (IllegalArgumentException e) {
+                failedAsExpected = true;
+            }
 
-
-            //
-            // validate results
-            CashManagementDocument depositedDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-
-            // 1 deposit
-            List deposits = depositedDoc.getDeposits();
-            assertEquals(1, deposits.size());
-
-            // deposit exists in database
-            Map depositPK = new HashMap();
-            depositPK.put("financialDocumentNumber", testDocumentId);
-            depositPK.put("financialDocumentDepositLineNumber", new Integer(0));
-
-            assertEquals(1, businessObjectService.countMatching(Deposit.class, depositPK));
-
-            // deposit is interim, not final
-            Deposit deposit = (Deposit) deposits.get(0);
-            assertEquals(Constants.DepositConstants.DEPOSIT_TYPE_INTERIM, deposit.getDepositTypeCode());
-
-            // deposit contains 3 CRs
-            List depositedReceiptControls = deposit.getDepositCashReceiptControl();
-            assertEquals(3, depositedReceiptControls.size());
-
-            // CRs are in appropriate state
-            assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr1.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-            assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr2.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-            assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr3.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-
-            // total value of the deposit is the sum of the values of the 3 CRs
-            assertEquals(new KualiDecimal("100.00"), deposit.getDepositAmount());
+            assertTrue(failedAsExpected);
         }
         finally {
-            // cancel CMDoc
-            cleanupCancel(testDocumentId);
-
-            // clean up CRdoc
-            denatureCashReceipts(CMST_WORKGROUP);
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
+            // cleanup (hide CR from future tests)
+            updateCRDocStatus(cr1, "Z");
         }
     }
 
+    public void testCreateDeposit() throws Exception {
+        CashReceiptDocument cr1 = null;
+        CashReceiptDocument cr2 = null;
+
+        try {
+            changeCurrentUser("RJWEISS");
+            CashManagementDocument cmDoc = buildCashManagementDoc("testCreateDeposit_nullLineNumber");
+
+            changeCurrentUser("INEFF");
+            List crList = new ArrayList();
+            cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr406",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            crList.add(cr1);
+            cr2 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr409",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            crList.add(cr2);
+
+            // verify that it doesn't exist
+            List preDeposits = cashManagementService.retrieveDeposits(cmDoc);
+            assertTrue(preDeposits.isEmpty());
+
+            // create it
+            Deposit createdDeposit = cashManagementService.createDeposit(cmDoc, VALID_LINE_NUMBER, crList, KNOWN_VERIFICATION_UNIT);
+
+            // verify that it exists
+            List postDeposits = cashManagementService.retrieveDeposits(cmDoc);
+            assertEquals(1, postDeposits.size());
+            Deposit retrievedDeposit = (Deposit) postDeposits.get(0);
+            assertTrue(createdDeposit.keysEqual(retrievedDeposit));
+        }
+        finally {
+            // cleanup (hide CRs from future tests)
+            updateCRDocStatus(cr1, "Z");
+            updateCRDocStatus(cr2, "Z");
+        }
+    }
+
+
+    public void testRetrieveDeposits_nullDocument() throws Exception {
+        boolean failedAsExpected = false;
+
+        try {
+            cashManagementService.retrieveDeposits(null);
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
+
+        assertTrue(failedAsExpected);
+    }
+
+    public void testRetrieveDeposits_noDeposits() throws Exception {
+        CashManagementDocument cmDoc = buildCashManagementDoc("testRetrieveDeposits_noDeposits");
+
+        List deposits = cashManagementService.retrieveDeposits(cmDoc);
+        assertTrue(deposits.isEmpty());
+    }
+
+    public void testRetrieveDeposits() throws Exception {
+        CashReceiptDocument cr1 = null;
+        CashReceiptDocument cr2 = null;
+        CashReceiptDocument cr3 = null;
+
+        try {
+            changeCurrentUser("RJWEISS");
+            CashManagementDocument cmDoc = buildCashManagementDoc("testRetrieveDeposits");
+
+            changeCurrentUser("INEFF");
+            List crList1 = new ArrayList();
+            cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr465",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            crList1.add(cr1);
+            cr2 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr468",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            crList1.add(cr2);
+
+            List crList2 = new ArrayList();
+            cr3 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr473",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            crList2.add(cr3);
+
+            cashManagementService.createDeposit(cmDoc, VALID_LINE_NUMBER, crList1, KNOWN_VERIFICATION_UNIT);
+            cashManagementService.createDeposit(cmDoc, VALID_LINE_NUMBER2, crList2, KNOWN_VERIFICATION_UNIT);
+
+            List deposits = cashManagementService.retrieveDeposits(cmDoc);
+            assertEquals(2, deposits.size());
+        }
+        finally {
+            // cleanup (hide CRs from future tests)
+            updateCRDocStatus(cr1, "Z");
+            updateCRDocStatus(cr2, "Z");
+            updateCRDocStatus(cr3, "Z");
+        }
+    }
+
+
+    public void testRetrieveCashReceipts_nullDeposit() throws Exception {
+        boolean failedAsExpected = false;
+
+        try {
+            cashManagementService.retrieveCashReceipts(null);
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
+
+        assertTrue(failedAsExpected);
+    }
+
+    public void testRetrieveCashReceipts_blankDeposit() throws Exception {
+        boolean failedAsExpected = false;
+
+        try {
+            cashManagementService.retrieveCashReceipts(new Deposit());
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
+
+        assertTrue(failedAsExpected);
+    }
+
+    public void testRetrieveCashReceipts() throws Exception {
+        CashReceiptDocument cr1 = null;
+        CashReceiptDocument cr2 = null;
+
+        try {
+            // create a deposit
+            changeCurrentUser("RJWEISS");
+            CashManagementDocument cmDoc = buildCashManagementDoc("testRetrieveCashReceipts");
+
+            changeCurrentUser("INEFF");
+            List createdCRList = new ArrayList();
+            cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr529",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            createdCRList.add(cr1);
+            cr2 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr532",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            createdCRList.add(cr2);
+
+            Deposit deposit = cashManagementService.createDeposit(cmDoc, VALID_LINE_NUMBER, createdCRList, KNOWN_VERIFICATION_UNIT);
+
+            // verify that it containts the desired cashReceipts
+            List retrievedCRList = cashManagementService.retrieveCashReceipts(deposit);
+            assertEquals(createdCRList.size(), retrievedCRList.size());
+            // UNF: need to compare for equality of list contents, not just size
+
+        }
+        finally {
+            // cleanup (hide CRs from future tests)
+            updateCRDocStatus(cr1, "Z");
+            updateCRDocStatus(cr2, "Z");
+        }
+    }
 
     public void testCancelDeposit_nullDeposit() throws Exception {
         boolean failedAsExpected = false;
@@ -610,172 +561,249 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
         assertTrue(failedAsExpected);
     }
 
+    public void testCancelDeposit_blankDeposit() throws Exception {
+        cashManagementService.cancelDeposit(new Deposit());
+    }
 
-    public void testCancelDeposit_cancelSingleInterim() throws Exception {
-        String testDocumentId = null;
+    public void testCancelDeposit_nonexistentDeposit() throws Exception {
+        Deposit hackedDeposit = new Deposit();
+        hackedDeposit.setFinancialDocumentNumber("-1");
+        hackedDeposit.setFinancialDocumentDepositLineNumber(VALID_LINE_NUMBER);
+
+        cashManagementService.cancelDeposit(hackedDeposit);
+    }
+
+    public void testCancelDeposit() throws Exception {
+        changeCurrentUser("RJWEISS");
+        CashManagementDocument cmDoc = buildCashManagementDoc("testCancelDeposit");
+
+        changeCurrentUser("INEFF");
+        List crList = new ArrayList();
+        CashReceiptDocument cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr582",
+                Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+        crList.add(cr1);
+        CashReceiptDocument cr2 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr585",
+                Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+        crList.add(cr2);
+
+        // verify that it doesn't exist
+        List preDeposits = cashManagementService.retrieveDeposits(cmDoc);
+        assertTrue(preDeposits.isEmpty());
+
+        // create it
+        Deposit createdDeposit = cashManagementService.createDeposit(cmDoc, VALID_LINE_NUMBER, crList, KNOWN_VERIFICATION_UNIT);
+
+        // verify that it exists
+        List postCreatedDeposits = cashManagementService.retrieveDeposits(cmDoc);
+        assertEquals(1, postCreatedDeposits.size());
+        Deposit retrievedDeposit = (Deposit) postCreatedDeposits.get(0);
+        assertTrue(createdDeposit.keysEqual(retrievedDeposit));
+
+        // cancel it
+        cashManagementService.cancelDeposit(retrievedDeposit);
+
+        // verify that it doesn't exist
+        List postCancelDeposits = cashManagementService.retrieveDeposits(cmDoc);
+        assertTrue(postCancelDeposits.isEmpty());
+
+        // change status of created CRs, so they don't show up in the webapp or other tests
+        cr1 = (CashReceiptDocument) docService.getByDocumentHeaderId(cr1.getFinancialDocumentNumber());
+        cr2 = (CashReceiptDocument) docService.getByDocumentHeaderId(cr2.getFinancialDocumentNumber());
+        updateCRDocStatus(cr1, "Z");
+        updateCRDocStatus(cr2, "Z");
+    }
+
+
+    public void testValidateCashReceipts_nullList() throws Exception {
+        boolean failedAsExpected = false;
 
         try {
-            //
-            // create a valid, empty CashManagementDocument
-            deleteIfExists(CMST_WORKGROUP);
-            CashDrawer preDocCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, true);
-            assertTrue(preDocCD.isClosed());
+            cashManagementService.validateVerifiedCashReceipts(null);
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
 
-            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testAddID_valid", null);
-            testDocumentId = createdDoc.getFinancialDocumentNumber();
+        assertTrue(failedAsExpected);
+    }
 
-            // save it
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, testDocumentId);
-            documentService.saveDocument(createdDoc, "saving it", null);
+    public void testValidateCashReceipts_emptyList() throws Exception {
+        boolean failedAsExpected = false;
 
-            //
-            // add Interim Deposit
+        try {
+            cashManagementService.validateVerifiedCashReceipts(new ArrayList());
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
 
-            // create CashReceipts
+        assertTrue(failedAsExpected);
+    }
+
+    public void testValidateCashReceipts_noMatching() throws Exception {
+        CashReceiptDocument cr1 = null;
+        CashReceiptDocument cr2 = null;
+
+        try {
+            List crDocs = new ArrayList();
+
             changeCurrentUser("INEFF");
-            CashReceiptDocument cr1 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR1", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("25.00"), KualiDecimal.ZERO);
-            CashReceiptDocument cr2 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR2", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, KualiDecimal.ZERO, new KualiDecimal("25.00"));
-            CashReceiptDocument cr3 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR3", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("27.00"), new KualiDecimal("23.00"));
+            cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr645", "Q");
+            crDocs.add(cr1);
+            cr2 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr647", "Q");
+            crDocs.add(cr2);
 
-            List crList = new ArrayList();
-            crList.add(cr1);
-            crList.add(cr2);
-            crList.add(cr3);
-
-            // add interim deposit
-            changeCurrentUser("KHUNTLEY");
-            CashManagementDocument interimDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-            cashManagementService.addDeposit(interimDoc, VALID_DEPOSIT_TICKET, lookupBankAccount(), crList, false);
-
-
-            //
-            // verify addition
-
-            CashManagementDocument depositedDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-            {
-                // 1 deposit in document
-                List deposits = depositedDoc.getDeposits();
-                assertEquals(1, deposits.size());
-
-                // deposit exists in database
-                Map depositPK = new HashMap();
-                depositPK.put("financialDocumentNumber", testDocumentId);
-                depositPK.put("financialDocumentDepositLineNumber", new Integer(0));
-
-                assertEquals(1, businessObjectService.countMatching(Deposit.class, depositPK));
-
-                // deposit contains 3 CRs
-                Deposit deposit = depositedDoc.getDeposit(0);
-                List depositedReceiptControls = deposit.getDepositCashReceiptControl();
-                assertEquals(3, depositedReceiptControls.size());
-
-                // CRs are in appropriate state
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr1.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr2.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr3.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-            }
-
-
-            {
-                //
-                // cancel deposit
-                Deposit deposit = depositedDoc.getDeposit(0);
-                cashManagementService.cancelDeposit(deposit);
-
-                //
-                // verify cancellation
-                CashManagementDocument postCanceledDoc = (CashManagementDocument) documentService.getByDocumentHeaderId(testDocumentId);
-
-                // 0 deposits in document
-                List deposits = postCanceledDoc.getDeposits();
-                assertEquals(0, deposits.size());
-
-                // deposit doesn't exist in database
-                Map depositPK = new HashMap();
-                depositPK.put("financialDocumentNumber", testDocumentId);
-                depositPK.put("financialDocumentDepositLineNumber", new Integer(0));
-
-                assertEquals(0, businessObjectService.countMatching(Deposit.class, depositPK));
-
-                // cash receipts have been restored to appropriate state
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.VERIFIED, lookupCR(cr1.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.VERIFIED, lookupCR(cr2.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-                assertEquals(Constants.DocumentStatusCodes.CashReceipt.VERIFIED, lookupCR(cr3.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
-            }
+            boolean succeeded = cashManagementService.validateVerifiedCashReceipts(crDocs);
+            assertFalse(succeeded);
         }
         finally {
-            // cancel CMDoc
-            cleanupCancel(testDocumentId);
-
-            // clean up CRdoc
-            denatureCashReceipts(CMST_WORKGROUP);
-
-            // delete the cashDrawer which was created as a side-effect above
-            deleteIfExists(CMST_WORKGROUP);
+            updateCRDocStatus(cr1, "Z");
+            updateCRDocStatus(cr2, "Z");
         }
     }
 
-    private CashReceiptDocument lookupCR(String documentId) throws WorkflowException {
-        CashReceiptDocument crDoc = (CashReceiptDocument) documentService.getByDocumentHeaderId(documentId);
+    public void testValidateCashReceipts() throws Exception {
+        CashReceiptDocument cr1 = null;
+        CashReceiptDocument cr2 = null;
 
-        return crDoc;
-    }
+        try {
+            List crDocs = new ArrayList();
 
+            changeCurrentUser("INEFF");
+            cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr667",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            crDocs.add(cr1);
+            cr2 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr670",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            crDocs.add(cr2);
 
-
-    private void deleteIfExists(String workgroupName) {
-        Map deleteCriteria = new HashMap();
-        deleteCriteria.put("workgroupName", workgroupName);
-        businessObjectService.deleteMatching(CashDrawer.class, deleteCriteria);
-    }
-
-    private static final String[] BOTH_STATII = { Constants.DocumentStatusCodes.CashReceipt.VERIFIED, Constants.DocumentStatusCodes.CashReceipt.INTERIM };
-
-    private void denatureCashReceipts(String workgroupName) {
-        List verifiedReceipts = cashReceiptService.getCashReceipts(workgroupName, BOTH_STATII);
-
-        for (Iterator i = verifiedReceipts.iterator(); i.hasNext();) {
-            CashReceiptDocument receipt = (CashReceiptDocument) i.next();
-            receipt.getDocumentHeader().setFinancialDocumentStatusCode("Z");
-            documentService.updateDocument(receipt);
+            boolean succeeded = cashManagementService.validateVerifiedCashReceipts(crDocs);
+            assertTrue(succeeded);
+        }
+        finally {
+            // cleanup (hide CRs from future tests)
+            updateCRDocStatus(cr1, "Z");
+            updateCRDocStatus(cr2, "Z");
         }
     }
 
-    private CashReceiptDocument buildCashReceiptDoc(String workgroupName, String description, String status, KualiDecimal cashAmount, KualiDecimal checkAmount) throws WorkflowException {
-        CashReceiptDocument crDoc = (CashReceiptDocument) documentService.getNewDocument(CashReceiptDocument.class);
+
+    public void testRetrieveCashReceiptsByVerificationUnit_blankWorkgroup() throws Exception {
+        boolean failedAsExpected = false;
+
+        try {
+            cashManagementService.retrieveVerifiedCashReceiptsByVerificationUnit("   ");
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
+
+        assertTrue(failedAsExpected);
+    }
+
+    // public void testRetrieveCashReceiptsByVerificationUnit_noMatching() throws Exception {
+    // UNF: once getCampusCodeByCashReceiptVerificationUnitWorkgroupName actually does a lookup based on workgroup name, uncomment
+    // this and make sure that CRs for groupUnknown don't show up when retrieving for groupKnown
+    // fail();
+    // }
+
+    public void testRetrieveCashReceiptsByVerificationUnit() throws Exception {
+        CashReceiptDocument cr1 = null;
+
+        try {
+            // create a cashReceipt
+            changeCurrentUser("INEFF");
+            cr1 = buildCashReceiptDoc(KNOWN_VERIFICATION_UNIT, "cr710",
+                    Constants.CashReceiptConstants.DOCUMENT_STATUS_CD_CASH_RECEIPT_VERIFIED);
+            cr1 = (CashReceiptDocument) docService.save(cr1, "saving", null);
+
+            // retrieve it
+            List retrievedCRDocs = cashManagementService.retrieveVerifiedCashReceiptsByVerificationUnit(KNOWN_VERIFICATION_UNIT);
+
+            // validate retrieval
+            boolean contains = false;
+            for (Iterator i = retrievedCRDocs.iterator(); !contains && i.hasNext();) {
+                CashReceiptDocument cr = (CashReceiptDocument) i.next();
+
+                String retrievedDocNumber = cr.getFinancialDocumentNumber();
+                if (retrievedDocNumber.equals(cr1.getFinancialDocumentNumber())) {
+                    contains = true;
+                }
+            }
+
+            assertTrue(contains);
+        }
+        finally {
+            // cleanup (hide CRs from future tests)
+            updateCRDocStatus(cr1, "Z");
+        }
+    }
+
+    /**
+     * This method tests the default return of the single verification unit for now.
+     */
+    public void testGetCashReceiptVerificationUnitByCampusCode() {
+        assertEquals(Constants.CashReceiptConstants.CASH_RECEIPT_VERIFICATION_UNIT, SpringServiceLocator.getCashManagementService()
+                .getCashReceiptVerificationUnitWorkgroupNameByCampusCode(Constants.EMPTY_STRING));
+    }
+
+    public void testGetCampusCodeByCashReceiptVerificationUnitWorkgroupName_blankWorkgroup() throws Exception {
+        boolean failedAsExpected = false;
+
+        try {
+            cashManagementService.getCampusCodeByCashReceiptVerificationUnitWorkgroupName("  ");
+        }
+        catch (IllegalArgumentException e) {
+            failedAsExpected = true;
+        }
+
+        assertTrue(failedAsExpected);
+    }
+
+    public void testGetCampusCodeByCashReceiptVerificationUnitWorkgroupName_noMatching() throws Exception {
+        String campusCode = cashManagementService
+                .getCampusCodeByCashReceiptVerificationUnitWorkgroupName(UNKNOWN_VERIFICATION_UNIT);
+
+        assertNull(campusCode);
+    }
+
+    // public void testGetCampusCodeByCashReceiptVerificationUnitWorkgroupName() throws Exception {
+    // UNF: once getCampusCodeByCashReceiptVerificationUnitWorkgroupName actually does a lookup based on workgroup name, uncomment
+    // this and make sure that groupKnown doesn't return a null campusCode
+    // String campusCode = cashManagementService.getCampusCodeByCashReceiptVerificationUnitWorkgroupName(KNOWN_VERIFICATION_UNIT);
+    //        
+    // assertNotNull( campusCode );
+    // }
+
+    private CashReceiptDocument buildCashReceiptDoc(String workgroupName, String description, String status)
+            throws WorkflowException, UserNotFoundException, Exception {
+        CashReceiptDocument crDoc = (CashReceiptDocument) docService.getNewDocument(CashReceiptDocument.class);
 
         crDoc.getDocumentHeader().setFinancialDocumentDescription(description);
         crDoc.getDocumentHeader().setFinancialDocumentStatusCode(status);
 
-        crDoc.setCheckEntryMode(CashReceiptDocument.CHECK_ENTRY_TOTAL);
-        crDoc.setTotalCashAmount(cashAmount);
-        crDoc.setTotalCheckAmount(checkAmount);
+        crDoc.setCampusLocationCode(cashManagementService
+                .getCampusCodeByCashReceiptVerificationUnitWorkgroupName(KNOWN_VERIFICATION_UNIT));
 
-        crDoc.setCampusLocationCode(cashReceiptService.getCampusCodeForCashReceiptVerificationUnit(workgroupName));
+        docService.save(crDoc, "buildVerifiedCashReceiptDoc", null);
 
-        documentService.saveDocument(crDoc, "buildVerifiedCashReceiptDoc", null);
-
-        CashReceiptDocument persistedDoc = (CashReceiptDocument) documentService.getByDocumentHeaderId(crDoc.getFinancialDocumentNumber());
-        return persistedDoc;
+        return crDoc;
     }
 
-    private BankAccount lookupBankAccount() {
-        Map keyMap = new HashMap();
-        keyMap.put("financialDocumentBankCode", "TEST");
-        keyMap.put("finDocumentBankAccountNumber", "1111");
+    private CashManagementDocument buildCashManagementDoc(String description) throws WorkflowException, UserNotFoundException {
+        CashManagementDocument cmDoc = (CashManagementDocument) docService.getNewDocument(CashManagementDocument.class);
 
-        BankAccount bankAccount = (BankAccount) businessObjectService.findByPrimaryKey(BankAccount.class, keyMap);
+        cmDoc.getDocumentHeader().setFinancialDocumentDescription(description);
 
-        return bankAccount;
+        return cmDoc;
     }
 
-    private void cleanupCancel(String documentId) throws WorkflowException {
-        if (documentId != null) {
-            Document testDoc = documentService.getByDocumentHeaderId(documentId);
+    private void updateCRDocStatus(CashReceiptDocument crDoc, String status) throws WorkflowException {
+        if (crDoc != null) {
+            DocumentHeader dh = crDoc.getDocumentHeader();
+            dh.setFinancialDocumentStatusCode(status);
 
-            if (!testDoc.getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
-                documentService.cancelDocument(testDoc, "CMST cleanup cancel");
-            }
+            docService.updateDocument(crDoc);
         }
     }
 }

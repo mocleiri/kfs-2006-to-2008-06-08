@@ -22,22 +22,12 @@
  */
 package org.kuali.module.gl.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.bo.user.Options;
-import org.kuali.module.gl.batch.poster.PostTransaction;
-import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
-import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.service.impl.scrubber.Message;
-import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
-import org.kuali.module.gl.util.LedgerEntryHolder;
-import org.kuali.module.gl.util.LedgerReport;
-import org.kuali.module.gl.util.Summary;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
@@ -45,118 +35,19 @@ import org.kuali.module.gl.util.Summary;
  */
 
 public interface ReportService {
-    /**
-     * Scrubber General Ledger Transaction Summary report
-     * 
-     * @param - runDate Run date of the report
-     * @param - groups Groups to summarize for the report
-     * @param - title Title of the report
-     */
-    public void generateScrubberLedgerSummaryReport(Date runDate, Collection groups, String title);
 
-    /**
-     * Scrubber Statistics report
-     * 
-     * @param - runDate Run date of the report
-     * @param - scrubberReport Summary information
-     * @param - scrubberReportErrors Map of transactions with errors or warnings
-     */
-    public void generateScrubberStatisticsReport(Date runDate, ScrubberReportData scrubberReport, Map<Transaction,List<Message>> scrubberReportErrors);
+    public void generateIcrReports(Date runDate, List reportSummary, Map reportErrors, Map ledgerEntries);
 
-    /** 
-     * Scrubber Demerger Statistics report
-     * 
-     * @param - runDate Run date of the report
-     * @param - demergerReport Summary information
-     */
-    public void generateScrubberDemergerStatisticsReports(Date runDate, DemergerReportData demergerReport);
+    public void generatePosterReports(Date runDate, List reportSummary, Map reportErrors, Map ledgerEntries, int mode);
 
-    /**
-     * Scrubber Bad Balance listing report
-     * 
-     * @param - runDate Run date of the report
-     * @param - groups Groups to summarize for the report
-     */
-    public void generateScrubberBadBalanceTypeListingReport(Date runDate, Collection groups);
+    public void generateScrubberReports(Date runDate, List reportSummary, Map<Transaction, List<Message>> reportErrors, Map ledgerEntries);
 
-    /**
-     * Scrubber Removed Transactions report
-     * 
-     * @param - runDate Run date of the report
-     * @param errorGroup Group with error transactions
-     */
-    public void generateScrubberRemovedTransactions(Date runDate,OriginEntryGroup errorGroup);
+    public void generateScrubberReports(Date runDate, List reportSummary, Map reportErrors, Integer groupId);
 
-    /**
-     * GL Summary report
-     * 
-     * @param runDate
-     * @param yearOffset
-     * @param balanceTypeCodes
-     */
-    public void generateGlSummary(Date runDate,Options year,String reportType);
+    public void generateScrubberReports(Date runDate, List reportSummary, Map reportErrors, List groupIdList);
 
-    /**
-     * GL Encumbrance Summary report
-     * 
-     * @param runDate
-     * @param yearOffset
-     * @param balanceTypeCodes
-     */
-    public void generateGlEncumbranceSummary(Date runDate,Options year,String reportType);
+    public void generateYearEndEncumbranceForwardReports(Date runDate, List reportSummary, Map reportErrors, Map ledgerEntries);
 
-    /**
-     * Poster Statistics report
-     * 
-     * @param runDate
-     * @param reportSummary
-     * @param reportErrors
-     * @param mode
-     */
-    public void generatePosterStatisticsReport(Date runDate, Map<String,Integer> reportSummary, List<PostTransaction> transactionPosters, Map<Transaction,List<Message>> reportErrors, int mode);
+    public void generateYearEndBalanceForwardReports(Date runDate, List reportSummary, Map reportErrors, Map ledgerEntries);
 
-    /**
-     * Poster ICR Statistics report
-     * 
-     * @param runDate
-     * @param reportErrors
-     * @param reportExpendTranRetrieved
-     * @param reportExpendTranDeleted
-     * @param reportExpendTranKept
-     * @param reportOriginEntryGenerated
-     */
-    public void generatePosterIcrStatisticsReport(Date runDate, Map<Transaction,List<Message>> reportErrors, int reportExpendTranRetrieved,int reportExpendTranDeleted,int reportExpendTranKept,int reportOriginEntryGenerated);
-
-    /**
-     * ICR Encumbrance Statistics report
-     * 
-     * @param runDate
-     * @param totalOfIcrEncumbrances
-     * @param totalOfEntriesGenerated
-     */
-    public void generateIcrEncumbranceStatisticsReport(Date runDate,int totalOfIcrEncumbrances,int totalOfEntriesGenerated);
-
-    /**
-     * Main Poster Input Transaction Report
-     * 
-     * @param runDate
-     * @param groups
-     */
-    public void generatePosterMainLedgerSummaryReport(Date runDate, Collection groups);
-
-    /**
-     * Icr Poster Input Transaction Report
-     * 
-     * @param runDate
-     * @param groups
-     */
-    public void generatePosterIcrLedgerSummaryReport(Date runDate, Collection groups);
-
-    /**
-     * Reversal Poster Input Transaction Report
-     * 
-     * @param runDate
-     * @param groups
-     */
-    public void generatePosterReversalLedgerSummaryReport(Date runDate, Collection groups);
 }

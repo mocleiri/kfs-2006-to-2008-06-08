@@ -26,37 +26,38 @@ import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.document.Document;
-import org.kuali.core.document.FinancialDocument;
 import org.kuali.core.document.TransactionalDocument;
-import org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
-import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.module.financial.bo.AdvanceDepositDetail;
 import org.kuali.module.financial.document.AdvanceDepositDocument;
-import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
  * Business rules applicable to Advance Deposit documents.
  * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule implements GenerateGeneralLedgerDocumentPendingEntriesRule {
+public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule {
     /**
      * For Advance Deposit documents, the document is balanced if the sum total of advance deposits equals the sum total of the
      * accounting lines.
      * 
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDocumentBalanceValid(org.kuali.core.document.TransactionalDocument)
      */
-    @Override
     protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
         AdvanceDepositDocument ad = (AdvanceDepositDocument) transactionalDocument;
 
-        // make sure the document is in balance
-        boolean isValid = ad.getSourceTotal().equals(ad.getSumTotalAmount());
-
+        // make sure that the deposits total is greater than zero
+        boolean isValid = ad.getSumTotalAmount().compareTo(Constants.ZERO) > 0;
         if (!isValid) {
-            GlobalVariables.getErrorMap().putError(PropertyConstants.NEW_ADVANCE_DEPOSIT, KeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_OUT_OF_BALANCE);
+            GlobalVariables.getErrorMap().put(PropertyConstants.NEW_ADVANCE_DEPOSIT, KeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_TOTAL_INVALID);
+        }
+
+        if (isValid) {
+            // make sure the document is in balance
+            isValid = ad.getSourceTotal().compareTo(ad.getSumTotalAmount()) == 0;
+
+            if (!isValid) {
+                GlobalVariables.getErrorMap().put(PropertyConstants.NEW_ADVANCE_DEPOSIT, KeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_OUT_OF_BALANCE);
+            }
         }
 
         return isValid;
@@ -67,7 +68,6 @@ public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule implemen
      * 
      * @see org.kuali.core.rule.DocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
      */
-    @Override
     protected boolean processCustomRouteDocumentBusinessRules(Document document) {
         boolean isValid = super.processCustomRouteDocumentBusinessRules(document);
 
@@ -88,7 +88,7 @@ public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule implemen
         AdvanceDepositDocument ad = (AdvanceDepositDocument) document;
 
         if (ad.getAdvanceDeposits().size() == 0) {
-            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX, KeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_REQ_NUMBER_DEPOSITS_NOT_MET);
+            GlobalVariables.getErrorMap().put(DOCUMENT_ERROR_PREFIX, KeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_REQ_NUMBER_DEPOSITS_NOT_MET);
             return false;
         }
         else {
@@ -101,7 +101,6 @@ public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule implemen
      * 
      * @see org.kuali.core.rule.DocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.Document)
      */
-    @Override
     protected boolean processCustomSaveDocumentBusinessRules(Document document) {
         boolean isValid = super.processCustomSaveDocumentBusinessRules(document);
 
@@ -130,36 +129,5 @@ public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule implemen
         }
         GlobalVariables.getErrorMap().removeFromErrorPath(Constants.DOCUMENT_PROPERTY_NAME);
         return isValid;
-    }
-
-    /**
-     * Generates bank offset GLPEs for deposits, if enabled.
-     *
-     * @see org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule#processGenerateDocumentGeneralLedgerPendingEntries(org.kuali.core.document.FinancialDocument,org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
-     */
-    public boolean processGenerateDocumentGeneralLedgerPendingEntries(FinancialDocument financialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
-        boolean success = true;
-        final AdvanceDepositDocument advanceDepositDocument = ((AdvanceDepositDocument) financialDocument);
-        if (advanceDepositDocument.isBankCashOffsetEnabled()) {
-            int displayedDepositNumber = 1;
-            for (AdvanceDepositDetail detail : advanceDepositDocument.getAdvanceDeposits()) {
-                detail.refreshReferenceObject(PropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT);
-
-                GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
-                if (!TransactionalDocumentRuleUtil.populateBankOffsetGeneralLedgerPendingEntry(detail.getFinancialDocumentBankAccount(), detail.getFinancialDocumentAdvanceDepositAmount(), advanceDepositDocument, advanceDepositDocument.getPostingYear(), sequenceHelper, bankOffsetEntry, Constants.ADVANCE_DEPOSITS_LINE_ERRORS)) {
-                    success = false;
-                    continue;  // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at all.
-                }
-                bankOffsetEntry.setTransactionLedgerEntryDescription(TransactionalDocumentRuleUtil.formatProperty(KeyConstants.AdvanceDeposit.DESCRIPTION_GLPE_BANK_OFFSET, displayedDepositNumber++));
-                advanceDepositDocument.getGeneralLedgerPendingEntries().add(bankOffsetEntry);
-                sequenceHelper.increment();
-
-                GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(bankOffsetEntry);
-                success &= populateOffsetGeneralLedgerPendingEntry(advanceDepositDocument.getPostingYear(), bankOffsetEntry, sequenceHelper, offsetEntry);
-                advanceDepositDocument.getGeneralLedgerPendingEntries().add(offsetEntry);
-                sequenceHelper.increment();
-            }
-        }
-        return success;
     }
 }

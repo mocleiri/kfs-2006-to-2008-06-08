@@ -4,6 +4,8 @@
 	htmlFormAction="financialProcurementCard" renderMultipart="true"
 	showTabButtons="true">
 
+	<html:hidden property="document.nextSourceLineNumber" />
+	<html:hidden property="document.nextTargetLineNumber" />
 	<html:hidden
 		property="document.procurementCardHolder.financialDocumentNumber" />
 	<html:hidden
@@ -48,7 +50,7 @@
 
 	<kul:notes />
 
-	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
+	<kul:adHocRecipients />
 
 	<kul:routeLog />
 

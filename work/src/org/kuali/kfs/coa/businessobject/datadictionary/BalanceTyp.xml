@@ -53,7 +53,7 @@
 
                 <maxLength>2</maxLength>
                 <validationPattern>
-                    <alphaNumeric allowWhitespace="false" />
+                    <alphaNumeric />
                 </validationPattern>
                 <required>true</required>
 
@@ -65,7 +65,7 @@
                 <description>The type of balance this offsetting definition is relevant for.</description>
             </attribute>
 
-            <attribute name="name" forceUppercase="true">
+            <attribute name="name" forceUppercase="false">
                 <label>Balance Type Name</label>
                 <shortLabel>Name</shortLabel>
 
@@ -80,7 +80,7 @@
                 <description>Balance Type Name...</description>
             </attribute>
 
-            <attribute name="financialBalanceTypeShortNm" forceUppercase="true">
+            <attribute name="financialBalanceTypeShortNm" forceUppercase="false">
                 <label>Short Name</label>
                 <shortLabel>Short Name</shortLabel>
 

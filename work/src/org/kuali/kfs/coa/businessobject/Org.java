@@ -25,34 +25,18 @@ package org.kuali.module.chart.bo;
  * THE SOFTWARE.
  */
 
-import java.math.RoundingMode;
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.bo.Country;
 import org.kuali.core.bo.PostalZipCode;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.core.util.UrlFactory;
-import org.kuali.core.util.cache.ObjectCacheOSCacheImpl;
-import org.kuali.module.chart.service.OrganizationService;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class Org extends BusinessObjectBase {
-    private static final Logger LOG = Logger.getLogger(Org.class);
-    
+
     private static final long serialVersionUID = 121873645110037203L;
 
     /**
@@ -64,6 +48,7 @@ public class Org extends BusinessObjectBase {
 
     private String organizationCode;
     private String organizationName;
+    private String organizationStreetAddress;
     private String organizationCityName;
     private String organizationStateCode;
     private String organizationZipCode;
@@ -81,10 +66,7 @@ public class Org extends BusinessObjectBase {
     private String campusPlantAccountNumber;
     private String organizationPlantChartCode;
     private String campusPlantChartCode;
-    private String organizationCountryCode;
-    private String organizationLine1Address;
-    private String organizationLine2Address;
-    
+
     private Chart chartOfAccounts;
     private Org hrisOrganization;
     private Account organizationDefaultAccount;
@@ -99,12 +81,6 @@ public class Org extends BusinessObjectBase {
     private Chart organizationPlantChart;
     private Chart campusPlantChart;
     private PostalZipCode postalZip;
-    private Country organizationCountry;
-    
-    //  HRMS Org fields
-    private OrganizationExtension organizationExtension;
-    private String editHrmsUnitSectionBlank;
-    private String editHrmsUnitSection;
 
     // fields for mixed anonymous keys
     private String organizationDefaultAccountNumber;
@@ -127,7 +103,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationCode attribute.
      * 
-     * @param organizationCode The organizationCode to set.
+     * @param - organizationCode The organizationCode to set.
      * 
      */
     public void setOrganizationCode(String organizationCode) {
@@ -147,11 +123,31 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationName attribute.
      * 
-     * @param organizationName The organizationName to set.
+     * @param - organizationName The organizationName to set.
      * 
      */
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
+    }
+
+    /**
+     * Gets the organizationStreetAddress attribute.
+     * 
+     * @return - Returns the organizationStreetAddress
+     * 
+     */
+    public String getOrganizationStreetAddress() {
+        return organizationStreetAddress;
+    }
+
+    /**
+     * Sets the organizationStreetAddress attribute.
+     * 
+     * @param - organizationStreetAddress The organizationStreetAddress to set.
+     * 
+     */
+    public void setOrganizationStreetAddress(String organizationStreetAddress) {
+        this.organizationStreetAddress = organizationStreetAddress;
     }
 
     /**
@@ -167,7 +163,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationCityName attribute.
      * 
-     * @param organizationCityName The organizationCityName to set.
+     * @param - organizationCityName The organizationCityName to set.
      * 
      */
     public void setOrganizationCityName(String organizationCityName) {
@@ -187,7 +183,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationStateCode attribute.
      * 
-     * @param organizationStateCode The organizationStateCode to set.
+     * @param - organizationStateCode The organizationStateCode to set.
      * 
      */
     public void setOrganizationStateCode(String organizationStateCode) {
@@ -207,7 +203,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationZipCode attribute.
      * 
-     * @param organizationZipCode The organizationZipCode to set.
+     * @param - organizationZipCode The organizationZipCode to set.
      * 
      */
     public void setOrganizationZipCode(String organizationZipCode) {
@@ -227,7 +223,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationBeginDate attribute.
      * 
-     * @param organizationBeginDate The organizationBeginDate to set.
+     * @param - organizationBeginDate The organizationBeginDate to set.
      * 
      */
     public void setOrganizationBeginDate(Date organizationBeginDate) {
@@ -247,7 +243,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationEndDate attribute.
      * 
-     * @param organizationEndDate The organizationEndDate to set.
+     * @param - organizationEndDate The organizationEndDate to set.
      * 
      */
     public void setOrganizationEndDate(Date organizationEndDate) {
@@ -267,7 +263,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationActiveIndicator attribute.
      * 
-     * @param organizationActiveIndicator The organizationActiveIndicator to set.
+     * @param - organizationActiveIndicator The organizationActiveIndicator to set.
      * 
      */
     public void setOrganizationActiveIndicator(boolean organizationActiveIndicator) {
@@ -287,7 +283,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationInFinancialProcessingIndicator attribute.
      * 
-     * @param organizationInFinancialProcessingIndicator The organizationInFinancialProcessingIndicator to set.
+     * @param - organizationInFinancialProcessingIndicator The organizationInFinancialProcessingIndicator to set.
      * 
      */
     public void setOrganizationInFinancialProcessingIndicator(boolean organizationInFinancialProcessingIndicator) {
@@ -307,7 +303,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the chartOfAccounts attribute.
      * 
-     * @param chartOfAccounts The chartOfAccounts to set.
+     * @param - chartOfAccounts The chartOfAccounts to set.
      * @deprecated
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -327,7 +323,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationDefaultAccount attribute.
      * 
-     * @param organizationDefaultAccount The organizationDefaultAccount to set.
+     * @param - organizationDefaultAccount The organizationDefaultAccount to set.
      * @deprecated
      */
     public void setOrganizationDefaultAccount(Account organizationDefaultAccount) {
@@ -347,7 +343,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationManagerUniversal attribute.
      * 
-     * @param organizationManagerUniversal The organizationManagerUniversal to set.
+     * @param - organizationManagerUniversal The organizationManagerUniversal to set.
      * @deprecated
      */
     public void setOrganizationManagerUniversal(UniversalUser organizationManagerUniversal) {
@@ -367,7 +363,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the responsibilityCenter attribute.
      * 
-     * @param responsibilityCenter The responsibilityCenter to set.
+     * @param - responsibilityCenter The responsibilityCenter to set.
      * @deprecated
      */
     public void setResponsibilityCenter(ResponsibilityCenter responsibilityCenter) {
@@ -387,7 +383,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationPhysicalCampus attribute.
      * 
-     * @param organizationPhysicalCampus The organizationPhysicalCampus to set.
+     * @param - organizationPhysicalCampus The organizationPhysicalCampus to set.
      * @deprecated
      */
     public void setOrganizationPhysicalCampus(Campus organizationPhysicalCampus) {
@@ -407,7 +403,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationType attribute.
      * 
-     * @param organizationType The organizationType to set.
+     * @param - organizationType The organizationType to set.
      * @deprecated
      */
     public void setOrganizationType(OrgType organizationType) {
@@ -427,7 +423,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the reportsToOrganization attribute.
      * 
-     * @param reportsToOrganization The reportsToOrganization to set.
+     * @param - reportsToOrganization The reportsToOrganization to set.
      * @deprecated
      */
     public void setReportsToOrganization(Org reportsToOrganization) {
@@ -447,7 +443,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the reportsToChartOfAccounts attribute.
      * 
-     * @param reportsToChartOfAccounts The reportsToChartOfAccounts to set.
+     * @param - reportsToChartOfAccounts The reportsToChartOfAccounts to set.
      * @deprecated
      */
     public void setReportsToChartOfAccounts(Chart reportsToChartOfAccounts) {
@@ -467,7 +463,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationPlantAccount attribute.
      * 
-     * @param organizationPlantAccount The organizationPlantAccount to set.
+     * @param - organizationPlantAccount The organizationPlantAccount to set.
      * @deprecated
      */
     public void setOrganizationPlantAccount(Account organizationPlantAccount) {
@@ -487,7 +483,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the campusPlantAccount attribute.
      * 
-     * @param campusPlantAccount The campusPlantAccount to set.
+     * @param - campusPlantAccount The campusPlantAccount to set.
      * @deprecated
      */
     public void setCampusPlantAccount(Account campusPlantAccount) {
@@ -507,7 +503,7 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the organizationPlantChart attribute.
      * 
-     * @param organizationPlantChart The organizationPlantChart to set.
+     * @param - organizationPlantChart The organizationPlantChart to set.
      * @deprecated
      */
     public void setOrganizationPlantChart(Chart organizationPlantChart) {
@@ -527,30 +523,13 @@ public class Org extends BusinessObjectBase {
     /**
      * Sets the campusPlantChart attribute.
      * 
-     * @param campusPlantChart The campusPlantChart to set.
+     * @param - campusPlantChart The campusPlantChart to set.
      * @deprecated
      */
     public void setCampusPlantChart(Chart campusPlantChart) {
         this.campusPlantChart = campusPlantChart;
     }
 
-    /**
-     * Gets the organizationCountry attribute. 
-     * @return Returns the organizationCountry.
-     */
-    public Country getOrganizationCountry() {
-        return organizationCountry;
-    }
-
-    /**
-     * Sets the organizationCountry attribute value.
-     * @param organizationCountry The organizationCountry to set.
-     * @deprecated
-     */
-    public void setOrganizationCountry(Country organizationCountry) {
-        this.organizationCountry = organizationCountry;
-    }
-    
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
@@ -746,55 +725,7 @@ public class Org extends BusinessObjectBase {
     }
 
     /**
-     * Gets the organizationCountryCode attribute. 
-     * @return Returns the organizationCountryCode.
-     */
-    public String getOrganizationCountryCode() {
-        return organizationCountryCode;
-    }
-
-    /**
-     * Sets the organizationCountryCode attribute value.
-     * @param organizationCountryCode The organizationCountryCode to set.
-     */
-    public void setOrganizationCountryCode(String organizationCountryCode) {
-        this.organizationCountryCode = organizationCountryCode;
-    }
-
-    /**
-     * Gets the organizationLine1Address attribute. 
-     * @return Returns the organizationLine1Address.
-     */
-    public String getOrganizationLine1Address() {
-        return organizationLine1Address;
-    }
-
-    /**
-     * Sets the organizationLine1Address attribute value.
-     * @param organizationLine1Address The organizationLine1Address to set.
-     */
-    public void setOrganizationLine1Address(String organizationLine1Address) {
-        this.organizationLine1Address = organizationLine1Address;
-    }
-
-    /**
-     * Gets the organizationLine2Address attribute. 
-     * @return Returns the organizationLine2Address.
-     */
-    public String getOrganizationLine2Address() {
-        return organizationLine2Address;
-    }
-
-    /**
-     * Sets the organizationLine2Address attribute value.
-     * @param organizationLine2Address The organizationLine2Address to set.
-     */
-    public void setOrganizationLine2Address(String organizationLine2Address) {
-        this.organizationLine2Address = organizationLine2Address;
-    }
-    
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
@@ -822,145 +753,4 @@ public class Org extends BusinessObjectBase {
     public String getEditPlantAccountsSectionBlank() {
         return editPlantAccountsSectionBlank;
     }
-
-    /**
-     * Gets the editHrmsUnitSection attribute. 
-     * @return Returns the editHrmsUnitSection.
-     */
-    public final String getEditHrmsUnitSection() {
-        return editHrmsUnitSection;
-    }
-
-    /**
-     * Sets the editHrmsUnitSection attribute value.
-     * @param editHrmsUnitSection The editHrmsUnitSection to set.
-     */
-    public final void setEditHrmsUnitSection(String editHrmsUnitSection) {
-        this.editHrmsUnitSection = editHrmsUnitSection;
-    }
-
-    /**
-     * Gets the editHrmsUnitSectionBlank attribute. 
-     * @return Returns the editHrmsUnitSectionBlank.
-     */
-    public final String getEditHrmsUnitSectionBlank() {
-        return editHrmsUnitSectionBlank;
-    }
-
-    /**
-     * Sets the editHrmsUnitSectionBlank attribute value.
-     * @param editHrmsUnitSectionBlank The editHrmsUnitSectionBlank to set.
-     */
-    public final void setEditHrmsUnitSectionBlank(String editHrmsUnitSectionBlank) {
-        this.editHrmsUnitSectionBlank = editHrmsUnitSectionBlank;
-    }
-
-    /**
-     * Gets the organizationExtension attribute. 
-     * @return Returns the organizationExtension.
-     */
-    public final OrganizationExtension getOrganizationExtension() {
-        return organizationExtension;
-    }
-
-    /**
-     * Sets the organizationExtension attribute value.
-     * @param organizationExtension The organizationExtension to set.
-     */
-    public final void setOrganizationExtension(OrganizationExtension organizationExtension) {
-        this.organizationExtension = organizationExtension;
-    }
-    
-    public String getOrganizationHierarchy() {
-        StringBuffer result = new StringBuffer();
-        Set<Org> seen = new HashSet<Org>();
-        
-        Org org=this;
-        
-        while (org!=null && org.getReportsToOrganizationCode()!=null && !seen.contains(org)) {
-            String rChart = org.getReportsToChartOfAccountsCode();
-            String rOrg=org.getReportsToOrganizationCode();
-            
-            seen.add(org);
-            org=SpringServiceLocator.getOrganizationService().getByPrimaryId(rChart,rOrg);
-            
-            result.append(rChart+"/"+rOrg+" "+((org==null)?"":org.getOrganizationName())+"\n");
-        }
-        
-        return result.toString();
-    }
-
-    public String getOrganizationReviewHierarchy() {
-        
-        Properties params = new Properties();
-
-        params.put("returnLocation","");
-        params.put("quickFinderLookupable","");
-        params.put("backLocation","");
-        params.put("formKey","");
-        params.put("methodToCall","search");
-        params.put("lookupableImplServiceName","RuleBaseValuesLookupableImplService");
-        params.put("ruleTemplateName","KualiOrgReviewTemplate");
-        params.put("activeInd","");
-        params.put("delegateRuleSearch","ALL");
-        params.put("conversionFields","");
-        params.put("docTypeFullName","");
-        params.put("ruleDescription","");
-        params.put("workgroupName","");
-        params.put("ruleDelegationOnly","");
-        params.put("networkId","");
-        params.put("roleName","");
-        params.put("ruleBaseValuesId","");
-        params.put("delegationWizard","");
-        params.put("org_review_fin_coa_cd",this.chartOfAccountsCode);
-        params.put("org_review_org_cd",this.organizationCode);
-        params.put("fromAmount","");
-        params.put("toAmount","");
-        params.put("listKey","");
-        params.put("overrideCd","");
-        
-        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString("workflow.base.url")+"/Lookup.do",params);
-    }
-    
-    /**
-     * Implementing equals so Org will behave reasonably in a hashed datastructure.
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        boolean equal = false;
-
-        LOG.debug("Org equals");
-        
-        if (obj != null) {
-            
-            if (this==obj) return true;
-            
-            if (this.getClass().isAssignableFrom(obj.getClass())) {
-                
-                Org other = (Org) obj;
-
-                LOG.debug("this: "+this);
-                LOG.debug("other: "+other);
-                
-                if (StringUtils.equals(this.getChartOfAccountsCode(), other.getChartOfAccountsCode())) {
-                    if (StringUtils.equals(this.getOrganizationCode(), other.getOrganizationCode())) {
-                        equal = true;
-                    }
-                }
-            }
-        }
-
-        return equal;
-    }
-    
-   /**
-    * @see java.lang.Object#hashCode()
-    */
-   public int hashCode() {
-       String hashString = getChartOfAccountsCode() + "|" + getOrganizationCode();
-       return hashString.hashCode();
-   }
-
-  
 }

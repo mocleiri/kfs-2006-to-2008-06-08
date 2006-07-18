@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.KualiDecimalMoney;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -47,9 +47,9 @@ public class SufficientFundBalances extends BusinessObjectBase {
     private String accountNumber;
     private String financialObjectCode;
     private String accountSufficientFundsCode;
-    private KualiDecimal currentBudgetBalanceAmount;
-    private KualiDecimal accountActualExpenditureAmt;
-    private KualiDecimal accountEncumbranceAmount;
+    private KualiDecimalMoney currentBudgetBalanceAmount;
+    private KualiDecimalMoney accountActualExpenditureAmt;
+    private KualiDecimalMoney accountEncumbranceAmount;
     private Date transactionDateTimeStamp;
     private ObjectCode objectCode;
     private Chart chart;
@@ -81,9 +81,9 @@ public class SufficientFundBalances extends BusinessObjectBase {
         setAccountNumber(line.substring(6, 13).trim());
         setFinancialObjectCode(line.substring(13, 17).trim());
         setAccountSufficientFundsCode(line.substring(17, 24).trim());
-        setCurrentBudgetBalanceAmount(new KualiDecimal(line.substring(24, 41).trim()));
-        setAccountActualExpenditureAmt(new KualiDecimal(line.substring(41, 58).trim()));
-        setAccountEncumbranceAmount(new KualiDecimal(line.substring(58, 75).trim()));
+        setCurrentBudgetBalanceAmount(new KualiDecimalMoney(line.substring(24, 41).trim()));
+        setAccountActualExpenditureAmt(new KualiDecimalMoney(line.substring(41, 58).trim()));
+        setAccountEncumbranceAmount(new KualiDecimalMoney(line.substring(58, 75).trim()));
         setTransactionDateTimeStamp(parseDate(line.substring(75, 85), true));
     }
 
@@ -190,7 +190,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     /**
      * Sets the universityFiscalYear attribute.
      * 
-     * @param universityFiscalYear The universityFiscalYear to set.
+     * @param - universityFiscalYear The universityFiscalYear to set.
      * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -211,7 +211,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     /**
      * Sets the chartOfAccountsCode attribute.
      * 
-     * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * @param - chartOfAccountsCode The chartOfAccountsCode to set.
      * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -232,7 +232,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     /**
      * Sets the accountNumber attribute.
      * 
-     * @param accountNumber The accountNumber to set.
+     * @param - accountNumber The accountNumber to set.
      * 
      */
     public void setAccountNumber(String accountNumber) {
@@ -253,7 +253,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     /**
      * Sets the financialObjectCode attribute.
      * 
-     * @param financialObjectCode The financialObjectCode to set.
+     * @param - financialObjectCode The financialObjectCode to set.
      * 
      */
     public void setFinancialObjectCode(String financialObjectCode) {
@@ -274,7 +274,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     /**
      * Sets the accountSufficientFundsCode attribute.
      * 
-     * @param accountSufficientFundsCode The accountSufficientFundsCode to set.
+     * @param - accountSufficientFundsCode The accountSufficientFundsCode to set.
      * 
      */
     public void setAccountSufficientFundsCode(String accountSufficientFundsCode) {
@@ -288,17 +288,17 @@ public class SufficientFundBalances extends BusinessObjectBase {
      * @return - Returns the currentBudgetBalanceAmount
      * 
      */
-    public KualiDecimal getCurrentBudgetBalanceAmount() {
+    public KualiDecimalMoney getCurrentBudgetBalanceAmount() {
         return currentBudgetBalanceAmount;
     }
 
     /**
      * Sets the currentBudgetBalanceAmount attribute.
      * 
-     * @param currentBudgetBalanceAmount The currentBudgetBalanceAmount to set.
+     * @param - currentBudgetBalanceAmount The currentBudgetBalanceAmount to set.
      * 
      */
-    public void setCurrentBudgetBalanceAmount(KualiDecimal currentBudgetBalanceAmount) {
+    public void setCurrentBudgetBalanceAmount(KualiDecimalMoney currentBudgetBalanceAmount) {
         this.currentBudgetBalanceAmount = currentBudgetBalanceAmount;
     }
 
@@ -309,17 +309,17 @@ public class SufficientFundBalances extends BusinessObjectBase {
      * @return - Returns the accountActualExpenditureAmt
      * 
      */
-    public KualiDecimal getAccountActualExpenditureAmt() {
+    public KualiDecimalMoney getAccountActualExpenditureAmt() {
         return accountActualExpenditureAmt;
     }
 
     /**
      * Sets the accountActualExpenditureAmt attribute.
      * 
-     * @param accountActualExpenditureAmt The accountActualExpenditureAmt to set.
+     * @param - accountActualExpenditureAmt The accountActualExpenditureAmt to set.
      * 
      */
-    public void setAccountActualExpenditureAmt(KualiDecimal accountActualExpenditureAmt) {
+    public void setAccountActualExpenditureAmt(KualiDecimalMoney accountActualExpenditureAmt) {
         this.accountActualExpenditureAmt = accountActualExpenditureAmt;
     }
 
@@ -330,17 +330,17 @@ public class SufficientFundBalances extends BusinessObjectBase {
      * @return - Returns the accountEncumbranceAmount
      * 
      */
-    public KualiDecimal getAccountEncumbranceAmount() {
+    public KualiDecimalMoney getAccountEncumbranceAmount() {
         return accountEncumbranceAmount;
     }
 
     /**
      * Sets the accountEncumbranceAmount attribute.
      * 
-     * @param accountEncumbranceAmount The accountEncumbranceAmount to set.
+     * @param - accountEncumbranceAmount The accountEncumbranceAmount to set.
      * 
      */
-    public void setAccountEncumbranceAmount(KualiDecimal accountEncumbranceAmount) {
+    public void setAccountEncumbranceAmount(KualiDecimalMoney accountEncumbranceAmount) {
         this.accountEncumbranceAmount = accountEncumbranceAmount;
     }
 
@@ -358,7 +358,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     /**
      * Sets the transactionDateTimeStamp attribute.
      * 
-     * @param transactionDateTimeStamp The transactionDateTimeStamp to set.
+     * @param - transactionDateTimeStamp The transactionDateTimeStamp to set.
      * 
      */
     public void setTransactionDateTimeStamp(Date transactionDateTimeStamp) {
@@ -379,7 +379,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     /**
      * Sets the objectCode attribute.
      * 
-     * @param objectCode The objectCode to set.
+     * @param - objectCode The objectCode to set.
      * @deprecated
      */
     public void setObjectCode(ObjectCode objectCode) {
@@ -399,7 +399,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     /**
      * Sets the chart attribute.
      * 
-     * @param chart The chart to set.
+     * @param - chart The chart to set.
      * @deprecated
      */
     public void setChart(Chart chart) {
@@ -419,7 +419,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     /**
      * Sets the account attribute.
      * 
-     * @param account The account to set.
+     * @param - account The account to set.
      * @deprecated
      */
     public void setAccount(Account account) {
@@ -427,7 +427,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
