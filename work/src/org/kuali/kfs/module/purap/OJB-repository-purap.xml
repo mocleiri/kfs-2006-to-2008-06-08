@@ -383,7 +383,6 @@
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="vendorTypeDescription" column="VNDR_TYP_DESC" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorWorkGroupName" column="VNDR_WORK_GRP_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
 
