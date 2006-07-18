@@ -18,7 +18,7 @@
         </authorizations>
 
         <documentTypeName>KualiCarrierMaintenanceDocument</documentTypeName>
-        <documentTypeCode>PMCT</documentTypeCode>
+        <documentTypeCode>PMCA</documentTypeCode>
 
         <label>Carrier Maintenance Document</label>
         <shortLabel>Carrier Maint Doc</shortLabel>
@@ -27,7 +27,7 @@
         <description>Document used to create or update Carrier objects</description>
 
         <lockingKeys>
-            <field attributeName="CarrierCode" />
+            <field attributeName="carrierCode" />
         </lockingKeys>
 
         <maintainableSections>
@@ -35,6 +35,7 @@
                 <maintainableItems>
                     <maintainableField name="carrierCode" required="true" />
                     <maintainableField name="carrierDescription" required="true" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>
