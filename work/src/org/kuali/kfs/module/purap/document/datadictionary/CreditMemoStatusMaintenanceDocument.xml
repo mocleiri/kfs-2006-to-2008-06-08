@@ -27,7 +27,7 @@
         <description>Document used to create or update Credit Memo Status objects</description>
 
         <lockingKeys>
-            <field attributeName="creditMemoStatusDescription" />
+            <field attributeName="creditMemoStatusCode" />
         </lockingKeys>
 
         <maintainableSections>
