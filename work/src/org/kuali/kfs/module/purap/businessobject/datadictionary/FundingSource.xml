@@ -59,12 +59,12 @@
                 <description>fundingSourceCode description...</description>
 			</attribute>
 
-            <attribute name="fundingSourceDescription" forceUppercase="true">
+            <attribute name="fundingSourceDescription">
                 <label>Funding Source Description</label>
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>45</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
 
                 <control>
                     <text size="47" />
@@ -74,34 +74,9 @@
                 <description>fundingSourceDescription description...</description>
 			</attribute>
 
-            <attribute name="dataObjectMaintenanceCodeActiveIndicator" forceUppercase="true">
-                <label>Code Active Indicator</label>
-                <shortLabel>Active Indicator</shortLabel>
+            <attributeReference name="dataObjectMaintenanceCodeActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
 
-                <maxLength>1</maxLength>
-
-                <control>
-                    <checkbox />
-                </control>
-
-                <summary>dataObjectMaintenanceCodeActiveIndicator</summary>
-                <description>dataObjectMaintenanceCodeActiveIndicator description...</description>
-			</attribute>
-
-            <attribute name="versionNumber" forceUppercase="true">
-                <label>Version Number</label>
-                <shortLabel>Number</shortLabel>
-
-                <maxLength>8</maxLength>
-                <validationPattern><numeric /></validationPattern>
-
-                <control>
-                    <text size="10" />
-                </control>
-
-                <summary>versionNumber</summary>
-                <description>versionNumber description...</description>
-			</attribute>
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
     </businessObject>
