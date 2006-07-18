@@ -21,7 +21,7 @@
 
 			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.Carrier">Create New</a>]]></menubar>
 
-            <instructions>Lookup an Carrier</instructions>
+            <instructions>Lookup a Carrier</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
@@ -59,7 +59,7 @@
                 <description>carrierCode description...</description>
 			</attribute>
 
-            <attribute name="carrierDescription" forceUppercase="true">
+            <attribute name="carrierDescription" >
                 <label>Carrier Description</label>
                 <shortLabel>Description</shortLabel>
 
