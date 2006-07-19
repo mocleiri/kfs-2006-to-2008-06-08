@@ -36,7 +36,8 @@ public class RecurringPaymentType extends BusinessObjectBase {
 
 	private String recurringPaymentTypeCode;
 	private String recurringPaymentTypeDescription;
-
+    private boolean dataObjectMaintenanceCodeActiveIndicator;
+    
     private Requisition recurringPaymentType;
 
 	/**
@@ -108,12 +109,29 @@ public class RecurringPaymentType extends BusinessObjectBase {
 		this.recurringPaymentType = recurringPaymentType;
 	}
 
-	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("recurringPaymentTypeCode", this.recurringPaymentTypeCode);
-	    return m;
+    /**
+     * Gets the dataObjectMaintenanceCodeActiveIndicator attribute. 
+     * @return Returns the dataObjectMaintenanceCodeActiveIndicator.
+     */
+    public boolean isDataObjectMaintenanceCodeActiveIndicator() {
+        return dataObjectMaintenanceCodeActiveIndicator;
     }
+
+    /**
+     * Sets the dataObjectMaintenanceCodeActiveIndicator attribute value.
+     * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+     */
+    public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+        this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+    }
+
+    /**
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
+        m.put("recurringPaymentTypeCode", this.recurringPaymentTypeCode);
+        return m;
+    }
+
 }
