@@ -11,14 +11,14 @@
 
             <inquiryFields>
                 <field attributeName="billingCampusCode" />
-                <field attributeName="billingCityName" />
-                <field attributeName="billingCountryCode" />
+                <field attributeName="billingName" />
                 <field attributeName="billingLine1Address" />
                 <field attributeName="billingLine2Address" />
-                <field attributeName="billingName" />
-                <field attributeName="billingPhoneNumber" />
-                <field attributeName="billingPostalCode" />
+                <field attributeName="billingCityName" />
                 <field attributeName="billingStateCode" />
+                <field attributeName="billingPostalCode" />
+                <field attributeName="billingCountryCode" />
+                <field attributeName="billingPhoneNumber" />
             </inquiryFields>
         </inquiry>
 
@@ -37,26 +37,26 @@
 
             <lookupFields>
                 <lookupField attributeName="billingCampusCode" required="false" />
-                <lookupField attributeName="billingCityName" required="false" />
-                <lookupField attributeName="billingCountryCode" required="false" />
+                <lookupField attributeName="billingName" required="false" />
                 <lookupField attributeName="billingLine1Address" required="false" />
                 <lookupField attributeName="billingLine2Address" required="false" />
-                <lookupField attributeName="billingName" required="false" />
-                <lookupField attributeName="billingPhoneNumber" required="false" />
-                <lookupField attributeName="billingPostalCode" required="false" />
+                <lookupField attributeName="billingCityName" required="false" />
                 <lookupField attributeName="billingStateCode" required="false" />
+                <lookupField attributeName="billingPostalCode" required="false" />
+                <lookupField attributeName="billingCountryCode" required="false" />
+                <lookupField attributeName="billingPhoneNumber" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="billingCampusCode" />
-                <field attributeName="billingCityName" />
-                <field attributeName="billingCountryCode" />
+                <field attributeName="billingName" />
                 <field attributeName="billingLine1Address" />
                 <field attributeName="billingLine2Address" />
-                <field attributeName="billingName" />
-                <field attributeName="billingPhoneNumber" />
-                <field attributeName="billingPostalCode" />
+                <field attributeName="billingCityName" />
                 <field attributeName="billingStateCode" />
+                <field attributeName="billingPostalCode" />
+                <field attributeName="billingCountryCode" />
+                <field attributeName="billingPhoneNumber" />
             </resultFields>
         </lookup>
 
@@ -77,12 +77,12 @@
                 <description>billingCampusCode description...</description>
 			</attribute>
 
-            <attribute name="billingCityName" forceUppercase="true">
+            <attribute name="billingCityName">
                 <label>Billing City Name</label>
                 <shortLabel>Name</shortLabel>
 
                 <maxLength>45</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
 
                 <control>
                     <text size="47" />
@@ -107,12 +107,12 @@
                 <description>billingCountryCode description...</description>
 			</attribute>
 
-            <attribute name="billingLine1Address" forceUppercase="true">
+            <attribute name="billingLine1Address">
                 <label>Billing Line1 Address</label>
                 <shortLabel>Address</shortLabel>
 
                 <maxLength>45</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
 
                 <control>
                     <text size="47" />
@@ -122,7 +122,7 @@
                 <description>billingLine1Address description...</description>
 			</attribute>
 
-            <attribute name="billingLine2Address" forceUppercase="true">
+            <attribute name="billingLine2Address">
                 <label>Billing Line2 Address</label>
                 <shortLabel>Address</shortLabel>
 
@@ -137,12 +137,12 @@
                 <description>billingLine2Address description...</description>
 			</attribute>
 
-            <attribute name="billingName" forceUppercase="true">
+            <attribute name="billingName">
                 <label>Billing Name</label>
                 <shortLabel>Name</shortLabel>
 
                 <maxLength>45</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
 
                 <control>
                     <text size="47" />
@@ -152,7 +152,7 @@
                 <description>billingName description...</description>
 			</attribute>
 
-            <attribute name="billingPhoneNumber" forceUppercase="true">
+            <attribute name="billingPhoneNumber">
                 <label>Billing Phone Number</label>
                 <shortLabel>Number</shortLabel>
 
@@ -167,7 +167,7 @@
                 <description>billingPhoneNumber description...</description>
 			</attribute>
 
-            <attribute name="billingPostalCode" forceUppercase="true">
+            <attribute name="billingPostalCode">
                 <label>Billing Postal Code</label>
                 <shortLabel>Code</shortLabel>
 
@@ -197,20 +197,10 @@
                 <description>billingStateCode description...</description>
 			</attribute>
 
-            <attribute name="versionNumber" forceUppercase="true">
-                <label>Version Number</label>
-                <shortLabel>Number</shortLabel>
+            <!-- attributeReference name="dataObjectMaintenanceCodeActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" /-->
 
-                <maxLength>8</maxLength>
-                <validationPattern><numeric /></validationPattern>
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
-                <control>
-                    <text size="10" />
-                </control>
-
-                <summary>versionNumber</summary>
-                <description>versionNumber description...</description>
-			</attribute>
 
         </attributes>
     </businessObject>
