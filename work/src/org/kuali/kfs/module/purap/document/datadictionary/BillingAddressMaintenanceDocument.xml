@@ -34,14 +34,14 @@
             <maintainableSection title="Edit Billing Address">
                 <maintainableItems>
                     <maintainableField name="billingCampusCode" required="true" />
-                    <maintainableField name="billingName" />
-                    <maintainableField name="billingLine1Address" />
+                    <maintainableField name="billingName" required="true"/>
+                    <maintainableField name="billingLine1Address" required="true"/>
                     <maintainableField name="billingLine2Address" />
-                    <maintainableField name="billingCityName" />
-                    <maintainableField name="billingStateCode" />
-                    <maintainableField name="billingPostalCode" />
-                    <maintainableField name="billingCountryCode" />
-                    <maintainableField name="billingPhoneNumber" />
+                    <maintainableField name="billingCityName" required="true"/>
+                    <maintainableField name="billingStateCode" required="true"/>
+                    <maintainableField name="billingPostalCode" required="true"/>
+                    <maintainableField name="billingCountryCode" required="true"/>
+                    <maintainableField name="billingPhoneNumber" required="true"/>
                     <!-- maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" /-->
                 </maintainableItems>
             </maintainableSection>
