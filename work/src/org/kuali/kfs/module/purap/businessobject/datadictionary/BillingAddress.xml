@@ -27,7 +27,7 @@
 
 			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.BillingAddress">Create New</a>]]></menubar>
 
-            <instructions>Lookup an Billing Address</instructions>
+            <instructions>Lookup a Billing Address</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
