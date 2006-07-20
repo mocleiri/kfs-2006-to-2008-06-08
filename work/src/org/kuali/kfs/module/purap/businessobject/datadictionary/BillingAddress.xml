@@ -19,6 +19,7 @@
                 <field attributeName="billingPostalCode" />
                 <field attributeName="billingCountryCode" />
                 <field attributeName="billingPhoneNumber" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
             </inquiryFields>
         </inquiry>
 
@@ -45,6 +46,7 @@
                 <lookupField attributeName="billingPostalCode" required="false" />
                 <lookupField attributeName="billingCountryCode" required="false" />
                 <lookupField attributeName="billingPhoneNumber" required="false" />
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -57,6 +59,7 @@
                 <field attributeName="billingPostalCode" />
                 <field attributeName="billingCountryCode" />
                 <field attributeName="billingPhoneNumber" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
             </resultFields>
         </lookup>
 
@@ -197,7 +200,7 @@
                 <description>billingStateCode description...</description>
 			</attribute>
 
-            <!-- attributeReference name="dataObjectMaintenanceCodeActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" /-->
+            <attributeReference name="dataObjectMaintenanceCodeActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 

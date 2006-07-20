@@ -44,7 +44,8 @@ public class BillingAddress extends BusinessObjectBase {
 	private String billingPostalCode;
 	private String billingCountryCode;
 	private String billingPhoneNumber;
-
+    private boolean dataObjectMaintenanceCodeActiveIndicator;
+    
     private Campus billingCampus;
 
 	/**
@@ -263,12 +264,30 @@ public class BillingAddress extends BusinessObjectBase {
 		this.billingCampus = billingCampus;
 	}
 
-	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("billingCampusCode", this.billingCampusCode);
-	    return m;
+    /**
+     * Gets the dataObjectMaintenanceCodeActiveIndicator attribute. 
+     * @return Returns the dataObjectMaintenanceCodeActiveIndicator.
+     */
+    public boolean isDataObjectMaintenanceCodeActiveIndicator() {
+        return dataObjectMaintenanceCodeActiveIndicator;
     }
+
+    /**
+     * Sets the dataObjectMaintenanceCodeActiveIndicator attribute value.
+     * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+     */
+    public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+        this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+    }
+
+    /**
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
+        m.put("billingCampusCode", this.billingCampusCode);
+        return m;
+    }
+
+
 }

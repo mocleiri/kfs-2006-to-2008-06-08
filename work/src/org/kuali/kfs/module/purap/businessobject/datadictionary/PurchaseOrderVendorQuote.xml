@@ -13,7 +13,7 @@
                 <field attributeName="purchaseOrderIdentifier" />
                 <field attributeName="purchaseOrderQuoteAwardDate" />
                 <field attributeName="purchaseOrderQuotePriceExpirationDate" />
-                <field attributeName="purchaseOrderQuoteRankingNumber" />
+                <field attributeName="purchaseOrderQuoteRankNumber" />
                 <field attributeName="purchaseOrderQuoteStatusCode" />
                 <field attributeName="purchaseOrderQuoteTransactionDate" />
                 <field attributeName="purchaseOrderQuoteTransactionTypeCode" />
@@ -50,7 +50,7 @@
                 <lookupField attributeName="purchaseOrderIdentifier" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteAwardDate" required="false" />
                 <lookupField attributeName="purchaseOrderQuotePriceExpirationDate" required="false" />
-                <lookupField attributeName="purchaseOrderQuoteRankingNumber" required="false" />
+                <lookupField attributeName="purchaseOrderQuoteRankNumber" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteStatusCode" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteTransactionDate" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteTransactionTypeCode" required="false" />
@@ -73,7 +73,7 @@
                 <field attributeName="purchaseOrderIdentifier" />
                 <field attributeName="purchaseOrderQuoteAwardDate" />
                 <field attributeName="purchaseOrderQuotePriceExpirationDate" />
-                <field attributeName="purchaseOrderQuoteRankingNumber" />
+                <field attributeName="purchaseOrderQuoteRankNumber" />
                 <field attributeName="purchaseOrderQuoteStatusCode" />
                 <field attributeName="purchaseOrderQuoteTransactionDate" />
                 <field attributeName="purchaseOrderQuoteTransactionTypeCode" />
@@ -140,8 +140,8 @@
                 <description>purchaseOrderQuotePriceExpirationDate description...</description>
 			</attribute>
 
-            <attribute name="purchaseOrderQuoteRankingNumber" forceUppercase="true">
-                <label>Purchase Order Quote Ranking Number</label>
+            <attribute name="purchaseOrderQuoteRankNumber" forceUppercase="true">
+                <label>Purchase Order Quote Rank Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>3</maxLength>
@@ -151,8 +151,8 @@
                     <text size="5" />
                 </control>
 
-                <summary>purchaseOrderQuoteRankingNumber</summary>
-                <description>purchaseOrderQuoteRankingNumber description...</description>
+                <summary>purchaseOrderQuoteRankNumber</summary>
+                <description>purchaseOrderQuoteRankNumber description...</description>
 			</attribute>
 
             <attribute name="purchaseOrderQuoteStatusCode" forceUppercase="true">

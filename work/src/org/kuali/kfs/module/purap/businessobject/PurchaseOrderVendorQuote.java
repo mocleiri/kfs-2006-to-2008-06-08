@@ -54,7 +54,7 @@ public class PurchaseOrderVendorQuote extends BusinessObjectBase {
 	private Date purchaseOrderQuotePriceExpirationDate;
 	private String purchaseOrderQuoteStatusCode;
 	private Date purchaseOrderQuoteAwardDate;
-	private String purchaseOrderQuoteRankingNumber;
+	private String purchaseOrderQuoteRankNumber;
 
     private PurchaseOrder purchaseOrder;
 	private PurchaseOrderQuoteStatus purchaseOrderQuoteStatus;
@@ -466,23 +466,23 @@ public class PurchaseOrderVendorQuote extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the purchaseOrderQuoteRankingNumber attribute.
+	 * Gets the purchaseOrderQuoteRankNumber attribute.
 	 * 
-	 * @return - Returns the purchaseOrderQuoteRankingNumber
+	 * @return - Returns the purchaseOrderQuoteRankNumber
 	 * 
 	 */
-	public String getPurchaseOrderQuoteRankingNumber() { 
-		return purchaseOrderQuoteRankingNumber;
+	public String getPurchaseOrderQuoteRankNumber() { 
+		return purchaseOrderQuoteRankNumber;
 	}
 
 	/**
-	 * Sets the purchaseOrderQuoteRankingNumber attribute.
+	 * Sets the purchaseOrderQuoteRankNumber attribute.
 	 * 
-	 * @param - purchaseOrderQuoteRankingNumber The purchaseOrderQuoteRankingNumber to set.
+	 * @param - purchaseOrderQuoteRankNumber The purchaseOrderQuoteRankNumber to set.
 	 * 
 	 */
-	public void setPurchaseOrderQuoteRankingNumber(String purchaseOrderQuoteRankingNumber) {
-		this.purchaseOrderQuoteRankingNumber = purchaseOrderQuoteRankingNumber;
+	public void setPurchaseOrderQuoteRankNumber(String purchaseOrderQuoteRankNumber) {
+		this.purchaseOrderQuoteRankNumber = purchaseOrderQuoteRankNumber;
 	}
 
 

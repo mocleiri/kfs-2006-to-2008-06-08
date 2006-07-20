@@ -44,7 +44,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	private String itemUnitOfMeasureCode;
 	private KualiDecimalMoney itemOrderedQuantity;
 	private KualiDecimalMoney itemInvoicedTotalQuantity;
-	private KualiDecimalMoney itemInvoiceTotalAmount;
+	private KualiDecimalMoney itemInvoicedTotalAmount;
 	private String itemCatalogNumber;
 	private KualiDecimalMoney itemReceivedTotalQuantity;
 	private String itemDescription;
@@ -55,7 +55,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	private KualiDecimalMoney itemOutstandingEncumbranceAmount;
 	private String requisitionLineIdentifier;
 	private String itemAuxiliaryPartIdentifier;
-	private boolean itemActivityIndicator;
+	private boolean itemActiveIndicator;
 	private String purchaseOrderCommodityCd;
 	private String externalOrganizationB2bProductReferenceNumber;
 	private String externalOrganizationB2bProductTypeName;
@@ -241,23 +241,23 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the itemInvoiceTotalAmount attribute.
+	 * Gets the itemInvoicedTotalAmount attribute.
 	 * 
-	 * @return - Returns the itemInvoiceTotalAmount
+	 * @return - Returns the itemInvoicedTotalAmount
 	 * 
 	 */
-	public KualiDecimalMoney getItemInvoiceTotalAmount() { 
-		return itemInvoiceTotalAmount;
+	public KualiDecimalMoney getItemInvoicedTotalAmount() { 
+		return itemInvoicedTotalAmount;
 	}
 
 	/**
-	 * Sets the itemInvoiceTotalAmount attribute.
+	 * Sets the itemInvoicedTotalAmount attribute.
 	 * 
-	 * @param - itemInvoiceTotalAmount The itemInvoiceTotalAmount to set.
+	 * @param - itemInvoicedTotalAmount The itemInvoicedTotalAmount to set.
 	 * 
 	 */
-	public void setItemInvoiceTotalAmount(KualiDecimalMoney itemInvoiceTotalAmount) {
-		this.itemInvoiceTotalAmount = itemInvoiceTotalAmount;
+	public void setItemInvoicedTotalAmount(KualiDecimalMoney itemInvoicedTotalAmount) {
+		this.itemInvoicedTotalAmount = itemInvoicedTotalAmount;
 	}
 
 
@@ -472,23 +472,23 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the itemActivityIndicator attribute.
+	 * Gets the itemActiveIndicator attribute.
 	 * 
-	 * @return - Returns the itemActivityIndicator
+	 * @return - Returns the itemActiveIndicator
 	 * 
 	 */
-	public boolean getItemActivityIndicator() { 
-		return itemActivityIndicator;
+	public boolean getItemActiveIndicator() { 
+		return itemActiveIndicator;
 	}
 
 	/**
-	 * Sets the itemActivityIndicator attribute.
+	 * Sets the itemActiveIndicator attribute.
 	 * 
-	 * @param - itemActivityIndicator The itemActivityIndicator to set.
+	 * @param - itemActiveIndicator The itemActiveIndicator to set.
 	 * 
 	 */
-	public void setItemActivityIndicator(boolean itemActivityIndicator) {
-		this.itemActivityIndicator = itemActivityIndicator;
+	public void setItemActiveIndicator(boolean itemActiveIndicator) {
+		this.itemActiveIndicator = itemActiveIndicator;
 	}
 
 

@@ -42,7 +42,7 @@
                     <maintainableField name="billingPostalCode" required="true"/>
                     <maintainableField name="billingCountryCode" required="true"/>
                     <maintainableField name="billingPhoneNumber" required="true"/>
-                    <!-- maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" /-->
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>

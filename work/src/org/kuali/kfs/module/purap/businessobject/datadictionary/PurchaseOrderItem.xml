@@ -13,13 +13,13 @@
                 <field attributeName="capitalAssetTransactionTypeCode" />
                 <field attributeName="externalOrganizationB2bProductReferenceNumber" />
                 <field attributeName="externalOrganizationB2bProductTypeName" />
-                <field attributeName="itemActivityIndicator" />
+                <field attributeName="itemActiveIndicator" />
                 <field attributeName="itemAssignedToTradeInIndicator" />
                 <field attributeName="itemAuxiliaryPartIdentifier" />
                 <field attributeName="itemCapitalAssetNoteText" />
                 <field attributeName="itemCatalogNumber" />
                 <field attributeName="itemDescription" />
-                <field attributeName="itemInvoiceTotalAmount" />
+                <field attributeName="itemInvoicedTotalAmount" />
                 <field attributeName="itemInvoicedTotalQuantity" />
                 <field attributeName="itemLineNumber" />
                 <field attributeName="itemOrderedQuantity" />
@@ -54,13 +54,13 @@
                 <lookupField attributeName="capitalAssetTransactionTypeCode" required="false" />
                 <lookupField attributeName="externalOrganizationB2bProductReferenceNumber" required="false" />
                 <lookupField attributeName="externalOrganizationB2bProductTypeName" required="false" />
-                <lookupField attributeName="itemActivityIndicator" required="false" />
+                <lookupField attributeName="itemActiveIndicator" required="false" />
                 <lookupField attributeName="itemAssignedToTradeInIndicator" required="false" />
                 <lookupField attributeName="itemAuxiliaryPartIdentifier" required="false" />
                 <lookupField attributeName="itemCapitalAssetNoteText" required="false" />
                 <lookupField attributeName="itemCatalogNumber" required="false" />
                 <lookupField attributeName="itemDescription" required="false" />
-                <lookupField attributeName="itemInvoiceTotalAmount" required="false" />
+                <lookupField attributeName="itemInvoicedTotalAmount" required="false" />
                 <lookupField attributeName="itemInvoicedTotalQuantity" required="false" />
                 <lookupField attributeName="itemLineNumber" required="false" />
                 <lookupField attributeName="itemOrderedQuantity" required="false" />
@@ -81,13 +81,13 @@
                 <field attributeName="capitalAssetTransactionTypeCode" />
                 <field attributeName="externalOrganizationB2bProductReferenceNumber" />
                 <field attributeName="externalOrganizationB2bProductTypeName" />
-                <field attributeName="itemActivityIndicator" />
+                <field attributeName="itemActiveIndicator" />
                 <field attributeName="itemAssignedToTradeInIndicator" />
                 <field attributeName="itemAuxiliaryPartIdentifier" />
                 <field attributeName="itemCapitalAssetNoteText" />
                 <field attributeName="itemCatalogNumber" />
                 <field attributeName="itemDescription" />
-                <field attributeName="itemInvoiceTotalAmount" />
+                <field attributeName="itemInvoicedTotalAmount" />
                 <field attributeName="itemInvoicedTotalQuantity" />
                 <field attributeName="itemLineNumber" />
                 <field attributeName="itemOrderedQuantity" />
@@ -152,8 +152,8 @@
                 <description>externalOrganizationB2bProductTypeName description...</description>
 			</attribute>
 
-            <attribute name="itemActivityIndicator" forceUppercase="true">
-                <label>Item Activity Indicator</label>
+            <attribute name="itemActiveIndicator" forceUppercase="true">
+                <label>Item Active Indicator</label>
                 <shortLabel>Indicator</shortLabel>
 
                 <maxLength>1</maxLength>
@@ -162,8 +162,8 @@
                     <checkbox />
                 </control>
 
-                <summary>itemActivityIndicator</summary>
-                <description>itemActivityIndicator description...</description>
+                <summary>itemActiveIndicator</summary>
+                <description>itemActiveIndicator description...</description>
 			</attribute>
 
             <attribute name="itemAssignedToTradeInIndicator" forceUppercase="true">
@@ -240,8 +240,8 @@
                 <description>itemDescription description...</description>
 			</attribute>
 
-            <attribute name="itemInvoiceTotalAmount" forceUppercase="true">
-                <label>Item Invoice Total Amount</label>
+            <attribute name="itemInvoicedTotalAmount" forceUppercase="true">
+                <label>Item Invoiced Total Amount</label>
                 <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
@@ -251,8 +251,8 @@
                     <text size="21" />
                 </control>
 
-                <summary>itemInvoiceTotalAmount</summary>
-                <description>itemInvoiceTotalAmount description...</description>
+                <summary>itemInvoicedTotalAmount</summary>
+                <description>itemInvoicedTotalAmount description...</description>
 			</attribute>
 
             <attribute name="itemInvoicedTotalQuantity" forceUppercase="true">

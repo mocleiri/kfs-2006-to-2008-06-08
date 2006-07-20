@@ -406,7 +406,7 @@
 	<field-descriptor name="vendorOwnershipCategoryAllowedIndicator" column="VNDR_OWNR_CTGRY_ALLW_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorTaxNumberRequiredIndicator" column="VNDR_TAX_NBR_RQRD_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorRouteToTaxAreaIndicator" column="VNDR_RTE_TAX_AREA_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<field-descriptor name="vendorExclusionAutomaticApprovalIndicator" column="VNDR_EXCL_AUTO_APPRV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
+	<field-descriptor name="vendorExcludeAutoApproveIndicator" column="VNDR_EXCL_AUTO_APRV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
 
@@ -451,7 +451,7 @@
 	<field-descriptor name="itemUnitOfMeasureCode" column="ITM_UOM_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemOrderedQuantity" column="ITM_ORD_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
 	<field-descriptor name="itemInvoicedTotalQuantity" column="ITM_INV_TOT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
-	<field-descriptor name="itemInvoiceTotalAmount" column="ITM_INV_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemInvoicedTotalAmount" column="ITM_INV_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
 	<field-descriptor name="itemCatalogNumber" column="ITM_CATLG_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemReceivedTotalQuantity" column="ITM_RCVD_TOT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
 	<field-descriptor name="itemDescription" column="ITM_DESC" jdbc-type="VARCHAR"/>
@@ -462,7 +462,7 @@
 	<field-descriptor name="itemOutstandingEncumbranceAmount" column="ITM_OSTND_ENC_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
 	<field-descriptor name="requisitionLineIdentifier" column="REQS_LN_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemAuxiliaryPartIdentifier" column="ITM_AUX_PART_ID" jdbc-type="VARCHAR"/>
-	<field-descriptor name="itemActivityIndicator" column="ITM_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
+	<field-descriptor name="itemActiveIndicator" column="ITM_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="purchaseOrderCommodityCd" column="PO_CMDTY_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="externalOrganizationB2bProductReferenceNumber" column="EXT_ORG_B2B_PROD_REF_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="externalOrganizationB2bProductTypeName" column="EXT_ORG_B2B_PROD_TYP_NM" jdbc-type="VARCHAR"/>
@@ -1257,6 +1257,7 @@
 	<field-descriptor name="billingPostalCode" column="BILL_PSTL_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="billingCountryCode" column="BILL_CNTRY_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="billingPhoneNumber" column="BILL_PHN_NBR" jdbc-type="VARCHAR"/>
+	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<reference-descriptor name="billingCampus" class-ref="org.kuali.module.chart.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="billingCampusCode" />
 	</reference-descriptor>
@@ -1601,7 +1602,7 @@
 	<field-descriptor name="purchaseOrderQuotePriceExpirationDate" column="PO_QT_PRCE_EXPR_DT" jdbc-type="DATE"/>
 	<field-descriptor name="purchaseOrderQuoteStatusCode" column="PO_QT_STAT_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="purchaseOrderQuoteAwardDate" column="PO_QT_AWD_DT" jdbc-type="DATE"/>
-	<field-descriptor name="purchaseOrderQuoteRankingNumber" column="PO_QTE_RANK_NBR" jdbc-type="VARCHAR"/>
+	<field-descriptor name="purchaseOrderQuoteRankNumber" column="PO_QT_RANK_NBR" jdbc-type="VARCHAR"/>
 	<reference-descriptor name="purchaseOrder" class-ref="org.kuali.module.purap.bo.PurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="purchaseOrderIdentifier" />
 	</reference-descriptor>
@@ -1768,7 +1769,7 @@
 	<field-descriptor name="invoiceReferenceItemSupplierPartAuxiliaryIdentifier" column="INV_REF_ITM_SUPP_PART_AUX_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="invoiceReferenceItemDescription" column="INV_REF_ITM_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="invoiceReferenceItemManufacturerPartIdentifier" column="INV_REF_ITM_MFR_PART_ID" jdbc-type="VARCHAR"/>
-	<field-descriptor name="invoiceReferenceItemManufacturerName" column="INV_REF_ITM_MFT_NM" jdbc-type="VARCHAR"/>
+	<field-descriptor name="invoiceReferenceItemManufacturerName" column="INV_REF_ITM_MFR_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="invoiceReferenceItemCountryCode" column="INV_REF_ITM_CNTRY_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="invoiceReferenceItemCountryName" column="INV_REF_ITM_CNTRY_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="invoiceCatalogNumber" column="INV_CATLG_NBR" jdbc-type="VARCHAR"/>
