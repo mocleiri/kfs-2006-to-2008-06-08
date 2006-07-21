@@ -92,6 +92,14 @@
         <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
         <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
     </collection-descriptor>
+    <collection-descriptor name="vendorShippingSpecialConditions" element-class-ref="org.kuali.module.purap.bo.VendorShippingSpecialCondition" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
+        <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
+        <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
+    </collection-descriptor>
+    <collection-descriptor name="vendorSupplierDiversities" element-class-ref="org.kuali.module.purap.bo.VendorSupplierDiversity" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
+        <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
+        <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
+    </collection-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.VendorAddress" table="PUR_VNDR_ADDR_T">
@@ -268,9 +276,6 @@
 	<field-descriptor name="vendorPreviousTaxNumber" column="VNDR_PREV_TAX_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorPreviousFeinSocialSecurityNumberIndicator" column="VNDR_PREV_FEIN_SSN_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorTaxChangePersonIdentifier" column="VNDR_TAX_CHG_PRSN_ID" jdbc-type="VARCHAR"/>
-	<reference-descriptor name="vendorHeader" class-ref="org.kuali.module.purap.bo.VendorHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.VendorPhoneNumber" table="PUR_VNDR_PHN_NBR_T">
@@ -484,9 +489,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="itemTypeDescription" column="ITM_TYP_DESC" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="itemType" class-ref="org.kuali.module.purap.bo.RequisitionItem" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="itemTypeCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.CapitalAssetTransactionType" table="PUR_AP_CPTL_AST_TRN_TYP_T">
@@ -496,9 +498,6 @@
 	<field-descriptor name="capitalAssetTransactionTypeDescription" column="CPTL_AST_TRN_TYP_DESC" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="capitalAssetTransactionTypeServiceIndicator" column="CPTL_AST_TRN_TYP_SRVC_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="capitalAssetTransactionType" class-ref="org.kuali.module.purap.bo.PurchaseOrderItem" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="capitalAssetTransactionTypeCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.ShipmentReceiving" table="PUR_SHPMNT_RCVNG_T">
@@ -557,9 +556,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="carrierDescription" column="CARI_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="carrier" class-ref="org.kuali.module.purap.bo.ShipmentReceiving" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="carrierCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.RequisitionItem" table="PUR_REQS_ITM_T">
@@ -732,9 +728,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="fundingSourceDescription" column="FND_SRC_DESC" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="fundingSource" class-ref="org.kuali.module.purap.bo.Requisition" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="fundingSourceCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.RequisitionSource" table="PUR_REQS_SRC_T">
@@ -743,9 +736,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="requisitionSourceDescription" column="REQS_SRC_DESC" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="requisitionSource" class-ref="org.kuali.module.purap.bo.Requisition" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="requisitionSourceCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.RequisitionStatus" table="PUR_REQS_STAT_T">
@@ -754,9 +744,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="requisitionStatusDescription" column="REQS_STAT_DESC" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="requisitionStatus" class-ref="org.kuali.module.purap.bo.Requisition" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="requisitionStatusCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.PurchaseOrderCostSource" table="PUR_PO_CST_SRC_T">
@@ -765,9 +752,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="purchaseOrderCostSourceDescription" column="PO_CST_SRC_DESC" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="purchaseOrderCostSource" class-ref="org.kuali.module.purap.bo.Requisition" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderCostSourceCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.DeliveryRequiredDateReason" table="PUR_DLVY_REQ_DT_REAS_T">
@@ -776,9 +760,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="deliveryRequiredDateReasonDescription" column="DLVY_REQ_DT_REAS_DESC" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="deliveryRequiredDateReason" class-ref="org.kuali.module.purap.bo.PurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="deliveryRequiredDateReasonCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod" table="PUR_PO_TRNS_MTHD_T">
@@ -787,9 +768,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="purchaseOrderTransmissionMethodDescription" column="PO_TRNS_MTHD_DESC" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="purchaseOrderTransmissionMethod" class-ref="org.kuali.module.purap.bo.PurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderTransmissionMethodCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.RecurringPaymentType" table="PUR_AP_RECUR_PMT_TYP_T">
@@ -798,9 +776,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="recurringPaymentTypeDescription" column="RECUR_PMT_TYP_DESC" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="recurringPaymentType" class-ref="org.kuali.module.purap.bo.Requisition" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="recurringPaymentTypeCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.RequisitionStatusHistory" table="PUR_REQS_STAT_HIST_T">
@@ -811,9 +786,12 @@
 	<field-descriptor name="oldRequisitionStatusCode" column="OLD_REQS_STAT_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="newRequisitionStatusCode" column="NEW_REQS_STAT_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="documentNoteIdentifier" column="DOC_NTE_ID" jdbc-type="INTEGER"/>
-	<reference-descriptor name="requisition" class-ref="org.kuali.module.purap.bo.Requisition" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="requisitionIdentifier" />
-	</reference-descriptor>
+    <reference-descriptor name="oldRequisitionStatus" class-ref="org.kuali.module.purap.bo.RequisitionStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="oldRequisitionStatusCode" />
+    </reference-descriptor>
+    <reference-descriptor name="newRequisitionStatus" class-ref="org.kuali.module.purap.bo.RequisitionStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="newRequisitionStatusCode" />
+    </reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.CreditMemoStatus" table="AP_CRDT_MEMO_STAT_T">
@@ -822,9 +800,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="creditMemoStatusDescription" column="CRDT_MEMO_STAT_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="creditMemoStatus" class-ref="org.kuali.module.purap.bo.CreditMemo" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="creditMemoStatusCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.PurchaseOrder" table="PUR_PO_T">
@@ -1118,9 +1093,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="purchaseOrderStatusDescription" column="PO_STAT_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="purchaseOrderStatus" class-ref="org.kuali.module.purap.bo.PurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderStatusCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.PurchaseOrderVendorChoice" table="PUR_PO_VNDR_CHC_T">
@@ -1129,9 +1101,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="purchaseOrderVendorChoiceDescription" column="PO_VNDR_CHC_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="purchaseOrderVendorChoice" class-ref="org.kuali.module.purap.bo.PurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderVendorChoiceCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.RecurringPaymentFrequency" table="PUR_AP_RECUR_PMT_FREQ_T">
@@ -1140,9 +1109,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="recurringPaymentFrequencyDescription" column="RECUR_PMT_FREQ_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="recurringPaymentFrequency" class-ref="org.kuali.module.purap.bo.PurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="recurringPaymentFrequencyCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.PurchaseOrderRestrictedMaterialStatusHistory" table="PUR_PO_RSTRC_MTRL_STATHST_T">
@@ -1152,9 +1118,6 @@
 	<field-descriptor name="purchaseOrderIdentifier" column="PO_ID" jdbc-type="INTEGER" index="true"/>
 	<field-descriptor name="restrictedMaterialCode" column="RSTRC_MTRL_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="purchaseOrderRestrictedMaterialIndicator" column="PO_RSTRC_MTRL_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="purchaseOrder" class-ref="org.kuali.module.purap.bo.PurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderIdentifier" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.PaymentRequestStatusHistory" table="AP_PMT_RQST_STAT_HIST_T">
@@ -1165,9 +1128,6 @@
 	<field-descriptor name="oldPaymentRequestStatusCode" column="OLD_PMT_RQST_STAT_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="newPaymentRequestStatusCode" column="NEW_PMT_RQST_STAT_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="documentNoteIdentifier" column="DOC_NTE_ID" jdbc-type="INTEGER"/>
-	<reference-descriptor name="paymentRequest" class-ref="org.kuali.module.purap.bo.PaymentRequest" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="paymentRequestIdentifier" />
-	</reference-descriptor>
 	<reference-descriptor name="oldPaymentRequestStatus" class-ref="org.kuali.module.purap.bo.PaymentRequestStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="oldPaymentRequestStatusCode" />
 	</reference-descriptor>
@@ -1182,9 +1142,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="paymentRequestStatusDescription" column="PMT_RQST_STAT_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="paymentRequestStatus" class-ref="org.kuali.module.purap.bo.PaymentRequest" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="paymentRequestStatusCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.ShippingSpecialCondition" table="PUR_SHP_SPCL_COND_T">
@@ -1218,9 +1175,12 @@
 	<field-descriptor name="creditMemoOldStatusCode" column="CRDT_MEMO_OLD_STAT_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="creditMemoNewStatusCode" column="CRDT_MEMO_NEW_STAT_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="documentNoteIdentifier" column="DOC_NTE_ID" jdbc-type="INTEGER"/>
-	<reference-descriptor name="creditMemo" class-ref="org.kuali.module.purap.bo.CreditMemo" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="creditMemoIdentifier" />
-	</reference-descriptor>
+    <reference-descriptor name="oldCreditMemoStatus" class-ref="org.kuali.module.purap.bo.CreditMemoStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="creditMemoOldStatusCode" />
+    </reference-descriptor>
+    <reference-descriptor name="newCreditMemoStatus" class-ref="org.kuali.module.purap.bo.CreditMemoStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="creditMemoNewStatusCode" />
+    </reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.AddressType" table="PUR_ADDR_TYP_T">
@@ -1495,9 +1455,12 @@
 	<field-descriptor name="oldPurchaseOrderStatusCode" column="OLD_PO_STAT_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="newPurchaseOrderStatusCode" column="NEW_PO_STAT_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="purchaseOrderNoteIdentifier" column="PO_NTE_ID" jdbc-type="INTEGER"/>
-	<reference-descriptor name="purchaseOrder" class-ref="org.kuali.module.purap.bo.PurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderIdentifier" />
-	</reference-descriptor>
+    <reference-descriptor name="oldPurchaseOrderStatus" class-ref="org.kuali.module.purap.bo.PurchaseOrderStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="PurchaseOrderOldStatusCode" />
+    </reference-descriptor>
+    <reference-descriptor name="newPurchaseOrderStatus" class-ref="org.kuali.module.purap.bo.PurchaseOrderStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="PurchaseOrderNewStatusCode" />
+    </reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.RequisitionAccount" table="PUR_REQS_ACCT_T">
@@ -1617,9 +1580,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="purchaseOrderQuoteStatusDescription" column="PO_QT_STAT_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="purchaseOrderQuoteStatus" class-ref="org.kuali.module.purap.bo.PurchaseOrderVendorQuote" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderQuoteStatusCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.ElectronicInvoiceHeaderInformation" table="AP_ELCTRNC_INV_HDR_INFO_T">
@@ -1784,9 +1744,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="documentStatusDescription" column="DOC_STAT_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="capitalAssetManagementStatus" class-ref="org.kuali.module.purap.bo.CapitalAssetManagement" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="capitalAssetManagementStatusCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.CapitalAssetManagement" table="PUR_AP_CM_T">

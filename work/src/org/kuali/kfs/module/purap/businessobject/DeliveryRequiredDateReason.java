@@ -38,8 +38,6 @@ public class DeliveryRequiredDateReason extends BusinessObjectBase {
 	private String deliveryRequiredDateReasonDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private PurchaseOrder deliveryRequiredDateReason;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class DeliveryRequiredDateReason extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the deliveryRequiredDateReason attribute.
-	 * 
-	 * @return - Returns the deliveryRequiredDateReason
-	 * 
-	 */
-	public PurchaseOrder getDeliveryRequiredDateReason() { 
-		return deliveryRequiredDateReason;
-	}
-
-	/**
-	 * Sets the deliveryRequiredDateReason attribute.
-	 * 
-	 * @param - deliveryRequiredDateReason The deliveryRequiredDateReason to set.
-	 * @deprecated
-	 */
-	public void setDeliveryRequiredDateReason(PurchaseOrder deliveryRequiredDateReason) {
-		this.deliveryRequiredDateReason = deliveryRequiredDateReason;
 	}
 
 	/**

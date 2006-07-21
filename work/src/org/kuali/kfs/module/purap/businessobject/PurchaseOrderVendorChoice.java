@@ -38,8 +38,6 @@ public class PurchaseOrderVendorChoice extends BusinessObjectBase {
 	private String purchaseOrderVendorChoiceDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private PurchaseOrder purchaseOrderVendorChoice;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class PurchaseOrderVendorChoice extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the purchaseOrderVendorChoice attribute.
-	 * 
-	 * @return - Returns the purchaseOrderVendorChoice
-	 * 
-	 */
-	public PurchaseOrder getPurchaseOrderVendorChoice() { 
-		return purchaseOrderVendorChoice;
-	}
-
-	/**
-	 * Sets the purchaseOrderVendorChoice attribute.
-	 * 
-	 * @param - purchaseOrderVendorChoice The purchaseOrderVendorChoice to set.
-	 * @deprecated
-	 */
-	public void setPurchaseOrderVendorChoice(PurchaseOrder purchaseOrderVendorChoice) {
-		this.purchaseOrderVendorChoice = purchaseOrderVendorChoice;
 	}
 
 	/**

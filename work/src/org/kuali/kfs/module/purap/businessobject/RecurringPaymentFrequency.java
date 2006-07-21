@@ -38,8 +38,6 @@ public class RecurringPaymentFrequency extends BusinessObjectBase {
 	private String recurringPaymentFrequencyDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private PurchaseOrder recurringPaymentFrequency;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class RecurringPaymentFrequency extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the recurringPaymentFrequency attribute.
-	 * 
-	 * @return - Returns the recurringPaymentFrequency
-	 * 
-	 */
-	public PurchaseOrder getRecurringPaymentFrequency() { 
-		return recurringPaymentFrequency;
-	}
-
-	/**
-	 * Sets the recurringPaymentFrequency attribute.
-	 * 
-	 * @param - recurringPaymentFrequency The recurringPaymentFrequency to set.
-	 * @deprecated
-	 */
-	public void setRecurringPaymentFrequency(PurchaseOrder recurringPaymentFrequency) {
-		this.recurringPaymentFrequency = recurringPaymentFrequency;
 	}
 
 	/**

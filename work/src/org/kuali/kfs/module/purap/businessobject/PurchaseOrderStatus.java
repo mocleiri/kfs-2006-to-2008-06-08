@@ -38,8 +38,6 @@ public class PurchaseOrderStatus extends BusinessObjectBase {
 	private String purchaseOrderStatusDescription;
 	private String dataObjectMaintenanceCodeActiveIndicator;
 
-    private PurchaseOrder purchaseOrderStatus;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class PurchaseOrderStatus extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(String dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the purchaseOrderStatus attribute.
-	 * 
-	 * @return - Returns the purchaseOrderStatus
-	 * 
-	 */
-	public PurchaseOrder getPurchaseOrderStatus() { 
-		return purchaseOrderStatus;
-	}
-
-	/**
-	 * Sets the purchaseOrderStatus attribute.
-	 * 
-	 * @param - purchaseOrderStatus The purchaseOrderStatus to set.
-	 * @deprecated
-	 */
-	public void setPurchaseOrderStatus(PurchaseOrder purchaseOrderStatus) {
-		this.purchaseOrderStatus = purchaseOrderStatus;
 	}
 
 	/**

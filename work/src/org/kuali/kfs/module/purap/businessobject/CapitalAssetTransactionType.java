@@ -39,8 +39,6 @@ public class CapitalAssetTransactionType extends BusinessObjectBase {
 	private boolean capitalAssetTransactionTypeServiceIndicator;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private PurchaseOrderItem capitalAssetTransactionType;
-
 	/**
 	 * Default constructor.
 	 */
@@ -129,27 +127,6 @@ public class CapitalAssetTransactionType extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the capitalAssetTransactionType attribute.
-	 * 
-	 * @return - Returns the capitalAssetTransactionType
-	 * 
-	 */
-	public PurchaseOrderItem getCapitalAssetTransactionType() { 
-		return capitalAssetTransactionType;
-	}
-
-	/**
-	 * Sets the capitalAssetTransactionType attribute.
-	 * 
-	 * @param - capitalAssetTransactionType The capitalAssetTransactionType to set.
-	 * @deprecated
-	 */
-	public void setCapitalAssetTransactionType(PurchaseOrderItem capitalAssetTransactionType) {
-		this.capitalAssetTransactionType = capitalAssetTransactionType;
 	}
 
 	/**

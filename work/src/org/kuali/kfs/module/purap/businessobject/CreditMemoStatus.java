@@ -38,8 +38,6 @@ public class CreditMemoStatus extends BusinessObjectBase {
 	private String creditMemoStatusDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private CreditMemo creditMemoStatus;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class CreditMemoStatus extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the creditMemoStatus attribute.
-	 * 
-	 * @return - Returns the creditMemoStatus
-	 * 
-	 */
-	public CreditMemo getCreditMemoStatus() { 
-		return creditMemoStatus;
-	}
-
-	/**
-	 * Sets the creditMemoStatus attribute.
-	 * 
-	 * @param - creditMemoStatus The creditMemoStatus to set.
-	 * @deprecated
-	 */
-	public void setCreditMemoStatus(CreditMemo creditMemoStatus) {
-		this.creditMemoStatus = creditMemoStatus;
 	}
 
 	/**

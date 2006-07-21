@@ -38,8 +38,6 @@ public class ItemType extends BusinessObjectBase {
 	private String itemTypeDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private RequisitionItem itemType;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class ItemType extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the itemType attribute.
-	 * 
-	 * @return - Returns the itemType
-	 * 
-	 */
-	public RequisitionItem getItemType() { 
-		return itemType;
-	}
-
-	/**
-	 * Sets the itemType attribute.
-	 * 
-	 * @param - itemType The itemType to set.
-	 * @deprecated
-	 */
-	public void setItemType(RequisitionItem itemType) {
-		this.itemType = itemType;
 	}
 
 	/**

@@ -38,8 +38,6 @@ public class PaymentRequestStatus extends BusinessObjectBase {
 	private String paymentRequestStatusDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private PaymentRequest paymentRequestStatus;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class PaymentRequestStatus extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the paymentRequestStatus attribute.
-	 * 
-	 * @return - Returns the paymentRequestStatus
-	 * 
-	 */
-	public PaymentRequest getPaymentRequestStatus() { 
-		return paymentRequestStatus;
-	}
-
-	/**
-	 * Sets the paymentRequestStatus attribute.
-	 * 
-	 * @param - paymentRequestStatus The paymentRequestStatus to set.
-	 * @deprecated
-	 */
-	public void setPaymentRequestStatus(PaymentRequest paymentRequestStatus) {
-		this.paymentRequestStatus = paymentRequestStatus;
 	}
 
 	/**

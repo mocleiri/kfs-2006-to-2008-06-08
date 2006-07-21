@@ -38,8 +38,6 @@ public class RequisitionSource extends BusinessObjectBase {
 	private String requisitionSourceDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private Requisition requisitionSource;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class RequisitionSource extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the requisitionSource attribute.
-	 * 
-	 * @return - Returns the requisitionSource
-	 * 
-	 */
-	public Requisition getRequisitionSource() { 
-		return requisitionSource;
-	}
-
-	/**
-	 * Sets the requisitionSource attribute.
-	 * 
-	 * @param - requisitionSource The requisitionSource to set.
-	 * @deprecated
-	 */
-	public void setRequisitionSource(Requisition requisitionSource) {
-		this.requisitionSource = requisitionSource;
 	}
 
 	/**

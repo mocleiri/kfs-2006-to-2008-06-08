@@ -38,8 +38,6 @@ public class FundingSource extends BusinessObjectBase {
 	private String fundingSourceDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private Requisition fundingSource;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class FundingSource extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the fundingSource attribute.
-	 * 
-	 * @return - Returns the fundingSource
-	 * 
-	 */
-	public Requisition getFundingSource() { 
-		return fundingSource;
-	}
-
-	/**
-	 * Sets the fundingSource attribute.
-	 * 
-	 * @param - fundingSource The fundingSource to set.
-	 * @deprecated
-	 */
-	public void setFundingSource(Requisition fundingSource) {
-		this.fundingSource = fundingSource;
 	}
 
 	/**

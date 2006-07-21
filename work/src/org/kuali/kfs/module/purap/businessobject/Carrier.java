@@ -38,8 +38,6 @@ public class Carrier extends BusinessObjectBase {
 	private String carrierDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private ShipmentReceiving carrier;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class Carrier extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the carrier attribute.
-	 * 
-	 * @return - Returns the carrier
-	 * 
-	 */
-	public ShipmentReceiving getCarrier() { 
-		return carrier;
-	}
-
-	/**
-	 * Sets the carrier attribute.
-	 * 
-	 * @param - carrier The carrier to set.
-	 * @deprecated
-	 */
-	public void setCarrier(ShipmentReceiving carrier) {
-		this.carrier = carrier;
 	}
 
 	/**

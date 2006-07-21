@@ -38,8 +38,6 @@ public class PurchaseOrderTransmissionMethod extends BusinessObjectBase {
 	private String purchaseOrderTransmissionMethodDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private PurchaseOrder purchaseOrderTransmissionMethod;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class PurchaseOrderTransmissionMethod extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the purchaseOrderTransmissionMethod attribute.
-	 * 
-	 * @return - Returns the purchaseOrderTransmissionMethod
-	 * 
-	 */
-	public PurchaseOrder getPurchaseOrderTransmissionMethod() { 
-		return purchaseOrderTransmissionMethod;
-	}
-
-	/**
-	 * Sets the purchaseOrderTransmissionMethod attribute.
-	 * 
-	 * @param - purchaseOrderTransmissionMethod The purchaseOrderTransmissionMethod to set.
-	 * @deprecated
-	 */
-	public void setPurchaseOrderTransmissionMethod(PurchaseOrder purchaseOrderTransmissionMethod) {
-		this.purchaseOrderTransmissionMethod = purchaseOrderTransmissionMethod;
 	}
 
 	/**

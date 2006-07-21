@@ -38,8 +38,6 @@ public class RecurringPaymentType extends BusinessObjectBase {
 	private String recurringPaymentTypeDescription;
     private boolean dataObjectMaintenanceCodeActiveIndicator;
     
-    private Requisition recurringPaymentType;
-
 	/**
 	 * Default constructor.
 	 */
@@ -86,27 +84,6 @@ public class RecurringPaymentType extends BusinessObjectBase {
 	 */
 	public void setRecurringPaymentTypeDescription(String recurringPaymentTypeDescription) {
 		this.recurringPaymentTypeDescription = recurringPaymentTypeDescription;
-	}
-
-
-	/**
-	 * Gets the recurringPaymentType attribute.
-	 * 
-	 * @return - Returns the recurringPaymentType
-	 * 
-	 */
-	public Requisition getRecurringPaymentType() { 
-		return recurringPaymentType;
-	}
-
-	/**
-	 * Sets the recurringPaymentType attribute.
-	 * 
-	 * @param - recurringPaymentType The recurringPaymentType to set.
-	 * @deprecated
-	 */
-	public void setRecurringPaymentType(Requisition recurringPaymentType) {
-		this.recurringPaymentType = recurringPaymentType;
 	}
 
     /**

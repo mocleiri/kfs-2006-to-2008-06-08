@@ -38,8 +38,6 @@ public class RequisitionStatus extends BusinessObjectBase {
 	private String requisitionStatusDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private Requisition requisitionStatus;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class RequisitionStatus extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the requisitionStatus attribute.
-	 * 
-	 * @return - Returns the requisitionStatus
-	 * 
-	 */
-	public Requisition getRequisitionStatus() { 
-		return requisitionStatus;
-	}
-
-	/**
-	 * Sets the requisitionStatus attribute.
-	 * 
-	 * @param - requisitionStatus The requisitionStatus to set.
-	 * @deprecated
-	 */
-	public void setRequisitionStatus(Requisition requisitionStatus) {
-		this.requisitionStatus = requisitionStatus;
 	}
 
 	/**
