@@ -13,9 +13,12 @@
                 <field attributeName="financialDocumentBankCode" />
                 <field attributeName="finDocumentBankAccountNumber" />
                 <field attributeName="finDocumentBankAccountDesc" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="organizationCode" />
+                <field attributeName="universityAcctChartOfAcctCd" />
+                <field attributeName="universityAccountNumber" />
                 <field attributeName="cashOffsetFinancialChartOfAccountCode" />
                 <field attributeName="cashOffsetAccountNumber" />
-                <field attributeName="cashOffsetSubAccountNumber" />
                 <field attributeName="cashOffsetObjectCode" />
                 <field attributeName="cashOffsetSubObjectCode" />
             </inquiryFields>
@@ -36,9 +39,12 @@
                 <lookupField attributeName="financialDocumentBankCode" required="false" />
                 <lookupField attributeName="finDocumentBankAccountNumber" required="false" />
                 <lookupField attributeName="finDocumentBankAccountDesc" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="organizationCode" required="false" />
+                <lookupField attributeName="universityAcctChartOfAcctCd" required="false" />
+                <lookupField attributeName="universityAccountNumber" required="false" />
                 <lookupField attributeName="cashOffsetFinancialChartOfAccountCode" required="false" />
                 <lookupField attributeName="cashOffsetAccountNumber" required="false" />
-                <lookupField attributeName="cashOffsetSubAccountNumber" required="false" />
                 <lookupField attributeName="cashOffsetObjectCode" required="false" />
                 <lookupField attributeName="cashOffsetSubObjectCode" required="false" />
             </lookupFields>
@@ -47,15 +53,16 @@
                 <field attributeName="financialDocumentBankCode" />
                 <field attributeName="finDocumentBankAccountNumber" />
                 <field attributeName="finDocumentBankAccountDesc" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="organizationCode" />
+                <field attributeName="universityAcctChartOfAcctCd" />
+                <field attributeName="universityAccountNumber" />
                 <field attributeName="cashOffsetFinancialChartOfAccountCode" />
                 <field attributeName="cashOffsetAccountNumber" />
-                <field attributeName="cashOffsetSubAccountNumber" />
                 <field attributeName="cashOffsetObjectCode" />
                 <field attributeName="cashOffsetSubObjectCode" />
             </resultFields>
         </lookup>
-
-        <titleAttribute>finDocumentBankAccountNumber</titleAttribute>
 
         <attributes>
 
@@ -77,7 +84,7 @@
                 <description>Bank Account Number...</description>
             </attribute>
 
-            <attribute name="finDocumentBankAccountDesc" forceUppercase="true">
+            <attribute name="finDocumentBankAccountDesc" forceUppercase="false">
                 <label>Bank Account Description</label>
                 <shortLabel>Bank Acct Desc</shortLabel>
 
@@ -91,12 +98,46 @@
                 <description>Bank Account Description...</description>
             </attribute>
 
+            <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
+                <label>Chart Of Accounts</label>
+                <shortLabel>CoA</shortLabel>
+                <required>false</required>
+                <control>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                </control>
+                <summary>Chart Of Accounts Code</summary>
+                <description>Chart Of Accounts Code</description>
+            </attributeReference>
+
+            <attributeReference name="organizationCode" sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="organizationCode">
+                <required>false</required>
+            </attributeReference>
+
+            <attributeReference name="universityAcctChartOfAcctCd" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
+                <label>University Chart Of Accounts</label>
+                <shortLabel>Univ CoA</shortLabel>
+                <required>false</required>
+                <control>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                </control>
+                <summary>University Chart Of Accounts Code</summary>
+                <description>University Chart Of Accounts Code</description>
+            </attributeReference>
+
+            <attributeReference name="universityAccountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber">
+                <label>University Account Number</label>
+                <shortLabel>Univ. Acct. Num.</shortLabel>
+                <required>false</required>
+                <summary>Univ Account</summary>
+                <description>University Account Number</description>
+            </attributeReference>
+
             <attributeReference name="cashOffsetFinancialChartOfAccountCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <label>Cash Offset Chart Of Accounts</label>
                 <shortLabel>Cash Off CoA</shortLabel>
                 <required>false</required>
                 <control>
-                    <text size="2" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>Cash Offset Chart Of Accounts Code</summary>
                 <description>Cash Offset Chart Of Accounts Code</description>
@@ -108,14 +149,6 @@
                 <required>false</required>
                 <summary>Cash Offset Account Number</summary>
                 <description>Cash Offset Account Number</description>
-            </attributeReference>
-            
-            <attributeReference name="cashOffsetSubAccountNumber" sourceClassName="org.kuali.module.chart.bo.SubAccount" sourceAttributeName="subAccountNumber">
-                <label>Cash Offset Sub Account Number</label>
-                <shortLabel>Cash Off Sub Acct Nbr</shortLabel>
-                <required>false</required>
-                <summary>Cash Offset Sub Account Number</summary>
-                <description>Cash Offset Sub Account Number</description>
             </attributeReference>
 
             <attributeReference name="cashOffsetObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -133,7 +166,7 @@
                 <summary>Cash Offset Sub Object Code</summary>
                 <description>Cash Offset Sub Object Code</description>
             </attributeReference>
-            
+
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>

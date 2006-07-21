@@ -34,9 +34,6 @@ import org.kuali.module.gl.bo.AccountBalance;
  * @author Bin Gao from Michigan State University
  */
 public interface AccountBalanceService {
-    public final int PENDING_NONE = 1;
-    public final int PENDING_APPROVED = 2;
-    public final int PENDING_ALL = 3;
 
     /**
      * This method finds the available account balances according to input fields and values
@@ -45,37 +42,23 @@ public interface AccountBalanceService {
      * @param isConsolidated determine whether the search results are consolidated
      * @return the summary records of account balance entries
      */
-    public Iterator findConsolidatedAvailableAccountBalance(Map fieldValues);
-    
-    /**
-     * This method finds the available account balances according to input fields and values
-     * 
-     * @param fieldValues the input fields and values
-     * @param isConsolidated determine whether the search results are consolidated
-     * @return a collection of account balance entries
-     */
-    public Iterator findAvailableAccountBalance(Map fieldValues);
+    public Iterator findAvailableAccountBalance(Map fieldValues, boolean isConsolidated);
 
     /**
      * This method finds the available account balances according to input fields and values
      */
-    public List findAccountBalanceByConsolidation(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, boolean isCostShareExcluded, boolean isConsolidated, int pendingEntryCode);
+    public List findAccountBalanceByConsolidation(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, boolean isCostShareExcluded, boolean isConsolidated, boolean isIncludePendingEntry);
 
     /**
      * This method finds the available account balances according to input fields and values
      */
-    public List findAccountBalanceByLevel(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, String financialConsolidationObjectCode, boolean isCostShareExcluded, boolean isConsolidated, int pendingEntryCode);
+    public List findAccountBalanceByLevel(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, String financialConsolidationObjectCode, boolean isCostShareExcluded, boolean isConsolidated, boolean isIncludePendingEntry);
 
     /**
      * This method finds the available account balances according to input fields and values
      */
-    public List findAccountBalanceByObject(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, String financialObjectLevelCode, String financialReportingSortCode, boolean isCostShareExcluded, boolean isConsolidated, int pendingEntryCode);
+    public List findAccountBalanceByObject(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, String financialObjectLevelCode, String financialReportingSortCode, boolean isCostShareExcluded, boolean isConsolidated, boolean isIncludePendingEntry);
 
-    /**
-     * Save an account balance
-     *
-     * @param ab
-     */
     public void save(AccountBalance ab);
 
     /**

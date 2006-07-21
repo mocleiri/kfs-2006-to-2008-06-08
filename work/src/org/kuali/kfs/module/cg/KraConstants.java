@@ -44,9 +44,4 @@ public class KraConstants extends JstlConstants {
 
     public static final String INSTITUTION_COST_SHARE_CODE = "I";
     public static final String THIRD_PARTY_COST_SHARE_CODE = "T";
-    
-    public static final String PERMISSION_MOD_CODE = "M";
-    public static final String PERMISSION_READ_CODE = "R";
-
-    public static final String DATABASE_TRUE_VALUE = "Y";
 }

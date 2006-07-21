@@ -25,23 +25,20 @@ package org.kuali.module.gl.dao.ojb;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.PropertyConstants;
-import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.EncumbranceDao;
-import org.kuali.module.gl.util.BusinessObjectHandler;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
- * @author Kuali General Ledger Team <kualigltech@oncourse.iu.edu>
- * @version $Id: EncumbranceDaoOjb.java,v 1.10 2006-07-13 21:20:44 larevans Exp $
+ * @author jsissom
+ * @version $Id: EncumbranceDaoOjb.java,v 1.8 2006-06-14 12:26:34 abyrne Exp $
  */
 public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements EncumbranceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EncumbranceDaoOjb.class);
@@ -50,7 +47,9 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
         super();
     }
 
-    /**
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.kuali.module.gl.dao.EncumbranceDao#getEncumbranceByTransaction(org.kuali.module.gl.bo.Transaction)
      */
     public Encumbrance getEncumbranceByTransaction(Transaction t) {
@@ -72,11 +71,32 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
         return (Encumbrance) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
     }
 
-    /**
-     * @see org.kuali.module.gl.dao.EncumbranceDao#getEncumbrancesToClose(java.lang.Integer)
-     */
     public Iterator getEncumbrancesToClose(Integer fiscalYear) {
 
+        // 816 002750 EXEC SQL
+        // 817 002760 DECLARE GLEC_CURSOR CURSOR FOR
+        // 818 002770 SELECT UNIV_FISCAL_YR,
+        // 819 002780 FIN_COA_CD,
+        // 820 002790 ACCOUNT_NBR,
+        // 821 002800 SUB_ACCT_NBR,
+        // 822 002810 FIN_OBJECT_CD,
+        // 823 002820 FIN_SUB_OBJ_CD,
+        // 824 002830 FIN_BALANCE_TYP_CD,
+        // 825 002840 FDOC_TYP_CD,
+        // 826 002850 FS_ORIGIN_CD,
+        // 827 002860 FDOC_NBR,
+        // 828 002870 TRN_ENCUM_DESC,
+        // 829 002880 ACLN_ENCUM_AMT,
+        // 830 002890 ACLN_ENCUM_CLS_AMT
+        // 831 002900 FROM GL_ENCUMBRANCE_T
+        // 832 002910 WHERE UNIV_FISCAL_YR = RTRIM(:GLGLEC-UNIV-FISCAL-YR)
+        // 833 002920 ORDER BY FIN_COA_CD,
+        // 834 002930 ACCOUNT_NBR,
+        // 835 002940 SUB_ACCT_NBR,
+        // 836 002950 FIN_OBJECT_CD,
+        // 837 002960 FIN_SUB_OBJ_CD,
+        // 838 002970 FIN_BALANCE_TYP_CD
+        // 839 002980 END-EXEC.
         Criteria criteria = new Criteria();
         criteria.addEqualTo("universityFiscalYear", fiscalYear);
 
@@ -91,7 +111,9 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
-    /**
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.kuali.module.gl.dao.EncumbranceDao#save(org.kuali.module.gl.bo.Encumbrance)
      */
     public void save(Encumbrance e) {
@@ -100,9 +122,6 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
         getPersistenceBrokerTemplate().store(e);
     }
 
-    /**
-     * @see org.kuali.module.gl.dao.EncumbranceDao#purgeYearByChart(java.lang.String, int)
-     */
     public void purgeYearByChart(String chartOfAccountsCode, int year) {
         LOG.debug("purgeYearByChart() started");
 
@@ -155,18 +174,6 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
         query.addGroupBy(groupBy);
 
         return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-    }
-    
-    /**
-     * @see org.kuali.module.gl.dao.EncumbranceDao#findOpenEncumbrance(java.util.Map)
-     */
-    public Iterator findOpenEncumbrance(Map fieldValues) {
-        LOG.debug("findOpenEncumbrance() started");
-
-        Criteria criteria = BusinessObjectHandler.buildCriteriaFromMap(fieldValues, new Encumbrance());
-        QueryByCriteria query = QueryFactory.newReportQuery(Encumbrance.class, criteria);
-        
-        return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
     /**

@@ -49,14 +49,12 @@ public class CashDrawerServiceTest extends KualiTestBaseWithFixtures {
     private BusinessObjectService boService;
 
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
         cashDrawerService = SpringServiceLocator.getCashDrawerService();
         boService = SpringServiceLocator.getBusinessObjectService();
     }
 
-    @Override
     protected void tearDown() throws Exception {
         deleteCashDrawer(VALID_WORKGROUP_NAME);
 
@@ -402,15 +400,16 @@ public class CashDrawerServiceTest extends KualiTestBaseWithFixtures {
 
         CashDrawer retrieved = null;
         try {
-            boService.save(created);
+            CashDrawer saved = cashDrawerService.save(created);
+            assertNotNull(saved);
 
             retrieved = cashDrawerService.getByWorkgroupName(RANDOM_WORKGROUP_NAME, false);
             assertNotNull(retrieved);
 
             // compare
-            assertEquals(created.getWorkgroupName(), retrieved.getWorkgroupName());
-            assertEquals(created.getStatusCode(), retrieved.getStatusCode());
-            assertNull(retrieved.getReferenceFinancialDocumentNumber());
+            assertEquals(created.getWorkgroupName(), saved.getWorkgroupName());
+            assertEquals(created.getStatusCode(), saved.getStatusCode());
+            assertNull(saved.getReferenceFinancialDocumentNumber());
         }
         finally {
             // delete it
