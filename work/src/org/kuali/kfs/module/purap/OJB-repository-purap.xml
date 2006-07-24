@@ -82,7 +82,7 @@
         <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
     </collection-descriptor>
     <collection-descriptor name="vendorContracts" element-class-ref="org.kuali.module.purap.bo.VendorContract" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true" proxy="true">
-        <orderby name="vendorContractIdentifier" sort="ASC" />
+        <orderby name="vendorContractName" sort="ASC" />
         <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
         <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
     </collection-descriptor>
@@ -149,6 +149,14 @@
 	<field-descriptor name="vendorContactName" column="VNDR_CNTCT_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorContactEmailAddress" column="VNDR_CNTCT_EMAIL_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorContactCommentText" column="VNDR_CNTCT_CMNT_TXT" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorLine1Address" column="VNDR_LN1_ADDR" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorLine2Address" column="VNDR_LN2_ADDR" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorCityName" column="VNDR_CTY_NM" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorStateCode" column="VNDR_ST_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorZipCode" column="VNDR_ZIP_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorCountryCode" column="VNDR_CNTRY_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorAttentionName" column="VNDR_ATTN_NM" jdbc-type="VARCHAR"/>
+    <field-descriptor name="vendorAddressInternationalProvinceName" column="VNDR_ADDR_INTL_PROV_NM" jdbc-type="VARCHAR"/>
 	<reference-descriptor name="vendorDetail" class-ref="org.kuali.module.purap.bo.VendorDetail" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
 		<foreignkey field-ref="vendorDetailAssignedIdentifier" />
@@ -159,6 +167,12 @@
     <reference-descriptor name="vendorAddress" class-ref="org.kuali.module.purap.bo.VendorAddress" auto-retrieve="true" auto-update="true" auto-delete="true">
         <foreignkey field-ref="vendorContactGeneratedIdentifier" />
     </reference-descriptor>
+	<reference-descriptor name="vendorState" class-ref="org.kuali.core.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="vendorStateCode" />
+	</reference-descriptor>
+	<reference-descriptor name="vendorCountry" class-ref="org.kuali.core.bo.Country" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="vendorCountryCode" />
+	</reference-descriptor>
 <!--     <collection-descriptor name="vendorPhoneNumbers" proxy="true" element-class-ref="org.kuali.module.purap.bo.VendorContactPhoneNumber" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none">
         <orderby name="vendorContactPhoneGeneratedIdentifier" sort="ASC" />
         <inverse-foreignkey field-ref="vendorContactGeneratedIdentifier" />
@@ -171,7 +185,7 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="vendorHeaderGeneratedIdentifier" column="VNDR_HDR_GNRTD_ID" jdbc-type="INTEGER" index="true"/>
 	<field-descriptor name="vendorDetailAssignedIdentifier" column="VNDR_DTL_ASND_ID" jdbc-type="INTEGER" index="true"/>
-	<field-descriptor name="vendorContractIdentifier" column="VNDR_CONTR_ID" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorContractName" column="VNDR_CONTR_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorContractDescription" column="VNDR_CONTR_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorCampusCode" column="VNDR_CMP_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="vendorContractBeginningDate" column="VNDR_CONTR_BEG_DT" jdbc-type="DATE"/>
