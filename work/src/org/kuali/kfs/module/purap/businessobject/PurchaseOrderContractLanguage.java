@@ -38,7 +38,6 @@ public class PurchaseOrderContractLanguage extends BusinessObjectBase {
 	private Integer purchaseOrderContractLanguageIdentifier;
 	private String campusCode;
 	private String purchaseOrderContractLanguageDescription;
-	private Date contractLanguageCreateDate;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
 	/**
@@ -109,28 +108,6 @@ public class PurchaseOrderContractLanguage extends BusinessObjectBase {
 	public void setPurchaseOrderContractLanguageDescription(String purchaseOrderContractLanguageDescription) {
 		this.purchaseOrderContractLanguageDescription = purchaseOrderContractLanguageDescription;
 	}
-
-
-	/**
-	 * Gets the contractLanguageCreateDate attribute.
-	 * 
-	 * @return - Returns the contractLanguageCreateDate
-	 * 
-	 */
-	public Date getContractLanguageCreateDate() { 
-		return contractLanguageCreateDate;
-	}
-
-	/**
-	 * Sets the contractLanguageCreateDate attribute.
-	 * 
-	 * @param - contractLanguageCreateDate The contractLanguageCreateDate to set.
-	 * 
-	 */
-	public void setContractLanguageCreateDate(Date contractLanguageCreateDate) {
-		this.contractLanguageCreateDate = contractLanguageCreateDate;
-	}
-
 
 	/**
 	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.

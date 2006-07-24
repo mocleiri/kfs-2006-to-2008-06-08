@@ -40,8 +40,6 @@ public class RestrictedMaterial extends BusinessObjectBase {
 	private String restrictedMaterialWorkgroupName;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private PurchaseOrderRestrictedMaterial restrictedMaterial;
-
 	/**
 	 * Default constructor.
 	 */
@@ -151,27 +149,6 @@ public class RestrictedMaterial extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the restrictedMaterial attribute.
-	 * 
-	 * @return - Returns the restrictedMaterial
-	 * 
-	 */
-	public PurchaseOrderRestrictedMaterial getRestrictedMaterial() { 
-		return restrictedMaterial;
-	}
-
-	/**
-	 * Sets the restrictedMaterial attribute.
-	 * 
-	 * @param - restrictedMaterial The restrictedMaterial to set.
-	 * @deprecated
-	 */
-	public void setRestrictedMaterial(PurchaseOrderRestrictedMaterial restrictedMaterial) {
-		this.restrictedMaterial = restrictedMaterial;
 	}
 
 	/**
