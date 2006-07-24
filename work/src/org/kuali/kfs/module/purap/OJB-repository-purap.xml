@@ -1234,6 +1234,7 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="campusCode" column="CMP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="purchaseOrderContractLanguageDescription" column="PO_CONTR_LANG_DESC" jdbc-type="VARCHAR"/>
+	<field-descriptor name="contractLanguageCreateDate" column="CONTR_LANG_CRTE_DT" jdbc-type="DATE"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
 
