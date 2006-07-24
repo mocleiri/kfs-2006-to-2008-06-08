@@ -1511,9 +1511,9 @@
 	<field-descriptor name="restrictedMaterialDefaultDescription" column="RSTRC_MTRL_DFLT_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="restrictedMaterialWorkgroupName" column="RSTRC_MTRL_WRKGRP_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="restrictedMaterial" class-ref="org.kuali.module.purap.bo.PurchaseOrderRestrictedMaterial" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<!-- reference-descriptor name="restrictedMaterial" class-ref="org.kuali.module.purap.bo.PurchaseOrderRestrictedMaterial" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="restrictedMaterialCode" />
-	</reference-descriptor>
+	</reference-descriptor -->
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.PurchaseOrderRestrictedMaterial" table="PUR_PO_RSTRC_MTRL_T">
