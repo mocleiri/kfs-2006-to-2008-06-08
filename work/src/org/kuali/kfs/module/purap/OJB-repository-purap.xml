@@ -380,6 +380,20 @@
 	<field-descriptor name="vendorStipulationDescription" column="VNDR_STPLTN_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
+
+<class-descriptor class="org.kuali.module.purap.bo.VendorContactPhoneNumber" table="PUR_VNDR_CNTCT_PHN_NBR_T">
+	<field-descriptor name="vendorContactPhoneGeneratedIdentifier" column="VNDR_CNTCT_PHN_GNRTD_ID" jdbc-type="INTEGER" primarykey="true" index="true" autoincrement="true" sequence-name="VNDR_CNTCT_PHN_GNRTD_ID"/>
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
+	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+	<field-descriptor name="vendorContactGeneratedIdentifier" column="VNDR_CNTCT_GNRTD_ID" jdbc-type="INTEGER"/>
+	<field-descriptor name="vendorPhoneTypeCode" column="VNDR_PHN_TYP_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorPhoneNumber" column="VNDR_PHN_NBR" jdbc-type="VARCHAR"/>
+	<field-descriptor name="vendorPhoneExtensionNumber" column="VNDR_PHN_EXTNS_NBR" jdbc-type="VARCHAR"/>
+	<reference-descriptor name="vendorPhoneType" class-ref="org.kuali.module.purap.bo.PhoneType" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="vendorPhoneTypeCode" />
+	</reference-descriptor>
+</class-descriptor>
+
 <!--  End Vendor tables  -->
 
 <class-descriptor class="org.kuali.module.purap.bo.OwnershipType" table="PUR_OWNR_TYP_T">
