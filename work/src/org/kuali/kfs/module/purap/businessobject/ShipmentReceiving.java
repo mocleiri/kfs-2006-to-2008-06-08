@@ -46,7 +46,6 @@ public class ShipmentReceiving extends BusinessObjectBase {
 	private String vendorName;
 	private String vendorLine1Address;
 	private String vendorLine2Address;
-	private String vendorLine3Address;
 	private String vendorCityName;
 	private String vendorStateCode;
 	private String vendorPostalCode;
@@ -286,28 +285,6 @@ public class ShipmentReceiving extends BusinessObjectBase {
 	public void setVendorLine2Address(String vendorLine2Address) {
 		this.vendorLine2Address = vendorLine2Address;
 	}
-
-
-	/**
-	 * Gets the vendorLine3Address attribute.
-	 * 
-	 * @return - Returns the vendorLine3Address
-	 * 
-	 */
-	public String getVendorLine3Address() { 
-		return vendorLine3Address;
-	}
-
-	/**
-	 * Sets the vendorLine3Address attribute.
-	 * 
-	 * @param - vendorLine3Address The vendorLine3Address to set.
-	 * 
-	 */
-	public void setVendorLine3Address(String vendorLine3Address) {
-		this.vendorLine3Address = vendorLine3Address;
-	}
-
 
 	/**
 	 * Gets the vendorCityName attribute.

@@ -111,7 +111,6 @@
 	<field-descriptor name="vendorAddressTypeCode" column="VNDR_ADDR_TYP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLine1Address" column="VNDR_LN1_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLine2Address" column="VNDR_LN2_ADDR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorLine3Address" column="VNDR_LN3_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorCityName" column="VNDR_CTY_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorStateCode" column="VNDR_ST_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorZipCode" column="VNDR_ZIP_CD" jdbc-type="VARCHAR"/>
@@ -495,7 +494,6 @@
 	<field-descriptor name="vendorName" column="VNDR_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLine1Address" column="VNDR_LN1_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLine2Address" column="VNDR_LN2_ADDR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorLine3Address" column="VNDR_LN3_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorCityName" column="VNDR_CTY_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorStateCode" column="VNDR_ST_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorPostalCode" column="VNDR_PSTL_CD" jdbc-type="VARCHAR"/>
@@ -593,7 +591,6 @@
 	<field-descriptor name="vendorName" column="VNDR_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLine1Address" column="VNDR_LN1_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLine2Address" column="VNDR_LN2_ADDR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorLine3Address" column="VNDR_LN3_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorCityName" column="VNDR_CTY_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorStateCode" column="VNDR_ST_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorPostalCode" column="VNDR_PSTL_CD" jdbc-type="VARCHAR"/>
@@ -798,7 +795,6 @@
 	<field-descriptor name="vendorName" column="VNDR_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLine1Address" column="VNDR_LN1_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLine2Address" column="VNDR_LN2_ADDR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorLine3Address" column="VNDR_LN3_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorCityName" column="VNDR_CTY_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorStateCode" column="VNDR_ST_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorPostalCode" column="VNDR_PSTL_CD" jdbc-type="VARCHAR"/>

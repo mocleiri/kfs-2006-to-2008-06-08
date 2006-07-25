@@ -36,7 +36,6 @@
                 <field attributeName="vendorCountryCode" />
                 <field attributeName="vendorLine1Address" />
                 <field attributeName="vendorLine2Address" />
-                <field attributeName="vendorLine3Address" />
                 <field attributeName="vendorName" />
                 <field attributeName="vendorPostalCode" />
                 <field attributeName="vendorShippingPaymentTermsCode" />
@@ -84,7 +83,6 @@
                 <lookupField attributeName="vendorCountryCode" required="false" />
                 <lookupField attributeName="vendorLine1Address" required="false" />
                 <lookupField attributeName="vendorLine2Address" required="false" />
-                <lookupField attributeName="vendorLine3Address" required="false" />
                 <lookupField attributeName="vendorName" required="false" />
                 <lookupField attributeName="vendorPostalCode" required="false" />
                 <lookupField attributeName="vendorShippingPaymentTermsCode" required="false" />
@@ -118,7 +116,6 @@
                 <field attributeName="vendorCountryCode" />
                 <field attributeName="vendorLine1Address" />
                 <field attributeName="vendorLine2Address" />
-                <field attributeName="vendorLine3Address" />
                 <field attributeName="vendorName" />
                 <field attributeName="vendorPostalCode" />
                 <field attributeName="vendorShippingPaymentTermsCode" />
@@ -516,21 +513,6 @@
 
                 <summary>vendorLine2Address</summary>
                 <description>vendorLine2Address description...</description>
-			</attribute>
-
-            <attribute name="vendorLine3Address" forceUppercase="true">
-                <label>Vendor Line3 Address</label>
-                <shortLabel>Address</shortLabel>
-
-                <maxLength>45</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="47" />
-                </control>
-
-                <summary>vendorLine3Address</summary>
-                <description>vendorLine3Address description...</description>
 			</attribute>
 
             <attribute name="vendorName" forceUppercase="true">
