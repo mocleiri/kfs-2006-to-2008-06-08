@@ -71,6 +71,11 @@
 	<reference-descriptor name="vendorShippingPaymentTerms" class-ref="org.kuali.module.purap.bo.ShippingPaymentTerms" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorShippingPaymentTermsCode" />
 	</reference-descriptor>
+    <collection-descriptor name="vendorAliases" element-class-ref="org.kuali.module.purap.bo.VendorAlias" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
+        <orderby name="vendorAliasName" sort="ASC" />
+        <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
+        <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
+    </collection-descriptor>
     <collection-descriptor name="vendorAddresses" element-class-ref="org.kuali.module.purap.bo.VendorAddress" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
         <orderby name="vendorAddressTypeCode" sort="ASC" />
         <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
