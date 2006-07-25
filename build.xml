@@ -43,6 +43,12 @@
 
 	<target name="init-user-properties">
 		<property file="${user.home}/${ant.project.name}-build.properties" />
+		<condition property="use.p6spy.local">
+			<and>
+				<equals arg1="${is.local.build}" arg2="true" />
+				<equals arg1="${use.p6spy}" arg2="true" />
+			</and>
+		</condition>
 		<condition property="dist.workflow.local">
 			<equals arg1="${is.local.workflow.build}" arg2="true" />
 		</condition>
@@ -107,7 +113,7 @@
 		<property name="cas.url" value="${test.environment.url}cas-unt" />
 		<property name="workflow.url" value="${test.environment.url}en-${build.environment}" />
 		<condition property="driver.class" value="${p6spy.driver.class}">
-			<equals arg1="${use.p6spy}" arg2="true" />
+			<isset property="use.p6spy.local" />
 		</condition>
 		<property name="driver.class" value="${oracle.driver.class}" />
 		<condition property="appenders" value="INFO, LogFile, StdOut">
@@ -167,6 +173,7 @@
 		<delete>
 			<fileset dir="${source.directory}" includes="${tokenized.source.files}" />
 		</delete>
+		<delete file="${lib.directory}/${log4j.library}" />
 		<delete dir="${war.directory}" />
 		<delete dir="${batch.directory}" />
 		<delete dir="${test.directory}" />
@@ -183,6 +190,7 @@
 		<delete failonerror="false">
 			<fileset dir="${appserver.lib.dir}" includes="${appserver.library.list}" />
 		</delete>
+		<delete file="${appserver.lib.dir}/${log4j.library}"/>
 		<delete failonerror="false">
 			<fileset dir="${appserver.config.dir}" includes="${ant.project.name}-*.xml" />
 		</delete>
@@ -224,7 +232,15 @@
 	<!-- wrapper based on naming convention required by workflow build script -->
 	<target name="clean-plugin" depends="clean"/>
 
-	<target name="filter-project" depends="init-filter-sets,clean-project">
+	<target name="filter-project-log4j" unless="use.p6spy.local" depends="init-filter-sets,clean-project">
+		<copy file="${build.appserver.directory}/${log4j.library}" todir="${lib.directory}"/>
+	</target>
+	
+	<target name="filter-project-p6spy" if="use.p6spy.local" depends="filter-project-log4j">
+		<copy file="${build.appserver.directory}/${log4j.library}" todir="${appserver.lib.dir}"/>
+	</target>
+	
+	<target name="filter-project" depends="filter-project-p6spy">
 		<mkdir dir="${metainf.directory}" />
 		<copy file="${build.tokenized.resources.directory}/${tomcat.context.file}" todir="${metainf.directory}" overwrite="true">
 			<filterset refid="general.filterset" />
