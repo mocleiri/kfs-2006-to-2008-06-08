@@ -202,7 +202,7 @@
 	<field-descriptor name="vendorContractExtensionDate" column="VNDR_CONTR_EXTNS_DT" jdbc-type="DATE"/>
 	<field-descriptor name="vendorHotUrlName" column="VNDR_HOT_URL_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorB2bIndicator" column="VNDR_B2B_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<field-descriptor name="organizationAutomaticPurchaseOrderLimit" column="ORG_AUTO_PO_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="organizationAutomaticPurchaseOrderLimit" column="ORG_AUTO_PO_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<reference-descriptor name="vendorDetail" class-ref="org.kuali.module.purap.bo.VendorDetail" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
 		<foreignkey field-ref="vendorDetailAssignedIdentifier" />
@@ -241,7 +241,7 @@
 	<field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="vendorContractPurchaseOrderLimitAmount" column="VNDR_CTRPO_LMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="vendorContractPurchaseOrderLimitAmount" column="VNDR_CTRPO_LMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="vendorContractExcludeIndicator" column="VNDR_CONTR_EXCL_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<reference-descriptor name="vendorContract" class-ref="org.kuali.module.purap.bo.VendorContract" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorContractGeneratedIdentifier" />
@@ -429,8 +429,8 @@
 	<field-descriptor name="projectCode" column="PROJECT_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="organizationReferenceId" column="ORG_REFERENCE_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="accountLinePercent" column="ACLN_PCT" jdbc-type="INTEGER"/>
-	<field-descriptor name="itemAccountOutstandingEncumbranceAmount" column="ITM_ACCT_OSTND_ENCUM_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
-	<field-descriptor name="itemAccountPaidAmount" column="ITM_ACCT_PD_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemAccountOutstandingEncumbranceAmount" column="ITM_ACCT_OSTND_ENCUM_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
+	<field-descriptor name="itemAccountPaidAmount" column="ITM_ACCT_PD_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="chartOfAccountsCode" />
 	</reference-descriptor>
@@ -454,17 +454,17 @@
 	<field-descriptor name="itemTypeCode" column="ITM_TYP_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="capitalAssetTransactionTypeCode" column="CPTL_AST_TRN_TYP_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="itemUnitOfMeasureCode" column="ITM_UOM_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="itemOrderedQuantity" column="ITM_ORD_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
-	<field-descriptor name="itemInvoicedTotalQuantity" column="ITM_INV_TOT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
-	<field-descriptor name="itemInvoicedTotalAmount" column="ITM_INV_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemOrderedQuantity" column="ITM_ORD_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
+	<field-descriptor name="itemInvoicedTotalQuantity" column="ITM_INV_TOT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
+	<field-descriptor name="itemInvoicedTotalAmount" column="ITM_INV_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="itemCatalogNumber" column="ITM_CATLG_NBR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="itemReceivedTotalQuantity" column="ITM_RCVD_TOT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemReceivedTotalQuantity" column="ITM_RCVD_TOT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="itemDescription" column="ITM_DESC" jdbc-type="VARCHAR"/>
-	<field-descriptor name="itemReturnedTotalQuantity" column="ITM_RTRN_TOT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemReturnedTotalQuantity" column="ITM_RTRN_TOT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="itemCapitalAssetNoteText" column="ITM_CPTL_AST_NTE_TXT" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemUnitPrice" column="ITM_UNIT_PRC" jdbc-type="DECIMAL"/>
-	<field-descriptor name="itemOutstandingEncumberedQuantity" column="ITM_OSTND_ENC_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
-	<field-descriptor name="itemOutstandingEncumbranceAmount" column="ITM_OSTND_ENC_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemOutstandingEncumberedQuantity" column="ITM_OSTND_ENC_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
+	<field-descriptor name="itemOutstandingEncumbranceAmount" column="ITM_OSTND_ENC_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="requisitionLineIdentifier" column="REQS_LN_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemAuxiliaryPartIdentifier" column="ITM_AUX_PART_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemActiveIndicator" column="ITM_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
@@ -565,7 +565,7 @@
 	<field-descriptor name="itemLineNumber" column="ITM_LN_NBR" jdbc-type="INTEGER" index="true"/>
 	<field-descriptor name="capitalAssetTransactionTypeCode" column="CPTL_AST_TRN_TYP_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="itemUnitOfMeasureCode" column="ITM_UOM_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="itemQuantity" column="ITM_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemQuantity" column="ITM_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="itemCatalogNumber" column="ITM_CATLG_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemDescription" column="ITM_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemCapitalAssetNoteText" column="ITM_CPTL_AST_NTE_TXT" jdbc-type="VARCHAR"/>
@@ -604,7 +604,7 @@
 	<field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="deliveryCampusCode" column="DLVY_CMP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="purchaseOrderEncumbranceFiscalYear" column="PO_ENCUM_FSCL_YR" jdbc-type="INTEGER"/>
-	<field-descriptor name="purchaseOrderTotalLimit" column="PO_TOT_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="purchaseOrderTotalLimit" column="PO_TOT_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="vendorHeaderGeneratedIdentifier" column="VNDR_HDR_GNRTD_ID" jdbc-type="INTEGER"/>
 	<field-descriptor name="vendorDetailAssignedIdentifier" column="VNDR_DTL_ASND_ID" jdbc-type="INTEGER"/>
 	<field-descriptor name="vendorName" column="VNDR_NM" jdbc-type="VARCHAR"/>
@@ -665,7 +665,7 @@
 	<field-descriptor name="billingPhoneNumber" column="BILL_PHN_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="externalOrganizationB2bSupplierIdentifier" column="EXT_ORG_B2B_SUPP_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="contractManagerCode" column="CONTR_MGR_CD" jdbc-type="INTEGER"/>
-	<field-descriptor name="organizationAutomaticPurchaseOrderLimit" column="ORG_AUTO_PO_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="organizationAutomaticPurchaseOrderLimit" column="ORG_AUTO_PO_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="purchaseOrderAutomaticIndicator" column="PO_AUTO_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<reference-descriptor name="requisition" class-ref="org.kuali.module.purap.bo.RequisitionStatusHistory" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="requisitionIdentifier" />
@@ -854,17 +854,17 @@
 	<field-descriptor name="deliveryRequiredDateReasonCode" column="DLVY_REQ_DT_REAS_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="purchaseOrderTotalAmount" column="PO_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="purchaseOrderTotalAmount" column="PO_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="purchaseOrderGeneralDescription" column="PO_GNRL_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="purchaseOrderCreateDate" column="PO_CRTE_DT" jdbc-type="DATE"/>
 	<field-descriptor name="purchaseOrderEncumbranceFiscalYear" column="PO_ENCUM_FSCL_YR" jdbc-type="INTEGER"/>
 	<field-descriptor name="purchaseOrderCostSourceCode" column="PO_CST_SRC_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="purchaseOrderTransmissionMethodCode" column="PO_TRNS_MTHD_CD" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="purchaseOrderTotalLimit" column="PO_TOT_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="purchaseOrderTotalLimit" column="PO_TOT_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="purchaseOrderBeginDate" column="PO_BEG_DT" jdbc-type="DATE"/>
 	<field-descriptor name="purchaseOrderEndDate" column="PO_END_DT" jdbc-type="DATE"/>
 	<field-descriptor name="recurringPaymentFrequencyCode" column="RECUR_PMT_FREQ_CD" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="recurringPaymentAmount" column="RECUR_PMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="recurringPaymentAmount" column="RECUR_PMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="recurringPaymentTypeCode" column="RECUR_PMT_TYP_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="recurringPaymentDate" column="RECUR_PMT_DT" jdbc-type="DATE"/>
 	<field-descriptor name="institutionContactName" column="INST_CNTCT_NM" jdbc-type="VARCHAR"/>
@@ -878,9 +878,9 @@
 	<field-descriptor name="billingPostalCode" column="BILL_PSTL_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="billingCountryCode" column="BILL_CNTRY_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="billingPhoneNumber" column="BILL_PHN_NBR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="initialPaymentAmount" column="INIT_PMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="initialPaymentAmount" column="INIT_PMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="initialPaymentDate" column="INIT_PMT_DT" jdbc-type="DATE"/>
-	<field-descriptor name="finalPaymentAmount" column="FNL_PMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="finalPaymentAmount" column="FNL_PMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="finalPaymentDate" column="FNL_PMT_DT" jdbc-type="DATE"/>
 	<field-descriptor name="externalOrganizationB2bSupplierIdentifier" column="EXT_ORG_B2B_SUPP_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="contractManagerCode" column="CONTR_MGR_CD" jdbc-type="INTEGER"/>
@@ -971,7 +971,7 @@
 	<field-descriptor name="creditMemoNumber" column="CRDT_MEMO_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="creditMemoDate" column="CRDT_MEMO_DT" jdbc-type="DATE"/>
 	<field-descriptor name="creditMemoCreateDate" column="CRDT_MEMO_CRT_DT" jdbc-type="DATE"/>
-	<field-descriptor name="creditMemoAmount" column="CRDT_MEMO_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="creditMemoAmount" column="CRDT_MEMO_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="creditMemoNoteLine1Text" column="CRDT_MEMO_NTE_LN1_TXT" jdbc-type="VARCHAR"/>
 	<field-descriptor name="creditMemoNoteLine2Text" column="CRDT_MEMO_NTE_LN2_TXT" jdbc-type="VARCHAR"/>
 	<field-descriptor name="creditMemoNoteLine3Text" column="CRDT_MEMO_NTE_LN3_TXT" jdbc-type="VARCHAR"/>
@@ -1015,9 +1015,9 @@
 	<field-descriptor name="creditMemoIdentifier" column="CRDT_MEMO_ID" jdbc-type="INTEGER" index="true"/>
 	<field-descriptor name="itemLineNumber" column="ITM_LN_NBR" jdbc-type="INTEGER" index="true"/>
 	<field-descriptor name="itemTypeCode" column="ITM_TYP_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="itemCreditQuantity" column="ITM_CRDT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemCreditQuantity" column="ITM_CRDT_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="itemUnitPrice" column="ITM_UNT_PRC" jdbc-type="DECIMAL"/>
-	<field-descriptor name="itemExtendedPrice" column="ITM_EXTND_PRC" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemExtendedPrice" column="ITM_EXTND_PRC" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="itemAssignedToTradeInIndicator" column="ITM_ASND_TO_TRADE_IN_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<reference-descriptor name="creditMemo" class-ref="org.kuali.module.purap.bo.CreditMemo" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="creditMemoIdentifier" />
@@ -1036,7 +1036,7 @@
 	<field-descriptor name="requisitionNumber" column="REQS_NBR" jdbc-type="INTEGER"/>
 	<field-descriptor name="invoiceDate" column="INV_DT" jdbc-type="DATE"/>
 	<field-descriptor name="invoiceNumber" column="INV_NBR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorInvoiceAmount" column="VNDR_INV_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="vendorInvoiceAmount" column="VNDR_INV_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="vendorPaymentTermsCode" column="VNDR_PMT_TERMS_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorShippingPaymentTermsCode" column="VNDR_SHP_PMT_TERM_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorCustomerNumber" column="VNDR_CUST_NBR" jdbc-type="VARCHAR"/>
@@ -1322,7 +1322,7 @@
 	<field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="accountsPayableThresholdNotToExceedAmount" column="AP_THRSHLD_NO_EXCD_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="accountsPayableThresholdNotToExceedAmount" column="AP_THRSHLD_NO_EXCD_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="chartOfAccountsCode" />
 	</reference-descriptor>
@@ -1337,7 +1337,7 @@
 	<field-descriptor name="contractManagerPhoneNumber" column="CONTR_MGR_PHN_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="contractManagerFaxNumber" column="CONTR_MGR_FAX_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="contractManagerLongDistanceAccessCode" column="CONTR_MGR_LONG_DIST_ACC_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="contractManagerDelegationDollarLimit" column="CONTR_MGR_DLGN_DLR_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="contractManagerDelegationDollarLimit" column="CONTR_MGR_DLGN_DLR_LMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="contractManagerSignatureImageLocationDescription" column="CONTR_MGR_SIG_IMG_LOC_DESC" jdbc-type="VARCHAR"/>
 </class-descriptor>
 
@@ -1354,7 +1354,7 @@
 	<field-descriptor name="financialSubObjectCode" column="FIN_SUB_OBJ_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="projectCode" column="PROJECT_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="organizationReferenceId" column="ORG_REFERENCE_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="itemAccountTotalAmount" column="ITM_ACCT_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemAccountTotalAmount" column="ITM_ACCT_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="accountLinePercent" column="ACLN_PCT" jdbc-type="DECIMAL"/>
 	<reference-descriptor name="itemLine" class-ref="org.kuali.module.purap.bo.CreditMemoItem" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="creditMemoIdentifier" />
@@ -1376,7 +1376,7 @@
 	<field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="accountNumber" column="ACCT_NBR" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="negativePaymentRequestApprovalLimitAmount" column="NEG_PMT_RQST_APRVL_LMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="negativePaymentRequestApprovalLimitAmount" column="NEG_PMT_RQST_APRVL_LMT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="chartOfAccountsCode" />
 	</reference-descriptor>
@@ -1403,9 +1403,9 @@
 	<field-descriptor name="financialObjectCode" column="FIN_OBJECT_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="projectCode" column="PROJECT_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="organizationReferenceId" column="ORG_REFERENCE_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="itemAccountTotalAmount" column="ITM_ACCT_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemAccountTotalAmount" column="ITM_ACCT_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="accountLinePercent" column="ACLN_PCT" jdbc-type="DECIMAL"/>
-	<field-descriptor name="disencumberedAmount" column="DISENC_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="disencumberedAmount" column="DISENC_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<reference-descriptor name="itemLine" class-ref="org.kuali.module.purap.bo.PaymentRequestItem" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="paymentRequestIdentifier" />
 		<foreignkey field-ref="itemLineNumber" />
@@ -1430,10 +1430,10 @@
 	<field-descriptor name="itemCatalogNumber" column="ITM_CATLG_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemAuxiliaryPartIdentifier" column="ITM_AUX_PART_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemUnitOfMeasureCode" column="ITM_UOM_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="itemInvoicedQuantity" column="ITM_INV_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemInvoicedQuantity" column="ITM_INV_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="itemUnitPrice" column="ITM_UNIT_PRC" jdbc-type="DECIMAL"/>
 	<field-descriptor name="purchaseOrderItemUnitPrice" column="PO_ITM_UNIT_PRC" jdbc-type="DECIMAL"/>
-	<field-descriptor name="itemExtendedPrice" column="ITM_EXTND_PRC" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemExtendedPrice" column="ITM_EXTND_PRC" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="capitalAssetTransactionTypeCode" column="CPTL_AST_TRN_TYP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemCapitalAssetNoteText" column="ITM_CPTL_AST_NTE_TXT" jdbc-type="VARCHAR"/>
 	<field-descriptor name="purchaseOrderCommodityCode" column="PO_COMDTY_CD" jdbc-type="VARCHAR"/>
@@ -1770,7 +1770,7 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="capitalAssetManagementDocumentIdentifier" column="CM_DOC_ID" jdbc-type="INTEGER" index="true"/>
 	<field-descriptor name="itemLineNumber" column="ITM_LN_NBR" jdbc-type="INTEGER" index="true"/>
-	<field-descriptor name="capitalAssetManagementItemQuantity" column="CM_ITM_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="capitalAssetManagementItemQuantity" column="CM_ITM_QTY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="campusCode" column="CMP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="capitalAssetManagementOffCampusIndicator" column="CM_OFF_CMP_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="buildingCode" column="BLDG_CD" jdbc-type="VARCHAR"/>
@@ -1815,7 +1815,7 @@
 	<field-descriptor name="generalLedgerPendingEntryIdentifier" column="GL_PENDING_ENTRY_ID" jdbc-type="INTEGER" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="itemAccountTotalAmount" column="ITM_ACCT_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion"/>
+	<field-descriptor name="itemAccountTotalAmount" column="ITM_ACCT_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.CapitalAssetManagementPaymentChange" table="PUR_AP_CM_PMT_CHG_T">

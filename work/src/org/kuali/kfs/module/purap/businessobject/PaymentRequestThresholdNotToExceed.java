@@ -28,7 +28,7 @@ package org.kuali.module.purap.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Chart;
 
 /**
@@ -37,7 +37,7 @@ import org.kuali.module.chart.bo.Chart;
 public class PaymentRequestThresholdNotToExceed extends BusinessObjectBase {
 
 	private String chartOfAccountsCode;
-	private KualiDecimalMoney accountsPayableThresholdNotToExceedAmount;
+	private KualiDecimal accountsPayableThresholdNotToExceedAmount;
 
     private Chart chartOfAccounts;
 
@@ -75,7 +75,7 @@ public class PaymentRequestThresholdNotToExceed extends BusinessObjectBase {
 	 * @return - Returns the accountsPayableThresholdNotToExceedAmount
 	 * 
 	 */
-	public KualiDecimalMoney getAccountsPayableThresholdNotToExceedAmount() { 
+	public KualiDecimal getAccountsPayableThresholdNotToExceedAmount() { 
 		return accountsPayableThresholdNotToExceedAmount;
 	}
 
@@ -85,7 +85,7 @@ public class PaymentRequestThresholdNotToExceed extends BusinessObjectBase {
 	 * @param - accountsPayableThresholdNotToExceedAmount The accountsPayableThresholdNotToExceedAmount to set.
 	 * 
 	 */
-	public void setAccountsPayableThresholdNotToExceedAmount(KualiDecimalMoney accountsPayableThresholdNotToExceedAmount) {
+	public void setAccountsPayableThresholdNotToExceedAmount(KualiDecimal accountsPayableThresholdNotToExceedAmount) {
 		this.accountsPayableThresholdNotToExceedAmount = accountsPayableThresholdNotToExceedAmount;
 	}
 

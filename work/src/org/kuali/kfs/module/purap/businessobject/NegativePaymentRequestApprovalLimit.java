@@ -28,7 +28,7 @@ package org.kuali.module.purap.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
@@ -42,7 +42,7 @@ public class NegativePaymentRequestApprovalLimit extends BusinessObjectBase {
 	private String chartOfAccountsCode;
 	private String organizationCode;
 	private String accountNumber;
-	private KualiDecimalMoney negativePaymentRequestApprovalLimitAmount;
+	private KualiDecimal negativePaymentRequestApprovalLimitAmount;
 
     private Chart chartOfAccounts;
 	private Account account;
@@ -145,7 +145,7 @@ public class NegativePaymentRequestApprovalLimit extends BusinessObjectBase {
 	 * @return - Returns the negativePaymentRequestApprovalLimitAmount
 	 * 
 	 */
-	public KualiDecimalMoney getNegativePaymentRequestApprovalLimitAmount() { 
+	public KualiDecimal getNegativePaymentRequestApprovalLimitAmount() { 
 		return negativePaymentRequestApprovalLimitAmount;
 	}
 
@@ -155,7 +155,7 @@ public class NegativePaymentRequestApprovalLimit extends BusinessObjectBase {
 	 * @param - negativePaymentRequestApprovalLimitAmount The negativePaymentRequestApprovalLimitAmount to set.
 	 * 
 	 */
-	public void setNegativePaymentRequestApprovalLimitAmount(KualiDecimalMoney negativePaymentRequestApprovalLimitAmount) {
+	public void setNegativePaymentRequestApprovalLimitAmount(KualiDecimal negativePaymentRequestApprovalLimitAmount) {
 		this.negativePaymentRequestApprovalLimitAmount = negativePaymentRequestApprovalLimitAmount;
 	}
 

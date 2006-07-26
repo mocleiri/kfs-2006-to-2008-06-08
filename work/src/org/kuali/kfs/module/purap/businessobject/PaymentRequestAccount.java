@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 
@@ -48,9 +48,9 @@ public class PaymentRequestAccount extends BusinessObjectBase {
 	private String financialObjectCode;
 	private String projectCode;
 	private String organizationReferenceId;
-	private KualiDecimalMoney itemAccountTotalAmount;
+	private KualiDecimal itemAccountTotalAmount;
 	private BigDecimal accountLinePercent;
-	private KualiDecimalMoney disencumberedAmount;
+	private KualiDecimal disencumberedAmount;
 
     private PaymentRequestItem itemLine;
 	private Chart chartOfAccounts;
@@ -279,7 +279,7 @@ public class PaymentRequestAccount extends BusinessObjectBase {
 	 * @return - Returns the itemAccountTotalAmount
 	 * 
 	 */
-	public KualiDecimalMoney getItemAccountTotalAmount() { 
+	public KualiDecimal getItemAccountTotalAmount() { 
 		return itemAccountTotalAmount;
 	}
 
@@ -289,7 +289,7 @@ public class PaymentRequestAccount extends BusinessObjectBase {
 	 * @param - itemAccountTotalAmount The itemAccountTotalAmount to set.
 	 * 
 	 */
-	public void setItemAccountTotalAmount(KualiDecimalMoney itemAccountTotalAmount) {
+	public void setItemAccountTotalAmount(KualiDecimal itemAccountTotalAmount) {
 		this.itemAccountTotalAmount = itemAccountTotalAmount;
 	}
 
@@ -321,7 +321,7 @@ public class PaymentRequestAccount extends BusinessObjectBase {
 	 * @return - Returns the disencumberedAmount
 	 * 
 	 */
-	public KualiDecimalMoney getDisencumberedAmount() { 
+	public KualiDecimal getDisencumberedAmount() { 
 		return disencumberedAmount;
 	}
 
@@ -331,7 +331,7 @@ public class PaymentRequestAccount extends BusinessObjectBase {
 	 * @param - disencumberedAmount The disencumberedAmount to set.
 	 * 
 	 */
-	public void setDisencumberedAmount(KualiDecimalMoney disencumberedAmount) {
+	public void setDisencumberedAmount(KualiDecimal disencumberedAmount) {
 		this.disencumberedAmount = disencumberedAmount;
 	}
 

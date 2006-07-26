@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -42,17 +42,17 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	private String itemTypeCode;
 	private String capitalAssetTransactionTypeCode;
 	private String itemUnitOfMeasureCode;
-	private KualiDecimalMoney itemOrderedQuantity;
-	private KualiDecimalMoney itemInvoicedTotalQuantity;
-	private KualiDecimalMoney itemInvoicedTotalAmount;
+	private KualiDecimal itemOrderedQuantity;
+	private KualiDecimal itemInvoicedTotalQuantity;
+	private KualiDecimal itemInvoicedTotalAmount;
 	private String itemCatalogNumber;
-	private KualiDecimalMoney itemReceivedTotalQuantity;
+	private KualiDecimal itemReceivedTotalQuantity;
 	private String itemDescription;
-	private KualiDecimalMoney itemReturnedTotalQuantity;
+	private KualiDecimal itemReturnedTotalQuantity;
 	private String itemCapitalAssetNoteText;
 	private BigDecimal itemUnitPrice;
-	private KualiDecimalMoney itemOutstandingEncumberedQuantity;
-	private KualiDecimalMoney itemOutstandingEncumbranceAmount;
+	private KualiDecimal itemOutstandingEncumberedQuantity;
+	private KualiDecimal itemOutstandingEncumbranceAmount;
 	private String requisitionLineIdentifier;
 	private String itemAuxiliaryPartIdentifier;
 	private boolean itemActiveIndicator;
@@ -204,7 +204,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @return - Returns the itemOrderedQuantity
 	 * 
 	 */
-	public KualiDecimalMoney getItemOrderedQuantity() { 
+	public KualiDecimal getItemOrderedQuantity() { 
 		return itemOrderedQuantity;
 	}
 
@@ -214,7 +214,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @param - itemOrderedQuantity The itemOrderedQuantity to set.
 	 * 
 	 */
-	public void setItemOrderedQuantity(KualiDecimalMoney itemOrderedQuantity) {
+	public void setItemOrderedQuantity(KualiDecimal itemOrderedQuantity) {
 		this.itemOrderedQuantity = itemOrderedQuantity;
 	}
 
@@ -225,7 +225,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @return - Returns the itemInvoicedTotalQuantity
 	 * 
 	 */
-	public KualiDecimalMoney getItemInvoicedTotalQuantity() { 
+	public KualiDecimal getItemInvoicedTotalQuantity() { 
 		return itemInvoicedTotalQuantity;
 	}
 
@@ -235,7 +235,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @param - itemInvoicedTotalQuantity The itemInvoicedTotalQuantity to set.
 	 * 
 	 */
-	public void setItemInvoicedTotalQuantity(KualiDecimalMoney itemInvoicedTotalQuantity) {
+	public void setItemInvoicedTotalQuantity(KualiDecimal itemInvoicedTotalQuantity) {
 		this.itemInvoicedTotalQuantity = itemInvoicedTotalQuantity;
 	}
 
@@ -246,7 +246,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @return - Returns the itemInvoicedTotalAmount
 	 * 
 	 */
-	public KualiDecimalMoney getItemInvoicedTotalAmount() { 
+	public KualiDecimal getItemInvoicedTotalAmount() { 
 		return itemInvoicedTotalAmount;
 	}
 
@@ -256,7 +256,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @param - itemInvoicedTotalAmount The itemInvoicedTotalAmount to set.
 	 * 
 	 */
-	public void setItemInvoicedTotalAmount(KualiDecimalMoney itemInvoicedTotalAmount) {
+	public void setItemInvoicedTotalAmount(KualiDecimal itemInvoicedTotalAmount) {
 		this.itemInvoicedTotalAmount = itemInvoicedTotalAmount;
 	}
 
@@ -288,7 +288,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @return - Returns the itemReceivedTotalQuantity
 	 * 
 	 */
-	public KualiDecimalMoney getItemReceivedTotalQuantity() { 
+	public KualiDecimal getItemReceivedTotalQuantity() { 
 		return itemReceivedTotalQuantity;
 	}
 
@@ -298,7 +298,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @param - itemReceivedTotalQuantity The itemReceivedTotalQuantity to set.
 	 * 
 	 */
-	public void setItemReceivedTotalQuantity(KualiDecimalMoney itemReceivedTotalQuantity) {
+	public void setItemReceivedTotalQuantity(KualiDecimal itemReceivedTotalQuantity) {
 		this.itemReceivedTotalQuantity = itemReceivedTotalQuantity;
 	}
 
@@ -330,7 +330,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @return - Returns the itemReturnedTotalQuantity
 	 * 
 	 */
-	public KualiDecimalMoney getItemReturnedTotalQuantity() { 
+	public KualiDecimal getItemReturnedTotalQuantity() { 
 		return itemReturnedTotalQuantity;
 	}
 
@@ -340,7 +340,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @param - itemReturnedTotalQuantity The itemReturnedTotalQuantity to set.
 	 * 
 	 */
-	public void setItemReturnedTotalQuantity(KualiDecimalMoney itemReturnedTotalQuantity) {
+	public void setItemReturnedTotalQuantity(KualiDecimal itemReturnedTotalQuantity) {
 		this.itemReturnedTotalQuantity = itemReturnedTotalQuantity;
 	}
 
@@ -393,7 +393,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @return - Returns the itemOutstandingEncumberedQuantity
 	 * 
 	 */
-	public KualiDecimalMoney getItemOutstandingEncumberedQuantity() { 
+	public KualiDecimal getItemOutstandingEncumberedQuantity() { 
 		return itemOutstandingEncumberedQuantity;
 	}
 
@@ -403,7 +403,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @param - itemOutstandingEncumberedQuantity The itemOutstandingEncumberedQuantity to set.
 	 * 
 	 */
-	public void setItemOutstandingEncumberedQuantity(KualiDecimalMoney itemOutstandingEncumberedQuantity) {
+	public void setItemOutstandingEncumberedQuantity(KualiDecimal itemOutstandingEncumberedQuantity) {
 		this.itemOutstandingEncumberedQuantity = itemOutstandingEncumberedQuantity;
 	}
 
@@ -414,7 +414,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @return - Returns the itemOutstandingEncumbranceAmount
 	 * 
 	 */
-	public KualiDecimalMoney getItemOutstandingEncumbranceAmount() { 
+	public KualiDecimal getItemOutstandingEncumbranceAmount() { 
 		return itemOutstandingEncumbranceAmount;
 	}
 
@@ -424,7 +424,7 @@ public class PurchaseOrderItem extends BusinessObjectBase {
 	 * @param - itemOutstandingEncumbranceAmount The itemOutstandingEncumbranceAmount to set.
 	 * 
 	 */
-	public void setItemOutstandingEncumbranceAmount(KualiDecimalMoney itemOutstandingEncumbranceAmount) {
+	public void setItemOutstandingEncumbranceAmount(KualiDecimal itemOutstandingEncumbranceAmount) {
 		this.itemOutstandingEncumbranceAmount = itemOutstandingEncumbranceAmount;
 	}
 

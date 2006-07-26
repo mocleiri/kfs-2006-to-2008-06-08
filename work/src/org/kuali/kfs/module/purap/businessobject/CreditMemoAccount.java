@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 
@@ -48,7 +48,7 @@ public class CreditMemoAccount extends BusinessObjectBase {
 	private String financialSubObjectCode;
 	private String projectCode;
 	private String organizationReferenceId;
-	private KualiDecimalMoney itemAccountTotalAmount;
+	private KualiDecimal itemAccountTotalAmount;
 	private BigDecimal accountLinePercent;
 
     private CreditMemoItem itemLine;
@@ -278,7 +278,7 @@ public class CreditMemoAccount extends BusinessObjectBase {
 	 * @return - Returns the itemAccountTotalAmount
 	 * 
 	 */
-	public KualiDecimalMoney getItemAccountTotalAmount() { 
+	public KualiDecimal getItemAccountTotalAmount() { 
 		return itemAccountTotalAmount;
 	}
 
@@ -288,7 +288,7 @@ public class CreditMemoAccount extends BusinessObjectBase {
 	 * @param - itemAccountTotalAmount The itemAccountTotalAmount to set.
 	 * 
 	 */
-	public void setItemAccountTotalAmount(KualiDecimalMoney itemAccountTotalAmount) {
+	public void setItemAccountTotalAmount(KualiDecimal itemAccountTotalAmount) {
 		this.itemAccountTotalAmount = itemAccountTotalAmount;
 	}
 

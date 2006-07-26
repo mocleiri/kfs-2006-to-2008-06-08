@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -40,9 +40,9 @@ public class CreditMemoItem extends BusinessObjectBase {
 	private Integer creditMemoIdentifier;
 	private Integer itemLineNumber;
 	private String itemTypeCode;
-	private KualiDecimalMoney itemCreditQuantity;
+	private KualiDecimal itemCreditQuantity;
 	private BigDecimal itemUnitPrice;
-	private KualiDecimalMoney itemExtendedPrice;
+	private KualiDecimal itemExtendedPrice;
 	private boolean itemAssignedToTradeInIndicator;
 
     private CreditMemo creditMemo;
@@ -144,7 +144,7 @@ public class CreditMemoItem extends BusinessObjectBase {
 	 * @return - Returns the itemCreditQuantity
 	 * 
 	 */
-	public KualiDecimalMoney getItemCreditQuantity() { 
+	public KualiDecimal getItemCreditQuantity() { 
 		return itemCreditQuantity;
 	}
 
@@ -154,7 +154,7 @@ public class CreditMemoItem extends BusinessObjectBase {
 	 * @param - itemCreditQuantity The itemCreditQuantity to set.
 	 * 
 	 */
-	public void setItemCreditQuantity(KualiDecimalMoney itemCreditQuantity) {
+	public void setItemCreditQuantity(KualiDecimal itemCreditQuantity) {
 		this.itemCreditQuantity = itemCreditQuantity;
 	}
 
@@ -186,7 +186,7 @@ public class CreditMemoItem extends BusinessObjectBase {
 	 * @return - Returns the itemExtendedPrice
 	 * 
 	 */
-	public KualiDecimalMoney getItemExtendedPrice() { 
+	public KualiDecimal getItemExtendedPrice() { 
 		return itemExtendedPrice;
 	}
 
@@ -196,7 +196,7 @@ public class CreditMemoItem extends BusinessObjectBase {
 	 * @param - itemExtendedPrice The itemExtendedPrice to set.
 	 * 
 	 */
-	public void setItemExtendedPrice(KualiDecimalMoney itemExtendedPrice) {
+	public void setItemExtendedPrice(KualiDecimal itemExtendedPrice) {
 		this.itemExtendedPrice = itemExtendedPrice;
 	}
 
