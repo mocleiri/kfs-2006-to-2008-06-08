@@ -37,6 +37,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.lookup.Lookupable;
 import org.kuali.core.util.GlobalVariables;
@@ -46,6 +48,8 @@ import org.kuali.core.web.struts.form.LookupForm;
 import org.kuali.core.web.uidraw.Field;
 import org.kuali.core.web.uidraw.Row;
 import org.kuali.module.gl.web.struts.form.BalanceInquiryForm;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.ojb.OjbOperationException;
 
 /**
  * This class handles Actions for lookup flow
@@ -68,7 +72,9 @@ public class BalanceInquiryAction extends KualiAction {
      */
     public ActionForward search(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         BalanceInquiryForm lookupForm = (BalanceInquiryForm) form;
+
         Lookupable kualiLookupable = lookupForm.getLookupable();
+
         if (kualiLookupable == null) {
             LOG.error("Lookupable is null.");
             throw new RuntimeException("Lookupable is null.");
@@ -76,23 +82,37 @@ public class BalanceInquiryAction extends KualiAction {
 
         Collection displayList = new ArrayList();
         Collection resultTable = new ArrayList();
-
-        // validate search parameters
+        
         kualiLookupable.validateSearchParameters(lookupForm.getFields());
-        displayList = SpringServiceLocator.getPersistenceService().performLookup(lookupForm, kualiLookupable, resultTable, true);
+        
+        try {
+            displayList = SpringServiceLocator.getPersistenceService().performLookup(lookupForm, kualiLookupable, resultTable, true);
 
-        request.setAttribute("reqSearchResultsActualSize", ((CollectionIncomplete) displayList).getActualSizeIfTruncated());
-        request.setAttribute("reqSearchResults", resultTable);
-        if (request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY) != null) {
-            GlobalVariables.getUserSession().removeObject(request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY));
+            CollectionIncomplete incompleteDisplayList = (CollectionIncomplete) displayList;
+            Long totalSize = ((CollectionIncomplete) displayList).getActualSizeIfTruncated();
+            
+            request.setAttribute("reqSearchResultsActualSize", totalSize);
+            request.setAttribute("reqSearchResults", resultTable);
+            if (request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY) != null) {
+                GlobalVariables.getUserSession().removeObject(request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY));
+            }
+            request.setAttribute(Constants.SEARCH_LIST_REQUEST_KEY, GlobalVariables.getUserSession().addObject(resultTable));
+            }
+        catch (NumberFormatException e) {
+            GlobalVariables.getErrorMap().putError(PropertyConstants.UNIVERSITY_FISCAL_YEAR, KeyConstants.ERROR_CUSTOM, new String[] { "must be a number" });
         }
-        request.setAttribute(Constants.SEARCH_LIST_REQUEST_KEY, GlobalVariables.getUserSession().addObject(resultTable));
+        catch (Exception e) {
+            GlobalVariables.getErrorMap().putError(Constants.DOCUMENT_ERRORS, KeyConstants.ERROR_CUSTOM, new String[] { "Please report the server error." });
+            e.printStackTrace();
+            LOG.error("Application Errors", e);
+        }
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
      * refresh - is called when one quickFinder returns to the previous one. Sets all the values and performs the new search.
      */
+    @Override
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LookupForm lookupForm = (LookupForm) form;
         Lookupable kualiLookupable = lookupForm.getLookupable();

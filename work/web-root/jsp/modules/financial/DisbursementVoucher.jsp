@@ -10,8 +10,6 @@
 
 	<dv:dvMessages />
 
-	<html:hidden property="document.nextSourceLineNumber" />
-
 	<c:if test="${!empty KualiForm.editingMode['fullEntry']}">
 		<c:set var="fullEntryMode" value="true" scope="request" />
 	</c:if>
@@ -77,7 +75,7 @@
 
 	<kul:notes />
 
-	<kul:adHocRecipients />
+	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
 
 	<kul:routeLog />
 

@@ -23,18 +23,24 @@
 package org.kuali.module.gl.web.inquirable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.bo.KualiSystemCode;
+import org.kuali.core.datadictionary.AttributeDefinition;
+import org.kuali.core.datadictionary.AttributeReferenceDefinition;
+import org.kuali.core.datadictionary.DataDictionaryEntryBase;
 import org.kuali.core.inquiry.KualiInquirableImpl;
 import org.kuali.core.lookup.KualiLookupableImpl;
 import org.kuali.core.service.BusinessObjectDictionaryService;
+import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.PersistenceStructureService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
@@ -63,7 +69,7 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
 
         String baseUrl = Constants.INQUIRY_ACTION;
         Properties parameters = new Properties();
-        parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, "start");
+        parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.START_METHOD);
 
         Object attributeValue = null;
         Class inquiryBusinessObjectClass = null;
@@ -71,9 +77,9 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
         boolean isPkReference = false;
 
         Map userDefinedAttributeMap = getUserDefinedAttributeMap();
-        boolean isUserDefinedAttribute = userDefinedAttributeMap.containsKey(attributeName);
+        boolean isUserDefinedAttribute = userDefinedAttributeMap == null ? false : userDefinedAttributeMap.containsKey(attributeName);
 
-        // determine the type of the given attribute: user-defined, regular or nested-refrenced
+        // determine the type of the given attribute: user-defined, regular, nested-referenced or primitive reference
         if (isUserDefinedAttribute) {
             attributeName = getAttributeName(attributeName);
             inquiryBusinessObjectClass = getInquiryBusinessObjectClass();
@@ -83,24 +89,27 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
             inquiryBusinessObjectClass = businessObject.getClass();
             isPkReference = true;
         }
+        else if (ObjectUtils.isNestedAttribute(attributeName)) {
+            inquiryBusinessObjectClass = KualiLookupableImpl.getNestedReferenceClass(businessObject, attributeName);
+            //inquiryBusinessObjectClass = this.getNestedInquiryBusinessObjectClass(businessObject, attributeName);
+        }
         else {
-            if (ObjectUtils.isNestedAttribute(attributeName)) {
-                inquiryBusinessObjectClass = KualiLookupableImpl.getNestedReferenceClass(businessObject, attributeName);
+            Map primitiveReference = KualiLookupableImpl.getPrimitiveReference(businessObject, attributeName);
+            if (primitiveReference != null && !primitiveReference.isEmpty()) {
+                attributeRefName = (String) primitiveReference.keySet().iterator().next();
+                inquiryBusinessObjectClass = (Class) primitiveReference.get(attributeRefName);
             }
-            else {
-                Map primitiveReference = KualiLookupableImpl.getPrimitiveReference(businessObject, attributeName);
-                if (primitiveReference != null && !primitiveReference.isEmpty()) {
-                    attributeRefName = (String) primitiveReference.keySet().iterator().next();
-                    inquiryBusinessObjectClass = (Class) primitiveReference.get(attributeRefName);
-                }
-                attributeValue = ObjectUtils.getPropertyValue(businessObject, attributeName);
-                attributeValue = (attributeValue == null) ? "" : attributeValue.toString();
-            }
+            attributeValue = ObjectUtils.getPropertyValue(businessObject, attributeName);
+            attributeValue = (attributeValue == null) ? "" : attributeValue.toString();
         }
 
         // process the business object class if the attribute name is not user-defined
         if (!isUserDefinedAttribute) {
-            if (inquiryBusinessObjectClass == null || businessDictionary.isInquirable(inquiryBusinessObjectClass) == null || !businessDictionary.isInquirable(inquiryBusinessObjectClass).booleanValue() || isExclusiveField(attributeName, attributeValue)) {
+            if (isExclusiveField(attributeName, attributeValue)) {
+                return Constants.EMPTY_STRING;
+            }
+
+            if (inquiryBusinessObjectClass == null || businessDictionary.isInquirable(inquiryBusinessObjectClass) == null || !businessDictionary.isInquirable(inquiryBusinessObjectClass).booleanValue()) {
                 return Constants.EMPTY_STRING;
             }
 
@@ -117,7 +126,7 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
 
             parameters.put(Constants.RETURN_LOCATION_PARAMETER, Constant.RETURN_LOCATION_VALUE);
             parameters.put(Constants.GL_BALANCE_INQUIRY_FLAG, "true");
-            parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, "search");
+            parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.SEARCH_METHOD);
             parameters.put(Constants.DOC_FORM_KEY, "88888888");
 
             // add more customized parameters into the current parameter map
@@ -128,37 +137,42 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
         }
 
         // build key value url parameters used to retrieve the business object
-        Iterator keyIterator = keys.iterator();
-        while (keyIterator.hasNext()) {
-            String keyName = (String) keyIterator.next();
+        if (keys != null) {
+            for (Iterator keyIterator = keys.iterator(); keyIterator.hasNext();) {
+                String keyName = (String) keyIterator.next();
 
-            // convert the key names based on their formats and types
-            String keyConversion = keyName;
-            if (ObjectUtils.isNestedAttribute(attributeName)) {
-                if (isUserDefinedAttribute) {
-                    keyConversion = keyName;
+                // convert the key names based on their formats and types
+                String keyConversion = keyName;
+                if (ObjectUtils.isNestedAttribute(attributeName)) {
+                    if (isUserDefinedAttribute) {
+                        keyConversion = keyName;
+                    }
+                    else {
+                        keyConversion = ObjectUtils.getNestedAttributePrefix(attributeName) + "." + keyName;
+                    }
                 }
                 else {
-                    keyConversion = ObjectUtils.getNestedAttributePrefix(attributeName) + "." + keyName;
+                    if (isPkReference) {
+                        keyConversion = keyName;
+                    }
+                    else {
+                        keyConversion = persistenceStructureService.getForeignKeyFieldName(businessObject.getClass(), attributeRefName, keyName);
+                    }
                 }
-            }
-            else {
-                if (isPkReference) {
-                    keyConversion = keyName;
-                }
-                else {
-                    keyConversion = persistenceStructureService.getForeignKeyFieldName(businessObject.getClass(), attributeRefName, keyName);
-                }
-            }
-            Object keyValue = ObjectUtils.getPropertyValue(businessObject, keyConversion);
-            keyValue = (keyValue == null) ? "" : keyValue.toString();
+                Object keyValue = ObjectUtils.getPropertyValue(businessObject, keyConversion);
+                keyValue = (keyValue == null) ? "" : keyValue.toString();
 
-            // convert the key value and name into the given ones
-            keyValue = getKeyValue(keyName, keyValue);
-            keyName = getKeyName(keyName);
+                // convert the key value and name into the given ones
+                Object tempKeyValue = this.getKeyValue(keyName, keyValue);
+                keyValue = tempKeyValue == null ? keyValue : tempKeyValue;
+                
+                String tempKeyName = this.getKeyName(keyName);
+                keyName = tempKeyName == null ? keyName : tempKeyName;
 
-            // add the key-value pair into the parameter map
-            parameters.put(keyName, keyValue);
+                // add the key-value pair into the parameter map
+                if (keyName != null)
+                    parameters.put(keyName, keyValue);
+            }
         }
 
         return UrlFactory.parameterizeUrl(baseUrl, parameters);
@@ -231,7 +245,6 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
      */
     protected abstract void addMoreParameters(Properties parameter, String attributeName);
 
-
     /**
      * This method determines whether the input name-value pair is exclusive from the processing
      * 
@@ -264,5 +277,83 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
             }
         }
         return false;
+    }
+    
+    /**
+     * This method recovers the values of the given keys
+     * @param fieldValues
+     * @param keyName
+     * @param keyValue
+     * @return
+     */
+    protected String recoverFieldValueFromConsolidation(Map fieldValues, Object keyName, Object keyValue){
+        if(fieldValues == null || keyName == null || keyValue == null){
+            return Constant.EMPTY_STRING;
+        }
+        
+        Map convertedFieldValues = BusinessObjectFieldConverter.convertFromTransactionFieldValues(fieldValues);
+        String convertedKeyName = BusinessObjectFieldConverter.convertFromTransactionPropertyName(keyName.toString());
+
+        if (convertedKeyName.equals(PropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
+            return this.getValueFromFieldValues(convertedFieldValues, keyName);
+        }
+        else if (convertedKeyName.equals(PropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
+            return this.getValueFromFieldValues(convertedFieldValues, keyName);
+        }
+        else if (convertedKeyName.equals(PropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
+            return this.getValueFromFieldValues(convertedFieldValues, keyName);
+        }
+        
+        return Constant.EMPTY_STRING;
+    }
+    
+    // get the value of the given key from the field values 
+    private String getValueFromFieldValues(Map fieldValues, Object keyName){
+        String keyValue = Constant.EMPTY_STRING;
+        
+        if(fieldValues.containsKey(keyName)){
+            keyValue = (String)fieldValues.get(keyName);
+        }        
+        return keyValue;
+    }
+
+    public Map getFieldValues(Map fieldValues){
+        return fieldValues;
+    }
+    
+    // TODO: not finished
+    public Class getNestedInquiryBusinessObjectClass(BusinessObject businessObject, String attributeName){
+        Class inquiryBusinessObjectClass = null;
+        String entryName = businessObject.getClass().getName();
+        System.out.println("businessObject: " + entryName);
+        System.out.println("attributeName: " + attributeName);
+        
+        DataDictionaryService dataDictionary = SpringServiceLocator.getDataDictionaryService();
+        AttributeDefinition attributeDefinition = null;
+        
+        if (StringUtils.isBlank(attributeName)) {
+            throw new IllegalArgumentException("invalid (blank) attributeName");
+        }
+
+        DataDictionaryEntryBase entry = (DataDictionaryEntryBase) dataDictionary.getDataDictionary().getDictionaryObjectEntry(entryName);
+        if (entry != null) {
+            attributeDefinition = entry.getAttributeDefinition(attributeName);
+            inquiryBusinessObjectClass = KualiLookupableImpl.getNestedReferenceClass(businessObject, attributeName);
+        }
+        
+        if (attributeDefinition instanceof AttributeReferenceDefinition) {
+            AttributeReferenceDefinition attributeReferenceDefinition = (AttributeReferenceDefinition) attributeDefinition;
+            System.out.println("Source Classname = " + attributeReferenceDefinition.getSourceClassName());
+            System.out.println("Source Attribute = " + attributeReferenceDefinition.getSourceAttributeName());
+            
+            try{
+                inquiryBusinessObjectClass = Class.forName(attributeReferenceDefinition.getSourceClassName()); 
+            }
+            catch(Exception e){
+                throw new IllegalArgumentException("fail to construct a Class");
+            }
+        }
+        
+        return inquiryBusinessObjectClass;
     }
 }
