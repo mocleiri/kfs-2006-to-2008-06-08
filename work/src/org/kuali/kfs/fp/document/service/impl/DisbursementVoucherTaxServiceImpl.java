@@ -37,6 +37,7 @@ import org.kuali.KeyConstants;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.exceptions.ApplicationParameterException;
+import org.kuali.core.exceptions.InfrastructureException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.MaintenanceDocumentService;
@@ -230,7 +231,16 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
 
         // generate gross up
         if (document.getDvNonResidentAlienTax().isIncomeTaxGrossUpCode()) {
-            AccountingLine grossLine = new SourceAccountingLine();
+            AccountingLine grossLine = null;
+            try {
+                grossLine = (SourceAccountingLine) document.getSourceAccountingLineClass().newInstance();
+            }
+            catch (IllegalAccessException e) {
+                throw new InfrastructureException("unable to access sourceAccountingLineClass", e);
+            }
+            catch (InstantiationException e) {
+                throw new InfrastructureException("unable to instantiate sourceAccountingLineClass", e);
+            }
 
             grossLine.setFinancialDocumentNumber(document.getFinancialDocumentNumber());
             grossLine.setSequenceNumber(document.getNextSourceLineNumber());
@@ -329,7 +339,16 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
      * @param document
      */
     private AccountingLine generateTaxAccountingLine(DisbursementVoucherDocument document, String chart, String account, String objectCode, KualiDecimal taxPercent, KualiDecimal taxableAmount) {
-        AccountingLine taxLine = new SourceAccountingLine();
+        AccountingLine taxLine = null;
+        try {
+            taxLine = (SourceAccountingLine) document.getSourceAccountingLineClass().newInstance();
+        }
+        catch (IllegalAccessException e) {
+            throw new InfrastructureException("unable to access sourceAccountingLineClass", e);
+        }
+        catch (InstantiationException e) {
+            throw new InfrastructureException("unable to instantiate sourceAccountingLineClass", e);
+        }
 
         taxLine.setFinancialDocumentNumber(document.getFinancialDocumentNumber());
         taxLine.setSequenceNumber(document.getNextSourceLineNumber());
@@ -454,13 +473,13 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
 
         /* make sure payee is nra */
         if (!document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
-            errors.putWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_NOT_NRA);
+            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_NOT_NRA);
             return false;
         }
 
         /* don't generate tax if reference doc is given */
         if (StringUtils.isNotBlank(document.getDvNonResidentAlienTax().getReferenceFinancialDocumentNumber())) {
-            errors.putWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_DOC_REFERENCE);
+            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_DOC_REFERENCE);
             return false;
         }
 
@@ -468,31 +487,31 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
         // check attributes needed to generate lines
         /* need at least 1 line */
         if (!(document.getSourceAccountingLines().size() >= 1)) {
-            errors.putWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_NO_SOURCE);
+            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_NO_SOURCE);
             return false;
         }
 
         /* make sure both fed and state tax percents are not 0, in which case there is no need to generate lines */
         if (new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent()) && new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent())) {
-            errors.putWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_BOTH_0);
+            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_BOTH_0);
             return false;
         }
 
         /* check total cannot be negative */
         if (Constants.ZERO.compareTo(document.getDisbVchrCheckTotalAmount()) == 1) {
-            errors.putWithoutFullErrorPath("document.disbVchrCheckTotalAmount", KeyConstants.ERROR_NEGATIVE_CHECK_TOTAL);
+            errors.putErrorWithoutFullErrorPath("document.disbVchrCheckTotalAmount", KeyConstants.ERROR_NEGATIVE_CHECK_TOTAL);
             return false;
         }
 
         /* total accounting lines cannot be negative */
         if (Constants.ZERO.compareTo(document.getSourceTotal()) == 1) {
-            errors.putWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_NEGATIVE_ACCOUNTING_TOTAL);
+            errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_NEGATIVE_ACCOUNTING_TOTAL);
             return false;
         }
 
         /* total of accounting lines must match check total */
         if (document.getDisbVchrCheckTotalAmount().compareTo(document.getSourceTotal()) != 0) {
-            errors.putWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_CHECK_ACCOUNTING_TOTAL);
+            errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_CHECK_ACCOUNTING_TOTAL);
             return false;
         }
 
