@@ -32,7 +32,7 @@ import org.kuali.Constants;
 import org.kuali.core.document.Document;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DocumentService;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.BankAccount;
 import org.kuali.module.financial.bo.CashDrawer;
@@ -230,9 +230,9 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
 
             // create CashReceipts
             changeCurrentUser("INEFF");
-            CashReceiptDocument cr1 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR1", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimalMoney("25.00"), KualiDecimalMoney.ZERO);
-            CashReceiptDocument cr2 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR2", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, KualiDecimalMoney.ZERO, new KualiDecimalMoney("25.00"));
-            CashReceiptDocument cr3 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR3", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimalMoney("27.00"), new KualiDecimalMoney("23.00"));
+            CashReceiptDocument cr1 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR1", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("25.00"), KualiDecimal.ZERO);
+            CashReceiptDocument cr2 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR2", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, KualiDecimal.ZERO, new KualiDecimal("25.00"));
+            CashReceiptDocument cr3 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR3", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("27.00"), new KualiDecimal("23.00"));
 
             List crList = new ArrayList();
             crList.add(cr1);
@@ -436,7 +436,7 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
 
             // create CashReceipt
             changeCurrentUser("INEFF");
-            CashReceiptDocument cr = buildCashReceiptDoc(CMST_WORKGROUP, "CMST nonverified CR", Constants.DocumentStatusCodes.CashReceipt.INTERIM, new KualiDecimalMoney("25.00"), new KualiDecimalMoney("75.00"));
+            CashReceiptDocument cr = buildCashReceiptDoc(CMST_WORKGROUP, "CMST nonverified CR", Constants.DocumentStatusCodes.CashReceipt.INTERIM, new KualiDecimal("25.00"), new KualiDecimal("75.00"));
             changeCurrentUser("KHUNTLEY");
 
             List crList = new ArrayList();
@@ -491,7 +491,7 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
 
             // create CashReceipt
             changeCurrentUser("INEFF");
-            CashReceiptDocument cr = buildCashReceiptDoc(CMST_WORKGROUP, "CMST noncheck CR", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimalMoney("25.00"), KualiDecimalMoney.ZERO);
+            CashReceiptDocument cr = buildCashReceiptDoc(CMST_WORKGROUP, "CMST noncheck CR", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("25.00"), KualiDecimal.ZERO);
             changeCurrentUser("KHUNTLEY");
 
             List crList = new ArrayList();
@@ -540,9 +540,9 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
 
             // create CashReceipts
             changeCurrentUser("INEFF");
-            CashReceiptDocument cr1 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR1", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimalMoney("25.00"), KualiDecimalMoney.ZERO);
-            CashReceiptDocument cr2 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR2", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, KualiDecimalMoney.ZERO, new KualiDecimalMoney("25.00"));
-            CashReceiptDocument cr3 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR3", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimalMoney("27.00"), new KualiDecimalMoney("23.00"));
+            CashReceiptDocument cr1 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR1", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("25.00"), KualiDecimal.ZERO);
+            CashReceiptDocument cr2 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR2", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, KualiDecimal.ZERO, new KualiDecimal("25.00"));
+            CashReceiptDocument cr3 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR3", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("27.00"), new KualiDecimal("23.00"));
 
             List crList = new ArrayList();
             crList.add(cr1);
@@ -583,7 +583,7 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
             assertEquals(Constants.DocumentStatusCodes.CashReceipt.INTERIM, lookupCR(cr3.getFinancialDocumentNumber()).getDocumentHeader().getFinancialDocumentStatusCode());
 
             // total value of the deposit is the sum of the values of the 3 CRs
-            assertEquals(new KualiDecimalMoney("100.00"), deposit.getDepositAmount());
+            assertEquals(new KualiDecimal("100.00"), deposit.getDepositAmount());
         }
         finally {
             // cancel CMDoc
@@ -630,9 +630,9 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
 
             // create CashReceipts
             changeCurrentUser("INEFF");
-            CashReceiptDocument cr1 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR1", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimalMoney("25.00"), KualiDecimalMoney.ZERO);
-            CashReceiptDocument cr2 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR2", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, KualiDecimalMoney.ZERO, new KualiDecimalMoney("25.00"));
-            CashReceiptDocument cr3 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR3", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimalMoney("27.00"), new KualiDecimalMoney("23.00"));
+            CashReceiptDocument cr1 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR1", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("25.00"), KualiDecimal.ZERO);
+            CashReceiptDocument cr2 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR2", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, KualiDecimal.ZERO, new KualiDecimal("25.00"));
+            CashReceiptDocument cr3 = buildCashReceiptDoc(CMST_WORKGROUP, "CMST CR3", Constants.DocumentStatusCodes.CashReceipt.VERIFIED, new KualiDecimal("27.00"), new KualiDecimal("23.00"));
 
             List crList = new ArrayList();
             crList.add(cr1);
@@ -746,7 +746,7 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
         }
     }
 
-    private CashReceiptDocument buildCashReceiptDoc(String workgroupName, String description, String status, KualiDecimalMoney cashAmount, KualiDecimalMoney checkAmount) throws WorkflowException {
+    private CashReceiptDocument buildCashReceiptDoc(String workgroupName, String description, String status, KualiDecimal cashAmount, KualiDecimal checkAmount) throws WorkflowException {
         CashReceiptDocument crDoc = (CashReceiptDocument) documentService.getNewDocument(CashReceiptDocument.class);
 
         crDoc.getDocumentHeader().setFinancialDocumentDescription(description);

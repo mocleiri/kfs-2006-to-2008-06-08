@@ -42,7 +42,7 @@ import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Bank;
 import org.kuali.module.financial.bo.BankAccount;
@@ -215,7 +215,7 @@ public class CashManagementServiceImpl implements CashManagementService {
         deposit.setDepositBankAccountNumber(bankAccount.getFinDocumentBankAccountNumber());
 
         // total up the cash receipts
-        KualiDecimalMoney total = KualiDecimalMoney.ZERO;
+        KualiDecimal total = KualiDecimal.ZERO;
         for (Iterator i = selectedCashReceipts.iterator(); i.hasNext();) {
             CashReceiptDocument crDoc = (CashReceiptDocument) i.next();
             total = total.add(crDoc.getSumTotalAmount());
