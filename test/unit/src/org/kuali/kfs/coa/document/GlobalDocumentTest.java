@@ -34,7 +34,7 @@ import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.maintenance.Maintainable;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.DateUtils;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountChangeDetail;
 import org.kuali.module.chart.bo.AccountChangeDocument;
@@ -144,8 +144,8 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         change.setAccountDelegatePrimaryRoutingCode(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("20000000");
-        change.setApprovalFromThisAmount(new KualiDecimalMoney(0));
-        change.setApprovalToThisAmount(new KualiDecimalMoney(0));
+        change.setApprovalFromThisAmount(new KualiDecimal(0));
+        change.setApprovalToThisAmount(new KualiDecimal(0));
         change.setFinancialDocumentTypeCode("ALL");
         changes.add(change);
 
@@ -193,8 +193,8 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         change.setAccountDelegatePrimaryRoutingCode(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("20000000");
-        change.setApprovalFromThisAmount(new KualiDecimalMoney(0));
-        change.setApprovalToThisAmount(new KualiDecimalMoney(0));
+        change.setApprovalFromThisAmount(new KualiDecimal(0));
+        change.setApprovalToThisAmount(new KualiDecimal(0));
         change.setFinancialDocumentTypeCode("ALL");
         changes.add(change);
         bo.setDelegateChanges(changes);
@@ -278,8 +278,8 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         change.setAccountDelegatePrimaryRoutingCode(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("019283749");
-        change.setApprovalFromThisAmount(new KualiDecimalMoney(0));
-        change.setApprovalToThisAmount(new KualiDecimalMoney(0));
+        change.setApprovalFromThisAmount(new KualiDecimal(0));
+        change.setApprovalToThisAmount(new KualiDecimal(0));
         change.setFinancialDocumentTypeCode("ALL");
         changes.add(change);
         bo.setDelegateChanges(changes);
@@ -365,8 +365,8 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         change.setAccountDelegatePrimaryRoutingCode(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("20000000");
-        change.setApprovalFromThisAmount(new KualiDecimalMoney(0));
-        change.setApprovalToThisAmount(new KualiDecimalMoney(0));
+        change.setApprovalFromThisAmount(new KualiDecimal(0));
+        change.setApprovalToThisAmount(new KualiDecimal(0));
         change.setFinancialDocumentTypeCode("ALL");
 
         bo.setDelegateChanges(changes);
@@ -445,8 +445,8 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         change.setAccountDelegatePrimaryRoutingCode(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("3000000");
-        change.setApprovalFromThisAmount(new KualiDecimalMoney(0));
-        change.setApprovalToThisAmount(new KualiDecimalMoney(0));
+        change.setApprovalFromThisAmount(new KualiDecimal(0));
+        change.setApprovalToThisAmount(new KualiDecimal(0));
         change.setFinancialDocumentTypeCode("ALL");
 
         bo.setDelegateChanges(changes);
