@@ -41,7 +41,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryDaoOjb.java,v 1.22 2006-06-14 12:26:34 abyrne Exp $
+ * @version $Id: OriginEntryDaoOjb.java,v 1.22.2.1 2006-07-26 21:51:20 abyrne Exp $
  */
 
 public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryDao {
@@ -97,32 +97,81 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
     }
 
+    public Iterator<OriginEntry> getBadBalanceEntries(Collection groups) {
+        LOG.debug("getBadBalanceEntries() started");
+
+
+        Collection ids = new ArrayList();
+        for (Iterator iter = groups.iterator(); iter.hasNext();) {
+            OriginEntryGroup element = (OriginEntryGroup)iter.next();
+            ids.add(element.getId());
+        }
+
+        Criteria crit1 = new Criteria();
+        crit1.addIn("entryGroupId", ids);
+
+        Criteria crit2 = new Criteria();
+        crit2.addIsNull("financialBalanceTypeCode");
+        
+        Criteria crit3 = new Criteria();
+        crit3.addEqualTo("financialBalanceTypeCode", "  ");
+
+        crit2.addOrCriteria(crit3);
+
+        crit1.addAndCriteria(crit2);
+
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, crit1);
+        qbc.addOrderByAscending("chartOfAccountsCode");
+        qbc.addOrderByAscending("accountNumber");
+        qbc.addOrderByAscending("subAccountNumber");
+
+        return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
+    }
+
     /**
      * This method is special because of the order by. It is used in the scrubber. The getMatchingEntries wouldn't work because of
      * the required order by.
      * 
      */
-    public Iterator<OriginEntry> getEntriesByGroup(OriginEntryGroup oeg) {
+    public Iterator<OriginEntry> getEntriesByGroup(OriginEntryGroup oeg,int sort) {
         LOG.debug("getEntriesByGroup() started");
 
         Criteria criteria = new Criteria();
         criteria.addEqualTo("entryGroupId", oeg.getId());
 
         QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, criteria);
-        qbc.addOrderByAscending("financialDocumentTypeCode");
-        qbc.addOrderByAscending("financialSystemOriginationCode");
-        qbc.addOrderByAscending("financialDocumentNumber");
-        qbc.addOrderByAscending("chartOfAccountsCode");
-        qbc.addOrderByAscending("accountNumber");
-        qbc.addOrderByAscending("subAccountNumber");
-        qbc.addOrderByAscending("financialBalanceTypeCode");
-        qbc.addOrderByAscending("financialDocumentReversalDate");
-        qbc.addOrderByAscending("universityFiscalPeriodCode");
-        qbc.addOrderByAscending("universityFiscalYear");
 
-        // The above order by fields are required by the scrubber process. Adding this
-        // field makes the data in the exact same order as the COBOL scrubber.
-        qbc.addOrderByAscending("financialObjectCode");
+        if ( sort == OriginEntryDao.SORT_DOCUMENT ) {
+            qbc.addOrderByAscending("financialDocumentTypeCode");
+            qbc.addOrderByAscending("financialSystemOriginationCode");
+            qbc.addOrderByAscending("financialDocumentNumber");
+            qbc.addOrderByAscending("chartOfAccountsCode");
+            qbc.addOrderByAscending("accountNumber");
+            qbc.addOrderByAscending("subAccountNumber");
+            qbc.addOrderByAscending("financialBalanceTypeCode");
+            qbc.addOrderByAscending("financialDocumentReversalDate");
+            qbc.addOrderByAscending("universityFiscalPeriodCode");
+            qbc.addOrderByAscending("universityFiscalYear");
+            // The above order by fields are required by the scrubber process. Adding these
+            // fields makes the data in the exact same order as the COBOL scrubber.
+            qbc.addOrderByAscending("financialObjectCode");
+            qbc.addOrderByAscending("financialSubObjectCode");
+            qbc.addOrderByAscending("financialBalanceTypeCode");
+            qbc.addOrderByAscending("financialObjectTypeCode");
+            qbc.addOrderByAscending("universityFiscalPeriodCode");
+            qbc.addOrderByAscending("financialDocumentTypeCode");
+            qbc.addOrderByAscending("financialSystemOriginationCode");
+            qbc.addOrderByAscending("financialDocumentNumber");
+            qbc.addOrderByAscending("transactionLedgerEntrySequenceNumber");
+            qbc.addOrderByAscending("transactionLedgerEntryDescription");
+            qbc.addOrderByAscending("transactionLedgerEntryAmount");
+            qbc.addOrderByAscending("transactionDebitCreditCode");
+        } else {
+            qbc.addOrderByAscending("chartOfAccountsCode");
+            qbc.addOrderByAscending("accountNumber");
+            qbc.addOrderByAscending("subAccountNumber");
+        }
+
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
     }
 
@@ -176,6 +225,35 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         getPersistenceBrokerTemplate().clearCache();
     }
 
+    /**
+     * 
+     * @see org.kuali.module.gl.dao.OriginEntryDao#deleteGroups(java.util.Collection)
+     */
+    public void deleteGroups(Collection<OriginEntryGroup> groups) {
+        LOG.debug("deleteGroups() started");
+
+        List ids = new ArrayList();
+        for (Iterator iter = groups.iterator(); iter.hasNext();) {
+            OriginEntryGroup element = (OriginEntryGroup)iter.next();
+            ids.add(element.getId());
+        }
+
+        Criteria criteria = new Criteria();
+        criteria.addIn("entryGroupId", ids);
+
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, criteria);
+        getPersistenceBrokerTemplate().deleteByQuery(qbc);
+
+        // This is required because deleteByQuery leaves the cache alone so future queries
+        // could return origin entries that don't exist. Clearing the cache makes OJB
+        // go back to the database for everything to make sure valid data is returned.
+        getPersistenceBrokerTemplate().clearCache();
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.gl.dao.OriginEntryDao#getMatchingEntriesByCollection(java.util.Map)
+     */
     public Collection<OriginEntry> getMatchingEntriesByCollection(Map searchCriteria) {
         LOG.debug("getMatchingEntries() started");
 
@@ -191,80 +269,49 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
     }
 
     /**
-     * @see org.kuali.module.gl.dao.OriginEntryDao#getSummaryByGroupId(java.lang.Integer)
-     */
-    public Iterator getSummaryByGroupId(Integer groupId) {
-
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo(PropertyConstants.ENTRY_GROUP_ID, groupId);
-
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(OriginEntry.class, criteria);
-
-        List attributeList = buildAttributeList();
-        List groupList = buildGroupList();
-
-        // set the selection attributes
-        String[] attributes = (String[]) attributeList.toArray(new String[attributeList.size()]);
-        query.setAttributes(attributes);
-
-        // add the group criteria into the selection statement
-        String[] groupBy = (String[]) groupList.toArray(new String[groupList.size()]);
-        query.addGroupBy(groupBy);
-
-        // add the sorting criteria
-        for (int i = 0; i < groupBy.length; i++) {
-            query.addOrderByAscending(groupBy[i]);
-        }
-
-        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-    }
-
-    /**
      * @see org.kuali.module.gl.dao.OriginEntryDao#getSummaryByGroupId(java.util.List)
      */
-    public Iterator getSummaryByGroupId(List groupIdList) {
+    public Iterator getSummaryByGroupId(Collection groupIdList) {
+        LOG.debug("getSummaryByGroupId() started");
+
+        Collection ids = new ArrayList();
+        for (Iterator iter = groupIdList.iterator(); iter.hasNext();) {
+            OriginEntryGroup element = (OriginEntryGroup)iter.next();
+            ids.add(element.getId());
+        }
+
         Criteria criteria = new Criteria();
-        criteria.addIn(PropertyConstants.ENTRY_GROUP_ID, groupIdList);
+        criteria.addIn(PropertyConstants.ENTRY_GROUP_ID, ids);
 
         ReportQueryByCriteria query = QueryFactory.newReportQuery(OriginEntry.class, criteria);
 
-        List attributeList = buildAttributeList();
-        List groupList = buildGroupList();
+        String attributeList[] = {
+                PropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE,
+                PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE,
+                PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE,
+                PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE,
+                "sum(" + PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")",
+                "count(" + PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE + ")"
+        };
 
-        // set the selection attributes
-        String[] attributes = (String[]) attributeList.toArray(new String[attributeList.size()]);
-        query.setAttributes(attributes);
+        String groupList[] = {
+                PropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE,
+                PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE,
+                PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE,
+                PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE
+        };
 
-        // add the group criteria into the selection statement
-        String[] groupBy = (String[]) groupList.toArray(new String[groupList.size()]);
-        query.addGroupBy(groupBy);
+        query.setAttributes(attributeList);
+        query.addGroupBy(groupList);
 
         // add the sorting criteria
-        for (int i = 0; i < groupBy.length; i++) {
-            query.addOrderByAscending(groupBy[i]);
+        for (int i = 0; i < groupList.length; i++) {
+            query.addOrderByAscending(groupList[i]);
         }
 
         return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-    }
-
-    private List buildAttributeList() {
-        List attributeList = this.buildGroupList();
-
-        attributeList.add("sum(" + PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")");
-        attributeList.add("count(" + PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE + ")");
-        return attributeList;
-    }
-
-    private List buildGroupList() {
-        List attributeList = new ArrayList();
-
-        attributeList.add(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        attributeList.add(PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE);
-        attributeList.add(PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
-        attributeList.add(PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE);
-        attributeList.add(PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE);
-
-        return attributeList;
     }
 
     public OriginEntry getExactMatchingEntry(Integer entryId) {
