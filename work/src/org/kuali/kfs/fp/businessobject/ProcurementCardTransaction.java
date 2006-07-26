@@ -33,7 +33,7 @@ import org.apache.commons.beanutils.converters.SqlDateConverter;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
@@ -42,7 +42,7 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
 
     private Integer transactionSequenceRowNumber;
     private String transactionCreditCardNumber;
-    private KualiDecimalMoney financialDocumentTotalAmount;
+    private KualiDecimal financialDocumentTotalAmount;
     private String transactionDebitCreditCode;
     private String chartOfAccountsCode;
     private String accountNumber;
@@ -59,10 +59,10 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
     private Date transactionPostingDate;
     private String transactionOriginalCurrencyCode;
     private String transactionBillingCurrencyCode;
-    private KualiDecimalMoney transactionOriginalCurrencyAmount;
+    private KualiDecimal transactionOriginalCurrencyAmount;
     private BigDecimal transactionCurrencyExchangeRate;
-    private KualiDecimalMoney transactionSettlementAmount;
-    private KualiDecimalMoney transactionSalesTaxAmount;
+    private KualiDecimal transactionSettlementAmount;
+    private KualiDecimal transactionSalesTaxAmount;
     private boolean transactionTaxExemptIndicator;
     private boolean transactionPurchaseIdentifierIndicator;
     private String transactionPurchaseIdentifierDescription;
@@ -84,9 +84,9 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
     private String cardHolderStateCode;
     private String cardHolderZipCode;
     private String cardHolderWorkPhoneNumber;
-    private KualiDecimalMoney cardLimit;
-    private KualiDecimalMoney cardCycleAmountLimit;
-    private KualiDecimalMoney cardCycleVolumeLimit;
+    private KualiDecimal cardLimit;
+    private KualiDecimal cardCycleAmountLimit;
+    private KualiDecimal cardCycleVolumeLimit;
     private String cardStatusCode;
     private String cardNoteText;
 
@@ -145,7 +145,7 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @return - Returns the financialDocumentTotalAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentTotalAmount() {
+    public KualiDecimal getFinancialDocumentTotalAmount() {
         return financialDocumentTotalAmount;
     }
 
@@ -155,16 +155,16 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @param - financialDocumentTotalAmount The financialDocumentTotalAmount to set.
      * 
      */
-    public void setFinancialDocumentTotalAmount(KualiDecimalMoney financialDocumentTotalAmount) {
+    public void setFinancialDocumentTotalAmount(KualiDecimal financialDocumentTotalAmount) {
         this.financialDocumentTotalAmount = financialDocumentTotalAmount;
     }
 
     public void setFinancialDocumentTotalAmount(String financialDocumentTotalAmount) {
         if (StringUtils.isNotBlank(financialDocumentTotalAmount)) {
-            this.financialDocumentTotalAmount = new KualiDecimalMoney(financialDocumentTotalAmount);
+            this.financialDocumentTotalAmount = new KualiDecimal(financialDocumentTotalAmount);
         }
         else {
-            this.financialDocumentTotalAmount = new KualiDecimalMoney(0);
+            this.financialDocumentTotalAmount = new KualiDecimal(0);
         }
     }
 
@@ -522,7 +522,7 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @return - Returns the transactionOriginalCurrencyAmount
      * 
      */
-    public KualiDecimalMoney getTransactionOriginalCurrencyAmount() {
+    public KualiDecimal getTransactionOriginalCurrencyAmount() {
         return transactionOriginalCurrencyAmount;
     }
 
@@ -532,16 +532,16 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @param - transactionOriginalCurrencyAmount The transactionOriginalCurrencyAmount to set.
      * 
      */
-    public void setTransactionOriginalCurrencyAmount(KualiDecimalMoney transactionOriginalCurrencyAmount) {
+    public void setTransactionOriginalCurrencyAmount(KualiDecimal transactionOriginalCurrencyAmount) {
         this.transactionOriginalCurrencyAmount = transactionOriginalCurrencyAmount;
     }
 
     public void setTransactionOriginalCurrencyAmount(String transactionOriginalCurrencyAmount) {
         if (StringUtils.isNotBlank(transactionOriginalCurrencyAmount)) {
-            this.transactionOriginalCurrencyAmount = new KualiDecimalMoney(transactionOriginalCurrencyAmount);
+            this.transactionOriginalCurrencyAmount = new KualiDecimal(transactionOriginalCurrencyAmount);
         }
         else {
-            this.transactionOriginalCurrencyAmount = new KualiDecimalMoney(0);
+            this.transactionOriginalCurrencyAmount = new KualiDecimal(0);
         }
     }
 
@@ -582,7 +582,7 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @return - Returns the transactionSettlementAmount
      * 
      */
-    public KualiDecimalMoney getTransactionSettlementAmount() {
+    public KualiDecimal getTransactionSettlementAmount() {
         return transactionSettlementAmount;
     }
 
@@ -592,16 +592,16 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @param - transactionSettlementAmount The transactionSettlementAmount to set.
      * 
      */
-    public void setTransactionSettlementAmount(KualiDecimalMoney transactionSettlementAmount) {
+    public void setTransactionSettlementAmount(KualiDecimal transactionSettlementAmount) {
         this.transactionSettlementAmount = transactionSettlementAmount;
     }
 
     public void setTransactionSettlementAmount(String transactionSettlementAmount) {
         if (StringUtils.isNotBlank(transactionSettlementAmount)) {
-            this.transactionSettlementAmount = new KualiDecimalMoney(transactionSettlementAmount);
+            this.transactionSettlementAmount = new KualiDecimal(transactionSettlementAmount);
         }
         else {
-            this.transactionSettlementAmount = new KualiDecimalMoney(0);
+            this.transactionSettlementAmount = new KualiDecimal(0);
         }
     }
 
@@ -612,7 +612,7 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @return - Returns the transactionSalesTaxAmount
      * 
      */
-    public KualiDecimalMoney getTransactionSalesTaxAmount() {
+    public KualiDecimal getTransactionSalesTaxAmount() {
         return transactionSalesTaxAmount;
     }
 
@@ -622,16 +622,16 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @param - transactionSalesTaxAmount The transactionSalesTaxAmount to set.
      * 
      */
-    public void setTransactionSalesTaxAmount(KualiDecimalMoney transactionSalesTaxAmount) {
+    public void setTransactionSalesTaxAmount(KualiDecimal transactionSalesTaxAmount) {
         this.transactionSalesTaxAmount = transactionSalesTaxAmount;
     }
 
     public void setTransactionSalesTaxAmount(String transactionSalesTaxAmount) {
         if (StringUtils.isNotBlank(transactionSalesTaxAmount)) {
-            this.transactionSalesTaxAmount = new KualiDecimalMoney(transactionSalesTaxAmount);
+            this.transactionSalesTaxAmount = new KualiDecimal(transactionSalesTaxAmount);
         }
         else {
-            this.transactionSalesTaxAmount = new KualiDecimalMoney(0);
+            this.transactionSalesTaxAmount = new KualiDecimal(0);
         }
     }
 
@@ -1101,7 +1101,7 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @return - Returns the cardLimit
      * 
      */
-    public KualiDecimalMoney getCardLimit() {
+    public KualiDecimal getCardLimit() {
         return cardLimit;
     }
 
@@ -1111,16 +1111,16 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @param - cardLimit The cardLimit to set.
      * 
      */
-    public void setCardLimit(KualiDecimalMoney cardLimit) {
+    public void setCardLimit(KualiDecimal cardLimit) {
         this.cardLimit = cardLimit;
     }
 
     public void setCardLimit(String cardLimit) {
         if (StringUtils.isNotBlank(cardLimit)) {
-            this.cardLimit = new KualiDecimalMoney(cardLimit);
+            this.cardLimit = new KualiDecimal(cardLimit);
         }
         else {
-            this.cardLimit = new KualiDecimalMoney(0);
+            this.cardLimit = new KualiDecimal(0);
         }
     }
 
@@ -1131,7 +1131,7 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @return - Returns the cardCycleAmountLimit
      * 
      */
-    public KualiDecimalMoney getCardCycleAmountLimit() {
+    public KualiDecimal getCardCycleAmountLimit() {
         return cardCycleAmountLimit;
     }
 
@@ -1141,16 +1141,16 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @param - cardCycleAmountLimit The cardCycleAmountLimit to set.
      * 
      */
-    public void setCardCycleAmountLimit(KualiDecimalMoney cardCycleAmountLimit) {
+    public void setCardCycleAmountLimit(KualiDecimal cardCycleAmountLimit) {
         this.cardCycleAmountLimit = cardCycleAmountLimit;
     }
 
     public void setCardCycleAmountLimit(String cardCycleAmountLimit) {
         if (StringUtils.isNotBlank(cardCycleAmountLimit)) {
-            this.cardCycleAmountLimit = new KualiDecimalMoney(cardCycleAmountLimit);
+            this.cardCycleAmountLimit = new KualiDecimal(cardCycleAmountLimit);
         }
         else {
-            this.cardCycleAmountLimit = new KualiDecimalMoney(0);
+            this.cardCycleAmountLimit = new KualiDecimal(0);
         }
     }
 
@@ -1161,7 +1161,7 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @return - Returns the cardCycleVolumeLimit
      * 
      */
-    public KualiDecimalMoney getCardCycleVolumeLimit() {
+    public KualiDecimal getCardCycleVolumeLimit() {
         return cardCycleVolumeLimit;
     }
 
@@ -1171,16 +1171,16 @@ public class ProcurementCardTransaction extends BusinessObjectBase {
      * @param - cardCycleVolumeLimit The cardCycleVolumeLimit to set.
      * 
      */
-    public void setCardCycleVolumeLimit(KualiDecimalMoney cardCycleVolumeLimit) {
+    public void setCardCycleVolumeLimit(KualiDecimal cardCycleVolumeLimit) {
         this.cardCycleVolumeLimit = cardCycleVolumeLimit;
     }
 
     public void setCardCycleVolumeLimit(String cardCycleVolumeLimit) {
         if (StringUtils.isNotBlank(cardCycleVolumeLimit)) {
-            this.cardCycleVolumeLimit = new KualiDecimalMoney(cardCycleVolumeLimit);
+            this.cardCycleVolumeLimit = new KualiDecimal(cardCycleVolumeLimit);
         }
         else {
-            this.cardCycleVolumeLimit = new KualiDecimalMoney(0);
+            this.cardCycleVolumeLimit = new KualiDecimal(0);
         }
     }
 

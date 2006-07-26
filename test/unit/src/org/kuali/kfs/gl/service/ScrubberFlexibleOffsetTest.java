@@ -35,7 +35,7 @@ import org.kuali.core.document.DocumentType;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DocumentTypeService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.financial.bo.OffsetAccount;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
@@ -72,7 +72,7 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
     public final String OBJECT_CODE = "4190";
     public final String BALANCE_TYPE_CODE = "AC";
     public final String DOCUMENT_TYPE_CODE = "PCDO";
-    public final KualiDecimalMoney ENTRY_AMOUNT = new KualiDecimalMoney(2000);
+    public final KualiDecimal ENTRY_AMOUNT = new KualiDecimal(2000);
 
     /**
      * @see junit.framework.TestCase#setUp()
@@ -383,7 +383,7 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
     }
 
     // put the given entry information into the origin entry template and generate the origin entry
-    private OriginEntry getOriginEntryFromTemplate(OriginEntryGroup group, String objectCode, String balanceTypeCode, KualiDecimalMoney entryAmount, String documentTypeCode, String debitCreditCode) {
+    private OriginEntry getOriginEntryFromTemplate(OriginEntryGroup group, String objectCode, String balanceTypeCode, KualiDecimal entryAmount, String documentTypeCode, String debitCreditCode) {
 
         OriginEntry entry = this.buildOriginEntryTemplate(group);
 
@@ -397,7 +397,7 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
     }
 
     // put the given entry information into the origin entry template and generate the origin entry
-    private OriginEntry getExpectedOriginEntryFromTemplate(OriginEntryGroup group, String chartOfAccountsCode, String accountNumber, String objectCode, String balanceTypeCode, KualiDecimalMoney entryAmount, String documentTypeCode, String debitCreditCode) {
+    private OriginEntry getExpectedOriginEntryFromTemplate(OriginEntryGroup group, String chartOfAccountsCode, String accountNumber, String objectCode, String balanceTypeCode, KualiDecimal entryAmount, String documentTypeCode, String debitCreditCode) {
 
         OriginEntry entry = this.getOriginEntryFromTemplate(group, objectCode, balanceTypeCode, entryAmount, documentTypeCode, debitCreditCode);
 
@@ -452,7 +452,7 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
         entry.setFinancialObjectCode("");
         entry.setFinancialBalanceTypeCode("");
         entry.setFinancialDocumentTypeCode("");
-        entry.setTransactionLedgerEntryAmount(new KualiDecimalMoney(0));
+        entry.setTransactionLedgerEntryAmount(new KualiDecimal(0));
 
         // don't need to chang the values of the following properties
         entry.setUniversityFiscalYear(FISCAL_YEAR);
