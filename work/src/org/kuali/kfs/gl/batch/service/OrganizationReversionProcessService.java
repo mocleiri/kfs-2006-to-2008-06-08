@@ -24,8 +24,14 @@ package org.kuali.module.gl.service;
 
 public interface OrganizationReversionProcessService {
     /**
-     * Organization Reversion Year End Process
+     * Organization Reversion Year End Process for the end of a fiscal year
      * 
      */
-    public void organizationReversionProcess();
+    public void organizationReversionProcessEndOfYear();
+
+    /**
+     * Organization Reversion Year End Process for the beginning of a fiscal year
+     * 
+     */
+    public void organizationReversionProcessBeginningOfYear();
 }

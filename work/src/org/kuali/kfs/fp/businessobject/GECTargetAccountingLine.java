@@ -20,18 +20,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.kuali.module.financial.rules;
+package org.kuali.module.financial.bo;
+
+import org.kuali.core.bo.TargetAccountingLine;
+
 
 /**
- * Indirect Cost Adjustment Document specific APC constants
+ * Extends TargetAccountingLine so that, ultimately, GEC can generate different help text since it marks a field as required which
+ * is otherwise optional.
  * 
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public interface IndirectCostAdjustmentDocumentRuleConstants {
-    public static final String INDIRECT_COST_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING = "Kuali.FinancialTransactionProcessing.IndirectCostAdjustmentDocument";
-
-    public static final String RESTRICTED_SUB_TYPE_GROUP_CODES = "RestrictedSubTypeCodes";
-    public static final String RESTRICTED_OBJECT_TYPE_CODES = "RestrictedObjectTypeCodes";
-    public static final String GRANT_OBJECT_CODE = "GrantObjectCode";
-    public static final String RECEIPT_OBJECT_CODE = "ReceiptObjectCode";
+public class GECTargetAccountingLine extends TargetAccountingLine {
+    /**
+     * This constructor needs to initialize the ojbConcreteClass attribute such that it sets it to its class name. This is how OJB
+     * knows what grouping of objects to work with.
+     */
+    public GECTargetAccountingLine() {
+        super();
+        super.ojbConcreteClass = this.getClass().getName();
+    }
 }
