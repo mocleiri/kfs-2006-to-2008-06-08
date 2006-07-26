@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.Constants;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
@@ -46,7 +46,7 @@ import org.kuali.module.gl.util.LedgerEntryHolder;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryServiceImpl.java,v 1.16.2.1 2006-07-12 17:41:24 ckirsche Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.16.2.2 2006-07-26 19:45:26 ckirsche Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -252,7 +252,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         thisElement = entrySummary[i++];
         String debitCreditCode = thisElement != null ? thisElement.toString() : "";
 
-        KualiDecimalMoney amount = new KualiDecimalMoney(entrySummary[i++].toString());
+        KualiDecimal amount = new KualiDecimal(entrySummary[i++].toString());
         int count = Integer.parseInt(entrySummary[i].toString());
 
         // construct a ledger entry with the information fetched from the given array

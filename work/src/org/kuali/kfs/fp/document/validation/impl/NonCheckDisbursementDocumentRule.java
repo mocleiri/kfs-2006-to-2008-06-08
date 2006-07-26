@@ -43,7 +43,7 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.gl.util.SufficientFundsItemHelper.SufficientFundsItem;
@@ -216,7 +216,7 @@ public class NonCheckDisbursementDocumentRule extends TransactionalDocumentRuleB
         String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
         String financialObjectCode = accountingLine.getObjectCode().getFinancialObjectCode();
         String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
-        KualiDecimalMoney lineAmount = getGeneralLedgerPendingEntryAmountForAccountingLine(accountingLine);
+        KualiDecimal lineAmount = getGeneralLedgerPendingEntryAmountForAccountingLine(accountingLine);
         Integer fiscalYear = accountingLine.getPostingYear();
         String financialObjectTypeCode = accountingLine.getObjectTypeCode();
 
