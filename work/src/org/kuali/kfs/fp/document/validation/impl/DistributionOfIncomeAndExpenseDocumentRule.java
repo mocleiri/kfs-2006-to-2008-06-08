@@ -31,7 +31,7 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -205,7 +205,7 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends TransactionalDoc
         String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
         Integer fiscalYear = accountingLine.getPostingYear();
         String financialObjectTypeCode = accountingLine.getObjectTypeCode();
-        KualiDecimalMoney lineAmount = accountingLine.getAmount();
+        KualiDecimal lineAmount = accountingLine.getAmount();
         String offsetDebitCreditCode = null;
         // fi_ddi:lp_proc_from_ln.43-2...69-2
         // fi_ddi:lp_proc_to_ln.43-2...69-2

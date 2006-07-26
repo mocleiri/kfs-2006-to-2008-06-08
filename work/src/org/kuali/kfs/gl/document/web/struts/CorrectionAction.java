@@ -49,7 +49,7 @@ import org.kuali.KeyConstants;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.LookupService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.action.KualiDocumentActionBase;
 import org.kuali.module.gl.bo.CorrectionChange;
@@ -66,7 +66,7 @@ import org.kuali.module.gl.web.struts.form.CorrectionForm;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.12.2.1 2006-07-12 17:41:25 ckirsche Exp $
+ * @version $Id: CorrectionAction.java,v 1.12.2.2 2006-07-26 19:45:24 ckirsche Exp $
  * 
  */
 
@@ -762,7 +762,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
                 BeanUtils.setProperty(eachReplaceEntries, replaceField, new Integer(convertInt));
             }
             if (replaceField.equals("transactionLedgerEntryAmount")) {
-                BeanUtils.setProperty(eachReplaceEntries, replaceField, new KualiDecimalMoney(replaceValue));
+                BeanUtils.setProperty(eachReplaceEntries, replaceField, new KualiDecimal(replaceValue));
             }
 
             if (replaceField.equals("universityFiscalYear")) {
@@ -992,7 +992,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
             oe.setTransactionLedgerEntrySequenceNumber(new Integer(convertInt));
         }
         if (!(editTransactionLedgerEntryAmount == null | editTransactionLedgerEntryAmount.equals(""))) {
-            oe.setTransactionLedgerEntryAmount(new KualiDecimalMoney(editTransactionLedgerEntryAmount));
+            oe.setTransactionLedgerEntryAmount(new KualiDecimal(editTransactionLedgerEntryAmount));
         }
 
         oe.setTransactionLedgerEntryDescription(editTransactionLedgerEntryDescription);
