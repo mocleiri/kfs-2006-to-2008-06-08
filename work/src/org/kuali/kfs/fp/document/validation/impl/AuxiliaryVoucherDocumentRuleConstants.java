@@ -24,13 +24,16 @@ package org.kuali.module.financial.rules;
 
 
 /**
- * Holds constants for <code>{@link AuxiliaryVoucherDocument}</code> business rules.
- * 
+ * Holds constants for <code>{@link org.kuali.module.financial.document.AuxiliaryVoucherDocument}</code>
+ * business rules.
+ *
  * @author Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public interface AuxiliaryVoucherDocumentRuleConstants extends TransactionalDocumentRuleBaseConstants {
-    // Security grouping constants used to do application parameter lookups
-    public static final String AUXILIARY_VOUCHER_SECURITY_GROUPING = "Kuali.FinancialTransactionProcessing.AuxiliaryVoucherDocument";
+public interface AuxiliaryVoucherDocumentRuleConstants 
+    extends TransactionalDocumentRuleBaseConstants {
+    //  Security grouping constants used to do application parameter lookups
+    public static final String AUXILIARY_VOUCHER_SECURITY_GROUPING = 
+        "Kuali.FinancialTransactionProcessing.AuxiliaryVoucherDocument";
 
     // Application parameter lookup constants to be used in conjunction with the grouping constants above
     public static final String RESTRICTED_COMBINED_CODES = "RestrictedCombinationOfCodes";
@@ -38,10 +41,5 @@ public interface AuxiliaryVoucherDocumentRuleConstants extends TransactionalDocu
     public static final String RESTRICTED_EXPENSE_OBJECT_TYPE_CODES = "RestrictedExpenseObjectTypeCodes";
     public static final String RESTRICTED_INCOME_OBJECT_TYPE_CODES = "RestrictedIncomeObjectTypeCodes";
     public static final String RESTRICTED_PERIOD_CODES = "RestrictedPeriodCodes";
-
-
-    // Application type constants
-    public static final String AUX_VOUCHER_ADJUSTMENT_DOC_TYPE = "AVAD";
-    public static final String AUX_VOUCHER_RECODE_DOC_TYPE = "AVRC";
-    public static final String AUX_VOUCHER_ACCRUAL_DOC_TYPE = "AVAE";
+	public static final String GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE = "GeneralLedgerPendingEntryOffsetObjectCode";
 }

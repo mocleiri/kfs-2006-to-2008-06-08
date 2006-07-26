@@ -22,6 +22,7 @@
  */
 package org.kuali.module.financial.web.struts.form;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,10 +66,25 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      * Supplements a constructor for this voucher class
      */
     public VoucherForm() {
-        selectedAccountingPeriod = "";
-        setNewSourceLineCredit(new KualiDecimal(0));
-        setNewSourceLineDebit(new KualiDecimal(0));
+        populateDefaultSelectedAccountingPeriod();
+        setNewSourceLineCredit(KualiDecimal.ZERO);
+        setNewSourceLineDebit(KualiDecimal.ZERO);
         setVoucherLineHelpers(new ArrayList());
+    }
+
+    /**
+     * sets initial selected accounting period to current period
+     * 
+     */
+    private void populateDefaultSelectedAccountingPeriod() {
+        Date date = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
+        AccountingPeriod accountingPeriod = SpringServiceLocator.getAccountingPeriodService().getByDate(date);
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(accountingPeriod.getUniversityFiscalPeriodCode());
+        sb.append(accountingPeriod.getUniversityFiscalYear());
+
+        setSelectedAccountingPeriod(sb.toString());
     }
 
     /**
@@ -78,6 +94,7 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      * 
      * @see org.kuali.core.web.struts.pojo.PojoForm#populate(javax.servlet.http.HttpServletRequest)
      */
+    @Override
     public void populate(HttpServletRequest request) {
         super.populate(request);
 
@@ -92,7 +109,36 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
     }
 
     /**
+     * util method to get postingYear out of selectedAccountingPeriod
+     * 
+     * @return Integer
+     */
+
+    private Integer getSelectedPostingYear() {
+        Integer postingYear = null;
+        if (StringUtils.isNotBlank(getSelectedAccountingPeriod())) {
+            postingYear = new Integer(StringUtils.right(getSelectedAccountingPeriod(), 4));
+        }
+        return postingYear;
+    }
+
+    /**
+     * util method to get posting period code out of selectedAccountingPeriod
+     * @return String
+     */
+    private String getSelectedPostingPeriodCode() {
+        String periodCode = null;
+        String selectedPeriod = getSelectedAccountingPeriod();
+        if (StringUtils.isNotBlank(selectedPeriod)) {
+            periodCode = StringUtils.left(selectedPeriod, 2);
+        }
+        return periodCode;
+    }
+
+    /**
      * Helper method to make casting easier
+     * 
+     * @return VoucherDocument
      */
     public VoucherDocument getVoucherDocument() {
         return (VoucherDocument) getDocument();
@@ -105,6 +151,7 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      * 
      * @see org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase#populateSourceAccountingLine(org.kuali.core.bo.SourceAccountingLine)
      */
+    @Override
     public void populateSourceAccountingLine(SourceAccountingLine sourceLine) {
         super.populateSourceAccountingLine(sourceLine);
 
@@ -112,7 +159,7 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
         String selectedAccountingPeriod = getSelectedAccountingPeriod();
 
         if (StringUtils.isNotBlank(selectedAccountingPeriod)) {
-            Integer postingYear = new Integer(StringUtils.right(selectedAccountingPeriod, 4));
+            Integer postingYear = getSelectedPostingYear();
             sourceLine.setPostingYear(postingYear);
 
             if (ObjectUtils.isNull(sourceLine.getObjectCode())) {
@@ -169,12 +216,8 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
     public AccountingPeriod getAccountingPeriod() {
         AccountingPeriod period = null;
 
-        String selectedPeriod = getSelectedAccountingPeriod();
-        if (!StringUtils.isBlank(selectedPeriod)) {
-            String periodCode = StringUtils.left(selectedPeriod, selectedPeriod.length() - 4);
-            Integer periodYear = new Integer(StringUtils.right(selectedPeriod, 4));
-
-            period = SpringServiceLocator.getAccountingPeriodService().getByPeriod(periodCode, periodYear);
+        if (!StringUtils.isBlank(getSelectedAccountingPeriod())) {
+            period = SpringServiceLocator.getAccountingPeriodService().getByPeriod(getSelectedPostingPeriodCode(), getSelectedPostingYear());
         }
 
         return period;
@@ -190,8 +233,8 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
     }
 
     /**
-     * Accessor to the list of <code>{@link VoucherLineHelper}</code> instances. This method retrieves the list of helper line
-     * objects for the form.
+     * Accessor to the list of <code>{@link VoucherAccountingLineHelper}</code> instances. This method retrieves the list of
+     * helper line objects for the form.
      * 
      * @return List
      */
@@ -306,8 +349,8 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
     protected void populateSelectedVoucherAccountingPeriod() {
         if (StringUtils.isNotBlank(getSelectedAccountingPeriod())) {
             AccountingPeriod ap = new AccountingPeriod();
-            ap.setUniversityFiscalPeriodCode(StringUtils.left(getSelectedAccountingPeriod(), 2));
-            ap.setUniversityFiscalYear(new Integer(StringUtils.right(getSelectedAccountingPeriod(), 4)));
+            ap.setUniversityFiscalPeriodCode(getSelectedPostingPeriodCode());
+            ap.setUniversityFiscalYear(getSelectedPostingYear());
             getTransactionalDocument().setAccountingPeriod(ap);
         }
     }
@@ -330,12 +373,9 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      */
     protected boolean processDebitAndCreditForNewSourceLine() {
         // using debits and credits supplied, populate the new source accounting line's amount and debit/credit code appropriately
-        if (!processDebitAndCreditForSourceLine(newSourceLine, newSourceLineDebit, newSourceLineCredit, Constants.NEGATIVE_ONE)) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        boolean passed = processDebitAndCreditForSourceLine(getNewSourceLine(), newSourceLineDebit, newSourceLineCredit, Constants.NEGATIVE_ONE);
+
+        return passed;
     }
 
     /**
@@ -386,14 +426,13 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
 
         // check to see which amount field has a value - credit or debit field?
         // and set the values of the appropriate fields
-        KualiDecimal ZERO = new KualiDecimal("0.00");
-        if (debitAmount != null && debitAmount.compareTo(ZERO) != 0) { // a value entered into the debit field? if so it's a debit
+        if (debitAmount != null && debitAmount.isNonZero()) { // a value entered into the debit field? if so it's a debit
             // create a new instance w/out reference
             KualiDecimal tmpDebitAmount = new KualiDecimal(debitAmount.toString());
             sourceLine.setDebitCreditCode(Constants.GL_DEBIT_CODE);
             sourceLine.setAmount(tmpDebitAmount);
         }
-        else if (creditAmount != null && !creditAmount.equals(ZERO)) { // assume credit, if both are set the br eval framework will
+        else if (creditAmount != null && creditAmount.isNonZero()) { // assume credit, if both are set the br eval framework will
             // catch it
             KualiDecimal tmpCreditAmount = new KualiDecimal(creditAmount.toString());
             sourceLine.setDebitCreditCode(Constants.GL_CREDIT_CODE);
@@ -401,7 +440,7 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
         }
         else { // explicitly set to zero, let br eval framework pick it up
             sourceLine.setDebitCreditCode(null);
-            sourceLine.setAmount(ZERO);
+            sourceLine.setAmount(KualiDecimal.ZERO);
         }
 
         return true;
@@ -416,26 +455,27 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      * @return boolean False if both the credit and debit fields have a value, true otherwise.
      */
     protected boolean validateCreditAndDebitAmounts(KualiDecimal debitAmount, KualiDecimal creditAmount, int index) {
-        KualiDecimal ZERO = new KualiDecimal(0);
+        boolean valid = false;
         if (null != creditAmount && null != debitAmount) {
-            if (ZERO.compareTo(creditAmount) != 0 && ZERO.compareTo(debitAmount) != 0) { // there's a value in both fields
+            if (creditAmount.isNonZero() && debitAmount.isNonZero()) {
+                // there's a value in both fields
                 if (Constants.NEGATIVE_ONE == index) { // it's a new line
-                    GlobalVariables.getErrorMap().putWithoutFullErrorPath(Constants.DEBIT_AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_DOCUMENT_JV_AMOUNTS_IN_CREDIT_AND_DEBIT_FIELDS);
-                    GlobalVariables.getErrorMap().putWithoutFullErrorPath(Constants.CREDIT_AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_DOCUMENT_JV_AMOUNTS_IN_CREDIT_AND_DEBIT_FIELDS);
+                    GlobalVariables.getErrorMap().putErrorWithoutFullErrorPath(Constants.DEBIT_AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_DOCUMENT_JV_AMOUNTS_IN_CREDIT_AND_DEBIT_FIELDS);
+                    GlobalVariables.getErrorMap().putErrorWithoutFullErrorPath(Constants.CREDIT_AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_DOCUMENT_JV_AMOUNTS_IN_CREDIT_AND_DEBIT_FIELDS);
                 }
                 else {
                     String errorKeyPath = Constants.JOURNAL_LINE_HELPER_PROPERTY_NAME + Constants.SQUARE_BRACKET_LEFT + Integer.toString(index) + Constants.SQUARE_BRACKET_RIGHT;
-                    GlobalVariables.getErrorMap().putWithoutFullErrorPath(errorKeyPath + Constants.JOURNAL_LINE_HELPER_DEBIT_PROPERTY_NAME, KeyConstants.ERROR_DOCUMENT_JV_AMOUNTS_IN_CREDIT_AND_DEBIT_FIELDS);
-                    GlobalVariables.getErrorMap().putWithoutFullErrorPath(errorKeyPath + Constants.JOURNAL_LINE_HELPER_CREDIT_PROPERTY_NAME, KeyConstants.ERROR_DOCUMENT_JV_AMOUNTS_IN_CREDIT_AND_DEBIT_FIELDS);
+                    GlobalVariables.getErrorMap().putErrorWithoutFullErrorPath(errorKeyPath + Constants.JOURNAL_LINE_HELPER_DEBIT_PROPERTY_NAME, KeyConstants.ERROR_DOCUMENT_JV_AMOUNTS_IN_CREDIT_AND_DEBIT_FIELDS);
+                    GlobalVariables.getErrorMap().putErrorWithoutFullErrorPath(errorKeyPath + Constants.JOURNAL_LINE_HELPER_CREDIT_PROPERTY_NAME, KeyConstants.ERROR_DOCUMENT_JV_AMOUNTS_IN_CREDIT_AND_DEBIT_FIELDS);
                 }
-                return false;
             }
             else {
-                return true;
+                valid = true;
             }
         }
         else {
-            return true;
+            valid = true;
         }
+        return valid;
     }
 }
