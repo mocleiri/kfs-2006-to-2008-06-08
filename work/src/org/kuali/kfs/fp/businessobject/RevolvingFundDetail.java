@@ -29,7 +29,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -43,7 +43,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     private Date financialDocumentRevolvingFundDate;
     private String financialDocumentRevolvingFundReferenceNumber;
     private String financialDocumentRevolvingFundDescription;
-    private KualiDecimalMoney financialDocumentRevolvingFundAmount;
+    private KualiDecimal financialDocumentRevolvingFundAmount;
     private String financialDocumentBankCode;
     private String financialDocumentBankAccountNumber;
 
@@ -207,7 +207,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
      * @return - Returns the financialDocumentRevolvingFundAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentRevolvingFundAmount() {
+    public KualiDecimal getFinancialDocumentRevolvingFundAmount() {
         return financialDocumentRevolvingFundAmount;
     }
 
@@ -217,7 +217,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
      * @param - financialDocumentRevolvingFundAmount The financialDocumentRevolvingFundAmount to set.
      * 
      */
-    public void setFinancialDocumentRevolvingFundAmount(KualiDecimalMoney financialDocumentRevolvingFundAmount) {
+    public void setFinancialDocumentRevolvingFundAmount(KualiDecimal financialDocumentRevolvingFundAmount) {
         this.financialDocumentRevolvingFundAmount = financialDocumentRevolvingFundAmount;
     }
 

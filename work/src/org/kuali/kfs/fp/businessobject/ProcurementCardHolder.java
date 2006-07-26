@@ -28,7 +28,7 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.SubAccount;
@@ -48,9 +48,9 @@ public class ProcurementCardHolder extends BusinessObjectBase {
     private String cardHolderStateCode;
     private String cardHolderZipCode;
     private String cardHolderWorkPhoneNumber;
-    private KualiDecimalMoney cardLimit;
-    private KualiDecimalMoney cardCycleAmountLimit;
-    private KualiDecimalMoney cardCycleVolumeLimit;
+    private KualiDecimal cardLimit;
+    private KualiDecimal cardCycleAmountLimit;
+    private KualiDecimal cardCycleVolumeLimit;
     private String cardStatusCode;
     private String cardNoteText;
     private String chartOfAccountsCode;
@@ -284,7 +284,7 @@ public class ProcurementCardHolder extends BusinessObjectBase {
      * @return - Returns the cardLimit
      * 
      */
-    public KualiDecimalMoney getCardLimit() {
+    public KualiDecimal getCardLimit() {
         return cardLimit;
     }
 
@@ -294,7 +294,7 @@ public class ProcurementCardHolder extends BusinessObjectBase {
      * @param - cardLimit The cardLimit to set.
      * 
      */
-    public void setCardLimit(KualiDecimalMoney cardLimit) {
+    public void setCardLimit(KualiDecimal cardLimit) {
         this.cardLimit = cardLimit;
     }
 
@@ -305,7 +305,7 @@ public class ProcurementCardHolder extends BusinessObjectBase {
      * @return - Returns the cardCycleAmountLimit
      * 
      */
-    public KualiDecimalMoney getCardCycleAmountLimit() {
+    public KualiDecimal getCardCycleAmountLimit() {
         return cardCycleAmountLimit;
     }
 
@@ -315,7 +315,7 @@ public class ProcurementCardHolder extends BusinessObjectBase {
      * @param - cardCycleAmountLimit The cardCycleAmountLimit to set.
      * 
      */
-    public void setCardCycleAmountLimit(KualiDecimalMoney cardCycleAmountLimit) {
+    public void setCardCycleAmountLimit(KualiDecimal cardCycleAmountLimit) {
         this.cardCycleAmountLimit = cardCycleAmountLimit;
     }
 
@@ -326,7 +326,7 @@ public class ProcurementCardHolder extends BusinessObjectBase {
      * @return - Returns the cardCycleVolumeLimit
      * 
      */
-    public KualiDecimalMoney getCardCycleVolumeLimit() {
+    public KualiDecimal getCardCycleVolumeLimit() {
         return cardCycleVolumeLimit;
     }
 
@@ -336,7 +336,7 @@ public class ProcurementCardHolder extends BusinessObjectBase {
      * @param - cardCycleVolumeLimit The cardCycleVolumeLimit to set.
      * 
      */
-    public void setCardCycleVolumeLimit(KualiDecimalMoney cardCycleVolumeLimit) {
+    public void setCardCycleVolumeLimit(KualiDecimal cardCycleVolumeLimit) {
         this.cardCycleVolumeLimit = cardCycleVolumeLimit;
     }
 

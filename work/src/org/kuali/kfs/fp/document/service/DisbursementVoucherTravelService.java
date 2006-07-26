@@ -24,7 +24,7 @@ package org.kuali.module.financial.service;
 
 import java.sql.Timestamp;
 
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 
 /**
@@ -40,7 +40,7 @@ public interface DisbursementVoucherTravelService {
      * @param travel
      * @return
      */
-    public KualiDecimalMoney calculatePerDiemAmount(Timestamp startDateTime, Timestamp endDateTime, KualiDecimalMoney perDiemRate);
+    public KualiDecimal calculatePerDiemAmount(Timestamp startDateTime, Timestamp endDateTime, KualiDecimal perDiemRate);
 
     /**
      * Calculates the mileage travel amount.
@@ -48,6 +48,6 @@ public interface DisbursementVoucherTravelService {
      * @param travel
      * @return
      */
-    public KualiDecimalMoney calculateMileageAmount(Integer totalMileage, Timestamp travelStartDate);
+    public KualiDecimal calculateMileageAmount(Integer totalMileage, Timestamp travelStartDate);
 
 }

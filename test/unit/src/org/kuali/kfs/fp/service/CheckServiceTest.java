@@ -25,7 +25,7 @@ package org.kuali.module.financial.service;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CheckBase;
@@ -50,7 +50,7 @@ public class CheckServiceTest extends KualiTestBaseWithFixtures {
         // setup check
         check = new CheckBase();
         check.setFinancialDocumentNumber(DOCUMENT_HEADER_ID);
-        check.setAmount(new KualiDecimalMoney("314.15"));
+        check.setAmount(new KualiDecimal("314.15"));
         check.setCheckDate(SpringServiceLocator.getDateTimeService().getCurrentSqlDate());
         check.setCheckNumber("2112");
         check.setDescription("test check");
