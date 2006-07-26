@@ -69,6 +69,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * 
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#createDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
      */
+    @Override
     protected void createDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
         super.createDocument(kualiDocumentFormBase);
         ((DisbursementVoucherDocument) kualiDocumentFormBase.getDocument()).initiateDocument();
@@ -81,6 +82,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @see org.kuali.core.web.struts.action.KualiAction#refresh(org.apache.struts.action.ActionMapping,
      *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
+    @Override
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         DisbursementVoucherForm dvForm = (DisbursementVoucherForm) form;
         DisbursementVoucherDocument document = (DisbursementVoucherDocument) dvForm.getDocument();
@@ -113,7 +115,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward printDisbursementVoucherCoverSheet(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -132,7 +134,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
         coverSheetService.generateDisbursementVoucherCoverSheet(directory, DisbursementVoucherCoverSheetServiceImpl.DV_COVERSHEET_TEMPLATE_NM, document, baos);
         String fileName = document.getFinancialDocumentNumber() + "_cover_sheet.pdf";
         WebUtils.saveMimeOutputStreamAsFile(response, "application/pdf", baos, fileName);
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return (null);
 
     }
 
@@ -143,7 +145,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward calculateTravelPerDiem(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -159,7 +161,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
         }
         catch (RuntimeException e) {
             LOG.error("Error in calculating travel per diem: " + e.getMessage());
-            GlobalVariables.getErrorMap().put("DVNonEmployeeTravelErrors", KeyConstants.ERROR_CUSTOM, e.getMessage());
+            GlobalVariables.getErrorMap().putError("DVNonEmployeeTravelErrors", KeyConstants.ERROR_CUSTOM, e.getMessage());
         }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
@@ -173,7 +175,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward calculateTravelMileageAmount(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -182,12 +184,12 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
 
         if (dvDocument.getDvNonEmployeeTravel().getDvPersonalCarMileageAmount() == null) {
             LOG.error("Total Mileage must be given");
-            GlobalVariables.getErrorMap().put(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_REQUIRED, "Total Mileage");
+            GlobalVariables.getErrorMap().putError(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_REQUIRED, "Total Mileage");
         }
 
         if (dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp() == null) {
             LOG.error("Travel Start Date must be given");
-            GlobalVariables.getErrorMap().put(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_REQUIRED, "Travel Start Date");
+            GlobalVariables.getErrorMap().putError(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_REQUIRED, "Travel Start Date");
         }
 
         if (GlobalVariables.getErrorMap().isEmpty()) {
@@ -208,7 +210,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward addNonEmployeeExpenseLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -237,7 +239,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward addPrePaidNonEmployeeExpenseLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -266,7 +268,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward deleteNonEmployeeExpenseLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -286,7 +288,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward deletePrePaidEmployeeExpenseLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -306,7 +308,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward addPreConfRegistrantLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -336,7 +338,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward deletePreConfRegistrantLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -358,7 +360,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward generateNonResidentAlienTaxLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -368,7 +370,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
         /* user should not have generate button if not in tax group, but check just to make sure */
         if (!GlobalVariables.getUserSession().getKualiUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_TAX_GROUP))) {
             LOG.info("User requested generateNonResidentAlienTaxLines who is not in the kuali tax group.");
-            GlobalVariables.getErrorMap().put(Constants.DV_NRATAX_TAB_ERRORS, KeyConstants.ERROR_DV_NRA_PERMISSIONS_GENERATE);
+            GlobalVariables.getErrorMap().putError(Constants.DV_NRATAX_TAB_ERRORS, KeyConstants.ERROR_DV_NRA_PERMISSIONS_GENERATE);
             return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
@@ -389,7 +391,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward clearNonResidentAlienTaxLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -399,7 +401,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
         /* user should not have generate button if not in tax group, but check just to make sure */
         if (!GlobalVariables.getUserSession().getKualiUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_TAX_GROUP))) {
             LOG.info("User requested generateNonResidentAlienTaxLines who is not in the kuali tax group.");
-            GlobalVariables.getErrorMap().put(Constants.DV_NRATAX_TAB_ERRORS, KeyConstants.ERROR_DV_NRA_PERMISSIONS_GENERATE);
+            GlobalVariables.getErrorMap().putError(Constants.DV_NRATAX_TAB_ERRORS, KeyConstants.ERROR_DV_NRA_PERMISSIONS_GENERATE);
             return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
@@ -417,6 +419,7 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
      * @see org.kuali.core.web.struts.action.KualiAction#performLookup(org.apache.struts.action.ActionMapping,
      *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
+    @Override
     public ActionForward performLookup(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // substitute bo class and mapping if the type is Employee, lookup already setup for Payee
         DisbursementVoucherForm dvForm = (DisbursementVoucherForm) form;
