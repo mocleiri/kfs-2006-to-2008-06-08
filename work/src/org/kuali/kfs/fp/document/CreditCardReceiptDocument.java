@@ -23,13 +23,14 @@
 package org.kuali.module.financial.document;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.Constants;
+import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
+import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.bo.CreditCardDetail;
 
 /**
@@ -40,9 +41,9 @@ import org.kuali.module.financial.bo.CreditCardDetail;
  * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class CreditCardReceiptDocument extends CashReceiptDocument {
+public class CreditCardReceiptDocument extends CashReceiptDocumentBase {
     // holds details about each credit card receipt
-    private List creditCardReceipts = new ArrayList();
+    private List<CreditCardDetail> creditCardReceipts = new ArrayList<CreditCardDetail>();
 
     // incrementers for detail lines
     private Integer nextCcCrLineNumber = new Integer(1);
@@ -89,7 +90,7 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
      * 
      * @return List
      */
-    public List getCreditCardReceipts() {
+    public List<CreditCardDetail> getCreditCardReceipts() {
         return creditCardReceipts;
     }
 
@@ -98,7 +99,7 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
      * 
      * @param creditCardReceipts
      */
-    public void setCreditCardReceipts(List creditCardReceipts) {
+    public void setCreditCardReceipts(List<CreditCardDetail> creditCardReceipts) {
         this.creditCardReceipts = creditCardReceipts;
     }
 
@@ -144,7 +145,7 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
         while (this.creditCardReceipts.size() <= index) {
             creditCardReceipts.add(new CreditCardDetail());
         }
-        return (CreditCardDetail) creditCardReceipts.get(index);
+        return creditCardReceipts.get(index);
     }
 
     /**
@@ -153,13 +154,8 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
      * @param index
      */
     public void removeCreditCardReceipt(int index) {
-        CreditCardDetail creditCardReceiptDetail = (CreditCardDetail) creditCardReceipts.remove(index);
-
-        // if the totalCreditCardAmount goes negative, bring back to zero.
+        CreditCardDetail creditCardReceiptDetail = creditCardReceipts.remove(index);
         this.totalCreditCardAmount = this.totalCreditCardAmount.subtract(creditCardReceiptDetail.getCreditCardAdvanceDepositAmount());
-        if (this.totalCreditCardAmount.isNegative()) {
-            this.totalCreditCardAmount = KualiDecimal.ZERO;
-        }
     }
 
     /**
@@ -181,6 +177,7 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
      * 
      * @return KualiDecimal
      */
+    @Override
     public KualiDecimal getSumTotalAmount() {
         return this.totalCreditCardAmount;
     }
@@ -192,24 +189,33 @@ public class CreditCardReceiptDocument extends CashReceiptDocument {
      */
     public KualiDecimal calculateCreditCardReceiptTotal() {
         KualiDecimal total = KualiDecimal.ZERO;
-        for (Iterator i = getCreditCardReceipts().iterator(); i.hasNext();) {
-            CreditCardDetail c = (CreditCardDetail) i.next();
-            if (null != c.getCreditCardAdvanceDepositAmount()) {
-                total = total.add(c.getCreditCardAdvanceDepositAmount());
+        for (CreditCardDetail detail : getCreditCardReceipts()) {
+            if (null != detail.getCreditCardAdvanceDepositAmount()) {
+                total = total.add(detail.getCreditCardAdvanceDepositAmount());
             }
         }
         return total;
     }
+
 
     /**
      * Overrides super to call super and then also add in the new list of credit card receipts that have to be managed.
      * 
      * @see org.kuali.core.document.TransactionalDocumentBase#buildListOfDeletionAwareLists()
      */
+    @Override
     public List buildListOfDeletionAwareLists() {
         List managedLists = super.buildListOfDeletionAwareLists();
         managedLists.add(getCreditCardReceipts());
 
         return managedLists;
+    }
+
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     */
+    @Override
+    public AccountingLineParser getAccountingLineParser() {
+        return new BasicFormatWithLineDescriptionAccountingLineParser();
     }
 }

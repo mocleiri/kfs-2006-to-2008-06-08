@@ -46,63 +46,20 @@ import org.kuali.module.gl.util.SufficientFundsItemHelper.SufficientFundsItem;
 public class DistributionOfIncomeAndExpenseDocumentRule extends TransactionalDocumentRuleBase implements DistributionOfIncomeAndExpenseDocumentRuleConstants {
 
     /**
-     * Overrrides default implementation to do the following: a line is considered debit if
-     * <ol>
-     * <li> is a source line && isExpenseOrAsset && is negative amount
-     * <li> is a source line && IncomeOrLiability && is positive amount
-     * <li> is a target line && isExpenseOrAsset && is positive amount
-     * <li> is a target line && IncomeOrLiability && is a negative amount
-     * </ol>
+     * @see IsDebitUtils#isDebitConsideringSectionAndTypePositiveOnly(TransactionalDocumentRuleBase, TransactionalDocument,
+     *      AccountingLine)
      * 
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDebit(org.kuali.core.bo.AccountingLine)
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(AccountingLine accountingLine) throws IllegalStateException {
-        // SOURCE line
-        // -- Expense Or Asset
-        // credit: positive amount
-        // debit: negative amount
-        // --Income Or Liability
-        // debit: positive amount
-        // credit: negative amount
-        // TARGET LINE
-        // --Expense Or Asset
-        // debit: positive amount
-        // credit: negative amount
-        // --Income Or Liability
-        // credit: positive amount
-        // debit: negative amount
-
-        boolean isDebit = false;
-        boolean isPositive = accountingLine.getAmount().isPositive();
-        if (isSourceAccountingLine(accountingLine)) {
-            if (isExpenseOrAsset(accountingLine)) {
-                isDebit = !isPositive;
-            }
-            else if (isIncomeOrLiability(accountingLine)) {
-                isDebit = isPositive;
-            }
-            else {
-                throw new IllegalStateException(objectTypeCodeIllegalStateExceptionMessage);
-            }
-        }
-        // target line
-        else {
-            if (isExpenseOrAsset(accountingLine)) {
-                isDebit = isPositive;
-            }
-            else if (isIncomeOrLiability(accountingLine)) {
-                isDebit = !isPositive;
-            }
-            else {
-                throw new IllegalStateException(objectTypeCodeIllegalStateExceptionMessage);
-            }
-        }
-        return isDebit;
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
+        return IsDebitUtils.isDebitConsideringSectionAndTypePositiveOnly(this, transactionalDocument, accountingLine);
     }
 
     /**
      * @see org.kuali.core.rule.AccountingLineRule#isObjectSubTypeAllowed(org.kuali.core.bo.AccountingLine)
      */
+    @Override
     public boolean isObjectSubTypeAllowed(AccountingLine accountingLine) {
         boolean valid = super.isObjectSubTypeAllowed(accountingLine);
         if (valid) {
@@ -124,32 +81,10 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends TransactionalDoc
     }
 
     /**
-     * adds the following additional balance checks
-     * <ol>
-     * <li> transactions (income and expense; assets or liabilities) must balance. FIS will check and prompt the initiator if the
-     * transaction does not balance
-     * <li> the total of the revenue objects - total of the expense objects in the "from" window = the total of the revenue objects -
-     * total of the expense objects in the "to" window
-     * <ul>
-     * 
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDocumentBalanceValid(org.kuali.core.document.TransactionalDocument)
-     */
-    protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
-        boolean valid = super.isDocumentBalanceValid(transactionalDocument);
-        if (valid) {
-            valid = isDocumentBalancedConsideringObjectTypes(transactionalDocument);
-        }
-
-        if (valid) {
-            valid = isDocumenBalancedConsideringRevenueAndExpenseObjectTypes(transactionalDocument);
-        }
-        return valid;
-    }
-
-    /**
      * 
      * @see org.kuali.core.rule.AccountingLineRule#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
      */
+    @Override
     public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
         boolean valid = super.isObjectTypeAllowed(accountingLine);
 
@@ -163,7 +98,7 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends TransactionalDoc
             valid = !rule.failsRule(objectTypeCode);
             if (!valid) {
                 // add message
-                GlobalVariables.getErrorMap().put(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.DistributionOfIncomeAndExpense.ERROR_DOCUMENT_DI_INVALID_OBJECT_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectTypeCode });
+                GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.DistributionOfIncomeAndExpense.ERROR_DOCUMENT_DI_INVALID_OBJECT_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectTypeCode });
             }
         }
 
@@ -171,22 +106,33 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends TransactionalDoc
     }
 
     /**
-     * @Override
+     * The DI allows one sided documents for correcting - so if one side is empty, the other side must have at least two lines in
+     * it. The balancing rules take care of validation of amounts.
+     * 
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.TransactionalDocument)
+     */
+    @Override
+    protected boolean isAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
+        return isOptionalOneSidedDocumentAccountingLinesRequiredNumberForRoutingMet(transactionalDocument);
+    }
+
+    /**
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.SourceAccountingLine)
      */
+    @Override
     protected SufficientFundsItem processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, SourceAccountingLine sourceAccountingLine) {
-        return processAccountingLineSufficientFundsCheckingPreparation(sourceAccountingLine);
+        return processAccountingLineSufficientFundsCheckingPreparation(sourceAccountingLine, transactionalDocument);
     }
 
 
     /**
-     * @Override
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processTargetAccountingLineSufficientFundsCheckingPreparation(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.TargetAccountingLine)
      */
+    @Override
     protected SufficientFundsItem processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, TargetAccountingLine targetAccountingLine) {
-        return processAccountingLineSufficientFundsCheckingPreparation(targetAccountingLine);
+        return processAccountingLineSufficientFundsCheckingPreparation(targetAccountingLine, transactionalDocument);
     }
 
     /**
@@ -195,9 +141,10 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends TransactionalDoc
      * fi_ddi:lp_proc_frm_ln,lp_proc_to_ln conslidated
      * 
      * @param accountingLine
+     * @param transactionalDocument TODO
      * @return <code>SufficientFundsItem</code>
      */
-    private final SufficientFundsItem processAccountingLineSufficientFundsCheckingPreparation(AccountingLine accountingLine) {
+    private final SufficientFundsItem processAccountingLineSufficientFundsCheckingPreparation(AccountingLine accountingLine, TransactionalDocument transactionalDocument) {
         String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
         String accountNumber = accountingLine.getAccountNumber();
         String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
@@ -209,7 +156,7 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends TransactionalDoc
         String offsetDebitCreditCode = null;
         // fi_ddi:lp_proc_from_ln.43-2...69-2
         // fi_ddi:lp_proc_to_ln.43-2...69-2
-        if (isDebit(accountingLine)) {
+        if (isDebit(transactionalDocument, accountingLine)) {
             offsetDebitCreditCode = Constants.GL_CREDIT_CODE;
         }
         else {

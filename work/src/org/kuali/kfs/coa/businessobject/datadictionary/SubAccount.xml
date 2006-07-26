@@ -83,6 +83,7 @@
                 <lookupField attributeName="financialReportChartCode" required="false" />
                 <lookupField attributeName="finReportOrganizationCode" required="false" />
                 <lookupField attributeName="financialReportingCode" required="false" />
+                <lookupField attributeName="subAccountActiveIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -113,7 +114,7 @@
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <text size="2" />
                 </control>
             </attributeReference>
 
@@ -143,9 +144,9 @@
                 </description>
             </attribute>
 
-            <attribute name="subAccountName" forceUppercase="false">
+            <attribute name="subAccountName" forceUppercase="true">
                 <label>Sub-Account Name</label>
-                <shortLabel>Su-Acct Name</shortLabel>
+                <shortLabel>Sub-Acct Name</shortLabel>
 
                 <maxLength>40</maxLength>
                 <validationPattern>
@@ -170,7 +171,7 @@
                 <shortLabel>Fin. Rpt. Chart</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <text size="2" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>

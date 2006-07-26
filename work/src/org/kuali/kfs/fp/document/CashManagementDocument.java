@@ -31,9 +31,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.kuali.Constants.DepositConstants;
 import org.kuali.core.document.FinancialDocumentBase;
+import org.kuali.core.service.impl.DocumentServiceImpl;
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.bo.Deposit;
 
@@ -44,6 +47,7 @@ import org.kuali.module.financial.bo.Deposit;
  */
 public class CashManagementDocument extends FinancialDocumentBase {
     private static final long serialVersionUID = 7475843770851900297L;
+    private static Logger LOG = Logger.getLogger(CashManagementDocument.class);
 
     private String workgroupName;
     private String referenceFinancialDocumentNumber;
@@ -109,6 +113,13 @@ public class CashManagementDocument extends FinancialDocumentBase {
     public void setCashDrawerStatus(String cashDrawerStatus) {
         // ignored, because that value is dynamically retrieved from the service
         // required, because POJO pitches a fit if this method doesn't exist
+    }
+
+    /**
+     * Alias for getCashDrawerStatus which avoids the automagic formatting
+     */
+    public String getRawCashDrawerStatus() {
+        return getCashDrawerStatus();
     }
 
     /* Deposit-list maintenance */
@@ -201,6 +212,7 @@ public class CashManagementDocument extends FinancialDocumentBase {
     /**
      * @see org.kuali.core.document.DocumentBase#buildListOfDeletionAwareLists()
      */
+    @Override
     public List buildListOfDeletionAwareLists() {
         List managedLists = super.buildListOfDeletionAwareLists();
 
@@ -213,22 +225,49 @@ public class CashManagementDocument extends FinancialDocumentBase {
     /**
      * @see org.kuali.core.document.DocumentBase#handleRouteStatusChange()
      */
+    @Override
     public void handleRouteStatusChange() {
-        // all approvals have been processed, finalize everything
-        if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
+        super.handleRouteStatusChange();
+
+        KualiWorkflowDocument kwd = getDocumentHeader().getWorkflowDocument();
+
+        if (LOG.isDebugEnabled()) {
+            logState();
+        }
+
+        if (kwd.stateIsProcessed()) {
+            // all approvals have been processed, finalize everything
             SpringServiceLocator.getCashManagementService().finalizeCashManagementDocument(this);
         }
-        // document has been canceled or disapproved,
-        else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled() || getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
+        else if (kwd.stateIsCanceled() || kwd.stateIsDisapproved()) {
+            // document has been canceled or disapproved
             SpringServiceLocator.getCashManagementService().cancelCashManagementDocument(this);
+        }
+    }
+
+    private void logState() {
+        KualiWorkflowDocument kwd = getDocumentHeader().getWorkflowDocument();
+
+        if (kwd.stateIsInitiated()) {
+            LOG.debug("CMD stateIsInitiated");
+        }
+        if (kwd.stateIsProcessed()) {
+            LOG.debug("CMD stateIsProcessed");
+        }
+        if (kwd.stateIsCanceled()) {
+            LOG.debug("CMD stateIsCanceled");
+        }
+        if (kwd.stateIsDisapproved()) {
+            LOG.debug("CMD stateIsDisapproved");
         }
     }
 
 
     /* utility methods */
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
+    @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         m.put("financialDocumentNumber", getFinancialDocumentNumber());
