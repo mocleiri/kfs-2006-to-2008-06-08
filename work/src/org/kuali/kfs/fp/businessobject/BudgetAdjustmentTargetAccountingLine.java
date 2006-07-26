@@ -70,6 +70,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
         this.financialDocumentMonth10LineAmount = new KualiDecimal(0);
         this.financialDocumentMonth11LineAmount = new KualiDecimal(0);
         this.financialDocumentMonth12LineAmount = new KualiDecimal(0);
+        this.fringeBenefitIndicator = false;
     }
 
     /**
@@ -121,7 +122,9 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     }
 
     public void setBaseBudgetAdjustmentAmount(KualiInteger baseBudgetAdjustmentAmount) {
-        this.baseBudgetAdjustmentAmount = baseBudgetAdjustmentAmount;
+        if (baseBudgetAdjustmentAmount != null) {
+            this.baseBudgetAdjustmentAmount = baseBudgetAdjustmentAmount;
+        }
     }
 
     public String getBudgetAdjustmentPeriodCode() {
@@ -137,7 +140,9 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     }
 
     public void setCurrentBudgetAdjustmentAmount(KualiDecimal currentBudgetAdjustmentAmount) {
-        this.currentBudgetAdjustmentAmount = currentBudgetAdjustmentAmount;
+        if (currentBudgetAdjustmentAmount != null) {
+            this.currentBudgetAdjustmentAmount = currentBudgetAdjustmentAmount;
+        }
     }
 
     /**
@@ -153,11 +158,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth1LineAmount attribute.
      * 
-     * @param - financialDocumentMonth1LineAmount The financialDocumentMonth1LineAmount to set.
+     * @param financialDocumentMonth1LineAmount The financialDocumentMonth1LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth1LineAmount(KualiDecimal financialDocumentMonth1LineAmount) {
-        this.financialDocumentMonth1LineAmount = financialDocumentMonth1LineAmount;
+        if (financialDocumentMonth1LineAmount != null) {
+            this.financialDocumentMonth1LineAmount = financialDocumentMonth1LineAmount;
+        }
     }
 
 
@@ -174,11 +181,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth2LineAmount attribute.
      * 
-     * @param - financialDocumentMonth2LineAmount The financialDocumentMonth2LineAmount to set.
+     * @param financialDocumentMonth2LineAmount The financialDocumentMonth2LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth2LineAmount(KualiDecimal financialDocumentMonth2LineAmount) {
-        this.financialDocumentMonth2LineAmount = financialDocumentMonth2LineAmount;
+        if (financialDocumentMonth2LineAmount != null) {
+            this.financialDocumentMonth2LineAmount = financialDocumentMonth2LineAmount;
+        }
     }
 
 
@@ -195,11 +204,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth3LineAmount attribute.
      * 
-     * @param - financialDocumentMonth3LineAmount The financialDocumentMonth3LineAmount to set.
+     * @param financialDocumentMonth3LineAmount The financialDocumentMonth3LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth3LineAmount(KualiDecimal financialDocumentMonth3LineAmount) {
-        this.financialDocumentMonth3LineAmount = financialDocumentMonth3LineAmount;
+        if (financialDocumentMonth3LineAmount != null) {
+            this.financialDocumentMonth3LineAmount = financialDocumentMonth3LineAmount;
+        }
     }
 
 
@@ -216,11 +227,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth4LineAmount attribute.
      * 
-     * @param - financialDocumentMonth4LineAmount The financialDocumentMonth4LineAmount to set.
+     * @param financialDocumentMonth4LineAmount The financialDocumentMonth4LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth4LineAmount(KualiDecimal financialDocumentMonth4LineAmount) {
-        this.financialDocumentMonth4LineAmount = financialDocumentMonth4LineAmount;
+        if (financialDocumentMonth4LineAmount != null) {
+            this.financialDocumentMonth4LineAmount = financialDocumentMonth4LineAmount;
+        }
     }
 
 
@@ -237,11 +250,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth5LineAmount attribute.
      * 
-     * @param - financialDocumentMonth5LineAmount The financialDocumentMonth5LineAmount to set.
+     * @param financialDocumentMonth5LineAmount The financialDocumentMonth5LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth5LineAmount(KualiDecimal financialDocumentMonth5LineAmount) {
-        this.financialDocumentMonth5LineAmount = financialDocumentMonth5LineAmount;
+        if (financialDocumentMonth5LineAmount != null) {
+            this.financialDocumentMonth5LineAmount = financialDocumentMonth5LineAmount;
+        }
     }
 
 
@@ -258,11 +273,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth6LineAmount attribute.
      * 
-     * @param - financialDocumentMonth6LineAmount The financialDocumentMonth6LineAmount to set.
+     * @param financialDocumentMonth6LineAmount The financialDocumentMonth6LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth6LineAmount(KualiDecimal financialDocumentMonth6LineAmount) {
-        this.financialDocumentMonth6LineAmount = financialDocumentMonth6LineAmount;
+        if (financialDocumentMonth6LineAmount != null) {
+            this.financialDocumentMonth6LineAmount = financialDocumentMonth6LineAmount;
+        }
     }
 
 
@@ -279,11 +296,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth7LineAmount attribute.
      * 
-     * @param - financialDocumentMonth7LineAmount The financialDocumentMonth7LineAmount to set.
+     * @param financialDocumentMonth7LineAmount The financialDocumentMonth7LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth7LineAmount(KualiDecimal financialDocumentMonth7LineAmount) {
-        this.financialDocumentMonth7LineAmount = financialDocumentMonth7LineAmount;
+        if (financialDocumentMonth7LineAmount != null) {
+            this.financialDocumentMonth7LineAmount = financialDocumentMonth7LineAmount;
+        }
     }
 
 
@@ -300,11 +319,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth8LineAmount attribute.
      * 
-     * @param - financialDocumentMonth8LineAmount The financialDocumentMonth8LineAmount to set.
+     * @param financialDocumentMonth8LineAmount The financialDocumentMonth8LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth8LineAmount(KualiDecimal financialDocumentMonth8LineAmount) {
-        this.financialDocumentMonth8LineAmount = financialDocumentMonth8LineAmount;
+        if (financialDocumentMonth8LineAmount != null) {
+            this.financialDocumentMonth8LineAmount = financialDocumentMonth8LineAmount;
+        }
     }
 
 
@@ -321,11 +342,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth9LineAmount attribute.
      * 
-     * @param - financialDocumentMonth9LineAmount The financialDocumentMonth9LineAmount to set.
+     * @param financialDocumentMonth9LineAmount The financialDocumentMonth9LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth9LineAmount(KualiDecimal financialDocumentMonth9LineAmount) {
-        this.financialDocumentMonth9LineAmount = financialDocumentMonth9LineAmount;
+        if (financialDocumentMonth9LineAmount != null) {
+            this.financialDocumentMonth9LineAmount = financialDocumentMonth9LineAmount;
+        }
     }
 
 
@@ -342,11 +365,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth10LineAmount attribute.
      * 
-     * @param - financialDocumentMonth10LineAmount The financialDocumentMonth10LineAmount to set.
+     * @param financialDocumentMonth10LineAmount The financialDocumentMonth10LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth10LineAmount(KualiDecimal financialDocumentMonth10LineAmount) {
-        this.financialDocumentMonth10LineAmount = financialDocumentMonth10LineAmount;
+        if (financialDocumentMonth10LineAmount != null) {
+            this.financialDocumentMonth10LineAmount = financialDocumentMonth10LineAmount;
+        }
     }
 
 
@@ -363,11 +388,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth11LineAmount attribute.
      * 
-     * @param - financialDocumentMonth11LineAmount The financialDocumentMonth11LineAmount to set.
+     * @param financialDocumentMonth11LineAmount The financialDocumentMonth11LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth11LineAmount(KualiDecimal financialDocumentMonth11LineAmount) {
-        this.financialDocumentMonth11LineAmount = financialDocumentMonth11LineAmount;
+        if (financialDocumentMonth11LineAmount != null) {
+            this.financialDocumentMonth11LineAmount = financialDocumentMonth11LineAmount;
+        }
     }
 
 
@@ -384,11 +411,13 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Sets the financialDocumentMonth12LineAmount attribute.
      * 
-     * @param - financialDocumentMonth12LineAmount The financialDocumentMonth12LineAmount to set.
+     * @param financialDocumentMonth12LineAmount The financialDocumentMonth12LineAmount to set.
      * 
      */
     public void setFinancialDocumentMonth12LineAmount(KualiDecimal financialDocumentMonth12LineAmount) {
-        this.financialDocumentMonth12LineAmount = financialDocumentMonth12LineAmount;
+        if (financialDocumentMonth12LineAmount != null) {
+            this.financialDocumentMonth12LineAmount = financialDocumentMonth12LineAmount;
+        }
     }
 
     /**

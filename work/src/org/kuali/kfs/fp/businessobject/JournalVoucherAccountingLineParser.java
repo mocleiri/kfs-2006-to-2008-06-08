@@ -23,335 +23,86 @@
 
 package org.kuali.module.financial.bo;
 
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
-import org.kuali.core.bo.AccountingLine;
-import org.kuali.core.bo.AccountingLineParserBase;
-import org.kuali.core.bo.BusinessObject;
+import static org.kuali.PropertyConstants.ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.AMOUNT;
+import static org.kuali.PropertyConstants.CHART_OF_ACCOUNTS_CODE;
+import static org.kuali.PropertyConstants.CREDIT;
+import static org.kuali.PropertyConstants.DEBIT;
+import static org.kuali.PropertyConstants.FINANCIAL_OBJECT_CODE;
+import static org.kuali.PropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
+import static org.kuali.PropertyConstants.OBJECT_TYPE_CODE;
+import static org.kuali.PropertyConstants.ORGANIZATION_REFERENCE_ID;
+import static org.kuali.PropertyConstants.OVERRIDE_CODE;
+import static org.kuali.PropertyConstants.PROJECT_CODE;
+import static org.kuali.PropertyConstants.REFERENCE_NUMBER;
+import static org.kuali.PropertyConstants.REFERENCE_ORIGIN_CODE;
+import static org.kuali.PropertyConstants.REFERENCE_TYPE_CODE;
+import static org.kuali.PropertyConstants.SUB_ACCOUNT_NUMBER;
 import org.kuali.core.bo.SourceAccountingLine;
-import org.kuali.core.document.TransactionalDocument;
-import org.kuali.core.exceptions.TooFewFieldsException;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.financial.document.JournalVoucherDocument;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
- * Base class for parsing serialized <code>{@link TransactionalDocument}</code>
- * <code>{@link AccountingLine}</code> instances
- * for import into the <code>{@link TransactionalDocument}</code>.<br/>
+ * <code>JournalVoucherDocument</code> accounting line parser
  * 
- * <p>
- * <code>{@link JournalVoucherAccountingLineParser}</code> requires a <code>{@link BalanceTyp}</code> to determine the number of
- * expected fields it will parse from the serialized CSV input. This is a special case requires
- * <code>{@link JournalVoucherAccountingLineParser} use
- * accessor methods to handle passing a <code>{@link BalanceTyp}</code>
- * around during a <code>{@link JournalVoucherAccountingLineParser}</code> 
- * instance.
- *
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class JournalVoucherAccountingLineParser extends AccountingLineParserBase {
-
-    private static final KualiDecimal ZERO = new KualiDecimal("0.00");
-    private static final String EXTERNAL_ENCUMBRANCE = "EX";
-
-    private static final int EXTERNAL_ENCUMBRANCE_EXPECTED_FIELDS = 15;
-    private static final int OFFSET_GENERATION_EXPECTED_FIELDS = 12;
-    private static final int NON_OFFSET_GENERATION_EXPECTED_FIELDS = 11;
-
-    private static final int CHART_IDX = 0;
-    private static final int ACCOUNT_IDX = 1;
-    private static final int SUBACCOUNT_IDX = 2;
-    private static final int OBJECT_CODE_IDX = 3;
-    private static final int SUBOBJECT_CODE_IDX = 4;
-    private static final int PROJECT_CODE_IDX = 5;
-    private static final int OBJECT_TYPE_CODE_IDX = 6;
-    private static final int ORGANIZATION_REFERENCE_ID_IDX = 7;
-    private static final int BUDGET_YEAR_IDX = 8;
-    private static final int OVERRIDE_CODE_IDX = 9;
-    private static final int DEBIT_AMOUNT_IDX = 10;
-    private static final int CREDIT_AMOUNT_IDX = 11;
-    private static final int REF_ORIGIN_CODE_IDX = 12;
-    private static final int REF_NUMBER_IDX = 13;
-    private static final int REF_TYPE_CODE_IDX = 14;
-
-    private JournalVoucherDocument _document;
+public class JournalVoucherAccountingLineParser extends AuxiliaryVoucherAccountingLineParser {
+    private String balanceTypeCode;
+    private static final String[] NON_OFFSET_ENTRY = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, OBJECT_TYPE_CODE, ORGANIZATION_REFERENCE_ID, OVERRIDE_CODE, AMOUNT };
+    private static final String[] OFFSET_ENTRY = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, OBJECT_TYPE_CODE, ORGANIZATION_REFERENCE_ID, OVERRIDE_CODE, DEBIT, CREDIT };
+    private static final String[] ENCUMBRANCE_ENTRY = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, OBJECT_TYPE_CODE, ORGANIZATION_REFERENCE_ID, REFERENCE_ORIGIN_CODE, REFERENCE_TYPE_CODE, REFERENCE_NUMBER, OVERRIDE_CODE, DEBIT, CREDIT };
 
     /**
-     * @see AccountingLineParserBase#parseAccountingLine
+     * Constructs a JournalVoucherAccountingLineParser.java.
+     * 
+     * @param balanceTypeCode
      */
-    public AccountingLine parseAccountingLine(String currentLine, TransactionalDocument document, boolean isSource) throws TooFewFieldsException {
-        AccountingLine retval = new SourceAccountingLine();
-        setJournalVoucherDocument((JournalVoucherDocument) document);
+    public JournalVoucherAccountingLineParser(String balanceTypeCode) {
+        super();
+        this.balanceTypeCode = balanceTypeCode;
+    }
 
-        String[] accountingLineData = currentLine.split("\\\"?\\s*,\\s*\\\"?");
-        int fieldCount = accountingLineData.length;
+    /**
+     * 
+     * @see org.kuali.core.bo.AccountingLineParserBase#performCustomSourceAccountingLinePopulation(java.util.Map,
+     *      org.kuali.core.bo.SourceAccountingLine, java.lang.String)
+     */
+    @Override
+    protected void performCustomSourceAccountingLinePopulation(Map<String, String> attributeValueMap, SourceAccountingLine sourceAccountingLine, String accountingLineAsString) {
 
-        if (fieldCount < getExpectedFieldCount()) {
-            throw new TooFewFieldsException(getExpectedFieldCount(), fieldCount);
+        boolean isFinancialOffsetGeneration = SpringServiceLocator.getBalanceTypService().getBalanceTypByCode(balanceTypeCode).isFinancialOffsetGenerationIndicator();
+        if (isFinancialOffsetGeneration || StringUtils.equals(balanceTypeCode, Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE)) {
+            super.performCustomSourceAccountingLinePopulation(attributeValueMap, sourceAccountingLine, accountingLineAsString);
         }
+        sourceAccountingLine.setBalanceTypeCode(balanceTypeCode);
+    }
 
-        Integer fiscalYear = document.getPostingYear();
-        String coa = parseChartCode(accountingLineData);
-        String account = parseAccountNumber(accountingLineData);
-        String subAccount = parseSubAccountNumber(accountingLineData);
-        String objectCode = parseObjectCode(accountingLineData);
-        String subObjectCode = parseSubObjectCode(accountingLineData);
-        String projectCode = parseProjectCode(accountingLineData);
-        String objectTypeCode = parseObjectTypeCode(accountingLineData);
-        String orgRefId = parseOrganizationReferenceId(accountingLineData);
-        String budgetYear = parseBudgetYear(accountingLineData);
-        String overrideCode = parseOverrideCode(accountingLineData);
-        KualiDecimal amount;
-        if (getExpectedFieldCount() > NON_OFFSET_GENERATION_EXPECTED_FIELDS) {
-            StringBuffer debitOrCredit = new StringBuffer();
-            amount = parseDebitCreditAmount(accountingLineData, debitOrCredit);
-            retval.setDebitCreditCode(debitOrCredit.toString());
+    /**
+     * @see org.kuali.core.bo.AccountingLineParserBase#getSourceAccountingLineFormat()
+     */
+    @Override
+    public String[] getSourceAccountingLineFormat() {
+        return selectFormat();
+    }
+
+    /**
+     * chooses line format based on balance type code
+     * 
+     * @return String []
+     */
+    private String[] selectFormat() {
+        if (StringUtils.equals(balanceTypeCode, Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE)) {
+            return ENCUMBRANCE_ENTRY;
+        }
+        else if (SpringServiceLocator.getBalanceTypService().getBalanceTypByCode(balanceTypeCode).isFinancialOffsetGenerationIndicator()) {
+            return OFFSET_ENTRY;
         }
         else {
-            amount = parseDebitAmount(accountingLineData);
+            return NON_OFFSET_ENTRY;
         }
-        String refOriginCode = null;
-        String refNumber = null;
-        String refTypeCode = null;
-
-        if (EXTERNAL_ENCUMBRANCE_EXPECTED_FIELDS == getExpectedFieldCount()) {
-            refOriginCode = parseRefOriginCode(accountingLineData);
-            refNumber = parseRefNumber(accountingLineData);
-            refTypeCode = parseRefTypeCode(accountingLineData);
-        }
-
-        retval.setBalanceTypeCode(getBalanceType().getCode());
-        retval.setFinancialDocumentNumber(document.getFinancialDocumentNumber());
-        retval.setPostingYear(fiscalYear);
-        retval.setChartOfAccountsCode(coa);
-        retval.setAccountNumber(account);
-        retval.setSubAccountNumber(subAccount);
-        retval.setFinancialObjectCode(objectCode);
-        retval.setFinancialSubObjectCode(subObjectCode);
-        retval.setObjectTypeCode(objectTypeCode);
-        retval.setOrganizationReferenceId(orgRefId);
-        retval.setProjectCode(projectCode);
-        retval.setBudgetYear(budgetYear);
-        retval.setOverrideCode(overrideCode);
-        retval.setAmount(amount);
-        retval.setReferenceOriginCode(refOriginCode);
-        retval.setReferenceTypeCode(refTypeCode);
-        retval.setReferenceNumber(refNumber);
-
-        ((BusinessObject) retval).refresh();
-
-        return retval;
-    }
-
-    /**
-     * Extracts the Chart Code from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the chart code.
-     */
-    private String parseChartCode(String[] lineData) {
-        return parseField(lineData, CHART_IDX);
-    }
-
-    /**
-     * Extracts the Account Number from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the account number.
-     */
-    private String parseAccountNumber(String[] lineData) {
-        return parseField(lineData, ACCOUNT_IDX);
-    }
-
-    /**
-     * Extracts the SubAccount Number from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the subaccount number.
-     */
-    private String parseSubAccountNumber(String[] lineData) {
-        return parseField(lineData, SUBACCOUNT_IDX);
-    }
-
-    /**
-     * Extracts the Object Code from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the object code.
-     */
-    private String parseObjectCode(String[] lineData) {
-        return parseField(lineData, OBJECT_CODE_IDX);
-    }
-
-    /**
-     * Extracts the SubObject Code from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the subobject code.
-     */
-    private String parseSubObjectCode(String[] lineData) {
-        return parseField(lineData, SUBOBJECT_CODE_IDX);
-    }
-
-    /**
-     * Extracts the Project Code from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the project code.
-     */
-    private String parseProjectCode(String[] lineData) {
-        return parseField(lineData, PROJECT_CODE_IDX);
-    }
-
-    /**
-     * Extracts the ObjectType Code from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the objecttype code.
-     */
-    private String parseObjectTypeCode(String[] lineData) {
-        return parseField(lineData, OBJECT_TYPE_CODE_IDX);
-    }
-
-    /**
-     * Extracts the Organization Reference Id from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the organization reference id.
-     */
-    private String parseOrganizationReferenceId(String[] lineData) {
-        return parseField(lineData, ORGANIZATION_REFERENCE_ID_IDX);
-    }
-
-    /**
-     * Extracts the Debit Amount from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link KualiDecimal}</code> instance of the debit amount
-     */
-    private KualiDecimal parseDebitAmount(String[] lineData) {
-        return new KualiDecimal(parseField(lineData, DEBIT_AMOUNT_IDX));
-    }
-
-    /**
-     * Extracts the Credit Amount from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link KualiDecimal}</code> instance of the credit amount
-     */
-    private KualiDecimal parseCreditAmount(String[] lineData) {
-        return new KualiDecimal(parseField(lineData, CREDIT_AMOUNT_IDX));
-    }
-
-    /**
-     * Extracts the Amount from the parsed CSV data. The amount could be a debit, credit or neither. This method uses
-     * <code>parseDebitAmount()</code> and <code>parseCreditAmount</code>.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link KualiDecimal}</code> instance of the amount.
-     */
-    private KualiDecimal parseDebitCreditAmount(String[] lineData, StringBuffer debitOrCredit) {
-        KualiDecimal amount = null;
-        if (parseDebitAmount(lineData).compareTo(ZERO) != 0) {
-            amount = parseDebitAmount(lineData);
-            debitOrCredit.append(Constants.GL_DEBIT_CODE);
-        }
-        else {
-            amount = parseCreditAmount(lineData);
-            debitOrCredit.append(Constants.GL_CREDIT_CODE);
-        }
-        return amount;
-    }
-
-    private String parseOverrideCode(String[] lineData) {
-        return parseField(lineData, OVERRIDE_CODE_IDX);
-    }
-
-    private String parseBudgetYear(String[] lineData) {
-        return parseField(lineData, BUDGET_YEAR_IDX);
-    }
-
-    /**
-     * Extracts the Chart Code from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the chart code.
-     */
-    private String parseRefOriginCode(String[] lineData) {
-        return parseField(lineData, REF_ORIGIN_CODE_IDX);
-    }
-
-    /**
-     * Extracts the Chart Code from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the chart code.
-     */
-    private String parseRefNumber(String[] lineData) {
-        return parseField(lineData, REF_NUMBER_IDX);
-    }
-
-    /**
-     * Extracts the Chart Code from the parsed CSV data.
-     * 
-     * @param lineData <code>{@link String}[]</code> of parsed CSV data.
-     * @return <code>{@link String}</code> instance of the chart code.
-     */
-    private String parseRefTypeCode(String[] lineData) {
-        return parseField(lineData, REF_TYPE_CODE_IDX);
-    }
-
-    /**
-     * Retrieves serialized data from a <code>{@link String}[]</code> by index.
-     * 
-     * @param lineData <code>{@link String}[]</code> to grab data from.
-     * @param fieldIndex <code>int</code> value of index.
-     * @return <code>{@link String}</code> instance of some serialized data.
-     */
-    private String parseField(String[] lineData, int fieldIndex) throws ArrayIndexOutOfBoundsException {
-        return lineData[fieldIndex];
-    }
-
-    /**
-     * Accessor method to get the <code>{@link BalanceTyp} belonging to the
-     * contained <code>{@link JournalVoucherDocument}</code> instance.
-     *
-     * @return <code>{@link BalanceTyp}</code> instance.
-     */
-    private BalanceTyp getBalanceType() {
-        return getJournalVoucherDocument().getBalanceType();
-    }
-
-    /**
-     * Accessor method to set the contained <code>{@link JournalVoucherDocument}</code> instance.
-     * 
-     * @param document <code>{@link JournalVoucherDocument}</code> instance.
-     */
-    private void setJournalVoucherDocument(JournalVoucherDocument document) {
-        _document = document;
-    }
-
-    /**
-     * Accessor method to get the contained <code>{@link JournalVoucherDocument}</code> instance.
-     * 
-     * @return <code>{@link JournalVoucherDocument}</code> instance.
-     */
-    private JournalVoucherDocument getJournalVoucherDocument() {
-        return _document;
-    }
-
-    /**
-     * Determines the number of fields to be parsed.
-     * 
-     * @return int number of fields expected.
-     */
-    public int getExpectedFieldCount() {
-        if (getBalanceType().getCode().equals(EXTERNAL_ENCUMBRANCE)) {
-            return EXTERNAL_ENCUMBRANCE_EXPECTED_FIELDS;
-        }
-        else if (getBalanceType().isFinancialOffsetGenerationIndicator()) {
-            return OFFSET_GENERATION_EXPECTED_FIELDS;
-        }
-        return NON_OFFSET_GENERATION_EXPECTED_FIELDS;
     }
 }

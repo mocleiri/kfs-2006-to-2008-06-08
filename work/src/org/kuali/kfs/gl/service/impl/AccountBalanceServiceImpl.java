@@ -52,16 +52,27 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     }
 
     /**
-     * @see org.kuali.module.gl.service.AccountBalanceService#findAvailableAccountBalance(java.util.Map, boolean)
+     * @see org.kuali.module.gl.service.AccountBalanceService#findConsolidatedAvailableAccountBalance(java.util.Map)
      */
-    public Iterator findAvailableAccountBalance(Map fieldValues, boolean isConsolidated) {
-        return accountBalanceDao.findAvailableAccountBalance(fieldValues, isConsolidated);
+    public Iterator findConsolidatedAvailableAccountBalance(Map fieldValues) {
+        LOG.debug("findConsolidatedAvailableAccountBalance() started");
+
+        return accountBalanceDao.findConsolidatedAvailableAccountBalance(fieldValues);
+    }
+    
+    /**
+     * @see org.kuali.module.gl.service.AccountBalanceService#findAvailableAccountBalance(java.util.Map)
+     */
+    public Iterator findAvailableAccountBalance(Map fieldValues) {
+        LOG.debug("findAvailableAccountBalance() started");
+
+        return accountBalanceDao.findAvailableAccountBalance(fieldValues);
     }
 
     /**
      * @see org.kuali.module.gl.service.AccountBalanceService#findAccountBalanceByConsolidation(java.util.Map, boolean, boolean)
      */
-    public List findAccountBalanceByConsolidation(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, boolean isCostShareExcluded, boolean isConsolidated, boolean isIncludePendingEntry) {
+    public List findAccountBalanceByConsolidation(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, boolean isCostShareExcluded, boolean isConsolidated, int pendingEntryCode) {
         LOG.debug("findAccountBalanceByConsolidation() started");
 
         // Put the 4 total lines at the beginning of the list
@@ -82,7 +93,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
         }
 
         // Get the data
-        List balances = accountBalanceDao.findAccountBalanceByConsolidation(universityFiscalYear, chartOfAccountsCode, accountNumber, isCostShareExcluded, isConsolidated);
+        List balances = accountBalanceDao.findAccountBalanceByConsolidation(universityFiscalYear, chartOfAccountsCode, accountNumber, isCostShareExcluded, isConsolidated, pendingEntryCode);
 
         // Convert it to Account Balances
         for (Iterator iter = balances.iterator(); iter.hasNext();) {
@@ -122,7 +133,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
         }
     }
 
-    public List findAccountBalanceByLevel(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, String financialConsolidationObjectCode, boolean isCostShareExcluded, boolean isConsolidated, boolean isIncludePendingEntry) {
+    public List findAccountBalanceByLevel(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, String financialConsolidationObjectCode, boolean isCostShareExcluded, boolean isConsolidated, int pendingEntryCode) {
         LOG.debug("findAccountBalanceByLevel() started");
 
         List results = new ArrayList();
@@ -134,7 +145,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
         }
 
         // Get the data
-        List balances = accountBalanceDao.findAccountBalanceByLevel(universityFiscalYear, chartOfAccountsCode, accountNumber, financialConsolidationObjectCode, isCostShareExcluded, isConsolidated);
+        List balances = accountBalanceDao.findAccountBalanceByLevel(universityFiscalYear, chartOfAccountsCode, accountNumber, financialConsolidationObjectCode, isCostShareExcluded, isConsolidated, pendingEntryCode);
 
         // Convert it to Account Balances
         for (Iterator iter = balances.iterator(); iter.hasNext();) {
@@ -154,7 +165,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
         return results;
     }
 
-    public List findAccountBalanceByObject(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, String financialObjectLevelCode, String financialReportingSortCode, boolean isCostShareExcluded, boolean isConsolidated, boolean isIncludePendingEntry) {
+    public List findAccountBalanceByObject(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, String financialObjectLevelCode, String financialReportingSortCode, boolean isCostShareExcluded, boolean isConsolidated, int pendingEntryCode) {
         LOG.debug("findAccountBalanceByObject() started");
 
         List results = new ArrayList();
@@ -166,7 +177,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
         }
 
         // Get the data
-        List balances = accountBalanceDao.findAccountBalanceByObject(universityFiscalYear, chartOfAccountsCode, accountNumber, financialObjectLevelCode, financialReportingSortCode, isCostShareExcluded, isConsolidated);
+        List balances = accountBalanceDao.findAccountBalanceByObject(universityFiscalYear, chartOfAccountsCode, accountNumber, financialObjectLevelCode, financialReportingSortCode, isCostShareExcluded, isConsolidated, pendingEntryCode);
 
         // Convert it to Account Balances
         for (Iterator iter = balances.iterator(); iter.hasNext();) {

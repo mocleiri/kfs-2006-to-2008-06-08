@@ -85,9 +85,12 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
 
         success &= checkOrgClosureRules(document);
 
-        // check that end date is greater than begin date
+        // check that end date is greater than begin date and Reports To Chart/Org should not be same as this Chart/Org
         success &= checkSimpleRules();
-
+        
+        // check that defaultAccount is present unless 
+        //    ( (orgType = U or C) and ( document is a "create new" ))
+        success &= checkDefaultAccountNumber(document);
         return success;
     }
 
@@ -109,8 +112,12 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         // check that all sub-objects whose keys are specified have matching objects in the db
         success &= checkExistenceAndActive();
 
-        // check that end date is greater than begin date
+        // check that end date is greater than begin date and Reports To Chart/Org should not be same as this Chart/Org
         success &= checkSimpleRules();
+        
+        // check that defaultAccount is present unless 
+        //    ( (orgType = U or C) and ( document is a "create new" ))
+        success &= checkDefaultAccountNumber(document);
 
         success &= checkOrgClosureRules(document);
 
@@ -135,8 +142,12 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
 
         checkOrgClosureRules(document);
 
-        // check that end date is greater than begin date
+        // check that end date is greater than begin date and Reports To Chart/Org should not be same as this Chart/Org
         checkSimpleRules();
+        
+        // check that defaultAccount is present unless 
+        //    ( (orgType = U or C) and ( document is a "create new" ))
+        checkDefaultAccountNumber(document);
 
         return true;
     }
@@ -326,6 +337,12 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     protected boolean checkSimpleRules() {
 
         boolean success = true;
+        String lastReportsToChartOfAccountsCode;
+        String lastReportsToOrganizationCode;
+        boolean continueSearch;
+        Org tempOrg;
+        Integer loopCount;
+        Integer maxLoopCount = 40;
 
         // begin date must be greater than or equal to end date
         if ((ObjectUtils.isNotNull(newOrg.getOrganizationBeginDate()) && (ObjectUtils.isNotNull(newOrg.getOrganizationEndDate())))) {
@@ -338,9 +355,85 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                 success &= false;
             }
         }
+
+        // Reports To Chart/Org should not be same as this Chart/Org
+        // However, allow special case where organizationCode = "UNIV"
+        if ((ObjectUtils.isNotNull(newOrg.getReportsToChartOfAccountsCode())) && (ObjectUtils.isNotNull(newOrg.getReportsToOrganizationCode())) && (ObjectUtils.isNotNull(newOrg.getChartOfAccountsCode())) && (ObjectUtils.isNotNull(newOrg.getOrganizationCode())) && (!(newOrg.getOrganizationCode().equals("UNIV")))) {
+
+            if ((newOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode())) && (newOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode())))
+
+            {
+                putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_SAME_ORG);
+                success &= false;
+            }
+            else
+
+            // Dont't allow a circular reference on Reports to Chart/Org
+            // However, do allow special case where organizationCode = "UNIV"
+            {
+                lastReportsToChartOfAccountsCode = newOrg.getReportsToChartOfAccountsCode();
+                lastReportsToOrganizationCode = newOrg.getReportsToOrganizationCode();
+                continueSearch = true;
+                loopCount = 0;
+                do {
+                    tempOrg = orgService.getByPrimaryId(lastReportsToChartOfAccountsCode, lastReportsToOrganizationCode);
+                    loopCount = loopCount + 1;
+                    if (ObjectUtils.isNull(tempOrg)) {
+                        continueSearch = false;
+                    }
+                    else {
+//                      LOG.info("Found Org = " + lastReportsToChartOfAccountsCode + "/" + lastReportsToOrganizationCode);
+                        lastReportsToChartOfAccountsCode = tempOrg.getReportsToChartOfAccountsCode();
+                        lastReportsToOrganizationCode = tempOrg.getReportsToOrganizationCode();
+ 
+                        if ((tempOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode())) && (tempOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode())) && (!tempOrg.getReportsToOrganizationCode().equals("UNIV"))) {
+                            putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_CIRCULAR_REF_TO_SAME_ORG);
+                            success &= false;
+                            continueSearch = false;
+                        }
+                    }
+                    if (loopCount > maxLoopCount) {
+                        continueSearch = false;
+                    }
+                    if (lastReportsToOrganizationCode.equals("UNIV")) {
+                        continueSearch = false;
+                    }
+
+                } while (continueSearch == true);
+            } // end else
+        }
+
+
         return success;
     }
 
+    // check that defaultAccount is present unless 
+    //    ( (orgType = U or C) and ( document is a "create new" ))
+
+    protected boolean checkDefaultAccountNumber(MaintenanceDocument document) {
+
+        boolean success = true;
+        boolean missingDefaultAccountNumber;
+        boolean exemptOrganizationTypeCode = false;
+        String organizationTypeCode;
+
+        // begin date must be greater than or equal to end date
+     
+        missingDefaultAccountNumber = StringUtils.isBlank(newOrg.getOrganizationDefaultAccountNumber());
+
+        if (ObjectUtils.isNotNull(newOrg.getOrganizationTypeCode())) {
+            organizationTypeCode = newOrg.getOrganizationTypeCode();
+            if (applyApcRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.DEFAULT_ACCOUNT_NOT_REQUIRED_ORG_TYPES, newOrg.getOrganizationTypeCode())) {
+                exemptOrganizationTypeCode = true;
+            }
+        }
+        if (missingDefaultAccountNumber && (!exemptOrganizationTypeCode | !document.isNew())) {
+            putFieldError("organizationDefaultAccountNumber", KeyConstants.ERROR_DOCUMENT_ORGMAINT_DEFAULT_ACCOUNT_NUMBER_REQUIRED);
+            success &= false;
+        }
+        return success;
+    }   
+    
     /**
      * 
      * This method compares an old and new value, and determines if they've changed.

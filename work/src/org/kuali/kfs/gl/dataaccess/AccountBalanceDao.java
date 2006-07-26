@@ -42,10 +42,17 @@ public interface AccountBalanceDao {
      * This method finds the available account balances according to input fields and values
      * 
      * @param fieldValues the input fields and values
-     * @param isConsolidated determine whether the search results are consolidated
-     * @return the summary records of balance entries
+     * @return the summary records of account balance entries
      */
-    public Iterator findAvailableAccountBalance(Map fieldValues, boolean isConsolidated);
+    public Iterator findConsolidatedAvailableAccountBalance(Map fieldValues);
+    
+    /**
+     * This method finds the available account balances according to input fields and values
+     * 
+     * @param fieldValues the input fields and values
+     * @return account balance entries
+     */
+    public Iterator findAvailableAccountBalance(Map fieldValues);
 
     /**
      * Get available balances by consolidation
@@ -57,7 +64,7 @@ public interface AccountBalanceDao {
      * @param isConsolidated
      * @return a List of Maps
      */
-    public List findAccountBalanceByConsolidation(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, boolean isExcludeCostShare, boolean isConsolidated);
+    public List findAccountBalanceByConsolidation(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, boolean isExcludeCostShare, boolean isConsolidated,int pendingEntryCode);
 
 
     /**
@@ -71,7 +78,7 @@ public interface AccountBalanceDao {
      * @param isConsolidated
      * @return a List of Maps
      */
-    public List findAccountBalanceByLevel(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialConsolidationObjectCode, boolean isCostShareExcluded, boolean isConsolidated);
+    public List findAccountBalanceByLevel(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialConsolidationObjectCode, boolean isCostShareExcluded, boolean isConsolidated,int pendingEntryCode);
 
     /**
      * Get available balances by object
@@ -85,7 +92,7 @@ public interface AccountBalanceDao {
      * @param isConsolidated
      * @return a List of Maps
      */
-    public List findAccountBalanceByObject(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialObjectLevelCode, String financialReportingSortCode, boolean isCostShareExcluded, boolean isConsolidated);
+    public List findAccountBalanceByObject(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialObjectLevelCode, String financialReportingSortCode, boolean isCostShareExcluded, boolean isConsolidated,int pendingEntryCode);
 
     /**
      * Purge an entire fiscal year for a single chart.
