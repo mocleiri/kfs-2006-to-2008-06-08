@@ -17,7 +17,6 @@
 	showTabButtons="true">
 	<cr:printCoverSheet />
 	<kul:hiddenDocumentFields />
-	<html:hidden property="document.nextSourceLineNumber" />
 	<html:hidden property="document.nextCheckSequenceId" />
 	<html:hidden property="document.checkEntryMode" />
 	<html:hidden property="checkTotal" />
@@ -112,7 +111,9 @@
 				</tr>
 				<tr>
 					<th>
-					<div align="right"><strong>Cash Reconciliation Total:</strong></div>
+					<div align="right"><strong><kul:htmlAttributeLabel
+						attributeEntry="${cashReceiptAttributes.sumTotalAmount}"
+						useShortLabel="false" skipHelpUrl="true" /></strong></div>
 					</th>
 					<td width="35%" align="left" valign="middle">$${KualiForm.document.currencyFormattedSumTotalAmount}&nbsp;&nbsp;&nbsp;
 					<c:if test="${!readOnly}">
@@ -134,7 +135,7 @@
 		extraSourceRowFields="financialDocumentLineDescription" />
 	<kul:generalLedgerPendingEntries />
 	<kul:notes />
-	<kul:adHocRecipients />
+	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
 	<kul:routeLog />
 	<kul:panelFooter />
 	<kul:documentControls
