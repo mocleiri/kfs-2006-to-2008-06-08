@@ -30,12 +30,39 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupService.java,v 1.7 2006-06-14 12:26:40 abyrne Exp $
+ * @version $Id: OriginEntryGroupService.java,v 1.7.2.1 2006-07-26 21:51:40 abyrne Exp $
  */
 
 public interface OriginEntryGroupService {
+    /**
+     * Create the backup group which has all the entries from
+     * all the groups where all the flags are set Y.
+     * 
+     */
+    public void createBackupGroup();
+
+    /**
+     * Delete all the groups (and entries) where the
+     * group is this many days old or older
+     * 
+     * @param days
+     */
+    public void deleteOlderGroups(int days);
+
+    /**
+     * Get a group by its id
+     * 
+     * @param groupId
+     * @return
+     */
     public OriginEntryGroup getOriginEntryGroup(String groupId);
 
+    /**
+     * Get groups that match
+     * 
+     * @param criteria
+     * @return
+     */
     public Collection getMatchingGroups(Map criteria);
 
     public Collection getOriginEntryGroupsPendingProcessing();
@@ -44,9 +71,40 @@ public interface OriginEntryGroupService {
 
     public Collection getIcrGroupsToPost();
 
-    public Collection getGroupsToScrub(Date scrubDate);
+    /**
+     * Get all the unscrubbed backup groups
+     * 
+     * @param backupDate
+     * @return
+     */
+    public Collection getBackupGroups(Date backupDate);
 
+    /**
+     * Get all the groups that need to be put into the backup group
+     * 
+     * @param backupDate
+     * @return
+     */
+    public Collection getGroupsToBackup(Date backupDate);
+
+    /**
+     * Create a new group
+     * 
+     * @param date
+     * @param sourceCode
+     * @param valid
+     * @param process
+     * @param scrub
+     * @return
+     */
     public OriginEntryGroup createGroup(Date date, String sourceCode, boolean valid, boolean process, boolean scrub);
 
+    /**
+     * save a group
+     * 
+     * @param group
+     */
     public void save(OriginEntryGroup group);
+    
+    public OriginEntryGroup getExactMatchingEntryGroup(Integer id);
 }

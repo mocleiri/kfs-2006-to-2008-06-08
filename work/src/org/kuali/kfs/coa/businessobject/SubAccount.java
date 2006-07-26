@@ -104,7 +104,7 @@ public class SubAccount extends BusinessObjectBase {
     /**
      * Sets the financialReporting attribute value.
      * 
-     * @param financialReporting The financialReporting to set.
+     * @param reportingCode The financialReporting to set.
      * @deprecated
      */
     public void setReportingCode(ReportingCodes reportingCode) {
@@ -124,7 +124,7 @@ public class SubAccount extends BusinessObjectBase {
     /**
      * Sets the subAccountName attribute.
      * 
-     * @param - subAccountName The subAccountName to set.
+     * @param subAccountName The subAccountName to set.
      * 
      */
     public void setSubAccountName(String subAccountName) {
@@ -144,7 +144,7 @@ public class SubAccount extends BusinessObjectBase {
     /**
      * Sets the subAccountActiveIndicator attribute.
      * 
-     * @param - subAccountActiveIndicator The subAccountActiveIndicator to set.
+     * @param subAccountActiveIndicator The subAccountActiveIndicator to set.
      * 
      */
     public void setSubAccountActiveIndicator(boolean subAccountActiveIndicator) {
@@ -164,7 +164,7 @@ public class SubAccount extends BusinessObjectBase {
     /**
      * Sets the account attribute.
      * 
-     * @param - account The account to set.
+     * @param account The account to set.
      * 
      */
     public void setAccount(Account account) {
@@ -184,7 +184,7 @@ public class SubAccount extends BusinessObjectBase {
     /**
      * Sets the subAccount attribute.
      * 
-     * @param - subAccount The subAccount to set.
+     * @param subAccount The subAccount to set.
      */
     public void setSubAccountNumber(String subAccountNumber) {
         this.subAccountNumber = subAccountNumber;

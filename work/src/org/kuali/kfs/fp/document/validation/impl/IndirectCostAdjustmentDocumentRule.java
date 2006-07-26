@@ -54,53 +54,36 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
     public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
         boolean isValid = accountingLine.getAmount().isNonZero();
         if (!isValid) {
-            GlobalVariables.getErrorMap().put(Constants.AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
+            GlobalVariables.getErrorMap().putError(Constants.AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
             LOG.info("failing isAmountValid - zero check");
         }
         return isValid;
     }
 
     /**
-     * Overrrides default implementation to do the following: a line is considered debit if
+     * same logic as
+     * <code>IsDebitUtils#isDebitConsideringType(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)</code>
+     * but has the following accounting line restrictions: for grant lines(source):
      * <ol>
-     * <li> is a source line && isExpenseOrAsset && is positive amount
-     * <li> is a source line && IncomeOrLiability && is positive amount
-     * <li> is a target line && isExpenseOrAsset && is positive amount
-     * <li> is a target line && IncomeOrLiability && is a negative amount
+     * <li>only allow expense object type codes
+     * </ol>
+     * for receipt lines(target):
+     * <ol>
+     * <li>only allow income object type codes
      * </ol>
      * 
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDebit(org.kuali.core.bo.AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringType(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
+     * 
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine)
      */
-    @Override
-    public boolean isDebit(AccountingLine accountingLine) throws IllegalStateException {
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) throws IllegalStateException {
 
-        boolean isDebit = false;
-        boolean isPositive = accountingLine.getAmount().isPositive();
-        // source
-        if (isSourceAccountingLine(accountingLine)) {
-            if (isExpenseOrAsset(accountingLine)) {
-                isDebit = isPositive;
-            }
-            else if (isIncomeOrLiability(accountingLine)) {
-                isDebit = isPositive;
-            }
-            else {
-                throw new IllegalStateException(objectTypeCodeIllegalStateExceptionMessage);
-            }
+        if (!(accountingLine.isSourceAccountingLine() && isExpense(accountingLine)) && !(accountingLine.isTargetAccountingLine() && isIncome(accountingLine))) {
+            throw new IllegalStateException(IsDebitUtils.isDebitCalculationIllegalStateExceptionMessage);
         }
-        // target line
-        else {
-            if (isExpenseOrAsset(accountingLine)) {
-                isDebit = isPositive;
-            }
-            else if (isIncomeOrLiability(accountingLine)) {
-                isDebit = !isPositive;
-            }
-            else {
-                throw new IllegalStateException(objectTypeCodeIllegalStateExceptionMessage);
-            }
-        }
-        return isDebit;
+
+        return IsDebitUtils.isDebitConsideringType(this, transactionalDocument, accountingLine);
     }
 
     /**
@@ -144,7 +127,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
             valid = !rule.failsRule(objectTypeCode);
             if (!valid) {
                 // add message
-                GlobalVariables.getErrorMap().put(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_INVALID_OBJECT_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectTypeCode });
+                GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_INVALID_OBJECT_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectTypeCode });
             }
         }
 
@@ -152,41 +135,82 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
     }
 
     /**
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomAddAccountingLineBusinessRules(TransactionalDocument,
-     *      AccountingLine)
+     * KULEDOCS-1406: show account not allowed message before expired account
+     * 
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processAddAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean processCustomAddAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine) {
-        return processCommonCustomAccountingLineBusinessRules(accountingLine);
+    public boolean processAddAccountingLineBusinessRules(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
+        boolean valid = processCommonCustomAccountingLineBusinessRules(accountingLine);
+        if (valid) {
+            valid = super.processAddAccountingLineBusinessRules(transactionalDocument, accountingLine);
+        }
+        return valid;
     }
 
     /**
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(TransactionalDocument,
-     *      AccountingLine)
+     * KULEDOCS-1406: show account not allowed message before expired account
+     * 
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processReviewAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean processCustomReviewAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine) {
-        return processCommonCustomAccountingLineBusinessRules(accountingLine);
+    public boolean processReviewAccountingLineBusinessRules(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
+        boolean valid = processCommonCustomAccountingLineBusinessRules(accountingLine);
+        if (valid) {
+            valid = super.processReviewAccountingLineBusinessRules(transactionalDocument, accountingLine);
+        }
+        return valid;
     }
 
     /**
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(TransactionalDocument,
-     *      AccountingLine, AccountingLine)
+     * KULEDOCS-1406: show account not allowed message before expired account
+     * 
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processUpdateAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine, org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean processCustomUpdateAccountingLineBusinessRules(TransactionalDocument document, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
-        return processCommonCustomAccountingLineBusinessRules(updatedAccountingLine);
+    public boolean processUpdateAccountingLineBusinessRules(TransactionalDocument transactionalDocument, AccountingLine accountingLine, AccountingLine updatedAccountingLine) {
+        boolean valid = processCommonCustomAccountingLineBusinessRules(accountingLine);
+        if (valid) {
+            valid = super.processUpdateAccountingLineBusinessRules(transactionalDocument, accountingLine, updatedAccountingLine);
+        }
+        return valid;
     }
 
     /**
      * provides centralized entry point to perform custom common accounting line validation
      * 
      * @param accountingLine
-     * @return
+     * @return boolean
      */
 
     protected boolean processCommonCustomAccountingLineBusinessRules(AccountingLine accountingLine) {
+    //refresh line since this document calls the custom rules first. KULEDOCS-1406
+        accountingLine.refresh();
         boolean isValid = isChartOfAccountsAllowed(accountingLine);
+        if (isValid) {
+            isValid = isAccountAllowed(accountingLine);
+        }
+        return isValid;
+    }
+
+    /**
+     * checks to see if source (grant) account references an ICR account
+     * 
+     * @param accountingLine
+     * @return true if the grant account references an ICR account
+     */
+    private boolean isAccountAllowed(AccountingLine accountingLine) {
+        boolean isValid = true;
+        if (isValid && isSourceAccountingLine(accountingLine)) {
+            String icrAccount = accountingLine.getAccount().getIndirectCostRecoveryAcctNbr();
+            isValid &= StringUtils.isNotBlank(icrAccount);
+            if (!isValid) {
+                reportError(PropertyConstants.ACCOUNT, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_GRANT_INVALID_ACCOUNT, new String[] { accountingLine.getAccountNumber() });
+            }
+        }
         return isValid;
     }
 
@@ -198,7 +222,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
      * </ol>
      * 
      * @param accountingLine
-     * @return
+     * @return true if the chart of account code is allowed on the ICA
      */
     private boolean isChartOfAccountsAllowed(AccountingLine accountingLine) {
         boolean isValid = true;
@@ -227,7 +251,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
      */
     @Override
     protected SufficientFundsItem processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, SourceAccountingLine sourceAccountingLine) {
-        return processAccountingLineSufficientFundsCheckingPreparation(sourceAccountingLine);
+        return processAccountingLineSufficientFundsCheckingPreparation(transactionalDocument, sourceAccountingLine);
     }
 
 
@@ -237,7 +261,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
      */
     @Override
     protected SufficientFundsItem processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, TargetAccountingLine targetAccountingLine) {
-        return processAccountingLineSufficientFundsCheckingPreparation(targetAccountingLine);
+        return processAccountingLineSufficientFundsCheckingPreparation(transactionalDocument, targetAccountingLine);
     }
 
     /**
@@ -245,10 +269,12 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
      * 
      * fi_dica:lp_proc_grant_ln,lp_proc_rcpt_ln conslidated
      * 
+     * @param transactionalDocument TODO
      * @param accountingLine
+     * 
      * @return <code>SufficientFundsItem</code>
      */
-    private final SufficientFundsItem processAccountingLineSufficientFundsCheckingPreparation(AccountingLine accountingLine) {
+    private final SufficientFundsItem processAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
         String accountNumber = accountingLine.getAccountNumber();
         String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
@@ -260,7 +286,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
         String offsetDebitCreditCode = null;
         // fi_dica:lp_proc_grant_ln.36-2...62-2
         // fi_dica:lp_proc_rcpt_ln.36-2...69-2
-        if (isDebit(accountingLine)) {
+        if (isDebit(transactionalDocument, accountingLine)) {
             offsetDebitCreditCode = Constants.GL_CREDIT_CODE;
         }
         else {

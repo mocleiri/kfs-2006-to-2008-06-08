@@ -50,18 +50,20 @@
             </resultFields>
         </lookup>
 
+        <titleAttribute>finConsolidationObjectCode</titleAttribute>
+
         <attributes>
 
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
 
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <text size="2" />
                 </control>
             </attributeReference>
 
             <attribute name="finConsolidationObjectCode" forceUppercase="true">
-                <label>Consolidation Object Code</label>
+                <label>Consolidation Code</label>
                 <shortLabel>Cons Code</shortLabel>
 
                 <maxLength>4</maxLength>
@@ -70,8 +72,8 @@
                     <text size="4" />
                 </control>
 
-                <summary>Consolidation Object Code</summary>
-                <description>Consolidation Object Code...</description>
+                <summary>Consolidation Code</summary>
+                <description>Consolidation Code...</description>
             </attribute>
 
             <attribute name="finConsolidationObjectName" forceUppercase="true">

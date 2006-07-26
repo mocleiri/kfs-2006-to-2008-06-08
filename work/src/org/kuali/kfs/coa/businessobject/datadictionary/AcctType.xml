@@ -37,15 +37,16 @@
             </resultFields>
         </lookup>
 
+        <titleAttribute>accountTypeCode</titleAttribute>
 
         <attributes>
             <attribute name="accountTypeCode" forceUppercase="true">
                 <label>Account Type Code</label>
-                <shortLabel>AcctType</shortLabel>
+                <shortLabel>Account Type</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern>
-                    <alpha exactLength="2" />
+                    <alphaNumeric exactLength="2" />
                 </validationPattern>
                 <required>true</required>
 
@@ -57,7 +58,7 @@
                 <description>Account Code</description>
             </attribute>
 
-            <attribute name="accountTypeName" forceUppercase="false">
+            <attribute name="accountTypeName" forceUppercase="true">
                 <label>Account Type Name</label>
                 <shortLabel>Name</shortLabel>
 

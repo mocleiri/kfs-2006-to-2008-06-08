@@ -30,9 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.KeyConstants;
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.web.format.TimestampAMPMFormatter;
@@ -100,7 +98,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the financialDocumentNumber attribute.
      * 
-     * @param - financialDocumentNumber The financialDocumentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
     public void setFinancialDocumentNumber(String financialDocumentNumber) {
@@ -121,7 +119,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrTravelFromCityName attribute.
      * 
-     * @param - disbVchrTravelFromCityName The disbVchrTravelFromCityName to set.
+     * @param disbVchrTravelFromCityName The disbVchrTravelFromCityName to set.
      * 
      */
     public void setDisbVchrTravelFromCityName(String disbVchrTravelFromCityName) {
@@ -142,7 +140,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrTravelFromStateCode attribute.
      * 
-     * @param - disbVchrTravelFromStateCode The disbVchrTravelFromStateCode to set.
+     * @param disbVchrTravelFromStateCode The disbVchrTravelFromStateCode to set.
      * 
      */
     public void setDisbVchrTravelFromStateCode(String disbVchrTravelFromStateCode) {
@@ -163,7 +161,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the dvTravelFromCountryCode attribute.
      * 
-     * @param - dvTravelFromCountryCode The dvTravelFromCountryCode to set.
+     * @param dvTravelFromCountryCode The dvTravelFromCountryCode to set.
      * 
      */
     public void setDvTravelFromCountryCode(String dvTravelFromCountryCode) {
@@ -184,7 +182,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrTravelToCityName attribute.
      * 
-     * @param - disbVchrTravelToCityName The disbVchrTravelToCityName to set.
+     * @param disbVchrTravelToCityName The disbVchrTravelToCityName to set.
      * 
      */
     public void setDisbVchrTravelToCityName(String disbVchrTravelToCityName) {
@@ -205,7 +203,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrTravelToStateCode attribute.
      * 
-     * @param - disbVchrTravelToStateCode The disbVchrTravelToStateCode to set.
+     * @param disbVchrTravelToStateCode The disbVchrTravelToStateCode to set.
      * 
      */
     public void setDisbVchrTravelToStateCode(String disbVchrTravelToStateCode) {
@@ -226,7 +224,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrTravelToCountryCode attribute.
      * 
-     * @param - disbVchrTravelToCountryCode The disbVchrTravelToCountryCode to set.
+     * @param disbVchrTravelToCountryCode The disbVchrTravelToCountryCode to set.
      * 
      */
     public void setDisbVchrTravelToCountryCode(String disbVchrTravelToCountryCode) {
@@ -247,7 +245,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the dvPerdiemStartDttmStamp attribute.
      * 
-     * @param - dvPerdiemStartDttmStamp The dvPerdiemStartDttmStamp to set.
+     * @param dvPerdiemStartDttmStamp The dvPerdiemStartDttmStamp to set.
      * 
      */
     public void setDvPerdiemStartDttmStamp(Timestamp dvPerdiemStartDttmStamp) {
@@ -268,7 +266,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the dvPerdiemEndDttmStamp attribute.
      * 
-     * @param - dvPerdiemEndDttmStamp The dvPerdiemEndDttmStamp to set.
+     * @param dvPerdiemEndDttmStamp The dvPerdiemEndDttmStamp to set.
      * 
      */
     public void setDvPerdiemEndDttmStamp(Timestamp dvPerdiemEndDttmStamp) {
@@ -289,7 +287,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrPerdiemCalculatedAmt attribute.
      * 
-     * @param - disbVchrPerdiemCalculatedAmt The disbVchrPerdiemCalculatedAmt to set.
+     * @param disbVchrPerdiemCalculatedAmt The disbVchrPerdiemCalculatedAmt to set.
      * 
      */
     public void setDisbVchrPerdiemCalculatedAmt(KualiDecimal disbVchrPerdiemCalculatedAmt) {
@@ -310,7 +308,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrPerdiemActualAmount attribute.
      * 
-     * @param - disbVchrPerdiemActualAmount The disbVchrPerdiemActualAmount to set.
+     * @param disbVchrPerdiemActualAmount The disbVchrPerdiemActualAmount to set.
      * 
      */
     public void setDisbVchrPerdiemActualAmount(KualiDecimal disbVchrPerdiemActualAmount) {
@@ -331,7 +329,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the dvPerdiemChangeReasonText attribute.
      * 
-     * @param - dvPerdiemChangeReasonText The dvPerdiemChangeReasonText to set.
+     * @param dvPerdiemChangeReasonText The dvPerdiemChangeReasonText to set.
      * 
      */
     public void setDvPerdiemChangeReasonText(String dvPerdiemChangeReasonText) {
@@ -352,7 +350,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrServicePerformedDesc attribute.
      * 
-     * @param - disbVchrServicePerformedDesc The disbVchrServicePerformedDesc to set.
+     * @param disbVchrServicePerformedDesc The disbVchrServicePerformedDesc to set.
      * 
      */
     public void setDisbVchrServicePerformedDesc(String disbVchrServicePerformedDesc) {
@@ -373,7 +371,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the dvServicePerformedLocName attribute.
      * 
-     * @param - dvServicePerformedLocName The dvServicePerformedLocName to set.
+     * @param dvServicePerformedLocName The dvServicePerformedLocName to set.
      * 
      */
     public void setDvServicePerformedLocName(String dvServicePerformedLocName) {
@@ -394,7 +392,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the dvServiceRegularEmprName attribute.
      * 
-     * @param - dvServiceRegularEmprName The dvServiceRegularEmprName to set.
+     * @param dvServiceRegularEmprName The dvServiceRegularEmprName to set.
      * 
      */
     public void setDvServiceRegularEmprName(String dvServiceRegularEmprName) {
@@ -415,7 +413,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrAutoFromCityName attribute.
      * 
-     * @param - disbVchrAutoFromCityName The disbVchrAutoFromCityName to set.
+     * @param disbVchrAutoFromCityName The disbVchrAutoFromCityName to set.
      * 
      */
     public void setDisbVchrAutoFromCityName(String disbVchrAutoFromCityName) {
@@ -436,7 +434,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrAutoFromStateCode attribute.
      * 
-     * @param - disbVchrAutoFromStateCode The disbVchrAutoFromStateCode to set.
+     * @param disbVchrAutoFromStateCode The disbVchrAutoFromStateCode to set.
      * 
      */
     public void setDisbVchrAutoFromStateCode(String disbVchrAutoFromStateCode) {
@@ -457,7 +455,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrAutoToCityName attribute.
      * 
-     * @param - disbVchrAutoToCityName The disbVchrAutoToCityName to set.
+     * @param disbVchrAutoToCityName The disbVchrAutoToCityName to set.
      * 
      */
     public void setDisbVchrAutoToCityName(String disbVchrAutoToCityName) {
@@ -478,7 +476,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrAutoToStateCode attribute.
      * 
-     * @param - disbVchrAutoToStateCode The disbVchrAutoToStateCode to set.
+     * @param disbVchrAutoToStateCode The disbVchrAutoToStateCode to set.
      * 
      */
     public void setDisbVchrAutoToStateCode(String disbVchrAutoToStateCode) {
@@ -499,7 +497,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrAutoRoundTripCode attribute.
      * 
-     * @param - disbVchrAutoRoundTripCode The disbVchrAutoRoundTripCode to set.
+     * @param disbVchrAutoRoundTripCode The disbVchrAutoRoundTripCode to set.
      * 
      */
     public void setDisbVchrAutoRoundTripCode(boolean disbVchrAutoRoundTripCode) {
@@ -520,7 +518,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the dvPersonalCarMileageAmount attribute.
      * 
-     * @param - dvPersonalCarMileageAmount The dvPersonalCarMileageAmount to set.
+     * @param dvPersonalCarMileageAmount The dvPersonalCarMileageAmount to set.
      * 
      */
     public void setDvPersonalCarMileageAmount(Integer dvPersonalCarMileageAmount) {
@@ -541,7 +539,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrPersonalCarRate attribute.
      * 
-     * @param - disbVchrPersonalCarRate The disbVchrPersonalCarRate to set.
+     * @param disbVchrPersonalCarRate The disbVchrPersonalCarRate to set.
      * 
      */
     public void setDisbVchrPersonalCarRate(KualiDecimal disbVchrPersonalCarRate) {
@@ -562,7 +560,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrPersonalCarAmount attribute.
      * 
-     * @param - disbVchrPersonalCarAmount The disbVchrPersonalCarAmount to set.
+     * @param disbVchrPersonalCarAmount The disbVchrPersonalCarAmount to set.
      * 
      */
     public void setDisbVchrPersonalCarAmount(KualiDecimal disbVchrPersonalCarAmount) {
@@ -583,7 +581,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrExceptionCode attribute.
      * 
-     * @param - disbVchrExceptionCode The disbVchrExceptionCode to set.
+     * @param disbVchrExceptionCode The disbVchrExceptionCode to set.
      * 
      */
     public void setDisbVchrExceptionCode(boolean disbVchrExceptionCode) {
@@ -604,7 +602,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the financialDocumentNextLineNbr attribute.
      * 
-     * @param - financialDocumentNextLineNbr The financialDocumentNextLineNbr to set.
+     * @param financialDocumentNextLineNbr The financialDocumentNextLineNbr to set.
      * 
      */
     public void setFinancialDocumentNextLineNbr(Integer financialDocumentNextLineNbr) {
@@ -625,7 +623,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrNonEmpTravelerName attribute.
      * 
-     * @param - disbVchrNonEmpTravelerName The disbVchrNonEmpTravelerName to set.
+     * @param disbVchrNonEmpTravelerName The disbVchrNonEmpTravelerName to set.
      * 
      */
     public void setDisbVchrNonEmpTravelerName(String disbVchrNonEmpTravelerName) {
@@ -646,7 +644,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrPerdiemRate attribute.
      * 
-     * @param - disbVchrPerdiemRate The disbVchrPerdiemRate to set.
+     * @param disbVchrPerdiemRate The disbVchrPerdiemRate to set.
      * 
      */
     public void setDisbVchrPerdiemRate(KualiDecimal disbVchrPerdiemRate) {
@@ -667,7 +665,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrPerdiemCategoryName attribute.
      * 
-     * @param - disbVchrPerdiemCategoryName The disbVchrPerdiemCategoryName to set.
+     * @param disbVchrPerdiemCategoryName The disbVchrPerdiemCategoryName to set.
      * 
      */
     public void setDisbVchrPerdiemCategoryName(String disbVchrPerdiemCategoryName) {
@@ -688,7 +686,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the disbVchrMileageCalculatedAmt attribute.
      * 
-     * @param - disbVchrMileageCalculatedAmt The disbVchrMileageCalculatedAmt to set.
+     * @param disbVchrMileageCalculatedAmt The disbVchrMileageCalculatedAmt to set.
      * 
      */
     public void setDisbVchrMileageCalculatedAmt(KualiDecimal disbVchrMileageCalculatedAmt) {
@@ -764,18 +762,13 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @param perDiemStartDateTime
      */
     public void setPerDiemStartDateTime(String perDiemStartDateTime) {
-        try {
-            this.dvPerdiemStartDttmStamp = (Timestamp) new TimestampAMPMFormatter().convertFromPresentationFormat(perDiemStartDateTime);
-        }
-        catch (RuntimeException e) {
-            GlobalVariables.getErrorMap().put("document.dvNonEmployeeTravel.dvPerDiemStartDateTime", KeyConstants.ERROR_CUSTOM, e.getMessage());
-        }
+        this.dvPerdiemStartDttmStamp = (Timestamp) new TimestampAMPMFormatter().convertFromPresentationFormat(perDiemStartDateTime);
     }
 
     /**
      * Returns the per diem end date time as a string representation.
      * 
-     * @return
+     * @return String
      */
     public String getPerDiemEndDateTime() {
         return (String) new TimestampAMPMFormatter().format(dvPerdiemEndDttmStamp);
@@ -784,21 +777,16 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Sets the per diem start timestamp from the string representation.
      * 
-     * @param perDiemStartDateTime
+     * @param perDiemEndDateTime
      */
     public void setPerDiemEndDateTime(String perDiemEndDateTime) {
-        try {
-            this.dvPerdiemEndDttmStamp = (Timestamp) new TimestampAMPMFormatter().convertFromPresentationFormat(perDiemEndDateTime);
-        }
-        catch (RuntimeException e) {
-            GlobalVariables.getErrorMap().put("document.dvNonEmployeeTravel.dvPerDiemEndDateTime", KeyConstants.ERROR_CUSTOM, e.getMessage());
-        }
+        this.dvPerdiemEndDttmStamp = (Timestamp) new TimestampAMPMFormatter().convertFromPresentationFormat(perDiemEndDateTime);
     }
 
     /**
      * Calculates the total pre paid expense amount
      * 
-     * @return
+     * @return KualiDecimal
      */
     public KualiDecimal getTotalPrePaidAmount() {
         KualiDecimal totalPrePaidAmount = new KualiDecimal(0);
@@ -815,7 +803,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Calculates the total expense amount
      * 
-     * @return
+     * @return KualiDecimal
      */
     public KualiDecimal getTotalExpenseAmount() {
         KualiDecimal totalExpenseAmount = new KualiDecimal(0);
@@ -830,6 +818,8 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
 
     /**
      * Calculates the total travel amount.
+	 *
+	 * @return KualiDecimal
      */
     public KualiDecimal getTotalTravelAmount() {
         KualiDecimal travelAmount = new KualiDecimal(0);
@@ -857,8 +847,9 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
+    @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         m.put("financialDocumentNumber", this.financialDocumentNumber);
