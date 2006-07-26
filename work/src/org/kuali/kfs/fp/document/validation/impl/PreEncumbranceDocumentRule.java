@@ -40,7 +40,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.OffsetDefinition;
@@ -235,6 +235,6 @@ public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
      */
     @Override
     public boolean isDebit(AccountingLine accountingLine) throws IllegalStateException {
-        return accountingLine.getAmount().isGreaterThan(KualiDecimalMoney.ZERO);
+        return accountingLine.getAmount().isGreaterThan(KualiDecimal.ZERO);
     }
 }
