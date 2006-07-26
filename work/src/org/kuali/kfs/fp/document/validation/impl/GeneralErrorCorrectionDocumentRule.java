@@ -22,11 +22,8 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.Constants.ACCOUNTING_LINE_ERRORS;
 import static org.kuali.Constants.GL_CREDIT_CODE;
 import static org.kuali.Constants.GL_DEBIT_CODE;
-import static org.kuali.Constants.ZERO;
-import static org.kuali.KeyConstants.ERROR_DOCUMENT_GEC_REQUIRED_NUMBER_OF_ACCOUNTING_LINES_NOT_MET;
 import static org.kuali.KeyConstants.GeneralErrorCorrection.ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_SUB_TYPE_CODE;
 import static org.kuali.KeyConstants.GeneralErrorCorrection.ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE;
 import static org.kuali.KeyConstants.GeneralErrorCorrection.ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_WITH_SUB_TYPE_CODE;
@@ -54,7 +51,8 @@ import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.util.SufficientFundsItemHelper.SufficientFundsItem;
 
 /**
- * Business rule(s) applicable to <code>{@link GeneralErrorCorrectionDocument}</code> instances.
+ * Business rule(s) applicable to <code>{@link org.kuali.module.financial.document.GeneralErrorCorrectionDocument}</code>
+ * instances.
  * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
@@ -65,6 +63,7 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
      * 
      * @return String
      */
+    @Override
     protected String getDefaultSecurityGrouping() {
         return GENERAL_ERROR_CORRECTION_SECURITY_GROUPING;
     }
@@ -101,66 +100,14 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
     }
 
     /**
-     * @see TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument, AccountingLine,
-     *      GeneralLedgerPendingEntry)
-     */
-    @Override
-    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        explicitEntry.setTransactionLedgerEntryDescription(buildTransactionLedgerEntryDescription(accountingLine));
-
-        // Clearing fields that are already handled by the parent algorithm
-        explicitEntry.setReferenceFinancialDocumentNumber(null);
-        explicitEntry.setReferenceFinancialSystemOriginationCode(null);
-    }
-
-    /**
-     * Builds an appropriately formatted string to be used for the <code>TransactionLedgerEntryDescription</code>. It is built
-     * using information from the <code>{@link AccountingLine}</code>
+     * @see IsDebitUtils#isDebitConsideringSectionAndTypePositiveOnly(TransactionalDocumentRuleBase, TransactionalDocument,
+     *      AccountingLine)
      * 
-     * @param line
-     * @return String
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine)
      */
-    private String buildTransactionLedgerEntryDescription(AccountingLine line) {
-        StringBuffer retval = new StringBuffer(line.getFinancialDocumentLineDescription());
-        retval.append(getEntryDescriptionDelimiter()).append(getEntryDescriptionDelimiter()).append(line.getReferenceOriginCode()).append(getEntryDescriptionDelimiter()).append(line.getReferenceNumber());
-        return retval.toString();
-    }
-
-    /**
-     * Overrides to provide specific isDebit() calculation - refer to
-     * https://test.kuali.org/confluence/display/KULEDOCS/TP+eDocs+Debits+and+Credits for a summary of business rules.
-     * 
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDebit(org.kuali.core.bo.AccountingLine)
-     */
-    @Override
-    public boolean isDebit(AccountingLine accountingLine) throws IllegalStateException {
-        if (accountingLine instanceof SourceAccountingLine) { // From lines
-            if (isIncomeOrLiability(accountingLine)) {
-                if (accountingLine.getAmount().compareTo(ZERO) > 0) {
-                    return true;
-                }
-            }
-            if (isExpenseOrAsset(accountingLine)) {
-                if (accountingLine.getAmount().compareTo(ZERO) > 0) {
-                    return false;
-                }
-            }
-        }
-
-        if (accountingLine instanceof TargetAccountingLine) { // To lines
-            if (isIncomeOrLiability(accountingLine)) {
-                if (accountingLine.getAmount().compareTo(ZERO) > 0) {
-                    return false;
-                }
-            }
-            if (isExpenseOrAsset(accountingLine)) {
-                if (accountingLine.getAmount().compareTo(ZERO) > 0) {
-                    return true;
-                }
-            }
-        }
-
-        throw new IllegalStateException("Invalid accounting line type, amount, and object type code combination for the accounting line.");
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
+        return IsDebitUtils.isDebitConsideringSectionAndTypePositiveOnly(this, transactionalDocument, accountingLine);
     }
 
     /**
@@ -169,26 +116,9 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
      * 
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.TransactionalDocument)
      */
-    protected boolean isAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
-        int sourceSectionSize = transactionalDocument.getSourceAccountingLines().size();
-        int targetSectionSize = transactionalDocument.getTargetAccountingLines().size();
-
-        if ((sourceSectionSize == 0 && targetSectionSize < 2) || (targetSectionSize == 0 && sourceSectionSize < 2)) {
-            GlobalVariables.getErrorMap().put(ACCOUNTING_LINE_ERRORS, ERROR_DOCUMENT_GEC_REQUIRED_NUMBER_OF_ACCOUNTING_LINES_NOT_MET);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * This overrides the parent to only do the one balance check that is necessary - making sure that the debits equal the credits.
-     * 
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDocumentBalanceValid(org.kuali.core.document.TransactionalDocument)
-     */
     @Override
-    protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
-        return isDocumentBalancedConsideringCreditAndDebitAmounts(transactionalDocument);
+    protected boolean isAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
+        return isOptionalOneSidedDocumentAccountingLinesRequiredNumberForRoutingMet(transactionalDocument);
     }
 
     /**
@@ -225,6 +155,51 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
 
         return retval;
     }
+    
+    /**
+     * @see TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument, AccountingLine,
+     *      GeneralLedgerPendingEntry)
+     */
+    @Override
+    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+        explicitEntry.setTransactionLedgerEntryDescription(buildTransactionLedgerEntryDescriptionUsingRefOriginAndRefDocNumber(transactionalDocument, accountingLine));
+
+        // Clearing fields that are already handled by the parent algorithm - we don't actually want
+        // these to copy over from the accounting lines b/c they don't belond in the GLPEs
+        // if the aren't nulled, then GECs fail to post
+        explicitEntry.setReferenceFinancialDocumentNumber(null);
+        explicitEntry.setReferenceFinancialSystemOriginationCode(null);
+        explicitEntry.setReferenceFinancialDocumentTypeCode(null);
+    }
+    
+    /**
+     * Builds an appropriately formatted string to be used for the <code>transactionLedgerEntryDescription</code>. It is built
+     * using information from the <code>{@link AccountingLine}</code>.  Format is "01-12345: blah blah blah".
+     * 
+     * @param line
+     * @param transactionalDocument
+     * @return String
+     */
+    private String buildTransactionLedgerEntryDescriptionUsingRefOriginAndRefDocNumber(TransactionalDocument transactionalDocument, AccountingLine line) {
+        String description = "";
+        if(StringUtils.isBlank(line.getReferenceOriginCode()) || StringUtils.isBlank(line.getReferenceNumber())) {
+            throw new IllegalStateException("Reference Origin Code and Reference Document Number are required and should be validated before this point.");
+        }
+        
+        description = line.getReferenceOriginCode() + "-" + line.getReferenceNumber();
+        
+        if(StringUtils.isNotBlank(line.getFinancialDocumentLineDescription())) {
+            description += ": " + line.getFinancialDocumentLineDescription();
+        } else {
+            description += ": " + transactionalDocument.getDocumentHeader().getFinancialDocumentDescription();
+        }
+        
+        if(description.length() > GENERAL_LEDGER_PENDING_ENTRY_CODE.GLPE_DESCRIPTION_MAX_LENGTH) {
+            description = description.substring(0, GENERAL_LEDGER_PENDING_ENTRY_CODE.GLPE_DESCRIPTION_MAX_LENGTH - 3)+ "...";
+        }
+            
+        return description;
+    }
 
     /**
      * Used to determine of object code sub types are valid with the object type code.
@@ -239,7 +214,7 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
 
         if (!retval) {
             // add message
-            GlobalVariables.getErrorMap().put(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_WITH_SUB_TYPE_CODE, new String[] { code.getFinancialObjectCode(), code.getFinancialObjectTypeCode(), code.getFinancialObjectSubTypeCode() });
+            GlobalVariables.getErrorMap().putError(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_WITH_SUB_TYPE_CODE, new String[] { code.getFinancialObjectCode(), code.getFinancialObjectTypeCode(), code.getFinancialObjectSubTypeCode() });
         }
 
         return retval;
@@ -264,7 +239,7 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
                 valid = false;
 
                 // add message
-                GlobalVariables.getErrorMap().put(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectTypeCode() });
+                GlobalVariables.getErrorMap().putError(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectTypeCode() });
             }
         }
 
@@ -320,7 +295,7 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
                 valid = false;
 
                 // add message
-                GlobalVariables.getErrorMap().put(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_SUB_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectSubTypeCode() });
+                GlobalVariables.getErrorMap().putError(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_SUB_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectSubTypeCode() });
             }
         }
 
@@ -369,7 +344,7 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
         // always credit
         String debitCreditCode = null;
 
-        if (isDebit(accountingLine)) {
+        if (isDebit(document, accountingLine)) {
             debitCreditCode = GL_CREDIT_CODE;
         }
         else {

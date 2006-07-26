@@ -1,28 +1,9 @@
 /*
- * Copyright (c) 2004, 2005 The National Association of College and University
- * Business Officers, Cornell University, Trustees of Indiana University,
- * Michigan State University Board of Trustees, Trustees of San Joaquin Delta
- * College, University of Hawai'i, The Arizona Board of Regents on behalf of the
- * University of Arizona, and the r*smart group. Licensed under the Educational
- * Community License Version 1.0 (the "License"); By obtaining, using and/or
- * copying this Original Work, you agree that you have read, understand, and
- * will comply with the terms and conditions of the Educational Community
- * License. You may obtain a copy of the License at:
- * http://kualiproject.org/license.html THE SOFTWARE IS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
- * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
- * THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers, Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees, Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on behalf of the University of Arizona, and the r*smart group. Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining, using and/or copying this Original Work, you agree that you have read, understand, and will comply with the terms and conditions of the Educational Community License. You may obtain a copy of the License at: http://kualiproject.org/license.html THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package org.kuali.workflow.attribute;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,17 +17,19 @@ import javax.xml.xpath.XPathConstants;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.kuali.KualiSpringServiceLocator;
+import org.kuali.Constants;
+import org.kuali.core.util.FieldUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.Org;
 import org.kuali.workflow.KualiConstants;
-import org.kuali.workflow.beans.KualiFiscalOrganization;
+import org.kuali.workflow.KualiWorkflowUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import edu.iu.uis.eden.WorkflowServiceErrorImpl;
 import edu.iu.uis.eden.doctype.DocumentType;
-import edu.iu.uis.eden.exception.WorkflowRuntimeException;
 import edu.iu.uis.eden.lookupable.Field;
 import edu.iu.uis.eden.lookupable.Row;
 import edu.iu.uis.eden.plugin.attributes.WorkflowAttribute;
@@ -56,7 +39,7 @@ import edu.iu.uis.eden.routetemplate.RuleExtensionValue;
 import edu.iu.uis.eden.util.Utilities;
 
 /**
- * KualiOrgReviewAttribute which should be used when using Orgs and thier inner details to do routing.
+ * KualiOrgReviewAttribute should be used when using Orgs and thier inner details to do routing.
  * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
@@ -66,62 +49,103 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
 
     private static Logger LOG = Logger.getLogger(KualiOrgReviewAttribute.class);
 
-    private static final String FIN_COA_CD_KEY = "fin_coa_cd";
-    private static final String ORG_REVIEW_FIN_COA_CD_KEY = "org_review_fin_coa_cd";
-    private static final String ORG_CD_KEY = "org_cd";
-    private static final String ORG_REVIEW_ORG_CD_KEY = "org_review_org_cd";
-    private static final String FROM_AMOUNT_KEY = "fromAmount";
-    private static final String TO_AMOUNT_KEY = "toAmount";
+    public static final String FIN_COA_CD_KEY = "fin_coa_cd";
+
+    public static final String ORG_CD_KEY = "org_cd";
+
+    public static final String FROM_AMOUNT_KEY = "fromAmount";
+
+    public static final String TO_AMOUNT_KEY = "toAmount";
+
     private static final String TOTAL_AMOUNT_KEY = "totalAmount";
-    private static final String OVERRIDE_CD_KEY = "overrideCd";
+
+    public static final String OVERRIDE_CD_KEY = "overrideCd";
 
     private static final String ORG_REVIEW_ATTRIBUTE = "KUALI_ORG_REVIEW_ATTRIBUTE";
+
     private static Map ORGS = new HashMap();
 
     private static final String MAINTAINABLE_PREFIX = "//newMaintainableObject/businessObject/";
+
     private static final String ACCOUNT_DOC_TYPE = "KualiAccountMaintenanceDocument";
+
     private static final String ACCOUNT_DEL_DOC_TYPE = "KualiAccountDelegateMaintenanceDocument";
+
     private static final String FIS_USER_DOC_TYPE = "KualiUserMaintenanceDocument";
+
     private static final String ORGANIZATION_DOC_TYPE = "KualiOrganizationMaintenanceDocument";
+
     private static final String SUB_ACCOUNT_DOC_TYPE = "KualiSubAccountMaintenanceDocument";
+
     private static final String SUB_OBJECT_DOC_TYPE = "KualiSubObjectMaintenanceDocument";
+
     private static final String PROJECT_CODE_DOC_TYPE = "KualiProjectCodeMaintenanceDocument";
 
     private String finCoaCd;
+
     private String orgCd;
+
     private String toAmount;
+
     private String fromAmount;
+
     private String overrideCd;
+
     private String totalDollarAmount;
+
     private boolean required;
-    private List rows;
+
+    private List ruleRows;
+
+    private List routingDataRows;
 
     /**
-     * no arg constructor, which will initialize the fields and rows of the attribute
+     * TODO clean the rest of the field defs up once chart is working this code up no arg constructor, which will initialize the
+     * fields and rows of the attribute
      */
     public KualiOrgReviewAttribute() {
-        rows = new ArrayList();
-
         List fields = new ArrayList();
-        fields.add(new Field("Chart", "", Field.TEXT, true, ORG_REVIEW_FIN_COA_CD_KEY, "", null, null, FIN_COA_CD_KEY));
-        rows.add(new Row(fields));
 
-        fields = new ArrayList();
-        fields.add(new Field("Org", "", Field.TEXT, true, ORG_REVIEW_ORG_CD_KEY, "", null, null, ORG_CD_KEY));
-        rows.add(new Row(fields));
+        ruleRows = new ArrayList();
+        ruleRows.add(getChartRow());
+        ruleRows.add(getOrgRow());
+        ruleRows.add(getOverrideCodeRow());
 
         fields = new ArrayList();
         fields.add(new Field("From Amount", "", Field.TEXT, true, FROM_AMOUNT_KEY, "", null, null, FROM_AMOUNT_KEY));
-        rows.add(new Row(fields));
-
+        ruleRows.add(new Row(fields));
         fields = new ArrayList();
         fields.add(new Field("To Amount", "", Field.TEXT, true, TO_AMOUNT_KEY, "", null, null, TO_AMOUNT_KEY));
-        rows.add(new Row(fields));
+        ruleRows.add(new Row(fields));
+
+        routingDataRows = new ArrayList();
+        routingDataRows.add(getChartRow());
+        routingDataRows.add(getOrgRow());
+        routingDataRows.add(getOverrideCodeRow());
 
         fields = new ArrayList();
-        fields.add(new Field("Override Code", "", Field.TEXT, true, OVERRIDE_CD_KEY, "", null, null, OVERRIDE_CD_KEY));
-        rows.add(new Row(fields));
+        fields.add(new Field("Total Amount", "", Field.TEXT, true, TOTAL_AMOUNT_KEY, "", null, null, TOTAL_AMOUNT_KEY));
+        routingDataRows.add(new Row(fields));
+    }
 
+    private edu.iu.uis.eden.lookupable.Row getChartRow() {
+        org.kuali.core.web.uidraw.Field kualiChartField = FieldUtils.getPropertyField(Chart.class, Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, false);
+        List chartFields = new ArrayList();
+        chartFields.add(new Field(kualiChartField.getFieldLabel(), WorkflowLookupableImpl.getHelpUrl(kualiChartField), Field.TEXT, true, FIN_COA_CD_KEY, kualiChartField.getPropertyValue(), kualiChartField.getFieldValidValues(), WorkflowLookupableImpl.getLookupableImplName(Chart.class), FIN_COA_CD_KEY));
+        chartFields.add(new Field("", "", Field.QUICKFINDER, false, "", "", null, WorkflowLookupableImpl.getLookupableName(WorkflowLookupableImpl.getLookupableImplName(Chart.class), new StringBuffer(WorkflowLookupableImpl.LOOKUPABLE_IMPL_NAME_PREFIX).append(Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME).append(":").append(FIN_COA_CD_KEY).toString())));
+        return new Row(chartFields);
+    }
+
+    private edu.iu.uis.eden.lookupable.Row getOrgRow() {
+        List orgFields = new ArrayList();
+        orgFields.add(new Field("Org", "", Field.TEXT, true, ORG_CD_KEY, "", null, null, ORG_CD_KEY));
+        return new Row(orgFields);
+    }
+
+    private edu.iu.uis.eden.lookupable.Row getOverrideCodeRow() {
+        List orgFields = new ArrayList();
+        orgFields.add(new Field("Override Code", "", Field.TEXT, true, OVERRIDE_CD_KEY, "", null, null, OVERRIDE_CD_KEY));
+        return new Row(orgFields);
     }
 
     /**
@@ -140,26 +164,16 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
         List extensions = new ArrayList();
         extensions.add(new RuleExtensionValue(FIN_COA_CD_KEY, this.finCoaCd));
         extensions.add(new RuleExtensionValue(ORG_CD_KEY, this.orgCd));
+        if (StringUtils.isBlank(this.fromAmount)) {
+            this.fromAmount = "0";
+        }
         extensions.add(new RuleExtensionValue(FROM_AMOUNT_KEY, this.fromAmount));
-        if (!StringUtils.isEmpty(this.toAmount)) {
+        if (!StringUtils.isBlank(this.toAmount)) {
             extensions.add(new RuleExtensionValue(TO_AMOUNT_KEY, this.toAmount));
         }
-        if (!StringUtils.isEmpty(this.overrideCd)) {
+        if (!StringUtils.isBlank(this.overrideCd)) {
             extensions.add(new RuleExtensionValue(OVERRIDE_CD_KEY, this.overrideCd));
         }
-        // if (!StringUtils.isEmpty(this.finCoaCd)) {
-        // RuleExtensionValue extensionFinCoaCd = new RuleExtensionValue();
-        // extensionFinCoaCd.setKey(FIN_COA_CD_KEY);
-        // extensionFinCoaCd.setValue(this.finCoaCd);
-        // extensions.add(extensionFinCoaCd);
-        // }
-        // if (! StringUtils.isEmpty(this.orgCd)) {
-        // RuleExtensionValue extensionOrgCd = new RuleExtensionValue();
-        // extensionOrgCd.setKey(ORG_CD_KEY);
-        // extensionOrgCd.setValue(this.orgCd);
-        // extensions.add(extensionOrgCd);
-        // }
-
         return extensions;
     }
 
@@ -168,138 +182,46 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
      */
     public List validateRuleData(Map paramMap) {
         List errors = new ArrayList();
-        this.finCoaCd = (String) paramMap.get(ORG_REVIEW_FIN_COA_CD_KEY);
-        this.orgCd = (String) paramMap.get(ORG_REVIEW_ORG_CD_KEY);
-        this.fromAmount = (String) paramMap.get(FROM_AMOUNT_KEY);
-        this.toAmount = (String) paramMap.get(TO_AMOUNT_KEY);
-        this.overrideCd = (String) paramMap.get(OVERRIDE_CD_KEY);
-
-        this.finCoaCd = (String) paramMap.get(ORG_REVIEW_FIN_COA_CD_KEY);
-        this.orgCd = (String) paramMap.get(ORG_REVIEW_ORG_CD_KEY);
-        if (isRequired() && (this.finCoaCd == null || "".equals(finCoaCd) || (this.orgCd == null || "".equals(orgCd)))) {
-            errors.add(new WorkflowServiceErrorImpl("Chart/org is required.", "routetemplate.chartorgattribute.chartorg.required"));
-        }
-        else if ((this.finCoaCd != null && !"".equals(finCoaCd) && ((this.orgCd == null || "".equals(orgCd)))) || ((this.finCoaCd == null || "".equals(finCoaCd)) && this.orgCd != null && !"".equals(orgCd))) {
-            errors.add(new WorkflowServiceErrorImpl("Chart/org is invalid.", "routetemplate.chartorgattribute.chartorg.invalid"));
-        }
-
-        if (this.finCoaCd != null && !"".equals(finCoaCd) && this.orgCd != null && !"".equals(orgCd)) {
-            if (!isValidOrg(finCoaCd, orgCd)) {
-                errors.add(new WorkflowServiceErrorImpl("Chart/org is invalid.", "routetemplate.chartorgattribute.chartorg.invalid"));
+        if (isRequired()) {
+            this.finCoaCd = (String) paramMap.get(FIN_COA_CD_KEY);
+            this.orgCd = (String) paramMap.get(ORG_CD_KEY);
+            this.fromAmount = (String) paramMap.get(FROM_AMOUNT_KEY);
+            this.toAmount = (String) paramMap.get(TO_AMOUNT_KEY);
+            this.overrideCd = (String) paramMap.get(OVERRIDE_CD_KEY);
+            validateOrg(errors);
+            if (StringUtils.isNotBlank(toAmount) && !StringUtils.isNumeric(toAmount)) {
+                errors.add(new WorkflowServiceErrorImpl("To Amount is invalid.", "routetemplate.dollarrangeattribute.toamount.invalid"));
+            }
+            if (StringUtils.isNotBlank(toAmount) && !StringUtils.isNumeric(fromAmount)) {
+                errors.add(new WorkflowServiceErrorImpl("From Amount is invalid.", "routetemplate.dollarrangeattribute.fromamount.invalid"));
             }
         }
-
-        if (isRequired() && !StringUtils.isNumeric(toAmount)) {
-            errors.add(new WorkflowServiceErrorImpl("To Amount is invalid.", "routetemplate.dollarrangeattribute.toamount.invalid"));
-        }
-        else if (StringUtils.isNotBlank(toAmount) && !StringUtils.isNumeric(toAmount)) {
-            errors.add(new WorkflowServiceErrorImpl("To Amount is invalid.", "routetemplate.dollarrangeattribute.toamount.invalid"));
-        }
-
-        if (isRequired() && !StringUtils.isNumeric(fromAmount)) {
-            errors.add(new WorkflowServiceErrorImpl("From Amount is invalid.", "routetemplate.dollarrangeattribute.fromamount.invalid"));
-        }
-        else if (StringUtils.isNotBlank(fromAmount) && !StringUtils.isNumeric(fromAmount)) {
-            errors.add(new WorkflowServiceErrorImpl("From Amount is invalid.", "routetemplate.dollarrangeattribute.fromamount.invalid"));
-        }
-
         return errors;
     }
 
     public List validateRoutingData(Map paramMap) {
-
         List errors = new ArrayList();
-        this.finCoaCd = (String) paramMap.get(ORG_REVIEW_FIN_COA_CD_KEY);
-        this.orgCd = (String) paramMap.get(ORG_REVIEW_ORG_CD_KEY);
+        this.finCoaCd = (String) paramMap.get(FIN_COA_CD_KEY);
+        this.orgCd = (String) paramMap.get(ORG_CD_KEY);
         this.totalDollarAmount = (String) paramMap.get(TOTAL_AMOUNT_KEY);
         this.overrideCd = (String) paramMap.get(OVERRIDE_CD_KEY);
-
-        this.finCoaCd = (String) paramMap.get(ORG_REVIEW_FIN_COA_CD_KEY);
-        this.orgCd = (String) paramMap.get(ORG_REVIEW_ORG_CD_KEY);
-        if (isRequired() && (this.finCoaCd == null || "".equals(finCoaCd) || (this.orgCd == null || "".equals(orgCd)))) {
-            errors.add(new WorkflowServiceErrorImpl("Chart/org is required.", "routetemplate.chartorgattribute.chartorg.required"));
-        }
-        else if ((this.finCoaCd != null && !"".equals(finCoaCd) && ((this.orgCd == null || "".equals(orgCd)))) || ((this.finCoaCd == null || "".equals(finCoaCd)) && this.orgCd != null && !"".equals(orgCd))) {
-            errors.add(new WorkflowServiceErrorImpl("Chart/org is invalid.", "routetemplate.chartorgattribute.chartorg.invalid"));
-        }
-
-        if (this.finCoaCd != null && !"".equals(finCoaCd) && this.orgCd != null && !"".equals(orgCd)) {
-            if (!isValidOrg(finCoaCd, orgCd)) {
-                errors.add(new WorkflowServiceErrorImpl("Chart/org is invalid.", "routetemplate.chartorgattribute.chartorg.invalid"));
+        if (isRequired()) {
+            validateOrg(errors);
+            if (!StringUtils.isNumeric(this.totalDollarAmount)) {
+                errors.add(new WorkflowServiceErrorImpl("Total Amount is invalid.", ""));
             }
         }
-
-        if (isRequired() && !StringUtils.isNumeric(totalDollarAmount)) {
-            errors.add(new WorkflowServiceErrorImpl("Total Amount is invalid.", ""));
-        }
-        else if (StringUtils.isNotBlank(totalDollarAmount) && !StringUtils.isNumeric(totalDollarAmount)) {
-            errors.add(new WorkflowServiceErrorImpl("Total Amount is invalid.", ""));
-        }
-
         return errors;
     }
 
-    /**
-     * Validates org using database
-     * 
-     * @param finCoaCd
-     * @param orgCd
-     * @return true if org is valid
-     */
-    private boolean isValidOrg(String finCoaCd, String orgCd) {
-        if (StringUtils.isBlank(finCoaCd) || StringUtils.isBlank(orgCd)) {
-            return false;
+    private void validateOrg(List errors) {
+        if (StringUtils.isBlank(this.finCoaCd) || StringUtils.isBlank(this.orgCd)) {
+            errors.add(new WorkflowServiceErrorImpl("Chart/org is required.", "routetemplate.chartorgattribute.chartorg.required"));
         }
-        else {
-            return getKualiFiscalOrganization(finCoaCd, orgCd) != null;
+        else if (SpringServiceLocator.getOrganizationService().getByPrimaryId(finCoaCd, orgCd) == null) {
+            errors.add(new WorkflowServiceErrorImpl("Chart/org is invalid.", "routetemplate.chartorgattribute.chartorg.invalid"));
         }
     }
-
-    /**
-     * @param finCoaCd
-     * @param orgCd
-     * @param isValidOrg
-     * @return
-     */
-    private KualiFiscalOrganization getKualiFiscalOrganization(String finCoaCd, String orgCd) {
-        KualiFiscalOrganization kualiFiscalOrganization = null;
-        String key = finCoaCd + orgCd;
-        if (ORGS.containsKey(key)) {
-            return (KualiFiscalOrganization) ORGS.get(key);
-        }
-        Connection conn = null;
-        try {
-            conn = KualiSpringServiceLocator.getDataSource().getConnection();
-
-            String sql = "select FIN_COA_CD, ORG_CD, RPTS_TO_FIN_COA_CD, RPTS_TO_ORG_CD  from CA_ORG_T where FIN_COA_CD = ? and ORG_CD = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, finCoaCd);
-            ps.setString(2, orgCd);
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                kualiFiscalOrganization = new KualiFiscalOrganization(rs.getString("FIN_COA_CD"), rs.getString("ORG_CD"), rs.getString("RPTS_TO_FIN_COA_CD"), rs.getString("RPTS_TO_ORG_CD"));
-            }
-        }
-        catch (Exception e) {
-            LOG.error("Error getting connection", e);
-            throw new RuntimeException("An Error occurred during routing of this document", e);
-        }
-        finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                }
-                catch (SQLException e1) {
-                    // Ignore
-                }
-                conn = null;
-            }
-        }
-        ORGS.put(key, kualiFiscalOrganization);
-        return kualiFiscalOrganization;
-    }
-
 
     /**
      * @see edu.iu.uis.eden.plugin.attributes.WorkflowAttribute#getDocContent()
@@ -330,8 +252,8 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
 
         boolean matchesOrg = false;
         for (Iterator iter = chartOrgValues.iterator(); iter.hasNext();) {
-            KualiFiscalOrganization attribute = (KualiFiscalOrganization) iter.next();
-            if (attribute.getFinCoaCd().equals(this.getFinCoaCd()) && attribute.getOrgCd().equals(this.getOrgCd())) {
+            Org org = (Org) iter.next();
+            if (org.getChartOfAccountsCode().equals(this.getFinCoaCd()) && org.getOrganizationCode().equals(this.getOrgCd())) {
                 matchesOrg = true;
                 break;
             }
@@ -368,22 +290,16 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
     /**
      * This method is a recursive method that will retrive reports to orgs to build up the hierarchy of organizations
      * 
-     * @param chartOrgList
+     * @param chartOrgSet
      * @param chartOrg
      */
-    private void buildOrgReviewHierarchy(Set chartOrgSet, KualiFiscalOrganization chartOrg) {
-        KualiFiscalOrganization org = getKualiFiscalOrganization(chartOrg.getFinCoaCd(), chartOrg.getOrgCd());
-        if (org == null) {
-            throw new WorkflowRuntimeException("Couldn't find organization " + chartOrg.getFinCoaCd() + "-" + chartOrg.getOrgCd());
-        }
-        if (org.getReportsToFinCoaCd().equals(chartOrg.getFinCoaCd()) && org.getReportsToOrgCd().equals(chartOrg.getOrgCd())) {
+    private void buildOrgReviewHierarchy(Set chartOrgSet, Org startOrg) {
+        if (startOrg.getReportsToChartOfAccountsCode().equals(startOrg.getChartOfAccountsCode()) && startOrg.getReportsToOrganizationCode().equals(startOrg.getOrganizationCode())) {
             return;
         }
-        KualiFiscalOrganization parent = new KualiFiscalOrganization();
-        parent.setFinCoaCd(org.getReportsToFinCoaCd());
-        parent.setOrgCd(org.getReportsToOrgCd());
-        chartOrgSet.add(parent);
-        buildOrgReviewHierarchy(chartOrgSet, parent);
+        Org reportsToOrg = SpringServiceLocator.getOrganizationService().getByPrimaryId(startOrg.getReportsToChartOfAccountsCode(), startOrg.getReportsToOrganizationCode());
+        chartOrgSet.add(reportsToOrg);
+        buildOrgReviewHierarchy(chartOrgSet, reportsToOrg);
     }
 
     private String getRuleExtentionValue(String key, List ruleExtensions) {
@@ -412,7 +328,7 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
     private Set populateFromDocContent(DocumentType docType, DocumentContent docContent) {
         Set chartOrgValues = new HashSet();
         NodeList nodes = null;
-        XPath xpath = KualiWorkflowAttributeUtils.getXPath(docContent.getDocument());
+        XPath xpath = KualiWorkflowUtils.getXPath(docContent.getDocument());
         try {
             String chart = null;
             String org = null;
@@ -437,21 +353,21 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
                 org = account.getOrganizationCode();
             }
             if (!StringUtils.isEmpty(chart) && !StringUtils.isEmpty(org)) {
-                KualiFiscalOrganization organization = new KualiFiscalOrganization();
-                organization.setFinCoaCd(chart);
-                organization.setOrgCd(org);
-                chartOrgValues.add(organization);
-                buildOrgReviewHierarchy(chartOrgValues, organization);
+                buildOrgReviewHierarchy(chartOrgValues, SpringServiceLocator.getOrganizationService().getByPrimaryId(chart, org));
             }
             else {
                 String xpathExp = null;
                 do {
-                    if (docType.getName().equals("KualiMaintenanceDocument")) {
+                    if (KualiConstants.MAINTENANCE_DOC_TYPE.equalsIgnoreCase(docType.getName())) {
                         xpathExp = "wf:xstreamsafe('//kualiUser')";
                         break;
                     }
-                    else if (docType.getName().equals(KualiConstants.PROCUREMENT_CARD_DOC_TYPE)) {
+                    else if (KualiConstants.PROCUREMENT_CARD_DOC_TYPE.equalsIgnoreCase(docType.getName())) {
                         xpathExp = "wf:xstreamsafe('//org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine/account')";
+                        break;
+                    }
+                    else if (docType.getName().equals(KualiConstants.BUDGET_ADJUSTMENT_DOC_TYPE)) {
+                        xpathExp = "//org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine/account | //org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine/account";
                         break;
                     }
                     else if (KualiConstants.isSourceLineOnly(docType.getName())) {
@@ -462,7 +378,11 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
                         xpathExp = "wf:xstreamsafe('//org.kuali.core.bo.TargetAccountingLine/account')";
                         break;
                     }
-                    else if (docType.getName().equals("KualiFinancialDocument")) {
+                    else if (KualiConstants.FINANCIAL_DOC_TYPE.equalsIgnoreCase(docType.getName())) {
+                        xpathExp = "wf:xstreamsafe('//org.kuali.core.bo.SourceAccountingLine/account') | wf:xstreamsafe('//org.kuali.core.bo.TargetAccountingLine/account')";
+                        break;
+                    }
+                    else if (KualiConstants.FINANCIAL_YEAR_END_DOC_TYPE.equalsIgnoreCase(docType.getName())) {
                         xpathExp = "wf:xstreamsafe('//org.kuali.core.bo.SourceAccountingLine/account') | wf:xstreamsafe('//org.kuali.core.bo.TargetAccountingLine/account')";
                         break;
                     }
@@ -478,19 +398,18 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
 
                 for (int i = 0; i < nodes.getLength(); i++) {
                     Node accountingLineNode = nodes.item(i);
-                    // TODO: this needs to be fixed up, the xpath.evaluate probably doesnt work
-                    // String referenceString = xpath.evaluate("@reference", accountingLineNode);
-                    // if (!StringUtils.isEmpty(referenceString)) {
-                    // accountingLineNode = (Node) xpath.evaluate(referenceString, accountingLineNode, XPathConstants.NODE);
-                    // }
+                    // TODO: xstreamsafe should be handling this, but is not, therefore this code block
+                    String referenceString = xpath.evaluate("@reference", accountingLineNode);
+                    if (!StringUtils.isEmpty(referenceString)) {
+                        accountingLineNode = (Node) xpath.evaluate(referenceString, accountingLineNode, XPathConstants.NODE);
+                    }
                     String finCoaCd = xpath.evaluate("./chartOfAccountsCode", accountingLineNode);
                     String orgCd = xpath.evaluate("./organizationCode", accountingLineNode);
-                    KualiFiscalOrganization orgization = new KualiFiscalOrganization();
-                    orgization.setFinCoaCd(finCoaCd);
-                    orgization.setOrgCd(orgCd);
-
-                    chartOrgValues.add(orgization);
-                    buildOrgReviewHierarchy(chartOrgValues, orgization);
+                    if (!StringUtils.isEmpty(finCoaCd) && !StringUtils.isEmpty(orgCd)) {
+                        Org organization = SpringServiceLocator.getOrganizationService().getByPrimaryId(finCoaCd, orgCd);
+                        chartOrgValues.add(organization);
+                        buildOrgReviewHierarchy(chartOrgValues, organization);
+                    }
                 }
             }
         }
@@ -502,7 +421,7 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
 
     private String getOverrideCd(DocumentType docType, DocumentContent docContent) {
         try {
-            XPath xpath = KualiWorkflowAttributeUtils.getXPath(docContent.getDocument());
+            XPath xpath = KualiWorkflowUtils.getXPath(docContent.getDocument());
             boolean isReport = ((Boolean) xpath.evaluate("wf:xstreamsafe('//report')", docContent.getDocument(), XPathConstants.BOOLEAN)).booleanValue();
             if (isReport) {
                 return xpath.evaluate("wf:xstreamsafe('//report/overrideCode')", docContent.getDocument());
@@ -542,7 +461,7 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
 
     private Float getAmount(DocumentType docType, DocumentContent docContent) {
         try {
-            XPath xpath = KualiWorkflowAttributeUtils.getXPath(docContent.getDocument());
+            XPath xpath = KualiWorkflowUtils.getXPath(docContent.getDocument());
             boolean isReport = ((Boolean) xpath.evaluate("wf:xstreamsafe('//report')", docContent.getDocument(), XPathConstants.BOOLEAN)).booleanValue();
             if (isReport) {
                 String floatVal = xpath.evaluate("wf:xstreamsafe('//report/totalDollarAmount')", docContent.getDocument());
@@ -592,38 +511,20 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
      * simple getter for the rule rows
      */
     public List getRuleRows() {
-        return rows;
+        return ruleRows;
     }
 
     /**
      * simple getter for the routing data rows
      */
     public List getRoutingDataRows() {
-        List routingRows = new ArrayList();
-
-        List fields = new ArrayList();
-        fields.add(new Field("Chart", "", Field.TEXT, true, ORG_REVIEW_FIN_COA_CD_KEY, "", null, null, FIN_COA_CD_KEY));
-        routingRows.add(new Row(fields));
-
-        fields = new ArrayList();
-        fields.add(new Field("Org", "", Field.TEXT, true, ORG_REVIEW_ORG_CD_KEY, "", null, null, ORG_CD_KEY));
-        routingRows.add(new Row(fields));
-
-        fields = new ArrayList();
-        fields.add(new Field("Total Amount", "", Field.TEXT, true, TOTAL_AMOUNT_KEY, "", null, null, TOTAL_AMOUNT_KEY));
-        routingRows.add(new Row(fields));
-
-        fields = new ArrayList();
-        fields.add(new Field("Override Code", "", Field.TEXT, true, OVERRIDE_CD_KEY, "", null, null, OVERRIDE_CD_KEY));
-        routingRows.add(new Row(fields));
-
-        return routingRows;
+        return routingDataRows;
     }
 
     /**
      * simple getter for fincoacd
      * 
-     * @return
+     * @return String
      */
     public String getFinCoaCd() {
         return this.finCoaCd;
@@ -641,7 +542,7 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
     /**
      * simple getter for org code
      * 
-     * @return
+     * @return String
      */
     public String getOrgCd() {
         return this.orgCd;
