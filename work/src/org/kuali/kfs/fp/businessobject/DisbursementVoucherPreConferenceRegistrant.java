@@ -28,7 +28,7 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
@@ -40,7 +40,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBa
     private String disbVchrPreConfDepartmentCd;
     private String dvConferenceRegistrantName;
     private String dvPreConferenceRequestNumber;
-    private KualiDecimalMoney disbVchrExpenseAmount;
+    private KualiDecimal disbVchrExpenseAmount;
 
     /**
      * Default no-arg constructor.
@@ -160,7 +160,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBa
      * @return - Returns the disbVchrExpenseAmount
      * 
      */
-    public KualiDecimalMoney getDisbVchrExpenseAmount() {
+    public KualiDecimal getDisbVchrExpenseAmount() {
         return disbVchrExpenseAmount;
     }
 
@@ -171,7 +171,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBa
      * @param - disbVchrExpenseAmount The disbVchrExpenseAmount to set.
      * 
      */
-    public void setDisbVchrExpenseAmount(KualiDecimalMoney disbVchrExpenseAmount) {
+    public void setDisbVchrExpenseAmount(KualiDecimal disbVchrExpenseAmount) {
         this.disbVchrExpenseAmount = disbVchrExpenseAmount;
     }
 

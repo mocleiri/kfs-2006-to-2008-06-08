@@ -28,7 +28,7 @@ import java.util.List;
 
 import org.kuali.Constants;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.bo.InternalBillingItem;
 
 
@@ -102,8 +102,8 @@ public class InternalBillingDocument extends TransactionalDocumentBase {
      * 
      * @return the total
      */
-    public KualiDecimalMoney getItemTotal() {
-        KualiDecimalMoney total = new KualiDecimalMoney(0);
+    public KualiDecimal getItemTotal() {
+        KualiDecimal total = new KualiDecimal(0);
         for (Iterator iterator = items.iterator(); iterator.hasNext();) {
             total = total.add(((InternalBillingItem) iterator.next()).getTotal());
         }

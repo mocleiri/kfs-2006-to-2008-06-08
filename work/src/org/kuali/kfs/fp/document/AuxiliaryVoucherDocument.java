@@ -29,7 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 
 /**
@@ -73,10 +73,10 @@ public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implemen
      * This method calculates the debit total for a JV document keying off of the debit/debit code, only summing the accounting
      * lines with a debitDebitCode that matched the debit constant, and returns the results.
      * 
-     * @return KualiDecimalMoney
+     * @return KualiDecimal
      */
-    public KualiDecimalMoney getDebitTotal() {
-        KualiDecimalMoney debitTotal = new KualiDecimalMoney(0);
+    public KualiDecimal getDebitTotal() {
+        KualiDecimal debitTotal = new KualiDecimal(0);
         AccountingLineBase al = null;
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
@@ -92,10 +92,10 @@ public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implemen
      * This method calculates the credit total for a JV document keying off of the debit/credit code, only summing the accounting
      * lines with a debitCreditCode that matched the debit constant, and returns the results.
      * 
-     * @return KualiDecimalMoney
+     * @return KualiDecimal
      */
-    public KualiDecimalMoney getCreditTotal() {
-        KualiDecimalMoney creditTotal = new KualiDecimalMoney(0);
+    public KualiDecimal getCreditTotal() {
+        KualiDecimal creditTotal = new KualiDecimal(0);
         AccountingLineBase al = null;
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
@@ -111,10 +111,10 @@ public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implemen
      * This method sums the amounts of all of the accounting lines in the <code>{@link AuxiliaryVoucherDocument}</code>. This
      * method should be used to represent the total of the document when the balance type of External Encubmrance is selected.
      * 
-     * @return KualiDecimalMoney
+     * @return KualiDecimal
      */
-    public KualiDecimalMoney getTotal() {
-        KualiDecimalMoney total = new KualiDecimalMoney(0);
+    public KualiDecimal getTotal() {
+        KualiDecimal total = new KualiDecimal(0);
 
         total = getCreditTotal().subtract(getDebitTotal());
 

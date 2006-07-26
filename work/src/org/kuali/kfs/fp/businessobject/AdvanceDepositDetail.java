@@ -29,7 +29,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.document.AdvanceDepositDocument;
 
 /**
@@ -45,7 +45,7 @@ public class AdvanceDepositDetail extends BusinessObjectBase {
     private Date financialDocumentAdvanceDepositDate;
     private String financialDocumentAdvanceDepositReferenceNumber;
     private String financialDocumentAdvanceDepositDescription;
-    private KualiDecimalMoney financialDocumentAdvanceDepositAmount;
+    private KualiDecimal financialDocumentAdvanceDepositAmount;
     private String financialDocumentBankCode;
     private String financialDocumentBankAccountNumber;
 
@@ -211,7 +211,7 @@ public class AdvanceDepositDetail extends BusinessObjectBase {
      * @return Returns the financialDocumentAdvanceDepositAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentAdvanceDepositAmount() {
+    public KualiDecimal getFinancialDocumentAdvanceDepositAmount() {
         return financialDocumentAdvanceDepositAmount;
     }
 
@@ -221,7 +221,7 @@ public class AdvanceDepositDetail extends BusinessObjectBase {
      * @param financialDocumentAdvanceDepositAmount The financialDocumentAdvanceDepositAmount to set.
      * 
      */
-    public void setFinancialDocumentAdvanceDepositAmount(KualiDecimalMoney financialDocumentAdvanceDepositAmount) {
+    public void setFinancialDocumentAdvanceDepositAmount(KualiDecimal financialDocumentAdvanceDepositAmount) {
         this.financialDocumentAdvanceDepositAmount = financialDocumentAdvanceDepositAmount;
     }
 

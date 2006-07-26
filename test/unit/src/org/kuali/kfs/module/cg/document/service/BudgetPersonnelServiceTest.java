@@ -25,7 +25,7 @@ package org.kuali.module.kra.service;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.bo.BudgetPeriod;
 import org.kuali.module.kra.bo.BudgetUser;
@@ -51,7 +51,7 @@ public class BudgetPersonnelServiceTest extends KualiTestBaseWithSpring {
     }
 
     public void testPeriodFullFiscalYear() throws Exception {
-        KualiDecimalMoney periodSalary;
+        KualiDecimal periodSalary;
         BudgetUser dummyUser = new BudgetUser();
         // dummyUser.setBaseSalary(new Long(100000));
 
@@ -61,16 +61,16 @@ public class BudgetPersonnelServiceTest extends KualiTestBaseWithSpring {
 
         // Fiscal year is the same as the period dates
         // periodSalary =
-        // budgetPersonnelService.calculatePeriodSalary(dummyUser, dummyPeriod, new KualiDecimalMoney(3));
+        // budgetPersonnelService.calculatePeriodSalary(dummyUser, dummyPeriod, new KualiDecimal(3));
         // assertEquals(dummyUser.getBaseSalary(), periodSalary);
 
         // Fiscal year is in the future, relative to the period dates
         // periodSalary =
-        // budgetPersonnelService.calculatePeriodSalary(dummyUser, dummyPeriod, new KualiDecimalMoney(3));
-        // assertEquals(new KualiDecimalMoney(103000), periodSalary);
+        // budgetPersonnelService.calculatePeriodSalary(dummyUser, dummyPeriod, new KualiDecimal(3));
+        // assertEquals(new KualiDecimal(103000), periodSalary);
 
         // Fiscal year is in the pase, relative to the period dates
-        // periodSalary = budgetPersonnelService.calculatePeriodSalary(dummyUser, dummyPeriod, new KualiDecimalMoney(3));
-        // assertEquals(new KualiDecimalMoney(97087.38), periodSalary);
+        // periodSalary = budgetPersonnelService.calculatePeriodSalary(dummyUser, dummyPeriod, new KualiDecimal(3));
+        // assertEquals(new KualiDecimal(97087.38), periodSalary);
     }
 }

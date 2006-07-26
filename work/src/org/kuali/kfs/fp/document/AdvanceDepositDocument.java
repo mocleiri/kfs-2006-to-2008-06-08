@@ -25,7 +25,7 @@ package org.kuali.module.financial.document;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.module.financial.bo.AdvanceDepositDetail;
@@ -48,7 +48,7 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
     private Integer nextAdvanceDepositLineNumber = new Integer(1);
 
     // monetary attributes
-    private KualiDecimalMoney totalAdvanceDepositAmount = new KualiDecimalMoney(0);
+    private KualiDecimal totalAdvanceDepositAmount = new KualiDecimal(0);
 
     /**
      * Default constructor that calls super.
@@ -60,9 +60,9 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
     /**
      * Gets the total advance deposit amount.
      * 
-     * @return KualiDecimalMoney
+     * @return KualiDecimal
      */
-    public KualiDecimalMoney getTotalAdvanceDepositAmount() {
+    public KualiDecimal getTotalAdvanceDepositAmount() {
         return totalAdvanceDepositAmount;
     }
 
@@ -80,7 +80,7 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
      * 
      * @param advanceDepositAmount
      */
-    public void setTotalAdvanceDepositAmount(KualiDecimalMoney advanceDepositAmount) {
+    public void setTotalAdvanceDepositAmount(KualiDecimal advanceDepositAmount) {
         this.totalAdvanceDepositAmount = advanceDepositAmount;
     }
 
@@ -158,7 +158,7 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
         // if the totalAdvanceDepositAmount goes negative, bring back to zero.
         this.totalAdvanceDepositAmount = this.totalAdvanceDepositAmount.subtract(advanceDepositDetail.getFinancialDocumentAdvanceDepositAmount());
         if (this.totalAdvanceDepositAmount.isNegative()) {
-            this.totalAdvanceDepositAmount = KualiDecimalMoney.ZERO;
+            this.totalAdvanceDepositAmount = KualiDecimal.ZERO;
         }
     }
 
@@ -179,9 +179,9 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
     /**
      * This method returns the overall total of the document - the advance deposit total.
      * 
-     * @return KualiDecimalMoney
+     * @return KualiDecimal
      */
-    public KualiDecimalMoney getSumTotalAmount() {
+    public KualiDecimal getSumTotalAmount() {
         return this.totalAdvanceDepositAmount;
     }
 

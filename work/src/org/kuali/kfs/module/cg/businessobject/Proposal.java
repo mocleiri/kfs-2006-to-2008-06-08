@@ -31,7 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -41,13 +41,13 @@ public class Proposal extends BusinessObjectBase {
     private Long proposalNumber;
     private Timestamp proposalBeginningDate;
     private Timestamp proposalEndingDate;
-    private KualiDecimalMoney proposalTotalAmount;
-    private KualiDecimalMoney proposalDirectCostAmount;
-    private KualiDecimalMoney proposalIndirectCostAmount;
+    private KualiDecimal proposalTotalAmount;
+    private KualiDecimal proposalDirectCostAmount;
+    private KualiDecimal proposalIndirectCostAmount;
     private Timestamp proposalRejectedDate;
     private Timestamp proposalLastUpdateDate;
     private Timestamp proposalDueDate;
-    private KualiDecimalMoney proposalTotalProjectAmount;
+    private KualiDecimal proposalTotalProjectAmount;
     private Timestamp proposalSubmissionDate;
     private boolean proposalFederalPassThroughIndicator;
     private String oldProposalNumber;
@@ -152,7 +152,7 @@ public class Proposal extends BusinessObjectBase {
      * @return - Returns the proposalTotalAmount
      * 
      */
-    public KualiDecimalMoney getProposalTotalAmount() {
+    public KualiDecimal getProposalTotalAmount() {
         return proposalTotalAmount;
     }
 
@@ -162,7 +162,7 @@ public class Proposal extends BusinessObjectBase {
      * @param - proposalTotalAmount The proposalTotalAmount to set.
      * 
      */
-    public void setProposalTotalAmount(KualiDecimalMoney proposalTotalAmount) {
+    public void setProposalTotalAmount(KualiDecimal proposalTotalAmount) {
         this.proposalTotalAmount = proposalTotalAmount;
     }
 
@@ -173,7 +173,7 @@ public class Proposal extends BusinessObjectBase {
      * @return - Returns the proposalDirectCostAmount
      * 
      */
-    public KualiDecimalMoney getProposalDirectCostAmount() {
+    public KualiDecimal getProposalDirectCostAmount() {
         return proposalDirectCostAmount;
     }
 
@@ -183,7 +183,7 @@ public class Proposal extends BusinessObjectBase {
      * @param - proposalDirectCostAmount The proposalDirectCostAmount to set.
      * 
      */
-    public void setProposalDirectCostAmount(KualiDecimalMoney proposalDirectCostAmount) {
+    public void setProposalDirectCostAmount(KualiDecimal proposalDirectCostAmount) {
         this.proposalDirectCostAmount = proposalDirectCostAmount;
     }
 
@@ -194,7 +194,7 @@ public class Proposal extends BusinessObjectBase {
      * @return - Returns the proposalIndirectCostAmount
      * 
      */
-    public KualiDecimalMoney getProposalIndirectCostAmount() {
+    public KualiDecimal getProposalIndirectCostAmount() {
         return proposalIndirectCostAmount;
     }
 
@@ -204,7 +204,7 @@ public class Proposal extends BusinessObjectBase {
      * @param - proposalIndirectCostAmount The proposalIndirectCostAmount to set.
      * 
      */
-    public void setProposalIndirectCostAmount(KualiDecimalMoney proposalIndirectCostAmount) {
+    public void setProposalIndirectCostAmount(KualiDecimal proposalIndirectCostAmount) {
         this.proposalIndirectCostAmount = proposalIndirectCostAmount;
     }
 
@@ -278,7 +278,7 @@ public class Proposal extends BusinessObjectBase {
      * @return - Returns the proposalTotalProjectAmount
      * 
      */
-    public KualiDecimalMoney getProposalTotalProjectAmount() {
+    public KualiDecimal getProposalTotalProjectAmount() {
         return proposalTotalProjectAmount;
     }
 
@@ -288,7 +288,7 @@ public class Proposal extends BusinessObjectBase {
      * @param - proposalTotalProjectAmount The proposalTotalProjectAmount to set.
      * 
      */
-    public void setProposalTotalProjectAmount(KualiDecimalMoney proposalTotalProjectAmount) {
+    public void setProposalTotalProjectAmount(KualiDecimal proposalTotalProjectAmount) {
         this.proposalTotalProjectAmount = proposalTotalProjectAmount;
     }
 

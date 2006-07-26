@@ -26,7 +26,7 @@ import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * Internal Billing Item Business Object
@@ -42,14 +42,14 @@ public class InternalBillingItem extends BusinessObjectBase {
     private String itemStockDescription;
     private Timestamp itemServiceDate;
     private Integer itemQuantity;
-    private KualiDecimalMoney itemUnitAmount;
+    private KualiDecimal itemUnitAmount;
     private String unitOfMeasureCode;
 
     /**
      * Constructs a InternalBillingItem.
      */
     public InternalBillingItem() {
-        setItemUnitAmount(new KualiDecimalMoney(0));
+        setItemUnitAmount(new KualiDecimal(0));
     }
 
 
@@ -178,7 +178,7 @@ public class InternalBillingItem extends BusinessObjectBase {
      * 
      * @return Returns the itemUnitAmount.
      */
-    public KualiDecimalMoney getItemUnitAmount() {
+    public KualiDecimal getItemUnitAmount() {
         return itemUnitAmount;
     }
 
@@ -188,7 +188,7 @@ public class InternalBillingItem extends BusinessObjectBase {
      * 
      * @param itemUnitAmount The itemUnitAmount to set.
      */
-    public void setItemUnitAmount(KualiDecimalMoney itemUnitAmount) {
+    public void setItemUnitAmount(KualiDecimal itemUnitAmount) {
         this.itemUnitAmount = itemUnitAmount;
     }
 
@@ -216,8 +216,8 @@ public class InternalBillingItem extends BusinessObjectBase {
     /**
      * @return the total amount for this item
      */
-    public KualiDecimalMoney getTotal() {
-        KualiDecimalMoney total = new KualiDecimalMoney(itemQuantity.toString());
+    public KualiDecimal getTotal() {
+        KualiDecimal total = new KualiDecimal(itemQuantity.toString());
         return total.multiply(itemUnitAmount);
     }
 
