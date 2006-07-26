@@ -7,13 +7,13 @@
     <businessObject businessObjectClass="org.kuali.module.gl.bo.AccountBalanceByConsolidation">
         <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
-            <title>Available Account Balance</title>
+            <title>Available Balances Lookup By Consolidation</title>
             <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
-                <field attributeName="objectCode" />
                 <field attributeName="subAccountNumber" />
+                <field attributeName="objectCode" />
                 <field attributeName="subObjectCode" />
                 <field attributeName="currentBudgetLineBalanceAmount" />
                 <field attributeName="accountLineActualsBalanceAmount" />
@@ -30,13 +30,13 @@
             <defaultSort attributeName="financialObject.financialObjectLevel.financialConsolidationObjectCode" />
 
             <lookupFields>
-                <lookupField attributeName="universityFiscalYear" required="true" noLookup="false">
+                <lookupField attributeName="universityFiscalYear" required="true">
                     <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.FiscalYearFinder</defaultValueFinderClass>
                 </lookupField>
 
-                <lookupField attributeName="chartOfAccountsCode" required="true" noLookup="true" />
-                <lookupField attributeName="accountNumber" required="true" noLookup="false" />
-                <lookupField attributeName="subAccountNumber" noLookup="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="true" />
+                <lookupField attributeName="accountNumber" required="true" />
+                <lookupField attributeName="subAccountNumber" forceLookup="true" />
 
                 <lookupField attributeName="dummyBusinessObject.consolidationOption">
                     <defaultValueFinderClass>org.kuali.module.gl.web.optionfinder.GLConsolidationOptionFinder</defaultValueFinderClass>
@@ -78,7 +78,7 @@
 
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <text size="2" />
                 </control>
                 <description>The Chart of Accounts for an Account Number. Kuali accommodates more than one Chart of Accounts. Each chart has its own set of Account Numbers, Object Codes, and Organizations.</description>
             </attributeReference>
