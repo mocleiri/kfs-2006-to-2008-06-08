@@ -40,7 +40,7 @@ import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentTypeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.service.ObjectCodeService;
@@ -163,7 +163,7 @@ public class ScrubberProcess {
 
     /* Unit Of Work info */
     private UnitOfWorkInfo unitOfWork;
-    private KualiDecimalMoney scrubCostShareAmount;
+    private KualiDecimal scrubCostShareAmount;
 
     /* Statistics for the reports */
     private ScrubberReportData scrubberReport;
@@ -490,7 +490,7 @@ public class ScrubberProcess {
     private void processGroup(OriginEntryGroup originEntryGroup) {
 
         OriginEntry lastEntry = null;
-        scrubCostShareAmount = KualiDecimalMoney.ZERO;
+        scrubCostShareAmount = KualiDecimal.ZERO;
         unitOfWork = new UnitOfWorkInfo();
 
         Iterator entries = originEntryService.getEntriesByGroup(originEntryGroup);
@@ -552,7 +552,7 @@ public class ScrubberProcess {
 
                 if (!scrubCostShareAmount.isZero()) {
                     generateCostShareEntries(scrubbedEntry);
-                    scrubCostShareAmount = KualiDecimalMoney.ZERO;
+                    scrubCostShareAmount = KualiDecimal.ZERO;
                 }
                 scrubbedEntry.setTransactionScrubberOffsetGenerationIndicator(false);
                 createOutputEntry(scrubbedEntry, validGroup);
@@ -599,7 +599,7 @@ public class ScrubberProcess {
      */
     private void processEntry(OriginEntry workingEntry) {
 
-        KualiDecimalMoney transactionAmount = workingEntry.getTransactionLedgerEntryAmount();
+        KualiDecimal transactionAmount = workingEntry.getTransactionLedgerEntryAmount();
 
         if (workingEntry.getBalanceType().isFinancialOffsetGenerationIndicator() && !"ACLO".equals(workingEntry.getFinancialDocumentTypeCode()) && !ObjectHelper.isOneOf(workingEntry.getUniversityFiscalPeriodCode(), invalidFiscalPeriodCodesForOffsetGeneration)) {
             if (workingEntry.isDebit()) {
@@ -806,7 +806,7 @@ public class ScrubberProcess {
         createOutputEntry(costShareSourceAccountOffsetEntry, validGroup);
         scrubberReport.incrementCostShareEntryGenerated();
 
-        scrubCostShareAmount = KualiDecimalMoney.ZERO;
+        scrubCostShareAmount = KualiDecimal.ZERO;
     }
 
     /**
