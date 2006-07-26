@@ -27,7 +27,7 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.Options;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -51,22 +51,22 @@ public class Balance extends BusinessObjectBase {
     private String subObjectCode;
     private String balanceTypeCode;
     private String objectTypeCode;
-    private KualiDecimalMoney accountLineAnnualBalanceAmount;
-    private KualiDecimalMoney beginningBalanceLineAmount;
-    private KualiDecimalMoney contractsGrantsBeginningBalanceAmount;
-    private KualiDecimalMoney month1Amount;
-    private KualiDecimalMoney month2Amount;
-    private KualiDecimalMoney month3Amount;
-    private KualiDecimalMoney month4Amount;
-    private KualiDecimalMoney month5Amount;
-    private KualiDecimalMoney month6Amount;
-    private KualiDecimalMoney month7Amount;
-    private KualiDecimalMoney month8Amount;
-    private KualiDecimalMoney month9Amount;
-    private KualiDecimalMoney month10Amount;
-    private KualiDecimalMoney month11Amount;
-    private KualiDecimalMoney month12Amount;
-    private KualiDecimalMoney month13Amount;
+    private KualiDecimal accountLineAnnualBalanceAmount;
+    private KualiDecimal beginningBalanceLineAmount;
+    private KualiDecimal contractsGrantsBeginningBalanceAmount;
+    private KualiDecimal month1Amount;
+    private KualiDecimal month2Amount;
+    private KualiDecimal month3Amount;
+    private KualiDecimal month4Amount;
+    private KualiDecimal month5Amount;
+    private KualiDecimal month6Amount;
+    private KualiDecimal month7Amount;
+    private KualiDecimal month8Amount;
+    private KualiDecimal month9Amount;
+    private KualiDecimal month10Amount;
+    private KualiDecimal month11Amount;
+    private KualiDecimal month12Amount;
+    private KualiDecimal month13Amount;
     private Date timestamp;
 
     private Chart chart;
@@ -95,22 +95,22 @@ public class Balance extends BusinessObjectBase {
     }
 
     public Balance() {
-        accountLineAnnualBalanceAmount = new KualiDecimalMoney(0);
-        beginningBalanceLineAmount = new KualiDecimalMoney(0);
-        contractsGrantsBeginningBalanceAmount = new KualiDecimalMoney(0);
-        month1Amount = new KualiDecimalMoney(0);
-        month2Amount = new KualiDecimalMoney(0);
-        month3Amount = new KualiDecimalMoney(0);
-        month4Amount = new KualiDecimalMoney(0);
-        month5Amount = new KualiDecimalMoney(0);
-        month6Amount = new KualiDecimalMoney(0);
-        month7Amount = new KualiDecimalMoney(0);
-        month8Amount = new KualiDecimalMoney(0);
-        month9Amount = new KualiDecimalMoney(0);
-        month10Amount = new KualiDecimalMoney(0);
-        month11Amount = new KualiDecimalMoney(0);
-        month12Amount = new KualiDecimalMoney(0);
-        month13Amount = new KualiDecimalMoney(0);
+        accountLineAnnualBalanceAmount = new KualiDecimal(0);
+        beginningBalanceLineAmount = new KualiDecimal(0);
+        contractsGrantsBeginningBalanceAmount = new KualiDecimal(0);
+        month1Amount = new KualiDecimal(0);
+        month2Amount = new KualiDecimal(0);
+        month3Amount = new KualiDecimal(0);
+        month4Amount = new KualiDecimal(0);
+        month5Amount = new KualiDecimal(0);
+        month6Amount = new KualiDecimal(0);
+        month7Amount = new KualiDecimal(0);
+        month8Amount = new KualiDecimal(0);
+        month9Amount = new KualiDecimal(0);
+        month10Amount = new KualiDecimal(0);
+        month11Amount = new KualiDecimal(0);
+        month12Amount = new KualiDecimal(0);
+        month13Amount = new KualiDecimal(0);
         this.dummyBusinessObject = new DummyBusinessObject();
     }
 
@@ -139,7 +139,7 @@ public class Balance extends BusinessObjectBase {
         return map;
     }
 
-    public KualiDecimalMoney getAmount(String period) {
+    public KualiDecimal getAmount(String period) {
         if ("AB".equals(period)) {
             return getAccountLineAnnualBalanceAmount();
         }
@@ -193,7 +193,7 @@ public class Balance extends BusinessObjectBase {
         }
     }
 
-    public void setAmount(String period, KualiDecimalMoney amount) {
+    public void setAmount(String period, KualiDecimal amount) {
         if ("AB".equals(period)) {
             setAccountLineAnnualBalanceAmount(amount);
         }
@@ -247,14 +247,14 @@ public class Balance extends BusinessObjectBase {
     /**
      * @return Returns the accountLineAnnualBalanceAmount.
      */
-    public KualiDecimalMoney getAccountLineAnnualBalanceAmount() {
+    public KualiDecimal getAccountLineAnnualBalanceAmount() {
         return accountLineAnnualBalanceAmount;
     }
 
     /**
      * @param accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
      */
-    public void setAccountLineAnnualBalanceAmount(KualiDecimalMoney accountLineAnnualBalanceAmount) {
+    public void setAccountLineAnnualBalanceAmount(KualiDecimal accountLineAnnualBalanceAmount) {
         this.accountLineAnnualBalanceAmount = accountLineAnnualBalanceAmount;
     }
 
@@ -289,14 +289,14 @@ public class Balance extends BusinessObjectBase {
     /**
      * @return Returns the beginningBalanceLineAmount.
      */
-    public KualiDecimalMoney getBeginningBalanceLineAmount() {
+    public KualiDecimal getBeginningBalanceLineAmount() {
         return beginningBalanceLineAmount;
     }
 
     /**
      * @param beginningBalanceLineAmount The beginningBalanceLineAmount to set.
      */
-    public void setBeginningBalanceLineAmount(KualiDecimalMoney beginningBalanceLineAmount) {
+    public void setBeginningBalanceLineAmount(KualiDecimal beginningBalanceLineAmount) {
         this.beginningBalanceLineAmount = beginningBalanceLineAmount;
     }
 
@@ -317,196 +317,196 @@ public class Balance extends BusinessObjectBase {
     /**
      * @return Returns the contractsGrantsBeginningBalanceAmount.
      */
-    public KualiDecimalMoney getContractsGrantsBeginningBalanceAmount() {
+    public KualiDecimal getContractsGrantsBeginningBalanceAmount() {
         return contractsGrantsBeginningBalanceAmount;
     }
 
     /**
      * @param contractsGrantsBeginningBalanceAmount The contractsGrantsBeginningBalanceAmount to set.
      */
-    public void setContractsGrantsBeginningBalanceAmount(KualiDecimalMoney contractsGrantsBeginningBalanceAmount) {
+    public void setContractsGrantsBeginningBalanceAmount(KualiDecimal contractsGrantsBeginningBalanceAmount) {
         this.contractsGrantsBeginningBalanceAmount = contractsGrantsBeginningBalanceAmount;
     }
 
     /**
      * @return Returns the month10Amount.
      */
-    public KualiDecimalMoney getMonth10Amount() {
+    public KualiDecimal getMonth10Amount() {
         return month10Amount;
     }
 
     /**
      * @param month10Amount The month10Amount to set.
      */
-    public void setMonth10Amount(KualiDecimalMoney month10Amount) {
+    public void setMonth10Amount(KualiDecimal month10Amount) {
         this.month10Amount = month10Amount;
     }
 
     /**
      * @return Returns the month11Amount.
      */
-    public KualiDecimalMoney getMonth11Amount() {
+    public KualiDecimal getMonth11Amount() {
         return month11Amount;
     }
 
     /**
      * @param month11Amount The month11Amount to set.
      */
-    public void setMonth11Amount(KualiDecimalMoney month11Amount) {
+    public void setMonth11Amount(KualiDecimal month11Amount) {
         this.month11Amount = month11Amount;
     }
 
     /**
      * @return Returns the month12Amount.
      */
-    public KualiDecimalMoney getMonth12Amount() {
+    public KualiDecimal getMonth12Amount() {
         return month12Amount;
     }
 
     /**
      * @param month12Amount The month12Amount to set.
      */
-    public void setMonth12Amount(KualiDecimalMoney month12Amount) {
+    public void setMonth12Amount(KualiDecimal month12Amount) {
         this.month12Amount = month12Amount;
     }
 
     /**
      * @return Returns the month13Amount.
      */
-    public KualiDecimalMoney getMonth13Amount() {
+    public KualiDecimal getMonth13Amount() {
         return month13Amount;
     }
 
     /**
      * @param month13Amount The month13Amount to set.
      */
-    public void setMonth13Amount(KualiDecimalMoney month13Amount) {
+    public void setMonth13Amount(KualiDecimal month13Amount) {
         this.month13Amount = month13Amount;
     }
 
     /**
      * @return Returns the month1Amount.
      */
-    public KualiDecimalMoney getMonth1Amount() {
+    public KualiDecimal getMonth1Amount() {
         return month1Amount;
     }
 
     /**
      * @param month1Amount The month1Amount to set.
      */
-    public void setMonth1Amount(KualiDecimalMoney month1Amount) {
+    public void setMonth1Amount(KualiDecimal month1Amount) {
         this.month1Amount = month1Amount;
     }
 
     /**
      * @return Returns the month2Amount.
      */
-    public KualiDecimalMoney getMonth2Amount() {
+    public KualiDecimal getMonth2Amount() {
         return month2Amount;
     }
 
     /**
      * @param month2Amount The month2Amount to set.
      */
-    public void setMonth2Amount(KualiDecimalMoney month2Amount) {
+    public void setMonth2Amount(KualiDecimal month2Amount) {
         this.month2Amount = month2Amount;
     }
 
     /**
      * @return Returns the month3Amount.
      */
-    public KualiDecimalMoney getMonth3Amount() {
+    public KualiDecimal getMonth3Amount() {
         return month3Amount;
     }
 
     /**
      * @param month3Amount The month3Amount to set.
      */
-    public void setMonth3Amount(KualiDecimalMoney month3Amount) {
+    public void setMonth3Amount(KualiDecimal month3Amount) {
         this.month3Amount = month3Amount;
     }
 
     /**
      * @return Returns the month4Amount.
      */
-    public KualiDecimalMoney getMonth4Amount() {
+    public KualiDecimal getMonth4Amount() {
         return month4Amount;
     }
 
     /**
      * @param month4Amount The month4Amount to set.
      */
-    public void setMonth4Amount(KualiDecimalMoney month4Amount) {
+    public void setMonth4Amount(KualiDecimal month4Amount) {
         this.month4Amount = month4Amount;
     }
 
     /**
      * @return Returns the month5Amount.
      */
-    public KualiDecimalMoney getMonth5Amount() {
+    public KualiDecimal getMonth5Amount() {
         return month5Amount;
     }
 
     /**
      * @param month5Amount The month5Amount to set.
      */
-    public void setMonth5Amount(KualiDecimalMoney month5Amount) {
+    public void setMonth5Amount(KualiDecimal month5Amount) {
         this.month5Amount = month5Amount;
     }
 
     /**
      * @return Returns the month6Amount.
      */
-    public KualiDecimalMoney getMonth6Amount() {
+    public KualiDecimal getMonth6Amount() {
         return month6Amount;
     }
 
     /**
      * @param month6Amount The month6Amount to set.
      */
-    public void setMonth6Amount(KualiDecimalMoney month6Amount) {
+    public void setMonth6Amount(KualiDecimal month6Amount) {
         this.month6Amount = month6Amount;
     }
 
     /**
      * @return Returns the month7Amount.
      */
-    public KualiDecimalMoney getMonth7Amount() {
+    public KualiDecimal getMonth7Amount() {
         return month7Amount;
     }
 
     /**
      * @param month7Amount The month7Amount to set.
      */
-    public void setMonth7Amount(KualiDecimalMoney month7Amount) {
+    public void setMonth7Amount(KualiDecimal month7Amount) {
         this.month7Amount = month7Amount;
     }
 
     /**
      * @return Returns the month8Amount.
      */
-    public KualiDecimalMoney getMonth8Amount() {
+    public KualiDecimal getMonth8Amount() {
         return month8Amount;
     }
 
     /**
      * @param month8Amount The month8Amount to set.
      */
-    public void setMonth8Amount(KualiDecimalMoney month8Amount) {
+    public void setMonth8Amount(KualiDecimal month8Amount) {
         this.month8Amount = month8Amount;
     }
 
     /**
      * @return Returns the month9Amount.
      */
-    public KualiDecimalMoney getMonth9Amount() {
+    public KualiDecimal getMonth9Amount() {
         return month9Amount;
     }
 
     /**
      * @param month9Amount The month9Amount to set.
      */
-    public void setMonth9Amount(KualiDecimalMoney month9Amount) {
+    public void setMonth9Amount(KualiDecimal month9Amount) {
         this.month9Amount = month9Amount;
     }
 

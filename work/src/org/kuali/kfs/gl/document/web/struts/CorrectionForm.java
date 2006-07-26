@@ -35,7 +35,7 @@ import java.util.TreeSet;
 
 import org.apache.struts.upload.FormFile;
 import org.kuali.core.authorization.TransactionalDocumentActionFlags;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.document.CorrectionDocument;
@@ -73,7 +73,7 @@ public class CorrectionForm extends KualiDocumentFormBase {
         for (int i = 0; i < methods.length; i++) {
             Method m = methods[i];
             Class c = m.getReturnType();
-            if (m.getName().startsWith("get") && (c.equals(String.class) || c.equals(Integer.class) || c.equals(java.sql.Date.class) || c.equals(KualiDecimalMoney.class))) {
+            if (m.getName().startsWith("get") && (c.equals(String.class) || c.equals(Integer.class) || c.equals(java.sql.Date.class) || c.equals(KualiDecimal.class))) {
                 char ch = Character.toLowerCase(m.getName().charAt(3));
                 validMethods.add(new StringBuffer("").append(ch).append(m.getName().substring(4)).toString());
             }

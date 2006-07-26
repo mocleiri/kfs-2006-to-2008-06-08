@@ -32,7 +32,7 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
@@ -93,9 +93,9 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
         GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry();
 
         // determine if we are on increase or decrease side
-        KualiDecimalMoney amountSign = new KualiDecimalMoney(1);
+        KualiDecimal amountSign = new KualiDecimal(1);
         if (accountingLine instanceof SourceAccountingLine) {
-            amountSign = new KualiDecimalMoney(-1);
+            amountSign = new KualiDecimal(-1);
         }
 
         BudgetAdjustmentAccountingLine budgetAccountingLine = (BudgetAdjustmentAccountingLine) accountingLine;
@@ -197,7 +197,7 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
      * @param monthAmount
      * @return
      */
-    private boolean createMontlyBudgetGLPE(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, String fiscalPeriod, KualiDecimalMoney monthAmount) {
+    private boolean createMontlyBudgetGLPE(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, String fiscalPeriod, KualiDecimal monthAmount) {
         boolean success = true;
 
         GeneralLedgerPendingEntry explicitEntry = new GeneralLedgerPendingEntry();
@@ -243,7 +243,7 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
 
         boolean validMonthlyLines = true;
 
-        KualiDecimalMoney monthlyTotal = budgetAdjustmentAccountingLine.getMonthlyLinesTotal();
+        KualiDecimal monthlyTotal = budgetAdjustmentAccountingLine.getMonthlyLinesTotal();
         if (monthlyTotal.isNonZero() && monthlyTotal.compareTo(budgetAdjustmentAccountingLine.getCurrentBudgetAdjustmentAmount()) != 0) {
             GlobalVariables.getErrorMap().put(PropertyConstants.BA_CURRENT_BUDGET_ADJUSTMENT_AMOUNT, KeyConstants.ERROR_DOCUMENT_BA_MONTH_TOTAL_NOT_EQUAL_CURRENT);
             validMonthlyLines = false;
@@ -313,7 +313,7 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
      * @param positive where to check amount is positive (true) or negative (false)
      * @return boolean indicating if the value has the requested sign
      */
-    private boolean checkAmountSign(KualiDecimalMoney amount, String propertyName, String label, boolean positive) {
+    private boolean checkAmountSign(KualiDecimal amount, String propertyName, String label, boolean positive) {
         boolean correctSign = true;
 
         if (positive && amount.isNegative()) {
