@@ -20,25 +20,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.kuali.module.kra.service;
 
-import org.kuali.core.util.OjbCollectionAware;
-import org.kuali.module.kra.document.ResearchDocument;
+package org.kuali.module.financial.document;
 
-import edu.iu.uis.eden.exception.WorkflowException;
+import org.kuali.core.util.SpringServiceLocator;
+
 
 /**
- * This class...
+ * Year End version of the <code>BudgetAdjustmentDocument</code> 
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public interface ResearchDocumentService {
+public class YearEndBudgetAdjustmentDocument extends BudgetAdjustmentDocument implements YearEndDocument {
 
     /**
-     * This method will prepare a research document for being saved. This will include cleansing lists of deleted items and removing
-     * dependencies of deleted items.
-     * 
+     * Constructs a YearEndBudgetAdjustmentDocument.
      */
-    public void prepareResearchDocumentForSave(ResearchDocument researchDocument) throws WorkflowException;
+    public YearEndBudgetAdjustmentDocument() {
+        super();
+    }
 
+    /**
+     * set posting year to previous fiscal year
+     */
+    public void initiateDocument() {
+        Integer previousYearParam = new Integer(SpringServiceLocator.getDateTimeService().getCurrentFiscalYear().intValue()-1);
+        setPostingYear(previousYearParam);
+    }
 }

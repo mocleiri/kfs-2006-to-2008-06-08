@@ -32,8 +32,11 @@ import java.util.List;
 
 import org.kuali.core.document.DocumentBase;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
 import org.kuali.module.gl.bo.OriginEntryGroup;
+import org.kuali.module.gl.service.CorrectionDocumentService;
+import org.kuali.module.gl.service.OriginEntryGroupService;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -41,14 +44,15 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 public class CorrectionDocument extends DocumentBase {
 
     // private String financialDocumentNumber;
-    private String correctionTypeCode;
-    private String correctionSelectionCode;
-    private String correctionFileDeleteCode;
+    
+    private String correctionTypeCode; // Manual or Criteria?
+    private boolean correctionSelectionCode; // File or System?
+    private boolean correctionFileDeleteCode; // Delete Output?
     private Integer correctionRowCount;
     private KualiDecimal correctionDebitTotalAmount;
     private KualiDecimal correctionCreditTotalAmount;
-    private String correctionInputFileName;
-    private String correctionOutputFileName;
+    private String correctionInputFileName; //Should be integer?
+    private String correctionOutputFileName; //Should be integer?
     private String correctionScriptText;
 
     // private DocumentHeader financialDocument;
@@ -97,7 +101,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the financialDocumentNumber attribute.
      * 
-     * @param - financialDocumentNumber The financialDocumentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
     // public void setFinancialDocumentNumber(String financialDocumentNumber) {
@@ -117,7 +121,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the correctionTypeCode attribute.
      * 
-     * @param - correctionTypeCode The correctionTypeCode to set.
+     * @param correctionTypeCode The correctionTypeCode to set.
      * 
      */
     public void setCorrectionTypeCode(String correctionTypeCode) {
@@ -131,17 +135,17 @@ public class CorrectionDocument extends DocumentBase {
      * @return - Returns the correctionSelectionCode
      * 
      */
-    public String getCorrectionSelectionCode() {
+    public boolean getCorrectionSelectionCode() {
         return correctionSelectionCode;
     }
 
     /**
      * Sets the correctionSelectionCode attribute.
      * 
-     * @param - correctionSelectionCode The correctionSelectionCode to set.
+     * @param correctionSelectionCode The correctionSelectionCode to set.
      * 
      */
-    public void setCorrectionSelectionCode(String correctionSelectionCode) {
+    public void setCorrectionSelectionCode(boolean correctionSelectionCode) {
         this.correctionSelectionCode = correctionSelectionCode;
     }
 
@@ -152,17 +156,17 @@ public class CorrectionDocument extends DocumentBase {
      * @return - Returns the correctionFileDeleteCode
      * 
      */
-    public String getCorrectionFileDeleteCode() {
+    public boolean getCorrectionFileDeleteCode() {
         return correctionFileDeleteCode;
     }
 
     /**
      * Sets the correctionFileDeleteCode attribute.
      * 
-     * @param - correctionFileDeleteCode The correctionFileDeleteCode to set.
+     * @param correctionFileDeleteCode The correctionFileDeleteCode to set.
      * 
      */
-    public void setCorrectionFileDeleteCode(String correctionFileDeleteCode) {
+    public void setCorrectionFileDeleteCode(boolean correctionFileDeleteCode) {
         this.correctionFileDeleteCode = correctionFileDeleteCode;
     }
 
@@ -180,7 +184,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the correctionRowCount attribute.
      * 
-     * @param - correctionRowCount The correctionRowCount to set.
+     * @param correctionRowCount The correctionRowCount to set.
      * 
      */
     public void setCorrectionRowCount(Integer correctionRowCount) {
@@ -201,7 +205,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the correctionChangeGroupNextLineNumber attribute.
      * 
-     * @param - correctionChangeGroupNextLineNumber The correctionChangeGroupNextLineNumber to set.
+     * @param correctionChangeGroupNextLineNumber The correctionChangeGroupNextLineNumber to set.
      * 
      */
     public void setCorrectionChangeGroupNextLineNumber(Integer correctionChangeGroupNextLineNumber) {
@@ -222,7 +226,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the correctionDebitTotalAmount attribute.
      * 
-     * @param - correctionDebitTotalAmount The correctionDebitTotalAmount to set.
+     * @param correctionDebitTotalAmount The correctionDebitTotalAmount to set.
      * 
      */
     public void setCorrectionDebitTotalAmount(KualiDecimal correctionDebitTotalAmount) {
@@ -243,7 +247,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the correctionCreditTotalAmount attribute.
      * 
-     * @param - correctionCreditTotalAmount The correctionCreditTotalAmount to set.
+     * @param correctionCreditTotalAmount The correctionCreditTotalAmount to set.
      * 
      */
     public void setCorrectionCreditTotalAmount(KualiDecimal correctionCreditTotalAmount) {
@@ -264,7 +268,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the correctionInputFileName attribute.
      * 
-     * @param - correctionInputFileName The correctionInputFileName to set.
+     * @param correctionInputFileName The correctionInputFileName to set.
      * 
      */
     public void setCorrectionInputFileName(String correctionInputFileName) {
@@ -285,7 +289,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the correctionOutputFileName attribute.
      * 
-     * @param - correctionOutputFileName The correctionOutputFileName to set.
+     * @param correctionOutputFileName The correctionOutputFileName to set.
      * 
      */
     public void setCorrectionOutputFileName(String correctionOutputFileName) {
@@ -306,7 +310,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the correctionScriptText attribute.
      * 
-     * @param - correctionScriptText The correctionScriptText to set.
+     * @param correctionScriptText The correctionScriptText to set.
      * 
      */
     public void setCorrectionScriptText(String correctionScriptText) {
@@ -326,7 +330,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the financialDocument attribute.
      * 
-     * @param - financialDocument The financialDocument to set.
+     * @param financialDocument The financialDocument to set.
      * @deprecated
      */
     // public void setFinancialDocument(DocumentHeader financialDocument) {
@@ -345,7 +349,7 @@ public class CorrectionDocument extends DocumentBase {
     /**
      * Sets the correctionChangeGroup list.
      * 
-     * @param - correctionChangeGroup The correctionChangeGroup list to set.
+     * @param correctionChangeGroup The correctionChangeGroup list to set.
      * 
      */
     public void setCorrectionChangeGroup(List correctionChangeGroup) {
@@ -446,17 +450,9 @@ public class CorrectionDocument extends DocumentBase {
         this.originEntryGroupId = originEntryGroupId;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.kuali.core.document.Document#populateDocumentForRouting()
-     */
-    public void populateDocumentForRouting() {
-        // TODO Auto-generated method stub
-    }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
@@ -464,4 +460,23 @@ public class CorrectionDocument extends DocumentBase {
         return m;
     }
 
+    public void handleRouteStatusChange() {
+        super.handleRouteStatusChange();
+        if (getDocumentHeader().getWorkflowDocument().stateIsApproved()) {
+            String docId = getDocumentHeader().getFinancialDocumentNumber();
+            CorrectionDocumentService correctionDocumentService = (CorrectionDocumentService) SpringServiceLocator.getBeanFactory().getBean("glCorrectionDocumentService");
+            CorrectionDocument oldDoc = correctionDocumentService.findByCorrectionDocumentHeaderId(docId);
+            String groupId = oldDoc.getCorrectionOutputFileName();
+            
+            OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
+            OriginEntryGroup approvedGLCP = originEntryGroupService.getExactMatchingEntryGroup(Integer.parseInt(groupId));
+            approvedGLCP.setScrub(true);
+            originEntryGroupService.save(approvedGLCP);
+            
+        }
+        
+        
+    }
+    
+    
 }

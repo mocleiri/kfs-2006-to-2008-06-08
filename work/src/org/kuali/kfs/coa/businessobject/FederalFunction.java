@@ -57,7 +57,7 @@ public class FederalFunction extends BusinessObjectBase {
     /**
      * Sets the financialFederalFunctionCode attribute.
      * 
-     * @param - financialFederalFunctionCode The financialFederalFunctionCode to set.
+     * @param financialFederalFunctionCode The financialFederalFunctionCode to set.
      * 
      */
     public void setFinancialFederalFunctionCode(String financialFederalFunctionCode) {
@@ -78,7 +78,7 @@ public class FederalFunction extends BusinessObjectBase {
     /**
      * Sets the financialFederalFunctionName attribute.
      * 
-     * @param - financialFederalFunctionName The financialFederalFunctionName to set.
+     * @param financialFederalFunctionName The financialFederalFunctionName to set.
      * 
      */
     public void setFinancialFederalFunctionName(String financialFederalFunctionName) {
@@ -87,7 +87,7 @@ public class FederalFunction extends BusinessObjectBase {
 
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

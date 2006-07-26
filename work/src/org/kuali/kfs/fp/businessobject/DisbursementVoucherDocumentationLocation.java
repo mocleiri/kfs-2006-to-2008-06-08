@@ -58,7 +58,7 @@ public class DisbursementVoucherDocumentationLocation extends BusinessObjectBase
     /**
      * Sets the disbursementVoucherDocumentationLocationCode attribute.
      * 
-     * @param - disbursementVoucherDocumentationLocationCode The disbursementVoucherDocumentationLocationCode to set.
+     * @param disbursementVoucherDocumentationLocationCode The disbursementVoucherDocumentationLocationCode to set.
      * 
      */
     public void setDisbursementVoucherDocumentationLocationCode(String disbursementVoucherDocumentationLocationCode) {
@@ -79,7 +79,7 @@ public class DisbursementVoucherDocumentationLocation extends BusinessObjectBase
     /**
      * Sets the disbursementVoucherDocumentationLocationName attribute.
      * 
-     * @param - disbursementVoucherDocumentationLocationName The disbursementVoucherDocumentationLocationName to set.
+     * @param disbursementVoucherDocumentationLocationName The disbursementVoucherDocumentationLocationName to set.
      * 
      */
     public void setDisbursementVoucherDocumentationLocationName(String disbursementVoucherDocumentationLocationName) {
@@ -100,7 +100,7 @@ public class DisbursementVoucherDocumentationLocation extends BusinessObjectBase
     /**
      * Sets the disbursementVoucherDocumentationLocationAddress attribute.
      * 
-     * @param - disbursementVoucherDocumentationLocationAddress The disbursementVoucherDocumentationLocationAddress to set.
+     * @param disbursementVoucherDocumentationLocationAddress The disbursementVoucherDocumentationLocationAddress to set.
      * 
      */
     public void setDisbursementVoucherDocumentationLocationAddress(String disbursementVoucherDocumentationLocationAddress) {
@@ -109,7 +109,7 @@ public class DisbursementVoucherDocumentationLocation extends BusinessObjectBase
 
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

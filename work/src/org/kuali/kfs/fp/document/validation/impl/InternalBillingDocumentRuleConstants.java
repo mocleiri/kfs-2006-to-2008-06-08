@@ -27,7 +27,7 @@ package org.kuali.module.financial.rules;
  * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public interface InternalBillingDocumentRuleConstants {
+public class InternalBillingDocumentRuleConstants {
     public static final String INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING = "Kuali.FinancialTransactionProcessing.InternalBillingDocument";
     public static final String RESTRICTED_SUB_FUND_GROUP_CODES = "RestrictedSubFundGroupCodes";
     public static final String RESTRICTED_FUND_GROUP_CODES = "RestrictedFundGroupCodes";

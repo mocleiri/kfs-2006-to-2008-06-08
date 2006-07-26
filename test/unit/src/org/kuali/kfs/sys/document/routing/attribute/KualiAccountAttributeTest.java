@@ -22,24 +22,19 @@
  */
 package org.kuali.workflow.attribute;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.workflow.KualiWorkflowUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import edu.iu.uis.eden.exception.InvalidXmlException;
 import edu.iu.uis.eden.routeheader.DocumentContent;
-import edu.iu.uis.eden.routeheader.StandardDocumentContent;
 
 /**
  * This class...
@@ -47,9 +42,6 @@ import edu.iu.uis.eden.routeheader.StandardDocumentContent;
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class KualiAccountAttributeTest extends KualiTestBaseWithFixtures {
-
-    private static final String BASE_PATH = "/java/projects/kuali_project/test/src/org/kuali/workflow/attribute/";
-    private static final String TOF_FEMP_SUBCODE_ONELINER = "TransferOfFunds_FEMPSubcode_OneLiner.xml";
 
     KualiAccountAttribute attribute;
 
@@ -67,14 +59,9 @@ public class KualiAccountAttributeTest extends KualiTestBaseWithFixtures {
 
     public void testGetFiscalOfficerCriteria_TOFOneLiner() throws IOException, InvalidXmlException, XPathExpressionException {
 
-        BufferedReader reader;
-        reader = new BufferedReader(new FileReader(BASE_PATH + TOF_FEMP_SUBCODE_ONELINER));
-        DocumentContent docContent = new StandardDocumentContent(readerToString(reader));
+        DocumentContent docContent = KualiAttributeTestUtil.getDocumentContentFromXmlFile(KualiAttributeTestUtil.TOF_FEMP_SUBCODE_ONELINER, "KualiTransferOfFundsDocument");
 
-        Set qualifiedRoleNames = new HashSet();
-        XPath xpath = KualiWorkflowAttributeUtils.getXPath(docContent.getDocument());
-        String docTypeName = "KualiTransferOfFundsDocument";
-
+        XPath xpath = KualiWorkflowUtils.getXPath(docContent.getDocument());
         NodeList sourceLineNodes = (NodeList) xpath.evaluate("wf:xstreamsafe('//org.kuali.core.bo.SourceAccountingLine')", docContent.getDocument(), XPathConstants.NODESET);
 
         String chart = "";
@@ -90,18 +77,19 @@ public class KualiAccountAttributeTest extends KualiTestBaseWithFixtures {
         }
     }
 
-    private static String readerToString(Reader is) throws IOException {
+    public void testSearchableAccountAttributeXPathTest() throws IOException, InvalidXmlException, XPathExpressionException {
+        
+        final String xpathQuery = "wf:xstreamsafe('//org.kuali.core.bo.SourceAccountingLine/accountNumber') | wf:xstreamsafe('//org.kuali.core.bo.TargetAccountingLine/accountNumber')";
+        
+        DocumentContent docContent = KualiAttributeTestUtil.getDocumentContentFromXmlFile(KualiAttributeTestUtil.TOF_FEMP_SUBCODE_ONELINER, "KualiTransferOfFundsDocument");
 
-        StringBuffer sb = new StringBuffer();
-        char[] charBytes = new char[8192];
-        int charsRead;
-
-        // read a block, if it gets any chars, append them
-        while ((charsRead = is.read(charBytes)) > 0) {
-            sb.append(charBytes, 0, charsRead);
+        XPath xpath = KualiWorkflowUtils.getXPath(docContent.getDocument());
+        NodeList sourceLineNodes = (NodeList) xpath.evaluate(xpathQuery, docContent.getDocument(), XPathConstants.NODESET);
+        
+        for (int i = 0; i < sourceLineNodes.getLength(); i++) {
+            Node node = sourceLineNodes.item(i);
+            System.err.println("[" + i + "] (" + node.getNodeType() + ") " + node.getNodeName() + " = " + node.getTextContent());
         }
-
-        // only construct the string once, here
-        return sb.toString();
     }
+    
 }

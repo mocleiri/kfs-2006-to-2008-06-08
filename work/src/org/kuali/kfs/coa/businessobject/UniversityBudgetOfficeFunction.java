@@ -57,7 +57,7 @@ public class UniversityBudgetOfficeFunction extends BusinessObjectBase {
     /**
      * Sets the financialUniversityBudgetOfficeFunctionCode attribute.
      * 
-     * @param - financialUniversityBudgetOfficeFunctionCode The financialUniversityBudgetOfficeFunctionCode to set.
+     * @param financialUniversityBudgetOfficeFunctionCode The financialUniversityBudgetOfficeFunctionCode to set.
      * 
      */
     public void setFinancialUniversityBudgetOfficeFunctionCode(String financialUniversityBudgetOfficeFunctionCode) {
@@ -78,7 +78,7 @@ public class UniversityBudgetOfficeFunction extends BusinessObjectBase {
     /**
      * Sets the financialUniversityBudgetOfficeFunctionName attribute.
      * 
-     * @param - financialUniversityBudgetOfficeFunctionName The financialUniversityBudgetOfficeFunctionName to set.
+     * @param financialUniversityBudgetOfficeFunctionName The financialUniversityBudgetOfficeFunctionName to set.
      * 
      */
     public void setFinancialUniversityBudgetOfficeFunctionName(String financialUniversityBudgetOfficeFunctionName) {
@@ -87,7 +87,7 @@ public class UniversityBudgetOfficeFunction extends BusinessObjectBase {
 
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

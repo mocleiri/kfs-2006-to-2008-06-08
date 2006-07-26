@@ -29,6 +29,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Country;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -43,7 +44,6 @@ public class PriorYearOrganization extends BusinessObjectBase {
     private String organizationPhysicalCampusCode;
     private String organizationTypeCode;
     private String organizationDefaultAccountNumber;
-    private String organizationStreetAddress;
     private String organizationCityName;
     private String organizationStateCode;
     private String organizationZipCode;
@@ -57,7 +57,10 @@ public class PriorYearOrganization extends BusinessObjectBase {
     private String campusPlantAccountNumber;
     private String organizationPlantChartCode;
     private String campusPlantChartCode;
-
+    private String organizationCountryCode;
+    private String organizationLine1Address;
+    private String organizationLine2Address;
+    
     private Chart chartOfAccounts;
     private Account organizationDefaultAccount;
     private Org organization;
@@ -68,7 +71,8 @@ public class PriorYearOrganization extends BusinessObjectBase {
     private Account campusPlantAccount;
     private Chart organizationPlantChart;
     private Chart campusPlantChart;
-
+    private Country organizationCountry;
+    
     /**
      * Default constructor.
      */
@@ -89,7 +93,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the chartOfAccountsCode attribute.
      * 
-     * @param - chartOfAccountsCode The chartOfAccountsCode to set.
+     * @param chartOfAccountsCode The chartOfAccountsCode to set.
      * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -110,7 +114,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationCode attribute.
      * 
-     * @param - organizationCode The organizationCode to set.
+     * @param organizationCode The organizationCode to set.
      * 
      */
     public void setOrganizationCode(String organizationCode) {
@@ -131,7 +135,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationManagerUniversalId attribute.
      * 
-     * @param - organizationManagerUniversalId The organizationManagerUniversalId to set.
+     * @param organizationManagerUniversalId The organizationManagerUniversalId to set.
      * 
      */
     public void setOrganizationManagerUniversalId(String organizationManagerUniversalId) {
@@ -152,7 +156,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationName attribute.
      * 
-     * @param - organizationName The organizationName to set.
+     * @param organizationName The organizationName to set.
      * 
      */
     public void setOrganizationName(String organizationName) {
@@ -173,7 +177,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the responsibilityCenterCode attribute.
      * 
-     * @param - responsibilityCenterCode The responsibilityCenterCode to set.
+     * @param responsibilityCenterCode The responsibilityCenterCode to set.
      * 
      */
     public void setResponsibilityCenterCode(String responsibilityCenterCode) {
@@ -194,7 +198,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationPhysicalCampusCode attribute.
      * 
-     * @param - organizationPhysicalCampusCode The organizationPhysicalCampusCode to set.
+     * @param organizationPhysicalCampusCode The organizationPhysicalCampusCode to set.
      * 
      */
     public void setOrganizationPhysicalCampusCode(String organizationPhysicalCampusCode) {
@@ -215,7 +219,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationTypeCode attribute.
      * 
-     * @param - organizationTypeCode The organizationTypeCode to set.
+     * @param organizationTypeCode The organizationTypeCode to set.
      * 
      */
     public void setOrganizationTypeCode(String organizationTypeCode) {
@@ -236,34 +240,12 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationDefaultAccountNumber attribute.
      * 
-     * @param - organizationDefaultAccountNumber The organizationDefaultAccountNumber to set.
+     * @param organizationDefaultAccountNumber The organizationDefaultAccountNumber to set.
      * 
      */
     public void setOrganizationDefaultAccountNumber(String organizationDefaultAccountNumber) {
         this.organizationDefaultAccountNumber = organizationDefaultAccountNumber;
     }
-
-
-    /**
-     * Gets the organizationStreetAddress attribute.
-     * 
-     * @return - Returns the organizationStreetAddress
-     * 
-     */
-    public String getOrganizationStreetAddress() {
-        return organizationStreetAddress;
-    }
-
-    /**
-     * Sets the organizationStreetAddress attribute.
-     * 
-     * @param - organizationStreetAddress The organizationStreetAddress to set.
-     * 
-     */
-    public void setOrganizationStreetAddress(String organizationStreetAddress) {
-        this.organizationStreetAddress = organizationStreetAddress;
-    }
-
 
     /**
      * Gets the organizationCityName attribute.
@@ -278,7 +260,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationCityName attribute.
      * 
-     * @param - organizationCityName The organizationCityName to set.
+     * @param organizationCityName The organizationCityName to set.
      * 
      */
     public void setOrganizationCityName(String organizationCityName) {
@@ -299,7 +281,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationStateCode attribute.
      * 
-     * @param - organizationStateCode The organizationStateCode to set.
+     * @param organizationStateCode The organizationStateCode to set.
      * 
      */
     public void setOrganizationStateCode(String organizationStateCode) {
@@ -320,7 +302,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationZipCode attribute.
      * 
-     * @param - organizationZipCode The organizationZipCode to set.
+     * @param organizationZipCode The organizationZipCode to set.
      * 
      */
     public void setOrganizationZipCode(String organizationZipCode) {
@@ -341,7 +323,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationBeginDate attribute.
      * 
-     * @param - organizationBeginDate The organizationBeginDate to set.
+     * @param organizationBeginDate The organizationBeginDate to set.
      * 
      */
     public void setOrganizationBeginDate(Date organizationBeginDate) {
@@ -362,7 +344,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationEndDate attribute.
      * 
-     * @param - organizationEndDate The organizationEndDate to set.
+     * @param organizationEndDate The organizationEndDate to set.
      * 
      */
     public void setOrganizationEndDate(Date organizationEndDate) {
@@ -383,7 +365,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the reportsToChartOfAccountsCode attribute.
      * 
-     * @param - reportsToChartOfAccountsCode The reportsToChartOfAccountsCode to set.
+     * @param reportsToChartOfAccountsCode The reportsToChartOfAccountsCode to set.
      * 
      */
     public void setReportsToChartOfAccountsCode(String reportsToChartOfAccountsCode) {
@@ -404,7 +386,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the reportsToOrganizationCode attribute.
      * 
-     * @param - reportsToOrganizationCode The reportsToOrganizationCode to set.
+     * @param reportsToOrganizationCode The reportsToOrganizationCode to set.
      * 
      */
     public void setReportsToOrganizationCode(String reportsToOrganizationCode) {
@@ -426,7 +408,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationActiveIndicator attribute.
      * 
-     * @param - organizationActiveIndicator The organizationActiveIndicator to set.
+     * @param organizationActiveIndicator The organizationActiveIndicator to set.
      * 
      */
     public void setOrganizationActiveIndicator(boolean organizationActiveIndicator) {
@@ -448,7 +430,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationInFinancialProcessingIndicator attribute.
      * 
-     * @param - organizationInFinancialProcessingIndicator The organizationInFinancialProcessingIndicator to set.
+     * @param organizationInFinancialProcessingIndicator The organizationInFinancialProcessingIndicator to set.
      * 
      */
     public void setOrganizationInFinancialProcessingIndicator(boolean organizationInFinancialProcessingIndicator) {
@@ -469,7 +451,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationPlantAccountNumber attribute.
      * 
-     * @param - organizationPlantAccountNumber The organizationPlantAccountNumber to set.
+     * @param organizationPlantAccountNumber The organizationPlantAccountNumber to set.
      * 
      */
     public void setOrganizationPlantAccountNumber(String organizationPlantAccountNumber) {
@@ -490,7 +472,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the campusPlantAccountNumber attribute.
      * 
-     * @param - campusPlantAccountNumber The campusPlantAccountNumber to set.
+     * @param campusPlantAccountNumber The campusPlantAccountNumber to set.
      * 
      */
     public void setCampusPlantAccountNumber(String campusPlantAccountNumber) {
@@ -511,7 +493,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationPlantChartCode attribute.
      * 
-     * @param - organizationPlantChartCode The organizationPlantChartCode to set.
+     * @param organizationPlantChartCode The organizationPlantChartCode to set.
      * 
      */
     public void setOrganizationPlantChartCode(String organizationPlantChartCode) {
@@ -532,14 +514,61 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the campusPlantChartCode attribute.
      * 
-     * @param - campusPlantChartCode The campusPlantChartCode to set.
+     * @param campusPlantChartCode The campusPlantChartCode to set.
      * 
      */
     public void setCampusPlantChartCode(String campusPlantChartCode) {
         this.campusPlantChartCode = campusPlantChartCode;
     }
 
+    /**
+     * Gets the organizationCountryCode attribute. 
+     * @return Returns the organizationCountryCode.
+     */
+    public String getOrganizationCountryCode() {
+        return organizationCountryCode;
+    }
 
+    /**
+     * Sets the organizationCountryCode attribute value.
+     * @param organizationCountryCode The organizationCountryCode to set.
+     */
+    public void setOrganizationCountryCode(String organizationCountryCode) {
+        this.organizationCountryCode = organizationCountryCode;
+    }
+
+    /**
+     * Gets the organizationLine1Address attribute. 
+     * @return Returns the organizationLine1Address.
+     */
+    public String getOrganizationLine1Address() {
+        return organizationLine1Address;
+    }
+
+    /**
+     * Sets the organizationLine1Address attribute value.
+     * @param organizationLine1Address The organizationLine1Address to set.
+     */
+    public void setOrganizationLine1Address(String organizationLine1Address) {
+        this.organizationLine1Address = organizationLine1Address;
+    }
+
+    /**
+     * Gets the organizationLine2Address attribute. 
+     * @return Returns the organizationLine2Address.
+     */
+    public String getOrganizationLine2Address() {
+        return organizationLine2Address;
+    }
+
+    /**
+     * Sets the organizationLine2Address attribute value.
+     * @param organizationLine2Address The organizationLine2Address to set.
+     */
+    public void setOrganizationLine2Address(String organizationLine2Address) {
+        this.organizationLine2Address = organizationLine2Address;
+    }
+    
     /**
      * Gets the chartOfAccounts attribute.
      * 
@@ -553,7 +582,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the chartOfAccounts attribute.
      * 
-     * @param - chartOfAccounts The chartOfAccounts to set.
+     * @param chartOfAccounts The chartOfAccounts to set.
      * @deprecated
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -573,7 +602,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationDefaultAccount attribute.
      * 
-     * @param - organizationDefaultAccount The organizationDefaultAccount to set.
+     * @param organizationDefaultAccount The organizationDefaultAccount to set.
      * @deprecated
      */
     public void setOrganizationDefaultAccount(Account organizationDefaultAccount) {
@@ -593,7 +622,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organization attribute.
      * 
-     * @param - organization The organization to set.
+     * @param organization The organization to set.
      * @deprecated
      */
     public void setOrganization(Org organization) {
@@ -613,7 +642,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationPhysicalCampus attribute.
      * 
-     * @param - organizationPhysicalCampus The organizationPhysicalCampus to set.
+     * @param organizationPhysicalCampus The organizationPhysicalCampus to set.
      * @deprecated
      */
     public void setOrganizationPhysicalCampus(Campus organizationPhysicalCampus) {
@@ -633,7 +662,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the reportsToOrganization attribute.
      * 
-     * @param - reportsToOrganization The reportsToOrganization to set.
+     * @param reportsToOrganization The reportsToOrganization to set.
      * @deprecated
      */
     public void setReportsToOrganization(Org reportsToOrganization) {
@@ -653,7 +682,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the reportsToChartOfAccounts attribute.
      * 
-     * @param - reportsToChartOfAccounts The reportsToChartOfAccounts to set.
+     * @param reportsToChartOfAccounts The reportsToChartOfAccounts to set.
      * @deprecated
      */
     public void setReportsToChartOfAccounts(Chart reportsToChartOfAccounts) {
@@ -673,7 +702,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationPlantAccount attribute.
      * 
-     * @param - organizationPlantAccount The organizationPlantAccount to set.
+     * @param organizationPlantAccount The organizationPlantAccount to set.
      * @deprecated
      */
     public void setOrganizationPlantAccount(Account organizationPlantAccount) {
@@ -693,7 +722,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the campusPlantAccount attribute.
      * 
-     * @param - campusPlantAccount The campusPlantAccount to set.
+     * @param campusPlantAccount The campusPlantAccount to set.
      * @deprecated
      */
     public void setCampusPlantAccount(Account campusPlantAccount) {
@@ -713,7 +742,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the organizationPlantChart attribute.
      * 
-     * @param - organizationPlantChart The organizationPlantChart to set.
+     * @param organizationPlantChart The organizationPlantChart to set.
      * @deprecated
      */
     public void setOrganizationPlantChart(Chart organizationPlantChart) {
@@ -733,7 +762,7 @@ public class PriorYearOrganization extends BusinessObjectBase {
     /**
      * Sets the campusPlantChart attribute.
      * 
-     * @param - campusPlantChart The campusPlantChart to set.
+     * @param campusPlantChart The campusPlantChart to set.
      * @deprecated
      */
     public void setCampusPlantChart(Chart campusPlantChart) {
@@ -741,7 +770,24 @@ public class PriorYearOrganization extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * Gets the organizationCountry attribute. 
+     * @return Returns the organizationCountry.
+     */
+    public Country getOrganizationCountry() {
+        return organizationCountry;
+    }
+
+    /**
+     * Sets the organizationCountry attribute value.
+     * @param organizationCountry The organizationCountry to set.
+     * @deprecated
+     */
+    public void setOrganizationCountry(Country organizationCountry) {
+        this.organizationCountry = organizationCountry;
+    }
+    
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

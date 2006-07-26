@@ -43,7 +43,6 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     private String correctionFieldValue;
 
     private String operator;
-    // TODO Does this need to be added to the database table?
     private String correctionFieldName;
 
     private CorrectionChangeGroup correctionChangeGroup;
@@ -69,7 +68,7 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     /**
      * Sets the financialDocumentNumber attribute.
      * 
-     * @param - financialDocumentNumber The financialDocumentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
     public void setFinancialDocumentNumber(String financialDocumentNumber) {
@@ -90,7 +89,7 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     /**
      * Sets the correctionChangeGroupLineNumber attribute.
      * 
-     * @param - correctionChangeGroupLineNumber The correctionChangeGroupLineNumber to set.
+     * @param correctionChangeGroupLineNumber The correctionChangeGroupLineNumber to set.
      * 
      */
     public void setCorrectionChangeGroupLineNumber(Integer correctionChangeGroupLineNumber) {
@@ -111,7 +110,7 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     /**
      * Sets the correctionCriteriaLineNumber attribute.
      * 
-     * @param - correctionCriteriaLineNumber The correctionCriteriaLineNumber to set.
+     * @param correctionCriteriaLineNumber The correctionCriteriaLineNumber to set.
      * 
      */
     public void setCorrectionCriteriaLineNumber(Integer correctionCriteriaLineNumber) {
@@ -132,7 +131,7 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     /**
      * Sets the correctionStartPosition attribute.
      * 
-     * @param - correctionStartPosition The correctionStartPosition to set.
+     * @param correctionStartPosition The correctionStartPosition to set.
      * 
      */
     public void setCorrectionStartPosition(Integer correctionStartPosition) {
@@ -153,7 +152,7 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     /**
      * Sets the correctionEndPosition attribute.
      * 
-     * @param - correctionEndPosition The correctionEndPosition to set.
+     * @param correctionEndPosition The correctionEndPosition to set.
      * 
      */
     public void setCorrectionEndPosition(Integer correctionEndPosition) {
@@ -174,7 +173,7 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     /**
      * Sets the correctionOperatorCode attribute.
      * 
-     * @param - correctionOperatorCode The correctionOperatorCode to set.
+     * @param correctionOperatorCode The correctionOperatorCode to set.
      * 
      */
     public void setCorrectionOperatorCode(String correctionOperatorCode) {
@@ -195,7 +194,7 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     /**
      * Sets the correctionFieldValue attribute.
      * 
-     * @param - correctionFieldValue The correctionFieldValue to set.
+     * @param correctionFieldValue The correctionFieldValue to set.
      * 
      */
     public void setCorrectionFieldValue(String correctionFieldValue) {
@@ -216,7 +215,7 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     /**
      * Sets the correctionChangeGroup attribute.
      * 
-     * @param - correctionChangeGroup The correctionChangeGroup to set.
+     * @param correctionChangeGroup The correctionChangeGroup to set.
      * @deprecated
      */
     public void setCorrectionChangeGroup(CorrectionChangeGroup correctionChangeGroup) {
@@ -278,7 +277,7 @@ public class CorrectionCriteria extends BusinessObjectBase implements Comparable
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

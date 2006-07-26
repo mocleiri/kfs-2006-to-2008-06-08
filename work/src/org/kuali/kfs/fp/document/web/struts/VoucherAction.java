@@ -64,7 +64,6 @@ public class VoucherAction extends KualiTransactionalDocumentActionBase {
     // used to determine which way the change balance type action is switching
     // these are local constants only used within this action class
     // these should not be used outside of this class
-    protected static final KualiDecimal ZERO = new KualiDecimal("0.00");
 
     /**
      * We want to keep the bad data for the voucher.
@@ -133,8 +132,8 @@ public class VoucherAction extends KualiTransactionalDocumentActionBase {
             voucherForm.getVoucherLineHelpers().add(helperLine);
 
             // now reset the debit and credit fields for adds
-            voucherForm.setNewSourceLineDebit(new KualiDecimal(0));
-            voucherForm.setNewSourceLineCredit(new KualiDecimal(0));
+            voucherForm.setNewSourceLineDebit(KualiDecimal.ZERO);
+            voucherForm.setNewSourceLineCredit(KualiDecimal.ZERO);
         }
 
         return actionForward;
@@ -163,46 +162,22 @@ public class VoucherAction extends KualiTransactionalDocumentActionBase {
     }
 
     /**
-     * Overrides the parent to iterate through all source accounting lines and re-populate the credit and debit code appropriately
-     * in case the user flip-flopped any of the debit/credit amounts or changed the amounts.
-     * 
-     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#route(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // process the question but we need to make sure there are lines and then check to see if it's not balanced
-        VoucherDocument vDoc = ((VoucherForm) form).getVoucherDocument();
-        if (vDoc.getSourceAccountingLines().size() > 0 && vDoc.getTotal().compareTo(Constants.ZERO) != 0) {
-            // it's not in "balance"
-            ActionForward returnForward = processRouteOutOfBalanceDocumentConfirmationQuestion(mapping, form, request, response);
-
-            // if not null, then the question component either has control of the flow and needs to ask its questions
-            // or the person chose the "cancel" or "no" button
-            // otherwise we have control
-            if (returnForward != null) {
-                return returnForward;
-            }
-        }
-        // now call the route method
-        return super.route(mapping, form, request, response);
-    }
-
-    /**
      * Overrides the parent to make sure that the AV specific accounting line helper forms are properly populated when the document
      * is first loaded. This first calls super, then populates the helper objects.
      * 
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#loadDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
      */
+    @Override
     protected void loadDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
         super.loadDocument(kualiDocumentFormBase);
         VoucherForm voucherForm = (VoucherForm) kualiDocumentFormBase;
 
         populateAllVoucherAccountingLineHelpers(voucherForm);
-        voucherForm.setNewSourceLineCredit(ZERO);
-        voucherForm.setNewSourceLineDebit(ZERO);
+        voucherForm.setNewSourceLineCredit(KualiDecimal.ZERO);
+        voucherForm.setNewSourceLineDebit(KualiDecimal.ZERO);
 
         // always wipe out the new source line
-        voucherForm.setNewSourceLine(new SourceAccountingLine());
+        voucherForm.setNewSourceLine(null);
 
         // reload the accounting period selections since now we have data in the document bo
         populateSelectedAccountingPeriod(voucherForm.getVoucherDocument(), voucherForm);
@@ -370,6 +345,7 @@ public class VoucherAction extends KualiTransactionalDocumentActionBase {
      * @throws FileNotFoundException
      * @throws IOException
      */
+    @Override
     public ActionForward uploadSourceLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException {
         // call method that sourceform and destination list
         uploadAccountingLines(true, form);
@@ -386,6 +362,7 @@ public class VoucherAction extends KualiTransactionalDocumentActionBase {
      * @throws FileNotFoundException
      * @throws IOException
      */
+    @Override
     protected void uploadAccountingLines(boolean isSource, ActionForm form) throws FileNotFoundException, IOException {
         super.uploadAccountingLines(isSource, form);
 

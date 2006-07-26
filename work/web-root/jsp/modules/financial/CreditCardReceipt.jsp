@@ -15,7 +15,6 @@
 	renderMultipart="true" showTabButtons="true">
 	<kul:hiddenDocumentFields />
 	<!-- Credit Card Receipt Document Specific Hidden Fields -->
-	<html:hidden property="document.nextSourceLineNumber" />
 	<html:hidden property="document.nextCcCrLineNumber" />
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
 	<SCRIPT type="text/javascript">
@@ -32,7 +31,7 @@
 		extraSourceRowFields="financialDocumentLineDescription" />
 	<kul:generalLedgerPendingEntries />
 	<kul:notes />
-	<kul:adHocRecipients />
+	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
 	<kul:routeLog />
 	<kul:panelFooter />
 	<kul:documentControls
