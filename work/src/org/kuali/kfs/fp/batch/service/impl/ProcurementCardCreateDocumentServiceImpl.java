@@ -43,7 +43,7 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.DateUtils;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.bo.ProcurementCardHolder;
 import org.kuali.module.financial.bo.ProcurementCardSourceAccountingLine;
 import org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine;
@@ -239,7 +239,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
 
             // for each transaction, create transaction detail object and then acct lines for the detail
             int transactionLineNumber = 1;
-            KualiDecimalMoney documentTotalAmount = new KualiDecimalMoney(0);
+            KualiDecimal documentTotalAmount = new KualiDecimal(0);
             String errorText = "";
             for (Iterator iter = transactions.iterator(); iter.hasNext();) {
                 ProcurementCardTransaction transaction = (ProcurementCardTransaction) iter.next();

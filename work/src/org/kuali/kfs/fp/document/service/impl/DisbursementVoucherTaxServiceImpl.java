@@ -42,7 +42,7 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.MaintenanceDocumentService;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
 import org.kuali.module.financial.bo.Payee;
@@ -243,8 +243,8 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
             BigDecimal stateTaxPercent = document.getDvNonResidentAlienTax().getStateIncomeTaxPercent().bigDecimalValue();
             BigDecimal documentAmount = document.getDisbVchrCheckTotalAmount().bigDecimalValue();
 
-            KualiDecimalMoney grossAmount1 = new KualiDecimalMoney((documentAmount.multiply(federalTaxPercent).divide(new BigDecimal(100).subtract(federalTaxPercent).subtract(stateTaxPercent), 5, BigDecimal.ROUND_HALF_UP)));
-            KualiDecimalMoney grossAmount2 = new KualiDecimalMoney((documentAmount.multiply(stateTaxPercent).divide(new BigDecimal(100).subtract(federalTaxPercent).subtract(stateTaxPercent), 5, BigDecimal.ROUND_HALF_UP)));
+            KualiDecimal grossAmount1 = new KualiDecimal((documentAmount.multiply(federalTaxPercent).divide(new BigDecimal(100).subtract(federalTaxPercent).subtract(stateTaxPercent), 5, BigDecimal.ROUND_HALF_UP)));
+            KualiDecimal grossAmount2 = new KualiDecimal((documentAmount.multiply(stateTaxPercent).divide(new BigDecimal(100).subtract(federalTaxPercent).subtract(stateTaxPercent), 5, BigDecimal.ROUND_HALF_UP)));
             grossLine.setAmount(grossAmount1.add(grossAmount2));
 
             // put line number in line number list, and update next line property in document
@@ -259,10 +259,10 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
             document.setDisbVchrCheckTotalAmount(document.getDisbVchrCheckTotalAmount().add(grossLine.getAmount()));
         }
 
-        KualiDecimalMoney taxableAmount = document.getDisbVchrCheckTotalAmount();
+        KualiDecimal taxableAmount = document.getDisbVchrCheckTotalAmount();
 
         // generate federal tax line
-        if (!(new KualiDecimalMoney(0).equals(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent()))) {
+        if (!(new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent()))) {
             String federalTaxChart;
             String federalTaxAccount;
             String federalTaxObjectCode;
@@ -291,7 +291,7 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
         }
 
         // generate state tax line
-        if (!(new KualiDecimalMoney(0).equals(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent()))) {
+        if (!(new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent()))) {
             String stateTaxChart;
             String stateTaxAccount;
             String stateTaxObjectCode;
@@ -328,7 +328,7 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
      * 
      * @param document
      */
-    private AccountingLine generateTaxAccountingLine(DisbursementVoucherDocument document, String chart, String account, String objectCode, KualiDecimalMoney taxPercent, KualiDecimalMoney taxableAmount) {
+    private AccountingLine generateTaxAccountingLine(DisbursementVoucherDocument document, String chart, String account, String objectCode, KualiDecimal taxPercent, KualiDecimal taxableAmount) {
         AccountingLine taxLine = new SourceAccountingLine();
 
         taxLine.setFinancialDocumentNumber(document.getFinancialDocumentNumber());
@@ -341,7 +341,7 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
         BigDecimal amount = taxableAmount.bigDecimalValue();
         BigDecimal tax = taxPercent.bigDecimalValue();
         BigDecimal taxDecimal = tax.divide(new BigDecimal(100), 5, BigDecimal.ROUND_HALF_UP);
-        KualiDecimalMoney taxAmount = new KualiDecimalMoney(amount.multiply(taxDecimal));
+        KualiDecimal taxAmount = new KualiDecimal(amount.multiply(taxDecimal));
         taxLine.setAmount(taxAmount.negated());
 
         return taxLine;
@@ -367,7 +367,7 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
      */
     public void clearNRATaxLines(DisbursementVoucherDocument document) {
         List taxLines = new ArrayList();
-        KualiDecimalMoney taxTotal = new KualiDecimalMoney(0);
+        KualiDecimal taxTotal = new KualiDecimal(0);
 
         DisbursementVoucherNonResidentAlienTax dvnrat = document.getDvNonResidentAlienTax();
         if (dvnrat != null) {
@@ -381,7 +381,7 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
                     taxLines.add(line);
 
                     // check if tax line was a positive amount, in which case we had a gross up
-                    if ((new KualiDecimalMoney(0)).compareTo(line.getAmount()) < 0) {
+                    if ((new KualiDecimal(0)).compareTo(line.getAmount()) < 0) {
                         previousGrossUp = true;
                     }
                     else {
@@ -406,8 +406,8 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
     /**
      * @see org.kuali.module.financial.service.DisbursementVoucherTaxService#getNonResidentAlienTaxAmount(org.kuali.module.financial.document.DisbursementVoucherDocument)
      */
-    public KualiDecimalMoney getNonResidentAlienTaxAmount(DisbursementVoucherDocument document) {
-        KualiDecimalMoney taxAmount = new KualiDecimalMoney(0);
+    public KualiDecimal getNonResidentAlienTaxAmount(DisbursementVoucherDocument document) {
+        KualiDecimal taxAmount = new KualiDecimal(0);
 
         // if not nra payment or gross has been done, no tax amount should have been taken out
         if (!document.getDvPayeeDetail().isDisbVchrAlienPaymentCode() || (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode() && document.getDvNonResidentAlienTax().isIncomeTaxGrossUpCode())) {
@@ -437,11 +437,11 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
 
         // set nulls to 0
         if (document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent() == null) {
-            document.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(new KualiDecimalMoney(0));
+            document.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(new KualiDecimal(0));
         }
 
         if (document.getDvNonResidentAlienTax().getStateIncomeTaxPercent() == null) {
-            document.getDvNonResidentAlienTax().setStateIncomeTaxPercent(new KualiDecimalMoney(0));
+            document.getDvNonResidentAlienTax().setStateIncomeTaxPercent(new KualiDecimal(0));
         }
 
         /* call dv rule to do general nra validation */
@@ -473,7 +473,7 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
         }
 
         /* make sure both fed and state tax percents are not 0, in which case there is no need to generate lines */
-        if (new KualiDecimalMoney(0).equals(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent()) && new KualiDecimalMoney(0).equals(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent())) {
+        if (new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent()) && new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent())) {
             errors.putWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_BOTH_0);
             return false;
         }

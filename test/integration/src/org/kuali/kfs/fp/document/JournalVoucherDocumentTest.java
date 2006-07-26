@@ -32,7 +32,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.DocumentNote;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.TransactionalDocumentTestBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.test.monitor.ChangeMonitor;
 import org.kuali.test.monitor.DocumentStatusMonitor;
@@ -173,7 +173,7 @@ public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
         TransactionalDocument document = (TransactionalDocument) buildDocument();
 
         // replace the broken sourceLines with one that lets the test succeed
-        KualiDecimalMoney balance = new KualiDecimalMoney("21.12");
+        KualiDecimal balance = new KualiDecimal("21.12");
         ArrayList sourceLines = new ArrayList();
         {
             SourceAccountingLine sourceLine = new SourceAccountingLine();
