@@ -199,6 +199,12 @@ public class Deposit extends BusinessObjectBase {
         this.depositTicketNumber = depositTicketNumber;
     }
 
+    /**
+     * @return current value of depositTypeCode, under a different name, to prevent the POJO code from reformatting it
+     */
+    public String getRawDepositTypeCode() {
+        return depositTypeCode;
+    }
 
     /**
      * @return current value of depositTypeCode.
@@ -252,8 +258,9 @@ public class Deposit extends BusinessObjectBase {
 
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
+    @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         m.put("financialDocumentNumber", getFinancialDocumentNumber());
