@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.kuali.core.service.DateTimeService;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.dao.BalanceDao;
@@ -103,8 +103,8 @@ public class BalanceServiceImpl implements BalanceService {
         Integer fiscalYear = dateTimeService.getCurrentFiscalYear();
         Iterator balances = balanceDao.findBalances(account, fiscalYear, null, wrap(fundBalanceObjectCodes), wrap(assetLiabilityFundBalanceBalanceTypeCodes), wrap(actualBalanceCodes));
 
-        KualiDecimalMoney begin;
-        KualiDecimalMoney annual;
+        KualiDecimal begin;
+        KualiDecimal annual;
 
         // TODO KULCOA-335 - is absolute value necessary to prevent obscure sets of values
         // from masking accounts that should remain open?
@@ -118,10 +118,10 @@ public class BalanceServiceImpl implements BalanceService {
 
             String objectCode = balance.getObjectCode();
 
-            KualiDecimalMoney runningTotal = (KualiDecimalMoney) groups.get(objectCode);
+            KualiDecimal runningTotal = (KualiDecimal) groups.get(objectCode);
 
             if (runningTotal == null) {
-                runningTotal = new KualiDecimalMoney(0);
+                runningTotal = new KualiDecimal(0);
             }
 
             runningTotal = runningTotal.add(begin);
@@ -136,7 +136,7 @@ public class BalanceServiceImpl implements BalanceService {
 
         Iterator iter = groups.keySet().iterator();
         while (iter.hasNext()) {
-            success |= ((KualiDecimalMoney) groups.get(iter.next())).isNonZero();
+            success |= ((KualiDecimal) groups.get(iter.next())).isNonZero();
         }
 
         return success;
@@ -144,11 +144,11 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
 
-    private KualiDecimalMoney sumBalances(Iterator balances) {
-        KualiDecimalMoney runningTotal = new KualiDecimalMoney(0);
+    private KualiDecimal sumBalances(Iterator balances) {
+        KualiDecimal runningTotal = new KualiDecimal(0);
 
-        KualiDecimalMoney begin;
-        KualiDecimalMoney annual;
+        KualiDecimal begin;
+        KualiDecimal annual;
 
         while (balances.hasNext()) {
             Balance balance = (Balance) balances.next();
@@ -176,7 +176,7 @@ public class BalanceServiceImpl implements BalanceService {
      * 
      * 
      */
-    protected KualiDecimalMoney incomeBalances(Account account) {
+    protected KualiDecimal incomeBalances(Account account) {
 
         Integer fiscalYear = dateTimeService.getCurrentFiscalYear();
         Iterator balances = balanceDao.findBalances(account, fiscalYear, wrap(fundBalanceObjectCodes), null, wrap(incomeObjectTypeCodes), wrap(actualBalanceCodes));
@@ -197,7 +197,7 @@ public class BalanceServiceImpl implements BalanceService {
      * @return
      */
 
-    protected KualiDecimalMoney expenseBalances(Account account) {
+    protected KualiDecimal expenseBalances(Account account) {
 
         Integer fiscalYear = dateTimeService.getCurrentFiscalYear();
         Iterator balances = balanceDao.findBalances(account, fiscalYear, null, null, wrap(expenseObjectTypeCodes), wrap(actualBalanceCodes));
@@ -211,8 +211,8 @@ public class BalanceServiceImpl implements BalanceService {
      * @see org.kuali.module.gl.service.BalanceService#fundBalanceWillNetToZero(org.kuali.module.chart.bo.Account)
      */
     public boolean fundBalanceWillNetToZero(Account account) {
-        KualiDecimalMoney income = incomeBalances(account);
-        KualiDecimalMoney expense = expenseBalances(account);
+        KualiDecimal income = incomeBalances(account);
+        KualiDecimal expense = expenseBalances(account);
 
         return income.equals(expense);
     }

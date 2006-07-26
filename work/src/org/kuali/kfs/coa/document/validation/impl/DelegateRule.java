@@ -35,7 +35,7 @@ import org.kuali.KeyConstants;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.chart.bo.Delegate;
 
@@ -156,8 +156,8 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     protected boolean checkSimpleRules() {
 
         boolean success = true;
-        KualiDecimalMoney fromAmount = newDelegate.getFinDocApprovalFromThisAmt();
-        KualiDecimalMoney toAmount = newDelegate.getFinDocApprovalToThisAmount();
+        KualiDecimal fromAmount = newDelegate.getFinDocApprovalFromThisAmt();
+        KualiDecimal toAmount = newDelegate.getFinDocApprovalToThisAmount();
 
         // start date must be greater than or equal to today
         if (ObjectUtils.isNotNull(newDelegate.getAccountDelegateStartDate())) {
@@ -171,7 +171,7 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
 
         // FROM amount must be >= 0 (may not be negative)
         if (ObjectUtils.isNotNull(fromAmount)) {
-            if (fromAmount.isLessThan(new KualiDecimalMoney(0))) {
+            if (fromAmount.isLessThan(new KualiDecimal(0))) {
                 putFieldError("finDocApprovalFromThisAmt", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_FROM_AMOUNT_NONNEGATIVE);
                 success &= false;
             }
@@ -187,7 +187,7 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
 
             if (ObjectUtils.isNull(fromAmount)) {
                 // case if FROM amount is null then TO amount must be zero
-                if (!toAmount.equals(new KualiDecimalMoney(0))) {
+                if (!toAmount.equals(new KualiDecimal(0))) {
                     putFieldError("finDocApprovalToThisAmount", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
                     success &= false;
                 }
