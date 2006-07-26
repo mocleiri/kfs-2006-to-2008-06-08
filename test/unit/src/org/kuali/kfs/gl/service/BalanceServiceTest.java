@@ -24,7 +24,7 @@ package org.kuali.module.financial.service;
 
 import java.util.List;
 
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.gl.dao.UnitTestSqlDao;
@@ -72,7 +72,7 @@ public class BalanceServiceTest extends KualiTestBaseWithSpring {
 
     }
 
-    private void insertBalance(String objectTypeCode, String balanceTypeCode, String objectCode, KualiDecimalMoney beginningAmount, KualiDecimalMoney finalAmount) {
+    private void insertBalance(String objectTypeCode, String balanceTypeCode, String objectCode, KualiDecimal beginningAmount, KualiDecimal finalAmount) {
         unitTestSqlDao.sqlCommand(INSERT_BALANCE + "'123','" + objectCode + "','" + balanceTypeCode + "','" + objectTypeCode + "'," + beginningAmount + "," + finalAmount + ")");
     }
 
@@ -91,18 +91,18 @@ public class BalanceServiceTest extends KualiTestBaseWithSpring {
 
         assertTrue("should net to zero when no rows exist", balanceService.fundBalanceWillNetToZero(account));
 
-        insertBalance("EE", "FF", "9899", new KualiDecimalMoney(1.5), new KualiDecimalMoney(2.5));
+        insertBalance("EE", "FF", "9899", new KualiDecimal(1.5), new KualiDecimal(2.5));
         results = unitTestSqlDao.sqlSelect(RAW_BALANCES);
         assertNotNull("List shouldn't be null", results);
         assertEquals("Should return 1 result", 1, results.size());
 
         assertTrue("should net to zero with non-AC balance Type Code", balanceService.fundBalanceWillNetToZero(account));
 
-        insertBalance("CH", "AC", "9899", new KualiDecimalMoney(1.5), new KualiDecimalMoney(2.5));
+        insertBalance("CH", "AC", "9899", new KualiDecimal(1.5), new KualiDecimal(2.5));
         assertFalse(balanceService.fundBalanceWillNetToZero(account));
 
         // Negate the income balance with an equal expense balance
-        insertBalance("EE", "AC", "9899", new KualiDecimalMoney(2), new KualiDecimalMoney(2));
+        insertBalance("EE", "AC", "9899", new KualiDecimal(2), new KualiDecimal(2));
         assertTrue("should net to zero after adding corresponding expenses", balanceService.fundBalanceWillNetToZero(account));
         purgeTestData();
     }
@@ -112,9 +112,9 @@ public class BalanceServiceTest extends KualiTestBaseWithSpring {
         purgeTestData();
         assertFalse("no rows means no balances", balanceService.hasAssetLiabilityFundBalanceBalances(account));
         String fundBalanceObjectCode = "9899"; // TODO - get this from Service? Or System Options?
-        insertBalance("LI", "AC", "9899", new KualiDecimalMoney(1.5), new KualiDecimalMoney(2.5));
+        insertBalance("LI", "AC", "9899", new KualiDecimal(1.5), new KualiDecimal(2.5));
         assertFalse("should ignore 9899 balance", balanceService.hasAssetLiabilityFundBalanceBalances(account));
-        insertBalance("LI", "AC", "1234", new KualiDecimalMoney(1.5), new KualiDecimalMoney(2.5));
+        insertBalance("LI", "AC", "1234", new KualiDecimal(1.5), new KualiDecimal(2.5));
         assertTrue("expect nonzero balance for non-9899 balance", balanceService.hasAssetLiabilityFundBalanceBalances(account));
 
 

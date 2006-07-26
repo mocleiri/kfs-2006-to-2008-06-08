@@ -25,7 +25,7 @@ package org.kuali.module.gl.batch.closing.year.service.impl.helper;
 import java.sql.Date;
 
 import org.kuali.Constants;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.PriorYearAccount;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
@@ -797,7 +797,7 @@ public class BalanceForwardRuleHelper {
                     // 1267 007940 GLGLBL-CONTR-GR-BB-AC-AMT
                     // 1268 007950 GIVING TRN-LDGR-ENTR-AMT.
 
-                    KualiDecimalMoney transactionLedgerEntryAmount = new KualiDecimalMoney(0);
+                    KualiDecimal transactionLedgerEntryAmount = new KualiDecimal(0);
                     transactionLedgerEntryAmount = transactionLedgerEntryAmount.add(balance.getAccountLineAnnualBalanceAmount()).add(balance.getBeginningBalanceLineAmount()).add(balance.getContractsGrantsBeginningBalanceAmount());
 
                     // 1269 007960 IF TRN-LDGR-ENTR-AMT < ZERO

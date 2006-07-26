@@ -32,7 +32,7 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -256,7 +256,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
         String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
         Integer fiscalYear = accountingLine.getPostingYear();
         String financialObjectTypeCode = accountingLine.getObjectTypeCode();
-        KualiDecimalMoney lineAmount = accountingLine.getAmount();
+        KualiDecimal lineAmount = accountingLine.getAmount();
         String offsetDebitCreditCode = null;
         // fi_dica:lp_proc_grant_ln.36-2...62-2
         // fi_dica:lp_proc_rcpt_ln.36-2...69-2

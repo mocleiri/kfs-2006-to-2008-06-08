@@ -24,7 +24,7 @@ package org.kuali.module.financial.service;
 
 import java.sql.Timestamp;
 
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
 import org.kuali.test.KualiTestBaseWithFixtures;
@@ -52,83 +52,83 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBaseWithFixtu
         dvDocument = new DisbursementVoucherDocument();
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 0:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/22/2006 0:01 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(12.50));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(12.50));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 10:00 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/22/2006 5:00 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(0));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(0));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 0:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/23/2006 0:01 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(22.50));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(22.50));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 12:01 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/23/2006 11:59 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(25.00));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(25.00));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 11:59 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/23/2006 11:59 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(22.50));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(22.50));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 0:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/23/2006 12:01 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(30.00));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(30.00));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("12/28/2005 0:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("01/01/2006 0:01 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(42.50));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(42.50));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 1:00 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/23/2006 0:01 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(17.50));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(17.50));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 6:00 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/23/2006 0:01 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(15.00));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(15.00));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("12/28/2005 0:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("01/01/2006 6:01 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(45.00));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(45.00));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("12/28/2005 0:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("01/01/2006 11:59 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(50.00));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(50.00));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 0:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/21/2006 11:59 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(7.50));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(7.50));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 3:00 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/21/2006 6:00 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(0));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(0));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 5:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/21/2006 5:00 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(0.00));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(0.00));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 4:59 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/21/2006 5:00 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(5.00));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(5.00));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 1:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/21/2006 7:01 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(50), new KualiDecimalMoney(37.50));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(50), new KualiDecimal(37.50));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 11:59 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/22/2006 6:00 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(0));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(0));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 6:01 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/22/2006 5:59 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(5.00));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(5.00));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 3:00 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/22/2006 6:01 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimalMoney(10), new KualiDecimalMoney(10));
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(10));
 
     }
 
-    private void runPerDiemTest(Timestamp startTime, Timestamp endTime, KualiDecimalMoney perDiemRate, KualiDecimalMoney expectedPerDiemAmount) {
+    private void runPerDiemTest(Timestamp startTime, Timestamp endTime, KualiDecimal perDiemRate, KualiDecimal expectedPerDiemAmount) {
         assertEquals("Per diem amount not correct ", expectedPerDiemAmount, disbursementVoucherTravelService.calculatePerDiemAmount(startTime, endTime, perDiemRate));
     }
 
@@ -143,25 +143,25 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBaseWithFixtu
     public void testCalculateMileageAmount() throws Exception {
         Timestamp effectiveDate = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
 
-        runMileageAmountTest(new Integer(0), new KualiDecimalMoney(0), effectiveDate);
-        runMileageAmountTest(new Integer(1), new KualiDecimalMoney(.38), effectiveDate);
-        runMileageAmountTest(new Integer(10), new KualiDecimalMoney(3.75), effectiveDate);
-        runMileageAmountTest(new Integer(15), new KualiDecimalMoney(5.62), effectiveDate);
-        runMileageAmountTest(new Integer(100), new KualiDecimalMoney(37.5), effectiveDate);
-        runMileageAmountTest(new Integer(200), new KualiDecimalMoney(75.00), effectiveDate);
-        runMileageAmountTest(new Integer(380), new KualiDecimalMoney(142.5), effectiveDate);
-        runMileageAmountTest(new Integer(500), new KualiDecimalMoney(187.5), effectiveDate);
+        runMileageAmountTest(new Integer(0), new KualiDecimal(0), effectiveDate);
+        runMileageAmountTest(new Integer(1), new KualiDecimal(.38), effectiveDate);
+        runMileageAmountTest(new Integer(10), new KualiDecimal(3.75), effectiveDate);
+        runMileageAmountTest(new Integer(15), new KualiDecimal(5.62), effectiveDate);
+        runMileageAmountTest(new Integer(100), new KualiDecimal(37.5), effectiveDate);
+        runMileageAmountTest(new Integer(200), new KualiDecimal(75.00), effectiveDate);
+        runMileageAmountTest(new Integer(380), new KualiDecimal(142.5), effectiveDate);
+        runMileageAmountTest(new Integer(500), new KualiDecimal(187.5), effectiveDate);
 
-        runMileageAmountTest(new Integer(501), new KualiDecimalMoney(187.68), effectiveDate);
-        runMileageAmountTest(new Integer(600), new KualiDecimalMoney(205.5), effectiveDate);
-        runMileageAmountTest(new Integer(2500), new KualiDecimalMoney(547.5), effectiveDate);
-        runMileageAmountTest(new Integer(3000), new KualiDecimalMoney(637.5), effectiveDate);
+        runMileageAmountTest(new Integer(501), new KualiDecimal(187.68), effectiveDate);
+        runMileageAmountTest(new Integer(600), new KualiDecimal(205.5), effectiveDate);
+        runMileageAmountTest(new Integer(2500), new KualiDecimal(547.5), effectiveDate);
+        runMileageAmountTest(new Integer(3000), new KualiDecimal(637.5), effectiveDate);
 
-        runMileageAmountTest(new Integer(3001), new KualiDecimalMoney(637.5), effectiveDate);
-        runMileageAmountTest(new Integer(8000), new KualiDecimalMoney(637.5), effectiveDate);
+        runMileageAmountTest(new Integer(3001), new KualiDecimal(637.5), effectiveDate);
+        runMileageAmountTest(new Integer(8000), new KualiDecimal(637.5), effectiveDate);
     }
 
-    private void runMileageAmountTest(Integer totalMiles, KualiDecimalMoney expectedMileageAmount, Timestamp effectiveDate) {
+    private void runMileageAmountTest(Integer totalMiles, KualiDecimal expectedMileageAmount, Timestamp effectiveDate) {
         assertEquals("Mileage amount not correct ", expectedMileageAmount, disbursementVoucherTravelService.calculateMileageAmount(totalMiles, effectiveDate));
     }
 

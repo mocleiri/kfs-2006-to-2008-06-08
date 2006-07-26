@@ -32,7 +32,7 @@ import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.financial.bo.JournalVoucherAccountingLineParser;
 import org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants;
@@ -138,10 +138,10 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
      * This method calculates the debit total for a JV document keying off of the debit/debit code, only summing the accounting
      * lines with a debitDebitCode that matched the debit constant, and returns the results.
      * 
-     * @return KualiDecimalMoney
+     * @return KualiDecimal
      */
-    public KualiDecimalMoney getDebitTotal() {
-        KualiDecimalMoney debitTotal = new KualiDecimalMoney(0);
+    public KualiDecimal getDebitTotal() {
+        KualiDecimal debitTotal = new KualiDecimal(0);
         AccountingLineBase al = null;
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
@@ -158,10 +158,10 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
      * This method calculates the credit total for a JV document keying off of the debit/credit code, only summing the accounting
      * lines with a debitCreditCode that matched the debit constant, and returns the results.
      * 
-     * @return KualiDecimalMoney
+     * @return KualiDecimal
      */
-    public KualiDecimalMoney getCreditTotal() {
-        KualiDecimalMoney creditTotal = new KualiDecimalMoney(0);
+    public KualiDecimal getCreditTotal() {
+        KualiDecimal creditTotal = new KualiDecimal(0);
         AccountingLineBase al = null;
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
@@ -178,11 +178,11 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
      * is calculated by subtracting the debit accounting lines from the credit accounting lines. Otherwise, the total is just the
      * sum of all accounting line amounts.
      * 
-     * @return KualiDecimalMoney the total of the JV document.
+     * @return KualiDecimal the total of the JV document.
      */
-    public KualiDecimalMoney getTotal() {
+    public KualiDecimal getTotal() {
 
-        KualiDecimalMoney total = new KualiDecimalMoney(0);
+        KualiDecimal total = new KualiDecimal(0);
         AccountingLineBase al = null;
 
         this.refreshReferenceObject("balanceType");

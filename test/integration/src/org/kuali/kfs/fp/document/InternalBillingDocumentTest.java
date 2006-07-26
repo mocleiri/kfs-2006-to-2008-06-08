@@ -33,7 +33,7 @@ import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.core.exceptions.DocumentAuthorizationException;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 
@@ -411,10 +411,10 @@ public class InternalBillingDocumentTest extends TransactionalDocumentTestBase {
         retrieved = (TransactionalDocument) getDocumentService().getByDocumentHeaderId(docId);
 
         // make sure totals don't change
-        KualiDecimalMoney originalSourceLineAmt = retrieved.getSourceAccountingLine(0).getAmount();
-        KualiDecimalMoney originalTargetLineAmt = retrieved.getTargetAccountingLine(0).getAmount();
-        KualiDecimalMoney newSourceLineAmt = originalSourceLineAmt.divide(new KualiDecimalMoney(2));
-        KualiDecimalMoney newTargetLineAmt = originalTargetLineAmt.divide(new KualiDecimalMoney(2));
+        KualiDecimal originalSourceLineAmt = retrieved.getSourceAccountingLine(0).getAmount();
+        KualiDecimal originalTargetLineAmt = retrieved.getTargetAccountingLine(0).getAmount();
+        KualiDecimal newSourceLineAmt = originalSourceLineAmt.divide(new KualiDecimal(2));
+        KualiDecimal newTargetLineAmt = originalTargetLineAmt.divide(new KualiDecimal(2));
 
         // update existing lines with new amount which equals orig divided by 2
         updateSourceAccountingLine(retrieved, 0, newSourceLineAmt.toString());

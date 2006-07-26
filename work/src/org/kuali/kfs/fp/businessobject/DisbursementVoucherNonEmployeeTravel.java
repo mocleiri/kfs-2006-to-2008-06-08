@@ -33,7 +33,7 @@ import java.util.List;
 import org.kuali.KeyConstants;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.web.format.TimestampAMPMFormatter;
 
@@ -51,8 +51,8 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     private String disbVchrTravelToCountryCode;
     private Timestamp dvPerdiemStartDttmStamp;
     private Timestamp dvPerdiemEndDttmStamp;
-    private KualiDecimalMoney disbVchrPerdiemCalculatedAmt;
-    private KualiDecimalMoney disbVchrPerdiemActualAmount;
+    private KualiDecimal disbVchrPerdiemCalculatedAmt;
+    private KualiDecimal disbVchrPerdiemActualAmount;
     private String dvPerdiemChangeReasonText;
     private String disbVchrServicePerformedDesc;
     private String dvServicePerformedLocName;
@@ -63,16 +63,16 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     private String disbVchrAutoToStateCode;
     private boolean disbVchrAutoRoundTripCode;
     private Integer dvPersonalCarMileageAmount;
-    private KualiDecimalMoney disbVchrPersonalCarRate;
-    private KualiDecimalMoney disbVchrPersonalCarAmount;
+    private KualiDecimal disbVchrPersonalCarRate;
+    private KualiDecimal disbVchrPersonalCarAmount;
     private boolean disbVchrExceptionCode;
     private Integer financialDocumentNextLineNbr;
     private String disbVchrNonEmpTravelerName;
-    private KualiDecimalMoney disbVchrPerdiemRate;
+    private KualiDecimal disbVchrPerdiemRate;
     private String disbVchrPerdiemCategoryName;
-    private KualiDecimalMoney disbVchrMileageCalculatedAmt;
+    private KualiDecimal disbVchrMileageCalculatedAmt;
 
-    private KualiDecimalMoney totalTravelAmount;
+    private KualiDecimal totalTravelAmount;
 
     private List dvNonEmployeeExpenses;
     private List dvPrePaidEmployeeExpenses;
@@ -281,7 +281,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @return - Returns the disbVchrPerdiemCalculatedAmt
      * 
      */
-    public KualiDecimalMoney getDisbVchrPerdiemCalculatedAmt() {
+    public KualiDecimal getDisbVchrPerdiemCalculatedAmt() {
         return disbVchrPerdiemCalculatedAmt;
     }
 
@@ -292,7 +292,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @param - disbVchrPerdiemCalculatedAmt The disbVchrPerdiemCalculatedAmt to set.
      * 
      */
-    public void setDisbVchrPerdiemCalculatedAmt(KualiDecimalMoney disbVchrPerdiemCalculatedAmt) {
+    public void setDisbVchrPerdiemCalculatedAmt(KualiDecimal disbVchrPerdiemCalculatedAmt) {
         this.disbVchrPerdiemCalculatedAmt = disbVchrPerdiemCalculatedAmt;
     }
 
@@ -302,7 +302,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @return - Returns the disbVchrPerdiemActualAmount
      * 
      */
-    public KualiDecimalMoney getDisbVchrPerdiemActualAmount() {
+    public KualiDecimal getDisbVchrPerdiemActualAmount() {
         return disbVchrPerdiemActualAmount;
     }
 
@@ -313,7 +313,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @param - disbVchrPerdiemActualAmount The disbVchrPerdiemActualAmount to set.
      * 
      */
-    public void setDisbVchrPerdiemActualAmount(KualiDecimalMoney disbVchrPerdiemActualAmount) {
+    public void setDisbVchrPerdiemActualAmount(KualiDecimal disbVchrPerdiemActualAmount) {
         this.disbVchrPerdiemActualAmount = disbVchrPerdiemActualAmount;
     }
 
@@ -533,7 +533,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @return - Returns the disbVchrPersonalCarRate
      * 
      */
-    public KualiDecimalMoney getDisbVchrPersonalCarRate() {
+    public KualiDecimal getDisbVchrPersonalCarRate() {
         return disbVchrPersonalCarRate;
     }
 
@@ -544,7 +544,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @param - disbVchrPersonalCarRate The disbVchrPersonalCarRate to set.
      * 
      */
-    public void setDisbVchrPersonalCarRate(KualiDecimalMoney disbVchrPersonalCarRate) {
+    public void setDisbVchrPersonalCarRate(KualiDecimal disbVchrPersonalCarRate) {
         this.disbVchrPersonalCarRate = disbVchrPersonalCarRate;
     }
 
@@ -554,7 +554,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @return - Returns the disbVchrPersonalCarAmount
      * 
      */
-    public KualiDecimalMoney getDisbVchrPersonalCarAmount() {
+    public KualiDecimal getDisbVchrPersonalCarAmount() {
         return disbVchrPersonalCarAmount;
     }
 
@@ -565,7 +565,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @param - disbVchrPersonalCarAmount The disbVchrPersonalCarAmount to set.
      * 
      */
-    public void setDisbVchrPersonalCarAmount(KualiDecimalMoney disbVchrPersonalCarAmount) {
+    public void setDisbVchrPersonalCarAmount(KualiDecimal disbVchrPersonalCarAmount) {
         this.disbVchrPersonalCarAmount = disbVchrPersonalCarAmount;
     }
 
@@ -638,7 +638,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @return - Returns the disbVchrPerdiemRate
      * 
      */
-    public KualiDecimalMoney getDisbVchrPerdiemRate() {
+    public KualiDecimal getDisbVchrPerdiemRate() {
         return disbVchrPerdiemRate;
     }
 
@@ -649,7 +649,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @param - disbVchrPerdiemRate The disbVchrPerdiemRate to set.
      * 
      */
-    public void setDisbVchrPerdiemRate(KualiDecimalMoney disbVchrPerdiemRate) {
+    public void setDisbVchrPerdiemRate(KualiDecimal disbVchrPerdiemRate) {
         this.disbVchrPerdiemRate = disbVchrPerdiemRate;
     }
 
@@ -680,7 +680,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @return - Returns the disbVchrMileageCalculatedAmt
      * 
      */
-    public KualiDecimalMoney getDisbVchrMileageCalculatedAmt() {
+    public KualiDecimal getDisbVchrMileageCalculatedAmt() {
         return disbVchrMileageCalculatedAmt;
     }
 
@@ -691,7 +691,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * @param - disbVchrMileageCalculatedAmt The disbVchrMileageCalculatedAmt to set.
      * 
      */
-    public void setDisbVchrMileageCalculatedAmt(KualiDecimalMoney disbVchrMileageCalculatedAmt) {
+    public void setDisbVchrMileageCalculatedAmt(KualiDecimal disbVchrMileageCalculatedAmt) {
         this.disbVchrMileageCalculatedAmt = disbVchrMileageCalculatedAmt;
     }
 
@@ -800,8 +800,8 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * 
      * @return
      */
-    public KualiDecimalMoney getTotalPrePaidAmount() {
-        KualiDecimalMoney totalPrePaidAmount = new KualiDecimalMoney(0);
+    public KualiDecimal getTotalPrePaidAmount() {
+        KualiDecimal totalPrePaidAmount = new KualiDecimal(0);
         if (dvPrePaidEmployeeExpenses != null) {
             for (Iterator iter = dvPrePaidEmployeeExpenses.iterator(); iter.hasNext();) {
                 DisbursementVoucherNonEmployeeExpense element = (DisbursementVoucherNonEmployeeExpense) iter.next();
@@ -817,8 +817,8 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
      * 
      * @return
      */
-    public KualiDecimalMoney getTotalExpenseAmount() {
-        KualiDecimalMoney totalExpenseAmount = new KualiDecimalMoney(0);
+    public KualiDecimal getTotalExpenseAmount() {
+        KualiDecimal totalExpenseAmount = new KualiDecimal(0);
         if (dvNonEmployeeExpenses != null) {
             for (Iterator iter = dvNonEmployeeExpenses.iterator(); iter.hasNext();) {
                 DisbursementVoucherNonEmployeeExpense element = (DisbursementVoucherNonEmployeeExpense) iter.next();
@@ -831,8 +831,8 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * Calculates the total travel amount.
      */
-    public KualiDecimalMoney getTotalTravelAmount() {
-        KualiDecimalMoney travelAmount = new KualiDecimalMoney(0);
+    public KualiDecimal getTotalTravelAmount() {
+        KualiDecimal travelAmount = new KualiDecimal(0);
 
         // get non paid expenses first
         travelAmount = travelAmount.add(getTotalExpenseAmount());
@@ -852,7 +852,7 @@ public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
     /**
      * @param totalTravelAmount The totalTravelAmount to set.
      */
-    public void setTotalTravelAmount(KualiDecimalMoney totalTravelAmount) {
+    public void setTotalTravelAmount(KualiDecimal totalTravelAmount) {
         this.totalTravelAmount = totalTravelAmount;
     }
 

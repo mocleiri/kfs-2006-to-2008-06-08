@@ -22,7 +22,7 @@
  */
 package org.kuali.module.kra.web.struts.form;
 
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.module.kra.bo.BudgetNonpersonnel;
 import org.kuali.test.KualiTestBaseWithSpring;
@@ -73,7 +73,7 @@ public class BudgetNonpersonnelCopyOverBoHelperTest extends KualiTestBaseWithSpr
         assertEquality(newBudgetNonpersonnel1.getBudgetInflatedThirdPartyCostShareAmount(), new KualiInteger(3000));
 
 
-        // //** BudgetNonpersonnelCopyOverBoHelper(BudgetNonpersonnel budgetNonpersonnel, int inflationLength, KualiDecimalMoney
+        // //** BudgetNonpersonnelCopyOverBoHelper(BudgetNonpersonnel budgetNonpersonnel, int inflationLength, KualiDecimal
         // budgetNonpersonnelInflationRate)
         budgetNonpersonnel = createBudgetNonpersonnelCopyOverBoHelper();
 
@@ -81,7 +81,7 @@ public class BudgetNonpersonnelCopyOverBoHelperTest extends KualiTestBaseWithSpr
         budgetNonpersonnel.setAgencyCopyIndicator(false);
         budgetNonpersonnel.setBudgetUniversityCostShareCopyIndicator(false);
         budgetNonpersonnel.setBudgetThirdPartyCostShareCopyIndicator(false);
-        BudgetNonpersonnelCopyOverBoHelper newBudgetNonpersonnel2 = new BudgetNonpersonnelCopyOverBoHelper(budgetNonpersonnel, 5, new KualiDecimalMoney(10.0));
+        BudgetNonpersonnelCopyOverBoHelper newBudgetNonpersonnel2 = new BudgetNonpersonnelCopyOverBoHelper(budgetNonpersonnel, 5, new KualiDecimal(10.0));
         assertEquality(newBudgetNonpersonnel2.getAgencyRequestAmount(), new KualiInteger(1000));
         assertEquality(newBudgetNonpersonnel2.getBudgetUniversityCostShareAmount(), new KualiInteger(2000));
         assertEquality(newBudgetNonpersonnel2.getBudgetThirdPartyCostShareAmount(), new KualiInteger(3000));
@@ -90,7 +90,7 @@ public class BudgetNonpersonnelCopyOverBoHelperTest extends KualiTestBaseWithSpr
         budgetNonpersonnel.setAgencyCopyIndicator(true);
         budgetNonpersonnel.setBudgetUniversityCostShareCopyIndicator(true);
         budgetNonpersonnel.setBudgetThirdPartyCostShareCopyIndicator(true);
-        newBudgetNonpersonnel2 = new BudgetNonpersonnelCopyOverBoHelper(budgetNonpersonnel, 5, new KualiDecimalMoney(10.0));
+        newBudgetNonpersonnel2 = new BudgetNonpersonnelCopyOverBoHelper(budgetNonpersonnel, 5, new KualiDecimal(10.0));
         assertEquality(newBudgetNonpersonnel2.getAgencyRequestAmount(), new KualiInteger(0));
         assertEquality(newBudgetNonpersonnel2.getBudgetUniversityCostShareAmount(), new KualiInteger(0));
         assertEquality(newBudgetNonpersonnel2.getBudgetThirdPartyCostShareAmount(), new KualiInteger(0));
@@ -102,7 +102,7 @@ public class BudgetNonpersonnelCopyOverBoHelperTest extends KualiTestBaseWithSpr
 
 
         // //** BudgetNonpersonnelCopyOverBoHelper(BudgetNonpersonnel originBudgetNonpersonnel, Integer
-        // budgetPeriodSequenceNumberOverride, int inflationLength, KualiDecimalMoney budgetNonpersonnelInflationRate)
+        // budgetPeriodSequenceNumberOverride, int inflationLength, KualiDecimal budgetNonpersonnelInflationRate)
         budgetNonpersonnel = createBudgetNonpersonnelCopyOverBoHelper();
 
         // indicators not changed when copyToFuturePeriods false
@@ -110,14 +110,14 @@ public class BudgetNonpersonnelCopyOverBoHelperTest extends KualiTestBaseWithSpr
         budgetNonpersonnel.setAgencyCopyIndicator(false);
         budgetNonpersonnel.setBudgetUniversityCostShareCopyIndicator(false);
         budgetNonpersonnel.setBudgetThirdPartyCostShareCopyIndicator(false);
-        BudgetNonpersonnelCopyOverBoHelper newBudgetNonpersonnel3 = new BudgetNonpersonnelCopyOverBoHelper(budgetNonpersonnel, new Integer(11), 5, new KualiDecimalMoney(10.0));
+        BudgetNonpersonnelCopyOverBoHelper newBudgetNonpersonnel3 = new BudgetNonpersonnelCopyOverBoHelper(budgetNonpersonnel, new Integer(11), 5, new KualiDecimal(10.0));
         assertFalse(newBudgetNonpersonnel3.getAgencyCopyIndicator());
         assertFalse(newBudgetNonpersonnel3.getBudgetUniversityCostShareCopyIndicator());
         assertFalse(newBudgetNonpersonnel3.getBudgetThirdPartyCostShareCopyIndicator());
 
         // indicators changed when copyToFuturePeriods true
         budgetNonpersonnel.setCopyToFuturePeriods(true);
-        newBudgetNonpersonnel3 = new BudgetNonpersonnelCopyOverBoHelper(budgetNonpersonnel, new Integer(11), 5, new KualiDecimalMoney(10.0));
+        newBudgetNonpersonnel3 = new BudgetNonpersonnelCopyOverBoHelper(budgetNonpersonnel, new Integer(11), 5, new KualiDecimal(10.0));
         assertTrue(newBudgetNonpersonnel3.getAgencyCopyIndicator());
         assertTrue(newBudgetNonpersonnel3.getBudgetUniversityCostShareCopyIndicator());
         assertTrue(newBudgetNonpersonnel3.getBudgetThirdPartyCostShareCopyIndicator());
