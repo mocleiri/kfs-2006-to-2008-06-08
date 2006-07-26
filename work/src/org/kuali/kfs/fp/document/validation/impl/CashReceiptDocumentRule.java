@@ -33,6 +33,7 @@ import org.kuali.core.rule.AddCheckRule;
 import org.kuali.core.rule.DeleteCheckRule;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.rule.UpdateCheckRule;
+import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
@@ -43,6 +44,7 @@ import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.document.CashReceiptDocument;
+import org.kuali.module.financial.document.CashReceiptDocumentBase;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
@@ -58,11 +60,12 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      * @see org.kuali.core.rule.AccountingLineRule#isAmountValid(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
+    @Override
     public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
         KualiDecimal amount = accountingLine.getAmount();
 
         if (Constants.ZERO.compareTo(amount) == 0) { // amount == 0
-            GlobalVariables.getErrorMap().put(Constants.AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
+            GlobalVariables.getErrorMap().putError(Constants.AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
             return false;
         }
 
@@ -75,21 +78,23 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      * 
      * @see org.kuali.core.rule.DocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.Document)
      */
+    @Override
     protected boolean processCustomSaveDocumentBusinessRules(Document document) {
-        return !CashReceiptDocumentRuleUtil.areCashTotalsNegative((CashReceiptDocument) document);
+        return !CashReceiptDocumentRuleUtil.areCashTotalsInvalid((CashReceiptDocumentBase) document);
     }
 
     /**
      * This overrides to call super, then to make sure that the cash drawer for the verification unit associated with this CR doc is
      * open. If it's not, the the rule fails.
      * 
-     * @see org.kuali.core.rule.DocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.document.Document)
+     * @see org.kuali.core.rule.DocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.rule.event.ApproveDocumentEvent)
      */
-    protected boolean processCustomApproveDocumentBusinessRules(Document document) {
-        boolean valid = super.processCustomApproveDocumentBusinessRules(document);
+    @Override
+    protected boolean processCustomApproveDocumentBusinessRules(ApproveDocumentEvent approveEvent) {
+        boolean valid = super.processCustomApproveDocumentBusinessRules(approveEvent);
 
         if (valid) {
-            CashReceiptDocument crd = (CashReceiptDocument) document;
+            CashReceiptDocumentBase crd = (CashReceiptDocumentBase) approveEvent.getDocument();
 
             String unitName = SpringServiceLocator.getCashReceiptService().getCashReceiptVerificationUnitForCampusCode(crd.getCampusLocationCode());
             CashDrawer cd = SpringServiceLocator.getCashDrawerService().getByWorkgroupName(unitName, false);
@@ -97,7 +102,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
                 throw new IllegalStateException("There is no cash drawer associated with unitName '" + unitName + "' from cash receipt " + crd.getFinancialDocumentNumber());
             }
             else if (cd.isClosed()) {
-                GlobalVariables.getErrorMap().put(Constants.GLOBAL_ERRORS, KeyConstants.CashReceipt.MSG_CASH_DRAWER_CLOSED_VERIFICATION_NOT_ALLOWED, cd.getWorkgroupName());
+                GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KeyConstants.CashReceipt.MSG_CASH_DRAWER_CLOSED_VERIFICATION_NOT_ALLOWED, cd.getWorkgroupName());
                 valid = false;
             }
         }
@@ -111,13 +116,14 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      * 
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDocumentBalanceValid(org.kuali.core.document.TransactionalDocument)
      */
+    @Override
     protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
-        CashReceiptDocument cr = (CashReceiptDocument) transactionalDocument;
+        CashReceiptDocumentBase cr = (CashReceiptDocumentBase) transactionalDocument;
 
         // make sure that cash reconciliation total is greater than zero
         boolean isValid = cr.getSumTotalAmount().compareTo(Constants.ZERO) > 0;
         if (!isValid) {
-            GlobalVariables.getErrorMap().put(DOCUMENT_ERROR_PREFIX + PropertyConstants.SUM_TOTAL_AMOUNT, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_NO_CASH_RECONCILIATION_TOTAL);
+            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + PropertyConstants.SUM_TOTAL_AMOUNT, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_NO_CASH_RECONCILIATION_TOTAL);
         }
 
         if (isValid) {
@@ -125,7 +131,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
             isValid = cr.getSourceTotal().compareTo(cr.getSumTotalAmount()) == 0;
 
             if (!isValid) {
-                GlobalVariables.getErrorMap().put(DOCUMENT_ERROR_PREFIX + PropertyConstants.SUM_TOTAL_AMOUNT, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_BALANCE);
+                GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + PropertyConstants.SUM_TOTAL_AMOUNT, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_BALANCE);
             }
         }
 
@@ -138,6 +144,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      * 
      * @see org.kuali.core.rule.AccountingLineRule#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
      */
+    @Override
     public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
         boolean valid = true;
 
@@ -155,7 +162,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
                 valid = false;
 
                 // add message
-                GlobalVariables.getErrorMap().put(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectTypeCode() });
+                GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectTypeCode() });
             }
         }
 
@@ -168,6 +175,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      * 
      * @see org.kuali.core.rule.AccountingLineRule#isObjectConsolidationAllowed(org.kuali.core.bo.AccountingLine)
      */
+    @Override
     public boolean isObjectConsolidationAllowed(AccountingLine accountingLine) {
         boolean valid = true;
 
@@ -192,7 +200,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
                 valid = false;
 
                 // add message
-                GlobalVariables.getErrorMap().put(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_CONSOLIDATED_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectLevel.getFinancialObjectLevelCode(), consolidatedObjectCode });
+                GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_CONSOLIDATED_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectLevel.getFinancialObjectLevelCode(), consolidatedObjectCode });
             }
         }
 
@@ -205,6 +213,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      * 
      * @see org.kuali.core.rule.AccountingLineRule#isObjectSubTypeAllowed(org.kuali.core.bo.AccountingLine)
      */
+    @Override
     public boolean isObjectSubTypeAllowed(AccountingLine accountingLine) {
         boolean valid = true;
 
@@ -222,7 +231,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
                 valid = false;
 
                 // add message
-                GlobalVariables.getErrorMap().put(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_SUB_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectSubTypeCode() });
+                GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_SUB_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectSubTypeCode() });
             }
         }
 
@@ -235,6 +244,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      * 
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.TransactionalDocument)
      */
+    @Override
     protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
         return true;
     }
@@ -244,9 +254,10 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      * 
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isSourceAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.TransactionalDocument)
      */
+    @Override
     protected boolean isSourceAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
         if (0 == transactionalDocument.getSourceAccountingLines().size()) {
-            GlobalVariables.getErrorMap().put(DOCUMENT_ERROR_PREFIX + PropertyConstants.SOURCE_ACCOUNTING_LINES, KeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES);
+            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + PropertyConstants.SOURCE_ACCOUNTING_LINES, KeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES);
             return false;
         }
         else {
@@ -260,6 +271,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
+    @Override
     protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
         String accountingLineDescription = accountingLine.getFinancialDocumentLineDescription();
         if (StringUtils.isNotBlank(accountingLineDescription)) {
@@ -317,7 +329,7 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
 
         // check to make sure the amount is also valid
         if (check.getAmount().compareTo(Constants.ZERO) <= 0) {
-            GlobalVariables.getErrorMap().put(PropertyConstants.CHECK_AMOUNT, KeyConstants.ERROR_ZERO_OR_NEGATIVE_AMOUNT, PropertyConstants.CHECKS);
+            GlobalVariables.getErrorMap().putError(PropertyConstants.CHECK_AMOUNT, KeyConstants.CashReceipt.ERROR_NEGATIVE_CHECK_AMOUNT, PropertyConstants.CHECKS);
             isValid = false;
         }
 
@@ -325,18 +337,28 @@ public class CashReceiptDocumentRule extends TransactionalDocumentRuleBase imple
     }
 
     /**
-     * Method used by <code>{@link CashReceiptCoverPageService}</code> to determine of the
+     * Method used by <code>{@link org.kuali.module.financial.service.CashReceiptCoverSheetService}</code> to determine of the
      * <code>{@link CashReceiptDocument}</code> validates business rules for generating a cover page. <br/> <br/> Rule is the
      * <code>{@link Document}</code> must be ENROUTE.
      * 
      * @param document
      * @return boolean
-     * 
-     * @see org.kuali.core.module.financial.service.CashReceiptCoverSheetServiceImpl#generateCoverSheet(
-     *      org.kuali.module.financial.documentCashReceiptDocument )
      */
-    public boolean isCoverSheetPrintable(CashReceiptDocument document) {
+    public boolean isCoverSheetPrintable(CashReceiptDocumentBase document) {
         KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument();
         return !(workflowDocument.stateIsCanceled() || workflowDocument.stateIsInitiated() || workflowDocument.stateIsDisapproved() || workflowDocument.stateIsException() || workflowDocument.stateIsDisapproved() || workflowDocument.stateIsSaved());
     }
+
+    /**
+     * @see IsDebitUtils#isDebitConsideringType(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
+     * 
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine)
+     */
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
+        // error corrections are not allowed
+        IsDebitUtils.disallowErrorCorrectionDocumentCheck(this, transactionalDocument);
+        return IsDebitUtils.isDebitConsideringType(this, transactionalDocument, accountingLine);
+    }
+
 }
