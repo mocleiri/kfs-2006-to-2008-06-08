@@ -44,7 +44,7 @@ import org.kuali.module.chart.bo.codes.SufficientFundsCode;
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class Account extends BusinessObjectBase {
+public class Account extends BusinessObjectBase implements AccountIntf {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Account.class);
     private static final long serialVersionUID = -144120733742373200L;
 
@@ -123,8 +123,8 @@ public class Account extends BusinessObjectBase {
     private BudgetRecordingLevelCode budgetRecordingLevel;
     private SufficientFundsCode sufficientFundsCode;
     private Program program;
-
-    // Several kinds of Dummy Attributes for dividing sections on Inquiry page
+    
+    //Several kinds of Dummy Attributes for dividing sections on Inquiry page
     private String accountResponsibilitySectionBlank;
     private String accountResponsibilitySection;
     private String contractsAndGrantsSectionBlank;
@@ -133,11 +133,13 @@ public class Account extends BusinessObjectBase {
     private String guidelinesAndPurposeSection;
     private String accountDescriptionSectionBlank;
     private String accountDescriptionSection;
-
-
+        
+        
+        
+        
     private AccountGuideline accountGuideline;
     private AccountDescription accountDescription;
-
+    
     private List subAccounts;
 
     /**
@@ -173,7 +175,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountNumber attribute.
      * 
-     * @param - accountNumber The accountNumber to set.
+     * @param accountNumber The accountNumber to set.
      * 
      */
     public void setAccountNumber(String accountNumber) {
@@ -193,7 +195,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountName attribute.
      * 
-     * @param - accountName The accountName to set.
+     * @param accountName The accountName to set.
      * 
      */
     public void setAccountName(String accountName) {
@@ -213,7 +215,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the _AccountsFringesBnftIndicator_ attribute.
      * 
-     * @param - _AccountsFringesBnftIndicator_ The _AccountsFringesBnftIndicator_ to set.
+     * @param _AccountsFringesBnftIndicator_ The _AccountsFringesBnftIndicator_ to set.
      * 
      */
     public void setAccountsFringesBnftIndicator(boolean _AccountsFringesBnftIndicator_) {
@@ -233,7 +235,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountRestrictedStatusDate attribute.
      * 
-     * @param - accountRestrictedStatusDate The accountRestrictedStatusDate to set.
+     * @param accountRestrictedStatusDate The accountRestrictedStatusDate to set.
      * 
      */
     public void setAccountRestrictedStatusDate(Timestamp accountRestrictedStatusDate) {
@@ -253,7 +255,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountCityName attribute.
      * 
-     * @param - accountCityName The accountCityName to set.
+     * @param accountCityName The accountCityName to set.
      * 
      */
     public void setAccountCityName(String accountCityName) {
@@ -273,7 +275,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountStateCode attribute.
      * 
-     * @param - accountStateCode The accountStateCode to set.
+     * @param accountStateCode The accountStateCode to set.
      * 
      */
     public void setAccountStateCode(String accountStateCode) {
@@ -293,7 +295,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountStreetAddress attribute.
      * 
-     * @param - accountStreetAddress The accountStreetAddress to set.
+     * @param accountStreetAddress The accountStreetAddress to set.
      * 
      */
     public void setAccountStreetAddress(String accountStreetAddress) {
@@ -313,7 +315,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountZipCode attribute.
      * 
-     * @param - accountZipCode The accountZipCode to set.
+     * @param accountZipCode The accountZipCode to set.
      * 
      */
     public void setAccountZipCode(String accountZipCode) {
@@ -333,7 +335,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountCreateDate attribute.
      * 
-     * @param - accountCreateDate The accountCreateDate to set.
+     * @param accountCreateDate The accountCreateDate to set.
      * 
      */
     public void setAccountCreateDate(Timestamp accountCreateDate) {
@@ -353,7 +355,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountEffectiveDate attribute.
      * 
-     * @param - accountEffectiveDate The accountEffectiveDate to set.
+     * @param accountEffectiveDate The accountEffectiveDate to set.
      * 
      */
     public void setAccountEffectiveDate(Timestamp accountEffectiveDate) {
@@ -373,7 +375,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountExpirationDate attribute.
      * 
-     * @param - accountExpirationDate The accountExpirationDate to set.
+     * @param accountExpirationDate The accountExpirationDate to set.
      * 
      */
     public void setAccountExpirationDate(Timestamp accountExpirationDate) {
@@ -384,10 +386,12 @@ public class Account extends BusinessObjectBase {
      * 
      * This method determines whether the account is expired or not.
      * 
-     * Note that if Expiration Date is the same as today, then this will return false. It will only return true if the account
+     * Note that if Expiration Date is the same as today, then this 
+     * will return false.  It will only return true if the account 
      * expiration date is one day earlier than today or earlier.
      * 
-     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
+     * Note that this logic ignores all time components when doing the 
+     * comparison.  It only does the before/after comparison based on 
      * date values, not time-values.
      * 
      * @return - true or false based on the logic outlined above
@@ -395,49 +399,51 @@ public class Account extends BusinessObjectBase {
      */
     public boolean isExpired() {
         LOG.debug("entering isExpired()");
-        // dont even bother trying to test if the accountExpirationDate is null
+        //	dont even bother trying to test if the accountExpirationDate is null
         if (this.accountExpirationDate == null) {
             return false;
         }
-
+        
         return this.isExpired(SpringServiceLocator.getDateTimeService().getCurrentCalendar());
     }
-
+    
     /**
      * 
      * This method determines whether the account is expired or not.
      * 
-     * Note that if Expiration Date is the same date as testDate, then this will return false. It will only return true if the
-     * account expiration date is one day earlier than testDate or earlier.
+     * Note that if Expiration Date is the same date as testDate, then this 
+     * will return false.  It will only return true if the account 
+     * expiration date is one day earlier than testDate or earlier.
      * 
-     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
+     * Note that this logic ignores all time components when doing the 
+     * comparison.  It only does the before/after comparison based on 
      * date values, not time-values.
      * 
-     * @param testDate - Calendar instance with the date to test the Account's Expiration Date against. This is most commonly set to
-     *        today's date.
+     * @param testDate - Calendar instance with the date to test the Account's Expiration Date against.  
+     *                   This is most commonly set to today's date.
      * @return - true or false based on the logic outlined above
      * 
      */
-    public boolean isExpired(Calendar testDate) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("entering isExpired(" + testDate + ")");
-        }
+     public boolean isExpired(Calendar testDate) {
+         if (LOG.isDebugEnabled()) {
+             LOG.debug("entering isExpired("+testDate+")");
+         }
 
-        // dont even bother trying to test if the accountExpirationDate is null
+        //	dont even bother trying to test if the accountExpirationDate is null
         if (this.accountExpirationDate == null) {
             return false;
         }
-
-        // remove any time-components from the testDate
+        
+        //	remove any time-components from the testDate
         testDate = DateUtils.truncate(testDate, Calendar.DAY_OF_MONTH);
-
-        // get a calendar reference to the Account Expiration
+        
+        //	get a calendar reference to the Account Expiration 
         // date, and remove any time components
         Calendar acctDate = Calendar.getInstance();
         acctDate.setTime(this.accountExpirationDate);
         acctDate = DateUtils.truncate(acctDate, Calendar.DAY_OF_MONTH);
-
-        // if the Account Expiration Date is before the testDate
+        
+        //	if the Account Expiration Date is before the testDate
         if (acctDate.before(testDate)) {
             return true;
         }
@@ -445,34 +451,36 @@ public class Account extends BusinessObjectBase {
             return false;
         }
     }
-
-    /**
-     * 
-     * This method determines whether the account is expired or not.
-     * 
-     * Note that if Expiration Date is the same date as testDate, then this will return false. It will only return true if the
-     * account expiration date is one day earlier than testDate or earlier.
-     * 
-     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
-     * date values, not time-values.
-     * 
-     * @param testDate - java.util.Date instance with the date to test the Account's Expiration Date against. This is most commonly
-     *        set to today's date.
-     * @return - true or false based on the logic outlined above
-     * 
-     */
+    
+     /**
+      * 
+      * This method determines whether the account is expired or not.
+      * 
+      * Note that if Expiration Date is the same date as testDate, then this 
+      * will return false.  It will only return true if the account 
+      * expiration date is one day earlier than testDate or earlier.
+      * 
+      * Note that this logic ignores all time components when doing the 
+      * comparison.  It only does the before/after comparison based on 
+      * date values, not time-values.
+      * 
+      * @param testDate - java.util.Date instance with the date to test the Account's Expiration Date against.  
+      *                   This is most commonly set to today's date.
+      * @return - true or false based on the logic outlined above
+      * 
+      */
     public boolean isExpired(Date testDate) {
 
-        // dont even bother trying to test if the accountExpirationDate is null
+        //	dont even bother trying to test if the accountExpirationDate is null
         if (this.accountExpirationDate == null) {
             return false;
         }
-
+        
         Calendar acctDate = Calendar.getInstance();
         acctDate.setTime(testDate);
         return isExpired(acctDate);
     }
-
+    
     /**
      * Gets the awardPeriodEndYear attribute.
      * 
@@ -486,7 +494,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the awardPeriodEndYear attribute.
      * 
-     * @param - awardPeriodEndYear The awardPeriodEndYear to set.
+     * @param awardPeriodEndYear The awardPeriodEndYear to set.
      * 
      */
     public void setAwardPeriodEndYear(Integer awardPeriodEndYear) {
@@ -506,7 +514,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the awardPeriodEndMonth attribute.
      * 
-     * @param - awardPeriodEndMonth The awardPeriodEndMonth to set.
+     * @param awardPeriodEndMonth The awardPeriodEndMonth to set.
      * 
      */
     public void setAwardPeriodEndMonth(String awardPeriodEndMonth) {
@@ -526,7 +534,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the awardPeriodBeginYear attribute.
      * 
-     * @param - awardPeriodBeginYear The awardPeriodBeginYear to set.
+     * @param awardPeriodBeginYear The awardPeriodBeginYear to set.
      * 
      */
     public void setAwardPeriodBeginYear(Integer awardPeriodBeginYear) {
@@ -546,7 +554,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the awardPeriodBeginMonth attribute.
      * 
-     * @param - awardPeriodBeginMonth The awardPeriodBeginMonth to set.
+     * @param awardPeriodBeginMonth The awardPeriodBeginMonth to set.
      * 
      */
     public void setAwardPeriodBeginMonth(String awardPeriodBeginMonth) {
@@ -566,7 +574,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the acctIndirectCostRcvyTypeCd attribute.
      * 
-     * @param - acctIndirectCostRcvyTypeCd The acctIndirectCostRcvyTypeCd to set.
+     * @param acctIndirectCostRcvyTypeCd The acctIndirectCostRcvyTypeCd to set.
      * 
      */
     public void setAcctIndirectCostRcvyTypeCd(String acctIndirectCostRcvyTypeCd) {
@@ -586,7 +594,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the acctCustomIndCstRcvyExclCd attribute.
      * 
-     * @param - acctCustomIndCstRcvyExclCd The acctCustomIndCstRcvyExclCd to set.
+     * @param acctCustomIndCstRcvyExclCd The acctCustomIndCstRcvyExclCd to set.
      * 
      */
     public void setAcctCustomIndCstRcvyExclCd(String acctCustomIndCstRcvyExclCd) {
@@ -606,7 +614,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the financialIcrSeriesIdentifier attribute.
      * 
-     * @param - financialIcrSeriesIdentifier The financialIcrSeriesIdentifier to set.
+     * @param financialIcrSeriesIdentifier The financialIcrSeriesIdentifier to set.
      * 
      */
     public void setFinancialIcrSeriesIdentifier(String financialIcrSeriesIdentifier) {
@@ -626,7 +634,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountInFinancialProcessingIndicator attribute.
      * 
-     * @param - accountInFinancialProcessingIndicator The accountInFinancialProcessingIndicator to set.
+     * @param accountInFinancialProcessingIndicator The accountInFinancialProcessingIndicator to set.
      * 
      */
     public void setAccountInFinancialProcessingIndicator(boolean accountInFinancialProcessingIndicator) {
@@ -646,7 +654,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the budgetRecordingLevelCode attribute.
      * 
-     * @param - budgetRecordingLevelCode The budgetRecordingLevelCode to set.
+     * @param budgetRecordingLevelCode The budgetRecordingLevelCode to set.
      * 
      */
     public void setBudgetRecordingLevelCode(String budgetRecordingLevelCode) {
@@ -666,7 +674,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountSufficientFundsCode attribute.
      * 
-     * @param - accountSufficientFundsCode The accountSufficientFundsCode to set.
+     * @param accountSufficientFundsCode The accountSufficientFundsCode to set.
      * 
      */
     public void setAccountSufficientFundsCode(String accountSufficientFundsCode) {
@@ -682,11 +690,11 @@ public class Account extends BusinessObjectBase {
     public boolean isPendingAcctSufficientFundsIndicator() {
         return pendingAcctSufficientFundsIndicator;
     }
-
+    
     /**
      * Sets the pendingAcctSufficientFundsIndicator attribute.
      * 
-     * @param - pendingAcctSufficientFundsIndicator The pendingAcctSufficientFundsIndicator to set.
+     * @param pendingAcctSufficientFundsIndicator The pendingAcctSufficientFundsIndicator to set.
      * 
      */
     public void setPendingAcctSufficientFundsIndicator(boolean pendingAcctSufficientFundsIndicator) {
@@ -706,7 +714,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the extrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @param - extrnlFinEncumSufficntFndIndicator The extrnlFinEncumSufficntFndIndicator to set.
+     * @param extrnlFinEncumSufficntFndIndicator The extrnlFinEncumSufficntFndIndicator to set.
      * 
      */
     public void setExtrnlFinEncumSufficntFndIndicator(boolean extrnlFinEncumSufficntFndIndicator) {
@@ -726,7 +734,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the intrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @param - intrnlFinEncumSufficntFndIndicator The intrnlFinEncumSufficntFndIndicator to set.
+     * @param intrnlFinEncumSufficntFndIndicator The intrnlFinEncumSufficntFndIndicator to set.
      * 
      */
     public void setIntrnlFinEncumSufficntFndIndicator(boolean intrnlFinEncumSufficntFndIndicator) {
@@ -746,7 +754,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the finPreencumSufficientFundIndicator attribute.
      * 
-     * @param - finPreencumSufficientFundIndicator The finPreencumSufficientFundIndicator to set.
+     * @param finPreencumSufficientFundIndicator The finPreencumSufficientFundIndicator to set.
      * 
      */
     public void setFinPreencumSufficientFundIndicator(boolean finPreencumSufficientFundIndicator) {
@@ -766,7 +774,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the _FinancialObjectivePrsctrlIndicator_ attribute.
      * 
-     * @param - _FinancialObjectivePrsctrlIndicator_ The _FinancialObjectivePrsctrlIndicator_ to set.
+     * @param _FinancialObjectivePrsctrlIndicator_ The _FinancialObjectivePrsctrlIndicator_ to set.
      * 
      */
     public void setFinancialObjectivePrsctrlIndicator(boolean _FinancialObjectivePrsctrlIndicator_) {
@@ -786,7 +794,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @param - cgCatlfFedDomestcAssistNbr The cgCatlfFedDomestcAssistNbr to set.
+     * @param cgCatlfFedDomestcAssistNbr The cgCatlfFedDomestcAssistNbr to set.
      * 
      */
     public void setCgCatlfFedDomestcAssistNbr(String cgCatlfFedDomestcAssistNbr) {
@@ -806,7 +814,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountOffCampusIndicator attribute.
      * 
-     * @param - accountOffCampusIndicator The accountOffCampusIndicator to set.
+     * @param accountOffCampusIndicator The accountOffCampusIndicator to set.
      * 
      */
     public void setAccountOffCampusIndicator(boolean accountOffCampusIndicator) {
@@ -826,7 +834,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountClosedIndicator attribute.
      * 
-     * @param - accountClosedIndicator The accountClosedIndicator to set.
+     * @param accountClosedIndicator The accountClosedIndicator to set.
      * 
      */
     public void setAccountClosedIndicator(boolean accountClosedIndicator) {
@@ -846,7 +854,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the chartOfAccounts attribute.
      * 
-     * @param - chartOfAccounts The chartOfAccounts to set.
+     * @param chartOfAccounts The chartOfAccounts to set.
      * @deprecated
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -866,7 +874,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the organization attribute.
      * 
-     * @param - organization The organization to set.
+     * @param organization The organization to set.
      * @deprecated
      */
     public void setOrganization(Org organization) {
@@ -886,7 +894,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountType attribute.
      * 
-     * @param - accountType The accountType to set.
+     * @param accountType The accountType to set.
      * @deprecated
      */
     public void setAccountType(AcctType accountType) {
@@ -906,7 +914,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountPhysicalCampus attribute.
      * 
-     * @param - accountPhysicalCampus The accountPhysicalCampus to set.
+     * @param accountPhysicalCampus The accountPhysicalCampus to set.
      * @deprecated
      */
     public void setAccountPhysicalCampus(Campus accountPhysicalCampus) {
@@ -945,7 +953,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the subFundGroup attribute.
      * 
-     * @param - subFundGroup The subFundGroup to set.
+     * @param subFundGroup The subFundGroup to set.
      * @deprecated
      */
     public void setSubFundGroup(SubFundGroup subFundGroup) {
@@ -965,7 +973,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the financialHigherEdFunction attribute.
      * 
-     * @param - financialHigherEdFunction The financialHigherEdFunction to set.
+     * @param financialHigherEdFunction The financialHigherEdFunction to set.
      * @deprecated
      */
     public void setFinancialHigherEdFunction(HigherEdFunction financialHigherEdFunction) {
@@ -985,7 +993,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the accountRestrictedStatus attribute.
      * 
-     * @param - accountRestrictedStatus The accountRestrictedStatus to set.
+     * @param accountRestrictedStatus The accountRestrictedStatus to set.
      * @deprecated
      */
     public void setAccountRestrictedStatus(RestrictedStatus accountRestrictedStatus) {
@@ -1005,7 +1013,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the reportsToAccount attribute.
      * 
-     * @param - reportsToAccount The reportsToAccount to set.
+     * @param reportsToAccount The reportsToAccount to set.
      * @deprecated
      */
     public void setReportsToAccount(Account reportsToAccount) {
@@ -1025,7 +1033,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the endowmentIncomeAccount attribute.
      * 
-     * @param - endowmentIncomeAccount The endowmentIncomeAccount to set.
+     * @param endowmentIncomeAccount The endowmentIncomeAccount to set.
      * @deprecated
      */
     public void setEndowmentIncomeAccount(Account endowmentIncomeAccount) {
@@ -1045,7 +1053,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the contractControlAccount attribute.
      * 
-     * @param - contractControlAccount The contractControlAccount to set.
+     * @param contractControlAccount The contractControlAccount to set.
      * @deprecated
      */
     public void setContractControlAccount(Account contractControlAccount) {
@@ -1066,7 +1074,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the incomeStreamAccount attribute.
      * 
-     * @param - incomeStreamAccount The incomeStreamAccount to set.
+     * @param incomeStreamAccount The incomeStreamAccount to set.
      * @deprecated
      */
     public void setIncomeStreamAccount(Account incomeStreamAccount) {
@@ -1086,7 +1094,7 @@ public class Account extends BusinessObjectBase {
     /**
      * Sets the indirectCostRecoveryAcct attribute.
      * 
-     * @param - indirectCostRecoveryAcct The indirectCostRecoveryAcct to set.
+     * @param indirectCostRecoveryAcct The indirectCostRecoveryAcct to set.
      * @deprecated
      */
     public void setIndirectCostRecoveryAcct(Account indirectCostRecoveryAcct) {
@@ -1175,7 +1183,7 @@ public class Account extends BusinessObjectBase {
     public void setProgram(Program program) {
         this.program = program;
     }
-
+    
     /**
      * @return Returns the accountGuideline.
      */
@@ -1194,23 +1202,21 @@ public class Account extends BusinessObjectBase {
 
 
     /**
-     * Gets the accountDescription attribute.
-     * 
+     * Gets the accountDescription attribute. 
      * @return Returns the accountDescription.
      */
     public AccountDescription getAccountDescription() {
         return accountDescription;
     }
-
+    
     /**
      * Sets the accountDescription attribute value.
-     * 
      * @param accountDescription The accountDescription to set.
      */
     public void setAccountDescription(AccountDescription accountDescription) {
         this.accountDescription = accountDescription;
     }
-
+    
     /**
      * @return Returns the subAccounts.
      */
@@ -1538,53 +1544,47 @@ public class Account extends BusinessObjectBase {
     }
 
     /**
-     * Gets the postalZipCode attribute.
-     * 
+     * Gets the postalZipCode attribute. 
      * @return Returns the postalZipCode.
      */
     public PostalZipCode getPostalZipCode() {
         return postalZipCode;
     }
-
+    
     /**
      * Sets the postalZipCode attribute value.
-     * 
      * @param postalZipCode The postalZipCode to set.
      */
     public void setPostalZipCode(PostalZipCode postalZipCode) {
         this.postalZipCode = postalZipCode;
     }
-
+    
     /**
-     * Gets the budgetRecordingLevel attribute.
-     * 
+     * Gets the budgetRecordingLevel attribute. 
      * @return Returns the budgetRecordingLevel.
      */
     public BudgetRecordingLevelCode getBudgetRecordingLevel() {
         return budgetRecordingLevel;
     }
-
+    
     /**
      * Sets the budgetRecordingLevel attribute value.
-     * 
      * @param budgetRecordingLevel The budgetRecordingLevel to set.
      */
     public void setBudgetRecordingLevel(BudgetRecordingLevelCode budgetRecordingLevel) {
         this.budgetRecordingLevel = budgetRecordingLevel;
     }
-
+    
     /**
-     * Gets the sufficientFundsCode attribute.
-     * 
+     * Gets the sufficientFundsCode attribute. 
      * @return Returns the sufficientFundsCode.
      */
     public SufficientFundsCode getSufficientFundsCode() {
         return sufficientFundsCode;
     }
-
+    
     /**
      * Sets the sufficientFundsCode attribute value.
-     * 
      * @param sufficientFundsCode The sufficientFundsCode to set.
      */
     public void setSufficientFundsCode(SufficientFundsCode sufficientFundsCode) {
@@ -1603,10 +1603,10 @@ public class Account extends BusinessObjectBase {
      */
     public void setProgramCode(String programCode) {
         this.programCode = programCode;
-    }
-
+    }    
+    
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
@@ -1665,115 +1665,90 @@ public class Account extends BusinessObjectBase {
         String key = getChartOfAccountsCode() + ":" + getAccountNumber();
         return key;
     }
-
     /**
-     * Gets the dummy attribute.
-     * 
+     * Gets the dummy attribute. 
      * @return Returns the dummy.
      */
-
+   
     /**
-     * Gets the accountResponsibilitySection attribute.
-     * 
+     * Gets the accountResponsibilitySection attribute. 
      * @return Returns the accountResponsibilitySection.
      */
     public String getAccountResponsibilitySection() {
         return accountResponsibilitySection;
     }
-
     /**
      * Sets the accountResponsibilitySection attribute value.
-     * 
      * @param accountResponsibilitySection The accountResponsibilitySection to set.
      */
     public void setAccountResponsibilitySection(String accountResponsibilitySection) {
         this.accountResponsibilitySection = accountResponsibilitySection;
     }
-
     /**
-     * Gets the contractsAndGrantsSection attribute.
-     * 
+     * Gets the contractsAndGrantsSection attribute. 
      * @return Returns the contractsAndGrantsSection.
      */
     public String getContractsAndGrantsSection() {
         return contractsAndGrantsSection;
     }
-
     /**
      * Sets the contractsAndGrantsSection attribute value.
-     * 
      * @param contractsAndGrantsSection The contractsAndGrantsSection to set.
      */
     public void setContractsAndGrantsSection(String contractsAndGrantsSection) {
         this.contractsAndGrantsSection = contractsAndGrantsSection;
     }
-
     /**
-     * Gets the accountDescriptionSection attribute.
-     * 
+     * Gets the accountDescriptionSection attribute. 
      * @return Returns the accountDescriptionSection.
      */
     public String getAccountDescriptionSection() {
         return accountDescriptionSection;
     }
-
     /**
      * Sets the accountDescriptionSection attribute value.
-     * 
      * @param accountDescriptionSection The accountDescriptionSection to set.
      */
     public void setAccountDescriptionSection(String accountDescriptionSection) {
         this.accountDescriptionSection = accountDescriptionSection;
     }
-
     /**
-     * Gets the guidelinesAndPurposeSection attribute.
-     * 
+     * Gets the guidelinesAndPurposeSection attribute. 
      * @return Returns the guidelinesAndPurposeSection.
      */
     public String getGuidelinesAndPurposeSection() {
         return guidelinesAndPurposeSection;
     }
-
     /**
      * Sets the guidelinesAndPurposeSection attribute value.
-     * 
      * @param guidelinesAndPurposeSection The guidelinesAndPurposeSection to set.
      */
     public void setGuidelinesAndPurposeSection(String guidelinesAndPurposeSection) {
         this.guidelinesAndPurposeSection = guidelinesAndPurposeSection;
     }
-
     /**
-     * Gets the accountResponsibilitySectionBlank attribute.
-     * 
+     * Gets the accountResponsibilitySectionBlank attribute. 
      * @return Returns the accountResponsibilitySectionBlank.
      */
     public String getAccountResponsibilitySectionBlank() {
         return accountResponsibilitySectionBlank;
     }
-
     /**
-     * Gets the contractsAndGrantsSectionBlank attribute.
-     * 
+     * Gets the contractsAndGrantsSectionBlank attribute. 
      * @return Returns the contractsAndGrantsSectionBlank.
      */
     public String getContractsAndGrantsSectionBlank() {
         return contractsAndGrantsSectionBlank;
     }
-
     /**
-     * Gets the accountDescriptionSectionBlank attribute.
-     * 
+     * Gets the accountDescriptionSectionBlank attribute. 
      * @return Returns the accountDescriptionSectionBlank.
      */
     public String getAccountDescriptionSectionBlank() {
         return accountDescriptionSectionBlank;
     }
-
     /**
-     * Gets the guidelinesAndPurposeSectionBlank attribute.
-     * 
+     * Gets the guidelinesAndPurposeSectionBlank attribute. 
      * @return Returns the guidelinesAndPurposeSectionBlank.
      */
     public String getGuidelinesAndPurposeSectionBlank() {

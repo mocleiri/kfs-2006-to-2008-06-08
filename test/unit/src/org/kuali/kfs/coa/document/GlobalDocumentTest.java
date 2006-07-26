@@ -44,6 +44,7 @@ import org.kuali.test.KualiTestBaseWithFixtures;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
+@SuppressWarnings("deprecation")
 public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
 
     private static final Log LOG = LogFactory.getLog(GlobalDocumentTest.class);
@@ -141,7 +142,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         List<DelegateChangeDocument> changes = new ArrayList();
 
         DelegateChangeDocument change = new DelegateChangeDocument();
-        change.setAccountDelegatePrimaryRoutingCode(false);
+        change.setAccountDelegatePrimaryRoutingIndicator(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("20000000");
         change.setApprovalFromThisAmount(new KualiDecimal(0));
@@ -170,7 +171,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031467");
         bo.addAccount(account);
-        docService.saveDocument(document, null, null);
+        docService.saveDocument(document);
 
         // now that it worked, lets cancel the doc so it doesnt lock for others
         docService.cancelDocument(document, "cancelling test document");
@@ -190,7 +191,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         List<DelegateChangeDocument> changes = new ArrayList();
 
         DelegateChangeDocument change = new DelegateChangeDocument();
-        change.setAccountDelegatePrimaryRoutingCode(false);
+        change.setAccountDelegatePrimaryRoutingIndicator(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("20000000");
         change.setApprovalFromThisAmount(new KualiDecimal(0));
@@ -219,7 +220,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         account.setAccountNumber("1031467");
         bo.addAccount(account);
 
-        docService.saveDocument(document, null, null);
+        docService.saveDocument(document);
 
         // clear the document, and re-load it from the DB
         document = null;
@@ -275,7 +276,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         List<DelegateChangeDocument> changes = new ArrayList();
 
         DelegateChangeDocument change = new DelegateChangeDocument();
-        change.setAccountDelegatePrimaryRoutingCode(false);
+        change.setAccountDelegatePrimaryRoutingIndicator(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("019283749");
         change.setApprovalFromThisAmount(new KualiDecimal(0));
@@ -304,7 +305,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         account.setAccountNumber("1031467");
         bo.addAccount(account);
 
-        docService.saveDocument(document, null, null);
+        docService.saveDocument(document);
 
         // clear the document, and re-load it from the DB
         document = null;
@@ -362,7 +363,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         List<DelegateChangeDocument> changes = new ArrayList();
 
         DelegateChangeDocument change = new DelegateChangeDocument();
-        change.setAccountDelegatePrimaryRoutingCode(false);
+        change.setAccountDelegatePrimaryRoutingIndicator(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("20000000");
         change.setApprovalFromThisAmount(new KualiDecimal(0));
@@ -391,7 +392,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         account.setAccountNumber("1031467");
         bo.addAccount(account);
 
-        docService.saveDocument(document1, null, null);
+        docService.saveDocument(document1);
 
         // clear the document, and re-load it from the DB
         MaintenanceDocument document2;
@@ -442,7 +443,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         changes = new ArrayList();
 
         change = new DelegateChangeDocument();
-        change.setAccountDelegatePrimaryRoutingCode(false);
+        change.setAccountDelegatePrimaryRoutingIndicator(false);
         change.setAccountDelegateStartDate(DateUtils.newDate(2006, 6, 1));
         change.setAccountDelegateUniversalId("3000000");
         change.setApprovalFromThisAmount(new KualiDecimal(0));
@@ -472,7 +473,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         // a locking error should be throw right here
         boolean correctErrorThrown = false;
         try {
-            docService.saveDocument(document3, null, null);
+            docService.saveDocument(document3);
         }
         catch (ValidationException e) {
             if ("Maintenance Record is locked by another document.".equalsIgnoreCase(e.getMessage())) {
