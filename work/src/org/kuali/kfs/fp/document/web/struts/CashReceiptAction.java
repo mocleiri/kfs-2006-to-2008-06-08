@@ -65,6 +65,7 @@ public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
      * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm,
      *      javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Timer t0 = new Timer("execute");
         CashReceiptForm cform = (CashReceiptForm) form;
@@ -82,7 +83,7 @@ public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
             }
 
             // generate errors for negative cash totals (especially for the recalculate button)
-            CashReceiptDocumentRuleUtil.areCashTotalsNegative(cdoc);
+            CashReceiptDocumentRuleUtil.areCashTotalsInvalid(cdoc);
         }
 
         // proceed as usual
@@ -99,7 +100,7 @@ public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward printCoverSheet(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -119,12 +120,12 @@ public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
         crForm.setDocument(document);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        CashReceiptCoverSheetService coverSheetService = new CashReceiptCoverSheetServiceImpl();
+        CashReceiptCoverSheetService coverSheetService = SpringServiceLocator.getCashReceiptCoverSheetService();
         coverSheetService.generateCoverSheet(document, directory, baos);
         String fileName = financialDocumentNumber + "_cover_sheet.pdf";
         WebUtils.saveMimeOutputStreamAsFile(response, "application/pdf", baos, fileName);
 
-        return new ActionForward();
+        return null;
     }
 
     /**
@@ -225,7 +226,7 @@ public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward deleteCheck(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -248,7 +249,7 @@ public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
             }
         }
         else {
-            GlobalVariables.getErrorMap().put("document.check[" + deleteIndex + "]", KeyConstants.Check.ERROR_CHECK_DELETERULE, Integer.toString(deleteIndex));
+            GlobalVariables.getErrorMap().putError("document.check[" + deleteIndex + "]", KeyConstants.Check.ERROR_CHECK_DELETERULE, Integer.toString(deleteIndex));
         }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
@@ -262,7 +263,7 @@ public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
      * @param form
      * @param request
      * @param response
-     * @return
+     * @return ActionForward
      * @throws Exception
      */
     public ActionForward changeCheckEntryMode(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -307,6 +308,7 @@ public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
     /**
      * @see org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase#createDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
      */
+    @Override
     protected void createDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
         super.createDocument(kualiDocumentFormBase);
 
@@ -324,6 +326,7 @@ public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
     /**
      * @see org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase#loadDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
      */
+    @Override
     protected void loadDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
         super.loadDocument(kualiDocumentFormBase);
 

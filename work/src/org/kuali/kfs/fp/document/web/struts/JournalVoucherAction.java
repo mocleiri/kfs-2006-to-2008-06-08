@@ -50,7 +50,9 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.financial.bo.VoucherAccountingLineHelper;
 import org.kuali.module.financial.bo.VoucherAccountingLineHelperBase;
 import org.kuali.module.financial.document.JournalVoucherDocument;
+import org.kuali.module.financial.document.VoucherDocument;
 import org.kuali.module.financial.web.struts.form.JournalVoucherForm;
+import org.kuali.module.financial.web.struts.form.VoucherForm;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -62,12 +64,6 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class JournalVoucherAction extends VoucherAction {
-    private static final String EXTERNAL_ENCUMBRANCE = "EX";
-
-    // upload file format templates
-    private static final String ACCOUNTING_LINE_IMPORT_EXTERNAL_ENCUMBRANCE = "JV-Accounting-Line-Import-External-Encumbrance-Balance-Type.csv";
-    private static final String ACCOUNTING_LINE_IMPORT_OFFSET_GENERATION = "JV-Accounting-Line-Import-Offset-Generation-Balance-Type.csv";
-    private static final String ACCOUNTING_LINE_IMPORT_NON_OFFSET_GENERATION = "JV-Accounting-Line-Import-Non-Offset-Generation-Balance-Type.csv";
 
     // used to determine which way the change balance type action is switching
     // these are local constants only used within this action class
@@ -87,9 +83,12 @@ public class JournalVoucherAction extends VoucherAction {
      * @see org.kuali.core.web.struts.action.KualiAction#execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
      *      HttpServletResponse response)
      */
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         JournalVoucherForm journalVoucherForm = (JournalVoucherForm) form;
 
+        populateBalanceTypeOneDocument(journalVoucherForm);
+        
         // now check to see if the balance type was changed and if so, we want to
         // set the method to call so that the appropriate action can be invoked
         // had to do it this way b/c the changing of the drop down causes the page to re-submit
@@ -110,6 +109,45 @@ public class JournalVoucherAction extends VoucherAction {
         return returnForward;
     }
 
+    /**
+     * Overrides the parent to first prompt the user appropriately to make sure that they want to submit and out of balance document, then 
+     * calls super's route method.
+     * 
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#route(org.apache.struts.action.ActionMapping,
+     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
+    @Override
+    public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // process the question but we need to make sure there are lines and then check to see if it's not balanced
+        VoucherDocument vDoc = ((VoucherForm) form).getVoucherDocument();
+        if (vDoc.getSourceAccountingLines().size() > 0 && vDoc.getTotal().compareTo(Constants.ZERO) != 0) {
+            // it's not in "balance"
+            ActionForward returnForward = processRouteOutOfBalanceDocumentConfirmationQuestion(mapping, form, request, response);
+
+            // if not null, then the question component either has control of the flow and needs to ask its questions
+            // or the person chose the "cancel" or "no" button
+            // otherwise we have control
+            if (returnForward != null) {
+                return returnForward;
+            }
+        }
+        // now call the route method
+        return super.route(mapping, form, request, response);
+    }
+
+    /**
+     * This method handles grabbing the values from the form and pushing them into the document appropriately.
+     * 
+     * @param journalVoucherForm
+     */
+    private void populateBalanceTypeOneDocument(JournalVoucherForm journalVoucherForm) {
+        String selectedBalanceTypeCode = journalVoucherForm.getSelectedBalanceType().getCode();
+        BalanceTyp selectedBalanceType = getPopulatedBalanceTypeInstance(selectedBalanceTypeCode);
+        journalVoucherForm.getJournalVoucherDocument().setBalanceTypeCode(selectedBalanceTypeCode);
+        journalVoucherForm.getJournalVoucherDocument().setBalanceType(selectedBalanceType);  // set the fully populated balance type object into the form's selected balance type
+        journalVoucherForm.setSelectedBalanceType(selectedBalanceType);
+    }
+
 
     /**
      * Overrides to call super, and then to repopulate the credit/debit amounts b/c the credit/debit code might change during a JV
@@ -118,6 +156,7 @@ public class JournalVoucherAction extends VoucherAction {
      * @see org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase#correct(org.apache.struts.action.ActionMapping,
      *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
+    @Override
     public ActionForward correct(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward actionForward = super.correct(mapping, form, request, response);
 
@@ -126,7 +165,8 @@ public class JournalVoucherAction extends VoucherAction {
         jvDoc.refreshReferenceObject(PropertyConstants.BALANCE_TYPE);
         // only repopulate if this is a JV that was entered in debit/credit mode
         if (jvDoc.getBalanceType().isFinancialOffsetGenerationIndicator()) {
-            super.correct(mapping, form, request, response);
+            // now make sure to repopulate credit/debit amounts
+            populateAllVoucherAccountingLineHelpers((JournalVoucherForm) form);
         }
 
         return actionForward;
@@ -145,7 +185,7 @@ public class JournalVoucherAction extends VoucherAction {
      */
     public ActionForward changeBalanceType(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         JournalVoucherForm journalVoucherForm = (JournalVoucherForm) form;
-
+        
         // figure out which way the balance type is changing
         determineBalanceTypeChangeModes(journalVoucherForm);
 
@@ -412,7 +452,8 @@ public class JournalVoucherAction extends VoucherAction {
      * 
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#loadDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
      */
-    protected void loadDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
+    @Override
+    protected void loadDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException{
         super.loadDocument(kualiDocumentFormBase);
         JournalVoucherForm journalVoucherForm = (JournalVoucherForm) kualiDocumentFormBase;
 
@@ -427,7 +468,7 @@ public class JournalVoucherAction extends VoucherAction {
         }
 
         // always wipe out the new source line
-        journalVoucherForm.setNewSourceLine(new SourceAccountingLine());
+        journalVoucherForm.setNewSourceLine(null);
 
         // reload the balance type and accounting period selections since now we have data in the document bo
         populateSelectedJournalBalanceType(journalVoucherDocument, journalVoucherForm);
@@ -463,6 +504,7 @@ public class JournalVoucherAction extends VoucherAction {
      * @return ActionForward
      * @throws Exception
      */
+    @Override
     protected ActionForward processRouteOutOfBalanceDocumentConfirmationQuestion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         JournalVoucherForm jvForm = (JournalVoucherForm) form;
         JournalVoucherDocument jvDoc = jvForm.getJournalVoucherDocument();
@@ -509,6 +551,7 @@ public class JournalVoucherAction extends VoucherAction {
      * @throws FileNotFoundException
      * @throws IOException
      */
+    @Override
     public ActionForward uploadSourceLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException {
         // call method that sourceform and destination list
         uploadAccountingLines(true, form);
@@ -525,68 +568,12 @@ public class JournalVoucherAction extends VoucherAction {
      * @throws FileNotFoundException
      * @throws IOException
      */
+    @Override
     protected void uploadAccountingLines(boolean isSource, ActionForm form) throws FileNotFoundException, IOException {
         JournalVoucherForm jvForm = (JournalVoucherForm) form;
         // JournalVoucherAccountingLineParser needs a fresh BalanceType BO in the JournalVoucherDocument.
         jvForm.getJournalVoucherDocument().refreshReferenceObject(PropertyConstants.BALANCE_TYPE);
         super.uploadAccountingLines(isSource, jvForm);
-
-        if (GlobalVariables.getErrorMap().containsKeyMatchingPattern(Constants.SOURCE_ACCOUNTING_LINE_ERROR_PATTERN)) {
-            JournalVoucherDocument jvDocument = jvForm.getJournalVoucherDocument();
-
-            GlobalVariables.getErrorMap().put(Constants.SOURCE_ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_JV_INVALID_ACCOUNTING_LINE_TEMPLATE, new String[] { jvDocument.getBalanceTypeCode(), getImportTemplateName(jvDocument) });
-        }
     }
 
-    /**
-     * Determines based on <code>{@link BalanceTyp}</code> criteria what template should have been used. This method is usually
-     * only called when criteria isn't met properly which is determined through the business rules.<br/>
-     * 
-     * <p>
-     * The following table shows the constraints this rule is based on. The table is separated by conditions, assumptions, and the
-     * template determined to be used. If a certain condition is met, than an assumption is made. If the assumption is not
-     * consistent, then the incorrect template was used.
-     * </p>
-     * <table>
-     * <tr>
-     * <th>Condition</th>
-     * <th>Assumption</th>
-     * <th>Template</th>
-     * </tr>
-     * <tr>
-     * <td>BalanceType.isOffsetGeneration()</td>
-     * <td>DebitCreditCode is set and amount &gt; 0</td>
-     * <td> JV-Accounting-Line-Upload-Offset-Generation-Balance-Type.csv </td>
-     * </tr>
-     * <tr>
-     * <td>BalanceType == "EX" (ExternalEncumberence)</td>
-     * <td>ReferenceOriginCode, ReferenceNumber, and ReferenceTypeCode are not null</td>
-     * <td> JV-Accounting-Line-Upload-External-Encumbrance-Balance-Type.csv </td>
-     * </tr>
-     * <tr>
-     * <td>None of the above</td>
-     * <td>DebitCreditCode is null, amount &gt; 0, and ReferenceOriginCode, ReferenceNumber, and ReferenceTypeCode are null.</td>
-     * <td> JV-Accounting-Line-Upload-Non-Offset-Generation-Balance-Type.csv </td>
-     * </tr>
-     * </table><br/>
-     * 
-     * <p>
-     * These rules are tested in the business rules. Not in this method. This method just determines the template that should have
-     * been used if there was an error.
-     * </p>
-     * 
-     * @param jv <code>{@link JournalVoucherDocument}</code> used to get
-     * @return String
-     */
-    private String getImportTemplateName(JournalVoucherDocument jv) {
-        if (jv.getBalanceType().getCode().equals(EXTERNAL_ENCUMBRANCE)) {
-            return ACCOUNTING_LINE_IMPORT_EXTERNAL_ENCUMBRANCE;
-        }
-        else if (jv.getBalanceType().isFinancialOffsetGenerationIndicator()) {
-            return ACCOUNTING_LINE_IMPORT_OFFSET_GENERATION;
-        }
-        else {
-            return ACCOUNTING_LINE_IMPORT_NON_OFFSET_GENERATION;
-        }
-    }
 }

@@ -29,10 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.Constants;
 import org.kuali.PropertyConstants;
 import org.kuali.Constants.CashDrawerConstants;
 import org.kuali.Constants.DepositConstants;
+import org.kuali.Constants.DocumentStatusCodes;
 import org.kuali.core.authorization.DocumentAuthorizer;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.DocumentHeader;
@@ -57,6 +57,7 @@ import org.kuali.module.financial.exceptions.InvalidCashReceiptState;
 import org.kuali.module.financial.service.CashDrawerService;
 import org.kuali.module.financial.service.CashManagementService;
 import org.kuali.module.financial.web.struts.form.CashDrawerStatusCodeFormatter;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -115,8 +116,6 @@ public class CashManagementServiceImpl implements CashManagementService {
             throw new IllegalArgumentException("invalid (blank) docDescription");
         }
 
-        CashManagementDocument cmDoc = null;
-
         // check user authorization
         KualiUser user = GlobalVariables.getUserSession().getKualiUser();
         String documentTypeName = SpringServiceLocator.getDataDictionaryService().getDocumentTypeNameByClass(CashManagementDocument.class);
@@ -127,116 +126,90 @@ public class CashManagementServiceImpl implements CashManagementService {
 
         // check cash drawer
         CashDrawer cd = cashDrawerService.getByWorkgroupName(unitName, true);
+        String controllingDocId = cd.getReferenceFinancialDocumentNumber();
+
+        // KULEDOCS-1475: adding handling for two things which should never happen:
+        // 1. CashDrawer is open or locked by document 'null'
+        // 2. CashDrawer is open or locked by a document which doesn't exist
+        if (!cd.isClosed()) {
+            boolean forceDrawerClosed = false;
+
+            if (StringUtils.isBlank(controllingDocId)) {
+                forceDrawerClosed = true;
+            }
+            else if (!documentService.documentExists(controllingDocId)) {
+                forceDrawerClosed = true;
+            }
+
+            if (forceDrawerClosed) {
+                cashDrawerService.closeCashDrawer(unitName);
+                cd = cashDrawerService.getByWorkgroupName(unitName, true);
+            }
+        }
+
+
+        CashManagementDocument cmDoc = null;
         if (cd.isClosed()) {
+            // create the document
             try {
-                // create the document
                 cmDoc = (CashManagementDocument) documentService.getNewDocument(CashManagementDocument.class);
                 cmDoc.getDocumentHeader().setFinancialDocumentDescription(docDescription);
                 cmDoc.setWorkgroupName(unitName);
-
-                // open cash drawer
-                cashDrawerService.openCashDrawer(unitName, cmDoc.getFinancialDocumentNumber());
-
-                // persist everything
-                documentService.saveDocument(cmDoc, annotation, null);
-            }
-            catch (RuntimeException e) {
-                // reclose the drawer if creation failed (without trapping the failure-to-close)
-                cashDrawerService.closeCashDrawer(unitName);
-
-                throw e;
             }
             catch (WorkflowException e) {
-                // reclose the drawer if creation failed (without trapping the failure-to-close)
-                cashDrawerService.closeCashDrawer(unitName);
-
-                throw new InfrastructureException("unable to create CashManagementDocument ", e);
+                throw new InfrastructureException("unable to create CashManagementDocument", e);
             }
         }
         else {
             CashDrawerStatusCodeFormatter f = new CashDrawerStatusCodeFormatter();
-            String controllingDocId = cd.getReferenceFinancialDocumentNumber();
+
             throw new CashDrawerStateException(unitName, controllingDocId, (String) f.format(CashDrawerConstants.STATUS_CLOSED), (String) f.format(cd.getStatusCode()));
         }
 
         return cmDoc;
     }
 
-
     /**
      * @see org.kuali.module.financial.service.CashManagementService#addInterimDeposit(org.kuali.module.financial.document.CashManagementDocument,
-     *      int, java.lang.String, java.lang.String, java.lang.String, java.util.List)
+     *      java.lang.String, org.kuali.module.financial.bo.BankAccount, java.util.List)
      */
     @SuppressWarnings("deprecation")
-    public void addInterimDeposit(CashManagementDocument cashManagementDoc, String depositTicketNumber, BankAccount bankAccount, List selectedCashReceipts) {
+    public void addDeposit(CashManagementDocument cashManagementDoc, String depositTicketNumber, BankAccount bankAccount, List selectedCashReceipts, boolean isFinalDeposit) {
+        validateDepositParams(cashManagementDoc, bankAccount, selectedCashReceipts);
+
+        String depositTypeCode = DepositConstants.DEPOSIT_TYPE_INTERIM;
+        if (isFinalDeposit) {
+            depositTypeCode = DepositConstants.DEPOSIT_TYPE_FINAL;
+        }
+
         //
-        // validate parameters
-
-        if (cashManagementDoc == null) {
-            throw new IllegalArgumentException("invalid (null) cashManagementDoc");
-        }
-        else if (!cashManagementDoc.getDocumentHeader().getWorkflowDocument().stateIsSaved()) {
-            throw new IllegalStateException("cashManagementDoc '" + cashManagementDoc.getFinancialDocumentNumber() + "' is not in 'saved' state");
-        }
-        else if (cashManagementDoc.hasFinalDeposit()) {
-            throw new IllegalStateException("cashManagementDoc '" + cashManagementDoc.getFinancialDocumentNumber() + "' hasFinalDeposit");
-        }
-        if (bankAccount == null) {
-            throw new IllegalArgumentException("invalid (null) bankAccount");
-        }
-
-        validateInterimCashReceipts(selectedCashReceipts);
+        // lock the cashDrawer
+        cashDrawerService.lockCashDrawer(cashManagementDoc.getWorkgroupName(), cashManagementDoc.getFinancialDocumentNumber());
 
 
         //
         // create the Deposit
+        Deposit deposit = buildDeposit(cashManagementDoc, depositTypeCode, depositTicketNumber, bankAccount, selectedCashReceipts);
 
-        // lock the cashDrawer
-        cashDrawerService.lockCashDrawer(cashManagementDoc.getWorkgroupName(), cashManagementDoc.getFinancialDocumentNumber());
-
-        // derive the line number
-        int lineNumber = cashManagementDoc.getNextDepositLineNumber();
-
-        // create the deposit
-        Deposit deposit = new Deposit();
-        deposit.setFinancialDocumentNumber(cashManagementDoc.getFinancialDocumentNumber());
-        deposit.setFinancialDocumentDepositLineNumber(new Integer(lineNumber));
-        deposit.setCashManagementDocument(cashManagementDoc);
-
-        deposit.setDepositTypeCode(DepositConstants.DEPOSIT_TYPE_INTERIM);
-
-        deposit.setDepositDate(dateTimeService.getCurrentSqlDate());
-
-        // trim to empty, because the field is optional
-        deposit.setDepositTicketNumber(StringUtils.trimToEmpty(depositTicketNumber));
-
-        deposit.setBankAccount(bankAccount);
-        deposit.setDepositBankCode(bankAccount.getBank().getFinancialDocumentBankCode());
-        deposit.setDepositBankAccountNumber(bankAccount.getFinDocumentBankAccountNumber());
-
-        // total up the cash receipts
-        KualiDecimal total = KualiDecimal.ZERO;
-        for (Iterator i = selectedCashReceipts.iterator(); i.hasNext();) {
-            CashReceiptDocument crDoc = (CashReceiptDocument) i.next();
-            total = total.add(crDoc.getSumTotalAmount());
-        }
-        deposit.setDepositAmount(total);
-
-
-        //
         // attach it to the document
         List deposits = cashManagementDoc.getDeposits();
         deposits.add(deposit);
         documentService.updateDocument(cashManagementDoc);
 
-
-        //
-        // associate the CashReceipts with the Deposit
+        // associate the CashReceipts with it
         List dccList = new ArrayList();
         for (Iterator i = selectedCashReceipts.iterator(); i.hasNext();) {
             CashReceiptDocument crDoc = (CashReceiptDocument) i.next();
             DocumentHeader dh = crDoc.getDocumentHeader();
-            dh.setFinancialDocumentStatusCode(Constants.DocumentStatusCodes.CashReceipt.INTERIM);
+
+            String statusCode = null;
+            if (isFinalDeposit) {
+                statusCode = DocumentStatusCodes.CashReceipt.FINAL;
+            }
+            else {
+                statusCode = DocumentStatusCodes.CashReceipt.INTERIM;
+            }
+            dh.setFinancialDocumentStatusCode(statusCode);
             documentService.updateDocument(crDoc);
 
             CashReceiptHeader crHeader = new CashReceiptHeader();
@@ -257,29 +230,86 @@ public class CashManagementServiceImpl implements CashManagementService {
         // crHeaders get saved as side-effect of saving dccs
         businessObjectService.save(dccList);
 
-        // unlock the cashDrawer
-        cashDrawerService.unlockCashDrawer(cashManagementDoc.getWorkgroupName(), cashManagementDoc.getFinancialDocumentNumber());
+
+        //
+        // unlock the cashDrawer, if needed
+        if (!isFinalDeposit) {
+            cashDrawerService.unlockCashDrawer(cashManagementDoc.getWorkgroupName(), cashManagementDoc.getFinancialDocumentNumber());
+        }
     }
 
-    private void validateInterimCashReceipts(List cashReceipts) {
-        if (cashReceipts == null) {
+    /**
+     * Validates the given Deposit parameters, throwing various (runtime) exceptions if errors exist
+     * 
+     * @param cashManagementDoc
+     * @param bankAccount
+     * @param selectedCashReceipts
+     */
+    private void validateDepositParams(CashManagementDocument cashManagementDoc, BankAccount bankAccount, List<CashReceiptDocument> selectedCashReceipts) {
+        if (cashManagementDoc == null) {
+            throw new IllegalArgumentException("invalid (null) cashManagementDoc");
+        }
+        else if (!cashManagementDoc.getDocumentHeader().getWorkflowDocument().stateIsSaved()) {
+            throw new IllegalStateException("cashManagementDoc '" + cashManagementDoc.getFinancialDocumentNumber() + "' is not in 'saved' state");
+        }
+        else if (cashManagementDoc.hasFinalDeposit()) {
+            throw new IllegalStateException("cashManagementDoc '" + cashManagementDoc.getFinancialDocumentNumber() + "' hasFinalDeposit");
+        }
+        if (bankAccount == null) {
+            throw new IllegalArgumentException("invalid (null) bankAccount");
+        }
+
+        if (selectedCashReceipts == null) {
             throw new IllegalArgumentException("invalid (null) cashReceipts list");
         }
-        else if (cashReceipts.isEmpty()) {
+        else if (selectedCashReceipts.isEmpty()) {
             throw new IllegalArgumentException("invalid (empty) cashReceipts list");
         }
         else {
-            for (Iterator i = cashReceipts.iterator(); i.hasNext();) {
-                CashReceiptDocument cashReceipt = (CashReceiptDocument) i.next();
-
+            for (CashReceiptDocument cashReceipt : selectedCashReceipts) {
                 String statusCode = cashReceipt.getDocumentHeader().getFinancialDocumentStatusCode();
-                if (!StringUtils.equals(statusCode, Constants.DocumentStatusCodes.CashReceipt.VERIFIED)) {
+                if (!StringUtils.equals(statusCode, DocumentStatusCodes.CashReceipt.VERIFIED)) {
                     throw new InvalidCashReceiptState("cash receipt document " + cashReceipt.getFinancialDocumentNumber() + " has a status other than 'verified' ");
                 }
             }
         }
     }
 
+    private Deposit buildDeposit(CashManagementDocument cashManagementDoc, String depositTypeCode, String depositTicketNumber, BankAccount bankAccount, List<CashReceiptDocument> selectedCashReceipts) {
+        Deposit deposit = new Deposit();
+        deposit.setFinancialDocumentNumber(cashManagementDoc.getFinancialDocumentNumber());
+        deposit.setCashManagementDocument(cashManagementDoc);
+
+        deposit.setDepositTypeCode(depositTypeCode);
+
+        deposit.setDepositDate(dateTimeService.getCurrentSqlDate());
+
+        deposit.setBankAccount(bankAccount);
+        deposit.setDepositBankCode(bankAccount.getBank().getFinancialDocumentBankCode());
+        deposit.setDepositBankAccountNumber(bankAccount.getFinDocumentBankAccountNumber());
+
+        // derive the line number
+        int lineNumber = cashManagementDoc.getNextDepositLineNumber();
+        deposit.setFinancialDocumentDepositLineNumber(new Integer(lineNumber));
+
+        // trim depositTicketNumber to empty, because the field is optional
+        deposit.setDepositTicketNumber(StringUtils.trimToEmpty(depositTicketNumber));
+
+        // total up the cash receipts
+        KualiDecimal total = KualiDecimal.ZERO;
+        for (Iterator i = selectedCashReceipts.iterator(); i.hasNext();) {
+            CashReceiptDocument crDoc = (CashReceiptDocument) i.next();
+            total = total.add(crDoc.getSumTotalAmount());
+        }
+        deposit.setDepositAmount(total);
+
+        return deposit;
+    }
+
+    /**
+     * @param bankCode
+     * @return Bank associated with the given bankCode, or null if none is found
+     */
     private Bank lookupBank(String bankCode) {
         Map keyMap = new HashMap();
         keyMap.put("financialDocumentBankCode", bankCode);
@@ -288,6 +318,11 @@ public class CashManagementServiceImpl implements CashManagementService {
         return bank;
     }
 
+    /**
+     * @param bankCode
+     * @param accountNumber
+     * @return BankAccount associated with the given bankCode and accountNumber, or null if none is found
+     */
     private BankAccount lookupBankAccount(String bankCode, String accountNumber) {
         Map keyMap = new HashMap();
         keyMap.put("financialDocumentBankCode", bankCode);
@@ -315,11 +350,14 @@ public class CashManagementServiceImpl implements CashManagementService {
 
             cancelDeposit(deposit);
         }
-        cmDoc.setDeposits(new ArrayList());
 
         // reclose the cashDrawer
         String unitName = cmDoc.getWorkgroupName();
         cashDrawerService.closeCashDrawer(cmDoc.getWorkgroupName());
+
+        // cleanup the CMDoc, but let the postprocessor itself save it
+        cmDoc.setDeposits(new ArrayList());
+        cmDoc.getDocumentHeader().setFinancialDocumentStatusCode(DocumentStatusCodes.CANCELLED);
     }
 
 
@@ -334,6 +372,9 @@ public class CashManagementServiceImpl implements CashManagementService {
         // reload it, to forestall OptimisticLockExceptions
         deposit.refresh();
 
+        // save workgroup name, for possible later use
+        String depositWorkgroup = deposit.getCashManagementDocument().getWorkgroupName();
+
         // update every CashReceipt associated with this Deposit
         List depositCashReceiptControls = deposit.getDepositCashReceiptControl();
         for (Iterator j = depositCashReceiptControls.iterator(); j.hasNext();) {
@@ -343,15 +384,17 @@ public class CashManagementServiceImpl implements CashManagementService {
             // reset each CashReceipt status
             CashReceiptDocument crDoc = crHeader.getCashReceiptDocument();
             DocumentHeader crdh = crDoc.getDocumentHeader();
-            crdh.setFinancialDocumentStatusCode(Constants.DocumentStatusCodes.CashReceipt.VERIFIED);
+            crdh.setFinancialDocumentStatusCode(DocumentStatusCodes.CashReceipt.VERIFIED);
             documentService.updateDocument(crDoc);
+        }
+
+        // unlock the cashDrawer, if needed
+        if (deposit.getDepositTypeCode() == DepositConstants.DEPOSIT_TYPE_FINAL) {
+            cashDrawerService.unlockCashDrawer(depositWorkgroup, deposit.getFinancialDocumentNumber());
         }
 
         // delete the Deposit from the database
         businessObjectService.delete(deposit);
-
-        // remove the Deposit from the cashManagementDocument
-        // (which unfortunately means that the line number isn't the index any more, for any deposit after this one)
     }
 
 
@@ -364,13 +407,38 @@ public class CashManagementServiceImpl implements CashManagementService {
         if (cmDoc == null) {
             throw new IllegalArgumentException("invalid (null) CashManagementDocument");
         }
+        if (!cmDoc.hasFinalDeposit()) {
+            throw new IllegalStateException("cmDoc " + cmDoc.getFinancialDocumentNumber() + " is missing a FinalDeposit");
+        }
+
+        String workgroupName = cmDoc.getWorkgroupName();
+        CashDrawer cd = cashDrawerService.getByWorkgroupName(workgroupName, false);
+        if (!cd.isClosed()) {
+            throw new IllegalStateException("cashDrawer for workgroup '" + workgroupName + "' should already have been closed");
+        }
 
 
-        // UNF: finalize the Deposits?
+        // finalize the CashReceipts
+        List<Deposit> deposits = cmDoc.getDeposits();
+        for (Deposit deposit : deposits) {
+            List<CashReceiptDocument> receipts = retrieveCashReceipts(deposit);
+            for (CashReceiptDocument receipt : receipts) {
+                // marks GLPEs of CRs as APPROVED
+                for (GeneralLedgerPendingEntry glpe : receipt.getGeneralLedgerPendingEntries()) {
+                    glpe.setFinancialDocumentApprovedCode(DocumentStatusCodes.APPROVED);
+                }
 
-        throw new UnsupportedOperationException();
+                // mark CRs themselves as APPROVED
+                receipt.getDocumentHeader().setFinancialDocumentStatusCode(DocumentStatusCodes.APPROVED);
+
+                // persist
+                documentService.updateDocument(receipt);
+            }
+        }
+
+        // finalize the CMDoc, but let the postprocessor save it
+        cmDoc.getDocumentHeader().setFinancialDocumentStatusCode(DocumentStatusCodes.APPROVED);
     }
-
 
     /**
      * @see org.kuali.module.financial.service.CashManagementService#retrieveCashReceipts(org.kuali.module.financial.bo.Deposit)
