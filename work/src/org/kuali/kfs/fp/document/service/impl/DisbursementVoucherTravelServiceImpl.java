@@ -32,7 +32,7 @@ import java.util.List;
 
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.DateUtils;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.bo.TravelMileageRate;
 import org.kuali.module.financial.dao.TravelMileageRateDao;
 import org.kuali.module.financial.service.DisbursementVoucherTravelService;
@@ -51,9 +51,9 @@ public class DisbursementVoucherTravelServiceImpl implements DisbursementVoucher
     /**
      * @see org.kuali.module.financial.service.DisbursementVoucherTravelService#calculatePerDiemAmount(org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel)
      */
-    public KualiDecimalMoney calculatePerDiemAmount(Timestamp startDateTime, Timestamp endDateTime, KualiDecimalMoney rate) {
-        KualiDecimalMoney perDiemAmount = new KualiDecimalMoney(0);
-        KualiDecimalMoney perDiemRate = new KualiDecimalMoney(rate.doubleValue());
+    public KualiDecimal calculatePerDiemAmount(Timestamp startDateTime, Timestamp endDateTime, KualiDecimal rate) {
+        KualiDecimal perDiemAmount = new KualiDecimal(0);
+        KualiDecimal perDiemRate = new KualiDecimal(rate.doubleValue());
 
         // make sure we have the fields neede
         if (perDiemAmount == null || startDateTime == null || endDateTime == null) {
@@ -81,11 +81,11 @@ public class DisbursementVoucherTravelServiceImpl implements DisbursementVoucher
             // no per diem for only 12 hours or less
             if (diffHours > 12) {
                 // half day of per diem
-                perDiemAmount = perDiemRate.divide(new KualiDecimalMoney(2));
+                perDiemAmount = perDiemRate.divide(new KualiDecimal(2));
 
                 // add in another 1/4 of a day if end time past 7:00
                 if (timeInPerDiemPeriod(endCalendar, 19, 0, 23, 59)) {
-                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimalMoney(4)));
+                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimal(4)));
                 }
             }
         }
@@ -95,25 +95,25 @@ public class DisbursementVoucherTravelServiceImpl implements DisbursementVoucher
             // must at least have 7 1/2 hours to get any per diem
             if (diffHours >= 7.5) {
                 // per diem for whole days
-                perDiemAmount = perDiemRate.multiply(new KualiDecimalMoney(diffDays - 1));
+                perDiemAmount = perDiemRate.multiply(new KualiDecimal(diffDays - 1));
 
                 // per diem for first day
                 if (timeInPerDiemPeriod(startCalendar, 0, 0, 11, 59)) {
                     perDiemAmount = perDiemAmount.add(perDiemRate);
                 }
                 else if (timeInPerDiemPeriod(startCalendar, 12, 0, 17, 59)) {
-                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimalMoney(2)));
+                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimal(2)));
                 }
                 else if (timeInPerDiemPeriod(startCalendar, 18, 0, 23, 59)) {
-                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimalMoney(4)));
+                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimal(4)));
                 }
 
                 // per diem for end day
                 if (timeInPerDiemPeriod(endCalendar, 0, 1, 6, 0)) {
-                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimalMoney(4)));
+                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimal(4)));
                 }
                 else if (timeInPerDiemPeriod(endCalendar, 6, 1, 12, 0)) {
-                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimalMoney(2)));
+                    perDiemAmount = perDiemAmount.add(perDiemRate.divide(new KualiDecimal(2)));
                 }
                 else if (timeInPerDiemPeriod(endCalendar, 12, 01, 23, 59)) {
                     perDiemAmount = perDiemAmount.add(perDiemRate);
@@ -140,8 +140,8 @@ public class DisbursementVoucherTravelServiceImpl implements DisbursementVoucher
     /**
      * @see org.kuali.module.financial.service.DisbursementVoucherTravelService#calculateMileageAmount(org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel)
      */
-    public KualiDecimalMoney calculateMileageAmount(Integer totalMileage, Timestamp travelStartDate) {
-        KualiDecimalMoney mileageAmount = new KualiDecimalMoney(0);
+    public KualiDecimal calculateMileageAmount(Integer totalMileage, Timestamp travelStartDate) {
+        KualiDecimal mileageAmount = new KualiDecimal(0);
 
         if (totalMileage == null || travelStartDate == null) {
             LOG.error("Total Mileage and Travel Start Date must be given.");
@@ -178,7 +178,7 @@ public class DisbursementVoucherTravelServiceImpl implements DisbursementVoucher
             int mileageLimitAmount = rate.getMileageLimitAmount().intValue();
             if (mileageRemaining > mileageLimitAmount) {
                 BigDecimal numMiles = new BigDecimal(mileageRemaining - mileageLimitAmount);
-                mileageAmount = mileageAmount.add(new KualiDecimalMoney(numMiles.multiply(rate.getMileageRate())));
+                mileageAmount = mileageAmount.add(new KualiDecimal(numMiles.multiply(rate.getMileageRate())));
                 mileageRemaining = mileageLimitAmount;
             }
 
