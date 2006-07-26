@@ -41,12 +41,12 @@
 <class-descriptor class="org.kuali.module.kra.bo.GraduateAssistantRate" table="ER_GRAD_ASST_RT_T">
     <field-descriptor name="campusCode" column="CMP_CD" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="active" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
-    <field-descriptor name="campusMaximumPeriod1Rate" column="CMP_MAX_PRD1_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod2Rate" column="CMP_MAX_PRD2_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod3Rate" column="CMP_MAX_PRD3_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod4Rate" column="CMP_MAX_PRD4_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod5Rate" column="CMP_MAX_PRD5_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod6Rate" column="CMP_MAX_PRD6_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod1Rate" column="CMP_MAX_PRD1_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod2Rate" column="CMP_MAX_PRD2_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod3Rate" column="CMP_MAX_PRD3_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod4Rate" column="CMP_MAX_PRD4_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod5Rate" column="CMP_MAX_PRD5_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod6Rate" column="CMP_MAX_PRD6_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="lastUpdateTimestamp" column="LST_UPDT_TS" jdbc-type="TIMESTAMP" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" locking="true" column="VER_NBR" jdbc-type="BIGINT" />
@@ -231,12 +231,12 @@
 <class-descriptor class="org.kuali.module.kra.bo.BudgetGraduateAssistantRate" table="ER_BDGT_GRAD_ASST_RT_T">
     <field-descriptor name="documentHeaderId" column="ER_REF_TRACK_NBR" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="campusCode" column="CMP_CD" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="campusMaximumPeriod1Rate" column="CMP_MAX_PRD1_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod2Rate" column="CMP_MAX_PRD2_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod3Rate" column="CMP_MAX_PRD3_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod4Rate" column="CMP_MAX_PRD4_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod5Rate" column="CMP_MAX_PRD5_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="campusMaximumPeriod6Rate" column="CMP_MAX_PRD6_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod1Rate" column="CMP_MAX_PRD1_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod2Rate" column="CMP_MAX_PRD2_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod3Rate" column="CMP_MAX_PRD3_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod4Rate" column="CMP_MAX_PRD4_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod5Rate" column="CMP_MAX_PRD5_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="campusMaximumPeriod6Rate" column="CMP_MAX_PRD6_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="lastUpdateTimestamp" column="LST_UPDT_TS" jdbc-type="TIMESTAMP" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" locking="true" column="VER_NBR" jdbc-type="BIGINT" />
@@ -301,7 +301,7 @@
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="fiscalCampusCode" column="EMP_FSCL_CMP_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="primaryDepartmentCode" column="EMP_PRM_DEPT_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="baseSalary" column="PRSN_BASE_SLRY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="baseSalary" column="PRSN_BASE_SLRY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="role" column="PRSN_ROLE_NM" jdbc-type="VARCHAR" />
     <field-descriptor name="personUniversalIdentifier" column="PERSON_UNVL_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="personSeniorKeyIndicator" column="PRSN_SNR_KEY_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
@@ -440,7 +440,7 @@
     <field-descriptor name="universityCostSharePercentEffortAmount" column="UNIV_CST_SHR_PCT_EFFRT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiIntegerPercentageFieldConversion" />
     <field-descriptor name="universityCostShareRequestTotalAmount" column="UNIV_CST_SHR_RQST_TOT_AMT" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
     <field-descriptor name="userAgencyHours" column="USR_AGNCY_HRS" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
-    <field-descriptor name="userHourlyRate" column="USR_HRLY_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="userHourlyRate" column="USR_HRLY_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="userUniversityHours" column="USR_UNIV_HRS" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
     <field-descriptor name="userBudgetPeriodSalaryAmount" column="USR_BDGT_PRD_SLRY_AMT" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
     <field-descriptor name="agencyFullTimeEquivalentPercent" column="AGNCY_FTE_PCT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiIntegerPercentageFieldConversion" />
@@ -452,7 +452,7 @@
     <field-descriptor name="universityRequestedFeesAmount" column="UNIV_RQST_FEE_AMT" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
     <field-descriptor name="universitySalaryAmount" column="UNIV_SLRY_AMT" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
     <field-descriptor name="userCreditHoursNumber" column="USR_CRDT_HRS_NBR" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
-    <field-descriptor name="userCreditHourAmount" column="USR_CRDT_HR_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="userCreditHourAmount" column="USR_CRDT_HR_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="userMiscellaneousFeeAmount" column="USR_MISC_FEE_AMT" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
     <reference-descriptor name="budgetFringeRate" class-ref="org.kuali.module.kra.bo.BudgetFringeRate" auto-retrieve="true" auto-update="false" auto-delete="false">
         <foreignkey field-ref="documentHeaderId" />
