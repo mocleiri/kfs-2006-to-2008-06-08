@@ -35,7 +35,7 @@ import java.util.Map;
 import org.kuali.Constants;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.IcrAutomatedEntry;
@@ -66,7 +66,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * @author jsissom
- * @version $Id: PosterServiceImpl.java,v 1.31.2.1 2006-07-12 17:41:24 ckirsche Exp $
+ * @version $Id: PosterServiceImpl.java,v 1.31.2.2 2006-07-26 19:45:26 ckirsche Exp $
  */
 public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
@@ -344,7 +344,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
         }
     }
 
-    private static KualiDecimalMoney ONEHUNDRED = new KualiDecimalMoney("100");
+    private static KualiDecimal ONEHUNDRED = new KualiDecimal("100");
 
     /**
      * This step reads the expenditure table and uses the data to generate Indirect Cost Recovery transactions.
@@ -363,17 +363,17 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
         int reportExpendTranKept = 0;
         int reportOriginEntryGenerated = 0;
 
-        KualiDecimalMoney warningMaxDifference = new KualiDecimalMoney("0.05"); // TODO Put this in APC
+        KualiDecimal warningMaxDifference = new KualiDecimal("0.05"); // TODO Put this in APC
 
         Iterator expenditureTransactions = expenditureTransactionDao.getAllExpenditureTransactions();
         while (expenditureTransactions.hasNext()) {
             ExpenditureTransaction et = (ExpenditureTransaction) expenditureTransactions.next();
             reportExpendTranRetrieved++;
 
-            KualiDecimalMoney transactionAmount = et.getAccountObjectDirectCostAmount();
-            KualiDecimalMoney distributionPercent = KualiDecimalMoney.ZERO;
-            KualiDecimalMoney distributionAmount = KualiDecimalMoney.ZERO;
-            KualiDecimalMoney distributedAmount = KualiDecimalMoney.ZERO;
+            KualiDecimal transactionAmount = et.getAccountObjectDirectCostAmount();
+            KualiDecimal distributionPercent = KualiDecimal.ZERO;
+            KualiDecimal distributionAmount = KualiDecimal.ZERO;
+            KualiDecimal distributedAmount = KualiDecimal.ZERO;
 
             Collection automatedEntries = icrAutomatedEntryDao.getEntriesBySeries(et.getUniversityFiscalYear(), et.getAccount().getFinancialIcrSeriesIdentifier(), et.getBalanceTypeCode());
             int automatedEntriesCount = automatedEntries.size();
@@ -383,24 +383,24 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
                     IcrAutomatedEntry icrEntry = (IcrAutomatedEntry) icrIter.next();
                     count++;
 
-                    KualiDecimalMoney generatedTransactionAmount = null;
+                    KualiDecimal generatedTransactionAmount = null;
 
                     if (icrEntry.getAwardIndrCostRcvyEntryNbr().intValue() == 1) {
                         // Line 1 must have the total percentage of the transaction to distribute
                         distributionPercent = icrEntry.getAwardIndrCostRcvyRatePct().divide(ONEHUNDRED);
-                        distributionAmount = transactionAmount.multiply(new KualiDecimalMoney(distributionPercent.toString())).divide(ONEHUNDRED);
+                        distributionAmount = transactionAmount.multiply(new KualiDecimal(distributionPercent.toString())).divide(ONEHUNDRED);
 
                         generatedTransactionAmount = distributionAmount;
                     }
                     else {
-                        generatedTransactionAmount = transactionAmount.multiply(new KualiDecimalMoney(icrEntry.getAwardIndrCostRcvyRatePct().divide(ONEHUNDRED).toString())).divide(ONEHUNDRED);
+                        generatedTransactionAmount = transactionAmount.multiply(new KualiDecimal(icrEntry.getAwardIndrCostRcvyRatePct().divide(ONEHUNDRED).toString())).divide(ONEHUNDRED);
                         distributedAmount = distributedAmount.add(generatedTransactionAmount);
 
                         // Do we need to round? Round on the last one
                         if (automatedEntriesCount == (count + 1)) {
-                            KualiDecimalMoney difference = distributionAmount.subtract(distributedAmount);
+                            KualiDecimal difference = distributionAmount.subtract(distributedAmount);
 
-                            if (difference.compareTo(KualiDecimalMoney.ZERO) != 0) {
+                            if (difference.compareTo(KualiDecimal.ZERO) != 0) {
                                 if (difference.abs().compareTo(warningMaxDifference) >= 0) {
                                     // TODO Rounding warning
                                 }
@@ -436,7 +436,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
      * @param runDate
      * @param group
      */
-    private void generateTransaction(ExpenditureTransaction et, IcrAutomatedEntry icrEntry, KualiDecimalMoney generatedTransactionAmount, Date runDate, OriginEntryGroup group, Map reportErrors) {
+    private void generateTransaction(ExpenditureTransaction et, IcrAutomatedEntry icrEntry, KualiDecimal generatedTransactionAmount, Date runDate, OriginEntryGroup group, Map reportErrors) {
         OriginEntry e = new OriginEntry();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD");
@@ -545,7 +545,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     // IndirectCostRecoveryThreshold threshold = (IndirectCostRecoveryThreshold)iter.next();
     // if ( threshold.getAwardThresholdAmount().compareTo(threshold.getAwardAccumulatedCostAmount()) > 0 ) {
     // // 1596 - 1654
-    // KualiDecimalMoney availableCostAmount = threshold.getAwardThresholdAmount().subtract(threshold.getAwardAccumulatedCostAmount());
+    // KualiDecimal availableCostAmount = threshold.getAwardThresholdAmount().subtract(threshold.getAwardAccumulatedCostAmount());
     // // subtract previous amount? What is that?
     //
     // if ( amountRemaining.compareTo(availableCostAmount) <= 0 ) {
@@ -556,7 +556,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     // }
     // }
 
-    private String getChargeDescription(KualiDecimalMoney rate, String objectCode, String type, KualiDecimalMoney amount) {
+    private String getChargeDescription(KualiDecimal rate, String objectCode, String type, KualiDecimal amount) {
         NumberFormat nf = NumberFormat.getInstance();
 
         StringBuffer desc = new StringBuffer("CHG ");
@@ -578,7 +578,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
         return desc.toString();
     }
 
-    private String getOffsetDescription(KualiDecimalMoney rate, KualiDecimalMoney amount, String chartOfAccountsCode, String accountNumber) {
+    private String getOffsetDescription(KualiDecimal rate, KualiDecimal amount, String chartOfAccountsCode, String accountNumber) {
         NumberFormat nf = NumberFormat.getInstance();
 
         StringBuffer desc = new StringBuffer("RCV ");
