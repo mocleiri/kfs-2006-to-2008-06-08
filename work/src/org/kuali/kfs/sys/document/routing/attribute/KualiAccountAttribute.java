@@ -41,7 +41,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
 import org.kuali.KualiSpringServiceLocator;
 import org.kuali.PropertyConstants;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.workflow.KualiConstants;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -451,9 +451,9 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
     }
 
     private static String calculateTotalDollarAmount(XPath xpath, NodeList targetAccountingLineNodes) throws XPathExpressionException {
-        KualiDecimalMoney sum = new KualiDecimalMoney(0);
+        KualiDecimal sum = new KualiDecimal(0);
         for (int index = 0; index < targetAccountingLineNodes.getLength(); index++) {
-            KualiDecimalMoney addend = new KualiDecimalMoney((String) xpath.evaluate("./amount/value", targetAccountingLineNodes.item(index), XPathConstants.STRING));
+            KualiDecimal addend = new KualiDecimal((String) xpath.evaluate("./amount/value", targetAccountingLineNodes.item(index), XPathConstants.STRING));
             sum = sum.add(addend);
         }
         return sum.toString();
