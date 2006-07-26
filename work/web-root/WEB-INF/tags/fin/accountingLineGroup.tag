@@ -58,13 +58,20 @@
               description="A boolean whether the monthy amounts table is displayed
               below each accounting line (needed for budget adjustment document).
               As with all boolean tag attributes, if it is not provided, it defaults to false." %>
+              
+<%@ attribute name="accountingLineAttributes" required="false" type="java.util.Map"
+              description="A parameter to specify an data dictionary entry for a sub-classed accounting line." %>            
 
+<%@ attribute name="forcedReadOnlyFields" required="false" type="java.util.Map"
+              description="map containing accounting line field names that should be marked as read only." %>
 <c:set var="sourceOrTarget" value="${isSource ? 'source' : 'target'}"/>
 <c:set var="baselineSourceOrTarget" value="${isSource ? 'baselineSource' : 'baselineTarget'}"/>
 <c:set var="capitalSourceOrTarget" value="${isSource ? 'Source' : 'Target'}"/>
 <c:set var="dataDictionaryEntryName" value="${capitalSourceOrTarget}AccountingLine"/>
 <c:set var="totalName" value="currencyFormatted${capitalSourceOrTarget}Total"/>
-<c:set var="accountingLineAttributes" value="${DataDictionary[dataDictionaryEntryName].attributes}" />
+<c:if test="${empty accountingLineAttributes}">
+  <c:set var="accountingLineAttributes" value="${DataDictionary[dataDictionaryEntryName].attributes}" />
+</c:if>  
 <c:set var="hasActionsColumn" value="${empty editingMode['viewOnly']}"/>
 
 <c:set var="displayHidden" value="false" />
@@ -103,14 +110,13 @@
     <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.chartOfAccountsCode}" rowspan="2"/>
     <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.accountNumber}" rowspan="2"/>
     <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.subAccountNumber}" rowspan="2"/>
-    <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.financialObjectCode}" rowspan="2"/>
+    <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.financialObjectCode}" hideRequiredAsterisk="${ !(empty forcedReadOnlyFields[accountingLineAttributes.financialObjectCode.name])}" rowspan="2"/>
     <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.financialSubObjectCode}" rowspan="2"/>
     <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.projectCode}" rowspan="2"/>
     <c:if test="${includeObjectTypeCode}">
         <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.objectTypeCode}" rowspan="2" forceRequired="true" />
     </c:if>
     <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.organizationReferenceId}" rowspan="2"/>
-    <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.budgetYear}" rowspan="2"/>
     <c:forTokens items="${optionalFields}" delims=" ," var="currentField">
         <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes[currentField]}" rowspan="2"/>
     </c:forTokens>
@@ -169,6 +175,7 @@
         includeObjectTypeCode="${includeObjectTypeCode}"
         displayHidden="${displayHidden}"
         accountingLineValuesMap="${valuesMap}"
+        forcedReadOnlyFields="${forcedReadOnlyFields}"
         />
 
     <c:if test="${displayMonthlyAmounts}">
@@ -224,6 +231,7 @@
         displayHidden="${displayHidden}"
         decorator="${sourceOrTarget}LineDecorator[${ctr}]"
         accountingLineValuesMap="${currentLine.valuesMap}"
+        forcedReadOnlyFields="${forcedReadOnlyFields}"
         />
 
     <c:if test="${displayMonthlyAmounts}">

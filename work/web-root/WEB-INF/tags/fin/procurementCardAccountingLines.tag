@@ -20,11 +20,11 @@
   <html:hidden property="accountingLineEditableFields(${field.key})"/>
 </c:forEach>
 
-<c:set var="columnCountUntilAmount" value="9" />
+<c:set var="columnCountUntilAmount" value="8" />
 <c:set var="columnCount" value="${columnCountUntilAmount + 1 + (empty editingMode['viewOnly'] ? 1 : 0)}" />
 <c:set var="accountingLineAttributes" value="${DataDictionary['TargetAccountingLine'].attributes}" />
 
-<kul:tab tabTitle="Accounting Lines" defaultOpen="true" tabErrorKey="${Constants.TARGET_ACCOUNTING_LINE_ERROR_PATTERN},document.accountingLines*">
+<kul:tab tabTitle="Accounting Lines" defaultOpen="true" tabErrorKey="${Constants.TARGET_ACCOUNTING_LINE_ERROR_PATTERN},document.transactionEntries*">
   <c:set var="transactionAttributes" value="${DataDictionary.ProcurementCardTransactionDetail.attributes}" />
   <c:set var="vendorAttributes" value="${DataDictionary.ProcurementCardVendor.attributes}" />
   <c:set var="cardAttributes" value="${DataDictionary.ProcurementCardHolder.attributes}" />
@@ -104,6 +104,8 @@
 	      <tr>
 	        <th scope="row"><div align="right"><kul:htmlAttributeLabel attributeEntry="${cardAttributes.cardHolderName}" readOnly="true"/></div></th>
 	        <td><kul:htmlControlAttribute attributeEntry="${cardAttributes.cardHolderName}" property="document.procurementCardHolder.cardHolderName" readOnly="true"/></td>
+            <th> <div align="right"><kul:htmlAttributeLabel attributeEntry="${transactionAttributes.transactionTotalAmount}"/></div></th>
+            <td valign=top><kul:htmlControlAttribute attributeEntry="${transactionAttributes.transactionTotalAmount}" property="document.transactionEntries[${ctr}].transactionTotalAmount" readOnly="true"/></td>
 	     </tr>
        <tr>
           <th><div align="right"><kul:htmlAttributeLabel attributeEntry="${transactionAttributes.transactionDate}"/></div></th>
@@ -149,7 +151,6 @@
         <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.financialSubObjectCode}"/>
         <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.projectCode}"/>
         <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.organizationReferenceId}"/>
-        <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.budgetYear}"/>
         <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.amount}"/>
 
         <c:if test="${hasActionsColumn}">

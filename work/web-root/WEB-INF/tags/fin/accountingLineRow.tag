@@ -86,7 +86,8 @@
 
 <%@ attribute name="accountingLineValuesMap" required="true" type="java.util.Map" 
               description="map of the accounting line primitive fields and values" %>
-
+<%@ attribute name="forcedReadOnlyFields" required="false" type="java.util.Map"
+              description="foces the object code to become a read only field regardless of document state"%>
 <c:set var="rowCount" value="${empty extraRowFields ? 1 : 2}"/>
 
 <tr>
@@ -172,7 +173,7 @@
     lookup="true"
     inquiry="true"
     boClassSimpleName="ObjectCode"
-    readOnly="${readOnly&&(empty editableFields['financialObjectCode'])}"
+    readOnly="${(readOnly&&(empty editableFields['financialObjectCode']))|| !(empty forcedReadOnlyFields[accountingLineAttributes.financialObjectCode.name])}"
     displayHidden="${displayHidden}"
     overrideField="objectBudgetOverride"
     lookupOrInquiryKeys="chartOfAccountsCode"
@@ -205,7 +206,7 @@
     baselineAccountingLine="${baselineAccountingLine}"
     field="projectCode"
     detailFunction="loadProjectInfo"
-    detailField="project.projectDescription"
+    detailField="project.name"
     attributes="${accountingLineAttributes}"
     lookup="true"
     inquiry="true"
@@ -244,15 +245,6 @@
     readOnly="${readOnly}"
     displayHidden="${displayHidden}"
     />
-<fin:accountingLineDataCell
-    dataCellCssClass="${dataCellCssClass}"
-    accountingLine="${accountingLine}"
-    baselineAccountingLine="${baselineAccountingLine}"
-    field="budgetYear"
-    attributes="${accountingLineAttributes}"
-    readOnly="${readOnly}"
-    displayHidden="${displayHidden}"
-    />
 <c:forTokens items="${optionalFields}" delims=" ," var="currentField">
     <fin:accountingLineDataCell
         dataCellCssClass="${dataCellCssClass}"
@@ -286,18 +278,22 @@
     <c:when test="${currentBaseAmount}" >
         <fin:accountingLineDataCell
             dataCellCssClass="${dataCellCssClass}"
+            accountingLine="${accountingLine}"
+            baselineAccountingLine="${baselineAccountingLine}"
             cellProperty="${currentCellProperty}"
             attributes="${accountingLineAttributes}"
-            field="amount"
-            readOnly="${readOnly&&(empty editableFields['amount'])}"
+            field="currentBudgetAdjustmentAmount"
+            readOnly="${readOnly&&(empty editableFields['currentBudgetAdjustmentAmount'])}"
             rowSpan="${rowCount}"
             />
         <fin:accountingLineDataCell
             dataCellCssClass="${dataCellCssClass}"
+            accountingLine="${accountingLine}"
+            baselineAccountingLine="${baselineAccountingLine}"
             cellProperty="${baseCellProperty}"
             attributes="${accountingLineAttributes}"
-            field="amount"
-            readOnly="${(readOnly&&(empty editableFields['amount']))||!KualiForm.editingMode['baseAmtEntry']}"
+            field="baseBudgetAdjustmentAmount"
+            readOnly="${(readOnly&&(empty editableFields['baseBudgetAdjustmentAmount']))||!KualiForm.editingMode['baseAmtEntry']}"
             rowSpan="${rowCount}"
             />
     </c:when>
@@ -387,19 +383,6 @@
                 displayHidden="${displayHidden}"
                 />
         </c:if>
-        <%-- referenceNumber displays like an unknown field, but explicitly here to follow referenceOriginCode. --%>
-        <c:if test="${fn:contains(delimitedExtraRowFields, ',referenceNumber,')}" >
-            <fin:accountingLineDataCell
-                field="referenceNumber"
-                accountingLine="${accountingLine}"
-                baselineAccountingLine="${baselineAccountingLine}"
-                attributes="${accountingLineAttributes}"
-                dataCellCssClass="${dataCellCssClass}"
-                labelFontWeight="${extraRowLabelFontWeight}"
-                readOnly="${readOnly}"
-                displayHidden="${displayHidden}"
-                />
-        </c:if>
         <c:if test="${fn:contains(delimitedExtraRowFields, ',referenceTypeCode,')}" >
             <fin:accountingLineDataCell
                 field="referenceTypeCode"
@@ -420,7 +403,20 @@
                 displayHidden="${displayHidden}"
                 />
         </c:if>
-        <c:set var="knownExtraFields" value=",referenceOriginCode,referenceNumber,referenceTypeCode,"/>
+        <%-- referenceNumber displays like an unknown field, but explicitly here to follow referenceOriginCode. --%>
+        <c:if test="${fn:contains(delimitedExtraRowFields, ',referenceNumber,')}" >
+            <fin:accountingLineDataCell
+                field="referenceNumber"
+                accountingLine="${accountingLine}"
+                baselineAccountingLine="${baselineAccountingLine}"
+                attributes="${accountingLineAttributes}"
+                dataCellCssClass="${dataCellCssClass}"
+                labelFontWeight="${extraRowLabelFontWeight}"
+                readOnly="${readOnly}"
+                displayHidden="${displayHidden}"
+                />
+        </c:if>
+        <c:set var="knownExtraFields" value=",referenceOriginCode,referenceTypeCode,referenceNumber,"/>
         <c:forTokens items="${extraRowFields}" delims="," var="extraField">
             <c:if test="${not fn:contains(knownExtraFields, extraField)}" >
                 <fin:accountingLineDataCell

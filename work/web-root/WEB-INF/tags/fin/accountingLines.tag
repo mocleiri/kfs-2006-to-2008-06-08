@@ -57,6 +57,12 @@
               below each accounting line (needed for budget adjustment document).
               As with all boolean tag attributes, if it is not provided, it defaults to false." %>
 
+<%@ attribute name="forcedReadOnlyFields" required="false" type="java.util.Map"
+              description="map containing accounting line field names that should be marked as read only." %>
+
+<%@ attribute name="accountingLineAttributes" required="false" type="java.util.Map"
+              description="A parameter to specify an data dictionary entry for a sub-classed accounting line." %> 
+
 <c:forEach items="${editableAccounts}" var="account">
   <html:hidden property="editableAccounts(${account.key})" value="${account.key}"/>
 </c:forEach>
@@ -66,7 +72,7 @@
 </c:forEach>
 
 <c:set var="optionalFieldCount" value="${empty optionalFields ? 0 : fn:length(fn:split(optionalFields, ' ,'))}"/>
-<c:set var="columnCountUntilAmount" value="${9
+<c:set var="columnCountUntilAmount" value="${8
                                         + (includeObjectTypeCode ? 1 : 0)
                                         + optionalFieldCount}" />
 <%-- add extra columns count for the "Action" button and/or dual amounts --%>
@@ -96,6 +102,8 @@
           useCurrencyFormattedTotal="${useCurrencyFormattedTotal}"
           includeObjectTypeCode="${includeObjectTypeCode}"
           displayMonthlyAmounts="${displayMonthlyAmounts}"
+          forcedReadOnlyFields="${forcedReadOnlyFields}"
+          accountingLineAttributes="${accountingLineAttributes}"
           />
       <c:if test="${!sourceAccountingLinesOnly}">
         <fin:accountingLineGroup
@@ -113,6 +121,8 @@
             useCurrencyFormattedTotal="${useCurrencyFormattedTotal}"
             includeObjectTypeCode="${includeObjectTypeCode}"
             displayMonthlyAmounts="${displayMonthlyAmounts}"
+            forcedReadOnlyFields="${forcedReadOnlyFields}"
+            accountingLineAttributes="${accountingLineAttributes}"
             />
       </c:if>
     </table>
