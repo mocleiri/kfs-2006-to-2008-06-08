@@ -35,7 +35,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.TransactionalDocumentRuleTestBase;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.TransferOfFundsDocument;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
@@ -171,7 +171,7 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
     protected final Document createDocumentValidForRouting() throws Exception {
         TransferOfFundsDocument doc = (TransferOfFundsDocument) createDocument();
 
-        KualiDecimalMoney balance = new KualiDecimalMoney("21.12");
+        KualiDecimal balance = new KualiDecimal("21.12");
 
         SourceAccountingLine sourceLine = new SourceAccountingLine();
         sourceLine.setChartOfAccountsCode("BL");
@@ -548,7 +548,7 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     public void testProcessSourceAccountingLineSufficientFundsCheckingPreparation_isExpense_postive_lineAmount() {
         SourceAccountingLine line = (SourceAccountingLine) getFixtureEntryFromCollection(COLLECTION_NAME, SUFF_FUNDS_CHECKING_SOURCE_EXPENSE).createObject();
-        line.setAmount(new KualiDecimalMoney("3.0"));
+        line.setAmount(new KualiDecimal("3.0"));
 
         TransferOfFundsDocumentRule rule = new TransferOfFundsDocumentRule();
         SufficientFundsItem item = rule.processSourceAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -560,7 +560,7 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     public void testProcessSourceAccountingLineSufficientFundsCheckingPreparation_isAsset__negative_lineAmount() {
         SourceAccountingLine line = (SourceAccountingLine) getFixtureEntryFromCollection(COLLECTION_NAME, SUFF_FUNDS_CHECKING_SOURCE_ASSET).createObject();
-        line.setAmount(new KualiDecimalMoney("-3.0"));
+        line.setAmount(new KualiDecimal("-3.0"));
 
         TransferOfFundsDocumentRule rule = new TransferOfFundsDocumentRule();
         SufficientFundsItem item = rule.processSourceAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -573,7 +573,7 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     public void testProcessSourceAccountingLineSufficientFundsCheckingPreparation_isIncome_postive_lineAmount() {
         SourceAccountingLine line = (SourceAccountingLine) getFixtureEntryFromCollection(COLLECTION_NAME, SUFF_FUNDS_CHECKING_SOURCE_INCOME).createObject();
-        line.setAmount(new KualiDecimalMoney("3.0"));
+        line.setAmount(new KualiDecimal("3.0"));
 
         TransferOfFundsDocumentRule rule = new TransferOfFundsDocumentRule();
         SufficientFundsItem item = rule.processSourceAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -585,7 +585,7 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     public void testProcessSourceAccountingLineSufficientFundsCheckingPreparation_isLiability__negative_lineAmount() {
         SourceAccountingLine line = (SourceAccountingLine) getFixtureEntryFromCollection(COLLECTION_NAME, SUFF_FUNDS_CHECKING_SOURCE_LIABILITY).createObject();
-        line.setAmount(new KualiDecimalMoney("-3.0"));
+        line.setAmount(new KualiDecimal("-3.0"));
 
         TransferOfFundsDocumentRule rule = new TransferOfFundsDocumentRule();
         SufficientFundsItem item = rule.processSourceAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -598,7 +598,7 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     public void testProcessTargetAccountingLineSufficientFundsCheckingPreparation_isExpense_postive_lineAmount() {
         TargetAccountingLine line = (TargetAccountingLine) getFixtureEntryFromCollection(COLLECTION_NAME, SUFF_FUNDS_CHECKING_TARGET_EXPENSE).createObject();
-        line.setAmount(new KualiDecimalMoney("3.0"));
+        line.setAmount(new KualiDecimal("3.0"));
 
         TransferOfFundsDocumentRule rule = new TransferOfFundsDocumentRule();
         SufficientFundsItem item = rule.processTargetAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -610,7 +610,7 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     public void testProcessTargetAccountingLineSufficientFundsCheckingPreparation_isAsset__negative_lineAmount() {
         TargetAccountingLine line = (TargetAccountingLine) getFixtureEntryFromCollection(COLLECTION_NAME, SUFF_FUNDS_CHECKING_TARGET_ASSET).createObject();
-        line.setAmount(new KualiDecimalMoney("-3.0"));
+        line.setAmount(new KualiDecimal("-3.0"));
 
         TransferOfFundsDocumentRule rule = new TransferOfFundsDocumentRule();
         SufficientFundsItem item = rule.processTargetAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -623,7 +623,7 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     public void testProcessTargetAccountingLineSufficientFundsCheckingPreparation_isIncome_postive_lineAmount() {
         TargetAccountingLine line = (TargetAccountingLine) getFixtureEntryFromCollection(COLLECTION_NAME, SUFF_FUNDS_CHECKING_TARGET_INCOME).createObject();
-        line.setAmount(new KualiDecimalMoney("3.0"));
+        line.setAmount(new KualiDecimal("3.0"));
 
         TransferOfFundsDocumentRule rule = new TransferOfFundsDocumentRule();
         SufficientFundsItem item = rule.processTargetAccountingLineSufficientFundsCheckingPreparation(null, line);
@@ -635,7 +635,7 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     public void testProcessTargetAccountingLineSufficientFundsCheckingPreparation_isLiability__negative_lineAmount() {
         TargetAccountingLine line = (TargetAccountingLine) getFixtureEntryFromCollection(COLLECTION_NAME, SUFF_FUNDS_CHECKING_TARGET_LIABILITY).createObject();
-        line.setAmount(new KualiDecimalMoney("-3.0"));
+        line.setAmount(new KualiDecimal("-3.0"));
 
         TransferOfFundsDocumentRule rule = new TransferOfFundsDocumentRule();
         SufficientFundsItem item = rule.processTargetAccountingLineSufficientFundsCheckingPreparation(null, line);
