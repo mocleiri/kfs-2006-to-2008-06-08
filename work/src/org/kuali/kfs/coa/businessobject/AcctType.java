@@ -57,7 +57,7 @@ public class AcctType extends BusinessObjectBase {
     /**
      * Sets the accountTypeCode attribute.
      * 
-     * @param - accountTypeCode The accountTypeCode to set.
+     * @param accountTypeCode The accountTypeCode to set.
      * 
      */
     public void setAccountTypeCode(String accountTypeCode) {
@@ -77,7 +77,7 @@ public class AcctType extends BusinessObjectBase {
     /**
      * Sets the accountTypeName attribute.
      * 
-     * @param - accountTypeName The accountTypeName to set.
+     * @param accountTypeName The accountTypeName to set.
      * 
      */
     public void setAccountTypeName(String accountTypeName) {
@@ -85,7 +85,7 @@ public class AcctType extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

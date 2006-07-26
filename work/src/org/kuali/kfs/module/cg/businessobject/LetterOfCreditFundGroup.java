@@ -57,7 +57,7 @@ public class LetterOfCreditFundGroup extends BusinessObjectBase {
     /**
      * Sets the letterOfCreditFundGroupCode attribute.
      * 
-     * @param - letterOfCreditFundGroupCode The letterOfCreditFundGroupCode to set.
+     * @param letterOfCreditFundGroupCode The letterOfCreditFundGroupCode to set.
      * 
      */
     public void setLetterOfCreditFundGroupCode(String letterOfCreditFundGroupCode) {
@@ -78,7 +78,7 @@ public class LetterOfCreditFundGroup extends BusinessObjectBase {
     /**
      * Sets the letterOfCreditFundGroupDescription attribute.
      * 
-     * @param - letterOfCreditFundGroupDescription The letterOfCreditFundGroupDescription to set.
+     * @param letterOfCreditFundGroupDescription The letterOfCreditFundGroupDescription to set.
      * 
      */
     public void setLetterOfCreditFundGroupDescription(String letterOfCreditFundGroupDescription) {
@@ -87,7 +87,7 @@ public class LetterOfCreditFundGroup extends BusinessObjectBase {
 
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

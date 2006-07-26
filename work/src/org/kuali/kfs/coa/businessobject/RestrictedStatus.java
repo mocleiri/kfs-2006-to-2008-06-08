@@ -57,7 +57,7 @@ public class RestrictedStatus extends BusinessObjectBase {
     /**
      * Sets the accountRestrictedStatusCode attribute.
      * 
-     * @param - accountRestrictedStatusCode The accountRestrictedStatusCode to set.
+     * @param accountRestrictedStatusCode The accountRestrictedStatusCode to set.
      * 
      */
     public void setAccountRestrictedStatusCode(String accountRestrictedStatusCode) {
@@ -77,7 +77,7 @@ public class RestrictedStatus extends BusinessObjectBase {
     /**
      * Sets the accountRestrictedStatusName attribute.
      * 
-     * @param - accountRestrictedStatusName The accountRestrictedStatusName to set.
+     * @param accountRestrictedStatusName The accountRestrictedStatusName to set.
      * 
      */
     public void setAccountRestrictedStatusName(String accountRestrictedStatusName) {
@@ -85,7 +85,7 @@ public class RestrictedStatus extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

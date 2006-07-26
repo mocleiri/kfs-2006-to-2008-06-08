@@ -58,7 +58,7 @@ public class Security extends BusinessObjectBase {
     /**
      * Sets the personUniversalIdentifier attribute.
      * 
-     * @param - personUniversalIdentifier The personUniversalIdentifier to set.
+     * @param personUniversalIdentifier The personUniversalIdentifier to set.
      */
     public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
         this.personUniversalIdentifier = personUniversalIdentifier;
@@ -84,7 +84,7 @@ public class Security extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

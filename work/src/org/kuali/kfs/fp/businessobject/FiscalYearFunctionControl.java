@@ -60,7 +60,7 @@ public class FiscalYearFunctionControl extends BusinessObjectBase {
     /**
      * Sets the universityFiscalYear attribute.
      * 
-     * @param - universityFiscalYear The universityFiscalYear to set.
+     * @param universityFiscalYear The universityFiscalYear to set.
      * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -81,7 +81,7 @@ public class FiscalYearFunctionControl extends BusinessObjectBase {
     /**
      * Sets the financialSystemFunctionControlCode attribute.
      * 
-     * @param - financialSystemFunctionControlCode The financialSystemFunctionControlCode to set.
+     * @param financialSystemFunctionControlCode The financialSystemFunctionControlCode to set.
      * 
      */
     public void setFinancialSystemFunctionControlCode(String financialSystemFunctionControlCode) {
@@ -103,7 +103,7 @@ public class FiscalYearFunctionControl extends BusinessObjectBase {
     /**
      * Sets the financialSystemFunctionActiveIndicator attribute.
      * 
-     * @param - financialSystemFunctionActiveIndicator The financialSystemFunctionActiveIndicator to set.
+     * @param financialSystemFunctionActiveIndicator The financialSystemFunctionActiveIndicator to set.
      * 
      */
     public void setFinancialSystemFunctionActiveIndicator(boolean financialSystemFunctionActiveIndicator) {
@@ -127,7 +127,7 @@ public class FiscalYearFunctionControl extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

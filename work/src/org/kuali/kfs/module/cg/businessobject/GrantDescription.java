@@ -58,7 +58,7 @@ public class GrantDescription extends BusinessObjectBase {
     /**
      * Sets the grantDescriptionCode attribute.
      * 
-     * @param - grantDescriptionCode The grantDescriptionCode to set.
+     * @param grantDescriptionCode The grantDescriptionCode to set.
      * 
      */
     public void setGrantDescriptionCode(String grantDescriptionCode) {
@@ -79,7 +79,7 @@ public class GrantDescription extends BusinessObjectBase {
     /**
      * Sets the grantDescription attribute.
      * 
-     * @param - grantDescription The grantDescription to set.
+     * @param grantDescription The grantDescription to set.
      * 
      */
     public void setGrantDescription(String grantDescription) {
@@ -100,7 +100,7 @@ public class GrantDescription extends BusinessObjectBase {
     /**
      * Sets the grantDescriptionActiveCode attribute.
      * 
-     * @param - grantDescriptionActiveCode The grantDescriptionActiveCode to set.
+     * @param grantDescriptionActiveCode The grantDescriptionActiveCode to set.
      * 
      */
     public void setGrantDescriptionActiveCode(String grantDescriptionActiveCode) {
@@ -109,7 +109,7 @@ public class GrantDescription extends BusinessObjectBase {
 
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

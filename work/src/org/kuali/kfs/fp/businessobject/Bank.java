@@ -40,6 +40,7 @@ public class Bank extends BusinessObjectBase {
     private String financialDocumentBankCode;
     private String financialDocumentBankName;
     private String financialDocumentBankShortNm;
+    private String bankRoutingNumber;
     private List bankAccounts;
 
     /**
@@ -63,7 +64,7 @@ public class Bank extends BusinessObjectBase {
     /**
      * Sets the financialDocumentBankCode attribute.
      * 
-     * @param - financialDocumentBankCode The financialDocumentBankCode to set.
+     * @param financialDocumentBankCode The financialDocumentBankCode to set.
      * 
      */
     public void setFinancialDocumentBankCode(String financialDocumentBankCode) {
@@ -83,7 +84,7 @@ public class Bank extends BusinessObjectBase {
     /**
      * Sets the financialDocumentBankName attribute.
      * 
-     * @param - financialDocumentBankName The financialDocumentBankName to set.
+     * @param financialDocumentBankName The financialDocumentBankName to set.
      * 
      */
     public void setFinancialDocumentBankName(String financialDocumentBankName) {
@@ -103,7 +104,7 @@ public class Bank extends BusinessObjectBase {
     /**
      * Sets the financialDocumentBankShortNm attribute.
      * 
-     * @param - financialDocumentBankShortNm The financialDocumentBankShortNm to set.
+     * @param financialDocumentBankShortNm The financialDocumentBankShortNm to set.
      * 
      */
     public void setFinancialDocumentBankShortNm(String financialDocumentBankShortNm) {
@@ -123,14 +124,29 @@ public class Bank extends BusinessObjectBase {
     /**
      * Sets the bankAccounts attribute.
      * 
-     * @param - bankAccounts The bankAccounts to set.
+     * @param bankAccounts The bankAccounts to set.
      * 
      */
     public void setBankAccounts(List bankAccounts) {
         this.bankAccounts = bankAccounts;
     }
 
+    /**
+     * Gets the bankRoutingNumber attribute. 
+     * @return Returns the bankRoutingNumber.
+     */
+    public String getBankRoutingNumber() {
+        return bankRoutingNumber;
+    }
 
+    /**
+     * Sets the bankRoutingNumber attribute value.
+     * @param bankRoutingNumber The bankRoutingNumber to set.
+     */
+    public void setBankRoutingNumber(String bankRoutingNumber) {
+        this.bankRoutingNumber = bankRoutingNumber;
+    }
+    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -141,4 +157,5 @@ public class Bank extends BusinessObjectBase {
 
         return m;
     }
+    
 }

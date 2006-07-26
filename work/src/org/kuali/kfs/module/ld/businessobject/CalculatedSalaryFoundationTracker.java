@@ -30,6 +30,7 @@ import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -67,6 +68,7 @@ public class CalculatedSalaryFoundationTracker extends BusinessObjectBase {
     private Account account;
     private SubAccount subAccount;
     private SubObjCd subObjectCode;
+    private transient Options universityFiscal;
 
     /**
      * Default constructor.
@@ -562,6 +564,25 @@ public class CalculatedSalaryFoundationTracker extends BusinessObjectBase {
      */
     public void setSubObjectCode(SubObjCd subObjectCode) {
         this.subObjectCode = subObjectCode;
+    }
+
+
+    /**
+     * Gets the universityFiscal attribute.
+     * 
+     * @return Returns the universityFiscal.
+     */
+    public Options getUniversityFiscal() {
+        return universityFiscal;
+    }
+
+    /**
+     * Sets the universityFiscal attribute value.
+     * 
+     * @param universityFiscal The universityFiscal to set.
+     */
+    public void setUniversityFiscal(Options universityFiscal) {
+        this.universityFiscal = universityFiscal;
     }
 
     /**

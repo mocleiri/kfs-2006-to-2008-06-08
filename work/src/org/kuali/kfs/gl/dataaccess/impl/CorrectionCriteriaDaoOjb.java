@@ -22,16 +22,16 @@
  */
 package org.kuali.module.gl.dao.ojb;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.gl.bo.CorrectionCriteria;
 import org.kuali.module.gl.dao.CorrectionCriteriaDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-public class CorrectionCriteriaDaoOjb extends PersistenceBrokerTemplate implements CorrectionCriteriaDao {
+public class CorrectionCriteriaDaoOjb extends PersistenceBrokerDaoSupport implements CorrectionCriteriaDao {
 
     public CorrectionCriteriaDaoOjb() {
         super();
@@ -43,7 +43,7 @@ public class CorrectionCriteriaDaoOjb extends PersistenceBrokerTemplate implemen
      * @see org.kuali.module.gl.dao.CorrectionSearchCriterionDao#delete(org.kuali.module.gl.bo.CorrectionSearchCriterion)
      */
     public void delete(CorrectionCriteria criterion) {
-        super.delete(criterion);
+        getPersistenceBrokerTemplate().delete(criterion);
     }
 
     /*
@@ -52,16 +52,16 @@ public class CorrectionCriteriaDaoOjb extends PersistenceBrokerTemplate implemen
      * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#findByDocumentNumberAndCorrectionGroupId(java.lang.String,
      *      java.lang.Integer)
      */
-    public Collection findByDocumentNumberAndCorrectionGroupNumber(String documentNumber, Integer correctionGroupNumber) {
+    public List findByDocumentNumberAndCorrectionGroupNumber(Integer documentNumber, Integer correctionGroupLineNumber) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("DOC_HDR_ID", documentNumber);
-        criteria.addEqualTo("GL_COR_CHG_GRP_LN_NBR", correctionGroupNumber);
+        criteria.addEqualTo("FDOC_NBR", documentNumber);
+        criteria.addEqualTo("GL_COR_CHG_GRP_LN_NBR", correctionGroupLineNumber);
 
         Class clazz = CorrectionCriteria.class;
         QueryByCriteria query = QueryFactory.newQuery(clazz, criteria);
 
-        Collection criteria_ = getCollectionByQuery(query);
-        return criteria_;
+        List returnList = (List) getPersistenceBrokerTemplate().getCollectionByQuery(query);
+        return returnList;
     }
 
     /*
@@ -70,7 +70,6 @@ public class CorrectionCriteriaDaoOjb extends PersistenceBrokerTemplate implemen
      * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#save(org.kuali.module.gl.bo.CorrectionCriteria)
      */
     public void save(CorrectionCriteria criterion) {
-        super.store(criterion);
+        getPersistenceBrokerTemplate().store(criterion);
     }
-
 }

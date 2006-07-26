@@ -23,9 +23,11 @@
 package org.kuali.module.financial.web.struts.action;
 
 /**
- * This class piggy backs on all of the functionality in the KualiTransactionalDocumentActionBase.
+ * Struts Action for <code>{@link org.kuali.module.financial.document.YearEndGeneralErrorCorrectionDocument}</code>.  This class 
+ * is purposely empty b/c it needs to be in order to work with the transactional document framework.
  * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class YearEndGeneralErrorCorrectionAction extends GeneralErrorCorrectionAction {
+    // empty
 }

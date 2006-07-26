@@ -50,8 +50,12 @@ public class SubFundGroup extends BusinessObjectBase {
     private String financialReportingSortCode;
     private boolean subFundGroupWagesIndicator;
     private String fundGroupCode;
+    private String fundGroupBudgetAdjustmentRestrictionLevelCode;
+    private String accountRestrictedStatusCode;
+    
     private FundGroup fundGroup;
-
+    private SubFundGroupType subFundGroupType;
+    
     /**
      * Gets the subFundGroupCode attribute.
      * 
@@ -65,7 +69,7 @@ public class SubFundGroup extends BusinessObjectBase {
     /**
      * Sets the subFundGroupCode attribute.
      * 
-     * @param - subFundGroupCode The subFundGroupCode to set.
+     * @param subFundGroupCode The subFundGroupCode to set.
      */
     public void setSubFundGroupCode(String subFundGroupCode) {
         this.subFundGroupCode = subFundGroupCode;
@@ -84,7 +88,7 @@ public class SubFundGroup extends BusinessObjectBase {
     /**
      * Sets the subFundGroupDescription attribute.
      * 
-     * @param - subFundGroupDescription The subFundGroupDescription to set.
+     * @param subFundGroupDescription The subFundGroupDescription to set.
      * 
      */
     public void setSubFundGroupDescription(String subFundGroupDescription) {
@@ -104,7 +108,7 @@ public class SubFundGroup extends BusinessObjectBase {
     /**
      * Sets the _SubfundgrpActivityIndicator_ attribute.
      * 
-     * @param - _SubfundgrpActivityIndicator_ The _SubfundgrpActivityIndicator_ to set.
+     * @param _SubfundgrpActivityIndicator_ The _SubfundgrpActivityIndicator_ to set.
      * 
      */
     public void setSubfundgrpActivityIndicator(boolean _SubfundgrpActivityIndicator_) {
@@ -124,7 +128,7 @@ public class SubFundGroup extends BusinessObjectBase {
     /**
      * Sets the subFundGroupTypeCode attribute.
      * 
-     * @param - subFundGroupTypeCode The subFundGroupTypeCode to set.
+     * @param subFundGroupTypeCode The subFundGroupTypeCode to set.
      * 
      */
     public void setSubFundGroupTypeCode(String subFundGroupTypeCode) {
@@ -144,7 +148,7 @@ public class SubFundGroup extends BusinessObjectBase {
     /**
      * Sets the financialReportingSortCode attribute.
      * 
-     * @param - financialReportingSortCode The financialReportingSortCode to set.
+     * @param financialReportingSortCode The financialReportingSortCode to set.
      * 
      */
     public void setFinancialReportingSortCode(String financialReportingSortCode) {
@@ -164,7 +168,7 @@ public class SubFundGroup extends BusinessObjectBase {
     /**
      * Sets the subFundGroupWagesIndicator attribute.
      * 
-     * @param - subFundGroupWagesIndicator The subFundGroupWagesIndicator to set.
+     * @param subFundGroupWagesIndicator The subFundGroupWagesIndicator to set.
      * 
      */
     public void setSubFundGroupWagesIndicator(boolean subFundGroupWagesIndicator) {
@@ -202,7 +206,56 @@ public class SubFundGroup extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * Gets the fundGroupBudgetAdjustmentRestrictionLevelCode attribute. 
+     * @return Returns the fundGroupBudgetAdjustmentRestrictionLevelCode.
+     */
+    public String getFundGroupBudgetAdjustmentRestrictionLevelCode() {
+        return fundGroupBudgetAdjustmentRestrictionLevelCode;
+    }
+
+    /**
+     * Sets the fundGroupBudgetAdjustmentRestrictionLevelCode attribute value.
+     * @param fundGroupBudgetAdjustmentRestrictionLevelCode The fundGroupBudgetAdjustmentRestrictionLevelCode to set.
+     */
+    public void setFundGroupBudgetAdjustmentRestrictionLevelCode(String fundGroupBudgetAdjustmentRestrictionLevelCode) {
+        this.fundGroupBudgetAdjustmentRestrictionLevelCode = fundGroupBudgetAdjustmentRestrictionLevelCode;
+    }
+
+    /**
+     * Gets the accountRestrictedStatusCode attribute. 
+     * @return Returns the accountRestrictedStatusCode.
+     */
+    public String getAccountRestrictedStatusCode() {
+        return accountRestrictedStatusCode;
+    }
+
+    /**
+     * Sets the accountRestrictedStatusCode attribute value.
+     * @param accountRestrictedStatusCode The accountRestrictedStatusCode to set.
+     */
+    public void setAccountRestrictedStatusCode(String accountRestrictedStatusCode) {
+        this.accountRestrictedStatusCode = accountRestrictedStatusCode;
+    }
+
+    /**
+     * Gets the subFundGroupType attribute. 
+     * @return Returns the subFundGroupType.
+     */
+    public SubFundGroupType getSubFundGroupType() {
+        return subFundGroupType;
+    }
+
+    /**
+     * Sets the subFundGroupType attribute value.
+     * @param subFundGroupType The subFundGroupType to set.
+     * @deprecated
+     */
+    public void setSubFundGroupType(SubFundGroupType subFundGroupType) {
+        this.subFundGroupType = subFundGroupType;
+    }
+
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
@@ -211,5 +264,6 @@ public class SubFundGroup extends BusinessObjectBase {
 
 
         return m;
-    }
+    }    
+    
 }

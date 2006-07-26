@@ -29,9 +29,9 @@ import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
 import org.kuali.module.gl.dao.CorrectionChangeGroupDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-public class CorrectionChangeGroupDaoOjb extends PersistenceBrokerTemplate implements CorrectionChangeGroupDao {
+public class CorrectionChangeGroupDaoOjb extends PersistenceBrokerDaoSupport implements CorrectionChangeGroupDao {
 
     public CorrectionChangeGroupDaoOjb() {
         super();
@@ -43,7 +43,7 @@ public class CorrectionChangeGroupDaoOjb extends PersistenceBrokerTemplate imple
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#delete(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void delete(CorrectionChangeGroup group) {
-        super.delete(group);
+        getPersistenceBrokerTemplate().delete(group);
     }
 
     /*
@@ -51,14 +51,14 @@ public class CorrectionChangeGroupDaoOjb extends PersistenceBrokerTemplate imple
      * 
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumber(java.lang.String)
      */
-    public Collection findByDocumentNumber(String documentNumber) {
+    public Collection findByDocumentNumber(Integer documentNumber) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("DOC_HDR_ID", documentNumber);
+        criteria.addEqualTo("FDOC_NBR", documentNumber);
 
         Class clazz = CorrectionChangeGroup.class;
         QueryByCriteria query = QueryFactory.newQuery(clazz, criteria);
 
-        Collection groups = getCollectionByQuery(query);
+        Collection groups = getPersistenceBrokerTemplate().getCollectionByQuery(query);
         return groups;
     }
 
@@ -68,15 +68,15 @@ public class CorrectionChangeGroupDaoOjb extends PersistenceBrokerTemplate imple
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentHeaderIdAndCorrectionChangeGroupId(java.lang.Integer,
      *      java.lang.Integer)
      */
-    public CorrectionChangeGroup findByDocumentNumberAndCorrectionChangeGroupNumber(String documentNumber, Integer CorrectionChangeGroupNumber) {
+    public CorrectionChangeGroup findByDocumentNumberAndCorrectionChangeGroupNumber(Integer documentNumber, Integer CorrectionChangeGroupNumber) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("DOC_HDR_ID", documentNumber);
+        criteria.addEqualTo("FDOC_NBR", documentNumber);
         criteria.addEqualTo("GL_COR_CHG_GRP_LN_NBR", CorrectionChangeGroupNumber);
 
         Class clazz = CorrectionChangeGroup.class;
         QueryByCriteria query = QueryFactory.newQuery(clazz, criteria);
 
-        CorrectionChangeGroup group = (CorrectionChangeGroup) getObjectByQuery(query);
+        CorrectionChangeGroup group = (CorrectionChangeGroup)getPersistenceBrokerTemplate().getObjectByQuery(query);
         return group;
     }
 
@@ -86,7 +86,6 @@ public class CorrectionChangeGroupDaoOjb extends PersistenceBrokerTemplate imple
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#save(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void save(CorrectionChangeGroup group) {
-        super.store(group);
+        getPersistenceBrokerTemplate().store(group);
     }
-
 }

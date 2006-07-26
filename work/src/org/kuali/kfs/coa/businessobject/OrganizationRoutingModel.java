@@ -43,7 +43,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     private String financialDocumentTypeCode;
     private KualiDecimal approvalFromThisAmount;
     private KualiDecimal approvalToThisAmount;
-    private String accountDelegatePrimaryRoutingCode;
+    private boolean accountDelegatePrimaryRoutingIndicator;
     private Date accountDelegateStartDate;
 
     private Chart chartOfAccounts;
@@ -52,7 +52,15 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
      * Default constructor.
      */
     public OrganizationRoutingModel() {
+    }
 
+    public OrganizationRoutingModel(DelegateChangeDocument delegateChangeDocument) {
+        accountDelegateUniversalId=delegateChangeDocument.getAccountDelegateUniversalId();
+        accountDelegatePrimaryRoutingIndicator=delegateChangeDocument.getAccountDelegatePrimaryRoutingIndicator();
+        approvalFromThisAmount=delegateChangeDocument.getApprovalFromThisAmount();
+        approvalToThisAmount=delegateChangeDocument.getApprovalToThisAmount();
+        accountDelegateStartDate=delegateChangeDocument.getAccountDelegateStartDate();
+        financialDocumentTypeCode=delegateChangeDocument.getFinancialDocumentTypeCode();
     }
 
     /**
@@ -68,7 +76,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     /**
      * Sets the chartOfAccountsCode attribute.
      * 
-     * @param - chartOfAccountsCode The chartOfAccountsCode to set.
+     * @param chartOfAccountsCode The chartOfAccountsCode to set.
      * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -89,7 +97,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     /**
      * Sets the organizationCode attribute.
      * 
-     * @param - organizationCode The organizationCode to set.
+     * @param organizationCode The organizationCode to set.
      * 
      */
     public void setOrganizationCode(String organizationCode) {
@@ -110,7 +118,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     /**
      * Sets the organizationRoutingModelName attribute.
      * 
-     * @param - organizationRoutingModelName The organizationRoutingModelName to set.
+     * @param organizationRoutingModelName The organizationRoutingModelName to set.
      * 
      */
     public void setOrganizationRoutingModelName(String organizationRoutingModelName) {
@@ -131,7 +139,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     /**
      * Sets the accountDelegateUniversalId attribute.
      * 
-     * @param - accountDelegateUniversalId The accountDelegateUniversalId to set.
+     * @param accountDelegateUniversalId The accountDelegateUniversalId to set.
      * 
      */
     public void setAccountDelegateUniversalId(String accountDelegateUniversalId) {
@@ -152,7 +160,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     /**
      * Sets the financialDocumentTypeCode attribute.
      * 
-     * @param - financialDocumentTypeCode The financialDocumentTypeCode to set.
+     * @param financialDocumentTypeCode The financialDocumentTypeCode to set.
      * 
      */
     public void setFinancialDocumentTypeCode(String financialDocumentTypeCode) {
@@ -173,7 +181,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     /**
      * Sets the approvalFromThisAmount attribute.
      * 
-     * @param - approvalFromThisAmount The approvalFromThisAmount to set.
+     * @param approvalFromThisAmount The approvalFromThisAmount to set.
      * 
      */
     public void setApprovalFromThisAmount(KualiDecimal approvalFromThisAmount) {
@@ -194,7 +202,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     /**
      * Sets the approvalToThisAmount attribute.
      * 
-     * @param - approvalToThisAmount The approvalToThisAmount to set.
+     * @param approvalToThisAmount The approvalToThisAmount to set.
      * 
      */
     public void setApprovalToThisAmount(KualiDecimal approvalToThisAmount) {
@@ -203,23 +211,23 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
 
 
     /**
-     * Gets the accountDelegatePrimaryRoutingCode attribute.
+     * Gets the accountDelegatePrimaryRoutingIndicator attribute.
      * 
-     * @return - Returns the accountDelegatePrimaryRoutingCode
+     * @return - Returns the accountDelegatePrimaryRoutingIndicator
      * 
      */
-    public String getAccountDelegatePrimaryRoutingCode() {
-        return accountDelegatePrimaryRoutingCode;
+    public boolean getAccountDelegatePrimaryRoutingIndicator() {
+        return accountDelegatePrimaryRoutingIndicator;
     }
 
     /**
-     * Sets the accountDelegatePrimaryRoutingCode attribute.
+     * Sets the accountDelegatePrimaryRoutingIndicator attribute.
      * 
-     * @param - accountDelegatePrimaryRoutingCode The accountDelegatePrimaryRoutingCode to set.
+     * @param accountDelegatePrimaryRoutingCode The accountDelegatePrimaryRoutingIndicator to set.
      * 
      */
-    public void setAccountDelegatePrimaryRoutingCode(String accountDelegatePrimaryRoutingCode) {
-        this.accountDelegatePrimaryRoutingCode = accountDelegatePrimaryRoutingCode;
+    public void setAccountDelegatePrimaryRoutingIndicator(boolean accountDelegatePrimaryRoutingCode) {
+        this.accountDelegatePrimaryRoutingIndicator = accountDelegatePrimaryRoutingCode;
     }
 
 
@@ -236,7 +244,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     /**
      * Sets the accountDelegateStartDate attribute.
      * 
-     * @param - accountDelegateStartDate The accountDelegateStartDate to set.
+     * @param accountDelegateStartDate The accountDelegateStartDate to set.
      * 
      */
     public void setAccountDelegateStartDate(Date accountDelegateStartDate) {
@@ -257,7 +265,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     /**
      * Sets the chartOfAccounts attribute.
      * 
-     * @param - chartOfAccounts The chartOfAccounts to set.
+     * @param chartOfAccounts The chartOfAccounts to set.
      * @deprecated
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -265,7 +273,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

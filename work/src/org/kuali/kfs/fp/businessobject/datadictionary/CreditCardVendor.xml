@@ -60,11 +60,13 @@
             </resultFields>
         </lookup>
 
+       <titleAttribute>financialDocumentCreditCardVendorNumber</titleAttribute>
+
         <attributes>
 
             <attribute name="financialDocumentCreditCardVendorNumber" forceUppercase="true">
-                <label>Vendor Credit Card Number</label>
-                <shortLabel>Number</shortLabel>
+                <label>Vendor Number</label>
+                <shortLabel>Vendor Number</shortLabel>
 
                 <maxLength>10</maxLength>
                 <validationPattern>
@@ -72,7 +74,7 @@
                 </validationPattern>
                 <required>true</required>
                 <control>
-                    <text size="10" />
+                    <text size="10"/>
                 </control>
 
                 <summary>
@@ -84,8 +86,8 @@
             </attribute>
 
             <attribute name="financialDocumentCreditCardVendorName" forceUppercase="false">
-                <label>Vendor Credit Card Name</label>
-                <shortLabel>Name</shortLabel>
+                <label>Vendor Name</label>
+                <shortLabel>Vendor Name</shortLabel>
 
                 <maxLength>40</maxLength>
                 <required>true</required>
@@ -122,7 +124,7 @@
             <attributeReference name="incomeFinancialChartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <label>Income Chart</label>
                 <shortLabel>Income Chart</shortLabel>
-                <required>false</required>
+                <required>true</required>
 
                 <control>
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
@@ -140,7 +142,7 @@
                 <label>Income Account Number</label>
                 <shortLabel>Income Account</shortLabel>
 
-                <required>false</required>
+                <required>true</required>
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
@@ -166,7 +168,7 @@
             <attributeReference name="incomeFinancialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
                 <label>Income Object Code</label>
                 <shortLabel>Inc Obj Cd</shortLabel>
-                <required>false</required>
+                <required>true</required>
             </attributeReference>
 
             <attributeReference name="incomeFinancialSubObjectCode" sourceClassName="org.kuali.module.chart.bo.SubObjCd" sourceAttributeName="financialSubObjectCode">
@@ -184,7 +186,7 @@
             <attributeReference name="expenseFinancialChartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <label>Expense Chart</label>
                 <shortLabel>Expense Chart</shortLabel>
-                <required>false</required>
+                <required>true</required>
 
                 <control>
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
@@ -202,7 +204,7 @@
                 <label>Expense Account Number</label>
                 <shortLabel>Expense Account</shortLabel>
 
-                <required>false</required>
+                <required>true</required>
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
@@ -228,7 +230,7 @@
             <attributeReference name="expenseFinancialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
                 <label>Expense Object Code</label>
                 <shortLabel>Exp Obj Cd</shortLabel>
-                <required>false</required>
+                <required>true</required>
             </attributeReference>
 
             <attributeReference name="expenseFinancialSubObjectCode" sourceClassName="org.kuali.module.chart.bo.SubObjCd" sourceAttributeName="financialSubObjectCode">
