@@ -31,107 +31,28 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.chart.bo.Org;
+import org.kuali.module.chart.bo.SubAccount;
+import org.kuali.module.chart.bo.SubObjCd;
 
 /**
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-
 public class BankAccount extends BusinessObjectBase {
-
-    private static final long serialVersionUID = -1056266362255635896L;
     private String finDocumentBankAccountDesc;
     private String finDocumentBankAccountNumber;
     private String financialDocumentBankCode;
-    private String chartOfAccountsCode;
-    private String universityAcctChartOfAcctCd;
-    private String universityAccountNumber;
-    private String organizationCode;
     private String cashOffsetFinancialChartOfAccountCode;
     private String cashOffsetAccountNumber;
+    private String cashOffsetSubAccountNumber;
     private String cashOffsetObjectCode;
     private String cashOffsetSubObjectCode;
 
-    private Chart chart;
-    private Chart universityAcctChartOfAcct;
     private Bank bank;
-    private Org organization;
-    private Account universityAccount;
     private Chart cashOffsetFinancialChartOfAccount;
     private Account cashOffsetAccount;
     private ObjectCode cashOffsetObject;
-
-    /**
-     * Gets the organizationCode attribute.
-     * 
-     * @return Returns the organizationCode.
-     */
-    public String getOrganizationCode() {
-        return organizationCode;
-    }
-
-    /**
-     * Sets the organizationCode attribute value.
-     * 
-     * @param organizationCode The organizationCode to set.
-     */
-    public void setOrganizationCode(String organizationCode) {
-        this.organizationCode = organizationCode;
-    }
-
-    /**
-     * Gets the chartOfAccountsCode attribute.
-     * 
-     * @return Returns the chartOfAccountsCode.
-     */
-    public String getChartOfAccountsCode() {
-        return chartOfAccountsCode;
-    }
-
-    /**
-     * Sets the chartOfAccountsCode attribute value.
-     * 
-     * @param chartOfAccountsCode The chartOfAccountsCode to set.
-     */
-    public void setChartOfAccountsCode(String chartOfAccountsCode) {
-        this.chartOfAccountsCode = chartOfAccountsCode;
-    }
-
-    /**
-     * Gets the universityAccountNumber attribute.
-     * 
-     * @return Returns the universityAccountNumber.
-     */
-    public String getUniversityAccountNumber() {
-        return universityAccountNumber;
-    }
-
-    /**
-     * Sets the universityAccountNumber attribute value.
-     * 
-     * @param universityAccountNumber The universityAccountNumber to set.
-     */
-    public void setUniversityAccountNumber(String universityAccountNumber) {
-        this.universityAccountNumber = universityAccountNumber;
-    }
-
-    /**
-     * Gets the universityAcctChartOfAcctCd attribute.
-     * 
-     * @return Returns the universityAcctChartOfAcctCd.
-     */
-    public String getUniversityAcctChartOfAcctCd() {
-        return universityAcctChartOfAcctCd;
-    }
-
-    /**
-     * Sets the universityAcctChartOfAcctCd attribute value.
-     * 
-     * @param universityAcctChartOfAcctCd The universityAcctChartOfAcctCd to set.
-     */
-    public void setUniversityAcctChartOfAcctCd(String universityAcctChartOfAcctCd) {
-        this.universityAcctChartOfAcctCd = universityAcctChartOfAcctCd;
-    }
+    private SubAccount cashOffsetSubAccount;
+    private SubObjCd cashOffsetSubObject;
 
     /**
      * Default no-arg constructor.
@@ -153,7 +74,7 @@ public class BankAccount extends BusinessObjectBase {
     /**
      * Sets the bank attribute.
      * 
-     * @param - bank The bank to set.
+     * @param bank The bank to set.
      * @deprecated
      */
     public void setBank(Bank bank) {
@@ -173,7 +94,7 @@ public class BankAccount extends BusinessObjectBase {
     /**
      * Sets the financialDocumentBankCode attribute.
      * 
-     * @param - financialDocumentBankCode The financialDocumentBankCode to set.
+     * @param financialDocumentBankCode The financialDocumentBankCode to set.
      * 
      */
     public void setFinancialDocumentBankCode(String financialDocumentBankCode) {
@@ -193,31 +114,11 @@ public class BankAccount extends BusinessObjectBase {
     /**
      * Sets the finDocumentBankAccountDesc attribute.
      * 
-     * @param - finDocumentBankAccountDesc The finDocumentBankAccountDesc to set.
+     * @param finDocumentBankAccountDesc The finDocumentBankAccountDesc to set.
      * 
      */
     public void setFinDocumentBankAccountDesc(String finDocumentBankAccountDesc) {
         this.finDocumentBankAccountDesc = finDocumentBankAccountDesc;
-    }
-
-    /**
-     * Gets the organization attribute.
-     * 
-     * @return - Returns the organization
-     * 
-     */
-    public Org getOrganization() {
-        return organization;
-    }
-
-    /**
-     * Sets the organization attribute.
-     * 
-     * @param - organization The organization to set.
-     * @deprecated
-     */
-    public void setOrganization(Org organization) {
-        this.organization = organization;
     }
 
     /**
@@ -233,7 +134,7 @@ public class BankAccount extends BusinessObjectBase {
     /**
      * Sets the finDocumentBankAccountNumber attribute.
      * 
-     * @param - finDocumentBankAccountNumber The finDocumentBankAccountNumber to set.
+     * @param finDocumentBankAccountNumber The finDocumentBankAccountNumber to set.
      * 
      */
     public void setFinDocumentBankAccountNumber(String finDocumentBankAccountNumber) {
@@ -297,66 +198,6 @@ public class BankAccount extends BusinessObjectBase {
     }
 
     /**
-     * Gets the universityAccount attribute.
-     * 
-     * @return - Returns the universityAccount
-     * 
-     */
-    public Account getUniversityAccount() {
-        return universityAccount;
-    }
-
-    /**
-     * Sets the universityAccount attribute.
-     * 
-     * @param - universityAccount The universityAccount to set.
-     * @deprecated
-     */
-    public void setUniversityAccount(Account universityAccount) {
-        this.universityAccount = universityAccount;
-    }
-
-    /**
-     * Gets the chart attribute.
-     * 
-     * @return - Returns the chart
-     * 
-     */
-    public Chart getChart() {
-        return chart;
-    }
-
-    /**
-     * Sets the chart attribute.
-     * 
-     * @param - chart The chart to set.
-     * @deprecated
-     */
-    public void setChart(Chart chart) {
-        this.chart = chart;
-    }
-
-    /**
-     * Gets the universityAcctChartOfAcct attribute.
-     * 
-     * @return - Returns the universityAcctChartOfAcct
-     * 
-     */
-    public Chart getUniversityAcctChartOfAcct() {
-        return universityAcctChartOfAcct;
-    }
-
-    /**
-     * Sets the universityAcctChartOfAcct attribute.
-     * 
-     * @param - universityAcctChartOfAcct The universityAcctChartOfAcct to set.
-     * @deprecated
-     */
-    public void setUniversityAcctChartOfAcct(Chart universityAcctChartOfAcct) {
-        this.universityAcctChartOfAcct = universityAcctChartOfAcct;
-    }
-
-    /**
      * Gets the cashOffsetAccount attribute.
      * 
      * @return - Returns the cashOffsetAccount
@@ -369,7 +210,7 @@ public class BankAccount extends BusinessObjectBase {
     /**
      * Sets the cashOffsetAccount attribute.
      * 
-     * @param - cashOffsetAccount The cashOffsetAccount to set.
+     * @param cashOffsetAccount The cashOffsetAccount to set.
      * @deprecated
      */
     public void setCashOffsetAccount(Account cashOffsetAccount) {
@@ -389,7 +230,7 @@ public class BankAccount extends BusinessObjectBase {
     /**
      * Sets the cashOffsetFinancialChartOfAccount attribute.
      * 
-     * @param - cashOffsetFinancialChartOfAccount The cashOffsetFinancialChartOfAccount to set.
+     * @param cashOffsetFinancialChartOfAccount The cashOffsetFinancialChartOfAccount to set.
      * @deprecated
      */
     public void setCashOffsetFinancialChartOfAccount(Chart cashOffsetFinancialChartOfAccount) {
@@ -416,7 +257,57 @@ public class BankAccount extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * Gets the cashOffsetSubAccountNumber attribute. 
+     * @return Returns the cashOffsetSubAccountNumber.
+     */
+    public String getCashOffsetSubAccountNumber() {
+        return cashOffsetSubAccountNumber;
+    }
+
+    /**
+     * Sets the cashOffsetSubAccountNumber attribute value.
+     * @param cashOffsetSubAccountNumber The cashOffsetSubAccountNumber to set.
+     */
+    public void setCashOffsetSubAccountNumber(String cashOffsetSubAccountNumber) {
+        this.cashOffsetSubAccountNumber = cashOffsetSubAccountNumber;
+    }
+
+    /**
+     * Gets the cashOffsetSubAccount attribute. 
+     * @return Returns the cashOffsetSubAccount.
+     */
+    public SubAccount getCashOffsetSubAccount() {
+        return cashOffsetSubAccount;
+    }
+
+    /**
+     * Sets the cashOffsetSubAccount attribute value.
+     * @param cashOffsetSubAccount The cashOffsetSubAccount to set.
+     * @deprecated
+     */
+    public void setCashOffsetSubAccount(SubAccount cashOffsetSubAccount) {
+        this.cashOffsetSubAccount = cashOffsetSubAccount;
+    }
+
+    /**
+     * Gets the cashOffsetSubObject attribute. 
+     * @return Returns the cashOffsetSubObject.
+     */
+    public SubObjCd getCashOffsetSubObject() {
+        return cashOffsetSubObject;
+    }
+
+    /**
+     * Sets the cashOffsetSubObject attribute value.
+     * @param cashOffsetSubObject The cashOffsetSubObject to set.
+     * @deprecated
+     */
+    public void setCashOffsetSubObject(SubObjCd cashOffsetSubObject) {
+        this.cashOffsetSubObject = cashOffsetSubObject;
+    }
+
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
@@ -424,6 +315,5 @@ public class BankAccount extends BusinessObjectBase {
         m.put("bankAccountNumber", getFinDocumentBankAccountNumber());
         return m;
     }
-
 
 }

@@ -37,6 +37,8 @@
             </resultFields>
         </lookup>
 
+        <titleAttribute>code</titleAttribute>
+
         <attributes>
             <attribute name="code" forceUppercase="true">
                 <label>Type Code</label>
@@ -47,6 +49,8 @@
                 <validationPattern>
                     <alpha exactLength="1" />
                 </validationPattern>
+
+                <required>true</required>
 
                 <control>
                     <text size="1" />
@@ -65,6 +69,9 @@
                 <validationPattern>
                     <anyCharacter allowWhitespace="true" />
                 </validationPattern>
+
+                <required>true</required>
+
                 <control>
                     <text size="32" />
                 </control>

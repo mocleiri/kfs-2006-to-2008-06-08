@@ -16,13 +16,13 @@
         </inquiry>
 
         <lookup>
-            <title>OrgType Lookup</title>
+            <title>Organization Type Lookup</title>
 
             <menubar>
                 <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.OrgType">Create New</a>]]>
             </menubar>
 
-            <instructions>Lookup a Organization Type</instructions>
+            <instructions>Lookup an Organization Type</instructions>
 
             <defaultSort attributeName="organizationTypeCode" sortAscending="true" />
 
@@ -37,25 +37,27 @@
             </resultFields>
         </lookup>
 
+        <titleAttribute>organizationTypeCode</titleAttribute>
+
         <attributes>
             <attribute name="organizationTypeCode" forceUppercase="true">
                 <label>Organization Type Code</label>
                 <shortLabel>Organization Type</shortLabel>
 
-                <maxLength>2</maxLength>
+                <maxLength>1</maxLength>
                 <validationPattern>
                     <alphaNumeric />
                 </validationPattern>
                 <required>true</required>
                 <control>
-                    <text size="2" />
+                    <text size="1" />
                 </control>
 
                 <summary>Organization Type Code</summary>
                 <description>The type of organization.</description>
             </attribute>
 
-            <attribute name="organizationTypeName" forceUppercase="false">
+            <attribute name="organizationTypeName" forceUppercase="true">
                 <label>Organization Type Name</label>
                 <shortLabel>Name</shortLabel>
 

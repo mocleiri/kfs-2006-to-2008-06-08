@@ -59,7 +59,7 @@ public class ProjectDirector extends BusinessObjectBase {
     /**
      * Sets the personUniversal attribute.
      * 
-     * @param - personUniversal The personUniversal to set.
+     * @param personUniversal The personUniversal to set.
      * @deprecated
      */
     public void setUniversalUser(UniversalUser user) {
@@ -85,7 +85,7 @@ public class ProjectDirector extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

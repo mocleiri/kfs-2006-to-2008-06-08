@@ -25,6 +25,7 @@ package org.kuali.module.financial.document;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
@@ -38,17 +39,15 @@ import org.kuali.module.financial.bo.AdvanceDepositDetail;
  * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class AdvanceDepositDocument extends CashReceiptDocument {
-    private static final String CASH_RECEIPT_ADVANCE_DEPOSIT_COLUMN_TYPE_CODE = "R";
-
+public class AdvanceDepositDocument extends CashReceiptDocumentBase {
     // holds details about each advance deposit
-    private List advanceDeposits = new ArrayList();
+    private List<AdvanceDepositDetail> advanceDeposits = new ArrayList<AdvanceDepositDetail>();
 
     // incrementers for detail lines
-    private Integer nextAdvanceDepositLineNumber = new Integer(1);
+    private Integer nextAdvanceDepositLineNumber = 1;
 
     // monetary attributes
-    private KualiDecimal totalAdvanceDepositAmount = new KualiDecimal(0);
+    private KualiDecimal totalAdvanceDepositAmount = KualiDecimal.ZERO;
 
     /**
      * Default constructor that calls super.
@@ -76,7 +75,7 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
     }
 
     /**
-     * Sets the total advance deposit amount which is the sum of all credit card receipts on this document.
+     * Sets the total advance deposit amount which is the sum of all advance deposits on this document.
      * 
      * @param advanceDepositAmount
      */
@@ -89,7 +88,7 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
      * 
      * @return List
      */
-    public List getAdvanceDeposits() {
+    public List<AdvanceDepositDetail> getAdvanceDeposits() {
         return advanceDeposits;
     }
 
@@ -98,7 +97,7 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
      * 
      * @param advanceDeposits
      */
-    public void setAdvanceDeposits(List advanceDeposits) {
+    public void setAdvanceDeposits(List<AdvanceDepositDetail> advanceDeposits) {
         this.advanceDeposits = advanceDeposits;
     }
 
@@ -115,7 +114,7 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
         this.advanceDeposits.add(advanceDepositDetail);
 
         // increment line number
-        this.nextAdvanceDepositLineNumber = new Integer(this.nextAdvanceDepositLineNumber.intValue() + 1);
+        this.nextAdvanceDepositLineNumber++;
 
         // update the overall amount
         this.totalAdvanceDepositAmount = this.totalAdvanceDepositAmount.add(advanceDepositDetail.getFinancialDocumentAdvanceDepositAmount());
@@ -129,7 +128,7 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
      */
     public final void prepareNewAdvanceDeposit(AdvanceDepositDetail advanceDepositDetail) {
         advanceDepositDetail.setFinancialDocumentLineNumber(this.nextAdvanceDepositLineNumber);
-        advanceDepositDetail.setFinancialDocumentColumnTypeCode(CASH_RECEIPT_ADVANCE_DEPOSIT_COLUMN_TYPE_CODE);
+        advanceDepositDetail.setFinancialDocumentColumnTypeCode(Constants.AdvanceDepositConstants.CASH_RECEIPT_ADVANCE_DEPOSIT_COLUMN_TYPE_CODE);
         advanceDepositDetail.setFinancialDocumentNumber(this.getFinancialDocumentNumber());
         advanceDepositDetail.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(this.getClass()));
     }
@@ -144,7 +143,7 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
         while (this.advanceDeposits.size() <= index) {
             advanceDeposits.add(new AdvanceDepositDetail());
         }
-        return (AdvanceDepositDetail) advanceDeposits.get(index);
+        return advanceDeposits.get(index);
     }
 
     /**
@@ -153,13 +152,8 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
      * @param index
      */
     public void removeAdvanceDeposit(int index) {
-        AdvanceDepositDetail advanceDepositDetail = (AdvanceDepositDetail) advanceDeposits.remove(index);
-
-        // if the totalAdvanceDepositAmount goes negative, bring back to zero.
+        AdvanceDepositDetail advanceDepositDetail = advanceDeposits.remove(index);
         this.totalAdvanceDepositAmount = this.totalAdvanceDepositAmount.subtract(advanceDepositDetail.getFinancialDocumentAdvanceDepositAmount());
-        if (this.totalAdvanceDepositAmount.isNegative()) {
-            this.totalAdvanceDepositAmount = KualiDecimal.ZERO;
-        }
     }
 
     /**
@@ -181,15 +175,17 @@ public class AdvanceDepositDocument extends CashReceiptDocument {
      * 
      * @return KualiDecimal
      */
+    @Override
     public KualiDecimal getSumTotalAmount() {
         return this.totalAdvanceDepositAmount;
     }
-
+    
     /**
      * Overrides super to call super and then also add in the new list of advance deposits that have to be managed.
      * 
      * @see org.kuali.core.document.TransactionalDocumentBase#buildListOfDeletionAwareLists()
      */
+    @Override
     public List buildListOfDeletionAwareLists() {
         List managedLists = super.buildListOfDeletionAwareLists();
         managedLists.add(getAdvanceDeposits());

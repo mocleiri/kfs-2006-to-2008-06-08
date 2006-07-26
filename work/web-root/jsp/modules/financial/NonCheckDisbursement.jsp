@@ -5,8 +5,6 @@
 	htmlFormAction="financialNonCheckDisbursement" renderMultipart="true"
 	showTabButtons="true">
 
-	<html:hidden property="document.nextSourceLineNumber" />
-	<html:hidden property="document.nextTargetLineNumber" />
 	<kul:hiddenDocumentFields />
 
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
@@ -19,7 +17,7 @@
 
 	<kul:notes />
 
-	<kul:adHocRecipients />
+	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
 
 	<kul:routeLog />
 
