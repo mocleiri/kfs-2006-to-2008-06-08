@@ -28,7 +28,7 @@ import java.util.LinkedHashMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.NumberUtils;
 
 /**
@@ -44,7 +44,7 @@ public class CheckBase extends BusinessObjectBase implements Check {
     private String description;
     private boolean interimDepositAmount;
     private Integer sequenceId;
-    private KualiDecimalMoney amount;
+    private KualiDecimal amount;
     private String financialDocumentNumber;
 
     /**
@@ -53,7 +53,7 @@ public class CheckBase extends BusinessObjectBase implements Check {
     public CheckBase() {
         super();
         this.sequenceId = new Integer(1);
-        this.amount = new KualiDecimalMoney(0);
+        this.amount = new KualiDecimal(0);
     }
 
     /**
@@ -151,7 +151,7 @@ public class CheckBase extends BusinessObjectBase implements Check {
      * 
      * @return Returns the amount.
      */
-    public KualiDecimalMoney getAmount() {
+    public KualiDecimal getAmount() {
         return amount;
     }
 
@@ -160,7 +160,7 @@ public class CheckBase extends BusinessObjectBase implements Check {
      * 
      * @param amount The amount to set.
      */
-    public void setAmount(KualiDecimalMoney amount) {
+    public void setAmount(KualiDecimal amount) {
         this.amount = amount;
     }
 
