@@ -25,7 +25,11 @@ package org.kuali.module.financial.document;
 import static org.kuali.Constants.FROM;
 import static org.kuali.Constants.TO;
 
+import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.module.financial.bo.GECSourceAccountingLine;
+import org.kuali.module.financial.bo.GECTargetAccountingLine;
+import org.kuali.module.financial.bo.GeneralErrorCorrectionDocumentAccountingLineParser;
 
 
 /**
@@ -46,7 +50,7 @@ public class GeneralErrorCorrectionDocument extends TransactionalDocumentBase {
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLineSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
@@ -56,10 +60,18 @@ public class GeneralErrorCorrectionDocument extends TransactionalDocumentBase {
     /**
      * Overrides the base implementation to return "To".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLineSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
         return TO;
+    }
+
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     */
+    @Override
+    public AccountingLineParser getAccountingLineParser() {
+        return new GeneralErrorCorrectionDocumentAccountingLineParser();
     }
 }

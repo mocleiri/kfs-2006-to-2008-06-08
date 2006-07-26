@@ -23,7 +23,9 @@
 package org.kuali.module.financial.document;
 
 import org.kuali.Constants;
+import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.module.financial.bo.NonCheckDisbursementDocumentAccountingLineParser;
 
 /**
  * This is the business object that represents the NonCheckDisbursementDocument in Kuali.
@@ -45,7 +47,7 @@ public class NonCheckDisbursementDocument extends TransactionalDocumentBase {
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see TransactionalDocument#getSourceAccountingLinesSectionTitle();
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
@@ -55,11 +57,19 @@ public class NonCheckDisbursementDocument extends TransactionalDocumentBase {
     /**
      * Overrides the base implementation to return "To".
      * 
-     * @see TransactionalDocument#getTargetAccountingLinesSectionTitle();
+     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
         return Constants.TO;
+    }
+
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     */
+    @Override
+    public AccountingLineParser getAccountingLineParser() {
+        return new NonCheckDisbursementDocumentAccountingLineParser();
     }
 
 }

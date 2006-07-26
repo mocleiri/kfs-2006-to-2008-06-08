@@ -66,7 +66,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the financialDocumentNumber attribute.
      * 
-     * @param - financialDocumentNumber The financialDocumentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
     public void setFinancialDocumentNumber(String financialDocumentNumber) {
@@ -87,7 +87,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the financialDocumentLineNumber attribute.
      * 
-     * @param - financialDocumentLineNumber The financialDocumentLineNumber to set.
+     * @param financialDocumentLineNumber The financialDocumentLineNumber to set.
      * 
      */
     public void setFinancialDocumentLineNumber(Integer financialDocumentLineNumber) {
@@ -107,7 +107,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Dummy field so we can have different select options.
      * 
-     * @return
+     * @return String
      */
     public String getDisbVchrPrePaidExpenseCode() {
         return disbVchrExpenseCode;
@@ -117,7 +117,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the disbVchrExpenseCode attribute.
      * 
-     * @param - disbVchrExpenseCode The disbVchrExpenseCode to set.
+     * @param disbVchrExpenseCode The disbVchrExpenseCode to set.
      * 
      */
     public void setDisbVchrExpenseCode(String disbVchrExpenseCode) {
@@ -148,7 +148,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the disbVchrExpenseCompanyName attribute.
      * 
-     * @param - disbVchrExpenseCompanyName The disbVchrExpenseCompanyName to set.
+     * @param disbVchrExpenseCompanyName The disbVchrExpenseCompanyName to set.
      * 
      */
     public void setDisbVchrExpenseCompanyName(String disbVchrExpenseCompanyName) {
@@ -169,7 +169,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the disbVchrExpenseAmount attribute.
      * 
-     * @param - disbVchrExpenseAmount The disbVchrExpenseAmount to set.
+     * @param disbVchrExpenseAmount The disbVchrExpenseAmount to set.
      * 
      */
     public void setDisbVchrExpenseAmount(KualiDecimal disbVchrExpenseAmount) {
@@ -189,7 +189,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the disbVchrExpense attribute.
      * 
-     * @param - disbVchrExpense The disbVchrExpense to set.
+     * @param disbVchrExpense The disbVchrExpense to set.
      * @deprecated
      */
     public void setDisbVchrExpense(TravelExpenseTypeCode disbVchrExpense) {
@@ -197,7 +197,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

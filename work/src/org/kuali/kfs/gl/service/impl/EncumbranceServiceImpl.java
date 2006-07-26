@@ -23,22 +23,33 @@
 package org.kuali.module.gl.service.impl;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.dao.EncumbranceDao;
 import org.kuali.module.gl.service.EncumbranceService;
 
+/**
+ * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
+ * @version $Id$
+ */
 public class EncumbranceServiceImpl implements EncumbranceService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EncumbranceServiceImpl.class);
 
     private EncumbranceDao encumbranceDao;
 
+    /**
+     * @see org.kuali.module.gl.service.EncumbranceService#save(org.kuali.module.gl.bo.Encumbrance)
+     */
     public void save(Encumbrance enc) {
         LOG.debug("save() started");
 
         encumbranceDao.save(enc);
     }
 
+    /**
+     * @see org.kuali.module.gl.service.EncumbranceService#purgeYearByChart(java.lang.String, int)
+     */
     public void purgeYearByChart(String chartOfAccountsCode, int year) {
         LOG.debug("purgeYearByChart() started");
 
@@ -52,6 +63,11 @@ public class EncumbranceServiceImpl implements EncumbranceService {
         return encumbranceDao.getAllEncumbrances();
     }
 
+    /**
+     * Field accessor for EncumbranceDao
+     * 
+     * @param ed
+     */
     public void setEncumbranceDao(EncumbranceDao ed) {
         encumbranceDao = ed;
     }
@@ -61,5 +77,12 @@ public class EncumbranceServiceImpl implements EncumbranceService {
      */
     public Iterator getSummarizedEncumbrances(String documentTypeCode, boolean included) {
         return encumbranceDao.getSummarizedEncumbrances(documentTypeCode, included);
+    }
+
+    /**
+     * @see org.kuali.module.gl.service.EncumbranceService#findOpenEncumbrance(java.util.Map)
+     */
+    public Iterator findOpenEncumbrance(Map fieldValues) {
+        return encumbranceDao.findOpenEncumbrance(fieldValues);
     }
 }
