@@ -43,7 +43,6 @@
         </lookup>
 
         <attributes>
-
             
             <attribute name="requisitionSourceCode" forceUppercase="true">
                 <label>Requisition Source Code</label>
@@ -79,7 +78,6 @@
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
             
-
         </attributes>
     </businessObject>
 </dictionaryEntry>
