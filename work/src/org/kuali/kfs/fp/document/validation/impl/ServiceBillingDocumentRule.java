@@ -22,17 +22,17 @@
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.module.financial.rules.ServiceBillingDocumentRuleConstants.RESTRICTED_OBJECT_TYPE_CODES;
+import static org.kuali.module.financial.rules.ServiceBillingDocumentRuleConstants.SERVICE_BILLING_DOCUMENT_SECURITY_GROUPING;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.AccountingLine;
-import org.kuali.core.bo.user.KualiGroup;
-import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.TransactionalDocument;
-import org.kuali.core.exceptions.GroupNotFoundException;
+import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.module.financial.bo.ServiceBillingControl;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import org.kuali.PropertyConstants;
 
 /**
  * Business rule(s) applicable to Service Billing documents. They differ from {@link InternalBillingDocumentRule} by not routing for
@@ -43,51 +43,45 @@ import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class ServiceBillingDocumentRule extends InternalBillingDocumentRule {
+
     /**
      * @see TransactionalDocumentRuleBase#accountIsAccessible(TransactionalDocument, AccountingLine)
      */
+    @Override
     protected boolean accountIsAccessible(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         KualiWorkflowDocument workflowDocument = transactionalDocument.getDocumentHeader().getWorkflowDocument();
 
         if (workflowDocument.stateIsInitiated() || workflowDocument.stateIsSaved()) {
-            // todo: separate rule with SB specific error message explaining about the control table instead/additionally?
             // The use from hasAccessibleAccountingLines() is not important for SB, which routes straight to final.
-            return accountingLine.isTargetAccountingLine() || serviceBillingIncomeAccountIsAccessible(accountingLine);
+            return accountingLine.isTargetAccountingLine() || ServiceBillingDocumentRuleUtil.serviceBillingIncomeAccountIsAccessible(accountingLine, null);
         }
-        else {
-            return super.accountIsAccessible(transactionalDocument, accountingLine);
-        }
+        return super.accountIsAccessible(transactionalDocument, accountingLine);
     }
 
     /**
-     * Checks the account and user against the SB control table.
-     * 
-     * @param accountingLine from the income section
-     * @return whether the current user is authorized to use the given account in the SB income section
+     * @see TransactionalDocumentRuleBase#checkAccountingLineAccountAccessibility(org.kuali.core.document.TransactionalDocument, org.kuali.core.bo.AccountingLine, org.kuali.module.financial.rules.TransactionalDocumentRuleBase.AccountingLineAction)
      */
-    private boolean serviceBillingIncomeAccountIsAccessible(AccountingLine accountingLine) {
-        // todo: assert accountingLine.isSourceAccountingLine();
-        String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
-        String accountNumber = accountingLine.getAccountNumber();
-        // Handle empty key because hasAccessibleAccountingLines() may not validate beforehand.
-        if (!StringUtils.isEmpty(chartOfAccountsCode) && !StringUtils.isEmpty(accountNumber)) {
-            KualiUser currentUser = GlobalVariables.getUserSession().getKualiUser();
-            ServiceBillingControl control = SpringServiceLocator.getServiceBillingControlService().getByPrimaryId(chartOfAccountsCode, accountNumber);
-            if (control != null) {
-                try {
-                    // todo: isMember(String) instead of going through KualiGroupService?
-                    KualiGroup group = SpringServiceLocator.getKualiGroupService().getByGroupName(control.getWorkgroupName());
-                    if (currentUser.isMember(group)) {
-                        return true;
-                    }
-                }
-                catch (GroupNotFoundException e) {
-                    LOG.error("invalid workgroup in SB control for " + chartOfAccountsCode + accountNumber, e);
-                    throw new RuntimeException(e);
-                }
-            }
+    @Override
+    protected boolean checkAccountingLineAccountAccessibility(TransactionalDocument transactionalDocument, AccountingLine accountingLine, AccountingLineAction action) {
+        // Duplicate code from accountIsAccessible() to avoid unnecessary calls to SB control and Workgroup services.
+        KualiWorkflowDocument workflowDocument = transactionalDocument.getDocumentHeader().getWorkflowDocument();
+
+        if (workflowDocument.stateIsInitiated() || workflowDocument.stateIsSaved()) {
+            return accountingLine.isTargetAccountingLine() || ServiceBillingDocumentRuleUtil.serviceBillingIncomeAccountIsAccessible(accountingLine, action);
         }
-        return false;
+        if (!super.accountIsAccessible(transactionalDocument, accountingLine)) {
+            GlobalVariables.getErrorMap().putError(PropertyConstants.ACCOUNT_NUMBER, action.accessibilityErrorKey, accountingLine.getAccountNumber(), GlobalVariables.getUserSession().getKualiUser().getPersonUserIdentifier());
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @see org.kuali.module.financial.rules.InternalBillingDocumentRule#getObjectTypeRule()
+     */
+    @Override
+    protected KualiParameterRule getObjectTypeRule() {
+        return KualiParameterRule.and(super.getObjectTypeRule(), getParameterRule(SERVICE_BILLING_DOCUMENT_SECURITY_GROUPING, RESTRICTED_OBJECT_TYPE_CODES));
     }
 
     /**
@@ -96,10 +90,26 @@ public class ServiceBillingDocumentRule extends InternalBillingDocumentRule {
      * @see TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument, AccountingLine,
      *      GeneralLedgerPendingEntry)
      */
+    @Override
     protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
         String description = accountingLine.getFinancialDocumentLineDescription();
         if (StringUtils.isNotBlank(description)) {
             explicitEntry.setTransactionLedgerEntryDescription(description);
         }
+    }
+
+    /**
+     * further restricts to income/expense object type codes
+     * 
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
+        if (!isIncome(accountingLine) && !isExpense(accountingLine)) {
+            throw new IllegalStateException(IsDebitUtils.isDebitCalculationIllegalStateExceptionMessage);
+        }
+
+        return super.isDebit(transactionalDocument, accountingLine);
     }
 }
