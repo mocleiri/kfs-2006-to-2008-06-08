@@ -41,7 +41,7 @@ import org.kuali.core.lookup.keyvalues.DisbursementVoucherDocumentationLocationV
 import org.kuali.core.lookup.keyvalues.PaymentMethodValuesFinder;
 import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel;
@@ -66,7 +66,7 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
     private Date disbursementVoucherDueDate;
     private boolean disbVchrAttachmentCode;
     private boolean disbVchrSpecialHandlingCode;
-    private KualiDecimalMoney disbVchrCheckTotalAmount;
+    private KualiDecimal disbVchrCheckTotalAmount;
     private boolean disbVchrForeignCurrencyInd;
     private String disbursementVoucherDocumentationLocationCode;
     private String disbVchrCheckStubText;
@@ -255,7 +255,7 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
      * @return - Returns the disbVchrCheckTotalAmount
      * 
      */
-    public KualiDecimalMoney getDisbVchrCheckTotalAmount() {
+    public KualiDecimal getDisbVchrCheckTotalAmount() {
         return disbVchrCheckTotalAmount;
     }
 
@@ -266,7 +266,7 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
      * @param - disbVchrCheckTotalAmount The disbVchrCheckTotalAmount to set.
      * 
      */
-    public void setDisbVchrCheckTotalAmount(KualiDecimalMoney disbVchrCheckTotalAmount) {
+    public void setDisbVchrCheckTotalAmount(KualiDecimal disbVchrCheckTotalAmount) {
         this.disbVchrCheckTotalAmount = disbVchrCheckTotalAmount;
     }
 
