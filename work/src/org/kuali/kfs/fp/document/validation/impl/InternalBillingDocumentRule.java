@@ -34,7 +34,7 @@ import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.ExceptionUtils;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -324,7 +324,7 @@ public class InternalBillingDocumentRule extends TransactionalDocumentRuleBase i
         String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
         String financialObjectCode = accountingLine.getFinancialObjectCode();
         String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
-        KualiDecimalMoney lineAmount = getGeneralLedgerPendingEntryAmountForAccountingLine(accountingLine);
+        KualiDecimal lineAmount = getGeneralLedgerPendingEntryAmountForAccountingLine(accountingLine);
         Integer fiscalYear = accountingLine.getPostingYear();
         String financialObjectTypeCode = accountingLine.getObjectTypeCode();
         String offsetDebitCreditCode = isDebit(accountingLine) ? Constants.GL_CREDIT_CODE : Constants.GL_DEBIT_CODE;
