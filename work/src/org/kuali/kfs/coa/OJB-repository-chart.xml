@@ -821,12 +821,12 @@
     <field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="financialDocumentTypeCode" column="FDOC_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="accountDelegateSystemId" column="ACCT_DLGT_UNVL_ID" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="finDocApprovalFromThisAmt" column="FDOC_APRV_FROM_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="finDocApprovalFromThisAmt" column="FDOC_APRV_FROM_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
 
     <field-descriptor name="accountsDelegatePrmrtIndicator" column="ACCT_DLGT_PRMRT_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="accountDelegateActiveIndicator" column="ACCT_DLGT_ACTV_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="accountDelegateStartDate" column="ACCT_DLGT_START_DT" jdbc-type="TIMESTAMP" />
-    <field-descriptor name="finDocApprovalToThisAmount" column="FDOC_APRV_TO_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="finDocApprovalToThisAmount" column="FDOC_APRV_TO_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
 
@@ -1224,11 +1224,11 @@
 <class-descriptor class="org.kuali.module.chart.bo.IndirectCostRecoveryThreshold" table="CA_ICR_THRESHOLD_T">
     <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="awardThresholdAmount" column="AWRD_THRESHOLD_AMT" jdbc-type="DECIMAL" primarykey="true" index="true" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="awardThresholdAmount" column="AWRD_THRESHOLD_AMT" jdbc-type="DECIMAL" primarykey="true" index="true" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="financialIcrSeriesIdentifier" column="FIN_SERIES_ID" jdbc-type="VARCHAR" />
-    <field-descriptor name="awardAccumulatedToDateDirectCostAmount" column="AWRD_ACCUMDCST_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="awardAccumulatedToDateDirectCostAmount" column="AWRD_ACCUMDCST_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <reference-descriptor name="chart" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="chartOfAccountsCode" />
     </reference-descriptor>
@@ -1493,8 +1493,8 @@
     <field-descriptor name="financialDocumentTypeCode" column="FDOC_TYP_CD" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="approvalFromThisAmount" column="FDOC_APRV_FROM_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="approvalToThisAmount" column="FDOC_APRV_TO_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="approvalFromThisAmount" column="FDOC_APRV_FROM_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="approvalToThisAmount" column="FDOC_APRV_TO_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="accountDelegatePrimaryRoutingCode" column="ACCT_DLGT_PRMRT_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="accountDelegateStartDate" column="ACCT_DLGT_START_DT" jdbc-type="DATE" />
 
@@ -1525,8 +1525,8 @@
     <field-descriptor name="financialDocumentTypeCode" column="FDOC_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="approvalFromThisAmount" column="FDOC_APRV_FROM_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
-    <field-descriptor name="approvalToThisAmount" column="FDOC_APRV_TO_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="approvalFromThisAmount" column="FDOC_APRV_FROM_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
+    <field-descriptor name="approvalToThisAmount" column="FDOC_APRV_TO_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="accountDelegatePrimaryRoutingCode" column="ACCT_DLGT_PRMRT_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="accountDelegateStartDate" column="ACCT_DLGT_START_DT" jdbc-type="DATE" />
     <reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
