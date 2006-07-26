@@ -22,8 +22,10 @@
  */
 package org.kuali.module.gl.service;
 
+import java.io.BufferedOutputStream;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -49,6 +51,22 @@ public interface OriginEntryService {
      * @return Iterator to all documents
      */
     public Iterator<OriginEntry> getDocumentsByGroup(OriginEntryGroup oeg);
+
+    /**
+     * Return all entries for a group sorted by account number for the error 
+     * 
+     * @param oeg
+     * @return
+     */
+    public Iterator<OriginEntry> getEntriesByGroupAccountOrder(OriginEntryGroup oeg);
+
+    /**
+     * Return all entries for the groups where the balance type is empty
+     * 
+     * @param groups
+     * @return
+     */
+    public Iterator<OriginEntry> getBadBalanceEntries(Collection groups);
 
     /**
      * Return all the entries in a specific group
@@ -106,9 +124,16 @@ public interface OriginEntryService {
     /**
      * get the summarized information of the entries that belong to the entry groups with the given group id list
      * 
-     * @param groupIdList the id of a origin entry group
-     * @param calculateTotals indicate if the subtotals and grand total need to be calculated
+     * @param groupIdList the origin entry groups
      * @return a set of summarized information of the entries within the specified group
      */
-    public LedgerEntryHolder getSummaryByGroupId(List groupIdList, boolean calculateTotals);
+    
+    public void flatFile(String filename, Integer groupId, BufferedOutputStream bw);
+    
+    public LedgerEntryHolder getSummaryByGroupId(Collection groupIdList);
+    
+    public Collection getMatchingEntriesByCollection(Map searchCriteria);
+    
+    public OriginEntry getExactMatchingEntry(Integer entryId);
+    
 }

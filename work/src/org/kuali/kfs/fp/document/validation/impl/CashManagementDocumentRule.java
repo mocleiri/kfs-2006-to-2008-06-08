@@ -26,13 +26,17 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.Constants;
+import org.kuali.Constants.DocumentStatusCodes.CashReceipt;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.Document;
-import org.kuali.core.rule.DocumentRuleBase;
+import org.kuali.core.document.FinancialDocument;
+import org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
+import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
@@ -42,13 +46,14 @@ import org.kuali.module.financial.bo.Deposit;
 import org.kuali.module.financial.bo.DepositCashReceiptControl;
 import org.kuali.module.financial.document.CashManagementDocument;
 import org.kuali.module.financial.document.CashReceiptDocument;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
  * Business rule(s) applicable to Cash Management Document.
  * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class CashManagementDocumentRule extends DocumentRuleBase {
+public class CashManagementDocumentRule extends FinancialDocumentRuleBase implements GenerateGeneralLedgerDocumentPendingEntriesRule {
     private static final Logger LOG = Logger.getLogger(CashManagementDocumentRule.class);
 
     /**
@@ -58,6 +63,7 @@ public class CashManagementDocumentRule extends DocumentRuleBase {
      * 
      * @see org.kuali.core.rule.DocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.Document)
      */
+    @Override
     protected boolean processCustomSaveDocumentBusinessRules(Document document) {
         boolean isValid = super.processCustomSaveDocumentBusinessRules(document);
 
@@ -93,17 +99,24 @@ public class CashManagementDocumentRule extends DocumentRuleBase {
 
     /**
      * This method checks to make sure that the cash drawer is closed for the associated verification unit, for post initiation
-     * saves.
+     * saves for CashManagementDocuments which don't have Final
      * 
      * @param cmd
      */
     private void verifyCashDrawerForVerificationUnitIsOpenForPostInitiationSaves(CashManagementDocument cmd) {
         if (cmd.getDocumentHeader() != null && cmd.getDocumentHeader().getWorkflowDocument() != null && cmd.getDocumentHeader().getWorkflowDocument().getRouteHeader() != null) {
             if (cmd.getDocumentHeader().getWorkflowDocument().stateIsSaved()) {
-                // now verify that the associated cash drawer is closed
+                // now verify that the associated cash drawer is in the appropriate state
                 CashDrawer cd = SpringServiceLocator.getCashDrawerService().getByWorkgroupName(cmd.getWorkgroupName(), true);
-                if (!cd.isOpen()) {
-                    throw new IllegalStateException("The cash drawer for verification unit \"" + cd.getWorkgroupName() + "\" is closed.  It should be open when a cash management document for that verification unit is open and being saved.");
+                if (!cmd.hasFinalDeposit()) {
+                    if (!cd.isOpen()) {
+                        throw new IllegalStateException("The cash drawer for verification unit \"" + cd.getWorkgroupName() + "\" is closed.  It should be open when a cash management document for that verification unit is open and being saved.");
+                    }
+                }
+                else {
+                    if (!cd.isLocked()) {
+                        throw new IllegalStateException("The cash drawer for verification unit \"" + cd.getWorkgroupName() + "\" is closed.  It should be open when a cash management document for that verification unit is open and being saved.");
+                    }
                 }
             }
         }
@@ -125,8 +138,8 @@ public class CashManagementDocumentRule extends DocumentRuleBase {
         for (Iterator deposits = cmd.getDeposits().iterator(); deposits.hasNext(); index++) {
             Deposit deposit = (Deposit) deposits.next();
 
-            isValid &= validateDeposit(deposit, isInitiated);
             GlobalVariables.getErrorMap().addToErrorPath(PropertyConstants.DEPOSIT + "[" + index + "]");
+            isValid &= validateDeposit(deposit, isInitiated);
             GlobalVariables.getErrorMap().removeFromErrorPath(PropertyConstants.DEPOSIT + "[" + index + "]");
         }
 
@@ -156,8 +169,8 @@ public class CashManagementDocumentRule extends DocumentRuleBase {
     }
 
 
-    private static final List INITIATED_STATES = Arrays.asList(new String[] { Constants.DocumentStatusCodes.CashReceipt.VERIFIED });
-    private static final List UNINITIATED_STATES = Arrays.asList(new String[] { Constants.DocumentStatusCodes.CashReceipt.INTERIM, Constants.DocumentStatusCodes.CashReceipt.DEPOSITED });
+    private static final List INITIATED_STATES = Arrays.asList(new String[] { CashReceipt.VERIFIED });
+    private static final List UNINITIATED_STATES = Arrays.asList(new String[] { CashReceipt.INTERIM, CashReceipt.FINAL });
 
     /**
      * Verifies that all CashReceipts associated with the given document are of an appropriate status for the given
@@ -197,11 +210,79 @@ public class CashManagementDocumentRule extends DocumentRuleBase {
         // validate foreign-key relationships
         deposit.refresh();
 
-        BankAccount bankAccount = deposit.getBankAccount();
-        if (ObjectUtils.isNull(bankAccount)) {
-            GlobalVariables.getErrorMap().put(PropertyConstants.DEPOSIT_BANK_ACCOUNT_NUMBER, KeyConstants.ERROR_EXISTENCE, "Bank Account");
+        // only check for BankAccount if both bankCode and bankAccountNumber are present
+        if (StringUtils.isNotBlank(deposit.getDepositBankCode()) && StringUtils.isNotBlank(deposit.getDepositBankAccountNumber())) {
+            BankAccount bankAccount = deposit.getBankAccount();
+            if (ObjectUtils.isNull(bankAccount)) {
+                GlobalVariables.getErrorMap().putError(PropertyConstants.DEPOSIT_BANK_ACCOUNT_NUMBER, KeyConstants.ERROR_EXISTENCE, "Bank Account");
+            }
         }
 
         return GlobalVariables.getErrorMap().isEmpty();
+    }
+
+    /**
+     * Generates bank offset GLPEs for deposits, if enabled.
+     *
+     * @see org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule#processGenerateDocumentGeneralLedgerPendingEntries(org.kuali.core.document.FinancialDocument,org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
+     */
+    public boolean processGenerateDocumentGeneralLedgerPendingEntries(FinancialDocument financialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
+        boolean success = true;
+        final CashManagementDocument cashManagementDocument = ((CashManagementDocument) financialDocument);
+        if (cashManagementDocument.isBankCashOffsetEnabled()) {
+            Integer universityFiscalYear = getUniversityFiscalYear();
+            int interimDepositNumber = 1;
+            for (Iterator iterator = cashManagementDocument.getDeposits().iterator(); iterator.hasNext();) {
+                // todo: getDeposits() should return List<Deposit> not List
+                Deposit deposit = (Deposit) iterator.next();
+                deposit.refreshReferenceObject(PropertyConstants.BANK_ACCOUNT);
+
+                GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
+                if (!TransactionalDocumentRuleUtil.populateBankOffsetGeneralLedgerPendingEntry(deposit.getBankAccount(), deposit.getDepositAmount(), cashManagementDocument, universityFiscalYear, sequenceHelper, bankOffsetEntry, Constants.CASH_MANAGEMENT_DEPOSIT_ERRORS)) {
+                    success = false;
+                    continue;  // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at all.
+                }
+                bankOffsetEntry.setTransactionLedgerEntryDescription(createDescription(deposit, interimDepositNumber++));
+                cashManagementDocument.getGeneralLedgerPendingEntries().add(bankOffsetEntry);
+                sequenceHelper.increment();
+
+                GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(bankOffsetEntry);
+                success &= populateOffsetGeneralLedgerPendingEntry(universityFiscalYear, bankOffsetEntry, sequenceHelper, offsetEntry);
+                cashManagementDocument.getGeneralLedgerPendingEntries().add(offsetEntry);
+                sequenceHelper.increment();
+            }
+        }
+        return success;
+    }
+
+    /**
+     * @param deposit
+     * @param interimDepositNumber
+     * @return the description for the given deposit's GLPE bank offset
+     */
+    private static String createDescription(Deposit deposit, int interimDepositNumber) {
+        String descriptionKey;
+        if (Constants.DepositConstants.DEPOSIT_TYPE_FINAL.equals(deposit.getDepositTypeCode())) {
+            descriptionKey = KeyConstants.CashManagement.DESCRIPTION_GLPE_BANK_OFFSET_FINAL;
+        }
+        else {
+            assert Constants.DepositConstants.DEPOSIT_TYPE_INTERIM.equals(deposit.getDepositTypeCode()) : deposit.getDepositTypeCode();
+            descriptionKey = KeyConstants.CashManagement.DESCRIPTION_GLPE_BANK_OFFSET_INTERIM;
+        }
+        return TransactionalDocumentRuleUtil.formatProperty(descriptionKey, interimDepositNumber);
+    }
+
+    /**
+     * Gets the fiscal year for the GLPEs generated by this document.
+     * This works the same way as in TransactionalDocumentBase.  The property is down in TransactionalDocument because no FinancialDocument
+     * (currently only CashManagementDocument) allows the user to override it.  So, that logic is duplicated here.  A comment in
+     * TransactionalDocumentBase says that this implementation is a hack right now because it's intended to be set by the
+     * <code>{@link org.kuali.module.chart.service.AccountingPeriodService}</code>, which suggests to me that pulling that property
+     * up to FinancialDocument is preferable to duplicating this logic here.
+     * 
+     * @return the fiscal year for the GLPEs generated by this document
+     */
+    private Integer getUniversityFiscalYear() {
+        return SpringServiceLocator.getDateTimeService().getCurrentFiscalYear();
     }
 }

@@ -26,7 +26,7 @@ package org.kuali.module.financial.rules;
 /**
  * Holds constants for disbursement voucher and payee documents.
  * 
- * @author Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public interface DisbursementVoucherRuleConstants {
 
@@ -102,6 +102,7 @@ public interface DisbursementVoucherRuleConstants {
     public static String PERFORM_PREPAID_EMPL_PARM_NM = "PERFORM_PREPAID_ACTIVE_EMPLOPYEE_IND";
     public static String PERFORM_EMPL_OUTSIDE_PAYROLL_PARM_NM = "RFORM_EMPL_PAID_OUTSIDE_PAYROLL_IND";
     public static String MOVING_PAY_REASONS_PARM_NM = "MOVING_PAYMENT_REASONS";
+    public static String SWITCH_DEBIT_CREDIT_ACCOUNT_TYPES_PARM_NM = "SWITCH_DEBIT_CREDIT_ACCOUNT_TYPES";
 
     public static String TAX_TYPE_SSN = "1";
     public static String TAX_TYPE_FEIN = "0";
