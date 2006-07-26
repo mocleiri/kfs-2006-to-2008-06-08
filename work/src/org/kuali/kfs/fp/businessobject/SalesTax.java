@@ -29,7 +29,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 
@@ -43,8 +43,8 @@ public class SalesTax extends BusinessObjectBase {
     private Integer financialDocumentLineNumber;
     private String chartOfAccountsCode;
     private String accountNumber;
-    private KualiDecimalMoney financialDocumentGrossSalesAmount;
-    private KualiDecimalMoney financialDocumentTaxableSalesAmount;
+    private KualiDecimal financialDocumentGrossSalesAmount;
+    private KualiDecimal financialDocumentTaxableSalesAmount;
     private Date financialDocumentSaleDate;
 
     private Account account;
@@ -168,7 +168,7 @@ public class SalesTax extends BusinessObjectBase {
      * @return - Returns the financialDocumentGrossSalesAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentGrossSalesAmount() {
+    public KualiDecimal getFinancialDocumentGrossSalesAmount() {
         return financialDocumentGrossSalesAmount;
     }
 
@@ -178,7 +178,7 @@ public class SalesTax extends BusinessObjectBase {
      * @param - financialDocumentGrossSalesAmount The financialDocumentGrossSalesAmount to set.
      * 
      */
-    public void setFinancialDocumentGrossSalesAmount(KualiDecimalMoney financialDocumentGrossSalesAmount) {
+    public void setFinancialDocumentGrossSalesAmount(KualiDecimal financialDocumentGrossSalesAmount) {
         this.financialDocumentGrossSalesAmount = financialDocumentGrossSalesAmount;
     }
 
@@ -189,7 +189,7 @@ public class SalesTax extends BusinessObjectBase {
      * @return - Returns the financialDocumentTaxableSalesAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentTaxableSalesAmount() {
+    public KualiDecimal getFinancialDocumentTaxableSalesAmount() {
         return financialDocumentTaxableSalesAmount;
     }
 
@@ -199,7 +199,7 @@ public class SalesTax extends BusinessObjectBase {
      * @param - financialDocumentTaxableSalesAmount The financialDocumentTaxableSalesAmount to set.
      * 
      */
-    public void setFinancialDocumentTaxableSalesAmount(KualiDecimalMoney financialDocumentTaxableSalesAmount) {
+    public void setFinancialDocumentTaxableSalesAmount(KualiDecimal financialDocumentTaxableSalesAmount) {
         this.financialDocumentTaxableSalesAmount = financialDocumentTaxableSalesAmount;
     }
 

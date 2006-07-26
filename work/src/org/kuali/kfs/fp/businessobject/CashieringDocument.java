@@ -28,7 +28,7 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -38,14 +38,14 @@ public class CashieringDocument extends BusinessObjectBase {
     private String financialDocumentNumber;
     private String depositFinancialSystemOriginationCode;
     private String financialDocumentDepositNumber;
-    private KualiDecimalMoney financialDocumentCheckAmount;
-    private KualiDecimalMoney financialDocumentAdvanceDepositAmount;
-    private KualiDecimalMoney financialDocumentRevolvingFundAmount;
+    private KualiDecimal financialDocumentCheckAmount;
+    private KualiDecimal financialDocumentAdvanceDepositAmount;
+    private KualiDecimal financialDocumentRevolvingFundAmount;
     private Integer financialDocumentNextCreditCardLineNumber;
-    private KualiDecimalMoney financialDocumentCashAmount;
-    private KualiDecimalMoney financialDocumentCreditCardAmount;
-    private KualiDecimalMoney financialDocumentTotalCoinAmount;
-    private KualiDecimalMoney financialDocumentChangeOutAmount;
+    private KualiDecimal financialDocumentCashAmount;
+    private KualiDecimal financialDocumentCreditCardAmount;
+    private KualiDecimal financialDocumentTotalCoinAmount;
+    private KualiDecimal financialDocumentChangeOutAmount;
     private Integer nextCheckLineNumber;
     private Integer nextAdvanceDepositLineNumber;
     private Integer nextRevolvingFundLineNumber;
@@ -126,7 +126,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @return - Returns the financialDocumentCheckAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentCheckAmount() {
+    public KualiDecimal getFinancialDocumentCheckAmount() {
         return financialDocumentCheckAmount;
     }
 
@@ -136,7 +136,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @param - financialDocumentCheckAmount The financialDocumentCheckAmount to set.
      * 
      */
-    public void setFinancialDocumentCheckAmount(KualiDecimalMoney financialDocumentCheckAmount) {
+    public void setFinancialDocumentCheckAmount(KualiDecimal financialDocumentCheckAmount) {
         this.financialDocumentCheckAmount = financialDocumentCheckAmount;
     }
 
@@ -147,7 +147,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @return - Returns the financialDocumentAdvanceDepositAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentAdvanceDepositAmount() {
+    public KualiDecimal getFinancialDocumentAdvanceDepositAmount() {
         return financialDocumentAdvanceDepositAmount;
     }
 
@@ -157,7 +157,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @param - financialDocumentAdvanceDepositAmount The financialDocumentAdvanceDepositAmount to set.
      * 
      */
-    public void setFinancialDocumentAdvanceDepositAmount(KualiDecimalMoney financialDocumentAdvanceDepositAmount) {
+    public void setFinancialDocumentAdvanceDepositAmount(KualiDecimal financialDocumentAdvanceDepositAmount) {
         this.financialDocumentAdvanceDepositAmount = financialDocumentAdvanceDepositAmount;
     }
 
@@ -168,7 +168,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @return - Returns the financialDocumentRevolvingFundAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentRevolvingFundAmount() {
+    public KualiDecimal getFinancialDocumentRevolvingFundAmount() {
         return financialDocumentRevolvingFundAmount;
     }
 
@@ -178,7 +178,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @param - financialDocumentRevolvingFundAmount The financialDocumentRevolvingFundAmount to set.
      * 
      */
-    public void setFinancialDocumentRevolvingFundAmount(KualiDecimalMoney financialDocumentRevolvingFundAmount) {
+    public void setFinancialDocumentRevolvingFundAmount(KualiDecimal financialDocumentRevolvingFundAmount) {
         this.financialDocumentRevolvingFundAmount = financialDocumentRevolvingFundAmount;
     }
 
@@ -210,7 +210,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @return - Returns the financialDocumentCashAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentCashAmount() {
+    public KualiDecimal getFinancialDocumentCashAmount() {
         return financialDocumentCashAmount;
     }
 
@@ -220,7 +220,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @param - financialDocumentCashAmount The financialDocumentCashAmount to set.
      * 
      */
-    public void setFinancialDocumentCashAmount(KualiDecimalMoney financialDocumentCashAmount) {
+    public void setFinancialDocumentCashAmount(KualiDecimal financialDocumentCashAmount) {
         this.financialDocumentCashAmount = financialDocumentCashAmount;
     }
 
@@ -231,7 +231,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @return - Returns the financialDocumentCreditCardAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentCreditCardAmount() {
+    public KualiDecimal getFinancialDocumentCreditCardAmount() {
         return financialDocumentCreditCardAmount;
     }
 
@@ -241,7 +241,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @param - financialDocumentCreditCardAmount The financialDocumentCreditCardAmount to set.
      * 
      */
-    public void setFinancialDocumentCreditCardAmount(KualiDecimalMoney financialDocumentCreditCardAmount) {
+    public void setFinancialDocumentCreditCardAmount(KualiDecimal financialDocumentCreditCardAmount) {
         this.financialDocumentCreditCardAmount = financialDocumentCreditCardAmount;
     }
 
@@ -252,7 +252,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @return - Returns the financialDocumentTotalCoinAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentTotalCoinAmount() {
+    public KualiDecimal getFinancialDocumentTotalCoinAmount() {
         return financialDocumentTotalCoinAmount;
     }
 
@@ -262,7 +262,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @param - financialDocumentTotalCoinAmount The financialDocumentTotalCoinAmount to set.
      * 
      */
-    public void setFinancialDocumentTotalCoinAmount(KualiDecimalMoney financialDocumentTotalCoinAmount) {
+    public void setFinancialDocumentTotalCoinAmount(KualiDecimal financialDocumentTotalCoinAmount) {
         this.financialDocumentTotalCoinAmount = financialDocumentTotalCoinAmount;
     }
 
@@ -273,7 +273,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @return - Returns the financialDocumentChangeOutAmount
      * 
      */
-    public KualiDecimalMoney getFinancialDocumentChangeOutAmount() {
+    public KualiDecimal getFinancialDocumentChangeOutAmount() {
         return financialDocumentChangeOutAmount;
     }
 
@@ -283,7 +283,7 @@ public class CashieringDocument extends BusinessObjectBase {
      * @param - financialDocumentChangeOutAmount The financialDocumentChangeOutAmount to set.
      * 
      */
-    public void setFinancialDocumentChangeOutAmount(KualiDecimalMoney financialDocumentChangeOutAmount) {
+    public void setFinancialDocumentChangeOutAmount(KualiDecimal financialDocumentChangeOutAmount) {
         this.financialDocumentChangeOutAmount = financialDocumentChangeOutAmount;
     }
 

@@ -28,7 +28,7 @@ package org.kuali.module.cg.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.kra.bo.AgencyExtension;
 
 /**
@@ -41,7 +41,7 @@ public class Agency extends BusinessObjectBase {
     private String fullName;
     private String agencyTypeCode;
     private String reportsToAgencyNumber;
-    private KualiDecimalMoney indirectAmount;
+    private KualiDecimal indirectAmount;
     private boolean historicalIndicator;
     private boolean inStateIndicator;
     private Agency reportsToAgency;
@@ -157,7 +157,7 @@ public class Agency extends BusinessObjectBase {
      * @return - Returns the indirectAmount
      * 
      */
-    public KualiDecimalMoney getIndirectAmount() {
+    public KualiDecimal getIndirectAmount() {
         return indirectAmount;
     }
 
@@ -167,7 +167,7 @@ public class Agency extends BusinessObjectBase {
      * @param - indirectAmount The indirectAmount to set.
      * 
      */
-    public void setIndirectAmount(KualiDecimalMoney indirectAmount) {
+    public void setIndirectAmount(KualiDecimal indirectAmount) {
         this.indirectAmount = indirectAmount;
     }
 

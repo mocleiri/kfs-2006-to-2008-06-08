@@ -26,7 +26,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author jsissom
@@ -39,7 +39,7 @@ public class Batch extends BusinessObjectBase {
     private Date batchDate;
     private String batchStatus;
     private Integer totalRecords;
-    private KualiDecimalMoney totalAmount;
+    private KualiDecimal totalAmount;
     private String chartOfAccountsCode;
     private String organizationCode;
     private Date transmissionDate;
@@ -169,11 +169,11 @@ public class Batch extends BusinessObjectBase {
         this.processDate = processDate;
     }
 
-    public KualiDecimalMoney getTotalAmount() {
+    public KualiDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(KualiDecimalMoney totalAmount) {
+    public void setTotalAmount(KualiDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 

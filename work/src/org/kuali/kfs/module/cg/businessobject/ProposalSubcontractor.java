@@ -28,7 +28,7 @@ package org.kuali.module.cg.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -38,7 +38,7 @@ public class ProposalSubcontractor extends BusinessObjectBase {
     private String proposalSubcontractorNumber;
     private Long proposalNumber;
     private String subcontractorNumber;
-    private KualiDecimalMoney proposalSubcontractorAmount;
+    private KualiDecimal proposalSubcontractorAmount;
 
     private Subcontractor subcontractor;
 
@@ -118,7 +118,7 @@ public class ProposalSubcontractor extends BusinessObjectBase {
      * @return - Returns the proposalSubcontractorAmount
      * 
      */
-    public KualiDecimalMoney getProposalSubcontractorAmount() {
+    public KualiDecimal getProposalSubcontractorAmount() {
         return proposalSubcontractorAmount;
     }
 
@@ -128,7 +128,7 @@ public class ProposalSubcontractor extends BusinessObjectBase {
      * @param - proposalSubcontractorAmount The proposalSubcontractorAmount to set.
      * 
      */
-    public void setProposalSubcontractorAmount(KualiDecimalMoney proposalSubcontractorAmount) {
+    public void setProposalSubcontractorAmount(KualiDecimal proposalSubcontractorAmount) {
         this.proposalSubcontractorAmount = proposalSubcontractorAmount;
     }
 

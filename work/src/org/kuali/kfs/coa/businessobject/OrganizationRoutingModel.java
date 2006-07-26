@@ -29,7 +29,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -41,8 +41,8 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
     private String organizationRoutingModelName;
     private String accountDelegateUniversalId;
     private String financialDocumentTypeCode;
-    private KualiDecimalMoney approvalFromThisAmount;
-    private KualiDecimalMoney approvalToThisAmount;
+    private KualiDecimal approvalFromThisAmount;
+    private KualiDecimal approvalToThisAmount;
     private String accountDelegatePrimaryRoutingCode;
     private Date accountDelegateStartDate;
 
@@ -166,7 +166,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
      * @return - Returns the approvalFromThisAmount
      * 
      */
-    public KualiDecimalMoney getApprovalFromThisAmount() {
+    public KualiDecimal getApprovalFromThisAmount() {
         return approvalFromThisAmount;
     }
 
@@ -176,7 +176,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
      * @param - approvalFromThisAmount The approvalFromThisAmount to set.
      * 
      */
-    public void setApprovalFromThisAmount(KualiDecimalMoney approvalFromThisAmount) {
+    public void setApprovalFromThisAmount(KualiDecimal approvalFromThisAmount) {
         this.approvalFromThisAmount = approvalFromThisAmount;
     }
 
@@ -187,7 +187,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
      * @return - Returns the approvalToThisAmount
      * 
      */
-    public KualiDecimalMoney getApprovalToThisAmount() {
+    public KualiDecimal getApprovalToThisAmount() {
         return approvalToThisAmount;
     }
 
@@ -197,7 +197,7 @@ public class OrganizationRoutingModel extends BusinessObjectBase {
      * @param - approvalToThisAmount The approvalToThisAmount to set.
      * 
      */
-    public void setApprovalToThisAmount(KualiDecimalMoney approvalToThisAmount) {
+    public void setApprovalToThisAmount(KualiDecimal approvalToThisAmount) {
         this.approvalToThisAmount = approvalToThisAmount;
     }
 
