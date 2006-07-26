@@ -26,7 +26,7 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.Options;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 
 /**
@@ -47,7 +47,7 @@ public class ExpenditureTransaction extends BusinessObjectBase {
     private String universityFiscalAccountingPeriod;
     private String projectCode;
     private String organizationReferenceId;
-    private KualiDecimalMoney accountObjectDirectCostAmount;
+    private KualiDecimal accountObjectDirectCostAmount;
 
     private Account account;
     private Options option;
@@ -71,7 +71,7 @@ public class ExpenditureTransaction extends BusinessObjectBase {
         universityFiscalAccountingPeriod = t.getUniversityFiscalPeriodCode();
         projectCode = t.getProjectCode();
         organizationReferenceId = t.getOrganizationReferenceId();
-        accountObjectDirectCostAmount = new KualiDecimalMoney("0");
+        accountObjectDirectCostAmount = new KualiDecimal("0");
     }
 
     protected LinkedHashMap toStringMapper() {
@@ -114,11 +114,11 @@ public class ExpenditureTransaction extends BusinessObjectBase {
         this.accountNumber = accountNumber;
     }
 
-    public KualiDecimalMoney getAccountObjectDirectCostAmount() {
+    public KualiDecimal getAccountObjectDirectCostAmount() {
         return accountObjectDirectCostAmount;
     }
 
-    public void setAccountObjectDirectCostAmount(KualiDecimalMoney accountObjectDirectCostAmount) {
+    public void setAccountObjectDirectCostAmount(KualiDecimal accountObjectDirectCostAmount) {
         this.accountObjectDirectCostAmount = accountObjectDirectCostAmount;
     }
 

@@ -32,7 +32,7 @@ import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
@@ -56,8 +56,8 @@ import org.kuali.module.financial.document.VoucherDocument;
  */
 public class VoucherForm extends KualiTransactionalDocumentFormBase {
     private List accountingPeriods;
-    private KualiDecimalMoney newSourceLineDebit;
-    private KualiDecimalMoney newSourceLineCredit;
+    private KualiDecimal newSourceLineDebit;
+    private KualiDecimal newSourceLineCredit;
     private List voucherLineHelpers;
     protected String selectedAccountingPeriod;
 
@@ -66,8 +66,8 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      */
     public VoucherForm() {
         selectedAccountingPeriod = "";
-        setNewSourceLineCredit(new KualiDecimalMoney(0));
-        setNewSourceLineDebit(new KualiDecimalMoney(0));
+        setNewSourceLineCredit(new KualiDecimal(0));
+        setNewSourceLineDebit(new KualiDecimal(0));
         setVoucherLineHelpers(new ArrayList());
     }
 
@@ -225,9 +225,9 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
     /**
      * This method retrieves the credit amount of the new accounting line that was added.
      * 
-     * @return KualiDecimalMoney
+     * @return KualiDecimal
      */
-    public KualiDecimalMoney getNewSourceLineCredit() {
+    public KualiDecimal getNewSourceLineCredit() {
         return newSourceLineCredit;
     }
 
@@ -236,16 +236,16 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      * 
      * @param newSourceLineCredit
      */
-    public void setNewSourceLineCredit(KualiDecimalMoney newSourceLineCredit) {
+    public void setNewSourceLineCredit(KualiDecimal newSourceLineCredit) {
         this.newSourceLineCredit = newSourceLineCredit;
     }
 
     /**
      * This method retrieves the debit amount of the new accounting line that was added.
      * 
-     * @return KualiDecimalMoney
+     * @return KualiDecimal
      */
-    public KualiDecimalMoney getNewSourceLineDebit() {
+    public KualiDecimal getNewSourceLineDebit() {
         return newSourceLineDebit;
     }
 
@@ -254,7 +254,7 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      * 
      * @param newSourceLineDebit
      */
-    public void setNewSourceLineDebit(KualiDecimalMoney newSourceLineDebit) {
+    public void setNewSourceLineDebit(KualiDecimal newSourceLineDebit) {
         this.newSourceLineDebit = newSourceLineDebit;
     }
 
@@ -378,7 +378,7 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      * @param index if -1, then its a new line, if not -1 then it's an existing line
      * @return boolean True if the processing was successful, false otherwise.
      */
-    protected boolean processDebitAndCreditForSourceLine(SourceAccountingLine sourceLine, KualiDecimalMoney debitAmount, KualiDecimalMoney creditAmount, int index) {
+    protected boolean processDebitAndCreditForSourceLine(SourceAccountingLine sourceLine, KualiDecimal debitAmount, KualiDecimal creditAmount, int index) {
         // check to make sure that the
         if (!validateCreditAndDebitAmounts(debitAmount, creditAmount, index)) {
             return false;
@@ -386,16 +386,16 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
 
         // check to see which amount field has a value - credit or debit field?
         // and set the values of the appropriate fields
-        KualiDecimalMoney ZERO = new KualiDecimalMoney("0.00");
+        KualiDecimal ZERO = new KualiDecimal("0.00");
         if (debitAmount != null && debitAmount.compareTo(ZERO) != 0) { // a value entered into the debit field? if so it's a debit
             // create a new instance w/out reference
-            KualiDecimalMoney tmpDebitAmount = new KualiDecimalMoney(debitAmount.toString());
+            KualiDecimal tmpDebitAmount = new KualiDecimal(debitAmount.toString());
             sourceLine.setDebitCreditCode(Constants.GL_DEBIT_CODE);
             sourceLine.setAmount(tmpDebitAmount);
         }
         else if (creditAmount != null && !creditAmount.equals(ZERO)) { // assume credit, if both are set the br eval framework will
             // catch it
-            KualiDecimalMoney tmpCreditAmount = new KualiDecimalMoney(creditAmount.toString());
+            KualiDecimal tmpCreditAmount = new KualiDecimal(creditAmount.toString());
             sourceLine.setDebitCreditCode(Constants.GL_CREDIT_CODE);
             sourceLine.setAmount(tmpCreditAmount);
         }
@@ -415,8 +415,8 @@ public class VoucherForm extends KualiTransactionalDocumentFormBase {
      * @param index if -1, it's a new line, if not -1, then its an existing line
      * @return boolean False if both the credit and debit fields have a value, true otherwise.
      */
-    protected boolean validateCreditAndDebitAmounts(KualiDecimalMoney debitAmount, KualiDecimalMoney creditAmount, int index) {
-        KualiDecimalMoney ZERO = new KualiDecimalMoney(0);
+    protected boolean validateCreditAndDebitAmounts(KualiDecimal debitAmount, KualiDecimal creditAmount, int index) {
+        KualiDecimal ZERO = new KualiDecimal(0);
         if (null != creditAmount && null != debitAmount) {
             if (ZERO.compareTo(creditAmount) != 0 && ZERO.compareTo(debitAmount) != 0) { // there's a value in both fields
                 if (Constants.NEGATIVE_ONE == index) { // it's a new line

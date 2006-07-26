@@ -29,7 +29,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * This class represents the CreditCardDetail business object, which is a single record on the Credit Card Receipts Document
@@ -46,7 +46,7 @@ public class CreditCardDetail extends BusinessObjectBase {
     private String financialDocumentCreditCardVendorNumber;
     private Date creditCardDepositDate;
     private String creditCardDepositReferenceNumber;
-    private KualiDecimalMoney creditCardAdvanceDepositAmount;
+    private KualiDecimal creditCardAdvanceDepositAmount;
 
     private CreditCardType financialDocumentCreditCardType;
     private CreditCardVendor financialDocumentCreditCardVendor;
@@ -57,7 +57,7 @@ public class CreditCardDetail extends BusinessObjectBase {
     public CreditCardDetail() {
         super();
         this.financialDocumentLineNumber = new Integer(1);
-        this.creditCardAdvanceDepositAmount = new KualiDecimalMoney(0);
+        this.creditCardAdvanceDepositAmount = new KualiDecimal(0);
     }
 
     /**
@@ -234,7 +234,7 @@ public class CreditCardDetail extends BusinessObjectBase {
      * @return - Returns the creditCardAdvanceDepositAmount
      * 
      */
-    public KualiDecimalMoney getCreditCardAdvanceDepositAmount() {
+    public KualiDecimal getCreditCardAdvanceDepositAmount() {
         return creditCardAdvanceDepositAmount;
     }
 
@@ -244,7 +244,7 @@ public class CreditCardDetail extends BusinessObjectBase {
      * @param creditCardAdvanceDepositAmount The creditCardAdvanceDepositAmount to set.
      * 
      */
-    public void setCreditCardAdvanceDepositAmount(KualiDecimalMoney creditCardAdvanceDepositAmount) {
+    public void setCreditCardAdvanceDepositAmount(KualiDecimal creditCardAdvanceDepositAmount) {
         this.creditCardAdvanceDepositAmount = creditCardAdvanceDepositAmount;
     }
 

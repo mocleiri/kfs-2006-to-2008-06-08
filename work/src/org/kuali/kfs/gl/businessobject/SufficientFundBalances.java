@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -47,9 +47,9 @@ public class SufficientFundBalances extends BusinessObjectBase {
     private String accountNumber;
     private String financialObjectCode;
     private String accountSufficientFundsCode;
-    private KualiDecimalMoney currentBudgetBalanceAmount;
-    private KualiDecimalMoney accountActualExpenditureAmt;
-    private KualiDecimalMoney accountEncumbranceAmount;
+    private KualiDecimal currentBudgetBalanceAmount;
+    private KualiDecimal accountActualExpenditureAmt;
+    private KualiDecimal accountEncumbranceAmount;
     private Date transactionDateTimeStamp;
     private ObjectCode objectCode;
     private Chart chart;
@@ -81,9 +81,9 @@ public class SufficientFundBalances extends BusinessObjectBase {
         setAccountNumber(line.substring(6, 13).trim());
         setFinancialObjectCode(line.substring(13, 17).trim());
         setAccountSufficientFundsCode(line.substring(17, 24).trim());
-        setCurrentBudgetBalanceAmount(new KualiDecimalMoney(line.substring(24, 41).trim()));
-        setAccountActualExpenditureAmt(new KualiDecimalMoney(line.substring(41, 58).trim()));
-        setAccountEncumbranceAmount(new KualiDecimalMoney(line.substring(58, 75).trim()));
+        setCurrentBudgetBalanceAmount(new KualiDecimal(line.substring(24, 41).trim()));
+        setAccountActualExpenditureAmt(new KualiDecimal(line.substring(41, 58).trim()));
+        setAccountEncumbranceAmount(new KualiDecimal(line.substring(58, 75).trim()));
         setTransactionDateTimeStamp(parseDate(line.substring(75, 85), true));
     }
 
@@ -288,7 +288,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
      * @return - Returns the currentBudgetBalanceAmount
      * 
      */
-    public KualiDecimalMoney getCurrentBudgetBalanceAmount() {
+    public KualiDecimal getCurrentBudgetBalanceAmount() {
         return currentBudgetBalanceAmount;
     }
 
@@ -298,7 +298,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
      * @param - currentBudgetBalanceAmount The currentBudgetBalanceAmount to set.
      * 
      */
-    public void setCurrentBudgetBalanceAmount(KualiDecimalMoney currentBudgetBalanceAmount) {
+    public void setCurrentBudgetBalanceAmount(KualiDecimal currentBudgetBalanceAmount) {
         this.currentBudgetBalanceAmount = currentBudgetBalanceAmount;
     }
 
@@ -309,7 +309,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
      * @return - Returns the accountActualExpenditureAmt
      * 
      */
-    public KualiDecimalMoney getAccountActualExpenditureAmt() {
+    public KualiDecimal getAccountActualExpenditureAmt() {
         return accountActualExpenditureAmt;
     }
 
@@ -319,7 +319,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
      * @param - accountActualExpenditureAmt The accountActualExpenditureAmt to set.
      * 
      */
-    public void setAccountActualExpenditureAmt(KualiDecimalMoney accountActualExpenditureAmt) {
+    public void setAccountActualExpenditureAmt(KualiDecimal accountActualExpenditureAmt) {
         this.accountActualExpenditureAmt = accountActualExpenditureAmt;
     }
 
@@ -330,7 +330,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
      * @return - Returns the accountEncumbranceAmount
      * 
      */
-    public KualiDecimalMoney getAccountEncumbranceAmount() {
+    public KualiDecimal getAccountEncumbranceAmount() {
         return accountEncumbranceAmount;
     }
 
@@ -340,7 +340,7 @@ public class SufficientFundBalances extends BusinessObjectBase {
      * @param - accountEncumbranceAmount The accountEncumbranceAmount to set.
      * 
      */
-    public void setAccountEncumbranceAmount(KualiDecimalMoney accountEncumbranceAmount) {
+    public void setAccountEncumbranceAmount(KualiDecimal accountEncumbranceAmount) {
         this.accountEncumbranceAmount = accountEncumbranceAmount;
     }
 

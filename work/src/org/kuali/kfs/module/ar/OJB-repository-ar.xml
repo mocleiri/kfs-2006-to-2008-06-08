@@ -14,7 +14,7 @@
     <field-descriptor name="organizationRemitToStateCode" column="ORG_REMIT_ST_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="organizationRemitToZipCode" column="ORG_REMIT_ZIP_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="organizationLateFeeIndicator" column="ORG_LATE_FEE_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
-    <field-descriptor name="orgLatePaymentChargeAmt" column="ORG_LTPMT_CHRG_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalMoneyFieldConversion" />
+    <field-descriptor name="orgLatePaymentChargeAmt" column="ORG_LTPMT_CHRG_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="acctReceivableAutoPayInd" column="AR_AUTO_PAY_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="organizationPhoneNumber" column="ORG_PHONE_NBR" jdbc-type="VARCHAR" />
     <field-descriptor name="organization800PhoneNumber" column="ORG_800_PHONE_NBR" jdbc-type="VARCHAR" />
