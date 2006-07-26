@@ -33,7 +33,7 @@ import java.util.List;
 
 import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
 
 /**
@@ -48,10 +48,10 @@ public class ProcurementCardTransactionDetail extends BusinessObjectBase {
     private Date transactionPostingDate;
     private String transactionOriginalCurrencyCode;
     private String transactionBillingCurrencyCode;
-    private KualiDecimalMoney transactionOriginalCurrencyAmount;
+    private KualiDecimal transactionOriginalCurrencyAmount;
     private BigDecimal transactionCurrencyExchangeRate;
-    private KualiDecimalMoney transactionSettlementAmount;
-    private KualiDecimalMoney transactionSalesTaxAmount;
+    private KualiDecimal transactionSettlementAmount;
+    private KualiDecimal transactionSalesTaxAmount;
     private boolean transactionTaxExemptIndicator;
     private boolean transactionPurchaseIdentifierIndicator;
     private String transactionPurchaseIdentifierDescription;
@@ -77,14 +77,14 @@ public class ProcurementCardTransactionDetail extends BusinessObjectBase {
     /**
      * @see org.kuali.core.document.TransactionalDocument#getTargetTotal()
      */
-    public KualiDecimalMoney getTargetTotal() {
-        KualiDecimalMoney total = new KualiDecimalMoney(0);
+    public KualiDecimal getTargetTotal() {
+        KualiDecimal total = new KualiDecimal(0);
         AccountingLineBase al = null;
         Iterator iter = getTargetAccountingLines().iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
 
-            KualiDecimalMoney amount = al.getAmount();
+            KualiDecimal amount = al.getAmount();
             if (amount != null) {
                 total = total.add(amount);
             }
@@ -245,7 +245,7 @@ public class ProcurementCardTransactionDetail extends BusinessObjectBase {
      * @return - Returns the transactionOriginalCurrencyAmount
      * 
      */
-    public KualiDecimalMoney getTransactionOriginalCurrencyAmount() {
+    public KualiDecimal getTransactionOriginalCurrencyAmount() {
         return transactionOriginalCurrencyAmount;
     }
 
@@ -255,7 +255,7 @@ public class ProcurementCardTransactionDetail extends BusinessObjectBase {
      * @param - transactionOriginalCurrencyAmount The transactionOriginalCurrencyAmount to set.
      * 
      */
-    public void setTransactionOriginalCurrencyAmount(KualiDecimalMoney transactionOriginalCurrencyAmount) {
+    public void setTransactionOriginalCurrencyAmount(KualiDecimal transactionOriginalCurrencyAmount) {
         this.transactionOriginalCurrencyAmount = transactionOriginalCurrencyAmount;
     }
 
@@ -287,7 +287,7 @@ public class ProcurementCardTransactionDetail extends BusinessObjectBase {
      * @return - Returns the transactionSettlementAmount
      * 
      */
-    public KualiDecimalMoney getTransactionSettlementAmount() {
+    public KualiDecimal getTransactionSettlementAmount() {
         return transactionSettlementAmount;
     }
 
@@ -297,7 +297,7 @@ public class ProcurementCardTransactionDetail extends BusinessObjectBase {
      * @param - transactionSettlementAmount The transactionSettlementAmount to set.
      * 
      */
-    public void setTransactionSettlementAmount(KualiDecimalMoney transactionSettlementAmount) {
+    public void setTransactionSettlementAmount(KualiDecimal transactionSettlementAmount) {
         this.transactionSettlementAmount = transactionSettlementAmount;
     }
 
@@ -308,7 +308,7 @@ public class ProcurementCardTransactionDetail extends BusinessObjectBase {
      * @return - Returns the transactionSalesTaxAmount
      * 
      */
-    public KualiDecimalMoney getTransactionSalesTaxAmount() {
+    public KualiDecimal getTransactionSalesTaxAmount() {
         return transactionSalesTaxAmount;
     }
 
@@ -318,7 +318,7 @@ public class ProcurementCardTransactionDetail extends BusinessObjectBase {
      * @param - transactionSalesTaxAmount The transactionSalesTaxAmount to set.
      * 
      */
-    public void setTransactionSalesTaxAmount(KualiDecimalMoney transactionSalesTaxAmount) {
+    public void setTransactionSalesTaxAmount(KualiDecimal transactionSalesTaxAmount) {
         this.transactionSalesTaxAmount = transactionSalesTaxAmount;
     }
 

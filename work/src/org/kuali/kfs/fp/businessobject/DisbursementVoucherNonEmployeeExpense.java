@@ -28,7 +28,7 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
@@ -39,7 +39,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     private Integer financialDocumentLineNumber;
     private String disbVchrExpenseCode;
     private String disbVchrExpenseCompanyName;
-    private KualiDecimalMoney disbVchrExpenseAmount;
+    private KualiDecimal disbVchrExpenseAmount;
 
     private TravelExpenseTypeCode disbVchrExpense;
 
@@ -161,7 +161,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
      * @return - Returns the disbVchrExpenseAmount
      * 
      */
-    public KualiDecimalMoney getDisbVchrExpenseAmount() {
+    public KualiDecimal getDisbVchrExpenseAmount() {
         return disbVchrExpenseAmount;
     }
 
@@ -172,7 +172,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
      * @param - disbVchrExpenseAmount The disbVchrExpenseAmount to set.
      * 
      */
-    public void setDisbVchrExpenseAmount(KualiDecimalMoney disbVchrExpenseAmount) {
+    public void setDisbVchrExpenseAmount(KualiDecimal disbVchrExpenseAmount) {
         this.disbVchrExpenseAmount = disbVchrExpenseAmount;
     }
 

@@ -24,7 +24,7 @@ package org.kuali.module.kra.web.struts.form;
 
 import java.util.List;
 
-import org.kuali.core.util.KualiDecimalMoney;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.bo.BudgetNonpersonnelTest;
@@ -56,7 +56,7 @@ public class BudgetNonpersonnelCopyOverFormHelperTest extends KualiTestBaseWithS
         budgetForm.getBudgetDocument().getBudget().setNonpersonnelItems(BudgetNonpersonnelTest.createBudgetNonpersonnel(categories, subCategories));
         budgetForm.setCurrentTaskNumber(new Integer(0));
         budgetForm.getBudgetDocument().getBudget().setPeriods(BudgetPeriodTest.createBudgetPeriods(5));
-        budgetForm.getBudgetDocument().getBudget().setBudgetNonpersonnelInflationRate(new KualiDecimalMoney(10));
+        budgetForm.getBudgetDocument().getBudget().setBudgetNonpersonnelInflationRate(new KualiDecimal(10));
     }
 
     public void testBudgetNonpersonnelCopyOverFormHelper() {
@@ -96,22 +96,22 @@ public class BudgetNonpersonnelCopyOverFormHelperTest extends KualiTestBaseWithS
 
         NonpersonnelCopyOverCategoryHelper nonpersonnelCopyOverCategoryHelper = (NonpersonnelCopyOverCategoryHelper) budgetNonpersonnelCopyOverFormHelper1.getNonpersonnelCopyOverCategoryHelpers().get("CO");
 
-        assertEquality(new KualiDecimalMoney(2000), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(0));
-        assertEquality(new KualiDecimalMoney(1100), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(1));
-        assertEquality(new KualiDecimalMoney(1210), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(2));
-        assertEquality(new KualiDecimalMoney(1331), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(3));
-        assertEquality(new KualiDecimalMoney(1464), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(4));
+        assertEquality(new KualiDecimal(2000), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(0));
+        assertEquality(new KualiDecimal(1100), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(1));
+        assertEquality(new KualiDecimal(1210), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(2));
+        assertEquality(new KualiDecimal(1331), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(3));
+        assertEquality(new KualiDecimal(1464), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(4));
 
-        assertEquality(new KualiDecimalMoney(4000), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(0));
-        assertEquality(new KualiDecimalMoney(2200), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(1));
-        assertEquality(new KualiDecimalMoney(2420), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(2));
-        assertEquality(new KualiDecimalMoney(2662), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(3));
-        assertEquality(new KualiDecimalMoney(2928), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(4));
+        assertEquality(new KualiDecimal(4000), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(0));
+        assertEquality(new KualiDecimal(2200), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(1));
+        assertEquality(new KualiDecimal(2420), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(2));
+        assertEquality(new KualiDecimal(2662), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(3));
+        assertEquality(new KualiDecimal(2928), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(4));
 
-        assertEquality(new KualiDecimalMoney(6000), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(0));
-        assertEquality(new KualiDecimalMoney(3300), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(1));
-        assertEquality(new KualiDecimalMoney(3630), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(2));
-        assertEquality(new KualiDecimalMoney(3993), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(3));
-        assertEquality(new KualiDecimalMoney(4392), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(4));
+        assertEquality(new KualiDecimal(6000), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(0));
+        assertEquality(new KualiDecimal(3300), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(1));
+        assertEquality(new KualiDecimal(3630), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(2));
+        assertEquality(new KualiDecimal(3993), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(3));
+        assertEquality(new KualiDecimal(4392), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(4));
     }
 }
