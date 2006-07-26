@@ -77,6 +77,7 @@ public class DepositWizardAction extends KualiAction {
      * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm,
      *      javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         DepositWizardForm dwForm = (DepositWizardForm) form;
 
@@ -199,7 +200,7 @@ public class DepositWizardAction extends KualiAction {
         boolean hasBankAccountNumber = false;
         String bankAccountNumber = dform.getBankAccountNumber();
         if (StringUtils.isBlank(bankAccountNumber)) {
-            GlobalVariables.getErrorMap().put(Constants.DepositConstants.DEPOSIT_WIZARD_DEPOSITHEADER_ERROR, KeyConstants.Deposit.ERROR_MISSING_BANKACCOUNT);
+            GlobalVariables.getErrorMap().putError(Constants.DepositConstants.DEPOSIT_WIZARD_DEPOSITHEADER_ERROR, KeyConstants.Deposit.ERROR_MISSING_BANKACCOUNT);
         }
         else {
             hasBankAccountNumber = true;
@@ -207,7 +208,7 @@ public class DepositWizardAction extends KualiAction {
 
         String bankCode = dform.getBankCode();
         if (StringUtils.isBlank(bankCode)) {
-            GlobalVariables.getErrorMap().put(Constants.DepositConstants.DEPOSIT_WIZARD_DEPOSITHEADER_ERROR, KeyConstants.Deposit.ERROR_MISSING_BANK);
+            GlobalVariables.getErrorMap().putError(Constants.DepositConstants.DEPOSIT_WIZARD_DEPOSITHEADER_ERROR, KeyConstants.Deposit.ERROR_MISSING_BANK);
         }
         else {
             Map keyMap = new HashMap();
@@ -215,7 +216,7 @@ public class DepositWizardAction extends KualiAction {
 
             Bank bank = (Bank) boService.findByPrimaryKey(Bank.class, keyMap);
             if (bank == null) {
-                GlobalVariables.getErrorMap().put(Constants.DepositConstants.DEPOSIT_WIZARD_DEPOSITHEADER_ERROR, KeyConstants.Deposit.ERROR_UNKNOWN_BANK, bankCode);
+                GlobalVariables.getErrorMap().putError(Constants.DepositConstants.DEPOSIT_WIZARD_DEPOSITHEADER_ERROR, KeyConstants.Deposit.ERROR_UNKNOWN_BANK, bankCode);
             }
             else {
                 dform.setBank(bank);
@@ -226,7 +227,7 @@ public class DepositWizardAction extends KualiAction {
                     BankAccount bankAccount = (BankAccount) boService.findByPrimaryKey(BankAccount.class, keyMap);
                     if (bankAccount == null) {
                         String[] msgParams = { bankAccountNumber, bankCode };
-                        GlobalVariables.getErrorMap().put(Constants.DepositConstants.DEPOSIT_WIZARD_DEPOSITHEADER_ERROR, KeyConstants.Deposit.ERROR_UNKNOWN_BANKACCOUNT, msgParams);
+                        GlobalVariables.getErrorMap().putError(Constants.DepositConstants.DEPOSIT_WIZARD_DEPOSITHEADER_ERROR, KeyConstants.Deposit.ERROR_UNKNOWN_BANKACCOUNT, msgParams);
                     }
                     else {
                         dform.setBankAccount(bankAccount);
@@ -247,7 +248,7 @@ public class DepositWizardAction extends KualiAction {
         }
 
         if (selectedIds.isEmpty()) {
-            GlobalVariables.getErrorMap().put(Constants.DepositConstants.DEPOSIT_WIZARD_CASHRECEIPT_ERROR, KeyConstants.Deposit.ERROR_NO_CASH_RECEIPTS_SELECTED);
+            GlobalVariables.getErrorMap().putError(Constants.DepositConstants.DEPOSIT_WIZARD_CASHRECEIPT_ERROR, KeyConstants.Deposit.ERROR_NO_CASH_RECEIPTS_SELECTED);
         }
 
         //
@@ -274,18 +275,9 @@ public class DepositWizardAction extends KualiAction {
                 // create deposit
                 String cmDocId = dform.getCashManagementDocId();
 
+                boolean depositIsFinal = (StringUtils.equals(dform.getDepositTypeCode(), Constants.DepositConstants.DEPOSIT_TYPE_FINAL));
                 CashManagementService cms = SpringServiceLocator.getCashManagementService();
-                if (StringUtils.equals(dform.getDepositTypeCode(), Constants.DepositConstants.DEPOSIT_TYPE_INTERIM)) {
-                    cms.addInterimDeposit(cashManagementDoc, dform.getDepositTicketNumber(), dform.getBankAccount(), selectedReceipts);
-                }
-                else if (StringUtils.equals(dform.getDepositTypeCode(), Constants.DepositConstants.DEPOSIT_TYPE_FINAL)) {
-                    throw new UnknownError("die, die, everybody die)");
-                    // UNF: cms.addFinalDeposit(cashManagementDoc, dform.getDepositTicketNumber(), dform.getBankAccount(),
-                    // selectedReceipts);
-                }
-                else {
-                    throw new IllegalStateException("invalid (unknown) depositTypeCode '" + dform.getDepositTypeCode() + "'");
-                }
+                cms.addDeposit(cashManagementDoc, dform.getDepositTicketNumber(), dform.getBankAccount(), selectedReceipts, depositIsFinal);
 
                 // redirect to controlling CashManagementDocument
                 dest = returnToSender(cashManagementDocId);

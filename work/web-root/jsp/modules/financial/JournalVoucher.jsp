@@ -13,7 +13,6 @@
 	documentTypeName="KualiJournalVoucherDocument"
 	htmlFormAction="financialJournalVoucher" renderMultipart="true"
 	showTabButtons="true">
-	<html:hidden property="document.nextSourceLineNumber" />
 	<kul:hiddenDocumentFields />
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
 	<!-- JOURNAL VOUCHER SPECIFIC FIELDS -->
@@ -124,18 +123,18 @@
 					</c:if></td>
 				</tr>
 				<tr>
-					<th width="35%" class="bord-l-b">
-					<div align="right"><kul:htmlAttributeLabel
-						attributeEntry="${journalVoucherAttributes.reversalDate}"
-						useShortLabel="false" /></div>
-					</th>
-					<td class="datacell-nowrap"><c:if test="${readOnly}">
-                        ${KualiForm.formattedReversalDate}
-						<html:hidden property="document.reversalDate" />
-					</c:if> <c:if test="${!readOnly}">
-						<kul:dateInputNoAttributeEntry property="document.reversalDate"
-							maxLength="10" size="10" />
-					</c:if></td>
+                    <kul:htmlAttributeHeaderCell
+                        attributeEntry="${journalVoucherAttributes.reversalDate}"
+                        horizontal="true"
+                        width="35%"
+                        />
+                    <td class="datacell-nowrap"><kul:htmlControlAttribute
+                        attributeEntry="${journalVoucherAttributes.reversalDate}"
+                        datePicker="true"
+                        property="document.reversalDate"
+                        readOnly="${readOnly}"
+                        readOnlyAlternateDisplay="${KualiForm.formattedReversalDate}"
+                        /></td>
 				</tr>
 			</tbody>
 		</table>
@@ -149,7 +148,7 @@
 		includeObjectTypeCode="true" />
 	<kul:generalLedgerPendingEntries />
 	<kul:notes />
-	<kul:adHocRecipients />
+	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
 	<kul:routeLog />
 	<kul:panelFooter />
 	<kul:documentControls transactionalDocument="true" />

@@ -32,9 +32,12 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryDao.java,v 1.11 2006-06-14 12:26:54 abyrne Exp $
+ * @version $Id: OriginEntryDao.java,v 1.11.2.1 2006-07-26 21:51:18 abyrne Exp $
  */
 public interface OriginEntryDao {
+    public static final int SORT_DOCUMENT = 1;
+    public static final int SORT_ACCOUNT = 2;
+
     /**
      * Delete an entry
      * 
@@ -56,7 +59,15 @@ public interface OriginEntryDao {
      * @param oeg Group
      * @return Iterator of entries in the specified group
      */
-    public Iterator<OriginEntry> getEntriesByGroup(OriginEntryGroup oeg);
+    public Iterator<OriginEntry> getEntriesByGroup(OriginEntryGroup oeg,int sort);
+
+    /**
+     * Get bad balance entries
+     * 
+     * @param groups
+     * @return
+     */
+    public Iterator<OriginEntry> getBadBalanceEntries(Collection groups);
 
     /**
      * Collection of entries that match criteria
@@ -82,6 +93,15 @@ public interface OriginEntryDao {
     public void deleteMatchingEntries(Map searchCriteria);
 
     /**
+     * Delete all the groups in the list.  This will delete
+     * the entries.  The OriginEntryGroupDao has a method
+     * to delete the groups
+     * 
+     * @param groups Groups to be deleted
+     */
+    public void deleteGroups(Collection<OriginEntryGroup> groups);
+
+    /**
      * Save origin entry
      * 
      * @param entry entry to save
@@ -100,18 +120,10 @@ public interface OriginEntryDao {
     public Collection testingGetAllEntries();
 
     /**
-     * get the summarized information of the entries that belong to an entry group with the given group id
-     * 
-     * @param groupId the id of a origin entry group
-     * @return a set of summarized information of the entries within the specified group
-     */
-    public Iterator getSummaryByGroupId(Integer groupId);
-
-    /**
      * get the summarized information of the entries that belong to the entry groups with the given group ids
      * 
      * @param groupIdList the ids of origin entry groups
      * @return a set of summarized information of the entries within the specified groups
      */
-    public Iterator getSummaryByGroupId(List groupIdList);
+    public Iterator getSummaryByGroupId(Collection groupIdList);
 }
