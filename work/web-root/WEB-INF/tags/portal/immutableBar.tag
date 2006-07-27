@@ -16,7 +16,7 @@
                 <div align="left">
                   <portal:portalLink displayTitle="false" title='Action List' url='${ConfigProperties.workflow.base.url}/ActionList.do'><img src="images-portal/icon-port-actionlist.gif" width="91" height="19" border="0"></portal:portalLink>
                   <portal:portalLink displayTitle="false" title='Document Search' url='${ConfigProperties.workflow.base.url}/DocumentSearch.do'><img src="images-portal/icon-port-docsearch.gif" width="96" height="19" border="0"></portal:portalLink>
-                  <portal:portalLink displayTitle="false" title='Workflow Services' url='${ConfigProperties.workflow.base.url}/Backdoor.do'><img src="images-portal/icon-port-wfservices.gif" width="141" height="19" border="0"></portal:portalLink>
+                  <portal:portalLink displayTitle="false" title='Workflow Services' url='${ConfigProperties.workflow.base.url}/Portal.do'><img src="images-portal/icon-port-wfservices.gif" width="141" height="19" border="0"></portal:portalLink>
                 </div>
               </td>
               <%--  KULCFG-17  -- need to update these sections when this is resolved so that these dont happen in prd environments --%>
