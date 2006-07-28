@@ -36,6 +36,7 @@
                     <maintainableField name="accountNumber" required="true" />
                     <maintainableField name="chartOfAccountsCode" required="true" />
                     <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="false" />
+                    <maintainableField name="versionNumber" required="true"/>
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>

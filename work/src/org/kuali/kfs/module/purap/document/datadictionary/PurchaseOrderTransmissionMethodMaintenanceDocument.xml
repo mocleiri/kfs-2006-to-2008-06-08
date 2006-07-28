@@ -36,6 +36,7 @@
                     <maintainableField name="purchaseOrderTransmissionMethodCode" required="true" />
                     <maintainableField name="purchaseOrderTransmissionMethodDescription" required="true" />
                     <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="false" />
+                    <maintainableField name="versionNumber" required="true"/>
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>
