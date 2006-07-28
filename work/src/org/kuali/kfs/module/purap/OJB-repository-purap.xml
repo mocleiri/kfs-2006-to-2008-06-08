@@ -222,9 +222,6 @@
 	<reference-descriptor name="vendorShippingTitle" class-ref="org.kuali.module.purap.bo.ShippingTitle" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorShippingTitleCode" />
 	</reference-descriptor>
-	<reference-descriptor name="vendorExcludeCampus" class-ref="org.kuali.module.chart.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="vendorExcludeCampusCode" />
-	</reference-descriptor>
     <collection-descriptor name="vendorContractOrganizations" proxy="true" element-class-ref="org.kuali.module.purap.bo.VendorContractOrganization" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none">
         <orderby name="chartOfAccountsCode" sort="ASC" />
         <orderby name="organizationCode" sort="ASC" />
