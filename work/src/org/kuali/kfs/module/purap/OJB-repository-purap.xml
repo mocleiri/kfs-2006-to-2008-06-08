@@ -97,6 +97,11 @@
         <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
         <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
     </collection-descriptor>
+    <collection-descriptor name="vendorPhoneNumbers" proxy="true" element-class-ref="org.kuali.module.purap.bo.VendorPhoneNumber" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <orderby name="vendorPhoneGeneratedIdentifier" sort="ASC" />
+        <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
+        <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
+    </collection-descriptor>
     <collection-descriptor name="vendorShippingSpecialConditions" element-class-ref="org.kuali.module.purap.bo.VendorShippingSpecialCondition" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
         <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
         <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
@@ -174,10 +179,10 @@
 	<reference-descriptor name="vendorCountry" class-ref="org.kuali.core.bo.Country" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorCountryCode" />
 	</reference-descriptor>
-<!--     <collection-descriptor name="vendorPhoneNumbers" proxy="true" element-class-ref="org.kuali.module.purap.bo.VendorContactPhoneNumber" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none">
+    <collection-descriptor name="vendorContactPhoneNumbers" proxy="true" element-class-ref="org.kuali.module.purap.bo.VendorContactPhoneNumber" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none">
         <orderby name="vendorContactPhoneGeneratedIdentifier" sort="ASC" />
         <inverse-foreignkey field-ref="vendorContactGeneratedIdentifier" />
-    </collection-descriptor> -->
+    </collection-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.VendorContract" table="PUR_VNDR_CONTR_T">
