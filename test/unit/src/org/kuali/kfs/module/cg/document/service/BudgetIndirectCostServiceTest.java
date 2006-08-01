@@ -23,20 +23,15 @@
 package org.kuali.module.kra.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.bo.Budget;
 import org.kuali.module.kra.bo.BudgetIndirectCost;
-import org.kuali.module.kra.bo.BudgetNonpersonnel;
-import org.kuali.module.kra.bo.BudgetNonpersonnelTest;
 import org.kuali.module.kra.bo.BudgetPeriod;
 import org.kuali.module.kra.bo.BudgetPeriodTest;
 import org.kuali.module.kra.bo.BudgetTask;
 import org.kuali.module.kra.bo.BudgetTaskPeriodIndirectCost;
-import org.kuali.module.kra.bo.UserAppointmentTaskPeriod;
 import org.kuali.module.kra.document.BudgetDocument;
 import org.kuali.test.KualiTestBaseWithSpring;
 
@@ -143,47 +138,5 @@ public class BudgetIndirectCostServiceTest extends KualiTestBaseWithSpring {
         assertEquals(idc2.getDocumentHeaderId(), "1234");
         assertEquals(idc2.getBudgetTaskSequenceNumber(), new Integer(2));
         assertEquals(idc2.getBudgetPeriodSequenceNumber(), new Integer(1));
-    }
-
-    public void testRefreshIndirectCost() {
-
-//        Budget budget = budgetDocument.getBudget();
-//
-//        String[] categories = { "CO", "CO", "FL", "SC" };
-//        String[] subCategories = { "C1", "C1", "F5", "R2" };
-//        String[] subcontractorNumber = { "", "", "", "1" };
-//        List nonpersonnelItems = BudgetNonpersonnelTest.createBudgetNonpersonnel(categories, subCategories, subcontractorNumber);
-//        for (Iterator iter = nonpersonnelItems.iterator(); iter.hasNext();) {
-//            BudgetNonpersonnel nonpersonnel = (BudgetNonpersonnel) iter.next();
-//            nonpersonnel.setBudgetPeriodSequenceNumber(new Integer(2));
-//        }
-//        budget.setNonpersonnelItems(nonpersonnelItems);
-//
-//        List userAppointmentTaskPeriods = new ArrayList();
-//
-//        BudgetPeriod period1 = (BudgetPeriod) budget.getPeriods().get(0);
-//
-//        UserAppointmentTaskPeriod taskPeriod = new UserAppointmentTaskPeriod();
-//        taskPeriod.setBudgetPeriodSequenceNumber(period1.getBudgetPeriodSequenceNumber());
-//        taskPeriod.setAgencyRequestTotalAmount(new KualiInteger(39000));
-//        taskPeriod.setAgencyFringeBenefitTotalAmount(new KualiInteger(13000));
-//        userAppointmentTaskPeriods.add(taskPeriod);
-//
-//        UserAppointmentTaskPeriod taskPeriod2 = new UserAppointmentTaskPeriod();
-//        taskPeriod2.setBudgetPeriodSequenceNumber(period1.getBudgetPeriodSequenceNumber());
-//        taskPeriod2.setAgencyRequestTotalAmount(new KualiInteger(43000));
-//        taskPeriod2.setAgencyFringeBenefitTotalAmount(new KualiInteger(8500));
-//        userAppointmentTaskPeriods.add(taskPeriod2);
-//
-//        BudgetPeriod period2 = (BudgetPeriod) budget.getPeriods().get(1);
-//
-//        UserAppointmentTaskPeriod taskPeriod3 = new UserAppointmentTaskPeriod();
-//        taskPeriod3.setBudgetPeriodSequenceNumber(period2.getBudgetPeriodSequenceNumber());
-//        taskPeriod3.setAgencyRequestTotalAmount(new KualiInteger(74000));
-//        taskPeriod3.setAgencyFringeBenefitTotalAmount(new KualiInteger(21500));
-//        userAppointmentTaskPeriods.add(taskPeriod3);
-//
-//        budget.setAllUserAppointmentTaskPeriods(userAppointmentTaskPeriods);
-
     }
 }
