@@ -36,6 +36,7 @@
                     <maintainableField name="itemTypeCode" required="true" />
                 	<maintainableField name="itemTypeDescription" required="true" />
                 	<maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                    <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>
