@@ -36,6 +36,7 @@
                     <maintainableField name="deliveryRequiredDateReasonCode" required="true" />
                     <maintainableField name="deliveryRequiredDateReasonDescription" required="true" />
                     <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                    <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>
