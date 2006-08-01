@@ -37,6 +37,7 @@
                 	<maintainableField name="capitalAssetTransactionTypeDescription" required="true" />
                 	<maintainableField name="capitalAssetTransactionTypeServiceIndicator" required="true" />
                 	<maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                    <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>
