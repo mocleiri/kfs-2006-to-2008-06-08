@@ -15,10 +15,10 @@
 	<reference-descriptor name="vendorType" class-ref="org.kuali.module.purap.bo.VendorType" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorTypeCode" />
 	</reference-descriptor>
-	<reference-descriptor name="vendorOwnership" class-ref="org.kuali.module.purap.bo.OwnershipType" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="vendorOwnership" class-ref="org.kuali.module.purap.bo.OwnershipType" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
 		<foreignkey field-ref="vendorOwnershipCode" />
 	</reference-descriptor>
-	<reference-descriptor name="vendorOwnershipCategory" class-ref="org.kuali.module.purap.bo.OwnershipCategory" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="vendorOwnershipCategory" class-ref="org.kuali.module.purap.bo.OwnershipCategory" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
 		<foreignkey field-ref="vendorOwnershipCategoryCode" />
 	</reference-descriptor>
 </class-descriptor>
@@ -56,7 +56,7 @@
 	<field-descriptor name="vendorLegacyBranchNumber" column="VNDR_LGCY_BRCH_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLegacyPayeeIdentifier" column="VNDR_LGCY_PAYEE_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorLegacySystemNumber" column="VNDR_LGCY_TOPS_NBR" jdbc-type="VARCHAR"/>
-	<reference-descriptor name="vendorHeader" class-ref="org.kuali.module.purap.bo.VendorHeader" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+	<reference-descriptor name="vendorHeader" class-ref="org.kuali.module.purap.bo.VendorHeader" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true">
 		<foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
 	</reference-descriptor>
 	<reference-descriptor name="vendorStatus" class-ref="org.kuali.module.purap.bo.VendorStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -108,7 +108,7 @@
     </collection-descriptor>
     <collection-descriptor name="vendorSupplierDiversities" element-class-ref="org.kuali.module.purap.bo.VendorSupplierDiversity" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
         <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
-        <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
+<!-- *Seems to break, check with Heather about* <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" /> -->
     </collection-descriptor>
 </class-descriptor>
 
