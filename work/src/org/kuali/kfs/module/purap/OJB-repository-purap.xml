@@ -30,8 +30,8 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="vendorParentIndicator" column="VNDR_PARENT_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorName" column="VNDR_NM" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorStatusCode" column="VNDR_STAT_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorStatusDate" column="VNDR_STAT_DT" jdbc-type="DATE"/>
+	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
+	<field-descriptor name="vendorInactiveReasonCode" column="VNDR_INACTV_REAS_CD" jdbc-type="VARCHAR"/>
     <field-descriptor name="vendorDunsNumber" column="VNDR_DUNS_NBR" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="vendorPaymentTermsCode" column="VNDR_PMT_TERM_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorShippingTitleCode" column="VNDR_SHP_TTL_CD" jdbc-type="VARCHAR"/>
@@ -59,8 +59,8 @@
 	<reference-descriptor name="vendorHeader" class-ref="org.kuali.module.purap.bo.VendorHeader" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true">
 		<foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
 	</reference-descriptor>
-	<reference-descriptor name="vendorStatus" class-ref="org.kuali.module.purap.bo.VendorStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="vendorStatusCode" />
+	<reference-descriptor name="vendorInactiveReason" class-ref="org.kuali.module.purap.bo.VendorInactiveReason" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="vendorInactiveReasonCode" />
 	</reference-descriptor>
 	<reference-descriptor name="vendorPaymentTerms" class-ref="org.kuali.module.purap.bo.PaymentTermType" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorPaymentTermsCode" />
@@ -398,6 +398,14 @@
 	</reference-descriptor>
 </class-descriptor>
 
+<class-descriptor class="org.kuali.module.purap.bo.VendorInactiveReason" table="PUR_VNDR_INACTV_REAS_T">
+	<field-descriptor name="vendorInactiveReasonCode" column="VNDR_INACTV_REAS_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
+	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+	<field-descriptor name="vendorInactiveReasonDescription" column="VNDR_INACTV_REAS_DESC" jdbc-type="VARCHAR"/>
+	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
+</class-descriptor>
+
 <!--  End Vendor tables  -->
 
 <class-descriptor class="org.kuali.module.purap.bo.OwnershipType" table="PUR_OWNR_TYP_T">
@@ -538,14 +546,6 @@
 	<reference-descriptor name="deliveryCampus" class-ref="org.kuali.module.chart.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="deliveryCampusCode" />
 	</reference-descriptor>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.purap.bo.VendorStatus" table="PUR_VNDR_STAT_T">
-	<field-descriptor name="vendorStatusCode" column="VNDR_STAT_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>  
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="vendorStatusDescription" column="VNDR_STAT_DESC" jdbc-type="VARCHAR"/>
-	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.Carrier" table="PUR_CARI_T">
