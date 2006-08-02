@@ -84,7 +84,11 @@
                 <description>purchaseOrderContractLanguageDescription description...</description>
 			</attribute>
 
-            <attributeReference name="contractLanguageCreateDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="createDate">
+            <attributeReference name="contractLanguageCreateDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericDate">
+                <label>Contract Language Create Date</label>
+                <shortLabel>Create Date</shortLabel>
+                <summary>Contract Language Create Date</summary>
+                <description>The create date of the Contract Language</description>
             </attributeReference>
 
             <attributeReference name="dataObjectMaintenanceCodeActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
