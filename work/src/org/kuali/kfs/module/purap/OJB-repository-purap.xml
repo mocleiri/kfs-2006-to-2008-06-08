@@ -108,7 +108,6 @@
     </collection-descriptor>
     <collection-descriptor name="vendorSupplierDiversities" element-class-ref="org.kuali.module.purap.bo.VendorSupplierDiversity" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
         <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
-<!-- *Seems to break, check with Heather about* <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" /> -->
     </collection-descriptor>
 </class-descriptor>
 
