@@ -24,7 +24,7 @@
     <reference-descriptor name="reportsToAgency" class-ref="org.kuali.module.cg.bo.Agency" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="reportsToAgencyNumber" />
     </reference-descriptor>
-    <reference-descriptor name="agencyExtension" class-ref="org.kuali.module.kra.bo.AgencyExtension" auto-retrieve="true" auto-update="object" auto-delete="object">
+    <reference-descriptor name="agencyExtension" class-ref="org.kuali.module.kra.budget.bo.AgencyExtension" auto-retrieve="true" auto-update="object" auto-delete="object">
         <foreignkey field-ref="agencyNumber" />
     </reference-descriptor>
 </class-descriptor>
@@ -550,7 +550,7 @@
     <field-descriptor name="agencyNumber" column="CG_AGENCY_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <reference-descriptor name="agencyExtension" class-ref="org.kuali.module.kra.bo.AgencyExtension" auto-retrieve="true" auto-update="object" auto-delete="object">
+    <reference-descriptor name="agencyExtension" class-ref="org.kuali.module.kra.budget.bo.AgencyExtension" auto-retrieve="true" auto-update="object" auto-delete="object">
         <foreignkey field-ref="agencyNumber" />
     </reference-descriptor>
 </class-descriptor>
