@@ -32,7 +32,9 @@
             <lookupFields>
                 <lookupField attributeName="carrierCode" required="false" />
                 <lookupField attributeName="carrierDescription" required="false" />
-                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" >
+                	<defaultValue>Y</defaultValue>
+                </lookupField>
             </lookupFields>
 
             <resultFields>
