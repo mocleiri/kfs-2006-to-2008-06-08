@@ -38,21 +38,21 @@
         <form-bean name="YearEndBudgetAdjustmentForm" type="org.kuali.module.financial.web.struts.form.YearEndBudgetAdjustmentForm" />
 
         <!-- KRA Module Bean Definitions -->
-        <form-bean name="BudgetForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetParametersForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetOverviewForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetTemplateForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetNonpersonnelForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetNonpersonnelCopyOverForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetPersonnelForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetPersonnelForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetCostShareForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetOutputForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetModularForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetIndirectCostForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetAuditModeForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetPermissionsForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
-        <form-bean name="BudgetNotesForm" type="org.kuali.module.kra.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetParametersForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetOverviewForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetTemplateForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetNonpersonnelForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetNonpersonnelCopyOverForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetPersonnelForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetPersonnelForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetCostShareForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetOutputForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetModularForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetIndirectCostForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetAuditModeForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetPermissionsForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
+        <form-bean name="BudgetNotesForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
 
 
         <!-- General Ledger Bean Definitions -->
@@ -169,21 +169,21 @@
             <forward name="basic" path="/jsp/modules/generalLedger/AccountBalanceByConsolidationLookup.jsp" />
         </action>
 
-        <action path="/research*" name="{1}Form" input="/jsp/modules/research/{1}.jsp" type="org.kuali.module.kra.web.struts.action.{1}Action" scope="request" parameter="methodToCall" validate="true" attribute="KualiForm">
-            <forward name="basic" path="/jsp/modules/research/{1}.jsp" />
-            <forward name="parameters" path="/jsp/modules/research/BudgetParameters.jsp" redirect="false" />
-            <forward name="overview" path="/jsp/modules/research/BudgetOverview.jsp" redirect="false" />
-            <forward name="template" path="/jsp/modules/research/BudgetTemplate.jsp" redirect="false" />
-            <forward name="nonpersonnel" path="/jsp/modules/research/BudgetNonpersonnel.jsp" redirect="false" />
-            <forward name="nonpersonnelCopyOver" path="/jsp/modules/research/BudgetNonpersonnelCopyOver.jsp" redirect="false" />
-            <forward name="personnel" path="/jsp/modules/research/BudgetPersonnel.jsp" redirect="false" />
-            <forward name="costshare" path="/jsp/modules/research/BudgetCostShare.jsp" redirect="false" />
-            <forward name="output" path="/jsp/modules/research/BudgetOutput.jsp" redirect="false" />
-            <forward name="modular" path="/jsp/modules/research/BudgetModular.jsp" redirect="false" />
-            <forward name="indirectcost" path="/jsp/modules/research/BudgetIndirectCost.jsp" redirect="false" />
-            <forward name="auditmode" path="/jsp/modules/research/BudgetAuditMode.jsp" redirect="false" />
-            <forward name="permissions" path="/jsp/modules/research/BudgetPermissions.jsp" redirect="false" />
-            <forward name="notes" path="/jsp/modules/research/BudgetNotes.jsp" redirect="false" />
+        <action path="/research*" name="{1}Form" input="/jsp/modules/research/{1}.jsp" type="org.kuali.module.kra.budget.web.struts.action.{1}Action" scope="request" parameter="methodToCall" validate="true" attribute="KualiForm">
+            <forward name="basic" path="/jsp/modules/research/budget/{1}.jsp" />
+            <forward name="parameters" path="/jsp/modules/research/budget/BudgetParameters.jsp" redirect="false" />
+            <forward name="overview" path="/jsp/modules/research/budget/BudgetOverview.jsp" redirect="false" />
+            <forward name="template" path="/jsp/modules/research/budget/BudgetTemplate.jsp" redirect="false" />
+            <forward name="nonpersonnel" path="/jsp/modules/research/budget/BudgetNonpersonnel.jsp" redirect="false" />
+            <forward name="nonpersonnelCopyOver" path="/jsp/modules/budget/research/BudgetNonpersonnelCopyOver.jsp" redirect="false" />
+            <forward name="personnel" path="/jsp/modules/research/budget/BudgetPersonnel.jsp" redirect="false" />
+            <forward name="costshare" path="/jsp/modules/research/budget/BudgetCostShare.jsp" redirect="false" />
+            <forward name="output" path="/jsp/modules/research/budget/BudgetOutput.jsp" redirect="false" />
+            <forward name="modular" path="/jsp/modules/research/budget/BudgetModular.jsp" redirect="false" />
+            <forward name="indirectcost" path="/jsp/modules/research/budget/BudgetIndirectCost.jsp" redirect="false" />
+            <forward name="auditmode" path="/jsp/modules/research/budget/BudgetAuditMode.jsp" redirect="false" />
+            <forward name="permissions" path="/jsp/modules/research/budget/BudgetPermissions.jsp" redirect="false" />
+            <forward name="notes" path="/jsp/modules/research/budget/BudgetNotes.jsp" redirect="false" />
         </action>
 
         <action path="/cashManagementStatus" name="CashManagementStatusForm" type="org.kuali.module.financial.web.struts.action.CashManagementStatusAction" scope="request" attribute="KualiForm">
@@ -194,7 +194,7 @@
     <controller processorClass="org.kuali.core.web.struts.action.KualiRequestProcessor" maxFileSize="5M" />
 
     <message-resources parameter="ApplicationResources" />
-    <message-resources key="kraResources" parameter="org.kuali.module.kra.KraResources" />
+    <message-resources key="kraResources" parameter="org.kuali.module.kra.budget.KraResources" />
 
     <plug-in className="org.kuali.core.web.struts.pojo.PojoPlugin" />
 </struts-config>
