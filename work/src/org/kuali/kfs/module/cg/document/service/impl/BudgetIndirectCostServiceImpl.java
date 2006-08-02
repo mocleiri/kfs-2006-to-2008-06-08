@@ -22,12 +22,13 @@
  */
 package org.kuali.module.kra.budget.service.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
@@ -54,6 +55,7 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
     private BudgetTaskDao budgetTaskDao;
     private BudgetPeriodDao budgetPeriodDao;
     private BudgetModularService budgetModularService;
+    private KualiConfigurationService kualiConfigurationService;
 
     /**
      * Generate our task/period list items based on idc data. Each task/period list item is basically a mapping between one task and
@@ -118,22 +120,12 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
 
         List userAppointmentTaskPeriods = budget.getAllUserAppointmentTaskPeriods(false);
         List nonPersonnelItems = budget.getNonpersonnelItems();
+        List<BudgetNonpersonnel> temporaryNonPersonnelItems = new ArrayList<BudgetNonpersonnel>();
 
         // Task / Period totals for nonpersonnel, personnel and modular.
-        KualiInteger personnelTotal = new KualiInteger(0);
+        KualiInteger personnelTotal = calculatePersonnelTotalDirectCost(userAppointmentTaskPeriods, taskPeriod, temporaryNonPersonnelItems);
         KualiInteger nonPersonnelTotal = new KualiInteger(0);
         KualiInteger modularTotal = new KualiInteger(0);
-
-        // Loop over user appointments to get the total amount requested for this taskPeriod.
-        for (Iterator userAppointmentTaskPeriodIterator = userAppointmentTaskPeriods.iterator(); userAppointmentTaskPeriodIterator.hasNext();) {
-            UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIterator.next();
-
-            // If our task and period sequence numbers match, add the value to the total.
-            if (userAppointmentTaskPeriod.getBudgetTaskSequenceNumber().equals(taskPeriod.getBudgetTaskSequenceNumber()) && userAppointmentTaskPeriod.getBudgetPeriodSequenceNumber().equals(taskPeriod.getBudgetPeriodSequenceNumber())) {
-                personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getAgencyRequestTotalAmount());
-                personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getAgencyFringeBenefitTotalAmount());
-            }
-        }
 
         // Loop over nonpersonnel items to get the total amount requested for this taskPeriod.
         for (Iterator nonPersonnelIterator = nonPersonnelItems.iterator(); nonPersonnelIterator.hasNext();) {
@@ -142,6 +134,14 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
             // If our task and period sequence numbers match, add the value to the total.
             if (nonPersonnelItem.getBudgetTaskSequenceNumber().equals(taskPeriod.getBudgetTaskSequenceNumber()) && nonPersonnelItem.getBudgetPeriodSequenceNumber().equals(taskPeriod.getBudgetPeriodSequenceNumber())) {
                 nonPersonnelTotal = nonPersonnelTotal.add(nonPersonnelItem.getAgencyRequestAmount());
+            }
+        }
+        
+//      Now add temporary nonpersonnel amounts that may have been added as a side-effect of personnel
+        for (BudgetNonpersonnel tempNonpersonnelItem: temporaryNonPersonnelItems) {
+            if (tempNonpersonnelItem.getBudgetTaskSequenceNumber().equals(taskPeriod.getBudgetTaskSequenceNumber()) 
+                    && tempNonpersonnelItem.getBudgetPeriodSequenceNumber().equals(taskPeriod.getBudgetPeriodSequenceNumber())) {
+                nonPersonnelTotal = nonPersonnelTotal.add(tempNonpersonnelItem.getAgencyRequestAmount());
             }
         }
 
@@ -186,6 +186,7 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
 
         List userAppointmentTaskPeriods = budget.getAllUserAppointmentTaskPeriods(false);
         List nonPersonnelItems = budget.getNonpersonnelItems();
+        List<BudgetNonpersonnel> temporaryNonPersonnelItems = new ArrayList<BudgetNonpersonnel>();
 
         KualiInteger baseCost = new KualiInteger(0);
         
@@ -193,21 +194,15 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
         KualiInteger personnelTotal = new KualiInteger(0);
         KualiInteger nonPersonnelTotal = new KualiInteger(0);
         KualiInteger modularTotal = new KualiInteger(0);
+        
+        List GRADUATE_RA_APPOINTMENTS =
+            Arrays.asList(kualiConfigurationService.getApplicationParameterValues("KraDevelopmentGroup", "KraBudgetPersonnelGraduateResearchAssistantAppointmentTypes"));
 
         // If there is no base, or if the base is manual, we don't need any calculations.
         if (baseCode != null && !"MN".equals(baseCode)) {
-
-            // Loop over user appointments to get the total amount requested for this taskPeriod.
-            for (Iterator userAppointmentTaskPeriodIterator = userAppointmentTaskPeriods.iterator(); userAppointmentTaskPeriodIterator.hasNext();) {
-                UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIterator.next();
-
-                // If our task and period sequence numbers match, add the value to the total.
-                if (userAppointmentTaskPeriod.getBudgetTaskSequenceNumber().equals(taskPeriod.getBudgetTaskSequenceNumber()) && userAppointmentTaskPeriod.getBudgetPeriodSequenceNumber().equals(taskPeriod.getBudgetPeriodSequenceNumber())) {
-                    personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getAgencyRequestTotalAmount());
-                    personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getAgencyFringeBenefitTotalAmount());
-                }
-            }
-
+            
+            personnelTotal = calculatePersonnelTotalDirectCost(userAppointmentTaskPeriods, taskPeriod, temporaryNonPersonnelItems);
+            
             // Loop over nonpersonnel items to get the total amount requested for this taskPeriod.
             for (Iterator nonPersonnelIterator = nonPersonnelItems.iterator(); nonPersonnelIterator.hasNext();) {
                 BudgetNonpersonnel nonPersonnelItem = (BudgetNonpersonnel) nonPersonnelIterator.next();
@@ -219,6 +214,17 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
                     // But first, test to see if the base code is null or not MTDC.
                     if (!"MT".equals(baseCode) || nonPersonnelItem.getNonpersonnelObjectCode() == null || !nonPersonnelItem.getNonpersonnelObjectCode().getNonpersonnelSubCategory().isNonpersonnelMtdcExcludedIndicator()) {
                         nonPersonnelTotal = nonPersonnelTotal.add(nonPersonnelItem.getAgencyRequestAmount());
+                    }
+                }
+            }
+            
+//          Now add temporary nonpersonnel amounts that may have been added as a side-effect of personnel
+            for (BudgetNonpersonnel tempNonpersonnelItem: temporaryNonPersonnelItems) {
+                if (tempNonpersonnelItem.getBudgetTaskSequenceNumber().equals(taskPeriod.getBudgetTaskSequenceNumber()) 
+                        && tempNonpersonnelItem.getBudgetPeriodSequenceNumber().equals(taskPeriod.getBudgetPeriodSequenceNumber())) {
+                    if (!"MT".equals(baseCode) || tempNonpersonnelItem.getNonpersonnelObjectCode() == null 
+                            || !tempNonpersonnelItem.getNonpersonnelObjectCode().getNonpersonnelSubCategory().isNonpersonnelMtdcExcludedIndicator()) {
+                        nonPersonnelTotal = nonPersonnelTotal.add(tempNonpersonnelItem.getAgencyRequestAmount());
                     }
                 }
             }
@@ -248,6 +254,44 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
         }
         
         return baseCost;
+    }
+    
+    private KualiInteger calculatePersonnelTotalDirectCost(List userAppointmentTaskPeriods, BudgetTaskPeriodIndirectCost taskPeriod, List<BudgetNonpersonnel> temporaryNonpersonnelItems) {
+        
+        KualiInteger personnelTotal = new KualiInteger(0);
+        
+        List GRADUATE_RA_APPOINTMENTS =
+            Arrays.asList(kualiConfigurationService.getApplicationParameterValues("KraDevelopmentGroup", "KraBudgetPersonnelGraduateResearchAssistantAppointmentTypes"));
+        
+        String GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE = kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "graduateAssistantNonpersonnelCategoryCode");
+        String GRADUATE_ASSISTANT_NONPERSONNEL_SUBCATEGORY_CODE = kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "graduateAssistantNonpersonnelSubCategoryCode");
+        
+//      Loop over user appointments to get the total amount requested for this taskPeriod.
+        for (Iterator userAppointmentTaskPeriodIterator = userAppointmentTaskPeriods.iterator(); userAppointmentTaskPeriodIterator.hasNext();) {
+            UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIterator.next();
+
+            // If our task and period sequence numbers match, add the value to the total.
+            if (userAppointmentTaskPeriod.getBudgetTaskSequenceNumber().equals(taskPeriod.getBudgetTaskSequenceNumber()) && userAppointmentTaskPeriod.getBudgetPeriodSequenceNumber().equals(taskPeriod.getBudgetPeriodSequenceNumber())) {
+                // Have to look in a different place for grad lines.
+                if (GRADUATE_RA_APPOINTMENTS.contains(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode())) {
+                    personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getAgencySalaryAmount());
+                    personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getAgencyHealthInsuranceAmount());
+                    
+//                  If it is a GA, we need to add Nonpersonnel Fee Remission to Nonpersonnel list (not stored in database).
+                    BudgetNonpersonnel budgetNonpersonnel = new BudgetNonpersonnel(userAppointmentTaskPeriod.getBudgetTaskSequenceNumber(), userAppointmentTaskPeriod.getBudgetPeriodSequenceNumber(), GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE, GRADUATE_ASSISTANT_NONPERSONNEL_SUBCATEGORY_CODE, "", userAppointmentTaskPeriod.getAgencyRequestedFeesAmount(), userAppointmentTaskPeriod.getUniversityRequestedFeesAmount());
+                    budgetNonpersonnel.refreshReferenceObject("nonpersonnelObjectCode");
+                    budgetNonpersonnel.getNonpersonnelObjectCode().refreshReferenceObject("nonpersonnelSubCategory");
+
+                    temporaryNonpersonnelItems.add(budgetNonpersonnel);
+                    
+                } else {
+                    personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getAgencyRequestTotalAmount());
+                    personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getAgencyFringeBenefitTotalAmount());
+                }
+            }
+        }
+        
+        return personnelTotal;
     }
 
     private KualiDecimal getIndirectCostRate(BudgetTaskPeriodIndirectCost taskPeriod, BudgetDocument budgetDocument, boolean overrideManualRateIndicator) {
@@ -288,17 +332,34 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
         // Task / Period totals for nonpersonnel and personnel.
         KualiInteger personnelTotal = new KualiInteger(0);
         KualiInteger nonPersonnelTotal = new KualiInteger(0);
+        
+        List GRADUATE_RA_APPOINTMENTS =
+            Arrays.asList(kualiConfigurationService.getApplicationParameterValues("KraDevelopmentGroup", "KraBudgetPersonnelGraduateResearchAssistantAppointmentTypes"));
+        String GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE = kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "graduateAssistantNonpersonnelCategoryCode");
+        String GRADUATE_ASSISTANT_NONPERSONNEL_SUBCATEGORY_CODE = kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "graduateAssistantNonpersonnelSubCategoryCode");
 
         if (budgetDocument.getBudget().getIndirectCost().getBudgetIndirectCostCostShareIndicator()) {
             List userAppointmentTaskPeriods = budgetDocument.getBudget().getAllUserAppointmentTaskPeriods(false);
             List nonPersonnelItems = budgetDocument.getBudget().getNonpersonnelItems();
+            List<BudgetNonpersonnel> temporaryNonpersonnelItems = new ArrayList<BudgetNonpersonnel>();
 
             // Loop over user appointments to get the total amount requested for this taskPeriod.
             for (Iterator userAppointmentTaskPeriodIterator = userAppointmentTaskPeriods.iterator(); userAppointmentTaskPeriodIterator.hasNext();) {
                 UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIterator.next();
 
                 // If our task and period sequence numbers match, add the value to the total.
-                if (userAppointmentTaskPeriod.getBudgetTaskSequenceNumber().equals(taskPeriod.getBudgetTaskSequenceNumber()) && userAppointmentTaskPeriod.getBudgetPeriodSequenceNumber().equals(taskPeriod.getBudgetPeriodSequenceNumber())) {
+                if (GRADUATE_RA_APPOINTMENTS.contains(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode())) {
+                    personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getUniversitySalaryAmount());
+                    personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getUniversityHealthInsuranceAmount());
+                    
+//                  If it is a GA, we need to add Nonpersonnel Fee Remission to Nonpersonnel list (not stored in database).
+                    BudgetNonpersonnel budgetNonpersonnel = new BudgetNonpersonnel(userAppointmentTaskPeriod.getBudgetTaskSequenceNumber(), userAppointmentTaskPeriod.getBudgetPeriodSequenceNumber(), GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE, GRADUATE_ASSISTANT_NONPERSONNEL_SUBCATEGORY_CODE, "", userAppointmentTaskPeriod.getAgencyRequestedFeesAmount(), userAppointmentTaskPeriod.getUniversityRequestedFeesAmount());
+                    budgetNonpersonnel.refreshReferenceObject("nonpersonnelObjectCode");
+                    budgetNonpersonnel.getNonpersonnelObjectCode().refreshReferenceObject("nonpersonnelSubCategory");
+
+                    temporaryNonpersonnelItems.add(budgetNonpersonnel);
+                    
+                } else {
                     personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getUniversityCostShareRequestTotalAmount());
                     personnelTotal = personnelTotal.add(userAppointmentTaskPeriod.getUniversityCostShareFringeBenefitTotalAmount());
                 }
@@ -312,6 +373,17 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
                 if (nonPersonnelItem.getBudgetTaskSequenceNumber().equals(taskPeriod.getBudgetTaskSequenceNumber()) && nonPersonnelItem.getBudgetPeriodSequenceNumber().equals(taskPeriod.getBudgetPeriodSequenceNumber())) {
                     if (nonPersonnelItem.getNonpersonnelObjectCode() == null || !nonPersonnelItem.getNonpersonnelObjectCode().getNonpersonnelSubCategory().isNonpersonnelMtdcExcludedIndicator()) {
                         nonPersonnelTotal = nonPersonnelTotal.add(nonPersonnelItem.getBudgetUniversityCostShareAmount());
+                    }
+                }
+            }
+            
+//          Now add temporary nonpersonnel amounts that may have been added as a side-effect of personnel
+            for (BudgetNonpersonnel tempNonpersonnelItem: temporaryNonpersonnelItems) {
+                if (tempNonpersonnelItem.getBudgetTaskSequenceNumber().equals(taskPeriod.getBudgetTaskSequenceNumber()) 
+                        && tempNonpersonnelItem.getBudgetPeriodSequenceNumber().equals(taskPeriod.getBudgetPeriodSequenceNumber())) {
+                    if (tempNonpersonnelItem.getNonpersonnelObjectCode() == null 
+                            || !tempNonpersonnelItem.getNonpersonnelObjectCode().getNonpersonnelSubCategory().isNonpersonnelMtdcExcludedIndicator()) {
+                        nonPersonnelTotal = nonPersonnelTotal.add(tempNonpersonnelItem.getAgencyRequestAmount());
                     }
                 }
             }
@@ -500,4 +572,20 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
         this.budgetModularService = budgetModularService;
     }
 
+    /**
+     * Gets the kualiConfigurationService attribute. 
+     * @return Returns the kualiConfigurationService.
+     */
+    public KualiConfigurationService getKualiConfigurationService() {
+        return kualiConfigurationService;
+    }
+
+    /**
+     * Sets the kualiConfigurationService attribute value.
+     * @param kualiConfigurationService The kualiConfigurationService to set.
+     */
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
+    }
+    
 }
