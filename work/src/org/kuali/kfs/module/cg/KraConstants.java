@@ -51,4 +51,11 @@ public class KraConstants extends JstlConstants {
     public static final String DATABASE_TRUE_VALUE = "Y";
     
     public static final String QUESTION_ROUTE_DOCUMENT_TO_COMPLETE = "Completing this document will remove it from your Action List.<br/><br/>  Are you sure you want to continue?";
+    public static final String PROJECT_DIRECTOR = "Project Director";
+    
+    public static final String PERIOD = "period";
+
+    public static final String TASK = "task";
+    
+    public static final String KRA_DEVELOPMENT_GROUP = "KraDevelopmentGroup";
 }
