@@ -34,8 +34,10 @@
             <maintainableSection title="Edit Carrier">
                 <maintainableItems>
                     <maintainableField name="carrierCode" required="true" />
-                    <maintainableField name="carrierDescription" required="true" />
-                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                    <maintainableField name="carrierDescription" required="true"/>
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" >
+                       	<defaultValue>true</defaultValue>
+                    </maintainableField>
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>
