@@ -25,10 +25,11 @@ package org.kuali.module.kra.web.struts.form;
 import java.util.List;
 
 import org.kuali.core.util.KualiInteger;
-import org.kuali.module.kra.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.bo.BudgetNonpersonnelTest;
-import org.kuali.module.kra.bo.BudgetPeriod;
 import org.kuali.module.kra.bo.BudgetPeriodTest;
+import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
+import org.kuali.module.kra.budget.bo.BudgetPeriod;
+import org.kuali.module.kra.budget.web.struts.form.BudgetCostShareFormHelper;
 import org.kuali.test.KualiTestBaseWithSpring;
 
 /**
