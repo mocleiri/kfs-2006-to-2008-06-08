@@ -5,7 +5,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="vendorTypeCode" column="VNDR_TYP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorTaxNumber" column="VNDR_TAX_NBR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorFeinSocialSecurityNumberIndicator" column="VNDR_FEIN_SSN_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorOwnershipCode" column="VNDR_OWNR_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorOwnershipCategoryCode" column="VNDR_OWNR_CTGRY_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorFederalWithholdingTaxBeginningDate" column="VNDR_FWT_BEG_DT" jdbc-type="DATE"/>
