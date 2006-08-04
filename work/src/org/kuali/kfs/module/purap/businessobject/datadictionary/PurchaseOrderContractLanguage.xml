@@ -10,7 +10,6 @@
             <title>Purchase Order Contract Language Inquiry</title>
 
             <inquiryFields>
-                <!--  <field attributeName="purchaseOrderContractLanguageIdentifier" /> -->
                 <field attributeName="campusCode" />
                 <field attributeName="purchaseOrderContractLanguageDescription" />
                 <field attributeName="contractLanguageCreateDate" />
@@ -43,7 +42,7 @@
                 <field attributeName="campusCode" />
                 <field attributeName="purchaseOrderContractLanguageDescription" />
                 <field attributeName="contractLanguageCreateDate" />
-                <field attributeName="purchaseOrderContractLanguageIdentifier" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
             </resultFields>
         </lookup>
 
