@@ -232,7 +232,7 @@
 
                 <maxLength>10</maxLength>
 
-                <required>true</required>
+                <required>false</required>
 
                 <control>
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.TravelPerDiemCategoryValuesFinder" />
@@ -250,7 +250,7 @@
 
                 <maxLength>22</maxLength>
 
-                <required>true</required>
+                <required>false</required>
 
                 <control>
                     <text size="6" />
@@ -268,7 +268,7 @@
 
                 <maxLength>22</maxLength>
 
-                <required>true</required>
+                <required>false</required>
 
                 <control>
                     <text size="9" />
@@ -286,7 +286,7 @@
 
                 <maxLength>22</maxLength>
 
-                <required>true</required>
+                <required>false</required>
 
                 <control>
                     <text size="9" />
@@ -409,7 +409,7 @@
             </attribute>
 
             <attribute name="dvPersonalCarMileageAmount">
-                <label>Mileage Amount</label>
+                <label>Total Mileage</label>
                 <shortLabel>Mileage</shortLabel>
 
                 <maxLength>7</maxLength>
