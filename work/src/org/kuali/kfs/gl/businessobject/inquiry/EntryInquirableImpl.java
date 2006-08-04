@@ -45,80 +45,47 @@ import org.kuali.module.gl.web.Constant;
 public class EntryInquirableImpl extends AbstractGLInquirableImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EntryInquirableImpl.class);
 
-    private BusinessObjectDictionaryService dataDictionary;
-    private LookupService lookupService;
-    private Class businessObjectClass;
-
-    /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#buildUserDefinedAttributeKeyList()
-     */
+    @Override
     protected List buildUserDefinedAttributeKeyList() {
-        return new ArrayList();
+        return null;
     }
 
-    /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getUserDefinedAttributeMap()
-     */
+    @Override
     protected Map getUserDefinedAttributeMap() {
-        Map userDefinedAttributeMap = new HashMap();
-
-        userDefinedAttributeMap.put(PropertyConstants.FINANCIAL_DOCUMENT_NUMBER, "");
-        return userDefinedAttributeMap;
+        return null;
     }
 
-    /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getAttributeName(java.lang.String)
-     */
+    @Override
     protected String getAttributeName(String attributeName) {
-        return attributeName;
+        return null;
     }
 
-    /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyValue(java.lang.String, java.lang.Object)
-     */
+    @Override
     protected Object getKeyValue(String keyName, Object keyValue) {
-        if (isExclusiveField(keyName, keyValue)) {
-            keyValue = "";
-        }
-        return keyValue;
+        return null;
     }
 
-    /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyName(java.lang.String)
-     */
+    @Override
     protected String getKeyName(String keyName) {
-        keyName = BusinessObjectFieldConverter.convertToTransactionPropertyName(keyName);
-        return keyName;
+        return null;
     }
 
-    /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getLookupableImplAttributeName()
-     */
+    @Override
     protected String getLookupableImplAttributeName() {
-        return Constant.GL_LOOKUPABLE_ENTRY;
+        return null;
     }
 
-    /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getBaseUrl()
-     */
+    @Override
     protected String getBaseUrl() {
-        return Constants.GL_MODIFIED_INQUIRY_ACTION;
+        return null;
     }
 
-    /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getInquiryBusinessObjectClass()
-     */
+    @Override
     protected Class getInquiryBusinessObjectClass() {
-        return Entry.class;
+        return null;
     }
 
-    /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
-     */
-    protected void addMoreParameters(Properties parameter, String attributeName) {
-        String documentNumber = (String) getUserDefinedAttributeMap().get(attributeName);
-        parameter.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.DOC_HANDLER_METHOD);
-        parameter.put(Constants.PARAMETER_COMMAND, Constants.METHOD_DISPLAY_DOC_SEARCH_VIEW);
-        parameter.put(Constants.PARAMETER_DOC_ID, documentNumber);
+    @Override
+    protected void addMoreParameters(Properties parameter, String attributeName) {        
     }
 }
