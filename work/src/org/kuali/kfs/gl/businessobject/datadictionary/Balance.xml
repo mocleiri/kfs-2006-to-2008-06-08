@@ -38,7 +38,10 @@
                 <lookupField attributeName="subAccountNumber" forceLookup="true" />
                 <lookupField attributeName="objectCode" />
                 <lookupField attributeName="subObjectCode" />
-                <lookupField attributeName="balanceTypeCode"/>
+                
+                <lookupField attributeName="balanceTypeCode">
+	                <defaultValueFinderClass>org.kuali.module.gl.web.optionfinder.GLActualBalanceTypeOptionFinder</defaultValueFinderClass>
+                </lookupField>
 
                 <lookupField attributeName="objectTypeCode" />
 
@@ -64,9 +67,9 @@
                 <field attributeName="subObjectCode" />
                 <field attributeName="balanceTypeCode" />
                 <field attributeName="objectTypeCode" />
-                <field attributeName="accountLineAnnualBalanceAmount" />
                 <field attributeName="beginningBalanceLineAmount" />
                 <field attributeName="contractsGrantsBeginningBalanceAmount" />
+                <field attributeName="accountLineAnnualBalanceAmount" />
                 <field attributeName="month13Amount" />
 
                 <field attributeName="month1Amount" />
