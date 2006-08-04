@@ -30,7 +30,7 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupService.java,v 1.7.2.1 2006-07-26 21:51:40 abyrne Exp $
+ * @version $Id: OriginEntryGroupService.java,v 1.7.2.1.2.1 2006-08-04 21:30:22 tdurkin Exp $
  */
 
 public interface OriginEntryGroupService {
