@@ -33,8 +33,10 @@ import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.module.financial.bo.PreEncumbranceDocumentAccountingLineParser;
 
 /**
+ * The Pre-Encumbrance document provides the capability to record encumbrances independently of purchase orders, travel, or Physical Plant work orders. These transactions are for the use of the account manager to earmark funds for which unofficial commitments have already been made.
+ * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
- * @version $Id: PreEncumbranceDocument.java,v 1.2.2.1 2006-07-26 21:49:54 abyrne Exp $
+ * @version $Id: PreEncumbranceDocument.java,v 1.2.2.1.2.1 2006-08-04 21:30:24 tdurkin Exp $
  */
 public class PreEncumbranceDocument extends TransactionalDocumentBase {
 
