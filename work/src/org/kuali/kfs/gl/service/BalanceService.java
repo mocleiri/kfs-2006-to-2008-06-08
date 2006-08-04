@@ -31,7 +31,7 @@ import org.kuali.module.gl.bo.Balance;
 
 /**
  * @author Laran evans <lc278@cornell.edu>
- * @version $Id: BalanceService.java,v 1.10.2.1 2006-07-26 21:51:40 abyrne Exp $
+ * @version $Id: BalanceService.java,v 1.10.2.1.2.1 2006-08-04 21:30:22 tdurkin Exp $
  */
 
 public interface BalanceService {
