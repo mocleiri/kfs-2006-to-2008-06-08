@@ -77,7 +77,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.12.2.3 2006-07-26 21:51:23 abyrne Exp $
+ * @version $Id: CorrectionAction.java,v 1.12.2.3.2.1 2006-08-04 21:30:30 tdurkin Exp $
  * 
  */
 
@@ -106,24 +106,19 @@ public class CorrectionAction extends KualiDocumentActionBase {
             
             previousForm.setAllEntries(errorCorrectionForm.getAllEntries());
             previousForm.setEditableFlag(errorCorrectionForm.getEditableFlag());
-            /*
-            //may not need this part if use strut tag 
-            CorrectionDocument document = (CorrectionDocument) errorCorrectionForm.getDocument();  
-            CorrectionDocument previousDocument = (CorrectionDocument) previousForm.getDocument();
-            previousDocument.setCorrectionChangeGroup(document.getCorrectionChangeGroup());*/
-            
-            
-            
-            //previousForm.setDocument(errorCorrectionForm.getDocument());
-            
-            //arg2.setAttribute(arg0.getAttribute(), errorCorrectionForm);
+            previousForm.setManualEditFlag(errorCorrectionForm.getManualEditFlag());
             
         }
         
+        
+               
         if (request.getParameter("document.correctionChangeGroupNextLineNumber") != null){
             CorrectionActionHelper.rebuildDocumentState(request, previousForm);
         }
         
+        if (!previousForm.getMethodToCall().equals("viewResults")) {
+            GlobalVariables.getUserSession().addObject(Constants.CORRECTION_FORM_KEY, previousForm);
+        }
         
         
         return super.execute(mapping, form, request, response);
@@ -686,7 +681,9 @@ public class CorrectionAction extends KualiDocumentActionBase {
             correctionSearchCriterion = (CorrectionCriteria) fieldIter.next();
             String operator = correctionSearchCriterion.getOperator();
             String searchValue = correctionSearchCriterion.getCorrectionFieldValue();
-            String searchField = correctionSearchCriterion.getCorrectionFieldName();
+            
+            // correctionFieldName should be changed to Java BO 
+            String searchField = changeFieldName(correctionSearchCriterion.getCorrectionFieldName());
             if (!operator.equals("eq")) {
                 // Add operator
                 searchValue = changeSearchField(operator, searchValue);
@@ -761,7 +758,9 @@ public class CorrectionAction extends KualiDocumentActionBase {
         while (replaceIter.hasNext()) {
             correctionReplacementSpecification = (CorrectionChange) replaceIter.next();
             String replaceValue = correctionReplacementSpecification.getCorrectionFieldValue();
-            String replaceField = correctionReplacementSpecification.getCorrectionFieldName();
+            
+            // correctionFieldName should be changed to Java BO 
+            String replaceField = changeFieldName(correctionReplacementSpecification.getCorrectionFieldName());
 
             if (replaceField.equals("financialDocumentReversalDate")) {
                 // convert String to Date
@@ -1714,10 +1713,6 @@ public class CorrectionAction extends KualiDocumentActionBase {
         CorrectionForm errorCorrectionForm = (CorrectionForm) form;
         showAllEntries(errorCorrectionForm.getGroupIdList(), errorCorrectionForm, request);
         errorCorrectionForm.setDeleteFileFlag("Y");
-        
-        //mutliple dropdown!!
-        HttpSession session = request.getSession(true);
-        session.setAttribute("groupId", errorCorrectionForm.getGroupIdList());
        
         return mapping.findForward(Constants.MAPPING_BASIC);
         
@@ -1728,11 +1723,12 @@ public class CorrectionAction extends KualiDocumentActionBase {
         CorrectionForm errorCorrectionForm = (CorrectionForm) form;
         showAllEntries(errorCorrectionForm.getGroupIdList(), errorCorrectionForm, request);
        
-        HttpSession session = request.getSession(true);
-        String[] groupId = (String[]) session.getAttribute("groupId");
-        for(int i=0; i<groupId.length; i++){
-            OriginEntryGroup oeg = originEntryGroupService.getExactMatchingEntryGroup(Integer.parseInt(groupId[i]));
-            oeg.setProcess(false);
+        for (String eachGroupId : errorCorrectionForm.getGroupIdList()) {
+        
+            OriginEntryGroup oeg = originEntryGroupService.getExactMatchingEntryGroup(Integer.parseInt(eachGroupId));
+            oeg.setValid(false);
+            /*oeg.setProcess(false);
+            oeg.setScrub(false);*/
             originEntryGroupService.save(oeg);
         }
         
@@ -1780,17 +1776,44 @@ public class CorrectionAction extends KualiDocumentActionBase {
 
     public ActionForward viewResults(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
     
-        request.setAttribute(Constants.SEARCH_LIST_REQUEST_KEY, request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY));
+   /*     request.setAttribute(Constants.SEARCH_LIST_REQUEST_KEY, request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY));
         request.setAttribute("reqSearchResults", GlobalVariables.getUserSession().retrieveObject(request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY)));
-        
+   */     
         //UserSession userSession = (UserSession) request.getSession().getAttribute(Constants.USER_SESSION_KEY);
         
-        String correctionFormKey = request.getParameter(Constants.CORRECTION_FORM_KEY);
-        CorrectionForm errorCorrectionForm = (CorrectionForm) GlobalVariables.getUserSession().retrieveObject(correctionFormKey);
-        form = (ActionForm) GlobalVariables.getUserSession().retrieveObject(correctionFormKey);
         
-        request.setAttribute(Constants.CORRECTION_FORM_KEY, correctionFormKey);
-        request.setAttribute(mapping.getAttribute(), form);
+        //errorCorrectionForm = (CorrectionForm) GlobalVariables.getUserSession().retrieveObject(Constants.CORRECTION_FORM_KEY);
+        //errorCorrectionForm.setMethodToCall("viewResults");
+        
+        CorrectionForm sessionForm = (CorrectionForm) GlobalVariables.getUserSession().retrieveObject(Constants.CORRECTION_FORM_KEY);
+        
+        
+        
+        errorCorrectionForm = (CorrectionForm) form;
+        //form = (CorrectionForm) errorCorrectionForm;
+        
+        
+        
+        errorCorrectionForm.setChooseSystem(sessionForm.getChooseSystem());
+        errorCorrectionForm.setEditMethod(sessionForm.getEditMethod());
+        errorCorrectionForm.setManualEditFlag(sessionForm.getManualEditFlag());
+        errorCorrectionForm.setEditableFlag(sessionForm.getEditableFlag());
+        
+        
+        errorCorrectionForm.setDocument(sessionForm.getDocument());
+        errorCorrectionForm.setDeleteFileFlag(sessionForm.getDeleteFileFlag());
+        errorCorrectionForm.setDeleteOutput(sessionForm.getDeleteOutput());
+        errorCorrectionForm.setDocId(sessionForm.getDocId());
+        errorCorrectionForm.setDocTypeName(sessionForm.getDocTypeName());
+        errorCorrectionForm.setMatchCriteriaOnly(sessionForm.getMatchCriteriaOnly());
+        
+        //errorCorrectionForm.setTabStates(sessionForm.getTabStates());
+        
+       
+        
+        
+        //CorrectionForm previousForm = (CorrectionForm) form;
+        //previousForm.setAllEntries(errorCorrectionForm.getAllEntries());
         
         //userSession.removeObject();
         
@@ -1893,4 +1916,89 @@ public class CorrectionAction extends KualiDocumentActionBase {
     public void setOriginEntryService(OriginEntryService originEntryService) {
         this.originEntryService = originEntryService;
     }
+    
+public String changeFieldName(String fieldName){
+        
+        if(fieldName.equals("Fiscal Year")){
+            return "universityFiscalYear";
+        }
+        if(fieldName.equals("Budget Year")){
+            return "budgetYear";
+        }
+        if(fieldName.equals("Chart Code")){
+            return "chartOfAccountsCode";
+        }
+        if(fieldName.equals("Account Number")){
+            return "accountNumber";
+        }
+        if(fieldName.equals("Sub Account Number")){
+            return "subAccountNumber";
+        }
+        if(fieldName.equals("Object Code")){
+            return "financialObjectCode";
+        }
+        if(fieldName.equals("Sub Object Code")){
+            return "financialSubObjectCode";
+        }
+        if(fieldName.equals("Balance Type")){
+            return "financialBalanceTypeCode";
+        }
+        if(fieldName.equals("Object Type")){
+            return "financialObjectTypeCode";
+        }
+        if(fieldName.equals("Fiscal Period")){
+            return "universityFiscalPeriodCode";
+        }
+        if(fieldName.equals("Document Type")){
+            return "financialDocumentTypeCode";
+        }
+        if(fieldName.equals("Origin Code")){
+            return "financialSystemOriginationCode";
+        }
+        if(fieldName.equals("Document Number")){
+            return "financialDocumentNumber";
+        }
+        if(fieldName.equals("Sequence Number")){
+            return "transactionLedgerEntrySequenceNumber";
+        }
+        if(fieldName.equals("Description")){
+            return "transactionLedgerEntryDescription";
+        }
+        if(fieldName.equals("Amount")){
+            return "transactionLedgerEntryAmount";
+        }
+        if(fieldName.equals("Debit Credit Indicator")){
+            return "transactionDebitCreditCode";
+        }
+        if(fieldName.equals("Transaction Date")){
+            return "transactionDate";
+        }
+        if(fieldName.equals("Organization Document Number")){
+            return "organizationDocumentNumber";
+        }
+        if(fieldName.equals("Project Code")){
+            return "projectCode";
+        }
+        if(fieldName.equals("Organization Reference Number")){
+            return "organizationReferenceId";
+        }
+        if(fieldName.equals("Reference Document Type")){
+            return "referenceFinancialDocumentTypeCode";
+        }
+        if(fieldName.equals("Reference Origin Code")){
+            return "referenceFinancialSystemOriginationCode";
+        }
+        if(fieldName.equals("Reference Document Number")){
+            return "referenceFinancialDocumentNumber";
+        }
+        if(fieldName.equals("Reversal Date")){
+            return "financialDocumentReversalDate";
+        }
+        if(fieldName.equals("Transaction Encumbrance Update Code")){
+            return "transactionEncumbranceUpdateCode";
+        }
+        
+       return null;
+    }
+    
 }
