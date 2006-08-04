@@ -47,7 +47,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: OriginEntry.java,v 1.29.2.3 2006-07-26 21:49:56 abyrne Exp $
+ * @version $Id: OriginEntry.java,v 1.29.2.3.2.1 2006-08-04 21:30:26 tdurkin Exp $
  */
 public class OriginEntry extends BusinessObjectBase implements Transaction {
     static final long serialVersionUID = -2498312988235747448L;
