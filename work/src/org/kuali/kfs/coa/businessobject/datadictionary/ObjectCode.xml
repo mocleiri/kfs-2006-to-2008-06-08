@@ -77,10 +77,9 @@
                 <field attributeName="financialObjectLevelCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialObjectSubTypeCode" />
-                <field attributeName="financialObjectActiveCode" />
                 <field attributeName="historicalFinancialObjectCode" />
                 <field attributeName="financialBudgetAggregationCd" />
-
+                <field attributeName="financialObjectActiveCode" />
             </resultFields>
         </lookup>
 
@@ -178,8 +177,8 @@
                 they need to be made to both documents
             -->
             <attribute name="financialObjectLevelCode" forceUppercase="true">
-                <label>Object Level Code</label>
-                <shortLabel>ObjLevlCde</shortLabel>
+                <label>Level Code</label>
+                <shortLabel>Level Code</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern>
@@ -262,8 +261,8 @@
             </attribute>
 
             <attribute name="financialObjectSubTypeCode" forceUppercase="true">
-                <label>Object Sub Type Code</label>
-                <shortLabel>ObjSubTypCode</shortLabel>
+                <label>Object Sub-Type Code</label>
+                <shortLabel>Object Sub-Type Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern>
