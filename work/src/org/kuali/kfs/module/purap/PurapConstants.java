@@ -45,4 +45,17 @@ public class PurapConstants {
         NA_FAX_FORMAT_1
     };
     public static final int NA_DEFAULT_PHONE_NUM_DIGITS = 10;
+      
+    // Tax Number formats as  regular expressions
+    public static final String TAX_NUM_FORMAT_1 = "\\d{3}\\d{2}\\d{4}";
+    public static final String TAX_NUM_FORMAT_2 = "\\d{3}-\\d{2}-\\d{4}";
+    
+    public static final String[] TAX_NUMBER_FORMATS = {
+        TAX_NUM_FORMAT_1,
+        TAX_NUM_FORMAT_2,
+    };
+    
+    public static final int DEFAULT_TAX_NUM_DIGITS = 9;
+    public static final String NOT_ALLOWED_TAX_NUMBER = "356001673";
+    
 }
