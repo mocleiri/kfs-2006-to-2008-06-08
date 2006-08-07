@@ -28,6 +28,9 @@ package org.kuali.module.purap;
  * @author PURAP Development Team (kualidev@oncourse.iu.edu)
  */
 public class PurapConstants {
-
+    public static final String PURCHASE_ORDER = "PO";
+    public static final String REMIT = "RM";
+    public static final String DISBURSEMENT_VOUCHER = "DV";
+    
 
 }

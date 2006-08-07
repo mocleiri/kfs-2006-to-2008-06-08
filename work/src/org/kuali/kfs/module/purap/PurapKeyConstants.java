@@ -37,4 +37,5 @@ public class PurapKeyConstants {
     //Vendor Maintenance Address
     public static final String ERROR_US_REQUIRES_STATE = "error.vendorMaint.vendorAddress.USRequiresState";
     public static final String ERROR_US_REQUIRES_ZIP = "error.vendorMaint.vendorAddress.USRequiresZip";
+    public static final String ERROR_ADDRESS_TYPE = "error.vendorMaint.vendorAddress.addressType";
 }
