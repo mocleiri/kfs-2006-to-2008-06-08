@@ -99,6 +99,8 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
     private Integer currentTaskNumber;
     private Integer previousTaskNumber;
     private String previousAppointmentTypeCode;
+    private String previousSecondaryAppointmentTypeCode;
+    private String secondaryAppointmentTypeCode;
 
     public void initializeBudgetUser(BudgetDocument budgetDocument) {
         this.setBudgetUserSequenceNumber(budgetDocument.getPersonnelNextSequenceNumber());
@@ -598,5 +600,21 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
 
     public void setBudgetSalaryFiscalYear(Integer budgetSalaryFiscalYear) {
         this.budgetSalaryFiscalYear = budgetSalaryFiscalYear;
+    }
+
+    public String getSecondaryAppointmentTypeCode() {
+        return secondaryAppointmentTypeCode;
+    }
+
+    public void setSecondaryAppointmentTypeCode(String secondaryAppointmentTypeCode) {
+        this.secondaryAppointmentTypeCode = secondaryAppointmentTypeCode;
+    }
+
+    public String getPreviousSecondaryAppointmentTypeCode() {
+        return previousSecondaryAppointmentTypeCode;
+    }
+
+    public void setPreviousSecondaryAppointmentTypeCode(String previousSecondaryAppointmentTypeCode) {
+        this.previousSecondaryAppointmentTypeCode = previousSecondaryAppointmentTypeCode;
     }
 }

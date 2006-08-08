@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.DateTimeService;
@@ -103,15 +104,27 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
      * @parm budgetDocument - Stores information used to create the appropriate number of tasks/period
      */
     public void createPersonnelDetail(BudgetUser budgetUser, BudgetDocument budgetDocument) {
-        BudgetFringeRate userAppointmentType = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
-        budgetUser.setAppointmentTypeCode(userAppointmentType.getUniversityAppointmentTypeCode());
+        BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
+        budgetUser.setAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
 
-        for (BudgetTask task :  budgetDocument.getBudget().getTasks()) {
-            budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(budgetUser, budgetDocument, userAppointmentType, task, budgetDocument.getBudget().getPeriods()));
+        BudgetFringeRate secondaryBudgetFringeRate = null;
+        if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
+            secondaryBudgetFringeRate = budgetFringeRateService.getBudgetFringeRate(budgetDocument.getFinancialDocumentNumber(), budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode());
+            budgetUser.setSecondaryAppointmentTypeCode(secondaryBudgetFringeRate.getUniversityAppointmentTypeCode());
         }
+
+        
+        for (BudgetTask task :  budgetDocument.getBudget().getTasks()) {
+            budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(budgetUser, budgetDocument, budgetFringeRate, task, budgetDocument.getBudget().getPeriods(), false));
+            if (secondaryBudgetFringeRate != null) {
+                budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(budgetUser, budgetDocument, secondaryBudgetFringeRate, task, budgetDocument.getBudget().getPeriods(), true));
+            }
+        }
+        
+        Collections.sort(budgetUser.getUserAppointmentTasks());
     }
 
-    private UserAppointmentTask createUserAppointmentTask(BudgetUser budgetUser, BudgetDocument budgetDocument, BudgetFringeRate budgetFringeRate, BudgetTask task, List<BudgetPeriod> periods) {
+    private UserAppointmentTask createUserAppointmentTask(BudgetUser budgetUser, BudgetDocument budgetDocument, BudgetFringeRate budgetFringeRate, BudgetTask task, List<BudgetPeriod> periods, boolean isSecondaryAppointment) {
         Integer budgetTaskSequenceNumber = task.getBudgetTaskSequenceNumber();
 
         UserAppointmentTask userAppointmentTask = new UserAppointmentTask();
@@ -120,6 +133,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
         userAppointmentTask.setDocumentHeaderId(budgetUser.getDocumentHeaderId());
         userAppointmentTask.setUniversityAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
         userAppointmentTask.setBudgetFringeRate(budgetFringeRate);
+        userAppointmentTask.setSecondaryAppointment(isSecondaryAppointment);
 
         userAppointmentTask.setTask(task);
 
@@ -277,7 +291,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                 BudgetPeriod period = (BudgetPeriod) (ObjectUtils.retrieveObjectWithIdentitcalKey(budgetDocument.getBudget().getPeriods(), userAppointmentTaskPeriod.getPeriod()));
                 userAppointmentTaskPeriod.setPeriod(period);
 
-                if (userAppointmentTaskPeriod.getPeriod() != null && (StringUtils.contains(getAppointmentTypeMappings().get(ACADEMIC_YEAR_SUMMER).toString(), budgetUser.getAppointmentTypeCode()) || StringUtils.contains(getAppointmentTypeMappings().get(FULL_YEAR).toString(), budgetUser.getAppointmentTypeCode()))) {
+                if (userAppointmentTaskPeriod.getPeriod() != null && (StringUtils.contains(getAppointmentTypeMappings().get(ACADEMIC_YEAR_SUMMER).toString(), userAppointmentTask.getUniversityAppointmentTypeCode()) || StringUtils.contains(getAppointmentTypeMappings().get(FULL_YEAR).toString(), userAppointmentTask.getUniversityAppointmentTypeCode()))) {
 
                     // the following should ensure that we have up to date fringe rates in the case of modification from Parameters
                     BudgetFringeRate budgetFringeRate = (BudgetFringeRate) (ObjectUtils.retrieveObjectWithIdentitcalKey(budgetDocument.getBudget().getFringeRates(), userAppointmentTaskPeriod.getBudgetFringeRate()));
@@ -455,45 +469,81 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
     private void verifyAndPropogateAppointmentType(BudgetUser budgetUser, BudgetDocument budgetDocument) {
         List newUserAppointmentTasks = new ArrayList();
-       
-        String[] appointmentTypes = new String[] { null };
-        String userAppointmentTypes = budgetUser.getAppointmentTypeCode();
-        String secondaryAppointmentType = null;
 
-        if (budgetUser.getAppointmentTypeCode() != null) {
-            appointmentTypes = budgetUser.getAppointmentTypeCode().split(",");
-            budgetUser.setAppointmentTypeCode(appointmentTypes[0]);
-            if (appointmentTypes.length > 1) {
-                secondaryAppointmentType = appointmentTypes[1];
+        //check to see if the budgetUser.getAppointmentTypeCode has a value - if it doesn't, we're coming into the page from another page or are reloading data.  appointment type code is not stored
+        //in the database.  If it does exist, check to make sure that the type code hasn't changed since the last su
+        if (budgetUser.getAppointmentTypeCode() != null && !budgetUser.getAppointmentTypeCode().equals(budgetUser.getPreviousAppointmentTypeCode())) {
+            // appointment type has changed
+
+            AppointmentType previousAppointmentType = appointmentTypeDao.getAppointmentType(budgetUser.getPreviousAppointmentTypeCode());
+            
+            // Update the Fringes for this person to ensure that we're getting the most recent amounts
+            BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
+            budgetUser.setAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
+
+            BudgetFringeRate secondaryBudgetFringeRate = null;
+            if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
+                secondaryBudgetFringeRate = budgetFringeRateService.getBudgetFringeRate(budgetDocument.getFinancialDocumentNumber(), budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode());
+                budgetUser.setSecondaryAppointmentTypeCode(secondaryBudgetFringeRate.getUniversityAppointmentTypeCode());
+            } else {
+                budgetUser.setSecondaryAppointmentTypeCode(null);
+            }
+            
+            for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
+    
+                //check to see if this userAppointmentTask is associated with the primary or secondary (related) appointment type.
+                if (!userAppointmentTask.isSecondaryAppointment()) {
+                    userAppointmentTask.setBudgetFringeRate(budgetFringeRate);
+                    userAppointmentTask.setUniversityAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
+    
+                    //trickle-down the new appointmentType into the userAppointmentTaskPeriod objects 
+                    for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
+                        userAppointmentTaskPeriod.setBudgetFringeRate(budgetFringeRate);
+                        userAppointmentTaskPeriod.setUniversityAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
+                    }
+                } else if (secondaryBudgetFringeRate != null) {
+                    //this is a secondary appointment type record, update the record and the associated userAppointmentTaskPeriod records
+                    userAppointmentTask.setBudgetFringeRate(secondaryBudgetFringeRate);
+                    userAppointmentTask.setUniversityAppointmentTypeCode(secondaryBudgetFringeRate.getUniversityAppointmentTypeCode());
+    
+                    for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
+                        userAppointmentTaskPeriod.setBudgetFringeRate(secondaryBudgetFringeRate);
+                        userAppointmentTaskPeriod.setUniversityAppointmentTypeCode(secondaryBudgetFringeRate.getUniversityAppointmentTypeCode());
+                    }
+                }
+            }
+            if (secondaryBudgetFringeRate != null && budgetUser.getUserAppointmentTasks().size() / budgetDocument.getBudget().getTasks().size() < (secondaryBudgetFringeRate != null ? 2 : 1)) {
+                //There is a secondary appointment type, but there are no records created for it yet.  Create them.
+                BudgetUser missingBudgetUser = new BudgetUser(budgetUser);
+                missingBudgetUser.setAppointmentTypeCode(secondaryBudgetFringeRate.getUniversityAppointmentTypeCode());
+                for (BudgetTask task : budgetDocument.getBudget().getTasks()) {
+                    budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(missingBudgetUser, budgetDocument, secondaryBudgetFringeRate, task, budgetDocument.getBudget().getPeriods(), true));
+                }
+            }
+        } else if (budgetUser.getAppointmentTypeCode() == null) {
+            //Coming into the page with no appointment type code set in BudgetUser - need to set it.
+            List<AppointmentType> appointmentTypes = new ArrayList();
+            for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
+                if (!appointmentTypes.contains(userAppointmentTask.getUniversityAppointmentTypeCode())) {
+                    appointmentTypes.add(appointmentTypeDao.getAppointmentType(userAppointmentTask.getUniversityAppointmentTypeCode()));
+                }
+            }
+            if (appointmentTypes.size() == 1) {
+                BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
+                budgetUser.setAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
+            } else {
+                for (AppointmentType appointmentType : appointmentTypes) {
+                    if (appointmentType.getRelatedAppointmentTypeCode() != null) {
+                        budgetUser.setAppointmentTypeCode(appointmentType.getAppointmentTypeCode());
+                    } else {
+                        budgetUser.setSecondaryAppointmentTypeCode(appointmentType.getAppointmentTypeCode());
+                    }
+                }
+                for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
+                    userAppointmentTask.setSecondaryAppointment(userAppointmentTask.getUniversityAppointmentTypeCode().equals(budgetUser.getSecondaryAppointmentTypeCode()));
+                }
             }
         }
-
-        // Update the Fringes for this person to ensure that we're getting the most recent amounts
-        BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
-        budgetUser.setAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
-
-        for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
-
-            if (!userAppointmentTask.getUniversityAppointmentTypeCode().equals(secondaryAppointmentType)) {
-                userAppointmentTask.setBudgetFringeRate(budgetFringeRate);
-                userAppointmentTask.setUniversityAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
-
-                for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
-                    userAppointmentTaskPeriod.setBudgetFringeRate(budgetFringeRate);
-                    userAppointmentTaskPeriod.setUniversityAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
-                }
-
-                if (budgetUser.getUserAppointmentTasks().size() / budgetDocument.getBudget().getTasks().size() != appointmentTypes.length) {
-                    BudgetUser missingBudgetUser = new BudgetUser(budgetUser);
-                    missingBudgetUser.setAppointmentTypeCode(appointmentTypes[1]);
-                    BudgetFringeRate missingFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(missingBudgetUser);
-
-                    newUserAppointmentTasks.add(createUserAppointmentTask(missingBudgetUser, budgetDocument, missingFringeRate, userAppointmentTask.getTask(), budgetDocument.getBudget().getPeriods()));
-                }
-            }
-        }
-        budgetUser.getUserAppointmentTasks().addAll(newUserAppointmentTasks);
-        budgetUser.setAppointmentTypeCode(userAppointmentTypes);
     }
 
     public void reconcileAndCalculatePersonnel(BudgetDocument budgetDocument) {
@@ -528,14 +578,17 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
     public void reconcilePersonTaskPeriod(BudgetUser budgetUser, BudgetDocument budgetDocument) {
         BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
         budgetUser.setAppointmentTypeCode(budgetFringeRate.getUniversityAppointmentTypeCode());
+        if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
+            budgetUser.setSecondaryAppointmentTypeCode(budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode());
+        }
 
         List<BudgetTask> tasks = new ArrayList(budgetDocument.getBudget().getTasks());
 
-        List budgetFringeRates = new ArrayList();
+        List<BudgetFringeRate> budgetFringeRates = new ArrayList();
         budgetFringeRates.add(budgetFringeRate);
 
         // Iterate over the list of UserAppointmentTask objects, remove the task from each object from the Tasks List.
-        for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {   
+        for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
             userAppointmentTask.refreshReferenceObject(KraConstants.TASK);
             ObjectUtils.removeObjectWithIdentitcalKey(tasks, userAppointmentTask.getTask());
 
@@ -558,6 +611,8 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                 userAppointmentTask.getUserAppointmentTaskPeriods().add(createUserAppointmentTaskPeriod(budgetUser, budgetDocument, budgetFringeRate, userAppointmentTask.getTask(), period));
             }
 
+            userAppointmentTask.setSecondaryAppointment(userAppointmentTask.getUniversityAppointmentTypeCode().equals(budgetUser.getSecondaryAppointmentTypeCode()));
+
             Collections.sort(userAppointmentTask.getUserAppointmentTaskPeriods());
         }
 
@@ -565,9 +620,10 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
         for (BudgetTask task : tasks) {
             for (Iterator budgetFringeRateIterator = budgetFringeRates.iterator(); budgetFringeRateIterator.hasNext();) {
                 budgetFringeRate = (BudgetFringeRate) budgetFringeRateIterator.next();
-                budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(budgetUser, budgetDocument, budgetFringeRate, task, budgetDocument.getBudget().getPeriods()));
+                budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(budgetUser, budgetDocument, budgetFringeRate, task, budgetDocument.getBudget().getPeriods(), budgetUser.getSecondaryAppointmentTypeCode().equals(budgetFringeRate.getUniversityAppointmentTypeCode())));
             }
         }
+        
         Collections.sort(budgetUser.getUserAppointmentTasks());
     }
 

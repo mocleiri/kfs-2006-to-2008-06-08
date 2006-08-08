@@ -22,10 +22,7 @@
  */
 package org.kuali.module.kra.budget.rules.budget;
 
-import static org.kuali.module.kra.budget.service.impl.BudgetPersonnelServiceImpl.ACADEMIC_YEAR_SUMMER;
-import static org.kuali.module.kra.budget.service.impl.BudgetPersonnelServiceImpl.FULL_YEAR;
-import static org.kuali.module.kra.budget.service.impl.BudgetPersonnelServiceImpl.GRADUATE_ASSISTANT;
-import static org.kuali.module.kra.budget.service.impl.BudgetPersonnelServiceImpl.HOURLY;
+import static org.kuali.module.kra.budget.service.impl.BudgetPersonnelServiceImpl.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -271,7 +268,9 @@ public class BudgetPersonnelRule {
                         Integer periodNumber = new Integer(userAppointmentTaskPeriodIndex + 1);
 
                         UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
-                        if (!StringUtils.equals(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
+                        if (!StringUtils.equals(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString()) &&
+                                !StringUtils.contains(appointmentTypeMappings.get("gradResAssistant").toString(), userAppointmentTaskPeriod.getUniversityAppointmentTypeCode()) &&
+                                !StringUtils.contains(appointmentTypeMappings.get("hourly").toString(), userAppointmentTaskPeriod.getUniversityAppointmentTypeCode())) {
                             if (periodEffortMap.get(periodNumber) == null) {
                                 periodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount()));
                             }
@@ -279,7 +278,7 @@ public class BudgetPersonnelRule {
                                 periodEffortMap.put(periodNumber, ((KualiInteger) periodEffortMap.get(periodNumber)).add(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount())));
                             }
                         }
-                        else {
+                        else if (StringUtils.equals(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
                             if (summerPeriodEffortMap.get(periodNumber) == null) {
                                 summerPeriodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount()));
                             }

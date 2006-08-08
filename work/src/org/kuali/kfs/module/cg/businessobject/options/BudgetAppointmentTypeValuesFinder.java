@@ -51,19 +51,16 @@ public class BudgetAppointmentTypeValuesFinder extends KeyValuesBase {
      * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
-//      if (summerAppointmentType == null) {
+      if (summerAppointmentType == null) {
         summerAppointmentType = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("KraDevelopmentGroup", "KraBudgetPersonnelSummerGridAppointmentType");
-//    }
+    }
 
     List<AppointmentType> appointmentTypes = (List) SpringServiceLocator.getBudgetFringeRateService().getDefaultFringeRates(); // getDefaultFringeRates is, perhaps, misnamed. It returns a list of appointment types.
     List appointmentTypeKeyLabelPairList = new ArrayList();
     for (AppointmentType element : appointmentTypes) {
-        String keys = element.getAppointmentTypeCode();
         if (!element.getAppointmentTypeCode().equals(summerAppointmentType)) {
-        } else {
-            keys += ",H1";
+            appointmentTypeKeyLabelPairList.add(new KeyLabelPair(element.getAppointmentTypeCode(), element.getAppointmentTypeDescription()));
         }
-        appointmentTypeKeyLabelPairList.add(new KeyLabelPair(keys, element.getAppointmentTypeDescription()));
     }
 
     return appointmentTypeKeyLabelPairList;

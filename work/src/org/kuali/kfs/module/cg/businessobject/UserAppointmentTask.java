@@ -44,14 +44,11 @@ public class UserAppointmentTask extends BusinessObjectBase implements Comparabl
     private Integer budgetUserSequenceNumber;
     private String universityAppointmentTypeCode;
 
-    private KualiInteger agencyFringeBenefitTotalAmountTask = new KualiInteger(0); // TODO Make these KualiInteger if that ever
-                                                                                    // becomes
-    private KualiInteger agencyRequestTotalAmountTask = new KualiInteger(0); // TODO Make these KualiInteger if that ever becomes
-    private KualiInteger universityCostShareFringeBenefitTotalAmountTask = new KualiInteger(0); // TODO Make these KualiInteger if
-                                                                                                // that ever becomes
-    private KualiInteger universityCostShareRequestTotalAmountTask = new KualiInteger(0); // TODO Make these KualiInteger if that
-                                                                                            // ever becomes
-
+    private KualiInteger agencyFringeBenefitTotalAmountTask = new KualiInteger(0); 
+    private KualiInteger agencyRequestTotalAmountTask = new KualiInteger(0); 
+    private KualiInteger universityCostShareFringeBenefitTotalAmountTask = new KualiInteger(0);
+    private KualiInteger universityCostShareRequestTotalAmountTask = new KualiInteger(0);
+    
     private KualiInteger gradAsstAgencySalaryTotal = new KualiInteger(0);
     private KualiInteger gradAsstAgencyHealthInsuranceTotal = new KualiInteger(0);
     private KualiInteger gradAsstUnivSalaryTotal = new KualiInteger(0);
@@ -62,6 +59,7 @@ public class UserAppointmentTask extends BusinessObjectBase implements Comparabl
     private BudgetTask task;
     private BudgetFringeRate budgetFringeRate;
 
+    private boolean secondaryAppointment;
 
     /**
      * Default no-arg constructor.
@@ -410,5 +408,13 @@ public class UserAppointmentTask extends BusinessObjectBase implements Comparabl
      */
     public void setGradAsstUnivSalaryTotal(KualiInteger gradAsstUnivSalaryTotal) {
         this.gradAsstUnivSalaryTotal = gradAsstUnivSalaryTotal;
+    }
+
+    public boolean isSecondaryAppointment() {
+        return secondaryAppointment;
+    }
+
+    public void setSecondaryAppointment(boolean isSecondaryAppointment) {
+        this.secondaryAppointment = isSecondaryAppointment;
     }
 }

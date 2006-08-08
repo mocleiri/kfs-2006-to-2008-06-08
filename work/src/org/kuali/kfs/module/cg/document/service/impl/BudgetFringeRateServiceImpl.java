@@ -48,7 +48,12 @@ public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
     private KualiConfigurationService kualiConfigurationService;
 
     public BudgetFringeRate getBudgetFringeRate(String documentHeaderId, String universityAppointmentTypeCode) {
-        return budgetFringeRateDao.getBudgetFringeRate(documentHeaderId, universityAppointmentTypeCode);
+        BudgetFringeRate budgetFringeRate = budgetFringeRateDao.getBudgetFringeRate(documentHeaderId, universityAppointmentTypeCode);
+        if (budgetFringeRate == null) {
+            AppointmentType appointmentType = appointmentTypeDao.getAppointmentType(universityAppointmentTypeCode);
+            budgetFringeRate = new BudgetFringeRate(documentHeaderId, appointmentType);
+        }
+        return budgetFringeRate;
     }
 
     /**

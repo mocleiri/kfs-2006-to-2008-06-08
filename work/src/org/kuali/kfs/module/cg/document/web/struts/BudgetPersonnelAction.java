@@ -39,6 +39,8 @@ import org.kuali.core.rule.event.KualiDocumentEventBase;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.bo.BudgetUser;
+import org.kuali.module.kra.budget.bo.UserAppointmentTask;
+import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
 import org.kuali.module.kra.budget.rules.event.CalculatePersonnelEvent;
 import org.kuali.module.kra.budget.rules.event.InsertPersonnelEventBase;
 import org.kuali.module.kra.budget.rules.event.SavePersonnelEventBase;
@@ -186,7 +188,21 @@ public class BudgetPersonnelAction extends BudgetAction {
             for (Iterator i = budgetForm.getBudgetDocument().getBudget().getPersonnel().iterator(); i.hasNext();) {
                 BudgetUser budgetUser = (BudgetUser) i.next();
                 budgetUser.setCurrentTaskNumber(budgetUser.getPreviousTaskNumber());
+
+                for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
+                    if (userAppointmentTask.getUniversityAppointmentTypeCode().equals(budgetUser.getAppointmentTypeCode())) {
+                        userAppointmentTask.setUniversityAppointmentTypeCode(budgetUser.getPreviousAppointmentTypeCode());
+                    } else if (userAppointmentTask.getUniversityAppointmentTypeCode().equals(budgetUser.getSecondaryAppointmentTypeCode())) {
+                        userAppointmentTask.setUniversityAppointmentTypeCode(budgetUser.getPreviousSecondaryAppointmentTypeCode());
+                    }
+                    for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
+                        userAppointmentTaskPeriod.setUniversityAppointmentTypeCode(userAppointmentTask.getUniversityAppointmentTypeCode());
+                    }
+                }
+
                 budgetUser.setAppointmentTypeCode(budgetUser.getPreviousAppointmentTypeCode());
+                budgetUser.setSecondaryAppointmentTypeCode(budgetUser.getPreviousSecondaryAppointmentTypeCode());
+                
             }
         }
         
