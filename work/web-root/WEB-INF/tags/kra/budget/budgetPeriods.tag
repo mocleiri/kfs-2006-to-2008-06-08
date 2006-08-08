@@ -13,7 +13,7 @@
 
 <div class="h2-container"> <span class="subhead-left">
   <h2><a name="Periods"></a>Budget Periods</h2>
-  </span><span class="subhead-right"><kul:help businessObjectClassName="${businessObjectClass}" altText="help"/></span> </div>
+  </span><span class="subhead-right"><kul:help securityGroupName="${KraConstants.KRA_ADMIN_GROUP_NAME}" parameterName="${KraConstants.BUDGET_PERIODS_HELP_PARAMETER_NAME}" altText="help"/></span> </div>
 <table cellpadding="0" cellspacing="0" class="datatable" summary=""> <tbody>
   <tr>
     <th width="2%"  scope="row">&nbsp;</th>
