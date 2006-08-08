@@ -33,18 +33,18 @@ public class PurapConstants {
     public static final String DISBURSEMENT_VOUCHER = "DV";
     
     //North American phone number formats as regular expressions
-    public static final String NA_PHONE_FORMAT_1 = "\\d{3}-\\d{3}-\\d{4}";
-    public static final String NA_PHONE_FORMAT_2 = "\\(\\d{3}\\)\\s\\d{3}-\\d{4}";
-    public static final String NA_PHONE_FORMAT_3 = "\\d{3}\\s\\d{3}\\s\\d{4}";
-    public static final String NA_FAX_FORMAT_1 = "\\d{3},\\d{3}-\\d{4}";
+    public static final String GENERIC_PHONE_FORMAT_1 = "\\d{3}-\\d{3}-\\d{4}";
+    public static final String GENERIC_PHONE_FORMAT_2 = "\\(\\d{3}\\)\\s\\d{3}-\\d{4}";
+    public static final String GENERIC_PHONE_FORMAT_3 = "\\d{3}\\s\\d{3}\\s\\d{4}";
+    public static final String GENERIC_FAX_FORMAT_1 = "\\d{3},\\d{3}-\\d{4}";
     
-    public static final String[] NORTH_AMERICAN_PHONE_NUMBER_FORMATS = {
-        NA_PHONE_FORMAT_1,
-        NA_PHONE_FORMAT_2,
-        NA_PHONE_FORMAT_3,
-        NA_FAX_FORMAT_1
+    public static final String[] GENERIC_PHONE_NUMBER_FORMATS = {
+        GENERIC_PHONE_FORMAT_1,
+        GENERIC_PHONE_FORMAT_2,
+        GENERIC_PHONE_FORMAT_3,
+        GENERIC_FAX_FORMAT_1
     };
-    public static final int NA_DEFAULT_PHONE_NUM_DIGITS = 10;
+    public static final int GENERIC_DEFAULT_PHONE_NUM_DIGITS = 10;
       
     // Tax Number formats as  regular expressions
     public static final String TAX_NUM_FORMAT_1 = "\\d{3}\\d{2}\\d{4}";
