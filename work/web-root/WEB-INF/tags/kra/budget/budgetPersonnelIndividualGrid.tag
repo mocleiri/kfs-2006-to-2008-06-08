@@ -16,41 +16,39 @@
                  <c:set var="appointmentTypes" value="${fn:split(person.appointmentTypeCode, ',')}" />
                  
                  <c:choose>
-	                 <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['fullYear'], appointmentTypes[0])}">
-	                   <kra-b:budgetPersonnelFullYearGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${appointmentTypes[0]}" />
+	                 <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['fullYear'], person.appointmentTypeCode)}">
+	                   <kra-b:budgetPersonnelFullYearGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${person.appointmentTypeCode}" />
 	                 </c:when>
-                   <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['academicYear'], appointmentTypes[0])}">
-	                   <kra-b:budgetPersonnelFullYearGrid person="${person}" personListIndex="${personListIndex}"  matchAppointmentType="${appointmentTypes[0]}"/>
+                   <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['academicYear'], person.appointmentTypeCode)}">
+	                   <kra-b:budgetPersonnelFullYearGrid person="${person}" personListIndex="${personListIndex}"  matchAppointmentType="${person.appointmentTypeCode}"/>
 	                 </c:when>
-                   <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['academicSummer'], appointmentTypes[0])}">
-                     <kra-b:budgetPersonnelSummerGrid person="${person}" personListIndex="${personListIndex}"  matchAppointmentType="${appointmentTypes[0]}"/>
+                   <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['academicSummer'], person.appointmentTypeCode)}">
+                     <kra-b:budgetPersonnelSummerGrid person="${person}" personListIndex="${personListIndex}"  matchAppointmentType="${person.appointmentTypeCode}"/>
                    </c:when>
-                   <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['hourly'], appointmentTypes[0])}">
-                     <kra-b:budgetPersonnelHourlyGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${appointmentTypes[0]}" />
+                   <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['hourly'], person.appointmentTypeCode)}">
+                     <kra-b:budgetPersonnelHourlyGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${person.appointmentTypeCode}" />
                    </c:when>
-                   <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['gradResAssistant'], appointmentTypes[0])}">
-                     <kra-b:budgetResGradAsstGrid person="${person}" personListIndex="${personListIndex}"  matchAppointmentType="${appointmentTypes[0]}" />
+                   <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['gradResAssistant'], person.appointmentTypeCode)}">
+                     <kra-b:budgetResGradAsstGrid person="${person}" personListIndex="${personListIndex}"  matchAppointmentType="${person.appointmentTypeCode}" />
                    </c:when>
                  </c:choose>
                                     
-                                    
-                                    
-                 <c:if test="${not empty appointmentTypes[1] }">
+                 <c:if test="${not empty person.secondaryAppointmentTypeCode }">
                   <c:choose>
-	                  <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['fullYear'], appointmentTypes[1])}">
-	                    <kra-b:budgetPersonnelFullYearGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${appointmentTypes[1]}" />
+	                  <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['fullYear'], person.secondaryAppointmentTypeCode)}">
+	                    <kra-b:budgetPersonnelFullYearGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${person.secondaryAppointmentTypeCode}" />
 	                  </c:when>
-                    <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['academicYear'], appointmentTypes[1])}">
-	                    <kra-b:budgetPersonnelFullYearGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${appointmentTypes[1]}"  />
+                    <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['academicYear'], person.secondaryAppointmentTypeCode)}">
+	                    <kra-b:budgetPersonnelFullYearGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${person.secondaryAppointmentTypeCode}"  />
                     </c:when>
-                    <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['academicSummer'], appointmentTypes[1])}">
-                      <kra-b:budgetPersonnelSummerGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${appointmentTypes[1]}"  />
+                    <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['academicSummer'], person.secondaryAppointmentTypeCode)}">
+                      <kra-b:budgetPersonnelSummerGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${person.secondaryAppointmentTypeCode}"  />
                     </c:when>
-                    <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['hourly'], appointmentTypes[1])}">
-                      <kra-b:budgetPersonnelHourlyGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${appointmentTypes[1]}"  />
+                    <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['hourly'], person.secondaryAppointmentTypeCode)}">
+                      <kra-b:budgetPersonnelHourlyGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${person.secondaryAppointmentTypeCode}"  />
                     </c:when>
-                    <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['gradResAssistant'], appointmentTypes[1])}">
-                      <kra-b:budgetResGradAsstGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${appointmentTypes[1]}"  />
+                    <c:when test="${fn:contains(KualiForm.appointmentTypeGridMappings['gradResAssistant'], person.secondaryAppointmentTypeCode)}">
+                      <kra-b:budgetResGradAsstGrid person="${person}" personListIndex="${personListIndex}" matchAppointmentType="${person.secondaryAppointmentTypeCode}"  />
                     </c:when>
                   </c:choose>
                  </c:if>
@@ -64,6 +62,7 @@
 	                 <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].budgetTaskSequenceNumber" />
 	                 <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].universityAppointmentTypeCode" />
 	                 <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].versionNumber" />
+	                 <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].secondaryAppointment" />
 	                 <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].objectId" />
 	                 
 	                 <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].budgetFringeRate.documentHeaderId" />
@@ -102,7 +101,7 @@
                      <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].task.budgetTaskName" />
 
 
-	                     <c:if test="${ (!(fn:contains(KualiForm.appointmentTypeGridMappings['fullYear'], userAppointmentType) or fn:contains(KualiForm.appointmentTypeGridMappings['academicYearSummer'], userAppointmentType))) or not (userAppointmentTask.budgetTaskSequenceNumber eq person.currentTaskNumber) }">
+	                     <c:if test="${ (!(fn:contains(KualiForm.appointmentTypeGridMappings['fullYear'], userAppointmentType) or fn:contains(KualiForm.appointmentTypeGridMappings['academicYearSummer'], userAppointmentType))) or not (userAppointmentTask.budgetTaskSequenceNumber eq person.currentTaskNumber) or (userAppointmentTask.secondaryAppointment and empty person.secondaryAppointmentTypeCode) }">
                          <!-- Salary Appointment Types -->
                          <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].userBudgetPeriodSalaryAmount" />
                          <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].agencyPercentEffortAmount" />
@@ -114,19 +113,19 @@
                          <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].universityCostSharePercentEffortAmount" />
 	                     </c:if>
 	                  
-                       <c:if test="${ !fn:contains(KualiForm.appointmentTypeGridMappings['academicSummer'], userAppointmentType) or not (userAppointmentTask.budgetTaskSequenceNumber eq person.currentTaskNumber)  }">
+                       <c:if test="${ !fn:contains(KualiForm.appointmentTypeGridMappings['academicSummer'], userAppointmentType) or not (userAppointmentTask.budgetTaskSequenceNumber eq person.currentTaskNumber) or (userAppointmentTask.secondaryAppointment and empty person.secondaryAppointmentTypeCode)  }">
                          <!-- Summer Appointment Type -->
                          <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].personWeeksAmount" />
                        </c:if>
                     
-                       <c:if test="${!fn:contains(KualiForm.appointmentTypeGridMappings['hourly'], userAppointmentType) or not (userAppointmentTask.budgetTaskSequenceNumber eq person.currentTaskNumber) }">
+                       <c:if test="${!fn:contains(KualiForm.appointmentTypeGridMappings['hourly'], userAppointmentType) or not (userAppointmentTask.budgetTaskSequenceNumber eq person.currentTaskNumber) or (userAppointmentTask.secondaryAppointment and empty person.secondaryAppointmentTypeCode) }">
                          <!-- Hourly Appointment Types -->
                          <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].userHourlyRate" />
                          <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].userAgencyHours" />
                          <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].userUniversityHours" />
                        </c:if>
                     
-                       <c:if test="${!fn:contains(KualiForm.appointmentTypeGridMappings['gradResAssistant'], userAppointmentType) or not (userAppointmentTask.budgetTaskSequenceNumber eq person.currentTaskNumber) }">
+                       <c:if test="${!fn:contains(KualiForm.appointmentTypeGridMappings['gradResAssistant'], userAppointmentType) or not (userAppointmentTask.budgetTaskSequenceNumber eq person.currentTaskNumber) or (userAppointmentTask.secondaryAppointment and empty person.secondaryAppointmentTypeCode) }">
                          <!-- Grad Asst Appointment -->
                          <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].agencyFullTimeEquivalentPercent" />
                          <html:hidden property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].agencyHealthInsuranceAmount" />

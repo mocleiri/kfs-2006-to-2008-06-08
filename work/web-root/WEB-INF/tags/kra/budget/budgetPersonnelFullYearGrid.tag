@@ -22,7 +22,7 @@
 
               <tr>
                 <th rowspan="2" class="bord-l-b"><b>Period</b></th>
-                <th rowspan="2" class="bord-l-b"> Period Salary </th>
+                <th rowspan="2" colspan="2" class="bord-l-b"> Period Salary </th>
                 <td colspan="4" class="tab-subhead"><div align="center"><b>Agency Amount Requested</b> </div></td>
                 <td colspan="4" class="tab-subhead"><div align="center"><b>Institution CS</b></div></td>
                 <th rowspan="2" class="bord-l-b"><b>Total Effort </b></th>
@@ -51,7 +51,7 @@
   		                    (<fmt:formatDate value="${userAppointmentTaskPeriod.period.budgetPeriodBeginDate}" dateStyle="short"/> - 
   		                     <fmt:formatDate value="${userAppointmentTaskPeriod.period.budgetPeriodEndDate}" dateStyle="short"/>)</span></div>
                       </td>
-  		                <td class="datacell">
+  		                <td colspan="2" class="datacell">
                         <div align="right">
                           <fmt:formatNumber value="${userAppointmentTaskPeriod.userBudgetPeriodSalaryAmount}" type="currency" currencySymbol="" maxFractionDigits="0" />
                           <kul:htmlControlAttribute property="document.budget.personFromList[${personListIndex}].userAppointmentTask[${userAppointmentTaskIndex}].userAppointmentTaskPeriod[${userAppointmentTaskPeriodIndex}].userBudgetPeriodSalaryAmount" attributeEntry="${userAppointmentTaskPeriodAttributes.userBudgetPeriodSalaryAmount}"/>
@@ -117,7 +117,7 @@
                   </logic:iterate>
   	              <tr>
   	                <th class="bord-l-b"><b>TOTAL</b> </th>
-  	                <td colspan="2" class="infoline">&nbsp;</td>
+  	                <td colspan="3" class="infoline">&nbsp;</td>
   	                <td class="infoline"><div align="right"><b><fmt:formatNumber value="${userAppointmentTask.agencyRequestTotalAmountTask}" type="currency" currencySymbol="$" maxFractionDigits="0" /></b> </div></td>
   	
   	                <td class="infoline">&nbsp;</td>
