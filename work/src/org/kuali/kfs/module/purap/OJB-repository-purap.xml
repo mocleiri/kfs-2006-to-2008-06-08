@@ -47,9 +47,6 @@
 	<field-descriptor name="vendorRestrictedReasonText" column="VNDR_RSTRC_REAS_TXT" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorRestrictedDate" column="VNDR_RSTRC_DT" jdbc-type="DATE"/>
 	<field-descriptor name="vendorRestrictedPersonIdentifier" column="VNDR_RSTRC_PRSN_ID" jdbc-type="VARCHAR"/>
-	<field-descriptor name="vendorProtestedIndicator" column="VNDR_PRTST_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<field-descriptor name="vendorProtestedDate" column="VNDR_PRTST_DT" jdbc-type="DATE"/>
-	<field-descriptor name="vendorProtestedIdentifier" column="VNDR_PRTST_ID" jdbc-type="VARCHAR"/>
     <field-descriptor name="vendorSoldToGeneratedIdentifier" column="VNDR_SOLD_TO_GNRTD_ID" jdbc-type="INTEGER"/>
     <field-descriptor name="vendorSoldToAssignedIdentifier" column="VNDR_SOLD_TO_ASND_ID" jdbc-type="INTEGER"/>
 	<field-descriptor name="vendorLegacyTaxNumber" column="VNDR_LGCY_TAX_NBR" jdbc-type="VARCHAR"/>
