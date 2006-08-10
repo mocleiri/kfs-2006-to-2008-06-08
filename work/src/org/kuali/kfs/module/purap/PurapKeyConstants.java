@@ -35,8 +35,10 @@ public class PurapKeyConstants {
     public static final String ERROR_OWNERSHIP_REQUIRES_TAX_NUMBER = "error.vendorMaint.OwnershipRequiresTaxNumber";
     public static final String ERROR_VENDOR_TAX_TYPE_AND_NUMBER_COMBO_EXISTS = "error.vendorMaint.addVendor.vendor.exists";
     public static final String ERROR_VENDOR_NAME_REQUIRED = "error.vendorMaint.vendorName.required";
-    public static final String ERROR_VENDOR_BOTH_NAME_REQUIRED = "error.vendor.bothNameRequired";
-    public static final String ERROR_VENDOR_NAME_INVALID = "error.vendor.nameInvalid";
+    public static final String ERROR_VENDOR_BOTH_NAME_REQUIRED = "error.vendorMaint.bothNameRequired";
+    public static final String ERROR_VENDOR_NAME_INVALID = "error.vendorMaint.nameInvalid";
+    public static final String ERROR_VENDOR_SSN_FEIN_ALLOWED = "error.vendorMaint.ssn.fein.allowed";
+    
     //Vendor Maintenance Address
     public static final String ERROR_US_REQUIRES_STATE = "error.vendorMaint.vendorAddress.USRequiresState";
     public static final String ERROR_US_REQUIRES_ZIP = "error.vendorMaint.vendorAddress.USRequiresZip";

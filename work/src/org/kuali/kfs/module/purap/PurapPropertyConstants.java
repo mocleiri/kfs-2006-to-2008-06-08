@@ -37,4 +37,5 @@ public class PurapPropertyConstants {
     public static final String VENDOR_FEIN_SSN_INDICATOR = "vendorFeinSocialSecurityNumberIndicator";
     public static final String VENDOR_TAX_NUMBER_ONLY = "vendorTaxNumber";
     public static final String VENDOR_NAME = "vendorName";
+    public static final String VENDOR_TAX_TYPE_CODE = "vendorHeader.vendorTaxTypeCode";
 }

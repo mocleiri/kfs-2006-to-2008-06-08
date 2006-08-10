@@ -29,11 +29,13 @@ package org.kuali.module.purap;
  */
 public class PurapConstants {
 
+    public static final String NONE = "NONE";
+    
     //Vendor Tax Types
     public static final String TAX_TYPE_FEIN = "FEIN";
     public static final String TAX_TYPE_SSN = "SSN";
 //    public static final String TAX_TYPE_ITIN = "ITIN";  //are we implementing this in Kuali??
-
+    
     public static final String PURCHASE_ORDER = "PO";
     public static final String REMIT = "RM";
     public static final String DISBURSEMENT_VOUCHER = "DV";
