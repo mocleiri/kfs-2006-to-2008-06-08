@@ -30,6 +30,7 @@ package org.kuali.module.purap;
 public class PurapPropertyConstants {
     
     public static final String VENDOR_TAX_NUMBER = "vendorHeader.vendorTaxNumber";
+    public static final String VENDOR_FAX_NUMBER = "vendorFaxNumber";
     public static final String VENDOR_ADDRESS = "vendorAddresses";
     public static final String VENDOR_ADDRESS_STATE = "vendorStateCode";
     public static final String VENDOR_ADDRESS_ZIP = "vendorZipCode";
