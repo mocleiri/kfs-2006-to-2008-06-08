@@ -42,7 +42,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * @author Kuali General Ledger Team <kualigltech@oncourse.iu.edu>
- * @version $Id: ScrubberServiceImpl.java,v 1.95.2.1.2.1 2006-08-04 21:30:21 tdurkin Exp $
+ * @version $Id: ScrubberServiceImpl.java,v 1.95.2.1.2.2 2006-08-11 21:08:13 tdurkin Exp $
  */
 
 public class ScrubberServiceImpl implements ScrubberService, BeanFactoryAware {
