@@ -22,25 +22,28 @@
  */
 package org.kuali.module.financial.rules;
 
+import org.apache.commons.lang.StringUtils;
 import static org.kuali.Constants.AMOUNT_PROPERTY_NAME;
 import static org.kuali.Constants.BALANCE_TYPE_ACTUAL;
 import static org.kuali.Constants.BALANCE_TYPE_BASE_BUDGET;
 import static org.kuali.Constants.BALANCE_TYPE_BUDGET_STATISTICS;
 import static org.kuali.Constants.BALANCE_TYPE_CURRENT_BUDGET;
+import static org.kuali.Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE;
 import static org.kuali.Constants.BALANCE_TYPE_MONTHLY_BUDGET;
+import static org.kuali.Constants.BLANK_SPACE;
 import static org.kuali.Constants.CREDIT_AMOUNT_PROPERTY_NAME;
 import static org.kuali.Constants.DEBIT_AMOUNT_PROPERTY_NAME;
 import static org.kuali.Constants.GENERIC_CODE_PROPERTY_NAME;
 import static org.kuali.Constants.GL_CREDIT_CODE;
 import static org.kuali.Constants.GL_DEBIT_CODE;
-import static org.kuali.Constants.JOURNAL_LINE_HELPER_CREDIT_PROPERTY_NAME;
-import static org.kuali.Constants.JOURNAL_LINE_HELPER_DEBIT_PROPERTY_NAME;
 import static org.kuali.Constants.JOURNAL_LINE_HELPER_PROPERTY_NAME;
 import static org.kuali.Constants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME;
 import static org.kuali.Constants.OBJECT_TYPE_CODE_PROPERTY_NAME;
 import static org.kuali.Constants.SF_TYPE_CASH_AT_ACCOUNT;
 import static org.kuali.Constants.SQUARE_BRACKET_LEFT;
 import static org.kuali.Constants.SQUARE_BRACKET_RIGHT;
+import static org.kuali.Constants.VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME;
+import static org.kuali.Constants.VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME;
 import static org.kuali.KeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES;
 import static org.kuali.KeyConstants.ERROR_REQUIRED;
 import static org.kuali.KeyConstants.ERROR_ZERO_AMOUNT;
@@ -54,11 +57,6 @@ import static org.kuali.PropertyConstants.REFERENCE_ORIGIN_CODE;
 import static org.kuali.PropertyConstants.REFERENCE_TYPE_CODE;
 import static org.kuali.PropertyConstants.REVERSAL_DATE;
 import static org.kuali.PropertyConstants.SELECTED_ACCOUNTING_PERIOD;
-import static org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.BALANCE_TYPE_CODE.EXTERNAL_ENCUMBRANCE;
-
-import java.sql.Timestamp;
-
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
@@ -165,7 +163,7 @@ public class JournalVoucherDocumentRule extends TransactionalDocumentRuleBase {
 
         // check the chosen reversal date, only if they entered a value
         if (null != jvDoc.getReversalDate()) {
-            Timestamp reversalDate = jvDoc.getReversalDate();
+            java.sql.Date reversalDate = jvDoc.getReversalDate();
             valid &= TransactionalDocumentRuleUtil.isValidReversalDate(reversalDate, DOCUMENT_ERROR_PREFIX + REVERSAL_DATE);
         }
 
@@ -195,18 +193,18 @@ public class JournalVoucherDocumentRule extends TransactionalDocumentRuleBase {
         // set the debit/credit code appropriately
         jvDoc.refreshReferenceObject(BALANCE_TYPE);
         if (jvDoc.getBalanceType().isFinancialOffsetGenerationIndicator()) {
-            explicitEntry.setTransactionDebitCreditCode(getEntryValue(accountingLine.getDebitCreditCode(), GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SPACE));
+            explicitEntry.setTransactionDebitCreditCode(getEntryValue(accountingLine.getDebitCreditCode(), BLANK_SPACE));
         }
         else {
-            explicitEntry.setTransactionDebitCreditCode(GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SPACE);
+            explicitEntry.setTransactionDebitCreditCode(BLANK_SPACE);
         }
 
         // set the encumbrance update code
-        explicitEntry.setTransactionEncumbranceUpdateCode(getEntryValue(accountingLine.getEncumbranceUpdateCode(), GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SPACE));
+        explicitEntry.setTransactionEncumbranceUpdateCode(getEntryValue(accountingLine.getEncumbranceUpdateCode(), BLANK_SPACE));
 
         // set the reversal date to what what specified at the document level
         if (jvDoc.getReversalDate() != null) {
-            explicitEntry.setFinancialDocumentReversalDate(new java.sql.Date(jvDoc.getReversalDate().getTime()));
+            explicitEntry.setFinancialDocumentReversalDate(jvDoc.getReversalDate());
         }
     }
 
@@ -260,7 +258,7 @@ public class JournalVoucherDocumentRule extends TransactionalDocumentRuleBase {
             }
             else if (amount.isNegative()) { // entered a negative number
                 String debitCreditCode = accountingLine.getDebitCreditCode();
-                if (StringUtils.isNotBlank(debitCreditCode) && GENERAL_LEDGER_PENDING_ENTRY_CODE.DEBIT.equals(debitCreditCode)) {
+                if (StringUtils.isNotBlank(debitCreditCode) && GL_DEBIT_CODE.equals(debitCreditCode)) {
                     GlobalVariables.getErrorMap().putErrorWithoutFullErrorPath(buildErrorMapKeyPathForDebitCreditAmount(true), ERROR_ZERO_OR_NEGATIVE_AMOUNT, "an accounting line");
                 }
                 else {
@@ -310,10 +308,10 @@ public class JournalVoucherDocumentRule extends TransactionalDocumentRuleBase {
             String index = StringUtils.substringBetween(GlobalVariables.getErrorMap().getKeyPath("", true), SQUARE_BRACKET_LEFT, SQUARE_BRACKET_RIGHT);
             String indexWithParams = SQUARE_BRACKET_LEFT + index + SQUARE_BRACKET_RIGHT;
             if (isDebit) {
-                return JOURNAL_LINE_HELPER_PROPERTY_NAME + indexWithParams + JOURNAL_LINE_HELPER_DEBIT_PROPERTY_NAME;
+                return JOURNAL_LINE_HELPER_PROPERTY_NAME + indexWithParams + VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME;
             }
             else {
-                return JOURNAL_LINE_HELPER_PROPERTY_NAME + indexWithParams + JOURNAL_LINE_HELPER_CREDIT_PROPERTY_NAME;
+                return JOURNAL_LINE_HELPER_PROPERTY_NAME + indexWithParams + VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME;
             }
 
         }
@@ -374,7 +372,7 @@ public class JournalVoucherDocumentRule extends TransactionalDocumentRuleBase {
         if (!TransactionalDocumentRuleUtil.isValidBalanceType(balanceType, GENERIC_CODE_PROPERTY_NAME)) {
             return false;
         }
-        else if (EXTERNAL_ENCUMBRANCE.equals(balanceType.getCode())) {
+        else if (BALANCE_TYPE_EXTERNAL_ENCUMBRANCE.equals(balanceType.getCode())) {
             // now check to make sure that the three extra fields (referenceOriginCode, referenceTypeCode, referenceNumber) have
             // values in them
             return isRequiredReferenceFieldsValid(accountingLine);
