@@ -30,7 +30,7 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupService.java,v 1.7.2.1.2.1 2006-08-04 21:30:22 tdurkin Exp $
+ * @version $Id: OriginEntryGroupService.java,v 1.7.2.1.2.2 2006-08-11 21:08:03 tdurkin Exp $
  */
 
 public interface OriginEntryGroupService {
@@ -107,4 +107,8 @@ public interface OriginEntryGroupService {
     public void save(OriginEntryGroup group);
     
     public OriginEntryGroup getExactMatchingEntryGroup(Integer id);
+    
+    public Collection getAllOriginEntryGroup();
+    
+    public Collection getRecentGroupsByDays(int days);
 }
