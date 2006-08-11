@@ -38,6 +38,7 @@ public class PurapKeyConstants {
     public static final String ERROR_VENDOR_BOTH_NAME_REQUIRED = "error.vendorMaint.bothNameRequired";
     public static final String ERROR_VENDOR_NAME_INVALID = "error.vendorMaint.nameInvalid";
     public static final String ERROR_VENDOR_SSN_FEIN_ALLOWED = "error.vendorMaint.ssn.fein.allowed";
+    public static final String ERROR_VENDOR_MIN_ORDER_AMOUNT_EXCEEDED = "error.vendorMaint.minimumAmt.invalid";
     
     //Vendor Maintenance Address
     public static final String ERROR_US_REQUIRES_STATE = "error.vendorMaint.vendorAddress.USRequiresState";
