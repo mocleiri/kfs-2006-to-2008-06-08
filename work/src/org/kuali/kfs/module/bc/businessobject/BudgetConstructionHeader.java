@@ -59,13 +59,13 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     private UniversalUser budgetTransactionLockUser;
     private Org organizationLevelOrganization; 
 
-    private List budgetConstructionAccountSelected;
+    private List budgetConstructionAccountSelect;
 
 	/**
 	 * Default constructor.
 	 */
 	public BudgetConstructionHeader() {
-        budgetConstructionAccountSelected = new ArrayList();        
+        budgetConstructionAccountSelect = new ArrayList();        
 
 	}
 
@@ -340,23 +340,23 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
 	}
 
 	/**
-	 * Gets the budgetConstructionAccountSelected list.
+	 * Gets the budgetConstructionAccountSelect list.
 	 * 
-	 * @return - Returns the budgetConstructionAccountSelected list
+	 * @return - Returns the budgetConstructionAccountSelect list
 	 * 
 	 */
-	public List getBudgetConstructionAccountSelected() { 
-		return budgetConstructionAccountSelected;
+	public List getBudgetConstructionAccountSelect() { 
+		return budgetConstructionAccountSelect;
 	}
 
 	/**
-	 * Sets the budgetConstructionAccountSelected list.
+	 * Sets the budgetConstructionAccountSelect list.
 	 * 
-	 * @param - budgetConstructionAccountSelected The budgetConstructionAccountSelected list to set.
+	 * @param - budgetConstructionAccountSelect The budgetConstructionAccountSelect list to set.
 	 * 
 	 */
-	public void setBudgetConstructionAccountSelected(List budgetConstructionAccountSelected) {
-		this.budgetConstructionAccountSelected = budgetConstructionAccountSelected;
+	public void setBudgetConstructionAccountSelect(List budgetConstructionAccountSelect) {
+		this.budgetConstructionAccountSelect = budgetConstructionAccountSelect;
 	}
 
     /**
