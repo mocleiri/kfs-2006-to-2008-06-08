@@ -22,13 +22,11 @@
  */
 package org.kuali.module.financial.rules;
 
-import java.sql.Timestamp;
-
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
+import static org.kuali.Constants.BALANCE_TYPE_PRE_ENCUMBRANCE;
 import org.kuali.KeyConstants;
 import static org.kuali.PropertyConstants.REFERENCE_NUMBER;
-import static org.kuali.PropertyConstants.REFERENCE_ORIGIN_CODE;
 import static org.kuali.PropertyConstants.REVERSAL_DATE;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
@@ -82,22 +80,18 @@ public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
     }
 
     /**
-     * This method checks that values exist in a disencumbrance line's two reference fields. This cannot be done by the
-     * DataDictionary validation because not all documents require them.
+     * This method checks that there is a value in a disencumbrance line's reference number field. This cannot be done by the
+     * DataDictionary validation because not all documents require it.  It does not validate the existence of the referenced document.
      * 
      * @param accountingLine
      * 
-     * @return True if all of the required external encumbrance reference fields are valid, false otherwise.
+     * @return True if the required external encumbrance reference field is valid, false otherwise.
      */
     private boolean isRequiredReferenceFieldsValid(AccountingLine accountingLine) {
         boolean valid = true;
 
         if (accountingLine.isTargetAccountingLine()) {
             BusinessObjectEntry boe = SpringServiceLocator.getDataDictionaryService().getDataDictionary().getBusinessObjectEntry(TargetAccountingLine.class);
-            if (StringUtils.isEmpty(accountingLine.getReferenceOriginCode())) {
-                putRequiredPropertyError(boe, REFERENCE_ORIGIN_CODE);
-                valid = false;
-            }
             if (StringUtils.isEmpty(accountingLine.getReferenceNumber())) {
                 putRequiredPropertyError(boe, REFERENCE_NUMBER);
                 valid = false;
@@ -147,7 +141,7 @@ public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
      * @return boolean True if this document does not have a reversal date earlier than the current date, false otherwise.
      */
     private boolean isReversalDateValidForRouting(PreEncumbranceDocument preEncumbranceDocument) {
-        Timestamp reversalDate = preEncumbranceDocument.getReversalDate();
+        java.sql.Date reversalDate = preEncumbranceDocument.getReversalDate();
         return TransactionalDocumentRuleUtil.isValidReversalDate(reversalDate, DOCUMENT_ERROR_PREFIX + REVERSAL_DATE);
     }
 
@@ -187,12 +181,12 @@ public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
      */
     @Override
     protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        explicitEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_CODE.PRE_ENCUMBRANCE);
+        explicitEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_PRE_ENCUMBRANCE);
 
         // set the reversal date to what was chosen by the user in the interface
         PreEncumbranceDocument peDoc = (PreEncumbranceDocument) transactionalDocument;
         if (peDoc.getReversalDate() != null) {
-            explicitEntry.setFinancialDocumentReversalDate(new java.sql.Date(peDoc.getReversalDate().getTime()));
+            explicitEntry.setFinancialDocumentReversalDate(peDoc.getReversalDate());
         }
         explicitEntry.setTransactionEntryProcessedTs(null);
         if (accountingLine.isSourceAccountingLine()) {
@@ -201,9 +195,9 @@ public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
         else {
             assertThat(accountingLine.isTargetAccountingLine(), accountingLine);
             explicitEntry.setTransactionEncumbranceUpdateCode(Constants.ENCUMB_UPDT_REFERENCE_DOCUMENT_CD);
-            explicitEntry.setReferenceFinancialSystemOriginationCode(accountingLine.getReferenceOriginCode());
+            explicitEntry.setReferenceFinancialSystemOriginationCode(SpringServiceLocator.getHomeOriginationService().getHomeOrigination().getFinSystemHomeOriginationCode());
             explicitEntry.setReferenceFinancialDocumentNumber(accountingLine.getReferenceNumber());
-            explicitEntry.setReferenceFinancialDocumentTypeCode(REFERENCE_DOCUMENT_TYPE_CODES.PRE_ENCUMBRANCE);
+            explicitEntry.setReferenceFinancialDocumentTypeCode(explicitEntry.getFinancialDocumentTypeCode()); // "PE"
         }
     }
 
