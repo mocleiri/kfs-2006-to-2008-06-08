@@ -39,7 +39,7 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupServiceImpl.java,v 1.17.2.1.2.1 2006-08-04 21:30:21 tdurkin Exp $
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.17.2.1.2.2 2006-08-11 21:08:13 tdurkin Exp $
  */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
@@ -138,6 +138,14 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
         }
         return null;
     }
+    
+    public Collection getAllOriginEntryGroup(){
+        LOG.debug("getAllOriginEntryGroup() started");
+        Map criteria = new HashMap();
+
+        return originEntryGroupDao.getMatchingGroups(criteria);
+    }
+    
 
     /**
      * Create a new OriginEntryGroup and persist it to the database.
@@ -221,7 +229,27 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     }
     
     public OriginEntryGroup getExactMatchingEntryGroup(Integer id){
-        return originEntryGroupDao.getExactMatchingEntryGroup(id);
+        OriginEntryGroup oeg = null;
+        try {oeg = originEntryGroupDao.getExactMatchingEntryGroup(id);}
+        catch (Exception e){
+            
+        }
+        return oeg;
         
+    }
+    
+    /**
+     * 
+     * @see org.kuali.module.gl.service.OriginEntryGroupService#getRecentGroupsByDays(int)
+     */
+    public Collection getRecentGroupsByDays(int days) {
+        LOG.debug("deleteOlderGroups() started");
+
+        Calendar today = dateTimeService.getCurrentCalendar();
+        today.add(Calendar.DAY_OF_MONTH, 0 - days);
+
+        Collection groups = originEntryGroupDao.getRecentGroups(new java.sql.Date(today.getTime().getTime()));
+        
+        return groups;
     }
 }
