@@ -44,7 +44,7 @@ import org.springframework.beans.factory.BeanFactory;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: OriginEntryTestBase.java,v 1.21.2.1.2.1 2006-08-04 21:30:30 tdurkin Exp $
+ * @version $Id: OriginEntryTestBase.java,v 1.21.2.1.2.2 2006-08-11 21:08:58 tdurkin Exp $
  */
 public class OriginEntryTestBase extends KualiTestBaseWithSpringOnly {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryTestBase.class);
@@ -235,7 +235,7 @@ public class OriginEntryTestBase extends KualiTestBaseWithSpringOnly {
 
     protected void setApplicationConfigurationFlag(String name, boolean value) {
         unitTestSqlDao.sqlCommand("delete from fs_parm_t where fs_scr_nm = 'SYSTEM' and fs_parm_nm = '" + name + "'");
-        unitTestSqlDao.sqlCommand("insert into fs_parm_t (fs_scr_nm,fs_parm_nm,obj_id,ver_nbr,fs_parm_txt,fs_parm_desc,fs_mult_val_ind," + "fs_parm_oper,fs_active_ind) values ('SYSTEM','" + name + "',SYS_GUID(),1,'" + (value ? "Y" : "N") + "','Y','N',null,'Y')");
+        unitTestSqlDao.sqlCommand("insert into fs_parm_t (fs_scr_nm,fs_parm_nm,obj_id,ver_nbr,fs_parm_txt,fs_parm_desc,fs_mult_val_ind" + ") values ('SYSTEM','" + name + "',SYS_GUID(),1,'" + (value ? "Y" : "N") + "','Y','N')");
     }
 
 
