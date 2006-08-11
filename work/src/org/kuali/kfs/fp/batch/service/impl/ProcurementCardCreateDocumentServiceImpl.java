@@ -25,6 +25,8 @@
  */
 package org.kuali.module.financial.service.impl;
 
+import static org.kuali.Constants.GL_CREDIT_CODE;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +59,15 @@ import org.kuali.module.financial.document.ProcurementCardDocument;
 import org.kuali.module.financial.rules.AccountingLineRuleUtil;
 import org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants;
 import org.kuali.module.financial.service.ProcurementCardCreateDocumentService;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.PCARD_DOCUMENT_PARAMETERS_SEC_GROUP;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.AUTO_APPROVE_DOCUMENTS_IND;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.AUTO_APPROVE_NUMBER_OF_DAYS;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.SINGLE_TRANSACTION_IND_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.ERROR_TRANS_ACCOUNT_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.ERROR_TRANS_CHART_CODE_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.DEFAULT_TRANS_ACCOUNT_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.DEFAULT_TRANS_CHART_CODE_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.DEFAULT_TRANS_OBJECT_CODE_PARM_NM;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -261,7 +272,8 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
 
             pcardDocument.getDocumentHeader().setFinancialDocumentTotalAmount(documentTotalAmount);
             pcardDocument.getDocumentHeader().setFinancialDocumentDescription("SYSTEM Generated");
-            pcardDocument.setExplanation(errorText);
+            // TODO: Fix for length problem of explanation, possibly make into note?
+           // pcardDocument.setExplanation(errorText);
         }
         catch (WorkflowException e) {
             LOG.error("Error creating pcdo documents: " + e.getMessage());
@@ -410,7 +422,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         targetLine.setFinancialSubObjectCode(transaction.getFinancialSubObjectCode());
         targetLine.setProjectCode(transaction.getProjectCode());
 
-        if (TransactionalDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.CREDIT.equals(transaction.getTransactionDebitCreditCode())) {
+        if (GL_CREDIT_CODE.equals(transaction.getTransactionDebitCreditCode())) {
             targetLine.setAmount(transaction.getFinancialDocumentTotalAmount().negated());
         }
         else {
@@ -439,7 +451,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         sourceLine.setFinancialSubObjectCode("");
         sourceLine.setProjectCode("");
 
-        if (TransactionalDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.CREDIT.equals(transaction.getTransactionDebitCreditCode())) {
+        if (GL_CREDIT_CODE.equals(transaction.getTransactionDebitCreditCode())) {
             sourceLine.setAmount(transaction.getFinancialDocumentTotalAmount().negated());
         }
         else {
