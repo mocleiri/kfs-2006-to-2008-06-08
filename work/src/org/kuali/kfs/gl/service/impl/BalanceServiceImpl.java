@@ -30,13 +30,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.OptionsService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.GlSummary;
 import org.kuali.module.gl.dao.BalanceDao;
 import org.kuali.module.gl.service.BalanceService;
+import org.kuali.module.gl.util.OJBUtility;
 
 /**
  * 
@@ -49,6 +52,7 @@ public class BalanceServiceImpl implements BalanceService {
 
     protected BalanceDao balanceDao;
     protected DateTimeService dateTimeService;
+    protected OptionsService optionsService;
 
     // must have no asset, liability or fund balance balances other than object code 9899
 
@@ -255,14 +259,13 @@ public class BalanceServiceImpl implements BalanceService {
         Iterator balances = balanceDao.findBalances(account, fiscalYear, null, null, null, wrap(encumbranceBaseBudgetBalanceTypeCodes));
 
         return sumBalances(balances).isNonZero();
-
     }
 
     /**
      * @see org.kuali.module.gl.service.BalanceService#beginningBalanceLoaded(org.kuali.module.chart.bo.Account)
      */
     public boolean beginningBalanceLoaded(Account account) {
-        return true; // TODO: KULCOA-748 retrieve this from SystemOptions per Bill Overman
+        return optionsService.getCurrentYearOptions().isFinancialBeginBalanceLoadInd();
     }
 
     /**
@@ -279,7 +282,6 @@ public class BalanceServiceImpl implements BalanceService {
         balanceDao.save(b);
     }
 
-
     public void setBalanceDao(BalanceDao balanceDao) {
         this.balanceDao = balanceDao;
     }
@@ -288,18 +290,62 @@ public class BalanceServiceImpl implements BalanceService {
         this.dateTimeService = dateTimeService;
     }
 
+    public void setOptionsService(OptionsService optionsService) {
+        this.optionsService = optionsService;
+    }
+
     /**
      * @see org.kuali.module.gl.service.BalanceService#findCashBalance(java.util.Map, boolean)
      */
     public Iterator findCashBalance(Map fieldValues, boolean isConsolidated) {
+        LOG.debug("findCashBalance() started");
+        
         return balanceDao.findCashBalance(fieldValues, isConsolidated);
+    }
+    
+    /**
+     * @see org.kuali.module.gl.service.BalanceService#getCashBalanceRecordCount(java.util.Map, boolean)
+     */
+    public Integer getCashBalanceRecordCount(Map fieldValues, boolean isConsolidated) {
+        LOG.debug("getCashBalanceRecordCount() started");
+        
+        Integer recordCount = new Integer(0);
+        if(!isConsolidated){
+            recordCount = balanceDao.getDetailedCashBalanceRecordCount(fieldValues);
+        }
+        else{
+            Iterator recordCountIterator = balanceDao.getConsolidatedCashBalanceRecordCount(fieldValues);
+            List recordCountList = IteratorUtils.toList(recordCountIterator);
+            recordCount = recordCountList.size();
+        }
+        return recordCount;
     }
 
     /**
      * @see org.kuali.module.gl.service.BalanceService#findBalance(java.util.Map, boolean)
      */
     public Iterator findBalance(Map fieldValues, boolean isConsolidated) {
+        LOG.debug("findBalance() started");
+        
         return balanceDao.findBalance(fieldValues, isConsolidated);
+    }
+    
+    /**
+     * @see org.kuali.module.gl.service.BalanceService#getBalanceRecordCount(java.util.Map, boolean)
+     */
+    public Integer getBalanceRecordCount(Map fieldValues, boolean isConsolidated) {
+        LOG.debug("getBalanceRecordCount() started");
+        
+        Integer recordCount = null;
+        if(!isConsolidated){
+            recordCount = OJBUtility.getResultSizeFromMap(fieldValues, new Balance()).intValue();
+        }
+        else{
+            Iterator recordCountIterator = balanceDao.getConsolidatedBalanceRecordCount(fieldValues);
+            List recordCountList = IteratorUtils.toList(recordCountIterator);
+            recordCount = recordCountList.size();
+        }
+        return recordCount;
     }
 
     /**
