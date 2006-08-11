@@ -41,7 +41,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupDaoOjb.java,v 1.10.2.1.2.1 2006-08-04 21:30:22 tdurkin Exp $
+ * @version $Id: OriginEntryGroupDaoOjb.java,v 1.10.2.1.2.2 2006-08-11 21:08:00 tdurkin Exp $
  * TODO Oracle Specific code here
  */
 public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryGroupDao {
@@ -219,4 +219,19 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
             }
         }
     }
+    
+    /**
+     * 
+     * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getRecentGroups(Date)
+     */
+    public Collection<OriginEntryGroup> getRecentGroups(Date day) {
+        LOG.debug("getOlderGroups() started");
+
+        Criteria criteria = new Criteria();
+        criteria.addGreaterOrEqualThan("date", day);
+
+        return getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(OriginEntryGroup.class,criteria));
+    }
+    
+    
 }

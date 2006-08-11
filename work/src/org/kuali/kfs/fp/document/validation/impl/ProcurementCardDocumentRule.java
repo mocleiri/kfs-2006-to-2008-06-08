@@ -26,6 +26,7 @@ import static org.kuali.Constants.ACCOUNTING_LINE_ERRORS;
 import static org.kuali.Constants.AMOUNT_PROPERTY_NAME;
 import static org.kuali.Constants.ZERO;
 import static org.kuali.KeyConstants.ERROR_DOCUMENT_BALANCE_CONSIDERING_SOURCE_AND_TARGET_AMOUNTS;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_SINGLE_ACCOUNTING_LINE_SECTION_TOTAL_CHANGED;
 import static org.kuali.KeyConstants.ERROR_ZERO_AMOUNT;
 
 import java.util.Arrays;
@@ -41,11 +42,25 @@ import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine;
 import org.kuali.module.financial.bo.ProcurementCardTransactionDetail;
 import org.kuali.module.financial.document.ProcurementCardDocument;
 import org.kuali.module.financial.document.ProcurementCardDocumentAuthorizer.ProcurementCardRouteLevels;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.GLOBAL_FIELD_RESTRICTIONS_GROUP_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.MCC_OBJECT_CODE_GROUP_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.MCC_OBJECT_SUB_TYPE_GROUP_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.MCC_PARM_PREFIX;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.OBJECT_CODE_GLOBAL_RESTRICTION_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.OBJECT_CONSOLIDATION_GLOBAL_RESTRICTION_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.ACCOUNT_NUMBER_GLOBAL_RESTRICTION_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.SUB_FUND_GLOBAL_RESTRICTION_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM;
+
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -56,18 +71,6 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class ProcurementCardDocumentRule extends TransactionalDocumentRuleBase {
-    public static String MCC_OBJECT_CODE_GROUP_NM = "PCMccObjectCodeRestrictions";
-    public static String MCC_OBJECT_SUB_TYPE_GROUP_NM = "PCMccObjectSubTypeRestrictions";
-    public static String GLOBAL_FIELD_RESTRICTIONS_GROUP_NM = "PCGlobalFieldRestrictions";
-    public static String OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_TYPE_RESTRICTIONS";
-    public static String OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_SUB_TYPE_RESTRICTIONS";
-    public static String OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_LEVEL_RESTRICTIONS";
-    public static String OBJECT_CONSOLIDATION_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_CONSOLIDATION_RESTRICTIONS";
-    public static String OBJECT_CODE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_CODE_RESTRICTIONS";
-    public static String ACCOUNT_NUMBER_GLOBAL_RESTRICTION_PARM_NM = "ACCOUNT_NUMBER_RESTRICTIONS";
-    public static String SUB_FUND_GLOBAL_RESTRICTION_PARM_NM = "SUB_FUND_RESTRICTIONS";
-    public static String FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM = "FUNCTION_CODE_RESTRICTIONS";
-    public static String MCC_PARM_PREFIX = "MCC_";
     
     /**
      * Inserts proper errorPath, otherwise functions just like super. 
@@ -300,6 +303,18 @@ public class ProcurementCardDocumentRule extends TransactionalDocumentRuleBase {
         return true;
     }
 
+    /**
+     * Override to avoid seeing ERROR_DOCUMENT_SINGLE_ACCOUNTING_LINE_SECTION_TOTAL_CHANGED error message on PCDO.
+     * 
+     * @param propertyName
+     * @param persistedSourceLineTotal
+     * @param currentSourceLineTotal
+     */
+    @Override
+    protected void buildTotalChangeErrorMessage(String propertyName, KualiDecimal persistedSourceLineTotal, KualiDecimal currentSourceLineTotal) {
+        return;
+    }
+    
     /**
      * Fix the GlobalVariables.getErrorMap errorPath for how PCDO needs them in order to properly display errors on the
      * interface. This is different from kuali accounting lines because instead PCDO has accounting lines insides of
