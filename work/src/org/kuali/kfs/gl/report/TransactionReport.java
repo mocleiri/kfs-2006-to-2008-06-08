@@ -50,7 +50,7 @@ import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: TransactionReport.java,v 1.16.2.1.2.1 2006-08-04 21:30:26 tdurkin Exp $
+ * @version $Id: TransactionReport.java,v 1.16.2.1.2.2 2006-08-11 21:08:10 tdurkin Exp $
  */
 public class TransactionReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TransactionReport.class);
