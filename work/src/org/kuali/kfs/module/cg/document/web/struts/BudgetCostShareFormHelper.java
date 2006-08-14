@@ -137,7 +137,7 @@ public class BudgetCostShareFormHelper {
      * @param budgetUniversityCostShare
      * @param budgetThirdPartyCostShare
      */
-    public void setupDirect(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<UniversityCostSharePersonnel> universityCostSharePersonnel, List<BudgetUniversityCostShare> budgetUniversityCostShare, List<BudgetThirdPartyCostShare> budgetThirdPartyCostShare) {
+    private void setupDirect(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<UniversityCostSharePersonnel> universityCostSharePersonnel, List<BudgetUniversityCostShare> budgetUniversityCostShare, List<BudgetThirdPartyCostShare> budgetThirdPartyCostShare) {
         institutionDirect = new Direct(periods, personnel, budgetNonpersonnelItems, universityCostSharePersonnel, budgetUniversityCostShare);
         thirdPartyDirect = new Direct(subcontractorCostShare, periods, budgetNonpersonnelItems, budgetThirdPartyCostShare);
     }
@@ -149,7 +149,7 @@ public class BudgetCostShareFormHelper {
      * @param periods
      * @param nonpersonnelItems
      */
-    public void setupSubcontractors(List<BudgetPeriod> periods, List<BudgetNonpersonnel> nonpersonnelItems) {
+    private void setupSubcontractors(List<BudgetPeriod> periods, List<BudgetNonpersonnel> nonpersonnelItems) {
         HashMap<String, Subcontractor> addedSubcontractors = new HashMap();
 
         subcontractorCostShare = new KualiInteger[periods.size()];
@@ -193,7 +193,7 @@ public class BudgetCostShareFormHelper {
      * @param budgetIndirectCostFormHelper
      * @param periods
      */
-    public void setupTotals(List<BudgetPeriod> periods, BudgetIndirectCostFormHelper budgetIndirectCostFormHelper) {
+    private void setupTotals(List<BudgetPeriod> periods, BudgetIndirectCostFormHelper budgetIndirectCostFormHelper) {
         // Deal with indirect cost totals first. They are all calculated in the helper.
         institutionIndirectCostShare = new KualiInteger[periods.size()];
         for (int i = 0; i < institutionIndirectCostShare.length; i++) {
