@@ -58,7 +58,6 @@ public class BudgetConstructionAccountSelect extends BusinessObjectBase {
 	private Chart chartOfAccounts;
 	private Chart organizationChartOfAccounts;
     private SubAccount subAccount;
-    private UniversalUser universalUser;
     private Org organization;
    
 	/**
@@ -435,23 +434,6 @@ public class BudgetConstructionAccountSelect extends BusinessObjectBase {
      */
     public void setSubAccount(SubAccount subAccount) {
         this.subAccount = subAccount;
-    }
-
-    /**
-     * Gets the universalUser attribute. 
-     * @return Returns the universalUser.
-     */
-    public UniversalUser getUniversalUser() {
-        return universalUser;
-    }
-
-    /**
-     * Sets the universalUser attribute value.
-     * @param universalUser The universalUser to set.
-     * @deprecated
-     */
-    public void setUniversalUser(UniversalUser universalUser) {
-        this.universalUser = universalUser;
     }
 
     /**

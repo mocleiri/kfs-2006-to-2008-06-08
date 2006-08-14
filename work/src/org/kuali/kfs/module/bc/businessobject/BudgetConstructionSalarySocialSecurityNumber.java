@@ -29,6 +29,7 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.Org;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -42,7 +43,8 @@ public class BudgetConstructionSalarySocialSecurityNumber extends BusinessObject
 	private String emplid;
 
     private Chart organizationChartOfAccounts;
-
+    private Org organization;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -175,6 +177,26 @@ public class BudgetConstructionSalarySocialSecurityNumber extends BusinessObject
 		this.organizationChartOfAccounts = organizationChartOfAccounts;
 	}
 
+    /**
+     * Gets the organization attribute.
+     * 
+     * @return - Returns the organization
+     * 
+     */
+    public Org getOrganization() { 
+        return organization;
+    }
+
+    /**
+     * Sets the organization attribute.
+     * 
+     * @param - organization The organization to set.
+     * @deprecated
+     */
+    public void setOrganization(Org organization) {
+        this.organization = organization;
+    }    
+    
 	/**
 	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
