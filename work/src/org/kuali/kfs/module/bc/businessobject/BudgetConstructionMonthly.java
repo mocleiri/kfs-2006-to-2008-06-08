@@ -32,8 +32,10 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
+import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.bo.Balance;
 
 /**
@@ -70,6 +72,8 @@ public class BudgetConstructionMonthly extends BusinessObjectBase {
 	private Chart chartOfAccounts;
     private SubAccount subAccount;
     private SubObjCd financialSubObject;
+    private BalanceTyp balanceType;
+    private ObjectType objectType;
     
 	/**
 	 * Default constructor.
@@ -653,6 +657,40 @@ public class BudgetConstructionMonthly extends BusinessObjectBase {
         this.subAccount = subAccount;
     }
 
+    /**
+     * Gets the balanceType attribute. 
+     * @return Returns the balanceType.
+     */
+    public BalanceTyp getBalanceType() {
+        return balanceType;
+    }
+
+    /**
+     * Sets the balanceType attribute value.
+     * @param balanceType The balanceType to set.
+     * @deprecated
+     */
+    public void setBalanceType(BalanceTyp balanceType) {
+        this.balanceType = balanceType;
+    }
+
+    /**
+     * Gets the objectType attribute. 
+     * @return Returns the objectType.
+     */
+    public ObjectType getObjectType() {
+        return objectType;
+    }
+
+    /**
+     * Sets the objectType attribute value.
+     * @param objectType The objectType to set.
+     * @deprecated
+     */
+    public void setObjectType(ObjectType objectType) {
+        this.objectType = objectType;
+    }    
+    
     /**
      * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
