@@ -37,6 +37,8 @@ import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUniversityCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 import org.kuali.module.kra.budget.bo.UniversityCostSharePersonnel;
+import org.kuali.module.kra.budget.bo.UserAppointmentTask;
+import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
 import org.kuali.module.kra.budget.web.struts.form.BudgetCostShareFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetIndirectCostFormHelper;
 import org.kuali.test.KualiTestBaseWithSpring;
@@ -59,20 +61,46 @@ public class BudgetCostShareFormHelperTest extends KualiTestBaseWithSpring {
     protected void setUp() throws Exception {
         super.setUp();
 
+        // Periods
         periods = BudgetPeriodTest.createBudgetPeriods(2);
 
+        // Personnel
         personnel = new ArrayList();
-        // TODO
+        BudgetUser budgetUser1 = new BudgetUser();
+        budgetUser1.setFiscalCampusCode("BL");
+        budgetUser1.setPrimaryDepartmentCode("CHEM");
+        UserAppointmentTask userAppointmentTask = new UserAppointmentTask();
+        UserAppointmentTaskPeriod userAppointmentTaskPeriod1 = new UserAppointmentTaskPeriod();
+        userAppointmentTaskPeriod1.setUniversityCostShareFringeBenefitTotalAmount(new KualiInteger(2500));
+        userAppointmentTaskPeriod1.setUniversityCostShareRequestTotalAmount(new KualiInteger(1500));
+        userAppointmentTaskPeriod1.setBudgetPeriodSequenceNumber(new Integer(0));
+        UserAppointmentTaskPeriod userAppointmentTaskPeriod2 = new UserAppointmentTaskPeriod();
+        userAppointmentTaskPeriod2.setUniversityCostShareFringeBenefitTotalAmount(new KualiInteger(3500));
+        userAppointmentTaskPeriod2.setUniversityCostShareRequestTotalAmount(new KualiInteger(4500));
+        userAppointmentTaskPeriod2.setBudgetPeriodSequenceNumber(new Integer(1));
+        List userAppointmentTaskPeriod = new ArrayList();
+        userAppointmentTaskPeriod.add(userAppointmentTaskPeriod1);
+        userAppointmentTaskPeriod.add(userAppointmentTaskPeriod2);
+        userAppointmentTask.setUserAppointmentTaskPeriods(userAppointmentTaskPeriod);
+        List userAppointmentTasks = new ArrayList();
+        userAppointmentTasks.add(userAppointmentTask);
+        budgetUser1.setUserAppointmentTasks(userAppointmentTasks);
+        personnel.add(budgetUser1);
         
+        // University Cost Share Personnel
+        universityCostSharePersonnel = new ArrayList();
+        UniversityCostSharePersonnel universityCostSharePersonnel1 = new UniversityCostSharePersonnel();
+        universityCostSharePersonnel1.setChartOfAccountsCode("BL");
+        universityCostSharePersonnel1.setOrganizationCode("CHEM");
+        universityCostSharePersonnel.add(universityCostSharePersonnel1);
+        
+        // Nonpersonnel
         String[] categories = { "CO", "CO", "SC", "SC" };
         String[] subCategories = { "C1", "C1", "R3", "R1" };
         String[] subcontractorNumber = { "", "", "1", "2" };
         budgetNonpersonnelItems = BudgetNonpersonnelTest.createBudgetNonpersonnel(categories, subCategories, subcontractorNumber);
         
-        universityCostSharePersonnel = new ArrayList();
-        //UniversityCostSharePersonnel universityCostSharePersonnel1 = new UniversityCostSharePersonnel();
-        // TODO
-        
+        // Budget University Cost Share
         budgetUniversityCostShare = new ArrayList();
         BudgetUniversityCostShare budgetUniversityCostShare1 = new BudgetUniversityCostShare();
         List budgetPeriodUniversityCostShare = new ArrayList();
@@ -85,6 +113,7 @@ public class BudgetCostShareFormHelperTest extends KualiTestBaseWithSpring {
         budgetUniversityCostShare1.setBudgetPeriodCostShare(budgetPeriodUniversityCostShare);
         budgetUniversityCostShare.add(budgetUniversityCostShare1);
         
+        // Budget Third Party Cost Share
         budgetThirdPartyCostShare = new ArrayList();
         BudgetThirdPartyCostShare budgetThirdPartyCostShare1 = new BudgetThirdPartyCostShare();
         List budgetPeriodThirdPartyCostShare = new ArrayList();
@@ -96,7 +125,8 @@ public class BudgetCostShareFormHelperTest extends KualiTestBaseWithSpring {
         budgetPeriodThirdPartyCostShare.add(budgetPeriodThirdPartyCostShare2);
         budgetThirdPartyCostShare1.setBudgetPeriodCostShare(budgetPeriodThirdPartyCostShare);
         budgetThirdPartyCostShare.add(budgetThirdPartyCostShare1);
-               
+        
+        // Budget Indirect Cost
         budgetIndirectCostFormHelper = new BudgetIndirectCostFormHelper();
         List periodTotalsList = new ArrayList();
         BudgetTaskPeriodIndirectCost idcPeriod0Exist = new BudgetTaskPeriodIndirectCost();
@@ -122,22 +152,23 @@ public class BudgetCostShareFormHelperTest extends KualiTestBaseWithSpring {
         testSetupTotals(budgetCostShareFormHelper);
     }
     
-    private void testSetupInstitutionDirect(BudgetCostShareFormHelper.Direct institutionPartyDirect) {
-        assertEquals("institutionPartyDirect.getTotalBudgeted()[0] = 8000", institutionPartyDirect.getTotalBudgeted()[0], new KualiInteger(8000));
-        assertEquals("institutionPartyDirect.getAmountDistributed()[0] = 1000", institutionPartyDirect.getAmountDistributed()[0], new KualiInteger(1000));
-        assertEquals("institutionPartyDirect.getBalanceToBeDistributed()[0] = 7000", institutionPartyDirect.getBalanceToBeDistributed()[0], new KualiInteger(7000));
+    private void testSetupInstitutionDirect(BudgetCostShareFormHelper.Direct institutionDirect) {
+        assertEquals("institutionDirect.getTotalBudgeted()[0] = 12000", institutionDirect.getTotalBudgeted()[0], new KualiInteger(12000));
+        assertEquals("institutionDirect.getTotalBudgeted()[1] = 8000", institutionDirect.getTotalBudgeted()[1], new KualiInteger(8000));
+        assertEquals("institutionDirect.getAmountDistributed()[0] = 5000", institutionDirect.getAmountDistributed()[0], new KualiInteger(5000));
+        assertEquals("institutionDirect.getAmountDistributed()[1] = 10000", institutionDirect.getAmountDistributed()[1], new KualiInteger(10000));
+        assertEquals("institutionDirect.getBalanceToBeDistributed()[0] = 7000", institutionDirect.getBalanceToBeDistributed()[0], new KualiInteger(7000));
+        assertEquals("institutionDirect.getBalanceToBeDistributed()[1] = -2000", institutionDirect.getBalanceToBeDistributed()[1], new KualiInteger(-2000));
         
-        assertEquals("institutionPartyDirect.getTotalTotalBudgeted()[0] = 8000", institutionPartyDirect.getTotalTotalBudgeted(), new KualiInteger(8000));
-        assertEquals("institutionPartyDirect.getTotalAmountDistributed()[0] = 3000", institutionPartyDirect.getTotalAmountDistributed(), new KualiInteger(3000));
-        assertEquals("institutionPartyDirect.getTotalBalanceToBeDistributed()[0] = 5000", institutionPartyDirect.getTotalBalanceToBeDistributed(), new KualiInteger(5000));
+        assertEquals("institutionDirect.getTotalTotalBudgeted()[0] = 20000", institutionDirect.getTotalTotalBudgeted(), new KualiInteger(20000));
+        assertEquals("institutionDirect.getTotalAmountDistributed() = 15000", institutionDirect.getTotalAmountDistributed(), new KualiInteger(15000));
+        assertEquals("institutionDirect.getTotalBalanceToBeDistributed() = 5000", institutionDirect.getTotalBalanceToBeDistributed(), new KualiInteger(5000));
 
-        assertEquals("institutionPartyDirect.getTotalSource()[0] = 3000", institutionPartyDirect.getTotalSource()[0], new KualiInteger(3000));
+        assertEquals("institutionDirect.getTotalSource()[0] = 3000", institutionDirect.getTotalSource()[0], new KualiInteger(3000));
         
-//        assertEquals("institutionPartyDirect.getTotalSource()[0] = 3000", institutionPartyDirect.getInstitutionDirectPersonnel()[0], new KualiInteger(3000));
-//        assertEquals("institutionPartyDirect.getTotalInstitutionDirectPersonnel()[0] = 3000", institutionPartyDirect.getTotalInstitutionDirectPersonnel()[0], new KualiInteger(3000));
-        
-//        private KualiInteger[][] institutionDirectPersonnel;
-//        private KualiInteger[] totalInstitutionDirectPersonnel;
+        assertEquals("institutionDirect.getInstitutionDirectPersonnel()[0][0] = 4000", institutionDirect.getInstitutionDirectPersonnel()[0][0], new KualiInteger(4000));
+        assertEquals("institutionDirect.getInstitutionDirectPersonnel()[0][1] = 8000", institutionDirect.getInstitutionDirectPersonnel()[0][1], new KualiInteger(8000));
+        assertEquals("institutionDirect.getTotalInstitutionDirectPersonnel()[0] = 12000", institutionDirect.getTotalInstitutionDirectPersonnel()[0], new KualiInteger(12000));
     }
     
     private void testSetupThirdPartyDirect(BudgetCostShareFormHelper.Direct thirdPartyDirect) {
@@ -172,12 +203,11 @@ public class BudgetCostShareFormHelperTest extends KualiTestBaseWithSpring {
     
     private void testSetupTotals(BudgetCostShareFormHelper budgetCostShareFormHelper) {
         assertEquals("institutionIndirectCostShare[0] = 500", budgetCostShareFormHelper.getInstitutionIndirectCostShare()[0], new KualiInteger(500));
-        assertEquals("total[0] = 16500", budgetCostShareFormHelper.getTotal()[0], new KualiInteger(16500));
-        
         assertEquals("institutionIndirectCostShare[1] = 200", budgetCostShareFormHelper.getInstitutionIndirectCostShare()[1], new KualiInteger(200));
-        assertEquals("total[1] = 6200", budgetCostShareFormHelper.getTotal()[1], new KualiInteger(6200));
+        assertEquals("total[0] = 20500", budgetCostShareFormHelper.getTotal()[0], new KualiInteger(20500));
+        assertEquals("total[1] = 14200", budgetCostShareFormHelper.getTotal()[1], new KualiInteger(14200));
         
         assertEquals("totalInstitutionIndirectCostShare = 700", budgetCostShareFormHelper.getTotalInstitutionIndirectCostShare(), new KualiInteger(700));
-        assertEquals("totalTotal = 22700", budgetCostShareFormHelper.getTotalTotal(), new KualiInteger(22700));
+        assertEquals("totalTotal = 34700", budgetCostShareFormHelper.getTotalTotal(), new KualiInteger(34700));
     }
 }
