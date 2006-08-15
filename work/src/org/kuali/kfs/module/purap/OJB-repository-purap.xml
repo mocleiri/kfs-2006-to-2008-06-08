@@ -39,7 +39,7 @@
 	<field-descriptor name="vendorConfirmationIndicator" column="VNDR_CNFM_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorPrepaymentIndicator" column="VNDR_PRPYMT_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="vendorCreditCardIndicator" column="VNDR_CCRD_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<field-descriptor name="vendorMinimumOrderAmount" column="VNDR_MIN_ORD_AMT" jdbc-type="DECIMAL"/>
+	<field-descriptor name="vendorMinimumOrderAmount" column="VNDR_MIN_ORD_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="vendorUrlAddress" column="VNDR_URL_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorSoldToName" column="VNDR_SOLD_TO_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorRemitName" column="VNDR_RMT_NM" jdbc-type="VARCHAR"/>
