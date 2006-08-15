@@ -22,7 +22,7 @@
  */
 package org.kuali.module.purap;
 
-import java.math.BigDecimal;
+import org.kuali.core.util.KualiDecimal;
 
 /**
  * Holds constants for PURAP.
@@ -68,5 +68,5 @@ public class PurapConstants {
     public static final int DEFAULT_TAX_NUM_DIGITS = 9;
     public static final String NOT_ALLOWED_TAX_NUMBER = "356001673";
     
-    public static final BigDecimal VENDOR_MIN_ORDER_AMOUNT = new BigDecimal(100000);
+    public static final KualiDecimal VENDOR_MIN_ORDER_AMOUNT = new KualiDecimal(100000);
 }
