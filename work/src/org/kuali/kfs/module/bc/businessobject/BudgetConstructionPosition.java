@@ -30,7 +30,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.chart.bo.ResponsibilityCenter;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -65,7 +65,8 @@ public class BudgetConstructionPosition extends BusinessObjectBase {
 	private String positionLockUserIdentifier;
 
     private BudgetConstructionPositionSelect positionSelect;
-
+    private ResponsibilityCenter responsibilityCenter;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -639,15 +640,34 @@ public class BudgetConstructionPosition extends BusinessObjectBase {
 		this.positionSelect = positionSelect;
 	}
 
-	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
+    /**
+     * Gets the responsibilityCenter attribute. 
+     * @return Returns the responsibilityCenter.
+     */
+    public ResponsibilityCenter getResponsibilityCenter() {
+        return responsibilityCenter;
+    }
+
+    /**
+     * Sets the responsibilityCenter attribute value.
+     * @param responsibilityCenter The responsibilityCenter to set.
+     * @deprecated
+     */
+    public void setResponsibilityCenter(ResponsibilityCenter responsibilityCenter) {
+        this.responsibilityCenter = responsibilityCenter;
+    }
+
+    /**
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
         m.put("positionNumber", this.positionNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }
-	    return m;
+        return m;
     }
+
+
 }

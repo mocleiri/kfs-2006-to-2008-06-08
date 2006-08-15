@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
+import org.kuali.module.chart.bo.ResponsibilityCenter;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -46,7 +47,8 @@ public class BudgetConstructionOrganizationReports extends BusinessObjectBase {
 	private Org organization;
 	private Chart reportsToChartOfAccounts;
 	private Org reportsToOrganization;
-
+    private ResponsibilityCenter responsibilityCenter;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -239,6 +241,23 @@ public class BudgetConstructionOrganizationReports extends BusinessObjectBase {
 		this.reportsToOrganization = reportsToOrganization;
 	}
 
+    /**
+     * Gets the responsibilityCenter attribute. 
+     * @return Returns the responsibilityCenter.
+     */
+    public ResponsibilityCenter getResponsibilityCenter() {
+        return responsibilityCenter;
+    }
+
+    /**
+     * Sets the responsibilityCenter attribute value.
+     * @param responsibilityCenter The responsibilityCenter to set.
+     * @deprecated
+     */
+    public void setResponsibilityCenter(ResponsibilityCenter responsibilityCenter) {
+        this.responsibilityCenter = responsibilityCenter;
+    }
+   
 	/**
 	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */

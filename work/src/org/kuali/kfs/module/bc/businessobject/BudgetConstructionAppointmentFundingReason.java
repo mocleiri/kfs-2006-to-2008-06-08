@@ -56,6 +56,7 @@ public class BudgetConstructionAppointmentFundingReason extends BusinessObjectBa
 	private Chart chartOfAccounts;
     private SubAccount subAccount;
     private SubObjCd financialSubObject;
+    private BudgetConstructionAppointmentFundingReasonCode appointmentFundingReason;
     
 	/**
 	 * Default constructor.
@@ -366,6 +367,23 @@ public class BudgetConstructionAppointmentFundingReason extends BusinessObjectBa
      */
     public void setSubAccount(SubAccount subAccount) {
         this.subAccount = subAccount;
+    }
+
+    /**
+     * Gets the appointmentFundingReason attribute. 
+     * @return Returns the appointmentFundingReason.
+     */
+    public BudgetConstructionAppointmentFundingReasonCode getAppointmentFundingReason() {
+        return appointmentFundingReason;
+    }
+
+    /**
+     * Sets the appointmentFundingReason attribute value.
+     * @param appointmentFundingReason The appointmentFundingReason to set.
+     * @deprecated
+     */
+    public void setAppointmentFundingReason(BudgetConstructionAppointmentFundingReasonCode appointmentFundingReason) {
+        this.appointmentFundingReason = appointmentFundingReason;
     }
 
     /**

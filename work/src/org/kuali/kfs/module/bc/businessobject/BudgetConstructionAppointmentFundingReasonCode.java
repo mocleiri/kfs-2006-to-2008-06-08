@@ -37,9 +37,7 @@ public class BudgetConstructionAppointmentFundingReasonCode extends BusinessObje
 	private String appointmentFundingReasonCode;
 	private String appointmentFundingReasonDescription;
 
-    private BudgetConstructionAppointmentFundingReason appointmentFundingReason;
-
-	/**
+    /**
 	 * Default constructor.
 	 */
 	public BudgetConstructionAppointmentFundingReasonCode() {
@@ -85,27 +83,6 @@ public class BudgetConstructionAppointmentFundingReasonCode extends BusinessObje
 	 */
 	public void setAppointmentFundingReasonDescription(String appointmentFundingReasonDescription) {
 		this.appointmentFundingReasonDescription = appointmentFundingReasonDescription;
-	}
-
-
-	/**
-	 * Gets the appointmentFundingReason attribute.
-	 * 
-	 * @return - Returns the appointmentFundingReason
-	 * 
-	 */
-	public BudgetConstructionAppointmentFundingReason getAppointmentFundingReason() { 
-		return appointmentFundingReason;
-	}
-
-	/**
-	 * Sets the appointmentFundingReason attribute.
-	 * 
-	 * @param - appointmentFundingReason The appointmentFundingReason to set.
-	 * @deprecated
-	 */
-	public void setAppointmentFundingReason(BudgetConstructionAppointmentFundingReason appointmentFundingReason) {
-		this.appointmentFundingReason = appointmentFundingReason;
 	}
 
 	/**

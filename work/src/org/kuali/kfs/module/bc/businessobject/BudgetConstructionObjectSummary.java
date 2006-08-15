@@ -29,51 +29,46 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjLevel;
-import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.chart.bo.ObjectCons;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.SubFundGroup;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetConstructionAccountBalance extends BusinessObjectBase {
+public class BudgetConstructionObjectSummary extends BusinessObjectBase {
 
 	private String personUniversalIdentifier;
 	private String organizationChartOfAccountsCode;
 	private String organizationCode;
 	private String subFundGroupCode;
-	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
-	private String accountNumber;
-	private String subAccountNumber;
 	private String incomeExpenseCode;
+	private String financialConsolidationSortCode;
 	private String financialLevelSortCode;
 	private String financialObjectCode;
-	private String financialSubObjectCode;
-	private String financialConsolidationSortCode;
-	private String financialObjectLevelCode;
-	private Integer appointmentRequestedFteQuantity;
-	private Integer appointmentRequestedCsfFteQuantity;
-	private Integer positionFullTimeEquivalencyQuantity;
-	private KualiDecimal financialBeginningBalanceLineAmount;
 	private KualiDecimal accountLineAnnualBalanceAmount;
+	private KualiDecimal financialBeginningBalanceLineAmount;
+	private String financialConsolidationObjectCode;
+	private String financialObjectLevelCode;
+	private Integer appointmentRequestedCsfFteQuantity;
+	private Integer appointmentRequestedFteQuantity;
+	private Integer csfFullTimeEmploymentQuantity;
 	private Integer positionCsfLeaveFteQuantity;
 
     private Chart organizationChartOfAccounts;
 	private Org organization;
-	private ObjectCode financialObject;
 	private Chart chartOfAccounts;
-	private Account account;
     private SubFundGroup subFundGroup;
     private ObjLevel financialObjectLevel;
+    private ObjectCons financialConsolidationObject;
     
 	/**
 	 * Default constructor.
 	 */
-	public BudgetConstructionAccountBalance() {
+	public BudgetConstructionObjectSummary() {
 
 	}
 
@@ -162,27 +157,6 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the universityFiscalYear attribute.
-	 * 
-	 * @return - Returns the universityFiscalYear
-	 * 
-	 */
-	public Integer getUniversityFiscalYear() { 
-		return universityFiscalYear;
-	}
-
-	/**
-	 * Sets the universityFiscalYear attribute.
-	 * 
-	 * @param - universityFiscalYear The universityFiscalYear to set.
-	 * 
-	 */
-	public void setUniversityFiscalYear(Integer universityFiscalYear) {
-		this.universityFiscalYear = universityFiscalYear;
-	}
-
-
-	/**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
 	 * @return - Returns the chartOfAccountsCode
@@ -204,48 +178,6 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the accountNumber attribute.
-	 * 
-	 * @return - Returns the accountNumber
-	 * 
-	 */
-	public String getAccountNumber() { 
-		return accountNumber;
-	}
-
-	/**
-	 * Sets the accountNumber attribute.
-	 * 
-	 * @param - accountNumber The accountNumber to set.
-	 * 
-	 */
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
-
-
-	/**
-	 * Gets the subAccountNumber attribute.
-	 * 
-	 * @return - Returns the subAccountNumber
-	 * 
-	 */
-	public String getSubAccountNumber() { 
-		return subAccountNumber;
-	}
-
-	/**
-	 * Sets the subAccountNumber attribute.
-	 * 
-	 * @param - subAccountNumber The subAccountNumber to set.
-	 * 
-	 */
-	public void setSubAccountNumber(String subAccountNumber) {
-		this.subAccountNumber = subAccountNumber;
-	}
-
-
-	/**
 	 * Gets the incomeExpenseCode attribute.
 	 * 
 	 * @return - Returns the incomeExpenseCode
@@ -263,6 +195,27 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	 */
 	public void setIncomeExpenseCode(String incomeExpenseCode) {
 		this.incomeExpenseCode = incomeExpenseCode;
+	}
+
+
+	/**
+	 * Gets the financialConsolidationSortCode attribute.
+	 * 
+	 * @return - Returns the financialConsolidationSortCode
+	 * 
+	 */
+	public String getFinancialConsolidationSortCode() { 
+		return financialConsolidationSortCode;
+	}
+
+	/**
+	 * Sets the financialConsolidationSortCode attribute.
+	 * 
+	 * @param - financialConsolidationSortCode The financialConsolidationSortCode to set.
+	 * 
+	 */
+	public void setFinancialConsolidationSortCode(String financialConsolidationSortCode) {
+		this.financialConsolidationSortCode = financialConsolidationSortCode;
 	}
 
 
@@ -309,128 +262,23 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the financialSubObjectCode attribute.
+	 * Gets the accountLineAnnualBalanceAmount attribute.
 	 * 
-	 * @return - Returns the financialSubObjectCode
+	 * @return - Returns the accountLineAnnualBalanceAmount
 	 * 
 	 */
-	public String getFinancialSubObjectCode() { 
-		return financialSubObjectCode;
+	public KualiDecimal getAccountLineAnnualBalanceAmount() { 
+		return accountLineAnnualBalanceAmount;
 	}
 
 	/**
-	 * Sets the financialSubObjectCode attribute.
+	 * Sets the accountLineAnnualBalanceAmount attribute.
 	 * 
-	 * @param - financialSubObjectCode The financialSubObjectCode to set.
-	 * 
-	 */
-	public void setFinancialSubObjectCode(String financialSubObjectCode) {
-		this.financialSubObjectCode = financialSubObjectCode;
-	}
-
-
-	/**
-	 * Gets the financialConsolidationSortCode attribute.
-	 * 
-	 * @return - Returns the financialConsolidationSortCode
+	 * @param - accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
 	 * 
 	 */
-	public String getFinancialConsolidationSortCode() { 
-		return financialConsolidationSortCode;
-	}
-
-	/**
-	 * Sets the financialConsolidationSortCode attribute.
-	 * 
-	 * @param - financialConsolidationSortCode The financialConsolidationSortCode to set.
-	 * 
-	 */
-	public void setFinancialConsolidationSortCode(String financialConsolidationSortCode) {
-		this.financialConsolidationSortCode = financialConsolidationSortCode;
-	}
-
-
-	/**
-	 * Gets the financialObjectLevelCode attribute.
-	 * 
-	 * @return - Returns the financialObjectLevelCode
-	 * 
-	 */
-	public String getFinancialObjectLevelCode() { 
-		return financialObjectLevelCode;
-	}
-
-	/**
-	 * Sets the financialObjectLevelCode attribute.
-	 * 
-	 * @param - financialObjectLevelCode The financialObjectLevelCode to set.
-	 * 
-	 */
-	public void setFinancialObjectLevelCode(String financialObjectLevelCode) {
-		this.financialObjectLevelCode = financialObjectLevelCode;
-	}
-
-
-	/**
-	 * Gets the appointmentRequestedFteQuantity attribute.
-	 * 
-	 * @return - Returns the appointmentRequestedFteQuantity
-	 * 
-	 */
-	public Integer getAppointmentRequestedFteQuantity() { 
-		return appointmentRequestedFteQuantity;
-	}
-
-	/**
-	 * Sets the appointmentRequestedFteQuantity attribute.
-	 * 
-	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
-	 * 
-	 */
-	public void setAppointmentRequestedFteQuantity(Integer appointmentRequestedFteQuantity) {
-		this.appointmentRequestedFteQuantity = appointmentRequestedFteQuantity;
-	}
-
-
-	/**
-	 * Gets the appointmentRequestedCsfFteQuantity attribute.
-	 * 
-	 * @return - Returns the appointmentRequestedCsfFteQuantity
-	 * 
-	 */
-	public Integer getAppointmentRequestedCsfFteQuantity() { 
-		return appointmentRequestedCsfFteQuantity;
-	}
-
-	/**
-	 * Sets the appointmentRequestedCsfFteQuantity attribute.
-	 * 
-	 * @param - appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
-	 * 
-	 */
-	public void setAppointmentRequestedCsfFteQuantity(Integer appointmentRequestedCsfFteQuantity) {
-		this.appointmentRequestedCsfFteQuantity = appointmentRequestedCsfFteQuantity;
-	}
-
-
-	/**
-	 * Gets the positionFullTimeEquivalencyQuantity attribute.
-	 * 
-	 * @return - Returns the positionFullTimeEquivalencyQuantity
-	 * 
-	 */
-	public Integer getPositionFullTimeEquivalencyQuantity() { 
-		return positionFullTimeEquivalencyQuantity;
-	}
-
-	/**
-	 * Sets the positionFullTimeEquivalencyQuantity attribute.
-	 * 
-	 * @param - positionFullTimeEquivalencyQuantity The positionFullTimeEquivalencyQuantity to set.
-	 * 
-	 */
-	public void setPositionFullTimeEquivalencyQuantity(Integer positionFullTimeEquivalencyQuantity) {
-		this.positionFullTimeEquivalencyQuantity = positionFullTimeEquivalencyQuantity;
+	public void setAccountLineAnnualBalanceAmount(KualiDecimal accountLineAnnualBalanceAmount) {
+		this.accountLineAnnualBalanceAmount = accountLineAnnualBalanceAmount;
 	}
 
 
@@ -456,23 +304,107 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the accountLineAnnualBalanceAmount attribute.
+	 * Gets the financialConsolidationObjectCode attribute.
 	 * 
-	 * @return - Returns the accountLineAnnualBalanceAmount
+	 * @return - Returns the financialConsolidationObjectCode
 	 * 
 	 */
-	public KualiDecimal getAccountLineAnnualBalanceAmount() { 
-		return accountLineAnnualBalanceAmount;
+	public String getFinancialConsolidationObjectCode() { 
+		return financialConsolidationObjectCode;
 	}
 
 	/**
-	 * Sets the accountLineAnnualBalanceAmount attribute.
+	 * Sets the financialConsolidationObjectCode attribute.
 	 * 
-	 * @param - accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
+	 * @param - financialConsolidationObjectCode The financialConsolidationObjectCode to set.
 	 * 
 	 */
-	public void setAccountLineAnnualBalanceAmount(KualiDecimal accountLineAnnualBalanceAmount) {
-		this.accountLineAnnualBalanceAmount = accountLineAnnualBalanceAmount;
+	public void setFinancialConsolidationObjectCode(String financialConsolidationObjectCode) {
+		this.financialConsolidationObjectCode = financialConsolidationObjectCode;
+	}
+
+
+	/**
+	 * Gets the financialObjectLevelCode attribute.
+	 * 
+	 * @return - Returns the financialObjectLevelCode
+	 * 
+	 */
+	public String getFinancialObjectLevelCode() { 
+		return financialObjectLevelCode;
+	}
+
+	/**
+	 * Sets the financialObjectLevelCode attribute.
+	 * 
+	 * @param - financialObjectLevelCode The financialObjectLevelCode to set.
+	 * 
+	 */
+	public void setFinancialObjectLevelCode(String financialObjectLevelCode) {
+		this.financialObjectLevelCode = financialObjectLevelCode;
+	}
+
+
+	/**
+	 * Gets the appointmentRequestedCsfFteQuantity attribute.
+	 * 
+	 * @return - Returns the appointmentRequestedCsfFteQuantity
+	 * 
+	 */
+	public Integer getAppointmentRequestedCsfFteQuantity() { 
+		return appointmentRequestedCsfFteQuantity;
+	}
+
+	/**
+	 * Sets the appointmentRequestedCsfFteQuantity attribute.
+	 * 
+	 * @param - appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
+	 * 
+	 */
+	public void setAppointmentRequestedCsfFteQuantity(Integer appointmentRequestedCsfFteQuantity) {
+		this.appointmentRequestedCsfFteQuantity = appointmentRequestedCsfFteQuantity;
+	}
+
+
+	/**
+	 * Gets the appointmentRequestedFteQuantity attribute.
+	 * 
+	 * @return - Returns the appointmentRequestedFteQuantity
+	 * 
+	 */
+	public Integer getAppointmentRequestedFteQuantity() { 
+		return appointmentRequestedFteQuantity;
+	}
+
+	/**
+	 * Sets the appointmentRequestedFteQuantity attribute.
+	 * 
+	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
+	 * 
+	 */
+	public void setAppointmentRequestedFteQuantity(Integer appointmentRequestedFteQuantity) {
+		this.appointmentRequestedFteQuantity = appointmentRequestedFteQuantity;
+	}
+
+
+	/**
+	 * Gets the csfFullTimeEmploymentQuantity attribute.
+	 * 
+	 * @return - Returns the csfFullTimeEmploymentQuantity
+	 * 
+	 */
+	public Integer getCsfFullTimeEmploymentQuantity() { 
+		return csfFullTimeEmploymentQuantity;
+	}
+
+	/**
+	 * Sets the csfFullTimeEmploymentQuantity attribute.
+	 * 
+	 * @param - csfFullTimeEmploymentQuantity The csfFullTimeEmploymentQuantity to set.
+	 * 
+	 */
+	public void setCsfFullTimeEmploymentQuantity(Integer csfFullTimeEmploymentQuantity) {
+		this.csfFullTimeEmploymentQuantity = csfFullTimeEmploymentQuantity;
 	}
 
 
@@ -538,26 +470,6 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	}
 
 	/**
-	 * Gets the financialObject attribute.
-	 * 
-	 * @return - Returns the financialObject
-	 * 
-	 */
-	public ObjectCode getFinancialObject() { 
-		return financialObject;
-	}
-
-	/**
-	 * Sets the financialObject attribute.
-	 * 
-	 * @param - financialObject The financialObject to set.
-	 * @deprecated
-	 */
-	public void setFinancialObject(ObjectCode financialObject) {
-		this.financialObject = financialObject;
-	}
-
-	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
 	 * @return - Returns the chartOfAccounts
@@ -577,43 +489,6 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 		this.chartOfAccounts = chartOfAccounts;
 	}
 
-	/**
-	 * Gets the account attribute.
-	 * 
-	 * @return - Returns the account
-	 * 
-	 */
-	public Account getAccount() { 
-		return account;
-	}
-
-	/**
-	 * Sets the account attribute.
-	 * 
-	 * @param - account The account to set.
-	 * @deprecated
-	 */
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-
-    /**
-     * Gets the subFundGroup attribute. 
-     * @return Returns the subFundGroup.
-     */
-    public SubFundGroup getSubFundGroup() {
-        return subFundGroup;
-    }
-
-    /**
-     * Sets the subFundGroup attribute value.
-     * @param subFundGroup The subFundGroup to set.
-     * @deprecated
-     */
-    public void setSubFundGroup(SubFundGroup subFundGroup) {
-        this.subFundGroup = subFundGroup;
-    }    
-    
     /**
      * Gets the financialObjectLevel attribute. 
      * @return Returns the financialObjectLevel.
@@ -632,25 +507,53 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * Gets the subFundGroup attribute. 
+     * @return Returns the subFundGroup.
      */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
+    public SubFundGroup getSubFundGroup() {
+        return subFundGroup;
+    }
+
+    /**
+     * Sets the subFundGroup attribute value.
+     * @param subFundGroup The subFundGroup to set.
+     * @deprecated
+     */
+    public void setSubFundGroup(SubFundGroup subFundGroup) {
+        this.subFundGroup = subFundGroup;
+    }
+
+    /**
+     * Gets the financialConsolidationObject attribute. 
+     * @return Returns the financialConsolidationObject.
+     */
+    public ObjectCons getFinancialConsolidationObject() {
+        return financialConsolidationObject;
+    }
+
+    /**
+     * Sets the financialConsolidationObject attribute value.
+     * @param financialConsolidationObject The financialConsolidationObject to set.
+     * @deprecated
+     */
+    public void setFinancialConsolidationObject(ObjectCons financialConsolidationObject) {
+        this.financialConsolidationObject = financialConsolidationObject;
+    }    
+    
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("personUniversalIdentifier", this.personUniversalIdentifier);
         m.put("organizationChartOfAccountsCode", this.organizationChartOfAccountsCode);
         m.put("organizationCode", this.organizationCode);
         m.put("subFundGroupCode", this.subFundGroupCode);
-        if (this.universityFiscalYear != null) {
-            m.put("universityFiscalYear", this.universityFiscalYear.toString());
-        }
         m.put("chartOfAccountsCode", this.chartOfAccountsCode);
-        m.put("accountNumber", this.accountNumber);
-        m.put("subAccountNumber", this.subAccountNumber);
         m.put("incomeExpenseCode", this.incomeExpenseCode);
+        m.put("financialConsolidationSortCode", this.financialConsolidationSortCode);
         m.put("financialLevelSortCode", this.financialLevelSortCode);
         m.put("financialObjectCode", this.financialObjectCode);
-        m.put("financialSubObjectCode", this.financialSubObjectCode);
-        return m;
+	    return m;
     }
-
 }
