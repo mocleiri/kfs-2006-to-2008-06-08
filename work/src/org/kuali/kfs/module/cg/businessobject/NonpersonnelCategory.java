@@ -135,7 +135,7 @@ public class NonpersonnelCategory extends BusinessObjectBase {
      * 
      * @return Returns the nonpersonnelObjectCodes.
      */
-    public List getNonpersonnelObjectCodes() {
+    public List<NonpersonnelObjectCode> getNonpersonnelObjectCodes() {
         return nonpersonnelObjectCodes;
     }
 
