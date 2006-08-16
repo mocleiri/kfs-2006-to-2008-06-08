@@ -47,34 +47,7 @@ public class BudgetNonpersonnelServiceImpl implements BudgetNonpersonnelService 
     private NonpersonnelCategoryDao nonpersonnelCategoryDao;
     private NonpersonnelObjectCodesDao nonpersonnelObjectCodesDao;
 
-    /**
-     * Default constructor
-     */
-    public BudgetNonpersonnelServiceImpl() {
-        super();
-    }
-
-    /**
-     * Saves a documentNote to the DB.
-     * 
-     * @param DocumentNote The accounting documentNote object to save - can be any object that extends DocumentNote (i.e. Source and
-     *        Target lines).
-     */
-    public BudgetNonpersonnel save(BudgetNonpersonnel budgetNonpersonnel) throws Exception {
-        budgetNonpersonnelDao.save(budgetNonpersonnel);
-        return budgetNonpersonnel;
-    }
-
-    /**
-     * Deletes a documentNote from the DB.
-     * 
-     * @param DocumentNote The documentNote object to save - can be any object that extends DocumentNote (i.e. Source and Target
-     *        lines).
-     */
-    public void deleteBudgetNonpersonnel(BudgetNonpersonnel budgetNonpersonnel) throws Exception {
-        budgetNonpersonnelDao.deleteBudgetNonpersonnel(budgetNonpersonnel);
-    }
-
+ 
     public void refreshNonpersonnelObjectCode(List nonpersonnelItems) {
         for (Iterator nonpersonnelItem = nonpersonnelItems.iterator(); nonpersonnelItem.hasNext();) {
             BudgetNonpersonnel budgetNonpersonnel = (BudgetNonpersonnel) nonpersonnelItem.next();
@@ -97,27 +70,15 @@ public class BudgetNonpersonnelServiceImpl implements BudgetNonpersonnelService 
     }
 
     /**
-     * Retrieves a documentNote by its document header id. Will retrieve any object that extends DocumentNote (i.e. Source and
-     * Target lines).
-     * 
-     * @param Class The specific child class type to be retrieved.
-     * @param Long
-     */
-    public List getByDocumentHeaderId(Long documentHeaderId) throws Exception {
-        // retrieve the documentNote
-        return getBudgetNonpersonnelDao().findByDocumentHeaderId(documentHeaderId);
-    }
-
-    /**
      * Returns all nonpersonnel categories
      * 
      * @throws Exception
      */
-    public List getAllNonpersonnelCategories() throws Exception {
-        List<NonpersonnelCategory> nonpersonnelCategories = this.getNonpersonnelCategoryDao().findAllNonpersonnelCategories();
+    public List getAllNonpersonnelCategories() {
+        List<NonpersonnelCategory> nonpersonnelCategories = nonpersonnelCategoryDao.findAllNonpersonnelCategories();
         
         for(NonpersonnelCategory nonpersonnelCategory : nonpersonnelCategories) {
-            nonpersonnelCategory.setNonpersonnelObjectCodes(this.getNonpersonnelObjectCodesDao().findActiveNonpersonnelObjectCodes(nonpersonnelCategory.getCode()));
+            nonpersonnelCategory.setNonpersonnelObjectCodes(nonpersonnelObjectCodesDao.findActiveNonpersonnelObjectCodes(nonpersonnelCategory.getCode()));
         }
         
         return nonpersonnelCategories;
@@ -134,36 +95,12 @@ public class BudgetNonpersonnelServiceImpl implements BudgetNonpersonnelService 
     }
 
     /**
-     * Retrieves a data access object
-     */
-    public BudgetNonpersonnelDao getBudgetNonpersonnelDao() {
-        return budgetNonpersonnelDao;
-    }
-
-    /**
-     * Gets the nonpersonnelCategoryDao attribute.
-     * 
-     * @return Returns the nonpersonnelCategoryDao.
-     */
-    public NonpersonnelCategoryDao getNonpersonnelCategoryDao() {
-        return nonpersonnelCategoryDao;
-    }
-
-    /**
      * Sets the nonpersonnelCategoryDao attribute value.
      * 
      * @param nonpersonnelCategoryDao The nonpersonnelCategoryDao to set.
      */
     public void setNonpersonnelCategoryDao(NonpersonnelCategoryDao nonpersonnelCategoryDao) {
         this.nonpersonnelCategoryDao = nonpersonnelCategoryDao;
-    }
-
-    /**
-     * Gets the nonpersonnelObjectCodesDao attribute. 
-     * @return Returns the nonpersonnelObjectCodesDao.
-     */
-    public NonpersonnelObjectCodesDao getNonpersonnelObjectCodesDao() {
-        return nonpersonnelObjectCodesDao;
     }
 
     /**

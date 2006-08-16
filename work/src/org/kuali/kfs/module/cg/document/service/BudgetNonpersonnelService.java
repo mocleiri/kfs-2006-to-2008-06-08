@@ -33,32 +33,6 @@ import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
  */
 public interface BudgetNonpersonnelService {
     /**
-     * Retrieves a list of document notes for a document id
-     * 
-     * @param documentHeaderId
-     * @return A list of nonpersonnel items
-     * @throws Exception
-     */
-    public List getByDocumentHeaderId(Long documentHeaderId) throws Exception;
-
-    /**
-     * Saves a nonpersonnel item
-     * 
-     * @param budgetNonpersonnel
-     * @return The nonpersonnel item
-     * @throws Exception
-     */
-    public BudgetNonpersonnel save(BudgetNonpersonnel budgetNonpersonnel) throws Exception;
-
-    /**
-     * Deletes a nonpersonnel item
-     * 
-     * @param budget nonpersonnel
-     * @throws Exception
-     */
-    public void deleteBudgetNonpersonnel(BudgetNonpersonnel budgetNonpersonnel) throws Exception;
-
-    /**
      * Refreshes the NonpersonnelObjectCode reference objects in the nonpersonnelItems list passed in.
      * 
      * @param nonpersonnelItems of items to have NonpersonnelObjectCode refreshed.
@@ -80,5 +54,5 @@ public interface BudgetNonpersonnelService {
      * 
      * @throws Exception
      */
-    public List getAllNonpersonnelCategories() throws Exception;
+    public List getAllNonpersonnelCategories();
 }
