@@ -22,8 +22,6 @@
  */
 package org.kuali.module.kra.budget.rules.budget;
 
-import static org.kuali.module.kra.budget.service.impl.BudgetPersonnelServiceImpl.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,6 +36,7 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.KraKeyConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetUser;
@@ -332,7 +331,7 @@ public class BudgetPersonnelRule {
                 for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
                     GlobalVariables.getErrorMap().addToErrorPath("userAppointmentTaskPeriod[" + period + "]");
                     
-                    if (StringUtils.contains(appointmentTypeMappings.get(FULL_YEAR).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Salary
+                    if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.FULL_YEAR).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Salary
                         if (userAppointmentTaskPeriod.getAgencyPercentEffortAmount() == null) {
                             GlobalVariables.getErrorMap().putError("agencyPercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Agency Percent Effort Amount");
                             valid = false;
@@ -343,7 +342,7 @@ public class BudgetPersonnelRule {
                             valid = false;
                         }
                         
-                    } else if (StringUtils.contains(appointmentTypeMappings.get(ACADEMIC_YEAR_SUMMER).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Academic 9/Summer
+                    } else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.ACADEMIC_YEAR_SUMMER).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Academic 9/Summer
                         if (userAppointmentTaskPeriod.getPersonWeeksAmount() == null) {
                             GlobalVariables.getErrorMap().putError("personWeeksAmount", KeyConstants.ERROR_REQUIRED, "Number of Weeks");
                             valid = false;
@@ -358,7 +357,7 @@ public class BudgetPersonnelRule {
                             GlobalVariables.getErrorMap().putError("universityCostSharePercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Institution Cost Share Percent Effort Amount");
                             valid = false;
                         }
-                    } else if (StringUtils.contains(appointmentTypeMappings.get(HOURLY).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Hourly
+                    } else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.HOURLY).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Hourly
                         if (userAppointmentTaskPeriod.getUserHourlyRate() == null) {
                             GlobalVariables.getErrorMap().putError("userHourlyRate", KeyConstants.ERROR_REQUIRED, "Hourly Rate");
                             valid = false;
@@ -373,7 +372,7 @@ public class BudgetPersonnelRule {
                             GlobalVariables.getErrorMap().putError("userUniversityHours", KeyConstants.ERROR_REQUIRED, "Institution Request Number of Hours");
                             valid = false;
                         }
-                    } else if(StringUtils.contains(appointmentTypeMappings.get(GRADUATE_ASSISTANT).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Grad Asst
+                    } else if(StringUtils.contains(appointmentTypeMappings.get(KraConstants.GRADUATE_ASSISTANT).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Grad Asst
                         if (userAppointmentTaskPeriod.getAgencyFullTimeEquivalentPercent() == null) {
                             GlobalVariables.getErrorMap().putError("agencyFullTimeEquivalentPercent", KeyConstants.ERROR_REQUIRED, "Agency Percent Effort");
                             valid = false;

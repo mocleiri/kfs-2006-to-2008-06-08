@@ -393,9 +393,9 @@ public class BudgetAction extends KualiDocumentActionBase {
      * @throws Exception
      */
     protected static void setupAcademicYearSubdivisionConstants(BudgetForm budgetForm) throws Exception {
-        String[] academicYearSubdivisionNames = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues("KraDevelopmentGroup", "KraBudgetAcademicYearSubdivisionNames");
+        String[] academicYearSubdivisionNames = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES);
         budgetForm.setAcademicYearSubdivisionNames(Arrays.asList(academicYearSubdivisionNames));
-        budgetForm.setNumberOfAcademicYearSubdivisions(Integer.parseInt(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("KraDevelopmentGroup", "KraBudgetNumberOfAcademicYearSubdivisions")));
+        budgetForm.setNumberOfAcademicYearSubdivisions(Integer.parseInt(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS)));
     }
 
     /**

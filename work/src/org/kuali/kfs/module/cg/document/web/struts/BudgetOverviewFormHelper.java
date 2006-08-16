@@ -73,13 +73,6 @@ public class BudgetOverviewFormHelper {
     private KualiInteger personnelSalaryInstitutionCostShare = new KualiInteger(0);
     private KualiInteger personnelFringeBenefitsAgencyRequest = new KualiInteger(0);
     private KualiInteger personnelFringeBenefitsInstitutionCostShare = new KualiInteger(0);
-    // getTotalPersonnelAgencyRequest = personnelSalaryAgencyRequest + personnelFringeBenefitsAgencyRequest
-    // getTotalPersonnelInstitutionCostShare = personnelSalaryInstitutionCostShare + personnelFringeBenefitsInstitutionCostShare
-
-    // Nonpersonnel Expenses
-    // budgetNonpersonnelFormHelper.getNonpersonnelAgencyTotal
-    // budgetNonpersonnelFormHelper.getNonpersonnelUnivCostShareTotal
-    // budgetNonpersonnelFormHelper.getNonpersonnelThirdPartyCostShareTotal
 
     // Total Direct Costs
     private KualiInteger totalDirectCostsAgencyRequest;
@@ -90,13 +83,6 @@ public class BudgetOverviewFormHelper {
     private boolean overviewShowModular;
     private KualiInteger modularAdjustmentAgencyRequest;
     private KualiInteger adjustedDirectCostsAgencyRequest;
-    // Other 4 fields don't exist as part of modular.
-
-    // Total Indirect Costs
-    // getTotalIndirectCostsAgencyRequest
-    // getTotalIndirectCostsInstitutionCostShare
-    // getTotalIndirectCostsInstitutionCostShareUnrecovered
-    // Third Party does not exist as part of Indirect Cost.
 
     // Total Costs
     private KualiInteger totalCostsAgencyRequest;
@@ -108,16 +94,16 @@ public class BudgetOverviewFormHelper {
      */
     public BudgetOverviewFormHelper() {
         KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
-        this.TO_BE_NAMED = kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "toBeNamedLabel");
-        this.HOURLY_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues("KraDevelopmentGroup", "KraBudgetPersonnelHourlyAppointmentTypes"));
-        this.GRADUATE_RA_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues("KraDevelopmentGroup", "KraBudgetPersonnelGraduateResearchAssistantAppointmentTypes"));
-        this.FULL_YEAR_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues("KraDevelopmentGroup", "KraBudgetPersonnelFullYearAppointmentTypes"));
-        this.SUMMER_GRID_APPOINTMENT = kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "KraBudgetPersonnelSummerGridAppointmentType");
-        this.SUMMER_GRID_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues("KraDevelopmentGroup", "KraBudgetPersonnelSummerGridAppointmentTypes"));
+        this.TO_BE_NAMED = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.TO_BE_NAMED_LABEL);
+        this.HOURLY_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_HOURLY_APPOINTMENT_TYPES));
+        this.GRADUATE_RA_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES));
+        this.FULL_YEAR_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_FULL_YEAR_APPOINTMENT_TYPES));
+        this.SUMMER_GRID_APPOINTMENT = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPE);
+        this.SUMMER_GRID_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPES));
         
-        this.GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE = kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "graduateAssistantNonpersonnelCategoryCode");
-        this.GRADUATE_ASSISTANT_NONPERSONNEL_SUBCATEGORY_CODE = kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "graduateAssistantNonpersonnelSubCategoryCode");
-        this.GRADUATE_ASSISTANT_NONPERSONNEL_DESCRIPTION = kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "graduateAssistantNonpersonnelDescription");
+        this.GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE);
+        this.GRADUATE_ASSISTANT_NONPERSONNEL_SUBCATEGORY_CODE = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE);
+        this.GRADUATE_ASSISTANT_NONPERSONNEL_DESCRIPTION = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_DESCRIPTION);
     }
 
     /**
