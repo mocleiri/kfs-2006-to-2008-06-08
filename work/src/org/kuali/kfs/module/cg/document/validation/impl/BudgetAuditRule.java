@@ -31,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.Document;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiInteger;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.KraKeyConstants;
@@ -83,20 +84,22 @@ public class BudgetAuditRule {
         BudgetIndirectCostService idcService = SpringServiceLocator.getBudgetIndirectCostService();
         idcService.refreshIndirectCost(budgetDocument);
         
-        List<AuditError> parametersSoftAuditErrors = new ArrayList<AuditError>();
-        List<BudgetTaskPeriodIndirectCost> taskPeriodIndirectCostItems = budgetDocument.getBudget().getIndirectCost().getBudgetTaskPeriodIndirectCostItems();
+        if (ObjectUtils.isNotNull(budgetDocument.getBudget().getIndirectCost())) {
+            List<AuditError> parametersSoftAuditErrors = new ArrayList<AuditError>();
+            List<BudgetTaskPeriodIndirectCost> taskPeriodIndirectCostItems = budgetDocument.getBudget().getIndirectCost().getBudgetTaskPeriodIndirectCostItems();
         
-        for (BudgetTaskPeriodIndirectCost taskPeriodIndirectCost : taskPeriodIndirectCostItems) {
-            if (taskPeriodIndirectCost.getCalculatedIndirectCost().isNegative()) {
-                parametersSoftAuditErrors.add(new AuditError("document.budget.audit.parameters.tasks.negativeIdc" + taskPeriodIndirectCost.getBudgetTaskSequenceNumber().toString(),
-                        KraKeyConstants.AUDIT_PARAMETERS_NEGATIVE_IDC,
-                        "parameters", new String[] {taskPeriodIndirectCost.getBudgetTaskSequenceNumber().toString()}));
+            for (BudgetTaskPeriodIndirectCost taskPeriodIndirectCost : taskPeriodIndirectCostItems) {
+                if (taskPeriodIndirectCost.getCalculatedIndirectCost().isNegative()) {
+                    parametersSoftAuditErrors.add(new AuditError("document.budget.audit.parameters.tasks.negativeIdc" + taskPeriodIndirectCost.getBudgetTaskSequenceNumber().toString(),
+                            KraKeyConstants.AUDIT_PARAMETERS_NEGATIVE_IDC,
+                            "parameters", new String[] {taskPeriodIndirectCost.getBudgetTaskSequenceNumber().toString()}));
+                }
             }
-        }
         
-        if (!parametersSoftAuditErrors.isEmpty()) {
-            GlobalVariables.getAuditErrorMap().put("parametersSoftAuditErrors", new AuditCluster("Parameters", parametersSoftAuditErrors, true));
-            return false;
+            if (!parametersSoftAuditErrors.isEmpty()) {
+                GlobalVariables.getAuditErrorMap().put("parametersSoftAuditErrors", new AuditCluster("Parameters", parametersSoftAuditErrors, true));
+                return false;
+            }
         }
         return true;
     }
