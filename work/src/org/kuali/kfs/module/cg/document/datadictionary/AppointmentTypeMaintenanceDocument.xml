@@ -39,6 +39,7 @@
                     <maintainableField name="fringeRateAmount" />
                     <maintainableField name="costShareFringeRateAmount" />
                     <maintainableField name="fiscalYear" />
+                    <maintainableField name="relatedAppointmentTypeCode" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

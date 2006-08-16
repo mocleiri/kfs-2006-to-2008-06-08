@@ -15,6 +15,7 @@
                 <field attributeName="appointmentTypeAbbrieviation" />
                 <field attributeName="fringeRateAmount" />
                 <field attributeName="costShareFringeRateAmount" />
+                <field attributeName="relatedAppointmentTypeCode" />
                 <field attributeName="fiscalYear" />
                 <field attributeName="lastUpdate" />
             </inquiryFields>
@@ -43,6 +44,7 @@
                 <field attributeName="appointmentTypeAbbrieviation" />
                 <field attributeName="fringeRateAmount" />
                 <field attributeName="costShareFringeRateAmount" />
+                <field attributeName="relatedAppointmentTypeCode" />
                 <field attributeName="fiscalYear" />
                 <field attributeName="lastUpdate" />
             </resultFields>
@@ -165,6 +167,12 @@
                 <summary>lastUpdate summary...</summary>
                 <description>lastUpdate description...</description>
             </attribute>
+            
+            <attributeReference name="relatedAppointmentTypeCode" sourceClassName="org.kuali.module.kra.budget.bo.AppointmentType" sourceAttributeName="appointmentTypeCode">
+                <label>Related AppointmentType Code</label>
+                <shortLabel>Related Appt Type</shortLabel>
+                <summary>The Appointment Type Code of a related Appointment Type, used for creating entries for dual appointment types.  For example, an Academic 12- Month appointment could be combined with an Hourly appointment.</summary>
+            </attributeReference>
 
             <attribute name="objectId" forceUppercase="true">
                 <label>Object Id</label>
