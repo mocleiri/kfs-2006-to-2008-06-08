@@ -37,7 +37,7 @@ public class BudgetConstructionObjectPick extends BusinessObjectBase {
 
 	private String financialObjectCode;
 	private Integer selectFlag;
-	private Long personSystemIdentifier;
+	private Long personUniversalIdentifier;
 
 	/**
 	 * Default constructor.
@@ -89,23 +89,23 @@ public class BudgetConstructionObjectPick extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the personSystemIdentifier attribute.
+	 * Gets the personUniversalIdentifier attribute.
 	 * 
-	 * @return - Returns the personSystemIdentifier
+	 * @return - Returns the personUniversalIdentifier
 	 * 
 	 */
-	public Long getPersonSystemIdentifier() { 
-		return personSystemIdentifier;
+	public Long getPersonUniversalIdentifier() { 
+		return personUniversalIdentifier;
 	}
 
 	/**
-	 * Sets the personSystemIdentifier attribute.
+	 * Sets the personUniversalIdentifier attribute.
 	 * 
-	 * @param - personSystemIdentifier The personSystemIdentifier to set.
+	 * @param - personUniversalIdentifier The personUniversalIdentifier to set.
 	 * 
 	 */
-	public void setPersonSystemIdentifier(Long personSystemIdentifier) {
-		this.personSystemIdentifier = personSystemIdentifier;
+	public void setPersonUniversalIdentifier(Long personUniversalIdentifier) {
+		this.personUniversalIdentifier = personUniversalIdentifier;
 	}
 
 	/**
@@ -113,8 +113,8 @@ public class BudgetConstructionObjectPick extends BusinessObjectBase {
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
-        if (this.personSystemIdentifier != null) {
-            m.put("personSystemIdentifier", this.personSystemIdentifier.toString());
+        if (this.personUniversalIdentifier != null) {
+            m.put("personUniversalIdentifier", this.personUniversalIdentifier.toString());
         }
         m.put("financialObjectCode", this.financialObjectCode);
 	    return m;

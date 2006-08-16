@@ -44,7 +44,7 @@ public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 	private Integer appointmentRequestedFteQuantity;
 	private KualiDecimal initialRequestedAmount;
 	private Integer initialRequestedFteQuantity;
-	private Long personSystemIdentifier;
+	private Long personUniversalIdentifier;
 
     private Chart organizationChartOfAccounts;
 	private Org organization;
@@ -204,23 +204,23 @@ public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the personSystemIdentifier attribute.
+	 * Gets the personUniversalIdentifier attribute.
 	 * 
-	 * @return - Returns the personSystemIdentifier
+	 * @return - Returns the personUniversalIdentifier
 	 * 
 	 */
-	public Long getPersonSystemIdentifier() { 
-		return personSystemIdentifier;
+	public Long getPersonUniversalIdentifier() { 
+		return personUniversalIdentifier;
 	}
 
 	/**
-	 * Sets the personSystemIdentifier attribute.
+	 * Sets the personUniversalIdentifier attribute.
 	 * 
-	 * @param - personSystemIdentifier The personSystemIdentifier to set.
+	 * @param - personUniversalIdentifier The personUniversalIdentifier to set.
 	 * 
 	 */
-	public void setPersonSystemIdentifier(Long personSystemIdentifier) {
-		this.personSystemIdentifier = personSystemIdentifier;
+	public void setPersonUniversalIdentifier(Long personUniversalIdentifier) {
+		this.personUniversalIdentifier = personUniversalIdentifier;
 	}
 
 
@@ -269,8 +269,8 @@ public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
-        if (this.personSystemIdentifier != null) {
-            m.put("personSystemIdentifier", this.personSystemIdentifier.toString());
+        if (this.personUniversalIdentifier != null) {
+            m.put("personUniversalIdentifier", this.personUniversalIdentifier.toString());
         }
         m.put("organizationChartOfAccountsCode", this.organizationChartOfAccountsCode);
         m.put("organizationCode", this.organizationCode);
