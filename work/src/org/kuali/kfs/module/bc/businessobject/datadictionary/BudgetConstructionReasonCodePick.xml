@@ -3,25 +3,25 @@
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
-    <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionAppointmentFundingReasonCode">
+    <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionReasonCodePick">
         <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Budget Construction Appointment Funding Reason Code Inquiry</title>
+            <title>Budget Construction Reason Code Pick Inquiry</title>
 
             <inquiryFields>
                 <field attributeName="appointmentFundingReasonCode" />
-                <field attributeName="appointmentFundingReasonDescription" />
-                <field attributeName="rowActiveIndicator" />
+                <field attributeName="personUniversalIdentifier" />
+                <field attributeName="selectFlag" />
             </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Budget Construction Appointment Funding Reason Code Lookup</title>
+            <title>Budget Construction Reason Code Pick Lookup</title>
 
-			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionAppointmentFundingReasonCode">Create New</a>]]></menubar>
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionReasonCodePick">Create New</a>]]></menubar>
 
-            <instructions>Look up a Budget Construction Appointment Funding Reason Code</instructions>
+            <instructions>Look up a Budget Construction Reason Code Pick</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
@@ -31,14 +31,14 @@
 
             <lookupFields>
                 <lookupField attributeName="appointmentFundingReasonCode" required="false" />
-                <lookupField attributeName="appointmentFundingReasonDescription" required="false" />
-                <lookupField attributeName="rowActiveIndicator" required="false" />
+                <lookupField attributeName="personUniversalIdentifier" required="false" />
+                <lookupField attributeName="selectFlag" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="appointmentFundingReasonCode" />
-                <field attributeName="appointmentFundingReasonDescription" />
-                <field attributeName="rowActiveIndicator" />
+                <field attributeName="personUniversalIdentifier" />
+                <field attributeName="selectFlag" />
             </resultFields>
         </lookup>
 
@@ -59,33 +59,34 @@
                 <description>appointmentFundingReasonCode description...</description>
 			</attribute>
 
-            <attribute name="appointmentFundingReasonDescription" forceUppercase="true">
-                <label>Appointment Funding Reason Description</label>
-                <shortLabel>Description</shortLabel>
+            <attribute name="personUniversalIdentifier" forceUppercase="true">
+                <label>Person Universal Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
-                <maxLength>40</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
+                <maxLength>10</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="42" />
+                    <text size="12" />
                 </control>
 
-                <summary>appointmentFundingReasonDescription</summary>
-                <description>appointmentFundingReasonDescription description...</description>
+                <summary>personUniversalIdentifier</summary>
+                <description>personUniversalIdentifier description...</description>
 			</attribute>
 
-            <attribute name="rowActiveIndicator" forceUppercase="true">
-                <label>Row Active Indicator</label>
-                <shortLabel>Indicator</shortLabel>
+            <attribute name="selectFlag" forceUppercase="true">
+                <label>Select Flag</label>
+                <shortLabel>Flag</shortLabel>
 
-                <maxLength>1</maxLength>
+                <maxLength>7</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <checkbox />
+                    <text size="9" />
                 </control>
 
-                <summary>rowActiveIndicator</summary>
-                <description>rowActiveIndicator description...</description>
+                <summary>selectFlag</summary>
+                <description>selectFlag description...</description>
 			</attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
