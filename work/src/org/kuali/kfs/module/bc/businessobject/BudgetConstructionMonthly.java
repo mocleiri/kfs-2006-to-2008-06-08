@@ -65,6 +65,7 @@ public class BudgetConstructionMonthly extends BusinessObjectBase {
 	private KualiDecimal financialDocumentMonth11LineAmount;
 	private KualiDecimal financialDocumentMonth12LineAmount;
 
+    private BudgetConstructionHeader budgetConstructionHeader;
     private PendingBudgetConstructionGeneralLedger pendingBudgetConstructionGeneralLedger;
 	private Balance financialBalanceType;
 	private ObjectCode financialObject;
@@ -692,6 +693,23 @@ public class BudgetConstructionMonthly extends BusinessObjectBase {
     }    
     
     /**
+     * Gets the budgetConstructionHeader attribute. 
+     * @return Returns the budgetConstructionHeader.
+     */
+    public BudgetConstructionHeader getBudgetConstructionHeader() {
+        return budgetConstructionHeader;
+    }
+
+    /**
+     * Sets the budgetConstructionHeader attribute value.
+     * @param budgetConstructionHeader The budgetConstructionHeader to set.
+     * @deprecated
+     */
+    public void setBudgetConstructionHeader(BudgetConstructionHeader budgetConstructionHeader) {
+        this.budgetConstructionHeader = budgetConstructionHeader;
+    }
+
+    /**
      * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
@@ -708,7 +726,6 @@ public class BudgetConstructionMonthly extends BusinessObjectBase {
         m.put("financialBalanceTypeCode", this.financialBalanceTypeCode);
         m.put("financialObjectTypeCode", this.financialObjectTypeCode);
         return m;
-    }
-
+    }    
 
 }
