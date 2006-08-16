@@ -32,16 +32,18 @@ import org.kuali.core.bo.BusinessObjectBase;
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetConstructionAppointmentFundingReasonCode extends BusinessObjectBase {
+public class BudgetConstructionReasonCodePick extends BusinessObjectBase {
 
 	private String appointmentFundingReasonCode;
-	private String appointmentFundingReasonDescription;
-    private boolean rowActiveIndicator;
+	private Integer selectFlag;
+	private Long personSystemIdentifier;
+
+    BudgetConstructionAppointmentFundingReasonCode appointmentFundingReason;
     
-    /**
+	/**
 	 * Default constructor.
 	 */
-	public BudgetConstructionAppointmentFundingReasonCode() {
+	public BudgetConstructionReasonCodePick() {
 
 	}
 
@@ -67,39 +69,61 @@ public class BudgetConstructionAppointmentFundingReasonCode extends BusinessObje
 
 
 	/**
-	 * Gets the appointmentFundingReasonDescription attribute.
+	 * Gets the selectFlag attribute.
 	 * 
-	 * @return - Returns the appointmentFundingReasonDescription
+	 * @return - Returns the selectFlag
 	 * 
 	 */
-	public String getAppointmentFundingReasonDescription() { 
-		return appointmentFundingReasonDescription;
+	public Integer getSelectFlag() { 
+		return selectFlag;
 	}
 
 	/**
-	 * Sets the appointmentFundingReasonDescription attribute.
+	 * Sets the selectFlag attribute.
 	 * 
-	 * @param - appointmentFundingReasonDescription The appointmentFundingReasonDescription to set.
+	 * @param - selectFlag The selectFlag to set.
 	 * 
 	 */
-	public void setAppointmentFundingReasonDescription(String appointmentFundingReasonDescription) {
-		this.appointmentFundingReasonDescription = appointmentFundingReasonDescription;
+	public void setSelectFlag(Integer selectFlag) {
+		this.selectFlag = selectFlag;
+	}
+
+
+	/**
+	 * Gets the personSystemIdentifier attribute.
+	 * 
+	 * @return - Returns the personSystemIdentifier
+	 * 
+	 */
+	public Long getPersonSystemIdentifier() { 
+		return personSystemIdentifier;
+	}
+
+	/**
+	 * Sets the personSystemIdentifier attribute.
+	 * 
+	 * @param - personSystemIdentifier The personSystemIdentifier to set.
+	 * 
+	 */
+	public void setPersonSystemIdentifier(Long personSystemIdentifier) {
+		this.personSystemIdentifier = personSystemIdentifier;
 	}
 
     /**
-     * Gets the rowActiveIndicator attribute. 
-     * @return Returns the rowActiveIndicator.
+     * Gets the appointmentFundingReason attribute. 
+     * @return Returns the appointmentFundingReason.
      */
-    public boolean isRowActiveIndicator() {
-        return rowActiveIndicator;
+    public BudgetConstructionAppointmentFundingReasonCode getAppointmentFundingReason() {
+        return appointmentFundingReason;
     }
 
     /**
-     * Sets the rowActiveIndicator attribute value.
-     * @param rowActiveIndicator The rowActiveIndicator to set.
+     * Sets the appointmentFundingReason attribute value.
+     * @param appointmentFundingReason The appointmentFundingReason to set.
+     * @deprecated
      */
-    public void setRowActiveIndicator(boolean rowActiveIndicator) {
-        this.rowActiveIndicator = rowActiveIndicator;
+    public void setAppointmentFundingReason(BudgetConstructionAppointmentFundingReasonCode appointmentFundingReason) {
+        this.appointmentFundingReason = appointmentFundingReason;
     }
 
     /**
@@ -107,9 +131,11 @@ public class BudgetConstructionAppointmentFundingReasonCode extends BusinessObje
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
+        if (this.personSystemIdentifier != null) {
+            m.put("personSystemIdentifier", this.personSystemIdentifier.toString());
+        }
         m.put("appointmentFundingReasonCode", this.appointmentFundingReasonCode);
         return m;
     }
-    
 
 }

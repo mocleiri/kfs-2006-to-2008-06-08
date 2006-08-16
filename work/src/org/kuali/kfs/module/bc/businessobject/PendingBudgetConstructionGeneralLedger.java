@@ -55,6 +55,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	private KualiDecimal accountLineAnnualBalanceAmount;
 	private KualiDecimal financialBeginningBalanceLineAmount;
 
+    private BudgetConstructionHeader budgetConstructionHeader;
     private BudgetConstructionMonthly budgetConstructionMonthly;
 	private ObjectCode financialObject;
 	private Chart chartOfAccounts;
@@ -468,6 +469,23 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
         this.objectType = objectType;
     }
 
+    /**
+     * Gets the budgetConstructionHeader attribute. 
+     * @return Returns the budgetConstructionHeader.
+     */
+    public BudgetConstructionHeader getBudgetConstructionHeader() {
+        return budgetConstructionHeader;
+    }
+
+    /**
+     * Sets the budgetConstructionHeader attribute value.
+     * @param budgetConstructionHeader The budgetConstructionHeader to set.
+     * @deprecated
+     */
+    public void setBudgetConstructionHeader(BudgetConstructionHeader budgetConstructionHeader) {
+        this.budgetConstructionHeader = budgetConstructionHeader;
+    }    
+    
     /**
      * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
