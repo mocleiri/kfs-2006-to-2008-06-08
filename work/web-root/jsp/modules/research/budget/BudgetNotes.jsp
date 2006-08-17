@@ -3,7 +3,7 @@
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiBudgetDocument"
 	htmlFormAction="researchBudgetNotes" headerDispatch="notes"
-	headerTabActive="template" feedbackKey="app.krafeedback.link" renderMultipart="true" >
+	headerTabActive="notes" feedbackKey="app.krafeedback.link" renderMultipart="true" >
 
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
 
