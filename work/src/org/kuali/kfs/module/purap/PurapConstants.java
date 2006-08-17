@@ -69,4 +69,8 @@ public class PurapConstants {
     public static final String NOT_ALLOWED_TAX_NUMBER = "356001673";
     
     public static final KualiDecimal VENDOR_MIN_ORDER_AMOUNT = new KualiDecimal(100000);
+    
+    //  Payment Terms  Types
+    public static final String PAYMENT_TERMS_TYPE_DAYS = "days";
+    public static final String PAYMENT_TERMS_TYPE_DATE = "date";
 }
