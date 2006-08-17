@@ -12,7 +12,7 @@
 
 <div id="workarea" >
 
-<kul:notes allowsNoteDelete="${DataDictionary.KualiBudgetDocument.allowsNoteDelete}" attachmentTypesValuesFinderClass="${DataDictionary.KualiBudgetDocument.attachmentTypesValuesFinderClass}" transparentBackground="true" />
+<kul:notes allowsNoteDelete="${DataDictionary.KualiBudgetDocument.allowsNoteDelete}" defaultOpen="true" attachmentTypesValuesFinderClass="${DataDictionary.KualiBudgetDocument.attachmentTypesValuesFinderClass}" transparentBackground="true" />
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="b3" summary="">
   <tr>
     <td align="left" class="footer"><img src="images/pixel_clear.gif" alt="" width="12" height="14" class="bl3"></td>
