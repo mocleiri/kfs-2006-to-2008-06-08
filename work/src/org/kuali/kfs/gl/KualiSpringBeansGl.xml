@@ -552,14 +552,8 @@
         <property name="encumbranceDao">
             <ref bean="glEncumbranceDao" />
         </property>
-        <property name="encumbranceClosingReport">
-            <ref bean="glEncumbranceClosingYearEndReport" />
-        </property>
-        <property name="balanceForwardReport">
-            <ref bean="glBalanceForwardYearEndReport" />
-        </property>
-        <property name="nominalActivityClosingReport">
-            <ref bean="glNominalActivityClosingYearEndReport" />
+        <property name="reportService">
+        	<ref bean="glReportService"/>
         </property>
         <property name="dateTimeService">
             <ref bean="dateTimeService" />
@@ -680,6 +674,9 @@
         </property>
         <property name="accountService">
             <ref bean="accountService" />
+        </property>
+        <property name="sufficientFundsService">
+        	<ref bean="sufficientFundsService" />
         </property>
     </bean>
 
@@ -836,6 +833,9 @@
         <property name="accountBalanceDao">
             <ref bean="glAccountBalanceDao" />
         </property>
+        <property name="kualiConfigurationService">
+        	<ref bean="kualiConfigurationService"/>
+        </property>
     </bean>
 
     <bean id="glEncumbranceService" class="org.kuali.module.gl.service.impl.EncumbranceServiceImpl">
@@ -961,15 +961,7 @@
         </property>
     </bean>
 
-    <bean id="glNominalActivityClosingYearEndReport" class="org.kuali.module.gl.batch.closing.year.reporting.impl.NominalActivityClosingReportImpl" />
-
-    <bean id="glEncumbranceClosingYearEndReport" class="org.kuali.module.gl.batch.closing.year.reporting.impl.EncumbranceClosingReportImpl" />
-
-    <bean id="glBalanceForwardYearEndReport" class="org.kuali.module.gl.batch.closing.year.reporting.impl.BalanceForwardReportImpl" />
-
-    <bean id="glScrubberReport" class="org.kuali.module.gl.batch.scrubber.impl.ScrubberReportImpl" />
-
-    <bean id="glReportService" class="org.kuali.module.gl.service.impl.ReportServiceImpl">
+    <bean id="glReportService" class="org.kuali.module.gl.service.impl.ReportServiceImpl" init-method="init">
         <property name="originEntryService">
             <ref bean="glOriginEntryService" />
         </property>
@@ -981,6 +973,9 @@
         </property>
         <property name="optionsService">
         	<ref bean="optionsService"/>
+        </property>
+        <property name="kualiConfigurationService">
+            <ref bean="kualiConfigurationService" />
         </property>
     </bean>
 
@@ -1096,26 +1091,23 @@
 
     <!-- SUFFICIENT FUNDS SERVICE/DAO -->
     <bean id="sufficientFundsService" class="org.kuali.module.gl.service.impl.SufficientFundsServiceImpl">
-        <property name="accountService">
-            <ref bean="accountService" />
-        </property>
-        <property name="optionsDao">
-        	<ref bean="optionsDao" />
-        </property>
         <property name="sufficientFundBalancesDao">
         	<ref bean="glSufficientFundBalancesDao"/>
-        </property>
-        <property name="objectLevelService">
-            <ref bean="objectLevelService" />
         </property>
         <property name="kualiConfigurationService">
             <ref bean="kualiConfigurationService" />
         </property>
-        <property name="kualiRuleService">
-            <ref bean="kualiRuleService" />
-        </property>
         <property name="sufficientFundsDao">
             <ref bean="sufficientFundsDao" />
+        </property>
+        <property name="optionsService">
+        	<ref bean="optionsService"/>
+        </property>
+        <property name="kualiRuleService">
+        	<ref bean="kualiRuleService"/>
+        </property>
+        <property name="accountService">
+        	<ref bean="accountService"/>
         </property>
     </bean>
 
