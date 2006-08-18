@@ -97,8 +97,10 @@
                 <field attributeName="responsibilityCenterCode" />
                 <field attributeName="organizationTypeCode" />
                 <field attributeName="organizationName" />
+                <field attributeName="reportsToChartOfAccountsCode" />
+                <field attributeName="reportsToOrganizationCode" />
+                <field attributeName="organizationActiveIndicator" />               
                 <field attributeName="organizationManagerUniversal.personName" />
-                <field attributeName="organizationActiveIndicator" />
             </resultFields>
         </lookup>
 
@@ -156,7 +158,7 @@
             </attribute>
 
 
-            <attribute name="codeAndDescription" forceUppercase="true">
+            <attribute name="codeAndDescription" forceUppercase="false">
                 <label>Organization Code</label>
                 <shortLabel>Org Code</shortLabel>
 
@@ -768,3 +770,4 @@
         </attributes>
     </businessObject>
 </dictionaryEntry>
+
