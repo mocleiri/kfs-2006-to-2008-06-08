@@ -47,7 +47,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: BalanceDaoOjb.java,v 1.31.2.1.2.2 2006-08-11 21:08:00 tdurkin Exp $
+ * @version $Id: BalanceDaoOjb.java,v 1.31.2.1.2.3 2006-08-18 21:03:16 tdurkin Exp $
  */
 public class BalanceDaoOjb extends PersistenceBrokerDaoSupport implements BalanceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceDaoOjb.class);
