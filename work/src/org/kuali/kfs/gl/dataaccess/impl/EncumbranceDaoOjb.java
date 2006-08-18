@@ -44,7 +44,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * @author Kuali General Ledger Team <kualigltech@oncourse.iu.edu>
- * @version $Id: EncumbranceDaoOjb.java,v 1.8.2.1.2.2 2006-08-11 21:08:00 tdurkin Exp $
+ * @version $Id: EncumbranceDaoOjb.java,v 1.8.2.1.2.3 2006-08-18 21:03:17 tdurkin Exp $
  */
 public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements EncumbranceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EncumbranceDaoOjb.class);
