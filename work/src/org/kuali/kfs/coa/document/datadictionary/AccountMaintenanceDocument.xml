@@ -6,7 +6,7 @@
 <dictionaryEntry>
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.chart.bo.Account</businessObjectClass>
-        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiAccountMaintainableImpl</maintainableClass>
         <businessRulesClass>org.kuali.module.chart.rules.AccountRule</businessRulesClass>
         <preRulesCheckClass>org.kuali.module.chart.rules.AccountPreRules</preRulesCheckClass>
         <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
@@ -42,7 +42,6 @@
             <reference attributeName="reportsToAccount" activeIndicatorAttributeName="accountClosedIndicator" activeIndicatorReversed="true" attributeToHighlightOnFail="reportsToAccountNumber" />
             <reference attributeName="continuationAccount" activeIndicatorAttributeName="accountClosedIndicator" activeIndicatorReversed="true" attributeToHighlightOnFail="continuationAccountNumber" />
             <reference attributeName="endowmentIncomeAccount" activeIndicatorAttributeName="accountClosedIndicator" activeIndicatorReversed="true" attributeToHighlightOnFail="endowmentIncomeAccountNumber" />
-            <reference attributeName="incomeStreamAccount" activeIndicatorAttributeName="accountClosedIndicator" activeIndicatorReversed="true" attributeToHighlightOnFail="incomeStreamAccountNumber" />
             <reference attributeName="indirectCostRecoveryAcct" activeIndicatorAttributeName="accountClosedIndicator" activeIndicatorReversed="true" attributeToHighlightOnFail="indirectCostRecoveryAcctNbr" />
             <reference attributeName="sufficientFundsCode" attributeToHighlightOnFail="accountSufficientFundsCode" />
             <reference attributeName="accountFiscalOfficerUser" attributeToHighlightOnFail="accountFiscalOfficerUser.personUserIdentifier" />
