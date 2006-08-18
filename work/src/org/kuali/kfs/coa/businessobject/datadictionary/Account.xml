@@ -46,15 +46,8 @@
                 <field attributeName="continuationAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
                 <field attributeName="incomeStreamAccountNumber" />
-                <!--	Those two fields generate ERROR!! 
-                    This is somehow related to the fact that these fields use the generic
-                    FS_Codes_Desc_T code table instead of having their own.
-                    The problem is that the inquiry screen gets an error.
-                    We will solve this problem as part of the APC refactoring project.
-                    
-                    <field attributeName="budgetRecordingLevelCode" /> 
-                    <field attributeName="accountSufficientFundsCode" />
-                -->
+				<field attributeName="budgetRecordingLevelCode" /> 
+                <field attributeName="accountSufficientFundsCode" />
 
                 <field attributeName="pendingAcctSufficientFundsIndicator" />
                 <field attributeName="extrnlFinEncumSufficntFndIndicator" />
@@ -96,8 +89,8 @@
             <title>Account Lookup</title>
 
             <menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Account">Create New</a>
-			                  <a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.AccountChangeDocument">Create New Global</a>]]>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Account"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a> &nbsp; 
+			                  <a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.AccountChangeDocument"><img src="images/tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
             </menubar>
 
             <instructions>Lookup an Account</instructions>
@@ -122,27 +115,30 @@
             </lookupFields>
 
             <resultFields>
-                <field attributeName="accountNumber" />
-                <field attributeName="accountFiscalOfficerUser.personName" forceInquiry="true" />
-                <field attributeName="accountManagerUser.personName" forceInquiry="true" />
                 <field attributeName="chartOfAccountsCode" />
+                <field attributeName="accountNumber" />
                 <field attributeName="accountName" />
                 <field attributeName="organizationCode" />
                 <field attributeName="accountTypeCode" />
+                <field attributeName="subFundGroupCode" />
+                <field attributeName="programCode" />
+                <field attributeName="accountFiscalOfficerUser.personUserIdentifier" />               
+                <field attributeName="accountFiscalOfficerUser.personName" forceInquiry="true" />
+                <field attributeName="accountClosedIndicator" />                
+                <field attributeName="accountManagerUser.personName" forceInquiry="true" />
                 <field attributeName="accountCreateDate" />
                 <field attributeName="accountExpirationDate" />
-                <field attributeName="accountClosedIndicator" />
+
             </resultFields>
         </lookup>
 
         <titleAttribute>accountNumber</titleAttribute>
 
         <attributes>
-
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <description>The code that identifies the Chart of Accounts for an Account. It is part of the primary key. Kuali accommodates more than one Chart of Accounts.</description>
             </attributeReference>
-            
+
            <attributeReference name="chartOfAccounts.codeAndDescription" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="codeAndDescription">
                 <label>Chart Code</label>
                 <shortLabel>Chart Code</shortLabel>
@@ -212,7 +208,7 @@
                 <description>The code used to represent an organization.</description>
             </attributeReference>
 
-            
+
            <attributeReference name="organization.codeAndDescription" sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="codeAndDescription">
                 <label>Organization Code</label>
                 <shortLabel>Org Code</shortLabel>
@@ -294,7 +290,7 @@
                 </summary>
                 <description>Program Code and Description</description>
             </attributeReference>
-             
+
             <attributeReference name="accountsFringesBnftIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator">
                 <label>Account Fringe Benefit</label>
                 <shortLabel>FringeBene</shortLabel>
@@ -423,7 +419,7 @@
             </attribute>
 
             <attributeReference name="accountZipCode" sourceClassName="org.kuali.core.bo.PostalZipCode" sourceAttributeName="postalZipCode">
-                <label>Account Zip Code</label>
+                <label>Account Postal Code</label>
                 <shortLabel>ZipCode</shortLabel>
                 <required>true</required>
                 <summary>
