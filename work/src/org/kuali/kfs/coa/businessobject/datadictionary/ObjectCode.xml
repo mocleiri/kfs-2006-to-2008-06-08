@@ -42,8 +42,8 @@
             <title>Object Code Lookup</title>
 
             <menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCode">Create New</a>
-                <a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCodeChangeDocument">Create New Global</a>]]>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCode"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>&nbsp;
+                <a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCodeChangeDocument"><img src="images/tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
             </menubar>
 
             <instructions>Lookup an Object Code</instructions>
@@ -203,9 +203,9 @@
                 <validationPattern>
                     <alpha exactLength="2" />
                 </validationPattern>
-                <required>true</required>
+                <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartOfAccountsCode();" />
+                    <text size="2" />
                 </control>
 
                 <summary>
@@ -324,8 +324,13 @@
 
                 <maxLength>1</maxLength>
                 <required>true</required>
+<!-- 
                 <control>
                     <apcSelect group="ChartMaintenanceEDoc" parameterName="ObjectCodeValidBudgetAggregationCodes" />
+                </control>
+-->              
+                <control>
+                    <text size="1" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
