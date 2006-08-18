@@ -79,10 +79,15 @@
     <td>
     	<html:hidden property="document.budget.federalPassThroughAgencyNumber" />
     	<html:hidden write="true" property="document.budget.federalPassThroughAgency.fullName"/>
-    	<c:if test="${empty KualiForm.document.budget.federalPassThroughAgencyNumber}">(select)</c:if>
-    	<c:if test="${!viewOnly}">    	
-    		<kul:lookup boClassName="org.kuali.module.cg.bo.Agency" fieldConversions="agencyNumber:document.budget.federalPassThroughAgencyNumber,fullName:document.budget.federalPassThroughAgency.fullName" tabindexOverride="5110" anchor="General" />
-    	</c:if>
+    	<c:choose>
+    		<c:when test="${!viewOnly && KualiForm.document.budget.budgetAgency.agencyTypeCode != Constants.AGENCY_TYPE_CODE_FEDERAL}">
+    			<c:if test="${empty KualiForm.document.budget.federalPassThroughAgencyNumber}">(select)</c:if>
+    			<kul:lookup boClassName="org.kuali.module.cg.bo.Agency" fieldConversions="agencyNumber:document.budget.federalPassThroughAgencyNumber,fullName:document.budget.federalPassThroughAgency.fullName" tabindexOverride="5110" anchor="General" />
+    		</c:when>
+    		<c:otherwise>
+    			N/A
+    		</c:otherwise>
+    	</c:choose>
     </td>
   </tr>
   
