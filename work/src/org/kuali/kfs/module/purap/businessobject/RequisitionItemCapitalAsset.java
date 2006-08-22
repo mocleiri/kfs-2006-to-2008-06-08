@@ -35,11 +35,10 @@ import org.kuali.core.bo.BusinessObjectBase;
 public class RequisitionItemCapitalAsset extends BusinessObjectBase {
 
 	private Integer requisitionItemCapitalAssetIdentifier;
-	private Integer requisitionIdentifier;
-	private Integer itemLineNumber;
+	private Integer requisitionItemIdentifier;
 	private Long capitalAssetNumber;
 
-    private RequisitionItem itemLine;
+    private RequisitionItem requisitionItem;
 
 	/**
 	 * Default constructor.
@@ -70,46 +69,24 @@ public class RequisitionItemCapitalAsset extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the requisitionIdentifier attribute.
+	 * Gets the requisitionItemIdentifier attribute.
 	 * 
-	 * @return - Returns the requisitionIdentifier
+	 * @return - Returns the requisitionItemIdentifier
 	 * 
 	 */
-	public Integer getRequisitionIdentifier() { 
-		return requisitionIdentifier;
+	public Integer getRequisitionItemIdentifier() { 
+		return requisitionItemIdentifier;
 	}
 
 	/**
-	 * Sets the requisitionIdentifier attribute.
+	 * Sets the requisitionItemIdentifier attribute.
 	 * 
-	 * @param - requisitionIdentifier The requisitionIdentifier to set.
-	 * 
-	 */
-	public void setRequisitionIdentifier(Integer requisitionIdentifier) {
-		this.requisitionIdentifier = requisitionIdentifier;
-	}
-
-
-	/**
-	 * Gets the itemLineNumber attribute.
-	 * 
-	 * @return - Returns the itemLineNumber
+	 * @param - requisitionItemIdentifier The requisitionItemIdentifier to set.
 	 * 
 	 */
-	public Integer getItemLineNumber() { 
-		return itemLineNumber;
+	public void setRequisitionItemIdentifier(Integer requisitionItemIdentifier) {
+		this.requisitionItemIdentifier = requisitionItemIdentifier;
 	}
-
-	/**
-	 * Sets the itemLineNumber attribute.
-	 * 
-	 * @param - itemLineNumber The itemLineNumber to set.
-	 * 
-	 */
-	public void setItemLineNumber(Integer itemLineNumber) {
-		this.itemLineNumber = itemLineNumber;
-	}
-
 
 	/**
 	 * Gets the capitalAssetNumber attribute.
@@ -133,23 +110,23 @@ public class RequisitionItemCapitalAsset extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the itemLine attribute.
+	 * Gets the requisitionItem attribute.
 	 * 
-	 * @return - Returns the itemLine
+	 * @return - Returns the requisitionItem
 	 * 
 	 */
-	public RequisitionItem getItemLine() { 
-		return itemLine;
+	public RequisitionItem getRequisitionItem() { 
+		return requisitionItem;
 	}
 
 	/**
-	 * Sets the itemLine attribute.
+	 * Sets the requisitionItem attribute.
 	 * 
-	 * @param - itemLine The itemLine to set.
+	 * @param - requisitionItem The requisitionItem to set.
 	 * @deprecated
 	 */
-	public void setItemLine(RequisitionItem itemLine) {
-		this.itemLine = itemLine;
+	public void setRequisitionItem(RequisitionItem requisitionItem) {
+		this.requisitionItem = requisitionItem;
 	}
 
 	/**

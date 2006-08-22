@@ -31,6 +31,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.chart.bo.SubAccount;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -38,8 +39,7 @@ import org.kuali.module.chart.bo.ObjectCode;
 public class RequisitionAccount extends BusinessObjectBase {
 
 	private Integer requisitionAccountIdentifier;
-	private Integer requisitionIdentifier;
-	private Integer itemLineNumber;
+	private Integer requisitionItemIdentifier;
 	private String chartOfAccountsCode;
 	private String accountNumber;
 	private String subAccountNumber;
@@ -49,10 +49,11 @@ public class RequisitionAccount extends BusinessObjectBase {
 	private String organizationReferenceId;
 	private Integer accountLinePercent;
 
-    private RequisitionItem itemLine;
+    private RequisitionItem requisitionItem;
 	private Chart chartOfAccounts;
 	private Account account;
-
+    private SubAccount subAccount;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -82,46 +83,24 @@ public class RequisitionAccount extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the requisitionIdentifier attribute.
+	 * Gets the requisitionItemIdentifier attribute.
 	 * 
-	 * @return - Returns the requisitionIdentifier
+	 * @return - Returns the requisitionItemIdentifier
 	 * 
 	 */
-	public Integer getRequisitionIdentifier() { 
-		return requisitionIdentifier;
+	public Integer getRequisitionItemIdentifier() { 
+		return requisitionItemIdentifier;
 	}
 
 	/**
-	 * Sets the requisitionIdentifier attribute.
+	 * Sets the requisitionItemIdentifier attribute.
 	 * 
-	 * @param - requisitionIdentifier The requisitionIdentifier to set.
-	 * 
-	 */
-	public void setRequisitionIdentifier(Integer requisitionIdentifier) {
-		this.requisitionIdentifier = requisitionIdentifier;
-	}
-
-
-	/**
-	 * Gets the itemLineNumber attribute.
-	 * 
-	 * @return - Returns the itemLineNumber
+	 * @param - requisitionItemIdentifier The requisitionItemIdentifier to set.
 	 * 
 	 */
-	public Integer getItemLineNumber() { 
-		return itemLineNumber;
+	public void setRequisitionItemIdentifier(Integer requisitionItemIdentifier) {
+		this.requisitionItemIdentifier = requisitionItemIdentifier;
 	}
-
-	/**
-	 * Sets the itemLineNumber attribute.
-	 * 
-	 * @param - itemLineNumber The itemLineNumber to set.
-	 * 
-	 */
-	public void setItemLineNumber(Integer itemLineNumber) {
-		this.itemLineNumber = itemLineNumber;
-	}
-
 
 	/**
 	 * Gets the chartOfAccountsCode attribute.
@@ -292,23 +271,23 @@ public class RequisitionAccount extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the itemLine attribute.
+	 * Gets the requisitionItem attribute.
 	 * 
-	 * @return - Returns the itemLine
+	 * @return - Returns the requisitionItem
 	 * 
 	 */
-	public RequisitionItem getItemLine() { 
-		return itemLine;
+	public RequisitionItem getRequisitionItem() { 
+		return requisitionItem;
 	}
 
 	/**
-	 * Sets the itemLine attribute.
+	 * Sets the requisitionItem attribute.
 	 * 
-	 * @param - itemLine The itemLine to set.
+	 * @param - requisitionItem The requisitionItem to set.
 	 * @deprecated
 	 */
-	public void setItemLine(RequisitionItem itemLine) {
-		this.itemLine = itemLine;
+	public void setRequisitionItem(RequisitionItem requisitionItem) {
+		this.requisitionItem = requisitionItem;
 	}
 
 	/**
@@ -351,7 +330,24 @@ public class RequisitionAccount extends BusinessObjectBase {
 		this.account = account;
 	}
 
-	/**
+    /**
+     * Gets the subAccount attribute. 
+     * @return Returns the subAccount.
+     */
+    public SubAccount getSubAccount() {
+        return subAccount;
+    }
+
+    /**
+     * Sets the subAccount attribute value.
+     * @param subAccount The subAccount to set.
+     * @deprecated
+     */
+    public void setSubAccount(SubAccount subAccount) {
+        this.subAccount = subAccount;
+    }
+    
+    /**
 	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {

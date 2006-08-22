@@ -35,11 +35,10 @@ import org.kuali.core.bo.BusinessObjectBase;
 public class PurchaseOrderItemCapitalAsset extends BusinessObjectBase {
 
 	private Integer purchaseOrderItemCapitalAssetIdentifier;
-	private Integer purchaseOrderIdentifier;
-	private Integer itemLineNumber;
+	private Integer purchaseOrderItemIdentifier;
 	private Long capitalAssetNumber;
 
-    private PurchaseOrderItem itemLine;
+    private PurchaseOrderItem purchaseOrderItem;
 
 	/**
 	 * Default constructor.
@@ -70,46 +69,24 @@ public class PurchaseOrderItemCapitalAsset extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the purchaseOrderIdentifier attribute.
+	 * Gets the purchaseOrderItemIdentifier attribute.
 	 * 
-	 * @return - Returns the purchaseOrderIdentifier
+	 * @return - Returns the purchaseOrderItemIdentifier
 	 * 
 	 */
-	public Integer getPurchaseOrderIdentifier() { 
-		return purchaseOrderIdentifier;
+	public Integer getPurchaseOrderItemIdentifier() { 
+		return purchaseOrderItemIdentifier;
 	}
 
 	/**
-	 * Sets the purchaseOrderIdentifier attribute.
+	 * Sets the purchaseOrderItemIdentifier attribute.
 	 * 
-	 * @param - purchaseOrderIdentifier The purchaseOrderIdentifier to set.
-	 * 
-	 */
-	public void setPurchaseOrderIdentifier(Integer purchaseOrderIdentifier) {
-		this.purchaseOrderIdentifier = purchaseOrderIdentifier;
-	}
-
-
-	/**
-	 * Gets the itemLineNumber attribute.
-	 * 
-	 * @return - Returns the itemLineNumber
+	 * @param - purchaseOrderItemIdentifier The purchaseOrderItemIdentifier to set.
 	 * 
 	 */
-	public Integer getItemLineNumber() { 
-		return itemLineNumber;
+	public void setPurchaseOrderItemIdentifier(Integer purchaseOrderItemIdentifier) {
+		this.purchaseOrderItemIdentifier = purchaseOrderItemIdentifier;
 	}
-
-	/**
-	 * Sets the itemLineNumber attribute.
-	 * 
-	 * @param - itemLineNumber The itemLineNumber to set.
-	 * 
-	 */
-	public void setItemLineNumber(Integer itemLineNumber) {
-		this.itemLineNumber = itemLineNumber;
-	}
-
 
 	/**
 	 * Gets the capitalAssetNumber attribute.
@@ -133,23 +110,23 @@ public class PurchaseOrderItemCapitalAsset extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the itemLine attribute.
+	 * Gets the purchaseOrderItem attribute.
 	 * 
-	 * @return - Returns the itemLine
+	 * @return - Returns the purchaseOrderItem
 	 * 
 	 */
-	public PurchaseOrderItem getItemLine() { 
-		return itemLine;
+	public PurchaseOrderItem getPurchaseOrderItem() { 
+		return purchaseOrderItem;
 	}
 
 	/**
-	 * Sets the itemLine attribute.
+	 * Sets the purchaseOrderItem attribute.
 	 * 
-	 * @param - itemLine The itemLine to set.
+	 * @param - purchaseOrderItem The purchaseOrderItem to set.
 	 * @deprecated
 	 */
-	public void setItemLine(PurchaseOrderItem itemLine) {
-		this.itemLine = itemLine;
+	public void setPurchaseOrderItem(PurchaseOrderItem purchaseOrderItem) {
+		this.purchaseOrderItem = purchaseOrderItem;
 	}
 
 	/**

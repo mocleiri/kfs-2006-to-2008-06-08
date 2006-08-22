@@ -44,8 +44,6 @@ public class ElectronicInvoiceLoadSummary extends BusinessObjectBase {
 	private Integer invoiceLoadFailCount;
 	private BigDecimal invoiceLoadFailAmount;
 
-    private ElectronicInvoiceHeaderInformation vendorDuns;
-
 	/**
 	 * Default constructor.
 	 */
@@ -197,27 +195,6 @@ public class ElectronicInvoiceLoadSummary extends BusinessObjectBase {
 	 */
 	public void setInvoiceLoadFailAmount(BigDecimal invoiceLoadFailAmount) {
 		this.invoiceLoadFailAmount = invoiceLoadFailAmount;
-	}
-
-
-	/**
-	 * Gets the vendorDuns attribute.
-	 * 
-	 * @return - Returns the vendorDuns
-	 * 
-	 */
-	public ElectronicInvoiceHeaderInformation getVendorDuns() { 
-		return vendorDuns;
-	}
-
-	/**
-	 * Sets the vendorDuns attribute.
-	 * 
-	 * @param - vendorDuns The vendorDuns to set.
-	 * @deprecated
-	 */
-	public void setVendorDuns(ElectronicInvoiceHeaderInformation vendorDuns) {
-		this.vendorDuns = vendorDuns;
 	}
 
 	/**
