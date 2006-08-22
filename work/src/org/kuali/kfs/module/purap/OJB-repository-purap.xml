@@ -192,7 +192,7 @@
 	<field-descriptor name="vendorCampusCode" column="VNDR_CMP_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="vendorContractBeginningDate" column="VNDR_CONTR_BEG_DT" jdbc-type="DATE"/>
 	<field-descriptor name="vendorContractEndDate" column="VNDR_CONTR_END_DT" jdbc-type="DATE"/>
-	<field-descriptor name="contractManagerCode" column="CONTR_MGR_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="contractManagerCode" column="CONTR_MGR_CD" jdbc-type="INTEGER"/>
 	<field-descriptor name="purchaseOrderCostSourceCode" column="PO_CST_SRC_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorPaymentTermsCode" column="VNDR_PMT_TERM_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorShippingPaymentTermsCode" column="VNDR_SHP_PMT_TERM_CD" jdbc-type="VARCHAR"/>
@@ -454,7 +454,7 @@
 	<field-descriptor name="purchaseOrderItemIdentifier" column="PO_ITM_ID" jdbc-type="INTEGER" primarykey="true" index="true" autoincrement="true" sequence-name="PO_ITM_ID"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="purchaseOrderItemIdentifier" column="PO_ID" jdbc-type="INTEGER" index="true"/>
+	<field-descriptor name="purchaseOrderIdentifier" column="PO_ID" jdbc-type="INTEGER" index="true"/>
 	<field-descriptor name="itemTypeCode" column="ITM_TYP_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="capitalAssetTransactionTypeCode" column="CPTL_AST_TRN_TYP_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="itemUnitOfMeasureCode" column="ITM_UOM_CD" jdbc-type="VARCHAR"/>
@@ -1453,10 +1453,10 @@
 	<field-descriptor name="newPurchaseOrderStatusCode" column="NEW_PO_STAT_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="purchaseOrderNoteIdentifier" column="PO_NTE_ID" jdbc-type="INTEGER"/>
     <reference-descriptor name="oldPurchaseOrderStatus" class-ref="org.kuali.module.purap.bo.PurchaseOrderStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="PurchaseOrderOldStatusCode" />
+        <foreignkey field-ref="oldPurchaseOrderStatusCode" />
     </reference-descriptor>
     <reference-descriptor name="newPurchaseOrderStatus" class-ref="org.kuali.module.purap.bo.PurchaseOrderStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="PurchaseOrderNewStatusCode" />
+        <foreignkey field-ref="newPurchaseOrderStatusCode" />
     </reference-descriptor>
 </class-descriptor>
 
@@ -1525,9 +1525,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="purchaseOrderQuoteListName" column="PO_QT_LST_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="contractManagerCode" column="CONTR_MGR_CD" jdbc-type="INTEGER"/>
-	<reference-descriptor name="purchaseOrderQuoteList" class-ref="org.kuali.module.purap.bo.PurchaseOrderQuoteListVendor" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderQuoteListIdentifier" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.PurchaseOrderQuoteListVendor" table="PUR_PO_QT_LST_VNDR_T">
@@ -1536,6 +1533,9 @@
 	<field-descriptor name="vendorDetailAssignedIdentifier" column="VNDR_DTL_ASND_ID" jdbc-type="INTEGER" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+	<reference-descriptor name="purchaseOrderQuoteList" class-ref="org.kuali.module.purap.bo.PurchaseOrderQuoteList" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="purchaseOrderQuoteListIdentifier" />
+	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.PurchaseOrderVendorQuote" table="PUR_PO_VNDR_QT_T">
@@ -1671,9 +1671,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="invoiceRejectReasonTypeDescription" column="INV_RJT_REAS_TYP_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="invoiceRejectReasonType" class-ref="org.kuali.module.purap.bo.ElectronicInvoiceRejectReason" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="invoiceRejectReasonTypeCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.ElectronicInvoiceLoadSummary" table="AP_ELCTRNC_INV_LOAD_SUM_T">
