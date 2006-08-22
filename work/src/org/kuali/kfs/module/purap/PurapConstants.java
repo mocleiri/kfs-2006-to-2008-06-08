@@ -46,13 +46,11 @@ public class PurapConstants {
     public static final String GENERIC_PHONE_FORMAT_1 = "\\d{3}-\\d{3}-\\d{4}";
     public static final String GENERIC_PHONE_FORMAT_2 = "\\(\\d{3}\\)\\s\\d{3}-\\d{4}";
     public static final String GENERIC_PHONE_FORMAT_3 = "\\d{3}\\s\\d{3}\\s\\d{4}";
-    public static final String GENERIC_FAX_FORMAT_1 = "\\d{3},\\d{3}-\\d{4}";
     
     public static final String[] GENERIC_PHONE_NUMBER_FORMATS = {
         GENERIC_PHONE_FORMAT_1,
         GENERIC_PHONE_FORMAT_2,
-        GENERIC_PHONE_FORMAT_3,
-        GENERIC_FAX_FORMAT_1
+        GENERIC_PHONE_FORMAT_3
     };
     public static final int GENERIC_DEFAULT_PHONE_NUM_DIGITS = 10;
       
