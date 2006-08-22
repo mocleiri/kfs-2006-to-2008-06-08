@@ -38,6 +38,8 @@ public class PurchaseOrderQuoteListVendor extends BusinessObjectBase {
 	private Integer vendorHeaderGeneratedIdentifier;
 	private Integer vendorDetailAssignedIdentifier;
 
+    private PurchaseOrderQuoteList purchaseOrderQuoteList;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -107,12 +109,28 @@ public class PurchaseOrderQuoteListVendor extends BusinessObjectBase {
 		this.vendorDetailAssignedIdentifier = vendorDetailAssignedIdentifier;
 	}
 
+    /**
+     * Gets the purchaseOrderQuoteList attribute. 
+     * @return Returns the purchaseOrderQuoteList.
+     */
+    public PurchaseOrderQuoteList getPurchaseOrderQuoteList() {
+        return purchaseOrderQuoteList;
+    }
 
-	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
+    /**
+     * Sets the purchaseOrderQuoteList attribute value.
+     * @param purchaseOrderQuoteList The purchaseOrderQuoteList to set.
+     * @deprecated
+     */
+    public void setPurchaseOrderQuoteList(PurchaseOrderQuoteList purchaseOrderQuoteList) {
+        this.purchaseOrderQuoteList = purchaseOrderQuoteList;
+    }
+
+    /**
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
         if (this.purchaseOrderQuoteListIdentifier != null) {
             m.put("purchaseOrderQuoteListIdentifier", this.purchaseOrderQuoteListIdentifier.toString());
         }
@@ -122,6 +140,7 @@ public class PurchaseOrderQuoteListVendor extends BusinessObjectBase {
         if (this.vendorDetailAssignedIdentifier != null) {
             m.put("vendorDetailAssignedIdentifier", this.vendorDetailAssignedIdentifier.toString());
         }
-	    return m;
+        return m;
     }
+
 }

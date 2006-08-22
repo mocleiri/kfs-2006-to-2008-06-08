@@ -38,8 +38,6 @@ public class ElectronicInvoiceRejectTypeCode extends BusinessObjectBase {
 	private String invoiceRejectReasonTypeDescription;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    private ElectronicInvoiceRejectReason invoiceRejectReasonType;
-
 	/**
 	 * Default constructor.
 	 */
@@ -108,27 +106,6 @@ public class ElectronicInvoiceRejectTypeCode extends BusinessObjectBase {
 	 */
 	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
-	}
-
-
-	/**
-	 * Gets the invoiceRejectReasonType attribute.
-	 * 
-	 * @return - Returns the invoiceRejectReasonType
-	 * 
-	 */
-	public ElectronicInvoiceRejectReason getInvoiceRejectReasonType() { 
-		return invoiceRejectReasonType;
-	}
-
-	/**
-	 * Sets the invoiceRejectReasonType attribute.
-	 * 
-	 * @param - invoiceRejectReasonType The invoiceRejectReasonType to set.
-	 * @deprecated
-	 */
-	public void setInvoiceRejectReasonType(ElectronicInvoiceRejectReason invoiceRejectReasonType) {
-		this.invoiceRejectReasonType = invoiceRejectReasonType;
 	}
 
 	/**

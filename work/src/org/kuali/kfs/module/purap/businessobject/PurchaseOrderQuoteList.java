@@ -38,8 +38,6 @@ public class PurchaseOrderQuoteList extends BusinessObjectBase {
 	private String purchaseOrderQuoteListName;
 	private Integer contractManagerCode;
 
-    private PurchaseOrderQuoteListVendor purchaseOrderQuoteList;
-
 	/**
 	 * Default constructor.
 	 */
@@ -107,27 +105,6 @@ public class PurchaseOrderQuoteList extends BusinessObjectBase {
 	 */
 	public void setContractManagerCode(Integer contractManagerCode) {
 		this.contractManagerCode = contractManagerCode;
-	}
-
-
-	/**
-	 * Gets the purchaseOrderQuoteList attribute.
-	 * 
-	 * @return - Returns the purchaseOrderQuoteList
-	 * 
-	 */
-	public PurchaseOrderQuoteListVendor getPurchaseOrderQuoteList() { 
-		return purchaseOrderQuoteList;
-	}
-
-	/**
-	 * Sets the purchaseOrderQuoteList attribute.
-	 * 
-	 * @param - purchaseOrderQuoteList The purchaseOrderQuoteList to set.
-	 * @deprecated
-	 */
-	public void setPurchaseOrderQuoteList(PurchaseOrderQuoteListVendor purchaseOrderQuoteList) {
-		this.purchaseOrderQuoteList = purchaseOrderQuoteList;
 	}
 
 	/**
