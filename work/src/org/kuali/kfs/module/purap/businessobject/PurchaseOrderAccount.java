@@ -39,8 +39,7 @@ import org.kuali.module.chart.bo.SubAccount;
 public class PurchaseOrderAccount extends BusinessObjectBase {
 
 	private Integer purchaseOrderAccountIdentifier;
-	private Integer purchaseOrderIdentifier;
-	private Integer itemLineNumber;
+	private Integer purchaseOrderItemIdentifier;
 	private String chartOfAccountsCode;
 	private String accountNumber;
 	private String subAccountNumber;
@@ -52,7 +51,8 @@ public class PurchaseOrderAccount extends BusinessObjectBase {
 	private KualiDecimal itemAccountOutstandingEncumbranceAmount;
 	private KualiDecimal itemAccountPaidAmount;
 
-	private Chart chartOfAccounts;
+    private PurchaseOrderItem purchaseOrderItem;
+    private Chart chartOfAccounts;
 	private Account account;
     private SubAccount subAccount;
     
@@ -85,46 +85,24 @@ public class PurchaseOrderAccount extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the purchaseOrderIdentifier attribute.
+	 * Gets the purchaseOrderItemIdentifier attribute.
 	 * 
-	 * @return - Returns the purchaseOrderIdentifier
+	 * @return - Returns the purchaseOrderItemIdentifier
 	 * 
 	 */
-	public Integer getPurchaseOrderIdentifier() { 
-		return purchaseOrderIdentifier;
+	public Integer getPurchaseOrderItemIdentifier() { 
+		return purchaseOrderItemIdentifier;
 	}
 
 	/**
-	 * Sets the purchaseOrderIdentifier attribute.
+	 * Sets the purchaseOrderItemIdentifier attribute.
 	 * 
-	 * @param - purchaseOrderIdentifier The purchaseOrderIdentifier to set.
-	 * 
-	 */
-	public void setPurchaseOrderIdentifier(Integer purchaseOrderIdentifier) {
-		this.purchaseOrderIdentifier = purchaseOrderIdentifier;
-	}
-
-
-	/**
-	 * Gets the itemLineNumber attribute.
-	 * 
-	 * @return - Returns the itemLineNumber
+	 * @param - purchaseOrderItemIdentifier The purchaseOrderItemIdentifier to set.
 	 * 
 	 */
-	public Integer getItemLineNumber() { 
-		return itemLineNumber;
+	public void setPurchaseOrderItemIdentifier(Integer purchaseOrderItemIdentifier) {
+		this.purchaseOrderItemIdentifier = purchaseOrderItemIdentifier;
 	}
-
-	/**
-	 * Sets the itemLineNumber attribute.
-	 * 
-	 * @param - itemLineNumber The itemLineNumber to set.
-	 * 
-	 */
-	public void setItemLineNumber(Integer itemLineNumber) {
-		this.itemLineNumber = itemLineNumber;
-	}
-
 
 	/**
 	 * Gets the chartOfAccountsCode attribute.
@@ -393,6 +371,23 @@ public class PurchaseOrderAccount extends BusinessObjectBase {
     }
 
     /**
+     * Gets the purchaseOrderItem attribute. 
+     * @return Returns the purchaseOrderItem.
+     */
+    public PurchaseOrderItem getPurchaseOrderItem() {
+        return purchaseOrderItem;
+    }
+
+    /**
+     * Sets the purchaseOrderItem attribute value.
+     * @param purchaseOrderItem The purchaseOrderItem to set.
+     * @deprecated
+     */
+    public void setPurchaseOrderItem(PurchaseOrderItem purchaseOrderItem) {
+        this.purchaseOrderItem = purchaseOrderItem;
+    }
+
+    /**
      * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
@@ -401,7 +396,6 @@ public class PurchaseOrderAccount extends BusinessObjectBase {
             m.put("purchaseOrderAccountIdentifier", this.purchaseOrderAccountIdentifier.toString());
         }
         return m;
-    }
-
+    }    
 
 }

@@ -32,6 +32,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.SubAccount;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -39,8 +40,7 @@ import org.kuali.module.chart.bo.Chart;
 public class CreditMemoAccount extends BusinessObjectBase {
 
 	private Integer creditMemoAccountIdentifier;
-	private Integer creditMemoIdentifier;
-	private Integer itemLineNumber;
+	private Integer creditMemoItemIdentifier;
 	private String chartOfAccountsCode;
 	private String accountNumber;
 	private String financialObjectCode;
@@ -51,10 +51,11 @@ public class CreditMemoAccount extends BusinessObjectBase {
 	private KualiDecimal itemAccountTotalAmount;
 	private BigDecimal accountLinePercent;
 
-    private CreditMemoItem itemLine;
+    private CreditMemoItem creditMemoItem;
 	private Chart chartOfAccounts;
 	private Account account;
-
+    private SubAccount subAccount;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -84,46 +85,24 @@ public class CreditMemoAccount extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the creditMemoIdentifier attribute.
+	 * Gets the creditMemoItemIdentifier attribute.
 	 * 
-	 * @return - Returns the creditMemoIdentifier
+	 * @return - Returns the creditMemoItemIdentifier
 	 * 
 	 */
-	public Integer getCreditMemoIdentifier() { 
-		return creditMemoIdentifier;
+	public Integer getCreditMemoItemIdentifier() { 
+		return creditMemoItemIdentifier;
 	}
 
 	/**
-	 * Sets the creditMemoIdentifier attribute.
+	 * Sets the creditMemoItemIdentifier attribute.
 	 * 
-	 * @param - creditMemoIdentifier The creditMemoIdentifier to set.
-	 * 
-	 */
-	public void setCreditMemoIdentifier(Integer creditMemoIdentifier) {
-		this.creditMemoIdentifier = creditMemoIdentifier;
-	}
-
-
-	/**
-	 * Gets the itemLineNumber attribute.
-	 * 
-	 * @return - Returns the itemLineNumber
+	 * @param - creditMemoItemIdentifier The creditMemoItemIdentifier to set.
 	 * 
 	 */
-	public Integer getItemLineNumber() { 
-		return itemLineNumber;
+	public void setCreditMemoItemIdentifier(Integer creditMemoItemIdentifier) {
+		this.creditMemoItemIdentifier = creditMemoItemIdentifier;
 	}
-
-	/**
-	 * Sets the itemLineNumber attribute.
-	 * 
-	 * @param - itemLineNumber The itemLineNumber to set.
-	 * 
-	 */
-	public void setItemLineNumber(Integer itemLineNumber) {
-		this.itemLineNumber = itemLineNumber;
-	}
-
 
 	/**
 	 * Gets the chartOfAccountsCode attribute.
@@ -315,23 +294,23 @@ public class CreditMemoAccount extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the itemLine attribute.
+	 * Gets the creditMemoItem attribute.
 	 * 
-	 * @return - Returns the itemLine
+	 * @return - Returns the creditMemoItem
 	 * 
 	 */
-	public CreditMemoItem getItemLine() { 
-		return itemLine;
+	public CreditMemoItem getCreditMemoItem() { 
+		return creditMemoItem;
 	}
 
 	/**
-	 * Sets the itemLine attribute.
+	 * Sets the creditMemoItem attribute.
 	 * 
-	 * @param - itemLine The itemLine to set.
+	 * @param - creditMemoItem The creditMemoItem to set.
 	 * @deprecated
 	 */
-	public void setItemLine(CreditMemoItem itemLine) {
-		this.itemLine = itemLine;
+	public void setCreditMemoItem(CreditMemoItem creditMemoItem) {
+		this.creditMemoItem = creditMemoItem;
 	}
 
 	/**
@@ -374,14 +353,32 @@ public class CreditMemoAccount extends BusinessObjectBase {
 		this.account = account;
 	}
 
-	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
+    /**
+     * Gets the subAccount attribute. 
+     * @return Returns the subAccount.
+     */
+    public SubAccount getSubAccount() {
+        return subAccount;
+    }
+
+    /**
+     * Sets the subAccount attribute value.
+     * @param subAccount The subAccount to set.
+     * @deprecated
+     */
+    public void setSubAccount(SubAccount subAccount) {
+        this.subAccount = subAccount;
+    }
+
+    /**
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
         if (this.creditMemoAccountIdentifier != null) {
             m.put("creditMemoAccountIdentifier", this.creditMemoAccountIdentifier.toString());
         }
-	    return m;
+        return m;
     }
+
 }

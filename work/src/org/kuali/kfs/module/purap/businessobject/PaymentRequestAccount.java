@@ -32,6 +32,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.SubAccount;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -39,8 +40,7 @@ import org.kuali.module.chart.bo.Chart;
 public class PaymentRequestAccount extends BusinessObjectBase {
 
 	private Integer paymentRequestAccountIdentifier;
-	private Integer paymentRequestIdentifier;
-	private Integer itemLineNumber;
+	private Integer paymentRequestItemIdentifier;
 	private String chartOfAccountsCode;
 	private String accountNumber;
 	private String subAccountNumber;
@@ -52,10 +52,11 @@ public class PaymentRequestAccount extends BusinessObjectBase {
 	private BigDecimal accountLinePercent;
 	private KualiDecimal disencumberedAmount;
 
-    private PaymentRequestItem itemLine;
+    private PaymentRequestItem paymentRequestItem;
 	private Chart chartOfAccounts;
 	private Account account;
-
+    private SubAccount subAccount;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -85,48 +86,26 @@ public class PaymentRequestAccount extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the paymentRequestIdentifier attribute.
+	 * Gets the paymentRequestItemIdentifier attribute.
 	 * 
-	 * @return - Returns the paymentRequestIdentifier
+	 * @return - Returns the paymentRequestItemIdentifier
 	 * 
 	 */
-	public Integer getPaymentRequestIdentifier() { 
-		return paymentRequestIdentifier;
+	public Integer getPaymentRequestItemIdentifier() { 
+		return paymentRequestItemIdentifier;
 	}
 
 	/**
-	 * Sets the paymentRequestIdentifier attribute.
+	 * Sets the paymentRequestItemIdentifier attribute.
 	 * 
-	 * @param - paymentRequestIdentifier The paymentRequestIdentifier to set.
-	 * 
-	 */
-	public void setPaymentRequestIdentifier(Integer paymentRequestIdentifier) {
-		this.paymentRequestIdentifier = paymentRequestIdentifier;
-	}
-
-
-	/**
-	 * Gets the itemLineNumber attribute.
-	 * 
-	 * @return - Returns the itemLineNumber
+	 * @param - paymentRequestItemIdentifier The paymentRequestItemIdentifier to set.
 	 * 
 	 */
-	public Integer getItemLineNumber() { 
-		return itemLineNumber;
+	public void setPaymentRequestItemIdentifier(Integer paymentRequestItemIdentifier) {
+		this.paymentRequestItemIdentifier = paymentRequestItemIdentifier;
 	}
 
-	/**
-	 * Sets the itemLineNumber attribute.
-	 * 
-	 * @param - itemLineNumber The itemLineNumber to set.
-	 * 
-	 */
-	public void setItemLineNumber(Integer itemLineNumber) {
-		this.itemLineNumber = itemLineNumber;
-	}
-
-
-	/**
+    /**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
 	 * @return - Returns the chartOfAccountsCode
@@ -337,23 +316,23 @@ public class PaymentRequestAccount extends BusinessObjectBase {
 
 
 	/**
-	 * Gets the itemLine attribute.
+	 * Gets the paymentRequestItem attribute.
 	 * 
-	 * @return - Returns the itemLine
+	 * @return - Returns the paymentRequestItem
 	 * 
 	 */
-	public PaymentRequestItem getItemLine() { 
-		return itemLine;
+	public PaymentRequestItem getPaymentRequestItem() { 
+		return paymentRequestItem;
 	}
 
 	/**
-	 * Sets the itemLine attribute.
+	 * Sets the paymentRequestItem attribute.
 	 * 
-	 * @param - itemLine The itemLine to set.
+	 * @param - paymentRequestItem The paymentRequestItem to set.
 	 * @deprecated
 	 */
-	public void setItemLine(PaymentRequestItem itemLine) {
-		this.itemLine = itemLine;
+	public void setPaymentRequestItem(PaymentRequestItem paymentRequestItem) {
+		this.paymentRequestItem = paymentRequestItem;
 	}
 
 	/**
@@ -396,7 +375,24 @@ public class PaymentRequestAccount extends BusinessObjectBase {
 		this.account = account;
 	}
 
-	/**
+    /**
+     * Gets the subAccount attribute. 
+     * @return Returns the subAccount.
+     */
+    public SubAccount getSubAccount() {
+        return subAccount;
+    }
+
+    /**
+     * Sets the subAccount attribute value.
+     * @param subAccount The subAccount to set.
+     * @deprecated
+     */
+    public void setSubAccount(SubAccount subAccount) {
+        this.subAccount = subAccount;
+    }
+    
+    /**
 	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
