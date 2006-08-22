@@ -14,11 +14,10 @@
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="creditMemoAccountIdentifier" />
-                <field attributeName="creditMemoIdentifier" />
+                <field attributeName="creditMemoItemIdentifier" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="itemAccountTotalAmount" />
-                <field attributeName="itemLineNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
                 <field attributeName="subAccountNumber" />
@@ -43,11 +42,10 @@
                 <lookupField attributeName="accountNumber" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="creditMemoAccountIdentifier" required="false" />
-                <lookupField attributeName="creditMemoIdentifier" required="false" />
+                <lookupField attributeName="creditMemoItemIdentifier" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
                 <lookupField attributeName="itemAccountTotalAmount" required="false" />
-                <lookupField attributeName="itemLineNumber" required="false" />
                 <lookupField attributeName="organizationReferenceId" required="false" />
                 <lookupField attributeName="projectCode" required="false" />
                 <lookupField attributeName="subAccountNumber" required="false" />
@@ -58,11 +56,10 @@
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="creditMemoAccountIdentifier" />
-                <field attributeName="creditMemoIdentifier" />
+                <field attributeName="creditMemoItemIdentifier" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="itemAccountTotalAmount" />
-                <field attributeName="itemLineNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
                 <field attributeName="subAccountNumber" />
@@ -131,19 +128,19 @@
                 <description>creditMemoAccountIdentifier description...</description>
 			</attribute>
 
-            <attribute name="creditMemoIdentifier" forceUppercase="true">
-                <label>Credit Memo Identifier</label>
+            <attribute name="creditMemoItemIdentifier" forceUppercase="true">
+                <label>Credit Memo Item Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
-                <maxLength>9</maxLength>
+                <maxLength>10</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="11" />
+                    <text size="12" />
                 </control>
 
-                <summary>creditMemoIdentifier</summary>
-                <description>creditMemoIdentifier description...</description>
+                <summary>creditMemoItemIdentifier</summary>
+                <description>creditMemoItemIdentifier description...</description>
 			</attribute>
 
             <attribute name="financialObjectCode" forceUppercase="true">
@@ -189,21 +186,6 @@
 
                 <summary>itemAccountTotalAmount</summary>
                 <description>itemAccountTotalAmount description...</description>
-			</attribute>
-
-            <attribute name="itemLineNumber" forceUppercase="true">
-                <label>Item Line Number</label>
-                <shortLabel>Number</shortLabel>
-
-                <maxLength>4</maxLength>
-                <validationPattern><numeric /></validationPattern>
-
-                <control>
-                    <text size="6" />
-                </control>
-
-                <summary>itemLineNumber</summary>
-                <description>itemLineNumber description...</description>
 			</attribute>
 
             <attribute name="organizationReferenceId" forceUppercase="true">

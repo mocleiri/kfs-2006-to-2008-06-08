@@ -11,8 +11,7 @@
 
             <inquiryFields>
                 <field attributeName="capitalAssetNumber" />
-                <field attributeName="itemLineNumber" />
-                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="purchaseOrderItemIdentifier" />
                 <field attributeName="purchaseOrderItemCapitalAssetIdentifier" />
             </inquiryFields>
         </inquiry>
@@ -32,15 +31,13 @@
 
             <lookupFields>
                 <lookupField attributeName="capitalAssetNumber" required="false" />
-                <lookupField attributeName="itemLineNumber" required="false" />
-                <lookupField attributeName="purchaseOrderIdentifier" required="false" />
+                <lookupField attributeName="purchaseOrderItemIdentifier" required="false" />
                 <lookupField attributeName="purchaseOrderItemCapitalAssetIdentifier" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="capitalAssetNumber" />
-                <field attributeName="itemLineNumber" />
-                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="purchaseOrderItemIdentifier" />
                 <field attributeName="purchaseOrderItemCapitalAssetIdentifier" />
             </resultFields>
         </lookup>
@@ -62,34 +59,19 @@
                 <description>capitalAssetNumber description...</description>
 			</attribute>
 
-            <attribute name="itemLineNumber" forceUppercase="true">
-                <label>Item Line Number</label>
-                <shortLabel>Number</shortLabel>
-
-                <maxLength>3</maxLength>
-                <validationPattern><numeric /></validationPattern>
-
-                <control>
-                    <text size="5" />
-                </control>
-
-                <summary>itemLineNumber</summary>
-                <description>itemLineNumber description...</description>
-			</attribute>
-
-            <attribute name="purchaseOrderIdentifier" forceUppercase="true">
-                <label>Purchase Order Identifier</label>
+            <attribute name="purchaseOrderItemIdentifier" forceUppercase="true">
+                <label>Purchase Order Item Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
-                <maxLength>9</maxLength>
+                <maxLength>10</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="11" />
+                    <text size="12" />
                 </control>
 
-                <summary>purchaseOrderIdentifier</summary>
-                <description>purchaseOrderIdentifier description...</description>
+                <summary>purchaseOrderItemIdentifier</summary>
+                <description>purchaseOrderItemIdentifier description...</description>
 			</attribute>
 
             <attribute name="purchaseOrderItemCapitalAssetIdentifier" forceUppercase="true">

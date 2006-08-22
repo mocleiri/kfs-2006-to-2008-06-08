@@ -17,11 +17,10 @@
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="itemAccountOutstandingEncumbranceAmount" />
                 <field attributeName="itemAccountPaidAmount" />
-                <field attributeName="itemLineNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
                 <field attributeName="purchaseOrderAccountIdentifier" />
-                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="purchaseOrderItemIdentifier" />
                 <field attributeName="subAccountNumber" />
             </inquiryFields>
         </inquiry>
@@ -47,11 +46,10 @@
                 <lookupField attributeName="financialSubObjectCode" required="false" />
                 <lookupField attributeName="itemAccountOutstandingEncumbranceAmount" required="false" />
                 <lookupField attributeName="itemAccountPaidAmount" required="false" />
-                <lookupField attributeName="itemLineNumber" required="false" />
                 <lookupField attributeName="organizationReferenceId" required="false" />
                 <lookupField attributeName="projectCode" required="false" />
                 <lookupField attributeName="purchaseOrderAccountIdentifier" required="false" />
-                <lookupField attributeName="purchaseOrderIdentifier" required="false" />
+                <lookupField attributeName="purchaseOrderItemIdentifier" required="false" />
                 <lookupField attributeName="subAccountNumber" required="false" />
             </lookupFields>
 
@@ -63,11 +61,10 @@
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="itemAccountOutstandingEncumbranceAmount" />
                 <field attributeName="itemAccountPaidAmount" />
-                <field attributeName="itemLineNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
                 <field attributeName="purchaseOrderAccountIdentifier" />
-                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="purchaseOrderItemIdentifier" />
                 <field attributeName="subAccountNumber" />
             </resultFields>
         </lookup>
@@ -179,21 +176,6 @@
                 <description>itemAccountPaidAmount description...</description>
 			</attribute>
 
-            <attribute name="itemLineNumber" forceUppercase="true">
-                <label>Item Line Number</label>
-                <shortLabel>Number</shortLabel>
-
-                <maxLength>3</maxLength>
-                <validationPattern><numeric /></validationPattern>
-
-                <control>
-                    <text size="5" />
-                </control>
-
-                <summary>itemLineNumber</summary>
-                <description>itemLineNumber description...</description>
-			</attribute>
-
             <attribute name="organizationReferenceId" forceUppercase="true">
                 <label>Organization Reference Id</label>
                 <shortLabel>Id</shortLabel>
@@ -239,19 +221,19 @@
                 <description>purchaseOrderAccountIdentifier description...</description>
 			</attribute>
 
-            <attribute name="purchaseOrderIdentifier" forceUppercase="true">
-                <label>Purchase Order Identifier</label>
+            <attribute name="purchaseOrderItemIdentifier" forceUppercase="true">
+                <label>Purchase Order Item Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
-                <maxLength>9</maxLength>
+                <maxLength>10</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="11" />
+                    <text size="12" />
                 </control>
 
-                <summary>purchaseOrderIdentifier</summary>
-                <description>purchaseOrderIdentifier description...</description>
+                <summary>purchaseOrderItemIdentifier</summary>
+                <description>purchaseOrderItemIdentifier description...</description>
 			</attribute>
 
             <attribute name="subAccountNumber" forceUppercase="true">

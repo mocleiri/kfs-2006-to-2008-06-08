@@ -11,8 +11,7 @@
 
             <inquiryFields>
                 <field attributeName="capitalAssetNumber" />
-                <field attributeName="itemLineNumber" />
-                <field attributeName="requisitionIdentifier" />
+                <field attributeName="requisitionItemIdentifier" />
                 <field attributeName="requisitionItemCapitalAssetIdentifier" />
             </inquiryFields>
         </inquiry>
@@ -32,15 +31,13 @@
 
             <lookupFields>
                 <lookupField attributeName="capitalAssetNumber" required="false" />
-                <lookupField attributeName="itemLineNumber" required="false" />
-                <lookupField attributeName="requisitionIdentifier" required="false" />
+                <lookupField attributeName="requisitionItemIdentifier" required="false" />
                 <lookupField attributeName="requisitionItemCapitalAssetIdentifier" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="capitalAssetNumber" />
-                <field attributeName="itemLineNumber" />
-                <field attributeName="requisitionIdentifier" />
+                <field attributeName="requisitionItemIdentifier" />
                 <field attributeName="requisitionItemCapitalAssetIdentifier" />
             </resultFields>
         </lookup>
@@ -62,34 +59,19 @@
                 <description>capitalAssetNumber description...</description>
 			</attribute>
 
-            <attribute name="itemLineNumber" forceUppercase="true">
-                <label>Item Line Number</label>
-                <shortLabel>Number</shortLabel>
-
-                <maxLength>3</maxLength>
-                <validationPattern><numeric /></validationPattern>
-
-                <control>
-                    <text size="5" />
-                </control>
-
-                <summary>itemLineNumber</summary>
-                <description>itemLineNumber description...</description>
-			</attribute>
-
-            <attribute name="requisitionIdentifier" forceUppercase="true">
-                <label>Requisition Identifier</label>
+            <attribute name="requisitionItemIdentifier" forceUppercase="true">
+                <label>Requisition Item Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
-                <maxLength>8</maxLength>
+                <maxLength>10</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="10" />
+                    <text size="12" />
                 </control>
 
-                <summary>requisitionIdentifier</summary>
-                <description>requisitionIdentifier description...</description>
+                <summary>requisitionItemIdentifier</summary>
+                <description>requisitionItemIdentifier description...</description>
 			</attribute>
 
             <attribute name="requisitionItemCapitalAssetIdentifier" forceUppercase="true">
