@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../dataDictionary-1_0.dtd">
+    "../../../core/datadictionary/dataDictionary-1_0.dtd" >
+
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionAccountReports">
         <customAttributeEnabled>false</customAttributeEnabled>
@@ -10,8 +11,8 @@
             <title>Budget Construction Account Reports Inquiry</title>
 
             <inquiryFields>
-                <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
+                <field attributeName="accountNumber" />
                 <field attributeName="reportsToChartOfAccountsCode" />
                 <field attributeName="reportsToOrganizationCode" />
             </inquiryFields>
@@ -32,15 +33,15 @@
             </defaultSort>
 
             <lookupFields>
-                <lookupField attributeName="accountNumber" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="accountNumber" required="false" />
                 <lookupField attributeName="reportsToChartOfAccountsCode" required="false" />
                 <lookupField attributeName="reportsToOrganizationCode" required="false" />
             </lookupFields>
 
             <resultFields>
-                <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
+                <field attributeName="accountNumber" />
                 <field attributeName="reportsToChartOfAccountsCode" />
                 <field attributeName="reportsToOrganizationCode" />
             </resultFields>
