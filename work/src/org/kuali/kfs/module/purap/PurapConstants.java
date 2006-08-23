@@ -31,7 +31,9 @@ import org.kuali.core.util.KualiDecimal;
  */
 public class PurapConstants {
 
+    //miscellaneous generic constants
     public static final String NONE = "NONE";
+    public static final String CREATE_NEW_DIVISION = "Create a New Division";
     
     //Vendor Tax Types
     public static final String TAX_TYPE_FEIN = "FEIN";
