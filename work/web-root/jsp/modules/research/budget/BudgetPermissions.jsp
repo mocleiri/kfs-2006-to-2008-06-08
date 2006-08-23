@@ -12,6 +12,14 @@
 		includeTaskPeriodLists="false" />
 
 	<kra-b:budgetPermissions />
+	
+	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
+	
+	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
+	
+	<kul:routeLog />
+	
+	<kul:panelFooter />
 
 	<div align="center"><kul:documentControls transactionalDocument="false" suppressRoutingControls="true" />
 	</div>

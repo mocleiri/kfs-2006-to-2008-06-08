@@ -27,15 +27,12 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.authorization.DocumentActionFlags;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.DocumentAuthorizerBase;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.module.kra.budget.KraConstants;
-import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
+import org.kuali.module.kra.budget.service.BudgetPermissionsService;
 
 /**
  * DocumentAuthorizer class for KRA Budget Documents.
@@ -50,34 +47,11 @@ public class BudgetDocumentAuthorizer extends DocumentAuthorizerBase {
      *      org.kuali.core.bo.user.KualiUser)
      */
     public Map getEditMode(Document d, KualiUser u) {
-        
-        BudgetDocument budgetDocument = (BudgetDocument) d;
-        KualiWorkflowDocument workflowDocument = d.getDocumentHeader().getWorkflowDocument();
-        Map editModeMap = super.getEditMode(d, u);
-        
-        // First check default permissions
-        if (u.getPersonUniversalIdentifier().equals(budgetDocument.getBudget().getBudgetProjectDirectorSystemId())
-                || workflowDocument.getInitiatorNetworkId().equalsIgnoreCase(u.getPersonUserIdentifier())) {
-            editModeMap.put(AuthorizationConstants.EditMode.FULL_ENTRY, "TRUE");
-        } else {
-            // Check ad-hoc permissions
-            BudgetAdHocPermission budgetAdHocPermission = 
-                SpringServiceLocator.getBudgetPermissionsService().getBudgetAdHocPermission(d.getFinancialDocumentNumber(), u.getPersonUniversalIdentifier());
-            
-            if (budgetAdHocPermission != null) {
-                if (KraConstants.PERMISSION_MOD_CODE.equals(budgetAdHocPermission.getBudgetPermissionCode())) {
-                    editModeMap.put(AuthorizationConstants.EditMode.FULL_ENTRY, "TRUE");
-                } else {
-                    editModeMap.put(AuthorizationConstants.EditMode.VIEW_ONLY, "TRUE");
-                }
-            } else {
-                editModeMap.put(AuthorizationConstants.EditMode.UNVIEWABLE, "TRUE");
-            }
-        }
-
+        Map editModeMap = new HashMap();
+        editModeMap.put(SpringServiceLocator.getBudgetPermissionsService().getUserPermissionCode((BudgetDocument) d, u), "TRUE");
         return editModeMap;
     }
-
+    
     /**
      * Overrides most of the inherited flags so that the buttons behave exactly like they used to in the obsoleted
      * budgetDocumentControls.tag

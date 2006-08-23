@@ -22,6 +22,7 @@
  */
 package org.kuali.module.kra.budget.web.struts.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,21 +33,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
+import org.kuali.core.bo.AdHocRoutePerson;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.core.workflow.service.KualiWorkflowInfo;
 import org.kuali.module.kra.budget.bo.BudgetAdHocOrg;
 import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
-
-import edu.iu.uis.eden.clientapp.WorkflowInfo;
-import edu.iu.uis.eden.clientapp.vo.DocumentContentVO;
-import edu.iu.uis.eden.clientapp.vo.DocumentDetailVO;
-import edu.iu.uis.eden.clientapp.vo.ReportCriteriaVO;
-import edu.iu.uis.eden.clientapp.vo.RouteNodeInstanceVO;
-import edu.iu.uis.eden.clientapp.vo.WorkflowAttributeDefinitionVO;
-import edu.iu.uis.eden.clientapp.vo.WorkflowIdVO;
-import edu.iu.uis.eden.routetemplate.RuleRoutingAttribute;
 
 /**
  * This class handles Actions for Research Administration permissions page.
@@ -72,8 +64,6 @@ public class BudgetPermissionsAction extends BudgetAction {
             newAdHocPermission.setAddedByPerson(SpringServiceLocator.getWebAuthenticationService().getNetworkId(request));
             budgetForm.getBudgetDocument().getBudget().getAdHocPermissions().add(newAdHocPermission);
             budgetForm.setNewAdHocPermission(new BudgetAdHocPermission());
-            
-            budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().addAttributeDefinition(new WorkflowAttributeDefinitionVO("blah"));
         }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
@@ -128,6 +118,9 @@ public class BudgetPermissionsAction extends BudgetAction {
 
         budgetForm.getBudgetDocument().getBudget().setAdHocPermissions(adHocPermissions);
         budgetForm.getBudgetDocument().getBudget().setAdHocOrgs(adHocOrgs);
+        
+        //List<AdHocRoutePerson> adHocRoutePersons = convertToAdHocRoutePersons(adHocPermissions);
+        //budgetForm.getBudgetDocument().setAdHocRoutePersons(adHocRoutePersons);
 
         return super.save(mapping, budgetForm, request, response);
     }
@@ -141,23 +134,18 @@ public class BudgetPermissionsAction extends BudgetAction {
         budgetForm.setNewAdHocPermission(new BudgetAdHocPermission());
         budgetForm.setNewAdHocOrg(new BudgetAdHocOrg());
         
-      budgetForm.getBudgetDocument().populateDocumentForRouting();
-      WorkflowAttributeDefinitionVO[] test = budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().getAttributeDefinitions();
-      String test2 = budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().getAttributeContent();
-      String[] test3 = budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().getNodeNames();
-      DocumentContentVO test4 = budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocumentContent();
-      RuleRoutingAttribute attribute = new RuleRoutingAttribute("KualiBudgetDocument");
-      List rows1 = attribute.getRoutingDataRows();
-      List rows2 = attribute.getRuleRows();
-      List rows3 = attribute.getRuleExtensionValues();
-      
-      KualiWorkflowInfo service = SpringServiceLocator.getWorkflowInfoService();
-      WorkflowInfo info = new WorkflowInfo();
-      boolean result = info.isUserAuthenticatedByRouteLog(budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().getRouteHeaderId(),
-              new WorkflowIdVO("JGERHART"), true);
-      RouteNodeInstanceVO[] stuff = info.getDocumentRouteNodeInstances(budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().getRouteHeaderId());
-      DocumentDetailVO detail = info.routingReport(new ReportCriteriaVO(budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().getRouteHeaderId()));
-        
         return super.reload(mapping, budgetForm, request, response);
+    }
+    
+    private static List<AdHocRoutePerson> convertToAdHocRoutePersons(List<BudgetAdHocPermission> adHocPermissions) {
+        List<AdHocRoutePerson> adHocRoutePersons = new ArrayList<AdHocRoutePerson>();
+        for (BudgetAdHocPermission adHocPermission: adHocPermissions) {
+            SpringServiceLocator.getPersistenceService().refreshAllNonUpdatingReferences(adHocPermission);
+            AdHocRoutePerson adHocRoutePerson = new AdHocRoutePerson();
+            adHocRoutePerson.setId(adHocPermission.getUser().getPersonUserIdentifier());
+            adHocRoutePerson.setActionRequested("F");
+            adHocRoutePersons.add(adHocRoutePerson);
+        }
+        return adHocRoutePersons;
     }
 }
