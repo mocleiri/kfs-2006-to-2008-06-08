@@ -8,10 +8,14 @@
 <%@ taglib tagdir="/WEB-INF/tags/kra" prefix="kra" %>
 <%@ taglib tagdir="/WEB-INF/tags/kra/budget" prefix="kra-b" %>
 
+<c:set var="KraConstants" value="${KraConstants}" />
+
           <table cellpadding=0 cellspacing="0"  summary="">
             <tr>
-              <td colspan=3 class="subhead"><span class="subhead-left"> Select Report Type </span> </td>
-
+              <td colspan=3 class="subhead">
+                <span class="subhead-left"> Select Report Type </span>
+                <span class="subhead-right"> <span class="subhead"><kul:help securityGroupName="${KraConstants.KRA_ADMIN_GROUP_NAME}" parameterName="${KraConstants.BUDGET_OUTPUT_HELP_PARAMETER_NAME}" altText="help"/></span> </span>
+              </td>
             </tr>
             <tr align="center" valign="top">
               <td width="40%" ><div class="floaters" > <strong>

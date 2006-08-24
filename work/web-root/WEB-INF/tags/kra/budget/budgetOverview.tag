@@ -10,6 +10,10 @@
 
   <kra-b:budgetDetailSelection includeSummary="true" />
 
+        <div align="right">
+          <kul:help securityGroupName="${KraConstants.KRA_ADMIN_GROUP_NAME}" parameterName="${KraConstants.BUDGET_OVERVIEW_HELP_PARAMETER_NAME}" altText="help"/>
+        </div>
+
         <div align="center">
           <table class="t3" border="0" cellpadding="0" cellspacing="0" width="100%">
 

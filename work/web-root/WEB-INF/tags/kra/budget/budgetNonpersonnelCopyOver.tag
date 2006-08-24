@@ -9,6 +9,8 @@
 <%@ taglib tagdir="/WEB-INF/tags/kra" prefix="kra" %>
 <%@ taglib tagdir="/WEB-INF/tags/kra/budget" prefix="kra-b" %>
 
+<c:set var="KraConstants" value="${KraConstants}" />
+
   <!-- A bonanza of hidden variables from nonpersonnel & copy over to assure non-saved items are retained. -->
   <html:hidden property="document.budget.universityCostShareIndicator" />
   <html:hidden property="document.budget.budgetThirdPartyCostShareIndicator" />
@@ -123,6 +125,10 @@
           </table>
         </div>
 
+
+<div align="right">
+  <kul:help securityGroupName="${KraConstants.KRA_ADMIN_GROUP_NAME}" parameterName="${KraConstants.BUDGET_NONPERSONNEL_COPY_OVER_HELP_PARAMETER_NAME}" altText="help"/>
+</div>
 
 <div id="workarea">
 

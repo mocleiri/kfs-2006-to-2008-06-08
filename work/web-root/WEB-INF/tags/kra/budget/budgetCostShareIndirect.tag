@@ -6,6 +6,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/kra" prefix="kra"%>
 <%@ taglib uri="/tlds/fmt.tld" prefix="fmt"%>
 
+<c:set var="KraConstants" value="${KraConstants}" />
 <c:set var="showCostShareIndirect" value="${KualiForm.document.budget.universityCostShareIndicator && KualiForm.document.budget.indirectCost.budgetIndirectCostCostShareIndicator}"/>
 
 <c:set var="tabDescription">
@@ -27,6 +28,7 @@
 					<h2>
 						Cost Share - Institution Indirect
 					</h2> </span>
+					<span class="subhead-right"> <span class="subhead"><kul:help securityGroupName="${KraConstants.KRA_ADMIN_GROUP_NAME}" parameterName="${KraConstants.BUDGET_COSTSHARE_INDIRECT_HELP_PARAMETER_NAME}" altText="help"/></span> </span>
 			</div>
 			<table cellpadding=0 summary="view/edit document overview information">
 				<tr>
@@ -46,6 +48,7 @@
 				<tr>
 					<td class="subhead" colspan="${KualiForm.document.periodListSize+3}">
 						<span class="subhead-left">Cost Share - Institution Indirect</span>
+						<span class="subhead-right"> <span class="subhead"><kul:help securityGroupName="${KraConstants.KRA_ADMIN_GROUP_NAME}" parameterName="${KraConstants.BUDGET_COSTSHARE_INDIRECT_HELP_PARAMETER_NAME}" altText="help"/></span> </span>
 					</td>
 				</tr>
 				<tr>
