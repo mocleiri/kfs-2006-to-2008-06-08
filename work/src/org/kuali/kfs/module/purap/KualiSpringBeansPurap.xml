@@ -6,6 +6,9 @@
         <property name="vendorDao">
             <ref bean="vendorDao" />
         </property>
+        <property name="businessObjectService">
+            <ref bean="businessObjectService" />
+        </property>
     </bean>
 
     <bean id="vendorDao" class="org.kuali.module.purap.dao.ojb.VendorDaoOjb">
@@ -41,5 +44,4 @@
         </property>
     </bean>
     
-
 </beans>
