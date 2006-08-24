@@ -189,7 +189,7 @@
             <forward name="overview" path="/jsp/modules/research/budget/BudgetOverview.jsp" redirect="false" />
             <forward name="template" path="/jsp/modules/research/budget/BudgetTemplate.jsp" redirect="false" />
             <forward name="nonpersonnel" path="/jsp/modules/research/budget/BudgetNonpersonnel.jsp" redirect="false" />
-            <forward name="nonpersonnelCopyOver" path="/jsp/modules/budget/research/BudgetNonpersonnelCopyOver.jsp" redirect="false" />
+            <forward name="nonpersonnelCopyOver" path="/jsp/modules/research/budget/BudgetNonpersonnelCopyOver.jsp" redirect="false" />
             <forward name="personnel" path="/jsp/modules/research/budget/BudgetPersonnel.jsp" redirect="false" />
             <forward name="costshare" path="/jsp/modules/research/budget/BudgetCostShare.jsp" redirect="false" />
             <forward name="output" path="/jsp/modules/research/budget/BudgetOutput.jsp" redirect="false" />
