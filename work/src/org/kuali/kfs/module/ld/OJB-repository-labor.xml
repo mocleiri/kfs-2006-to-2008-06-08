@@ -142,9 +142,6 @@
         <foreignkey field-ref="a21LaborReportNumber" />
         <foreignkey field-ref="a21LaborFiscalYear" />
     </reference-descriptor>
-    <reference-descriptor name="universalUser" class-ref="org.kuali.core.bo.user.UniversalUser" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="emplid" />
-    </reference-descriptor>
     <reference-descriptor name="org" class-ref="org.kuali.module.chart.bo.Org" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="chartOfAccountsCode" />
         <foreignkey field-ref="organizationCode" />
