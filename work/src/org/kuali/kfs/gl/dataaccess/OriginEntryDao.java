@@ -32,11 +32,18 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryDao.java,v 1.11.2.1.2.2 2006-08-11 21:08:56 tdurkin Exp $
+ * @version $Id: OriginEntryDao.java,v 1.11.2.1.2.3 2006-08-25 20:55:28 hstaplet Exp $
  */
 public interface OriginEntryDao {
     public static final int SORT_DOCUMENT = 1;
     public static final int SORT_ACCOUNT = 2;
+
+    /**
+     * Get the counts of rows of all the origin entry groups
+     * 
+     * @return iterator of Object[] {[BigDecimal id,BigDecimal count]}
+     */
+    public Iterator getGroupCounts();
 
     /**
      * Delete an entry
