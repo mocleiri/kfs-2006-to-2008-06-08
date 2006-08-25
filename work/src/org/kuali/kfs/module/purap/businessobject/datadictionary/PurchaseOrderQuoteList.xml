@@ -10,9 +10,9 @@
             <title>Purchase Order Quote List Inquiry</title>
 
             <inquiryFields>
-                <field attributeName="contractManagerCode" />
                 <field attributeName="purchaseOrderQuoteListIdentifier" />
                 <field attributeName="purchaseOrderQuoteListName" />
+                <field attributeName="contractManagerCode" />
             </inquiryFields>
         </inquiry>
 
@@ -30,35 +30,20 @@
             </defaultSort>
 
             <lookupFields>
-                <lookupField attributeName="contractManagerCode" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteListIdentifier" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteListName" required="false" />
+                <lookupField attributeName="contractManagerCode" required="false" />
             </lookupFields>
 
             <resultFields>
-                <field attributeName="contractManagerCode" />
                 <field attributeName="purchaseOrderQuoteListIdentifier" />
                 <field attributeName="purchaseOrderQuoteListName" />
+                <field attributeName="contractManagerCode" />
             </resultFields>
         </lookup>
 
         <attributes>
-
-            <attribute name="contractManagerCode" forceUppercase="true">
-                <label>Contract Manager Code</label>
-                <shortLabel>Code</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern><numeric /></validationPattern>
-
-                <control>
-                    <text size="4" />
-                </control>
-
-                <summary>contractManagerCode</summary>
-                <description>contractManagerCode description...</description>
-			</attribute>
-
+			
             <attribute name="purchaseOrderQuoteListIdentifier" forceUppercase="true">
                 <label>Purchase Order Quote List Identifier</label>
                 <shortLabel>Identifier</shortLabel>
@@ -88,22 +73,14 @@
                 <summary>purchaseOrderQuoteListName</summary>
                 <description>purchaseOrderQuoteListName description...</description>
 			</attribute>
-
-            <attribute name="versionNumber" forceUppercase="true">
-                <label>Version Number</label>
-                <shortLabel>Number</shortLabel>
-
-                <maxLength>8</maxLength>
-                <validationPattern><numeric /></validationPattern>
-
+			
+			<attributeReference name="contractManagerCode" sourceClassName="org.kuali.module.purap.bo.ContractManager" sourceAttributeName="contractManagerCode">
                 <control>
-                    <text size="10" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ContractManagerValuesFinder" />
                 </control>
-
-                <summary>versionNumber</summary>
-                <description>versionNumber description...</description>
-			</attribute>
-
+            </attributeReference>			
+			<attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+			
         </attributes>
     </businessObject>
 </dictionaryEntry>
