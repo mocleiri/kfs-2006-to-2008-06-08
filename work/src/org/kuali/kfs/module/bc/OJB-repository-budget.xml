@@ -1356,14 +1356,3 @@
         <foreignkey field-ref="continuationAccountNumber" />
     </reference-descriptor>
 </class-descriptor>
-<!-- 
-<class-descriptor class="org.kuali.module.budget.bo.BudgetConstructionPositionSynchronization01Move" table="LD_BCN_POS_SYNC01_MT">
-    <field-descriptor name="sessionIdentifier" column="SESID" jdbc-type="BIGINT" primarykey="true" index="true" />
-	<field-descriptor name="positionNumber" column="POSITION_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="positionEffectiveDate" column="POS_EFFDT" jdbc-type="DATE" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="iuNormalWorkMonths" column="IU_NORM_WORK_MONTHS" jdbc-type="INTEGER"/>
-	<field-descriptor name="iuPayMonths" column="IU_PAY_MONTHS" jdbc-type="INTEGER"/>
-</class-descriptor>
--->
