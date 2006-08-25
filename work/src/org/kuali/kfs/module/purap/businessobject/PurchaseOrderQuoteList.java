@@ -37,6 +37,8 @@ public class PurchaseOrderQuoteList extends BusinessObjectBase {
 	private Integer purchaseOrderQuoteListIdentifier;
 	private String purchaseOrderQuoteListName;
 	private Integer contractManagerCode;
+    
+    private ContractManager contractManager;
 
 	/**
 	 * Default constructor.
@@ -116,5 +118,13 @@ public class PurchaseOrderQuoteList extends BusinessObjectBase {
             m.put("purchaseOrderQuoteListIdentifier", this.purchaseOrderQuoteListIdentifier.toString());
         }
 	    return m;
+    }
+
+    /**
+     * Gets the contractManager attribute. 
+     * @return Returns the contractManager.
+     */
+    public ContractManager getContractManager() {
+        return contractManager;
     }
 }
