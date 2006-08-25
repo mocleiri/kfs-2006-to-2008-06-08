@@ -25,18 +25,23 @@
  */
 package org.kuali.module.financial.document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.kuali.Constants;
 import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.module.financial.bo.PreEncumbranceDocumentAccountingLineParser;
+import org.kuali.module.gl.util.SufficientFundsItem;
 
 /**
  * The Pre-Encumbrance document provides the capability to record encumbrances independently of purchase orders, travel, or Physical Plant work orders. These transactions are for the use of the account manager to earmark funds for which unofficial commitments have already been made.
  * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
- * @version $Id: PreEncumbranceDocument.java,v 1.2.2.1.2.2 2006-08-11 21:08:10 tdurkin Exp $
+ * @version $Id: PreEncumbranceDocument.java,v 1.2.2.1.2.3 2006-08-25 20:55:25 hstaplet Exp $
  */
 public class PreEncumbranceDocument extends TransactionalDocumentBase {
+    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PreEncumbranceDocument.class);
 
     private java.sql.Date reversalDate;
 
@@ -46,6 +51,19 @@ public class PreEncumbranceDocument extends TransactionalDocumentBase {
     public PreEncumbranceDocument() {
         super();
     }
+
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentBase#checkSufficientFunds()
+     */
+    @Override
+    public List<SufficientFundsItem> checkSufficientFunds() {
+        LOG.debug("checkSufficientFunds() started");
+
+        // This document does not do sufficient funds checking
+        return new ArrayList<SufficientFundsItem>();
+    }
+
 
     /**
      * 
