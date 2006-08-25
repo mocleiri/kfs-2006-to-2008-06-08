@@ -37,6 +37,9 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.PostalZipCode;
@@ -46,13 +49,13 @@ import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
 import org.kuali.module.chart.bo.codes.SufficientFundsCode;
+import org.kuali.module.gl.bo.SufficientFundRebuild;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class Account extends BusinessObjectBase implements AccountIntf {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Account.class);
-    private static final long serialVersionUID = -144120733742373200L;
 
     private String chartOfAccountsCode;
     private String accountNumber;
@@ -140,10 +143,9 @@ public class Account extends BusinessObjectBase implements AccountIntf {
     private String guidelinesAndPurposeSection;
     private String accountDescriptionSectionBlank;
     private String accountDescriptionSection;
-        
-        
-        
-        
+
+    private boolean isCGAccount;
+
     private AccountGuideline accountGuideline;
     private AccountDescription accountDescription;
     
@@ -163,12 +165,28 @@ public class Account extends BusinessObjectBase implements AccountIntf {
      */
     public boolean isInCg() {
         // IF C&G is a sub fund group, use this line
-        // return "CG".equals(getSubFundGroupCode();
-
+        // return isInCgFundGroup();
+        
         // IF C&G is a fund group, use this line
-        return "CG".equals(getSubFundGroup().getFundGroupCode());
+        return isInCgSubFundGroup();
     }
-    
+
+    private boolean isInCgFundGroup() {
+        return "CG".equals(getSubFundGroup().getFundGroupCode());        
+    }
+
+    private boolean isInCgSubFundGroup() {
+        return "CG".equals(getSubFundGroupCode());        
+    }
+
+    public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        super.afterLookup(persistenceBroker);
+
+        // This is needed to put a value in the object so the persisted XML has a flag that
+        // can be used in routing to determine if an account is a C&G Account
+        isCGAccount = isInCg();
+    }
+
     /**
      * This method gathers all SubAccounts related to this account if the account
      * is marked as closed to deactivate
@@ -1806,4 +1824,33 @@ public class Account extends BusinessObjectBase implements AccountIntf {
         this.endowmentIncomeChartOfAccounts = endowmentIncomeChartOfAccounts;
     }
 
+    @Override
+    public void beforeUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        super.beforeUpdate(persistenceBroker);
+        try {
+            // KULCOA-549: update the sufficient funds table
+            // get the current data from the database
+            BusinessObjectService boService = SpringServiceLocator.getBusinessObjectService();
+            Account originalAcct = (Account)boService.retrieve( this );
+            
+            if ( originalAcct != null ) { 
+                if ( !originalAcct.getSufficientFundsCode().equals( getSufficientFundsCode() )
+                        || originalAcct.isExtrnlFinEncumSufficntFndIndicator() != isExtrnlFinEncumSufficntFndIndicator() 
+                        || originalAcct.isIntrnlFinEncumSufficntFndIndicator() != isIntrnlFinEncumSufficntFndIndicator()
+                        || originalAcct.isPendingAcctSufficientFundsIndicator() != isPendingAcctSufficientFundsIndicator()
+                        || originalAcct.isFinPreencumSufficientFundIndicator() != isFinPreencumSufficientFundIndicator() ) {
+                    SufficientFundRebuild sfr = new SufficientFundRebuild();
+                    sfr.setAccountFinancialObjectTypeCode( SufficientFundRebuild.REBUILD_ACCOUNT );
+                    sfr.setChartOfAccountsCode( getChartOfAccountsCode() );
+                    sfr.setAccountNumberFinancialObjectCode( getAccountNumber() );
+                    if ( boService.retrieve( sfr ) == null ) {
+                        persistenceBroker.store( sfr );
+                    }
+                }
+            }
+        } catch ( Exception ex ) {
+            LOG.error( "Problem updating sufficient funds rebuild table: ", ex );            
+        }
+    }
+    
 }
