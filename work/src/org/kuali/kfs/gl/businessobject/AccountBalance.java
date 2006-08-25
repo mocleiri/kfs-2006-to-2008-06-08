@@ -64,6 +64,7 @@ public class AccountBalance extends BusinessObjectBase {
     private A21SubAccount a21SubAccount;
     private DummyBusinessObject dummyBusinessObject;
     private Options option;
+    private String title;
 
     public AccountBalance() {
         super();
@@ -99,16 +100,18 @@ public class AccountBalance extends BusinessObjectBase {
         accountLineActualsBalanceAmount = new KualiDecimal((BigDecimal) data.get("ACLN_ACTLS_BAL_AMT"));
         accountLineEncumbranceBalanceAmount = new KualiDecimal((BigDecimal) data.get("ACLN_ENCUM_BAL_AMT"));
 
+        financialObject.getFinancialObjectLevel().setFinancialConsolidationObjectCode((String) data.get("FIN_CONS_OBJ_CD"));
+        financialObject.getFinancialObjectLevel().getFinancialConsolidationObject().setFinConsolidationObjectCode((String) data.get("FIN_CONS_OBJ_CD"));
+        
         if ("Consolidation".equals(type)) {
             financialObject.getFinancialObjectType().setFinancialReportingSortCode((String) data.get("FIN_REPORT_SORT_CD"));
             financialObject.getFinancialObjectLevel().getFinancialConsolidationObject().setFinancialReportingSortCode((String) data.get("CONS_FIN_REPORT_SORT_CD"));
-            financialObject.getFinancialObjectLevel().setFinancialConsolidationObjectCode((String) data.get("FIN_CONS_OBJ_CD"));
             fixVariance();
         }
         else if ("Level".equals(type)) {
-            financialObject.getFinancialObjectLevel().setFinancialConsolidationObjectCode((String) data.get("FIN_CONS_OBJ_CD"));
             financialObject.getFinancialObjectLevel().setFinancialReportingSortCode((String) data.get("FIN_REPORT_SORT_CD"));
-            financialObject.getFinancialObjectLevel().setFinancialObjectLevelCode((String) data.get("FIN_OBJ_LEVEL_CD"));
+            financialObject.setFinancialObjectLevelCode((String) data.get("FIN_OBJ_LEVEL_CD"));
+            financialObject.getFinancialObjectLevel().setFinancialObjectLevelCode((String) data.get("FIN_OBJ_LVL_CD"));
 
             // tricking it so getVariance() works
             financialObject.getFinancialObjectType().setFinancialReportingSortCode("B");
@@ -117,6 +120,7 @@ public class AccountBalance extends BusinessObjectBase {
         else if ("Object".equals(type)) {
             objectCode = (String) data.get("FIN_OBJECT_CD");
             financialObject.setFinancialObjectLevelCode((String) data.get("FIN_OBJ_LVL_CD"));
+            financialObject.getFinancialObjectLevel().setFinancialObjectLevelCode((String) data.get("FIN_OBJ_LVL_CD"));
 
             // tricking it so getVariance() works
             financialObject.getFinancialObjectType().setFinancialReportingSortCode("B");
@@ -129,6 +133,7 @@ public class AccountBalance extends BusinessObjectBase {
 
     public AccountBalance(String title) {
         this();
+        this.title = title;
         financialObject.getFinancialObjectLevel().setFinancialConsolidationObjectCode(title);
         currentBudgetLineBalanceAmount = KualiDecimal.ZERO;
         accountLineActualsBalanceAmount = KualiDecimal.ZERO;
@@ -179,6 +184,10 @@ public class AccountBalance extends BusinessObjectBase {
         return map;
     }
 
+    public String getTitle() {
+        return title;
+    }
+    
     public A21SubAccount getA21SubAccount() {
         return a21SubAccount;
     }
