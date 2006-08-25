@@ -22,6 +22,7 @@
  */
 package org.kuali.module.gl.service.impl;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,7 +40,7 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupServiceImpl.java,v 1.17.2.1.2.3 2006-08-18 21:01:23 tdurkin Exp $
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.17.2.1.2.4 2006-08-25 20:55:24 hstaplet Exp $
  */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
@@ -138,12 +139,38 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
         }
         return null;
     }
-    
-    public Collection getAllOriginEntryGroup(){
+
+    /**
+     * 
+     * @see org.kuali.module.gl.service.OriginEntryGroupService#getAllOriginEntryGroup()
+     */
+    public Collection getAllOriginEntryGroup() {
         LOG.debug("getAllOriginEntryGroup() started");
         Map criteria = new HashMap();
 
-        return originEntryGroupDao.getMatchingGroups(criteria);
+        Collection c = originEntryGroupDao.getMatchingGroups(criteria);
+
+        // Get the row counts for each group
+        Iterator i = originEntryDao.getGroupCounts();
+        while ( i.hasNext() ) {
+            Object[] rowCount = (Object[])i.next();
+            int id = ((BigDecimal)rowCount[0]).intValue();
+            int count = ((BigDecimal)rowCount[1]).intValue();
+
+            // Find the correct group to add the count
+            for (Iterator iter = c.iterator(); iter.hasNext();) {
+                OriginEntryGroup group = (OriginEntryGroup)iter.next();
+                if ( group.getId().intValue() == id ) {
+                    group.setRows(new Integer(count));
+                }
+            }
+        }
+
+        for (Iterator iter = c.iterator(); iter.hasNext();) {
+            OriginEntryGroup element = (OriginEntryGroup) iter.next();
+            LOG.error("getAllOriginEntryGroup() " + element.getId() + " " + element.getRows());
+        }
+        return c;
     }
     
 
@@ -243,8 +270,7 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
      * @see org.kuali.module.gl.service.OriginEntryGroupService#getRecentGroupsByDays(int)
      */
     public Collection getRecentGroupsByDays(int days) {
-        LOG.debug("deleteOlderGroups() started");
-
+        
         Calendar today = dateTimeService.getCurrentCalendar();
         today.add(Calendar.DAY_OF_MONTH, 0 - days);
 
