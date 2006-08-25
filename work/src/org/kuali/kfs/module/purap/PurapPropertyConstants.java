@@ -44,4 +44,5 @@ public class PurapPropertyConstants {
     public static final String VENDOR_MIN_ORDER_AMOUNT = "vendorMinimumOrderAmount";
     public static final String VENDOR_TYPE_CODE = "vendorHeader.vendorTypeCode";
     public static final String VENDOR_DETAIL_ASSIGNED_ID = "vendorDetailAssignedIdentifier";
+    public static final String VENDOR_HEADER_GENERATED_ID = "vendorHeaderGeneratedIdentifier";
 }
