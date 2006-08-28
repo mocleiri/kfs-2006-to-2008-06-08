@@ -47,7 +47,7 @@ public class BudgetConstructionPositionInitializationMove extends BusinessObject
 	private String confidentialPosition;
 	private BigDecimal positionStandardHoursDefault;
 	private String positionRegularTemporary;
-	private Integer positionFullTimeEquivalency;
+	private BigDecimal positionFullTimeEquivalency;
 	private Integer iuNormalWorkMonths;
 	private Integer iuPayMonths;
 	private String positionDescription;
@@ -289,7 +289,7 @@ public class BudgetConstructionPositionInitializationMove extends BusinessObject
 	 * @return - Returns the positionFullTimeEquivalency
 	 * 
 	 */
-	public Integer getPositionFullTimeEquivalency() { 
+	public BigDecimal getPositionFullTimeEquivalency() { 
 		return positionFullTimeEquivalency;
 	}
 
@@ -299,7 +299,7 @@ public class BudgetConstructionPositionInitializationMove extends BusinessObject
 	 * @param - positionFullTimeEquivalency The positionFullTimeEquivalency to set.
 	 * 
 	 */
-	public void setPositionFullTimeEquivalency(Integer positionFullTimeEquivalency) {
+	public void setPositionFullTimeEquivalency(BigDecimal positionFullTimeEquivalency) {
 		this.positionFullTimeEquivalency = positionFullTimeEquivalency;
 	}
 

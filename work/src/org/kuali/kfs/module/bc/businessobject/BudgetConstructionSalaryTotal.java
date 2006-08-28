@@ -25,6 +25,7 @@
 
 package org.kuali.module.budget.bo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
@@ -41,9 +42,9 @@ public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 	private String organizationCode;
 	private KualiDecimal csfAmount;
 	private KualiDecimal appointmentRequestedAmount;
-	private Integer appointmentRequestedFteQuantity;
+	private BigDecimal appointmentRequestedFteQuantity;
 	private KualiDecimal initialRequestedAmount;
-	private Integer initialRequestedFteQuantity;
+	private BigDecimal initialRequestedFteQuantity;
 	private Long personUniversalIdentifier;
 
     private Chart organizationChartOfAccounts;
@@ -146,7 +147,7 @@ public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 	 * @return - Returns the appointmentRequestedFteQuantity
 	 * 
 	 */
-	public Integer getAppointmentRequestedFteQuantity() { 
+	public BigDecimal getAppointmentRequestedFteQuantity() { 
 		return appointmentRequestedFteQuantity;
 	}
 
@@ -156,7 +157,7 @@ public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
 	 * 
 	 */
-	public void setAppointmentRequestedFteQuantity(Integer appointmentRequestedFteQuantity) {
+	public void setAppointmentRequestedFteQuantity(BigDecimal appointmentRequestedFteQuantity) {
 		this.appointmentRequestedFteQuantity = appointmentRequestedFteQuantity;
 	}
 
@@ -188,7 +189,7 @@ public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 	 * @return - Returns the initialRequestedFteQuantity
 	 * 
 	 */
-	public Integer getInitialRequestedFteQuantity() { 
+	public BigDecimal getInitialRequestedFteQuantity() { 
 		return initialRequestedFteQuantity;
 	}
 
@@ -198,7 +199,7 @@ public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 	 * @param - initialRequestedFteQuantity The initialRequestedFteQuantity to set.
 	 * 
 	 */
-	public void setInitialRequestedFteQuantity(Integer initialRequestedFteQuantity) {
+	public void setInitialRequestedFteQuantity(BigDecimal initialRequestedFteQuantity) {
 		this.initialRequestedFteQuantity = initialRequestedFteQuantity;
 	}
 

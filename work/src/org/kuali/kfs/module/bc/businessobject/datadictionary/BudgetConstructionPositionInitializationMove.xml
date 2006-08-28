@@ -312,11 +312,11 @@
                 <label>Position Full Time Equivalency</label>
                 <shortLabel>Equivalency</shortLabel>
 
-                <maxLength>22</maxLength>
+                <maxLength>9</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="24" />
+                    <text size="11" />
                 </control>
 
                 <summary>positionFullTimeEquivalency</summary>

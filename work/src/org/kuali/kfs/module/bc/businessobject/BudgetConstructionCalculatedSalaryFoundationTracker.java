@@ -25,6 +25,7 @@
 
 package org.kuali.module.budget.bo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
@@ -49,8 +50,8 @@ public class BudgetConstructionCalculatedSalaryFoundationTracker extends Busines
 	private String positionNumber;
 	private String emplid;
 	private KualiDecimal csfAmount;
-	private Integer csfFullTimeEmploymentQuantity;
-	private Integer csfTimePercent;
+	private BigDecimal csfFullTimeEmploymentQuantity;
+	private BigDecimal csfTimePercent;
 	private String csfFundingStatusCode;
 
     private ObjectCode financialObject;
@@ -262,7 +263,7 @@ public class BudgetConstructionCalculatedSalaryFoundationTracker extends Busines
 	 * @return - Returns the csfFullTimeEmploymentQuantity
 	 * 
 	 */
-	public Integer getCsfFullTimeEmploymentQuantity() { 
+	public BigDecimal getCsfFullTimeEmploymentQuantity() { 
 		return csfFullTimeEmploymentQuantity;
 	}
 
@@ -272,7 +273,7 @@ public class BudgetConstructionCalculatedSalaryFoundationTracker extends Busines
 	 * @param - csfFullTimeEmploymentQuantity The csfFullTimeEmploymentQuantity to set.
 	 * 
 	 */
-	public void setCsfFullTimeEmploymentQuantity(Integer csfFullTimeEmploymentQuantity) {
+	public void setCsfFullTimeEmploymentQuantity(BigDecimal csfFullTimeEmploymentQuantity) {
 		this.csfFullTimeEmploymentQuantity = csfFullTimeEmploymentQuantity;
 	}
 
@@ -283,7 +284,7 @@ public class BudgetConstructionCalculatedSalaryFoundationTracker extends Busines
 	 * @return - Returns the csfTimePercent
 	 * 
 	 */
-	public Integer getCsfTimePercent() { 
+	public BigDecimal getCsfTimePercent() { 
 		return csfTimePercent;
 	}
 
@@ -293,7 +294,7 @@ public class BudgetConstructionCalculatedSalaryFoundationTracker extends Busines
 	 * @param - csfTimePercent The csfTimePercent to set.
 	 * 
 	 */
-	public void setCsfTimePercent(Integer csfTimePercent) {
+	public void setCsfTimePercent(BigDecimal csfTimePercent) {
 		this.csfTimePercent = csfTimePercent;
 	}
 

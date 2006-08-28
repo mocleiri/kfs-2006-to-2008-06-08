@@ -25,6 +25,7 @@
 
 package org.kuali.module.budget.bo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
@@ -41,7 +42,7 @@ public class BudgetConstructionPayRateHolding extends BusinessObjectBase {
 	private String salaryAdministrationPlan;
 	private String grade;
 	private String unionCode;
-	private Integer appointmentRequestedPayRate;
+	private BigDecimal appointmentRequestedPayRate;
 
 	/**
 	 * Default constructor.
@@ -203,7 +204,7 @@ public class BudgetConstructionPayRateHolding extends BusinessObjectBase {
 	 * @return - Returns the appointmentRequestedPayRate
 	 * 
 	 */
-	public Integer getAppointmentRequestedPayRate() { 
+	public BigDecimal getAppointmentRequestedPayRate() { 
 		return appointmentRequestedPayRate;
 	}
 
@@ -213,7 +214,7 @@ public class BudgetConstructionPayRateHolding extends BusinessObjectBase {
 	 * @param - appointmentRequestedPayRate The appointmentRequestedPayRate to set.
 	 * 
 	 */
-	public void setAppointmentRequestedPayRate(Integer appointmentRequestedPayRate) {
+	public void setAppointmentRequestedPayRate(BigDecimal appointmentRequestedPayRate) {
 		this.appointmentRequestedPayRate = appointmentRequestedPayRate;
 	}
 

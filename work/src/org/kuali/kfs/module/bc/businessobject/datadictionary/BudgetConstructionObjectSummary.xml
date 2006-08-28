@@ -106,11 +106,11 @@
                 <label>Appointment Requested Csf Fte Quantity</label>
                 <shortLabel>Quantity</shortLabel>
 
-                <maxLength>22</maxLength>
+                <maxLength>9</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="24" />
+                    <text size="11" />
                 </control>
 
                 <summary>appointmentRequestedCsfFteQuantity</summary>
@@ -121,11 +121,11 @@
                 <label>Appointment Requested Fte Quantity</label>
                 <shortLabel>Quantity</shortLabel>
 
-                <maxLength>22</maxLength>
+                <maxLength>9</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="24" />
+                    <text size="11" />
                 </control>
 
                 <summary>appointmentRequestedFteQuantity</summary>
@@ -151,11 +151,11 @@
                 <label>Csf Full Time Employment Quantity</label>
                 <shortLabel>Quantity</shortLabel>
 
-                <maxLength>22</maxLength>
+                <maxLength>9</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="24" />
+                    <text size="11" />
                 </control>
 
                 <summary>csfFullTimeEmploymentQuantity</summary>
@@ -316,11 +316,11 @@
                 <label>Position Csf Leave Fte Quantity</label>
                 <shortLabel>Quantity</shortLabel>
 
-                <maxLength>22</maxLength>
+                <maxLength>9</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="24" />
+                    <text size="11" />
                 </control>
 
                 <summary>positionCsfLeaveFteQuantity</summary>

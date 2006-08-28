@@ -25,6 +25,7 @@
 
 package org.kuali.module.budget.bo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
@@ -50,14 +51,14 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	private String emplid;
 	private String appointmentFundingDurationCode;
 	private KualiDecimal appointmentRequestedCsfAmount;
-	private Integer appointmentRequestedCsfFteQuantity;
-	private Integer appointmentRequestedCsfTimePercent;
+	private BigDecimal appointmentRequestedCsfFteQuantity;
+	private BigDecimal appointmentRequestedCsfTimePercent;
 	private KualiDecimal appointmentTotalIntendedAmount;
-	private Integer appointmentTotalIntendedFteQuantity;
+	private BigDecimal appointmentTotalIntendedFteQuantity;
 	private KualiDecimal appointmentRequestedAmount;
-	private Integer appointmentRequestedTimePercent;
-	private Integer appointmentRequestedFteQuantity;
-	private Integer appointmentRequestedPayRate;
+	private BigDecimal appointmentRequestedTimePercent;
+	private BigDecimal appointmentRequestedFteQuantity;
+	private BigDecimal appointmentRequestedPayRate;
 	private boolean appointmentFundingDeleteIndicator;
 	private Integer appointmentFundingMonth;
     private String newChartOfAccountsCode;
@@ -295,7 +296,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @return - Returns the appointmentRequestedCsfFteQuantity
 	 * 
 	 */
-	public Integer getAppointmentRequestedCsfFteQuantity() { 
+	public BigDecimal getAppointmentRequestedCsfFteQuantity() { 
 		return appointmentRequestedCsfFteQuantity;
 	}
 
@@ -305,7 +306,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @param - appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
 	 * 
 	 */
-	public void setAppointmentRequestedCsfFteQuantity(Integer appointmentRequestedCsfFteQuantity) {
+	public void setAppointmentRequestedCsfFteQuantity(BigDecimal appointmentRequestedCsfFteQuantity) {
 		this.appointmentRequestedCsfFteQuantity = appointmentRequestedCsfFteQuantity;
 	}
 
@@ -316,7 +317,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @return - Returns the appointmentRequestedCsfTimePercent
 	 * 
 	 */
-	public Integer getAppointmentRequestedCsfTimePercent() { 
+	public BigDecimal getAppointmentRequestedCsfTimePercent() { 
 		return appointmentRequestedCsfTimePercent;
 	}
 
@@ -326,7 +327,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @param - appointmentRequestedCsfTimePercent The appointmentRequestedCsfTimePercent to set.
 	 * 
 	 */
-	public void setAppointmentRequestedCsfTimePercent(Integer appointmentRequestedCsfTimePercent) {
+	public void setAppointmentRequestedCsfTimePercent(BigDecimal appointmentRequestedCsfTimePercent) {
 		this.appointmentRequestedCsfTimePercent = appointmentRequestedCsfTimePercent;
 	}
 
@@ -358,7 +359,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @return - Returns the appointmentTotalIntendedFteQuantity
 	 * 
 	 */
-	public Integer getAppointmentTotalIntendedFteQuantity() { 
+	public BigDecimal getAppointmentTotalIntendedFteQuantity() { 
 		return appointmentTotalIntendedFteQuantity;
 	}
 
@@ -368,7 +369,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @param - appointmentTotalIntendedFteQuantity The appointmentTotalIntendedFteQuantity to set.
 	 * 
 	 */
-	public void setAppointmentTotalIntendedFteQuantity(Integer appointmentTotalIntendedFteQuantity) {
+	public void setAppointmentTotalIntendedFteQuantity(BigDecimal appointmentTotalIntendedFteQuantity) {
 		this.appointmentTotalIntendedFteQuantity = appointmentTotalIntendedFteQuantity;
 	}
 
@@ -400,7 +401,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @return - Returns the appointmentRequestedTimePercent
 	 * 
 	 */
-	public Integer getAppointmentRequestedTimePercent() { 
+	public BigDecimal getAppointmentRequestedTimePercent() { 
 		return appointmentRequestedTimePercent;
 	}
 
@@ -410,7 +411,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @param - appointmentRequestedTimePercent The appointmentRequestedTimePercent to set.
 	 * 
 	 */
-	public void setAppointmentRequestedTimePercent(Integer appointmentRequestedTimePercent) {
+	public void setAppointmentRequestedTimePercent(BigDecimal appointmentRequestedTimePercent) {
 		this.appointmentRequestedTimePercent = appointmentRequestedTimePercent;
 	}
 
@@ -421,7 +422,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @return - Returns the appointmentRequestedFteQuantity
 	 * 
 	 */
-	public Integer getAppointmentRequestedFteQuantity() { 
+	public BigDecimal getAppointmentRequestedFteQuantity() { 
 		return appointmentRequestedFteQuantity;
 	}
 
@@ -431,7 +432,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
 	 * 
 	 */
-	public void setAppointmentRequestedFteQuantity(Integer appointmentRequestedFteQuantity) {
+	public void setAppointmentRequestedFteQuantity(BigDecimal appointmentRequestedFteQuantity) {
 		this.appointmentRequestedFteQuantity = appointmentRequestedFteQuantity;
 	}
 
@@ -442,7 +443,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @return - Returns the appointmentRequestedPayRate
 	 * 
 	 */
-	public Integer getAppointmentRequestedPayRate() { 
+	public BigDecimal getAppointmentRequestedPayRate() { 
 		return appointmentRequestedPayRate;
 	}
 
@@ -452,7 +453,7 @@ public class BudgetConstructionAppointmentFundingLoad01Move extends BusinessObje
 	 * @param - appointmentRequestedPayRate The appointmentRequestedPayRate to set.
 	 * 
 	 */
-	public void setAppointmentRequestedPayRate(Integer appointmentRequestedPayRate) {
+	public void setAppointmentRequestedPayRate(BigDecimal appointmentRequestedPayRate) {
 		this.appointmentRequestedPayRate = appointmentRequestedPayRate;
 	}
 

@@ -25,6 +25,7 @@
 
 package org.kuali.module.budget.bo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
@@ -55,12 +56,12 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	private String financialSubObjectCode;
 	private String financialConsolidationSortCode;
 	private String financialObjectLevelCode;
-	private Integer appointmentRequestedFteQuantity;
-	private Integer appointmentRequestedCsfFteQuantity;
-	private Integer positionFullTimeEquivalencyQuantity;
+	private BigDecimal appointmentRequestedFteQuantity;
+	private BigDecimal appointmentRequestedCsfFteQuantity;
+	private BigDecimal positionFullTimeEquivalencyQuantity;
 	private KualiDecimal financialBeginningBalanceLineAmount;
 	private KualiDecimal accountLineAnnualBalanceAmount;
-	private Integer positionCsfLeaveFteQuantity;
+	private BigDecimal positionCsfLeaveFteQuantity;
 
     private Chart organizationChartOfAccounts;
 	private Org organization;
@@ -377,7 +378,7 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	 * @return - Returns the appointmentRequestedFteQuantity
 	 * 
 	 */
-	public Integer getAppointmentRequestedFteQuantity() { 
+	public BigDecimal getAppointmentRequestedFteQuantity() { 
 		return appointmentRequestedFteQuantity;
 	}
 
@@ -387,7 +388,7 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
 	 * 
 	 */
-	public void setAppointmentRequestedFteQuantity(Integer appointmentRequestedFteQuantity) {
+	public void setAppointmentRequestedFteQuantity(BigDecimal appointmentRequestedFteQuantity) {
 		this.appointmentRequestedFteQuantity = appointmentRequestedFteQuantity;
 	}
 
@@ -398,7 +399,7 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	 * @return - Returns the appointmentRequestedCsfFteQuantity
 	 * 
 	 */
-	public Integer getAppointmentRequestedCsfFteQuantity() { 
+	public BigDecimal getAppointmentRequestedCsfFteQuantity() { 
 		return appointmentRequestedCsfFteQuantity;
 	}
 
@@ -408,7 +409,7 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	 * @param - appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
 	 * 
 	 */
-	public void setAppointmentRequestedCsfFteQuantity(Integer appointmentRequestedCsfFteQuantity) {
+	public void setAppointmentRequestedCsfFteQuantity(BigDecimal appointmentRequestedCsfFteQuantity) {
 		this.appointmentRequestedCsfFteQuantity = appointmentRequestedCsfFteQuantity;
 	}
 
@@ -419,7 +420,7 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	 * @return - Returns the positionFullTimeEquivalencyQuantity
 	 * 
 	 */
-	public Integer getPositionFullTimeEquivalencyQuantity() { 
+	public BigDecimal getPositionFullTimeEquivalencyQuantity() { 
 		return positionFullTimeEquivalencyQuantity;
 	}
 
@@ -429,7 +430,7 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	 * @param - positionFullTimeEquivalencyQuantity The positionFullTimeEquivalencyQuantity to set.
 	 * 
 	 */
-	public void setPositionFullTimeEquivalencyQuantity(Integer positionFullTimeEquivalencyQuantity) {
+	public void setPositionFullTimeEquivalencyQuantity(BigDecimal positionFullTimeEquivalencyQuantity) {
 		this.positionFullTimeEquivalencyQuantity = positionFullTimeEquivalencyQuantity;
 	}
 
@@ -482,7 +483,7 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	 * @return - Returns the positionCsfLeaveFteQuantity
 	 * 
 	 */
-	public Integer getPositionCsfLeaveFteQuantity() { 
+	public BigDecimal getPositionCsfLeaveFteQuantity() { 
 		return positionCsfLeaveFteQuantity;
 	}
 
@@ -492,7 +493,7 @@ public class BudgetConstructionAccountBalance extends BusinessObjectBase {
 	 * @param - positionCsfLeaveFteQuantity The positionCsfLeaveFteQuantity to set.
 	 * 
 	 */
-	public void setPositionCsfLeaveFteQuantity(Integer positionCsfLeaveFteQuantity) {
+	public void setPositionCsfLeaveFteQuantity(BigDecimal positionCsfLeaveFteQuantity) {
 		this.positionCsfLeaveFteQuantity = positionCsfLeaveFteQuantity;
 	}
 

@@ -25,6 +25,7 @@
 
 package org.kuali.module.budget.bo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
@@ -52,10 +53,10 @@ public class BudgetConstructionLevelSummary extends BusinessObjectBase {
 	private KualiDecimal financialBeginningBalanceLineAmount;
 	private String financialConsolidationObjectCode;
 	private String financialObjectLevelCode;
-	private Integer appointmentRequestedCsfFteQuantity;
-	private Integer appointmentRequestedFteQuantity;
-	private Integer csfFullTimeEmploymentQuantity;
-	private Integer positionCsfLeaveFteQuantity;
+	private BigDecimal appointmentRequestedCsfFteQuantity;
+	private BigDecimal appointmentRequestedFteQuantity;
+	private BigDecimal csfFullTimeEmploymentQuantity;
+	private BigDecimal positionCsfLeaveFteQuantity;
 
     private Chart organizationChartOfAccounts;
 	private Org organization;
@@ -329,7 +330,7 @@ public class BudgetConstructionLevelSummary extends BusinessObjectBase {
 	 * @return - Returns the appointmentRequestedCsfFteQuantity
 	 * 
 	 */
-	public Integer getAppointmentRequestedCsfFteQuantity() { 
+	public BigDecimal getAppointmentRequestedCsfFteQuantity() { 
 		return appointmentRequestedCsfFteQuantity;
 	}
 
@@ -339,7 +340,7 @@ public class BudgetConstructionLevelSummary extends BusinessObjectBase {
 	 * @param - appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
 	 * 
 	 */
-	public void setAppointmentRequestedCsfFteQuantity(Integer appointmentRequestedCsfFteQuantity) {
+	public void setAppointmentRequestedCsfFteQuantity(BigDecimal appointmentRequestedCsfFteQuantity) {
 		this.appointmentRequestedCsfFteQuantity = appointmentRequestedCsfFteQuantity;
 	}
 
@@ -350,7 +351,7 @@ public class BudgetConstructionLevelSummary extends BusinessObjectBase {
 	 * @return - Returns the appointmentRequestedFteQuantity
 	 * 
 	 */
-	public Integer getAppointmentRequestedFteQuantity() { 
+	public BigDecimal getAppointmentRequestedFteQuantity() { 
 		return appointmentRequestedFteQuantity;
 	}
 
@@ -360,7 +361,7 @@ public class BudgetConstructionLevelSummary extends BusinessObjectBase {
 	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
 	 * 
 	 */
-	public void setAppointmentRequestedFteQuantity(Integer appointmentRequestedFteQuantity) {
+	public void setAppointmentRequestedFteQuantity(BigDecimal appointmentRequestedFteQuantity) {
 		this.appointmentRequestedFteQuantity = appointmentRequestedFteQuantity;
 	}
 
@@ -371,7 +372,7 @@ public class BudgetConstructionLevelSummary extends BusinessObjectBase {
 	 * @return - Returns the csfFullTimeEmploymentQuantity
 	 * 
 	 */
-	public Integer getCsfFullTimeEmploymentQuantity() { 
+	public BigDecimal getCsfFullTimeEmploymentQuantity() { 
 		return csfFullTimeEmploymentQuantity;
 	}
 
@@ -381,7 +382,7 @@ public class BudgetConstructionLevelSummary extends BusinessObjectBase {
 	 * @param - csfFullTimeEmploymentQuantity The csfFullTimeEmploymentQuantity to set.
 	 * 
 	 */
-	public void setCsfFullTimeEmploymentQuantity(Integer csfFullTimeEmploymentQuantity) {
+	public void setCsfFullTimeEmploymentQuantity(BigDecimal csfFullTimeEmploymentQuantity) {
 		this.csfFullTimeEmploymentQuantity = csfFullTimeEmploymentQuantity;
 	}
 
@@ -392,7 +393,7 @@ public class BudgetConstructionLevelSummary extends BusinessObjectBase {
 	 * @return - Returns the positionCsfLeaveFteQuantity
 	 * 
 	 */
-	public Integer getPositionCsfLeaveFteQuantity() { 
+	public BigDecimal getPositionCsfLeaveFteQuantity() { 
 		return positionCsfLeaveFteQuantity;
 	}
 
@@ -402,7 +403,7 @@ public class BudgetConstructionLevelSummary extends BusinessObjectBase {
 	 * @param - positionCsfLeaveFteQuantity The positionCsfLeaveFteQuantity to set.
 	 * 
 	 */
-	public void setPositionCsfLeaveFteQuantity(Integer positionCsfLeaveFteQuantity) {
+	public void setPositionCsfLeaveFteQuantity(BigDecimal positionCsfLeaveFteQuantity) {
 		this.positionCsfLeaveFteQuantity = positionCsfLeaveFteQuantity;
 	}
 
