@@ -59,12 +59,12 @@
                 <description>purchaseOrderQuoteListIdentifier description...</description>
 			</attribute>
 
-            <attribute name="purchaseOrderQuoteListName" forceUppercase="true">
+            <attribute name="purchaseOrderQuoteListName" forceUppercase="false">
                 <label>Purchase Order Quote List Name</label>
                 <shortLabel>Name</shortLabel>
 
                 <maxLength>100</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
 
                 <control>
                     <text size="102" />
