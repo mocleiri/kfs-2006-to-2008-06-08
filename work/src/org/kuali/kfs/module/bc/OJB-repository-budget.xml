@@ -1114,9 +1114,9 @@
 	<field-descriptor name="subAccountNumber" column="SUB_ACCT_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="universityFiscalYear" column="UNIV_FISCAL_YR" jdbc-type="INTEGER" primarykey="true" index="true"/>
-	<field-descriptor name="fill1" column="FILL1" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+	<field-descriptor name="fill1" column="FILL1" jdbc-type="VARCHAR"/>
 	<field-descriptor name="fill2" column="FILL2" jdbc-type="VARCHAR"/>
 	<field-descriptor name="fill3" column="FILL3" jdbc-type="VARCHAR"/>
 	<field-descriptor name="fill4" column="FILL4" jdbc-type="VARCHAR"/>
