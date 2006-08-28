@@ -24,7 +24,10 @@
 		<table cellpadding=0  summary="view/edit ad hoc recipients">
 			<tbody>
 				<tr>
-					<td colspan=5 class="subhead"><span class="subhead-left"> Template</span> <span class="subhead-right"></span></td>
+					<td colspan=5 class="subhead">
+						<span class="subhead-left"> Template</span> 
+						<span class="subhead-right"><kul:help securityGroupName="${KraConstants.KRA_ADMIN_GROUP_NAME}" parameterName="${KraConstants.BUDGET_TEMPLATE_HELP_PARAMETER_NAME}" altText="help"/></span>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="5"  scope=col>
