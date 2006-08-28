@@ -31,7 +31,7 @@ public class PurapKeyConstants {
 
     public static final String PURAP_GENERAL_POTENTIAL_DUPLICATE = "error.document.purap.potentialDuplicate";
     
-    // Vendor Maintenance
+    //Vendor Maintenance
     public static final String ERROR_OWNERSHIP_REQUIRES_TAX_NUMBER = "error.vendorMaint.OwnershipRequiresTaxNumber";
     public static final String ERROR_VENDOR_TAX_TYPE_AND_NUMBER_COMBO_EXISTS = "error.vendorMaint.addVendor.vendor.exists";
     public static final String ERROR_VENDOR_NAME_REQUIRED = "error.vendorMaint.vendorName.required";
@@ -41,6 +41,18 @@ public class PurapKeyConstants {
     public static final String ERROR_VENDOR_MAX_MIN_ORDER_AMOUNT = "error.vendorMaint.minimumAmt.invalid";
     public static final String ERROR_VENDOR_TAX_TYPE_CANNOT_BE_BLANK = "error.vendorMaint.tax.type.cannot.be.blank";
     public static final String ERROR_VENDOR_TAX_TYPE_CANNOT_BE_SET = "error.vendorMaint.tax.type.cannot.be.set";
+    
+    //Vendor Lookup
+    public static final String ERROR_VENDOR_LOOKUP_FEWER_THAN_MIN_CRITERIA = "error.vendorLookup.min.criteria.fewer";
+    public static final String ERROR_VENDOR_LOOKUP_PAYEE_ID_WRONG_LENGTH = "error.vendorLookup.payeeId.wrong.length";
+    public static final String ERROR_VENDOR_LOOKUP_PAYEE_ID_NO_STARTING_P = "error.vendorLookup.payeeId.no.starting.p";
+    public static final String ERROR_VENDOR_LOOKUP_TYPE_NO_NAME = "error.vendorLookup.type.no.name";
+    public static final String ERROR_VENDOR_LOOKUP_STATUS_NO_NAME = "error.vendorLookup.status.no.name";
+    public static final String ERROR_VENDOR_LOOKUP_TAX_NUM_NONNUMERIC = "error.vendorLookup.taxNum.nonnumeric";
+    public static final String ERROR_VENDOR_LOOKUP_TAX_NUM_WRONG_LENGTH = "error.vendorLookup.taxNum.wrong.length";
+    public static final String ERROR_VENDOR_LOOKUP_TAX_NUM_ALL_ZEROES = "error.vendorLookup.taxNum.all.zeroes";
+    public static final String ERROR_VENDOR_LOOKUP_VNDR_NUM_TOO_MANY_DASHES = "error.vendorLookup.vndrNum.dashes.tooMany";
+    public static final String ERROR_VENDOR_LOOKUP_VNDR_NUM_DASHES_ONLY = "error.vendorLookujp.vndrNum.dashes.only";
     
     //Vendor Maintenance Address
     public static final String ERROR_US_REQUIRES_STATE = "error.vendorMaint.vendorAddress.USRequiresState";

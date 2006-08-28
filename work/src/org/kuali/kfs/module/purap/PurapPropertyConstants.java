@@ -29,6 +29,9 @@ package org.kuali.module.purap;
  */
 public class PurapPropertyConstants {
     
+    public static final String DATA_OBJ_MAINT_CD_ACTIVE_IND = "dataObjectMaintenanceCodeActiveIndicator";
+    
+    public static final String VENDOR_NUMBER = "vendorNumber";
     public static final String VENDOR_TAX_NUMBER = "vendorHeader.vendorTaxNumber";
     public static final String VENDOR_FAX_NUMBER = "vendorFaxNumber";
     public static final String VENDOR_ADDRESS = "vendorAddresses";
@@ -39,10 +42,13 @@ public class PurapPropertyConstants {
     public static final String VENDOR_FEIN_SSN_INDICATOR = "vendorFeinSocialSecurityNumberIndicator";
     public static final String VENDOR_TAX_NUMBER_ONLY = "vendorTaxNumber";
     public static final String VENDOR_NAME = "vendorName";
+    public static final String VENDOR_FIRST_NAME = "vendorFirstName";
+    public static final String VENDOR_LAST_NAME = "vendorLastName";
     public static final String VENDOR_TAX_TYPE_CODE = "vendorHeader.vendorTaxTypeCode";
     public static final String VENDOR_TAX_TYPE_CODE_WITHOUT_HEADER = "vendorTaxTypeCode";
     public static final String VENDOR_MIN_ORDER_AMOUNT = "vendorMinimumOrderAmount";
     public static final String VENDOR_TYPE_CODE = "vendorHeader.vendorTypeCode";
     public static final String VENDOR_DETAIL_ASSIGNED_ID = "vendorDetailAssignedIdentifier";
     public static final String VENDOR_HEADER_GENERATED_ID = "vendorHeaderGeneratedIdentifier";
+    public static final String VENDOR_LEGACY_PAYEE_ID = "vendorLegacyPayeeIdentifier";
 }
