@@ -12,8 +12,8 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="csfDeleteCode" column="POS_CSF_DELETE_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="csfAmount" column="POS_CSF_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-	<field-descriptor name="csfFullTimeEmploymentQuantity" column="POS_CSF_FTE_QTY" jdbc-type="INTEGER"/>
-	<field-descriptor name="csfTimePercent" column="POS_CSF_TM_PCT" jdbc-type="INTEGER"/>
+	<field-descriptor name="csfFullTimeEmploymentQuantity" column="POS_CSF_FTE_QTY" jdbc-type="DECIMAL"/>
+	<field-descriptor name="csfTimePercent" column="POS_CSF_TM_PCT" jdbc-type="DECIMAL"/>
 	<field-descriptor name="csfFundingStatusCode" column="POS_CSF_FNDSTAT_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="employeeRecord" column="EMPL_RCD" jdbc-type="INTEGER"/>
 	<field-descriptor name="earnCode" column="ERNCD" jdbc-type="VARCHAR"/>
