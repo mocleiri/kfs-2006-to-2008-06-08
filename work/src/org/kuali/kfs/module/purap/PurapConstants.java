@@ -31,14 +31,16 @@ import org.kuali.core.util.KualiDecimal;
  */
 public class PurapConstants {
 
-    //miscellaneous generic constants
+    //Miscellaneous generic constants
     public static final String NONE = "NONE";
     public static final String CREATE_NEW_DIVISION = "Create a New Division";
+    public static int VNDR_MIN_NUM_LOOKUP_CRITERIA = 1;
+    public static int VNDR_LEGACY_PAYEE_ID_LENGTH = 10;
     
     //Vendor Tax Types
     public static final String TAX_TYPE_FEIN = "FEIN";
     public static final String TAX_TYPE_SSN = "SSN";
-//    public static final String TAX_TYPE_ITIN = "ITIN";  //are we implementing this in Kuali??
+    //public static final String TAX_TYPE_ITIN = "ITIN";  //are we implementing this in Kuali??
     
     public static final String PURCHASE_ORDER = "PO";
     public static final String REMIT = "RM";
@@ -56,7 +58,7 @@ public class PurapConstants {
     };
     public static final int GENERIC_DEFAULT_PHONE_NUM_DIGITS = 10;
       
-    // Tax Number formats as  regular expressions
+    //Tax Number formats as  regular expressions
     public static final String TAX_NUM_FORMAT_1 = "\\d{3}\\d{2}\\d{4}";
     public static final String TAX_NUM_FORMAT_2 = "\\d{3}-\\d{2}-\\d{4}";
     
@@ -67,10 +69,12 @@ public class PurapConstants {
     
     public static final int DEFAULT_TAX_NUM_DIGITS = 9;
     public static final String NOT_ALLOWED_TAX_NUMBER = "356001673";
+    public static final String ALL_ZEROS_TAX_NUMBER = "000000000";
     
     public static final KualiDecimal VENDOR_MIN_ORDER_AMOUNT = new KualiDecimal(100000);
     
-    //  Payment Terms  Types
+    //Payment Terms  Types
     public static final String PAYMENT_TERMS_TYPE_DAYS = "Days";
     public static final String PAYMENT_TERMS_TYPE_DATE = "Date";
+    
 }
