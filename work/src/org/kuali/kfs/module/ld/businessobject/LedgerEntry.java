@@ -119,7 +119,8 @@ public class LedgerEntry extends BusinessObjectBase {
     private OriginationCode referenceOriginationCode;
     private ProjectCode project;
     private DocumentHeader documentHeader;
-   
+    private CalculatedSalaryFoundationCompany company;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -1447,6 +1448,23 @@ public class LedgerEntry extends BusinessObjectBase {
         this.subAccount = subAccount;
     }
 
+    /**
+     * Gets the company attribute. 
+     * @return Returns the company.
+     */
+    public CalculatedSalaryFoundationCompany getCompany() {
+        return company;
+    }
+
+    /**
+     * Sets the company attribute value.
+     * @param company The company to set.
+     * @deprecated
+     */
+    public void setCompany(CalculatedSalaryFoundationCompany company) {
+        this.company = company;
+    }    
+    
     /**
      * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */

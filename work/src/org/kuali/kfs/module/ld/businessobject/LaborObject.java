@@ -47,7 +47,8 @@ public class LaborObject extends BusinessObjectBase {
 
     private ObjectCode financialObject;
 	private Chart chartOfAccounts;
-
+    private PositionObjectGroup positionObjectGroup;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -265,16 +266,34 @@ public class LaborObject extends BusinessObjectBase {
 		this.chartOfAccounts = chartOfAccounts;
 	}
 
-	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
+    /**
+     * Gets the positionObjectGroup attribute. 
+     * @return Returns the positionObjectGroup.
+     */
+    public PositionObjectGroup getPositionObjectGroup() {
+        return positionObjectGroup;
+    }
+
+    /**
+     * Sets the positionObjectGroup attribute value.
+     * @param positionObjectGroup The positionObjectGroup to set.
+     * @deprecated
+     */
+    public void setPositionObjectGroup(PositionObjectGroup positionObjectGroup) {
+        this.positionObjectGroup = positionObjectGroup;
+    }
+
+    /**
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }
         m.put("chartOfAccountsCode", this.chartOfAccountsCode);
         m.put("financialObjectCode", this.financialObjectCode);
-	    return m;
-    }
+        return m;
+    }    
+
 }
