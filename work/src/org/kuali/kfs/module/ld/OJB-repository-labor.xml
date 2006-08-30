@@ -409,6 +409,9 @@
     <reference-descriptor name="documentHeader" class-ref="org.kuali.core.document.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="financialDocumentNumber" />
     </reference-descriptor>
+    <reference-descriptor name="company" class-ref="org.kuali.module.labor.bo.CalculatedSalaryFoundationCompany" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="hrmsCompany" />
+    </reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.labor.bo.LedgerBalance" table="LD_LDGR_BAL_T">
@@ -527,4 +530,43 @@
 	<reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="chartOfAccountsCode" />
 	</reference-descriptor>
+	<reference-descriptor name="positionObjectGroup" class-ref="org.kuali.module.labor.bo.PositionObjectGroup" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="positionObjectGroupCode" />
+	</reference-descriptor>
+</class-descriptor>
+
+<class-descriptor class="org.kuali.module.labor.bo.CalculatedSalaryFoundationAction" table="LD_CSF_ACTION_T">
+	<field-descriptor name="action" column="ACTION" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="actionReason" column="ACTION_REASON" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
+	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+	<field-descriptor name="csfFundingStatusCode" column="POS_CSF_FNDSTAT_CD" jdbc-type="VARCHAR"/>
+</class-descriptor>
+
+<class-descriptor class="org.kuali.module.labor.bo.CalculatedSalaryFoundationCompany" table="LD_CSF_COMPANY_T">
+	<field-descriptor name="hrmsCompany" column="COMPANY" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
+	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+</class-descriptor>
+
+<class-descriptor class="org.kuali.module.labor.bo.CalculatedSalaryFoundationEarnCode" table="LD_CSF_ERNCD_T">
+	<field-descriptor name="payGroup" column="PAYGROUP" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="effectiveDate" column="EFFDT" jdbc-type="DATE" primarykey="true" index="true"/>
+	<field-descriptor name="hrmsCompany" column="COMPANY" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
+	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+	<field-descriptor name="earnCodeRegularEarnings" column="ERNCD_REG_EARNS" jdbc-type="VARCHAR"/>
+	<field-descriptor name="description" column="DESCR" jdbc-type="VARCHAR"/>
+	<field-descriptor name="csfEligibleFlag" column="CSF_ELIGIBLE_FLAG" jdbc-type="VARCHAR"/>
+    <reference-descriptor name="company" class-ref="org.kuali.module.labor.bo.CalculatedSalaryFoundationCompany" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="hrmsCompany" />
+    </reference-descriptor>
+</class-descriptor>
+
+<class-descriptor class="org.kuali.module.labor.bo.PositionObjectGroup" table="LD_POS_OBJ_GRP_T">
+	<field-descriptor name="positionObjectGroupCode" column="POS_OBJ_GRP_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
+	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
+	<field-descriptor name="positionObjectGroupName" column="POS_OBJ_GRP_NM" jdbc-type="VARCHAR"/>
+	<field-descriptor name="rowActiveIndicator" column="ROW_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
