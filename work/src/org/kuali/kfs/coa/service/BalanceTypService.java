@@ -49,6 +49,13 @@ public interface BalanceTypService {
     public Collection getAllBalanceTyps();
 
     /**
+     * Get encumbrance balance TYPES
+     * 
+     * @return
+     */
+    public Collection getEncumbranceBalanceTypes();
+
+    /**
      * This method retrieves a BalanceTyp instance from the Kuali database by its primary key - the balance typ's code.
      * 
      * @param code The primary key in the database for this data type.
