@@ -290,6 +290,22 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * Checks whether the account restricted status code is the default from the sub fund group.
+     * 
+     * @param account
+     * @return
+     */
+    protected boolean hasDefaultRestrictedStatusCode( Account account ) {
+        boolean result = false;
+        
+        if (StringUtils.isNotBlank(account.getAccountRestrictedStatusCode())) {
+            result = account.getAccountRestrictedStatusCode().equals( account.getSubFundGroup().getAccountRestrictedStatusCode() );
+        }
+        
+        return result;
+    }
+    
+    /**
      * 
      * This method checks some of the general business rules associated with this document
      * 
@@ -765,7 +781,8 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         // the acct_expiration_dt must be changed to a date that is today or later
         if (maintenanceDocument.isNew() && ObjectUtils.isNotNull(newExpDate)) {          
             if (!newExpDate.after(today) && !newExpDate.equals(today)) {
-                putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER);
+                putFieldError("accountExpirationDate", KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER);
+                // putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER);
                 success &= false;
             }         
         }
@@ -774,7 +791,8 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         Timestamp effectiveDate = newAccount.getAccountEffectiveDate();
         if (ObjectUtils.isNotNull(effectiveDate) && ObjectUtils.isNotNull(newExpDate)) {
             if (newExpDate.before(effectiveDate)) {
-                putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_CANNOT_BE_BEFORE_EFFECTIVE_DATE);
+                putFieldError("accountExpirationDate", KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_CANNOT_BE_BEFORE_EFFECTIVE_DATE);
+                // putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_CANNOT_BE_BEFORE_EFFECTIVE_DATE);
                 success &= false;
             }
         }
@@ -853,35 +871,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             }
             if (StringUtils.isNotBlank(newAccount.getAccountRestrictedStatusCode())) {
                 restrictedStatusCode = newAccount.getAccountRestrictedStatusCode().trim();
-            }
-
-            if (ObjectUtils.isNotNull(restrictedStatusCode)) {
-                // on the account screen, if the fund group of the account is CG (contracts & grants) or
-                // RF (restricted funds), the restricted status code must be 'R'.
-                if (fundGroupCode.equalsIgnoreCase(CONTRACTS_GRANTS_CD) || fundGroupCode.equalsIgnoreCase(RESTRICTED_FUND_CD)) {
-                    if (!restrictedStatusCode.equalsIgnoreCase(RESTRICTED_CD_RESTRICTED)) {
-                        putFieldError("accountRestrictedStatusCode", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_RESTRICTED_STATUS_CD_MUST_BE_R);
-                        success &= false;
-                    }
-                }
-
-                // If the fund group is EN (endowment) or PF (plant fund) the value is not set by the system and
-                // must be set by the user
-                else if (fundGroupCode.equalsIgnoreCase(ENDOWMENT_FUND_CD) || fundGroupCode.equalsIgnoreCase(PLANT_FUND_CD)) {
-                    if (StringUtils.isBlank(restrictedStatusCode) || (!restrictedStatusCode.equalsIgnoreCase(RESTRICTED_CD_RESTRICTED) && !restrictedStatusCode.equalsIgnoreCase(RESTRICTED_CD_UNRESTRICTED))) {
-
-                        putFieldError("accountRestrictedStatusCode", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_RESTRICTED_STATUS_CD_MUST_BE_U_OR_R);
-                        success &= false;
-                    }
-                }
-
-                // for all other fund groups the value is set to 'U'. R being restricted,U being unrestricted.
-                else {
-                    if (!restrictedStatusCode.equalsIgnoreCase(RESTRICTED_CD_UNRESTRICTED)) {
-                        putFieldError("accountRestrictedStatusCode", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_RESTRICTED_STATUS_CD_MUST_BE_U);
-                        success &= false;
-                    }
-                }
             }
 
             // an account in the general fund fund group cannot have a budget recording level of mixed.
