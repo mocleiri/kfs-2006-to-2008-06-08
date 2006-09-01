@@ -54,7 +54,6 @@ import org.displaytag.tags.TableTagParameters;
 import org.displaytag.util.ParamEncoder;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
-import org.kuali.core.dao.DocumentDao;
 import org.kuali.core.lookup.keyvalues.OEGDateComparator;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.LookupService;
@@ -78,11 +77,10 @@ import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.web.struts.form.CorrectionForm;
 
 import edu.iu.uis.eden.clientapp.IDocHandler;
-import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.12.2.3.2.4 2006-08-25 20:55:27 hstaplet Exp $
+ * @version $Id: CorrectionAction.java,v 1.12.2.3.2.5 2006-09-01 21:31:39 tdurkin Exp $
  * 
  */
 
@@ -136,8 +134,16 @@ public class CorrectionAction extends KualiDocumentActionBase {
             
             Object displayTablePageNumber = GlobalVariables.getUserSession().retrieveObject(Constants.DISPLAY_TABLE_PAGE_NUMBER);
             Object displayTableColumnNumber = GlobalVariables.getUserSession().retrieveObject(Constants.DISPLAY_TABLE_COLUMN_NUMBER); 
-            request.setAttribute("displayTablePageNumber", displayTablePageNumber);
-            request.setAttribute("displayTableColumnNumber", displayTableColumnNumber);
+            
+            if (displayTablePageNumber != null){
+                request.setAttribute("displayTablePageNumber", displayTablePageNumber.toString());
+            }
+            
+            
+            if (displayTableColumnNumber !=null){
+                request.setAttribute("displayTableColumnNumber", displayTableColumnNumber.toString());
+            }
+            
             
             
         return super.execute(mapping, form, request, response);
@@ -150,27 +156,46 @@ public class CorrectionAction extends KualiDocumentActionBase {
         java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
         OriginEntryGroup newOriginEntryGroup = originEntryGroupService.createGroup(today, "GLCP", false, false, false);
         
-
+        
         FormFile sourceFile = errorCorrectionForm.getSourceFile();
-        Object fileNameObject = sourceFile.getFileName();
-        GlobalVariables.getUserSession().addObject("fileName", fileNameObject);
+        String curDir = System.getProperty("user.dir");
+        String lowerCaseFileName = StringUtils.lowerCase(sourceFile.getFileName());
+        //sourceFile.setFileName(lowerCaseFileName);
+        //fullFileName has file path
+        String fullFileName = curDir + " - " + sourceFile.getFileName(); 
+        Object fullFileNameObject = (Object) fullFileName;
+        
+
+        sourceFile.getInputStream();
+        
+        GlobalVariables.getUserSession().addObject("fileName", fullFileNameObject);
+        //CommonsMultipartRequestHandler.CommonsFormFile test = (CommonsMultipartRequestHandler.CommonsFormFile) sourceFile;
+        //CommonsMultipartRequestHandler test = (CommonsMultipartRequestHandler) sourceFile;
+        
         
         /*DiskFile test = (DiskFile) sourceFile;
         String filePath = test.getFilePath();*/
 
         BufferedReader br = new BufferedReader(new InputStreamReader(sourceFile.getInputStream()));
         OriginEntry entryFromFile = new OriginEntry();
-
+        int lineNumber = 0;
         try {
             String currentLine = br.readLine();
             while (currentLine != null ) {
-                
+                lineNumber += 1;
                 if (!currentLine.equals("")){
-                    entryFromFile.setFromTextFile(currentLine);
-
-                    entryFromFile.setEntryGroupId(newOriginEntryGroup.getId());
-                    originEntryService.createEntry(entryFromFile, newOriginEntryGroup);
+                    
+                    try{
+                        entryFromFile.setFromTextFile(currentLine, lineNumber);
+                        entryFromFile.setEntryGroupId(newOriginEntryGroup.getId());
+                        originEntryService.createEntry(entryFromFile, newOriginEntryGroup);
+                    } catch (NumberFormatException e){
+                        
+                    } 
+                    
+                    
                 }
+                
                 currentLine = br.readLine();
             }
         }
@@ -487,15 +512,15 @@ public class CorrectionAction extends KualiDocumentActionBase {
         document.setCorrectionCreditTotalAmount(tempTotalCredits);
         document.setCorrectionRowCount(resultCorrectionList.size());
         
-        
+        document.setCorrectionInputFileName(groupId[0].toString());
         document.setCorrectionOutputFileName(newOriginEntryGroup.getId().toString());
         document.setCorrectionTypeCode("C");
         //Store in DB CorrectionChange, CorrectionChangeGroup, CorrectionCriteria
         storeCorrectionGroup(document);
         
-        errorCorrectionForm.setTotalDebitsOrBlanks(tempTotalDebitsOrBlanks);
-        errorCorrectionForm.setTotalCredits(tempTotalCredits);
-        errorCorrectionForm.setRowsOutput(resultCorrectionList.size());
+        document.setCorrectionDebitTotalAmount(tempTotalDebitsOrBlanks);
+        document.setCorrectionCreditTotalAmount(tempTotalCredits);
+        document.setCorrectionRowCount(resultCorrectionList.size());
         
         
     }
@@ -1081,92 +1106,8 @@ public class CorrectionAction extends KualiDocumentActionBase {
     public ActionForward editEntry(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         CorrectionForm errorCorrectionForm = (CorrectionForm) form;
         OriginEntry oe = errorCorrectionForm.getEachEntryForManualEdit();
-        OriginEntry temp = (OriginEntry) request.getAttribute("eachEntryForManualEdit");
-        /*Date convertDate;
-        int convertInt;
-
-        OriginEntry oe = new OriginEntry();
-
-        String editAccountNumber = request.getParameter("editAccountNumber");
-        String editFinancialDocumentNumber = request.getParameter("editFinancialDocumentNumber");
-        String editReferenceFinancialDocumentNumber = request.getParameter("editReferenceFinancialDocumentNumber");
-        String editReferenceFinancialDocumentTypeCode = request.getParameter("editReferenceFinancialDocumentTypeCode");
-        String editFinancialDocumentReversalDate = request.getParameter("editFinancialDocumentReversalDate");
-        String editFinancialDocumentTypeCode = request.getParameter("editFinancialDocumentTypeCode");
-        String editFinancialBalanceTypeCode = request.getParameter("editFinancialBalanceTypeCode");
-        String editChartOfAccountsCode = request.getParameter("editChartOfAccountsCode");
-        String editFinancialObjectTypeCode = request.getParameter("editFinancialObjectTypeCode");
-        String editFinancialObjectCode = request.getParameter("editFinancialObjectCode");
-        String editFinancialSubObjectCode = request.getParameter("editFinancialSubObjectCode");
-        String editFinancialSystemOriginationCode = request.getParameter("editFinancialSystemOriginationCode");
-        String editReferenceFinancialSystemOriginationCode = request.getParameter("editReferenceFinancialSystemOriginationCode");
-        String editOrganizationDocumentNumber = request.getParameter("editOrganizationDocumentNumber");
-        String editOrganizationReferenceId = request.getParameter("editOrganizationReferenceId");
-        String editProjectCode = request.getParameter("editProjectCode");
-        String editSubAccountNumber = request.getParameter("editSubAccountNumber");
-        String editTransactionDate = request.getParameter("editTransactionDate");
-        String editTransactionDebitCreditCode = request.getParameter("editTransactionDebitCreditCode");
-        String editTransactionEncumbranceUpdateCode = request.getParameter("editTransactionEncumbranceUpdateCode");
-        String editTransactionLedgerEntrySequenceNumber = request.getParameter("editTransactionLedgerEntrySequenceNumber");
-        String editTransactionLedgerEntryAmount = request.getParameter("editTransactionLedgerEntryAmount");
-        String editTransactionLedgerEntryDescription = request.getParameter("editTransactionLedgerEntryDescription");
-        String editUniversityFiscalPeriodCode = request.getParameter("editUniversityFiscalPeriodCode");
-        String editUniversityFiscalYear = request.getParameter("editUniversityFiscalYear");
-        String editBudgetYear = request.getParameter("editBudgetYear");
-
-
-        oe.setAccountNumber(editAccountNumber);
-        oe.setFinancialDocumentNumber(editFinancialDocumentNumber);
-        oe.setReferenceFinancialDocumentNumber(editReferenceFinancialDocumentNumber);
-        oe.setReferenceFinancialDocumentTypeCode(editReferenceFinancialDocumentTypeCode);
-
-        if (!(editFinancialDocumentReversalDate == null | editFinancialDocumentReversalDate.equals(""))) {
-            convertDate = SpringServiceLocator.getDateTimeService().convertToSqlDate(editFinancialDocumentReversalDate);
-            oe.setFinancialDocumentReversalDate(convertDate);
-        }
-
-        oe.setFinancialDocumentTypeCode(editFinancialDocumentTypeCode);
-        oe.setFinancialBalanceTypeCode(editFinancialBalanceTypeCode);
-        oe.setChartOfAccountsCode(editChartOfAccountsCode);
-        oe.setFinancialObjectTypeCode(editFinancialObjectTypeCode);
-        oe.setFinancialObjectCode(editFinancialObjectCode);
-        oe.setFinancialSubObjectCode(editFinancialSubObjectCode);
-        oe.setFinancialSystemOriginationCode(editFinancialSystemOriginationCode);
-        oe.setReferenceFinancialSystemOriginationCode(editReferenceFinancialSystemOriginationCode);
-        oe.setOrganizationDocumentNumber(editOrganizationDocumentNumber);
-        oe.setOrganizationReferenceId(editOrganizationReferenceId);
-        oe.setProjectCode(editProjectCode);
-        oe.setSubAccountNumber(editSubAccountNumber);
-
-        if (!(editTransactionDate == null | editTransactionDate.equals(""))) {
-            convertDate = SpringServiceLocator.getDateTimeService().convertToSqlDate(editTransactionDate);
-            oe.setTransactionDate(convertDate);
-        }
-
-        oe.setTransactionDebitCreditCode(editTransactionDebitCreditCode);
-        oe.setTransactionEncumbranceUpdateCode(editTransactionEncumbranceUpdateCode);
-
-        if (!(editTransactionLedgerEntrySequenceNumber == null | editTransactionLedgerEntrySequenceNumber.equals(""))) {
-            convertInt = Integer.parseInt(editTransactionLedgerEntrySequenceNumber);
-            oe.setTransactionLedgerEntrySequenceNumber(new Integer(convertInt));
-        }
-        if (!(editTransactionLedgerEntryAmount == null | editTransactionLedgerEntryAmount.equals(""))) {
-            oe.setTransactionLedgerEntryAmount(new KualiDecimal(editTransactionLedgerEntryAmount));
-        }
-
-        oe.setTransactionLedgerEntryDescription(editTransactionLedgerEntryDescription);
-        oe.setUniversityFiscalPeriodCode(editUniversityFiscalPeriodCode);
-
-        if (!(editUniversityFiscalYear == null | editUniversityFiscalYear.equals(""))) {
-            convertInt = Integer.parseInt(editUniversityFiscalYear);
-            oe.setUniversityFiscalYear(new Integer(convertInt));
-        }
-
-        if (!(editBudgetYear == null | editBudgetYear.equals(""))) {
-            convertInt = Integer.parseInt(editBudgetYear);
-//            oe.setBudgetYear(new Integer(convertInt));
-        }
-*/
+        //OriginEntry temp = (OriginEntry) request.getAttribute("eachEntryForManualEdit");
+      
         // set entryId
         // null id means user added a new entry.
         HttpSession session = request.getSession(true);
@@ -1385,16 +1326,20 @@ public class CorrectionAction extends KualiDocumentActionBase {
         document.setCorrectionRowCount(searchResult.size());
         
         //TODO: should be changed.....if file upload then should be changed file name(with Directory).....etc
+        
+        //'errorCorrectionForm.getGroupIdList() is null' means file upload 
+        if (errorCorrectionForm.getGroupIdList() != null){
+            String inputFileName = errorCorrectionForm.getGroupIdList()[0].toString();
+            document.setCorrectionInputFileName(inputFileName);
+        }
+        
         document.setCorrectionOutputFileName(newOriginEntryGroup.getId().toString());
         document.setCorrectionTypeCode("M");
         
+        document.setCorrectionDebitTotalAmount(tempTotalDebitsOrBlanks);
+        document.setCorrectionCreditTotalAmount(tempTotalCredits);
+        document.setCorrectionRowCount(searchResult.size());
         
-        
-        
-        errorCorrectionForm.setTotalDebitsOrBlanks(tempTotalDebitsOrBlanks);
-        errorCorrectionForm.setTotalCredits(tempTotalCredits);
-        errorCorrectionForm.setRowsOutput(searchResult.size());
-
         /*errorCorrectionForm.setEditMethod(null);
         errorCorrectionForm.setChooseSystem(null);*/
      }
@@ -1604,10 +1549,10 @@ public class CorrectionAction extends KualiDocumentActionBase {
         //Store in DB CorrectionChange, CorrectionChangeGroup, CorrectionCriteria
         storeCorrectionGroup(document);
         
-        errorCorrectionForm.setTotalDebitsOrBlanks(tempTotalDebitsOrBlanks);
-        errorCorrectionForm.setTotalCredits(tempTotalCredits);
-        errorCorrectionForm.setRowsOutput(resultCorrectionList.size());
-       
+        document.setCorrectionDebitTotalAmount(tempTotalDebitsOrBlanks);
+        document.setCorrectionCreditTotalAmount(tempTotalCredits);
+        document.setCorrectionRowCount(resultCorrectionList.size());
+        
 }
 
 
@@ -1840,9 +1785,9 @@ public class CorrectionAction extends KualiDocumentActionBase {
         document.setCorrectionCreditTotalAmount(tempTotalCredits);
         document.setCorrectionRowCount(resultCorrectionList.size());
         
-        errorCorrectionForm.setTotalDebitsOrBlanks(tempTotalDebitsOrBlanks);
-        errorCorrectionForm.setTotalCredits(tempTotalCredits);
-        errorCorrectionForm.setRowsOutput(resultCorrectionList.size());
+        document.setCorrectionDebitTotalAmount(tempTotalDebitsOrBlanks);
+        document.setCorrectionCreditTotalAmount(tempTotalCredits);
+        document.setCorrectionRowCount(resultCorrectionList.size());
         
         String searchResultKey = GlobalVariables.getUserSession().addObject(resultCorrectionList, Constants.SEARCH_LIST_KEY_PREFIX);
         request.setAttribute(Constants.SEARCH_LIST_REQUEST_KEY, searchResultKey);
@@ -1896,7 +1841,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
         //return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
-    public ActionForward showPreviousCorrectionFiles(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws WorkflowException {
+    /*public ActionForward showPreviousCorrectionFiles(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws WorkflowException {
         
         CorrectionChangeGroupDao correctionChangeGroupDao 
             = (CorrectionChangeGroupDao) SpringServiceLocator.getBeanFactory().getBean("glCorrectionChangeGroupDao");
@@ -1920,7 +1865,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
     
     return mapping.findForward(Constants.MAPPING_BASIC);
     
-    }
+    }*/
     
     
     public ActionForward confirmDeleteDocument(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
@@ -2070,9 +2015,15 @@ public class CorrectionAction extends KualiDocumentActionBase {
         
         //build errorCorrectionForm
         //CorrectionChangeGroup correctionChangeGroup;
+        if (errorCorrectionForm.getAllEntries() != null){
+            errorCorrectionForm.getAllEntries().clear();
+        }
         Integer correctionChangeGroupNextLineNumber = oldDoc.getCorrectionChangeGroupNextLineNumber();
         Integer docId = Integer.parseInt(oldDoc.getFinancialDocumentNumber());
         CorrectionDocument document = (CorrectionDocument) errorCorrectionForm.getDocument();
+        
+        errorCorrectionForm.setDocument(oldDoc);
+        
         try {
         if (oldDoc.getCorrectionTypeCode().equals("M")){
             errorCorrectionForm.setEditMethod("manual");
@@ -2103,16 +2054,12 @@ public class CorrectionAction extends KualiDocumentActionBase {
             }
         } 
         
-            errorCorrectionForm.setTotalCredits(oldDoc.getCorrectionCreditTotalAmount());
-            errorCorrectionForm.setTotalDebitsOrBlanks(oldDoc.getCorrectionDebitTotalAmount());
-            errorCorrectionForm.setRowsOutput(oldDoc.getCorrectionRowCount());
-        
-        
-        
         String[] groupId = {oldDoc.getCorrectionOutputFileName()};
         int intGroupId = 0;
         try{intGroupId = Integer.parseInt(groupId[0]);}
         catch (Exception e) {}
+        
+        
         
         OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
         if (originEntryGroupService.getExactMatchingEntryGroup(new Integer(intGroupId)) != null){
@@ -2125,9 +2072,11 @@ public class CorrectionAction extends KualiDocumentActionBase {
         document.setFinancialDocumentNumber(docId.toString());
     
         }
-     catch (Exception e){
-        
-     }
+     catch (Exception e){}
+     
+         errorCorrectionForm.setProcessInBatch(oldDoc.getCorrectionFileDeleteCode());
+         errorCorrectionForm.setMatchCriteriaOnly(oldDoc.getCorrectionSelectionCode());
+         
     }
     
     public OriginEntryGroupService getOriginEntryGroupService() {
