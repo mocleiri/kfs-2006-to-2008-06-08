@@ -22,13 +22,12 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.Constants.GL_CREDIT_CODE;
-import static org.kuali.Constants.GL_DEBIT_CODE;
-
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
@@ -357,11 +356,11 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         explicitEntry.setFinancialObjectTypeCode(OBJECT_TYPE_CODE.EXPENSE_EXPENDITURE);
         explicitEntry.setTransactionDebitCreditCode(GL_DEBIT_CODE);
 
-        if (dvDocument.getDvWireTransfer().isDisbVchrForeignBankIndicator()) {
-            explicitEntry.setTransactionLedgerEntryAmount(wireCharge.getForeignChargeAmt());
+        if (Constants.COUNTRY_CODE_UNITED_STATES.equals(dvDocument.getDvWireTransfer().getDisbVchrBankCountryCode())) {
+            explicitEntry.setTransactionLedgerEntryAmount(wireCharge.getDomesticChargeAmt());
         }
         else {
-            explicitEntry.setTransactionLedgerEntryAmount(wireCharge.getDomesticChargeAmt());
+            explicitEntry.setTransactionLedgerEntryAmount(wireCharge.getForeignChargeAmt());
         }
 
         explicitEntry.setTransactionLedgerEntryDescription("Automatic debit for wire transfer fee");
@@ -466,12 +465,14 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
             errors.putErrorWithoutFullErrorPath(Constants.GENERAL_SPECHAND_TAB_ERRORS, KeyConstants.ERROR_DV_SPECIAL_HANDLING_NOTE);
         }
 
-        /* state & zip must be given for us */
+        /* city, state & zip must be given for us */
         if (Constants.COUNTRY_CODE_UNITED_STATES.equals(document.getDvPayeeDetail().getDisbVchrPayeeCountryCode())) {
+            if (StringUtils.isBlank(document.getDvPayeeDetail().getDisbVchrPayeeStateCode())) {
+                errors.putError(PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYEE_CITY_NAME, KeyConstants.ERROR_DV_PAYEE_CITY_NAME);
+            }
             if (StringUtils.isBlank(document.getDvPayeeDetail().getDisbVchrPayeeStateCode())) {
                 errors.putError(PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYEE_STATE_CODE, KeyConstants.ERROR_DV_PAYEE_STATE_CODE);
             }
-
             if (StringUtils.isBlank(document.getDvPayeeDetail().getDisbVchrPayeeZipCode())) {
                 errors.putError(PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYEE_ZIP_CODE, KeyConstants.ERROR_DV_PAYEE_ZIP_CODE);
             }
@@ -494,11 +495,11 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         errors.addToErrorPath(PropertyConstants.DV_WIRE_TRANSFER);
         SpringServiceLocator.getDictionaryValidationService().validateBusinessObject(document.getDvWireTransfer());
 
-        if (!document.getDvWireTransfer().isDisbVchrForeignBankIndicator() && StringUtils.isBlank(document.getDvWireTransfer().getDisbVchrBankRoutingNumber())) {
+        if (Constants.COUNTRY_CODE_UNITED_STATES.equals(document.getDvWireTransfer().getDisbVchrBankCountryCode()) && StringUtils.isBlank(document.getDvWireTransfer().getDisbVchrBankRoutingNumber())) {
             errors.putError(PropertyConstants.DISB_VCHR_BANK_ROUTING_NUMBER, KeyConstants.ERROR_DV_BANK_ROUTING_NUMBER);
         }
 
-        if (!document.getDvWireTransfer().isDisbVchrForeignBankIndicator() && StringUtils.isBlank(document.getDvWireTransfer().getDisbVchrBankStateCode())) {
+        if (Constants.COUNTRY_CODE_UNITED_STATES.equals(document.getDvWireTransfer().getDisbVchrBankCountryCode()) && StringUtils.isBlank(document.getDvWireTransfer().getDisbVchrBankStateCode())) {
             errors.putError(PropertyConstants.DISB_VCHR_BANK_STATE_CODE, KeyConstants.ERROR_REQUIRED, "Bank State");
         }
 
@@ -661,15 +662,25 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
             errors.putErrorWithoutFullErrorPath(Constants.DV_CHECK_TRAVEL_TOTAL_ERROR, KeyConstants.ERROR_DV_TRAVEL_CHECK_TOTAL);
         }
         
-
         /* make sure mileage fields have not changed since the mileage amount calculation */
         if (personalVehicleSectionComplete) {
-            if (ObjectUtils.isNotNull(document.getDvNonEmployeeTravel().getDisbVchrMileageCalculatedAmt()) && ObjectUtils.isNotNull(document.getDvNonEmployeeTravel().getDisbVchrPersonalCarAmount())) {
+            KualiDecimal currentCalcAmt = document.getDvNonEmployeeTravel().getDisbVchrMileageCalculatedAmt();
+            KualiDecimal currentActualAmt = document.getDvNonEmployeeTravel().getDisbVchrPersonalCarAmount();
+            if (ObjectUtils.isNotNull(currentCalcAmt) && ObjectUtils.isNotNull(currentActualAmt)) {
                 KualiDecimal calculatedMileageAmount = SpringServiceLocator.getDisbursementVoucherTravelService().calculateMileageAmount(document.getDvNonEmployeeTravel().getDvPersonalCarMileageAmount(), document.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp());
                 if (calculatedMileageAmount.compareTo(document.getDvNonEmployeeTravel().getDisbVchrMileageCalculatedAmt()) != 0) {
                     errors.putErrorWithoutFullErrorPath(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_DV_MILEAGE_CALC_CHANGE);
                 }
-            }
+                
+                // determine if the rule is flagged off in the parm setting
+                boolean performTravelMileageLimitInd = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(DV_DOCUMENT_PARAMETERS_GROUP_NM, NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM);
+                if(performTravelMileageLimitInd) {
+                    // if actual amount is greater than calculated amount
+                    if(currentCalcAmt.subtract(currentActualAmt).isNegative()) {
+                        errors.putError(PropertyConstants.DV_PERSONAL_CAR_AMOUNT, KeyConstants.ERROR_DV_ACTUAL_MILEAGE_TOO_HIGH);
+                    }
+                }
+            }            
         }
 
         errors.removeFromErrorPath(PropertyConstants.DV_NON_EMPLOYEE_TRAVEL);
@@ -1335,44 +1346,6 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         return !(workflowDocument.stateIsCanceled() || workflowDocument.stateIsInitiated() || workflowDocument.stateIsDisapproved() || workflowDocument.stateIsException() || workflowDocument.stateIsDisapproved() || workflowDocument.stateIsSaved());
 
     }
-
-    /**
-     * 
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument,
-     *      org.kuali.core.bo.SourceAccountingLine)
-     */
-//    @Override
-//    protected SufficientFundsItem processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, SourceAccountingLine sourceAccountingLine) {
-//        SufficientFundsItem item = null;
-//        String chartOfAccountsCode = sourceAccountingLine.getChartOfAccountsCode();
-//        String accountNumber = sourceAccountingLine.getAccountNumber();
-//        String accountSufficientFundsCode = sourceAccountingLine.getAccount().getAccountSufficientFundsCode();
-//        String financialObjectCode = sourceAccountingLine.getFinancialObjectCode();
-//        String financialObjectLevelCode = sourceAccountingLine.getObjectCode().getFinancialObjectLevelCode();
-//        KualiDecimal lineAmount = sourceAccountingLine.getAmount();
-//        Integer fiscalYear = sourceAccountingLine.getPostingYear();
-//        String financialObjectTypeCode = sourceAccountingLine.getObjectTypeCode();
-//
-//        // always credit
-//        String debitCreditCode = GL_CREDIT_CODE;
-//        String sufficientFundsObjectCode = SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(sourceAccountingLine.getObjectCode(), accountSufficientFundsCode);
-//        item = buildSufficentFundsItem(accountNumber, accountSufficientFundsCode, lineAmount, chartOfAccountsCode, sufficientFundsObjectCode, debitCreditCode, financialObjectCode, financialObjectLevelCode, fiscalYear, financialObjectTypeCode);
-//
-//        return item;
-//    }
-//
-//    /**
-//     * 
-//     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument,
-//     *      org.kuali.core.bo.TargetAccountingLine)
-//     */
-//    @Override
-//    protected SufficientFundsItem processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, TargetAccountingLine targetAccountingLine) {
-//        if (targetAccountingLine != null) {
-//            throw new IllegalArgumentException("DV document doesn't have target accounting lines. This method should have never been entered");
-//        }
-//        return null;
-//    }
 
     /**
      * error corrections are not allowed
