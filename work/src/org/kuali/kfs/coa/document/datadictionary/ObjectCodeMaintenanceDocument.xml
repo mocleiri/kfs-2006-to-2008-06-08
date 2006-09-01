@@ -15,7 +15,7 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>kualiUniversalGroup</workgroup>
+                    <workgroup>KUALI_TABLE_MAINTAINERS</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
@@ -37,6 +37,7 @@
 
         <defaultExistenceChecks>
             <reference attributeName="universityFiscal" attributeToHighlightOnFail="universityFiscalYear" />
+            <reference attributeName="chartOfAccounts" attributeToHighlightOnFail="chartOfAccountsCode" />            
         </defaultExistenceChecks>
 
         <maintainableSections>
