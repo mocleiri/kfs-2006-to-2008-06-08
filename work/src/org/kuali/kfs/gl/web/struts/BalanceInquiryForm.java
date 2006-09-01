@@ -31,11 +31,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
+import org.kuali.core.lookup.LookupUtils;
 import org.kuali.core.lookup.Lookupable;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.form.LookupForm;
 import org.kuali.core.web.uidraw.Field;
 import org.kuali.core.web.uidraw.Row;
+import org.kuali.module.gl.GLConstants;
+import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
@@ -97,8 +100,8 @@ public class BalanceInquiryForm extends LookupForm {
             }
 
             // (laran) I put this here to allow the Exception to be thrown if the localLookupable is null.
-            if("org.kuali.module.gl.bo.Entry".equals(getBusinessObjectClassName())) {
-                localPendingEntryLookupable = SpringServiceLocator.getLookupable("glPendingEntryLookupableImpl");
+            if(Entry.class.getName().equals(getBusinessObjectClassName())) {
+                localPendingEntryLookupable = SpringServiceLocator.getLookupable(GLConstants.LookupableBeanKeys.PENDING_ENTRY);
             }
 
             if (request.getParameter(Constants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME) != null) {
@@ -113,11 +116,11 @@ public class BalanceInquiryForm extends LookupForm {
                 setFormKey(request.getParameter(Constants.DOC_FORM_KEY));
             }
 
-            if (request.getParameter("returnLocation") != null) {
-                setBackLocation(request.getParameter("returnLocation"));
+            if (request.getParameter(Constants.RETURN_LOCATION_PARAMETER) != null) {
+                setBackLocation(request.getParameter(Constants.RETURN_LOCATION_PARAMETER));
             }
-            if (request.getParameter("conversionFields") != null) {
-                setConversionFields(request.getParameter("conversionFields"));
+            if (request.getParameter(Constants.CONVERSION_FIELDS_PARAMETER) != null) {
+                setConversionFields(request.getParameter(Constants.CONVERSION_FIELDS_PARAMETER));
             }
             
             // init lookupable with bo class
@@ -128,6 +131,7 @@ public class BalanceInquiryForm extends LookupForm {
             
             Map fieldValues = new HashMap();
             Map formFields = getFields();
+            Class boClass = Class.forName(getBusinessObjectClassName());
             for (Iterator iter = localLookupable.getRows().iterator(); iter.hasNext();) {
                 Row row = (Row) iter.next();
 
@@ -143,6 +147,10 @@ public class BalanceInquiryForm extends LookupForm {
                     if (request.getParameter(field.getPropertyName()) != null) {
                         field.setPropertyValue(request.getParameter(field.getPropertyName()));
                     }
+
+                    //  force uppercase if necessary
+                    field.setPropertyValue(LookupUtils.forceUppercase(boClass, field.getPropertyName(), field.getPropertyValue()));
+                    
                     fieldValues.put(field.getPropertyName(), field.getPropertyValue());
                 }
             }

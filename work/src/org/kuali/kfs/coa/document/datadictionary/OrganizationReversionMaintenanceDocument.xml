@@ -7,6 +7,7 @@
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.chart.bo.OrganizationReversion</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.OrganizationReversionMaintainable</maintainableClass>
+        <businessRulesClass>org.kuali.module.chart.rules.OrganizationReversionRule</businessRulesClass>
         <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
@@ -69,7 +70,7 @@
 
            <maintainableSection title="Edit Organization Reversion Details">
                 <maintainableItems>
-                    <maintainableCollection name="organizationReversionDetail" businessObjectClass="org.kuali.module.chart.bo.OrganizationReversionDetail">
+                    <maintainableCollection name="organizationReversionDetail" businessObjectClass="org.kuali.module.chart.bo.OrganizationReversionDetail" includeAddLine="false">
                         <maintainableField name="organizationReversionCategoryCode" required="true" readOnly="true"/>
                         <maintainableField name="organizationReversionObjectCode" required="true" />
                         <maintainableField name="organizationReversionCode" required="true" />
