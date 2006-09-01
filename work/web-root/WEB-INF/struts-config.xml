@@ -73,6 +73,9 @@
         <form-bean name="CorrectionForm" type="org.kuali.module.gl.web.struts.form.CorrectionForm" />
         <form-bean name="BalanceInquiryForm" type="org.kuali.module.gl.web.struts.form.BalanceInquiryForm" />
 
+        <!-- PURAP Module Bean Definitions -->
+        <form-bean name="RequisitionForm" type="org.kuali.module.purap.web.struts.form.RequisitionForm" />
+
     </form-beans>
 
     <global-exceptions>
@@ -220,6 +223,11 @@
         <action path="/cashManagementStatus" name="CashManagementStatusForm" type="org.kuali.module.financial.web.struts.action.CashManagementStatusAction" scope="request" attribute="KualiForm">
             <forward name="basic" path="/jsp/modules/financial/CashManagementStatus.jsp" />
         </action>
+
+        <action path="/purap*" name="{1}Form" input="/jsp/modules/purap/{1}.jsp" type="org.kuali.module.purap.web.struts.action.{1}Action" scope="request" parameter="methodToCall" validate="true" attribute="KualiForm">
+            <forward name="basic" path="/jsp/modules/purap/{1}.jsp" />
+        </action>
+
     </action-mappings>
 
     <controller processorClass="org.kuali.core.web.struts.action.KualiRequestProcessor" maxFileSize="5M" />
