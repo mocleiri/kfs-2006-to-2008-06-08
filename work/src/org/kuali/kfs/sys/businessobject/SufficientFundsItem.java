@@ -44,9 +44,8 @@ public class SufficientFundsItem implements Serializable,Comparable {
     private ObjectCode financialObject;
     private ObjectType financialObjectType;
     private String sufficientFundsObjectCode;
-    private String debitCreditCode;
     private KualiDecimal amount;
-
+    private String documentTypeCode;
 
     public SufficientFundsItem() {
         amount = KualiDecimal.ZERO;
@@ -60,13 +59,12 @@ public class SufficientFundsItem implements Serializable,Comparable {
         financialObject = tran.getFinancialObject();
         financialObjectType = tran.getObjectType();
         this.sufficientFundsObjectCode = sufficientFundsObjectCode;
-        debitCreditCode = tran.getTransactionDebitCreditCode();
 
         add(tran);
     }
 
     public void add(Transaction t) {
-        if ( t.getObjectType().getFinObjectTypeDebitcreditCd().equals(debitCreditCode) ) {
+        if ( t.getObjectType().getFinObjectTypeDebitcreditCd().equals(t.getTransactionDebitCreditCode()) ) {
             amount = amount.add(t.getTransactionLedgerEntryAmount());
         } else {
             amount = amount.subtract(t.getTransactionLedgerEntryAmount());
@@ -80,6 +78,14 @@ public class SufficientFundsItem implements Serializable,Comparable {
 
     public String getKey() {
         return year.getUniversityFiscalYear() + account.getChartOfAccountsCode() + account.getAccountNumber() + financialObjectType.getCode() + sufficientFundsObjectCode;
+    }
+
+    public String getDocumentTypeCode() {
+        return documentTypeCode;
+    }
+
+    public void setDocumentTypeCode(String documentTypeCode) {
+        this.documentTypeCode = documentTypeCode;
     }
 
     public String getAccountSufficientFundsCode() {
@@ -96,7 +102,7 @@ public class SufficientFundsItem implements Serializable,Comparable {
 
     @Override
     public String toString() {
-        return year.getUniversityFiscalYear() + "-" + account.getChartOfAccountsCode() + "-" + account.getAccountNumber() + "-" + financialObject.getFinancialObjectCode() + "-" + account.getAccountSufficientFundsCode() + "-" + sufficientFundsObjectCode + "-" + debitCreditCode + "-" + amount.toString();
+        return year.getUniversityFiscalYear() + "-" + account.getChartOfAccountsCode() + "-" + account.getAccountNumber() + "-" + financialObject.getFinancialObjectCode() + "-" + account.getAccountSufficientFundsCode() + "-" + sufficientFundsObjectCode + "-" + amount.toString();
     }
 
     public Account getAccount() {
@@ -113,14 +119,6 @@ public class SufficientFundsItem implements Serializable,Comparable {
 
     public void setAmount(KualiDecimal amount) {
         this.amount = amount;
-    }
-
-    public String getDebitCreditCode() {
-        return debitCreditCode;
-    }
-
-    public void setDebitCreditCode(String debitCreditCode) {
-        this.debitCreditCode = debitCreditCode;
     }
 
     public ObjectCode getFinancialObject() {
