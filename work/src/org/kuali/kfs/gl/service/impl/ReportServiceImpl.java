@@ -28,12 +28,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.kuali.Constants;
 import org.kuali.core.bo.user.Options;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
@@ -84,14 +87,16 @@ public class ReportServiceImpl implements ReportService {
     private BalanceService balanceService;
     private OptionsService optionsService;
     private KualiConfigurationService kualiConfigurationService;
+    
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
     public ReportServiceImpl() {
         super();
     }
 
     public void init() {
-        batchReportsDirectory = kualiConfigurationService.getPropertyString("batch.reports.directory");
-        onlineReportsDirectory = kualiConfigurationService.getPropertyString("online.reports.directory");        
+        batchReportsDirectory = kualiConfigurationService.getPropertyString(Constants.BATCH_REPORTS_DIRECTORY);
+        onlineReportsDirectory = kualiConfigurationService.getPropertyString(Constants.ONLINE_REPORTS_DIRECTORY);        
     }
 
     /**
@@ -116,7 +121,7 @@ public class ReportServiceImpl implements ReportService {
 
         try {
             String filename = batchReportsDirectory + "/" + fileprefix + "_";
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            
             filename = filename + sdf.format(runDate);
             filename = filename + ".pdf";
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
@@ -327,10 +332,36 @@ public class ReportServiceImpl implements ReportService {
     public void generateBatchScrubberStatisticsReport(Date runDate, ScrubberReportData scrubberReport, Map<Transaction,List<Message>> scrubberReportErrors) {
         LOG.debug("generateScrubberStatisticsReport() started");
 
+        List tranKeys = new ArrayList();
+        tranKeys.addAll(scrubberReportErrors.keySet());
+
+        Collections.sort(tranKeys,new Comparator<Transaction>() {
+            public int compare(Transaction t1,Transaction t2) {
+                StringBuffer sb1 = new StringBuffer();
+                sb1.append(t1.getFinancialDocumentTypeCode());
+                sb1.append(t1.getFinancialSystemOriginationCode());
+                sb1.append(t1.getFinancialDocumentNumber());
+                sb1.append(t1.getChartOfAccountsCode());
+                sb1.append(t1.getAccountNumber());
+                sb1.append(t1.getSubAccountNumber());
+                sb1.append(t1.getFinancialBalanceTypeCode());
+
+                StringBuffer sb2 = new StringBuffer();
+                sb2.append(t2.getFinancialDocumentTypeCode());
+                sb2.append(t2.getFinancialSystemOriginationCode());
+                sb2.append(t2.getFinancialDocumentNumber());
+                sb2.append(t2.getChartOfAccountsCode());
+                sb2.append(t2.getAccountNumber());
+                sb2.append(t2.getSubAccountNumber());
+                sb2.append(t2.getFinancialBalanceTypeCode());
+                return sb1.toString().compareTo(sb2.toString());
+            }
+        });
+
         List summary = buildScrubberReportSummary(scrubberReport);
         
         TransactionReport transactionReport = new TransactionReport();
-        transactionReport.generateReport(scrubberReportErrors, summary, runDate, "Scrubber Report ", "scrubber", batchReportsDirectory);
+        transactionReport.generateReport(tranKeys,scrubberReportErrors, summary, runDate, "Scrubber Report ", "scrubber", batchReportsDirectory);
     }
 
     /**
