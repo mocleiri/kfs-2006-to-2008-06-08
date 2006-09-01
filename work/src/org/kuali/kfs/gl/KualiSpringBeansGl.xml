@@ -309,15 +309,18 @@
 		</property>
 	</bean>	
 
-	<bean id="glCollectorFileParser" class="org.kuali.module.gl.collector.xml.impl.CollectorFileParserImpl">
-    </bean>	
+	<bean id="glCollectorFileParser" class="org.kuali.module.gl.collector.xml.impl.CollectorFileParserImpl"></bean>
 
     <bean id="glMailService" class="org.kuali.core.service.impl.MailServiceImpl">
-        <property name="mailSender"><ref bean="glMailSender"/></property>
+		<property name="mailSender">
+			<ref bean="glMailSender" />
+		</property>
     </bean>
 
     <bean id="glMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host"><value>mail.rsmart.com</value></property>
+		<property name="host">
+			<value>mail.rsmart.com</value>
+		</property>
     </bean>
 
 	<bean id="glCollectorService" class="org.kuali.module.gl.service.impl.CollectorServiceImpl">
@@ -350,8 +353,6 @@
             <ref bean="kualiConfigurationService" />
         </property>
     </bean>
-
-    <bean id="glC12OrganizationReversionCategory" class="org.kuali.module.gl.service.impl.orgreversion.CustomOrganizationReversionCategory" />
 
     <bean id="glEncumbranceClosingRuleHelper" class="org.kuali.module.gl.batch.closing.year.service.impl.helper.EncumbranceClosingRuleHelper">
         <property name="a21SubAccountService">
@@ -725,6 +726,9 @@
         <property name="objectCodeService">
             <ref bean="objectCodeService" />
         </property>
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
     </bean>
 
     <bean id="glIcrEncumbranceService" class="org.kuali.module.gl.service.impl.IndirectCostRecoveryEncumbranceServiceImpl">
@@ -803,6 +807,18 @@
         </property>
         <property name="kualiRuleService">
             <ref bean="kualiRuleService" />
+        </property>
+        <property name="chartService">
+        	<ref bean="chartService" />
+        </property>
+		<property name="optionsService">
+			<ref bean="optionsService"/>
+		</property>
+        <property name="kualiConfigurationService">
+            <ref bean="kualiConfigurationService" />
+        </property>
+        <property name="balanceTypeService">
+        	<ref bean="balanceTypService"/>
         </property>
     </bean>
 
@@ -981,7 +997,11 @@
         </property>
     </bean>
 
-    <bean id="glVerifyTransaction" class="org.kuali.module.gl.batch.poster.impl.VerifyTransactionImpl" />
+	<bean id="glVerifyTransaction" class="org.kuali.module.gl.batch.poster.impl.VerifyTransactionImpl">
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
+	</bean>
 
     <bean id="glAccountBalanceDao" class="org.kuali.module.gl.dao.ojb.AccountBalanceDaoOjb">
     	<property name="dateTimeService">
@@ -1090,27 +1110,30 @@
 
     <!-- SUFFICIENT FUNDS SERVICE/DAO -->
     <bean id="sufficientFundsService" class="org.kuali.module.gl.service.impl.SufficientFundsServiceImpl">
-        <property name="sufficientFundBalancesDao">
-        	<ref bean="glSufficientFundBalancesDao"/>
+        <property name="accountService">
+        	<ref bean="accountService"/>
         </property>
+    	<property name="objectLevelService">
+    		<ref bean="objectLevelService"/>
+    	</property>
         <property name="kualiConfigurationService">
             <ref bean="kualiConfigurationService" />
         </property>
         <property name="sufficientFundsDao">
-            <ref bean="sufficientFundsDao" />
+            <ref bean="glSufficientFundsDao" />
+        </property>
+        <property name="sufficientFundBalancesDao">
+        	<ref bean="glSufficientFundBalancesDao"/>
         </property>
         <property name="optionsService">
         	<ref bean="optionsService"/>
         </property>
-        <property name="kualiRuleService">
-        	<ref bean="kualiRuleService"/>
-        </property>
-        <property name="accountService">
-        	<ref bean="accountService"/>
-        </property>
+		<property name="generalLedgerPendingEntryService">
+			<ref bean="generalLedgerPendingEntryService"/>
+		</property>
     </bean>
 
-    <bean id="sufficientFundsDao" class="org.kuali.module.gl.dao.ojb.SufficientFundsDaoOjb">
+    <bean id="glSufficientFundsDao" class="org.kuali.module.gl.dao.ojb.SufficientFundsDaoOjb">
         <property name="jcdAlias">
             <value>dataSource</value>
         </property>
@@ -1136,26 +1159,22 @@
             <value>dataSource</value>
         </property>
     </bean>
-    
+
     <bean id="glCorrectionChangeGroupDao" class="org.kuali.module.gl.dao.ojb.CorrectionChangeGroupDaoOjb">
         <property name="jcdAlias">
             <value>dataSource</value>
         </property>
     </bean>
-    
+
     <bean id="glCorrectionCriteriaDao" class="org.kuali.module.gl.dao.ojb.CorrectionCriteriaDaoOjb">
         <property name="jcdAlias">
             <value>dataSource</value>
         </property>
     </bean>
-    
+
     <bean id="glDocumentDao" class="org.kuali.core.dao.ojb.DocumentDaoOjb">
         <property name="jcdAlias">
             <value>dataSource</value>
         </property>
     </bean>
-    
-    
-    
-    
 </beans>
