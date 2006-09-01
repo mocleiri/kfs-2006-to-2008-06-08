@@ -35,6 +35,7 @@ import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
+import org.kuali.Constants.DisbursementVoucherDocumentConstants;
 import org.kuali.core.bo.user.KualiGroup;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.util.GlobalVariables;
@@ -49,6 +50,7 @@ import org.kuali.module.financial.bo.DisbursementVoucherPreConferenceRegistrant;
 import org.kuali.module.financial.bo.Payee;
 import org.kuali.module.financial.bo.WireCharge;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
+import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 import org.kuali.module.financial.service.DisbursementVoucherCoverSheetService;
 import org.kuali.module.financial.service.DisbursementVoucherTaxService;
 import org.kuali.module.financial.service.impl.DisbursementVoucherCoverSheetServiceImpl;
@@ -161,8 +163,14 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
             dvDocument.getDvNonEmployeeTravel().setDisbVchrPerdiemActualAmount(perDiemAmount);
         }
         catch (RuntimeException e) {
-            LOG.error("Error in calculating travel per diem: " + e.getMessage());
-            GlobalVariables.getErrorMap().putError("DVNonEmployeeTravelErrors", KeyConstants.ERROR_CUSTOM, e.getMessage());
+            String errorMessage = e.getMessage();
+            
+            if(StringUtils.isBlank(errorMessage)) {
+                errorMessage = "The per diem amount could not be calculated.  Please ensure all required per diem fields are filled in before attempting to calculate the per diem amount.";
+            }
+            
+            LOG.error("Error in calculating travel per diem: " + errorMessage);
+            GlobalVariables.getErrorMap().putError("DVNonEmployeeTravelErrors", KeyConstants.ERROR_CUSTOM, errorMessage);
         }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
@@ -506,10 +514,10 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
         String fullParameter = (String) request.getAttribute(Constants.METHOD_TO_CALL_ATTRIBUTE);
         String boClassName = StringUtils.substringBetween(fullParameter, Constants.METHOD_TO_CALL_BOPARM_LEFT_DEL, Constants.METHOD_TO_CALL_BOPARM_RIGHT_DEL);
 
-        if ("org.kuali.module.financial.bo.Payee".equals(boClassName) && document.getDvPayeeDetail().isEmployee()) {
+        if (Payee.class.getName().equals(boClassName) && document.getDvPayeeDetail().isEmployee()) {
             String conversionFields = StringUtils.substringBetween(fullParameter, Constants.METHOD_TO_CALL_PARM1_LEFT_DEL, Constants.METHOD_TO_CALL_PARM1_RIGHT_DEL);
 
-            fullParameter = StringUtils.replace(fullParameter, boClassName, "org.kuali.core.bo.user.UniversalUser");
+            fullParameter = StringUtils.replace(fullParameter, boClassName, UniversalUser.class.getName());
             fullParameter = StringUtils.replace(fullParameter, conversionFields, "personUniversalIdentifier:document.dvPayeeDetail.disbVchrPayeeIdNumber");
             request.setAttribute(Constants.METHOD_TO_CALL_ATTRIBUTE, fullParameter);
         }
