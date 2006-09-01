@@ -110,7 +110,7 @@
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartOfAccountsCode();" />
+                   <text size="2" />
                 </control>
 
             </attributeReference>
@@ -323,9 +323,8 @@
                 <maxLength>1</maxLength>
                 <required>true</required>
                 <control>
-                    <text size="1" />
-                </control>
-
+                	<select valuesFinderClass="org.kuali.core.lookup.keyvalues.BudgetAggregationCodeValuesFinder" />
+				</control>
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
