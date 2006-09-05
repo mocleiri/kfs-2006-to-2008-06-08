@@ -158,7 +158,7 @@
                     </td>
                   </tr>
                   <c:choose>
-                    <c:when test="${not fn:contains(KualiForm.appointmentTypeGridMappings['horuly'], person.appointmentTypeCode) and not fn:contains(KualiForm.appointmentTypeGridMappings['gradResAssistant'], person.appointmentTypeCode)}">
+                    <c:when test="${not fn:contains(KualiForm.appointmentTypeGridMappings['hourly'], person.appointmentTypeCode) and not fn:contains(KualiForm.appointmentTypeGridMappings['gradResAssistant'], person.appointmentTypeCode)}">
 		                  <tr bgcolor="#FFFFFF">
 		                    <td height="30" colspan="14" class="tab-subhead"><div align="left"><strong>Salary</strong></div></td>
 		                  </tr>
