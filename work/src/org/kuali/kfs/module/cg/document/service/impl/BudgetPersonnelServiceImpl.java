@@ -312,7 +312,8 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
         BudgetFringeRate budgetFringeRate;
 
         for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
-
+           userAppointmentTask.refreshReferenceObject("budgetFringeRate");
+            
             BudgetFringeRate budgetFringeRateFromList = (BudgetFringeRate) (ObjectUtils.retrieveObjectWithIdentitcalKey(budgetFringeRates, userAppointmentTask.getBudgetFringeRate()));
             if (budgetFringeRateFromList != null) {
                 budgetFringeRate = budgetFringeRateFromList;
