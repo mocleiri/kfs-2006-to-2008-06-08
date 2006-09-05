@@ -6,8 +6,7 @@
 <dictionaryEntry>
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.purap.bo.PurchaseOrderContractLanguage</businessObjectClass>
-        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-
+        <maintainableClass>org.kuali.module.purap.maintenance.PurchaseOrderContractLanguageMaintainableImpl</maintainableClass>
         <businessRulesClass>org.kuali.module.purap.rules.PurchaseOrderContractLanguageRule</businessRulesClass>
 
         <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
