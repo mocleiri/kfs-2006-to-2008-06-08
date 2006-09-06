@@ -3,7 +3,6 @@ package org.kuali.module.gl.service;
 import java.util.List;
 
 import org.kuali.core.document.FinancialDocument;
-import org.kuali.core.document.TransactionalDocument;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.util.SufficientFundsItem;
@@ -33,8 +32,8 @@ public interface SufficientFundsService {
     public List<SufficientFundsItem> checkSufficientFunds(List<? extends Transaction> transactions);
 
     /**
-     * This operation derives the acct_sf_finobj_cd which is used to populate the General Ledger Pending entry
-     * table, so that later we can do Suff Fund checking against that entry
+     * This operation derives the acct_sf_finobj_cd which is used to populate the General Ledger Pending entry table, so that later
+     * we can do Suff Fund checking against that entry
      * 
      * @param financialObject
      * @param accountSufficientFundsCode
