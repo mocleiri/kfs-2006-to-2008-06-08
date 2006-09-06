@@ -22,12 +22,11 @@
  */
 package org.kuali.module.gl.service;
 
-import java.io.InputStream;
 
 public interface CollectorService {
     /**
-     * Given an inputStream to the collector XML, load the data into the
-     * origin entry table.  If there are errors loading the file, throw a CollectorLoadException that has a list of all the issues.
+     * Given an inputStream to the collector XML, load the data into the origin entry table. If there are errors loading the file,
+     * throw a CollectorLoadException that has a list of all the issues.
      * 
      * @param inputStream inputStream of collector XML
      * @return origin entry group ID

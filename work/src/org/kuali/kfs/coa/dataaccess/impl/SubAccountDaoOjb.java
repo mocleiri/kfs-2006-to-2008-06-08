@@ -26,7 +26,6 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.dao.SubAccountDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 
@@ -53,6 +52,6 @@ public class SubAccountDaoOjb extends PersistenceBrokerDaoSupport implements Sub
         criteria.addEqualTo("accountNumber", accountNumber);
         criteria.addEqualTo("subAccountNumber", subAccountNumber);
 
-        return (SubAccount)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(SubAccount.class, criteria));
+        return (SubAccount) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(SubAccount.class, criteria));
     }
 }

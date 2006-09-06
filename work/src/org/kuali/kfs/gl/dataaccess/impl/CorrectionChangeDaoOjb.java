@@ -22,7 +22,6 @@
  */
 package org.kuali.module.gl.dao.ojb;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.ojb.broker.query.Criteria;
@@ -62,7 +61,7 @@ public class CorrectionChangeDaoOjb extends PersistenceBrokerDaoSupport implemen
         QueryByCriteria query = QueryFactory.newQuery(clazz, criteria);
 
         List specifications = (List) getPersistenceBrokerTemplate().getCollectionByQuery(query);
-        
+
         return specifications;
     }
 

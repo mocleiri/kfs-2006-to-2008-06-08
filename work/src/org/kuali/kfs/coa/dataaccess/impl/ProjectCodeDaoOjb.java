@@ -26,7 +26,6 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.dao.ProjectCodeDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 
@@ -49,7 +48,7 @@ public class ProjectCodeDaoOjb extends PersistenceBrokerDaoSupport implements Pr
         Criteria criteria = new Criteria();
         criteria.addEqualTo("code", projectCode);
 
-        return (ProjectCode)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(ProjectCode.class, criteria));
+        return (ProjectCode) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(ProjectCode.class, criteria));
     }
 
     /**
@@ -63,7 +62,7 @@ public class ProjectCodeDaoOjb extends PersistenceBrokerDaoSupport implements Pr
         Criteria criteria = new Criteria();
         criteria.addEqualTo("name", name);
 
-        return (ProjectCode)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(ProjectCode.class, criteria));
+        return (ProjectCode) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(ProjectCode.class, criteria));
     }
 
     /**
