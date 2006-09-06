@@ -83,7 +83,7 @@ import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.46 2006-09-06 06:50:04 abyrne Exp $
+ * @version $Id: CorrectionAction.java,v 1.46.2.1 2006-09-06 18:34:13 schoo Exp $
  * 
  */
 
@@ -552,7 +552,10 @@ public class CorrectionAction extends KualiDocumentActionBase {
                 errorCorrectionForm.setManualEditFlag("Y");
                 errorCorrectionForm.setEditableFlag("N");
             }
-
+            
+            
+        } else {
+            request.setAttribute("noOriginEntry", "There are no records for the origin entry group selected.");
         }
 
         // not need to if multiple dropdown keep values
@@ -1771,13 +1774,15 @@ public class CorrectionAction extends KualiDocumentActionBase {
         KualiDecimal tempTotalCredits = new KualiDecimal(0);
 
         for (OriginEntry oe : resultCorrectionList) {
-
-            if (oe.getTransactionDebitCreditCode().equals(" ") | oe.getTransactionDebitCreditCode().equals("D")) {
-                tempTotalDebitsOrBlanks = tempTotalDebitsOrBlanks.add(oe.getTransactionLedgerEntryAmount());
-            }
-            else {
-                tempTotalCredits = tempTotalCredits.add(oe.getTransactionLedgerEntryAmount());
-            }
+            if (oe.getTransactionDebitCreditCode() != null){
+                if (oe.getTransactionDebitCreditCode().equals(" ") | oe.getTransactionDebitCreditCode().equals("D")) {
+                    tempTotalDebitsOrBlanks = tempTotalDebitsOrBlanks.add(oe.getTransactionLedgerEntryAmount());
+                }
+                else {
+                    tempTotalCredits = tempTotalCredits.add(oe.getTransactionLedgerEntryAmount());
+                }
+            } else {tempTotalDebitsOrBlanks = tempTotalDebitsOrBlanks.add(oe.getTransactionLedgerEntryAmount());}
+            
         }
 
         document.setCorrectionDebitTotalAmount(tempTotalDebitsOrBlanks);
