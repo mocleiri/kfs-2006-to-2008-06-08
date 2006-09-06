@@ -35,17 +35,20 @@ import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.ExceptionUtils;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.financial.document.InternalBillingDocument;
+import org.kuali.module.gl.util.SufficientFundsItemHelper;
 
 /**
  * Business rule(s) applicable to InternalBilling document.
@@ -134,9 +137,9 @@ public class InternalBillingDocumentRule extends TransactionalDocumentRuleBase {
         String actualSubFundGroupCode = accountingLine.getAccount().getSubFundGroupCode();
         String requiredSubFundGroupCode = SUB_FUND_GROUP_CODE.CONTINUE_EDUC;
 
-        if (accountingLine.isSourceAccountingLine() && OBJECT_SUB_TYPE_CODE.STUDENT_FEES.equals(objectSubTypeCode) && !requiredSubFundGroupCode.equals(actualSubFundGroupCode)) {
+        if (isSourceAccountingLine(accountingLine) && OBJECT_SUB_TYPE_CODE.STUDENT_FEES.equals(objectSubTypeCode) && !requiredSubFundGroupCode.equals(actualSubFundGroupCode)) {
             // The user could fix this via either ObjectCode or Account, but we arbitrarily choose the ObjectCode to highlight.
-            reportError(PropertyConstants.OBJECT_CODE, KeyConstants.ERROR_DOCUMENT_INCORRECT_OBJ_CODE_WITH_SUB_FUND_GROUP, accountingLine.getFinancialObjectCode(), objectSubTypeCode, requiredSubFundGroupCode, actualSubFundGroupCode);
+            reportError(PropertyConstants.OBJECT_CODE, KeyConstants.ERROR_DOCUMENT_INCORRECT_OBJ_CODE_WITH_SUB_FUND_GROUP, new String[] { accountingLine.getFinancialObjectCode(), objectSubTypeCode, requiredSubFundGroupCode, actualSubFundGroupCode });
             return false;
         }
         return true;
@@ -151,7 +154,7 @@ public class InternalBillingDocumentRule extends TransactionalDocumentRuleBase {
      * @return whether the given line is valid with respect to capital object codes
      */
     private boolean validateCapitalObjectCodes(AccountingLine accountingLine) {
-        if (accountingLine.isSourceAccountingLine() && isCapitalObject(accountingLine)) {
+        if (isSourceAccountingLine(accountingLine) && isCapitalObject(accountingLine)) {
             GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.ERROR_DOCUMENT_IB_CAPITAL_OBJECT_IN_INCOME_SECTION);
             LOG.debug("APC rule failure " + ExceptionUtils.describeStackLevel(0));
             return false;
@@ -317,5 +320,45 @@ public class InternalBillingDocumentRule extends TransactionalDocumentRuleBase {
             allowed &= indirectRuleSucceeds(parameterRule, direct, indirect);
         }
         return allowed;
+    }
+
+    /**
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument,
+     *      org.kuali.core.bo.SourceAccountingLine)
+     */
+    @Override
+    protected SufficientFundsItemHelper.SufficientFundsItem processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, SourceAccountingLine sourceAccountingLine) {
+        return processAccountingLineSufficientFundsCheckingPreparation(sourceAccountingLine, transactionalDocument);
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument,
+     *      org.kuali.core.bo.TargetAccountingLine)
+     */
+    @Override
+    protected SufficientFundsItemHelper.SufficientFundsItem processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, TargetAccountingLine targetAccountingLine) {
+        return processAccountingLineSufficientFundsCheckingPreparation(targetAccountingLine, transactionalDocument);
+    }
+
+    /**
+     * Prepares to process sufficient funds checking for the given AccountingLine.
+     * 
+     * @param accountingLine
+     * @param transactionalDocument TODO
+     * @return the item to help check sufficient funds for the given AccountingLine
+     */
+    private SufficientFundsItemHelper.SufficientFundsItem processAccountingLineSufficientFundsCheckingPreparation(AccountingLine accountingLine, TransactionalDocument transactionalDocument) {
+        String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
+        String accountNumber = accountingLine.getAccountNumber();
+        String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
+        String financialObjectCode = accountingLine.getFinancialObjectCode();
+        String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
+        KualiDecimal lineAmount = getGeneralLedgerPendingEntryAmountForAccountingLine(accountingLine);
+        Integer fiscalYear = accountingLine.getPostingYear();
+        String financialObjectTypeCode = accountingLine.getObjectTypeCode();
+        String offsetDebitCreditCode = isDebit(transactionalDocument, accountingLine) ? Constants.GL_CREDIT_CODE : Constants.GL_DEBIT_CODE;
+        String sufficientFundsObjectCode = SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(chartOfAccountsCode, financialObjectCode, accountSufficientFundsCode, financialObjectLevelCode);
+        return buildSufficentFundsItem(accountNumber, accountSufficientFundsCode, lineAmount, chartOfAccountsCode, sufficientFundsObjectCode, offsetDebitCreditCode, financialObjectCode, financialObjectLevelCode, fiscalYear, financialObjectTypeCode);
     }
 }

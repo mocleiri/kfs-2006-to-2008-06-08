@@ -36,6 +36,7 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.chart.service.AccountService;
+import org.kuali.workflow.KualiConstants;
 
 /**
  * 
@@ -58,6 +59,7 @@ public class AccountPreRules extends MaintenancePreRulesBase {
     private Account newAccount;
     private Account copyAccount;
 
+    private static final String CONTRACTS_GRANTS_CD = "CG";
     private static final String GENERAL_FUND_CD = "GF";
     private static final String RESTRICTED_FUND_CD = "RF";
     private static final String ENDOWMENT_FUND_CD = "EN";
@@ -89,8 +91,9 @@ public class AccountPreRules extends MaintenancePreRulesBase {
 
     /**
      * 
-     * This method sets a default restricted status on an account if and only if the status code in SubFundGroup has been set and
-     * the user answers in the affirmative that they definitely want to use this SubFundGroup.
+     * This method sets a default restricted status on an account if and only if the status code
+     * in SubFundGroup has been set and the user answers in the affirmative that they definitely
+     * want to use this SubFundGroup.
      */
     private void checkForDefaultSubFundGroupStatus() {
         String restrictedStatusCode = "";
@@ -101,28 +104,27 @@ public class AccountPreRules extends MaintenancePreRulesBase {
             return;
         }
         SubFundGroup subFundGroup = copyAccount.getSubFundGroup();
-
+        
         boolean useSubFundGroup = false;
         if (StringUtils.isNotBlank(subFundGroup.getAccountRestrictedStatusCode())) {
             restrictedStatusCode = subFundGroup.getAccountRestrictedStatusCode().trim();
             String subFundGroupCd = subFundGroup.getSubFundGroupCode();
             useSubFundGroup = askOrAnalyzeYesNoQuestion("SubFundGroup" + subFundGroupCd, buildSubFundGroupConfirmationQuestion(subFundGroupCd, restrictedStatusCode));
-            if (useSubFundGroup) {
-                // then set defaults for account based on this
+            if(useSubFundGroup) {
+                //then set defaults for account based on this
                 newAccount.setAccountRestrictedStatusCode(restrictedStatusCode);
-            }
-            else {
+            } else {
                 // the user did not want to use this sub fund group so we wipe it out
                 newAccount.setSubFundGroupCode(Constants.EMPTY_STRING);
             }
         }
-
+        
     }
-
+    
     /**
      * 
-     * This method builds up the message string that gets sent to the user regarding using this SubFundGroup
-     * 
+     * This method builds up the message string that gets sent to the user regarding using
+     * this SubFundGroup
      * @param subFundGroupCd
      * @param restrictedStatusCd
      * @return
@@ -133,10 +135,11 @@ public class AccountPreRules extends MaintenancePreRulesBase {
         result = StringUtils.replace(result, "{1}", restrictedStatusCd);
         return result;
     }
-
+    
     /**
      * 
-     * This method checks for continuation accounts and presents the user with a question regarding their use on this account.
+     * This method checks for continuation accounts and presents the user with a question
+     * regarding their use on this account.
      */
     private void checkForContinuationAccounts() {
         LOG.debug("entering checkForContinuationAccounts()");
