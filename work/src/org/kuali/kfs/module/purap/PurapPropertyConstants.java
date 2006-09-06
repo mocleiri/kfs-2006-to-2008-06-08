@@ -36,6 +36,7 @@ public class PurapPropertyConstants {
     public static final String VENDOR_FAX_NUMBER = "vendorFaxNumber";
     public static final String VENDOR_ADDRESS = "vendorAddresses";
     public static final String VENDOR_ADDRESS_STATE = "vendorStateCode";
+    public static final String VENDOR_STATE_FOR_LOOKUP = "vendorStateForLookup";
     public static final String VENDOR_ADDRESS_ZIP = "vendorZipCode";
     public static final String VENDOR_ADDRESS_TYPE_CODE = "vendorAddresses.vendorAddressTypeCode";
     public static final String VENDOR_ADDRESS_EMAIL = "vendorAddresses.vendorAddressEmailAddress";

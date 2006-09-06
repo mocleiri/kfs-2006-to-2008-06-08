@@ -45,12 +45,9 @@ public class PurapKeyConstants {
     
     //Vendor Lookup
     public static final String ERROR_VENDOR_LOOKUP_FEWER_THAN_MIN_CRITERIA = "error.vendorLookup.min.criteria.fewer";
-    public static final String ERROR_VENDOR_LOOKUP_PAYEE_ID_WRONG_LENGTH = "error.vendorLookup.payeeId.wrong.length";
     public static final String ERROR_VENDOR_LOOKUP_PAYEE_ID_NO_STARTING_P = "error.vendorLookup.payeeId.no.starting.p";
-    public static final String ERROR_VENDOR_LOOKUP_TYPE_NO_NAME = "error.vendorLookup.type.no.name";
+    public static final String ERROR_VENDOR_LOOKUP_TYPE_NO_NAME_OR_STATE = "error.vendorLookup.type.no.name.or.state";
     public static final String ERROR_VENDOR_LOOKUP_STATUS_NO_NAME = "error.vendorLookup.status.no.name";
-    public static final String ERROR_VENDOR_LOOKUP_TAX_NUM_NONNUMERIC = "error.vendorLookup.taxNum.nonnumeric";
-    public static final String ERROR_VENDOR_LOOKUP_TAX_NUM_WRONG_LENGTH = "error.vendorLookup.taxNum.wrong.length";
     public static final String ERROR_VENDOR_LOOKUP_TAX_NUM_ALL_ZEROES = "error.vendorLookup.taxNum.all.zeroes";
     public static final String ERROR_VENDOR_LOOKUP_VNDR_NUM_TOO_MANY_DASHES = "error.vendorLookup.vndrNum.dashes.tooMany";
     public static final String ERROR_VENDOR_LOOKUP_VNDR_NUM_DASHES_ONLY = "error.vendorLookujp.vndrNum.dashes.only";

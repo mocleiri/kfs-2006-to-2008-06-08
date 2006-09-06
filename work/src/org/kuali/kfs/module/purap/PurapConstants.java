@@ -35,7 +35,6 @@ public class PurapConstants {
     public static final String NONE = "NONE";
     public static final String CREATE_NEW_DIVISION = "Create a New Division";
     public static int VNDR_MIN_NUM_LOOKUP_CRITERIA = 1;
-    public static int VNDR_LEGACY_PAYEE_ID_LENGTH = 10;
     
     //Vendor Tax Types
     public static final String TAX_TYPE_FEIN = "FEIN";
