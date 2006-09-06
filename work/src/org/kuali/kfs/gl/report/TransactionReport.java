@@ -51,7 +51,7 @@ import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: TransactionReport.java,v 1.16.2.1.2.3 2006-09-01 21:31:26 tdurkin Exp $
+ * @version $Id: TransactionReport.java,v 1.16.2.1.2.4 2006-09-06 22:37:25 tdurkin Exp $
  */
 public class TransactionReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TransactionReport.class);
@@ -103,13 +103,13 @@ public class TransactionReport {
      * @param fileprefix
      * @param destinationDirectory
      */
-    public void generateReport(Map<Transaction,List<Message>> reportErrors, List<Summary> reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
+    public void generateReport(Map<Transaction, List<Message>> reportErrors, List<Summary> reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
 
         List transactions = new ArrayList();
         transactions.addAll(reportErrors.keySet());
-        
-        generateReport(transactions,reportErrors,reportSummary,runDate,title,fileprefix,destinationDirectory);
+
+        generateReport(transactions, reportErrors, reportSummary, runDate, title, fileprefix, destinationDirectory);
     }
 
     /**
@@ -120,7 +120,7 @@ public class TransactionReport {
      * @param fileprefix
      * @param destinationDirectory
      */
-    public void generateReport(List<Transaction> errorSortedList,Map<Transaction,List<Message>> reportErrors, List<Summary> reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
+    public void generateReport(List<Transaction> errorSortedList, Map<Transaction, List<Message>> reportErrors, List<Summary> reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
 
         Font headerFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
@@ -156,7 +156,7 @@ public class TransactionReport {
             summary.addCell(cell);
 
             for (Iterator iter = reportSummary.iterator(); iter.hasNext();) {
-                Summary s = (Summary)iter.next();
+                Summary s = (Summary) iter.next();
 
                 cell = new PdfPCell(new Phrase(s.getDescription(), textFont));
                 cell.setBorder(Rectangle.NO_BORDER);
@@ -230,10 +230,11 @@ public class TransactionReport {
                     for (Iterator listIter = errors.iterator(); listIter.hasNext();) {
                         String msg = null;
                         Object m = listIter.next();
-                        if ( m instanceof Message ) {
-                            Message mm = (Message)m;
+                        if (m instanceof Message) {
+                            Message mm = (Message) m;
                             msg = mm.getMessage();
-                        } else {
+                        }
+                        else {
                             msg = m.toString();
                         }
 
