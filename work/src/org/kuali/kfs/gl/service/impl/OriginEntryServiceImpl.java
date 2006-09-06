@@ -25,7 +25,6 @@ package org.kuali.module.gl.service.impl;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,10 +47,15 @@ import org.kuali.module.gl.util.LedgerEntryHolder;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryServiceImpl.java,v 1.16.2.3.2.2 2006-08-11 21:08:14 tdurkin Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.16.2.3.2.3 2006-09-06 22:37:34 tdurkin Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
+
+    private static final String ENTRY_GROUP_ID = "entryGroupId";
+    private static final String FINANCIAL_DOCUMENT_NUMBER = "financialDocumentNumber";
+    private static final String FINANCIAL_DOCUMENT_TYPE_CODE = "financialDocumentTypeCode";
+    private static final String FINANCIAL_SYSTEM_ORIGINATION_CODE = "financialSystemOriginationCode";
 
     private OriginEntryDao originEntryDao;
     private OriginEntryGroupService originEntryGroupService;
@@ -106,7 +110,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public Iterator<OriginEntry> getEntriesByGroup(OriginEntryGroup originEntryGroup) {
         LOG.debug("getEntriesByGroup() started");
 
-        return originEntryDao.getEntriesByGroup(originEntryGroup,OriginEntryDao.SORT_DOCUMENT);
+        return originEntryDao.getEntriesByGroup(originEntryGroup, OriginEntryDao.SORT_DOCUMENT);
     }
 
     public Iterator<OriginEntry> getBadBalanceEntries(Collection groups) {
@@ -118,7 +122,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public Iterator<OriginEntry> getEntriesByGroupAccountOrder(OriginEntryGroup oeg) {
         LOG.debug("getEntriesByGroupAccountOrder() started");
 
-        return originEntryDao.getEntriesByGroup(oeg,OriginEntryDao.SORT_ACCOUNT);
+        return originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_ACCOUNT);
     }
 
     /**
@@ -130,10 +134,10 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         LOG.debug("getEntriesByGroup() started");
 
         Map criteria = new HashMap();
-        criteria.put("entryGroupId", originEntryGroup.getId());
-        criteria.put("financialDocumentNumber", documentNumber);
-        criteria.put("financialDocumentTypeCode", documentTypeCode);
-        criteria.put("financialSystemOriginationCode", originCode);
+        criteria.put(ENTRY_GROUP_ID, originEntryGroup.getId());
+        criteria.put(FINANCIAL_DOCUMENT_NUMBER, documentNumber);
+        criteria.put(FINANCIAL_DOCUMENT_TYPE_CODE, documentTypeCode);
+        criteria.put(FINANCIAL_SYSTEM_ORIGINATION_CODE, originCode);
 
         return originEntryDao.getMatchingEntries(criteria);
     }
@@ -239,7 +243,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public LedgerEntryHolder getSummaryByGroupId(Collection groupIdList) {
         LedgerEntryHolder ledgerEntryHolder = new LedgerEntryHolder();
 
-        if ( groupIdList.size() == 0 ) {
+        if (groupIdList.size() == 0) {
             return ledgerEntryHolder;
         }
 
@@ -289,10 +293,11 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         return ledgerEntry;
     }
-    //TODO
+
+    // TODO
     public void flatFile(String filename, Integer groupId, BufferedOutputStream bw) {
-        
-        
+
+
         LOG.debug("exportFlatFile() started");
 
         try {
@@ -308,15 +313,15 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         catch (IOException e) {
             LOG.error("exportFlatFile() Error writing to file", e);
         }
-                }
-        
-    public Collection getMatchingEntriesByCollection(Map searchCriteria){
-        return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
-        
     }
-        
-    public OriginEntry getExactMatchingEntry(Integer entryId){
+
+    public Collection getMatchingEntriesByCollection(Map searchCriteria) {
+        return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
+
+    }
+
+    public OriginEntry getExactMatchingEntry(Integer entryId) {
         return originEntryDao.getExactMatchingEntry(entryId);
     }
-    
+
 }
