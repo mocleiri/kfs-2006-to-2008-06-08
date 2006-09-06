@@ -31,7 +31,7 @@ import org.kuali.module.gl.bo.Balance;
 
 /**
  * @author Laran evans <lc278@cornell.edu>
- * @version $Id: BalanceService.java,v 1.10.2.1.2.3 2006-08-18 21:01:20 tdurkin Exp $
+ * @version $Id: BalanceService.java,v 1.10.2.1.2.4 2006-09-06 22:37:21 tdurkin Exp $
  */
 
 public interface BalanceService {
@@ -74,9 +74,9 @@ public interface BalanceService {
      * @param fieldValues the input fields and values
      * @param isConsolidated consolidation option is applied or not
      * @return the size of cash balance entries
-     */    
+     */
     public Integer getCashBalanceRecordCount(Map fieldValues, boolean isConsolidated);
-    
+
     /**
      * This method gets the size of balance entries according to input fields and values
      * 
@@ -110,5 +110,5 @@ public interface BalanceService {
      * @param balanceTypeCodes
      * @return
      */
-    public List getGlSummary(int universityFiscalYear,List<String> balanceTypeCodes);
+    public List getGlSummary(int universityFiscalYear, List<String> balanceTypeCodes);
 }
