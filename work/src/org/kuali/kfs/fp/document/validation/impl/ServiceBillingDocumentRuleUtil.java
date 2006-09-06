@@ -22,18 +22,17 @@
  */
 package org.kuali.module.financial.rules;
 
-import org.apache.commons.lang.StringUtils;
-import org.kuali.KeyConstants;
-import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
-import org.kuali.core.bo.user.KualiGroup;
 import org.kuali.core.bo.user.KualiUser;
-import org.kuali.core.exceptions.GroupNotFoundException;
-import static org.kuali.core.util.AssertionUtils.assertThat;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.bo.user.KualiGroup;
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.exceptions.GroupNotFoundException;
 import org.kuali.module.financial.bo.ServiceBillingControl;
+import org.kuali.PropertyConstants;
+import org.kuali.KeyConstants;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * This class contains static helper methods for ServiceBillingDocumentRule and ServiceBillingDocumentAuthorizer.
@@ -61,7 +60,7 @@ public class ServiceBillingDocumentRuleUtil {
      * @return whether the given user is authorized to use the given account in the SB income section
      */
     public static boolean serviceBillingIncomeAccountIsAccessible(AccountingLine accountingLine, TransactionalDocumentRuleBase.AccountingLineAction action, KualiUser user) {
-        assertThat(accountingLine.isSourceAccountingLine(), accountingLine);
+        assert accountingLine.isSourceAccountingLine();
         String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
         String accountNumber = accountingLine.getAccountNumber();
         if (StringUtils.isEmpty(chartOfAccountsCode) || StringUtils.isEmpty(accountNumber)) {
