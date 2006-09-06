@@ -22,12 +22,16 @@
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
+
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
-import static org.kuali.Constants.GL_CREDIT_CODE;
-import static org.kuali.Constants.GL_DEBIT_CODE;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
@@ -55,9 +59,15 @@ import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
 import org.kuali.module.financial.bo.NonResidentAlienTaxPercent;
 import org.kuali.module.financial.bo.Payee;
+import org.kuali.module.financial.bo.PaymentReasonCode;
 import org.kuali.module.financial.bo.WireCharge;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
 import org.kuali.module.financial.document.DisbursementVoucherDocumentAuthorizer;
+import org.kuali.module.financial.util.CodeDescriptionFormatter;
+import org.kuali.module.financial.util.DocumentationLocationCodeDescriptionFormatter;
+import org.kuali.module.financial.util.ObjectCodeDescriptionFormatter;
+import org.kuali.module.financial.util.ObjectLevelCodeDescriptionFormatter;
+import org.kuali.module.financial.util.SubFundGroupCodeDescriptionFormatter;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 
@@ -661,7 +671,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         if (paidAmount.compareTo(document.getDvNonEmployeeTravel().getTotalTravelAmount()) != 0) {
             errors.putErrorWithoutFullErrorPath(Constants.DV_CHECK_TRAVEL_TOTAL_ERROR, KeyConstants.ERROR_DV_TRAVEL_CHECK_TOTAL);
         }
-        
+
         /* make sure mileage fields have not changed since the mileage amount calculation */
         if (personalVehicleSectionComplete) {
             KualiDecimal currentCalcAmt = document.getDvNonEmployeeTravel().getDisbVchrMileageCalculatedAmt();
@@ -671,16 +681,16 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
                 if (calculatedMileageAmount.compareTo(document.getDvNonEmployeeTravel().getDisbVchrMileageCalculatedAmt()) != 0) {
                     errors.putErrorWithoutFullErrorPath(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_DV_MILEAGE_CALC_CHANGE);
                 }
-                
+
                 // determine if the rule is flagged off in the parm setting
                 boolean performTravelMileageLimitInd = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(DV_DOCUMENT_PARAMETERS_GROUP_NM, NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM);
-                if(performTravelMileageLimitInd) {
+                if (performTravelMileageLimitInd) {
                     // if actual amount is greater than calculated amount
-                    if(currentCalcAmt.subtract(currentActualAmt).isNegative()) {
+                    if (currentCalcAmt.subtract(currentActualAmt).isNegative()) {
                         errors.putError(PropertyConstants.DV_PERSONAL_CAR_AMOUNT, KeyConstants.ERROR_DV_ACTUAL_MILEAGE_TOO_HIGH);
                     }
                 }
-            }            
+            }
         }
 
         errors.removeFromErrorPath(PropertyConstants.DV_NON_EMPLOYEE_TRAVEL);
@@ -812,6 +822,65 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         errors.removeFromErrorPath(PropertyConstants.DV_PRE_CONFERENCE_DETAIL);
     }
 
+
+    /**
+     * Validates whether there is a error based on payment reason rules, and adds an error message if it does not exist
+     * 
+     * Note: This method is pretty much a copy of
+     * org.kuali.core.rule.DocumentRuleBase.executeApplicationParameterRestriction(String, String, String, String, String), except
+     * that a different error message is used. I'd like to be able to call the original method, and just replace the error value,
+     * but it's not possible to do so because ErrorMap does not support replacing only one of the errors with a given errorKey (aka
+     * targetKey), i.e. it's an all or nothing operation.
+     * 
+     * @param parameterGroupName
+     * @param parameterName
+     * @param restrictedFieldValue
+     * @param errorField
+     * @param errorParameter
+     * @return
+     */
+    private boolean executePaymentReasonRestriction(String parameterGroupName, String parameterName, String restrictedFieldValue, String errorField, String errorParameter, String paymentReasonCode, CodeDescriptionFormatter restrictedFieldDescFormatter) {
+        boolean rulePassed = true;
+        if (SpringServiceLocator.getKualiConfigurationService().hasApplicationParameterRule(parameterGroupName, parameterName)) {
+            KualiParameterRule rule = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterRule(parameterGroupName, parameterName);
+            if (rule.failsRule(restrictedFieldValue)) {
+                String errorMsgKey = null;
+                String endConjunction = null;
+                if (rule.isAllowedRule()) {
+                    errorMsgKey = KeyConstants.ERROR_PAYMENT_REASON_ALLOWED_RESTRICTION;
+                    endConjunction = "or";
+                }
+                else {
+                    errorMsgKey = KeyConstants.ERROR_PAYMENT_REASON_DENIED_RESTRICTION;
+                    endConjunction = "and";
+                }
+
+                Map<String, String> paymentReasonParams = new HashMap<String, String>();
+                paymentReasonParams.put("code", paymentReasonCode);
+                // TODO: should we not ignore active flag?
+                Collection<PaymentReasonCode> paymentReasons = SpringServiceLocator.getKeyValuesService().findMatching(PaymentReasonCode.class, paymentReasonParams);
+
+                String prName = "(Description unavailable)";
+
+                // find max version #
+                Long prMaxVer = null;
+                for (PaymentReasonCode currPrc : paymentReasons) {
+                    if (prMaxVer == null || prMaxVer.compareTo(currPrc.getVersionNumber()) < 0) {
+                        prName = currPrc.getName();
+                        prMaxVer = currPrc.getVersionNumber();
+                    }
+                }
+
+                GlobalVariables.getErrorMap().putError(errorField, errorMsgKey, new String[] { errorParameter, restrictedFieldValue, parameterName, parameterGroupName, rule.getPrettyParameterValueString(), "Payment reason", paymentReasonCode, prName, restrictedFieldDescFormatter.getFormattedStringWithDescriptions(rule.getParameterValueSet(), null, endConjunction) });
+                rulePassed = false;
+            }
+        }
+        else {
+            LOG.warn("Did not find apc parameter record for group " + parameterGroupName + " with parm name " + parameterName);
+        }
+        return rulePassed;
+    }
+
     /**
      * Validates the selected documentation location field.
      * 
@@ -821,7 +890,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         String errorKey = PropertyConstants.DISBURSEMENT_VOUCHER_DOCUMENTATION_LOCATION_CODE;
 
         // payment reason restrictions
-        executeApplicationParameterRestriction(PAYMENT_DOC_LOCATION_GROUP_NM, PAYMENT_PARM_PREFIX + document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location");
+        executePaymentReasonRestriction(PAYMENT_DOC_LOCATION_GROUP_NM, PAYMENT_PARM_PREFIX + document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location", document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), new DocumentationLocationCodeDescriptionFormatter());
 
         // alien indicator restrictions
         if (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
@@ -971,7 +1040,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
             if (isActiveEmployeeSSN(dvPayee.getTaxIdNumber()) || true) {
                 // determine if the rule is flagged off in the parm setting
                 boolean performPrepaidEmployeeInd = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(DV_DOCUMENT_PARAMETERS_GROUP_NM, PERFORM_PREPAID_EMPL_PARM_NM);
-                
+
                 if (performPrepaidEmployeeInd) {
                     /* active payee employees cannot be paid for prepaid travel */
                     String[] travelPrepaidPaymentReasonCodes = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues(DV_DOCUMENT_PARAMETERS_GROUP_NM, PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
@@ -984,7 +1053,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
             else if (isEmployeeSSN(dvPayee.getTaxIdNumber())) {
                 // check parm setting for paid outside payroll check
                 boolean performPaidOutsidePayrollInd = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(DV_DOCUMENT_PARAMETERS_GROUP_NM, PERFORM_PREPAID_EMPL_PARM_NM);
-                
+
                 if (performPaidOutsidePayrollInd) {
                     /* If payee is type payee and employee, payee record must be flagged as paid outside of payroll */
                     if (!dvPayee.isPayeeEmployeeCode()) {
@@ -1091,10 +1160,10 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         }
 
         /* check object level is in permitted list for payment reason */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(PAYMENT_OBJECT_LEVEL_GROUP_NM, PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level");
+        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(PAYMENT_OBJECT_LEVEL_GROUP_NM, PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level", documentPaymentReason, new ObjectLevelCodeDescriptionFormatter(accountingLine.getChartOfAccountsCode()));
 
         /* check object code is in permitted list for payment reason */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(PAYMENT_OBJECT_CODE_GROUP_NM, PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getFinancialObjectCode(), errorKey, "Object code");
+        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(PAYMENT_OBJECT_CODE_GROUP_NM, PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getFinancialObjectCode(), errorKey, "Object code", documentPaymentReason, new ObjectCodeDescriptionFormatter(accountingLine.getPostingYear(), accountingLine.getChartOfAccountsCode()));
 
         /* check payment reason is valid for object code */
         objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(OBJECT_CODE_PAYMENT_GROUP_NM, OBJECT_CODE_PARM_PREFIX + accountingLine.getFinancialObjectCode(), dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
@@ -1136,7 +1205,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         }
 
         /* check sub fund is in permitted list for payment reason */
-        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(PAYMENT_SUB_FUND_GROUP_NM, PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getAccount().getSubFundGroupCode(), errorKey, "Sub fund");
+        accountNumberAllowed = accountNumberAllowed && executePaymentReasonRestriction(PAYMENT_SUB_FUND_GROUP_NM, PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getAccount().getSubFundGroupCode(), errorKey, "Sub fund", documentPaymentReason, new SubFundGroupCodeDescriptionFormatter());
 
         /* check object sub type is allowed for sub fund code */
         accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(SUB_FUND_OBJECT_SUB_TYPE_GROUP_NM, SUB_FUND_CODE_PARM_PREFIX + accountingLine.getAccount().getSubFundGroupCode(), accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type");
