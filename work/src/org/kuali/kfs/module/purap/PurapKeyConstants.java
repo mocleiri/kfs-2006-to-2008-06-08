@@ -42,6 +42,12 @@ public class PurapKeyConstants {
     public static final String ERROR_VENDOR_TAX_TYPE_CANNOT_BE_BLANK = "error.vendorMaint.tax.type.cannot.be.blank";
     public static final String ERROR_VENDOR_TAX_TYPE_CANNOT_BE_SET = "error.vendorMaint.tax.type.cannot.be.set";
     public static final String ERROR_VENDOR_PARENT_NEEDS_CHANGED = "error.vendorMaint.vendorParent.needs.changed";
+    public static final String ERROR_TAX_NUMBER_ALL_DIGITS_AND_LENGTH= "error.vendorMaint.taxNumber.isAllDigits.and.length";
+    public static final String ERROR_TAX_NUMBER_ALL_ZEROES="error.vendorMaint.taxNumber.isAllZeroes";
+    public static final String ERROR_FIRST_THREE_SSN = "error.vendorMaint.first.three.ssn";
+    public static final String ERROR_MIDDLE_TWO_SSN = "error.vendorMaint.middle.two.ssn";
+    public static final String ERROR_LAST_FOUR_SSN = "error.vendorMaint.last.four.ssn";
+    public static final String ERROR_FIRST_TWO_FEIN = "error.vendorMaint.first.two.fein";
     
     //Vendor Lookup
     public static final String ERROR_VENDOR_LOOKUP_FEWER_THAN_MIN_CRITERIA = "error.vendorLookup.min.criteria.fewer";

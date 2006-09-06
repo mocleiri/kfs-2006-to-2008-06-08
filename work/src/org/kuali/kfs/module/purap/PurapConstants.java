@@ -69,6 +69,10 @@ public class PurapConstants {
     public static final int DEFAULT_TAX_NUM_DIGITS = 9;
     public static final String NOT_ALLOWED_TAX_NUMBER = "356001673";
     public static final String ALL_ZEROS_TAX_NUMBER = "000000000";
+    public static final String THREE_ZEROES = "000";
+    public static final String THREE_SIXES = "666";
+    public static final String TWO_ZEROES = "00";
+    public static final String FOUR_ZEROES = "0000";
     
     public static final KualiDecimal VENDOR_MIN_ORDER_AMOUNT = new KualiDecimal(100000);
     
