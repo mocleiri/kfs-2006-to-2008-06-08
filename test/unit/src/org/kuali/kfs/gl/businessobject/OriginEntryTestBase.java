@@ -44,7 +44,7 @@ import org.springframework.beans.factory.BeanFactory;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: OriginEntryTestBase.java,v 1.21.2.1.2.2 2006-08-11 21:08:58 tdurkin Exp $
+ * @version $Id: OriginEntryTestBase.java,v 1.21.2.1.2.3 2006-09-06 22:38:50 tdurkin Exp $
  */
 public class OriginEntryTestBase extends KualiTestBaseWithSpringOnly {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryTestBase.class);
@@ -159,25 +159,27 @@ public class OriginEntryTestBase extends KualiTestBaseWithSpringOnly {
      * @param requiredEntries
      */
     protected void assertOriginEntries(int groupCount, EntryHolder[] requiredEntries) {
-
         persistenceService.getPersistenceBroker().clearCache();
 
         List groups = unitTestSqlDao.sqlSelect("select * from gl_origin_entry_grp_t order by origin_entry_grp_src_cd");
         assertEquals("Number of groups is wrong", groupCount, groups.size());
 
         Collection c = originEntryDao.testingGetAllEntries();
-        assertEquals("Wrong number of transactions in Origin Entry", requiredEntries.length, c.size());
 
-        // This is for debugging purposes
-         for (Iterator iter = groups.iterator(); iter.hasNext();) {
-         Map element = (Map) iter.next();
-         System.err.println("G:" + element.get("ORIGIN_ENTRY_GRP_ID") + " " + element.get("ORIGIN_ENTRY_GRP_SRC_CD"));
-         }
-        
-         for (Iterator iter = c.iterator(); iter.hasNext();) {
-         OriginEntry element = (OriginEntry) iter.next();
-         System.err.println("L:" + element.getEntryGroupId() + " " + element.getLine());
-         }
+        // This is for debugging purposes - change to true for output
+        if (true) {
+            for (Iterator iter = groups.iterator(); iter.hasNext();) {
+                Map element = (Map) iter.next();
+                System.err.println("G:" + element.get("ORIGIN_ENTRY_GRP_ID") + " " + element.get("ORIGIN_ENTRY_GRP_SRC_CD"));
+            }
+
+            for (Iterator iter = c.iterator(); iter.hasNext();) {
+                OriginEntry element = (OriginEntry) iter.next();
+                System.err.println("L:" + element.getEntryGroupId() + " " + element.getLine());
+            }
+        }
+
+        assertEquals("Wrong number of transactions in Origin Entry", requiredEntries.length, c.size());
 
         int count = 0;
         for (Iterator iter = c.iterator(); iter.hasNext();) {
