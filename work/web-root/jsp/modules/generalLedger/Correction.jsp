@@ -109,14 +109,13 @@
 
 
 	   	    	         	 <html:image property="methodToCall.readDocument.anchor${currentTabIndex}"
-	    	                 		src="images/tinybutton-loaddoc.gif" styleClass="tinybutton" alt="ShowAllEntriesForManualEdit" />
-			               	
-							Copy To Desktop 
+	    	                 		src="images/tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntriesForManualEdit" />
+
 							<html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}"
-	    	                 		src="images/tinybutton-copy2.gif" styleClass="tinybutton" alt="saveToDeskTop" onclick="excludeSubmitRestriction=true" />
-							Delete Document
+	    	                 		src="images/tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="saveToDeskTop" onclick="excludeSubmitRestriction=true" />
+							
 							<html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}"
-	    	                 		src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="deleteDocument" />
+	    	                 		src="images/tinybutton-deletergroup.gif" styleClass="tinybutton" alt="deleteDocument" />
 						       
 			         
 	           		</center> 
