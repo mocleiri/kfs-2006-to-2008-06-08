@@ -18,6 +18,7 @@ import javax.xml.xpath.XPathConstants;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.Constants;
+import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.util.FieldUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
@@ -64,7 +65,7 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
     private static final String ORG_REVIEW_ATTRIBUTE = "KUALI_ORG_REVIEW_ATTRIBUTE";
 
     private static Map ORGS = new HashMap();
-    
+
     private static final String DOCUMENT_CHART_ORG_VALUES_KEY = "organizations";
 
     private String finCoaCd;
@@ -109,6 +110,8 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
         routingDataRows.add(getOrgRow());
         routingDataRows.add(getOverrideCodeRow());
 
+        // TODO: hook TotalDollarAmount into the DD attribute for DocumentHeader.financialDocumentTotalAmount once
+        // the DD has this attribute defined, like Chart and Org above
         fields = new ArrayList();
         fields.add(new Field("Total Amount", "", Field.TEXT, true, TOTAL_AMOUNT_KEY, "", null, null, TOTAL_AMOUNT_KEY));
         routingDataRows.add(new Row(fields));
@@ -117,7 +120,7 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
     private edu.iu.uis.eden.lookupable.Row getChartRow() {
         org.kuali.core.web.uidraw.Field kualiChartField = FieldUtils.getPropertyField(Chart.class, Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, false);
         List chartFields = new ArrayList();
-        chartFields.add(new Field(kualiChartField.getFieldLabel(), WorkflowLookupableImpl.getHelpUrl(kualiChartField), Field.TEXT, true, FIN_COA_CD_KEY, kualiChartField.getPropertyValue(), kualiChartField.getFieldValidValues(), WorkflowLookupableImpl.getLookupableImplName(Chart.class), FIN_COA_CD_KEY));
+        chartFields.add(new Field(kualiChartField.getFieldLabel(), KualiWorkflowUtils.getHelpUrl(kualiChartField), Field.TEXT, true, FIN_COA_CD_KEY, kualiChartField.getPropertyValue(), kualiChartField.getFieldValidValues(), WorkflowLookupableImpl.getLookupableImplName(Chart.class), FIN_COA_CD_KEY));
         chartFields.add(new Field("", "", Field.QUICKFINDER, false, "", "", null, WorkflowLookupableImpl.getLookupableName(WorkflowLookupableImpl.getLookupableImplName(Chart.class), new StringBuffer(WorkflowLookupableImpl.LOOKUPABLE_IMPL_NAME_PREFIX).append(Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME).append(":").append(FIN_COA_CD_KEY).toString())));
         return new Row(chartFields);
     }
@@ -125,14 +128,16 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
     private edu.iu.uis.eden.lookupable.Row getOrgRow() {
         org.kuali.core.web.uidraw.Field kualiOrgField = FieldUtils.getPropertyField(Org.class, Constants.ORGANIZATION_CODE_PROPERTY_NAME, false);
         List orgFields = new ArrayList();
-        orgFields.add(new Field(kualiOrgField.getFieldLabel(), WorkflowLookupableImpl.getHelpUrl(kualiOrgField), Field.TEXT, true, ORG_CD_KEY, kualiOrgField.getPropertyValue(), kualiOrgField.getFieldValidValues(), WorkflowLookupableImpl.getLookupableImplName(Org.class), ORG_CD_KEY));
+        orgFields.add(new Field(kualiOrgField.getFieldLabel(), KualiWorkflowUtils.getHelpUrl(kualiOrgField), Field.TEXT, true, ORG_CD_KEY, kualiOrgField.getPropertyValue(), kualiOrgField.getFieldValidValues(), WorkflowLookupableImpl.getLookupableImplName(Org.class), ORG_CD_KEY));
         orgFields.add(new Field("", "", Field.QUICKFINDER, false, "", "", null, WorkflowLookupableImpl.getLookupableName(WorkflowLookupableImpl.getLookupableImplName(Org.class), new StringBuffer(WorkflowLookupableImpl.LOOKUPABLE_IMPL_NAME_PREFIX).append(Constants.ORGANIZATION_CODE_PROPERTY_NAME).append(":").append(ORG_CD_KEY).toString())));
         return new Row(orgFields);
     }
 
     private edu.iu.uis.eden.lookupable.Row getOverrideCodeRow() {
+        org.kuali.core.web.uidraw.Field kualiOverrideCodeField;
+        kualiOverrideCodeField = FieldUtils.getPropertyField(SourceAccountingLine.class, "overrideCode", false);
         List orgFields = new ArrayList();
-        orgFields.add(new Field("Override Code", "", Field.TEXT, true, OVERRIDE_CD_KEY, "", null, null, OVERRIDE_CD_KEY));
+        orgFields.add(new Field(kualiOverrideCodeField.getFieldLabel(), KualiWorkflowUtils.getHelpUrl(kualiOverrideCodeField), Field.TEXT, true, OVERRIDE_CD_KEY, kualiOverrideCodeField.getPropertyValue(), kualiOverrideCodeField.getFieldValidValues(), null, OVERRIDE_CD_KEY));
         return new Row(orgFields);
     }
 
@@ -253,7 +258,7 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
             Float ruleFromAmount = null;
             Float ruleToAmount = null;
             if (!StringUtils.isBlank(fromAmount)) {
-                ruleFromAmount = new Float(fromAmount); 
+                ruleFromAmount = new Float(fromAmount);
                 if (ruleFromAmount.floatValue() > documentAmount.floatValue()) {
                     return false;
                 }
@@ -288,7 +293,7 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
         }
         Org reportsToOrg = SpringServiceLocator.getOrganizationService().getByPrimaryIdWithCaching(startOrg.getReportsToChartOfAccountsCode(), startOrg.getReportsToOrganizationCode());
         chartOrgSet.add(reportsToOrg);
-        buildOrgReviewHierarchy(counter++, chartOrgSet, reportsToOrg);
+        buildOrgReviewHierarchy(++counter, chartOrgSet, reportsToOrg);
     }
 
     private String getRuleExtentionValue(String key, List ruleExtensions) {
@@ -317,8 +322,9 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
     private Set populateFromDocContent(DocumentType docType, DocumentContent docContent, RouteContext routeContext) {
         Set chartOrgValues = null;
         if (routeContext.getParameters().containsKey(DOCUMENT_CHART_ORG_VALUES_KEY)) {
-            chartOrgValues = (Set)routeContext.getParameters().get(DOCUMENT_CHART_ORG_VALUES_KEY);
-        } else {
+            chartOrgValues = (Set) routeContext.getParameters().get(DOCUMENT_CHART_ORG_VALUES_KEY);
+        }
+        else {
             chartOrgValues = new HashSet();
             NodeList nodes = null;
             XPath xpath = KualiWorkflowUtils.getXPath(docContent.getDocument());
@@ -352,9 +358,8 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
                     String xpathExp = null;
                     if (KualiWorkflowUtils.isMaintenanceDocument(docType)) {
                         xpathExp = new StringBuffer(KualiWorkflowUtils.XSTREAM_SAFE_PREFIX).append(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX).append("kualiUser").append(KualiWorkflowUtils.XSTREAM_SAFE_SUFFIX).toString();
-                    } else if (KualiWorkflowUtils.KRA_BUDGET_DOC_TYPE.equalsIgnoreCase(docType.getName())) {
-                        xpathExp = "wf:xstreamsafe('//chartOrg')";
-                    } else {
+                    }
+                    else {
                         if (KualiWorkflowUtils.isSourceLineOnly(docType.getName())) {
                             xpathExp = new StringBuffer(KualiWorkflowUtils.XSTREAM_SAFE_PREFIX).append(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX).append(KualiWorkflowUtils.getSourceAccountingLineClassName(docType.getName())).append("/account").append(KualiWorkflowUtils.XSTREAM_SAFE_SUFFIX).toString();
                         }
