@@ -75,9 +75,8 @@
 						return with no value </a>
 					</c:if>
 				</logic-el:present></div>
-			</c:if> 
-			<c:if test="${param.inquiryFlag == 'true'}">
-				<c:set var="url" value="glBalanceInquiry.do" scope="request" />
+			</c:if> <c:if test="${param.inquiryFlag == 'true'}">
+				<c:set var="url" value="${pageContext.request.requestURL}" />
 
 				<c:url value="${url}" var="amountViewSwitch">
 					<c:forEach items="${param}" var="params">
@@ -101,7 +100,8 @@
 				</c:url>
 
 				<a href="<c:out value='${amountViewSwitch}'/>"> <input type="button"
-					name="amountViewSwitch" value="<c:out value='${amountViewLabel}'/>" /></a>
+					name="amountViewSwitch" value="<c:out value='${amountViewLabel}'/>" />
+				</a>
 			</c:if>
 			
 			<br />
@@ -126,7 +126,7 @@
 		
 								<c:when test="${column.formatter.implementationClass == 'org.kuali.core.web.format.CurrencyFormatter'}">
 		
-									<display:column class="numbercell" sortable="true" media="${(status.index < 11) ? 'all' : 'csv excel xml'}"
+									<display:column class="numbercell" sortable="true" media="${(status.index < 12) ? 'all' : 'csv excel xml'}"
 										decorator="org.kuali.core.web.uidraw.FormatAwareDecorator"
 										title="${column.columnTitle}" comparator="${column.comparator}">
 										
@@ -153,7 +153,7 @@
 		
 											<display:column class="infocell" sortable="${column.sortable}"
 												decorator="org.kuali.core.web.uidraw.FormatAwareDecorator"
-												title="${column.columnTitle}" media="${(status.index < 11) ? 'all' : 'csv excel xml'}"
+												title="${column.columnTitle}" media="${(status.index < 12) ? 'all' : 'csv excel xml'}"
 												comparator="${column.comparator}">
 		
 												<a href="<c:out value="${column.propertyURL}"/>"
@@ -167,7 +167,7 @@
 											
 											<display:column class="infocell" sortable="${column.sortable}"
 												decorator="org.kuali.core.web.uidraw.FormatAwareDecorator"
-												title="${column.columnTitle}" media="${(status.index < 11) ? 'all' : 'csv excel xml'}"
+												title="${column.columnTitle}" media="${(status.index < 12) ? 'all' : 'csv excel xml'}"
 												comparator="${column.comparator}">
 												
 												<c:if test="${column.columnTitle == 'Project Code'}">
@@ -191,10 +191,12 @@
 					
 						</c:when>
 						
-					</c:choose>
+						<c:otherwise></c:otherwise>
 					
+					</c:choose>
+
 				</c:forEach>
-				
+								
 			</display:table>
 			</td>
 			<td width="1%"><img src="images/pixel_clear.gif" alt="" height="20"
