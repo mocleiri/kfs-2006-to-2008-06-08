@@ -25,34 +25,27 @@ package org.kuali.module.chart.bo;
  * THE SOFTWARE.
  */
 
-import java.math.RoundingMode;
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.Country;
 import org.kuali.core.bo.PostalZipCode;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
-import org.kuali.core.util.cache.ObjectCacheOSCacheImpl;
-import org.kuali.module.chart.service.OrganizationService;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class Org extends BusinessObjectBase {
     private static final Logger LOG = Logger.getLogger(Org.class);
-    
+
     private static final long serialVersionUID = 121873645110037203L;
 
     /**
@@ -84,7 +77,7 @@ public class Org extends BusinessObjectBase {
     private String organizationCountryCode;
     private String organizationLine1Address;
     private String organizationLine2Address;
-    
+
     private Chart chartOfAccounts;
     private Org hrisOrganization;
     private Account organizationDefaultAccount;
@@ -100,8 +93,8 @@ public class Org extends BusinessObjectBase {
     private Chart campusPlantChart;
     private PostalZipCode postalZip;
     private Country organizationCountry;
-    
-    //  HRMS Org fields
+
+    // HRMS Org fields
     private OrganizationExtension organizationExtension;
     private String editHrmsUnitSectionBlank;
     private String editHrmsUnitSection;
@@ -535,7 +528,8 @@ public class Org extends BusinessObjectBase {
     }
 
     /**
-     * Gets the organizationCountry attribute. 
+     * Gets the organizationCountry attribute.
+     * 
      * @return Returns the organizationCountry.
      */
     public Country getOrganizationCountry() {
@@ -544,13 +538,14 @@ public class Org extends BusinessObjectBase {
 
     /**
      * Sets the organizationCountry attribute value.
+     * 
      * @param organizationCountry The organizationCountry to set.
      * @deprecated
      */
     public void setOrganizationCountry(Country organizationCountry) {
         this.organizationCountry = organizationCountry;
     }
-    
+
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
@@ -746,7 +741,8 @@ public class Org extends BusinessObjectBase {
     }
 
     /**
-     * Gets the organizationCountryCode attribute. 
+     * Gets the organizationCountryCode attribute.
+     * 
      * @return Returns the organizationCountryCode.
      */
     public String getOrganizationCountryCode() {
@@ -755,6 +751,7 @@ public class Org extends BusinessObjectBase {
 
     /**
      * Sets the organizationCountryCode attribute value.
+     * 
      * @param organizationCountryCode The organizationCountryCode to set.
      */
     public void setOrganizationCountryCode(String organizationCountryCode) {
@@ -762,7 +759,8 @@ public class Org extends BusinessObjectBase {
     }
 
     /**
-     * Gets the organizationLine1Address attribute. 
+     * Gets the organizationLine1Address attribute.
+     * 
      * @return Returns the organizationLine1Address.
      */
     public String getOrganizationLine1Address() {
@@ -771,6 +769,7 @@ public class Org extends BusinessObjectBase {
 
     /**
      * Sets the organizationLine1Address attribute value.
+     * 
      * @param organizationLine1Address The organizationLine1Address to set.
      */
     public void setOrganizationLine1Address(String organizationLine1Address) {
@@ -778,7 +777,8 @@ public class Org extends BusinessObjectBase {
     }
 
     /**
-     * Gets the organizationLine2Address attribute. 
+     * Gets the organizationLine2Address attribute.
+     * 
      * @return Returns the organizationLine2Address.
      */
     public String getOrganizationLine2Address() {
@@ -787,12 +787,13 @@ public class Org extends BusinessObjectBase {
 
     /**
      * Sets the organizationLine2Address attribute value.
+     * 
      * @param organizationLine2Address The organizationLine2Address to set.
      */
     public void setOrganizationLine2Address(String organizationLine2Address) {
         this.organizationLine2Address = organizationLine2Address;
     }
-    
+
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -824,7 +825,8 @@ public class Org extends BusinessObjectBase {
     }
 
     /**
-     * Gets the editHrmsUnitSection attribute. 
+     * Gets the editHrmsUnitSection attribute.
+     * 
      * @return Returns the editHrmsUnitSection.
      */
     public final String getEditHrmsUnitSection() {
@@ -833,6 +835,7 @@ public class Org extends BusinessObjectBase {
 
     /**
      * Sets the editHrmsUnitSection attribute value.
+     * 
      * @param editHrmsUnitSection The editHrmsUnitSection to set.
      */
     public final void setEditHrmsUnitSection(String editHrmsUnitSection) {
@@ -840,7 +843,8 @@ public class Org extends BusinessObjectBase {
     }
 
     /**
-     * Gets the editHrmsUnitSectionBlank attribute. 
+     * Gets the editHrmsUnitSectionBlank attribute.
+     * 
      * @return Returns the editHrmsUnitSectionBlank.
      */
     public final String getEditHrmsUnitSectionBlank() {
@@ -849,6 +853,7 @@ public class Org extends BusinessObjectBase {
 
     /**
      * Sets the editHrmsUnitSectionBlank attribute value.
+     * 
      * @param editHrmsUnitSectionBlank The editHrmsUnitSectionBlank to set.
      */
     public final void setEditHrmsUnitSectionBlank(String editHrmsUnitSectionBlank) {
@@ -856,7 +861,8 @@ public class Org extends BusinessObjectBase {
     }
 
     /**
-     * Gets the organizationExtension attribute. 
+     * Gets the organizationExtension attribute.
+     * 
      * @return Returns the organizationExtension.
      */
     public final OrganizationExtension getOrganizationExtension() {
@@ -865,63 +871,64 @@ public class Org extends BusinessObjectBase {
 
     /**
      * Sets the organizationExtension attribute value.
+     * 
      * @param organizationExtension The organizationExtension to set.
      */
     public final void setOrganizationExtension(OrganizationExtension organizationExtension) {
         this.organizationExtension = organizationExtension;
     }
-    
+
     public String getOrganizationHierarchy() {
         StringBuffer result = new StringBuffer();
         Set<Org> seen = new HashSet<Org>();
-        
-        Org org=this;
-        
-        while (org!=null && org.getReportsToOrganizationCode()!=null && !seen.contains(org)) {
+
+        Org org = this;
+
+        while (org != null && org.getReportsToOrganizationCode() != null && !seen.contains(org)) {
             String rChart = org.getReportsToChartOfAccountsCode();
-            String rOrg=org.getReportsToOrganizationCode();
-            
+            String rOrg = org.getReportsToOrganizationCode();
+
             seen.add(org);
-            org=SpringServiceLocator.getOrganizationService().getByPrimaryId(rChart,rOrg);
-            
-            result.append(rChart+"/"+rOrg+" "+((org==null)?"":org.getOrganizationName())+"\n");
+            org = SpringServiceLocator.getOrganizationService().getByPrimaryId(rChart, rOrg);
+
+            result.append(rChart + "/" + rOrg + " " + ((org == null) ? "" : org.getOrganizationName()) + "\n");
         }
-        
+
         return result.toString();
     }
 
     public String getOrganizationReviewHierarchy() {
-        
+
         Properties params = new Properties();
 
-        params.put("returnLocation","");
-        params.put("quickFinderLookupable","");
-        params.put("backLocation","");
-        params.put("formKey","");
-        params.put("methodToCall","search");
-        params.put("lookupableImplServiceName","RuleBaseValuesLookupableImplService");
-        params.put("ruleTemplateName","KualiOrgReviewTemplate");
-        params.put("activeInd","");
-        params.put("delegateRuleSearch","ALL");
-        params.put("conversionFields","");
-        params.put("docTypeFullName","");
-        params.put("ruleDescription","");
-        params.put("workgroupName","");
-        params.put("ruleDelegationOnly","");
-        params.put("networkId","");
-        params.put("roleName","");
-        params.put("ruleBaseValuesId","");
-        params.put("delegationWizard","");
-        params.put("org_review_fin_coa_cd",this.chartOfAccountsCode);
-        params.put("org_review_org_cd",this.organizationCode);
-        params.put("fromAmount","");
-        params.put("toAmount","");
-        params.put("listKey","");
-        params.put("overrideCd","");
-        
-        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString("workflow.base.url")+"/Lookup.do",params);
+        params.put("returnLocation", "");
+        params.put("quickFinderLookupable", "");
+        params.put("backLocation", "");
+        params.put("formKey", "");
+        params.put("methodToCall", "search");
+        params.put("lookupableImplServiceName", "RuleBaseValuesLookupableImplService");
+        params.put("ruleTemplateName", "KualiOrgReviewTemplate");
+        params.put("activeInd", "");
+        params.put("delegateRuleSearch", "ALL");
+        params.put("conversionFields", "");
+        params.put("docTypeFullName", "");
+        params.put("ruleDescription", "");
+        params.put("workgroupName", "");
+        params.put("ruleDelegationOnly", "");
+        params.put("networkId", "");
+        params.put("roleName", "");
+        params.put("ruleBaseValuesId", "");
+        params.put("delegationWizard", "");
+        params.put("org_review_fin_coa_cd", this.chartOfAccountsCode);
+        params.put("org_review_org_cd", this.organizationCode);
+        params.put("fromAmount", "");
+        params.put("toAmount", "");
+        params.put("listKey", "");
+        params.put("overrideCd", "");
+
+        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString("workflow.base.url") + "/Lookup.do", params);
     }
-    
+
     /**
      * Implementing equals so Org will behave reasonably in a hashed datastructure.
      * 
@@ -931,18 +938,19 @@ public class Org extends BusinessObjectBase {
         boolean equal = false;
 
         LOG.debug("Org equals");
-        
+
         if (obj != null) {
-            
-            if (this==obj) return true;
-            
+
+            if (this == obj)
+                return true;
+
             if (this.getClass().isAssignableFrom(obj.getClass())) {
-                
+
                 Org other = (Org) obj;
 
-                LOG.debug("this: "+this);
-                LOG.debug("other: "+other);
-                
+                LOG.debug("this: " + this);
+                LOG.debug("other: " + other);
+
                 if (StringUtils.equals(this.getChartOfAccountsCode(), other.getChartOfAccountsCode())) {
                     if (StringUtils.equals(this.getOrganizationCode(), other.getOrganizationCode())) {
                         equal = true;
@@ -953,21 +961,22 @@ public class Org extends BusinessObjectBase {
 
         return equal;
     }
-    
+
     /**
      * @return Returns the code and description in format: xx - xxxxxxxxxxxxxxxx
      */
     public String getCodeAndDescription() {
         String theString = getOrganizationCode() + " - " + getOrganizationName();
-        return theString ;    }
-    
-   /**
-    * @see java.lang.Object#hashCode()
-    */
-   public int hashCode() {
-       String hashString = getChartOfAccountsCode() + "|" + getOrganizationCode();
-       return hashString.hashCode();
-   }
+        return theString;
+    }
 
-  
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        String hashString = getChartOfAccountsCode() + "|" + getOrganizationCode();
+        return hashString.hashCode();
+    }
+
+
 }
