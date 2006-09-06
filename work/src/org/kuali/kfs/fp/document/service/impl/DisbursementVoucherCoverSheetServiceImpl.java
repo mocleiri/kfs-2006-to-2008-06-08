@@ -22,6 +22,8 @@
  */
 package org.kuali.module.financial.service.impl;
 
+import static org.kuali.module.financial.rules.DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -46,7 +48,6 @@ import org.kuali.module.financial.document.DisbursementVoucherDocument;
 import org.kuali.module.financial.rules.DisbursementVoucherDocumentRule;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 import org.kuali.module.financial.service.DisbursementVoucherCoverSheetService;
-import static org.kuali.module.financial.rules.DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM;
 
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.AcroFields;
@@ -58,7 +59,7 @@ import com.lowagie.text.pdf.PdfStamper;
  * Service used for manipulating disbursement voucher cover sheets.
  * 
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
- * @version $Id: DisbursementVoucherCoverSheetServiceImpl.java,v 1.5.6.1 2006-08-11 21:07:59 tdurkin Exp $
+ * @version $Id: DisbursementVoucherCoverSheetServiceImpl.java,v 1.5.6.2 2006-09-06 22:37:49 tdurkin Exp $
  */
 public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVoucherCoverSheetService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherCoverSheetServiceImpl.class);
