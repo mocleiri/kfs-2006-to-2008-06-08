@@ -175,6 +175,11 @@
                     <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results</span></td>
                 </tr>
                 <tr>
+	                <td>
+	                	<Strong> <c:out value="${noOriginEntry}" /> </Strong>
+    	            </td>
+                </tr>
+                <tr>
                     
                       <td>
                 	    <input type="hidden" name="d-2339813-p" value="${displayTablePageNumber}"/> 
@@ -978,7 +983,7 @@
                                     value="${criterion.correctionCriteriaLineNumber}" />][field-name]"
                                       name="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out 
                                         value="${criterion.correctionCriteriaLineNumber}" />][field-name]">
-                                    <option value="" selected>Select Search Criteria</option> 
+                                    <option value="" selected disabled="true">Select Search Criteria</option> 
             	                        <c:forEach var="fieldName" items="${KualiForm.fieldNames}">
                 	                        <option value="<c:out value="${fieldName.value}" />"<c:if 
                     	                        test="${fieldName.value eq criterion.correctionFieldName}"> selected="true" </c:if> disabled="true">
