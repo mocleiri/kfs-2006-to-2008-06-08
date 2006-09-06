@@ -22,6 +22,9 @@
  */
 package org.kuali.module.financial.web.struts.form;
 
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.DISPUTE_URL_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.PCARD_DOCUMENT_PARAMETERS_SEC_GROUP;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,8 +38,6 @@ import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine;
 import org.kuali.module.financial.document.ProcurementCardDocument;
-import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.PCARD_DOCUMENT_PARAMETERS_SEC_GROUP;
-import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.DISPUTE_URL_PARM_NM;
 
 /**
  * This class is the form class for the ProcurementCard document. This method extends the parent KualiTransactionalDocumentFormBase
@@ -84,7 +85,7 @@ public class ProcurementCardForm extends KualiTransactionalDocumentFormBase {
 
         setDocTypeName(discoverDocumentTypeName());
     }
-    
+
     /**
      * Constructs a ProcurmentCardForm instance and sets up the appropriately casted document. Also, the newSourceLine needs to be
      * the extended ProcurementCardSourceAccountingLine, for the additional trans line nbr.

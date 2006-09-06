@@ -31,7 +31,6 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.dao.ObjectCodeDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 
@@ -58,7 +57,7 @@ public class ObjectCodeDaoOjb extends PersistenceBrokerDaoSupport implements Obj
         criteria.addEqualTo("chartOfAccountsCode", chartOfAccountsCode);
         criteria.addEqualTo("financialObjectCode", financialObjectCode);
 
-        return (ObjectCode)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(ObjectCode.class, criteria));
+        return (ObjectCode) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(ObjectCode.class, criteria));
     }
 
     public List getYearList(String chartOfAccountsCode, String financialObjectCode) {

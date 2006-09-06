@@ -33,10 +33,7 @@ import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.dao.ChartDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
-
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 /**
  * This class is the OJB implementation of the ChartDao interface.
@@ -63,11 +60,11 @@ public class ChartDaoOjb extends PersistenceBrokerDaoSupport implements ChartDao
 
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
     }
-    
+
     public Chart getUniversityChart() {
         Criteria criteria = new Criteria();
         criteria.addEqualToField("FIN_COA_CD", "RPTS_TO_FIN_COA_CD");
-        return (Chart)getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Chart.class, criteria)).iterator().next();
+        return (Chart) getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Chart.class, criteria)).iterator().next();
     }
 
 
@@ -75,7 +72,7 @@ public class ChartDaoOjb extends PersistenceBrokerDaoSupport implements ChartDao
         Criteria criteria = new Criteria();
         criteria.addEqualTo("chartOfAccountsCode", chartOfAccountsCode);
 
-        return (Chart)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(Chart.class, criteria));
+        return (Chart) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(Chart.class, criteria));
     }
 
     /**

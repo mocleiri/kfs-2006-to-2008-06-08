@@ -37,10 +37,8 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 import org.kuali.module.financial.bo.AdvanceDepositDetail;
 import org.kuali.module.financial.document.AdvanceDepositDocument;
-import org.kuali.module.financial.document.CreditCardReceiptDocument;
 import org.kuali.module.financial.rules.AdvanceDepositDocumentRuleUtil;
 import org.kuali.module.financial.web.struts.form.AdvanceDepositForm;
-import org.kuali.module.financial.web.struts.form.CreditCardReceiptForm;
 
 /**
  * This is the action class for the Advance Deposit document.
@@ -60,13 +58,14 @@ public class AdvanceDepositAction extends KualiTransactionalDocumentActionBase {
         if (adForm.hasDocumentId()) {
             AdvanceDepositDocument adDoc = adForm.getAdvanceDepositDocument();
 
-            adDoc.setTotalAdvanceDepositAmount(calculateAdvanceDepositTotal(adDoc)); // recalc b/c changes to the amounts could have happened
+            adDoc.setTotalAdvanceDepositAmount(calculateAdvanceDepositTotal(adDoc)); // recalc b/c changes to the amounts could
+                                                                                        // have happened
         }
 
         // proceed as usual
         return super.execute(mapping, form, request, response);
     }
-    
+
     /**
      * Adds a AdvanceDepositDetail instance created from the current "new advanceDeposit" line to the document
      * 
@@ -130,7 +129,7 @@ public class AdvanceDepositAction extends KualiTransactionalDocumentActionBase {
         GlobalVariables.getErrorMap().removeFromErrorPath(PropertyConstants.NEW_ADVANCE_DEPOSIT);
         return isValid;
     }
-    
+
     /**
      * Recalculates the advance deposit total since user could have changed it during their update.
      * 
@@ -139,10 +138,10 @@ public class AdvanceDepositAction extends KualiTransactionalDocumentActionBase {
     private KualiDecimal calculateAdvanceDepositTotal(AdvanceDepositDocument advanceDepositDocument) {
         KualiDecimal total = KualiDecimal.ZERO;
         Iterator<AdvanceDepositDetail> deposits = advanceDepositDocument.getAdvanceDeposits().iterator();
-        while(deposits.hasNext()) {
+        while (deposits.hasNext()) {
             AdvanceDepositDetail deposit = deposits.next();
             total = total.add(deposit.getFinancialDocumentAdvanceDepositAmount());
         }
         return total;
     }
- }
+}

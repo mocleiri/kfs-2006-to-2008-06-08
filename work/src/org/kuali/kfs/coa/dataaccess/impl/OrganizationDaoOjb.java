@@ -31,7 +31,6 @@ import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
@@ -52,7 +51,7 @@ public class OrganizationDaoOjb extends PersistenceBrokerDaoSupport implements O
         criteria.addEqualTo("chartOfAccountsCode", chartOfAccountsCode);
         criteria.addEqualTo("organizationCode", organizationCode);
 
-        return (Org)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(Org.class, criteria));
+        return (Org) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(Org.class, criteria));
     }
 
     /*
@@ -77,7 +76,7 @@ public class OrganizationDaoOjb extends PersistenceBrokerDaoSupport implements O
         criteria.addEqualTo("organizationCode", organizationCode);
         criteria.addEqualTo("accountClosedIndicator", Boolean.FALSE);
 
-        accounts = (List)getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Account.class, criteria));
+        accounts = (List) getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Account.class, criteria));
 
         if (accounts.isEmpty() || accounts.size() == 0) {
             return Collections.EMPTY_LIST;
@@ -98,7 +97,7 @@ public class OrganizationDaoOjb extends PersistenceBrokerDaoSupport implements O
         criteria.addEqualTo("reportsToOrganizationCode", organizationCode);
         criteria.addEqualTo("organizationActiveIndicator", Boolean.TRUE);
 
-        orgs = (List)getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Org.class, criteria));
+        orgs = (List) getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Org.class, criteria));
 
         if (orgs.isEmpty() || orgs.size() == 0) {
             return Collections.EMPTY_LIST;

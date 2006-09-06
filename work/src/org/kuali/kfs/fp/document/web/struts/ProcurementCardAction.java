@@ -34,7 +34,6 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.event.AddAccountingLineEvent;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.core.util.Timer;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
@@ -59,7 +58,7 @@ public class ProcurementCardAction extends KualiTransactionalDocumentActionBase 
     @Override
     protected void processAccountingLineOverrides(KualiTransactionalDocumentFormBase transForm) {
         ProcurementCardForm procurementCardForm = (ProcurementCardForm) transForm;
-        
+
         processAccountingLineOverrides(procurementCardForm.getNewSourceLine());
         processAccountingLineOverrides(procurementCardForm.getNewTargetLines());
         if (procurementCardForm.hasDocumentId()) {
@@ -69,7 +68,7 @@ public class ProcurementCardAction extends KualiTransactionalDocumentActionBase 
             processAccountingLineOverrides(transactionalDocument.getTargetAccountingLines());
         }
     }
-    
+
     /**
      * Override to add the new accounting line to the correct transaction
      * 
@@ -141,16 +140,17 @@ public class ProcurementCardAction extends KualiTransactionalDocumentActionBase 
         transactionalDocumentForm.getBaselineTargetAccountingLines().remove(deleteIndex);
         transactionalDocumentForm.getTargetLineDecorators().remove(deleteIndex);
     }
-    
+
     /**
      * Ensures that ProcurementCardForm.newTargetLines is cleared. Otherwise works like super.reload.
      * 
-     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#reload(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#reload(org.apache.struts.action.ActionMapping,
+     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     public ActionForward reload(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ProcurementCardForm procurementCardForm = (ProcurementCardForm) form;
         procurementCardForm.setNewTargetLines(new TypedArrayList(ProcurementCardTargetAccountingLine.class));
-        
+
         return super.reload(mapping, procurementCardForm, request, response);
     }
 }
