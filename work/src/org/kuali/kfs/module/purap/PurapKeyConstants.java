@@ -50,13 +50,15 @@ public class PurapKeyConstants {
     public static final String ERROR_FIRST_TWO_FEIN = "error.vendorMaint.first.two.fein";
     
     //Vendor Lookup
+    public static final String ERROR_VENDOR_LOOKUP_NAME_TOO_SHORT = "error.vendorLookup.name.too.short";
     public static final String ERROR_VENDOR_LOOKUP_FEWER_THAN_MIN_CRITERIA = "error.vendorLookup.min.criteria.fewer";
     public static final String ERROR_VENDOR_LOOKUP_PAYEE_ID_NO_STARTING_P = "error.vendorLookup.payeeId.no.starting.p";
     public static final String ERROR_VENDOR_LOOKUP_TYPE_NO_NAME_OR_STATE = "error.vendorLookup.type.no.name.or.state";
     public static final String ERROR_VENDOR_LOOKUP_STATUS_NO_NAME = "error.vendorLookup.status.no.name";
     public static final String ERROR_VENDOR_LOOKUP_TAX_NUM_ALL_ZEROES = "error.vendorLookup.taxNum.all.zeroes";
     public static final String ERROR_VENDOR_LOOKUP_VNDR_NUM_TOO_MANY_DASHES = "error.vendorLookup.vndrNum.dashes.tooMany";
-    public static final String ERROR_VENDOR_LOOKUP_VNDR_NUM_DASHES_ONLY = "error.vendorLookujp.vndrNum.dashes.only";
+    public static final String ERROR_VENDOR_LOOKUP_VNDR_NUM_DASHES_ONLY = "error.vendorLookup.vndrNum.dashes.only";
+    public static final String ERROR_VENDOR_LOOKUP_STATE_NO_TYPE = "error.vendorLookup.state.no.type";
     
     //Vendor Maintenance Address
     public static final String ERROR_US_REQUIRES_STATE = "error.vendorMaint.vendorAddress.USRequiresState";
