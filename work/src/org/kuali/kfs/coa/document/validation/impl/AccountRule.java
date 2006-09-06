@@ -58,7 +58,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     private static final String ACCT_PREFIX_RESTRICTION = "Account.PrefixRestriction";
     private static final String ACCT_CAPITAL_SUBFUNDGROUP = "Account.CapitalSubFundGroup";
 
-    private static final String CONTRACTS_GRANTS_CD = "CG";
     private static final String GENERAL_FUND_CD = "GF";
     private static final String RESTRICTED_FUND_CD = "RF";
     private static final String ENDOWMENT_FUND_CD = "EN";
@@ -73,7 +72,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
     private BalanceService balanceService;
     private AccountService accountService;
-    
+
     private Account oldAccount;
     private Account newAccount;
 
@@ -245,7 +244,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
      *         Supervisors
      * 
      */
-    protected boolean isNonSystemSupervisorReopeningAClosedAccount(MaintenanceDocument document, KualiUser user) {
+    protected boolean isNonSystemSupervisorEditingAClosedAccount(MaintenanceDocument document, KualiUser user) {
 
         boolean result = false;
 
@@ -256,12 +255,8 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             Account newAccount = (Account) document.getNewMaintainableObject().getBusinessObject();
 
             // do the test
-            if (oldAccount.isAccountClosedIndicator()) {
-                if (!newAccount.isAccountClosedIndicator()) {
-                    if (!user.isSupervisorUser()) {
-                        result = true;
-                    }
-                }
+            if (oldAccount.isAccountClosedIndicator() && !user.isSupervisorUser()) {
+                result = true;
             }
         }
         return result;
@@ -295,16 +290,16 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
      * @param account
      * @return
      */
-    protected boolean hasDefaultRestrictedStatusCode( Account account ) {
+    protected boolean hasDefaultRestrictedStatusCode(Account account) {
         boolean result = false;
-        
+
         if (StringUtils.isNotBlank(account.getAccountRestrictedStatusCode())) {
-            result = account.getAccountRestrictedStatusCode().equals( account.getSubFundGroup().getAccountRestrictedStatusCode() );
+            result = account.getAccountRestrictedStatusCode().equals(account.getSubFundGroup().getAccountRestrictedStatusCode());
         }
-        
+
         return result;
     }
-    
+
     /**
      * 
      * This method checks some of the general business rules associated with this document
@@ -332,9 +327,9 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
         // only a FIS supervisor can reopen a closed account. (This is the central super user, not an account supervisor).
         // we need to get the old maintanable doc here
-        if (isNonSystemSupervisorReopeningAClosedAccount(maintenanceDocument, GlobalVariables.getUserSession().getKualiUser())) {
+        if (isNonSystemSupervisorEditingAClosedAccount(maintenanceDocument, GlobalVariables.getUserSession().getKualiUser())) {
             success &= false;
-            putFieldError("accountClosedIndicator", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ONLY_SUPERVISORS_CAN_REOPEN);
+            putFieldError("accountClosedIndicator", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ONLY_SUPERVISORS_CAN_EDIT);
         }
 
         // when a restricted status code of 'T' (temporarily restricted) is selected, a restricted status
@@ -438,33 +433,32 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             result &= false;
         }
 
-        //  if either of the fringe benefit account fields are not present, then we're done
+        // if either of the fringe benefit account fields are not present, then we're done
         if (result == false) {
             return result;
         }
-        
-        //  attempt to load the fringe benefit account
+
+        // attempt to load the fringe benefit account
         Account fringeBenefitAccount = accountService.getByPrimaryId(newAccount.getReportsToChartOfAccountsCode(), newAccount.getReportsToAccountNumber());
-        
-        //  fringe benefit account must exist
+
+        // fringe benefit account must exist
         if (fringeBenefitAccount == null) {
             putFieldError("reportsToAccountNumber", KeyConstants.ERROR_EXISTENCE, getFieldLabel(Account.class, "reportsToAccountNumber"));
             return false;
         }
-        
-        //  fringe benefit account must be active
+
+        // fringe benefit account must be active
         if (fringeBenefitAccount.isAccountClosedIndicator()) {
             putFieldError("reportsToAccountNumber", KeyConstants.ERROR_INACTIVE, getFieldLabel(Account.class, "reportsToAccountNumber"));
             result &= false;
         }
-        
-        //  make sure the fringe benefit account specified is set to fringe benefits = Y
+
+        // make sure the fringe benefit account specified is set to fringe benefits = Y
         if (!fringeBenefitAccount.isAccountsFringesBnftIndicator()) {
-            putFieldError("reportsToAccountNumber", KeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_MUST_BE_FLAGGED_FRINGEBENEFIT, 
-                    fringeBenefitAccount.getChartOfAccountsCode() + "-" + fringeBenefitAccount.getAccountNumber());
+            putFieldError("reportsToAccountNumber", KeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_MUST_BE_FLAGGED_FRINGEBENEFIT, fringeBenefitAccount.getChartOfAccountsCode() + "-" + fringeBenefitAccount.getAccountNumber());
             result &= false;
         }
-        
+
         return result;
     }
 
@@ -654,7 +648,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         String fundGroupCode = newAccount.getSubFundGroup().getFundGroupCode().trim();
 
         // if this is a CG fund group, then its required
-        if (CONTRACTS_GRANTS_CD.equalsIgnoreCase(fundGroupCode)) {
+        if (newAccount.isInCg()) {
             required = true;
         }
 
@@ -697,7 +691,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
         // Certain C&G fields are required if the Account belongs to the CG Fund Group
         if (ObjectUtils.isNotNull(newAccount.getSubFundGroup())) {
-            if (newAccount.getSubFundGroup().getFundGroupCode().equalsIgnoreCase(CONTRACTS_GRANTS_CD)) {
+            if (newAccount.isInCg()) {
                 result &= checkEmptyBOField("contractControlFinCoaCode", newAccount.getContractControlFinCoaCode(), "When Fund Group is CG, Contract Control Chart of Accounts Code");
                 result &= checkEmptyBOField("contractControlAccountNumber", newAccount.getContractControlAccountNumber(), "When Fund Group is CG, Contract Control Account Number");
                 result &= checkEmptyBOField("acctIndirectCostRcvyTypeCd", newAccount.getAcctIndirectCostRcvyTypeCd(), "When Fund Group is CG, ICR Type Code");
@@ -712,22 +706,21 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     protected boolean checkContractControlAccountNumberRequired(Account newAccount) {
-        
+
         boolean result = true;
-        
+
         // Contract Control account must either exist or be the same as account being maintained
-        
+
         if (ObjectUtils.isNull(newAccount.getContractControlFinCoaCode())) {
-            return result ;
+            return result;
         }
         if (ObjectUtils.isNull(newAccount.getContractControlAccountNumber())) {
-            return result ;
+            return result;
         }
-        if ( (newAccount.getContractControlFinCoaCode().equals(newAccount.getChartOfAccountsCode())) &&
-                (newAccount.getContractControlAccountNumber().equals(newAccount.getAccountNumber()))){
-            return result ;
-        }  
-        
+        if ((newAccount.getContractControlFinCoaCode().equals(newAccount.getChartOfAccountsCode())) && (newAccount.getContractControlAccountNumber().equals(newAccount.getAccountNumber()))) {
+            return result;
+        }
+
         // do an existence/active test
         DictionaryValidationService dvService = super.getDictionaryValidationService();
         boolean referenceExists = dvService.validateReferenceExists(newAccount, "contractControlAccount");
@@ -735,7 +728,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             putFieldError("contractControlAccountNumber", KeyConstants.ERROR_EXISTENCE, "Contract Control Account: " + newAccount.getContractControlFinCoaCode() + "-" + newAccount.getContractControlAccountNumber());
             result &= false;
         }
-        
+
         return result;
     }
 
@@ -779,12 +772,12 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
         // If creating a new account if acct_expiration_dt is set then
         // the acct_expiration_dt must be changed to a date that is today or later
-        if (maintenanceDocument.isNew() && ObjectUtils.isNotNull(newExpDate)) {          
+        if (maintenanceDocument.isNew() && ObjectUtils.isNotNull(newExpDate)) {
             if (!newExpDate.after(today) && !newExpDate.equals(today)) {
                 putFieldError("accountExpirationDate", KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER);
                 // putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER);
                 success &= false;
-            }         
+            }
         }
 
         // acct_expiration_dt can not be before acct_effect_dt
@@ -901,7 +894,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         LOG.info("checkSubFundGroup called");
 
         boolean success = true;
-     
+
         // if we dont have a valid subFundGroupCode and subFundGroup object, we cannot proceed
         if (StringUtils.isBlank(newAccount.getSubFundGroupCode()) || ObjectUtils.isNull(newAccount.getSubFundGroup())) {
             return success;
@@ -959,6 +952,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
     /**
      * Sets the accountService attribute value.
+     * 
      * @param accountService The accountService to set.
      */
     public final void setAccountService(AccountService accountService) {
