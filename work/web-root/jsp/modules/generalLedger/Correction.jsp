@@ -27,12 +27,12 @@
              <tr> 
              
              <td width="20%" align="left" valign="middle" > Total Debits/Blanks: </td> 
-             <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionDebitTotalAmount}" groupingUsed="true"/></td>
+             <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionDebitTotalAmount}" groupingUsed="true" minFractionDigits="2"/></td>
 			 </tr>
 			 <tr>
 			 
 			 <td width="20%" align="left" valign="middle" > Total Credits: </td> 
-             <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionCreditTotalAmount}" groupingUsed="true"/></td>
+             <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionCreditTotalAmount}" groupingUsed="true" minFractionDigits="2"/></td>
 			 
 			 </tr>
 			 <tr>
@@ -50,7 +50,7 @@
  
  	
  	<%-- for display --%>
- 	<c:if test="${KualiForm.command !='displayDocSearchView'}">
+ <c:if test="${KualiForm.command !='displayDocSearchView'}">
  	
  	<kul:tab tabTitle="Correction Process" defaultOpen="true" tabErrorKey="Correction Process">
  	
@@ -182,8 +182,7 @@
 						<input type="hidden" name="d-2339813-d" value="ASC"/>            
 					<display:table class="datatable-100" cellspacing="0" cellpadding="0" name="${KualiForm.allEntries}" id="allEntries" pagesize="10"
                       requestURI="generalLedgerCorrection.do?methodToCall=viewResults&document.financialDocumentNumber=${KualiForm.document.documentHeader.financialDocumentNumber}" >
-        
-             			<c:choose>
+         	         		   <c:choose>
         			     			<c:when test="${KualiForm.editableFlag == 'Y'}">
 	    		       		    		<display:column title="Manual Edit" >
     	        			    			<html:image property="methodToCall.showOneEntry.anchor${currentTabIndex}.${allEntries.entryId}" 
@@ -197,6 +196,7 @@
 										<display:column title="" > </display:column>
 									</c:otherwise>
 								</c:choose>
+						
 						<display:column class="infocell" sortable="true" title="Fiscal Year" >
 						<c:out value="${allEntries.universityFiscalYear}" />&nbsp;</display:column>
 						<display:column class="infocell" sortable="true" title="Budget Year" >
@@ -249,10 +249,10 @@
 						<c:out value="${allEntries.financialDocumentReversalDate}" />&nbsp;</display:column>
 						<display:column class="infocell" sortable="true" title="Enc Update Code" >
 						<c:out value="${allEntries.transactionEncumbranceUpdateCode}" />&nbsp;</display:column>
-						
+					
 						</display:table>
-						
-						
+
+                    
                       
                       </td>
                       
@@ -272,7 +272,7 @@
 
    			<display:table id="eachEntryForManualEdit" name="${KualiForm.eachEntryForManualEdit}" requestURIcontext="false"  >
    			 
-						<display:column title="Manual Edit" >
+	   			<display:column title="Manual Edit" >
 
 	   			<html:image property="methodToCall.editEntry.anchor${currentTabIndex}.${eachEntryForManualEdit.entryId}" value="${eachEntryForManualEdit.entryId}"
   						src="images/tinybutton-saveedits.gif" styleClass="tinybutton" alt="EditAnEntry" />
@@ -355,15 +355,11 @@
 				<display:column title="Transaction Encumbrance Update Code" >
 		   			<html:text property="eachEntryForManualEdit.transactionEncumbranceUpdateCode" size="13"  />
 				</display:column>
-						</display:table>
-
-                    
-                      
-                      </td>
-                      
-                 	
-              	  </tr>
-              	  
+			</display:table>
+                        
+   			</td>
+   			</tr>
+   			
    			</c:if>
               	  
               	  
@@ -383,7 +379,6 @@
        
 
 	</c:if>
-	
             
             
             
@@ -465,7 +460,8 @@
     <div class="tab-container" align="center"> 
     
         <kul:errors keyMatch="searchFieldError" />
-    
+    	
+    	 
         <table cellpadding=0 class="datatable" summary="">
         
             <tr>
@@ -518,7 +514,7 @@
                                     value="${criterion.correctionCriteriaLineNumber}" />][operator]">
                                     <c:forEach var="operator" items="${KualiForm.searchOperators}">
                                         <option value="<c:out value="${operator.key }" />"<c:if 
-                                            test="${operator.key eq criterion.operator}">selected="true"</c:if>><c:out 
+                                            test="${operator.key eq criterion.correctionOperatorCode}">selected="true"</c:if>><c:out 
                                             value="${ operator.value}" /></option>
                                     </c:forEach>
                                 </select>
@@ -692,7 +688,7 @@
                                     value="${criterion.correctionCriteriaLineNumber}" />][operator]">
                                     <c:forEach var="operator" items="${KualiForm.searchOperators}">
                                         <option value="<c:out value="${operator.key }" />"<c:if 
-                                            test="${operator.key eq criterion.operator}">selected="true"</c:if>><c:out 
+                                            test="${operator.key eq criterion.correctionOperatorCode}">selected="true"</c:if>><c:out 
                                             value="${ operator.value}" /></option>
                                     </c:forEach>
                                 </select>
@@ -842,6 +838,7 @@
                 <tr>
                     <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results</span></td>
                 </tr>
+               
                 <tr>
                     
                       <td>
@@ -918,16 +915,16 @@
        	</div>
 
 
-
+	
 
 
  <div class="tab-container" align="center"> 
-
+ 
             <table cellpadding=0 class="datatable" summary="">
        			 <tr>
                     <td align="left" valign="middle" class="subhead"><span class="subhead-left">Edit Options and Action</span></td>
                 </tr>
-
+          	  
             <tr>
             	<td>
 					<center>
@@ -938,13 +935,13 @@
 					</center>
 				</td>
 			</tr>
-
+	
 		</table>				  
 	</div>	
+	
 
-
-
-
+	
+	
 
 
 	<c:if test="${KualiForm.editMethod == 'criteria'}" >
@@ -984,7 +981,7 @@
                                     <option value="" selected>Select Search Criteria</option> 
             	                        <c:forEach var="fieldName" items="${KualiForm.fieldNames}">
                 	                        <option value="<c:out value="${fieldName.value}" />"<c:if 
-                    	                        test="${fieldName.value eq criterion.correctionFieldName}"> selected="true"</c:if>>
+                    	                        test="${fieldName.value eq criterion.correctionFieldName}"> selected="true" </c:if> disabled="true">
                         	                    <c:out value="${fieldName.value}" /> 
                             	            </option>
                                 	    </c:forEach>
@@ -997,8 +994,8 @@
                                     value="${criterion.correctionCriteriaLineNumber}" />][operator]">
                                     <c:forEach var="operator" items="${KualiForm.searchOperators}">
                                         <option value="<c:out value="${operator.key }" />"<c:if 
-                                            test="${operator.key eq criterion.operator}">selected="true"</c:if>><c:out 
-                                            value="${ operator.value}" /></option>
+                                            test="${operator.key eq criterion.correctionOperatorCode}">selected="true" </c:if> disabled="true"><c:out 
+                                            value="${operator.value}" /></option>
                                     </c:forEach>
                                 </select>
                                 <label for="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out 
@@ -1017,15 +1014,15 @@
                             <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-name]">Field</label> 
                             <select id="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-name]"
                                   name="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][field-name]">
-                                <option value="" selected="selected">Select Search Criteria</option>
+                                <option value="" selected="selected" >Select Search Criteria</option>
                                 <c:forEach var="fieldName" items="${ KualiForm.fieldNames}"><option value="<c:out 
-                                    value="${fieldName.value}" />"><c:out value="${fieldName.value}" /></option></c:forEach> 
+                                    value="${fieldName.value}" />" disabled="true" ><c:out value="${fieldName.value}" /></option></c:forEach> 
                             </select>
                             <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][operator]">Operator</label> 
                             <select id="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][operator]"
                                   name="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][operator]">
                                 <c:forEach var="operator" items="${ KualiForm.searchOperators}">
-                                <option value="<c:out value="${operator.key}" />" <c:if test="${operator.key =='eq'}">selected="true"</c:if>><c:out value="${operator.value}" />  </option> 
+                                <option value="<c:out value="${operator.key}" />" <c:if test="${operator.key =='eq'}">selected="true"</c:if> disabled="true" ><c:out value="${operator.value}" />  </option> 
 
                                 </c:forEach>
                             </select>
@@ -1047,7 +1044,7 @@
                                         value="${specification.correctionChangeLineNumber}" />][field-name]">
                                     <c:forEach var="fieldName" items="${ KualiForm.fieldNames}">
                                         <option value="<c:out value="${fieldName.value}" />"<c:if 
-                                            test="${fieldName.value eq specification.correctionFieldName}"> selected="true"</c:if>>
+                                            test="${fieldName.value eq specification.correctionFieldName}"> selected="true"</c:if> disabled="true">
                                             <c:out value="${fieldName.value}" />
                                         </option> 
                                     </c:forEach>
@@ -1070,7 +1067,7 @@
                                 name="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][replacement-specifications][field-name]">
                                 <option value="" selected="selected">Specify Modification</option>
                                 <c:forEach var="fieldName" items="${ KualiForm.fieldNames}"><option value="<c:out 
-                                    value="${fieldName.value}" />"><c:out value="${fieldName.value}" /></option></c:forEach> 
+                                    value="${fieldName.value}" />" disabled="true"><c:out value="${fieldName.value}" /></option></c:forEach> 
                             </select>
                             <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][replacement-value]">Replacement 
                                 Value</label>
@@ -1088,20 +1085,23 @@
             </c:forEach>
 		</table>
 	</div>
-</c:if>
+	</c:if>
 
 
 </c:if>
+
+
 
    
 	<kul:notes/>
-    <kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>        
+    <kul:adHocRecipients />        
     <kul:routeLog/>
     <kul:panelFooter/>
     <kul:documentControls transactionalDocument="false" />
  </kul:page>
  
  
+
 
 
 
