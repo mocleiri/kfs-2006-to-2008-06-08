@@ -29,12 +29,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.AccountingLineBase;
+import org.kuali.core.bo.user.AuthenticationUserId;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.IllegalObjectStateException;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.workflow.DocumentInitiator;
+import org.kuali.core.workflow.KualiDocumentXmlMaterializer;
+import org.kuali.core.workflow.KualiTransactionalDocumentInformation;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetAbstractCostShare;
 import org.kuali.module.kra.budget.bo.BudgetAbstractPeriodCostShare;
+import org.kuali.module.kra.budget.bo.BudgetAdHocOrg;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetPeriodUniversityCostShare;
@@ -131,14 +139,6 @@ public class BudgetDocument extends ResearchDocumentBase {
     public void generatePEsfromAL(AccountingLineBase line, boolean isSource, int counter) throws IllegalObjectStateException {
         // TODO Auto-generated method stub
 
-    }
-
-    /**
-     * @see org.kuali.core.document.Document#populateDocumentForRouting()
-     */
-    public void populateDocumentForRouting() {
-        // TODO Auto-generated method stub
-        super.populateDocumentForRouting();
     }
 
     /**
@@ -367,6 +367,40 @@ public class BudgetDocument extends ResearchDocumentBase {
             }
             
         return list;
+    }
+    
+    @Override
+    public void populateDocumentForRouting() {
+        KualiTransactionalDocumentInformation transInfo = new KualiTransactionalDocumentInformation();
+        DocumentInitiator initiatior = new DocumentInitiator();
+        String initiatorNetworkId = documentHeader.getWorkflowDocument().getInitiatorNetworkId();
+        try {
+            KualiUser initiatorUser = SpringServiceLocator.getKualiUserService().getUser(new AuthenticationUserId(initiatorNetworkId));
+            initiatior.setKualiUser(initiatorUser);
+        }
+        catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        transInfo.setDocumentInitiator(initiatior);
+        KualiDocumentXmlMaterializer xmlWrapper = new KualiDocumentXmlMaterializer();
+        xmlWrapper.setDocument(this);
+        xmlWrapper.setKualiTransactionalDocumentInformation(transInfo);
+        //String xml = SpringServiceLocator.getXmlObjectSerializerService().toXml(xmlWrapper);
+        String xml = buildOrgReportXml(this.getBudget().getAdHocOrgs());
+        documentHeader.getWorkflowDocument().getRouteHeader().getDocumentContent().setApplicationContent(xml);
+    }
+    
+    private String buildOrgReportXml(List<BudgetAdHocOrg> orgs) {
+        StringBuffer xml = new StringBuffer("<documentContent>");
+        for (BudgetAdHocOrg org: orgs) {
+            xml.append("<chartOrg><chartOfAccountsCode>");
+            xml.append(org.getFiscalCampusCode());
+            xml.append("</chartOfAccountsCode><organizationCode>");
+            xml.append(org.getPrimaryDepartmentCode());
+            xml.append("</organizationCode></chartOrg>");
+        }
+        xml.append("</documentContent>");
+        return xml.toString();
     }
 
 }

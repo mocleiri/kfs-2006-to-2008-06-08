@@ -28,16 +28,22 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
+import org.kuali.core.authorization.DocumentActionFlags;
 import org.kuali.core.bo.AdHocRoutePerson;
+import org.kuali.core.bo.user.AuthenticationUserId;
+import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.rule.event.AddAdHocRoutePersonEvent;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.bo.BudgetAdHocOrg;
 import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
+import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 
 /**
@@ -48,27 +54,55 @@ import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 public class BudgetPermissionsAction extends BudgetAction {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetPermissionsAction.class);
-
-
-    public ActionForward add(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
-
+    
+    
+    /**
+     * This method will insert the new ad hoc person from the from into the list of ad hoc person recipients, put a new new record
+     * in place and return like normal.
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return ActionForward
+     * @throws Exception
+     */
+    public ActionForward insertAdHocRoutePerson(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         BudgetForm budgetForm = (BudgetForm) form;
+        BudgetDocument document = budgetForm.getBudgetDocument();
 
-        if (budgetForm.getNewAdHocPermission().getPersonUniversalIdentifier() == null) {
-            // Add page error.
-            GlobalVariables.getErrorMap().putError("newAdHocPermission", KeyConstants.ERROR_NO_PERSON_SELECTED, new String[] {});
+        // check authorization
+        DocumentActionFlags flags = getDocumentActionFlags(document);
+        if (!flags.getCanAdHocRoute()) {
+            throw buildAuthorizationException("ad-hoc route", document);
         }
-        else {
+        
+        AdHocRoutePerson adHocRoutePerson = (AdHocRoutePerson) budgetForm.getNewAdHocRoutePerson();
+
+        // check business rules
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAdHocRoutePersonEvent(document, (AdHocRoutePerson) budgetForm.getNewAdHocRoutePerson()));
+        
+        if (rulePassed) {
             BudgetAdHocPermission newAdHocPermission = budgetForm.getNewAdHocPermission();
+            UniversalUser user = SpringServiceLocator.getKualiUserService().getUniversalUser(new AuthenticationUserId(adHocRoutePerson.getId()));
+            newAdHocPermission.setPersonUniversalIdentifier(user.getPersonUniversalIdentifier());
+            newAdHocPermission.setUser(user);
             newAdHocPermission.setPersonAddedTimestamp(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
             newAdHocPermission.setAddedByPerson(SpringServiceLocator.getWebAuthenticationService().getNetworkId(request));
             budgetForm.getBudgetDocument().getBudget().getAdHocPermissions().add(newAdHocPermission);
             budgetForm.setNewAdHocPermission(new BudgetAdHocPermission());
+            budgetForm.setNewAdHocRoutePerson(new AdHocRoutePerson());
         }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
+    public ActionForward delete(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+
+        ((BudgetForm) form).getBudgetDocument().getBudget().getAdHocPermissions().remove(getLineToDelete(request));
+
+        return mapping.findForward(Constants.MAPPING_BASIC);
+    }
     
     public ActionForward addOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
@@ -89,15 +123,6 @@ public class BudgetPermissionsAction extends BudgetAction {
         return mapping.findForward(Constants.MAPPING_BASIC);
     } 
 
-
-    public ActionForward delete(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
-
-        ((BudgetForm) form).getBudgetDocument().getBudget().getAdHocPermissions().remove(getLineToDelete(request));
-
-        return mapping.findForward(Constants.MAPPING_BASIC);
-    }
-    
-    
     public ActionForward deleteOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
         ((BudgetForm) form).getBudgetDocument().getBudget().getAdHocOrgs().remove(getLineToDelete(request));
@@ -118,9 +143,6 @@ public class BudgetPermissionsAction extends BudgetAction {
 
         budgetForm.getBudgetDocument().getBudget().setAdHocPermissions(adHocPermissions);
         budgetForm.getBudgetDocument().getBudget().setAdHocOrgs(adHocOrgs);
-        
-        //List<AdHocRoutePerson> adHocRoutePersons = convertToAdHocRoutePersons(adHocPermissions);
-        //budgetForm.getBudgetDocument().setAdHocRoutePersons(adHocRoutePersons);
 
         return super.save(mapping, budgetForm, request, response);
     }
@@ -134,7 +156,11 @@ public class BudgetPermissionsAction extends BudgetAction {
         budgetForm.setNewAdHocPermission(new BudgetAdHocPermission());
         budgetForm.setNewAdHocOrg(new BudgetAdHocOrg());
         
-        return super.reload(mapping, budgetForm, request, response);
+        ActionForward forward = super.reload(mapping, budgetForm, request, response);
+        
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObject(budgetForm.getBudgetDocument().getBudget(), "adHocPermissions");
+        
+        return forward;
     }
     
     private static List<AdHocRoutePerson> convertToAdHocRoutePersons(List<BudgetAdHocPermission> adHocPermissions) {

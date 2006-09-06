@@ -11,11 +11,11 @@
 	<kra-b:budgetHiddenDocumentFields includeDocumenHeaderIdFields="true"
 		includeTaskPeriodLists="false" />
 
-	<kra-b:budgetPermissions />
+	<%--  %><kra-b:budgetPermissions /> --%>
 	
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
 	
-	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
+	<kra:kraAdHocRecipients editingMode="${KualiForm.editingMode}"/>
 	
 	<kul:routeLog />
 	
