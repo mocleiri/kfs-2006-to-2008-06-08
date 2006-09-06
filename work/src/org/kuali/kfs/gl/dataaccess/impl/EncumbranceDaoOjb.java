@@ -43,7 +43,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * @author Kuali General Ledger Team <kualigltech@oncourse.iu.edu>
- * @version $Id: EncumbranceDaoOjb.java,v 1.14 2006-09-06 06:50:17 abyrne Exp $
+ * @version $Id: EncumbranceDaoOjb.java,v 1.14.2.1 2006-09-06 21:37:50 jsissom Exp $
  */
 public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements EncumbranceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EncumbranceDaoOjb.class);
@@ -60,7 +60,7 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
 
         Criteria crit = new Criteria();
         crit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, t.getUniversityFiscalYear());
-        crit.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS, t.getChartOfAccountsCode());
+        crit.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE, t.getChartOfAccountsCode());
         crit.addEqualTo(PropertyConstants.ACCOUNT_NUMBER, t.getAccountNumber());
         crit.addEqualTo(PropertyConstants.SUB_ACCOUNT_NUMBER, t.getSubAccountNumber());
         crit.addEqualTo(PropertyConstants.OBJECT_CODE, t.getFinancialObjectCode());
