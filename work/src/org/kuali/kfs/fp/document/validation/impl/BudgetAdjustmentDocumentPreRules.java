@@ -22,18 +22,14 @@
  */
 package org.kuali.module.financial.rules;
 
-import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
-import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.rules.PreRulesContinuationBase;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
-import org.kuali.module.financial.bo.Payee;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
-import org.kuali.module.financial.document.DisbursementVoucherDocument;
 
 /**
  * Checks warnings and prompt conditions for ba document.
@@ -76,7 +72,7 @@ public class BudgetAdjustmentDocumentPreRules extends PreRulesContinuationBase {
                 // update baselines in form
                 ((KualiTransactionalDocumentFormBase) form).setBaselineSourceAccountingLines(budgetDocument.getSourceAccountingLines());
                 ((KualiTransactionalDocumentFormBase) form).setBaselineTargetAccountingLines(budgetDocument.getTargetAccountingLines());
-                
+
                 // return to document after lines are generated
                 super.event.setActionForwardName(Constants.MAPPING_BASIC);
                 return false;
