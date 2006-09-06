@@ -27,7 +27,6 @@ import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.chart.dao.SubFundGroupDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
@@ -45,7 +44,7 @@ public class SubFundGroupDaoOjb extends PersistenceBrokerDaoSupport implements S
         Criteria criteria = new Criteria();
         criteria.addEqualTo("subFundGroupCode", subFundGroupCode);
 
-        return (SubFundGroup)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(SubFundGroup.class, criteria));
+        return (SubFundGroup) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(SubFundGroup.class, criteria));
     }
 
     /*
@@ -58,11 +57,11 @@ public class SubFundGroupDaoOjb extends PersistenceBrokerDaoSupport implements S
         criteria.addEqualTo("chartOfAccountsCode", chartCode);
         criteria.addEqualTo("accountNumber", accountNumber);
 
-        Account account = (Account)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(Account.class, criteria));
+        Account account = (Account) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(Account.class, criteria));
         criteria = new Criteria();
         criteria.addEqualTo("subFundGroupCode", account.getSubFundGroupCode());
 
-        return (SubFundGroup)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(SubFundGroup.class, criteria));
+        return (SubFundGroup) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(SubFundGroup.class, criteria));
     }
 
 }

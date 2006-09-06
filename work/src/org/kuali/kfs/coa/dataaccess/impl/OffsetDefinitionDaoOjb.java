@@ -26,7 +26,6 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.dao.OffsetDefinitionDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 
@@ -50,6 +49,6 @@ public class OffsetDefinitionDaoOjb extends PersistenceBrokerDaoSupport implemen
         criteria.addEqualTo("financialDocumentTypeCode", financialDocumentTypeCode);
         criteria.addEqualTo("financialBalanceTypeCode", financialBalanceTypeCode);
 
-        return (OffsetDefinition)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(OffsetDefinition.class, criteria));
+        return (OffsetDefinition) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(OffsetDefinition.class, criteria));
     }
 }

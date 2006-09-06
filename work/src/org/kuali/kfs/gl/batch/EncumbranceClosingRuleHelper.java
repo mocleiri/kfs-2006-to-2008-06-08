@@ -23,6 +23,8 @@
 package org.kuali.module.gl.batch.closing.year.service.impl.helper;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.kuali.Constants;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.PriorYearAccount;
 import org.kuali.module.chart.bo.SubFundGroup;
@@ -35,9 +37,8 @@ import org.kuali.module.gl.util.FatalErrorException;
 import org.kuali.module.gl.util.ObjectHelper;
 
 /**
- * A helper class which contains the more complicated logic involved in the year
- * end encumbrance closing process. This logic is likely going to need to be
- * modular which is why it's in its own class.
+ * A helper class which contains the more complicated logic involved in the year end encumbrance closing process. This logic is
+ * likely going to need to be modular which is why it's in its own class.
  * 
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
  * @version $Id$
@@ -47,13 +48,10 @@ public class EncumbranceClosingRuleHelper {
 
     static private org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EncumbranceClosingRuleHelper.class);
 
-    static private String[] EXPENSE_OBJECT_CODE_TYPES = new String[] { "EE", "EX", "ES", "TE" };
-
-    static private String[] EXTERNAL_INTERNAL_AND_PRE_ENCUMBRANCE_BALANCE_TYPE_CODES = new String[] { "IE", "EX", "PE" };
-
     private A21SubAccountService a21SubAccountService;
     private PriorYearAccountService priorYearAccountService;
     private SubFundGroupService subFundGroupService;
+    private KualiConfigurationService kualiConfigurationService;
 
     /**
      * Field accessor for A21SubAccountService.
@@ -83,8 +81,7 @@ public class EncumbranceClosingRuleHelper {
     }
 
     /**
-     * Determine whether or not an encumbrance should be carried forward from
-     * one fiscal year to the next.
+     * Determine whether or not an encumbrance should be carried forward from one fiscal year to the next.
      * 
      * @param encumbrance
      * @return true if the encumbrance should be rolled forward from the closing fiscal year to the opening fiscal year.
@@ -99,26 +96,26 @@ public class EncumbranceClosingRuleHelper {
         }
 
         // internal encumbrance or labor distribution
-        if ("IE".equals(encumbrance.getBalanceTypeCode()) && "LD".equals(encumbrance.getOriginCode())) {
+        if (Constants.BALANCE_TYPE_INTERNAL_ENCUMBRANCE.equals(encumbrance.getBalanceTypeCode()) && Constants.LABOR_DISTRIBUTION_ORIGIN_CODE.equals(encumbrance.getOriginCode())) {
             return false;
 
         }
 
-        if ("CE".equals(encumbrance.getBalanceTypeCode())) {
+        if (Constants.BALANCE_TYPE_COST_SHARE_ENCUMBRANCE.equals(encumbrance.getBalanceTypeCode())) {
 
             return false;
 
         }
 
         // closed encumbrances aren't carried forward
-        if (ObjectHelper.isOneOf(encumbrance.getBalanceTypeCode(), new String[] { "EX", "IE" })) {
+        if (ObjectHelper.isOneOf(encumbrance.getBalanceTypeCode(), new String[] { Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE, Constants.BALANCE_TYPE_INTERNAL_ENCUMBRANCE })) {
 
             return isEncumbranceClosed(encumbrance);
 
         }
 
         // pre-encumbrances
-        if ("PE".equals(encumbrance.getBalanceTypeCode())) {
+        if (Constants.BALANCE_TYPE_PRE_ENCUMBRANCE.equals(encumbrance.getBalanceTypeCode())) {
 
             PriorYearAccount priorYearAccount = priorYearAccountService.getByPrimaryKey(encumbrance.getChartOfAccountsCode(), encumbrance.getAccountNumber());
 
@@ -130,11 +127,11 @@ public class EncumbranceClosingRuleHelper {
                 return false;
 
             }
-            
+
             // the sub fund group must exist for the prior year account and the
             // encumbrance must not be closed.
             SubFundGroup subFundGroup = subFundGroupService.getByPrimaryId(priorYearAccount.getSubFundGroupCode());
-            if (null != subFundGroup && "CG".equals(subFundGroup.getSubFundGroupCode())) {
+            if (null != subFundGroup && Constants.CONTRACTS_AND_GRANTS.equals(subFundGroup.getSubFundGroupCode())) {
 
                 return isEncumbranceClosed(encumbrance);
 
@@ -155,9 +152,8 @@ public class EncumbranceClosingRuleHelper {
      * Determine whether or not the encumbrance has been fully relieved.
      * 
      * @param encumbrance
-     * @return true if the amount closed on the encumbrance is NOT equal to the
-     * amount of the encumbrance itself, e.g. if the encumbrance has not yet
-     * been paid off.
+     * @return true if the amount closed on the encumbrance is NOT equal to the amount of the encumbrance itself, e.g. if the
+     *         encumbrance has not yet been paid off.
      */
     private boolean isEncumbranceClosed(Encumbrance encumbrance) {
 
@@ -166,7 +162,7 @@ public class EncumbranceClosingRuleHelper {
             return false;
 
         }
-        
+
         return true;
 
     }
@@ -185,7 +181,7 @@ public class EncumbranceClosingRuleHelper {
 
         PriorYearAccount priorYearAccount = priorYearAccountService.getByPrimaryKey(encumbrance.getChartOfAccountsCode(), encumbrance.getAccountNumber());
 
-        // the sub fund group for the prior year account must exist. 
+        // the sub fund group for the prior year account must exist.
         String subFundGroupCode = null;
         if (null != priorYearAccount) {
 
@@ -193,17 +189,17 @@ public class EncumbranceClosingRuleHelper {
 
         }
         else {
-            
+
             // this message was carried over from the cobol.
             throw new FatalErrorException("ERROR ACCESSING PRIOR YR ACCT TABLE FOR " + encumbrance.getAccountNumber());
-            
+
         }
-        
+
         SubFundGroup subFundGroup = subFundGroupService.getByPrimaryId(subFundGroupCode);
-        
+
         if (null != subFundGroup) {
 
-            if (!"CG".equals(subFundGroup.getFundGroupCode())) {
+            if (!Constants.CONTRACTS_AND_GRANTS.equals(subFundGroup.getFundGroupCode())) {
 
                 return false;
 
@@ -215,17 +211,20 @@ public class EncumbranceClosingRuleHelper {
             throw new FatalErrorException("ERROR ACCESSING SUB FUND GROUP TABLE FOR " + subFundGroupCode);
 
         }
-        
+
         // I think this is redundant to the statement a few lines above here.
         // In any case, the sub fund group must not be contracts and grants.
-        if (!"CG".equals(subFundGroup.getFundGroupCode())) {
+        if (!Constants.CONTRACTS_AND_GRANTS.equals(subFundGroup.getFundGroupCode())) {
 
             return false;
 
         }
 
-        // the object type code must be an expense and the encumbrance balance type code must correspond to an internal, external or pre-encumbrance
-        if (!(ArrayUtils.contains(EXPENSE_OBJECT_CODE_TYPES, objectTypeCode) && ArrayUtils.contains(EXTERNAL_INTERNAL_AND_PRE_ENCUMBRANCE_BALANCE_TYPE_CODES, encumbrance.getBalanceTypeCode()))) {
+        String[] expenseObjectCodeTypes = kualiConfigurationService.getApplicationParameterValues("SYSTEM", "ExpenseObjectTypeCodes");
+        String[] encumbranceBalanceTypeCodes = kualiConfigurationService.getApplicationParameterValues("Kuali.GeneralLedger.EncumbranceClosing", "ExternalInternalAndPreEncumbranceBalanceTypeCodes");
+        // the object type code must be an expense and the encumbrance balance type code must correspond to an internal, external or
+        // pre-encumbrance
+        if (!(ArrayUtils.contains(expenseObjectCodeTypes, objectTypeCode) && ArrayUtils.contains(encumbranceBalanceTypeCodes, encumbrance.getBalanceTypeCode()))) {
 
             return false;
 
@@ -243,9 +242,14 @@ public class EncumbranceClosingRuleHelper {
             }
 
             // everything is valid, return true if the a21 sub account is a cost share sub-account
-            return "CS".equals(a21SubAccount.getSubAccountTypeCode());
+            return Constants.COST_SHARE.equals(a21SubAccount.getSubAccountTypeCode());
 
         }
 
     }
+
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
+    }
+
 }
