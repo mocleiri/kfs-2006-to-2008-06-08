@@ -32,7 +32,6 @@ import org.kuali.Constants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectDictionaryService;
 import org.kuali.core.service.LookupService;
-import org.kuali.module.gl.bo.AccountBalanceByConsolidation;
 import org.kuali.module.gl.bo.AccountBalanceByLevel;
 import org.kuali.module.gl.web.Constant;
 
@@ -72,7 +71,8 @@ public class AccountBalanceByConsolidationInquirableImpl extends AbstractGLInqui
      */
     protected Map getUserDefinedAttributeMap() {
         Map userDefinedAttributeMap = new HashMap();
-        //userDefinedAttributeMap.put("financialObject.financialObjectLevel.financialConsolidationObject.financialConsolidationObjectCode", "");
+        // userDefinedAttributeMap.put("financialObject.financialObjectLevel.financialConsolidationObject.financialConsolidationObjectCode",
+        // "");
         userDefinedAttributeMap.put("dummyBusinessObject.linkButtonOption", "");
         return userDefinedAttributeMap;
     }
@@ -81,9 +81,9 @@ public class AccountBalanceByConsolidationInquirableImpl extends AbstractGLInqui
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getAttributeName(java.lang.String)
      */
     protected String getAttributeName(String attributeName) {
-//        if (attributeName.equals("dummyBusinessObject.linkButtonOption")) {
-//            attributeName = "financialObject.financialObjectLevel";
-//        }
+        // if (attributeName.equals("dummyBusinessObject.linkButtonOption")) {
+        // attributeName = "financialObject.financialObjectLevel";
+        // }
         return attributeName;
     }
 
@@ -123,12 +123,12 @@ public class AccountBalanceByConsolidationInquirableImpl extends AbstractGLInqui
      */
     protected Class getInquiryBusinessObjectClass(String attributeName) {
         Class c = null;
-        if("dummyBusinessObject.linkButtonOption".equals(attributeName)) {
+        if ("dummyBusinessObject.linkButtonOption".equals(attributeName)) {
             c = AccountBalanceByLevel.class;
         }
         return c;
     }
-    
+
     /**
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
      */
