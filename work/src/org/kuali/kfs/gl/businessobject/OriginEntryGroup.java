@@ -23,130 +23,82 @@
 package org.kuali.module.gl.bo;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryGroup.java,v 1.5 2006-09-05 23:12:23 bnelson Exp $
- * 
+ * @version $Id: OriginEntryGroup.java,v 1.1.6.2 2006-02-03 20:53:30 rkirkend Exp $
+ *
  */
 
 public class OriginEntryGroup extends BusinessObjectBase {
-    
-    private static final String VALID_STRING =  "Valid/";
-    private static final String INVALID_STRING = "Invalid/";
-    private static final String PROCESSED_STRING = " Will Be Processed/";
-    private static final String NOT_PROCESSED_STRING = "Will Not Process/";
-    private static final String SCRUB_STRING = "To Scrub";
-    private static final String NO_SCRUB_STRING = "Not to Scrub";
-    
-    private Integer id;
-    private Date date;
-    private String sourceCode;
-    private Boolean valid;
-    private Boolean process;
-    private Boolean scrub;
+	static final private long serialVersionUID = 1l;
+  private Integer id;
+  private Date date;
+  private String sourceCode;
+  private Boolean valid;
+  private Boolean process;
+  private Boolean scrub;
 
-    // This does not normally get populated.
-    private Integer rows = new Integer(0);
+  private OriginEntrySource source;
 
-    private OriginEntrySource source;
+  /**
+   * 
+   */
+  public OriginEntryGroup() {
+    super();
+  }
 
-    /**
-     * 
-     */
-    public OriginEntryGroup() {
-        super();
-    }
+  protected LinkedHashMap toStringMapper() {
+    LinkedHashMap map = new LinkedHashMap();
+    map.put("id",id);
+    return map;
+  }
 
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap map = new LinkedHashMap();
-        map.put("id", id);
-        return map;
-    }
+  public OriginEntrySource getSource() {
+    return source;
+  }
 
-    public String getName() {
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-        StringBuffer sb = new StringBuffer(this.getSourceCode());
-        sb.append(" ");
-        sb.append(source.getName());
-        sb.append(" (");
-        sb.append(rows);
-        sb.append(") ");
-        sb.append(this.getId());
-        sb.append(" ");
-        sb.append(sdf.format(this.getDate()));
-        sb.append(" ");
-        sb.append(valid ? VALID_STRING : INVALID_STRING);
-        sb.append(process ? PROCESSED_STRING : NOT_PROCESSED_STRING);
-        sb.append(scrub ? SCRUB_STRING : NO_SCRUB_STRING);
-        return sb.toString();
-    }
+  public void setSource(OriginEntrySource oes) {
+    source = oes;
+  }
 
-    public Integer getRows() {
-        return rows;
-    }
-
-    public void setRows(Integer rows) {
-        this.rows = rows;
-    }
-
-    public OriginEntrySource getSource() {
-        return source;
-    }
-
-    public void setSource(OriginEntrySource oes) {
-        source = oes;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Boolean getProcess() {
-        return process;
-    }
-
-    public void setProcess(Boolean process) {
-        this.process = process;
-    }
-
-    public Boolean getScrub() {
-        return scrub;
-    }
-
-    public void setScrub(Boolean scrub) {
-        this.scrub = scrub;
-    }
-
-    public String getSourceCode() {
-        return sourceCode;
-    }
-
-    public void setSourceCode(String sourceCode) {
-        this.sourceCode = sourceCode;
-    }
-
-    public Boolean getValid() {
-        return valid;
-    }
-
-    public void setValid(Boolean valid) {
-        this.valid = valid;
-    }
+  public Date getDate() {
+    return date;
+  }
+  public void setDate(Date date) {
+    this.date = date;
+  }
+  public Integer getId() {
+    return id;
+  }
+  public void setId(Integer id) {
+    this.id = id;
+  }
+  public Boolean getProcess() {
+    return process;
+  }
+  public void setProcess(Boolean process) {
+    this.process = process;
+  }
+  public Boolean getScrub() {
+    return scrub;
+  }
+  public void setScrub(Boolean scrub) {
+    this.scrub = scrub;
+  }
+  public String getSourceCode() {
+    return sourceCode;
+  }
+  public void setSourceCode(String sourceCode) {
+    this.sourceCode = sourceCode;
+  }
+  public Boolean getValid() {
+    return valid;
+  }
+  public void setValid(Boolean valid) {
+    this.valid = valid;
+  }
 }

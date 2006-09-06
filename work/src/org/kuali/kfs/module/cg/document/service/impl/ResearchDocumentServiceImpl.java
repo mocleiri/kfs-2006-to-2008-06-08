@@ -26,35 +26,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.kra.bo.Budget;
 import org.kuali.module.kra.document.BudgetDocument;
 import org.kuali.module.kra.document.ResearchDocument;
 import org.kuali.module.kra.service.BudgetService;
 import org.kuali.module.kra.service.ResearchDocumentService;
 import org.springframework.orm.ojb.PersistenceBrokerTemplate;
 
-import edu.iu.uis.eden.exception.WorkflowException;
-
 /**
  * This class...
- * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class ResearchDocumentServiceImpl implements ResearchDocumentService {
+public class ResearchDocumentServiceImpl extends PersistenceBrokerTemplate implements ResearchDocumentService {
 
     private BudgetService budgetService;
-
+    
     /**
      * @see org.kuali.module.kra.service.ResearchDocumentService#prepareResearchDocumentForSave(org.kuali.module.kra.document.ResearchDocument)
      */
-    public void prepareResearchDocumentForSave(ResearchDocument researchDocument) throws WorkflowException {
+    public void prepareResearchDocumentForSave(ResearchDocument researchDocument) {
         if (researchDocument instanceof BudgetDocument) {
-            BudgetDocument budgetDocument = (BudgetDocument) researchDocument;
-            budgetService.prepareBudgetForSave(budgetDocument);
-            budgetDocument.setForceRefreshOfBOSubListsForSave(false);
+            budgetService.prepareBudgetForSave((BudgetDocument)researchDocument);
         }
+        SpringServiceLocator.getOjbCollectionHelper().processCollections(this,researchDocument.getFinancialDocumentNumber(),researchDocument);
     }
 
+    /**
+     * @see org.kuali.core.util.OjbCollectionAware#getListOfCollectionsToProcess(java.lang.Object)
+     */
+    public List getListOfCollectionsToProcess(Object object) {
+        List list=null;
+        if (object instanceof BudgetDocument) {
+            list=new ArrayList();
+            list.add(((BudgetDocument)object).getBudget().getTasks());
+            list.add(((BudgetDocument)object).getBudget().getPeriods());
+            list.add(((BudgetDocument)object).getBudget().getNonpersonnelItems());
+        }
+        return list;
+    }
+    
     public void setBudgetService(BudgetService budgetService) {
         this.budgetService = budgetService;
     }

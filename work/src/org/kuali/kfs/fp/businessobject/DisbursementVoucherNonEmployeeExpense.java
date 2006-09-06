@@ -31,7 +31,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
 
@@ -40,10 +40,10 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     private String disbVchrExpenseCode;
     private String disbVchrExpenseCompanyName;
     private KualiDecimal disbVchrExpenseAmount;
+    private boolean chargedToInstitution;
 
     private TravelExpenseTypeCode disbVchrExpense;
-
-    private boolean isPrepaid;
+    private TravelCompanyCode disbVchrExpenseCompany;
 
     /**
      * Default no-arg constructor.
@@ -56,7 +56,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
      * Gets the financialDocumentNumber attribute.
      * 
      * @return - Returns the financialDocumentNumber
-     * 
+     *  
      */
     public String getFinancialDocumentNumber() {
         return financialDocumentNumber;
@@ -66,8 +66,8 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the financialDocumentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
-     * 
+     * @param - financialDocumentNumber The financialDocumentNumber to set.
+     *  
      */
     public void setFinancialDocumentNumber(String financialDocumentNumber) {
         this.financialDocumentNumber = financialDocumentNumber;
@@ -77,7 +77,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
      * Gets the financialDocumentLineNumber attribute.
      * 
      * @return - Returns the financialDocumentLineNumber
-     * 
+     *  
      */
     public Integer getFinancialDocumentLineNumber() {
         return financialDocumentLineNumber;
@@ -87,8 +87,8 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the financialDocumentLineNumber attribute.
      * 
-     * @param financialDocumentLineNumber The financialDocumentLineNumber to set.
-     * 
+     * @param - financialDocumentLineNumber The financialDocumentLineNumber to set.
+     *  
      */
     public void setFinancialDocumentLineNumber(Integer financialDocumentLineNumber) {
         this.financialDocumentLineNumber = financialDocumentLineNumber;
@@ -98,18 +98,9 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
      * Gets the disbVchrExpenseCode attribute.
      * 
      * @return - Returns the disbVchrExpenseCode
-     * 
+     *  
      */
     public String getDisbVchrExpenseCode() {
-        return disbVchrExpenseCode;
-    }
-
-    /**
-     * Dummy field so we can have different select options.
-     * 
-     * @return String
-     */
-    public String getDisbVchrPrePaidExpenseCode() {
         return disbVchrExpenseCode;
     }
 
@@ -117,20 +108,10 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the disbVchrExpenseCode attribute.
      * 
-     * @param disbVchrExpenseCode The disbVchrExpenseCode to set.
-     * 
+     * @param - disbVchrExpenseCode The disbVchrExpenseCode to set.
+     *  
      */
     public void setDisbVchrExpenseCode(String disbVchrExpenseCode) {
-        this.disbVchrExpenseCode = disbVchrExpenseCode;
-        this.refresh();
-    }
-
-    /**
-     * Dummy field so we can have different select options.
-     * 
-     * @param disbVchrExpenseCode
-     */
-    public void setDisbVchrPrePaidExpenseCode(String disbVchrExpenseCode) {
         this.disbVchrExpenseCode = disbVchrExpenseCode;
     }
 
@@ -138,7 +119,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
      * Gets the disbVchrExpenseCompanyName attribute.
      * 
      * @return - Returns the disbVchrExpenseCompanyName
-     * 
+     *  
      */
     public String getDisbVchrExpenseCompanyName() {
         return disbVchrExpenseCompanyName;
@@ -148,31 +129,10 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the disbVchrExpenseCompanyName attribute.
      * 
-     * @param disbVchrExpenseCompanyName The disbVchrExpenseCompanyName to set.
-     * 
+     * @param - disbVchrExpenseCompanyName The disbVchrExpenseCompanyName to set.
+     *  
      */
     public void setDisbVchrExpenseCompanyName(String disbVchrExpenseCompanyName) {
-        this.disbVchrExpenseCompanyName = disbVchrExpenseCompanyName;
-    }
-
-    /**
-     * Gets the disbVchrExpenseCompanyName attribute.
-     * 
-     * @return - Returns the disbVchrExpenseCompanyName
-     * 
-     */
-    public String getDisbVchrPrePaidExpenseCompanyName() {
-        return disbVchrExpenseCompanyName;
-    }
-
-
-    /**
-     * Sets the disbVchrExpenseCompanyName attribute.
-     * 
-     * @param disbVchrExpenseCompanyName The disbVchrExpenseCompanyName to set.
-     * 
-     */
-    public void setDisbVchrPrePaidExpenseCompanyName(String disbVchrExpenseCompanyName) {
         this.disbVchrExpenseCompanyName = disbVchrExpenseCompanyName;
     }
 
@@ -180,7 +140,7 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
      * Gets the disbVchrExpenseAmount attribute.
      * 
      * @return - Returns the disbVchrExpenseAmount
-     * 
+     *  
      */
     public KualiDecimal getDisbVchrExpenseAmount() {
         return disbVchrExpenseAmount;
@@ -190,8 +150,8 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     /**
      * Sets the disbVchrExpenseAmount attribute.
      * 
-     * @param disbVchrExpenseAmount The disbVchrExpenseAmount to set.
-     * 
+     * @param - disbVchrExpenseAmount The disbVchrExpenseAmount to set.
+     *  
      */
     public void setDisbVchrExpenseAmount(KualiDecimal disbVchrExpenseAmount) {
         this.disbVchrExpenseAmount = disbVchrExpenseAmount;
@@ -201,16 +161,17 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
      * Gets the disbVchrExpense attribute.
      * 
      * @return - Returns the disbVchrExpense
-     * 
+     *  
      */
     public TravelExpenseTypeCode getDisbVchrExpense() {
         return disbVchrExpense;
     }
 
+
     /**
      * Sets the disbVchrExpense attribute.
      * 
-     * @param disbVchrExpense The disbVchrExpense to set.
+     * @param - disbVchrExpense The disbVchrExpense to set.
      * @deprecated
      */
     public void setDisbVchrExpense(TravelExpenseTypeCode disbVchrExpense) {
@@ -218,14 +179,48 @@ public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * Gets the disbVchrExpenseCompany attribute.
+     * 
+     * @return - Returns the disbVchrExpenseCompany
+     *  
+     */
+    public TravelCompanyCode getDisbVchrExpenseCompany() {
+        return disbVchrExpenseCompany;
+    }
+
+
+    /**
+     * Sets the disbVchrExpenseCompany attribute.
+     * 
+     * @param - disbVchrExpenseCompany The disbVchrExpenseCompany to set.
+     * @deprecated
+     */
+    public void setDisbVchrExpenseCompany(TravelCompanyCode disbVchrExpenseCompany) {
+        this.disbVchrExpenseCompany = disbVchrExpenseCompany;
+    }
+
+
+    /**
+     * @return Returns the chargedToInstitution.
+     */
+    public boolean isChargedToInstitution() {
+        return chargedToInstitution;
+    }
+
+    /**
+     * @param chargedToInstitution The chargedToInstitution to set.
+     */
+    public void setChargedToInstitution(boolean chargedToInstitution) {
+        this.chargedToInstitution = chargedToInstitution;
+    }
+
+    /**
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         m.put("financialDocumentNumber", this.financialDocumentNumber);
-        if (this.financialDocumentLineNumber != null) {
-            m.put("financialDocumentLineNumber", this.financialDocumentLineNumber.toString());
-        }
+        m.put("financialDocumentLineNumber", this.financialDocumentLineNumber.toString());
         return m;
     }
 }

@@ -25,30 +25,14 @@ package org.kuali.module.kra;
 import java.util.Calendar;
 
 import org.kuali.core.JstlConstants;
-import org.kuali.core.util.KualiInteger;
 
 public class KraConstants extends JstlConstants {
     private static final long serialVersionUID = 5725060921632498564L;
 
     public static final int maximumPeriodLengthUnits = Calendar.YEAR;
     public static final int maximumNumberOfPeriods = 20; // used on budgetPeriods.tag
-
+    
     public static final int maximumNumberOfTasks = 20; // used on budgetTasks.tag
-
+    
     public static final String SUBCONTRACTOR_CATEGORY_CODE = "SC"; // used on budgetCostShare*.tag and budgetNonpersonnel.tag
-
-    public static final Integer TASK_SUMMATION = new Integer(0); // budgetDetailSelection.tag defines 0 as a task summation
-    public static final Integer PERIOD_SUMMATION = new Integer(0); // budgetDetailSelection.tag defines 0 as a period summation
-
-    public static final KualiInteger PERSONNEL_MAX_PERCENTAGE = new KualiInteger(100);
-
-    public static final String INSTITUTION_COST_SHARE_CODE = "I";
-    public static final String THIRD_PARTY_COST_SHARE_CODE = "T";
-    
-    public static final String PERMISSION_MOD_CODE = "M";
-    public static final String PERMISSION_READ_CODE = "R";
-
-    public static final String DATABASE_TRUE_VALUE = "Y";
-    
-    public static final String QUESTION_ROUTE_DOCUMENT_TO_COMPLETE = "Completing this document will remove it from your Action List.<br/><br/>  Are you sure you want to continue?";
 }

@@ -28,14 +28,14 @@ import java.util.Date;
 import org.kuali.core.bo.KualiSystemCode;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetAggregationCode;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSpring;
 
 /**
  * This class tests the BudgetAggregationCode service.
  * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures {
+public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithSpring {
 
     private BudgetAggregationCode bac;
     private KualiCodeService kualiCodeService;
@@ -55,14 +55,17 @@ public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures 
      */
     public void testLookupByCode_code_known() {
         bac = null;
-        bac = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class, TestConstants.Data5.BUDGET_AGGREGATION_CODE1);
+        bac = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class,
+                TestConstants.Data5.BUDGET_AGGREGATION_CODE1);
         assertNotNull("Should be a valid object.", bac);
-        assertEquals("Known-good code results in expected returned Name.", TestConstants.Data5.BUDGET_AGGREGATION_NAME1, bac.getName());
+        assertEquals("Known-good code results in expected returned Name.", TestConstants.Data5.BUDGET_AGGREGATION_NAME1, 
+                bac.getName());
     }
 
     public void testLookupByCode_code_unknown() {
         bac = null;
-        bac = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class, TestConstants.Data5.FEDERAL_FUNDED_CODE_BAD);
+        bac = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class,
+                TestConstants.Data5.FEDERAL_FUNDED_CODE_BAD);
         assertNull("Known-bad code should return null object.", bac);
     }
 
@@ -80,15 +83,17 @@ public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures 
 
     public void testLookupByName_name_known() {
         KualiSystemCode bac = null;
-        Object result = kualiCodeService.getByName(BudgetAggregationCode.class, TestConstants.Data5.BUDGET_AGGREGATION_NAME1);
+        Object result=kualiCodeService.getByName(BudgetAggregationCode.class,TestConstants.Data5.BUDGET_AGGREGATION_NAME1);
         bac = (KualiSystemCode) result;
         assertNotNull("Should be a valid object.", bac);
-        assertEquals("Known-good name results in expected returned code.", TestConstants.Data5.BUDGET_AGGREGATION_CODE1, bac.getCode());
+        assertEquals("Known-good name results in expected returned code.", TestConstants.Data5.BUDGET_AGGREGATION_CODE1, bac
+                .getCode());
     }
 
     public void testLookupByName_name_unknown() {
         bac = null;
-        bac = (BudgetAggregationCode) kualiCodeService.getByName(BudgetAggregationCode.class, "This is not a valid code description in this table.");
+        bac = (BudgetAggregationCode) kualiCodeService.getByName(BudgetAggregationCode.class,
+                "This is not a valid code description in this table.");
         assertNull("Known-bad code returns null object.", bac);
     }
 
@@ -108,7 +113,8 @@ public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures 
 
         // test known-good active code
         bac = null;
-        bac = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class, TestConstants.Data5.BUDGET_AGGREGATION_CODE1);
+        bac = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class,
+                TestConstants.Data5.BUDGET_AGGREGATION_CODE1);
         assertEquals("The active code associated with this field is incorrect", true, bac.isActive());
 
     }
@@ -127,9 +133,12 @@ public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures 
         for (int i = 0; i < 5; i++) {
             long firstTime = -1000;
             tsStart = System.currentTimeMillis();
-            BudgetAggregationCode O = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class, TestConstants.Data5.BUDGET_AGGREGATION_CODE1);
-            BudgetAggregationCode C = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class, TestConstants.Data5.BUDGET_AGGREGATION_CODE2);
-            BudgetAggregationCode L = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class, TestConstants.Data5.BUDGET_AGGREGATION_CODE1);
+            BudgetAggregationCode O = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class,
+                    TestConstants.Data5.BUDGET_AGGREGATION_CODE1);
+            BudgetAggregationCode C = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class,
+                    TestConstants.Data5.BUDGET_AGGREGATION_CODE2);
+            BudgetAggregationCode L = (BudgetAggregationCode) kualiCodeService.getByCode(BudgetAggregationCode.class,
+                    TestConstants.Data5.BUDGET_AGGREGATION_CODE1);
             tsStop = System.currentTimeMillis();
             long diff = tsStop - tsStart;
             if (firstTime == -1000) {

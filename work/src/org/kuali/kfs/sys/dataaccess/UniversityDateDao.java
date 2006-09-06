@@ -23,22 +23,16 @@
 package org.kuali.module.gl.dao;
 
 import java.sql.Date;
-import java.util.Collection;
 
 import org.kuali.module.gl.bo.UniversityDate;
 
 /**
  * @author jsissom
- * 
+ *
  */
 public interface UniversityDateDao {
-    public UniversityDate getByPrimaryKey(Date date);
-
-    public UniversityDate getByPrimaryKey(java.util.Date date);
-
-    public UniversityDate getLastFiscalYearDate(Integer fiscalYear);
-
-    public UniversityDate getFirstFiscalYearDate(Integer fiscalYear);
-
-    public Collection getAccountingPeriodCode();
+  public UniversityDate getByPrimaryKey(Date date);
+  public UniversityDate getByPrimaryKey(java.util.Date date);
+  public UniversityDate getLastFiscalYearDate(Integer fiscalYear);
+  public UniversityDate getFirstFiscalYearDate(Integer fiscalYear);
 }

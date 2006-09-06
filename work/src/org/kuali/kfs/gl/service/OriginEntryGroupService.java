@@ -22,93 +22,17 @@
  */
 package org.kuali.module.gl.service;
 
-import java.sql.Date;
 import java.util.Collection;
-import java.util.Map;
+import java.util.Date;
 
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
-/**
- * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupService.java,v 1.12 2006-08-11 17:12:24 schoo Exp $
- */
-
 public interface OriginEntryGroupService {
-    /**
-     * Create the backup group which has all the entries from
-     * all the groups where all the flags are set Y.
-     * 
-     */
-    public void createBackupGroup();
-
-    /**
-     * Delete all the groups (and entries) where the
-     * group is this many days old or older
-     * 
-     * @param days
-     */
-    public void deleteOlderGroups(int days);
-
-    /**
-     * Get a group by its id
-     * 
-     * @param groupId
-     * @return
-     */
-    public OriginEntryGroup getOriginEntryGroup(String groupId);
-
-    /**
-     * Get groups that match
-     * 
-     * @param criteria
-     * @return
-     */
-    public Collection getMatchingGroups(Map criteria);
-
-    public Collection getOriginEntryGroupsPendingProcessing();
-
-    public Collection getGroupsToPost();
-
-    public Collection getIcrGroupsToPost();
-
-    /**
-     * Get all the unscrubbed backup groups
-     * 
-     * @param backupDate
-     * @return
-     */
-    public Collection getBackupGroups(Date backupDate);
-
-    /**
-     * Get all the groups that need to be put into the backup group
-     * 
-     * @param backupDate
-     * @return
-     */
-    public Collection getGroupsToBackup(Date backupDate);
-
-    /**
-     * Create a new group
-     * 
-     * @param date
-     * @param sourceCode
-     * @param valid
-     * @param process
-     * @param scrub
-     * @return
-     */
-    public OriginEntryGroup createGroup(Date date, String sourceCode, boolean valid, boolean process, boolean scrub);
-
-    /**
-     * save a group
-     * 
-     * @param group
-     */
-    public void save(OriginEntryGroup group);
-    
-    public OriginEntryGroup getExactMatchingEntryGroup(Integer id);
-    
-    public Collection getAllOriginEntryGroup();
-    
-    public Collection getRecentGroupsByDays(int days);
+	public OriginEntryGroup getOriginEntryGroup(String groupId);
+	public Collection getOriginEntryGroupsPendingProcessing();
+	public Collection getGroupsToPost(Date postDate);
+	public Collection getIcrGroupsToPost(Date postDate);
+	public Collection getGroupsToScrub(Date scrubDate);
+	public OriginEntryGroup createGroup(Date date,String sourceCode,boolean valid,boolean process,boolean scrub);
+  public void save(OriginEntryGroup group);
 }
