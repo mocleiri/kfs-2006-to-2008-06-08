@@ -23,29 +23,19 @@
 package org.kuali.module.gl.util;
 
 import java.io.FileOutputStream;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.kuali.module.gl.bo.Transaction;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * This class...
+ * 
  * @author Bin Gao
  */
 public abstract class AbstractPdfReportGenerator {
@@ -77,27 +67,27 @@ public abstract class AbstractPdfReportGenerator {
             this.closeDocument(document);
         }
     }
-    
+
     public abstract Element getReportContents();
-    
-    protected String generateReportFileName(String reportNamePrefix, String destinationDirectory, Date reportingDate){        
+
+    protected String generateReportFileName(String reportNamePrefix, String destinationDirectory, Date reportingDate) {
         String reportFilename = destinationDirectory + "/" + reportNamePrefix + "_";
         SimpleDateFormat dateFormat = new SimpleDateFormat(REPORT_FILE_DATE_FORMAT);
         reportFilename = reportFilename + dateFormat.format(reportingDate);
         reportFilename = reportFilename + PDF_FILE_EXTENSION;
-        
+
         return reportFilename;
     }
-    
-    protected Document getDocument(){
+
+    protected Document getDocument() {
         return new Document(PageSize.A4.rotate());
     }
-    
-    protected Font getHeaderFont(){
+
+    protected Font getHeaderFont() {
         return FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
     }
-    
-    protected Font getTextFont(){
+
+    protected Font getTextFont() {
         return FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
     }
 
