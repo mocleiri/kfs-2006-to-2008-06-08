@@ -33,11 +33,26 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * @author Laran Evans <lc278@cs.cornell.edu>
- * @version $Id: OriginEntrySourceDaoOjb.java,v 1.2 2006-06-14 12:26:35 abyrne Exp $
+ * @version $Id: OriginEntrySourceDaoOjb.java,v 1.2.6.1 2006-09-06 22:37:40 tdurkin Exp $
  * 
  */
 
 public class OriginEntrySourceDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntrySourceDao {
+
+    private static final String FINANCIAL_DOCUMENT_REVERSAL_DATE = "financialDocumentReversalDate";
+    private static final String UNIVERSITY_FISCAL_YEAR = "universityFiscalYear";
+    private static final String CHART_OF_ACCOUNTS_CODE = "chartOfAccountsCode";
+    private static final String ACCOUNT_NUMBER = "accountNumber";
+    private static final String SUB_ACCOUNT_NUMBER = "subAccountNumber";
+    private static final String FINANCIAL_OBJECT_CODE = "financialObjectCode";
+    private static final String FINANCIAL_SUB_OBJECT_CODE = "financialSubObjectCode";
+    private static final String FINANCIAL_BALANCE_TYPE_CODE = "financialBalanceTypeCode";
+    private static final String FINANCIAL_OBJECT_TYPE_CODE = "financialObjectTypeCode";
+    private static final String UNIVERSITY_FISCAL_PERIOD_CODE = "universityFiscalPeriodCode";
+    private static final String FINANCIAL_DOCUMENT_TYPE_CODE = "financialDocumentTypeCode";
+    private static final String FINANCIAL_SYSTEM_ORIGINATION_CODE = "financialSystemOriginationCode";
+    private static final String FINANCIAL_DOCUMENT_NUMBER = "financialDocumentNumber";
+    private static final String TRANSACTION_LEDGER_ENTRY_SEQUENCE_NUMBER = "transactionLedgerEntrySequenceNumber";
 
     public OriginEntrySourceDaoOjb() {
         super();
@@ -50,7 +65,7 @@ public class OriginEntrySourceDaoOjb extends PersistenceBrokerDaoSupport impleme
      */
     public Collection findAll() {
         QueryByCriteria query = QueryFactory.newQuery(OriginEntrySource.class, (Criteria) null);// "SELECT * FROM
-                                                                                                // GL_ORIGIN_ENTRY_SRC_T");
+        // GL_ORIGIN_ENTRY_SRC_T");
         Collection thawed = getPersistenceBrokerTemplate().getCollectionByQuery(query);
         // Collection frozen = Collections.unmodifiableCollection(thawed);
         return thawed;
