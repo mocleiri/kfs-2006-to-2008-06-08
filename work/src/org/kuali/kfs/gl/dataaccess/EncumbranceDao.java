@@ -30,7 +30,7 @@ import org.kuali.module.gl.bo.Transaction;
 
 /**
  * @author jsissom
- * @version $Id: EncumbranceDao.java,v 1.6.2.1.2.3 2006-08-18 21:03:18 tdurkin Exp $
+ * @version $Id: EncumbranceDao.java,v 1.6.2.1.2.4 2006-09-06 22:38:49 tdurkin Exp $
  */
 public interface EncumbranceDao {
     public Encumbrance getEncumbranceByTransaction(Transaction t);
@@ -54,7 +54,7 @@ public interface EncumbranceDao {
      * @param included indicate if all encumbrances with the given document type are included in the results or not
      */
     public Iterator getSummarizedEncumbrances(String documentTypeCode, boolean included);
-    
+
     /**
      * This method finds the open encumbrances according to input fields and values
      * 
@@ -62,7 +62,7 @@ public interface EncumbranceDao {
      * @return a collection of open encumbrances
      */
     public Iterator findOpenEncumbrance(Map fieldValues);
-    
+
     /**
      * This method gets the number of the open encumbrances according to input fields and values
      * 
