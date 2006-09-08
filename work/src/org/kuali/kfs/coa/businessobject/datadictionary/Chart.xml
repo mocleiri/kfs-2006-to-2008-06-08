@@ -238,11 +238,12 @@
                 <shortLabel>rptsToChartCode</shortLabel>
 
                 <maxLength>2</maxLength>
-                <required>true</required>
-
+                <required>false</required>
+                
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                	<text size="2"/>
                 </control>
+
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
