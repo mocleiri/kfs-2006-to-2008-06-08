@@ -23,22 +23,15 @@
 package org.kuali.module.gl.util;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.kuali.Constants;
 import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.gl.bo.Transaction;
 
-public class SufficientFundsItem implements Serializable,Comparable {
+public class SufficientFundsItem implements Serializable, Comparable {
     private Options year;
     private Account account;
     private ObjectCode financialObject;
@@ -51,7 +44,7 @@ public class SufficientFundsItem implements Serializable,Comparable {
         amount = KualiDecimal.ZERO;
     }
 
-    public SufficientFundsItem(Options universityFiscalYear,Transaction tran,String sufficientFundsObjectCode) {
+    public SufficientFundsItem(Options universityFiscalYear, Transaction tran, String sufficientFundsObjectCode) {
 
         amount = KualiDecimal.ZERO;
         year = universityFiscalYear;
@@ -64,15 +57,16 @@ public class SufficientFundsItem implements Serializable,Comparable {
     }
 
     public void add(Transaction t) {
-        if ( t.getObjectType().getFinObjectTypeDebitcreditCd().equals(t.getTransactionDebitCreditCode()) ) {
+        if (t.getObjectType().getFinObjectTypeDebitcreditCd().equals(t.getTransactionDebitCreditCode())) {
             amount = amount.add(t.getTransactionLedgerEntryAmount());
-        } else {
+        }
+        else {
             amount = amount.subtract(t.getTransactionLedgerEntryAmount());
-        }        
+        }
     }
 
     public int compareTo(Object arg0) {
-        SufficientFundsItem item = (SufficientFundsItem)arg0;
+        SufficientFundsItem item = (SufficientFundsItem) arg0;
         return getKey().compareTo(item.getKey());
     }
 
@@ -145,5 +139,5 @@ public class SufficientFundsItem implements Serializable,Comparable {
         this.year = year;
     }
 
-    
+
 }

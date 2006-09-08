@@ -22,34 +22,22 @@
  */
 package org.kuali.module.gl.service.impl;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.Currency;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
-import org.apache.log4j.Logger;
-import org.kuali.Constants;
+import org.apache.log4j.*;
+import org.bouncycastle.asn1.x509.qualified.MonetaryValue;
 import org.kuali.core.mail.InvalidAddressException;
 import org.kuali.core.mail.MailMessage;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.MailService;
-import org.kuali.module.gl.GLConstants;
-import org.kuali.module.gl.collector.xml.CollectorFileHandler;
-import org.kuali.module.gl.collector.xml.CollectorFileParser;
-import org.kuali.module.gl.collector.xml.FileReadException;
-import org.kuali.module.gl.collector.xml.XmlHeader;
-import org.kuali.module.gl.collector.xml.XmlTrailer;
-import org.kuali.module.gl.collector.xml.impl.CollectorFileHandlerImpl;
-import org.kuali.module.gl.collector.xml.impl.HardEditHandler;
-import org.kuali.module.gl.service.CollectorService;
-import org.kuali.module.gl.service.InterDepartmentalBillingService;
-import org.kuali.module.gl.service.OriginEntryGroupService;
-import org.kuali.module.gl.service.OriginEntryService;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
+import org.kuali.core.service.*;
+import org.kuali.module.gl.collector.xml.*;
+import org.kuali.module.gl.collector.xml.impl.*;
+import org.kuali.module.gl.service.*;
+import org.springframework.beans.*;
+import org.springframework.beans.factory.*;
 
 public class CollectorServiceImpl implements CollectorService, BeanFactoryAware {
     private static Logger LOG = Logger.getLogger(CollectorServiceImpl.class);
@@ -63,7 +51,7 @@ public class CollectorServiceImpl implements CollectorService, BeanFactoryAware 
     private BeanFactory beanFactory;
 
     public void loadCollectorFile(String fileName) {
-        CollectorFileParser collectorFileParser = (CollectorFileParser)beanFactory.getBean(GLConstants.LookupableBeanKeys.COLLECTOR_FILE_PARSER);
+        CollectorFileParser collectorFileParser = (CollectorFileParser)beanFactory.getBean("glCollectorFileParser");
         doHardEditParse(collectorFileParser, fileName);
         List errors = collectorFileParser.getFileHandler().getErrorMessages();
         if (errors.isEmpty())
@@ -86,10 +74,9 @@ public class CollectorServiceImpl implements CollectorService, BeanFactoryAware 
     private void sendEmail(CollectorFileHandler collectorFileHandler) {
         LOG.debug("sendNoteEmails() starting");
         MailMessage message = new MailMessage();
-        
-        message.setFromAddress(kualiConfigurationService.getApplicationParameterValue("Kuali.GeneralLedger.Collector", "Kuali.GeneralLedger.EmailAddress.DoNotReply"));
-        message.setSubject(kualiConfigurationService.getApplicationParameterValue("Kuali.GeneralLedger.Collector", "SubjectLine"));
-        
+        message.setFromAddress("doNotReply@KUALI.SYSTEM");
+        message.setSubject("Collector Input Summary");
+
         String body = createMessageBody(collectorFileHandler);
 
         message.setMessage(body);
@@ -159,7 +146,7 @@ public class CollectorServiceImpl implements CollectorService, BeanFactoryAware 
         this.kualiConfigurationService = kualiConfigurationService;
     }
     public String getStagingDirectory() {
-        return kualiConfigurationService.getPropertyString(Constants.GL_COLLECTOR_STAGING_DIRECTORY);
+        return kualiConfigurationService.getPropertyString("collector.staging.directory");
     }
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
