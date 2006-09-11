@@ -539,7 +539,7 @@ public class ReportServiceImpl implements ReportService {
 
         TransactionReport transactionReport = new TransactionReport();
         String title = "Balance Forward Report ";
-        transactionReport.generateReport(null, reportSummary, runDate, title, "year_end_balance_forward", batchReportsDirectory);
+        transactionReport.generateReport(new HashMap<Transaction, List<Message>>(), reportSummary, runDate, title, "year_end_balance_forward", batchReportsDirectory);
     }
 
     /**
@@ -551,7 +551,7 @@ public class ReportServiceImpl implements ReportService {
 
         TransactionReport transactionReport = new TransactionReport();
         String title = "Encumbrance Closing Report ";
-        transactionReport.generateReport(null, reportSummary, runDate, title, "year_end_encumbrance_closing", batchReportsDirectory);
+        transactionReport.generateReport(new HashMap<Transaction, List<Message>>(), reportSummary, runDate, title, "year_end_encumbrance_closing", batchReportsDirectory);
     }
 
     /**
