@@ -481,7 +481,11 @@ public class ScrubberProcess {
                 KualiParameterRule costShareEncDocTypeCodes = getRule(GLConstants.GlScrubberGroupRules.COST_SHARE_ENC_DOC_TYPE_CODES);
                 KualiParameterRule costShareFiscalPeriodCodes = getRule(GLConstants.GlScrubberGroupRules.COST_SHARE_FISCAL_PERIOD_CODES);
 
-                if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && costShareEncBalanceTypeCodes.succeedsRule(scrubbedEntry.getFinancialBalanceTypeCode()) && scrubbedEntry.getAccount().isInCg() && Constants.COST_SHARE.equals(subAccountTypeCode) && costShareEncFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && (StringHelper.isEmpty(scrubbedEntry.getFinancialDocumentTypeCode()) || costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim()))) {
+                if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && 
+                        costShareEncBalanceTypeCodes.succeedsRule(scrubbedEntry.getFinancialBalanceTypeCode()) && 
+                        scrubbedEntry.getAccount().isInCg() && Constants.COST_SHARE.equals(subAccountTypeCode) && 
+                        costShareEncFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && 
+                        costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim())) {
                     TransactionError te1 = generateCostShareEncumbranceEntries(scrubbedEntry);
                     if (te1 != null) {
                         List errors = new ArrayList();
@@ -493,7 +497,12 @@ public class ScrubberProcess {
                     }
                 }
 
-                if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && scrubbedEntry.getOption().getActualFinancialBalanceType().equals(scrubbedEntry.getFinancialBalanceTypeCode()) && scrubbedEntry.getAccount().isInCg() && Constants.COST_SHARE.equals(subAccountTypeCode) && costShareFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim())) {
+                if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && 
+                        scrubbedEntry.getOption().getActualFinancialBalanceTypeCd().equals(scrubbedEntry.getFinancialBalanceTypeCode()) && 
+                        scrubbedEntry.getAccount().isInCg() && 
+                        Constants.COST_SHARE.equals(subAccountTypeCode) && 
+                        costShareFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && 
+                        costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim())) {
                     if (scrubbedEntry.isDebit()) {
                         scrubCostShareAmount = scrubCostShareAmount.subtract(transactionAmount);
                     }
@@ -977,6 +986,7 @@ public class ScrubberProcess {
                 flexibleOffsetAccountService.updateOffset(plantIndebtednessEntry);
             }
             catch (InvalidFlexibleOffsetException e) {
+                LOG.error("processPlantIndebtedness() Flexible Offset Exception (1)",e);
                 LOG.debug("processPlantIndebtedness() Plant Indebtedness Flexible Offset Error: " + e.getMessage());
                 return e.getMessage();
             }
@@ -1031,10 +1041,12 @@ public class ScrubberProcess {
                 flexibleOffsetAccountService.updateOffset(plantIndebtednessEntry);
             }
             catch (InvalidFlexibleOffsetException e) {
+                LOG.error("processPlantIndebtedness() Flexible Offset Exception (2)",e);
                 LOG.debug("processPlantIndebtedness() Plant Indebtedness Flexible Offset Error: " + e.getMessage());
                 return e.getMessage();
             }
 
+            // TODO For some reason, this doesn't seem to save
             createOutputEntry(plantIndebtednessEntry, validGroup);
             scrubberReport.incrementPlantIndebtednessEntryGenerated();
         }
@@ -1178,6 +1190,7 @@ public class ScrubberProcess {
         }
 
         costShareEncumbranceEntry.setFinancialBalanceTypeCode(scrubbedEntry.getOption().getCostShareEncumbranceBalanceTypeCode());
+        setCostShareObjectCode(costShareEncumbranceEntry, scrubbedEntry);
         costShareEncumbranceEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
         costShareEncumbranceEntry.setTransactionLedgerEntrySequenceNumber(new Integer(0));
 
@@ -1293,18 +1306,18 @@ public class ScrubberProcess {
             param = getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_DEFAULT);
         }
 
-        String originEntryObjectCode = param.getFinancialSystemParameterText();
-        if ((originEntryObjectCode == null) || (originEntryObjectCode.length() == 0)) {
-            originEntryObjectCode = originEntry.getFinancialObjectCode();
-        }
-
         // IU Specific Rules
+        String originEntryObjectCode = param.getFinancialSystemParameterText();
         if ("BENF".equals(originEntryObjectLevelCode) && ("9956".equals(originEntryObjectCode) || 5700 > Integer.valueOf(originEntryObjectCode).intValue())) { // BENEFITS
             originEntryObjectCode = "9956"; // TRSFRS_OF_FUNDS_FRINGE_BENF
         }
         else if ("FINA".equals(originEntryObjectLevelCode) && ("9954".equals(originEntryObjectCode) || "5400".equals(originEntryObjectCode))) {
             // STUDENT_FINANCIAL_AID - TRSFRS_OF_FUNDS_FEE_REM - GRADUATE_FEE_REMISSIONS
             originEntryObjectCode = "9954"; // TRSFRS_OF_FUNDS_CAPITAL
+        } else {
+            if ((originEntryObjectCode == null) || (originEntryObjectCode.length() == 0)) {
+                originEntryObjectCode = originEntry.getFinancialObjectCode();
+            }
         }
 
         // Lookup the new object code
