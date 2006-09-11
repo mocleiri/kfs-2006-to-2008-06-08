@@ -85,4 +85,11 @@ public class EncumbranceServiceImpl implements EncumbranceService {
     public Iterator findOpenEncumbrance(Map fieldValues) {
         return encumbranceDao.findOpenEncumbrance(fieldValues);
     }
+
+    /**
+     * @see org.kuali.module.gl.service.EncumbranceService#getOpenEncumbranceCount(java.util.Map)
+     */
+    public Integer getOpenEncumbranceRecordCount(Map fieldValues) {
+        return encumbranceDao.getOpenEncumbranceRecordCount(fieldValues);
+    }
 }

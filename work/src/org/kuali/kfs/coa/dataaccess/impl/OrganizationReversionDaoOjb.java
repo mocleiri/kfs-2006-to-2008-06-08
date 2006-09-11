@@ -30,7 +30,6 @@ import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.module.chart.bo.OrganizationReversion;
 import org.kuali.module.chart.bo.OrganizationReversionCategory;
 import org.kuali.module.chart.dao.OrganizationReversionDao;
-import org.springframework.orm.ojb.PersistenceBrokerTemplate;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
@@ -51,7 +50,7 @@ public class OrganizationReversionDaoOjb extends PersistenceBrokerDaoSupport imp
         criteria.addEqualTo("chartOfAccountsCode", financialChartOfAccountsCode);
         criteria.addEqualTo("organizationCode", organizationCode);
 
-        return (OrganizationReversion)getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(OrganizationReversion.class, criteria));
+        return (OrganizationReversion) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(OrganizationReversion.class, criteria));
     }
 
     public List<OrganizationReversionCategory> getCategories() {
@@ -61,6 +60,6 @@ public class OrganizationReversionDaoOjb extends PersistenceBrokerDaoSupport imp
         QueryByCriteria q = QueryFactory.newQuery(OrganizationReversionCategory.class, criteria);
         q.addOrderByAscending("organizationReversionSortCode");
 
-        return (List)getPersistenceBrokerTemplate().getCollectionByQuery(q);
+        return (List) getPersistenceBrokerTemplate().getCollectionByQuery(q);
     }
 }

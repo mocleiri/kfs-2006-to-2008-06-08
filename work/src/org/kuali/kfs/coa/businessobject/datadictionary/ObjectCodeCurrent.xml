@@ -76,9 +76,9 @@
                 <field attributeName="financialObjectLevelCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialObjectSubTypeCode" />
-                <field attributeName="financialObjectActiveCode" />
                 <field attributeName="historicalFinancialObjectCode" />
                 <field attributeName="financialBudgetAggregationCd" />
+                <field attributeName="financialObjectActiveCode" />
 
             </resultFields>
         </lookup>
@@ -110,7 +110,7 @@
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartCode();" />
+                   <text size="2" />
                 </control>
 
             </attributeReference>
@@ -206,7 +206,7 @@
                 </validationPattern>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartCode();" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartOfAccpimtsCode();" />
                 </control>
 
                 <summary>
@@ -323,9 +323,8 @@
                 <maxLength>1</maxLength>
                 <required>true</required>
                 <control>
-                    <text size="1" />
-                </control>
-
+                	<select valuesFinderClass="org.kuali.core.lookup.keyvalues.BudgetAggregationCodeValuesFinder" />
+				</control>
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
