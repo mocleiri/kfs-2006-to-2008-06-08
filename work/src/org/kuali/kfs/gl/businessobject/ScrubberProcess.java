@@ -1301,23 +1301,31 @@ public class ScrubberProcess {
 
         String originEntryObjectLevelCode = (null == originEntry.getFinancialObject() ? "" : originEntry.getFinancialObject().getFinancialObjectLevelCode());
 
-        FinancialSystemParameter param = parameters.get(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_PREFIX + originEntryObjectLevelCode);
-        if (param == null) {
-            param = getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_DEFAULT);
+        boolean done = false;
+        String originEntryObjectCode = originEntry.getFinancialObjectCode();
+        
+        // IU Specific Rules
+
+        if ( (! done) && ("BENF".equals(originEntryObjectLevelCode) && ("9956".equals(originEntryObjectCode) || 5700 > Integer.valueOf(originEntryObjectCode).intValue()))) { // BENEFITS
+            originEntryObjectCode = "9956"; // TRSFRS_OF_FUNDS_FRINGE_BENF
+            done = true;
         }
 
-        // IU Specific Rules
-        String originEntryObjectCode = param.getFinancialSystemParameterText();
-        if ("BENF".equals(originEntryObjectLevelCode) && ("9956".equals(originEntryObjectCode) || 5700 > Integer.valueOf(originEntryObjectCode).intValue())) { // BENEFITS
-            originEntryObjectCode = "9956"; // TRSFRS_OF_FUNDS_FRINGE_BENF
-        }
-        else if ("FINA".equals(originEntryObjectLevelCode) && ("9954".equals(originEntryObjectCode) || "5400".equals(originEntryObjectCode))) {
+        if ( (! done) && ("FINA".equals(originEntryObjectLevelCode) && ("9954".equals(originEntryObjectCode) || "5400".equals(originEntryObjectCode)))) {
             // STUDENT_FINANCIAL_AID - TRSFRS_OF_FUNDS_FEE_REM - GRADUATE_FEE_REMISSIONS
             originEntryObjectCode = "9954"; // TRSFRS_OF_FUNDS_CAPITAL
-        } else {
-            if ((originEntryObjectCode == null) || (originEntryObjectCode.length() == 0)) {
-                originEntryObjectCode = originEntry.getFinancialObjectCode();
+            done = true;
+        }
+
+        // General rules
+        if ( ! done ) {
+            FinancialSystemParameter param = parameters.get(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_PREFIX + originEntryObjectLevelCode);
+            if ( param == null ) {
+                param = getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_DEFAULT);
             }
+
+            originEntryObjectCode = param.getFinancialSystemParameterText();
+            done = true;
         }
 
         // Lookup the new object code
