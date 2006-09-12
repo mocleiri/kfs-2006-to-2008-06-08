@@ -51,7 +51,7 @@ import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: TransactionReport.java,v 1.20 2006-09-06 06:50:01 abyrne Exp $
+ * @version $Id: TransactionReport.java,v 1.20.2.1 2006-09-12 14:36:01 jsissom Exp $
  */
 public class TransactionReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TransactionReport.class);
@@ -235,7 +235,11 @@ public class TransactionReport {
                             msg = mm.getMessage();
                         }
                         else {
-                            msg = m.toString();
+                            if ( m == null ) {
+                                msg = "";
+                            } else {
+                                msg = m.toString();
+                            }
                         }
 
                         if (first) {
