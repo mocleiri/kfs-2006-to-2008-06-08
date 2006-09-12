@@ -345,7 +345,6 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         assertOriginEntries(4, output);
     }
 
-    // TODO Fix
     public void testCostShareForLevelFina1() throws Exception {
 
         String[] input = new String[] { 
@@ -370,11 +369,21 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
 
     public void testCostShareForLevelCori() throws Exception {
 
-        String[] input = new String[] { "2007BL4631618CS0019912---ACEX07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  ", "2007BL4631618CS0019041---ACLI07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  " };
+        String[] input = new String[] {
+                "2007BL4631618CS0019912---ACEX07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  ", 
+                "2007BL4631618CS0019041---ACLI07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  " 
+        };
 
-        EntryHolder[] output = new EntryHolder[] { new EntryHolder(OriginEntrySource.BACKUP, "2007BL4631618CS0019912---ACEX07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  "), new EntryHolder(OriginEntrySource.BACKUP, "2007BL4631618CS0019041---ACLI07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631618CS0019041---ACLI07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631618CS0019915---ACTE07TF  CSCSHR01/0100000GENERATED COST SHARE FROM 4631618                   94.35C2006-01-01          ----------                                                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631618CS0018000---ACAS07TF  CSCSHR01/0100000GENERATED OFFSET                                    94.35D2006-01-01          ----------                                                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----9912---ACTE07TF  CSCSHR01/0100000GENERATED COST SHARE FROM 4631618                   94.35D2006-01-01          ----------                                                                  "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----8000---ACAS07TF  CSCSHR01/0100000GENERATED OFFSET                                    94.35C2006-01-01          ----------                                                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631618CS0019912---ACEX07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  "), };
+        EntryHolder[] output = new EntryHolder[] { 
+                new EntryHolder(OriginEntrySource.BACKUP, "2007BL4631618CS0019912---ACEX07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.BACKUP, "2007BL4631618CS0019041---ACLI07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631618CS0019041---ACLI07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631618CS0019915---ACTE07TF  CSCSHR01/0100000GENERATED COST SHARE FROM 4631618                   94.35C2006-01-01          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631618CS0018000---ACAS07TF  CSCSHR01/0100000GENERATED OFFSET                                    94.35D2006-01-01          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----9912---ACTE07TF  CSCSHR01/0100000GENERATED COST SHARE FROM 4631618                   94.35D2006-01-01          ----------                                                                  "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----8000---ACAS07TF  CSCSHR01/0100000GENERATED OFFSET                                    94.35C2006-01-01          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631618CS0019912---ACEX07DI  01CSHRCORI 00000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  "), 
+        };
 
         scrub(input);
         assertOriginEntries(4, output);
@@ -382,11 +391,21 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
 
     public void testCostShareForLevelCore() throws Exception {
 
-        String[] input = new String[] { "2007BL4631601CS0019951---ACEX07CR  01CSHRCORE 00000Poplars Garage Fees                                 20.00C2006-01-05          ----------                                                                  ", "2007BL4631601CS0018000---ACAS07CR  01CSHRCORE 00000TP Generated Offset                                 20.00D2006-01-05          ----------                                                                  " };
+        String[] input = new String[] { 
+                "2007BL4631601CS0019951---ACEX07CR  01CSHRCORE 00000Poplars Garage Fees                                 20.00C2006-01-05          ----------                                                                  ", 
+                "2007BL4631601CS0018000---ACAS07CR  01CSHRCORE 00000TP Generated Offset                                 20.00D2006-01-05          ----------                                                                  "
+        };
 
-        EntryHolder[] output = new EntryHolder[] { new EntryHolder(OriginEntrySource.BACKUP, "2007BL4631601CS0019951---ACEX07CR  01CSHRCORE 00000Poplars Garage Fees                                 20.00C2006-01-05          ----------                                                                  "), new EntryHolder(OriginEntrySource.BACKUP, "2007BL4631601CS0018000---ACAS07CR  01CSHRCORE 00000TP Generated Offset                                 20.00D2006-01-05          ----------                                                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631601CS0018000---ACAS07CR  01CSHRCORE 00000TP Generated Offset                                 20.00D2006-01-05          ----------                                                                  "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631601CS0019915---ACTE07TF  CSCSHR01/0100000GENERATED COST SHARE FROM 4631601                   20.00D2006-01-01          ----------                                                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631601CS0018000---ACAS07TF  CSCSHR01/0100000GENERATED OFFSET                                    20.00C2006-01-01          ----------                                                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----9951---ACTE07TF  CSCSHR01/0100000GENERATED COST SHARE FROM 4631601                   20.00C2006-01-01          ----------                                                                  "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----8000---ACAS07TF  CSCSHR01/0100000GENERATED OFFSET                                    20.00D2006-01-01          ----------                                                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631601CS0019951---ACEX07CR  01CSHRCORE 00000Poplars Garage Fees                                 20.00C2006-01-05          ----------                                                                  "), };
+        EntryHolder[] output = new EntryHolder[] { 
+                new EntryHolder(OriginEntrySource.BACKUP, "2007BL4631601CS0019951---ACEX07CR  01CSHRCORE 00000Poplars Garage Fees                                 20.00C2006-01-05          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.BACKUP, "2007BL4631601CS0018000---ACAS07CR  01CSHRCORE 00000TP Generated Offset                                 20.00D2006-01-05          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631601CS0018000---ACAS07CR  01CSHRCORE 00000TP Generated Offset                                 20.00D2006-01-05          ----------                                                                  "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631601CS0019915---ACTE07TF  CSCSHR01/0100000GENERATED COST SHARE FROM 4631601                   20.00D2006-01-01          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631601CS0018000---ACAS07TF  CSCSHR01/0100000GENERATED OFFSET                                    20.00C2006-01-01          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----9951---ACTE07TF  CSCSHR01/0100000GENERATED COST SHARE FROM 4631601                   20.00C2006-01-01          ----------                                                                  "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----8000---ACAS07TF  CSCSHR01/0100000GENERATED OFFSET                                    20.00D2006-01-01          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631601CS0019951---ACEX07CR  01CSHRCORE 00000Poplars Garage Fees                                 20.00C2006-01-05          ----------                                                                  "), 
+        };
 
         scrub(input);
         assertOriginEntries(4, output);
@@ -417,7 +436,6 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         assertOriginEntries(4, output);
     }
 
-    // TODO Fix
     public void testCostShareForLevelBenf6() throws Exception {
         String[] input = new String[] {
                 "2007BL4631625CS0015625---ACEX07ID33EUCSHRBENF600000NOV-05 IMU Business Office          2224           241.75D2005-11-30          ----------                                                                  ", 
@@ -1230,7 +1248,6 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         assertOriginEntries(4, outputTransactions);
     }
 
-    // TODO Fix
     public void testInvalidObjectCode() throws Exception {
         String[] inputTransactions = { 
                 "2007BL2231423-----XXXX---ACIN  CR  PLINVALOBJ 00000FRICKA FRACKA                                    45995.84C2006-01-05          ----------                                                                          ", 
@@ -1240,7 +1257,7 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         EntryHolder[] outputTransactions = { 
                 new EntryHolder(OriginEntrySource.BACKUP, inputTransactions[0]), 
                 new EntryHolder(OriginEntrySource.BACKUP, inputTransactions[1]), 
-                new EntryHolder(OriginEntrySource.SCRUBBER_ERROR, "2007BL2231423-----8000---ACAS07CR  PLINVALOBJ 00000TP Generated Offset                              45995.84D2006-01-05          ----------                                                                          "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_ERROR, "2006BL2231423-----8000---ACAS07CR  PLINVALOBJ 00000TP Generated Offset                              45995.84D2006-01-05          ----------                                                                          "), 
                 new EntryHolder(OriginEntrySource.SCRUBBER_ERROR, "2007BL2231423-----XXXX---ACIN  CR  PLINVALOBJ 00000FRICKA FRACKA                                    45995.84C2006-01-05          ----------                                                                          ")
         };
 
