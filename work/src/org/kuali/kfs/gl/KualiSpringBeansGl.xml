@@ -1134,9 +1134,12 @@
         <property name="optionsService">
         	<ref bean="optionsService"/>
         </property>
-		<property name="generalLedgerPendingEntryService">
-			<ref bean="generalLedgerPendingEntryService"/>
-		</property>
+		    <property name="generalLedgerPendingEntryService">
+			    <ref bean="generalLedgerPendingEntryService"/>
+		    </property>
+        <property name="sufficientFundRebuildService">
+          <ref bean="glSufficientFundRebuildService" />
+        </property>
     </bean>
 
     <bean id="glSufficientFundsDao" class="org.kuali.module.gl.dao.ojb.SufficientFundsDaoOjb">
