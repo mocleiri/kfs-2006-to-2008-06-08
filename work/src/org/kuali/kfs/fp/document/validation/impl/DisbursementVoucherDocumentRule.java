@@ -259,7 +259,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
             LOG.debug("validating non resident alien tax");
             validateNonResidentAlienInformation(dvDocument);
         }
-
+        
         // non-employee travel
 
         // retrieve nonemployee travel payment reasons
@@ -281,6 +281,9 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         LOG.debug("validating document amounts");
         validateDocumentAmounts(dvDocument);
 
+        LOG.debug("validating accounting line counts");
+        validateAccountingLineCounts(dvDocument);          
+        
         LOG.debug("validating documentaton location");
         validateDocumentationLocation(dvDocument);
 
@@ -1109,6 +1112,19 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
     }
 
     /**
+     * 
+     * This method...
+     * @param document
+     */
+    private void validateAccountingLineCounts(DisbursementVoucherDocument dvDocument) {
+        ErrorMap errors = GlobalVariables.getErrorMap();
+
+        if(dvDocument.getSourceAccountingLines().size()<1) {
+            errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_NO_ACCOUNTING_LINES);
+        }
+    }
+    
+    /**
      * Checks the amounts on the document for reconciliation.
      * 
      * @param document
@@ -1116,9 +1132,9 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
     public void validateDocumentAmounts(DisbursementVoucherDocument document) {
         ErrorMap errors = GlobalVariables.getErrorMap();
 
-        /* check total cannot be negative */
-        if (Constants.ZERO.compareTo(document.getDisbVchrCheckTotalAmount()) == 1) {
-            errors.putError(PropertyConstants.DISB_VCHR_CHECK_TOTAL_AMOUNT, KeyConstants.ERROR_NEGATIVE_CHECK_TOTAL);
+        /* check total cannot be negative or zero */
+        if (!document.getDisbVchrCheckTotalAmount().isPositive()) {
+            errors.putError(PropertyConstants.DISB_VCHR_CHECK_TOTAL_AMOUNT, KeyConstants.ERROR_NEGATIVE_OR_ZERO_CHECK_TOTAL);
         }
 
         /* total accounting lines cannot be negative */
