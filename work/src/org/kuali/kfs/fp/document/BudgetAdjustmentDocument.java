@@ -371,7 +371,6 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
      */
     @Override
     public KualiDecimal getTotalDollarAmount() {
-        // TODO Auto-generated method stub
         return super.getTotalDollarAmount();
     }
 
