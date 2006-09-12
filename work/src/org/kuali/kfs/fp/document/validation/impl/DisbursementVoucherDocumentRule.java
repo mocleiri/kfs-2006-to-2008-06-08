@@ -422,8 +422,6 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         explicitEntry.setFinancialObjectTypeCode(objectCode.getFinancialObjectTypeCode());
         explicitEntry.setTransactionDebitCreditCode(GL_CREDIT_CODE);
 
-        // TODO: get sufficient funds object code
-
         explicitEntry.setFinancialSubObjectCode(GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_OBJECT_CODE);
         explicitEntry.setSubAccountNumber(GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_ACCOUNT_NUMBER);
         explicitEntry.setProjectCode(GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_PROJECT_STRING);
