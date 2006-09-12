@@ -628,7 +628,6 @@ public class PosterServiceTest extends OriginEntryTestBase {
 
     public void testIcrGeneration() throws Exception {
         LOG.debug("testIcrGeneration() started");
-        super.needsTestTransaction = false;
         // Load the expenditure table
         unitTestSqlDao.sqlCommand("delete from gl_expend_trn_t");
 
