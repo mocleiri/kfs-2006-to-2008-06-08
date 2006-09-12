@@ -481,7 +481,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
 
         /* city, state & zip must be given for us */
         if (Constants.COUNTRY_CODE_UNITED_STATES.equals(document.getDvPayeeDetail().getDisbVchrPayeeCountryCode())) {
-            if (StringUtils.isBlank(document.getDvPayeeDetail().getDisbVchrPayeeStateCode())) {
+            if (StringUtils.isBlank(document.getDvPayeeDetail().getDisbVchrPayeeCityName())) {
                 errors.putError(PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYEE_CITY_NAME, KeyConstants.ERROR_DV_PAYEE_CITY_NAME);
             }
             if (StringUtils.isBlank(document.getDvPayeeDetail().getDisbVchrPayeeStateCode())) {
