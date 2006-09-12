@@ -38,10 +38,12 @@ import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.chart.service.ObjectLevelService;
 import org.kuali.module.financial.document.YearEndDocument;
 import org.kuali.module.gl.bo.SufficientFundBalances;
+import org.kuali.module.gl.bo.SufficientFundRebuild;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.SufficientFundBalancesDao;
 import org.kuali.module.gl.dao.SufficientFundsDao;
 import org.kuali.module.gl.service.GeneralLedgerPendingEntryService;
+import org.kuali.module.gl.service.SufficientFundRebuildService;
 import org.kuali.module.gl.service.SufficientFundsService;
 import org.kuali.module.gl.service.SufficientFundsServiceConstants;
 import org.kuali.module.gl.util.SufficientFundsItem;
@@ -62,6 +64,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
     private SufficientFundBalancesDao sufficientFundBalancesDao;
     private OptionsService optionsService;
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
+    private SufficientFundRebuildService sufficientFundRebuildService;
 
     /**
      * Default constructor
@@ -207,8 +210,17 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         SufficientFundBalances sfBalance = sufficientFundBalancesDao.getByPrimaryId(item.getYear().getUniversityFiscalYear(), item.getAccount().getChartOfAccountsCode(), item.getAccount().getAccountNumber(), item.getSufficientFundsObjectCode());
 
         if (sfBalance == null) {
-            LOG.debug("hasSufficientFundsOnItem() No balance record, no sufficient funds");
-            return false;
+            SufficientFundRebuild sufficientFundRebuild = sufficientFundRebuildService.getByAccount(item.getAccount().getChartOfAccountsCode(), item.getAccount().getAccountNumber());
+            if (sufficientFundRebuild != null) {
+                LOG.debug("hasSufficientFundsOnItem() No balance record and waiting on rebuild, no sufficient funds");
+                return false;
+            }
+            else {
+                sfBalance = new SufficientFundBalances();
+                sfBalance.setAccountActualExpenditureAmt(KualiDecimal.ZERO);
+                sfBalance.setAccountEncumbranceAmount(KualiDecimal.ZERO);
+                sfBalance.setCurrentBudgetBalanceAmount(KualiDecimal.ZERO);
+            }
         }
 
         KualiDecimal balanceAmount = item.getAmount();
@@ -436,5 +448,9 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
 
     public void setSufficientFundsDao(SufficientFundsDao sufficientFundsDao) {
         this.sufficientFundsDao = sufficientFundsDao;
+    }
+
+    public void setSufficientFundRebuildService(SufficientFundRebuildService sufficientFundRebuildService) {
+        this.sufficientFundRebuildService = sufficientFundRebuildService;
     }
 }
