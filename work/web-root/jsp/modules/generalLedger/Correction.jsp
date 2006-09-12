@@ -166,6 +166,7 @@
 
 <kul:tab tabTitle="Search Results" defaultOpen="true" tabErrorKey="Search Results">    
  	<c:if test="${KualiForm.chooseSystem != null && KualiForm.editMethod !=null}" >   
+ 	
 	<%--	<div class="tab-container" align="left" style="overflow: scroll; max-width: 100%;"> --%>
 	<div class="tab-container" align="left" STYLE="overflow-x:scroll; overflow-y:hidden"> 
 	<kul:errors keyMatch="numberFormatError" />
@@ -178,6 +179,9 @@
 	                	<Strong> <c:out value="${noOriginEntry}" /> </Strong>
     	            </td>
                 </tr>
+                
+                
+     <c:if test="${noOriginEntry == null}" >           
                 <tr>
                     
                       <td>
@@ -335,28 +339,28 @@
 				<display:column title="Transaction Date" >
 		   			<html:text property="eachEntryForManualEdit.transactionDate" size="12"  />
 				</display:column>
-				<display:column title="Organization Document Number" >
+				<display:column title="Org Doc Number" >
 		   			<html:text property="eachEntryForManualEdit.organizationDocumentNumber" size="12"  />
 				</display:column>
 				<display:column title="Project Code" >
 		   			<html:text property="eachEntryForManualEdit.projectCode" size="7"  />
 				</display:column>
-				<display:column title="Organization Reference Number" >
+				<display:column title="Org Ref ID" >
 		   			<html:text property="eachEntryForManualEdit.organizationReferenceId" size="13"  />
 				</display:column>
-				<display:column title="Reference Document Type" >
+				<display:column title="Ref Doc Type" >
 		   			<html:text property="eachEntryForManualEdit.referenceFinancialDocumentTypeCode" size="10"  />
 				</display:column>
-				<display:column title="Reference Origin Code" >
+				<display:column title="Ref Origin Code" >
 		   			<html:text property="eachEntryForManualEdit.referenceFinancialSystemOriginationCode" size="10"  />
 				</display:column>
-				<display:column title="Reference Document Number" >
+				<display:column title="Ref Doc Number" >
 		   			<html:text property="eachEntryForManualEdit.referenceFinancialDocumentNumber" size="9"  />
 				</display:column>
 				<display:column title="Reversal Date" >
 		   			<html:text property="eachEntryForManualEdit.financialDocumentReversalDate" size="8"  />
 				</display:column>				
-				<display:column title="Transaction Encumbrance Update Code" >
+				<display:column title="Enc Update Code" >
 		   			<html:text property="eachEntryForManualEdit.transactionEncumbranceUpdateCode" size="13"  />
 				</display:column>
 			</display:table>
@@ -382,32 +386,17 @@
        		
        
 
-	</c:if>
+    </c:if>
             
             
-            
-            
-            
-            
-	<c:if test="${KualiForm.editMethod == 'manual'}" >        	
-		<c:if test="${KualiForm.editableFlag == 'Y'}" >   
-			<tr>
-				<td>
-   			<div align="center" >	
-		   		<html:checkbox property="processInBatch" title="processInBatch" /> <STRONG> Process In Batch </STRONG>
-   			</div>
-		    </br>
-			   	</td>	
-		   	</tr>
-   		</c:if>  
-   </c:if>
-      
+ 
+       </c:if>      
     </table> 
 	</div>
             
         
-     
-    </c:if>      
+    </c:if> 
+   
 </kul:tab>          
             
             
@@ -418,12 +407,13 @@
 
 
 <kul:tab tabTitle="Edit Options and Action" defaultOpen="true" tabErrorKey="Edit Options and Action">    
-<c:if test="${KualiForm.editMethod == 'criteria'}" >	
+
 
 
  <div class="tab-container" align="center"> 
- 
-            <table cellpadding=0 class="datatable" summary="">
+    <table cellpadding=0 class="datatable" summary="">
+ 		<c:if test="${KualiForm.editMethod == 'criteria'}" >	
+
        			 <tr>
                     <td align="left" valign="middle" class="subhead"><span class="subhead-left">Edit Options and Action</span></td>
                 </tr>
@@ -447,10 +437,39 @@
 					</center>
 				</td>
 			</tr>
+	
+	
+	</c:if>
+	
+	
+	           
+            
+            
+	<c:if test="${KualiForm.editMethod == 'manual'}" >        	
+		<c:if test="${KualiForm.editableFlag == 'Y'}" >   
+		<tr>
+                    <td align="left" valign="middle" class="subhead"><span class="subhead-left">Edit Options and Action</span></td>
+        </tr>
+			<tr>
+				<td>
+					<center>
+
+		   		<html:checkbox property="processInBatch" title="processInBatch" /> <STRONG> Process In Batch </STRONG>
+					<center>
+		    
+			   	</td>	
+		   	</tr>
+   		</c:if>  
+   </c:if>
+	
+	
 		</table>				  
 	</div>	
 	
-	</c:if>
+	
+	
+	
+	
 </kul:tab>          
            
              
