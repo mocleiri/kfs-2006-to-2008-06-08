@@ -204,12 +204,12 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
         }
 
         if (!this.consolidationTableDoesNotHave(chartCode, objCode)) {
-            this.putFieldError("financialObjectCode", KeyConstants.ERROR_DOCUMENT_OBJCODE_CONSOLIDATION_ERROR, "Object Code");
+            this.putFieldError("financialObjectCode", KeyConstants.ERROR_DOCUMENT_OBJCODE_CONSOLIDATION_ERROR, chartCode+"-"+objCode);
             result = false;
         }
 
         if (!this.objectLevelTableDoesNotHave(chartCode, objCode)) {
-            this.putFieldError("financialObjectCode", KeyConstants.ERROR_DOCUMENT_OBJCODE_LEVEL_ERROR, "Object Code" );
+            this.putFieldError("financialObjectCode", KeyConstants.ERROR_DOCUMENT_OBJCODE_LEVEL_ERROR, chartCode+"-"+objCode );
             result = false;
         }
         if (this.nextYearObjectCodeDoesNotExistThisYear(year, chartCode,  nextYearObjectCode)){
