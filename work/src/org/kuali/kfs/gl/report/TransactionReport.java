@@ -51,12 +51,12 @@ import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: TransactionReport.java,v 1.20.2.1 2006-09-12 14:36:01 jsissom Exp $
+ * @version $Id: TransactionReport.java,v 1.20.2.2 2006-09-13 16:29:13 larevans Exp $
  */
 public class TransactionReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TransactionReport.class);
 
-    class PageHelper extends PdfPageEventHelper {
+    static public class PageHelper extends PdfPageEventHelper {
         public Date runDate;
         public Font headerFont;
         public String title;
@@ -238,8 +238,8 @@ public class TransactionReport {
                             if ( m == null ) {
                                 msg = "";
                             } else {
-                                msg = m.toString();
-                            }
+                            	msg = m.toString();
+                        	}
                         }
 
                         if (first) {
