@@ -242,7 +242,7 @@ public class ScrubberProcess {
         // run the demerger and generate the demerger report
         if (!reportOnlyMode) {
             performDemerger(errorGroup, validGroup);
-
+            
             // Run bad balance type report and removed transaction report
             reportService.generateScrubberBadBalanceTypeListingReport(runDate, groupsToScrub);
 
@@ -265,9 +265,11 @@ public class ScrubberProcess {
 
         // Read all the documents from the error group and move all non-generated
         // transactions for these documents from the valid group into the error group
-        Iterator<OriginEntry> errorDocuments = originEntryService.getDocumentsByGroup(errorGroup);
-        while (errorDocuments.hasNext()) {
-            OriginEntry document = errorDocuments.next();
+        Collection<OriginEntry> errorDocuments = originEntryService.getDocumentsByGroup(errorGroup);
+        Iterator<OriginEntry> i = errorDocuments.iterator();
+        while (i.hasNext()) {
+            OriginEntry document = i.next();
+            
             demergerReport.incrementErrorTransactionsRead();
             demergerReport.incrementErrorTransactionsSaved();
 
@@ -277,16 +279,6 @@ public class ScrubberProcess {
 
             while (transactions.hasNext()) {
                 OriginEntry transaction = transactions.next();
-
-                // I have no clue why, but when we run this query, sometime we retrieve the exact same row multiple times.
-                // Since they are sorted by ID, we can eliminate the duplicates this way. There much be a better way to
-                // solve this, but this works for now.
-                if (lastId.intValue() == transaction.getEntryId().intValue()) {
-                    continue;
-                }
-                else {
-                    lastId = transaction.getEntryId();
-                }
 
                 String transactionType = getTransactionType(transaction);
 
@@ -322,10 +314,43 @@ public class ScrubberProcess {
             }
         }
 
+        // Read all the transactions in the error group and delete the generated ones
+        Iterator<OriginEntry> ie = originEntryService.getEntriesByGroup(errorGroup);
+        while (ie.hasNext()) {
+            OriginEntry transaction = ie.next();
+
+            String transactionType = getTransactionType(transaction);
+
+            if ("CE".equals(transactionType)) {
+                demergerReport.incrementCostShareEncumbranceTransactionsBypassed();
+                originEntryService.delete(transaction);
+            }
+            else if ("O".equals(transactionType)) {
+                demergerReport.incrementOffsetTransactionsBypassed();
+                originEntryService.delete(transaction);
+            }
+            else if ("C".equals(transactionType)) {
+                demergerReport.incrementCapitalizationTransactionsBypassed();
+                originEntryService.delete(transaction);
+            }
+            else if ("L".equals(transactionType)) {
+                demergerReport.incrementLiabilityTransactionsBypassed();
+                originEntryService.delete(transaction);
+            }
+            else if ("T".equals(transactionType)) {
+                demergerReport.incrementTransferTransactionsBypassed();
+                originEntryService.delete(transaction);
+            }
+            else if ("CS".equals(transactionType)) {
+                demergerReport.incrementCostShareTransactionsBypassed();
+                originEntryService.delete(transaction);
+            }
+        }
+
         // Read all the transactions in the valid group and update the cost share transactions
-        Iterator<OriginEntry> validTransactions = originEntryService.getDocumentsByGroup(validGroup);
-        while (validTransactions.hasNext()) {
-            OriginEntry transaction = validTransactions.next();
+        Iterator<OriginEntry> it = originEntryService.getEntriesByGroup(validGroup);
+        while (it.hasNext()) {
+            OriginEntry transaction = it.next();
             demergerReport.incrementValidTransactionsSaved();
 
             String transactionType = getTransactionType(transaction);
@@ -448,10 +473,7 @@ public class ScrubberProcess {
                 // See if unit of work has changed
                 if (!unitOfWork.isSameUnitOfWork(scrubbedEntry)) {
                     // Generate offset for last unit of work
-                    if (!generateOffset(lastEntry)) {
-                        saveValidTransaction = false;
-                        saveErrorTransaction = true;
-                    }
+                    generateOffset(lastEntry);
 
                     unitOfWork = new UnitOfWorkInfo(scrubbedEntry);
                 }
@@ -1046,7 +1068,6 @@ public class ScrubberProcess {
                 return e.getMessage();
             }
 
-            // TODO For some reason, this doesn't seem to save
             createOutputEntry(plantIndebtednessEntry, validGroup);
             scrubberReport.incrementPlantIndebtednessEntryGenerated();
         }
@@ -1322,9 +1343,19 @@ public class ScrubberProcess {
             FinancialSystemParameter param = parameters.get(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_PREFIX + originEntryObjectLevelCode);
             if ( param == null ) {
                 param = getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_DEFAULT);
+                if ( param == null ) {
+                    throw new IllegalArgumentException("Missing " + GLConstants.GL_SCRUBBER_GROUP + "/" + GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_DEFAULT + " parameter in system parameters table");
+                } else {
+                    originEntryObjectCode = param.getFinancialSystemParameterText();
+                }
+            } else {
+                if ( param.getFinancialSystemParameterText() == null ) {
+                    // Don't do anything with the object code
+                } else {
+                    originEntryObjectCode = param.getFinancialSystemParameterText();                    
+                }
             }
 
-            originEntryObjectCode = param.getFinancialSystemParameterText();
             done = true;
         }
 
@@ -1388,6 +1419,9 @@ public class ScrubberProcess {
                 offsetKey.append(offsetDefinition.getFinancialObjectCode());
 
                 putTransactionError(offsetEntry, kualiConfigurationService.getPropertyString(KeyConstants.ERROR_OFFSET_DEFINITION_OBJECT_CODE_NOT_FOUND), offsetKey.toString(), Message.TYPE_FATAL);
+                
+                createOutputEntry(offsetEntry, errorGroup);
+                scrubberReport.incrementErrorRecordWritten();
                 return false;
             }
 
@@ -1408,6 +1442,9 @@ public class ScrubberProcess {
             sb.append(scrubbedEntry.getFinancialBalanceTypeCode());
 
             putTransactionError(offsetEntry, kualiConfigurationService.getPropertyString(KeyConstants.ERROR_OFFSET_DEFINITION_NOT_FOUND), sb.toString(), Message.TYPE_FATAL);
+
+            createOutputEntry(offsetEntry, errorGroup);
+            scrubberReport.incrementErrorRecordWritten();
             return false;
         }
 
@@ -1438,7 +1475,7 @@ public class ScrubberProcess {
         catch (InvalidFlexibleOffsetException e) {
             LOG.debug("generateOffset() Offset Flexible Offset Error: " + e.getMessage());
             putTransactionError(offsetEntry, e.getMessage(), "", Message.TYPE_FATAL);
-            return false;
+            return true;
         }
 
         createOutputEntry(offsetEntry, validGroup);
