@@ -536,7 +536,6 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         assertOriginEntries(4, output);
     }
 
-    // TODO Fix
     public void testPlantIndebtedness() throws Exception {
 
         String[] input = new String[] { 
@@ -569,7 +568,6 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         assertOriginEntries(4, output);
     }
 
-    // TODO Fix
     public void testNoIndebtednessForObjectSubTypeP2() throws Exception {
 
         String[] input = new String[] { 
@@ -592,7 +590,6 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         assertOriginEntries(4, output);
     }
 
-    // TODO Fix
     public void testNoIndebtednessForObjectSubTypeP1() throws Exception {
 
         String[] input = new String[] { 
@@ -603,8 +600,8 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         EntryHolder[] output = new EntryHolder[] {
                 new EntryHolder(OriginEntrySource.BACKUP, "2007BL2231423-----9100---ACIN  CR  PLNODEBTP1 00000FRICKA FRACKA                                    45995.84C2006-01-05          ----------                                                                  "), 
                 new EntryHolder(OriginEntrySource.BACKUP, "2007BL2231423-----8000---ACAS  CR  PLNODEBTP1 00000TP Generated Offset                              45995.84D2006-01-05          ----------                                                                  "), 
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL2231423-----8000---ACAS07CR  PLNODEBTP1 00000TP Generated Offset                              45995.84D2006-01-05          ----------                                                                  "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL2231423-----9100---ACIN07CR  PLNODEBTP1 00000FRICKA FRACKA                                    45995.84C2006-01-05          ----------                                                                  "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2006BL2231423-----8000---ACAS07CR  PLNODEBTP1 00000TP Generated Offset                              45995.84D2006-01-05          ----------                                                                  "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2006BL2231423-----9100---ACIN07CR  PLNODEBTP1 00000FRICKA FRACKA                                    45995.84C2006-01-05          ----------                                                                  "), 
         };
 
         scrub(input);
@@ -965,7 +962,6 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         assertOriginEntries(4, output);
     }
 
-    // TODO Fix
     public void testClosedAccount() throws Exception {
 
         String[] input = new String[] { 
@@ -976,10 +972,10 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         EntryHolder[] output = new EntryHolder[] { 
                 new EntryHolder(OriginEntrySource.BACKUP, "2007BA6044909-----1800---ACIN07CR  UBCLOSACCT 00000Poplars Garage Fees                                 20.00C2006-01-05          ----------                                                                          "), 
                 new EntryHolder(OriginEntrySource.BACKUP, "2007BA6044909-----8000---ACAS07CR  UBCLOSACCT 00000TP Generated Offset                                 20.00D2006-01-05          ----------                                                                          "), 
-                new EntryHolder(OriginEntrySource.SCRUBBER_EXPIRED, "2007BA6044900-----1800---ACIN07CR  UBCLOSACCT 00000AUTO FR BA6044909Poplars Garage Fees                20.00C2006-01-05          ----------                                                                          "),
                 new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----1800---ACIN07CR  UBCLOSACCT 00000AUTO FR BA6044909Poplars Garage Fees                20.00C2006-01-05          ----------                                                                          "), 
-                new EntryHolder(OriginEntrySource.SCRUBBER_EXPIRED, "2007BA6044900-----8000---ACAS07CR  UBCLOSACCT 00000AUTO FR BA6044909TP Generated Offset                20.00D2006-01-05          ----------                                                                          "), 
                 new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----8000---ACAS07CR  UBCLOSACCT 00000AUTO FR BA6044909TP Generated Offset                20.00D2006-01-05          ----------                                                                          "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_EXPIRED, "2007BA6044900-----1800---ACIN07CR  UBCLOSACCT 00000AUTO FR BA6044909Poplars Garage Fees                20.00C2006-01-05          ----------                                                                          "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_EXPIRED, "2007BA6044900-----8000---ACAS07CR  UBCLOSACCT 00000AUTO FR BA6044909TP Generated Offset                20.00D2006-01-05          ----------                                                                          "), 
         };
 
         scrub(input);
