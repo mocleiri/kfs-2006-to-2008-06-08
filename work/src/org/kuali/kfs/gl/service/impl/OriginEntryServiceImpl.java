@@ -29,6 +29,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,7 +49,7 @@ import org.kuali.module.gl.util.LedgerEntryHolder;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.1 2006-09-13 00:48:00 jsissom Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.2 2006-09-13 17:28:39 larevans Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -110,7 +111,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             oe.setFinancialDocumentTypeCode((String)data[1]);
             oe.setFinancialSystemOriginationCode((String)data[2]);
             results.add(oe);
-        }
+    }
 
         return results;
     }
@@ -135,6 +136,12 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         LOG.debug("getEntriesByGroupAccountOrder() started");
 
         return originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_ACCOUNT);
+    }
+
+    public Iterator<OriginEntry> getEntriesByGroupReportOrder(OriginEntryGroup oeg) {
+        LOG.debug("getEntriesByGroupAccountOrder() started");
+
+        return originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_REPORT);
     }
 
     /**
@@ -335,5 +342,5 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public OriginEntry getExactMatchingEntry(Integer entryId) {
         return originEntryDao.getExactMatchingEntry(entryId);
     }
-
+    
 }
