@@ -42,7 +42,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryDaoOjb.java,v 1.30.2.3 2006-09-13 00:48:01 jsissom Exp $
+ * @version $Id: OriginEntryDaoOjb.java,v 1.30.2.4 2006-09-13 17:26:16 larevans Exp $
  */
 
 public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryDao {
@@ -211,13 +211,10 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
             qbc.addOrderByAscending(FINANCIAL_DOCUMENT_TYPE_CODE);
             qbc.addOrderByAscending(FINANCIAL_SYSTEM_ORIGINATION_CODE);
             qbc.addOrderByAscending(FINANCIAL_DOCUMENT_NUMBER);
-            qbc.addOrderByAscending(FINANCIAL_BALANCE_TYPE_CODE);
+            qbc.addOrderByAscending(TRANSACTION_DEBIT_CREDIT_CODE);            
             qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
             qbc.addOrderByAscending(ACCOUNT_NUMBER);
-            qbc.addOrderByAscending(SUB_ACCOUNT_NUMBER);
             qbc.addOrderByAscending(FINANCIAL_OBJECT_CODE);
-            qbc.addOrderByAscending(FINANCIAL_SUB_OBJECT_CODE);
-            qbc.addOrderByAscending(TRANSACTION_DEBIT_CREDIT_CODE);            
         } else {
             qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
             qbc.addOrderByAscending(ACCOUNT_NUMBER);
