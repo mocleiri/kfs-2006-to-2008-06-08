@@ -31,7 +31,7 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryDao.java,v 1.17.2.1 2006-09-11 13:12:54 jsissom Exp $
+ * @version $Id: OriginEntryDao.java,v 1.17.2.2 2006-09-13 00:48:00 jsissom Exp $
  */
 public interface OriginEntryDao {
     public static final int SORT_DOCUMENT = 1;
@@ -56,9 +56,9 @@ public interface OriginEntryDao {
      * Return an iterator to all documents in a group
      * 
      * @param oeg Group
-     * @return Iterator of entries in the specified group
+     * @return Iterator of Object[] documents in the specified group
      */
-    public Iterator<OriginEntry> getDocumentsByGroup(OriginEntryGroup oeg);
+    public Iterator getDocumentsByGroup(OriginEntryGroup oeg);
 
     /**
      * Return an iterator to all the entries in a group
