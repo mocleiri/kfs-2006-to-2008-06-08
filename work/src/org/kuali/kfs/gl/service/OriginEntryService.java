@@ -48,9 +48,9 @@ public interface OriginEntryService {
      * Return all documents in a group
      * 
      * @param oeg Group used to select documents
-     * @return Iterator to all documents
+     * @return Collection to all documents
      */
-    public Iterator<OriginEntry> getDocumentsByGroup(OriginEntryGroup oeg);
+    public Collection<OriginEntry> getDocumentsByGroup(OriginEntryGroup oeg);
 
     /**
      * Return all entries for a group sorted by account number for the error
