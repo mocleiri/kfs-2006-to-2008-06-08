@@ -983,6 +983,9 @@
         <property name="originEntryService">
             <ref bean="glOriginEntryService" />
         </property>
+        <property name="originEntryGroupService">
+            <ref bean="glOriginEntryGroupService" />
+        </property>
         <property name="dateTimeService">
         	<ref bean="dateTimeService"/>
         </property>
@@ -1134,9 +1137,9 @@
         <property name="optionsService">
         	<ref bean="optionsService"/>
         </property>
-		    <property name="generalLedgerPendingEntryService">
-			    <ref bean="generalLedgerPendingEntryService"/>
-		    </property>
+		<property name="generalLedgerPendingEntryService">
+			<ref bean="generalLedgerPendingEntryService"/>
+		</property>
         <property name="sufficientFundRebuildService">
           <ref bean="glSufficientFundRebuildService" />
         </property>
