@@ -83,7 +83,7 @@ import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.46.2.1 2006-09-06 18:34:13 schoo Exp $
+ * @version $Id: CorrectionAction.java,v 1.46.2.2 2006-09-13 04:28:45 schoo Exp $
  * 
  */
 
@@ -1138,9 +1138,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
             originEntryService.createEntry(oe, newOriginEntryGroup);
 
         }
-
-        showAllEntries(newGroupId, errorCorrectionForm, request);
-
+       
         OriginEntry newOriginEntry = new OriginEntry();
         errorCorrectionForm.setEachEntryForManualEdit(newOriginEntry);
 
@@ -1149,6 +1147,15 @@ public class CorrectionAction extends KualiDocumentActionBase {
         errorCorrectionForm.setManualEditFlag("N");
 
         CorrectionActionHelper.rebuildDocumentState(request, errorCorrectionForm);
+        
+        //search
+        CorrectionChangeGroup ccg = (CorrectionChangeGroup) document.getCorrectionChangeGroup().get(0);
+        if (ccg.getCorrectionCriteria().size() > 0) {
+            searchForManualEdit(mapping, form, request, response);
+        } else {
+        showAllEntries(newGroupId, errorCorrectionForm, request);
+        }
+        
         return mapping.findForward(Constants.MAPPING_BASIC);
 
 
@@ -1184,7 +1191,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
      * @return
      * @throws Exception
      */
-    public ActionForward searchForManualEdit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward searchForManualEdit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
         CorrectionForm errorCorrectionForm = (CorrectionForm) form;
         document = (CorrectionDocument) errorCorrectionForm.getDocument();
@@ -1715,7 +1722,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
     public ActionForward deleteEntry(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
         CorrectionForm errorCorrectionForm = (CorrectionForm) form;
-
+        CorrectionDocument document = (CorrectionDocument) errorCorrectionForm.getDocument(); 
 
         String stringEditEntryId = "";
         for (Enumeration i = request.getParameterNames(); i.hasMoreElements();) {
@@ -1734,8 +1741,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
         originEntryService.delete(eachEntry);
         HttpSession session = request.getSession(true);
         String[] newGroupId = { (String) session.getAttribute("newGroupId") };
-        showAllEntries(newGroupId, errorCorrectionForm, request);
-
+        
         OriginEntry newOriginEntry = new OriginEntry();
         errorCorrectionForm.setEachEntryForManualEdit(newOriginEntry);
 
@@ -1744,7 +1750,15 @@ public class CorrectionAction extends KualiDocumentActionBase {
         errorCorrectionForm.setManualEditFlag("N");
 
         CorrectionActionHelper.rebuildDocumentState(request, errorCorrectionForm);
-
+        
+        //search 
+        CorrectionChangeGroup ccg = (CorrectionChangeGroup) document.getCorrectionChangeGroup().get(0);
+        if (ccg.getCorrectionCriteria().size() > 0) {
+                searchForManualEdit(mapping, form, request, response);
+        } else {
+            showAllEntries(newGroupId, errorCorrectionForm, request);
+        }
+       
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
