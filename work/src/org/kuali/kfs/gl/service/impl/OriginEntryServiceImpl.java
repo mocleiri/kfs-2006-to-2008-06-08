@@ -28,6 +28,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,7 +48,7 @@ import org.kuali.module.gl.util.LedgerEntryHolder;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryServiceImpl.java,v 1.26 2006-09-06 06:49:57 abyrne Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.1 2006-09-13 00:48:00 jsissom Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -97,10 +98,21 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      * 
      * @see org.kuali.module.gl.service.OriginEntryService#getDocumentsByGroup(org.kuali.module.gl.bo.OriginEntryGroup)
      */
-    public Iterator<OriginEntry> getDocumentsByGroup(OriginEntryGroup oeg) {
+    public Collection<OriginEntry> getDocumentsByGroup(OriginEntryGroup oeg) {
         LOG.debug("getDocumentsByGroup() started");
 
-        return originEntryDao.getDocumentsByGroup(oeg);
+        Collection<OriginEntry> results = new ArrayList<OriginEntry>();
+        Iterator i = originEntryDao.getDocumentsByGroup(oeg);
+        while ( i.hasNext() ) {
+            Object[] data = (Object[])i.next();
+            OriginEntry oe = new OriginEntry();
+            oe.setFinancialDocumentNumber((String)data[0]);
+            oe.setFinancialDocumentTypeCode((String)data[1]);
+            oe.setFinancialSystemOriginationCode((String)data[2]);
+            results.add(oe);
+        }
+
+        return results;
     }
 
     /**
