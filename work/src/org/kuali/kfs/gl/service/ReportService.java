@@ -36,11 +36,18 @@ import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 
 /**
- * @author Laran Evans <lc278@cornell.edu>
+ * @author Kuali General Ledger Team <kualigltech@oncourse.iu.edu>
  * @version $Id$
  */
 
 public interface ReportService {
+    /**
+     * Pending entry report.
+     * 
+     * @param runDate
+     */
+    public void generatePendingEntryReport(Date runDate);
+    
     /**
      * Sufficient Funds Summary Report
      * 
