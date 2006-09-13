@@ -22,6 +22,7 @@
  */
 package org.kuali.module.gl.dao.ojb;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -41,7 +42,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryDaoOjb.java,v 1.30.2.2 2006-09-11 13:13:05 jsissom Exp $
+ * @version $Id: OriginEntryDaoOjb.java,v 1.30.2.3 2006-09-13 00:48:01 jsissom Exp $
  */
 
 public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryDao {
@@ -105,15 +106,18 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
      * 
      * @see org.kuali.module.gl.dao.OriginEntryDao#getDocumentsByGroup(org.kuali.module.gl.bo.OriginEntryGroup)
      */
-    public Iterator<OriginEntry> getDocumentsByGroup(OriginEntryGroup oeg) {
+    public Iterator getDocumentsByGroup(OriginEntryGroup oeg) {
         LOG.debug("getDocumentsByGroup() started");
 
         Criteria criteria = new Criteria();
         criteria.addEqualTo(ENTRY_GROUP_ID, oeg.getId());
 
-        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, criteria);
-        qbc.setDistinct(true);
-        return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
+        ReportQueryByCriteria q = QueryFactory.newReportQuery(OriginEntry.class, criteria);
+        q.setAttributes(new String[] { "financialDocumentNumber","financialDocumentTypeCode","financialSystemOriginationCode" });
+
+        q.setDistinct(true);
+
+        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
     }
 
     /**
