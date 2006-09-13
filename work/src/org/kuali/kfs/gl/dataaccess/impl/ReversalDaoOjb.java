@@ -10,7 +10,9 @@ import java.util.Iterator;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.PropertyConstants;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.Reversal;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.ReversalDao;
@@ -64,6 +66,33 @@ public class ReversalDaoOjb extends PersistenceBrokerDaoSupport implements Rever
 
         QueryByCriteria qbc = QueryFactory.newQuery(Reversal.class, crit);
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.gl.dao.ReversalDao#getSummaryByDate(java.util.Date)
+     */
+    public Iterator getSummaryByDate(Date before) {
+        LOG.debug("getSummaryByDate() started");
+
+        Criteria crit = new Criteria();
+        crit.addLessOrEqualThan(PropertyConstants.FINANCIAL_DOCUMENT_REVERSAL_DATE, new java.sql.Date(before.getTime()));
+    
+        ReportQueryByCriteria query = QueryFactory.newReportQuery(OriginEntry.class, crit);
+
+        String attributeList[] = { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")", "count(" + PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE + ")" };
+
+        String groupList[] = { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE };
+
+        query.setAttributes(attributeList);
+        query.addGroupBy(groupList);
+
+        // add the sorting criteria
+        for (int i = 0; i < groupList.length; i++) {
+            query.addOrderByAscending(groupList[i]);
+        }
+
+        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
     }
 
     public void delete(Reversal re) {
