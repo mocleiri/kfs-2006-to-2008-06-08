@@ -167,8 +167,8 @@
 <kul:tab tabTitle="Search Results" defaultOpen="true" tabErrorKey="Search Results">    
  	<c:if test="${KualiForm.chooseSystem != null && KualiForm.editMethod !=null}" >   
  	
-	<%--	<div class="tab-container" align="left" style="overflow: scroll; max-width: 100%;"> --%>
-	<div class="tab-container" align="left" STYLE="overflow-x:scroll; overflow-y:hidden"> 
+	<div class="tab-container" align="left" style="overflow: scroll; width: 100% ;"> 
+<%--	<div class="tab-container" align="left" STYLE="overflow-x:scroll; overflow-y:hidden"> --%>
 	<kul:errors keyMatch="numberFormatError" />
             <table cellpadding=0 class="datatable" summary=""> 
                 <tr>
@@ -371,24 +371,33 @@
    			</c:if>
               	  
               	  
-              	  <td>
+              	  
               	  	<c:if test="${KualiForm.manualEditFlag == 'Y'}" >           
+              	  	<td>
                       	<STRONG> Do you want to edit this document? </STRONG>
                     	  	<html:image property="methodToCall.showEditMethod.anchor${currentTabIndex}" src="images/tinybutton-edit1.gif" styleClass="tinybutton" alt="show edit" />
+          		  </td>
 		   			</c:if>
-           			<c:if test="${KualiForm.deleteFileFlag == 'Y'}" >
-           				<STRONG> Do you want to delete this document? </STRONG>
-           				<html:image property="methodToCall.deleteDocument.anchor${currentTabIndex}"
-             		    						src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="deleteDocument" />
-           			</c:if>
            			
-           		  </td>
+           			
+
        		
        
 
     </c:if>
-            
-            
+
+	
+            <c:if test="${KualiForm.deleteFileFlag == 'Y'}" >
+			    <tr>
+            		<td>
+           				<STRONG> Do you want to delete this document? </STRONG>
+           				<html:image property="methodToCall.deleteDocument.anchor${currentTabIndex}"
+             		    						src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="deleteDocument" />
+                   </td>
+               </tr>
+   			</c:if>
+
+        
  
        </c:if>      
     </table> 
@@ -1001,7 +1010,7 @@
                                     value="${criterion.correctionCriteriaLineNumber}" />][field-name]"
                                       name="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out 
                                         value="${criterion.correctionCriteriaLineNumber}" />][field-name]">
-                                    <option value="" selected disabled="true">Select Search Criteria</option> 
+                                    <option value="" selected="true" disabled="true">Select Search Criteria</option> 
             	                        <c:forEach var="fieldName" items="${KualiForm.fieldNames}">
                 	                        <option value="<c:out value="${fieldName.value}" />"<c:if 
                     	                        test="${fieldName.value eq criterion.correctionFieldName}"> selected="true" </c:if> disabled="true">
@@ -1027,7 +1036,7 @@
                                     value="${criterion.correctionCriteriaLineNumber}" />][field-value]"
                                     value="${ criterion.correctionFieldValue}"
                                     name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out 
-                                    value="${ criterion.correctionCriteriaLineNumber}" />][field-value]" type="text">
+                                    value="${ criterion.correctionCriteriaLineNumber}" />][field-value]" type="text" disabled="true">
                                 
                             </div>
                         </c:forEach>
@@ -1037,7 +1046,7 @@
                             <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-name]">Field</label> 
                             <select id="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-name]"
                                   name="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][field-name]">
-                                <option value="" selected="selected" >Select Search Criteria</option>
+                                <option value="" selected="true" disabled="true">Select Search Criteria</option>
                                 <c:forEach var="fieldName" items="${ KualiForm.fieldNames}"><option value="<c:out 
                                     value="${fieldName.value}" />" disabled="true" ><c:out value="${fieldName.value}" /></option></c:forEach> 
                             </select>
@@ -1052,7 +1061,7 @@
                             <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-value]">Value</label> 
                             <input id="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-value]"
                                   name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-value]" 
-                                  type="text">
+                                  type="text" disabled="true">
                             </div>
                         
                     </td> 
@@ -1066,7 +1075,7 @@
                                     name="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][replacement-specifications][<c:out 
                                         value="${specification.correctionChangeLineNumber}" />][field-name]">
                                     <c:forEach var="fieldName" items="${ KualiForm.fieldNames}">
-                                        <option value="<c:out value="${fieldName.value}" />"<c:if 
+                                        <option value="<c:out value="${fieldName.value}" />" disabled="true" <c:if 
                                             test="${fieldName.value eq specification.correctionFieldName}"> selected="true"</c:if> disabled="true">
                                             <c:out value="${fieldName.value}" />
                                         </option> 
@@ -1074,7 +1083,7 @@
                                 </select>
                                 <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber }" />][replacement-specifications][<c:out 
                                     value="${specification.correctionChangeLineNumber}" />][replacement-value]">Replacement Value</label>
-                                <input type="text" 
+                                <input type="text" disabled="true"
                                     name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][<c:out 
                                         value="${ specification.correctionChangeLineNumber}" />][replacement-value]" 
                                     value="<c:out value="${specification.correctionFieldValue}" />"
@@ -1088,13 +1097,13 @@
                             <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][field-name]">Field</label> 
                             <select id="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][field-name]"
                                 name="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][replacement-specifications][field-name]">
-                                <option value="" selected="selected">Specify Modification</option>
+                                <option value="" selected="true" disabled="true">Specify Modification</option>
                                 <c:forEach var="fieldName" items="${ KualiForm.fieldNames}"><option value="<c:out 
                                     value="${fieldName.value}" />" disabled="true"><c:out value="${fieldName.value}" /></option></c:forEach> 
                             </select>
                             <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][replacement-value]">Replacement 
                                 Value</label>
-                            <input type="text" name="correction-groups[<c:out 
+                            <input type="text" disabled="true" name="correction-groups[<c:out 
                                 value="${group.correctionChangeGroupLineNumber }" />][replacement-specifications][replacement-value]" 
                                 id="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][replacement-value]"> 
                         </div>
