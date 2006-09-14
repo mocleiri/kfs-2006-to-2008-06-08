@@ -563,10 +563,9 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * 
-     * @see org.kuali.module.gl.service.ReportService#generateScrubberledgerSummaryReport(java.util.Date, java.util.Collection,
-     *      java.lang.String)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportBatch(java.util.Date, java.util.Collection)
      */
-    public void generateScrubberLedgerSummaryReport(Date runDate, Collection groups, String title) {
+    public void generateScrubberLedgerSummaryReportBatch(Date runDate, Collection groups) {
         LOG.debug("generateScrubberLedgerSummaryReport() started");
 
         LedgerReport ledgerReport = new LedgerReport();
@@ -576,6 +575,24 @@ public class ReportServiceImpl implements ReportService {
         }
 
         ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger", batchReportsDirectory);
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportOnline(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
+     */
+    public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group) {
+        LOG.debug("generateScrubberLedgerSummaryReport() started");
+
+        LedgerReport ledgerReport = new LedgerReport();
+        LedgerEntryHolder ledgerEntries = new LedgerEntryHolder();
+
+        Collection g = new ArrayList();
+        g.add(group);
+
+        ledgerEntries = originEntryService.getSummaryByGroupId(g);
+
+        ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger_" + group.getId(), onlineReportsDirectory);
     }
 
     /**
@@ -663,6 +680,15 @@ public class ReportServiceImpl implements ReportService {
 
         TransactionListingReport rept = new TransactionListingReport();
         rept.generateReport(i, runDate, "Scrubber Input Transactions with Bad Balance Types", "scrubber_badbal", batchReportsDirectory);
+    }
+
+    public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup) {
+        LOG.debug("generateScrubberTransactionsOnline() started");
+
+        Iterator ti = originEntryService.getEntriesByGroupAccountOrder(validGroup);
+
+        TransactionListingReport rept = new TransactionListingReport();
+        rept.generateReport(ti, runDate, "Output Transaction Listing From the Scrubber", "scrubber_listing_" + validGroup, onlineReportsDirectory);        
     }
 
     /**
