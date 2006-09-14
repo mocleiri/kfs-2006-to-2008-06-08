@@ -102,7 +102,7 @@
     sectionTitle="${sectionTitle}"/>
 
 <tr>
-    <kul:htmlAttributeHeaderCell literalLabel="&nbsp;" rowspan="2"/>
+    <kul:htmlAttributeHeaderCell literalLabel="&nbsp;" rowspan="2" anchor="accounting${capitalSourceOrTarget}Anchor"/>
     <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.chartOfAccountsCode}" rowspan="2"/>
     <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.accountNumber}" rowspan="2"/>
     <kul:htmlAttributeHeaderCell attributeEntry="${accountingLineAttributes.subAccountNumber}" rowspan="2"/>
