@@ -490,6 +490,9 @@
         <property name="nightlyOutService">
             <ref bean="glNightlyOutService" />
         </property>
+        <property name="reportService">
+        	<ref bean="glReportService"/>
+        </property>
     </bean>
 
     <bean id="glClearPendingStep" class="org.kuali.module.gl.batch.ClearPendingStep">
