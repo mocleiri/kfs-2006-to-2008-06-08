@@ -83,7 +83,7 @@ import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.46.2.2 2006-09-13 04:28:45 schoo Exp $
+ * @version $Id: CorrectionAction.java,v 1.46.2.3 2006-09-14 19:07:46 schoo Exp $
  * 
  */
 
@@ -2037,17 +2037,17 @@ public class CorrectionAction extends KualiDocumentActionBase {
 
         try {
             if (oldDoc.getCorrectionTypeCode().equals("M")) {
-                errorCorrectionForm.setEditMethod("manual");
+                errorCorrectionForm.setEditMethod("Manual Edit");
             }
             else {
-                errorCorrectionForm.setEditMethod("criteria");
+                errorCorrectionForm.setEditMethod("Using Criteria");
             }
 
             if (oldDoc.getCorrectionInputFileName() != null) {
-                errorCorrectionForm.setChooseSystem("file");
+                errorCorrectionForm.setChooseSystem("File Upload");
             }
             else {
-                errorCorrectionForm.setChooseSystem("system");
+                errorCorrectionForm.setChooseSystem("Database");
             }
 
 
