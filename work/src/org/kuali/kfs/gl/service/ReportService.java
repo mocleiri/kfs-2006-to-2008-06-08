@@ -60,10 +60,17 @@ public interface ReportService {
      * Scrubber General Ledger Transaction Summary report
      * 
      * @param - runDate Run date of the report
-     * @param - groups Groups to summarize for the report
-     * @param - title Title of the report
+     * @param - group Group to summarize for the report
      */
-    public void generateScrubberLedgerSummaryReport(Date runDate, Collection groups, String title);
+    public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group);
+
+    /**
+     * Scrubber General Ledger Transaction Summary report
+     * 
+     * @param - runDate Run date of the report
+     * @param - groups Groups to summarize for the report
+     */
+    public void generateScrubberLedgerSummaryReportBatch(Date runDate, Collection groups);
 
     /**
      * Scrubber Statistics report for batch reports
@@ -98,6 +105,14 @@ public interface ReportService {
      * @param - groups Groups to summarize for the report
      */
     public void generateScrubberBadBalanceTypeListingReport(Date runDate, Collection groups);
+
+    /**
+     * Scrubber Transaction Listing report
+     * 
+     * @param - runDate Run date of the report
+     * @param validGroup Group with transactions
+     */
+    public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup);
 
     /**
      * Scrubber Removed Transactions report
