@@ -40,6 +40,7 @@ import org.kuali.core.bo.user.Options;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.OptionsService;
+import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.OriginEntry;
@@ -91,6 +92,7 @@ public class ReportServiceImpl implements ReportService {
     private BalanceService balanceService;
     private OptionsService optionsService;
     private KualiConfigurationService kualiConfigurationService;
+    private PersistenceService persistenceService;
 
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
@@ -110,7 +112,7 @@ public class ReportServiceImpl implements ReportService {
         
         Date runDate = dateTimeService.getCurrentDate();
         String title = "PENDING LEDGER ENTRY TABLE";
-        String filePrefix = "glpe_ledger_" + sdf.format(runDate);
+        String filePrefix = "glpe_ledger";
         
         Font headerFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
         Font textFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.NORMAL);
@@ -133,7 +135,7 @@ public class ReportServiceImpl implements ReportService {
             
             document.open();
             
-            float[] columnWidths = new float[] {10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+            float[] columnWidths = new float[] {10, 10, 10, 10, 10, 10, 10, 10, 10};
             
             PdfPTable header = new PdfPTable(columnWidths);
             header.setHeaderRows(2);
@@ -143,7 +145,7 @@ public class ReportServiceImpl implements ReportService {
             header.addCell(titleCell);
             
             String[] columnHeaders = new String[] {
-                    "APP Code", "Doc Type", "Document Number", "Bal Type", "COA Code",
+                    "Doc Type", "Document Number", "Bal Type", "COA Code",
                     "Account Number", "Object Code", "Debit", "Credit", "Blank" };
             
             header = new PdfPTable(columnWidths);
@@ -152,12 +154,11 @@ public class ReportServiceImpl implements ReportService {
                 header.addCell(cell);
             }
             
+            document.add(header);
+            
             // FIXME add the dashed line across the page
             
-            Map criteria = new HashMap();
-            criteria.put("sourceCode", OriginEntrySource.GENERATE_BY_EDOC);
-            criteria.put("date", runDate);
-            Collection groups = originEntryGroupService.getMatchingGroups(criteria);
+            Collection groups = originEntryGroupService.getGroupsFromSourceForDate(OriginEntrySource.GENERATE_BY_EDOC, new java.sql.Date(runDate.getTime()));
             
             // We use the collection/iterator out of necessity. But there should only be one group in the collection.
             String docType = null;
@@ -185,16 +186,23 @@ public class ReportServiceImpl implements ReportService {
                 for(Iterator entries = originEntryService.getEntriesByGroupReportOrder(originEntryGroup); entries.hasNext();) {
                     
                     OriginEntry entry = (OriginEntry) entries.next();
+                    persistenceService.retrieveNonKeyFields(entry);
+                    
                     PdfPCell column = null;
                     
                     String displayDocType = entry.getFinancialDocumentTypeCode();
                     String displayDocNumber = entry.getOrganizationDocumentNumber();
                     String displayBalanceType = entry.getFinancialBalanceTypeCode();
                     
-                    boolean isFirstInCluster = 
-                        entry.getFinancialDocumentTypeCode().equals(docType)
-                            & entry.getOrganizationDocumentNumber().equals(docNumber)
-                            & entry.getFinancialBalanceTypeCode().equals(balanceType);
+                    
+                    boolean isFirstInCluster = false;
+                    if(null == docType && null == docNumber && null == balanceType) {
+                        isFirstInCluster = true;
+                    } else if ((null == entry.getFinancialDocumentTypeCode() && null != docType) || (null == entry.getOrganizationDocumentNumber() && null != docNumber) || (null == entry.getFinancialBalanceTypeCode() && null != balanceType)) {
+                        isFirstInCluster = true;
+                    } else if (!entry.getFinancialDocumentTypeCode().equals(docType) && !entry.getOrganizationDocumentNumber().equals(docNumber) && !entry.getFinancialBalanceTypeCode().equals(balanceType)) {
+                        isFirstInCluster = true;
+                    }
                     
                     clusterCount += isFirstInCluster ? 1 : 0;
                     
@@ -255,15 +263,11 @@ public class ReportServiceImpl implements ReportService {
                         
                     }
                     
-                    // FIXME Maybe put in the "Totals for Approval Code:" line if it's relevant.
-                    
                     countForDocumentType++;
                     
                     displayDocType = isFirstInCluster ? " " : displayDocType;
                     displayDocNumber = isFirstInCluster ? " " : displayDocNumber;
                     displayBalanceType = isFirstInCluster ? " " : displayBalanceType;
-                    
-                    ///////
                     
                     column = new PdfPCell(new Phrase(displayDocType, textFont));
                     column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
@@ -323,6 +327,10 @@ public class ReportServiceImpl implements ReportService {
                     column = new PdfPCell(new Phrase(null == amount ? " " : amount.toString(), textFont));
                     column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     dataTable.addCell(column);
+                    
+                    docType = displayDocType;
+                    docNumber = displayDocNumber;
+                    balanceType = displayBalanceType;
                     
                 }
                 
@@ -909,6 +917,10 @@ public class ReportServiceImpl implements ReportService {
 
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
+    }
+
+    public void setPersistenceService(PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
     }
     
 }
