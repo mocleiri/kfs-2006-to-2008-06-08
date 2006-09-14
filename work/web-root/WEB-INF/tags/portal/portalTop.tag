@@ -17,7 +17,7 @@ if (top.location != self.location) {
 </script>
 </head>
 <body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="uportal-background-content" summary="need a summary here">
+<table width="100%" id="iframe_portlet_container_table" border="0" cellpadding="0" cellspacing="0" class="uportal-background-content" summary="need a summary here">
   <tbody>
     <tr>
       <td align="left" valign="top"><a href="portal.do?selectedTab=edocs" border="0"><img src="images/kuali1.gif" alt="my portal" width="150" height="48" vspace="4" title="" border="0"></a>&nbsp;${ConfigProperties.version}</td>
