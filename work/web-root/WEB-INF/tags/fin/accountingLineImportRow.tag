@@ -45,7 +45,7 @@
                       '     width=72 height=15 border=0 align="middle" class="det-button">' +
                     '<\/a>' +
                     '<div id="${uploadDiv}" style="display:none;" >' +
-                      '<a href="${formatUrl}" target="helpWindow">format<\/a>&nbsp;' +
+                      '<a href="html/help/AccountingLineImport.html" target="helpWindow"><img src="images/my_cp_inf.gif" alt="${altText}" hspace=5 border=0  align="middle"><\/a>&nbsp;' +
                       '<html:file size="30" property="${file}" />' +
                       '<html:image property="methodToCall.${uploadLines}" src="images/tinybutton-add1.gif"
                                     styleClass="tinybutton" alt="insert ${sourceOrTarget} accounting lines" />' +
@@ -55,7 +55,7 @@
                 //-->
             </SCRIPT>
             <NOSCRIPT>
-                Import lines <a href="${formatUrl}" target="helpWindow">format</a>&nbsp;
+                Import lines <a href="html/help/AccountingLineImport.html" target="helpWindow"><img src="images/my_cp_inf.gif" alt="${altText}" hspace=5 border=0  align="middle"></a>&nbsp;
                 <html:file size="30" property="${file}" style="font:10px;height:16px;"/>
                 <html:image property="methodToCall.${uploadLines}" src="images/tinybutton-add1.gif"
                             alt="insert ${sourceOrTarget} accounting lines"/>
