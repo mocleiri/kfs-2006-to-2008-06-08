@@ -43,10 +43,8 @@ import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 public interface ReportService {
     /**
      * Pending entry report.
-     * 
-     * @param runDate
      */
-    public void generatePendingEntryReport(Date runDate);
+    public void generatePendingEntryReport();
     
     /**
      * Sufficient Funds Summary Report
