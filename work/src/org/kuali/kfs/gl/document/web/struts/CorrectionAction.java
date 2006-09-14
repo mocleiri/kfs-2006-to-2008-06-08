@@ -83,7 +83,7 @@ import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.46.2.3 2006-09-14 19:07:46 schoo Exp $
+ * @version $Id: CorrectionAction.java,v 1.46.2.4 2006-09-14 20:53:31 schoo Exp $
  * 
  */
 
@@ -544,24 +544,25 @@ public class CorrectionAction extends KualiDocumentActionBase {
         CorrectionActionHelper.rebuildDocumentState(request, errorCorrectionForm);
 
         HttpSession session = request.getSession(true);
-        showAllEntries(errorCorrectionForm.getGroupIdList(), errorCorrectionForm, request);
+        if (checkOriginEntryGroupList(errorCorrectionForm)){
+           showAllEntries(errorCorrectionForm.getGroupIdList(), errorCorrectionForm, request);
+        
+            if (errorCorrectionForm.getAllEntries().size() > 0) {
 
-        if (errorCorrectionForm.getAllEntries().size() > 0) {
-
-            if (errorCorrectionForm.getEditMethod().equals("manual")) {
+                if (errorCorrectionForm.getEditMethod().equals("manual")) {
                 errorCorrectionForm.setManualEditFlag("Y");
                 errorCorrectionForm.setEditableFlag("N");
-            }
+                }
             
             
-        } else {
-            request.setAttribute("noOriginEntry", "There are no records for the origin entry group selected.");
+                } else {
+                    request.setAttribute("noOriginEntry", "There are no records for the origin entry group selected.");
+                }
+
+            // not need to if multiple dropdown keep values
+            session.setAttribute("groupId", errorCorrectionForm.getGroupIdList());
+
         }
-
-        // not need to if multiple dropdown keep values
-        session.setAttribute("groupId", errorCorrectionForm.getGroupIdList());
-
-
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
@@ -615,6 +616,11 @@ public class CorrectionAction extends KualiDocumentActionBase {
         KualiDocumentFormBase kualiDocumentFormBase = (KualiDocumentFormBase) form;
         CorrectionForm errorCorrectionForm = (CorrectionForm) form;
         document = (CorrectionDocument) errorCorrectionForm.getDocument();
+        
+        if (!checkMainDropdown(errorCorrectionForm)){
+            return mapping.findForward(Constants.MAPPING_BASIC);
+        }
+        
         if (errorCorrectionForm.getChooseSystem().equals("file")) {
             if (errorCorrectionForm.getEditMethod().equals("manual")) {
 
@@ -956,44 +962,48 @@ public class CorrectionAction extends KualiDocumentActionBase {
         errorCorrectionForm.setEditableFlag("N");
         errorCorrectionForm.setManualEditFlag("N");
 
-
         document = (CorrectionDocument) errorCorrectionForm.getDocument();
 
+        
         errorCorrectionForm.setProcessInBatch(true);
+        
+        
+        if (checkMainDropdown(errorCorrectionForm)){
+            //if users choose database to get document, then set the default entry group
+            if (errorCorrectionForm.getChooseSystem().equals("system")) {
 
-        // if users choose database to get document, then set the default entry group
-        if (errorCorrectionForm.getChooseSystem().equals("system")) {
+                OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
+                List<OriginEntryGroup> entryGroupList = (List) originEntryGroupService.getRecentGroupsByDays(Constants.CORRECTION_RECENT_GROUPS_DAY);
 
-            OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
-            List<OriginEntryGroup> entryGroupList = (List) originEntryGroupService.getRecentGroupsByDays(Constants.CORRECTION_RECENT_GROUPS_DAY);
+                // if there is at least one group on the list
+                if (entryGroupList.size() > 0) {
+                    List<OriginEntryGroup> sceGroupList = new ArrayList();
 
-            // if there is at least one group on the list
-            if (entryGroupList.size() > 0) {
-                List<OriginEntryGroup> sceGroupList = new ArrayList();
-
-                for (OriginEntryGroup oeg : entryGroupList) {
-                    if (oeg.getSourceCode().equals("SCE")) {
-                        sceGroupList.add(oeg);
+                    for (OriginEntryGroup oeg : entryGroupList) {
+                        if (oeg.getSourceCode().equals("SCE")) {
+                            sceGroupList.add(oeg);
+                        }
                     }
-                }
-                // if there is at least one SCE group on the list
-                if (sceGroupList.size() > 0) {
-                    OEGDateComparator oegDateComparator = new OEGDateComparator();
-                    Collections.sort(sceGroupList, oegDateComparator);
-                    Collections.sort(entryGroupList, oegDateComparator);
+                    // if there is at least one SCE group on the list
+                    if (sceGroupList.size() > 0) {
+                        OEGDateComparator oegDateComparator = new OEGDateComparator();
+                        Collections.sort(sceGroupList, oegDateComparator);
+                        Collections.sort(entryGroupList, oegDateComparator);
 
-                    String[] defaultGroupId = { sceGroupList.get(0).getId().toString() };
-                    errorCorrectionForm.setGroupIdList(defaultGroupId);
-                }
-                else {
-                    // if there is not SCE group on the list, default group is first group on the list
-                    String[] defaultGroupId = { entryGroupList.get(0).getId().toString() };
-                    errorCorrectionForm.setGroupIdList(defaultGroupId);
+                        String[] defaultGroupId = { sceGroupList.get(0).getId().toString() };
+                        errorCorrectionForm.setGroupIdList(defaultGroupId);
+                    }
+                    else {
+                        // if there is not SCE group on the list, default group is first group on the list
+                        String[] defaultGroupId = { entryGroupList.get(0).getId().toString() };
+                        errorCorrectionForm.setGroupIdList(defaultGroupId);
+                    }
+
                 }
 
             }
-
-        }
+        } 
+        
 
 
         /*
@@ -2199,5 +2209,27 @@ public class CorrectionAction extends KualiDocumentActionBase {
 
         return null;
     }
-
+    
+    public boolean checkMainDropdown(CorrectionForm errorCorrectionForm) {
+        boolean returnVal = true;
+        if (errorCorrectionForm.getChooseSystem() == null){
+            GlobalVariables.getErrorMap().putError("systemAndEditMethod", KeyConstants.ERROR_GL_ERROR_CORRECTION_SYSTEMFIELD_REQUIRED);
+            returnVal = false;
+        }
+            if (errorCorrectionForm.getEditMethod() == null) {
+            GlobalVariables.getErrorMap().putError("systemAndEditMethod", KeyConstants.ERROR_GL_ERROR_CORRECTION_EDITMETHODFIELD_REQUIRED);
+            returnVal = false;
+        }
+        return returnVal;
+    }
+    
+    public boolean checkOriginEntryGroupList(CorrectionForm errorCorrectionForm){
+        boolean returnVal = true;
+        if (errorCorrectionForm.getGroupIdList() == null){
+            GlobalVariables.getErrorMap().putError("documentLoadError", KeyConstants.ERROR_GL_ERROR_CORRECTION_ORIGINGROUP_REQUIRED); 
+            returnVal = false;
+        }
+        
+        return returnVal;
+    }
 }
