@@ -25,6 +25,7 @@ package org.kuali.module.gl.dao.ojb;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 /**
  * @author jsissom
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: BalanceDaoOjb.java,v 1.44 2006-09-06 06:50:17 abyrne Exp $
+ * @version $Id: BalanceDaoOjb.java,v 1.44.2.1 2006-09-14 12:23:43 bgao Exp $
  */
 public class BalanceDaoOjb extends PersistenceBrokerDaoSupport implements BalanceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceDaoOjb.class);
@@ -380,19 +381,22 @@ public class BalanceDaoOjb extends PersistenceBrokerDaoSupport implements Balanc
      * @return a query criteria
      */
     private Criteria buildCriteriaFromMap(Map fieldValues, Balance balance) {
+        Map localFieldValues = new HashMap();        
+        localFieldValues.putAll(fieldValues);
+        
         Criteria criteria = new Criteria();
 
         // handle encumbrance balance type
         String propertyName = PropertyConstants.BALANCE_TYPE_CODE;
-        if (fieldValues.containsKey(propertyName)) {
-            String propertyValue = (String) fieldValues.get(propertyName);
+        if (localFieldValues.containsKey(propertyName)) {
+            String propertyValue = (String) localFieldValues.get(propertyName);
             if (Constants.AGGREGATE_ENCUMBRANCE_BALANCE_TYPE_CODE.equals(propertyValue)) {
-                fieldValues.remove(PropertyConstants.BALANCE_TYPE_CODE);
+                localFieldValues.remove(PropertyConstants.BALANCE_TYPE_CODE);
                 criteria.addIn(PropertyConstants.BALANCE_TYPE_CODE, this.getEncumbranceBalanceTypeCodeList());
             }
         }
 
-        criteria.addAndCriteria(OJBUtility.buildCriteriaFromMap(fieldValues, new Balance()));
+        criteria.addAndCriteria(OJBUtility.buildCriteriaFromMap(localFieldValues, new Balance()));
         return criteria;
     }
 
