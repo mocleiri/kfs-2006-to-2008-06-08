@@ -1001,6 +1001,9 @@
         <property name="kualiConfigurationService">
             <ref bean="kualiConfigurationService" />
         </property>
+        <property name="persistenceService">
+            <ref bean="persistenceService" />
+        </property>
     </bean>
 
     <bean id="glSufficientFundsReport" class="org.kuali.module.gl.batch.sufficientFunds.impl.SufficientFundsReportImpl">
