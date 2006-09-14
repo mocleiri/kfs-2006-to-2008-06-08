@@ -106,8 +106,9 @@ public class ReportServiceImpl implements ReportService {
     /**
      * @see org.kuali.module.gl.service.ReportService#generatePendingEntryReport(java.util.Date)
      */
-    public void generatePendingEntryReport(Date runDate) {
+    public void generatePendingEntryReport() {
         
+        Date runDate = dateTimeService.getCurrentDate();
         String title = "PENDING LEDGER ENTRY TABLE";
         String filePrefix = "glpe_ledger_" + sdf.format(runDate);
         
@@ -134,7 +135,6 @@ public class ReportServiceImpl implements ReportService {
             
             float[] columnWidths = new float[] {10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
             
-            // FIXME write header
             PdfPTable header = new PdfPTable(columnWidths);
             header.setHeaderRows(2);
             header.setWidthPercentage(100);
