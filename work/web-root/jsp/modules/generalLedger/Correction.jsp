@@ -55,7 +55,7 @@
  	<kul:tab tabTitle="Correction Process" defaultOpen="true" tabErrorKey="Correction Process">
  	
  	<div class="tab-container" align="center" >
-      
+	    <kul:errors keyMatch="systemAndEditMethod" />  
     	<table cellpadding=0 class="datatable" summary=""> 
         	  <tr>
                     <td align="left" valign="middle" class="subhead"><span class="subhead-left"></span>Select System and Edit Method</td>
@@ -63,11 +63,11 @@
 	    		<tr>
      	 			<td>
 		     			<center>
-							<html:select property="chooseSystem">
+							<html:select property="chooseSystem" >
 							<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionChooseSystemValuesFinder" label="label" value="key"/>
 							</html:select>
                
-      					    <html:select property="editMethod">
+      					    <html:select property="editMethod" >
 							<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionEditMethodValuesFinder" label="label" value="key"/>
 							</html:select>
 							
@@ -83,12 +83,14 @@
  
  
 <kul:tab tabTitle="Documents in System" defaultOpen="true" tabErrorKey="Documents in System">      
+
 <c:if test="${KualiForm.chooseSystem == 'system'}" >
 
 	
 
 
           <div class="tab-container" align="center" > 
+          <kul:errors keyMatch="documentLoadError" />
             <table cellpadding=0 class="datatable" summary="">
             
             <tr>
