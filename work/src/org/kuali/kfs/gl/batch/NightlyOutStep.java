@@ -22,8 +22,11 @@
  */
 package org.kuali.module.gl.batch;
 
+import java.util.Date;
+
 import org.kuali.core.batch.Step;
 import org.kuali.module.gl.service.NightlyOutService;
+import org.kuali.module.gl.service.ReportService;
 
 /**
  * This class...
@@ -33,12 +36,14 @@ import org.kuali.module.gl.service.NightlyOutService;
 public class NightlyOutStep implements Step {
 
     private NightlyOutService nightlyOutService;
+    private ReportService reportService;
 
     /**
      * @see org.kuali.core.batch.Step#performStep()
      */
     public boolean performStep() {
         nightlyOutService.copyApprovedPendingLedgerEntries();
+        reportService.generatePendingEntryReport();
         return true;
     }
 
@@ -57,4 +62,14 @@ public class NightlyOutStep implements Step {
     public void setNightlyOutService(NightlyOutService nightlyOutService) {
         this.nightlyOutService = nightlyOutService;
     }
+    
+    /**
+     * Sets the reportService attribute value.
+     * 
+     * @param reportService
+     */
+    public void setReportService(ReportService reportService) {
+        this.reportService = reportService;
+    }
+    
 }
