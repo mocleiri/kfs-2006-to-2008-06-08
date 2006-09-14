@@ -30,10 +30,12 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupService.java,v 1.13 2006-09-06 06:50:06 abyrne Exp $
+ * @version $Id: OriginEntryGroupService.java,v 1.13.2.1 2006-09-14 20:48:46 larevans Exp $
  */
 
 public interface OriginEntryGroupService {
+    public Collection getGroupsFromSourceForDate(String sourceCode, Date date);
+    
     /**
      * Create the backup group which has all the entries from all the groups where all the flags are set Y.
      * 
