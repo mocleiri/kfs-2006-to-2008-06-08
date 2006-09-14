@@ -43,6 +43,7 @@
             <reference attributeName="finPreEncumbranceObject" attributeToHighlightOnFail="finPreEncumbranceObjectCode" />
             <reference attributeName="icrIncomeFinancialObject" attributeToHighlightOnFail="icrIncomeFinancialObjectCode" />
             <reference attributeName="icrExpenseFinancialObject" attributeToHighlightOnFail="icrExpenseFinancialObjectCd" />
+            <reference attributeName="fundBalanceObject" attributeToHighlightOnFail="fundBalanceObject" />
         </defaultExistenceChecks>
 
         <maintainableSections>
@@ -65,6 +66,7 @@
                     <maintainableField name="finPreEncumbranceObjectCode" />
                     <maintainableField name="icrIncomeFinancialObjectCode" />
                     <maintainableField name="icrExpenseFinancialObjectCd" />
+                    <maintainableField name="fundBalanceObjectCode" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
