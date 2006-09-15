@@ -24,6 +24,7 @@ package org.kuali.module.gl.service;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -193,7 +194,7 @@ public interface ReportService {
      * @param runDate
      * @param groups
      */
-    public void generatePosterReversalLedgerSummaryReport(Date runDate, Collection groups);
+    public void generatePosterReversalLedgerSummaryReport(Date runDate, Iterator groups);
 
     /**
      * Balance Forward Year-End job Report
