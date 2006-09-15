@@ -113,7 +113,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
     public List<SufficientFundsItem> checkSufficientFunds(TransactionalDocument document) {
         LOG.debug("checkSufficientFunds() started");
 
-        return checkSufficientFunds((List<? extends Transaction>) document.getPendingLedgetEntriesForSufficientFundsChecking());
+        return checkSufficientFunds((List<? extends Transaction>) document.getPendingLedgerEntriesForSufficientFundsChecking());
     }
 
     /**
@@ -182,6 +182,11 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
 
     private boolean hasSufficientFundsOnItem(SufficientFundsItem item) {
 
+        if (item.getAmount().equals(KualiDecimal.ZERO)) {
+            LOG.debug("hasSufficientFundsOnItem() Transactions with zero amounts shold pass");
+            return true;
+        }
+        
         if (!StringUtils.equals(Constants.BUDGET_CHECKING_OPTIONS_CD_ACTIVE, item.getYear().getBudgetCheckingOptionsCode())) {
             LOG.debug("hasSufficientFundsOnItem() No sufficient funds checking");
             return true;
@@ -224,12 +229,20 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         }
 
         KualiDecimal balanceAmount = item.getAmount();
-        if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode())) {
+        if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode()) || item.getYear().getBudgetCheckingBalanceTypeCd().equals(item.getBalanceTyp().getCode())) {
             // We need to change the sign on the amount because the amount in the item is an increase in cash. We only care
             // about decreases in cash.
+           
+            //Also, negating if this is a balance type code of budget checking and the transaction is a budget transaction.
+            
             balanceAmount = balanceAmount.negated();
         }
 
+        if (balanceAmount.isNegative()) {
+            LOG.debug("hasSufficientFundsOnItem() balanceAmount is negative, allow transaction to proceed");
+            return true;
+        }
+        
         PendingAmounts priorYearPending = new PendingAmounts();
         if ((Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode())) && (!item.getYear().isFinancialBeginBalanceLoadInd())) {
             priorYearPending = getPendingPriorYearBalanceAmount(item);
@@ -249,7 +262,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         else {
             availableBalance = sfBalance.getCurrentBudgetBalanceAmount().add(pending.budget).subtract(sfBalance.getAccountActualExpenditureAmt()).subtract(pending.actual).subtract(sfBalance.getAccountEncumbranceAmount()).subtract(pending.encumbrance);
         }
-
+       
         if (balanceAmount.compareTo(availableBalance) > 0) {
             LOG.debug("hasSufficientFundsOnItem() no sufficient funds");
             return false;
@@ -280,7 +293,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         // This only gets called for sufficient funds type of Cash at Account (H). The object code in the table for this type is
         // always
         // 4 spaces.
-        SufficientFundBalances bal = sufficientFundBalancesDao.getByPrimaryId(item.getYear().getUniversityFiscalYear(), item.getAccount().getChartOfAccountsCode(), item.getAccount().getAccountNumber(), "    ");
+        SufficientFundBalances bal = sufficientFundBalancesDao.getByPrimaryId(Integer.valueOf(item.getYear().getUniversityFiscalYear().intValue() - 1), item.getAccount().getChartOfAccountsCode(), item.getAccount().getAccountNumber(), "    ");
 
         if (bal != null) {
             amounts.budget = bal.getCurrentBudgetBalanceAmount();
