@@ -83,7 +83,7 @@ import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.46.2.4 2006-09-14 20:53:31 schoo Exp $
+ * @version $Id: CorrectionAction.java,v 1.46.2.5 2006-09-15 17:46:39 schoo Exp $
  * 
  */
 
@@ -1287,7 +1287,9 @@ public class CorrectionAction extends KualiDocumentActionBase {
         Map searchMap = new HashMap();
 
         HttpSession session = request.getSession(true);
-
+        
+        //TODO: newGroupId can be null when user did not click edit button after loading a docu.
+        //TODO: should fix!
         String newGroupId = (String) session.getAttribute("newGroupId");
         OriginEntryGroup newOriginEntryGroup = originEntryGroupService.getExactMatchingEntryGroup(Integer.parseInt(newGroupId));
 
@@ -2044,20 +2046,23 @@ public class CorrectionAction extends KualiDocumentActionBase {
         CorrectionDocument document = (CorrectionDocument) errorCorrectionForm.getDocument();
 
         errorCorrectionForm.setDocument(oldDoc);
-
+        
+       
         try {
             if (oldDoc.getCorrectionTypeCode().equals("M")) {
-                errorCorrectionForm.setEditMethod("Manual Edit");
+                request.setAttribute("oldDocEditMethod", "Manual Edit");
+                errorCorrectionForm.setEditMethod("manual");
             }
             else {
-                errorCorrectionForm.setEditMethod("Using Criteria");
+                request.setAttribute("oldDocEditMethod", "Using Criteria");
+                errorCorrectionForm.setEditMethod("criteria");
             }
 
             if (oldDoc.getCorrectionInputFileName() != null) {
-                errorCorrectionForm.setChooseSystem("File Upload");
+                request.setAttribute("oldDocSystem", "File Upload");
             }
             else {
-                errorCorrectionForm.setChooseSystem("Database");
+                request.setAttribute("oldDocSystem", "Database");
             }
 
 
@@ -2107,6 +2112,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
 
         errorCorrectionForm.setProcessInBatch(oldDoc.getCorrectionFileDeleteCode());
         errorCorrectionForm.setMatchCriteriaOnly(oldDoc.getCorrectionSelectionCode());
+        changeSearchOperatorLabel(errorCorrectionForm);
 
     }
 
@@ -2232,4 +2238,20 @@ public class CorrectionAction extends KualiDocumentActionBase {
         
         return returnVal;
     }
+    
+    public void changeSearchOperatorLabel(CorrectionForm errorCorrectionForm){
+        
+        CorrectionDocument document = (CorrectionDocument) errorCorrectionForm.getDocument(); 
+        
+        List<CorrectionChangeGroup> ccgList = document.getCorrectionChangeGroup();
+        for(CorrectionChangeGroup ccg: ccgList){
+            List<CorrectionCriteria> ccList = ccg.getCorrectionCriteria();
+            for(CorrectionCriteria cc: ccList){
+                Object operatorKey = cc.getCorrectionOperatorCode();
+                String operator = (String) errorCorrectionForm.getSearchOperators().get(operatorKey);
+                cc.setCorrectionOperatorCode(operator);
+            }
+        }
+    }
+    
 }
