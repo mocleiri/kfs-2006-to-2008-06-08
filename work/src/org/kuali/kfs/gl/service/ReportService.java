@@ -43,6 +43,14 @@ import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 
 public interface ReportService {
     /**
+     * Generated during the nightly out step.
+     * 
+     * @param runDate
+     * @param groups
+     */
+    public void generateLedgerSummaryReport(Date runDate, Collection groups);
+    
+    /**
      * Pending entry report.
      */
     public void generatePendingEntryReport();
