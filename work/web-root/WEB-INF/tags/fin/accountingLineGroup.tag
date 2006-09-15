@@ -247,13 +247,14 @@
             <td class="total-line" style="border-left: 0px;"><strong>Credit Total: $${KualiForm.currencyFormattedCreditTotal}</strong></td>
         </c:when>
         <c:when test="${currentBaseAmount}" >
+            <!-- KULEDOCS-1631: Removed Current & Base total as requested. -->
             <c:if test="${isSource}">
-              <td class="total-line" style="border-left: 0px;"><strong>Current Total: $${KualiForm.document.currencyFormattedSourceCurrentBudgetTotal}</strong></td>
-              <td class="total-line" style="border-left: 0px;"><strong>Base Total: $${KualiForm.document.currencyFormattedSourceBaseBudgetTotal}</strong></td>
+              <td class="total-line" style="border-left: 0px;">&nbsp;<!-- <strong>Current Total: $${KualiForm.document.currencyFormattedSourceCurrentBudgetTotal}</strong> --></td>
+              <td class="total-line" style="border-left: 0px;">&nbsp;<!-- <strong>Base Total: $${KualiForm.document.currencyFormattedSourceBaseBudgetTotal}</strong> --></td>
             </c:if>
             <c:if test="${!isSource}">
-              <td class="total-line" style="border-left: 0px;"><strong>Current Total: $${KualiForm.document.currencyFormattedTargetCurrentBudgetTotal}</strong></td>
-              <td class="total-line" style="border-left: 0px;"><strong>Base Total: $${KualiForm.document.currencyFormattedTargetBaseBudgetTotal}</strong></td>
+              <td class="total-line" style="border-left: 0px;">&nbsp;<!-- <strong>Current Total: $${KualiForm.document.currencyFormattedTargetCurrentBudgetTotal}</strong> --></td>
+              <td class="total-line" style="border-left: 0px;">&nbsp;<!-- <strong>Base Total: $${KualiForm.document.currencyFormattedTargetBaseBudgetTotal}</strong> --></td>
             </c:if>
         </c:when>
         <c:otherwise>
