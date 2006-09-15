@@ -40,7 +40,7 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.1 2006-09-14 20:48:46 larevans Exp $
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.2 2006-09-15 19:52:59 jsissom Exp $
  */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
@@ -174,7 +174,6 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
 
         for (Iterator iter = c.iterator(); iter.hasNext();) {
             OriginEntryGroup element = (OriginEntryGroup) iter.next();
-            LOG.error("getAllOriginEntryGroup() " + element.getId() + " " + element.getRows());
         }
         return c;
     }
