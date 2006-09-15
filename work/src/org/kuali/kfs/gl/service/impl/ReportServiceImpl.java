@@ -665,6 +665,22 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * 
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportBatch(java.util.Date, java.util.Collection)
+     */
+    public void generateLedgerSummaryReport(Date runDate, Collection groups) {
+        LOG.debug("generateLedgerSummaryReport() started");
+
+        LedgerReport ledgerReport = new LedgerReport();
+        LedgerEntryHolder ledgerEntries = new LedgerEntryHolder();
+        if (groups.size() > 0) {
+            ledgerEntries = originEntryService.getSummaryByGroupId(groups);
+        }
+
+        ledgerReport.generateReport(ledgerEntries, runDate, "GLPE Statistics Report", "glpe_statistics", batchReportsDirectory);
+    }
+    
+    /**
+     * 
      * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportOnline(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
      */
     public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group) {
