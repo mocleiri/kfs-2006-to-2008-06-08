@@ -9,7 +9,7 @@
 
       <portal:immutableBar />
 
- <table width="100%"  cellspacing="0" cellpadding="0">
+ <table width="100%"  cellspacing="0" cellpadding="0" id="iframe_portlet_container_table">
     <tr valign="top" bgcolor="#FFFFFF">
      <td width="15" class="leftback-focus">&nbsp;</td>
         <c:choose>
