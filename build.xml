@@ -114,7 +114,6 @@
 			<filter token="cas-url" value="${cas.url}" />
 			<filter token="workflow-url" value="${workflow.url}" />
 			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
-			<filter token="web-authentication-filtermapping" value="${web.authentication.filtermapping}" />
 			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
 			<filter token="driver-class" value="${driver.class}" />
 			<filter token="context-docbase" value="${context.docbase}" />
@@ -278,11 +277,12 @@
 		</copy>
 		<copy todir="${workflow.usr.directory}" overwrite="true">
 			<fileset dir="${build.workflow.usr.directory}" />
-			<filterset refid="general.filterset" />
 			<filterset>
-				<filter token="local-plugin-classes" value="${local.plugin.classes.token}"/>
-				<filter token="local-plugin-lib" value="${local.plugin.lib.token}"/>
+				<filter token="local-plugin-classes" value="${local.plugin.classes.token}" />
+				<filter token="local-plugin-lib" value="${local.plugin.lib.token}" />
+				<filter token="workflow-web-authentication-filter" value="${workflow.web.authentication.filter}" />
 			</filterset>
+			<filterset refid="general.filterset" />
 		</copy>
 	</target>
 
