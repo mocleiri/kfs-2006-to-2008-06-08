@@ -71,7 +71,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * @author jsissom
- * @version $Id: PosterServiceImpl.java,v 1.42.2.1 2006-09-15 00:09:44 bnelson Exp $
+ * @version $Id: PosterServiceImpl.java,v 1.42.2.2 2006-09-15 13:19:23 bgao Exp $
  */
 public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
@@ -213,6 +213,9 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
                 addReporting(reportSummary, "GL_REVERSAL_T", PosterServiceImpl.SELECT_CODE);
 
                 postTransaction(tran, mode, reportSummary, reportError, invalidGroup, validGroup, runUniversityDate);
+                
+                // Report Reversal poster valid transactions
+                reportService.generatePosterReversalTransactionsListing(runDate, validGroup);
 
                 LOG.info("postEntries() Posted Entry " + (++ecount));
             }
