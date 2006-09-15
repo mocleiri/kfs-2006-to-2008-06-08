@@ -220,4 +220,12 @@ public interface ReportService {
      * @param runDate
      */
     public void generateNominalActivityClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate);
+    
+    /**
+     * Poster Reversal Transactions Listing
+     * 
+     * @param - runDate Run date of the report
+     * @param - group Group with valid transactions
+     */
+    public void generatePosterReversalTransactionsListing(Date runDate, OriginEntryGroup group);
 }
