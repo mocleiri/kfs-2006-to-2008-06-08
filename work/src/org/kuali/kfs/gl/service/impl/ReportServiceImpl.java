@@ -140,10 +140,12 @@ public class ReportServiceImpl implements ReportService {
             float[] columnWidths = new float[] {10, 10, 10, 10, 10, 10, 10, 10, 10};
             
             PdfPTable header = new PdfPTable(columnWidths);
-            header.setHeaderRows(2);
+            //header.setHeaderRows(1);
             header.setWidthPercentage(100);
+            header.setSpacingBefore(10);
             
             PdfPCell titleCell = new PdfPCell(new Phrase("PENDING LEDGER ENTRY TABLE", headerFont));
+            titleCell.setColspan(9);
             header.addCell(titleCell);
             
             String[] columnHeaders = new String[] {
@@ -158,14 +160,11 @@ public class ReportServiceImpl implements ReportService {
             
             document.add(header);
             
-            // FIXME add the dashed line across the page
-            
             Collection groups = originEntryGroupService.getGroupsFromSourceForDate(OriginEntrySource.GENERATE_BY_EDOC, new java.sql.Date(runDate.getTime()));
             
             // We use the collection/iterator out of necessity. But there should only be one group in the collection.
-            String docType = null;
-            String docNumber = null;
-            String balanceType = null;
+            String previousDocumentType = "-1";
+            String previousDocumentNumber = "-1";
             
             for(Iterator groupIterator = groups.iterator(); groupIterator.hasNext();) {
                 
@@ -174,7 +173,6 @@ public class ReportServiceImpl implements ReportService {
                 PdfPTable dataTable = new PdfPTable(columnWidths);
                 dataTable.setWidthPercentage(100);
                 
-                int clusterCount = 0;
                 int countForDocumentType = 0;
                 
                 KualiDecimal debitClusterTotal = new KualiDecimal(0);
@@ -185,31 +183,14 @@ public class ReportServiceImpl implements ReportService {
                 KualiDecimal documentTypeDebitTotal = new KualiDecimal(0);
                 KualiDecimal documentTypeUnassignedTotal = new KualiDecimal(0);
                 
+                PdfPCell column = null;
+                
                 for(Iterator entries = originEntryService.getEntriesByGroupReportOrder(originEntryGroup); entries.hasNext();) {
                     
                     OriginEntry entry = (OriginEntry) entries.next();
                     persistenceService.retrieveNonKeyFields(entry);
                     
-                    PdfPCell column = null;
-                    
-                    String displayDocType = entry.getFinancialDocumentTypeCode();
-                    String displayDocNumber = entry.getOrganizationDocumentNumber();
-                    String displayBalanceType = entry.getFinancialBalanceTypeCode();
-                    
-                    
-                    boolean isFirstInCluster = false;
-                    if(null == docType && null == docNumber && null == balanceType) {
-                        isFirstInCluster = true;
-                    } else if ((null == entry.getFinancialDocumentTypeCode() && null != docType) || (null == entry.getOrganizationDocumentNumber() && null != docNumber) || (null == entry.getFinancialBalanceTypeCode() && null != balanceType)) {
-                        isFirstInCluster = true;
-                    } else if (!entry.getFinancialDocumentTypeCode().equals(docType) && !entry.getOrganizationDocumentNumber().equals(docNumber) && !entry.getFinancialBalanceTypeCode().equals(balanceType)) {
-                        isFirstInCluster = true;
-                    }
-                    
-                    clusterCount += isFirstInCluster ? 1 : 0;
-                    
-                    // Show cluster totals.
-                    if(isFirstInCluster && 1 > clusterCount) {
+                    if(!entry.getFinancialDocumentNumber().equals(previousDocumentNumber) && !"-1".equals(previousDocumentNumber)) {
                         
                         column = new PdfPCell(new Phrase("Totals:", textFont));
                         column.setColspan(6);
@@ -218,15 +199,24 @@ public class ReportServiceImpl implements ReportService {
                         column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
                         dataTable.addCell(column);
                         
-                        column = new PdfPCell(new Phrase(debitClusterTotal.toString(), textFont));
+                        String s = debitClusterTotal.toString();
+                        column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                        column.setPaddingTop(10.0F);
+                        column.setPaddingBottom(10.0F);
                         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                         dataTable.addCell(column);
                         
-                        column = new PdfPCell(new Phrase(creditClusterTotal.toString(), textFont));
+                        s = creditClusterTotal.toString();
+                        column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                        column.setPaddingTop(10.0F);
+                        column.setPaddingBottom(10.0F);
                         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                         dataTable.addCell(column);
-
-                        column = new PdfPCell(new Phrase(unassignedClusterTotal.toString(), textFont));
+                        
+                        s = unassignedClusterTotal.toString();
+                        column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                        column.setPaddingTop(10.0F);
+                        column.setPaddingBottom(10.0F);
                         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                         dataTable.addCell(column);
                         
@@ -238,24 +228,33 @@ public class ReportServiceImpl implements ReportService {
                     }
                     
                     // Show doc type totals.
-                    if(!displayDocType.equals(docType)) {
+                    if(!entry.getFinancialDocumentTypeCode().equals(previousDocumentType) && !"-1".equals(previousDocumentType)) {
                         
-                        column = new PdfPCell(new Phrase("Totals for Document Type " + docType + " Cnt: " + countForDocumentType, textFont));
+                        column = new PdfPCell(new Phrase("Totals for Document Type " + previousDocumentType + " Cnt: " + countForDocumentType, textFont));
                         column.setColspan(6);
                         column.setPaddingTop(10.0F);
                         column.setPaddingBottom(10.0F);
                         column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
                         dataTable.addCell(column);
                         
-                        column = new PdfPCell(new Phrase(documentTypeDebitTotal.toString(), textFont));
+                        String s = documentTypeDebitTotal.toString();
+                        column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                        column.setPaddingTop(10.0F);
+                        column.setPaddingBottom(10.0F);
                         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                         dataTable.addCell(column);
                         
-                        column = new PdfPCell(new Phrase(documentTypeCreditTotal.toString(), textFont));
+                        s = documentTypeCreditTotal.toString();
+                        column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                        column.setPaddingTop(10.0F);
+                        column.setPaddingBottom(10.0F);
                         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                         dataTable.addCell(column);
                         
-                        column = new PdfPCell(new Phrase(documentTypeUnassignedTotal.toString(), textFont));
+                        s = documentTypeUnassignedTotal.toString();
+                        column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                        column.setPaddingTop(10.0F);
+                        column.setPaddingBottom(10.0F);
                         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                         dataTable.addCell(column);
                         
@@ -265,23 +264,46 @@ public class ReportServiceImpl implements ReportService {
                         
                     }
                     
-                    countForDocumentType++;
-                    
-                    displayDocType = isFirstInCluster ? " " : displayDocType;
-                    displayDocNumber = isFirstInCluster ? " " : displayDocNumber;
-                    displayBalanceType = isFirstInCluster ? " " : displayBalanceType;
-                    
-                    column = new PdfPCell(new Phrase(displayDocType, textFont));
-                    column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-                    dataTable.addCell(column);
-                    
-                    column = new PdfPCell(new Phrase(displayDocNumber, textFont));
-                    column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-                    dataTable.addCell(column);
-                    
-                    column = new PdfPCell(new Phrase(displayBalanceType, textFont));
-                    column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-                    dataTable.addCell(column);
+                    if(!entry.getFinancialDocumentNumber().equals(previousDocumentNumber)) {
+                        
+                        column = new PdfPCell(new Phrase(entry.getFinancialDocumentTypeCode(), textFont));
+                        column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                        dataTable.addCell(column);
+                        
+                        column = new PdfPCell(new Phrase(entry.getFinancialDocumentNumber(), textFont));
+                        column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                        dataTable.addCell(column);
+                        
+                        column = new PdfPCell(new Phrase(entry.getFinancialBalanceTypeCode(), textFont));
+                        column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                        dataTable.addCell(column);
+                        
+                        if(!entry.getFinancialDocumentTypeCode().equals(previousDocumentType)) {
+                            
+                            previousDocumentType = entry.getFinancialDocumentTypeCode();
+                            countForDocumentType = 0;
+                            
+                        }
+                        
+                        countForDocumentType++;
+                        
+                        previousDocumentNumber = entry.getFinancialDocumentNumber();
+                        
+                    } else {
+                        
+                        column = new PdfPCell(new Phrase(" ", textFont));
+                        column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                        dataTable.addCell(column);
+                        
+                        column = new PdfPCell(new Phrase(" ", textFont));
+                        column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                        dataTable.addCell(column);
+                        
+                        column = new PdfPCell(new Phrase(" ", textFont));
+                        column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                        dataTable.addCell(column);
+                        
+                    }
                     
                     column = new PdfPCell(new Phrase(entry.getChartOfAccountsCode(), textFont));
                     column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
@@ -292,10 +314,6 @@ public class ReportServiceImpl implements ReportService {
                     dataTable.addCell(column);
                     
                     column = new PdfPCell(new Phrase(entry.getFinancialObjectCode(), textFont));
-                    column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-                    dataTable.addCell(column);
-                    
-                    column = new PdfPCell(new Phrase(entry.getAccountNumber(), textFont));
                     column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
                     dataTable.addCell(column);
                     
@@ -330,11 +348,83 @@ public class ReportServiceImpl implements ReportService {
                     column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     dataTable.addCell(column);
                     
-                    docType = displayDocType;
-                    docNumber = displayDocNumber;
-                    balanceType = displayBalanceType;
+                }
+                
+                // If there were entries, write the totals after the last entry in the group.
+                
+                if(!"-1".equals(previousDocumentNumber)) {
+                    
+                    column = new PdfPCell(new Phrase("Totals:", textFont));
+                    column.setColspan(6);
+                    column.setPaddingTop(10.0F);
+                    column.setPaddingBottom(10.0F);
+                    column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                    dataTable.addCell(column);
+                    
+                    String s = debitClusterTotal.toString();
+                    column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                    column.setPaddingTop(10.0F);
+                    column.setPaddingBottom(10.0F);
+                    column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    dataTable.addCell(column);
+                    
+                    s = creditClusterTotal.toString();
+                    column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                    column.setPaddingTop(10.0F);
+                    column.setPaddingBottom(10.0F);
+                    column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    dataTable.addCell(column);
+                    
+                    s = unassignedClusterTotal.toString();
+                    column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                    column.setPaddingTop(10.0F);
+                    column.setPaddingBottom(10.0F);
+                    column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    dataTable.addCell(column);
+                    
+                    // reset totals for the new cluster
+                    debitClusterTotal = new KualiDecimal(0);
+                    creditClusterTotal = new KualiDecimal(0);
+                    unassignedClusterTotal = new KualiDecimal(0);
                     
                 }
+                
+                // Show doc type totals.
+                if(!"-1".equals(previousDocumentType)) {
+                    
+                    column = new PdfPCell(new Phrase("Totals for Document Type " + previousDocumentType + " Cnt: " + countForDocumentType, textFont));
+                    column.setColspan(6);
+                    column.setPaddingTop(10.0F);
+                    column.setPaddingBottom(10.0F);
+                    column.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                    dataTable.addCell(column);
+                    
+                    String s = documentTypeDebitTotal.toString();
+                    column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                    column.setPaddingTop(10.0F);
+                    column.setPaddingBottom(10.0F);
+                    column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    dataTable.addCell(column);
+                    
+                    s = documentTypeCreditTotal.toString();
+                    column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                    column.setPaddingTop(10.0F);
+                    column.setPaddingBottom(10.0F);
+                    column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    dataTable.addCell(column);
+                    
+                    s = documentTypeUnassignedTotal.toString();
+                    column = new PdfPCell(new Phrase("".equals(s.trim()) ? "0.00" : s, textFont));
+                    column.setPaddingTop(10.0F);
+                    column.setPaddingBottom(10.0F);
+                    column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    dataTable.addCell(column);
+                    
+                    documentTypeCreditTotal = new KualiDecimal(0);
+                    documentTypeDebitTotal = new KualiDecimal(0);
+                    documentTypeUnassignedTotal = new KualiDecimal(0);
+                    
+                }                
                 
                 document.add(dataTable);
                 
