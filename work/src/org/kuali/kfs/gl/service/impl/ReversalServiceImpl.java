@@ -115,4 +115,7 @@ public class ReversalServiceImpl implements ReversalService {
 
         return ledgerEntry;
     }
+    public void setReversalDao(ReversalDao reversalDao) {
+        this.reversalDao = reversalDao;
+    }
 }
