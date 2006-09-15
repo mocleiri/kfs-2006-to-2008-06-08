@@ -922,6 +922,18 @@ public class ReportServiceImpl implements ReportService {
             }
         }
     }
+    
+    /**
+     * @see org.kuali.module.gl.service.ReportService#generatePosterReversalTransactionsListing(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
+     */
+    public void generatePosterReversalTransactionsListing(Date runDate, OriginEntryGroup originGroup) {
+        LOG.debug("generatePosterReversalTransactionsListing() started");
+
+        Iterator ti = originEntryService.getEntriesByGroupAccountOrder(originGroup);
+
+        TransactionListingReport report = new TransactionListingReport();
+        report.generateReport(ti, runDate, "Reversal Poster Transaction Listing", "poster_reversal_list", batchReportsDirectory);     
+    }
 
     public void setOriginEntryService(OriginEntryService originEntryService) {
         this.originEntryService = originEntryService;
