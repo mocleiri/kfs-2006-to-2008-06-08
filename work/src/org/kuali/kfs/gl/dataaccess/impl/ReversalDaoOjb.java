@@ -5,6 +5,8 @@
 package org.kuali.module.gl.dao.ojb;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -15,6 +17,7 @@ import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.PropertyConstants;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Reversal;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.ReversalDao;
@@ -134,7 +137,7 @@ public class ReversalDaoOjb extends PersistenceBrokerDaoSupport implements Rever
         Criteria crit = new Criteria();
         crit.addLessOrEqualThan(PropertyConstants.FINANCIAL_DOCUMENT_REVERSAL_DATE, new java.sql.Date(before.getTime()));
     
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(OriginEntry.class, crit);
+        ReportQueryByCriteria query = QueryFactory.newReportQuery(Reversal.class, crit);
 
         String attributeList[] = { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")", "count(" + PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE + ")" };
 
