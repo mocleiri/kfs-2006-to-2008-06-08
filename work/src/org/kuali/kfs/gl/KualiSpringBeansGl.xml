@@ -493,6 +493,12 @@
         <property name="reportService">
         	<ref bean="glReportService"/>
         </property>
+        <property name="originEntryGroupService">
+            <ref bean="glOriginEntryGroupService" />
+        </property>
+		<property name="dateTimeService">
+			<ref bean="dateTimeService" />
+		</property>
     </bean>
 
     <bean id="glClearPendingStep" class="org.kuali.module.gl.batch.ClearPendingStep">
