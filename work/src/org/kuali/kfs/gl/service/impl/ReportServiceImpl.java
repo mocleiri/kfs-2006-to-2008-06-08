@@ -53,6 +53,7 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.PosterService;
 import org.kuali.module.gl.service.ReportService;
+import org.kuali.module.gl.service.ReversalService;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
@@ -91,6 +92,7 @@ public class ReportServiceImpl implements ReportService {
     private DateTimeService dateTimeService;
     private BalanceService balanceService;
     private OptionsService optionsService;
+    private ReversalService reversalService;
     private KualiConfigurationService kualiConfigurationService;
     private PersistenceService persistenceService;
 
@@ -791,14 +793,14 @@ public class ReportServiceImpl implements ReportService {
     /**
      * 
      * @see org.kuali.module.gl.service.ReportService#generatePosterReversalLedgerSummaryReport(java.util.Date,
-     *      java.util.Collection)
+     *      java.util.Iterator)
      */
-    public void generatePosterReversalLedgerSummaryReport(Date runDate, Collection groups) {
+    public void generatePosterReversalLedgerSummaryReport(Date runDate, Iterator reversals) {
         LOG.debug("generatePosterReversalLedgerSummaryReport() started");
 
         LedgerEntryHolder ledgerEntries = new LedgerEntryHolder();
-        if (groups.size() > 0) {
-            ledgerEntries = originEntryService.getSummaryByGroupId(groups);
+        if (reversals.hasNext()) {
+            ledgerEntries = reversalService.getSummaryByDate(runDate);
         }
 
         LedgerReport ledgerReport = new LedgerReport();
@@ -944,9 +946,16 @@ public class ReportServiceImpl implements ReportService {
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
     }
+    
+    public void setReversalService(ReversalService rs) {
+        reversalService = rs;
+    }
+
+    public PersistenceService getPersistenceService() {
+        return persistenceService;
+    }
 
     public void setPersistenceService(PersistenceService persistenceService) {
         this.persistenceService = persistenceService;
     }
-    
 }
