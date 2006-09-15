@@ -72,7 +72,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
      * @Override
      * @see org.kuali.core.document.TransactionalDocumentBase#getPendingLedgetEntriesForSufficientFundsChecking()
      */
-    public List<GeneralLedgerPendingEntry> getPendingLedgetEntriesForSufficientFundsChecking() {
+    public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
         List <GeneralLedgerPendingEntry> pendingLedgerEntries = new ArrayList();
         for (GeneralLedgerPendingEntry ple : this.getGeneralLedgerPendingEntries()) {
             if (!Constants.BALANCE_TYPE_BASE_BUDGET.equals(ple.getFinancialBalanceTypeCode()) && !Constants.BALANCE_TYPE_MONTHLY_BUDGET.equals(ple.getFinancialBalanceTypeCode())) {
