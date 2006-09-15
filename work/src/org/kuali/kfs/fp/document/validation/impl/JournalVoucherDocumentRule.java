@@ -150,8 +150,6 @@ public class JournalVoucherDocumentRule extends TransactionalDocumentRuleBase {
         // check the selected balance type
         jvDoc.refreshReferenceObject(BALANCE_TYPE);
         BalanceTyp balanceType = jvDoc.getBalanceType();
-        // todo: avoid naming conflict between PropertyConstants.BALANCE_TYPE_CODE and
-        // TransactionalDocumentsRuleBaseConstants.BALANCE_TYPE_CODE by renaming the latter to BALANCE_TYPE_CODES
         valid &= TransactionalDocumentRuleUtil.isValidBalanceType(balanceType, JournalVoucherDocument.class, BALANCE_TYPE_CODE, DOCUMENT_ERROR_PREFIX + BALANCE_TYPE_CODE);
 
         // check the selected accounting period
