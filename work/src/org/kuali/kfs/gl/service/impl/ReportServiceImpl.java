@@ -139,26 +139,20 @@ public class ReportServiceImpl implements ReportService {
             
             float[] columnWidths = new float[] {10, 10, 10, 10, 10, 10, 10, 10, 10};
             
-            PdfPTable header = new PdfPTable(columnWidths);
-            //header.setHeaderRows(1);
-            header.setWidthPercentage(100);
-            header.setSpacingBefore(10);
-            
-            PdfPCell titleCell = new PdfPCell(new Phrase("PENDING LEDGER ENTRY TABLE", headerFont));
-            titleCell.setColspan(9);
-            header.addCell(titleCell);
+            PdfPTable dataTable = new PdfPTable(columnWidths);
+            dataTable.setHeaderRows(1);
+            dataTable.setWidthPercentage(100);
             
             String[] columnHeaders = new String[] {
                     "Doc Type", "Document Number", "Bal Type", "COA Code",
                     "Account Number", "Object Code", "Debit", "Credit", "Blank" };
             
-            header = new PdfPTable(columnWidths);
             for(int x = 0; x < columnHeaders.length; x++) {
                 PdfPCell cell = new PdfPCell(new Phrase(columnHeaders[x], headerFont));
-                header.addCell(cell);
+                dataTable.addCell(cell);
             }
             
-            document.add(header);
+            document.add(dataTable);
             
             Collection groups = originEntryGroupService.getGroupsFromSourceForDate(OriginEntrySource.GENERATE_BY_EDOC, new java.sql.Date(runDate.getTime()));
             
@@ -170,8 +164,8 @@ public class ReportServiceImpl implements ReportService {
                 
                 OriginEntryGroup originEntryGroup = (OriginEntryGroup) groupIterator.next();
                 
-                PdfPTable dataTable = new PdfPTable(columnWidths);
-                dataTable.setWidthPercentage(100);
+//                PdfPTable dataTable = new PdfPTable(columnWidths);
+//                dataTable.setWidthPercentage(100);
                 
                 int countForDocumentType = 0;
                 
