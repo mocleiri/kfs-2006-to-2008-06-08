@@ -221,7 +221,8 @@ public class EncumbranceClosingRuleHelper {
         }
 
         String[] expenseObjectCodeTypes = kualiConfigurationService.getApplicationParameterValues("SYSTEM", "ExpenseObjectTypeCodes");
-        String[] encumbranceBalanceTypeCodes = kualiConfigurationService.getApplicationParameterValues("Kuali.GeneralLedger.EncumbranceClosing", "ExternalInternalAndPreEncumbranceBalanceTypeCodes");
+        String[] encumbranceBalanceTypeCodes = { "EX","IE","PE" };
+
         // the object type code must be an expense and the encumbrance balance type code must correspond to an internal, external or
         // pre-encumbrance
         if (!(ArrayUtils.contains(expenseObjectCodeTypes, objectTypeCode) && ArrayUtils.contains(encumbranceBalanceTypeCodes, encumbrance.getBalanceTypeCode()))) {
