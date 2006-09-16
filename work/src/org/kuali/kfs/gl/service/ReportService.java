@@ -236,4 +236,13 @@ public interface ReportService {
      * @param - group Group with valid transactions
      */
     public void generatePosterReversalTransactionsListing(Date runDate, OriginEntryGroup group);
+
+    /**
+     * Poster Error transaction listing
+     * 
+     * @param runDate Run date of the report
+     * @param group Group with error transactions
+     * @param posterMode Mode the poster is running
+     */
+    public void generatePosterErrorTransactionListing(Date runDate, OriginEntryGroup group, int posterMode);
 }
