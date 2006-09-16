@@ -71,7 +71,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * @author jsissom
- * @version $Id: PosterServiceImpl.java,v 1.42.2.2 2006-09-15 13:19:23 bgao Exp $
+ * @version $Id: PosterServiceImpl.java,v 1.42.2.3 2006-09-16 01:31:51 jsissom Exp $
  */
 public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
@@ -221,8 +221,9 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
             }
         }
 
-        // Generate the report
+        // Generate the reports
         reportService.generatePosterStatisticsReport(runDate, reportSummary, transactionPosters, reportError, mode);
+        reportService.generatePosterErrorTransactionListing(runDate, invalidGroup, mode);
     }
 
     private void postTransaction(Transaction tran, int mode, Map reportSummary, Map reportError, OriginEntryGroup invalidGroup, OriginEntryGroup validGroup, UniversityDate runUniversityDate) {
