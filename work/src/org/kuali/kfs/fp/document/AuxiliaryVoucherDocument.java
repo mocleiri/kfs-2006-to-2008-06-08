@@ -63,18 +63,6 @@ public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implemen
     }
 
     /**
-     * 
-     * @see org.kuali.core.document.TransactionalDocumentBase#checkSufficientFunds()
-     */
-    @Override
-    public List<SufficientFundsItem> checkSufficientFunds() {
-        LOG.debug("checkSufficientFunds() started");
-
-        // This document does not do sufficient funds checking
-        return new ArrayList<SufficientFundsItem>();
-    }
-
-    /**
      * Read Accessor for Reversal Date
      * 
      * @return java.sql.Date

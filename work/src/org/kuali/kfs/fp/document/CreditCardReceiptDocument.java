@@ -58,6 +58,12 @@ public class CreditCardReceiptDocument extends CashReceiptFamilyBase {
         super();
     }
 
+    
+    @Override
+    public boolean documentPerformsSufficientFundsCheck() {
+        return false;
+    }
+
     /**
      * Gets the total credit card amount.
      * 
