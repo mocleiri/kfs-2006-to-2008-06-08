@@ -940,28 +940,6 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
     // assertOriginEntries(4,output);
     // }
 
-    // TODO Fix
-    public void testClosedAccount01() throws Exception {
-
-        // Inputs.
-        String[] input = new String[] {
-                "2007BL2131401-----4100---ACEX07DI  01CLOSACT0100000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  ", 
-                "2007BL2131401-----9041---ACLI07DI  01CLOSACT0100000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  "
-        };
-
-        EntryHolder[] output = new EntryHolder[] {
-                new EntryHolder(OriginEntrySource.BACKUP, "2007BL2131401-----4100---ACEX07DI  01CLOSACT0100000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  "), 
-                new EntryHolder(OriginEntrySource.BACKUP, "2007BL2131401-----9041---ACLI07DI  01CLOSACT0100000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  "), 
-                new EntryHolder(OriginEntrySource.SCRUBBER_EXPIRED, "2007BL2131401-----4100---ACEX07DI  01CLOSACT0100000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_ERROR, "2007BL2131401-----4100---ACEX07DI  01CLOSACT0100000Rite Quality Office Supplies Inc.                   94.35D2006-01-05          ----------                                                                  "), 
-                new EntryHolder(OriginEntrySource.SCRUBBER_EXPIRED, "2007BL2131401-----9041---ACLI07DI  01CLOSACT0100000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  "), 
-                new EntryHolder(OriginEntrySource.SCRUBBER_ERROR, "2007BL2131401-----9041---ACLI07DI  01CLOSACT0100000Rite Quality Office Supplies Inc.                   94.35C2006-01-05          ----------                                                                  ")
-        };
-
-        scrub(input);
-        assertOriginEntries(4, output);
-    }
-
     public void testClosedAccount() throws Exception {
 
         String[] input = new String[] { 
