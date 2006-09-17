@@ -278,8 +278,8 @@
 		<copy todir="${workflow.usr.directory}" overwrite="true">
 			<fileset dir="${build.workflow.usr.directory}" />
 			<filterset>
-				<filter token="local-plugin-classes" value="${local.plugin.classes.token}" />
-				<filter token="local-plugin-lib" value="${local.plugin.lib.token}" />
+				<filter token="local-plugin-classes" value="${local.plugin.classes.token}"/>
+				<filter token="local-plugin-lib" value="${local.plugin.lib.token}"/>
 				<filter token="workflow-web-authentication-filter" value="${workflow.web.authentication.filter}" />
 			</filterset>
 			<filterset refid="general.filterset" />
@@ -440,7 +440,30 @@
 		<copy file="${temp.directory}/${cas.application}-${build.environment}.war" todir="${appserver.deploy.dir}" />
 		<delete dir="${temp.directory}" />
 	</target>
+	
+	<target name="init-packaging">
+		<property name="packaging.directory" value="/java/packaging" />
+		<delete dir="${packaging.directory}" />
+		<mkdir dir="${packaging.directory}" />
+		<property name="package.name" value="kfs" />
+		<property name="packaging.contents.directory" value="${packaging.directory}/${package.name}" />
+		<property name="packaging.server.zip.file" value="${packaging.directory}/server.zip" />
+		<property name="appserver" value="apache-tomcat-5.5.16" />
+		<property name="appserver.home" value="${packaging.contents.directory}/${appserver}" />
+		<property name="external.config.directory" value="${packaging.contents.directory}/external-config" />
+		<get dest="${packaging.server.zip.file}" src="https://test.kuali.org/confluence/download/attachments/9969/${appserver}.zip" />
+		<unzip src="${packaging.server.zip.file}" dest="${packaging.contents.directory}" />
+	</target>
 
+	<target name="dist-packaged-binary-only" depends="init-packaging,dist-local,dist">
+		<delete file="${appserver.localhost.dir}/${ant.project.name}-${build.environment}.xml" />
+		<copy file="${ant.project.name}-${build.environment}.war" todir="${appserver.deploy.dir}" />
+		<copy todir="${packaging.contents.directory}">
+			<fileset dir="." includes="*-packaged.*"/>
+		</copy>
+		<zip basedir="${packaging.contents.directory}" destfile="${packaging.contents.directory}.zip" />
+	</target>
+	
 	<target name="continuous-integration" depends="make-tests,test">
 		<fail if="tests.failed" message="Tests failed" />
 	</target>
