@@ -48,13 +48,13 @@ public interface ReportService {
      * @param runDate
      * @param groups
      */
-    public void generateLedgerSummaryReport(Date runDate, Collection groups);
-    
+    public void generatePendingEntryLedgerSummaryReport(Date runDate, OriginEntryGroup group);
+
     /**
      * Pending entry report.
      */
-    public void generatePendingEntryReport();
-    
+    public void generatePendingEntryReport(Date runDate,OriginEntryGroup group);
+
     /**
      * Sufficient Funds Summary Report
      * 
