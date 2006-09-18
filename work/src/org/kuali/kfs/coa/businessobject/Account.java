@@ -1682,42 +1682,6 @@ public class Account extends BusinessObjectBase implements AccountIntf {
         this.acctIndirectCostRcvyType = acctIndirectCostRcvyType;
     }
 
-    public String getAccountFiscalOfficerUserInstitutionId() {
-        return accountFiscalOfficerSystemIdentifier;
-    }
-
-    public String getAccountSupervisoryUserInstitutionId() {
-        return accountsSupervisorySystemsIdentifier;
-    }
-
-    public String getAccountManagerUserInstitutionId() {
-        return accountManagerSystemIdentifier;
-    }
-
-    public void setAccountFiscalOfficerUserInstitutionId(String accountFiscalOfficerSystemIdentifier) {
-        this.accountFiscalOfficerSystemIdentifier = accountFiscalOfficerSystemIdentifier;
-    }
-
-    public void setAccountSupervisoryUserInstitutionId(String accountsSupervisorySystemsIdentifier) {
-        this.accountsSupervisorySystemsIdentifier = accountsSupervisorySystemsIdentifier;
-    }
-
-    public void setAccountManagerUserInstitutionId(String accountManagerSystemIdentifier) {
-        this.accountManagerSystemIdentifier = accountManagerSystemIdentifier;
-    }    
-
-    public static String getAccountFiscalOfficerUserInstitutionIdName() {
-        return "accountFiscalOfficerSystemIdentifier";
-    }
-
-    public static String getAccountSupervisoryUserInstitutionIdName() {
-        return "accountsSupervisorySystemsIdentifier";
-    }
-    
-    public static String getAccountManagerUserInstitutionIdName() {
-        return "accountManagerSystemIdentifier";
-    }
-    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
