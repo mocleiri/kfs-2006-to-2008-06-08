@@ -130,7 +130,7 @@ public class ReportingCodes extends BusinessObjectBase {
     public void setFinancialReportsToReportingCode(String financialReportsToReportingCode) {
         this.financialReportsToReportingCode = financialReportsToReportingCode;
     }
-
+    
     /**
      * @return Returns the chart.
      */
