@@ -1,64 +1,67 @@
 <%@ include file="/jsp/core/tldHeader.jsp" %>
+
 <kul:page showDocumentInfo="true" docTitle="General Ledger Correction Process"
 	htmlFormAction="generalLedgerCorrection"transactionalDocument="false"
 	renderMultipart="true" showTabButtons="true">
+  <c:set var="readOnly" value="${empty KualiForm.editingMode['fullEntry']}" />
 
-    <kul:hiddenDocumentFields isFinancialDocument="false" />
-    <kul:documentOverview editingMode="${KualiForm.editingMode}"/>
+  <kul:hiddenDocumentFields isFinancialDocument="false" />
+  <kul:documentOverview editingMode="${KualiForm.editingMode}"/>
 
-    <input type="hidden" name="document.correctionChangeGroupNextLineNumber" value="<c:out value="${KualiForm.document.correctionChangeGroupNextLineNumber}" />" />
+  <input type="hidden" name="document.correctionChangeGroupNextLineNumber" value="<c:out value="${KualiForm.document.correctionChangeGroupNextLineNumber}" />" />
 
-    <kul:tab tabTitle="Correction Result" defaultOpen="true" tabErrorKey="Correction Result">
-      <c:if test="${KualiForm.document.correctionRowCount > 0}" >
-        <div class="tab-container" align="center"> 
-	      <table cellpadding=0 class="datatable" summary=""> 
-    	    <tr>
-        	  <td align="left" valign="middle" class="subhead"><span class="subhead-left">Correction Result</span></td>
-            </tr>
-          </table>
-          <table>
-            <tr>
-              <td width="20%" align="left" valign="middle" > Total Debits/Blanks: </td> 
-              <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionDebitTotalAmount}" groupingUsed="true" minFractionDigits="2"/></td>
-            </tr>
-            <tr>
-              <td width="20%" align="left" valign="middle" > Total Credits: </td> 
-              <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionCreditTotalAmount}" groupingUsed="true" minFractionDigits="2"/></td>
-            </tr>
-            <tr>
-              <td width="20%" align="left" valign="middle" > Rows output: </td> 
-              <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionRowCount}" groupingUsed="true"/></td>
-            </tr>
-          </table>
-        </div>
-      </c:if>
+  <kul:tab tabTitle="Correction Result" defaultOpen="true" tabErrorKey="Correction Result">
+    <c:if test="${KualiForm.document.correctionRowCount > 0}" >
+      <div class="tab-container" align="center"> 
+	    <table cellpadding=0 class="datatable" summary=""> 
+          <tr>
+            <td align="left" valign="middle" class="subhead"><span class="subhead-left">Correction Result</span></td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td width="20%" align="left" valign="middle" > Total Debits/Blanks: </td> 
+            <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionDebitTotalAmount}" groupingUsed="true" minFractionDigits="2"/></td>
+          </tr>
+          <tr>
+            <td width="20%" align="left" valign="middle" > Total Credits: </td> 
+            <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionCreditTotalAmount}" groupingUsed="true" minFractionDigits="2"/></td>
+          </tr>
+          <tr>
+            <td width="20%" align="left" valign="middle" > Rows output: </td> 
+            <td align="left" valign="middle" > <fmt:formatNumber value="${KualiForm.document.correctionRowCount}" groupingUsed="true"/></td>
+          </tr>
+        </table>
+      </div>
+    </c:if>
+  </kul:tab>
+
+<%-- ------------------------------------------------------------ This is read/write mode --------------------------------------------------- --%>
+  <c:if test="${readOnly == false}">
+    <kul:tab tabTitle="Correction Process" defaultOpen="true" tabErrorKey="Correction Process">
+      <div class="tab-container" align="center" >
+        <kul:errors keyMatch="systemAndEditMethod" />  
+        <table cellpadding=0 class="datatable" summary=""> 
+          <tr>
+            <td align="left" valign="middle" class="subhead"><span class="subhead-left"></span>Select System and Edit Method</td>
+          </tr>
+          <tr>
+            <td>
+              <center>
+                <html:select property="chooseSystem" >
+                  <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionChooseSystemValuesFinder" label="label" value="key"/>
+                </html:select>
+                <html:select property="editMethod" >
+                  <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionEditMethodValuesFinder" label="label" value="key"/>
+                </html:select>
+                <html:image property="methodToCall.chooseMainDropdown.anchor${currentTabIndex}" src="images/tinybutton-select.gif" styleClass="tinybutton" alt="chooseMainDropdown" />
+              </center>
+            </td>
+          </tr>
+        </table>
+      </div>
     </kul:tab>
-
-   <%-- for display --%>
-   <c:if test="${KualiForm.command !='displayDocSearchView'}">
-     <kul:tab tabTitle="Correction Process" defaultOpen="true" tabErrorKey="Correction Process">
-       <div class="tab-container" align="center" >
-         <kul:errors keyMatch="systemAndEditMethod" />  
-         <table cellpadding=0 class="datatable" summary=""> 
-           <tr>
-             <td align="left" valign="middle" class="subhead"><span class="subhead-left"></span>Select System and Edit Method</td>
-           </tr>
-           <tr>
-             <td>
-               <center>
-                 <html:select property="chooseSystem" >
-                   <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionChooseSystemValuesFinder" label="label" value="key"/>
-                 </html:select>
-                 <html:select property="editMethod" >
-                   <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionEditMethodValuesFinder" label="label" value="key"/>
-                 </html:select>
-                 <html:image property="methodToCall.chooseMainDropdown.anchor${currentTabIndex}" src="images/tinybutton-select.gif" styleClass="tinybutton" alt="chooseMainDropdown" />
-               </center>
-             </td>
-           </tr>
-         </table>
-       </div>
-     </kul:tab>
+  
     <kul:tab tabTitle="Documents in System" defaultOpen="true" tabErrorKey="Documents in System">
       <c:if test="${KualiForm.chooseSystem == 'system'}" >
         <div class="tab-container" align="center" > 
@@ -434,7 +437,9 @@
       </c:if>
     </kul:tab>        
   </c:if>
-  <c:if test="${KualiForm.command =='displayDocSearchView'}">
+<%-- ------------------------------------------------------------ This is read only mode --------------------------------------------------- --%>
+
+  <c:if test="${readOnly == true}">
     <div class="tab-container" align="center" >
       <table cellpadding=0 class="datatable" summary=""> 
         <tr>
