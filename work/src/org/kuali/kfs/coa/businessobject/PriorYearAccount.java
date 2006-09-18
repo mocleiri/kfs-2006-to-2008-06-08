@@ -1617,7 +1617,7 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     public void setProgramCode(String programCode) {
         this.programCode = programCode;
     }
-
+  
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */

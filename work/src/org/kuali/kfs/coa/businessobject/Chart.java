@@ -626,8 +626,7 @@ public class Chart extends BusinessObjectBase {
     public void setFundBalanceObjectCode(String fundBalanceObjectCode) {
         this.fundBalanceObjectCode = fundBalanceObjectCode;
     }
-
-
+    
     /**
      * @return Returns the code and description in format: xx - xxxxxxxxxxxxxxxx
      */
