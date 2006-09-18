@@ -1076,5 +1076,16 @@
                 <description>accounts with some hierarchical subrelationship to this one</description>
             </collection>
         </collections>
+        
+        <relationships>
+            <relationship objectAttributeName="accountFiscalOfficerUser" >
+                <primitiveAttribute sourceName="accountFiscalOfficerSystemIdentifier" targetName="personUniversalIdentifier" />
+            </relationship>
+
+            <relationship objectAttributeName="accountGuideline" >
+                <primitiveAttribute sourceName="chartOfAccountsCode" targetName="chartOfAccountsCode" />
+                <primitiveAttribute sourceName="accountNumber" targetName="accountNumber" />
+            </relationship>
+        </relationships>
     </businessObject>
 </dictionaryEntry>
