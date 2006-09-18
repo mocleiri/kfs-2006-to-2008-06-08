@@ -43,7 +43,7 @@ import edu.iu.uis.eden.routetemplate.RouteContext;
  */
 public class KualiAttributeTestUtil {
 
-    public static final String BASE_PATH = "/java/projects/kuali_project/test/src/org/kuali/workflow/attribute/";
+    public static final String RELATIVE_PATH_IN_PROJECT = "test/src/org/kuali/workflow/attribute/";
 
     public static final String TOF_FEMP_SUBCODE_ONELINER = "TransferOfFunds_FEMPSubcode_OneLiner.xml";
     public static final String PAYEE_MAINTENANCE_NEWDOC = "PayeeMaintenanceDocument_CreateNew.xml";
@@ -62,7 +62,7 @@ public class KualiAttributeTestUtil {
         if (StringUtils.isBlank(fileName)) {
             throw new IllegalArgumentException("The fileName parameter passed in was blank.");
         }
-        BufferedReader reader = new BufferedReader(new FileReader(KualiAttributeTestUtil.BASE_PATH + fileName));
+        BufferedReader reader = new BufferedReader(new FileReader(KualiAttributeTestUtil.RELATIVE_PATH_IN_PROJECT + fileName));
         RouteContext routeContext = RouteContext.getCurrentRouteContext();
         DocumentRouteHeaderValue docRouteHeaderValue = new DocumentRouteHeaderValue();
         DocumentType docType = new DocumentType();
