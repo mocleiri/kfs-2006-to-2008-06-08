@@ -1082,6 +1082,14 @@
                 <primitiveAttribute sourceName="accountFiscalOfficerSystemIdentifier" targetName="personUniversalIdentifier" />
             </relationship>
 
+            <relationship objectAttributeName="accountSupervisoryUser" >
+                <primitiveAttribute sourceName="accountsSupervisorySystemsIdentifier" targetName="personUniversalIdentifier" />
+            </relationship>
+
+            <relationship objectAttributeName="accountManagerUser" >
+                <primitiveAttribute sourceName="accountManagerSystemIdentifier" targetName="personUniversalIdentifier" />
+            </relationship>
+
             <relationship objectAttributeName="accountGuideline" >
                 <primitiveAttribute sourceName="chartOfAccountsCode" targetName="chartOfAccountsCode" />
                 <primitiveAttribute sourceName="accountNumber" targetName="accountNumber" />
