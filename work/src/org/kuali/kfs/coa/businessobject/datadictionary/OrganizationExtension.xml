@@ -256,6 +256,17 @@
         					sourceAttributeName="versionNumber" />
 
 		</attributes>
+
+        <relationships>
+            <relationship objectAttributeName="hrmsPersonnelApproverUniversal" >
+                <primitiveAttribute sourceName="hrmsPersonnelApproverUniversalId" targetName="personUniversalIdentifier" />
+            </relationship>
+
+            <relationship objectAttributeName="fiscalApproverUniversal" >
+                <primitiveAttribute sourceName="fiscalApproverUniversalId" targetName="personUniversalIdentifier" />
+            </relationship>
+        </relationships>
+
 	</businessObject>
 </dictionaryEntry>
 
