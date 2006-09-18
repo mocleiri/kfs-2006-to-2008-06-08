@@ -769,6 +769,13 @@
    			sourceAttributeName="versionNumber" />
    			
         </attributes>
+
+        <relationships>
+            <relationship objectAttributeName="organizationManagerUniversal" >
+                <primitiveAttribute sourceName="organizationManagerUniversalId" targetName="personUniversalIdentifier" />
+            </relationship>
+        </relationships>
+
     </businessObject>
 </dictionaryEntry>
 
