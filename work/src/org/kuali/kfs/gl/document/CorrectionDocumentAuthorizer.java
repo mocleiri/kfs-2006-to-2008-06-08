@@ -1,8 +1,5 @@
 package org.kuali.module.gl.document;
 
-//import org.kuali.core.authorization.DocumentActionFlags;
-//import org.kuali.core.bo.user.KualiUser;
-//import org.kuali.core.document.Document;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
