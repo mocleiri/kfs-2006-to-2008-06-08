@@ -868,7 +868,7 @@ public class Org extends BusinessObjectBase {
     public final OrganizationExtension getOrganizationExtension() {
         return organizationExtension;
     }
-
+    
     /**
      * Sets the organizationExtension attribute value.
      * 
