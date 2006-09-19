@@ -110,7 +110,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
 
         // report (and log) errors
         if (!isAccessible) {
-            String[] errorParams = new String[] { accountingLine.getAccountNumber(), GlobalVariables.getUserSession().getKualiUser().getPersonUserIdentifier() };
+            String[] errorParams = new String[] { accountingLine.getAccountNumber(), GlobalVariables.getUserSession().getKualiUser().getUniversalUser().getPersonUserIdentifier() };
             GlobalVariables.getErrorMap().putError(PropertyConstants.ACCOUNT_NUMBER, action.accessibilityErrorKey, errorParams);
         }
 
