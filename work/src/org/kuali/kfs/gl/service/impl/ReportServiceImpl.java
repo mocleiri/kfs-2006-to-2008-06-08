@@ -133,7 +133,7 @@ public class ReportServiceImpl implements ReportService {
 
         ledgerEntries = originEntryService.getSummaryByGroupId(g);
 
-        ledgerReport.generateReport(ledgerEntries, runDate, "GLPE Statistics Report", "glpe_statistics", batchReportsDirectory);
+        ledgerReport.generateReport(ledgerEntries, runDate, "GLPE Statistics Report", "glpe_ledger", batchReportsDirectory);
     }
 
     /**
