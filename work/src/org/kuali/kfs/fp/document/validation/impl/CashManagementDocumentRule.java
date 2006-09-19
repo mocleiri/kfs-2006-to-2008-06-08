@@ -93,8 +93,8 @@ public class CashManagementDocumentRule extends FinancialDocumentRuleBase implem
         KualiUser currentUser = GlobalVariables.getUserSession().getKualiUser();
         if (cmd.getDocumentHeader() != null && cmd.getDocumentHeader().getWorkflowDocument() != null) {
             String cmdInitiatorNetworkId = cmd.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
-            if (!cmdInitiatorNetworkId.equalsIgnoreCase(currentUser.getPersonUserIdentifier())) {
-                throw new IllegalStateException("The current user (" + currentUser.getPersonUserIdentifier() + ") is not the individual (" + cmdInitiatorNetworkId + ") that initiated this document.");
+            if (!cmdInitiatorNetworkId.equalsIgnoreCase(currentUser.getUniversalUser().getPersonUserIdentifier())) {
+                throw new IllegalStateException("The current user (" + currentUser.getUniversalUser().getPersonUserIdentifier() + ") is not the individual (" + cmdInitiatorNetworkId + ") that initiated this document.");
             }
         }
     }
