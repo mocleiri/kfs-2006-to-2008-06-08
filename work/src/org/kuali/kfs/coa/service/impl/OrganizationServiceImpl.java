@@ -25,6 +25,7 @@ package org.kuali.module.chart.service.impl;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.service.KualiUserService;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
 import org.kuali.module.chart.service.OrganizationService;
@@ -36,7 +37,8 @@ import org.kuali.module.chart.service.OrganizationService;
  */
 public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationDao organizationDao;
-
+    private KualiUserService kualiUserService;
+    
     /**
      * Implements the getByPrimaryId method defined by OrganizationService.
      * 
@@ -46,7 +48,9 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @see org.kuali.module.chart.service.OrganizationService#getByPrimaryId(java.lang.String, java.lang.String)
      */
     public Org getByPrimaryId(String chartOfAccountsCode, String organizationCode) {
-        return organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
+        Org org = organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
+        kualiUserService.linkInstitutionalUserFieldsPerBo(org);
+        return org;
     }
 
     /**
@@ -56,7 +60,9 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @see org.kuali.module.chart.service.impl.OrganizationServiceImpl#getByPrimaryId(java.lang.String, java.lang.String)
      */
     public Org getByPrimaryIdWithCaching(String chartOfAccountsCode, String organizationCode) {
-        return organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
+        Org org = organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
+        kualiUserService.linkInstitutionalUserFieldsPerBo(org);
+        return org;
     }
 
     /**
@@ -82,6 +88,10 @@ public class OrganizationServiceImpl implements OrganizationService {
         this.organizationDao = organizationDao;
     }
 
+    public void setKualiUserService(KualiUserService kualiUserService) {
+        this.kualiUserService = kualiUserService;
+    }    
+    
     /**
      * 
      * @see org.kuali.module.chart.service.OrganizationService#getActiveAccountsByOrg(java.lang.String, java.lang.String)
@@ -95,7 +105,9 @@ public class OrganizationServiceImpl implements OrganizationService {
             throw new IllegalArgumentException("String parameter organizationCode was null or blank.");
         }
 
-        return organizationDao.getActiveAccountsByOrg(chartOfAccountsCode, organizationCode);
+        List accountList = organizationDao.getActiveAccountsByOrg(chartOfAccountsCode, organizationCode);
+        kualiUserService.linkInstitutionalUserFields(accountList);
+        return accountList;
     }
 
     /**
@@ -111,7 +123,9 @@ public class OrganizationServiceImpl implements OrganizationService {
             throw new IllegalArgumentException("String parameter organizationCode was null or blank.");
         }
 
-        return organizationDao.getActiveChildOrgs(chartOfAccountsCode, organizationCode);
+        List orgList = organizationDao.getActiveChildOrgs(chartOfAccountsCode, organizationCode);
+        kualiUserService.linkInstitutionalUserFields(orgList);
+        return orgList;        
     }
 
 }
