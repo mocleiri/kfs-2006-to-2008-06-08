@@ -127,6 +127,27 @@ public class FiscalYearFunctionControl extends BusinessObjectBase {
     }
 
     /**
+     * Implementing equals since I need contains to behave reasonably.
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object obj) {
+        boolean equal = false;
+
+        if (obj != null) {
+            if (this.getClass().equals(obj.getClass())) {
+                FiscalYearFunctionControl fiscalYearFunctionControl = (FiscalYearFunctionControl) obj;
+
+                if (this.getUniversityFiscalYear().equals(fiscalYearFunctionControl.getUniversityFiscalYear())) {
+                    equal = true;
+                }
+            }
+        }
+
+        return equal;
+    }
+    
+    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
