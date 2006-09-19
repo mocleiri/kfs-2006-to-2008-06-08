@@ -462,14 +462,30 @@
         </tr>
       </table>
       <table>
-        <tr>
-          <td width="20%" align="left" valign="middle" > Input File Name: </td> 
-          <td align="left" valign="middle" > <c:out value="${KualiForm.document.correctionInputFileName}" /></td>
-        </tr>
-        <tr>
-          <td width="20%" align="left" valign="middle" > Output File Name: </td> 
-          <td align="left" valign="middle" > <c:out value="${KualiForm.document.correctionOutputFileName}" /></td>
-        </tr>
+        <c:if test="${KualiForm.document.correctionInputGroupId != null}">
+          <tr>
+            <td width="20%" align="left" valign="middle" > Input Group ID: </td> 
+            <td align="left" valign="middle" > <c:out value="${KualiForm.document.correctionInputGroupId}" /></td>
+          </tr>
+        </c:if>
+        <c:if test="${KualiForm.document.correctionOutputGroupId != null}">
+          <tr>
+            <td width="20%" align="left" valign="middle" > Output Group ID: </td> 
+            <td align="left" valign="middle" > <c:out value="${KualiForm.document.correctionOutputGroupId}" /></td>
+          </tr>
+        </c:if>
+        <c:if test="${KualiForm.document.correctionInputFileName != null}">
+          <tr>
+            <td width="20%" align="left" valign="middle" > Input File Name: </td> 
+            <td align="left" valign="middle" > <c:out value="${KualiForm.document.correctionInputFileName}" /></td>
+          </tr>
+        </c:if>
+        <c:if test="${KualiForm.document.correctionOutputFileName != null}">
+          <tr>
+            <td width="20%" align="left" valign="middle" > Output File Name: </td> 
+            <td align="left" valign="middle" > <c:out value="${KualiForm.document.correctionOutputFileName}" /></td>
+          </tr>
+        </c:if>
       </table>
     </div>
     <div class="tab-container" align="left" style="overflow: scroll; max-width: 100%;">
