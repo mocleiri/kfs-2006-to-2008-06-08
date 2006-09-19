@@ -54,7 +54,7 @@ public class GeneralLedgerPendingEntryReport {
         LOG.debug("generateReport() started");
 
         String title = "PENDING LEDGER ENTRY TABLE";
-        String filePrefix = "glpe_ledger";
+        String filePrefix = "glpe_list";
 
         headerFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
         textFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.NORMAL);
@@ -191,22 +191,22 @@ public class GeneralLedgerPendingEntryReport {
                 dataTable.addCell(column);
 
                 KualiDecimal amount = null;
-                if ( Constants.GL_CREDIT_CODE.equals(entry.getTransactionDebitCreditCode()) ) {
+                if(Constants.GL_DEBIT_CODE.equals(entry.getTransactionDebitCreditCode())) {
                     amount = entry.getTransactionLedgerEntryAmount();
-                    totalDocumentCredit = totalDocumentCredit.add(amount);
-                    totalDocumentTypeCredit = totalDocumentTypeCredit.add(amount);
-                    totalCredit = totalCredit.add(amount);
+                    totalDocumentDebit = totalDocumentDebit.add(amount);
+                    totalDocumentTypeDebit = totalDocumentTypeDebit.add(amount);
+                    totalDebit = totalDebit.add(amount);
                 }
                 column = new PdfPCell(new Phrase(null == amount ? " " : amountFormat.format(amount.doubleValue()), textFont));
                 column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                 dataTable.addCell(column);
 
                 amount = null;
-                if(Constants.GL_DEBIT_CODE.equals(entry.getTransactionDebitCreditCode())) {
+                if ( Constants.GL_CREDIT_CODE.equals(entry.getTransactionDebitCreditCode()) ) {
                     amount = entry.getTransactionLedgerEntryAmount();
-                    totalDocumentDebit = totalDocumentDebit.add(amount);
-                    totalDocumentTypeDebit = totalDocumentTypeDebit.add(amount);
-                    totalDebit = totalDebit.add(amount);
+                    totalDocumentCredit = totalDocumentCredit.add(amount);
+                    totalDocumentTypeCredit = totalDocumentTypeCredit.add(amount);
+                    totalCredit = totalCredit.add(amount);
                 }
                 column = new PdfPCell(new Phrase(null == amount ? " " : amountFormat.format(amount.doubleValue()), textFont));
                 column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -253,13 +253,13 @@ public class GeneralLedgerPendingEntryReport {
         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
         dataTable.addCell(column);
 
-        column = new PdfPCell(new Phrase(amountFormat.format(credit.doubleValue()), headerFont));
+        column = new PdfPCell(new Phrase(amountFormat.format(debit.doubleValue()), headerFont));
         column.setPaddingTop(10.0F);
         column.setPaddingBottom(10.0F);
         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
         dataTable.addCell(column);
 
-        column = new PdfPCell(new Phrase(amountFormat.format(debit.doubleValue()), headerFont));
+        column = new PdfPCell(new Phrase(amountFormat.format(credit.doubleValue()), headerFont));
         column.setPaddingTop(10.0F);
         column.setPaddingBottom(10.0F);
         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
