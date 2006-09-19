@@ -46,7 +46,6 @@ public class SufficientFundsRebuilderServiceTest extends KualiTestBaseWithSpring
     private SufficientFundsRebuilderService sufficientFundsRebuilderService = null;
     private SufficientFundRebuildDao sufficientFundRebuildDao = null;
     private SufficientFundBalancesDao sufficientFundBalancesDao = null;
-    private TestSufficientFundsReport testSufficientFundsReport = null;
     protected PersistenceService persistenceService;
     protected UnitTestSqlDao unitTestSqlDao = null;
 
@@ -61,10 +60,6 @@ public class SufficientFundsRebuilderServiceTest extends KualiTestBaseWithSpring
         sufficientFundBalancesDao = (SufficientFundBalancesDao) beanFactory.getBean("glSufficientFundBalancesDao");
         persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
         unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("glUnitTestSqlDao");
-
-        // get the test sufficient Funds report so we can read the summary and error information
-        // in the unit test
-        testSufficientFundsReport = (TestSufficientFundsReport) beanFactory.getBean("testSufficientFundsReport");
     }
 
     // testAddedSFBLRecords
@@ -136,18 +131,6 @@ public class SufficientFundsRebuilderServiceTest extends KualiTestBaseWithSpring
         sufficientFundsRebuilderService.rebuildSufficientFunds();
         assertSFRBEmpty();
         assertSFBLEntries(expectedOutput);
-    }
-
-    private void reportErrors() {
-        Map errors = testSufficientFundsReport.reportErrors;
-        for (Iterator i = errors.keySet().iterator(); i.hasNext();) {
-            Transaction key = (Transaction) i.next();
-            List msgs = (List) errors.get(key);
-            for (Iterator iterator = msgs.iterator(); iterator.hasNext();) {
-                String msg = (String) iterator.next();
-                System.err.println(msg);
-            }
-        }
     }
 
     protected void loadInputTransactions(String[] transactions) {
