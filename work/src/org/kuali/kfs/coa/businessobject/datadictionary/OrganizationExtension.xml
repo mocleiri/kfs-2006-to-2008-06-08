@@ -124,7 +124,7 @@
       </attributeReference>
 
 	  <attributeReference name="hrmsPersonnelApproverUniversal.personUserIdentifier" 
-	  					  sourceClassName="org.kuali.core.bo.user.KualiUser" 
+	  					  sourceClassName="org.kuali.core.bo.user.UniversalUser" 
 	  					  sourceAttributeName="personUserIdentifier">
 			<label>Personnel Approver UserID</label>
 			<shortLabel>Personnel Approver</shortLabel>
@@ -165,7 +165,7 @@
       </attributeReference>
 
 	  <attributeReference name="fiscalApproverUniversal.personUserIdentifier" 
-	  					  sourceClassName="org.kuali.core.bo.user.KualiUser" 
+	  					  sourceClassName="org.kuali.core.bo.user.UniversalUser" 
 	  					  sourceAttributeName="personUserIdentifier">
 			<label>Fiscal Approver UserID</label>
 			<shortLabel>Fiscal Approver</shortLabel>
