@@ -56,7 +56,6 @@ import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.core.lookup.keyvalues.CorrectionGroupComparator;
 import org.kuali.core.lookup.keyvalues.OEGDateComparator;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.LookupService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
@@ -84,7 +83,7 @@ import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.46.2.9 2006-09-19 01:39:05 jsissom Exp $
+ * @version $Id: CorrectionAction.java,v 1.46.2.10 2006-09-19 01:39:33 jsissom Exp $
  * 
  */
 public class CorrectionAction extends KualiDocumentActionBase {
