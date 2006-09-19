@@ -305,7 +305,7 @@
 
 	<target name="make-source" depends="init-make-references">
 		<mkdir dir="${war.classes.directory}" />
-		<javac destdir="${war.classes.directory}" srcdir="${source.directory}" debug="true" deprecation="true" optimize="true">
+		<javac fork="true" destdir="${war.classes.directory}" srcdir="${source.directory}" debug="true" deprecation="true" optimize="true">
 			<classpath refid="compile.source.classpath" />
 		</javac>
 		<copy todir="${war.classes.directory}">
