@@ -84,10 +84,10 @@ public class UserSession implements Serializable {
      */
     public String getNetworkId() {
         if (backdoorUser != null) {
-            return backdoorUser.getPersonUserIdentifier();
+            return backdoorUser.getUniversalUser().getPersonUserIdentifier();
         }
         else {
-            return kualiUser.getPersonUserIdentifier();
+            return kualiUser.getUniversalUser().getPersonUserIdentifier();
         }
     }
 
@@ -98,7 +98,7 @@ public class UserSession implements Serializable {
      * @return String
      */
     public String getLoggedInUserNetworkId() {
-        return kualiUser.getPersonUserIdentifier();
+        return kualiUser.getUniversalUser().getPersonUserIdentifier();
     }
 
     /**

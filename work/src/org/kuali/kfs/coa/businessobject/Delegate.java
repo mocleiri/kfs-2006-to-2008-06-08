@@ -31,6 +31,7 @@ import java.util.LinkedHashMap;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.KualiDecimal;
 
@@ -62,7 +63,7 @@ public class Delegate extends BusinessObjectBase {
     private Chart chart;
     private Account account;
     private DocumentType documentType;
-    private KualiUser accountDelegate;
+    private UniversalUser accountDelegate;
 
     /**
      * Gets the accountNumber attribute.
@@ -281,7 +282,7 @@ public class Delegate extends BusinessObjectBase {
      * 
      * @return Returns the accountDelegate.
      */
-    public KualiUser getAccountDelegate() {
+    public UniversalUser getAccountDelegate() {
         return accountDelegate;
     }
 
@@ -290,7 +291,7 @@ public class Delegate extends BusinessObjectBase {
      * 
      * @param accountDelegate The accountDelegate to set.
      */
-    public void setAccountDelegate(KualiUser accountDelegate) {
+    public void setAccountDelegate(UniversalUser accountDelegate) {
         this.accountDelegate = accountDelegate;
     }
 
