@@ -84,7 +84,7 @@ import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.46.2.8 2006-09-19 01:10:46 jsissom Exp $
+ * @version $Id: CorrectionAction.java,v 1.46.2.9 2006-09-19 01:39:05 jsissom Exp $
  * 
  */
 public class CorrectionAction extends KualiDocumentActionBase {
@@ -150,8 +150,6 @@ public class CorrectionAction extends KualiDocumentActionBase {
         sourceFile.getInputStream();
 
         GlobalVariables.getUserSession().addObject("fileName", (Object)fullFileName);
-        // CommonsMultipartRequestHandler.CommonsFormFile test = (CommonsMultipartRequestHandler.CommonsFormFile) sourceFile;
-        // CommonsMultipartRequestHandler test = (CommonsMultipartRequestHandler) sourceFile;
 
         /*
          * DiskFile test = (DiskFile) sourceFile; String filePath = test.getFilePath();
@@ -1321,8 +1319,8 @@ public class CorrectionAction extends KualiDocumentActionBase {
         }
 
         // save to DB and calculate Debits/Blanks and Total Credits
-        KualiDecimal tempTotalDebitsOrBlanks = new KualiDecimal(0);
-        KualiDecimal tempTotalCredits = new KualiDecimal(0);
+        KualiDecimal tempTotalDebitsOrBlanks = KualiDecimal.ZERO;
+        KualiDecimal tempTotalCredits = KualiDecimal.ZERO;
 
         for (OriginEntry oe : resultCorrectionList) {
             originEntryService.createEntry(oe, newOriginEntryGroup);
@@ -1574,8 +1572,8 @@ public class CorrectionAction extends KualiDocumentActionBase {
         request.setAttribute(Constants.SEARCH_LIST_REQUEST_KEY, GlobalVariables.getUserSession().addObject(resultCorrectionList, Constants.SEARCH_LIST_KEY_PREFIX));
 
         // calculate Debits/Blanks and Total Credits
-        KualiDecimal tempTotalDebitsOrBlanks = new KualiDecimal(0);
-        KualiDecimal tempTotalCredits = new KualiDecimal(0);
+        KualiDecimal tempTotalDebitsOrBlanks = KualiDecimal.ZERO;
+        KualiDecimal tempTotalCredits = KualiDecimal.ZERO;
 
         for (OriginEntry oe : resultCorrectionList) {
             if (oe.getTransactionDebitCreditCode() != null){
@@ -1585,8 +1583,9 @@ public class CorrectionAction extends KualiDocumentActionBase {
                 else {
                     tempTotalCredits = tempTotalCredits.add(oe.getTransactionLedgerEntryAmount());
                 }
-            } else {tempTotalDebitsOrBlanks = tempTotalDebitsOrBlanks.add(oe.getTransactionLedgerEntryAmount());}
-            
+            } else {
+                tempTotalDebitsOrBlanks = tempTotalDebitsOrBlanks.add(oe.getTransactionLedgerEntryAmount());
+            }
         }
 
         document.setCorrectionDebitTotalAmount(tempTotalDebitsOrBlanks);
@@ -1636,8 +1635,6 @@ public class CorrectionAction extends KualiDocumentActionBase {
         response.setHeader("Expires", "0");
         response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
         response.setHeader("Pragma", "public");
-
-        // response.setContentLength(bw.size());
 
         // write to output
 
