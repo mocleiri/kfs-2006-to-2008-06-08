@@ -46,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
 
     private AccountDao accountDao;
     private KualiUserService kualiUserService;
-    
+
     /**
      * Retrieves an Account object based on primary key.
      * 
@@ -62,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountDao.getByPrimaryId(chartOfAccountsCode, accountNumber);
         kualiUserService.linkInstitutionalUserFieldsPerBo(account);
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("retrieved account by primaryId (" + chartOfAccountsCode + "," + accountNumber + ")");
         }
@@ -85,15 +85,15 @@ public class AccountServiceImpl implements AccountService {
      */
     public List getAccountsThatUserIsResponsibleFor(KualiUser kualiUser) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieving accountsResponsible list for user " + kualiUser.getPersonName());
+            LOG.debug("retrieving accountsResponsible list for user " + kualiUser.getUniversalUser().getPersonName());
         }
 
         // gets the list of accounts that the user is the Fiscal Officer of
         List accountList = accountDao.getAccountsThatUserIsResponsibleFor(kualiUser);
         kualiUserService.linkInstitutionalUserFields(accountList);
-        
+
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieved accountsResponsible list for user " + kualiUser.getPersonName());
+            LOG.debug("retrieved accountsResponsible list for user " + kualiUser.getUniversalUser().getPersonName());
         }
         return accountList;
     }
@@ -127,9 +127,9 @@ public class AccountServiceImpl implements AccountService {
         List accountList = new ArrayList();
         while (accountIter.hasNext()) {
             accountList.add(accountIter.next());
-        }
+    }
         kualiUserService.linkInstitutionalUserFields(accountList);
-        
+
         return accountList.iterator();
     }
 
