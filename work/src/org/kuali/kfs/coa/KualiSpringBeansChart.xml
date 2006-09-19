@@ -34,7 +34,7 @@
         </property>
     </bean>
 
-    <bean id="priorYearAccountService" class="org.kuali.module.chart.service.impl.PrioYearAccountServiceImpl">
+    <bean id="priorYearAccountService" class="org.kuali.module.chart.service.impl.PriorYearAccountServiceImpl">
         <property name="priorYearAccountDao">
             <ref bean="priorYearAccountDao" />
         </property>
