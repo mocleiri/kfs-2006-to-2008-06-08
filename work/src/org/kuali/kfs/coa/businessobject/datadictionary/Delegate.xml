@@ -94,7 +94,7 @@
                 <description>The Universal ID (ie, unique identifier) of the Account Delegate.</description>
             </attributeReference>
 
-            <attributeReference name="accountDelegate.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.KualiUser" sourceAttributeName="personUserIdentifier">
+            <attributeReference name="accountDelegate.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
                 <label>Account Delegate UserID</label>
                 <shortLabel>UserID</shortLabel>
                 <required>false</required>
@@ -107,7 +107,7 @@
                 <description>The user ID of the designated delegate for the Fiscal Officer for the Account.</description>
             </attributeReference>
 
-            <attributeReference name="accountDelegate.personName" sourceClassName="org.kuali.core.bo.user.KualiUser" sourceAttributeName="personName">
+            <attributeReference name="accountDelegate.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
                 <label>Account Delegate Name</label>
                 <shortLabel>Name</shortLabel>
                 <required>false</required>
