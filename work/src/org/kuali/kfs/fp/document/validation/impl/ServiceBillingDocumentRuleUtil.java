@@ -83,7 +83,7 @@ public class ServiceBillingDocumentRuleUtil {
         }
         else {
             if (action != null) {
-                GlobalVariables.getErrorMap().putError(PropertyConstants.ACCOUNT_NUMBER, notControlGroupMemberErrorKey(action), accountingLine.getAccountNumber(), user.getPersonUserIdentifier(), control.getWorkgroupName());
+                GlobalVariables.getErrorMap().putError(PropertyConstants.ACCOUNT_NUMBER, notControlGroupMemberErrorKey(action), accountingLine.getAccountNumber(), user.getUniversalUser().getPersonUserIdentifier(), control.getWorkgroupName());
             }
             return false;
         }
