@@ -49,7 +49,7 @@
 							src="images/buttonsmall_clear.gif" styleClass="tinybutton"
 							alt="clear" border="0" /> <c:if test="${KualiForm.formKey!=''}">
 							<a
-								href='<c:out value="${KualiForm.backLocation}?methodToCall=refresh&docFormKey=${KualiForm.formKey}" />'>
+								href='<c:out value="${KualiForm.backLocation}?methodToCall=refresh&docFormKey=${KualiForm.formKey}" />'  title="cancel">
 							<img src="images/buttonsmall_cancel.gif" class="tinybutton"
 								border="0" alt="cancel"/> </a>
 						</c:if> <!-- Optional extra button --> <c:if
@@ -99,7 +99,7 @@
 								<c:choose>
 
 									<c:when test="${column.propertyURL != \"\"}">
-											<a href="<c:out value="${column.propertyURL}"/>"
+											<a href="<c:out value="${column.propertyURL}"/>" title="${column.propertyValue}"
 												target="blank"><c:out value="${column.propertyValue}" /></a>	
 									</c:when>
 	
@@ -122,7 +122,7 @@
 										title="${column.columnTitle}"
 										comparator="${column.comparator}">
 
-										<a href="<c:out value="${column.propertyURL}"/>"
+										<a href="<c:out value="${column.propertyURL}"/>" title="${column.propertyValue}"
 											target="blank"><c:out value="${column.propertyValue}" /></a>
 
 									</display:column>
