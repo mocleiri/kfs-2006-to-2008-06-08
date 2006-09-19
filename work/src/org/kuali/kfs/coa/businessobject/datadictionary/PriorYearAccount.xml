@@ -13,22 +13,17 @@
                 <field attributeName="accountCityName" />
                 <field attributeName="accountClosedIndicator" />
                 <field attributeName="accountCreateDate" />
-                <field attributeName="accountDescriptionSection" />
-                <field attributeName="accountDescriptionSectionBlank" />
                 <field attributeName="accountEffectiveDate" />
                 <field attributeName="accountExpirationDate" />
                 <field attributeName="accountFiscalOfficerSystemIdentifier" />
                 <field attributeName="accountFiscalOfficerUser" />
                 <field attributeName="accountInFinancialProcessingIndicator" />
-                <field attributeName="accountKey" />
                 <field attributeName="accountManagerSystemIdentifier" />
                 <field attributeName="accountManagerUser" />
                 <field attributeName="accountName" />
                 <field attributeName="accountNumber" />
                 <field attributeName="accountOffCampusIndicator" />
                 <field attributeName="accountPhysicalCampusCode" />
-                <field attributeName="accountResponsibilitySection" />
-                <field attributeName="accountResponsibilitySectionBlank" />
                 <field attributeName="accountRestrictedStatusCode" />
                 <field attributeName="accountRestrictedStatusDate" />
                 <field attributeName="accountStateCode" />
@@ -52,8 +47,6 @@
                 <field attributeName="continuationFinChrtOfAcctCd" />
                 <field attributeName="contractControlAccountNumber" />
                 <field attributeName="contractControlFinCoaCode" />
-                <field attributeName="contractsAndGrantsSection" />
-                <field attributeName="contractsAndGrantsSectionBlank" />
                 <field attributeName="endowmentIncomeAccountNumber" />
                 <field attributeName="endowmentIncomeAcctFinCoaCd" />
                 <field attributeName="expired" />
@@ -62,8 +55,6 @@
                 <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="financialObjectivePrsctrlIndicator" />
-                <field attributeName="guidelinesAndPurposeSection" />
-                <field attributeName="guidelinesAndPurposeSectionBlank" />
                 <field attributeName="inCg" />
                 <field attributeName="incomeStreamAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
@@ -97,22 +88,17 @@
                 <lookupField attributeName="accountCityName" required="false" />
                 <lookupField attributeName="accountClosedIndicator" required="false" />
                 <lookupField attributeName="accountCreateDate" required="false" />
-                <lookupField attributeName="accountDescriptionSection" required="false" />
-                <lookupField attributeName="accountDescriptionSectionBlank" required="false" />
                 <lookupField attributeName="accountEffectiveDate" required="false" />
                 <lookupField attributeName="accountExpirationDate" required="false" />
                 <lookupField attributeName="accountFiscalOfficerSystemIdentifier" required="false" />
                 <lookupField attributeName="accountFiscalOfficerUser" required="false" />
                 <lookupField attributeName="accountInFinancialProcessingIndicator" required="false" />
-                <lookupField attributeName="accountKey" required="false" />
                 <lookupField attributeName="accountManagerSystemIdentifier" required="false" />
                 <lookupField attributeName="accountManagerUser" required="false" />
                 <lookupField attributeName="accountName" required="false" />
                 <lookupField attributeName="accountNumber" required="false" />
                 <lookupField attributeName="accountOffCampusIndicator" required="false" />
                 <lookupField attributeName="accountPhysicalCampusCode" required="false" />
-                <lookupField attributeName="accountResponsibilitySection" required="false" />
-                <lookupField attributeName="accountResponsibilitySectionBlank" required="false" />
                 <lookupField attributeName="accountRestrictedStatusCode" required="false" />
                 <lookupField attributeName="accountRestrictedStatusDate" required="false" />
                 <lookupField attributeName="accountStateCode" required="false" />
@@ -136,8 +122,6 @@
                 <lookupField attributeName="continuationFinChrtOfAcctCd" required="false" />
                 <lookupField attributeName="contractControlAccountNumber" required="false" />
                 <lookupField attributeName="contractControlFinCoaCode" required="false" />
-                <lookupField attributeName="contractsAndGrantsSection" required="false" />
-                <lookupField attributeName="contractsAndGrantsSectionBlank" required="false" />
                 <lookupField attributeName="endowmentIncomeAccountNumber" required="false" />
                 <lookupField attributeName="endowmentIncomeAcctFinCoaCd" required="false" />
                 <lookupField attributeName="expired" required="false" />
@@ -146,8 +130,6 @@
                 <lookupField attributeName="financialHigherEdFunctionCd" required="false" />
                 <lookupField attributeName="financialIcrSeriesIdentifier" required="false" />
                 <lookupField attributeName="financialObjectivePrsctrlIndicator" required="false" />
-                <lookupField attributeName="guidelinesAndPurposeSection" required="false" />
-                <lookupField attributeName="guidelinesAndPurposeSectionBlank" required="false" />
                 <lookupField attributeName="inCg" required="false" />
                 <lookupField attributeName="incomeStreamAccountNumber" required="false" />
                 <lookupField attributeName="incomeStreamFinancialCoaCode" required="false" />
@@ -166,22 +148,17 @@
                 <field attributeName="accountCityName" />
                 <field attributeName="accountClosedIndicator" />
                 <field attributeName="accountCreateDate" />
-                <field attributeName="accountDescriptionSection" />
-                <field attributeName="accountDescriptionSectionBlank" />
                 <field attributeName="accountEffectiveDate" />
                 <field attributeName="accountExpirationDate" />
                 <field attributeName="accountFiscalOfficerSystemIdentifier" />
                 <field attributeName="accountFiscalOfficerUser" />
                 <field attributeName="accountInFinancialProcessingIndicator" />
-                <field attributeName="accountKey" />
                 <field attributeName="accountManagerSystemIdentifier" />
                 <field attributeName="accountManagerUser" />
                 <field attributeName="accountName" />
                 <field attributeName="accountNumber" />
                 <field attributeName="accountOffCampusIndicator" />
                 <field attributeName="accountPhysicalCampusCode" />
-                <field attributeName="accountResponsibilitySection" />
-                <field attributeName="accountResponsibilitySectionBlank" />
                 <field attributeName="accountRestrictedStatusCode" />
                 <field attributeName="accountRestrictedStatusDate" />
                 <field attributeName="accountStateCode" />
@@ -205,8 +182,6 @@
                 <field attributeName="continuationFinChrtOfAcctCd" />
                 <field attributeName="contractControlAccountNumber" />
                 <field attributeName="contractControlFinCoaCode" />
-                <field attributeName="contractsAndGrantsSection" />
-                <field attributeName="contractsAndGrantsSectionBlank" />
                 <field attributeName="endowmentIncomeAccountNumber" />
                 <field attributeName="endowmentIncomeAcctFinCoaCd" />
                 <field attributeName="expired" />
@@ -215,8 +190,6 @@
                 <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="financialObjectivePrsctrlIndicator" />
-                <field attributeName="guidelinesAndPurposeSection" />
-                <field attributeName="guidelinesAndPurposeSectionBlank" />
                 <field attributeName="inCg" />
                 <field attributeName="incomeStreamAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
@@ -278,36 +251,6 @@
                 <description>accountCreateDate description...</description>
 			</attribute>
 
-            <attribute name="accountDescriptionSection" forceUppercase="true">
-                <label>Account Description Section</label>
-                <shortLabel>Section</shortLabel>
-
-                <maxLength>-1</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="-1" />
-                </control>
-
-                <summary>accountDescriptionSection</summary>
-                <description>accountDescriptionSection description...</description>
-			</attribute>
-
-            <attribute name="accountDescriptionSectionBlank" forceUppercase="true">
-                <label>Account Description Section Blank</label>
-                <shortLabel>Blank</shortLabel>
-
-                <maxLength>-1</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="-1" />
-                </control>
-
-                <summary>accountDescriptionSectionBlank</summary>
-                <description>accountDescriptionSectionBlank description...</description>
-			</attribute>
-
             <attribute name="accountEffectiveDate" forceUppercase="true">
                 <label>Account Effective Date</label>
                 <shortLabel>Date</shortLabel>
@@ -353,19 +296,6 @@
                 <description>accountFiscalOfficerSystemIdentifier description...</description>
 			</attribute>
 
-            <attribute name="accountFiscalOfficerUser" forceUppercase="true">
-                <label>Account Fiscal Officer User</label>
-                <shortLabel>User</shortLabel>
-
-                <maxLength>$attribute.maxLength</maxLength>
-
-                <control>
-                </control>
-
-                <summary>accountFiscalOfficerUser</summary>
-                <description>accountFiscalOfficerUser description...</description>
-			</attribute>
-
             <attribute name="accountInFinancialProcessingIndicator" forceUppercase="true">
                 <label>Account In Financial Processing Indicator</label>
                 <shortLabel>Indicator</shortLabel>
@@ -378,21 +308,6 @@
 
                 <summary>accountInFinancialProcessingIndicator</summary>
                 <description>accountInFinancialProcessingIndicator description...</description>
-			</attribute>
-
-            <attribute name="accountKey" forceUppercase="true">
-                <label>Account Key</label>
-                <shortLabel>Key</shortLabel>
-
-                <maxLength>-1</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="-1" />
-                </control>
-
-                <summary>accountKey</summary>
-                <description>accountKey description...</description>
 			</attribute>
 
             <attribute name="accountManagerSystemIdentifier" forceUppercase="true">
@@ -408,19 +323,6 @@
 
                 <summary>accountManagerSystemIdentifier</summary>
                 <description>accountManagerSystemIdentifier description...</description>
-			</attribute>
-
-            <attribute name="accountManagerUser" forceUppercase="true">
-                <label>Account Manager User</label>
-                <shortLabel>User</shortLabel>
-
-                <maxLength>$attribute.maxLength</maxLength>
-
-                <control>
-                </control>
-
-                <summary>accountManagerUser</summary>
-                <description>accountManagerUser description...</description>
 			</attribute>
 
             <attribute name="accountName" forceUppercase="true">
@@ -480,36 +382,6 @@
 
                 <summary>accountPhysicalCampusCode</summary>
                 <description>accountPhysicalCampusCode description...</description>
-			</attribute>
-
-            <attribute name="accountResponsibilitySection" forceUppercase="true">
-                <label>Account Responsibility Section</label>
-                <shortLabel>Section</shortLabel>
-
-                <maxLength>-1</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="-1" />
-                </control>
-
-                <summary>accountResponsibilitySection</summary>
-                <description>accountResponsibilitySection description...</description>
-			</attribute>
-
-            <attribute name="accountResponsibilitySectionBlank" forceUppercase="true">
-                <label>Account Responsibility Section Blank</label>
-                <shortLabel>Blank</shortLabel>
-
-                <maxLength>-1</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="-1" />
-                </control>
-
-                <summary>accountResponsibilitySectionBlank</summary>
-                <description>accountResponsibilitySectionBlank description...</description>
 			</attribute>
 
             <attribute name="accountRestrictedStatusCode" forceUppercase="true">
@@ -585,19 +457,6 @@
 
                 <summary>accountSufficientFundsCode</summary>
                 <description>accountSufficientFundsCode description...</description>
-			</attribute>
-
-            <attribute name="accountSupervisoryUser" forceUppercase="true">
-                <label>Account Supervisory User</label>
-                <shortLabel>User</shortLabel>
-
-                <maxLength>$attribute.maxLength</maxLength>
-
-                <control>
-                </control>
-
-                <summary>accountSupervisoryUser</summary>
-                <description>accountSupervisoryUser description...</description>
 			</attribute>
 
             <attribute name="accountTypeCode" forceUppercase="true">
@@ -854,36 +713,6 @@
                 <description>contractControlFinCoaCode description...</description>
 			</attribute>
 
-            <attribute name="contractsAndGrantsSection" forceUppercase="true">
-                <label>Contracts And Grants Section</label>
-                <shortLabel>Section</shortLabel>
-
-                <maxLength>-1</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="-1" />
-                </control>
-
-                <summary>contractsAndGrantsSection</summary>
-                <description>contractsAndGrantsSection description...</description>
-			</attribute>
-
-            <attribute name="contractsAndGrantsSectionBlank" forceUppercase="true">
-                <label>Contracts And Grants Section Blank</label>
-                <shortLabel>Blank</shortLabel>
-
-                <maxLength>-1</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="-1" />
-                </control>
-
-                <summary>contractsAndGrantsSectionBlank</summary>
-                <description>contractsAndGrantsSectionBlank description...</description>
-			</attribute>
-
             <attribute name="endowmentIncomeAccountNumber" forceUppercase="true">
                 <label>Endowment Income Account Number</label>
                 <shortLabel>Number</shortLabel>
@@ -998,36 +827,6 @@
 
                 <summary>financialObjectivePrsctrlIndicator</summary>
                 <description>financialObjectivePrsctrlIndicator description...</description>
-			</attribute>
-
-            <attribute name="guidelinesAndPurposeSection" forceUppercase="true">
-                <label>Guidelines And Purpose Section</label>
-                <shortLabel>Section</shortLabel>
-
-                <maxLength>-1</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="-1" />
-                </control>
-
-                <summary>guidelinesAndPurposeSection</summary>
-                <description>guidelinesAndPurposeSection description...</description>
-			</attribute>
-
-            <attribute name="guidelinesAndPurposeSectionBlank" forceUppercase="true">
-                <label>Guidelines And Purpose Section Blank</label>
-                <shortLabel>Blank</shortLabel>
-
-                <maxLength>-1</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="-1" />
-                </control>
-
-                <summary>guidelinesAndPurposeSectionBlank</summary>
-                <description>guidelinesAndPurposeSectionBlank description...</description>
 			</attribute>
 
             <attribute name="inCg" forceUppercase="true">
