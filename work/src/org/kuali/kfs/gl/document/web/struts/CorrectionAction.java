@@ -84,7 +84,7 @@ import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.46.2.7 2006-09-18 22:04:50 jsissom Exp $
+ * @version $Id: CorrectionAction.java,v 1.46.2.8 2006-09-19 01:10:46 jsissom Exp $
  * 
  */
 public class CorrectionAction extends KualiDocumentActionBase {
@@ -1121,9 +1121,8 @@ public class CorrectionAction extends KualiDocumentActionBase {
         searchMap.put("entryGroupId", newGroupId);
         Collection<OriginEntry> searchResult = originEntryService.getMatchingEntriesByCollection(searchMap);
 
-        KualiDecimal tempTotalDebitsOrBlanks = new KualiDecimal(0);
-        KualiDecimal tempTotalCredits = new KualiDecimal(0);
-
+        KualiDecimal tempTotalDebitsOrBlanks = KualiDecimal.ZERO;
+        KualiDecimal tempTotalCredits = KualiDecimal.ZERO;
 
         for (OriginEntry oe : searchResult) {
             if (oe.getTransactionDebitCreditCode().equals(Constants.GL_BUDGET_CODE) | oe.getTransactionDebitCreditCode().equals(Constants.GL_DEBIT_CODE)) {
@@ -1146,16 +1145,12 @@ public class CorrectionAction extends KualiDocumentActionBase {
             document.setCorrectionInputFileName(inputFileName);
         }
 
-        document.setCorrectionOutputFileName(newOriginEntryGroup.getId().toString());
+        document.setCorrectionOutputGroupId(newOriginEntryGroup.getId().longValue());
         document.setCorrectionTypeCode("M");
 
         document.setCorrectionDebitTotalAmount(tempTotalDebitsOrBlanks);
         document.setCorrectionCreditTotalAmount(tempTotalCredits);
         document.setCorrectionRowCount(searchResult.size());
-
-        /*
-         * errorCorrectionForm.setEditMethod(null); errorCorrectionForm.setChooseSystem(null);
-         */
     }
 
     /**
