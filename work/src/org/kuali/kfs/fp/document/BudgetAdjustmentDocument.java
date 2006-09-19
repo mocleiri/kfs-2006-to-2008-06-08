@@ -39,6 +39,7 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLineParser;
+import org.kuali.module.financial.bo.FiscalYearFunctionControl;
 import org.kuali.module.financial.rules.TransactionalDocumentRuleUtil;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
@@ -88,9 +89,21 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
      * generic, shared logic used to iniate a ba document
      */
     public void initiateDocument() {
-        // setting default posting year
+        // setting default posting year. Trying to set currentYear first if it's allowed, if it isn't,
+        // just set first allowed year. Note: allowedYears will never be empty because then
+        // BudgetAdjustmentDocumentAuthorizer.canInitiate would have failed.
+        List allowedYears = SpringServiceLocator.getKeyValuesService().getBudgetAdjustmentAllowedYears();
         Integer currentYearParam = SpringServiceLocator.getDateTimeService().getCurrentFiscalYear();
-        setPostingYear(currentYearParam);
+        
+        FiscalYearFunctionControl fiscalYearFunctionControl = new FiscalYearFunctionControl();
+        fiscalYearFunctionControl.setUniversityFiscalYear(currentYearParam);
+        
+        // use 'this.postingYear =' because setPostingYear has logic we want to circumvent on initiateDocument
+        if(allowedYears.contains(fiscalYearFunctionControl)) {
+            this.postingYear = currentYearParam;
+        } else {
+            this.postingYear = ((FiscalYearFunctionControl) allowedYears.get(0)).getUniversityFiscalYear();
+        }
     }
 
     /**
