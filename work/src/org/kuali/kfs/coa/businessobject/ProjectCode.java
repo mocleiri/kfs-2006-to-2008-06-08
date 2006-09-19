@@ -27,6 +27,7 @@ package org.kuali.module.chart.bo;
 
 import org.kuali.core.bo.KualiCodeBase;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.UniversalUser;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -40,7 +41,7 @@ public class ProjectCode extends KualiCodeBase {
     private String chartOfAccountsCode;
     private String organizationCode;
 
-    private KualiUser projectManagerUniversal;
+    private UniversalUser projectManagerUniversal;
     private Chart chartOfAccounts;
     private Org organization;
 
@@ -76,7 +77,7 @@ public class ProjectCode extends KualiCodeBase {
      * @return - Returns the projectManagerUniversal
      * 
      */
-    public KualiUser getProjectManagerUniversal() {
+    public UniversalUser getProjectManagerUniversal() {
         return projectManagerUniversal;
     }
 
@@ -86,7 +87,7 @@ public class ProjectCode extends KualiCodeBase {
      * @param projectManagerUniversal The projectManagerUniversal to set.
      * 
      */
-    public void setProjectManagerUniversal(KualiUser projectManagerUniversal) {
+    public void setProjectManagerUniversal(UniversalUser projectManagerUniversal) {
         this.projectManagerUniversal = projectManagerUniversal;
     }
 
