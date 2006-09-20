@@ -42,11 +42,13 @@ import org.kuali.module.financial.document.CashReceiptDocument;
 import org.kuali.module.financial.exceptions.CashDrawerStateException;
 import org.kuali.module.financial.exceptions.InvalidCashReceiptState;
 import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.monitor.ChangeMonitor;
 import org.kuali.test.monitor.DocumentWorkflowStatusMonitor;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
+@WithTestSpringContext
 public class CashManagementServiceTest extends KualiTestBaseWithSession {
     static final String CMST_WORKGROUP = "CashManagementServiceTest";
 
