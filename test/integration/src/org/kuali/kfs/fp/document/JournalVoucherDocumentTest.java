@@ -264,6 +264,7 @@ public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
      * 
      * @see org.kuali.core.document.DocumentTestBase#testRouteDocument()
      */
+    @TestsWorkflowViaDatabase
     public void testRouteDocument() throws Exception {
         // save the original doc, wait for status change
         Document document = buildDocument();
