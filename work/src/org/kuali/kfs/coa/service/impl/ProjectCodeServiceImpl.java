@@ -47,9 +47,7 @@ public class ProjectCodeServiceImpl implements ProjectCodeService {
      * @return ProjectCode
      */
     public ProjectCode getByPrimaryId(String projectCode) {
-        ProjectCode projCode = projectCodeDao.getByPrimaryId(projectCode);
-        kualiUserService.linkInstitutionalUserFieldsPerBo(projCode);
-        return projCode;
+        return projectCodeDao.getByPrimaryId(projectCode);
     }
 
     /**
@@ -59,9 +57,7 @@ public class ProjectCodeServiceImpl implements ProjectCodeService {
      * @return ProjectCode
      */
     public ProjectCode getByName(String name) {
-        ProjectCode projCode = projectCodeDao.getByName(name);
-        kualiUserService.linkInstitutionalUserFieldsPerBo(projCode);
-        return projCode;
+        return projectCodeDao.getByName(name);
     }
 
     /**
