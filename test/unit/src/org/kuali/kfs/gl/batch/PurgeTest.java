@@ -31,7 +31,9 @@ import org.kuali.core.batch.Step;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.test.KualiTestBaseWithSpringOnly;
+import org.kuali.test.WithTestSpringContext;
 
+@WithTestSpringContext
 public class PurgeTest extends KualiTestBaseWithSpringOnly {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurgeTest.class);
 

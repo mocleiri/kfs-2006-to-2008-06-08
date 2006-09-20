@@ -34,6 +34,7 @@ import org.kuali.module.kra.bo.BudgetPeriod;
 import org.kuali.module.kra.bo.BudgetTask;
 import org.kuali.module.kra.rules.budget.BudgetDocumentRule;
 import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 
 
 /**
@@ -41,6 +42,7 @@ import org.kuali.test.KualiTestBaseWithFixtures;
  * 
  * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class BudgetDocumentRuleTest extends KualiTestBaseWithFixtures {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetDocumentRuleTest.class);
