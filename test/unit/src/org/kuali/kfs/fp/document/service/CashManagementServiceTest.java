@@ -22,7 +22,9 @@
  */
 package org.kuali.module.financial.service;
 
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -44,6 +46,7 @@ import org.kuali.module.financial.document.CashManagementDocument;
 import org.kuali.module.financial.document.CashReceiptDocument;
 import org.kuali.module.financial.exceptions.CashDrawerStateException;
 import org.kuali.module.financial.exceptions.InvalidCashReceiptState;
+import org.kuali.module.financial.util.CashReceiptFamilyTestUtil;
 import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.TestsWorkflowViaDatabase;
@@ -73,7 +76,7 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
         cashDrawerService = SpringServiceLocator.getCashDrawerService();
         businessObjectService = SpringServiceLocator.getBusinessObjectService();
     }
-    
+
     final public void testCreateCashManagementDocument_blankUnitName() throws Exception {
         boolean failedAsExpected = false;
 
@@ -132,7 +135,7 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
 
     @TestsWorkflowViaDatabase
     final public void testCreateCashManagementDocument_cashDrawerAlreadyOpen() throws Exception {
-        
+
         String testDocumentId = null;
         try {
             deleteIfExists(CMST_WORKGROUP);
@@ -142,7 +145,7 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
             CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testCreate_cashDrawerAlreadyOpen", "cmst3");
             assertNotNull(createdDoc);
             testDocumentId = createdDoc.getFinancialDocumentNumber();
-            
+
             // force the drawer open
             cashDrawerService.openCashDrawer(CMST_WORKGROUP, testDocumentId);
             saveDocument(createdDoc);
@@ -157,19 +160,19 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
                 // good
                 failedAsExpected = true;
             }
-            
+
             assertEquals(failedAsExpected, true);
-            
+
             //
             // cancel empty CMDoc
             //
             cashManagementService.cancelCashManagementDocument(createdDoc);
-            
+
         }
         finally {
             // cancel the document
             cleanupCancel(testDocumentId);
-            
+
             // delete the cashDrawer you created
             deleteIfExists(CMST_WORKGROUP);
         }
@@ -854,36 +857,37 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
 
         crDoc.setCampusLocationCode(cashReceiptService.getCampusCodeForCashReceiptVerificationUnit(workgroupName));
 
+        crDoc.addSourceAccountingLine(CashReceiptFamilyTestUtil.buildSourceAccountingLine(crDoc.getFinancialDocumentNumber(), crDoc.getPostingYear(), crDoc.getNextSourceLineNumber()));
         saveDocument(crDoc);
 
         CashReceiptDocument persistedDoc = (CashReceiptDocument) documentService.getByDocumentHeaderId(crDoc.getFinancialDocumentNumber());
         return persistedDoc;
     }
 
-    private void saveDocument(Document doc)
-        throws WorkflowException
-    {
+    private void saveDocument(Document doc) throws WorkflowException {
         try {
             documentService.saveDocument(doc);
         }
-        catch(ValidationException e) {
+        catch (ValidationException e) {
             // If the business rule evaluation fails then give us more info for debugging this test.
             fail(e.getMessage() + ", " + GlobalVariables.getErrorMap());
         }
     }
 
-    private BankAccount lookupBankAccount() {
+    private BankAccount lookupBankAccount() throws GeneralSecurityException {
         Map keyMap = new HashMap();
-        keyMap.put("financialDocumentBankCode", "TEST");
-        keyMap.put("finDocumentBankAccountNumber", "1111");
-
+        keyMap.put("financialDocumentBankCode", "1003");
+        keyMap.put("finDocumentBankAccountNumber", SpringServiceLocator.getEncryptionService().encrypt("1111111"));
+        Collection<BankAccount> accounts=businessObjectService.findAll(BankAccount.class);
+        
+        
         BankAccount bankAccount = (BankAccount) businessObjectService.findByPrimaryKey(BankAccount.class, keyMap);
 
+        assertNotNull("invalid bank account for test", bankAccount);
         return bankAccount;
     }
 
-    private void cleanupCancel(String documentId)
-        throws WorkflowException, UserNotFoundException {
+    private void cleanupCancel(String documentId) throws WorkflowException, UserNotFoundException {
         if (documentId != null) {
             Document testDoc = documentService.getByDocumentHeaderId(documentId);
 
