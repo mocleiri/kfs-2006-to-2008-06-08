@@ -34,6 +34,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.IndirectCostAdjustmentDocument;
 import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the <code>{@link IndirectCostAdjustmentDocument}</code>'s rules and PE generation. This is not currently
@@ -42,6 +43,7 @@ import org.kuali.test.KualiTestBaseWithFixtures;
  * 
  * @author Kuali Transaction Processing Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class IndirectCostAdjustmentDocumentRuleTest extends KualiTestBaseWithFixtures {
     // ////////////////////////////////////////////////////////////////////////
     // Test methods start here //
