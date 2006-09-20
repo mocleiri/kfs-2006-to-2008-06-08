@@ -54,7 +54,7 @@
                 <html:select property="editMethod" >
                   <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionEditMethodValuesFinder" label="label" value="key"/>
                 </html:select>
-                <html:image property="methodToCall.chooseMainDropdown.anchor${currentTabIndex}" src="images/tinybutton-select.gif" styleClass="tinybutton" alt="chooseMainDropdown" />
+                <html:image property="methodToCall.chooseMainDropdown.anchor${currentTabIndex}" src="images/tinybutton-select.gif" styleClass="tinybutton" alt="chooseMainDropdown" title="Choose Main Dropdown"  />
               </center>
             </td>
           </tr>
@@ -78,9 +78,9 @@
                     <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionGroupEntriesFinder" label="label" value="key" />
                   </html:select>
                   <br/><br/>  
-                  <html:image property="methodToCall.readDocument.anchor${currentTabIndex}" src="images/tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntriesForManualEdit" />
-                  <html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}" src="images/tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="saveToDeskTop" onclick="excludeSubmitRestriction=true" />
-                  <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="images/tinybutton-deletergroup.gif" styleClass="tinybutton" alt="deleteDocument" />
+                  <html:image property="methodToCall.readDocument.anchor${currentTabIndex}" src="images/tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntriesForManualEdit" title="Show All Entries For Manual Edit"/>
+                  <html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}" src="images/tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="saveToDeskTop" title="Save To Desk Top" onclick="excludeSubmitRestriction=true" />
+                  <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="images/tinybutton-deletergroup.gif" styleClass="tinybutton" alt="deleteDocument" title="Delete Document" />
                 </center> 
               </td>
             </tr>
@@ -99,7 +99,7 @@
             <tr>
               <td class="bord-l-b" style="padding: 4px;">
                 <html:file size="30" property="sourceFile" />
-                <html:image property="methodToCall.uploadFile.anchor${currentTabIndex}" src="images/tinybutton-loaddoc.gif" styleClass="tinybutton" alt="uploadFile" />
+                <html:image property="methodToCall.uploadFile.anchor${currentTabIndex}" src="images/tinybutton-loaddoc.gif" styleClass="tinybutton" alt="uploadFile" title="upload file"/>
               </td>
             </tr>
           </table>
