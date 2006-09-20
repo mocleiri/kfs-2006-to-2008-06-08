@@ -34,6 +34,7 @@ import org.kuali.core.exceptions.DocumentAuthorizationException;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 
@@ -42,6 +43,7 @@ import org.kuali.test.parameters.TransactionalDocumentParameter;
  * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class InternalBillingDocumentTest extends TransactionalDocumentTestBase {
     public static final String COLLECTION_NAME = "InternalBillingDocumentTest.collection1";
     public static final String USER_NAME = "user1";
