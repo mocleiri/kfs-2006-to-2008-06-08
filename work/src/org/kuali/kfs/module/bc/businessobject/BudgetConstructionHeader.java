@@ -31,6 +31,8 @@ import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
@@ -318,14 +320,13 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     public void setAccount(Account account) {
         this.account = account;
     }
-
-    /**
-     * Gets the budgetLockUser attribute.
-     * 
-     * @return - Returns the budgetLockUser
-     * 
-     */
+    
     public UniversalUser getBudgetLockUser() {
+        if (budgetLockUser == null) {
+            try {
+                budgetLockUser = SpringServiceLocator.getKualiUserService().getUniversalUser(budgetLockUserIdentifier);
+            } catch (UserNotFoundException unfe) {}
+        }
         return budgetLockUser;
     }
 
@@ -359,12 +360,12 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
         this.budgetConstructionAccountSelected = budgetConstructionAccountSelected;
     }
 
-    /**
-     * Gets the budgetTransactionLockUser attribute.
-     * 
-     * @return Returns the budgetTransactionLockUser.
-     */
     public UniversalUser getBudgetTransactionLockUser() {
+        if (budgetTransactionLockUser == null) {
+            try {
+                budgetTransactionLockUser = SpringServiceLocator.getKualiUserService().getUniversalUser(budgetTransactionLockUserIdentifier);
+            } catch (UserNotFoundException unfe) {}
+        }
         return budgetTransactionLockUser;
     }
 
