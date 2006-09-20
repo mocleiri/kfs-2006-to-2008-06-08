@@ -36,6 +36,7 @@ import org.kuali.test.parameters.DisbursementVoucherDocumentParameter;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.workflow.WorkflowTestUtils;
 
 import edu.iu.uis.eden.EdenConstants;
@@ -68,7 +69,7 @@ public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBa
     private static final String ALIEN_INDICATOR_PAYMENT_REASON = "Alien Indicator+Payment Reason";
     private static final String PAYMENT_METHOD = "Payment Method";
 
-    /**
+    /*
      * @see org.kuali.core.document.TransactionalDocumentTestBase#setUp()
      */
     protected void setUp() throws Exception {
@@ -122,6 +123,7 @@ public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBa
 
     }
 
+    @TestsWorkflowViaDatabase
     public void testWorkflowRouting() throws Exception {
         NetworkIdVO VPUTMAN = new NetworkIdVO("VPUTMAN");
         NetworkIdVO CSWINSON = new NetworkIdVO("CSWINSON");
