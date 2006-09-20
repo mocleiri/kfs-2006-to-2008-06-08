@@ -30,7 +30,7 @@ import org.kuali.PropertyConstants;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.DummyBusinessObject;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.test.KualiTestBaseWithSpringOnly;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -39,7 +39,7 @@ import org.kuali.test.WithTestSpringContext;
  * @author Bin Gao from Michigan State University
  */
 @WithTestSpringContext
-public class OJBUtilityTest extends KualiTestBaseWithSpringOnly {
+public class OJBUtilityTest extends KualiTestBase {
 
     // test cases for buildPropertyMap method
     public void testBuildPropertyMap() throws Exception {
