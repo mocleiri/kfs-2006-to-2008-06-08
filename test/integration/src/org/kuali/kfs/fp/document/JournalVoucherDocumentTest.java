@@ -39,6 +39,7 @@ import org.kuali.test.monitor.DocumentStatusMonitor;
 import org.kuali.test.monitor.DocumentWorkflowStatusMonitor;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
+import org.kuali.test.WithTestSpringContext;
 
 import edu.iu.uis.eden.EdenConstants;
 
@@ -47,6 +48,7 @@ import edu.iu.uis.eden.EdenConstants;
  * 
  * @author Kuali Financial Transactions Red Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
     public static final String COLLECTION_NAME = "JournalVoucherDocument.collection1";
     public static final String USER_NAME = "user_jvdoc";
