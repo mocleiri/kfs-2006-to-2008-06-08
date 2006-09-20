@@ -25,6 +25,7 @@ package org.kuali.module.financial.service;
 import java.util.List;
 
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.module.financial.bo.ProcurementCardTransaction;
 import org.kuali.test.KualiTestBaseWithFixtures;
 import org.kuali.test.WithTestSpringContext;
@@ -38,7 +39,7 @@ import org.kuali.test.WithTestSpringContext;
 public class ProcurementCardDocumentServiceTest extends KualiTestBaseWithFixtures {
     private ProcurementCardCreateDocumentService procurementCardCreateDocumentService;
     private ProcurementCardLoadTransactionsService procurementCardLoadTransactionsService;
-    private static String PCDO_USER_NAME = "hschrein";
+    private static String PCDO_USER_NAME = KualiUser.SYSTEM_USER;
 
     private static List documentsCreated;
 
@@ -49,16 +50,13 @@ public class ProcurementCardDocumentServiceTest extends KualiTestBaseWithFixture
         procurementCardLoadTransactionsService = SpringServiceLocator.getProcurementCardLoadTransactionsService();
     }
 
-    public boolean doRollback() {
-        return false;
-    }
-
     /**
      * Tests that the service is parsing the kuali xml files and loading into the transaction table correctly.
      * 
      * @throws Exception
      */
     public void testLoadKualiPCardFiles() throws Exception {
+        // todo: load test files with known contents?
         boolean loadSuccessful = procurementCardLoadTransactionsService.loadProcurementCardDataFile();
 
         // load transactions
