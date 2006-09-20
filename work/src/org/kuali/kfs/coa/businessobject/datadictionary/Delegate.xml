@@ -173,6 +173,13 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
+
+        <relationships>
+            <relationship objectAttributeName="accountDelegate" >
+                <primitiveAttribute sourceName="accountDelegateSystemId" targetName="personUniversalIdentifier" />
+            </relationship>
+        </relationships>
+
     </businessObject>
 </dictionaryEntry>
 
