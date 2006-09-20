@@ -27,12 +27,14 @@ import java.util.List;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.ProcurementCardTransaction;
 import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the services used to create ProcurementCard documents.
  * 
  * @author Kuali Financial Transactions (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class ProcurementCardDocumentServiceTest extends KualiTestBaseWithFixtures {
     private ProcurementCardCreateDocumentService procurementCardCreateDocumentService;
     private ProcurementCardLoadTransactionsService procurementCardLoadTransactionsService;
@@ -46,7 +48,7 @@ public class ProcurementCardDocumentServiceTest extends KualiTestBaseWithFixture
         procurementCardCreateDocumentService = SpringServiceLocator.getProcurementCardCreateDocumentService();
         procurementCardLoadTransactionsService = SpringServiceLocator.getProcurementCardLoadTransactionsService();
     }
-    
+
     public boolean doRollback() {
         return false;
     }
