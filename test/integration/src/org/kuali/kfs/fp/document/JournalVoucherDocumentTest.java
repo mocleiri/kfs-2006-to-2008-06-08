@@ -40,6 +40,7 @@ import org.kuali.test.monitor.DocumentWorkflowStatusMonitor;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.TestsWorkflowViaDatabase;
 
 import edu.iu.uis.eden.EdenConstants;
 
@@ -105,6 +106,7 @@ public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#testConvertIntoCopy()
      */
+    @TestsWorkflowViaDatabase
     public void testConvertIntoCopy() throws Exception {
         // save the original doc, wait for status change
         TransactionalDocument document = (TransactionalDocument) buildDocument();
@@ -171,6 +173,7 @@ public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#testConvertIntoErrorCorrection()
      */
+    @TestsWorkflowViaDatabase
     public void testConvertIntoErrorCorrection() throws Exception {
         TransactionalDocument document = (TransactionalDocument) buildDocument();
 
