@@ -60,7 +60,6 @@ public class ChartDaoOjb extends PersistenceBrokerDaoSupport implements ChartDao
         qbc.addOrderByAscending("chartOfAccountsCode");
         Collection charts = getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
         List chartList = new ArrayList(charts);
-        SpringServiceLocator.getKualiUserService().linkInstitutionalUserFields(chartList);
         return chartList;
     }
 
