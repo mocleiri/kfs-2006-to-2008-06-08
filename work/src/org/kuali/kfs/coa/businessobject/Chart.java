@@ -28,6 +28,8 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -235,13 +237,12 @@ public class Chart extends BusinessObjectBase {
         this.finAccountsReceivableObj = finAccountsReceivableObj;
     }
 
-    /**
-     * Gets the finCoaManagerUniversal attribute.
-     * 
-     * @return - Returns the finCoaManagerUniversal
-     * 
-     */
     public UniversalUser getFinCoaManagerUniversal() {
+        if (finCoaManagerUniversal == null) {
+            try {
+                finCoaManagerUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(finCoaManagerUniversalId);
+            } catch (UserNotFoundException unfe) {}
+        }
         return finCoaManagerUniversal;
     }
 

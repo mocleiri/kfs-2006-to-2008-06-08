@@ -73,7 +73,7 @@ public class UserSession implements Serializable {
      * @throws ResourceUnavailableException
      */
     public UserSession(String networkId) throws UserNotFoundException, WorkflowException {
-        this.kualiUser = SpringServiceLocator.getKualiUserService().getUser(new AuthenticationUserId(networkId));
+        this.kualiUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(networkId));
         this.workflowUser = SpringServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
         this.nextObjectKey = 0;
         this.objectMap = new HashMap();
@@ -136,7 +136,7 @@ public class UserSession implements Serializable {
      */
     public void setBackdoorUser(String networkId) throws UserNotFoundException, WorkflowException {
         // TODO - determine how we will get the environment configuration - KULCFG-17
-        this.backdoorUser = SpringServiceLocator.getKualiUserService().getUser(new AuthenticationUserId(networkId));
+        this.backdoorUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(networkId));
         this.backdoorWorkflowUser = SpringServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
         this.workflowDocMap = new HashMap();
     }

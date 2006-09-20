@@ -33,7 +33,9 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.DocumentType;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -277,12 +279,12 @@ public class Delegate extends BusinessObjectBase {
         this.documentType = documentType;
     }
 
-    /**
-     * Gets the accountDelegate attribute.
-     * 
-     * @return Returns the accountDelegate.
-     */
     public UniversalUser getAccountDelegate() {
+        if (accountDelegate == null) {
+            try {
+                accountDelegate = SpringServiceLocator.getKualiUserService().getUniversalUser(accountDelegateSystemId);
+            } catch (UserNotFoundException unfe) {}
+        }
         return accountDelegate;
     }
 
