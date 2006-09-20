@@ -55,6 +55,12 @@ public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implemen
     private String typeCode = ADJUSTMENT_DOC_TYPE;
     private java.sql.Date reversalDate;
 
+    
+    @Override
+    public boolean documentPerformsSufficientFundsCheck() {
+        return false;
+    }
+
     /**
      * Initializes the array lists and some basic info.
      */
