@@ -263,10 +263,6 @@
     <field-descriptor name="active" column="PROJ_ACTIVE_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="projectDescription" column="PROJECT_DESC" jdbc-type="VARCHAR" />
 
-    <reference-descriptor name="projectManagerUniversal" class-ref="org.kuali.core.bo.user.UniversalUser" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="projectManagerUniversalId" />
-    </reference-descriptor>
-
     <reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="chartOfAccountsCode" />
     </reference-descriptor>
@@ -890,9 +886,6 @@
     </reference-descriptor>
     <reference-descriptor name="documentType" class-ref="org.kuali.core.document.DocumentType" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="financialDocumentTypeCode" />
-    </reference-descriptor>
-    <reference-descriptor name="accountDelegate" class-ref="org.kuali.core.bo.user.UniversalUser" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="accountDelegateSystemId" />
     </reference-descriptor>
 </class-descriptor>
 
@@ -1554,9 +1547,6 @@
     <field-descriptor name="accountDelegatePrimaryRoutingIndicator" column="ACCT_DLGT_PRMRT_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="accountDelegateStartDate" column="ACCT_DLGT_START_DT" jdbc-type="DATE" />
 
-    <reference-descriptor name="accountDelegate" class-ref="org.kuali.core.bo.user.UniversalUser" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="accountDelegateUniversalId" />
-    </reference-descriptor>
     <reference-descriptor name="documentType" class-ref="org.kuali.core.document.DocumentType" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="financialDocumentTypeCode" />
     </reference-descriptor>
