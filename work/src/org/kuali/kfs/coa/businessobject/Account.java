@@ -45,6 +45,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.PostalZipCode;
 import org.kuali.core.bo.State;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
@@ -1155,10 +1156,12 @@ public class Account extends BusinessObjectBase implements AccountIntf {
     }
 
 
-    /**
-     * @return Returns the accountFiscalOfficerUser.
-     */
     public UniversalUser getAccountFiscalOfficerUser() {
+        if (accountFiscalOfficerUser == null) {
+            try {
+                accountFiscalOfficerUser = SpringServiceLocator.getKualiUserService().getUniversalUser(accountFiscalOfficerSystemIdentifier);
+            } catch (UserNotFoundException unfe) {}
+        }
         return accountFiscalOfficerUser;
     }
 
@@ -1171,14 +1174,14 @@ public class Account extends BusinessObjectBase implements AccountIntf {
         this.accountFiscalOfficerUser = accountFiscalOfficerUser;
     }
 
-
-    /**
-     * @return Returns the accountManagerUser.
-     */
     public UniversalUser getAccountManagerUser() {
+        if (accountManagerUser == null) {
+            try {
+                accountManagerUser = SpringServiceLocator.getKualiUserService().getUniversalUser(accountManagerSystemIdentifier);
+            } catch (UserNotFoundException unfe) {}
+        }
         return accountManagerUser;
     }
-
 
     /**
      * @param accountManagerUser The accountManagerUser to set.
@@ -1189,10 +1192,12 @@ public class Account extends BusinessObjectBase implements AccountIntf {
     }
 
 
-    /**
-     * @return Returns the accountSupervisoryUser.
-     */
     public UniversalUser getAccountSupervisoryUser() {
+        if (accountSupervisoryUser == null) {
+            try {
+                accountSupervisoryUser = SpringServiceLocator.getKualiUserService().getUniversalUser(accountsSupervisorySystemsIdentifier);
+            } catch (UserNotFoundException unfe) {}
+        }
         return accountSupervisoryUser;
     }
 
