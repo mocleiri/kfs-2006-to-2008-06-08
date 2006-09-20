@@ -25,6 +25,7 @@ package org.kuali.module.gl.service;
 import java.util.Calendar;
 
 import org.kuali.Constants;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.module.gl.GLSpringBeansRegistry;
 import org.kuali.module.gl.OriginEntryTestBase;
 import org.kuali.module.gl.bo.OriginEntrySource;
@@ -34,6 +35,7 @@ import org.kuali.module.gl.bo.OriginEntrySource;
  * 
  * @author Bin Gao from Michigan State University
  */
+@WithTestSpringContext
 public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ScrubberFlexibleOffsetTest.class);
 
