@@ -25,20 +25,19 @@ package org.kuali.module.gl.service;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.gl.TestSufficientFundsReport;
 import org.kuali.module.gl.bo.SufficientFundBalances;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
-import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.SufficientFundBalancesDao;
 import org.kuali.module.gl.dao.SufficientFundRebuildDao;
 import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.test.KualiTestBaseWithSpring;
+import org.kuali.test.WithTestSpringContext;
 import org.springframework.beans.factory.BeanFactory;
 
+@WithTestSpringContext
 public class SufficientFundsRebuilderServiceTest extends KualiTestBaseWithSpring {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ScrubberServiceTest.class);
 
