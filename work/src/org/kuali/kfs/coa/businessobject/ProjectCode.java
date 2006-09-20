@@ -28,6 +28,8 @@ package org.kuali.module.chart.bo;
 import org.kuali.core.bo.KualiCodeBase;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -71,13 +73,12 @@ public class ProjectCode extends KualiCodeBase {
         this.projectDescription = projectDescription;
     }
 
-    /**
-     * Gets the projectManagerUniversal attribute.
-     * 
-     * @return - Returns the projectManagerUniversal
-     * 
-     */
     public UniversalUser getProjectManagerUniversal() {
+        if (projectManagerUniversal == null) {
+            try {
+                projectManagerUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(projectManagerUniversalId);
+            } catch (UserNotFoundException unfe) {}
+        }
         return projectManagerUniversal;
     }
 
