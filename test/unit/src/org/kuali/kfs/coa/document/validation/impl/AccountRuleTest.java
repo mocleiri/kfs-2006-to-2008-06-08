@@ -27,6 +27,7 @@ import java.util.Calendar;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.kuali.KeyConstants;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
@@ -36,6 +37,7 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.SubFundGroup;
 
+@WithTestSpringContext
 public class AccountRuleTest extends ChartRuleTestBase {
 
     private class Accounts {
