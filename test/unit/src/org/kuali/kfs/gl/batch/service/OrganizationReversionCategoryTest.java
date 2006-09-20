@@ -30,8 +30,10 @@ import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.chart.service.OrganizationReversionService;
 import org.kuali.module.gl.service.OrganizationReversionCategoryLogic;
 import org.kuali.test.KualiTestBaseWithSpringOnly;
+import org.kuali.test.WithTestSpringContext;
 import org.springframework.beans.factory.BeanFactory;
 
+@WithTestSpringContext
 public class OrganizationReversionCategoryTest extends KualiTestBaseWithSpringOnly {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrganizationReversionCategoryTest.class);
 
