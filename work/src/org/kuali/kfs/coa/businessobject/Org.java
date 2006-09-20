@@ -37,6 +37,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.Country;
 import org.kuali.core.bo.PostalZipCode;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
 
@@ -327,13 +328,12 @@ public class Org extends BusinessObjectBase {
         this.organizationDefaultAccount = organizationDefaultAccount;
     }
 
-    /**
-     * Gets the organizationManagerUniversal attribute.
-     * 
-     * @return - Returns the organizationManagerUniversal
-     * 
-     */
     public UniversalUser getOrganizationManagerUniversal() {
+        if (organizationManagerUniversal == null) {
+            try {
+                organizationManagerUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(organizationManagerUniversalId);
+            } catch (UserNotFoundException unfe) {}
+        }
         return organizationManagerUniversal;
     }
 
