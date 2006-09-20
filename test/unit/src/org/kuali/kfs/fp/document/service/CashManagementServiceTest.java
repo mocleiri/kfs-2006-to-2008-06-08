@@ -877,8 +877,8 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
 
     private BankAccount lookupBankAccount() throws GeneralSecurityException {
         Map keyMap = new HashMap();
-        keyMap.put("financialDocumentBankCode", "1003");
-        keyMap.put("finDocumentBankAccountNumber", "1111111");
+        keyMap.put("financialDocumentBankCode", "TEST");
+        keyMap.put("finDocumentBankAccountNumber", "1111");
 
         BankAccount bankAccount = (BankAccount) businessObjectService.findByPrimaryKey(BankAccount.class, keyMap);
 
