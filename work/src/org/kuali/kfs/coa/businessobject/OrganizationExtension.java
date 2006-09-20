@@ -30,6 +30,8 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -1001,13 +1003,12 @@ public class OrganizationExtension extends BusinessObjectBase {
         this.organization = organization;
     }
 
-    /**
-     * Gets the hrmsPersonnelApproverUniversal attribute.
-     * 
-     * @return - Returns the hrmsPersonnelApproverUniversal
-     * 
-     */
     public UniversalUser getHrmsPersonnelApproverUniversal() {
+        if (hrmsPersonnelApproverUniversal == null) {
+            try {
+                hrmsPersonnelApproverUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(hrmsPersonnelApproverUniversalId);
+            } catch (UserNotFoundException unfe) {}
+        }
         return hrmsPersonnelApproverUniversal;
     }
 
@@ -1041,13 +1042,12 @@ public class OrganizationExtension extends BusinessObjectBase {
         this.hrmsIuCampus = hrmsIuCampus;
     }
 
-    /**
-     * Gets the fiscalApproverUniversal attribute.
-     * 
-     * @return - Returns the fiscalApproverUniversal
-     * 
-     */
     public UniversalUser getFiscalApproverUniversal() {
+        if (fiscalApproverUniversal == null) {
+            try {
+                fiscalApproverUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(fiscalApproverUniversalId);
+            } catch (UserNotFoundException unfe) {}
+        }
         return fiscalApproverUniversal;
     }
 
