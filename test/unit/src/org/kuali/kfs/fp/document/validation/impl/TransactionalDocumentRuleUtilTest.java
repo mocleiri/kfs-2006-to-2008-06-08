@@ -30,6 +30,7 @@ import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.FixtureEntryException;
 
 /**
@@ -37,6 +38,7 @@ import org.kuali.test.fixtures.FixtureEntryException;
  * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class TransactionalDocumentRuleUtilTest extends KualiTestBaseWithFixtures {
 
     private static final String DOES_NOT_MATTER = "doesNotMatter";

@@ -32,9 +32,11 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.CashReceiptDocument;
 import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.WithTestSpringContext;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
+@WithTestSpringContext
 public class CashReceiptServiceTest extends KualiTestBaseWithSession {
     private static final String TEST_CAMPUS_CD = Constants.CashReceiptConstants.TEST_CASH_RECEIPT_CAMPUS_LOCATION_CODE;
     private static final String TEST_UNIT_NAME = Constants.CashReceiptConstants.TEST_CASH_RECEIPT_VERIFICATION_UNIT;
