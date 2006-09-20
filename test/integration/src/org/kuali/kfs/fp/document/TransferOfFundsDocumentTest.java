@@ -34,6 +34,7 @@ import org.kuali.test.parameters.AccountingLineParameter;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.workflow.WorkflowTestUtils;
 
 import edu.iu.uis.eden.EdenConstants;
@@ -258,6 +259,7 @@ public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
     // Fixture Methods End Here //
     // /////////////////////////////////////////////////////////////////////////
 
+    @TestsWorkflowViaDatabase
     public void testWorkflowRouting() throws Exception {
         NetworkIdVO VPUTMAN = new NetworkIdVO("VPUTMAN");
         NetworkIdVO RORENFRO = new NetworkIdVO("RORENFRO");
