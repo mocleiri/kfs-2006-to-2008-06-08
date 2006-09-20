@@ -42,6 +42,7 @@ import org.kuali.module.chart.bo.DelegateChangeContainer;
 import org.kuali.module.chart.bo.DelegateChangeDocument;
 import org.kuali.test.KualiTestBaseWithFixtures;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.TestsWorkflowViaDatabase;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -64,10 +65,6 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
     public void setUp() throws Exception {
         super.setUp();
         docService = SpringServiceLocator.getDocumentService();
-    }
-
-    public boolean doRollback() {
-        return false;
     }
 
     public void testGlobalDelegateMaintenanceDocumentCreation_goodDocTypeName() throws Exception {
@@ -120,6 +117,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         assertEquals("New BO should be of the correct class.", AccountChangeDocument.class, newBo.getClass());
     }
 
+    @TestsWorkflowViaDatabase
     public final void testSaveDocument_globalDelegate() throws Exception {
 
         MaintenanceDocument document = (MaintenanceDocument) docService.getNewDocument(GLOBAL_DELEGATE_TYPENAME);
@@ -171,6 +169,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
 
     }
 
+    @TestsWorkflowViaDatabase
     public final void testSaveAndLoadDocument_globalDelegate() throws Exception {
 
         MaintenanceDocument document = (MaintenanceDocument) docService.getNewDocument(GLOBAL_DELEGATE_TYPENAME);
@@ -256,6 +255,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
 
     }
 
+    @TestsWorkflowViaDatabase
     public void testLocking_Delegate_NoLocks() throws WorkflowException {
 
         MaintenanceDocument document = (MaintenanceDocument) docService.getNewDocument(GLOBAL_DELEGATE_TYPENAME);
@@ -341,6 +341,7 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
 
     }
 
+    @TestsWorkflowViaDatabase
     public void testLocking_Delegate_GlobalLocks() throws WorkflowException {
 
         MaintenanceDocument document1;
@@ -464,26 +465,19 @@ public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
         bo.addAccount(account);
 
         // a locking error should be throw right here
-        boolean correctErrorThrown = false;
         try {
             docService.saveDocument(document3);
+            // if the save didnt fail, then we need to cancel this document
+            docService.cancelDocument(document3, "");
+            fail("no locking error thrown on save");
         }
         catch (ValidationException e) {
-            if ("Maintenance Record is locked by another document.".equalsIgnoreCase(e.getMessage())) {
-                correctErrorThrown = true;
-            }
+            assertEquals("Maintenance Record is locked by another document.", e.getMessage());
         }
 
-        // if the save didnt fail, then we need to cancel this document
-        if (!correctErrorThrown) {
-            docService.cancelDocument(document3, "");
-        }
-
-        assertTrue("The correct ValidationException was thrown.", correctErrorThrown);
-
+        // todo: finally?
         // now that it worked, lets cancel the doc so it doesnt lock for others
         docService.cancelDocument(document1, "cancelling test document");
-
     }
 
 }
