@@ -32,6 +32,7 @@ import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.TestsWorkflowViaDatabase;
 
 /**
  * This class is used to test DistributionOfIncomeAndExpenseDocument.
@@ -119,6 +120,7 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
     }
 
 
+    @TestsWorkflowViaDatabase
     public void testKULEDOCS_1401() throws Exception {
         String testDocId = null;
 
@@ -145,6 +147,7 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
                 savedDoc.addTargetAccountingLine(getTargetAccountingLineAccessibleAccount());
 
                 // blanketapprove updated doc
+                // todo: change session to a user authorized for blanket approval, in a way that is sure to restore the session to the default user afterwards
                 getDocumentService().blanketApproveDocument(savedDoc, "blanketapproving updated doc", null);
             }
         }

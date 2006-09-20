@@ -29,11 +29,11 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.module.gl.util.SufficientFundsItem;
-import org.kuali.test.KualiTestBaseWithSpringOnly;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 @WithTestSpringContext
-public class SufficientFundsServiceTest extends KualiTestBaseWithSpringOnly {
+public class SufficientFundsServiceTest extends KualiTestBase {
 
     private SufficientFundsService sufficientFundsService = null;
     private UnitTestSqlDao unitTestSqlDao = null;
