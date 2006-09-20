@@ -147,7 +147,6 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
                 savedDoc.addTargetAccountingLine(getTargetAccountingLineAccessibleAccount());
 
                 // blanketapprove updated doc
-                // todo: change session to a user authorized for blanket approval, in a way that is sure to restore the session to the default user afterwards
                 getDocumentService().blanketApproveDocument(savedDoc, "blanketapproving updated doc", null);
             }
         }
