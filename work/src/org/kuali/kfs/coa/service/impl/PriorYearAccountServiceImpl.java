@@ -29,7 +29,7 @@ import org.kuali.module.chart.service.PriorYearAccountService;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: PriorYearAccountServiceImpl.java,v 1.1.2.1 2006-09-19 16:41:45 temay Exp $
+ * @version $Id: PriorYearAccountServiceImpl.java,v 1.1.2.2 2006-09-20 20:09:32 abyrne Exp $
  */
 public class PriorYearAccountServiceImpl implements PriorYearAccountService {
 
@@ -53,9 +53,7 @@ public class PriorYearAccountServiceImpl implements PriorYearAccountService {
      * @see org.kuali.module.chart.service.PriorYearAccountService#getByPrimaryKey(java.lang.String, java.lang.String)
      */
     public PriorYearAccount getByPrimaryKey(String chartCode, String accountNumber) {
-        PriorYearAccount priorYearAccount = priorYearAccountDao.getByPrimaryId(chartCode, accountNumber);
-        kualiUserService.linkInstitutionalUserFieldsPerBo(priorYearAccount);
-        return priorYearAccount;
+        return priorYearAccountDao.getByPrimaryId(chartCode, accountNumber);
     }
 
     public void setKualiUserService(KualiUserService kualiUserService) {
