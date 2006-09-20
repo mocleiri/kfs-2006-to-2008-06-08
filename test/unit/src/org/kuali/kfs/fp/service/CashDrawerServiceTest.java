@@ -58,14 +58,6 @@ public class CashDrawerServiceTest extends KualiTestBaseWithFixtures {
         boService = SpringServiceLocator.getBusinessObjectService();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        deleteCashDrawer(VALID_WORKGROUP_NAME);
-
-        super.tearDown();
-    }
-
-
     public final void testOpenCashDrawer_blankWorkgroup() {
         boolean failedAsExpected = false;
 
