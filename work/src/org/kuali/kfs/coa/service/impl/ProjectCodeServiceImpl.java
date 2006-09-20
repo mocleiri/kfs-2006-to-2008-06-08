@@ -22,6 +22,8 @@
  */
 package org.kuali.module.chart.service.impl;
 
+import org.kuali.core.service.KualiUserService;
+import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.dao.ProjectCodeDao;
 import org.kuali.module.chart.service.ProjectCodeService;
@@ -36,7 +38,8 @@ public class ProjectCodeServiceImpl implements ProjectCodeService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProjectCodeServiceImpl.class);
 
     private ProjectCodeDao projectCodeDao;
-
+    private KualiUserService kualiUserService;
+    
     /**
      * Retrieves an ProjectCode object based on primary key.
      * 
@@ -44,7 +47,9 @@ public class ProjectCodeServiceImpl implements ProjectCodeService {
      * @return ProjectCode
      */
     public ProjectCode getByPrimaryId(String projectCode) {
-        return projectCodeDao.getByPrimaryId(projectCode);
+        ProjectCode projCode = projectCodeDao.getByPrimaryId(projectCode);
+        kualiUserService.linkInstitutionalUserFieldsPerBo(projCode);
+        return projCode;
     }
 
     /**
@@ -54,7 +59,9 @@ public class ProjectCodeServiceImpl implements ProjectCodeService {
      * @return ProjectCode
      */
     public ProjectCode getByName(String name) {
-        return projectCodeDao.getByName(name);
+        ProjectCode projCode = projectCodeDao.getByName(name);
+        kualiUserService.linkInstitutionalUserFieldsPerBo(projCode);
+        return projCode;
     }
 
     /**
@@ -70,4 +77,9 @@ public class ProjectCodeServiceImpl implements ProjectCodeService {
     public void setProjectCodeDao(ProjectCodeDao projectCodeDao) {
         this.projectCodeDao = projectCodeDao;
     }
+
+    public void setKualiUserService(KualiUserService kualiUserService) {
+        this.kualiUserService = kualiUserService;
+    }  
+
 }
