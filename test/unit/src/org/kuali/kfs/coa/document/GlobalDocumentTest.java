@@ -41,10 +41,12 @@ import org.kuali.module.chart.bo.AccountChangeDocument;
 import org.kuali.module.chart.bo.DelegateChangeContainer;
 import org.kuali.module.chart.bo.DelegateChangeDocument;
 import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 @SuppressWarnings("deprecation")
+@WithTestSpringContext
 public class GlobalDocumentTest extends KualiTestBaseWithFixtures {
 
     private static final Log LOG = LogFactory.getLog(GlobalDocumentTest.class);

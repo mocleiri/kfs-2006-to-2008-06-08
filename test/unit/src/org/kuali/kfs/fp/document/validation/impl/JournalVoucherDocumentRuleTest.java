@@ -22,13 +22,12 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.Constants.GL_CREDIT_CODE;
-import static org.kuali.Constants.GL_DEBIT_CODE;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
@@ -41,6 +40,7 @@ import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.parameters.AccountingLineParameter;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
@@ -50,6 +50,7 @@ import org.kuali.test.parameters.TransactionalDocumentParameter;
  * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class JournalVoucherDocumentRuleTest extends TransactionalDocumentRuleTestBase {
 
     private static final String COLLECTION_NAME = "JournalVoucherDocumentRuleTest.collection1";
