@@ -31,12 +31,14 @@ import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.DummyBusinessObject;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.test.KualiTestBaseWithSpringOnly;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class is the JUnit test case applied on the BusinessObjectHandler class
  * 
  * @author Bin Gao from Michigan State University
  */
+@WithTestSpringContext
 public class OJBUtilityTest extends KualiTestBaseWithSpringOnly {
 
     // test cases for buildPropertyMap method
