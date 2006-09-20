@@ -29,6 +29,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.workflow.KualiWorkflowUtils;
 
 import edu.iu.uis.eden.exception.InvalidXmlException;
@@ -39,6 +40,7 @@ import edu.iu.uis.eden.routeheader.DocumentContent;
  * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class KualiAttributeXPathTest extends KualiTestBaseWithFixtures {
 
     private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE = "//org.kuali.core.bo.SourceAccountingLine/account/subFundGroupCode or //org.kuali.core.bo.TargetAccountingLine/account/subFundGroupCode";
