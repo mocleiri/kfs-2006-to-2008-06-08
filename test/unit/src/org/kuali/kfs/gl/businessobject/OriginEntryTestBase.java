@@ -39,14 +39,14 @@ import org.kuali.module.gl.dao.OriginEntryDao;
 import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
-import org.kuali.test.KualiTestBaseWithSpringOnly;
+import org.kuali.test.KualiTestBase;
 import org.springframework.beans.factory.BeanFactory;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: OriginEntryTestBase.java,v 1.27 2006-09-06 06:50:25 abyrne Exp $
+ * @version $Id: OriginEntryTestBase.java,v 1.27.2.1 2006-09-20 06:54:52 dbeutel Exp $
  */
-public class OriginEntryTestBase extends KualiTestBaseWithSpringOnly {
+public class OriginEntryTestBase extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryTestBase.class);
 
     protected BeanFactory beanFactory;
