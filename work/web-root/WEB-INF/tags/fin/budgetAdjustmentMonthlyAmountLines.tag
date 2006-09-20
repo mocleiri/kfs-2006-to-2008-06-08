@@ -36,10 +36,10 @@
             <tr>
                 <td colspan="4" class="tab-subhead" style="border-right: none;">Monthly Lines 
                   <c:if test="${isOpen == 'true' || isOpen == 'TRUE'}">
-                    <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-hide.gif" alt="hide" styleClass="tinybutton"  styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
+                    <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-hide.gif" alt="hide" title="toggle" styleClass="tinybutton"  styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
                  </c:if>
                  <c:if test="${isOpen != 'true' && isOpen != 'TRUE'}">
-                   <html:image  property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-show.gif" alt="show" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
+                   <html:image  property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-show.gif" alt="show" title="toggle" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
                  </c:if>
                 </td>
             </tr>
