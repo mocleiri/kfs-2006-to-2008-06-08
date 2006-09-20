@@ -66,6 +66,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.BusinessRule;
 import org.kuali.core.document.Document;
@@ -89,6 +91,8 @@ import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
  * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class AuxiliaryVoucherDocumentRule extends TransactionalDocumentRuleBase {
+    private static Log LOG = LogFactory.getLog(AuxiliaryVoucherDocumentRule.class);
+
     /**
      * Convenience method for accessing the most-likely requested security grouping
      * 
@@ -683,8 +687,8 @@ public class AuxiliaryVoucherDocumentRule extends TransactionalDocumentRuleBase 
         StringBuffer combinedCodes = new StringBuffer("objectType=").append(accountingLine.getObjectType().getCode())
             .append(";objSubTyp=").append(accountingLine.getObjectCode().getFinancialObjectSubType().getCode())
             .append(";objLevel=").append(accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode());
-
-        retval = succeedsRule(RESTRICTED_COMBINED_CODES, combinedCodes.toString());
+        
+        retval = !getParameterRule(RESTRICTED_COMBINED_CODES).getParameterText().equals(combinedCodes.toString());
 
         if (!retval) {
             String errorObjects[] = { accountingLine.getObjectCode().getFinancialObjectCode(), accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode(), accountingLine.getObjectCode().getFinancialObjectSubType().getCode(), accountingLine.getObjectType().getCode() };
