@@ -30,8 +30,10 @@ import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.module.financial.document.CashReceiptDocument;
+import org.kuali.module.financial.util.CashReceiptFamilyTestUtil;
 import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.TestsWorkflowViaDatabase;
@@ -58,7 +60,7 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
         crService = SpringServiceLocator.getCashReceiptService();
         docService = SpringServiceLocator.getDocumentService();
     }
-    
+
     public final void testGetCampusCodeForCashReceiptVerificationUnit_blankVerificationUnit() {
         boolean failedAsExpected = false;
 
@@ -445,8 +447,10 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
         crDoc.setCheckEntryMode(CashReceiptDocument.CHECK_ENTRY_TOTAL);
         crDoc.setTotalCashAmount(cashAmount);
         crDoc.setTotalCheckAmount(checkAmount);
-
+        
         crDoc.setCampusLocationCode(crService.getCampusCodeForCashReceiptVerificationUnit(workgroupName));
+        
+        crDoc.addSourceAccountingLine(CashReceiptFamilyTestUtil.buildSourceAccountingLine(crDoc.getFinancialDocumentNumber(), crDoc.getPostingYear(), crDoc.getNextSourceLineNumber()));
 
         try {
             docService.saveDocument(crDoc);
