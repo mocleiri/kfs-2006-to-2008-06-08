@@ -32,12 +32,14 @@ import org.kuali.module.kra.bo.BudgetUniversityCostShare;
 import org.kuali.module.kra.bo.BudgetUser;
 import org.kuali.module.kra.bo.UniversityCostSharePersonnel;
 import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests service methods in BudgetCostShareService.
  * 
  * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class BudgetCostShareServiceTest extends KualiTestBaseWithSession {
 
     private BudgetCostShareService budgetCostShareService;

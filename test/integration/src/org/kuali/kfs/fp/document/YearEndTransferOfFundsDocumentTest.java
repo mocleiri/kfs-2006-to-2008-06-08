@@ -28,6 +28,7 @@ import java.util.List;
 import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class is used to test YearEndTransferOfFundsDocument. Note that structurally, there is no difference between a
@@ -36,6 +37,7 @@ import org.kuali.test.parameters.TransactionalDocumentParameter;
  * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class YearEndTransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
     public static final String COLLECTION_NAME = "YearEndTransferOfFundsDocumentTest.collection1";
     public static final String USER_NAME = "user1";
