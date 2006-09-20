@@ -81,7 +81,6 @@ import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.document.AuxiliaryVoucherDocument;
 import org.kuali.module.financial.document.DistributionOfIncomeAndExpenseDocument;
-import org.kuali.module.financial.rules.stack.Lexical;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
@@ -681,10 +680,11 @@ public class AuxiliaryVoucherDocumentRule extends TransactionalDocumentRuleBase 
     private boolean isValidDocWithSubAndLevel(TransactionalDocument document, AccountingLine accountingLine) {
         boolean retval = true;
 
-        StackRuntimeRule rule = getStackRuntimeRule(RESTRICTED_COMBINED_CODES);
-        rule = rule.withLexical(new Lexical("objectType", accountingLine.getObjectType().getCode())).withLexical(new Lexical("objSubTyp", accountingLine.getObjectCode().getFinancialObjectSubType().getCode())).withLexical(new Lexical("objLevel", accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode()));
+        StringBuffer combinedCodes = new StringBuffer("objectType=").append(accountingLine.getObjectType().getCode())
+            .append(";objSubTyp=").append(accountingLine.getObjectCode().getFinancialObjectSubType().getCode())
+            .append(";objLevel=").append(accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode());
 
-        retval = rule.succeedsRule(new String());
+        retval = succeedsRule(RESTRICTED_COMBINED_CODES, combinedCodes.toString());
 
         if (!retval) {
             String errorObjects[] = { accountingLine.getObjectCode().getFinancialObjectCode(), accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode(), accountingLine.getObjectCode().getFinancialObjectSubType().getCode(), accountingLine.getObjectType().getCode() };
@@ -798,23 +798,4 @@ public class AuxiliaryVoucherDocumentRule extends TransactionalDocumentRuleBase 
         return valid;
     }
 
-
-    /**
-     * helper method that is more of a FactoryMethod which determines from the <code>{@link BusinessRule}</code> what kind of
-     * <code>{@link KualiParameterRule}</code> instance to create.
-     * 
-     * @param parameterName
-     * @return <code>{@link StackRuntimeRule}</code>
-     * @see org.kuali.core.service.impl.KualiConfigurationServiiceImpl#getApplicationParameterRule(String, String)
-     */
-    private StackRuntimeRule getStackRuntimeRule(String parameterName) {
-        StackRuntimeRule retval = null;
-        BusinessRule param = getKualiConfigurationService().getApplicationRule(getDefaultSecurityGrouping(), parameterName);
-
-        if (param.getRuleText() != null && param.getRuleText().startsWith(SHEBANG)) {
-            retval = new StackRuntimeRule(new KualiParameterRule(param.getRuleGroupName() + ":" + param.getRuleName(), param.getRuleText(), param.getRuleOperatorCode(), param.isFinancialSystemParameterActiveIndicator()));
-        }
-
-        return retval;
-    }
 }
