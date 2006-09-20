@@ -132,14 +132,22 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
 
     @TestsWorkflowViaDatabase
     final public void testCreateCashManagementDocument_cashDrawerAlreadyOpen() throws Exception {
+        
+        String testDocumentId = null;
         try {
             deleteIfExists(CMST_WORKGROUP);
             CashDrawer preDocCD = cashDrawerService.getByWorkgroupName(CMST_WORKGROUP, true);
             assertTrue(preDocCD.isClosed());
 
+            CashManagementDocument createdDoc = cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testCreate_cashDrawerAlreadyOpen", "cmst3");
+            assertNotNull(createdDoc);
+            testDocumentId = createdDoc.getFinancialDocumentNumber();
+            
             // force the drawer open
-            cashDrawerService.openCashDrawer(CMST_WORKGROUP, "foo");
+            cashDrawerService.openCashDrawer(CMST_WORKGROUP, testDocumentId);
+            saveDocument(createdDoc);
 
+            boolean failedAsExpected = false;
             // fail creating the document since the CashDrawer is already open
             try {
                 cashManagementService.createCashManagementDocument(CMST_WORKGROUP, "CMST_testCreate_validCollision 2", "cmst5");
@@ -147,14 +155,25 @@ public class CashManagementServiceTest extends KualiTestBaseWithSession {
             }
             catch (CashDrawerStateException e) {
                 // good
+                failedAsExpected = true;
             }
+            
+            assertEquals(failedAsExpected, true);
+            
+            //
+            // cancel empty CMDoc
+            //
+            cashManagementService.cancelCashManagementDocument(createdDoc);
+            
         }
         finally {
+            // cancel the document
+            cleanupCancel(testDocumentId);
+            
             // delete the cashDrawer you created
             deleteIfExists(CMST_WORKGROUP);
         }
     }
-
 
     @TestsWorkflowViaDatabase
     final public void testCancelCashManagementDocument_validEmpty() throws Exception {
