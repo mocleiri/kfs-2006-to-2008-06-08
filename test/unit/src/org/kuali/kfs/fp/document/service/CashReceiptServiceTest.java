@@ -30,9 +30,11 @@ import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.exceptions.ValidationException;
 import org.kuali.module.financial.document.CashReceiptDocument;
 import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.TestsWorkflowViaDatabase;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -57,10 +59,6 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
         docService = SpringServiceLocator.getDocumentService();
     }
     
-    public boolean doRollback() {
-        return false;
-    }
-
     public final void testGetCampusCodeForCashReceiptVerificationUnit_blankVerificationUnit() {
         boolean failedAsExpected = false;
 
@@ -190,6 +188,7 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
     }
 
 
+    @TestsWorkflowViaDatabase
     public final void testGetCashReceipts1_knownVerificationUnit_interimReceipts() throws Exception {
         final String workgroup = TEST_UNIT_NAME;
 
@@ -214,6 +213,7 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
         denatureCashReceipts(workgroup);
     }
 
+    @TestsWorkflowViaDatabase
     public final void testGetCashReceipts1_knownVerificationUnit_verifiedReceipts() throws Exception {
         final String workgroup = TEST_UNIT_NAME;
 
@@ -238,6 +238,7 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
         denatureCashReceipts(workgroup);
     }
 
+    @TestsWorkflowViaDatabase
     public final void testGetCashReceipts1_knownVerificationUnit_mixedReceipts() throws Exception {
         final String workgroup = TEST_UNIT_NAME;
 
@@ -346,6 +347,7 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
     }
 
 
+    @TestsWorkflowViaDatabase
     public final void testGetCashReceipts2_knownVerificationUnit_interimReceipts() throws Exception {
         final String workgroup = TEST_UNIT_NAME;
 
@@ -370,6 +372,7 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
         denatureCashReceipts(workgroup);
     }
 
+    @TestsWorkflowViaDatabase
     public final void testGetCashReceipts2_knownVerificationUnit_verifiedReceipts() throws Exception {
         final String workgroup = TEST_UNIT_NAME;
 
@@ -394,6 +397,7 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
         denatureCashReceipts(workgroup);
     }
 
+    @TestsWorkflowViaDatabase
     public final void testGetCashReceipts2_knownVerificationUnit_mixedReceipts() throws Exception {
         final String workgroup = TEST_UNIT_NAME;
 
@@ -444,8 +448,13 @@ public class CashReceiptServiceTest extends KualiTestBaseWithSession {
 
         crDoc.setCampusLocationCode(crService.getCampusCodeForCashReceiptVerificationUnit(workgroupName));
 
-        docService.saveDocument(crDoc);
-
+        try {
+            docService.saveDocument(crDoc);
+        }
+        catch(ValidationException e) {
+            // If the business rule evaluation fails then give us more info for debugging this test.
+            fail(e.getMessage() + ", " + GlobalVariables.getErrorMap());
+        }
         return crDoc;
     }
 }
