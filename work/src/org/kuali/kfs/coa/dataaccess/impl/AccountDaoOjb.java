@@ -134,7 +134,6 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
         Collection accounts = getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Account.class, criteria));
         for (Iterator iter = accounts.iterator(); iter.hasNext();) {
             Account account = (Account) iter.next();
-            SpringServiceLocator.getKualiUserService().linkInstitutionalUserFieldsPerBo(account);              
             AccountResponsibility accountResponsibility = new AccountResponsibility(AccountResponsibility.FISCAL_OFFICER_RESPONSIBILITY, new KualiDecimal("0"), new KualiDecimal("0"), "", account);
             fiscalOfficerResponsibilities.add(accountResponsibility);
         }
@@ -158,7 +157,6 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
                 if (ObjectUtils.isNotNull(accountDelegate.getAccountDelegateStartDate())) {
                     if (!accountDelegate.getAccountDelegateStartDate().after(new Date())) {
                         Account account = getByPrimaryId(accountDelegate.getChartOfAccountsCode(), accountDelegate.getAccount().getAccountNumber());
-                        SpringServiceLocator.getKualiUserService().linkInstitutionalUserFieldsPerBo(account);
                         AccountResponsibility accountResponsibility = new AccountResponsibility(AccountResponsibility.DELEGATED_RESPONSIBILITY, accountDelegate.getFinDocApprovalFromThisAmt(), accountDelegate.getFinDocApprovalToThisAmount(), accountDelegate.getFinancialDocumentTypeCode(), account);
                         delegatedResponsibilities.add(accountResponsibility);
                     }
