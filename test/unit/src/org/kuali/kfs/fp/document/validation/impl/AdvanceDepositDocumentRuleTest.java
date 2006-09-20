@@ -31,6 +31,7 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.document.AdvanceDepositDocument;
 import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.WithTestSpringContext;
 
 
 /**
@@ -38,6 +39,7 @@ import org.kuali.test.KualiTestBaseWithSession;
  * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class AdvanceDepositDocumentRuleTest extends KualiTestBaseWithSession {
 
     /**
