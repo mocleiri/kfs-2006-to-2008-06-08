@@ -48,9 +48,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @see org.kuali.module.chart.service.OrganizationService#getByPrimaryId(java.lang.String, java.lang.String)
      */
     public Org getByPrimaryId(String chartOfAccountsCode, String organizationCode) {
-        Org org = organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
-        kualiUserService.linkInstitutionalUserFieldsPerBo(org);
-        return org;
+        return organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
     }
 
     /**
@@ -60,9 +58,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @see org.kuali.module.chart.service.impl.OrganizationServiceImpl#getByPrimaryId(java.lang.String, java.lang.String)
      */
     public Org getByPrimaryIdWithCaching(String chartOfAccountsCode, String organizationCode) {
-        Org org = organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
-        kualiUserService.linkInstitutionalUserFieldsPerBo(org);
-        return org;
+        return organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
     }
 
     /**
@@ -105,9 +101,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             throw new IllegalArgumentException("String parameter organizationCode was null or blank.");
         }
 
-        List accountList = organizationDao.getActiveAccountsByOrg(chartOfAccountsCode, organizationCode);
-        kualiUserService.linkInstitutionalUserFields(accountList);
-        return accountList;
+        return organizationDao.getActiveAccountsByOrg(chartOfAccountsCode, organizationCode);
     }
 
     /**
@@ -123,9 +117,6 @@ public class OrganizationServiceImpl implements OrganizationService {
             throw new IllegalArgumentException("String parameter organizationCode was null or blank.");
         }
 
-        List orgList = organizationDao.getActiveChildOrgs(chartOfAccountsCode, organizationCode);
-        kualiUserService.linkInstitutionalUserFields(orgList);
-        return orgList;        
+        return organizationDao.getActiveChildOrgs(chartOfAccountsCode, organizationCode);
     }
-
 }
