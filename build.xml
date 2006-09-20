@@ -82,6 +82,18 @@
 		<condition property="workflow.url" value="${prod.environment.url}en-${build.environment}">
 			<equals arg1="${build.environment}" arg2="ptd" />
 		</condition>
+		<condition property="base.url" value="${prod.environment.url}">
+			<equals arg1="${build.environment}" arg2="gl" />
+		</condition>
+		<condition property="application.url" value="${prod.environment.url}${ant.project.name}-${build.environment}">
+			<equals arg1="${build.environment}" arg2="gl" />
+		</condition>
+		<condition property="cas.url" value="${prod.environment.url}cas-${build.environment}">
+			<equals arg1="${build.environment}" arg2="gl" />
+		</condition>
+		<condition property="workflow.url" value="${prod.environment.url}en-${build.environment}">
+			<equals arg1="${build.environment}" arg2="gl" />
+		</condition>
 		<property name="base.url" value="${test.environment.url}" />
 		<property name="application.url" value="${test.environment.url}${ant.project.name}-${build.environment}" />
 		<property name="cas.url" value="${test.environment.url}cas-unt" />
