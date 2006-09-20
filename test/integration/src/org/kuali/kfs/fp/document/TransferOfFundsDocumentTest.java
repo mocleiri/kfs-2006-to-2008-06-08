@@ -33,6 +33,7 @@ import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.test.parameters.AccountingLineParameter;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.workflow.WorkflowTestUtils;
 
 import edu.iu.uis.eden.EdenConstants;
@@ -43,6 +44,7 @@ import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
  * 
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
+@WithTestSpringContext
 public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
     public static final String COLLECTION_NAME = "TransferOfFundsDocumentTest.collection1";
     public static final String USER_NAME = "user1";
