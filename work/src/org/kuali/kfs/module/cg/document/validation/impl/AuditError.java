@@ -25,7 +25,7 @@ package org.kuali.module.kra.util;
 /**
  * KRA Audit Error class.
  * 
- * @author KRA (kualidev@oncourse.iu.edu)
+ * @author KRA ()
  */
 public class AuditError {
 
