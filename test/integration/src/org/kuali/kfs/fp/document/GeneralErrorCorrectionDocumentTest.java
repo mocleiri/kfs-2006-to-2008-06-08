@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import org.kuali.test.parameters.AccountingLineParameter;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 import org.kuali.test.WithTestSpringContext;
@@ -67,7 +68,7 @@ public class GeneralErrorCorrectionDocumentTest extends TransactionalDocumentTes
      */
     public List getTargetAccountingLineParametersFromFixtures() {
         ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE1).createObject());
+        list.add(customizeAccountingLineParameter((AccountingLineParameter)getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE1).createObject()));
         return list;
     }
 
@@ -77,7 +78,7 @@ public class GeneralErrorCorrectionDocumentTest extends TransactionalDocumentTes
      */
     public List getSourceAccountingLineParametersFromFixtures() {
         ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE1).createObject());
+        list.add(customizeAccountingLineParameter((AccountingLineParameter)getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE1).createObject()));
         return list;
     }
 
@@ -88,9 +89,13 @@ public class GeneralErrorCorrectionDocumentTest extends TransactionalDocumentTes
     public String getUserName() {
         return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
     }
-
+    private AccountingLineParameter customizeAccountingLineParameter(AccountingLineParameter line){
+        line.setReferenceNumber("123");
+        line.setReferenceOriginCode("01");
+        return line;
+    }
     /*
-     * OLD CODE FOR FUTURE CONSIDERATION WHEN WE GET TO THIS DOCUMENT This should probably go in the rule test class
+     * TODO: OLD CODE FOR FUTURE CONSIDERATION WHEN WE GET TO THIS DOCUMENT This should probably go in the rule test class
      * 
      * public void testFailBusinessRules() throws WorkflowException, IllegalObjectStateException, Exception {
      * GeneralErrorCorrectionDocument documentOne = getBasicDocument(); SourceAccountingLine sourceAccountingLineOne =
