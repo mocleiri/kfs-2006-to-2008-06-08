@@ -128,13 +128,11 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
                 ple.refreshNonUpdateableReferences();
                 if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getSufficientFundsCode().getCode().equals(Constants.SF_TYPE_CASH_AT_ACCOUNT)) {
                     //is a cash account
-                    //TODO Need to replace this with sys params instead of hard coded strings
                     if (flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinancialCashObjectCode()) == null
                             && flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinAccountsPayableObjectCode()) == null) {
                         //does not have a flexible offset for cash or liability, set the object code to cash and add to list of PLEs to check for SF
                         
                         ple = (GeneralLedgerPendingEntry)ObjectUtils.deepCopy(ple);
-                        //TODO replace with sys param instead of hard coded string
                         ple.setFinancialObjectCode(ple.getChart().getFinancialCashObjectCode());
                         ple.setTransactionDebitCreditCode(ple.getTransactionDebitCreditCode().equals(Constants.GL_DEBIT_CODE) ? Constants.GL_CREDIT_CODE : Constants.GL_DEBIT_CODE);
                         ples.add(ple);
