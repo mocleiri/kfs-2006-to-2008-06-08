@@ -114,6 +114,7 @@
                 <control>
                     <text size="2" />
                 </control>
+                <summary>Chart Of Accounts Code</summary>
             </attributeReference>
 
             <attribute name="organizationCode" forceUppercase="true">
@@ -130,9 +131,7 @@
                     <text size="4" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Organization Code</summary>
                 <description>The code used to represent an organization.</description>
             </attribute>
 
@@ -150,9 +149,7 @@
                     <text size="40" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Organization Name</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -234,9 +231,7 @@
                     <text size="2" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Responsibility Center Code</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -278,9 +273,7 @@
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.OrgTypeValuesFinder" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Organization Type</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -463,9 +456,7 @@
        	 		<control>
         	 	 <text size="2" />
         		</control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Reports to Chart Code</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -475,9 +466,7 @@
                 <label>Reports to Organization</label>
                 <shortLabel>Rpts to Org</shortLabel>
                 <required>true</required>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Reports to Organization</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -510,9 +499,7 @@
             <attributeReference name="organizationActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean">
                 <label>Active</label>
                 <shortLabel>Act.</shortLabel>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Organization Active Indicator</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
