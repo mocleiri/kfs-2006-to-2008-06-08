@@ -25,7 +25,9 @@ package org.kuali.module.financial.service;
 import java.lang.reflect.InvocationTargetException;
 
 import org.kuali.core.util.SpringServiceLocator;
+import static org.kuali.core.util.SpringServiceLocator.KUALI_CONFIGURATION_SERVICE;
 import org.kuali.module.financial.bo.OffsetAccount;
+import static org.kuali.test.MockServiceUtils.createMockConfigurationServiceForFlexibleOffsetEnabled;
 import org.kuali.test.KualiTestBaseWithFixtures;
 import org.kuali.test.WithTestSpringContext;
 
@@ -44,7 +46,7 @@ public class FlexibleOffsetAccountServiceTest extends KualiTestBaseWithFixtures 
     }
 
     public void testGetByPrimaryId_valid() throws NoSuchMethodException, InvocationTargetException {
-        service.setKualiConfigurationService(createMockConfigurationService(true));
+        SpringServiceLocator.mockService(KUALI_CONFIGURATION_SERVICE, createMockConfigurationServiceForFlexibleOffsetEnabled(true));
         OffsetAccount offsetAccount = service.getByPrimaryIdIfEnabled(getFixtureString("blChartOfAccounts"), getFixtureString("blFlexAccountNumber"), getFixtureString("tofOffsetObjectCode"));
         assertSparselyEqualFixture("offsetAccount1", offsetAccount);
         assertEquals(getFixtureString("blChartOfAccounts"), offsetAccount.getChart().getChartOfAccountsCode());
@@ -54,25 +56,26 @@ public class FlexibleOffsetAccountServiceTest extends KualiTestBaseWithFixtures 
     }
 
     public void testGetByPrimaryId_validDisabled() throws NoSuchMethodException, InvocationTargetException {
-        service.setKualiConfigurationService(createMockConfigurationService(false));
+        SpringServiceLocator.mockService(KUALI_CONFIGURATION_SERVICE, createMockConfigurationServiceForFlexibleOffsetEnabled(false));
         assertNull(service.getByPrimaryIdIfEnabled(getFixtureString("blChartOfAccounts"), getFixtureString("blFlexAccountNumber"), getFixtureString("tofOffsetObjectCode")));
     }
 
     public void testGetByPrimaryId_invalid() {
-        service.setKualiConfigurationService(createMockConfigurationService(true));
+        SpringServiceLocator.mockService(KUALI_CONFIGURATION_SERVICE, createMockConfigurationServiceForFlexibleOffsetEnabled(true));
         assertNull(service.getByPrimaryIdIfEnabled("XX", "XX", "XX"));
     }
 
-    public void testSingletonService() {
+    public void testMockService() {
         assertSame(service, SpringServiceLocator.getFlexibleOffsetAccountService());
-        SpringServiceLocator.getFlexibleOffsetAccountService().setKualiConfigurationService(createMockConfigurationService(true));
+        SpringServiceLocator.mockService(KUALI_CONFIGURATION_SERVICE, createMockConfigurationServiceForFlexibleOffsetEnabled(true));
         assertEquals(true, SpringServiceLocator.getFlexibleOffsetAccountService().getEnabled());
-        SpringServiceLocator.getFlexibleOffsetAccountService().setKualiConfigurationService(createMockConfigurationService(false));
+        SpringServiceLocator.restoreServicesIfMocked();
+        SpringServiceLocator.mockService(KUALI_CONFIGURATION_SERVICE, createMockConfigurationServiceForFlexibleOffsetEnabled(false));
         assertEquals(false, SpringServiceLocator.getFlexibleOffsetAccountService().getEnabled());
     }
 
     /**
-     * Integration test to the database parameter table.
+     * Integration test to the database parameter table (not the mock configuration service).
      */
     public void testGetEnabled() {
         // This tests that no RuntimeException is thrown because the parameter is missing from the database
