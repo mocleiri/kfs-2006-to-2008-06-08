@@ -37,7 +37,7 @@ import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.SubAccount;
 
 /**
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 public class BudgetConstructionHeader extends BusinessObjectBase {
 
