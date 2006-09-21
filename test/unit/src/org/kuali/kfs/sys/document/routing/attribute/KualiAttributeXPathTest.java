@@ -38,7 +38,7 @@ import edu.iu.uis.eden.routeheader.DocumentContent;
 /**
  * This class...
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 @WithTestSpringContext
 public class KualiAttributeXPathTest extends KualiTestBaseWithFixtures {

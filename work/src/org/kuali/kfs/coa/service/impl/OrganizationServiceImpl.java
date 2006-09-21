@@ -32,7 +32,7 @@ import org.kuali.module.chart.service.OrganizationService;
 /**
  * This class is the service implementation for the Org structure. This is the default implementation, that is delivered with Kuali.
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationDao organizationDao;
