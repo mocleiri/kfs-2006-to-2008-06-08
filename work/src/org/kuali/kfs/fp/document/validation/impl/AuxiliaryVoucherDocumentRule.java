@@ -88,7 +88,7 @@ import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 /**
  * Business rule(s) applicable to <code>{@link AuxiliaryVoucherDocument}</code>.
  * 
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Team ()
  */
 public class AuxiliaryVoucherDocumentRule extends TransactionalDocumentRuleBase {
     private static Log LOG = LogFactory.getLog(AuxiliaryVoucherDocumentRule.class);
