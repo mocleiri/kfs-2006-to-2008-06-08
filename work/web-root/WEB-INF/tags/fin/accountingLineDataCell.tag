@@ -7,6 +7,8 @@
 
 <%@ attribute name="dataCellCssClass" required="true"
               description="The name of the CSS class for this data cell." %>
+<%@ attribute name="dataFieldCssClass" required="false"
+              description="The name of the CSS class for this data field." %>
 <%@ attribute name="field" required="true"
               description="The name of the field of the accounting line being edited or displayed by this cell.
               Combined with the accountingLine, this identifies the value (i.e., the data) of this cell." %>
@@ -86,6 +88,7 @@
 
 <%@ attribute name="rowSpan" required="false"
               description="row span for the data cell" %>
+<%@ attribute name="anchor" required="false" description="adds a named anchor inside the header cell" %>
               
            
 
@@ -95,6 +98,9 @@
 </c:if>
 <c:if test="${empty conversionField}">
     <c:set var="conversionField" value="${field}"/>
+</c:if>
+<c:if test="${empty dataFieldCssClass}">
+    <c:set var="dataFieldCssClass" value=""/>
 </c:if>
 <c:choose>
     <c:when test="${empty boPackageName}">
@@ -109,6 +115,9 @@
 <%-- test to see if we are dealing with the extra JV fields here --%>
 <c:set var="specialRequiredField" value="${(field eq 'referenceOriginCode') || (field eq 'referenceNumber') || (field eq 'referenceTypeCode')}" />
 <td class="${dataCellCssClass}" valign="top" rowspan="${rowSpan}">
+    <c:if test="${not empty anchor}">
+    	<a name="${anchor}"></a>
+    </c:if>
 <span class="nowrap">
     <c:if test="${!empty labelFontWeight}">
         <span style="font-weight: ${labelFontWeight}">
@@ -138,6 +147,7 @@
         onblur="${onblur}"
         readOnly="${readOnly}"
         readOnlyBody="true"
+        styleClass="${dataFieldCssClass}"
         >
         <fin:accountingLineReadOnlyCellProperty
             property="${cellProperty}"

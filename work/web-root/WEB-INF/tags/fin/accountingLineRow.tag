@@ -124,6 +124,7 @@
     readOnly="${readOnly&&(empty editableFields['chartOfAccountsCode'])}"
     displayHidden="${displayHidden}"
     accountingLineValuesMap="${accountingLineValuesMap}"
+    anchor="accounting${actionInfix}${actionGroup}LineAnchor${0 + accountingLineIndex}"
     />
 
 <fin:accountingLineDataCell
@@ -266,6 +267,7 @@
             field="amount"
             readOnly="${readOnly&&(empty editableFields['amount'])}"
             rowSpan="${rowCount}"
+            dataFieldCssClass="amount"
             />
         <fin:accountingLineDataCell
             dataCellCssClass="${dataCellCssClass}"
@@ -274,6 +276,7 @@
             field="amount"
             readOnly="${readOnly&&(empty editableFields['amount'])}"
             rowSpan="${rowCount}"
+            dataFieldCssClass="amount"
             />
     </c:when>
     <c:when test="${currentBaseAmount}" >
@@ -286,6 +289,7 @@
             field="currentBudgetAdjustmentAmount"
             readOnly="${readOnly&&(empty editableFields['currentBudgetAdjustmentAmount'])}"
             rowSpan="${rowCount}"
+            dataFieldCssClass="amount"
             />
         <fin:accountingLineDataCell
             dataCellCssClass="${dataCellCssClass}"
@@ -296,6 +300,7 @@
             field="baseBudgetAdjustmentAmount"
             readOnly="${(readOnly&&(empty editableFields['baseBudgetAdjustmentAmount']))||!KualiForm.editingMode['baseAmtEntry']}"
             rowSpan="${rowCount}"
+            dataFieldCssClass="amount"
             />
     </c:when>
     <c:otherwise>
@@ -308,6 +313,7 @@
             readOnly="${readOnly&&(empty editableFields['amount'])}"
             displayHidden="${displayHidden}"
             rowSpan="${rowCount}"
+            dataFieldCssClass="amount"
             />
     </c:otherwise>
 </c:choose>
