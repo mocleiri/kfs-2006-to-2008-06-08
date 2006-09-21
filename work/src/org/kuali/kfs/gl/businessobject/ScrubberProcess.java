@@ -273,6 +273,9 @@ public class ScrubberProcess {
     private void performDemerger(OriginEntryGroup errorGroup, OriginEntryGroup validGroup) {
         LOG.debug("performDemerger() started");
 
+        // Without this step, the job fails with Optimistic Lock Exceptions
+        persistenceService.getPersistenceBroker().clearCache();
+
         DemergerReportData demergerReport = new DemergerReportData();
 
         // Read all the documents from the error group and move all non-generated
