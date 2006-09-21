@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * KRA Audit Cluster; container for related set of audit errors.
  * 
- * @author KRA (kualidev@oncourse.iu.edu)
+ * @author KRA ()
  */
 public class AuditCluster {
 
