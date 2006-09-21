@@ -37,10 +37,12 @@ import org.kuali.core.rule.TransactionalDocumentRuleTestBase;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
+import static org.kuali.core.util.SpringServiceLocator.KUALI_CONFIGURATION_SERVICE;
 import org.kuali.module.financial.document.TransferOfFundsDocument;
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import static org.kuali.test.MockServiceUtils.createMockConfigurationServiceForFlexibleOffsetEnabled;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.parameters.AccountingLineParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
@@ -94,14 +96,6 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
         return FIXTURE_COLLECTION_NAMES;
     }
 
-    /**
-     * @see KualiTestBaseWithFixtures#isMockConfigurationServiceRequired()
-     */
-    @Override
-    protected boolean isMockConfigurationServiceRequired() {
-        return true;
-    }
-
     // /////////////////////////////////////////////////////////////////////////
     // Fixture Methods Start Here //
     // /////////////////////////////////////////////////////////////////////////
@@ -120,7 +114,13 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     @Override
     protected final TargetAccountingLine getValidObjectSubTypeTargetLine() throws Exception {
-        return (TargetAccountingLine) getTargetLineParameter1().createLine();
+        return (TargetAccountingLine) makeObjectTypeAndSubTypeValid((TargetAccountingLine) getTargetLineParameter1().createLine());
+    }
+    
+    private AccountingLine makeObjectTypeAndSubTypeValid(AccountingLine line) {
+        line.setFinancialObjectCode("1698"); // IN type and MT sub-type on UA chart
+        line.refresh();
+        return line;
     }
 
     @Override
@@ -166,7 +166,11 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
 
     @Override
     protected final SourceAccountingLine getInvalidObjectTypeSourceLine() throws Exception {
-        return (SourceAccountingLine) getSourceLineParameter3().createLine();
+        SourceAccountingLine line = (SourceAccountingLine) getSourceLineParameter3().createLine();
+        line.setFinancialObjectCode("9889");
+        line.refresh();
+        assertEquals("need FB obj type because it is invalid", "FB", line.getObjectCode().getFinancialObjectTypeCode());
+        return line;
     }
 
     @Override
@@ -240,7 +244,8 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
     @Override
     protected final TransactionalDocument createDocumentUnbalanced() throws Exception {
         TransferOfFundsDocument retval = (TransferOfFundsDocument) createDocument();
-        retval.setSourceAccountingLines(getInvalidObjectSubTypeSourceLines());
+        retval.addSourceAccountingLine((SourceAccountingLine) makeObjectTypeAndSubTypeValid(getValidObjectCodeSourceLine()));
+        retval.addSourceAccountingLine((SourceAccountingLine) makeObjectTypeAndSubTypeValid(getValidObjectCodeSourceLine()));
         retval.addTargetAccountingLine(getValidObjectSubTypeTargetLine());
         return retval;
     }
@@ -568,12 +573,12 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
     }
 
     public void testProcessGenerateGeneralLedgerPendingEntries_validSourceExpenseFlexibleOffset() throws Exception {
-        SpringServiceLocator.getFlexibleOffsetAccountService().setKualiConfigurationService(createMockConfigurationService(true));
+        SpringServiceLocator.mockService(KUALI_CONFIGURATION_SERVICE, createMockConfigurationServiceForFlexibleOffsetEnabled(true));
         testProcessGenerateGeneralLedgerPendingEntries(createLineFromFixture("flexibleExpenseSourceLine"), "expectedFlexibleExplicitSourcePendingEntryForExpense", "expectedFlexibleOffsetSourcePendingEntry");
     }
 
     public void testProcessGenerateGeneralLedgerPendingEntries_validSourceExpenseMissingOffsetDefinition() throws Exception {
-        SpringServiceLocator.getFlexibleOffsetAccountService().setKualiConfigurationService(createMockConfigurationService(true));
+        SpringServiceLocator.mockService(KUALI_CONFIGURATION_SERVICE, createMockConfigurationServiceForFlexibleOffsetEnabled(true));
         testProcessGenerateGeneralLedgerPendingEntries(createDocumentFromParameter("tof2000documentParameter"), createLineFromFixture("flexibleExpenseSourceLine"), "expectedFlexibleExplicitSourcePendingEntryForExpense", "expectedFlexibleOffsetSourcePendingEntryMissingOffsetDefinition", false);
         assertGlobalErrorMapContains(Constants.GENERAL_LEDGER_PENDING_ENTRIES_TAB_ERRORS, KeyConstants.ERROR_DOCUMENT_NO_OFFSET_DEFINITION);
     }
@@ -1311,6 +1316,18 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
         AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
 
         assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
+    }
+    
+    @Override
+    public void testProcessGenerateGeneralLedgerPendingEntries_validSourceAsset() throws Exception {
+        // Override this test to not run; it's invalid because TOF doesn't allow assets.  (TOF allows income.)
+        // todo: stop inheriting test methods
+    }
+
+    @Override
+    public void testProcessGenerateGeneralLedgerPendingEntries_validTargetAsset() throws Exception {
+        // Override this test to not run; it's invalid because TOF doesn't allow assets.  (TOF allows income.)
+        // todo: stop inheriting test methods
     }
 
     // /////////////////////////////////////////////////////////////////////////
