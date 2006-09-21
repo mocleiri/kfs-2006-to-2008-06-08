@@ -41,8 +41,6 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
- * @author Kuali General Ledger Team <kualigltech@oncourse.iu.edu>
- * @version $Id: ScrubberServiceImpl.java,v 1.96 2006-06-16 01:12:44 jsissom Exp $
  */
 
 public class ScrubberServiceImpl implements ScrubberService, BeanFactoryAware {
