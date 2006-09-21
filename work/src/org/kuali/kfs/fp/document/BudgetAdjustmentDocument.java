@@ -52,7 +52,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 /**
  * This is the business object that represents the BudgetAdjustment document in Kuali.
  * 
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Team ()
  */
 public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetAdjustmentDocument.class);
