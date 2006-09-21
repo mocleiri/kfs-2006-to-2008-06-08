@@ -30,7 +30,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 
 /**
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 public class Chart extends BusinessObjectBase {
 

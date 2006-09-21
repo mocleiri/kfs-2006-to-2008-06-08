@@ -35,7 +35,7 @@ import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.KualiDecimal;
 
 /**
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 public class Delegate extends BusinessObjectBase {
 
