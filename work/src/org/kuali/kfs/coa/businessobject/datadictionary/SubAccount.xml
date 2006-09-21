@@ -118,10 +118,12 @@
                 <control>
                     <text size="2" />
                 </control>
+                <summary>Chart Of Accounts Code</summary>
             </attributeReference>
 
             <attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber">
                 <required>true</required>
+                <summary>Account Number</summary>
             </attributeReference>
 
             <attribute name="subAccountNumber" forceUppercase="true">
@@ -138,9 +140,7 @@
                     <text size="5" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Sub-Account Number</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -160,9 +160,7 @@
                     <text size="40" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Sub-Account Name</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -175,9 +173,7 @@
                 <control>
                     <text size="2" />
                 </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Financial Reporting Chart Code</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -187,9 +183,7 @@
                 <label>Financial Reporting Org Code</label>
                 <shortLabel>Org</shortLabel>
                 <required>false</required>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Financial Reporting Org Code</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -199,9 +193,7 @@
                 <label>Financial Reporting Code</label>
                 <shortLabel>Fin. Rpt. Code</shortLabel>
                 <required>false</required>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Financial Reporting Code</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
