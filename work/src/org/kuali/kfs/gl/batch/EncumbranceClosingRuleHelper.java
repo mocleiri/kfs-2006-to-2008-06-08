@@ -40,8 +40,6 @@ import org.kuali.module.gl.util.ObjectHelper;
  * A helper class which contains the more complicated logic involved in the year end encumbrance closing process. This logic is
  * likely going to need to be modular which is why it's in its own class.
  * 
- * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id$
  */
 
 public class EncumbranceClosingRuleHelper {
@@ -130,18 +128,12 @@ public class EncumbranceClosingRuleHelper {
 
             // the sub fund group must exist for the prior year account and the
             // encumbrance must not be closed.
-            SubFundGroup subFundGroup = subFundGroupService.getByPrimaryId(priorYearAccount.getSubFundGroupCode());
-            if (null != subFundGroup && Constants.CONTRACTS_AND_GRANTS.equals(subFundGroup.getSubFundGroupCode())) {
-
+            if (priorYearAccount.isInCg()) {
                 return isEncumbranceClosed(encumbrance);
-
             }
             else {
-
                 return false;
-
             }
-
         }
 
         return false;
@@ -199,7 +191,7 @@ public class EncumbranceClosingRuleHelper {
 
         if (null != subFundGroup) {
 
-            if (!Constants.CONTRACTS_AND_GRANTS.equals(subFundGroup.getFundGroupCode())) {
+            if (!priorYearAccount.isInCg()) {
 
                 return false;
 
@@ -214,14 +206,15 @@ public class EncumbranceClosingRuleHelper {
 
         // I think this is redundant to the statement a few lines above here.
         // In any case, the sub fund group must not be contracts and grants.
-        if (!Constants.CONTRACTS_AND_GRANTS.equals(subFundGroup.getFundGroupCode())) {
+        if (!priorYearAccount.isInCg()) {
 
             return false;
 
         }
 
         String[] expenseObjectCodeTypes = kualiConfigurationService.getApplicationParameterValues("SYSTEM", "ExpenseObjectTypeCodes");
-        String[] encumbranceBalanceTypeCodes = kualiConfigurationService.getApplicationParameterValues("Kuali.GeneralLedger.EncumbranceClosing", "ExternalInternalAndPreEncumbranceBalanceTypeCodes");
+        String[] encumbranceBalanceTypeCodes = { "EX","IE","PE" };
+
         // the object type code must be an expense and the encumbrance balance type code must correspond to an internal, external or
         // pre-encumbrance
         if (!(ArrayUtils.contains(expenseObjectCodeTypes, objectTypeCode) && ArrayUtils.contains(encumbranceBalanceTypeCodes, encumbrance.getBalanceTypeCode()))) {
