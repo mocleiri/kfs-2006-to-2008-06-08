@@ -40,8 +40,8 @@ import org.kuali.module.gl.dao.OriginEntryGroupDao;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
- * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupDaoOjb.java,v 1.15 2006-09-06 06:50:17 abyrne Exp $ TODO Oracle Specific code here
+ * @author 
+ * @version $Id: OriginEntryGroupDaoOjb.java,v 1.15.4.1 2006-09-21 04:18:41 abyrne Exp $ TODO Oracle Specific code here
  */
 public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryGroupDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupDaoOjb.class);
@@ -71,6 +71,17 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
         sqlCommand(sql);
     }
 
+    public Collection<OriginEntryGroup> getGroupsFromSourceForDate(String sourceCode, Date date) {
+        LOG.debug("getGroupsFromSourceForDay() started");
+
+        Criteria criteria = new Criteria();
+        criteria.addEqualTo(DATE, date);
+        criteria.addEqualTo(SOURCE_CODE, sourceCode);
+        
+        return getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(OriginEntryGroup.class, criteria));
+        
+    }
+    
     /**
      * 
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getOlderGroups(Date)
