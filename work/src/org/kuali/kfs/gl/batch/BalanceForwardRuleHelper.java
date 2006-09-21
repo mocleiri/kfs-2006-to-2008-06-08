@@ -39,8 +39,6 @@ import org.kuali.module.gl.util.FatalErrorException;
 import org.kuali.module.gl.util.ObjectHelper;
 
 /**
- * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id$
  */
 public class BalanceForwardRuleHelper {
 
@@ -50,7 +48,6 @@ public class BalanceForwardRuleHelper {
      * A container for the state of the balance forward process. The way state is handled is heavily dependent upon the way in which
      * YearEndServiceImpl.forwardBalancesForFiscalYear works.
      * 
-     * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
      */
     public static class BalanceForwardProcessState {
         private int globalReadCount;

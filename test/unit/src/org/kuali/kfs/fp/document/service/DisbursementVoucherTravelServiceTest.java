@@ -33,7 +33,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the DisbursementVoucherTravel service.
  * 
- * @author Kuali Financial Transactions (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions ()
  */
 @WithTestSpringContext
 public class DisbursementVoucherTravelServiceTest extends KualiTestBaseWithFixtures {
