@@ -280,7 +280,7 @@ public class Delegate extends BusinessObjectBase {
     }
 
     public UniversalUser getAccountDelegate() {
-        if (accountDelegate == null) {
+        if (accountDelegate == null || !accountDelegate.getPersonUniversalIdentifier().equals(accountDelegateSystemId))  {
             try {
                 accountDelegate = SpringServiceLocator.getKualiUserService().getUniversalUser(accountDelegateSystemId);
             } catch (UserNotFoundException unfe) {}

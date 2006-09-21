@@ -1109,7 +1109,7 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
 
 
     public UniversalUser getAccountFiscalOfficerUser() {
-        if (accountFiscalOfficerUser == null) {
+        if (accountFiscalOfficerUser == null || !accountFiscalOfficerUser.getPersonUniversalIdentifier().equals(accountFiscalOfficerSystemIdentifier)) {
             try {
                 accountFiscalOfficerUser = SpringServiceLocator.getKualiUserService().getUniversalUser(accountFiscalOfficerSystemIdentifier);
             } catch (UserNotFoundException unfe) {}
@@ -1127,7 +1127,7 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
     }
 
     public UniversalUser getAccountManagerUser() {
-        if (accountManagerUser == null) {
+        if (accountManagerUser == null || !accountManagerUser.getPersonUniversalIdentifier().equals(accountManagerSystemIdentifier)) {
             try {
                 accountManagerUser = SpringServiceLocator.getKualiUserService().getUniversalUser(accountManagerSystemIdentifier);
             } catch (UserNotFoundException unfe) {}
@@ -1145,7 +1145,7 @@ public class PriorYearAccount extends BusinessObjectBase implements AccountIntf 
 
 
     public UniversalUser getAccountSupervisoryUser() {
-        if (accountSupervisoryUser == null) {
+        if (accountSupervisoryUser == null || !accountSupervisoryUser.getPersonUniversalIdentifier().equals(accountsSupervisorySystemsIdentifier)) {
             try {
                 accountSupervisoryUser = SpringServiceLocator.getKualiUserService().getUniversalUser(accountsSupervisorySystemsIdentifier);
             } catch (UserNotFoundException unfe) {}

@@ -238,7 +238,7 @@ public class Chart extends BusinessObjectBase {
     }
 
     public UniversalUser getFinCoaManagerUniversal() {
-        if (finCoaManagerUniversal == null) {
+        if (finCoaManagerUniversal == null || !finCoaManagerUniversal.getPersonUniversalIdentifier().equals(finCoaManagerUniversalId))  {
             try {
                 finCoaManagerUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(finCoaManagerUniversalId);
             } catch (UserNotFoundException unfe) {}
