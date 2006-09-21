@@ -30,12 +30,14 @@ import org.kuali.module.kra.bo.BudgetNonpersonnelTest;
 import org.kuali.module.kra.bo.BudgetPeriod;
 import org.kuali.module.kra.bo.BudgetPeriodTest;
 import org.kuali.test.KualiTestBaseWithSpring;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests methods in BudgetOverviewFormHelper.
  * 
- * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Research Administration Team ()
  */
+@WithTestSpringContext
 public class BudgetCostShareFormHelperTest extends KualiTestBaseWithSpring {
 
     BudgetCostShareFormHelper budgetCostShareFormHelper;
