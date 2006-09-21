@@ -39,8 +39,6 @@ import org.kuali.module.gl.util.FatalErrorException;
 import org.kuali.module.gl.util.ObjectHelper;
 
 /**
- * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id$
  */
 public class BalanceForwardRuleHelper {
 
@@ -50,7 +48,6 @@ public class BalanceForwardRuleHelper {
      * A container for the state of the balance forward process. The way state is handled is heavily dependent upon the way in which
      * YearEndServiceImpl.forwardBalancesForFiscalYear works.
      * 
-     * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
      */
     public static class BalanceForwardProcessState {
         private int globalReadCount;
@@ -369,8 +366,8 @@ public class BalanceForwardRuleHelper {
                     // 1075 006020 (CASFGR-SUB-FUND-GRP-CD = 'SDCI '
                     // 1076 006030 OR 'PFCMR ')
 
-                    // Contract and grants balances.
-                    if ("CG".equals(subFundGroup.getFundGroupCode()) || ObjectHelper.isOneOf(subFundGroup.getSubFundGroupCode().trim(), new String[] { "SDCI", "PFCMR" })) {
+                    // Contract and grants balances.                    
+                    if (priorYearAccount.isInCg() || ObjectHelper.isOneOf(subFundGroup.getSubFundGroupCode().trim(), new String[] { "SDCI", "PFCMR" })) {
 
                         // 1077 006040 MOVE 'Y' TO WS-SELECT-ACTIVE-SW
 
@@ -752,7 +749,7 @@ public class BalanceForwardRuleHelper {
                         entry.setFinancialObjectTypeCode(balance.getObjectTypeCode());
 
                     }
-
+                                        
                     // 1247 007740 MOVE 'BB'
                     // 1248 007750 TO UNIV-FISCAL-PRD-CD.
 
@@ -1062,7 +1059,7 @@ public class BalanceForwardRuleHelper {
                     // 1349 008710 TO FIN-OBJ-TYP-CD OF GLEN-RECORD.
 
                     activeEntry.setFinancialObjectTypeCode(balance.getObjectTypeCode());
-
+                    
                     // 1350 008720 MOVE 'CB'
                     // 1351 008730 TO UNIV-FISCAL-PRD-CD OF GLEN-RECORD.
 
