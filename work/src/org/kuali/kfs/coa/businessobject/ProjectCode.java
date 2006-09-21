@@ -29,7 +29,7 @@ import org.kuali.core.bo.KualiCodeBase;
 import org.kuali.core.bo.user.KualiUser;
 
 /**
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 public class ProjectCode extends KualiCodeBase {
 
