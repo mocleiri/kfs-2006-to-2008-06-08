@@ -40,19 +40,26 @@ import org.kuali.core.bo.user.Options;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.OptionsService;
+import org.kuali.core.service.PersistenceService;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.batch.poster.PostTransaction;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
+import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.service.BalanceService;
+import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.PosterService;
 import org.kuali.module.gl.service.ReportService;
+import org.kuali.module.gl.service.ReversalService;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 import org.kuali.module.gl.util.BalanceEncumbranceReport;
 import org.kuali.module.gl.util.BalanceReport;
+import org.kuali.module.gl.util.GeneralLedgerPendingEntryReport;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.LedgerReport;
 import org.kuali.module.gl.util.NominalActivityClosingTransactionReport;
@@ -73,8 +80,6 @@ import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
- * @author Laran Evans <lc278@cornell.edu>
- * @version $Id$
  */
 public class ReportServiceImpl implements ReportService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ReportServiceImpl.class);
@@ -82,10 +87,13 @@ public class ReportServiceImpl implements ReportService {
     String batchReportsDirectory;
     String onlineReportsDirectory;
     private OriginEntryService originEntryService;
+    private OriginEntryGroupService originEntryGroupService;
     private DateTimeService dateTimeService;
     private BalanceService balanceService;
     private OptionsService optionsService;
+    private ReversalService reversalService;
     private KualiConfigurationService kualiConfigurationService;
+    private PersistenceService persistenceService;
 
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
@@ -99,12 +107,40 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
+     * @see org.kuali.module.gl.service.ReportService#generatePendingEntryReport(java.util.Date)
+     */
+    public void generatePendingEntryReport(Date runDate,OriginEntryGroup group) {
+        LOG.debug("generatePendingEntryReport() started");
+
+        GeneralLedgerPendingEntryReport glper = new GeneralLedgerPendingEntryReport();
+        glper.generateReport(runDate,batchReportsDirectory,sdf,originEntryService.getEntriesByGroupReportOrder(group));
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.gl.service.ReportService#generatePendingEntryLedgerSummaryReport(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
+     */
+    public void generatePendingEntryLedgerSummaryReport(Date runDate, OriginEntryGroup group) {
+        LOG.debug("generatePendingEntryLedgerSummaryReport() started");
+
+        LedgerReport ledgerReport = new LedgerReport();
+        LedgerEntryHolder ledgerEntries = new LedgerEntryHolder();
+
+        Collection g = new ArrayList();
+        g.add(group);
+
+        ledgerEntries = originEntryService.getSummaryByGroupId(g);
+
+        ledgerReport.generateReport(ledgerEntries, runDate, "GLPE Statistics Report", "glpe_ledger", batchReportsDirectory);
+    }
+
+    /**
      * 
      * @see org.kuali.module.gl.service.ReportService#generateSufficientFundsReport(java.util.Map, java.util.List, java.util.Date,
      *      int)
      */
     public void generateSufficientFundsReport(Map reportErrors, List reportSummary, Date runDate, int mode) {
-        LOG.debug("generateReport() started");
+        LOG.debug("generateSufficientFundsReport() started");
 
         String title = "Sufficient Funds Report ";
         String fileprefix = "sufficientFunds";
@@ -314,10 +350,9 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * 
-     * @see org.kuali.module.gl.service.ReportService#generateScrubberledgerSummaryReport(java.util.Date, java.util.Collection,
-     *      java.lang.String)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportBatch(java.util.Date, java.util.Collection)
      */
-    public void generateScrubberLedgerSummaryReport(Date runDate, Collection groups, String title) {
+    public void generateScrubberLedgerSummaryReportBatch(Date runDate, Collection groups) {
         LOG.debug("generateScrubberLedgerSummaryReport() started");
 
         LedgerReport ledgerReport = new LedgerReport();
@@ -327,6 +362,24 @@ public class ReportServiceImpl implements ReportService {
         }
 
         ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger", batchReportsDirectory);
+    }
+    
+    /**
+     * 
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportOnline(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
+     */
+    public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group) {
+        LOG.debug("generateScrubberLedgerSummaryReport() started");
+
+        LedgerReport ledgerReport = new LedgerReport();
+        LedgerEntryHolder ledgerEntries = new LedgerEntryHolder();
+
+        Collection g = new ArrayList();
+        g.add(group);
+
+        ledgerEntries = originEntryService.getSummaryByGroupId(g);
+
+        ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger_" + group.getId(), onlineReportsDirectory);
     }
 
     /**
@@ -416,6 +469,15 @@ public class ReportServiceImpl implements ReportService {
         rept.generateReport(i, runDate, "Scrubber Input Transactions with Bad Balance Types", "scrubber_badbal", batchReportsDirectory);
     }
 
+    public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup) {
+        LOG.debug("generateScrubberTransactionsOnline() started");
+
+        Iterator ti = originEntryService.getEntriesByGroupAccountOrder(validGroup);
+
+        TransactionListingReport rept = new TransactionListingReport();
+        rept.generateReport(ti, runDate, "Output Transaction Listing From the Scrubber", "scrubber_listing_" + validGroup, onlineReportsDirectory);        
+    }
+
     /**
      * 
      * @see org.kuali.module.gl.service.ReportService#generateScrubberRemovedTransactions(java.util.Date,
@@ -443,10 +505,8 @@ public class ReportServiceImpl implements ReportService {
         }
         else {
             balanceTypeCodes.add(year.getBudgetCheckingBalanceTypeCd());
-
-            // TODO these may need fields in the fs_option_t table
-            balanceTypeCodes.add("BB");
-            balanceTypeCodes.add("MB");
+            balanceTypeCodes.add(year.getBaseBudgetFinancialBalanceTypeCode());
+            balanceTypeCodes.add(year.getMonthlyBudgetFinancialBalanceTypeCode());
         }
 
         List balances = balanceService.getGlSummary(year.getUniversityFiscalYear(), balanceTypeCodes);
@@ -516,14 +576,14 @@ public class ReportServiceImpl implements ReportService {
     /**
      * 
      * @see org.kuali.module.gl.service.ReportService#generatePosterReversalLedgerSummaryReport(java.util.Date,
-     *      java.util.Collection)
+     *      java.util.Iterator)
      */
-    public void generatePosterReversalLedgerSummaryReport(Date runDate, Collection groups) {
+    public void generatePosterReversalLedgerSummaryReport(Date runDate, Iterator reversals) {
         LOG.debug("generatePosterReversalLedgerSummaryReport() started");
 
         LedgerEntryHolder ledgerEntries = new LedgerEntryHolder();
-        if (groups.size() > 0) {
-            ledgerEntries = originEntryService.getSummaryByGroupId(groups);
+        if (reversals.hasNext()) {
+            ledgerEntries = reversalService.getSummaryByDate(runDate);
         }
 
         LedgerReport ledgerReport = new LedgerReport();
@@ -645,6 +705,37 @@ public class ReportServiceImpl implements ReportService {
             }
         }
     }
+    
+    /**
+     * @see org.kuali.module.gl.service.ReportService#generatePosterReversalTransactionsListing(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
+     */
+    public void generatePosterReversalTransactionsListing(Date runDate, OriginEntryGroup originGroup) {
+        LOG.debug("generatePosterReversalTransactionsListing() started");
+
+        Iterator ti = originEntryService.getEntriesByGroupAccountOrder(originGroup);
+
+        TransactionListingReport report = new TransactionListingReport();
+        report.generateReport(ti, runDate, "Reversal Poster Transaction Listing", "poster_reversal_list", batchReportsDirectory);     
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.gl.service.ReportService#generatePosterErrorTransactionListing(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup, int)
+     */
+    public void generatePosterErrorTransactionListing(Date runDate, OriginEntryGroup group, int posterMode) {
+        LOG.debug("generatePosterErrorTransactionListing() started");
+
+        Iterator ti = originEntryService.getEntriesByGroupAccountOrder(group);
+
+        TransactionListingReport report = new TransactionListingReport();
+        if ( posterMode == PosterService.MODE_ENTRIES ) {
+            report.generateReport(ti, runDate, "Main Poster Error Transaction Listing", "poster_main_error_list", batchReportsDirectory);
+        } else if ( posterMode == PosterService.MODE_ICR ) {
+            report.generateReport(ti, runDate, "ICR Poster Error Transaction Listing", "poster_icr_error_list", batchReportsDirectory);
+        } else if ( posterMode == PosterService.MODE_REVERSAL ) {
+            report.generateReport(ti, runDate, "Reversal Poster Error Transaction Listing", "poster_reversal_error_list", batchReportsDirectory);            
+        }
+    }
 
     public void setOriginEntryService(OriginEntryService originEntryService) {
         this.originEntryService = originEntryService;
@@ -664,5 +755,21 @@ public class ReportServiceImpl implements ReportService {
 
     public void setKualiConfigurationService(KualiConfigurationService kcs) {
         kualiConfigurationService = kcs;
+    }
+
+    public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
+        this.originEntryGroupService = originEntryGroupService;
+    }
+    
+    public void setReversalService(ReversalService rs) {
+        reversalService = rs;
+    }
+
+    public PersistenceService getPersistenceService() {
+        return persistenceService;
+    }
+
+    public void setPersistenceService(PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
     }
 }
