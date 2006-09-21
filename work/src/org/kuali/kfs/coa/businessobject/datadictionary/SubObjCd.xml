@@ -66,22 +66,25 @@
         <attributes>
             <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear">
                 <required>true</required>
+                <summary>University Fiscal Year</summary>
             </attributeReference>
 
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
                 <control>
-                    <text size="2" />
+                    <text size="2" />                    
                 </control>
-
+				<summary>Chart Of Accounts Code</summary>
             </attributeReference>
 
             <attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
                 <required>true</required>
+                <summary>Object Code</summary>
             </attributeReference>
 
             <attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber">
                 <required>true</required>
+                <summary>Account Number</summary>
             </attributeReference>
 
             <attribute name="financialSubObjectCode" forceUppercase="true">
@@ -98,9 +101,7 @@
                     <text size="3" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Sub-Object Code</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -120,9 +121,7 @@
                     <text size="40" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Sub-Object Code Name</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
