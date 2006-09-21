@@ -82,8 +82,8 @@ import org.kuali.module.gl.web.struts.form.CorrectionForm;
 import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
- * @author Laran Evans <lc278@cornell.edu> Shawn Choo <schoo@indiana.edu>
- * @version $Id: CorrectionAction.java,v 1.46.2.10 2006-09-19 01:39:33 jsissom Exp $
+ * @author 
+ * @version $Id: CorrectionAction.java,v 1.46.2.11 2006-09-21 00:28:01 bnelson Exp $
  * 
  */
 public class CorrectionAction extends KualiDocumentActionBase {
