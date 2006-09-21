@@ -58,7 +58,11 @@ public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implemen
     
     @Override
     public boolean documentPerformsSufficientFundsCheck() {
-        return false;
+        if (isRecodeType()) {
+            return super.documentPerformsSufficientFundsCheck();
+        } else {
+            return false;
+        }
     }
 
     /**
