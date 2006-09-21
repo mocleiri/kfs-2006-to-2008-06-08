@@ -174,6 +174,8 @@ public class ScrubberProcess {
     public void scrubEntries(OriginEntryGroup group) {
         LOG.debug("scrubEntries() started");
 
+        // We are in report only mode if we pass a group to this method.
+        // if not, we are in batch mode and we scrub the backup group
         reportOnlyMode = (group != null);
 
         scrubberReportErrors = new HashMap<Transaction, List<Message>>();
@@ -196,6 +198,8 @@ public class ScrubberProcess {
             validGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_VALID, true, true, false);
             errorGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_ERROR, false, true, false);
             expiredGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_EXPIRED, false, true, false);
+        } else {
+            validGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_VALID, false, false, false);            
         }
 
         // get the origin entry groups to be processed by Scrubber
@@ -210,8 +214,10 @@ public class ScrubberProcess {
         LOG.debug("scrubEntries() number of groups to scrub: " + groupsToScrub.size());
 
         // generate the reports based on the origin entries to be processed by scrubber
-        if (!reportOnlyMode) {
-            reportService.generateScrubberLedgerSummaryReport(runDate, groupsToScrub, "General Ledger Input Transactions");
+        if (reportOnlyMode) {
+            reportService.generateScrubberLedgerSummaryReportOnline(runDate, group);
+        } else {
+            reportService.generateScrubberLedgerSummaryReportBatch(runDate, groupsToScrub);
         }
 
         // Scrub all of the OriginEntryGroups waiting to be scrubbed as of runDate.
@@ -239,10 +245,16 @@ public class ScrubberProcess {
             reportService.generateBatchScrubberStatisticsReport(runDate, scrubberReport, scrubberReportErrors);
         }
 
-        // run the demerger and generate the demerger report
+        // run the demerger
         if (!reportOnlyMode) {
             performDemerger(errorGroup, validGroup);
-            
+        }
+
+        // Run the reports
+        if ( reportOnlyMode ) {
+            // Run transaction list
+            reportService.generateScrubberTransactionsOnline(runDate, validGroup);
+        } else {
             // Run bad balance type report and removed transaction report
             reportService.generateScrubberBadBalanceTypeListingReport(runDate, groupsToScrub);
 
@@ -1490,7 +1502,9 @@ public class ScrubberProcess {
      * @param group Group to save it in
      */
     private void createOutputEntry(OriginEntry entry, OriginEntryGroup group) {
-        if (!reportOnlyMode) {
+        // Write the entry if we aren't running in report only mode.  Or write the entry if we are in 
+        // report only mode and it is a valid entry
+        if ( (! reportOnlyMode) || (group.getSourceCode().equals(OriginEntrySource.SCRUBBER_VALID)) ) {
             entry.setGroup(group);
             originEntryService.save(entry);
         }
