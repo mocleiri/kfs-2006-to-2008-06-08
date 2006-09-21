@@ -30,12 +30,14 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.bo.BudgetPeriod;
 import org.kuali.module.kra.bo.BudgetUser;
 import org.kuali.test.KualiTestBaseWithSpring;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class...
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
+@WithTestSpringContext
 public class BudgetPersonnelServiceTest extends KualiTestBaseWithSpring {
 
     private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
