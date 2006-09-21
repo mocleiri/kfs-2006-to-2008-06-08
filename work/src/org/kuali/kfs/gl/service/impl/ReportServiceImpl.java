@@ -80,8 +80,6 @@ import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
- * @author Laran Evans <lc278@cornell.edu>
- * @version $Id$
  */
 public class ReportServiceImpl implements ReportService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ReportServiceImpl.class);
