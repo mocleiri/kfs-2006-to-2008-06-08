@@ -65,7 +65,7 @@ import edu.iu.uis.eden.util.Utilities;
 /**
  * KualiAccountAttribute which should be used when using Accounts to do routing
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
 
