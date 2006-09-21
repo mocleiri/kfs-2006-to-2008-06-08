@@ -51,7 +51,7 @@ import org.kuali.module.financial.document.InternalBillingDocument;
 /**
  * Business rule(s) applicable to InternalBilling document.
  * 
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Team ()
  */
 public class InternalBillingDocumentRule extends TransactionalDocumentRuleBase {
 
