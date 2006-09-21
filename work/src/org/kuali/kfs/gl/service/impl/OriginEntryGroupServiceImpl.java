@@ -39,8 +39,8 @@ import org.kuali.module.gl.dao.OriginEntryGroupDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 
 /**
- * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.2 2006-09-15 19:52:59 jsissom Exp $
+ * @author 
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.3 2006-09-21 00:28:14 bnelson Exp $
  */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
