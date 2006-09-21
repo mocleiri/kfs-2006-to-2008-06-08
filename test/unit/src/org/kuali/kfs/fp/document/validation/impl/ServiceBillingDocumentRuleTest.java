@@ -40,7 +40,7 @@ import org.kuali.test.WithTestSpringContext;
  * This class tests the business rules of the service billing document. This is not implemented yet and needs to extend
  * TransactionalDocumentRuleTestBase.
  * 
- * @author Kuali Financial Transaction Processing Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transaction Processing Team ()
  */
 @WithTestSpringContext
 public class ServiceBillingDocumentRuleTest extends KualiTestBaseWithFixtures {

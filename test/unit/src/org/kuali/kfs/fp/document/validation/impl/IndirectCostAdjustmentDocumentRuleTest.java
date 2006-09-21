@@ -41,7 +41,7 @@ import org.kuali.test.WithTestSpringContext;
  * implemented properly. When we get to building this document, we would need to extend TransactionalDocumentRuleTestBase. For now
  * it contains commented out old fixtures code that will need to be fitted to the new xml based fixtures framework.
  * 
- * @author Kuali Transaction Processing Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Transaction Processing Team ()
  */
 @WithTestSpringContext
 public class IndirectCostAdjustmentDocumentRuleTest extends KualiTestBaseWithFixtures {

@@ -40,8 +40,6 @@ import org.kuali.module.gl.util.ObjectHelper;
  * A helper class which contains the more complicated logic involved in the year end encumbrance closing process. This logic is
  * likely going to need to be modular which is why it's in its own class.
  * 
- * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id$
  */
 
 public class EncumbranceClosingRuleHelper {
