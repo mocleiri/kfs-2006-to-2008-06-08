@@ -45,7 +45,7 @@ import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
 /**
  * This class is used to test DisbursementVoucherDocument.
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 @WithTestSpringContext
 public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBase {
