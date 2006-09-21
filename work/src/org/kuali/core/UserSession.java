@@ -47,7 +47,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 /**
  * This class represents a User Session
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 public class UserSession implements Serializable {
 
