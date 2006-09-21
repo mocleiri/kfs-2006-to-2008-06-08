@@ -37,8 +37,6 @@ import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 
 /**
- * @author Kuali General Ledger Team <kualigltech@oncourse.iu.edu>
- * @version $Id$
  */
 
 public interface ReportService {
