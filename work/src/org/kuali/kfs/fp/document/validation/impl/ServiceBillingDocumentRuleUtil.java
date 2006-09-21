@@ -39,7 +39,7 @@ import org.kuali.module.financial.bo.ServiceBillingControl;
 /**
  * This class contains static helper methods for ServiceBillingDocumentRule and ServiceBillingDocumentAuthorizer.
  * 
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Team ()
  */
 public class ServiceBillingDocumentRuleUtil {
 
