@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import org.kuali.test.parameters.AccountingLineParameter;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 import org.kuali.test.WithTestSpringContext;
@@ -65,7 +66,7 @@ public class PreEncumbranceDocumentTest extends TransactionalDocumentTestBase {
      */
     public List getTargetAccountingLineParametersFromFixtures() {
         ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE6).createObject());
+        list.add(customizeAccountingLineParameter((AccountingLineParameter)getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE6).createObject()));
         return list;
     }
 
@@ -74,7 +75,7 @@ public class PreEncumbranceDocumentTest extends TransactionalDocumentTestBase {
      */
     public List getSourceAccountingLineParametersFromFixtures() {
         ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE6).createObject());
+        list.add(customizeAccountingLineParameter((AccountingLineParameter)getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE6).createObject()));
         return list;
     }
 
@@ -83,5 +84,10 @@ public class PreEncumbranceDocumentTest extends TransactionalDocumentTestBase {
      */
     public String getUserName() {
         return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
+    }
+    
+    private AccountingLineParameter customizeAccountingLineParameter(AccountingLineParameter line){
+        line.setReferenceNumber("123");
+        return line;
     }
 }
