@@ -34,7 +34,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the BudgetAggregationCode service.
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 @WithTestSpringContext
 public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures {

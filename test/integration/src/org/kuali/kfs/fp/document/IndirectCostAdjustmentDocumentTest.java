@@ -33,7 +33,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class is used to test the IndirectCostAdjustmentDocument.
  * 
- * @author Kuali Financial Transactions Blue Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Blue Team ()
  */
 @WithTestSpringContext
 public class IndirectCostAdjustmentDocumentTest extends TransactionalDocumentTestBase {
