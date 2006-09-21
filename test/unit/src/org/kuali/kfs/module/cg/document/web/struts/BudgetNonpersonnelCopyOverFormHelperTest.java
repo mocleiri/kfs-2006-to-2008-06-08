@@ -32,12 +32,14 @@ import org.kuali.module.kra.bo.BudgetPeriodTest;
 import org.kuali.module.kra.service.BudgetNonpersonnelService;
 import org.kuali.module.kra.web.struts.form.BudgetNonpersonnelCopyOverFormHelper.NonpersonnelCopyOverCategoryHelper;
 import org.kuali.test.KualiTestBaseWithSpring;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests methods in BudgetNonpersonnelCopyOverFormHelper.
  * 
- * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Research Administration Team ()
  */
+@WithTestSpringContext
 public class BudgetNonpersonnelCopyOverFormHelperTest extends KualiTestBaseWithSpring {
 
     private BudgetNonpersonnelService budgetNonpersonnelService;
