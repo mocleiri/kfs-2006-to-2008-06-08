@@ -39,8 +39,8 @@ import org.kuali.module.gl.dao.OriginEntryGroupDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 
 /**
- * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26 2006-09-06 06:49:58 abyrne Exp $
+ * @author 
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.4.1 2006-09-21 04:18:39 abyrne Exp $
  */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
@@ -52,7 +52,13 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     public OriginEntryGroupServiceImpl() {
         super();
     }
-
+    
+    public Collection getGroupsFromSourceForDate(String sourceCode, Date date) {
+        LOG.debug("getGroupsFromSourceForDate() started");
+        
+        return originEntryGroupDao.getGroupsFromSourceForDate(sourceCode, date);
+    }
+    
     /**
      * 
      * @see org.kuali.module.gl.service.OriginEntryGroupService#getBackupGroups(java.sql.Date)
@@ -168,7 +174,6 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
 
         for (Iterator iter = c.iterator(); iter.hasNext();) {
             OriginEntryGroup element = (OriginEntryGroup) iter.next();
-            LOG.error("getAllOriginEntryGroup() " + element.getId() + " " + element.getRows());
         }
         return c;
     }
