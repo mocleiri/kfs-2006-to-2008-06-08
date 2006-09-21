@@ -45,8 +45,6 @@ import org.kuali.module.gl.util.GeneralLedgerTestHelper;
 import org.kuali.test.WithTestSpringContext;
 
 /**
- * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id$
  */
 @WithTestSpringContext
 public class BalanceForwardStepTest extends OriginEntryTestBase {
