@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import org.kuali.test.parameters.AccountingLineParameter;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 import org.kuali.test.WithTestSpringContext;
@@ -66,9 +67,7 @@ public class IndirectCostAdjustmentDocumentTest extends TransactionalDocumentTes
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
     public List getTargetAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE1).createObject());
-        return list;
+           return null;
     }
 
     /**
@@ -77,7 +76,7 @@ public class IndirectCostAdjustmentDocumentTest extends TransactionalDocumentTes
      */
     public List getSourceAccountingLineParametersFromFixtures() {
         ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE1).createObject());
+        list.add(customizeSourceAccountingLineParameter((AccountingLineParameter) getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE1).createObject()));
         return list;
     }
 
@@ -104,5 +103,27 @@ public class IndirectCostAdjustmentDocumentTest extends TransactionalDocumentTes
      */
     public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
         // do nothing to pass
+    }
+     
+    private AccountingLineParameter customizeSourceAccountingLineParameter(AccountingLineParameter line) {
+        line.setChartOfAccounts("BL");
+        line.setAccountNumber("5431400");
+        line.setFinancialSubObjectCode(null);
+        line.setSubAccountNumber(null);
+        line.setObjectTypeCode(null);
+        line.setOrganizationReferenceId(null);
+        line.setProjectCode(null);
+        return line;
+    }
+    private AccountingLineParameter customizeTargetAccountingLineParameter(AccountingLineParameter line) {
+        line.setChartOfAccounts("BL");
+        line.setAccountNumber("5431400");
+        line.setFinancialObjectCode("1803");
+        line.setFinancialSubObjectCode(null);
+        line.setSubAccountNumber(null);
+        line.setObjectTypeCode(null);
+        line.setOrganizationReferenceId(null);
+        line.setProjectCode(null);
+        return line;
     }
 }
