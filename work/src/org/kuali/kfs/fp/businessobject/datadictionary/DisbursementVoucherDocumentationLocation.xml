@@ -55,9 +55,7 @@
                     <text size="2" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Documentation Location Code</summary>
                 <description>The code uniquely identify a documentation location.</description>
             </attribute>
 
@@ -71,9 +69,7 @@
                     <text size="25" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Documentation Location Name</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -89,9 +85,7 @@
                     <textarea rows="4" cols="60" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Documentation Location Address</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
