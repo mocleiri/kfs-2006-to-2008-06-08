@@ -322,7 +322,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     }
     
     public UniversalUser getBudgetLockUser() {
-        if (budgetLockUser == null) {
+        if (budgetLockUser == null || !budgetLockUser.getPersonUniversalIdentifier().equals(budgetLockUserIdentifier)) {
             try {
                 budgetLockUser = SpringServiceLocator.getKualiUserService().getUniversalUser(budgetLockUserIdentifier);
             } catch (UserNotFoundException unfe) {}
@@ -361,7 +361,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     }
 
     public UniversalUser getBudgetTransactionLockUser() {
-        if (budgetTransactionLockUser == null) {
+        if (budgetTransactionLockUser == null || !budgetTransactionLockUser.getPersonUniversalIdentifier().equals(budgetTransactionLockUserIdentifier)) {
             try {
                 budgetTransactionLockUser = SpringServiceLocator.getKualiUserService().getUniversalUser(budgetTransactionLockUserIdentifier);
             } catch (UserNotFoundException unfe) {}
