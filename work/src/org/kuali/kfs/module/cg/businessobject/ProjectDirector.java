@@ -29,6 +29,8 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.UserId;
+import org.kuali.core.bo.user.UuId;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.SpringServiceLocator;
 
@@ -51,7 +53,8 @@ public class ProjectDirector extends BusinessObjectBase {
     public UniversalUser getUniversalUser() {
         if (universalUser == null) {
             try {
-                universalUser = SpringServiceLocator.getKualiUserService().getUniversalUser(personUniversalIdentifier);
+                UserId userId = new UuId(personUniversalIdentifier);
+                universalUser = SpringServiceLocator.getKualiUserService().getUniversalUser(userId);
             } catch (UserNotFoundException unfe) {}
         }
         return universalUser;
