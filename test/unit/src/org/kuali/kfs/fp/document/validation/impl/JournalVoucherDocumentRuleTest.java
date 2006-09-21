@@ -48,7 +48,7 @@ import org.kuali.test.parameters.TransactionalDocumentParameter;
 /**
  * This class tests the JournalVoucherDocument's persistence, routing, and PE generation.
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 @WithTestSpringContext
 public class JournalVoucherDocumentRuleTest extends TransactionalDocumentRuleTestBase {
