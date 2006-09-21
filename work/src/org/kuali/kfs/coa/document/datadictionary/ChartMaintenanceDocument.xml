@@ -43,6 +43,7 @@
             <reference attributeName="finPreEncumbranceObject" attributeToHighlightOnFail="finPreEncumbranceObjectCode" />
             <reference attributeName="icrIncomeFinancialObject" attributeToHighlightOnFail="icrIncomeFinancialObjectCode" />
             <reference attributeName="icrExpenseFinancialObject" attributeToHighlightOnFail="icrExpenseFinancialObjectCd" />
+            <reference attributeName="fundBalanceObject" attributeToHighlightOnFail="fundBalanceObject" />
         </defaultExistenceChecks>
 
         <maintainableSections>
@@ -52,19 +53,20 @@
                     <maintainableField name="finCoaManagerUniversalId" required="true" readOnly="true" />
                     <maintainableField name="finCoaManagerUniversal.personUserIdentifier" required="true" />
                     <maintainableField name="finCoaManagerUniversal.personName" required="false" readOnly="true" />
-                    <maintainableField name="finChartOfAccountDescription" />
+                    <maintainableField name="finChartOfAccountDescription" required="true" />
                     <maintainableField name="finChartOfAccountActiveIndicator" />
                     <maintainableField name="financialCashObjectCode" />
                     <maintainableField name="finAccountsPayableObjectCode" />
                     <maintainableField name="incBdgtEliminationsFinObjCd" />
                     <maintainableField name="expBdgtEliminationsFinObjCd" />
-                    <maintainableField name="reportsToChartOfAccountsCode" />
+                    <maintainableField name="reportsToChartOfAccountsCode" required="true" />
                     <maintainableField name="finAccountsReceivableObjCode" />
                     <maintainableField name="finInternalEncumbranceObjCd" />
                     <maintainableField name="finExternalEncumbranceObjCd" />
                     <maintainableField name="finPreEncumbranceObjectCode" />
                     <maintainableField name="icrIncomeFinancialObjectCode" />
                     <maintainableField name="icrExpenseFinancialObjectCd" />
+                    <maintainableField name="fundBalanceObjectCode" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
