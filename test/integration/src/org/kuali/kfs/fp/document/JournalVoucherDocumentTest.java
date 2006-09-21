@@ -47,7 +47,7 @@ import edu.iu.uis.eden.EdenConstants;
 /**
  * This class is used to test JournalVoucherDocument.
  * 
- * @author Kuali Financial Transactions Red Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Red Team ()
  */
 @WithTestSpringContext
 public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
