@@ -25,7 +25,11 @@ package org.kuali.module.financial.document;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import org.kuali.test.parameters.AccountingLineParameter;
 import org.kuali.test.parameters.DocumentParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
 import org.kuali.test.WithTestSpringContext;
@@ -67,7 +71,7 @@ public class NonCheckDisbursementDocumentTest extends TransactionalDocumentTestB
      */
     public List getTargetAccountingLineParametersFromFixtures() {
         ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE4).createObject());
+        list.add(customizeAccountingLineParameter((AccountingLineParameter)getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE4).createObject()));
         return list;
     }
 
@@ -77,7 +81,7 @@ public class NonCheckDisbursementDocumentTest extends TransactionalDocumentTestB
      */
     public List getSourceAccountingLineParametersFromFixtures() {
         ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE4).createObject());
+        list.add(customizeAccountingLineParameter((AccountingLineParameter)getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE4).createObject()));
         return list;
     }
 
@@ -98,5 +102,10 @@ public class NonCheckDisbursementDocumentTest extends TransactionalDocumentTestB
         // and leaving blank to run successfully
         // when we get to this document, we'll fix the problem with blanket approving non check
         // disbursement document test
+    }
+    
+    private AccountingLineParameter customizeAccountingLineParameter(AccountingLineParameter line){
+        line.setReferenceNumber("123");
+        return line;
     }
 }
