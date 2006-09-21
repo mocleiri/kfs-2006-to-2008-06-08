@@ -37,7 +37,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests service methods in BudgetCostShareService.
  * 
- * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Research Administration Team ()
  */
 @WithTestSpringContext
 public class BudgetCostShareServiceTest extends KualiTestBaseWithSession {

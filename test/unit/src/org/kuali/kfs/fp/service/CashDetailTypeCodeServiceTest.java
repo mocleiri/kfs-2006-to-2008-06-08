@@ -33,7 +33,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the CashDetailTypeCode service.
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 @WithTestSpringContext
 public class CashDetailTypeCodeServiceTest extends KualiTestBaseWithFixtures {

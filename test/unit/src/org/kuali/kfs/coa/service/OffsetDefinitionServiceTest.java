@@ -30,7 +30,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the OffsetDefinition service.
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 @WithTestSpringContext
 public class OffsetDefinitionServiceTest extends KualiTestBaseWithFixtures {

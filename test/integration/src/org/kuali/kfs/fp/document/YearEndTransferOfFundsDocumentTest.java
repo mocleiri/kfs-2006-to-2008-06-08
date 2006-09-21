@@ -35,7 +35,7 @@ import org.kuali.test.WithTestSpringContext;
  * YearEndTransferOfFundsDocument and a regular TransferOfFundsDocument other than they have different document types and that this
  * one posts to the year end accouting period.
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 @WithTestSpringContext
 public class YearEndTransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
