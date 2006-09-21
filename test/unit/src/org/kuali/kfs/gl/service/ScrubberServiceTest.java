@@ -78,7 +78,10 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
     public void testCostShareEncumbrancesForPreEncumbrances() throws Exception {
 
         // Inputs.
-        String[] stringInput = new String[] { "2007BL4631625CS0018000---PEAS07PE  01CSENCPE       00000TP Generated Offset                               1650.00C2006-01-05          ----------                                      D                                ", "2007BL4631625CS0014866---PEEX07PE  01CSENCPE       00000Correction to: 01-PU3355206                       1650.00D2006-01-05          ----------                                      D                                " };
+        String[] stringInput = new String[] {
+                "2007BL4631625CS0018000---PEAS07PE  01CSENCPE       00000TP Generated Offset                               1650.00C2006-01-05          ----------                                      D                                ", 
+                "2007BL4631625CS0014866---PEEX07PE  01CSENCPE       00000Correction to: 01-PU3355206                       1650.00D2006-01-05          ----------                                      D                                "
+        };
 
         // Add inputs to expected output ...
         EntryHolder output[] = new EntryHolder[6];
@@ -87,10 +90,10 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
         }
 
         // ... add expected output ...
-        output[2] = new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----9940---CEEX07PE       01CSENCPE  00000Correction to: 01-PU3355206 FR-BL4631625          1650.00D2006-01-01          ----------                                      D                                ");
-        output[3] = new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----9893---CEFB07PE       01CSENCPE  00000GENERATED OFFSET                                  1650.00C2006-01-01          ----------                                                                  ");
-        output[4] = new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631625CS0014866---PEEX07PE       01CSENCPE  00000Correction to: 01-PU3355206                       1650.00D2006-01-05          ----------                                      D                                ");
-        output[5] = new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631625CS0018000---PEAS07PE       01CSENCPE  00000TP Generated Offset                               1650.00C2006-01-05          ----------                                      D                                ");
+        output[2] = new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----9940---CEEX07PE  01CSENCPE       00000Correction to: 01-PU3355206 FR-BL4631625          1650.00D2006-01-01          ----------                                      D                                ");
+        output[3] = new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031400-----9893---CEFB07PE  01CSENCPE       00000GENERATED OFFSET                                  1650.00C2006-01-01          ----------                                                                       ");
+        output[4] = new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631625CS0014866---PEEX07PE  01CSENCPE       00000Correction to: 01-PU3355206                       1650.00D2006-01-05          ----------                                      D                                ");
+        output[5] = new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631625CS0018000---PEAS07PE  01CSENCPE       00000TP Generated Offset                               1650.00C2006-01-05          ----------                                      D                                ");
 
         scrub(stringInput);
 
@@ -1061,7 +1064,8 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
 
         String[] input = new String[] { 
                 "2007BL1031497-----4190---ACEX07GEC 01OFFSETPER     00000THOMAS BUSEY/NEWEGG COMPUTERS                       40.72C2006-01-05          ----------                                                                       ", 
-                "2007BL1031497-----8000---ACAS08GEC 01OFFSETPER     00000TP Generated Offset                                 40.72D2006-01-05          ----------                                                                       " };
+                "2007BL1031497-----8000---ACAS08GEC 01OFFSETPER     00000TP Generated Offset                                 40.72D2006-01-05          ----------                                                                       "
+        };
 
         EntryHolder[] output = new EntryHolder[] { 
                 new EntryHolder(OriginEntrySource.BACKUP, "2007BL1031497-----4190---ACEX07GEC 01OFFSETPER     00000THOMAS BUSEY/NEWEGG COMPUTERS                       40.72C2006-01-05          ----------                                                                       "), 
@@ -1069,7 +1073,8 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
                 new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031497-----4190---ACEX07GEC 01OFFSETPER     00000THOMAS BUSEY/NEWEGG COMPUTERS                       40.72C2006-01-05          ----------                                                                       "),
                 new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031497-----8000---ACAS07GEC 01OFFSETPER     00000GENERATED OFFSET                                    40.72D2006-01-01          ----------                                                                       "), 
                 new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031497-----8000---ACAS08GEC 01OFFSETPER     00000TP Generated Offset                                 40.72D2006-01-05          ----------                                                                       "), 
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031497-----8000---ACAS08GEC 01OFFSETPER     00000GENERATED OFFSET                                    40.72C2006-01-01          ----------                                                                       "), };
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1031497-----8000---ACAS08GEC 01OFFSETPER     00000GENERATED OFFSET                                    40.72C2006-01-01          ----------                                                                       "),
+        };
 
         scrub(input);
         assertOriginEntries(4, output);
