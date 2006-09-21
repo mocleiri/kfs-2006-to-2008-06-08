@@ -37,7 +37,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests some methods of AccountingLineRuleUtil.
  * 
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Team ()
  */
 @WithTestSpringContext
 public class AccountingLineRuleUtilTest extends KualiTestBaseWithFixtures {

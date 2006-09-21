@@ -30,8 +30,6 @@ import org.kuali.module.chart.bo.Account;
 import org.kuali.module.gl.bo.Balance;
 
 /**
- * @author Laran evans <lc278@cornell.edu>
- * @version $Id: BalanceService.java,v 1.13 2006-09-06 06:50:06 abyrne Exp $
  */
 
 public interface BalanceService {

@@ -29,8 +29,8 @@ import java.util.Map;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
- * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupService.java,v 1.13.2.1 2006-09-14 20:48:46 larevans Exp $
+ * @author 
+ * @version $Id: OriginEntryGroupService.java,v 1.13.2.2 2006-09-21 00:28:03 bnelson Exp $
  */
 
 public interface OriginEntryGroupService {
