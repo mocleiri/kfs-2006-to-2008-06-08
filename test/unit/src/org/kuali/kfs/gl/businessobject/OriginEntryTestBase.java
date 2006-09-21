@@ -43,8 +43,6 @@ import org.kuali.test.KualiTestBase;
 import org.springframework.beans.factory.BeanFactory;
 
 /**
- * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: OriginEntryTestBase.java,v 1.27.2.1 2006-09-20 06:54:52 dbeutel Exp $
  */
 public class OriginEntryTestBase extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryTestBase.class);
