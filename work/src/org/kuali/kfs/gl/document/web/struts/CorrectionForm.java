@@ -92,9 +92,9 @@ public class CorrectionForm extends KualiDocumentFormBase {
                 if (fields[i].getName().equals("universityFiscalYear")) {
                     fieldNames.put(1, "Fiscal Year");
                 }
-                if (fields[i].getName().equals("budgetYear")) {
-                    fieldNames.put(2, "Budget Year");
-                }
+                // if (fields[i].getName().equals("budgetYear")) {
+                //    fieldNames.put(2, "Budget Year");
+                // }
                 if (fields[i].getName().equals("chartOfAccountsCode")) {
                     fieldNames.put(3, "Chart Code");
                 }
@@ -176,8 +176,8 @@ public class CorrectionForm extends KualiDocumentFormBase {
 
         searchOperators.put("eq", "Equals");
         searchOperators.put("ne", "Not equal to");
-        searchOperators.put("gt", "Greater than");
-        searchOperators.put("lt", "Less than");
+        // searchOperators.put("gt", "Greater than");
+        // searchOperators.put("lt", "Less than");
         searchOperators.put("sw", "Starts with");
         searchOperators.put("ew", "Ends with");
         searchOperators.put("ct", "Contains");
