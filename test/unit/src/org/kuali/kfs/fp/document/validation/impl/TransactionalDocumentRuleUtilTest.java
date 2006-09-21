@@ -36,7 +36,7 @@ import org.kuali.test.fixtures.FixtureEntryException;
 /**
  * Class for unit testing the functionality of <code>{@link TransactionalDocumentRuleUtil}</code>
  * 
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Nervous System Team ()
  */
 @WithTestSpringContext
 public class TransactionalDocumentRuleUtilTest extends KualiTestBaseWithFixtures {
