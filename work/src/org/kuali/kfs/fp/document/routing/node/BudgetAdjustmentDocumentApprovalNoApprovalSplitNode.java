@@ -48,7 +48,7 @@ import edu.iu.uis.eden.routetemplate.RouteContext;
  * the account 3) Only current adjustments are being made 4) The fund group for the account is not contract and grants 5) current
  * income/expense decrease amount must equal increase amount
  * 
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Team ()
  */
 public class BudgetAdjustmentDocumentApprovalNoApprovalSplitNode implements SplitNode {
 
@@ -59,11 +59,16 @@ public class BudgetAdjustmentDocumentApprovalNoApprovalSplitNode implements Spli
         String documentID = routeContext.getDocument().getRouteHeaderId().toString();
         BudgetAdjustmentDocument budgetDocument = (BudgetAdjustmentDocument) SpringServiceLocator.getDocumentService().getByDocumentHeaderId(documentID);
 
+        //TODO: due to transaction scoping issues, any proxied items in budgetDocument are now irretrievable!  Any 
+        //      attempt to retrieve them will cause OJB to throw an exception.  This will be fixed in the 
+        //      general case in Phase 2.
+        
         // new list so that sourceAccountingLines isn't modified by addAll statement. Important for
         // total calculations below.
-        List accountingLines = new ArrayList(budgetDocument.getSourceAccountingLines());
+        List accountingLines = new ArrayList();
+        accountingLines.addAll(budgetDocument.getSourceAccountingLines());
         accountingLines.addAll(budgetDocument.getTargetAccountingLines());
-
+        
         /* only one account can be present on document and only current adjustments allowed */
         String chart = "";
         String accountNumber = "";
