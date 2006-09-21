@@ -80,9 +80,7 @@
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
-                <description>
-                    <![CDATA[&nbsp;]]>
-                </description>
+                <description>Vendor Number</description>
             </attribute>
 
             <attribute name="financialDocumentCreditCardVendorName" forceUppercase="false">
@@ -95,9 +93,7 @@
                     <text size="40" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Vendor Name</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -113,9 +109,7 @@
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CreditCardTypeValuesFinder" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Credit Card Type</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -130,9 +124,7 @@
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Income Chart</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -143,9 +135,7 @@
                 <shortLabel>Income Account</shortLabel>
 
                 <required>true</required>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Income Account Number</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -156,9 +146,7 @@
                 <shortLabel>Income Sub-Account</shortLabel>
 
                 <required>false</required>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Income Sub-Account Number</summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
