@@ -25,7 +25,7 @@ package org.kuali.module.kra;
 /**
  * Holds error key constants for KRA.
  * 
- * @author KRA Development Team (kualidev@oncourse.iu.edu)
+ * @author KRA Development Team ()
  */
 public class KraKeyConstants {
 
