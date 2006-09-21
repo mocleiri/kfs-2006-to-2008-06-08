@@ -64,9 +64,7 @@ import org.kuali.module.gl.util.Summary;
 /**
  * This class owns the logic to perform year end tasks.
  * 
- * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id$
- */
+  */
 public class YearEndServiceImpl implements YearEndService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(YearEndServiceImpl.class);
 
