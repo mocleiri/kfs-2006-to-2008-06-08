@@ -32,7 +32,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class...
  * 
- * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @author Kuali Financial Transactions Team ()
  */
 @WithTestSpringContext
 public class FlexibleOffsetAccountServiceTest extends KualiTestBaseWithFixtures {
