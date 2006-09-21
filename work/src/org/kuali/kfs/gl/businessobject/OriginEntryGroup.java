@@ -30,18 +30,18 @@ import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryGroup.java,v 1.6 2006-09-06 06:50:05 abyrne Exp $
+ * @version $Id: OriginEntryGroup.java,v 1.6.4.1 2006-09-21 04:18:27 abyrne Exp $
  * 
  */
 
 public class OriginEntryGroup extends BusinessObjectBase {
 
-    private static final String VALID_STRING = "Valid/";
-    private static final String INVALID_STRING = "Invalid/";
-    private static final String PROCESSED_STRING = " Will Be Processed/";
-    private static final String NOT_PROCESSED_STRING = "Will Not Process/";
-    private static final String SCRUB_STRING = "To Scrub";
-    private static final String NO_SCRUB_STRING = "Not to Scrub";
+    private static final String VALID_STRING = "Valid-";
+    private static final String INVALID_STRING = "Invalid-";
+    private static final String PROCESSED_STRING = "Will Be Processed-";
+    private static final String NOT_PROCESSED_STRING = "Will Not Process-";
+    private static final String SCRUB_STRING = "Scrub";
+    private static final String NO_SCRUB_STRING = "Don't Scrub";
 
     private Integer id;
     private Date date;
@@ -50,7 +50,8 @@ public class OriginEntryGroup extends BusinessObjectBase {
     private Boolean process;
     private Boolean scrub;
 
-    // This does not normally get populated.
+    // This does not normally get populated.  It only gets populated if
+    // getAllOriginEntryGroup() is called
     private Integer rows = new Integer(0);
 
     private OriginEntrySource source;
@@ -69,7 +70,6 @@ public class OriginEntryGroup extends BusinessObjectBase {
     }
 
     public String getName() {
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
         StringBuffer sb = new StringBuffer(this.getSourceCode());
         sb.append(" ");
         sb.append(source.getName());
@@ -78,7 +78,7 @@ public class OriginEntryGroup extends BusinessObjectBase {
         sb.append(") ");
         sb.append(this.getId());
         sb.append(" ");
-        sb.append(sdf.format(this.getDate()));
+        sb.append(this.getDate().toString());
         sb.append(" ");
         sb.append(valid ? VALID_STRING : INVALID_STRING);
         sb.append(process ? PROCESSED_STRING : NOT_PROCESSED_STRING);

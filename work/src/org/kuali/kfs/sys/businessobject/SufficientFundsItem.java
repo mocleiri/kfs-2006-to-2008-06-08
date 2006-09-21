@@ -24,11 +24,13 @@ package org.kuali.module.gl.util;
 
 import java.io.Serializable;
 
+import org.kuali.Constants;
 import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectType;
+import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.bo.Transaction;
 
 public class SufficientFundsItem implements Serializable, Comparable {
@@ -39,6 +41,15 @@ public class SufficientFundsItem implements Serializable, Comparable {
     private String sufficientFundsObjectCode;
     private KualiDecimal amount;
     private String documentTypeCode;
+    private BalanceTyp balanceTyp;
+
+    public BalanceTyp getBalanceTyp() {
+        return balanceTyp;
+    }
+
+    public void setBalanceTyp(BalanceTyp balanceTyp) {
+        this.balanceTyp = balanceTyp;
+    }
 
     public SufficientFundsItem() {
         amount = KualiDecimal.ZERO;
@@ -52,12 +63,13 @@ public class SufficientFundsItem implements Serializable, Comparable {
         financialObject = tran.getFinancialObject();
         financialObjectType = tran.getObjectType();
         this.sufficientFundsObjectCode = sufficientFundsObjectCode;
+        this.balanceTyp = tran.getBalanceType();
 
         add(tran);
     }
 
     public void add(Transaction t) {
-        if (t.getObjectType().getFinObjectTypeDebitcreditCd().equals(t.getTransactionDebitCreditCode())) {
+        if (t.getObjectType().getFinObjectTypeDebitcreditCd().equals(t.getTransactionDebitCreditCode()) || Constants.EMPTY_STRING.equals(t.getTransactionDebitCreditCode())) {
             amount = amount.add(t.getTransactionLedgerEntryAmount());
         }
         else {
@@ -71,7 +83,7 @@ public class SufficientFundsItem implements Serializable, Comparable {
     }
 
     public String getKey() {
-        return year.getUniversityFiscalYear() + account.getChartOfAccountsCode() + account.getAccountNumber() + financialObjectType.getCode() + sufficientFundsObjectCode;
+        return year.getUniversityFiscalYear() + account.getChartOfAccountsCode() + account.getAccountNumber() + financialObjectType.getCode() + sufficientFundsObjectCode + balanceTyp.getCode();
     }
 
     public String getDocumentTypeCode() {
