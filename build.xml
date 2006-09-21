@@ -8,36 +8,10 @@
 	<target name="echo-properties" depends="init-filter-sets" description="Print all build properties that have been set">
 		<echoproperties />
 	</target>
-
-	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
-	<target name="test" depends="make-tests" description="Run all project tests and format results">
-		<mkdir dir="${test.temp.directory}" />
-		<mkdir dir="${test.xml.results.directory}" />
-		<junit showoutput="true" fork="true" forkmode="once" failureproperty="tests.failed" errorproperty="tests.errored" tempdir="${test.temp.directory}" maxmemory="512M">
-			<classpath>
-				<path refid="compile.tests.classpath" />
-				<pathelement location="${test.classes.directory}" />
-			</classpath>
-			<formatter type="xml" />
-			<batchtest todir="${test.xml.results.directory}">
-				<fileset dir="${test.source.directory}">
-					<include name="**/*Test.java" />
-					<exclude name="**/TransactionalDocumentRuleTest.java" />
-					<exclude name="**/PosterServiceTest.java" />
-					<exclude name="**/${test.spring.shutdown}.java" />
-				</fileset>
-			</batchtest>
-			<test name="org.kuali.${test.spring.shutdown}" todir="${test.xml.results.directory}" />
-		</junit>
-		<mkdir dir="${test.html.results.directory}" />
-		<junitreport todir="${test.html.results.directory}">
-			<fileset dir="${test.xml.results.directory}">
-				<include name="TEST-*.xml" />
-			</fileset>
-			<report format="frames" todir="${test.html.results.directory}" />
-		</junitreport>
-		<echo message="Generated test results: ${test.html.results.directory}/index.html" />
-	</target>
+	
+	<target name="dist-test-local" depends="dist-local,make-tests" description="Prepare local configuration and tokenized resources and compile tests on a development workstation"/>
+	
+	<target name="test-local" depends="init-project-properties,test" description="Run all unit tests and format results"/>
 
 	<target name="clean" depends="clean-project,clean-local,clean-workflow-local" description="Remove all build output" />
 
@@ -108,6 +82,18 @@
 		<condition property="workflow.url" value="${prod.environment.url}en-${build.environment}">
 			<equals arg1="${build.environment}" arg2="ptd" />
 		</condition>
+		<condition property="base.url" value="${prod.environment.url}">
+			<equals arg1="${build.environment}" arg2="gl" />
+		</condition>
+		<condition property="application.url" value="${prod.environment.url}${ant.project.name}-${build.environment}">
+			<equals arg1="${build.environment}" arg2="gl" />
+		</condition>
+		<condition property="cas.url" value="${prod.environment.url}cas-${build.environment}">
+			<equals arg1="${build.environment}" arg2="gl" />
+		</condition>
+		<condition property="workflow.url" value="${prod.environment.url}en-${build.environment}">
+			<equals arg1="${build.environment}" arg2="gl" />
+		</condition>
 		<property name="base.url" value="${test.environment.url}" />
 		<property name="application.url" value="${test.environment.url}${ant.project.name}-${build.environment}" />
 		<property name="cas.url" value="${test.environment.url}cas-unt" />
@@ -140,7 +126,6 @@
 			<filter token="cas-url" value="${cas.url}" />
 			<filter token="workflow-url" value="${workflow.url}" />
 			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
-			<filter token="web-authentication-filtermapping" value="${web.authentication.filtermapping}" />
 			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
 			<filter token="driver-class" value="${driver.class}" />
 			<filter token="context-docbase" value="${context.docbase}" />
@@ -304,11 +289,12 @@
 		</copy>
 		<copy todir="${workflow.usr.directory}" overwrite="true">
 			<fileset dir="${build.workflow.usr.directory}" />
-			<filterset refid="general.filterset" />
 			<filterset>
 				<filter token="local-plugin-classes" value="${local.plugin.classes.token}"/>
 				<filter token="local-plugin-lib" value="${local.plugin.lib.token}"/>
+				<filter token="workflow-web-authentication-filter" value="${workflow.web.authentication.filter}" />
 			</filterset>
+			<filterset refid="general.filterset" />
 		</copy>
 	</target>
 
@@ -386,6 +372,36 @@
 			<fileset dir="${classes.directory}" includes="**/OJB-*.xml" />
 		</copy>
 	</target>
+	
+	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
+	<target name="test">
+		<mkdir dir="${test.temp.directory}" />
+		<mkdir dir="${test.xml.results.directory}" />
+		<junit showoutput="true" fork="true" forkmode="once" failureproperty="tests.failed" errorproperty="tests.errored" tempdir="${test.temp.directory}" maxmemory="512M">
+			<classpath>
+				<path refid="compile.tests.classpath" />
+				<pathelement location="${test.classes.directory}" />
+			</classpath>
+			<formatter type="xml" />
+			<batchtest todir="${test.xml.results.directory}">
+				<fileset dir="${test.source.directory}">
+					<include name="**/*Test.java" />
+					<exclude name="**/TransactionalDocumentRuleTest.java" />
+					<exclude name="**/PosterServiceTest.java" />
+					<exclude name="**/${test.spring.shutdown}.java" />
+				</fileset>
+			</batchtest>
+			<test name="org.kuali.${test.spring.shutdown}" todir="${test.xml.results.directory}" />
+		</junit>
+		<mkdir dir="${test.html.results.directory}" />
+		<junitreport todir="${test.html.results.directory}">
+			<fileset dir="${test.xml.results.directory}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${test.html.results.directory}" />
+		</junitreport>
+		<echo message="Generated test results: ${test.html.results.directory}/index.html" />
+	</target>
 
 	<target name="dist" depends="make-source">
 		<copy todir="${war.directory}">
@@ -436,8 +452,31 @@
 		<copy file="${temp.directory}/${cas.application}-${build.environment}.war" todir="${appserver.deploy.dir}" />
 		<delete dir="${temp.directory}" />
 	</target>
+	
+	<target name="init-packaging">
+		<property name="packaging.directory" value="/java/packaging" />
+		<delete dir="${packaging.directory}" />
+		<mkdir dir="${packaging.directory}" />
+		<property name="package.name" value="kfs" />
+		<property name="packaging.contents.directory" value="${packaging.directory}/${package.name}" />
+		<property name="packaging.server.zip.file" value="${packaging.directory}/server.zip" />
+		<property name="appserver" value="apache-tomcat-5.5.16" />
+		<property name="appserver.home" value="${packaging.contents.directory}/${appserver}" />
+		<property name="external.config.directory" value="${packaging.contents.directory}/external-config" />
+		<get dest="${packaging.server.zip.file}" src="https://test.kuali.org/confluence/download/attachments/9969/${appserver}.zip" />
+		<unzip src="${packaging.server.zip.file}" dest="${packaging.contents.directory}" />
+	</target>
 
-	<target name="continuous-integration" depends="test">
+	<target name="dist-packaged-binary-only" depends="init-packaging,dist-local,dist">
+		<delete file="${appserver.localhost.dir}/${ant.project.name}-${build.environment}.xml" />
+		<copy file="${ant.project.name}-${build.environment}.war" todir="${appserver.deploy.dir}" />
+		<copy todir="${packaging.contents.directory}">
+			<fileset dir="." includes="*-packaged.*"/>
+		</copy>
+		<zip basedir="${packaging.contents.directory}" destfile="${packaging.contents.directory}.zip" />
+	</target>
+	
+	<target name="continuous-integration" depends="make-tests,test">
 		<fail if="tests.failed" message="Tests failed" />
 	</target>
 
@@ -521,9 +560,12 @@
 			
 			echo-properties: executes ant echoproperties task, thereby printing out all the properties that have been set
 
-			test: runs all project tests and generates results
-			- you should run dist-local before running this target, if the criteria listed above for runinng dist-local are met
-			- if you are running workflow locally, tomcat needs to be running when you are executing this target
+			dist-test-local: runs dist-local and make-tests to prepare for running the tests locally without disturbing cas and workflow, if they
+			are running in tomcat locally
+			
+			test-local: runs all project tests and generates results
+			- you should run dist-tests-local before running this target, if the criteria listed above for runinng dist-local are met
+			- if you are running cas or workflow locally, you need to start tomcat after running dist-tests-local and before running this target
 			
 			clean: removes all build output
 		</echo>
