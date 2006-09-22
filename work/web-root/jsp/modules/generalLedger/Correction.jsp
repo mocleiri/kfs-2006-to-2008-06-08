@@ -54,7 +54,7 @@
                 <html:select property="editMethod" >
                   <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionEditMethodValuesFinder" label="label" value="key"/>
                 </html:select>
-                <html:image property="methodToCall.chooseMainDropdown.anchor${currentTabIndex}" src="images/tinybutton-select.gif" styleClass="tinybutton" alt="chooseMainDropdown" title="Choose Main Dropdown"  />
+                <html:image property="methodToCall.chooseMainDropdown.anchor${currentTabIndex}" src="images/tinybutton-select.gif" styleClass="tinybutton" alt="Choose Main Dropdown" title="Choose Main Dropdown"  />
               </center>
             </td>
           </tr>
@@ -78,9 +78,9 @@
                     <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|core|lookup|keyvalues|CorrectionGroupEntriesFinder" label="label" value="key" />
                   </html:select>
                   <br/><br/>  
-                  <html:image property="methodToCall.readDocument.anchor${currentTabIndex}" src="images/tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntriesForManualEdit" title="Show All Entries For Manual Edit"/>
-                  <html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}" src="images/tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="saveToDeskTop" title="Save To Desk Top" onclick="excludeSubmitRestriction=true" />
-                  <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="images/tinybutton-deletergroup.gif" styleClass="tinybutton" alt="deleteDocument" title="Delete Document" />
+                  <html:image property="methodToCall.readDocument.anchor${currentTabIndex}" src="images/tinybutton-loadgroup.gif" styleClass="tinybutton" alt="Show All Entries For Manual Edit" title="Show All Entries For Manual Edit"/>
+                  <html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}" src="images/tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="Save To Desktop" title="Save To Desktop" onclick="excludeSubmitRestriction=true" />
+                  <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="images/tinybutton-deletergroup.gif" styleClass="tinybutton" alt="Delete Document" title="Delete Document" />
                 </center> 
               </td>
             </tr>
@@ -99,7 +99,7 @@
             <tr>
               <td class="bord-l-b" style="padding: 4px;">
                 <html:file size="30" property="sourceFile" />
-                <html:image property="methodToCall.uploadFile.anchor${currentTabIndex}" src="images/tinybutton-loaddoc.gif" styleClass="tinybutton" alt="uploadFile" title="upload file"/>
+                <html:image property="methodToCall.uploadFile.anchor${currentTabIndex}" src="images/tinybutton-loaddoc.gif" styleClass="tinybutton" alt="Upload File" title="Upload File"/>
               </td>
             </tr>
           </table>
@@ -176,7 +176,7 @@
                     <td>
                       <display:table id="eachEntryForManualEdit" name="${KualiForm.eachEntryForManualEdit}" requestURIcontext="false"  >
                         <display:column title="Manual Edit" >
-                          <html:image property="methodToCall.editEntry.anchor${currentTabIndex}.${eachEntryForManualEdit.entryId}" value="${eachEntryForManualEdit.entryId}" src="images/tinybutton-saveedits.gif" styleClass="tinybutton" alt="EditAnEntry" />
+                          <html:image property="methodToCall.editEntry.anchor${currentTabIndex}.${eachEntryForManualEdit.entryId}" value="${eachEntryForManualEdit.entryId}" src="images/tinybutton-saveedits.gif" styleClass="tinybutton" alt="Edit An Entry" title="Edit An Entry"/>
                         </display:column>
                         <display:column title="Fiscal Year" ><html:text property="eachEntryForManualEdit.universityFiscalYear" size="5"  /> </display:column>
                         <display:column title="Chart Code" ><html:text property="eachEntryForManualEdit.chartOfAccountsCode" size="5"  /></display:column>
@@ -218,7 +218,7 @@
                 <tr>
                   <td>
                     <STRONG> Do you want to delete this document? </STRONG>
-                    <html:image property="methodToCall.deleteDocument.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="deleteDocument" />
+                    <html:image property="methodToCall.deleteDocument.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="Delete Document" title="Delete Document" />
                   </td>
                 </tr>
               </c:if>
@@ -246,7 +246,7 @@
               <td>
                 <center>
                   <STRONG>Show Output Group<STRONG>
-                  <html:image property="methodToCall.showOutputFile.anchor${currentTabIndex}" src="images/tinybutton-show.gif" styleClass="tinybutton" alt="showOutputFile" />
+                  <html:image property="methodToCall.showOutputFile.anchor${currentTabIndex}" src="images/tinybutton-show.gif" styleClass="tinybutton" alt="Show Output File" title="Show Output File" />
                 </center>
               </td>
             </tr>
@@ -282,7 +282,7 @@
               <tr>
                 <td colspan="2" align="left" class="bord-l-b" style="padding: 4px; vertical-align: top;"> 
                   <strong>Group:</strong>
-                  <html:image property="methodToCall.removeCorrectionGroup.group${group.correctionChangeGroupLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="delete correction group" />
+                  <html:image property="methodToCall.removeCorrectionGroup.group${group.correctionChangeGroupLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="Delete Correction Group" title="Delete Correction Group" />
                 </td>
               </tr>
               <tr style="border-bottom: 1px solid #333;"> 
@@ -307,7 +307,7 @@
                       </select>
                       <label for="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${criterion.correctionCriteriaLineNumber}" />][field-value]">Value</label>
                       <input id="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${criterion.correctionCriteriaLineNumber}" />][field-value]" value="${ criterion.correctionFieldValue}" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${ criterion.correctionCriteriaLineNumber}" />][field-value]" type="text">
-                      <html:image property="methodToCall.removeSearchCriterion.criterion${criterion.correctionChangeGroupLineNumber}-${criterion.correctionCriteriaLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="delete search criterion" />
+                      <html:image property="methodToCall.removeSearchCriterion.criterion${criterion.correctionChangeGroupLineNumber}-${criterion.correctionCriteriaLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="Delete Search Criterion" title="Delete Search Criterion" />
                     </div>
                   </c:forEach>
                   <div>
@@ -326,7 +326,7 @@
                     </select>
                     <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-value]">Value</label> 
                     <input id="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-value]" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-value]" type="text">
-                    <html:image property="methodToCall.addSearchCriterion.anchor${currentTabIndex}" src="images/tinybutton-add1.gif"  alt="add search criteria" styleClass="tinybutton" />
+                    <html:image property="methodToCall.addSearchCriterion.anchor${currentTabIndex}" src="images/tinybutton-add1.gif"  alt="Add Search Criteria" title="Add Search Criteria" styleClass="tinybutton" />
                   </div>
                 </td> 
                 <td class="bord-l-b" style="padding: 4px; vertical-align: top;">
@@ -340,7 +340,7 @@
                       </select>
                       <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber }" />][replacement-specifications][<c:out value="${specification.correctionChangeLineNumber}" />][replacement-value]">Replacement Value</label>
                       <input type="text" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][<c:out value="${ specification.correctionChangeLineNumber}" />][replacement-value]" value="<c:out value="${specification.correctionFieldValue}" />" id="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][replacement-specifications][<c:out value="${specification.correctionChangeLineNumber}" />][replacement-value]">
-                      <html:image property="methodToCall.removeReplacementSpecification.specification${specification.correctionChangeGroupLineNumber}-${specification.correctionChangeLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" alt="delete search specification" styleClass="tinybutton" />
+                      <html:image property="methodToCall.removeReplacementSpecification.specification${specification.correctionChangeGroupLineNumber}-${specification.correctionChangeLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" alt="Delete Search Specification" title="Delete Search Specification" styleClass="tinybutton" />
                     </div>
                   </c:forEach>
                   <div>
@@ -353,7 +353,7 @@
                     </select>
                     <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][replacement-value]">Replacement Value</label>
                     <input type="text" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber }" />][replacement-specifications][replacement-value]" id="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][replacement-value]"> 
-                    <html:image property="methodToCall.addReplacementSpecification.anchor${currentTabIndex}" src="images/tinybutton-add1.gif" alt="add replacement specification" styleClass="tinybutton" /> 
+                    <html:image property="methodToCall.addReplacementSpecification.anchor${currentTabIndex}" src="images/tinybutton-add1.gif" alt="Add Replacement Specification" title="Add Replacement Specification" styleClass="tinybutton" /> 
                   </div>
                 </td>
               </tr>
@@ -362,7 +362,7 @@
               <td colspan="2" align="left" class="bord-l-b" style="padding: 4px; vertical-align: top;"> 
                 <center>
                   <STRONG>Add Groups </STRONG>
-                  <html:image property="methodToCall.addCorrectionGroup.anchor${currentTabIndex}" src="images/tinybutton-add1.gif" alt="add correction group" styleClass="tinybutton" />
+                  <html:image property="methodToCall.addCorrectionGroup.anchor${currentTabIndex}" src="images/tinybutton-add1.gif" alt="Add Correction Group" title="Add Correction Group" styleClass="tinybutton" />
                 </center>
               </td>
             </tr>
@@ -404,7 +404,7 @@
                         </select>
                         <label for="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${criterion.correctionCriteriaLineNumber}" />][field-value]">Value</label>
                         <input id="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${criterion.correctionCriteriaLineNumber}" />][field-value]" value="${ criterion.correctionFieldValue}" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${ criterion.correctionCriteriaLineNumber}" />][field-value]" type="text">
-                        <html:image property="methodToCall.removeSearchCriterionForManualEdit.criterion${criterion.correctionChangeGroupLineNumber}-${criterion.correctionCriteriaLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" alt="delete search criterion" styleClass="tinybutton" />
+                        <html:image property="methodToCall.removeSearchCriterionForManualEdit.criterion${criterion.correctionChangeGroupLineNumber}-${criterion.correctionCriteriaLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" alt="Delete Search Criterion" title="Delete Search Criterion" styleClass="tinybutton" />
                       </div>
                     </c:forEach>
                     <!-- New Search Criteria --> 
@@ -422,7 +422,7 @@
                       </select>
                       <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-value]">Value</label> 
                       <input id="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-value]" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][field-value]" type="text">
-                      <html:image property="methodToCall.addSearchCriterionForManualEdit.anchor${currentTabIndex}" src="images/tinybutton-add1.gif" alt="add search criteria" styleClass="tinybutton" />
+                      <html:image property="methodToCall.addSearchCriterionForManualEdit.anchor${currentTabIndex}" src="images/tinybutton-add1.gif" alt="Add Search Criteria" title="Add Search Criteria" styleClass="tinybutton" />
                     </div>                        
                   </td> 
                 </tr>
