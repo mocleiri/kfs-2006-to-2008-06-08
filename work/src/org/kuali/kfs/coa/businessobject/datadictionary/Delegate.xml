@@ -81,7 +81,7 @@
             					sourceClassName="org.kuali.core.document.DocumentType" 
             					sourceAttributeName="financialDocumentTypeCode" />
 
-            <attributeReference name="accountDelegateSystemId" sourceClassName="org.kuali.core.bo.user.KualiUser" sourceAttributeName="personUniversalIdentifier">
+            <attributeReference name="accountDelegateSystemId" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUniversalIdentifier">
                 <label>Account Delegate Universal ID</label>
                 <shortLabel>UnvlID</shortLabel>
                 <required>true</required>
