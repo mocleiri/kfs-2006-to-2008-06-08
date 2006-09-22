@@ -722,15 +722,6 @@
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
 </class-descriptor>
 
-<!-- 
-    <class-descriptor class="org.kuali.module.chart.bo.codes.BudgetAggregationCode" table="CA_BDGT_AGGR_T" >
-    <field-descriptor name="code" column="FOBJ_BDGT_AGGR_CD" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="active" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
-    <field-descriptor name="name" column="FIN_BDGT_AGGR_NM" jdbc-type="VARCHAR" />
-    </class-descriptor>
--->
-
 <class-descriptor class="org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode" table="CA_MNXFR_ELIM_T">
     <field-descriptor name="code" column="FOBJ_MNXFR_ELIM_CD" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
@@ -1288,16 +1279,6 @@
     </reference-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.chart.bo.ObjectCodeRestrictions" table="CA_OBJ_CD_RSTRC_T">
-    <field-descriptor name="finObjRestrictedGroupingName" column="FINOBJ_RSTRGRPG_NM" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="finObjRestrictedColumnName" column="FINOBJ_RSTR_COL_NM" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="finObjValueRestrictedCode" column="FINOBJ_VAL_RSTR_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="finObjRestrictionOperatorCd" column="FINOBJ_RSTR_OPR_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="finObjRestrictedGroupingCode" column="FINOBJ_RSTRGRPG_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-</class-descriptor>
-
 <class-descriptor class="org.kuali.module.chart.bo.IndirectCostRecoveryExclusionAccount" table="CA_ICR_EXCL_ACCT_T">
     <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
@@ -1569,22 +1550,6 @@
     </reference-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.chart.bo.AccountManagerRouteOption" table="CA_ACCT_MGR_RTE_OPTN_T">
-    <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="personUniversalIdentifier" column="PERSON_UNVL_ID" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="accountManagerRouteOptionIndicator" column="ACCT_MGR_RTE_OPTN_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
-    <reference-descriptor name="account" class-ref="org.kuali.module.chart.bo.Account" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="chartOfAccountsCode" />
-        <foreignkey field-ref="accountNumber" />
-    </reference-descriptor>
-    <reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="chartOfAccountsCode" />
-    </reference-descriptor>
-</class-descriptor>
-
 <class-descriptor class="org.kuali.module.chart.bo.DelegateChangeDocument" table="CA_DLGT_CHG_DOC_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="accountDelegateUniversalId" column="ACCT_DLGT_UNVL_ID" jdbc-type="VARCHAR" index="true" primarykey="true" />
@@ -1714,73 +1679,6 @@
     </collection-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.chart.bo.PriorYearOrganization" table="CA_PRIOR_YR_ORG_T">
-    <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="organizationManagerUniversalId" column="ORG_MGR_UNVL_ID" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="organizationName" column="ORG_NM" jdbc-type="VARCHAR" />
-    <field-descriptor name="responsibilityCenterCode" column="RC_CD" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="organizationPhysicalCampusCode" column="ORG_PHYS_CMP_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationTypeCode" column="ORG_TYP_CD" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="organizationDefaultAccountNumber" column="ORG_DFLT_ACCT_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationCityName" column="ORG_CITY_NM" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationStateCode" column="ORG_STATE_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationZipCode" column="ORG_ZIP_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationBeginDate" column="ORG_BEGIN_DT" jdbc-type="DATE" />
-    <field-descriptor name="organizationEndDate" column="ORG_END_DT" jdbc-type="DATE" />
-    <field-descriptor name="reportsToChartOfAccountsCode" column="RPTS_TO_FIN_COA_CD" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="reportsToOrganizationCode" column="RPTS_TO_ORG_CD" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="organizationActiveIndicator" column="ORG_ACTIVE_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
-    <field-descriptor name="organizationInFinancialProcessingIndicator" column="ORG_IN_FP_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
-    <field-descriptor name="organizationPlantAccountNumber" column="ORG_PLNT_ACCT_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="campusPlantAccountNumber" column="CMP_PLNT_ACCT_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationPlantChartCode" column="ORG_PLNT_COA_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="campusPlantChartCode" column="CMP_PLNT_COA_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationCountryCode" column="ORG_CNTRY_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationLine1Address" column="ORG_LN1_ADDR" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationLine2Address" column="ORG_LN2_ADDR" jdbc-type="VARCHAR" />
-    <reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="chartOfAccountsCode" />
-    </reference-descriptor>
-    <reference-descriptor name="organizationDefaultAccount" class-ref="org.kuali.module.chart.bo.Account" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="chartOfAccountsCode" />
-        <foreignkey field-ref="organizationDefaultAccountNumber" />
-    </reference-descriptor>
-    <reference-descriptor name="organization" class-ref="org.kuali.module.chart.bo.Org" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="chartOfAccountsCode" />
-        <foreignkey field-ref="organizationCode" />
-    </reference-descriptor>
-    <reference-descriptor name="organizationPhysicalCampus" class-ref="org.kuali.module.chart.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="organizationPhysicalCampusCode" />
-    </reference-descriptor>
-    <reference-descriptor name="reportsToOrganization" class-ref="org.kuali.module.chart.bo.Org" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="reportsToChartOfAccountsCode" />
-        <foreignkey field-ref="reportsToOrganizationCode" />
-    </reference-descriptor>
-    <reference-descriptor name="reportsToChartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="reportsToChartOfAccountsCode" />
-    </reference-descriptor>
-    <reference-descriptor name="organizationPlantAccount" class-ref="org.kuali.module.chart.bo.Account" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="organizationPlantChartCode" />
-        <foreignkey field-ref="organizationPlantAccountNumber" />
-    </reference-descriptor>
-    <reference-descriptor name="campusPlantAccount" class-ref="org.kuali.module.chart.bo.Account" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="campusPlantChartCode" />
-        <foreignkey field-ref="campusPlantAccountNumber" />
-    </reference-descriptor>
-    <reference-descriptor name="organizationPlantChart" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="organizationPlantChartCode" />
-    </reference-descriptor>
-    <reference-descriptor name="campusPlantChart" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="campusPlantChartCode" />
-    </reference-descriptor>
-    <reference-descriptor name="organizationCountry" class-ref="org.kuali.core.bo.Country" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="organizationCountryCode" />
-    </reference-descriptor>
-</class-descriptor>
-
 <class-descriptor class="org.kuali.module.chart.bo.OrganizationExtension" table="CA_ORG_EXTNS_T">
     <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
@@ -1850,16 +1748,6 @@
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="programName" column="PGM_NM" jdbc-type="VARCHAR" />
     <field-descriptor name="programActiveIndicator" column="PGM_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.chart.bo.CampusMove" table="SH_CAMPUS_MT">
-    <field-descriptor name="campusCode" column="CAMPUS_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="campusName" column="CAMPUS_NM" jdbc-type="VARCHAR" />
-    <field-descriptor name="campusShortName" column="CAMPUS_SHRT_NM" jdbc-type="VARCHAR" />
-    <field-descriptor name="campusTypeCode" column="CAMPUS_TYP_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="sessionIdentifier" column="SESID" jdbc-type="BIGINT" />
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.chart.bo.DelegateChangeContainer" table="FP_MAINTENANCE_DOCUMENT_T">
