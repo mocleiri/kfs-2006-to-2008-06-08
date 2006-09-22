@@ -1004,7 +1004,7 @@ public class OrganizationExtension extends BusinessObjectBase {
     }
 
     public UniversalUser getHrmsPersonnelApproverUniversal() {
-        if (hrmsPersonnelApproverUniversal == null || !hrmsPersonnelApproverUniversal.getPersonUniversalIdentifier().equals(hrmsPersonnelApproverUniversalId))  {
+        if (hrmsPersonnelApproverUniversalId != null & (hrmsPersonnelApproverUniversal == null || !hrmsPersonnelApproverUniversalId.equals(hrmsPersonnelApproverUniversal.getPersonUniversalIdentifier()))) {
             try {
                 hrmsPersonnelApproverUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(hrmsPersonnelApproverUniversalId);
             } catch (UserNotFoundException unfe) {}
@@ -1043,7 +1043,7 @@ public class OrganizationExtension extends BusinessObjectBase {
     }
 
     public UniversalUser getFiscalApproverUniversal() {
-        if (fiscalApproverUniversal == null || !fiscalApproverUniversal.getPersonUniversalIdentifier().equals(fiscalApproverUniversalId))  {
+        if (fiscalApproverUniversalId != null & (fiscalApproverUniversal == null || !fiscalApproverUniversalId.equals(fiscalApproverUniversal.getPersonUniversalIdentifier()))) {
             try {
                 fiscalApproverUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(fiscalApproverUniversalId);
             } catch (UserNotFoundException unfe) {}
