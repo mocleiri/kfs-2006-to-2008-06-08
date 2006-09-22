@@ -18,7 +18,7 @@
         </c:if>
 
         <td class="${dataCellCssClass}" nowrap><div align="center">
-            <html:image property="methodToCall.${insertMethod}.anchoraccounting${actionInfix}Anchor" src="images/tinybutton-add1.gif" title="Add an Accoutning Line" alt="Add an Accoutning Line" styleClass="tinybutton"/>
+            <html:image property="methodToCall.${insertMethod}.anchoraccounting${actionInfix}Anchor" src="images/tinybutton-add1.gif" title="Add an Accounting Line" alt="Add an Accounting Line" styleClass="tinybutton"/>
             <fin:accountingLineDataCellDetail/></div>
         </td>
     </c:when>
@@ -36,13 +36,13 @@
                 <%-- persist accountingLineDecorator --%>
                 <html:hidden name="KualiForm" property="${decorator}.revertible" />
 
-                <html:image property="methodToCall.${deleteMethod}.anchoraccounting${actionInfix}Anchor" src="images/tinybutton-delete1.gif" title="Deletean the Accoutning Line" alt="Delete the Accoutning Line" styleClass="tinybutton"/>
+                <html:image property="methodToCall.${deleteMethod}.anchoraccounting${actionInfix}Anchor" src="images/tinybutton-delete1.gif" title="Delete Accounting Line" alt="Delete Accounting Line" styleClass="tinybutton"/>
                 <c:if test="${revertible}">
                     <br>
-                    <html:image property="methodToCall.${revertMethod}.anchoraccounting${actionInfix}${actionGroup}LineAnchor${0 + accountingLineIndex}" src="images/tinybutton-revert1.gif" title="Revert Accoutning Line" alt="Revert Accoutning Line" styleClass="tinybutton"/>
+                    <html:image property="methodToCall.${revertMethod}.anchoraccounting${actionInfix}${actionGroup}LineAnchor${0 + accountingLineIndex}" src="images/tinybutton-revert1.gif" title="Revert Accounting Line" alt="Revert Accounting Line" styleClass="tinybutton"/>
                 </c:if>
                 <br>
-                <html:image property="methodToCall.${balanceInquiryMethod}.anchoraccounting${actionInfix}${actionGroup}LineAnchor${0 + accountingLineIndex}" src="images/tinybutton-balinquiry.gif" title="balance inquiry" alt="balance inquiry" styleClass="tinybutton" />
+                <html:image property="methodToCall.${balanceInquiryMethod}.anchoraccounting${actionInfix}${actionGroup}LineAnchor${0 + accountingLineIndex}" src="images/tinybutton-balinquiry.gif" title="Balance Inquiry" alt="Balance Inquiry" styleClass="tinybutton" />
             </div>
         </td>
     </c:when>
