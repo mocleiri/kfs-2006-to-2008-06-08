@@ -241,7 +241,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
             LOG.debug("hasSufficientFundsOnItem() balanceAmount is negative, allow transaction to proceed");
             return true;
         }
-        
+
         PendingAmounts priorYearPending = new PendingAmounts();
         if ((Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode())) && (!item.getYear().isFinancialBeginBalanceLoadInd())) {
             priorYearPending = getPendingPriorYearBalanceAmount(item);
