@@ -329,11 +329,7 @@ public class Org extends BusinessObjectBase {
     }
 
     public UniversalUser getOrganizationManagerUniversal() {
-        if (organizationManagerUniversal == null || !organizationManagerUniversal.getPersonUniversalIdentifier().equals(organizationManagerUniversalId))  {
-            try {
-                organizationManagerUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(organizationManagerUniversalId);
-            } catch (UserNotFoundException unfe) {}
-        }
+        organizationManagerUniversal = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(organizationManagerUniversalId, organizationManagerUniversal);
         return organizationManagerUniversal;
     }
 
