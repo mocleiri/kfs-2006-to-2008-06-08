@@ -22,6 +22,7 @@
  */
 package org.kuali.module.gl.dao.ojb;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +34,11 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
+import org.kuali.Constants;
 import org.kuali.PropertyConstants;
+import org.kuali.core.util.KualiDecimal;
+import org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.OBJECT_CODE;
+import org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.OBJECT_TYPE_CODE;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.OriginEntryDao;
@@ -41,7 +46,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * @author 
- * @version $Id: OriginEntryDaoOjb.java,v 1.30.2.5 2006-09-21 00:27:55 bnelson Exp $
+ * @version $Id: OriginEntryDaoOjb.java,v 1.30.2.6 2006-09-24 23:15:08 jsissom Exp $
  */
 
 public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryDao {
@@ -67,12 +72,51 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
     private static final String TRANSACTION_LEDGER_ENTRY_AMOUNT = "transactionLedgerEntryAmount";
     private static final String TRANSACTION_DEBIT_CREDIT_CODE = "transactionDebitCreditCode";
 
-
-    /**
-     * 
-     */
     public OriginEntryDaoOjb() {
         super();
+    }
+
+    public KualiDecimal getGroupTotal(Integer groupId, boolean isCredit) {
+        LOG.debug("getGroupTotal() started");
+
+        Criteria crit = new Criteria();
+        crit.addEqualTo(OriginEntryDaoOjb.ENTRY_GROUP_ID, groupId);
+        if ( isCredit ) {
+            crit.addEqualTo(OriginEntryDaoOjb.TRANSACTION_DEBIT_CREDIT_CODE, Constants.GL_CREDIT_CODE);
+        } else {
+            crit.addNotEqualTo(OriginEntryDaoOjb.TRANSACTION_DEBIT_CREDIT_CODE, Constants.GL_CREDIT_CODE);
+        }
+
+        ReportQueryByCriteria q = QueryFactory.newReportQuery(OriginEntry.class, crit);
+        q.setAttributes(new String[] { "SUM(" + OriginEntryDaoOjb.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")" });
+
+        Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
+        if ( i.hasNext() ) {
+            Object[] data = (Object[])i.next();
+            BigDecimal d = (BigDecimal)data[0];
+            return new KualiDecimal(d);
+        } else {
+            return null;
+        }
+    }
+
+    public Integer getGroupCount(Integer groupId) {
+        LOG.debug("getGroupCount() started");
+
+        Criteria crit = new Criteria();
+        crit.addEqualTo(OriginEntryDaoOjb.ENTRY_GROUP_ID, groupId);
+
+        ReportQueryByCriteria q = QueryFactory.newReportQuery(OriginEntry.class, crit);
+        q.setAttributes(new String[] { "count(*)" });
+
+        Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
+        if ( i.hasNext() ) {
+            Object[] data = (Object[])i.next();
+            BigDecimal d = (BigDecimal)data[0];
+            return d.intValue();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -161,9 +205,15 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         crit1.addAndCriteria(crit2);
 
         QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, crit1);
+        qbc.addOrderByAscending(UNIVERSITY_FISCAL_YEAR);
         qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
         qbc.addOrderByAscending(ACCOUNT_NUMBER);
-        qbc.addOrderByAscending(SUB_ACCOUNT_NUMBER);
+        qbc.addOrderByAscending(FINANCIAL_OBJECT_CODE);
+        qbc.addOrderByAscending(FINANCIAL_OBJECT_TYPE_CODE);
+        qbc.addOrderByAscending(UNIVERSITY_FISCAL_PERIOD_CODE);
+        qbc.addOrderByAscending(FINANCIAL_DOCUMENT_TYPE_CODE);
+        qbc.addOrderByAscending(FINANCIAL_SYSTEM_ORIGINATION_CODE);
+        qbc.addOrderByAscending(FINANCIAL_DOCUMENT_NUMBER);
 
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
     }
