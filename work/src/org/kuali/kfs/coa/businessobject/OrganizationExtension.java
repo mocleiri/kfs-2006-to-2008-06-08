@@ -30,7 +30,6 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.SpringServiceLocator;
 
 /**
@@ -1004,11 +1003,7 @@ public class OrganizationExtension extends BusinessObjectBase {
     }
 
     public UniversalUser getHrmsPersonnelApproverUniversal() {
-        if (hrmsPersonnelApproverUniversalId != null && (hrmsPersonnelApproverUniversal == null || !hrmsPersonnelApproverUniversalId.equals(hrmsPersonnelApproverUniversal.getPersonUniversalIdentifier()))) {
-            try {
-                hrmsPersonnelApproverUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(hrmsPersonnelApproverUniversalId);
-            } catch (UserNotFoundException unfe) {}
-        }
+        hrmsPersonnelApproverUniversal = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(hrmsPersonnelApproverUniversalId, hrmsPersonnelApproverUniversal);
         return hrmsPersonnelApproverUniversal;
     }
 
@@ -1043,11 +1038,7 @@ public class OrganizationExtension extends BusinessObjectBase {
     }
 
     public UniversalUser getFiscalApproverUniversal() {
-        if (fiscalApproverUniversalId != null && (fiscalApproverUniversal == null || !fiscalApproverUniversalId.equals(fiscalApproverUniversal.getPersonUniversalIdentifier()))) {
-            try {
-                fiscalApproverUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(fiscalApproverUniversalId);
-            } catch (UserNotFoundException unfe) {}
-        }
+        fiscalApproverUniversal = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(fiscalApproverUniversalId, fiscalApproverUniversal);
         return fiscalApproverUniversal;
     }
 
