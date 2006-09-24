@@ -39,16 +39,18 @@ import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
+import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.OriginEntryDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.util.LedgerEntry;
 import org.kuali.module.gl.util.LedgerEntryHolder;
+import org.kuali.module.gl.util.OriginEntryStatistics;
 
 /**
  * @author 
- * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.3 2006-09-21 00:28:14 bnelson Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.4 2006-09-24 23:15:07 jsissom Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -82,6 +84,36 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      */
     public OriginEntryServiceImpl() {
         super();
+    }
+
+    public OriginEntryStatistics getStatistics(Integer groupId) {
+        LOG.debug("getStatistics() started");
+
+        OriginEntryStatistics oes = new OriginEntryStatistics();
+
+        oes.setCreditTotalAmount(originEntryDao.getGroupTotal(groupId, true));
+        oes.setDebitTotalAmount(originEntryDao.getGroupTotal(groupId, false));
+        oes.setRowCount(originEntryDao.getGroupCount(groupId));
+
+        return oes;
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.gl.service.OriginEntryService#copyEntries(java.util.Date, java.lang.String, boolean, boolean, boolean, java.util.Collection)
+     */
+    public OriginEntryGroup copyEntries(Date date, String sourceCode, boolean valid,boolean process,boolean scrub,Collection<OriginEntry> entries) {
+        LOG.debug("copyEntries() started");
+
+        OriginEntryGroup newOriginEntryGroup = originEntryGroupService.createGroup(date, sourceCode, valid, process, scrub);
+
+        // Create new Entries with newOriginEntryGroup
+        for (OriginEntry oe : entries) {
+            oe.setEntryGroupId(newOriginEntryGroup.getId());
+            createEntry(oe, newOriginEntryGroup);
+        }
+
+        return newOriginEntryGroup;
     }
 
     /**
@@ -312,14 +344,14 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         return ledgerEntry;
     }
 
-    // TODO
-    public void flatFile(String filename, Integer groupId, BufferedOutputStream bw) {
-
-
-        LOG.debug("exportFlatFile() started");
+    /**
+     * 
+     * @see org.kuali.module.gl.service.OriginEntryService#flatFile(java.lang.Integer, java.io.BufferedOutputStream)
+     */
+    public void flatFile(Integer groupId, BufferedOutputStream bw) {
+        LOG.debug("flatFile() started");
 
         try {
-
             OriginEntryGroup oeg = new OriginEntryGroup();
             oeg.setId(groupId);
             Iterator i = getEntriesByGroup(oeg);
@@ -329,10 +361,15 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             }
         }
         catch (IOException e) {
-            LOG.error("exportFlatFile() Error writing to file", e);
+            LOG.error("flatFile() Error writing to file", e);
+            throw new RuntimeException("Error writing to file: " + e.getMessage());
         }
     }
 
+    /**
+     * 
+     * @see org.kuali.module.gl.service.OriginEntryService#getMatchingEntriesByCollection(java.util.Map)
+     */
     public Collection getMatchingEntriesByCollection(Map searchCriteria) {
         return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
 
