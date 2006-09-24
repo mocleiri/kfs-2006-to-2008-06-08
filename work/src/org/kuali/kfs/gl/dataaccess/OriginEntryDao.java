@@ -26,17 +26,28 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * @author jsissom
- * @version $Id: OriginEntryDao.java,v 1.17.2.2 2006-09-13 00:48:00 jsissom Exp $
+ * @version $Id: OriginEntryDao.java,v 1.17.2.3 2006-09-24 23:15:10 jsissom Exp $
  */
 public interface OriginEntryDao {
     public static final int SORT_DOCUMENT = 1;
     public static final int SORT_ACCOUNT = 2;
     public static final int SORT_REPORT = 3;
+
+    /**
+     * Get the total amount of transactions in a group
+     */
+    public KualiDecimal getGroupTotal(Integer groupId, boolean isCredit);
+
+    /**
+     * Get count of transactions in a group
+     */
+    public Integer getGroupCount(Integer groupId);
 
     /**
      * Get the counts of rows of all the origin entry groups
