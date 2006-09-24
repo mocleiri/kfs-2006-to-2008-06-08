@@ -131,7 +131,7 @@ public class TransactionListingReport {
             transactionList.setWidthPercentage(100);
 
             // Add headers
-            PdfPCell cell = new PdfPCell(new Phrase("Fund Group", headerFont));
+            PdfPCell cell = new PdfPCell(new Phrase("Fiscal Year", headerFont));
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("Account Number", headerFont));
             transactionList.addCell(cell);
@@ -165,14 +165,9 @@ public class TransactionListingReport {
                 while (transactions.hasNext()) {
                     Transaction tran = (Transaction) transactions.next();
 
-                    String fundGroup = "  ";
-                    if ((tran.getAccount() != null) && (tran.getAccount().getSubFundGroup() != null)) {
-                        fundGroup = tran.getAccount().getSubFundGroup().getFundGroupCode();
-                    }
-
-                    cell = new PdfPCell(new Phrase(fundGroup, textFont));
+                    cell = new PdfPCell(new Phrase(tran.getUniversityFiscalYear() == null ? " " : tran.getUniversityFiscalYear().toString(), textFont));
                     transactionList.addCell(cell);
-                    cell = new PdfPCell(new Phrase(tran.getAccountNumber(), textFont));
+                    cell = new PdfPCell(new Phrase(tran.getChartOfAccountsCode() + "-" + tran.getAccountNumber(), textFont));
                     transactionList.addCell(cell);
                     cell = new PdfPCell(new Phrase(tran.getFinancialObjectCode(), textFont));
                     transactionList.addCell(cell);
