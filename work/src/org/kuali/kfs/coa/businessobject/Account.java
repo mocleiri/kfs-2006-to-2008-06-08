@@ -1157,11 +1157,7 @@ public class Account extends BusinessObjectBase implements AccountIntf {
 
 
     public UniversalUser getAccountFiscalOfficerUser() {
-        if (accountFiscalOfficerUser == null || !accountFiscalOfficerUser.getPersonUniversalIdentifier().equals(accountFiscalOfficerSystemIdentifier)) {
-            try {
-                accountFiscalOfficerUser = SpringServiceLocator.getKualiUserService().getUniversalUser(accountFiscalOfficerSystemIdentifier);
-            } catch (UserNotFoundException unfe) {}
-        }
+        accountFiscalOfficerUser = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(accountFiscalOfficerSystemIdentifier, accountFiscalOfficerUser);
         return accountFiscalOfficerUser;
     }
 
@@ -1175,11 +1171,7 @@ public class Account extends BusinessObjectBase implements AccountIntf {
     }
 
     public UniversalUser getAccountManagerUser() {
-        if (accountManagerUser == null || !accountManagerUser.getPersonUniversalIdentifier().equals(accountManagerSystemIdentifier))  {
-            try {
-                accountManagerUser = SpringServiceLocator.getKualiUserService().getUniversalUser(accountManagerSystemIdentifier);
-            } catch (UserNotFoundException unfe) {}
-        }
+        accountManagerUser = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(accountManagerSystemIdentifier, accountManagerUser);
         return accountManagerUser;
     }
 
@@ -1193,11 +1185,7 @@ public class Account extends BusinessObjectBase implements AccountIntf {
 
 
     public UniversalUser getAccountSupervisoryUser() {
-        if (accountSupervisoryUser == null || !accountSupervisoryUser.getPersonUniversalIdentifier().equals(accountsSupervisorySystemsIdentifier))  {
-            try {
-                accountSupervisoryUser = SpringServiceLocator.getKualiUserService().getUniversalUser(accountsSupervisorySystemsIdentifier);
-            } catch (UserNotFoundException unfe) {}
-        }
+        accountSupervisoryUser = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(accountsSupervisorySystemsIdentifier, accountSupervisoryUser);
         return accountSupervisoryUser;
     }
 
