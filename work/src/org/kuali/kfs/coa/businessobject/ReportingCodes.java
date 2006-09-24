@@ -164,11 +164,7 @@ public class ReportingCodes extends BusinessObjectBase {
     }
 
     public UniversalUser getUniversalUser() {
-        if (universalUser == null || !universalUser.getPersonUniversalIdentifier().equals(financialReportingCodeMgrId))  {
-            try {
-                universalUser = SpringServiceLocator.getKualiUserService().getUniversalUser(financialReportingCodeMgrId);
-            } catch (UserNotFoundException unfe) {}
-        }
+        universalUser = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(financialReportingCodeMgrId, universalUser);
         return universalUser;
     }
 
