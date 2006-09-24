@@ -74,11 +74,7 @@ public class ProjectCode extends KualiCodeBase {
     }
 
     public UniversalUser getProjectManagerUniversal() {
-        if (projectManagerUniversal == null || !projectManagerUniversal.getPersonUniversalIdentifier().equals(projectManagerUniversalId)) {
-            try {
-                projectManagerUniversal = SpringServiceLocator.getKualiUserService().getUniversalUser(projectManagerUniversalId);
-            } catch (UserNotFoundException unfe) {}
-        }
+        projectManagerUniversal = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(projectManagerUniversalId, projectManagerUniversal);
         return projectManagerUniversal;
     }
 
