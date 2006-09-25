@@ -55,7 +55,10 @@ public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implemen
     private String typeCode = ADJUSTMENT_DOC_TYPE;
     private java.sql.Date reversalDate;
 
-    
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentBase#documentPerformsSufficientFundsCheck()
+     */
     @Override
     public boolean documentPerformsSufficientFundsCheck() {
         if (isRecodeType()) {
