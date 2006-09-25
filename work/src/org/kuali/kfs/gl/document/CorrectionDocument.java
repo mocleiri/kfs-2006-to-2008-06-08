@@ -32,6 +32,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.document.DocumentBase;
+import org.kuali.core.exceptions.ValidationException;
+import org.kuali.core.service.DictionaryValidationService;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.CorrectionChange;
