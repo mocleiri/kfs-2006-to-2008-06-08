@@ -99,8 +99,7 @@
           </tr>
         </table>
       </div>
-    </kul:tab>
-  
+    </kul:tab>  
     <kul:tab tabTitle="Documents in System" defaultOpen="true" tabErrorKey="documentsInSystem">
       <c:if test="${KualiForm.chooseSystem == 'D'}" >
         <div class="tab-container" align="center" > 
@@ -143,28 +142,44 @@
           </table>
         </div>
       </c:if>
-    </kul:tab> 
-    <kul:tab tabTitle="Search Results" defaultOpen="true" tabErrorKey="Search Results">
+    </kul:tab>
+    <kul:tab tabTitle="Search Results" defaultOpen="true" tabErrorKey="searchResults">
       <c:if test="${KualiForm.chooseSystem != null and KualiForm.editMethod != null and KualiForm.dataLoadedFlag == true}" >
         <div class="tab-container" align="left" style="overflow: scroll; width: 100% ;"> 
           <table cellpadding=0 class="datatable" summary=""> 
             <tr>
-              <c:if test="${KualiForm.showOutputFlag == true}">
-                <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results - Output Group</span></td>
-              </c:if>
-              <c:if test="${KualiForm.showOutputFlag == false}">
-                <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results - Input Group</span></td>
-              </c:if>
+              <c:choose>
+                <c:when test="${KualiForm.showOutputFlag == true and KualiForm.editMethod == 'C'}">
+                  <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results - Output Group</span></td>
+                </c:when>
+                <c:when test="${KualiForm.showOutputFlag == false and KualiForm.editMethod == 'C'}">
+                  <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results - Input Group</span></td>
+                </c:when>
+                <c:when test="${KualiForm.showOutputFlag == true and KualiForm.editMethod == 'M'}">
+                  <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results - Matching Entries Only</span></td>
+                </c:when>
+                <c:when test="${KualiForm.showOutputFlag == false and KualiForm.editMethod == 'M'}">
+                  <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results - All Entries</span></td>
+                </c:when>
+              </c:choose>
             </tr>
             <tr>
               <td>
                 <input type="hidden" name="d-2339813-p" value="${displayTablePageNumber}"/> 
                 <input type="hidden" name="d-2339813-s" value="${displayTableColumnNumber}"/> 
-                <input type="hidden" name="d-2339813-d" value="ASC"/>            
-                <display:table class="datatable-100" cellspacing="0" cellpadding="0" name="${KualiForm.allEntries}" id="allEntries" pagesize="10"
+                <input type="hidden" name="d-2339813-d" value="ASC"/>
+                <c:choose>
+                  <c:when test="${KualiForm.showOutputFlag == true and KualiForm.editMethod == 'M'}">
+                    <c:set var="groupForTable" value="${KualiForm.matchingEntries}"/>
+                  </c:when>
+                  <c:otherwise>
+                    <c:set var="groupForTable" value="${KualiForm.allEntries}"/>
+                  </c:otherwise>
+                </c:choose>
+                <display:table class="datatable-100" cellspacing="0" cellpadding="0" name="${groupForTable}" id="allEntries" pagesize="10"
                     requestURI="generalLedgerCorrection.do?methodToCall=viewResults&document.financialDocumentNumber=${KualiForm.document.documentHeader.financialDocumentNumber}" >
                   <c:choose>
-                    <c:when test="${KualiForm.editableFlag == true}">
+                    <c:when test="${KualiForm.editableFlag == true and KualiForm.showOutputFlag == false}">
                       <display:column title="Manual Edit" >
                         <html:image property="methodToCall.editManualEntry.entryId${allEntries.entryId}.anchor${currentTabIndex}" src="images/tinybutton-edit1.gif" styleClass="tinybutton" alt="edit" />
                         <html:image property="methodToCall.deleteManualEntry.entryId${allEntries.entryId}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="delete" />
@@ -202,7 +217,7 @@
                 </display:table>
               </td>
             </tr>
-            <c:if test="${KualiForm.editMethod == 'M' and KualiForm.editableFlag == true}">
+            <c:if test="${KualiForm.editMethod == 'M' and KualiForm.editableFlag == true and KualiForm.showOutputFlag == false}">
               <tr>
                 <td align="left" valign="middle" class="subhead"><span class="subhead-left">Manual Editing</span></td>
               </tr>
@@ -254,7 +269,7 @@
                             </td>
                           </c:otherwise>
                         </c:choose>
-                        <td><html:text property="entryForManualEdit.universityFiscalYear" size="5"/></td>
+                        <td><html:text property="entryUniversityFiscalYear" size="5"/></td>
                         <td><html:text property="entryForManualEdit.chartOfAccountsCode" size="5"/></td>
                         <td><html:text property="entryForManualEdit.accountNumber" size="7"/></td>
                         <td><html:text property="entryForManualEdit.subAccountNumber" size="7"/></td>
@@ -266,18 +281,18 @@
                         <td><html:text property="entryForManualEdit.financialDocumentTypeCode" size="10"/></td>
                         <td><html:text property="entryForManualEdit.financialSystemOriginationCode" size="6"/></td>
                         <td><html:text property="entryForManualEdit.financialDocumentNumber" size="9"/></td>
-                        <td><html:text property="entryForManualEdit.transactionLedgerEntrySequenceNumber" size="9"/></td>
+                        <td><html:text property="entryTransactionLedgerEntrySequenceNumber" size="9"/></td>
                         <td><html:text property="entryForManualEdit.transactionLedgerEntryDescription" size="11"/></td>
-                        <td><html:text property="entryForManualEdit.transactionLedgerEntryAmount" size="7"/></td>
+                        <td><html:text property="entryTransactionLedgerEntryAmount" size="7"/></td>
                         <td><html:text property="entryForManualEdit.transactionDebitCreditCode" size="9"/></td>
-                        <td><html:text property="entryForManualEdit.transactionDate" size="12"/></td>
+                        <td><html:text property="entryTransactionDate" size="12"/></td>
                         <td><html:text property="entryForManualEdit.organizationDocumentNumber" size="12"/></td>
                         <td><html:text property="entryForManualEdit.projectCode" size="7"/></td>
                         <td><html:text property="entryForManualEdit.organizationReferenceId" size="13"/></td>
                         <td><html:text property="entryForManualEdit.referenceFinancialDocumentTypeCode" size="10"/></td>
                         <td><html:text property="entryForManualEdit.referenceFinancialSystemOriginationCode" size="10"/></td>
                         <td><html:text property="entryForManualEdit.referenceFinancialDocumentNumber" size="9"/></td>
-                        <td><html:text property="entryForManualEdit.financialDocumentReversalDate" size="8"/></td>
+                        <td><html:text property="entryFinancialDocumentReversalDate" size="8"/></td>
                         <td><html:text property="entryForManualEdit.transactionEncumbranceUpdateCode" size="13"/></td>
                       </tr>
                     </tbody>
@@ -304,8 +319,8 @@
       </c:if>
     </kul:tab>
     <kul:tab tabTitle="Edit Options and Action" defaultOpen="true" tabErrorKey="Edit Options and Action">
-      <c:if test="${KualiForm.dataLoadedFlag == true}">
-        <div class="tab-container" align="center"> 
+      <c:if test="${KualiForm.dataLoadedFlag == true and ((KualiForm.editMethod == 'C') or (KualiForm.editMethod == 'M' and KualiForm.editableFlag == true))}">
+        <div class="tab-container" align="center">
           <table cellpadding=0 class="datatable" summary="">
             <c:if test="${KualiForm.editMethod == 'C'}">
               <tr>
@@ -497,6 +512,34 @@
 <%-- ------------------------------------------------------------ This is read only mode --------------------------------------------------- --%>
 
   <c:if test="${readOnly == true}">
+    <html:hidden property="correctionDocument.correctionTypeCode"/>
+    <html:hidden property="correctionDocument.correctionSelection" />
+    <html:hidden property="correctionDocument.correctionFileDelete"/>
+    <html:hidden property="correctionDocument.correctionInputFileName"/>
+    <html:hidden property="correctionDocument.correctionInputGroupId"/>
+    <html:hidden property="correctionDocument.correctionOutputGroupId"/>
+    <c:forEach var="group" items="${KualiForm.document.correctionChangeGroup}"> 
+      <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].versionNumber"/>
+      <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeGroupLineNumber"/>
+      <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].financialDocumentNumber"/>
+      <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaNextLineNumber"/>
+      <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeNextLineNumber"/>
+      <c:forEach items="${group.correctionCriteria}" var="criteria" varStatus="cc">
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].versionNumber"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].financialDocumentNumber"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionChangeGroupLineNumber"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldName"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionOperatorCode"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldValue"/>
+      </c:forEach>
+      <c:forEach items="${group.correctionChange}" var="change">
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].versionNumber"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].financialDocumentNumber"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionChangeGroupLineNumber"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldName"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldValue"/>
+      </c:forEach>
+    </c:forEach>
     <div class="tab-container" align="center" >
       <table cellpadding=0 class="datatable" summary=""> 
         <tr>
@@ -595,8 +638,9 @@
             </center>
           </td>
         </tr>
-    </table>
-  </div>
+      </table>
+    </div>
+  </c:if>
   <c:if test="${KualiForm.document.correctionTypeCode == 'C'}" >
     <div class="tab-container" align="center"> 
       <table cellpadding=0 class="datatable" summary="">
@@ -607,39 +651,40 @@
         <c:forEach var="group" items="${KualiForm.document.correctionChangeGroup}"> 
           <tr>
             <td colspan="2" align="left" class="bord-l-b" style="padding: 4px; vertical-align: top;"> 
-              <strong>Group:</strong> 
+              <strong>Group:</strong>
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #333;"> 
             <td class="bord-l-b" style="padding: 4px; vertical-align: top;">
-              <input type="hidden" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][group-number]" value="" /> 
-              <input type="hidden" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][next-search-criterion-number]" value="<c:out value="${group.correctionCriteriaNextLineNumber}" />" /> 
-              <input type="hidden" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][next-replacement-specification-number]" value="<c:out value="${group.correctionChangeNextLineNumber}" />" />
-              <c:forEach items="${group.correctionCriteria}" var="criterion"> 
-                <div>
-                  <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber }" />][search-criteria][<c:out value="${criterion.correctionCriteriaLineNumber}" />][field-name]">Field</label>
-                  <input type="text" value="<c:out value="${criterion.correctionFieldName}" />" disabled="true" />
-                  <label for="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${criterion.correctionCriteriaLineNumber}" />][operator]">Operator</label>
-                  <input type="text" value="<c:out value="${criterion.correctionOperatorCode}" />" disabled="true" />
-                  <label for="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${criterion.correctionCriteriaLineNumber}" />][field-value]">Value</label>
-                  <input id="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${criterion.correctionCriteriaLineNumber}" />][field-value]" value="${ criterion.correctionFieldValue}" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][search-criteria][<c:out value="${ criterion.correctionCriteriaLineNumber}" />][field-value]" type="text" disabled="true">
-                </div>
+              <c:forEach items="${group.correctionCriteria}" var="criteria" varStatus="cc">
+                Field:
+                <html:select disabled="true" property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldName">
+                  <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
+                </html:select>
+                Operator:
+                <html:select disabled="true" property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionOperatorCode">
+                  <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|SearchOperatorsFinder" label="label" value="key"/>
+                </html:select>
+                Value:
+                <html:text disabled="true" property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldValue"/>
+                <br>
               </c:forEach>
-            </td> 
+            </td>
             <td class="bord-l-b" style="padding: 4px; vertical-align: top;">
-              <c:forEach var="specification" items="${group.correctionChange }">
-                <div>
-                  <label for="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][replacement-specifications][<c:out value="${specification.correctionChangeLineNumber}" />][field-name]">Field</label>
-                  <input type="text" value="<c:out value="${specification.correctionFieldName}" />" disabled="true" />
-                  <label for="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber }" />][replacement-specifications][<c:out value="${specification.correctionChangeLineNumber}" />][replacement-value]">Replacement Value</label>
-                  <input type="text" disabled="true" name="correction-groups[<c:out value="${group.correctionChangeGroupLineNumber}" />][replacement-specifications][<c:out value="${ specification.correctionChangeLineNumber}" />][replacement-value]" value="<c:out value="${specification.correctionFieldValue}" />" id="correction-groups[<c:out value="${ group.correctionChangeGroupLineNumber}" />][replacement-specifications][<c:out value="${specification.correctionChangeLineNumber}" />][replacement-value]">
-                </div>
+              <c:forEach items="${group.correctionChange}" var="change">
+                Field:
+                <html:select disabled="true" property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldName">
+                  <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
+                </html:select>
+                Replacement Value:
+                <html:text disabled="true" property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldValue"/>
+                <br>
               </c:forEach>
-            </tr>
-          </c:forEach>
-        </table>
-      </div>
-    </c:if>
+            </td>
+          </tr>
+        </c:forEach>
+      </table>
+    </div>
   </c:if>
   <kul:notes/>
   <kul:adHocRecipients />        
