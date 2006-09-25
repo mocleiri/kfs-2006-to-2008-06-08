@@ -234,7 +234,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
                     // we have a change or are on the last record, write out the data if there is any
                     currentFinObjectCd = tempFinObjectCd;
 
-                    if (currentSfbl != null) {
+                    if (currentSfbl != null && amountsAreNonZero(currentSfbl)) {
                         sufficientFundBalancesDao.save(currentSfbl);
                         ++sfblInsertedCount;
                     }
@@ -263,7 +263,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
             }
 
             // save the last one
-            if (currentSfbl != null) {
+            if (currentSfbl != null && amountsAreNonZero(currentSfbl)) {
                 sufficientFundBalancesDao.save(currentSfbl);
                 ++sfblInsertedCount;
             }
@@ -276,6 +276,14 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
         }
     }
 
+    private boolean amountsAreNonZero(SufficientFundBalances sfbl) {
+        boolean zero = true;
+        zero &= KualiDecimal.ZERO.equals(sfbl.getAccountActualExpenditureAmt());
+        zero &= KualiDecimal.ZERO.equals(sfbl.getAccountEncumbranceAmount());
+        zero &= KualiDecimal.ZERO.equals(sfbl.getCurrentBudgetBalanceAmount());
+        return !zero;
+    }
+    
     private void processObjectOrAccount(Account sfrbAccount, Balance balance) {
         if ( options.getFinObjTypeExpenditureexpCd().equals(balance.getObjectTypeCode()) || 
                 options.getFinObjTypeExpendNotExp().equals(balance.getObjectTypeCode()) || 
