@@ -850,7 +850,7 @@ public class ScrubberProcess {
         }
 
         try {
-            flexibleOffsetAccountService.updateOffset(costShareOffsetEntry);
+            flexibleOffsetAccountService.updateOffset(costShareSourceAccountOffsetEntry);
         }
         catch (InvalidFlexibleOffsetException e) {
             Message m = new Message(e.getMessage(), Message.TYPE_FATAL);
@@ -1509,13 +1509,13 @@ public class ScrubberProcess {
         if ( reportOnlyMode ) {
             // If the group is null don't write it because the error and expired groups aren't created in reportOnlyMode 
             if ( group != null ) {
-                entry.setGroup(group);
-                originEntryService.save(entry);
-            }
-        } else {
             entry.setGroup(group);
             originEntryService.save(entry);
         }
+        } else {
+            entry.setGroup(group);
+            originEntryService.save(entry);
+    }
     }
 
     /**
