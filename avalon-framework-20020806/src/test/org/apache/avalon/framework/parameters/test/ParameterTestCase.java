@@ -65,7 +65,7 @@ import org.apache.avalon.framework.parameters.Parameters;
  * FIXME: Write messages for each assertion.
  * Writing message in English is very difficult for me :-(.
  *
- * @author <a href="mailto:colus@isoft.co.kr">Eung-ju Park</a>
+ *  <a href="mailto:colus@isoft.co.kr">Eung-ju Park</a>
  */
 public class ParameterTestCase
     extends TestCase

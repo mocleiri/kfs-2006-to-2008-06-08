@@ -10,7 +10,7 @@ import java.util.Set;
  * Mapper that specifies which types are basic immutable types. Types that are marked as immutable will be written
  * multiple times in the serialization stream without using references.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class ImmutableTypesMapper extends MapperWrapper {
 

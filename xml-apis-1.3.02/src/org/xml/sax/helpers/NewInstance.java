@@ -3,7 +3,7 @@
 // Written by Edwin Goei, edwingo@apache.org
 // and by David Brownell, dbrownell@users.sourceforge.net
 // NO WARRANTY!  This class is in the Public Domain.
-// $Id: NewInstance.java,v 1.1 2006-08-08 23:20:48 dbeutel Exp $
+// $Id: NewInstance.java,v 1.2 2006-09-25 14:26:09 bnelson Exp $
 
 package org.xml.sax.helpers;
 
@@ -29,7 +29,7 @@ package org.xml.sax.helpers;
  * <p>This is <strong>not</strong> the NewInstance accompanying SAX 2.0.2; it
  * represents many fixes to that code.
  * 
- * @author Edwin Goei, David Brownell
+ *  Edwin Goei, David Brownell
  * @version 2.0.1 (sax2r2)
  */
 class NewInstance {

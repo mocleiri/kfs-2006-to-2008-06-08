@@ -44,7 +44,7 @@ import java.util.Map;
  *   <li>ObjectInputValidation</li>
  * </ul>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class SerializableConverter implements Converter {
 

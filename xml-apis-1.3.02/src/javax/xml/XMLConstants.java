@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-// $Id: XMLConstants.java,v 1.1 2006-08-08 23:20:44 dbeutel Exp $
+// $Id: XMLConstants.java,v 1.2 2006-09-25 14:26:14 bnelson Exp $
 
 package javax.xml;
 
 /**
  * <p>Utility class to contain basic XML values as constants.</p>
  *
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:44 $
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:14 $
  * @see <a href="http://www.w3.org/TR/xml11/">Extensible Markup Language (XML) 1.1</a>
  * @see <a href="http://www.w3.org/TR/REC-xml">Extensible Markup Language (XML) 1.0 (Second Edition)</a>
  * @see <a href="http://www.w3.org/XML/xml-V10-2e-errata">XML 1.0 Second Edition Specification Errata</a>

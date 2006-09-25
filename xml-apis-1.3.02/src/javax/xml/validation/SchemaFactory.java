@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: SchemaFactory.java,v 1.1 2006-08-08 23:20:44 dbeutel Exp $
+// $Id: SchemaFactory.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package javax.xml.validation;
 
@@ -96,8 +96,8 @@ import org.xml.sax.SAXNotSupportedException;
  *   </tbody>
  * </table>
  * 
- * @author  <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:44 $
+ *   <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:05 $
  * @since 1.5
  */
 public abstract class SchemaFactory {

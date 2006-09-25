@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: SAXParser.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: SAXParser.java,v 1.2 2006-09-25 14:26:10 bnelson Exp $
 
 package javax.xml.parsers;
 
@@ -67,8 +67,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * class to initially adapt their SAX1 impelemntation to work under
  * this revised class.
  *
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:43 $
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:10 $
  */
 public abstract class SAXParser {
     

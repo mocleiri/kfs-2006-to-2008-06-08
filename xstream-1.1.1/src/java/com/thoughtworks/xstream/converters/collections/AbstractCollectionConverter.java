@@ -17,7 +17,7 @@ import com.thoughtworks.xstream.mapper.Mapper;
  * structure of the collection, loop through the contents and
  * call readItem() or writeItem() for each item.</p>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public abstract class AbstractCollectionConverter implements Converter {
 

@@ -10,7 +10,7 @@ import java.util.Iterator;
  * Objects with a high priority will appear before objects with a low priority in the list. If two objects of the same
  * priority are added to the list, the most recently added one will be iterated over first.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class PrioritizedList {
 

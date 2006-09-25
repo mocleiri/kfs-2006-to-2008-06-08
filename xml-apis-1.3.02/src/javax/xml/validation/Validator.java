@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// $Id: Validator.java,v 1.1 2006-08-08 23:20:44 dbeutel Exp $
+// $Id: Validator.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package javax.xml.validation;
 
@@ -44,8 +44,8 @@ import org.xml.sax.SAXNotSupportedException;
  * methods take a {@link Source} instance, the <code>Source</code>
  * instance must be a <code>SAXSource</code> or <code>DOMSource</code>.
  *
- * @author  <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:44 $
+ *   <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:05 $
  * @since 1.5
  */
 public abstract class Validator {

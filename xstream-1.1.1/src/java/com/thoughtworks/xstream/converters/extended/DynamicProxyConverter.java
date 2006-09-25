@@ -18,7 +18,7 @@ import java.util.List;
  * Converts a dynamic proxy to XML, storing the implemented
  * interfaces and handler.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class DynamicProxyConverter implements Converter {
 

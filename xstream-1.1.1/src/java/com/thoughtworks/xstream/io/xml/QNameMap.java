@@ -9,8 +9,8 @@ import java.util.Map;
  * Represents a mapping of {@link QName} intsnaces to Java class names
  * allowing class aliases and namespace aware mappings of QNames to class names.
  *
- * @author James Strachan
- * @version $Revision: 1.1 $
+ *  James Strachan
+ * @version $Revision: 1.2 $
  */
 public class QNameMap {
 

@@ -36,7 +36,7 @@ package org.objectweb.asm;
  * <tt>visitMethod</tt> | <tt>visitInnerClass</tt> | <tt>visitAttribute</tt>)*
  * <tt>visitEnd</tt>.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public interface ClassVisitor {

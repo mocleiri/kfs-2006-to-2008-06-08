@@ -10,7 +10,7 @@ import org.jdom.DefaultJDOMFactory;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
- * @author Laurent Bihanic
+ *  Laurent Bihanic
  */
 public class JDomWriter implements HierarchicalStreamWriter {
 

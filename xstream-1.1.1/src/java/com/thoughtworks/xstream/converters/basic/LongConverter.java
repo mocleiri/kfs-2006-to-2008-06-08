@@ -4,7 +4,7 @@ package com.thoughtworks.xstream.converters.basic;
  * Converts a long primitive or java.lang.Long wrapper to
  * a String.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class LongConverter extends AbstractBasicConverter {
 

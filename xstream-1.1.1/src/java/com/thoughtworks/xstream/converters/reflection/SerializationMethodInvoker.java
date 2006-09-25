@@ -13,7 +13,7 @@ import java.io.ObjectOutputStream;
 /**
  * Convenience wrapper to invoke special serialization methods on objects (and perform reflection caching).
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class SerializationMethodInvoker {
 

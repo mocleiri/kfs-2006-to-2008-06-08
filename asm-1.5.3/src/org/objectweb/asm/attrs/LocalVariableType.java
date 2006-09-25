@@ -36,7 +36,7 @@ import org.objectweb.asm.Label;
 /**
  * Container type info used by {@link LocalVariableTypeTableAttribute}.
  * 
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 public class LocalVariableType {
   

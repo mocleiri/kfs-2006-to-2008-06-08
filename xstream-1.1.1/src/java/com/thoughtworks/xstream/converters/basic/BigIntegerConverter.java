@@ -5,7 +5,7 @@ import java.math.BigInteger;
 /**
  * Converts a java.math.BigInteger to a String.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class BigIntegerConverter extends AbstractBasicConverter {
 

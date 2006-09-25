@@ -3,7 +3,7 @@ package com.thoughtworks.xstream.io;
 import com.thoughtworks.xstream.converters.ErrorWriter;
 
 /**
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public interface HierarchicalStreamReader {
 

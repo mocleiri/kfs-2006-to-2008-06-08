@@ -1,7 +1,7 @@
 package com.thoughtworks.xstream.io;
 
 /**
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public interface HierarchicalStreamWriter {
 

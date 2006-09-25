@@ -9,7 +9,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 /**
  * Special converter to signify nulls at the root level.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class NullConverter implements Converter {
 

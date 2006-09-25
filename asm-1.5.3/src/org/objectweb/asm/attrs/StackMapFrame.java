@@ -51,7 +51,7 @@ import org.objectweb.asm.Label;
  * @see <a href="http://www.jcp.org/en/jsr/detail?id=139">JSR 139 : Connected
  * Limited Device Configuration 1.1</a>
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class StackMapFrame {

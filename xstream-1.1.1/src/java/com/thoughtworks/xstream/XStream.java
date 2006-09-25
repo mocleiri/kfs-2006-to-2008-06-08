@@ -200,8 +200,8 @@ import java.util.Vector;
  * <p>To avoid the need for special tags for collections, you can define implicit collections using one of the 
  * <code>addImplicitCollection</code> methods.</p>
  * 
- * @author Joe Walnes
- * @author Mauro Talevi
+ *  Joe Walnes
+ *  Mauro Talevi
  */
 public class XStream {
 

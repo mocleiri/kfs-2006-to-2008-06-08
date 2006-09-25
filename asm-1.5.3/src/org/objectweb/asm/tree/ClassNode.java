@@ -40,7 +40,7 @@ import java.util.Arrays;
 /**
  * A node that represents a class.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class ClassNode {

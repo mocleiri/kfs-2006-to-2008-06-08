@@ -2,7 +2,7 @@
 // http://www.saxproject.org
 // Written by David Megginson
 // NO WARRANTY!  This class is in the public domain.
-// $Id: ContentHandler.java,v 1.1 2006-08-08 23:20:48 dbeutel Exp $
+// $Id: ContentHandler.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package org.xml.sax;
 
@@ -49,7 +49,7 @@ package org.xml.sax;
  * bug.</p>
  *
  * @since SAX 2.0
- * @author David Megginson
+ *  David Megginson
  * @version 2.0.1+ (sax2r3pre1)
  * @see org.xml.sax.XMLReader
  * @see org.xml.sax.DTDHandler

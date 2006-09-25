@@ -33,7 +33,7 @@ import java.lang.reflect.*;
 import java.io.FileOutputStream;
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class Helloworld extends ClassLoader implements Constants {

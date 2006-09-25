@@ -40,7 +40,7 @@ import org.objectweb.asm.attrs.EnclosingMethodAttribute;
 /**
  * An {@link ASMifiable} {@link EnclosingMethodAttribute} sub class.
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class ASMEnclosingMethodAttribute extends EnclosingMethodAttribute

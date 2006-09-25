@@ -31,7 +31,7 @@
 /**
  * An integer or boolean expression of at most two variables.
  *
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public interface Expression {

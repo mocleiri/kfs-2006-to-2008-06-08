@@ -2,7 +2,7 @@
 // http://www.saxproject.org
 // Written by David Megginson
 // This class is in the Public Domain.  NO WARRANTY!
-// $Id: NamespaceSupport.java,v 1.1 2006-08-08 23:20:48 dbeutel Exp $
+// $Id: NamespaceSupport.java,v 1.2 2006-09-25 14:26:09 bnelson Exp $
 
 package org.xml.sax.helpers;
 
@@ -66,7 +66,7 @@ import java.util.Vector;
  * want to use namespace information.
  *
  * @since SAX 2.0
- * @author David Megginson
+ *  David Megginson
  * @version 2.0.1 (sax2r2)
  */
 public class NamespaceSupport

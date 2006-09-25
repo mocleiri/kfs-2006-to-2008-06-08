@@ -35,7 +35,7 @@ import java.util.List;
  *   }
  * </code></pre>
  *
- * @author Laurent Bihanic
+ *  Laurent Bihanic
  */
 public class TraxSource extends SAXSource {
 

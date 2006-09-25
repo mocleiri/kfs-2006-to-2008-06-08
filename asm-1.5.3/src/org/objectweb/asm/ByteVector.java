@@ -34,7 +34,7 @@ package org.objectweb.asm;
  * A dynamically extensible vector of bytes. This class is roughly equivalent to
  * a DataOutputStream on top of a ByteArrayOutputStream, but is more efficient.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class ByteVector {

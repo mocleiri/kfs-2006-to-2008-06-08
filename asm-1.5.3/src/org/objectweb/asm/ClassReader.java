@@ -39,7 +39,7 @@ import java.io.IOException;
  * file format and calls the appropriate visit methods of a given class visitor
  * for each field, method and bytecode instruction encountered.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class ClassReader {

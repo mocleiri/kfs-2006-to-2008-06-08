@@ -45,8 +45,8 @@ import org.objectweb.asm.tree.TypeInsnNode;
 /**
  * An {@link Interpreter} for {@link BasicValue} values.
  * 
- * @author Eric Bruneton
- * @author Bing Ran
+ *  Eric Bruneton
+ *  Bing Ran
  */
 
 public class BasicInterpreter implements Constants, Interpreter {

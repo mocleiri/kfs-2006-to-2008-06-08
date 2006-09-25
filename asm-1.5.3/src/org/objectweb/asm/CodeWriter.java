@@ -35,7 +35,7 @@ package org.objectweb.asm;
  * Each visit method of this class appends the bytecode corresponding to the
  * visited instruction to a byte vector, in the order these methods are called.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class CodeWriter implements CodeVisitor {

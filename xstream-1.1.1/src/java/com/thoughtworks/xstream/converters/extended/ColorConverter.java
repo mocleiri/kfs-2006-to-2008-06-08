@@ -14,7 +14,7 @@ import java.util.Map;
  * Converts a java.awt.Color to XML, using four nested elements:
  * red, green, blue, alpha.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class ColorConverter implements Converter {
 

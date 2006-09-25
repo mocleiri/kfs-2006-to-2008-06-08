@@ -36,7 +36,7 @@ import org.objectweb.asm.Label;
 /**
  * A node that represents a local variable declaration.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class LocalVariableNode {

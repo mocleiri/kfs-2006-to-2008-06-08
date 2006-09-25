@@ -13,10 +13,10 @@ import org.apache.avalon.framework.CascadingException;
  * The exception thrown to indicate a problem with Components.
  * It is usually thrown by ComponentManager or ComponentSelector.
  *
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
- * @author <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
- * @author <a href="mailto:fede@apache.org">Federico Barbieri</a>
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
+ *  <a href="mailto:fede@apache.org">Federico Barbieri</a>
+ *  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * @deprecated Use {@link org.apache.avalon.framework.service.ServiceException} instead.
  */
 public class ComponentException

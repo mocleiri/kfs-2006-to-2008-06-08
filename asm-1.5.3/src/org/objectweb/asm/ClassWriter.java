@@ -37,7 +37,7 @@ package org.objectweb.asm;
  * or with one or more {@link ClassReader ClassReader} and adapter class
  * visitor to generate a modified class from one or more existing Java classes.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class ClassWriter implements ClassVisitor {

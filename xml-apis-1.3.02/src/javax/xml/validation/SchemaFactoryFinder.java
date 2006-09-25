@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// $Id: SchemaFactoryFinder.java,v 1.1 2006-08-08 23:20:44 dbeutel Exp $
+// $Id: SchemaFactoryFinder.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package javax.xml.validation;
 
@@ -32,8 +32,8 @@ import java.util.Properties;
 /**
  * Implementation of {@link SchemaFactory#newInstance(String)}.
  * 
- * @author <a href="Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:44 $
+ *  <a href="Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:05 $
  * @since 1.5
  */
 class SchemaFactoryFinder  {

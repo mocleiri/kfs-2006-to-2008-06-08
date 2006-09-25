@@ -10,7 +10,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * Converts a char[] to XML, storing the contents as a single
  * String.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class CharArrayConverter implements Converter {
 

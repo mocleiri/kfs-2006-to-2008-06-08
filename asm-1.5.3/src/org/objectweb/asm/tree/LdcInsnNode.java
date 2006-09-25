@@ -36,7 +36,7 @@ import org.objectweb.asm.Constants;
 /**
  * A node that represents an LDC instruction.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class LdcInsnNode extends AbstractInsnNode {

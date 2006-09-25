@@ -124,7 +124,7 @@ import org.objectweb.asm.Label;
  *   </dl>
  * </dl>  
  * 
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 public class LocalVariableTypeTableAttribute extends Attribute {
 

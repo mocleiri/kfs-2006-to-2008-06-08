@@ -7,7 +7,7 @@ import com.thoughtworks.xstream.alias.ClassMapper;
  * Default mapper implementation with 'vanilla' functionality. To build up the functionality required, wrap this mapper
  * with other mapper implementations.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class DefaultMapper extends MapperWrapper {
 

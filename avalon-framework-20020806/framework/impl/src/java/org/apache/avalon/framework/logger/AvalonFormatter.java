@@ -14,8 +14,8 @@ import org.apache.log.format.PatternFormatter;
  * This formatter extends PatternFormatter so that
  * CascadingExceptions are formatted with all nested exceptions.
  *
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
- * @author <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
  */
 public class AvalonFormatter
     extends PatternFormatter

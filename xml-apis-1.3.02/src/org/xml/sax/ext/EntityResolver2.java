@@ -1,7 +1,7 @@
 // EntityResolver2.java - Extended SAX entity resolver.
 // http://www.saxproject.org
 // No warranty; no copyright -- use this as you will.
-// $Id: EntityResolver2.java,v 1.1 2006-08-08 23:20:47 dbeutel Exp $
+// $Id: EntityResolver2.java,v 1.2 2006-09-25 14:26:13 bnelson Exp $
 
 package org.xml.sax.ext;
 
@@ -56,7 +56,7 @@ import org.xml.sax.SAXException;
  * @see org.xml.sax.XMLReader#setEntityResolver
  *
  * @since SAX 2.0 (extensions 1.1 alpha)
- * @author David Brownell
+ *  David Brownell
  * @version TBD
  */
 public interface EntityResolver2 extends EntityResolver

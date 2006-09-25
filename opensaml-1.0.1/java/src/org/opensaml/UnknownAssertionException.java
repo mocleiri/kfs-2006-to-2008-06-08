@@ -59,7 +59,7 @@ import org.w3c.dom.Element;
  *
  *
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    November 17, 2001
  */
 public class UnknownAssertionException extends BindingException implements Cloneable

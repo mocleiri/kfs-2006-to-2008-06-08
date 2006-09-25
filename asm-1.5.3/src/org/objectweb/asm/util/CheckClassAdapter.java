@@ -55,7 +55,7 @@ import org.objectweb.asm.tree.analysis.Frame;
  * <tt>visitField(ACC_PUBLIC, "i", "I", null)</tt> <tt>visitField(ACC_PUBLIC,
  * "i", "D", null)</tt> will <i>not</i> be detected by this class adapter.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class CheckClassAdapter extends ClassAdapter {

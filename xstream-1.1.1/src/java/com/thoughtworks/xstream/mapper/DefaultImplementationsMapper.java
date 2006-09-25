@@ -10,7 +10,7 @@ import java.util.Map;
  * Mapper that resolves default implementations of classes. For example, mapper.lookupName(ArrayList.class) will return
  * java.util.List. Calling mapper.defaultImplementationOf(List.class) will return ArrayList.
  *
- * @author Joe Walnes 
+ *  Joe Walnes 
  */
 public class DefaultImplementationsMapper extends MapperWrapper {
 

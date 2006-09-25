@@ -4,7 +4,7 @@ package com.thoughtworks.xstream.converters.basic;
  * Converts a double primitive or java.lang.Double wrapper to
  * a String.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class DoubleConverter extends AbstractBasicConverter {
 

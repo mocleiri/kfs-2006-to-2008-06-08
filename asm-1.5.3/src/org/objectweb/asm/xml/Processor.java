@@ -105,7 +105,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * </table>
  * </blockquote>
  * 
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 public class Processor {
   public static final int BYTECODE = 1;

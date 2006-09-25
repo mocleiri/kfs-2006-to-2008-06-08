@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: DOMResult.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: DOMResult.java,v 1.2 2006-09-25 14:26:06 bnelson Exp $
 
 package javax.xml.transform.dom;
 
@@ -27,8 +27,8 @@ import org.w3c.dom.Node;
  * <p>If no output DOM source is set, the transformation will create a Document node as the holder for the result of the transformation,
  * which may be retrieved with {@link #getNode()}.</p>
  * 
- * @author <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:43 $
+ *  <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:06 $
  */
 public class DOMResult implements Result {
 

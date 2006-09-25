@@ -47,7 +47,7 @@ import org.objectweb.asm.tree.VarInsnNode;
  * represented by <i>two</i> slots in local variables, and by <i>one</i> slot 
  * in the operand stack.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class Frame {

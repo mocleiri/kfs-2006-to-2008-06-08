@@ -58,7 +58,7 @@ import org.w3c.dom.Element;
  *  information available in the XML or the external constraints imposed on its
  *  use. Also used to indicate problems with method parameters.
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 2, 2003
  */
 public class MalformedException extends SAMLException implements Cloneable

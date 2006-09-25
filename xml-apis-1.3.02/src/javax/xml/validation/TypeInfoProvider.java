@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// $Id: TypeInfoProvider.java,v 1.1 2006-08-08 23:20:44 dbeutel Exp $
+// $Id: TypeInfoProvider.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package javax.xml.validation;
 
@@ -33,8 +33,8 @@ import org.w3c.dom.TypeInfo;
  * Implementation of this "interface" can be obtained through the
  * {@link ValidatorHandler#getTypeInfoProvider()} method.
  * 
- * @author  <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:44 $
+ *   <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:05 $
  * @see org.w3c.dom.TypeInfo 
  * @since 1.5
  */

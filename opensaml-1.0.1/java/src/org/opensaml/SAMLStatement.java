@@ -61,7 +61,7 @@ import org.xml.sax.SAXException;
 /**
  *  Abstract base class for all SAML statements
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 25, 2002
  */
 public abstract class SAMLStatement extends SAMLObject implements Cloneable

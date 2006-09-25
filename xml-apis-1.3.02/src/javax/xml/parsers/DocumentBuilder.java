@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: DocumentBuilder.java,v 1.1 2006-08-08 23:20:42 dbeutel Exp $
+// $Id: DocumentBuilder.java,v 1.2 2006-09-25 14:26:10 bnelson Exp $
 
 package javax.xml.parsers;
 
@@ -49,8 +49,8 @@ import org.xml.sax.SAXException;
  * <code>Document</code>. It merely requires that the implementation
  * communicate with the application using these existing APIs.
  *
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:42 $
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:10 $
  */
 
 public abstract class DocumentBuilder {

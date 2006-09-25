@@ -59,7 +59,7 @@ import org.w3c.dom.*;
 /**
  *  Represents a SAML AudienceRestrictionCondition
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 30, 2002
  */
 public class SAMLAudienceRestrictionCondition extends SAMLCondition implements Cloneable

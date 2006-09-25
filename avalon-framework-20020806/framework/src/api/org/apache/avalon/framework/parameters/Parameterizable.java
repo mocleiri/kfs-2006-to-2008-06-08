@@ -24,7 +24,7 @@ package org.apache.avalon.framework.parameters;
 
 
  *
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
  */
 public interface Parameterizable
 {

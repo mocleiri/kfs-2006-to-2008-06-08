@@ -57,7 +57,7 @@ import org.w3c.dom.Element;
  *  Indicates an error at a level somewhere above core processing rules,
  *  generally involving 
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 3, 2003
  */
 public class TrustException extends InvalidCryptoException implements Cloneable

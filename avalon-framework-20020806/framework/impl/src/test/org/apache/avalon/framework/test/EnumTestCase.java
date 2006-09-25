@@ -56,7 +56,7 @@ import org.apache.avalon.framework.Enum;
 /**
  * TestCase for Enum.
  *
- * @author <a href="mailto:leo.sutic@insprieinfrastructure.com">Leo Sutic</a>
+ *  <a href="mailto:leo.sutic@insprieinfrastructure.com">Leo Sutic</a>
  */
 public class EnumTestCase
     extends TestCase

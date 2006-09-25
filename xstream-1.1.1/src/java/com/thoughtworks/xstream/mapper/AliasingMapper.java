@@ -9,7 +9,7 @@ import java.util.HashMap;
 /**
  * Mapper that allows a fully qualified class name to be replaced with a shorter alias.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class AliasingMapper extends MapperWrapper {
 

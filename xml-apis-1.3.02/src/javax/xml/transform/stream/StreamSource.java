@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: StreamSource.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: StreamSource.java,v 1.2 2006-09-25 14:26:14 bnelson Exp $
 
 package javax.xml.transform.stream;
 
@@ -31,8 +31,8 @@ import javax.xml.transform.Source;
  * <p><em>Note:</em> Due to their internal use of either a {@link Reader} or {@link InputStream} instance,
  * <code>StreamSource</code> instances may only be used once.</p>
  *
- * @author <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:43 $
+ *  <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:14 $
  */
 public class StreamSource implements Source {
 

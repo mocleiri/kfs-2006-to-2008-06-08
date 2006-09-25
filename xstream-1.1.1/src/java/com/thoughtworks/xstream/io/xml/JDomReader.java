@@ -5,7 +5,7 @@ import org.jdom.Element;
 import org.jdom.Parent;
 
 /**
- * @author Laurent Bihanic
+ *  Laurent Bihanic
  */
 public class JDomReader extends AbstractTreeReader {
 

@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Converter for Throwable (and Exception) that retains stack trace, for JDK1.4 only.
  *
- * @author <a href="mailto:boxley@thoughtworks.com">B. K. Oxley (binkley)</a>
- * @author Joe Walnes
+ *  <a href="mailto:boxley@thoughtworks.com">B. K. Oxley (binkley)</a>
+ *  Joe Walnes
  */
 public class ThrowableConverter implements Converter {
 

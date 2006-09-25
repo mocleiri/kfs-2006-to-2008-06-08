@@ -83,7 +83,7 @@ import org.xml.sax.SAXException;
 /**
  *  Base class for policy-specific SOAP over HTTP binding implementations
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    November 25, 2001
  */
 public class SAMLSOAPBinding implements SAMLBinding

@@ -57,7 +57,7 @@ import org.apache.avalon.framework.service.DefaultServiceSelector;
 /**
  * Test the basic public methods of DefaultComponentSelector.
  *
- * @author <a href="mailto:rantene@hotmail.com">Ran Tene</a>
+ *  <a href="mailto:rantene@hotmail.com">Ran Tene</a>
  */
 public final class DefaultServiceSelectorTestCase
     extends TestCase

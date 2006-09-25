@@ -40,7 +40,7 @@ import org.objectweb.asm.attrs.SourceDebugExtensionAttribute;
 /**
  * An {@link ASMifiable} {@link SourceDebugExtensionAttribute} sub class.
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class ASMSourceDebugExtensionAttribute 

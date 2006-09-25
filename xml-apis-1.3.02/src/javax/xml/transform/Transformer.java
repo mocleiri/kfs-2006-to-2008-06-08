@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: Transformer.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: Transformer.java,v 1.2 2006-09-25 14:26:16 bnelson Exp $
 
 package javax.xml.transform;
 
@@ -37,8 +37,8 @@ import java.util.Properties;
  * <p>A <code>Transformer</code> may be used multiple times.  Parameters and
  * output properties are preserved across transformations.</p>
  * 
- * @author <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:43 $
+ *  <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:16 $
  */
 public abstract class Transformer {
 

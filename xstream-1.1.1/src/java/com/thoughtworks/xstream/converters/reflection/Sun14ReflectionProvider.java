@@ -15,8 +15,8 @@ import java.util.Collections;
  * will never be executed and parameters do not have to be known). This is the same method used by the internals of
  * standard Java serialization, but relies on internal Sun code that may not be present on all JVMs.
  *
- * @author Joe Walnes
- * @author Brian Slesinsky
+ *  Joe Walnes
+ *  Brian Slesinsky
  */
 public class Sun14ReflectionProvider extends PureJavaReflectionProvider {
 

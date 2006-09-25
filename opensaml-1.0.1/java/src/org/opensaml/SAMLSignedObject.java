@@ -73,7 +73,7 @@ import org.apache.xml.security.transforms.params.InclusiveNamespaces;
 /**
  *  Abstract base class for all SAML objects that can be signed
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 25, 2002
  */
 public abstract class SAMLSignedObject extends SAMLObject implements Cloneable

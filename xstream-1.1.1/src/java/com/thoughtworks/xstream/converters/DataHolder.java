@@ -5,7 +5,7 @@ import java.util.Iterator;
 /**
  * Holds generic data, to be used as seen fit by the user.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public interface DataHolder {
 

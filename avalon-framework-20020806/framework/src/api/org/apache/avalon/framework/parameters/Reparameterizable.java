@@ -14,7 +14,7 @@ package org.apache.avalon.framework.parameters;
  * Startable.stop(). It is incompatible with the
  * Reconfigurable interface.
  *
- * @author <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
+ *  <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
  */
 public interface Reparameterizable extends Parameterizable
 {

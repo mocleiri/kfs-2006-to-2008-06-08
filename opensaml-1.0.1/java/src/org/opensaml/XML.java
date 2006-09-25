@@ -63,7 +63,7 @@ import org.xml.sax.SAXParseException;
 /**
  *  Utility classes for XML constants and optimizations
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 2, 2002
  */
 public class XML
@@ -320,7 +320,7 @@ public class XML
     /**
      *  Nested class that provides XML parsers as a pooled resource
      *
-     * @author     Scott Cantor
+     *      Scott Cantor
      * @created    January 15, 2002
      */
     public static class ParserPool implements EntityResolver, ErrorHandler

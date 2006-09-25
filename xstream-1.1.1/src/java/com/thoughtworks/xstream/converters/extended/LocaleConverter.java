@@ -7,8 +7,8 @@ import java.util.Locale;
 /**
  * Converts a java.util.Locale to a string.
  *
- * @author Jose A. Illescas
- * @author Joe Walnes
+ *  Jose A. Illescas
+ *  Joe Walnes
  */
 public class LocaleConverter extends AbstractBasicConverter {
 

@@ -58,7 +58,7 @@ import org.apache.avalon.framework.configuration.DefaultConfiguration;
 /**
  * Test the basic public methods of DefaultConfiguration.
  *
- * @author <a href="mailto:rantene@hotmail.com">Ran Tene</a>
+ *  <a href="mailto:rantene@hotmail.com">Ran Tene</a>
  */
 public final class DefaultConfigurationTestCase extends TestCase
 {

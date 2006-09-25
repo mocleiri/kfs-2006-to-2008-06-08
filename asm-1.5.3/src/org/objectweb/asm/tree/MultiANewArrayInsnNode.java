@@ -36,7 +36,7 @@ import org.objectweb.asm.CodeVisitor;
 /**
  * A node that represents a MULTIANEWARRAY instruction.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class MultiANewArrayInsnNode extends AbstractInsnNode {

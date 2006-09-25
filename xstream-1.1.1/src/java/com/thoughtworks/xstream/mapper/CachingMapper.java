@@ -9,7 +9,7 @@ import java.util.HashMap;
 /**
  * Mapper that caches which names map to which classes. Prevents repetitive searching and class loading.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class CachingMapper extends MapperWrapper {
 

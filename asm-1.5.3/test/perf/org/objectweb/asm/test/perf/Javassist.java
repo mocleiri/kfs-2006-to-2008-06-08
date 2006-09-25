@@ -42,7 +42,7 @@ import javassist.bytecode.CodeIterator;
 import javassist.bytecode.MethodInfo;
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class Javassist extends ALL {

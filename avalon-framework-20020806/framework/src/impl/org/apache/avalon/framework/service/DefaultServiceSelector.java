@@ -13,8 +13,8 @@ import java.util.Map;
 /**
  * This is the default implementation of the ServiceSelector
  *
- * @author <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
- * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
+ *  <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
+ *  <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @version 1.0
  */
 public class DefaultServiceSelector

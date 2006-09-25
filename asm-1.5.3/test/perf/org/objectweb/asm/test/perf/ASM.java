@@ -42,7 +42,7 @@ import org.objectweb.asm.Attribute;
 import java.io.InputStream;
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class ASM extends ALL {

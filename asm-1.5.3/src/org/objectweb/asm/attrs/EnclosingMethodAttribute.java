@@ -80,7 +80,7 @@ import org.objectweb.asm.Label;
  * attribute.</dd>
  * </dl>
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class EnclosingMethodAttribute extends Attribute {

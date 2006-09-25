@@ -44,7 +44,7 @@ import org.objectweb.asm.attrs.Annotation.EnumConstValue;
 /**
  * An {@link ASMifiable} {@link AnnotationDefaultAttribute} sub class.
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class ASMAnnotationDefaultAttribute extends AnnotationDefaultAttribute 

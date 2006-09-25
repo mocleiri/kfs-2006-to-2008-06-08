@@ -9,7 +9,7 @@ import java.util.Date;
  * Converts a java.util.Date to a String as a date format,
  * retaining precision down to milliseconds.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class DateConverter extends AbstractBasicConverter {
 

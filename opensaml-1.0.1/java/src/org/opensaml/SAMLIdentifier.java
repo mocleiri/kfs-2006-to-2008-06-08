@@ -54,7 +54,7 @@ import java.security.SecureRandom;
 /**
  *  Encapsulates generation of identifiers for SAML objects
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 6, 2003
  */
 public class SAMLIdentifier

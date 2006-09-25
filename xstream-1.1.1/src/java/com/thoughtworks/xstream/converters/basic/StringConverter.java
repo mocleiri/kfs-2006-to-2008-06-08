@@ -7,7 +7,7 @@ package com.thoughtworks.xstream.converters.basic;
  * <p>The converter always calls intern() on the returned
  * String to encourage the JVM to reuse instances.</p>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  * @see String#intern()
  */
 public class StringConverter extends AbstractBasicConverter {

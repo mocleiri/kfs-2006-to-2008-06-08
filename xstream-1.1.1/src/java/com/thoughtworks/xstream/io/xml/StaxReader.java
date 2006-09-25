@@ -14,8 +14,8 @@ import javax.xml.stream.XMLStreamReader;
 /**
  * A reader using the StAX API
  *
- * @author James Strachan
- * @version $Revision: 1.1 $
+ *  James Strachan
+ * @version $Revision: 1.2 $
  */
 public class StaxReader implements HierarchicalStreamReader, XMLStreamConstants {
 

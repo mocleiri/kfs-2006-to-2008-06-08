@@ -66,7 +66,7 @@ import org.w3c.dom.Node;
 /**
  *  Abstract base class for all SAML constructs
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    November 17, 2001
  */
 public abstract class SAMLObject implements Cloneable

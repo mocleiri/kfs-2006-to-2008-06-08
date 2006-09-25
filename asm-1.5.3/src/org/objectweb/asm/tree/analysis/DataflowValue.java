@@ -40,7 +40,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
  * A {@link Value} that is represented by its type in a two types type system.
  * This type system distinguishes the ONEWORD and TWOWORDS types.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class DataflowValue implements Value {

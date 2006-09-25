@@ -54,7 +54,7 @@ import org.w3c.dom.*;
 /**
  *  Processes QName attribute values to determine their namespace and local name
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 28, 2002
  */
 public class QName

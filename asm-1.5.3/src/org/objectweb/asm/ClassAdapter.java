@@ -36,7 +36,7 @@ package org.objectweb.asm;
  * quickly implement usefull class adapter classes, just by overriding the
  * necessary methods.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class ClassAdapter implements ClassVisitor {

@@ -3,7 +3,7 @@ package com.thoughtworks.xstream.converters;
 /**
  * Responsible for looking up the correct Converter implementation for a specific type.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  * @see Converter
  */
 public interface ConverterLookup {

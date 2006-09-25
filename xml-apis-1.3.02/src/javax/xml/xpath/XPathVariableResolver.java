@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// $Id: XPathVariableResolver.java,v 1.1 2006-08-08 23:20:44 dbeutel Exp $
+// $Id: XPathVariableResolver.java,v 1.2 2006-09-25 14:26:07 bnelson Exp $
 
 package javax.xml.xpath;
 
@@ -28,9 +28,9 @@ import javax.xml.namespace.QName;
  * than once with different variable values, in the course of evaluating any
  * single XPath expression, a variable's value <strong><em>must</em></strong> be immutable.</p>
  *
- * @author  <a href="mailto:Norman.Walsh@Sun.com">Norman Walsh</a>
- * @author  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:44 $
+ *   <a href="mailto:Norman.Walsh@Sun.com">Norman Walsh</a>
+ *   <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:07 $
  * @since 1.5
  */
 public interface XPathVariableResolver {

@@ -57,7 +57,7 @@ import org.w3c.dom.Element;
  *  Indicates that an error occurred during the processing of a SAML profile, and
  *  the error is retryable in the context of the profile
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 17, 2003
  */
 public class RetryableProfileException extends ProfileException implements Cloneable

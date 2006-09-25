@@ -4,7 +4,7 @@ package antlr;
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/license.html
  *
- * $Id: CodeGenerator.java,v 1.1 2006-08-08 23:16:56 dbeutel Exp $
+ * $Id: CodeGenerator.java,v 1.2 2006-09-25 14:26:13 bnelson Exp $
  */
 
 import java.io.PrintWriter;
@@ -38,7 +38,7 @@ import antlr.collections.impl.BitSet;
  * This class provides a set of support utilities to handle argument
  * list parsing and so on.
  *
- * @author  Terence Parr, John Lilley
+ *   Terence Parr, John Lilley
  * @version 2.00a
  * @see     antlr.JavaCodeGenerator
  * @see     antlr.DiagnosticCodeGenerator

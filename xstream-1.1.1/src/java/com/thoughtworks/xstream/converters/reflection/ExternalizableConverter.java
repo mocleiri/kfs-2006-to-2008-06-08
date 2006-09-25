@@ -22,7 +22,7 @@ import java.util.Map;
  * Converts any object that implements the java.io.Externalizable interface, allowing compatability with native Java
  * serialization.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class ExternalizableConverter implements Converter {
 

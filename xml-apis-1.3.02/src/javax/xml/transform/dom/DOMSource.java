@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: DOMSource.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: DOMSource.java,v 1.2 2006-09-25 14:26:06 bnelson Exp $
 
 package javax.xml.transform.dom;
 
@@ -31,8 +31,8 @@ import org.w3c.dom.Node;
  * Parsers can be made namespace aware by calling
  * {@link javax.xml.parsers.DocumentBuilderFactory#setNamespaceAware(boolean awareness)}.</p>
  * 
- * @author <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:43 $
+ *  <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:06 $
  * @see <a href="http://www.w3.org/TR/DOM-Level-2">Document Object Model (DOM) Level 2 Specification</a>
  */
 public class DOMSource implements Source {

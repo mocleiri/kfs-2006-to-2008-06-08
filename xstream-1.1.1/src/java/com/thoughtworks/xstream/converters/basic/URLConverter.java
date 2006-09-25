@@ -8,7 +8,7 @@ import java.net.URL;
 /**
  * Converts a java.net.URL to a string.
  *
- * @author J. Matthew Pryor
+ *  J. Matthew Pryor
  */
 public class URLConverter extends AbstractBasicConverter {
 

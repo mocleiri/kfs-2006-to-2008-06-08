@@ -56,7 +56,7 @@ import org.w3c.dom.Element;
 /**
  *  Indicates that an error occurred during the processing of a SAML profile
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 17, 2003
  */
 public class ProfileException extends SAMLException implements Cloneable

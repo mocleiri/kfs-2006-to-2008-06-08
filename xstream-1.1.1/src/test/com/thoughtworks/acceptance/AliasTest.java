@@ -4,7 +4,7 @@ import com.thoughtworks.acceptance.someobjects.X;
 import com.thoughtworks.xstream.alias.CannotResolveClassException;
 
 /**
- * @author Paul Hammant
+ *  Paul Hammant
  */
 public class AliasTest extends AbstractAcceptanceTest {
 

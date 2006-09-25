@@ -56,7 +56,7 @@ import org.apache.avalon.framework.Version;
 /**
  * TestCase for Version.
  *
- * @author <a href="mailto:colus@apache.org">Eung-ju Park</a>
+ *  <a href="mailto:colus@apache.org">Eung-ju Park</a>
  */
 public class VersionTestCase
     extends TestCase

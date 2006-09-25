@@ -85,7 +85,7 @@ import org.objectweb.asm.Label;
  * @see <a href="http://www.jcp.org/en/jsr/detail?id=14">JSR 14 : Add Generic
  * Types To The JavaTM Programming Language</a>
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class SignatureAttribute extends Attribute {

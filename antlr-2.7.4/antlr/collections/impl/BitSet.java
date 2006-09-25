@@ -4,7 +4,7 @@ package antlr.collections.impl;
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/license.html
  *
- * $Id: BitSet.java,v 1.1 2006-08-08 23:16:55 dbeutel Exp $
+ * $Id: BitSet.java,v 1.2 2006-09-25 14:26:14 bnelson Exp $
  */
 
 import antlr.CharFormatter;
@@ -21,8 +21,8 @@ import antlr.CharFormatter;
  * Also seems like or() from util is wrong when size of incoming set is bigger
  * than this.bits.length.
  *
- * @author Terence Parr
- * @author <br><a href="mailto:pete@yamuna.demon.co.uk">Pete Wells</a>
+ *  Terence Parr
+ *  <br><a href="mailto:pete@yamuna.demon.co.uk">Pete Wells</a>
  */
 public class BitSet implements Cloneable {
     protected final static int BITS = 64;    // number of bits / long

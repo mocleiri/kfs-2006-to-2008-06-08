@@ -40,7 +40,7 @@ import org.objectweb.asm.attrs.RuntimeVisibleParameterAnnotations;
 /**
  * An {@link ASMifiable} {@link RuntimeVisibleParameterAnnotations} sub class.
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class ASMRuntimeVisibleParameterAnnotations 

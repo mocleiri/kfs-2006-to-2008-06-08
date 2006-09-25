@@ -41,7 +41,7 @@ import java.util.HashMap;
  * A {@link PrintCodeVisitor PrintCodeVisitor} that prints a disassembled view
  * of the code it visits.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class TraceCodeVisitor extends PrintCodeVisitor {

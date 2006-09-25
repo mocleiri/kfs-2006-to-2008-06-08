@@ -20,7 +20,7 @@ import java.util.Locale;
  * If all instances in the pool are in use and another is
  * required, it shall block until one becomes available.</p>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class ThreadSafeSimpleDateFormat {
 

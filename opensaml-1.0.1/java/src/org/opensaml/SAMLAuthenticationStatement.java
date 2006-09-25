@@ -61,7 +61,7 @@ import org.w3c.dom.*;
 /**
  *  Represents a SAML Authentication Statement
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 25, 2002
  */
 public class SAMLAuthenticationStatement extends SAMLSubjectStatement implements Cloneable

@@ -35,7 +35,7 @@ import org.objectweb.asm.ClassVisitor;
 /**
  * A node that represents an inner class.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class InnerClassNode {

@@ -36,7 +36,7 @@ import org.objectweb.asm.Attribute;
 /**
  * A node that represents a field.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class FieldNode {

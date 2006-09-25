@@ -38,7 +38,7 @@ import java.util.Map;
  * Implementation should print the ASM code that generates
  * attribute data structures for current attribute state.
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public interface ASMifiable {

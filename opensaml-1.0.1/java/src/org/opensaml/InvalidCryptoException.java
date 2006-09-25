@@ -58,7 +58,7 @@ import org.w3c.dom.Element;
  *  provider's policies, or a cryptographic problem was found while processing a
  *  message.
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    November 17, 2001
  */
 public class InvalidCryptoException extends SAMLException implements Cloneable

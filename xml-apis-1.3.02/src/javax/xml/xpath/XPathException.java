@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// $Id: XPathException.java,v 1.1 2006-08-08 23:20:44 dbeutel Exp $
+// $Id: XPathException.java,v 1.2 2006-09-25 14:26:07 bnelson Exp $
 
 package javax.xml.xpath;
 
@@ -22,9 +22,9 @@ import java.io.PrintWriter;
 /**
  * <code>XPathException</code> represents a generic XPath exception.</p>
  *
- * @author  <a href="Norman.Walsh@Sun.com">Norman Walsh</a>
- * @author <a href="mailto:Jeff.Suttor@Sun.COM">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:44 $
+ *   <a href="Norman.Walsh@Sun.com">Norman Walsh</a>
+ *  <a href="mailto:Jeff.Suttor@Sun.COM">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:07 $
  * @since 1.5
  */
 public class XPathException extends Exception {

@@ -49,7 +49,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 /**
  * A semantic bytecode analyzer.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class Analyzer implements Constants {

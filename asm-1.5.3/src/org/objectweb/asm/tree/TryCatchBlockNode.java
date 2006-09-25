@@ -36,7 +36,7 @@ import org.objectweb.asm.CodeVisitor;
 /**
  * A node that represents a try catch block.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class TryCatchBlockNode {

@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 /**
  * Converts a java.sql.Timestamp to text.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class SqlTimestampConverter extends AbstractBasicConverter {
 

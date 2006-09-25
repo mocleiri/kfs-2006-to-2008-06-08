@@ -40,7 +40,7 @@ import org.objectweb.asm.Attribute;
  * constructs an <i>XXX</i><tt>Node</tt> and adds it to the {@link #methodNode
  * methodNode} node.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class TreeCodeAdapter extends CodeAdapter {

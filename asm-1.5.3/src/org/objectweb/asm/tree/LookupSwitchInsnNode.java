@@ -41,7 +41,7 @@ import java.util.Arrays;
 /**
  * A node that represents a LOOKUPSWITCH instruction.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class LookupSwitchInsnNode extends AbstractInsnNode {

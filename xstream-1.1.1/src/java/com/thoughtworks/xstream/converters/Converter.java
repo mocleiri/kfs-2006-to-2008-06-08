@@ -25,7 +25,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * provides a starting point for objects that hold a collection of other objects
  * (such as Lists and Maps).</p>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  * @see com.thoughtworks.xstream.XStream
  * @see com.thoughtworks.xstream.converters.ConverterLookup
  * @see com.thoughtworks.xstream.converters.basic.AbstractBasicConverter

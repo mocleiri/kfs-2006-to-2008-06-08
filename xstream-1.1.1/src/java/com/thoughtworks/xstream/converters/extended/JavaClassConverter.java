@@ -6,9 +6,9 @@ import com.thoughtworks.xstream.converters.basic.AbstractBasicConverter;
 /**
  * Converts a java.lang.Class to XML.
  * 
- * @author Aslak Helles&oslash;y
- * @author Joe Walnes
- * @author Matthew Sandoz
+ *  Aslak Helles&oslash;y
+ *  Joe Walnes
+ *  Matthew Sandoz
  */
 public class JavaClassConverter extends AbstractBasicConverter {
 

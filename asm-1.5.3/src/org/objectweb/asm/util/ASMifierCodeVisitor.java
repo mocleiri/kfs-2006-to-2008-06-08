@@ -40,7 +40,7 @@ import java.util.HashMap;
  * A {@link PrintCodeVisitor} that prints the ASM code that
  * generates the code it visits.
  * 
- * @author Eric Bruneton, Eugene Kuleshov
+ *  Eric Bruneton, Eugene Kuleshov
  */
 
 public class ASMifierCodeVisitor extends PrintCodeVisitor {

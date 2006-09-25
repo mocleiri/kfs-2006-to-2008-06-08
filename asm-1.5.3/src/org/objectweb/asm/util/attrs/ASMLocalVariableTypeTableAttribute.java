@@ -41,7 +41,7 @@ import org.objectweb.asm.attrs.LocalVariableTypeTableAttribute;
 /**
  * An {@link ASMifiable} {@link LocalVariableTypeTableAttribute} sub class.
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class ASMLocalVariableTypeTableAttribute

@@ -14,7 +14,7 @@ import java.io.OutputStreamWriter;
  * Creates the debug log file (and window)
  *
  * @version	0.2 11th Sep 2000
- * @author	Dr. M.P. Ford (c)2000 Forward Computing and Control Pty. Ltd.
+ * 	Dr. M.P. Ford (c)2000 Forward Computing and Control Pty. Ltd.
  *   NSW Australia  email fcc@forward.com.au
  * You may use this class without restriction.
  */

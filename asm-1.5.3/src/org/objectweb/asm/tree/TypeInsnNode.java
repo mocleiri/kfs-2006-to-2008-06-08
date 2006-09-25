@@ -36,7 +36,7 @@ import org.objectweb.asm.CodeVisitor;
  * A node that represents a type instruction. A type instruction is an
  * instruction that takes a type descriptor as parameter.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class TypeInsnNode extends AbstractInsnNode {

@@ -11,11 +11,11 @@ package org.apache.avalon.framework.activity;
  * The Disposable interface is used when components need to
  * deallocate and dispose resources prior to their destruction.
  *
- * @author <a href="mailto:fede@apache.org">Federico Barbieri</a>
- * @author <a href="mailto:pier@apache.org">Pierpaolo Fumagalli</a>
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
- * @author <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
+ *  <a href="mailto:fede@apache.org">Federico Barbieri</a>
+ *  <a href="mailto:pier@apache.org">Pierpaolo Fumagalli</a>
+ *  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
  */
 public interface Disposable
 {

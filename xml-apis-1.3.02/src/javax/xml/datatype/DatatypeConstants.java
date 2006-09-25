@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: DatatypeConstants.java,v 1.1 2006-08-08 23:20:42 dbeutel Exp $
+// $Id: DatatypeConstants.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package javax.xml.datatype;
 
@@ -24,8 +24,8 @@ import javax.xml.namespace.QName;
 /**
  * <p>Utility class to contain basic Datatype values as constants.</p>
  *
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:42 $
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:05 $
  * @since 1.5
  */
 

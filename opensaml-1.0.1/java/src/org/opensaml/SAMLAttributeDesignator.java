@@ -56,7 +56,7 @@ import org.w3c.dom.*;
 /**
  *  SAML Attribute Designator implementation
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    Nov 22, 2003
  */
 public class SAMLAttributeDesignator extends SAMLObject implements Cloneable

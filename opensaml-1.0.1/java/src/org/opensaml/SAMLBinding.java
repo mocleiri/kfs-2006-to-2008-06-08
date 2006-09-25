@@ -52,7 +52,7 @@ package org.opensaml;
 /**
  *  Abstract base for SAML binding implementations
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    November 25, 2001
  */
 public interface SAMLBinding

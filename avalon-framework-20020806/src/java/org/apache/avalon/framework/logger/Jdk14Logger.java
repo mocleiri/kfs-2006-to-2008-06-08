@@ -30,8 +30,8 @@ import java.util.logging.Level;
  *   details, there is no equivalent to the "error" log level.
  * </p>
  *
- * @author <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
  */
 public final class Jdk14Logger
     implements Logger

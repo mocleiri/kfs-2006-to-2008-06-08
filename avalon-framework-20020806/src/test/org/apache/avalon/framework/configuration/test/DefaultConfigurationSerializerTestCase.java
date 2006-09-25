@@ -64,7 +64,7 @@ import org.xml.sax.helpers.AttributesImpl;
 /**
  * Test the basic public methods of DefaultConfigurationSerializer.
  *
- * @author <a href="mailto:leo.sutic@inspireinfrastructure.com">Leo Sutic</a>
+ *  <a href="mailto:leo.sutic@inspireinfrastructure.com">Leo Sutic</a>
  */
 public final class DefaultConfigurationSerializerTestCase extends TestCase
 {

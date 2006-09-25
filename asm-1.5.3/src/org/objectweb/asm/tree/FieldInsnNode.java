@@ -36,7 +36,7 @@ import org.objectweb.asm.CodeVisitor;
  * A node that represents a field instruction. A field instruction is an
  * instruction that loads or stores the value of a field of an object.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class FieldInsnNode extends AbstractInsnNode {

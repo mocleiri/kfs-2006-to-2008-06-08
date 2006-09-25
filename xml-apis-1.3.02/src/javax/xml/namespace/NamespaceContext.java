@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: NamespaceContext.java,v 1.1 2006-08-08 23:20:42 dbeutel Exp $
+// $Id: NamespaceContext.java,v 1.2 2006-09-25 14:26:08 bnelson Exp $
 
 package javax.xml.namespace;
 
@@ -59,8 +59,8 @@ import java.util.Iterator;
  * <p>A prefix can only be bound to a <strong>single</strong>
  * Namespace URI in the current scope.</p>
  *
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:42 $
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:08 $
  * @see javax.xml.XMLConstants javax.XMLConstants for declarations of common XML values
  * @see <a href="http://www.w3.org/TR/xmlschema-2/#QName">XML Schema Part2: Datatypes</a>
  * @see <a href="http://www.w3.org/TR/REC-xml-names/#ns-qualnames">Namespaces in XML</a>

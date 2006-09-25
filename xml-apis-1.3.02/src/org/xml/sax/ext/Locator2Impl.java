@@ -1,7 +1,7 @@
 // Locator2Impl.java - extended LocatorImpl
 // http://www.saxproject.org
 // Public Domain: no warranty.
-// $Id: Locator2Impl.java,v 1.1 2006-08-08 23:20:47 dbeutel Exp $
+// $Id: Locator2Impl.java,v 1.2 2006-09-25 14:26:13 bnelson Exp $
 
 package org.xml.sax.ext;
 
@@ -21,7 +21,7 @@ import org.xml.sax.helpers.LocatorImpl;
  * <p> This is not part of core-only SAX2 distributions.</p>
  *
  * @since SAX 2.0.2
- * @author David Brownell
+ *  David Brownell
  * @version TBS
  */
 public class Locator2Impl extends LocatorImpl implements Locator2

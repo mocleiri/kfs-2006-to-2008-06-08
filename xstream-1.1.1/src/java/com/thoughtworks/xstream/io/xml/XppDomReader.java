@@ -3,8 +3,8 @@ package com.thoughtworks.xstream.io.xml;
 import com.thoughtworks.xstream.io.xml.xppdom.Xpp3Dom;
 
 /**
- * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: XppDomReader.java,v 1.1 2005-04-19 21:14:58 bmcgough Exp $
+ *  <a href="mailto:jason@maven.org">Jason van Zyl</a>
+ * @version $Id: XppDomReader.java,v 1.2 2006-09-25 14:26:07 bnelson Exp $
  */
 public class XppDomReader extends AbstractTreeReader {
 

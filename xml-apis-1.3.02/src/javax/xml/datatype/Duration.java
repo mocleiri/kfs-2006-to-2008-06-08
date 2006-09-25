@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: Duration.java,v 1.1 2006-08-08 23:20:42 dbeutel Exp $
+// $Id: Duration.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package javax.xml.datatype;
 
@@ -83,10 +83,10 @@ import javax.xml.namespace.QName;
  * The impacted methods document their dependency on {@link Calendar}.
  * 
  *  
- * @author <a href="mailto:Joseph.Fialli@Sun.COM">Joseph Fialli</a>
- * @author <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:42 $    
+ *  <a href="mailto:Joseph.Fialli@Sun.COM">Joseph Fialli</a>
+ *  <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:05 $    
  * @see XMLGregorianCalendar#add(Duration)
  * @since 1.5
  */

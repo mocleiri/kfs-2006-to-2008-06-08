@@ -53,7 +53,7 @@ import org.objectweb.asm.util.TraceClassVisitor;
 /**
  * Roundtrip test suite.
  * 
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class AttrsRoundtripTest extends TestCase {

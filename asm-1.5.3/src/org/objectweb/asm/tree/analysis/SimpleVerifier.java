@@ -37,8 +37,8 @@ import org.objectweb.asm.Type;
  * This verifier computes exact class types, instead of using a single 
  * "object reference" type (as done in the {@link BasicVerifier}).  
  * 
- * @author Eric Bruneton
- * @author Bing Ran
+ *  Eric Bruneton
+ *  Bing Ran
  */
 
 public class SimpleVerifier extends BasicVerifier {

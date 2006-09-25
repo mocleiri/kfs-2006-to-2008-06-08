@@ -61,7 +61,7 @@ import org.xml.sax.SAXException;
 /**
  *  Abstract base class for all SAML conditions
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 30, 2002
  */
 public abstract class SAMLCondition extends SAMLObject implements Cloneable

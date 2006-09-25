@@ -8,8 +8,8 @@ import junit.framework.TestCase;
 import com.thoughtworks.xstream.converters.extended.StackTraceElementConverter;
 
 /**
- * @author <a href="mailto:boxley@thoughtworks.com">B. K. Oxley (binkley)</a>
- * @author Joe Walnes
+ *  <a href="mailto:boxley@thoughtworks.com">B. K. Oxley (binkley)</a>
+ *  Joe Walnes
  */
 public class StackTraceElementConverterTest extends AbstractAcceptanceTest {
 

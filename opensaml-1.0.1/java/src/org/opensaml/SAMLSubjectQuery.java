@@ -56,7 +56,7 @@ import org.w3c.dom.*;
 /**
  *  Abstract class for a SAML Subject Statement
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 25, 2002
  */
 public abstract class SAMLSubjectQuery extends SAMLQuery implements Cloneable

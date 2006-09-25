@@ -4,7 +4,7 @@ package com.thoughtworks.xstream.converters.basic;
  * Converts an int primitive or java.lang.Integer wrapper to
  * a String.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class IntConverter extends AbstractBasicConverter {
 

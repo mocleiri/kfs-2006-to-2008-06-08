@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// $Id: XPathFunctionResolver.java,v 1.1 2006-08-08 23:20:44 dbeutel Exp $
+// $Id: XPathFunctionResolver.java,v 1.2 2006-09-25 14:26:07 bnelson Exp $
 
 package javax.xml.xpath;
 
@@ -36,9 +36,9 @@ import javax.xml.namespace.QName;
  * <p>If you wish to implement additional built-in functions, you will have to
  * extend the underlying implementation directly.</p>
  *
- * @author  <a href="mailto:Norman.Walsh@Sun.com">Norman Walsh</a>
- * @author  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:44 $
+ *   <a href="mailto:Norman.Walsh@Sun.com">Norman Walsh</a>
+ *   <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:07 $
  * @see <a href="http://www.w3.org/TR/xpath#corelib">XML Path Language (XPath) Version 1.0, Core Function Library</a>
  * @since 1.5
  */

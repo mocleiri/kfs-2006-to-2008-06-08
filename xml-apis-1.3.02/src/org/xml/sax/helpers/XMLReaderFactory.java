@@ -3,7 +3,7 @@
 // Written by David Megginson
 // and by David Brownell
 // NO WARRANTY!  This class is in the Public Domain.
-// $Id: XMLReaderFactory.java,v 1.1 2006-08-08 23:20:48 dbeutel Exp $
+// $Id: XMLReaderFactory.java,v 1.2 2006-09-25 14:26:09 bnelson Exp $
 
 package org.xml.sax.helpers;
 import java.io.BufferedReader;
@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
  * those configuration mechanisms would see it.</p>
  *
  * @since SAX 2.0
- * @author David Megginson, David Brownell
+ *  David Megginson, David Brownell
  * @version 2.0.1 (sax2r2)
  */
 final public class XMLReaderFactory

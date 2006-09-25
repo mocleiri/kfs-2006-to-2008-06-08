@@ -42,7 +42,7 @@ import java.util.Arrays;
 /**
  * A node that represents a method.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class MethodNode {

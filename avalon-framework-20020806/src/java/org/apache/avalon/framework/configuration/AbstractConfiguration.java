@@ -11,12 +11,12 @@ package org.apache.avalon.framework.configuration;
  * This is an abstract <code>Configuration</code> implementation that deals
  * with methods that can be abstracted away from underlying implementations.
  *
- * @author <a href="mailto:fede@apache.org">Federico Barbieri</a>
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
- * @author <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
- * @author <a href="mailto:leo.sutic@inspireinfrastructure.com">Leo Sutic</a>
- * @version CVS $Revision: 1.1 $ $Date: 2006-08-08 23:17:17 $
+ *  <a href="mailto:fede@apache.org">Federico Barbieri</a>
+ *  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
+ *  <a href="mailto:leo.sutic@inspireinfrastructure.com">Leo Sutic</a>
+ * @version CVS $Revision: 1.2 $ $Date: 2006-09-25 14:26:09 $
  */
 public abstract class AbstractConfiguration
     implements Configuration

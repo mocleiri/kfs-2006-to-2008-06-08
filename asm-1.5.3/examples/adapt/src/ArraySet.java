@@ -29,7 +29,7 @@
  */
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class ArraySet {

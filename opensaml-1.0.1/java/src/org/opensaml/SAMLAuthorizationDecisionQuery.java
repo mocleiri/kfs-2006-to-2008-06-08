@@ -61,7 +61,7 @@ import org.w3c.dom.Node;
 /**
  *  Represents a SAML AuthorizationDecisionQuery
  *
- * @author     Helen Rehn, Scott Cantor
+ *      Helen Rehn, Scott Cantor
  * @created    October 4, 2002
  */
 

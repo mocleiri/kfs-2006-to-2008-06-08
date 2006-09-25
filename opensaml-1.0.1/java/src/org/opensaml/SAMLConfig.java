@@ -60,7 +60,7 @@ import org.w3c.dom.Element;
 /**
  *  OpenSAML configuration bundle.  Implemented as a singleton.  
  * 
- * @author     Walter Hoehn (wassa@columbia.edu)
+ *      Walter Hoehn (wassa@columbia.edu)
  */
 public class SAMLConfig {
 

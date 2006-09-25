@@ -35,7 +35,7 @@ import org.objectweb.asm.CodeVisitor;
 /**
  * A node that represents a zero operand instruction.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class InsnNode extends AbstractInsnNode {

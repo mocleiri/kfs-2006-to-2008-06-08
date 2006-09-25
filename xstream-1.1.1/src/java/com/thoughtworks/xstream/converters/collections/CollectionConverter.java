@@ -17,7 +17,7 @@ import java.util.*;
  * <p>Supports java.util.ArrayList, java.util.HashSet,
  * java.util.LinkedList, java.util.Vector and java.util.LinkedHashSet.</p>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class CollectionConverter extends AbstractCollectionConverter {
 

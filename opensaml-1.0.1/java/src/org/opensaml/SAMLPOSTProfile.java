@@ -58,7 +58,7 @@ import org.apache.xml.security.utils.Base64;
 /**
  *  Basic implementation of SAML POST browser profile
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    April 1, 2002
  */
 public class SAMLPOSTProfile

@@ -13,9 +13,9 @@ import org.apache.avalon.framework.CascadingException;
  * Thrown when a <code>Configurable</code> component cannot be configured
  * properly, or if a value cannot be retrieved properly.
  *
- * @author <a href="mailto:fede@apache.org">Federico Barbieri</a>
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
+ *  <a href="mailto:fede@apache.org">Federico Barbieri</a>
+ *  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ *  <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
  */
 public class ConfigurationException
     extends CascadingException

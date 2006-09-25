@@ -39,7 +39,7 @@ import org.apache.bcel.generic.*;
 import java.io.InputStream;
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class BCEL extends ALL implements Constants {

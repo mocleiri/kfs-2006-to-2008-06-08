@@ -9,7 +9,7 @@ import com.thoughtworks.xstream.alias.ClassMapper;
  * <b>$</b> (dollar) chars appearing in field names are replaced with <b>_DOLLAR_</b> string.<br>
  * <b>_</b> (underscore) chars appearing in field names are replaced with <b>__</b> (double underscore) string.<br>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class XmlFriendlyMapper extends MapperWrapper {
 

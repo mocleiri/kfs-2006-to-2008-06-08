@@ -43,7 +43,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class Adapt extends ClassLoader {

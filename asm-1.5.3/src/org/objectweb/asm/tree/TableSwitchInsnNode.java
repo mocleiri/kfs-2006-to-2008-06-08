@@ -41,7 +41,7 @@ import java.util.List;
 /**
  * A node that represents a TABLESWITCH instruction.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class TableSwitchInsnNode extends AbstractInsnNode {

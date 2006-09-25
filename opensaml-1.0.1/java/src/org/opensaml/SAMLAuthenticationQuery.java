@@ -56,7 +56,7 @@ import org.w3c.dom.*;
 /**
  *  Represents a SAML Authentication Query object
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 25, 2002
  */
 public class SAMLAuthenticationQuery extends SAMLSubjectQuery implements Cloneable

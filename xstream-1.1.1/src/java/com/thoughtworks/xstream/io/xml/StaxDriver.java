@@ -16,8 +16,8 @@ import java.io.Writer;
 /**
  * A driver using the StAX API
  *
- * @author James Strachan
- * @version $Revision: 1.1 $
+ *  James Strachan
+ * @version $Revision: 1.2 $
  */
 public class StaxDriver implements HierarchicalStreamDriver {
 

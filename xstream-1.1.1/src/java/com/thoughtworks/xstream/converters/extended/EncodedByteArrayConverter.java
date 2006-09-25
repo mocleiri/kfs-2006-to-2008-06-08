@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Converts a byte array to a single Base64 encoding string.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class EncodedByteArrayConverter implements Converter {
 

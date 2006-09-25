@@ -56,7 +56,7 @@ import org.w3c.dom.*;
 /**
  *  Represents a SAML DoNotCacheCondition
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 30, 2002
  */
 public class SAMLDoNotCacheCondition extends SAMLCondition implements Cloneable

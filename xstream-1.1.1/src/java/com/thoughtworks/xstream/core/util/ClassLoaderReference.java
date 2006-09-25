@@ -4,7 +4,7 @@ package com.thoughtworks.xstream.core.util;
  * ClassLoader that refers to another ClassLoader, allowing a single instance to be passed around the codebase that
  * can later have its destination changed.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  * @since 1.1.1
  */
 public class ClassLoaderReference extends ClassLoader {

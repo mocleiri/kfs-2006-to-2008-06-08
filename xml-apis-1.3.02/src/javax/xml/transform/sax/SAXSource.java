@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: SAXSource.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: SAXSource.java,v 1.2 2006-09-25 14:26:13 bnelson Exp $
 
 package javax.xml.transform.sax;
 
@@ -33,8 +33,8 @@ import org.xml.sax.XMLReader;
  * Parsers can be made namespace aware by calling the
  * {@link javax.xml.parsers.SAXParserFactory#setNamespaceAware(boolean awareness)} method.</p>
  * 
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:43 $
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:13 $
  */
 public class SAXSource implements Source {
 

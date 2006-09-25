@@ -12,7 +12,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.StreamException;
 
 /**
- * @author Laurent Bihanic
+ *  Laurent Bihanic
  */
 public class JDomDriver implements HierarchicalStreamDriver {
 

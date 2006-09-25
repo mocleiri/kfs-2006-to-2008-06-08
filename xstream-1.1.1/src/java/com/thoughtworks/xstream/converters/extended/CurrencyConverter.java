@@ -9,8 +9,8 @@ import java.util.Currency;
  * Converts a java.util.Currency to String. Despite the name of this class, it has nothing to do with converting
  * currencies between exchange rates! It makes sense in the context of XStream.
  *
- * @author Jose A. Illescas 
- * @author Joe Walnes
+ *  Jose A. Illescas 
+ *  Joe Walnes
  */
 public class CurrencyConverter extends AbstractBasicConverter {
 

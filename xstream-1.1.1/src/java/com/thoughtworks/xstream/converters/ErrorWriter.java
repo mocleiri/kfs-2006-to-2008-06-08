@@ -5,7 +5,7 @@ package com.thoughtworks.xstream.converters;
  * when things go wrong, allowing them to add information
  * to the error message that may be helpful to diagnose problems.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public interface ErrorWriter {
 

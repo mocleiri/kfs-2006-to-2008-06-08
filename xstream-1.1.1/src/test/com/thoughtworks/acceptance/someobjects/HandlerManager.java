@@ -5,9 +5,9 @@ import java.util.List;
 /**
  *
  * 
- * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
+ *  <a href="mailto:jason@maven.org">Jason van Zyl</a>
  *
- * @version $Id: HandlerManager.java,v 1.1 2005-04-19 21:15:00 bmcgough Exp $
+ * @version $Id: HandlerManager.java,v 1.2 2006-09-25 14:26:13 bnelson Exp $
  */
 public class HandlerManager
 {

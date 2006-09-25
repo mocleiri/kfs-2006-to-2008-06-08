@@ -44,7 +44,7 @@ import org.objectweb.asm.tree.MethodInsnNode;
 /**
  * An {@link Interpreter} for {@link DataflowValue} values.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class DataflowInterpreter implements Constants, Interpreter {

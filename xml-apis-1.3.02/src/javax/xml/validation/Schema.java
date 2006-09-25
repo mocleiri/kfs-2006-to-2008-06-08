@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: Schema.java,v 1.1 2006-08-08 23:20:44 dbeutel Exp $
+// $Id: Schema.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package javax.xml.validation;
 
@@ -51,8 +51,8 @@ package javax.xml.validation;
  * In other words, if you parse the same schema twice, you may
  * still get <code>!schemaA.equals(schemaB)</code>.
  * 
- * @author <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:44 $
+ *  <a href="mailto:Kohsuke.Kawaguchi@Sun.com">Kohsuke Kawaguchi</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:05 $
  * @see <a href="http://www.w3.org/TR/xmlschema-1/">XML Schema Part 1: Structures</a>
  * @see <a href="http://www.w3.org/TR/xml11/">Extensible Markup Language (XML) 1.1</a>
  * @see <a href="http://www.w3.org/TR/REC-xml">Extensible Markup Language (XML) 1.0 (Second Edition)</a>

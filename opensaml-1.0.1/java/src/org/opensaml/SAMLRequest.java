@@ -62,7 +62,7 @@ import org.w3c.dom.*;
 /**
  *  Represents a SAML protocol request
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 30, 2002
  */
 public class SAMLRequest extends SAMLSignedObject implements Cloneable

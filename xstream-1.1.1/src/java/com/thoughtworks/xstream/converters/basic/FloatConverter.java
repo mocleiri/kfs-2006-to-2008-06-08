@@ -4,7 +4,7 @@ package com.thoughtworks.xstream.converters.basic;
  * Converts a float primitive or java.lang.Float wrapper to
  * a String.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class FloatConverter extends AbstractBasicConverter {
 

@@ -36,7 +36,7 @@ import org.objectweb.asm.Label;
 import java.io.FileOutputStream;
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class Compile extends ClassLoader {
@@ -66,7 +66,7 @@ public class Compile extends ClassLoader {
 /**
  * An abstract expression.
  *
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 abstract class Exp implements Constants {

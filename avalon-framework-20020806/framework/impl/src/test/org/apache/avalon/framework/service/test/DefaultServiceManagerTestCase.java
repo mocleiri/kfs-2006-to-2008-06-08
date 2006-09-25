@@ -57,7 +57,7 @@ import org.apache.avalon.framework.service.DefaultServiceManager;
 /**
  * Test the basic public methods of DefaultComponentManager.
  *
- * @author <a href="mailto:rantene@hotmail.com">Ran Tene</a>
+ *  <a href="mailto:rantene@hotmail.com">Ran Tene</a>
  */
 public final class DefaultServiceManagerTestCase
     extends TestCase

@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
  * Converts a java.util.BitSet to XML, as a compact
  * comma delimited list of ones and zeros.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class BitSetConverter implements Converter {
 

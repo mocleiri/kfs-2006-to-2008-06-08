@@ -49,7 +49,7 @@ import java.util.HashMap;
  * instruction IRETURN, or the invalid sequence IADD L2I will <i>not</i> be
  * detected by this code adapter.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class CheckCodeAdapter extends CodeAdapter {

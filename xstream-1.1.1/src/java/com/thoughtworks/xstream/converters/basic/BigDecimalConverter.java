@@ -6,7 +6,7 @@ import java.math.BigDecimal;
  * Converts a java.math.BigDecimal to a String, retaining
  * its precision.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class BigDecimalConverter extends AbstractBasicConverter {
 

@@ -58,7 +58,7 @@ import org.w3c.dom.*;
  *  SOAP binding. This subclass signals a binding implementation to return a
  *  SOAP fault instead of a SAML error.
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 15, 2002
  */
 public class SOAPException extends BindingException implements Cloneable

@@ -35,7 +35,7 @@ import org.objectweb.asm.CodeVisitor;
 /**
  * A node that represents an instruction with a single int operand.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class IntInsnNode extends AbstractInsnNode {

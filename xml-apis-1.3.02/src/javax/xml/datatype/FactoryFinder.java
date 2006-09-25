@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: FactoryFinder.java,v 1.1 2006-08-08 23:20:42 dbeutel Exp $
+// $Id: FactoryFinder.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package javax.xml.datatype;
 
@@ -32,8 +32,8 @@ import java.util.Properties;
  * <p>This class is duplicated for each JAXP subpackage so keep it in
  * sync.  It is package private for secure class loading.</p>
  *
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:42 $
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:05 $
  * @since 1.5
  */
 class FactoryFinder {

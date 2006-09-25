@@ -36,7 +36,7 @@ import java.lang.reflect.Method;
  * A Java type. This class can be used to make it easier to manipulate type
  * and method descriptors.
  * 
- * @author Eric Bruneton, Chris Nokleberg
+ *  Eric Bruneton, Chris Nokleberg
  */
 
 public class Type {

@@ -7,7 +7,7 @@ import java.sql.Time;
 /**
  * Converts a java.sql.Time to text. Warning: Any granularity smaller than seconds is lost.
  *
- * @author Jose A. Illescas
+ *  Jose A. Illescas
  */
 public class SqlTimeConverter extends AbstractBasicConverter {
 

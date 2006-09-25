@@ -35,7 +35,7 @@ import org.objectweb.asm.Attribute;
 /**
  * Provides static utility methods for attributes.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class Attributes {

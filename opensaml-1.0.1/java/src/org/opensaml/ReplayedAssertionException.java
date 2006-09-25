@@ -57,7 +57,7 @@ import org.w3c.dom.Element;
  *  Indicates that a profile failed because an assertion was found to be a replayed
  *  copy of an earlier assertion already seen
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 17, 2003
  */
 public class ReplayedAssertionException extends RetryableProfileException implements Cloneable

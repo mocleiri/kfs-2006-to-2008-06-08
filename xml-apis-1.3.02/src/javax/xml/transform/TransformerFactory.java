@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: TransformerFactory.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: TransformerFactory.java,v 1.2 2006-09-25 14:26:16 bnelson Exp $
 
 package javax.xml.transform;
 
@@ -29,7 +29,7 @@ package javax.xml.transform;
  * <code>TransformerFactory</code> abstract class. If the property is not
  * defined, a platform default is be used.</p>
  * 
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
  */
 public abstract class TransformerFactory {
     

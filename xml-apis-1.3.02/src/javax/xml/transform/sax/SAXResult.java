@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: SAXResult.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: SAXResult.java,v 1.2 2006-09-25 14:26:13 bnelson Exp $
 
 package javax.xml.transform.sax;
 
@@ -26,7 +26,7 @@ import org.xml.sax.ext.LexicalHandler;
 /**
  * <p>Acts as an holder for a transformation Result.</p>
  * 
- * @author <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ *  <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
  */
 public class SAXResult implements Result {
 

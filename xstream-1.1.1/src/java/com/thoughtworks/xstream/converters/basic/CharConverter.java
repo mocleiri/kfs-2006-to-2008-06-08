@@ -11,7 +11,7 @@ import com.thoughtworks.xstream.converters.Converter;
  * a String. If char is \0, this will be marked as an attribute as
  * XML does not allow this.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class CharConverter implements Converter {
 

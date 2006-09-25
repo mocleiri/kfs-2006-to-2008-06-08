@@ -20,10 +20,10 @@ package org.apache.avalon.framework.component;
  * the <code>compose</code> method before the <code>Composable</code>
  * can be considered valid.
  *
- * @author <a href="mailto:fede@apache.org">Federico Barbieri</a>
- * @author <a href="mailto:pier@apache.org">Pierpaolo Fumagalli</a>
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
+ *  <a href="mailto:fede@apache.org">Federico Barbieri</a>
+ *  <a href="mailto:pier@apache.org">Pierpaolo Fumagalli</a>
+ *  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ *  <a href="mailto:bloritsch@apache.org">Berin Loritsch</a>
  * @deprecated Use {@link org.apache.avalon.framework.service.Serviceable} instead.
  */
 public interface Composable

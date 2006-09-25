@@ -45,7 +45,7 @@ import java.util.Map;
  * {@link #SOURCE_OBJECT_LIST_PROPERTY objects to be serialized} as
  * well as the {@link #CONFIGURED_XSTREAM_PROPERTY XStream facade}.</p>
  *
- * @author Laurent Bihanic
+ *  Laurent Bihanic
  */
 public final class SaxWriter implements HierarchicalStreamWriter, XMLReader {
     /**

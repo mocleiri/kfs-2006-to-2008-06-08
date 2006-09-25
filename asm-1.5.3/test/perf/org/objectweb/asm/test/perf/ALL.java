@@ -44,7 +44,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.EmptyClassVisitor;
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public abstract class ALL extends ClassLoader  {

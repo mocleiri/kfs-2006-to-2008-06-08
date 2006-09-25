@@ -55,7 +55,7 @@ import org.w3c.dom.*;
 /**
  *  Represents a SAML Subject
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 25, 2002
  */
 public class SAMLNameIdentifier extends SAMLObject implements Cloneable

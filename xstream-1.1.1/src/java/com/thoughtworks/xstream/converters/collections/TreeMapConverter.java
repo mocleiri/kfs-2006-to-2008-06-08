@@ -15,7 +15,7 @@ import java.util.TreeMap;
  * Converts a java.util.TreeMap to XML, and serializes
  * the associated java.util.Comparator.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class TreeMapConverter extends MapConverter {
 

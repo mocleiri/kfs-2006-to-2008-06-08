@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * <p>Subclasses should implement the toString(Object) and
  * fromString(String) methods for the conversion.</p>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public abstract class AbstractBasicConverter implements Converter {
 

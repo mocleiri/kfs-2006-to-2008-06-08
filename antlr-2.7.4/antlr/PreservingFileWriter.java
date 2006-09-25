@@ -4,8 +4,8 @@ package antlr;
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/license.html
  *
- * $Id: PreservingFileWriter.java,v 1.1 2006-08-08 23:16:57 dbeutel Exp $
- * @author Ric Klaren <klaren@cs.utwente.nl>
+ * $Id: PreservingFileWriter.java,v 1.2 2006-09-25 14:26:13 bnelson Exp $
+ *  Ric Klaren <klaren@cs.utwente.nl>
  */
 
 import java.io.*;

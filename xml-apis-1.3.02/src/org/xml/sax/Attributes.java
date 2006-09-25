@@ -2,7 +2,7 @@
 // http://www.saxproject.org
 // Written by David Megginson
 // NO WARRANTY!  This class is in the public domain.
-// $Id: Attributes.java,v 1.1 2006-08-08 23:20:48 dbeutel Exp $
+// $Id: Attributes.java,v 1.2 2006-09-25 14:26:05 bnelson Exp $
 
 package org.xml.sax;
 
@@ -61,7 +61,7 @@ package org.xml.sax;
  * vary from implementation to implementation.</p>
  *
  * @since SAX 2.0
- * @author David Megginson
+ *  David Megginson
  * @version 2.0.1 (sax2r2)
  * @see org.xml.sax.helpers.AttributesImpl
  * @see org.xml.sax.ext.DeclHandler#attributeDecl

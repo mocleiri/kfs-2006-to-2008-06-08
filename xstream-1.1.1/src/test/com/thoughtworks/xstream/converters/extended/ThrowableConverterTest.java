@@ -6,7 +6,7 @@ import junit.framework.AssertionFailedError;
 import java.math.BigDecimal;
 
 /**
- * @author <a href="mailto:boxley@thoughtworks.com">B. K. Oxley (binkley)</a>
+ *  <a href="mailto:boxley@thoughtworks.com">B. K. Oxley (binkley)</a>
  */
 public class ThrowableConverterTest extends AbstractAcceptanceTest {
 

@@ -37,7 +37,7 @@ import org.objectweb.asm.Type;
  * This type system distinguishes the UNINITIALZED, INT, FLOAT, LONG, DOUBLE,
  * REFERENCE and RETURNADDRESS types.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class BasicValue implements Value {

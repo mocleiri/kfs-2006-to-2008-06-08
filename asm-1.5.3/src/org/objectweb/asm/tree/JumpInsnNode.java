@@ -37,7 +37,7 @@ import org.objectweb.asm.CodeVisitor;
  * A node that represents a jump instruction. A jump instruction is an
  * instruction that may jump to another instruction.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class JumpInsnNode extends AbstractInsnNode {

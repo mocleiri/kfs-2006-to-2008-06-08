@@ -62,7 +62,7 @@ import org.w3c.dom.*;
 /**
  *  Represents a SAML Assertion
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 18, 2002
  */
 public class SAMLAssertion extends SAMLSignedObject implements Cloneable

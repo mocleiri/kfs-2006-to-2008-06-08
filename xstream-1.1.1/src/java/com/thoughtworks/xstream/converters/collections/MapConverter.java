@@ -20,7 +20,7 @@ import java.util.Map;
  * <p>Supports java.util.HashMap, java.util.Hashtable and
  * java.util.LinkedHashMap.</p>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class MapConverter extends AbstractCollectionConverter {
 

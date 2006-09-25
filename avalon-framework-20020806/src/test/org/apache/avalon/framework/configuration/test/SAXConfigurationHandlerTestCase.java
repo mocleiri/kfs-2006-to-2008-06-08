@@ -61,7 +61,7 @@ import org.xml.sax.helpers.AttributesImpl;
 /**
  * Test the basic public methods of SAXConfigurationHandlerTestCase.
  *
- * @author <a href="mailto:rantene@hotmail.com">Ran Tene</a>
+ *  <a href="mailto:rantene@hotmail.com">Ran Tene</a>
  */
 public final class SAXConfigurationHandlerTestCase extends TestCase
 {

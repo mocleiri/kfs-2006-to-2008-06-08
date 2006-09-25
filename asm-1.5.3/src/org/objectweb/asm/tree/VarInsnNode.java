@@ -37,7 +37,7 @@ import org.objectweb.asm.CodeVisitor;
  * instruction is an instruction that loads or stores the value of a local
  * variable.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class VarInsnNode extends AbstractInsnNode {

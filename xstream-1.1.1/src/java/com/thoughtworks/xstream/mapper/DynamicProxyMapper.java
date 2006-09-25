@@ -8,7 +8,7 @@ import java.lang.reflect.Proxy;
  * Mapper for handling special cases of aliasing dynamic proxies. The alias property specifies the name an instance
  * of a dynamic proxy should be serialized with.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class DynamicProxyMapper extends MapperWrapper {
 

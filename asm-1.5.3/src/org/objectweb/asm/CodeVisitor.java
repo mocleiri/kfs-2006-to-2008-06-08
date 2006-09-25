@@ -40,7 +40,7 @@ package org.objectweb.asm;
  * be called in any order, at any time (provided the labels passed as arguments
  * have already been visited with {@link #visitLabel visitLabel}).
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public interface CodeVisitor {

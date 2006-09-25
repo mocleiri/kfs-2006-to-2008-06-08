@@ -56,7 +56,7 @@ import org.w3c.dom.*;
 /**
  *  Wraps a SAML Authority Binding
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 25, 2002
  */
 public class SAMLAuthorityBinding extends SAMLObject implements Cloneable

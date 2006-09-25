@@ -38,7 +38,7 @@ import serp.bytecode.Project;
 import java.io.InputStream;
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class SERP extends ALL {

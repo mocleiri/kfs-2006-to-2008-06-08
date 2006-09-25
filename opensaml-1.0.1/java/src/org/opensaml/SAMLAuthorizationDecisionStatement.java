@@ -60,7 +60,7 @@ import org.w3c.dom.*;
 /**
  * Represents a SAML authorization decision statement.
  *
- * @author      Helen Rehn, Scott Cantor
+ *       Helen Rehn, Scott Cantor
  * @created     September 23, 2002
  */
 

@@ -14,10 +14,10 @@ import java.util.HashMap;
 /**
  * This is the default <code>Configuration</code> implementation.
  *
- * @author <a href="mailto:fede@apache.org">Federico Barbieri</a>
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:fede@apache.org">Federico Barbieri</a>
+ *  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ *  <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
  * @version 1.0
  */
 public class DefaultConfiguration

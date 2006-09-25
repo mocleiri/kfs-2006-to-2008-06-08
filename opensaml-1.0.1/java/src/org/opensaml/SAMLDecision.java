@@ -52,7 +52,7 @@ package org.opensaml;
 /**
  *  Represents a SAML Decision
  *
- * @author     Helen Rehn
+ *      Helen Rehn
  * @created    October 4, 2002
  */
 

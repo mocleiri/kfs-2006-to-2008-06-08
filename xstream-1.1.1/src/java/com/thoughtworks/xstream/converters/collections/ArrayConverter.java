@@ -16,7 +16,7 @@ import java.util.List;
  * Converts an array of objects or primitives to XML, using
  * a nested child element for each item.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class ArrayConverter extends AbstractCollectionConverter {
 

@@ -40,7 +40,7 @@ import org.objectweb.asm.attrs.RuntimeInvisibleAnnotations;
 /**
  * An {@link ASMifiable} {@link RuntimeInvisibleAnnotations} sub class.
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class ASMRuntimeInvisibleAnnotations extends RuntimeInvisibleAnnotations 

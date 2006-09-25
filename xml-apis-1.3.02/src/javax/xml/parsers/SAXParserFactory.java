@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: SAXParserFactory.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: SAXParserFactory.java,v 1.2 2006-09-25 14:26:10 bnelson Exp $
 
 package javax.xml.parsers;
 
@@ -28,8 +28,8 @@ import org.xml.sax.SAXNotSupportedException;
  * Defines a factory API that enables applications to configure and
  * obtain a SAX based parser to parse XML documents.
  *
- * @author <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:43 $
+ *  <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:10 $
  */
 public abstract class SAXParserFactory {
     /** The default property name according to the JAXP spec */

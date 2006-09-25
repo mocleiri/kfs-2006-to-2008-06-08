@@ -46,7 +46,7 @@ import java.util.List;
  * in a sub class of this class. Each method should print the instructions it
  * visits in {@link #buf buf}.
  * 
- * @author Eric Bruneton, Eugene Kuleshov
+ *  Eric Bruneton, Eugene Kuleshov
  */
 
 public abstract class PrintCodeVisitor implements CodeVisitor {

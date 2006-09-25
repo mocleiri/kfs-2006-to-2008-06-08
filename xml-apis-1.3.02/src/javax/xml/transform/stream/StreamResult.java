@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: StreamResult.java,v 1.1 2006-08-08 23:20:43 dbeutel Exp $
+// $Id: StreamResult.java,v 1.2 2006-09-25 14:26:14 bnelson Exp $
 
 package javax.xml.transform.stream;
 
@@ -30,7 +30,7 @@ import java.net.MalformedURLException;
  * <p>Acts as an holder for a transformation result,
  * which may be XML, plain Text, HTML, or some other form of markup.</p>
  *
- * @author <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ *  <a href="Jeff.Suttor@Sun.com">Jeff Suttor</a>
  */
 public class StreamResult implements Result {
 

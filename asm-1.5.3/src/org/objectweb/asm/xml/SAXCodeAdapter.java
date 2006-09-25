@@ -51,7 +51,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @see org.objectweb.asm.xml.SAXClassAdapter
  * @see org.objectweb.asm.xml.Processor
  * 
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 public final class SAXCodeAdapter implements CodeVisitor {
   private ContentHandler h;

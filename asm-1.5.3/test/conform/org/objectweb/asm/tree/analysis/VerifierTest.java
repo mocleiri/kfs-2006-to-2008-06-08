@@ -45,7 +45,7 @@ import org.objectweb.asm.tree.TreeClassAdapter;
 /**
  * Analysis tests.
  * 
- * @author Eric Bruneton, Eugene Kuleshov
+ *  Eric Bruneton, Eugene Kuleshov
  */
 
 public class VerifierTest extends TestCase {

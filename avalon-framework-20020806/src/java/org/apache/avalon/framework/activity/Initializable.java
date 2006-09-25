@@ -11,10 +11,10 @@ package org.apache.avalon.framework.activity;
  * The Initializable interface is used by components that need to
  * allocate resources prior to them becoming active.
  *
- * @author <a href="mailto:fede@apache.org">Federico Barbieri</a>
- * @author <a href="mailto:pier@apache.org">Pierpaolo Fumagalli</a>
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:fede@apache.org">Federico Barbieri</a>
+ *  <a href="mailto:pier@apache.org">Pierpaolo Fumagalli</a>
+ *  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
  */
 public interface Initializable
 {

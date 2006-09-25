@@ -18,7 +18,7 @@ import java.util.Properties;
  * are Strings, a single element is used for each property
  * with two attributes; one for key and one for value.</p>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class PropertiesConverter implements Converter {
 

@@ -55,7 +55,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @see org.objectweb.asm.xml.SAXClassAdapter
  * @see org.objectweb.asm.xml.Processor
  * 
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 public class ASMContentHandler extends DefaultHandler implements Constants {
   /**

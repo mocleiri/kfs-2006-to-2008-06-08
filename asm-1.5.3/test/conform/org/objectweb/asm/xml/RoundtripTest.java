@@ -56,7 +56,7 @@ import sun.misc.HexDumpEncoder;
 /**
  * RoundtripTest
  * 
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 public class RoundtripTest extends TestCase {
   private String className;

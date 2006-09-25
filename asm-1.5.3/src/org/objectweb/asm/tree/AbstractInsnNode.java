@@ -35,7 +35,7 @@ import org.objectweb.asm.CodeVisitor;
 /**
  * A node that represents a bytecode instruction.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public abstract class AbstractInsnNode {

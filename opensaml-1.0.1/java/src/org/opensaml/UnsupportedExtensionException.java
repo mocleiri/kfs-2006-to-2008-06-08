@@ -57,7 +57,7 @@ import org.w3c.dom.Element;
  *  Indicates that a message contained information requiring extension code
  *  that has not been registered with the SAML runtime.
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 2, 2003
  */
 public class UnsupportedExtensionException extends SAMLException implements Cloneable

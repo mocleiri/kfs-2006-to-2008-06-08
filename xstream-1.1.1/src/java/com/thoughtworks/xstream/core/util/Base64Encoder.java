@@ -14,7 +14,7 @@ import java.io.StringReader;
  * <p>This meets the standard as described in RFC 1521, section 5.2 <http://www.freesoft.org/CIE/RFC/1521/7.htm>, allowing
  * other Base64 tools to manipulate the data.</p>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class Base64Encoder {
 

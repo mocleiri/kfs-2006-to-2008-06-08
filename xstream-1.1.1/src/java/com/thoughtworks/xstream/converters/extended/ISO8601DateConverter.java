@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.converters.basic.AbstractBasicConverter;
  * A DateConverter conforming to the ISO8601 standard.
  * http://www.iso.ch/iso/en/CatalogueDetailPage.CatalogueDetail?CSNUMBER=26780
  * 
- * @author Mauro Talevi
+ *  Mauro Talevi
  */
 public class ISO8601DateConverter extends AbstractBasicConverter{
 	private DateTimeFormatter[] formatters;

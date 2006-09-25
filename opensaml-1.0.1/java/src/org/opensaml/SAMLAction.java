@@ -58,7 +58,7 @@ import org.w3c.dom.Node;
 /**
  *  Represents a SAML Action
  *
- * @author     Helen Rehn
+ *      Helen Rehn
  * @created    October 4, 2002
  */
 public class SAMLAction extends SAMLObject implements Cloneable

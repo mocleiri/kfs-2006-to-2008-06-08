@@ -13,7 +13,7 @@ import java.util.Map;
  * When this exception is thrown it can be passed around to things that accept an
  * {@link ErrorWriter}, allowing them to add diagnostics to the stack trace.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  *
  * @see ErrorWriter
  */

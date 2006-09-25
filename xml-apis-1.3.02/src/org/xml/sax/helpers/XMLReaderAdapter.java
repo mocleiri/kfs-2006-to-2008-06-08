@@ -2,7 +2,7 @@
 // http://www.saxproject.org
 // Written by David Megginson
 // NO WARRANTY!  This class is in the public domain.
-// $Id: XMLReaderAdapter.java,v 1.1 2006-08-08 23:20:48 dbeutel Exp $
+// $Id: XMLReaderAdapter.java,v 1.2 2006-09-25 14:26:09 bnelson Exp $
 
 package org.xml.sax.helpers;
 
@@ -44,7 +44,7 @@ import org.xml.sax.SAXNotSupportedException;
  * property, that will also be used to improve efficiency.</p>
  *
  * @since SAX 2.0
- * @author David Megginson
+ *  David Megginson
  * @version 2.0.1 (sax2r2)
  * @see org.xml.sax.Parser
  * @see org.xml.sax.XMLReader

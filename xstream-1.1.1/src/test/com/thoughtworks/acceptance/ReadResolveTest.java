@@ -6,8 +6,8 @@ import com.thoughtworks.acceptance.objects.ColorEnum;
 import java.io.*;
 
 /**
- * @author Chris Kelly
- * @author Joe Walnes
+ *  Chris Kelly
+ *  Joe Walnes
  */ 
 public class ReadResolveTest extends AbstractAcceptanceTest {
 

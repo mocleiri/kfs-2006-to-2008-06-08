@@ -33,7 +33,7 @@ package org.objectweb.asm.tree.analysis;
 /**
  * An immutable symbolic value for semantic interpretation of bytecode.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public interface Value {

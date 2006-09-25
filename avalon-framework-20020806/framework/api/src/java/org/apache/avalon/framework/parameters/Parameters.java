@@ -42,8 +42,8 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
  * prevent potential data corruption.
  * </p>
  *
- * @author <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:fumagalli@exoffice.com">Pierpaolo Fumagalli</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
  * @version 1.0
  */
 public class Parameters

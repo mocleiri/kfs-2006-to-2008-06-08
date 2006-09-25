@@ -6,7 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
- * @author Michael Kopp
+ *  Michael Kopp
  */
 public class DomWriter implements HierarchicalStreamWriter {
     private final Document document;

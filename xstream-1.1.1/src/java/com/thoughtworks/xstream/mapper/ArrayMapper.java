@@ -7,7 +7,7 @@ import com.thoughtworks.xstream.alias.CannotResolveClassException;
  * Mapper that detects arrays and changes the name so it can identified as an array
  * (for example Foo[] gets serialized as foo-array). Supports multi-dimensional arrays.
  *
- * @author Joe Walnes 
+ *  Joe Walnes 
  */
 public class ArrayMapper extends MapperWrapper {
 

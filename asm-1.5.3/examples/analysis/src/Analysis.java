@@ -50,7 +50,7 @@ import org.objectweb.asm.tree.analysis.Frame;
 import org.objectweb.asm.util.TraceCodeVisitor;
 
 /**
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class Analysis implements Constants {

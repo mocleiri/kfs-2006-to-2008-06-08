@@ -72,7 +72,7 @@ import org.objectweb.asm.Label;
  * @see <a href="http://www.jcp.org/en/jsr/detail?id=175">JSR 175 : A Metadata
  * Facility for the Java Programming Language</a>
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class AnnotationDefaultAttribute extends Attribute {

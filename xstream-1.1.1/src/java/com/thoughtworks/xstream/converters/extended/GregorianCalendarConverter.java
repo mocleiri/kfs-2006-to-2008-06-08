@@ -14,7 +14,7 @@ import java.util.Date;
  * Converts a java.util.GregorianCalendar to XML. Note that although it currently only contains one field, it nests
  * it inside a child element, to allow for other fields to be stored in the future.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class GregorianCalendarConverter implements Converter {
 

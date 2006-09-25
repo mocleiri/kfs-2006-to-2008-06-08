@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 /*
- * @author Laurent Bihanic
+ *  Laurent Bihanic
  */
 public class SaxWriterTest extends TestCase {
 

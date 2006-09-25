@@ -4,7 +4,7 @@ package antlr;
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/license.html
  *
- * $Id: LLkAnalyzer.java,v 1.1 2006-08-08 23:16:57 dbeutel Exp $
+ * $Id: LLkAnalyzer.java,v 1.2 2006-09-25 14:26:13 bnelson Exp $
  */
 
 import antlr.collections.impl.BitSet;
@@ -14,7 +14,7 @@ import antlr.collections.impl.Vector;
  *
  * All lookahead elements are sets of token types.
  *
- * @author  Terence Parr, John Lilley
+ *   Terence Parr, John Lilley
  * @see     antlr.Grammar
  * @see     antlr.Lookahead
  */

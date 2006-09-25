@@ -45,7 +45,7 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * Performance test suite for ASM XML
  * 
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 public class ALL {
   private static final String[] ENGINES = {

@@ -5,7 +5,7 @@ import com.thoughtworks.xstream.alias.ClassMapper;
 /**
  * Mapper that uses a more meaningful alias for the field in an inner class (this$0) that refers to the outer class.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class OuterClassMapper extends MapperWrapper {
 

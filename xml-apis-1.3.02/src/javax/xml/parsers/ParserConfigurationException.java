@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-// $Id: ParserConfigurationException.java,v 1.1 2006-08-08 23:20:42 dbeutel Exp $
+// $Id: ParserConfigurationException.java,v 1.2 2006-09-25 14:26:10 bnelson Exp $
 
 package javax.xml.parsers;
 
 /**
  * Indicates a serious configuration error.
  *
- * @author <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
- * @version $Revision: 1.1 $, $Date: 2006-08-08 23:20:42 $
+ *  <a href="mailto:Jeff.Suttor@Sun.com">Jeff Suttor</a>
+ * @version $Revision: 1.2 $, $Date: 2006-09-25 14:26:10 $
  */
 
 public class ParserConfigurationException extends Exception {

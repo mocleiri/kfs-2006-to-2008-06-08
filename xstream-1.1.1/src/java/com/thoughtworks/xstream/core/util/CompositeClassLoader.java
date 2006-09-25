@@ -29,7 +29,7 @@ import java.util.List;
  *   <li>The classloader for XStream (and all its parents)</li>
  * </ul>
  *
- * @author Joe Walnes
+ *  Joe Walnes
  * @since 1.0.3
  */
 public class CompositeClassLoader extends ClassLoader {

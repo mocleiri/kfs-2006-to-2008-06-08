@@ -66,7 +66,7 @@ import org.xml.sax.SAXException;
  *  Basic SAML Attribute implementation that handles rudimentary attribute value
  *  types
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    May 9, 2002
  */
 public class SAMLAttribute extends SAMLObject implements Cloneable

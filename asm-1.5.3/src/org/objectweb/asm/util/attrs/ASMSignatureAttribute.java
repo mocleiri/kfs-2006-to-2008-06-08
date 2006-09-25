@@ -40,7 +40,7 @@ import org.objectweb.asm.attrs.SignatureAttribute;
 /**
  * An {@link ASMifiable} {@link SignatureAttribute} sub class.
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class ASMSignatureAttribute extends SignatureAttribute 

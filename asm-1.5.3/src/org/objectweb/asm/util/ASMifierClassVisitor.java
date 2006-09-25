@@ -106,7 +106,7 @@ import org.objectweb.asm.util.attrs.ASMifiable;
  * </pre>
  * </blockquote>
  * 
- * @author Eric Bruneton, Eugene Kuleshov
+ *  Eric Bruneton, Eugene Kuleshov
  */
 
 public class ASMifierClassVisitor extends PrintClassVisitor {

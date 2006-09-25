@@ -36,7 +36,7 @@ import org.objectweb.asm.Constants;
 /**
  * A node that represents an IINC instruction.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class IincInsnNode extends AbstractInsnNode {

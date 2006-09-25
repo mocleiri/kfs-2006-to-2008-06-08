@@ -10,8 +10,8 @@ import javax.xml.stream.XMLStreamWriter;
 /**
  * A stream writing that outputs to a StAX stream writer
  *
- * @author James Strachan
- * @version $Revision: 1.1 $
+ *  James Strachan
+ * @version $Revision: 1.2 $
  */
 public class StaxWriter implements HierarchicalStreamWriter {
     private final QNameMap qnameMap;

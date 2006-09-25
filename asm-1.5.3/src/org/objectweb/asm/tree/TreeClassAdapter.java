@@ -56,7 +56,7 @@ import org.objectweb.asm.Attribute;
  * }
  * </pre>
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class TreeClassAdapter extends ClassAdapter {

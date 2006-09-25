@@ -48,7 +48,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @see org.objectweb.asm.xml.Processor
  * @see org.objectweb.asm.xml.ASMContentHandler
  * 
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 public final class SAXClassAdapter implements ClassVisitor {
   private ContentHandler h;

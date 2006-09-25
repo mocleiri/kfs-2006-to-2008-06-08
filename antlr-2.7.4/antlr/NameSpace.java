@@ -8,9 +8,9 @@ package antlr;
  * Container for a C++ namespace specification.  Namespaces can be
  * nested, so this contains a vector of all the nested names.
  *
- * @author David Wagner (JPL/Caltech) 8-12-00
+ *  David Wagner (JPL/Caltech) 8-12-00
  *
- * $Id: NameSpace.java,v 1.1 2006-08-08 23:16:57 dbeutel Exp $
+ * $Id: NameSpace.java,v 1.2 2006-09-25 14:26:13 bnelson Exp $
  */
 
 import java.util.Vector;

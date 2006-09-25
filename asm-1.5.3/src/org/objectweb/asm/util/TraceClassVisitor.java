@@ -84,7 +84,7 @@ import org.objectweb.asm.Constants;
  * </pre>
  * </blockquote>
  * 
- * @author Eric Bruneton, Eugene Kuleshov
+ *  Eric Bruneton, Eugene Kuleshov
  */
 
 public class TraceClassVisitor extends PrintClassVisitor {

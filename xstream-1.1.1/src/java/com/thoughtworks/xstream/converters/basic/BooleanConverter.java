@@ -4,7 +4,7 @@ package com.thoughtworks.xstream.converters.basic;
  * Converts a boolean primitive or java.lang.Boolean wrapper to
  * a String.
  *
- * @author Joe Walnes
+ *  Joe Walnes
  */
 public class BooleanConverter extends AbstractBasicConverter {
 

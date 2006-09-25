@@ -50,7 +50,7 @@ import java.util.List;
 /**
  * An abstract class visitor that prints the classes it visits.
  * 
- * @author Eric Bruneton, Eugene Kuleshov
+ *  Eric Bruneton, Eugene Kuleshov
  */
 
 public abstract class PrintClassVisitor implements ClassVisitor {

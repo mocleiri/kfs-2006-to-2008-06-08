@@ -60,7 +60,7 @@ import org.w3c.dom.*;
 /**
  *  Represents a SAML Attribute Statement
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 25, 2002
  */
 public class SAMLAttributeStatement extends SAMLSubjectStatement implements Cloneable

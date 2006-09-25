@@ -57,7 +57,7 @@ import org.w3c.dom.Element;
  *  Indicates that a profile failed because an assertion was found to be invalid
  *  due to conditions on its use
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    January 17, 2003
  */
 public class InvalidAssertionException extends FatalProfileException implements Cloneable

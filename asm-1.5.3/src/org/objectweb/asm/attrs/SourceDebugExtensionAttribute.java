@@ -69,7 +69,7 @@ import org.objectweb.asm.Label;
  * @see <a href="http://www.jcp.org/en/jsr/detail?id=45">JSR-045: Debugging
  * Support for Other Languages</a>
  *
- * @author Eugene Kuleshov
+ *  Eugene Kuleshov
  */
 
 public class SourceDebugExtensionAttribute extends Attribute {

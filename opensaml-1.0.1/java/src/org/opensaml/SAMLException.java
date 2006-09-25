@@ -77,7 +77,7 @@ import org.xml.sax.SAXException;
  *  the SAMLObject code here. (Note that interfaces!=multiple inheritance and don't
  *  solve the problem.)
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    December 2, 2001
  */
 public class SAMLException extends Exception implements Cloneable

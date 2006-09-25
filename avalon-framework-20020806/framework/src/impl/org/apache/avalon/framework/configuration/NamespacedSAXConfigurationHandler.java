@@ -21,8 +21,8 @@ import org.xml.sax.helpers.NamespaceSupport;
  * A SAXConfigurationHandler helps build Configurations out of sax events,
  * including namespace information.
  *
- * @author <a href="mailto:fede@apache.org">Federico Barbieri</a>
- * @author <a href="mailto:peter at apache.org">Peter Donald</a>
+ *  <a href="mailto:fede@apache.org">Federico Barbieri</a>
+ *  <a href="mailto:peter at apache.org">Peter Donald</a>
  * @version 1.0
  */
 public class NamespacedSAXConfigurationHandler

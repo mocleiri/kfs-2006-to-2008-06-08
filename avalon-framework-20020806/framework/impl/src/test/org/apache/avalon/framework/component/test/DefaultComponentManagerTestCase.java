@@ -58,7 +58,7 @@ import org.apache.avalon.framework.component.DefaultComponentManager;
 /**
  * Test the basic public methods of DefaultComponentManager.
  *
- * @author <a href="mailto:rantene@hotmail.com">Ran Tene</a>
+ *  <a href="mailto:rantene@hotmail.com">Ran Tene</a>
  */
 public final class DefaultComponentManagerTestCase
     extends TestCase

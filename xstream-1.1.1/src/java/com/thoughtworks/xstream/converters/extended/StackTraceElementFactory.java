@@ -8,8 +8,8 @@ import java.lang.reflect.Field;
  * Factory for creating StackTraceElements.
  * Factory for creating StackTraceElements.
  *
- * @author <a href="mailto:boxley@thoughtworks.com">B. K. Oxley (binkley)</a>
- * @author Joe Walnes
+ *  <a href="mailto:boxley@thoughtworks.com">B. K. Oxley (binkley)</a>
+ *  Joe Walnes
  */
 public class StackTraceElementFactory {
 

@@ -9,7 +9,7 @@ import org.apache.xml.security.signature.XMLSignature;
 import junit.framework.TestCase;
 
 /**
- * @author Scott Cantor
+ *  Scott Cantor
  *
  */
 public class SignatureTest extends TestCase

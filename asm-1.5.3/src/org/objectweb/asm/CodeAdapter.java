@@ -36,7 +36,7 @@ package org.objectweb.asm;
  * implement usefull code adapter classes, just by overriding the necessary
  * methods.
  * 
- * @author Eric Bruneton
+ *  Eric Bruneton
  */
 
 public class CodeAdapter implements CodeVisitor {

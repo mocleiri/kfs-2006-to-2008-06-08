@@ -61,7 +61,7 @@ import org.xml.sax.SAXException;
 /**
  *  Abstract base class for all SAML queries
  *
- * @author     Scott Cantor
+ *      Scott Cantor
  * @created    March 25, 2002
  */
 public abstract class SAMLQuery extends SAMLObject implements Cloneable
