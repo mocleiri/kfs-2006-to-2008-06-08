@@ -1505,9 +1505,14 @@ public class ScrubberProcess {
      * @param group Group to save it in
      */
     private void createOutputEntry(OriginEntry entry, OriginEntryGroup group) {
-        // Write the entry if we aren't running in report only mode.  Or write the entry if we are in 
-        // report only mode and it is a valid entry
-        if ( (! reportOnlyMode) || (group.getSourceCode().equals(OriginEntrySource.SCRUBBER_VALID)) ) {
+        // Write the entry if we aren't running in report only mode.
+        if ( reportOnlyMode ) {
+            // If the group is null don't write it because the error and expired groups aren't created in reportOnlyMode 
+            if ( group != null ) {
+                entry.setGroup(group);
+                originEntryService.save(entry);
+            }
+        } else {
             entry.setGroup(group);
             originEntryService.save(entry);
         }
