@@ -172,6 +172,8 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
                 explicitEntry.setUniversityFiscalPeriodCode(MONTH_1_PERIOD_CODE);
             }
 
+            customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
+            
             // add the new explicit entry to the document now
             transactionalDocument.getGeneralLedgerPendingEntries().add(explicitEntry);
 
@@ -193,6 +195,8 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
                 explicitEntry.setUniversityFiscalPeriodCode("01");
             }
 
+            customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
+            
             // add the new explicit entry to the document now
             transactionalDocument.getGeneralLedgerPendingEntries().add(explicitEntry);
 
@@ -269,6 +273,8 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
         explicitEntry.setTransactionLedgerEntryAmount(monthAmount);
         explicitEntry.setUniversityFiscalPeriodCode(fiscalPeriod);
 
+        customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
+        
         // add the new explicit entry to the document now
         transactionalDocument.getGeneralLedgerPendingEntries().add(explicitEntry);
     }
@@ -334,6 +340,8 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
                         explicitEntry.setUniversityFiscalPeriodCode(MONTH_1_PERIOD_CODE);
                     }
 
+                    customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
+                    
                     // add the new explicit entry to the document now
                     transactionalDocument.getGeneralLedgerPendingEntries().add(explicitEntry);
 
@@ -346,7 +354,7 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
                     accountingLine.setAmount(streamAmount);
                     explicitEntry = new GeneralLedgerPendingEntry();
                     populateExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, sequenceHelper, explicitEntry);
-
+                    
                     /* override and set object type to transfer */
                     explicitEntry.setFinancialObjectTypeCode(TRANSFER_INCOME);
 
@@ -360,6 +368,8 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
 
                     // add the new explicit entry to the document now
                     transactionalDocument.getGeneralLedgerPendingEntries().add(explicitEntry);
+
+                    customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
 
                     // increment the sequence counter
                     sequenceHelper.increment();
