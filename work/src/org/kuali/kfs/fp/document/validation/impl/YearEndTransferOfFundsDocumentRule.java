@@ -50,4 +50,13 @@ public class YearEndTransferOfFundsDocumentRule extends TransferOfFundsDocumentR
         super.customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
         YearEndDocumentUtil.customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
     }
+
+    @Override
+    protected boolean customizeOffsetGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+        boolean success = super.customizeOffsetGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry, offsetEntry);
+        YearEndDocumentUtil.customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
+        return success;
+    }
+    
+    
 }
