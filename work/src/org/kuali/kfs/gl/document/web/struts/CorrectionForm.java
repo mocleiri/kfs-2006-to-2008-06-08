@@ -24,6 +24,7 @@
 package org.kuali.module.gl.web.struts.form;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -63,6 +64,13 @@ public class CorrectionForm extends KualiDocumentFormBase {
     private boolean deleteFileFlag = false;
     private boolean showOutputFlag = false;
     private Collection allEntries;
+    private Collection matchingEntries;
+    private String entryUniversityFiscalYear;
+    private String entryFinancialDocumentReversalDate;
+    private String entryTransactionDate;
+    private String entryTransactionLedgerEntrySequenceNumber;
+    private String entryTransactionLedgerEntryAmount;
+
     private OriginEntry entryForManualEdit;
 
     private List<GroupHolder> groups;
@@ -111,6 +119,7 @@ public class CorrectionForm extends KualiDocumentFormBase {
         deleteFileFlag = false;
         showOutputFlag = false;
         allEntries = new ArrayList();
+        matchingEntries = new ArrayList();
 
         setDocument(new CorrectionDocument());
 
@@ -145,6 +154,7 @@ public class CorrectionForm extends KualiDocumentFormBase {
         deleteFileFlag = c.deleteFileFlag;
         showOutputFlag = c.showOutputFlag;
         allEntries = c.allEntries;
+        matchingEntries = c.matchingEntries;
         entryForManualEdit = c.entryForManualEdit;
         groups = c.groups;
         setDocument(c.getDocument());
@@ -152,6 +162,54 @@ public class CorrectionForm extends KualiDocumentFormBase {
 
     public CorrectionDocument getCorrectionDocument() {
         return (CorrectionDocument)getDocument();
+    }
+
+    public String getEntryFinancialDocumentReversalDate() {
+        return entryFinancialDocumentReversalDate;
+    }
+
+    public Collection getMatchingEntries() {
+        return matchingEntries;
+    }
+
+    public void setMatchingEntries(Collection matchingEntries) {
+        this.matchingEntries = matchingEntries;
+    }
+
+    public void setEntryFinancialDocumentReversalDate(String entryFinancialDocumentReversalDate) {
+        this.entryFinancialDocumentReversalDate = entryFinancialDocumentReversalDate;
+    }
+
+    public String getEntryTransactionDate() {
+        return entryTransactionDate;
+    }
+
+    public void setEntryTransactionDate(String entryTransactionDate) {
+        this.entryTransactionDate = entryTransactionDate;
+    }
+
+    public String getEntryTransactionLedgerEntryAmount() {
+        return entryTransactionLedgerEntryAmount;
+    }
+
+    public void setEntryTransactionLedgerEntryAmount(String entryTransactionLedgerEntryAmount) {
+        this.entryTransactionLedgerEntryAmount = entryTransactionLedgerEntryAmount;
+    }
+
+    public String getEntryTransactionLedgerEntrySequenceNumber() {
+        return entryTransactionLedgerEntrySequenceNumber;
+    }
+
+    public void setEntryTransactionLedgerEntrySequenceNumber(String entryTransactionLedgerEntrySequenceNumber) {
+        this.entryTransactionLedgerEntrySequenceNumber = entryTransactionLedgerEntrySequenceNumber;
+    }
+
+    public String getEntryUniversityFiscalYear() {
+        return entryUniversityFiscalYear;
+    }
+
+    public void setEntryUniversityFiscalYear(String entryUniversityFiscalYear) {
+        this.entryUniversityFiscalYear = entryUniversityFiscalYear;
     }
 
     public boolean getShowOutputFlag() {
