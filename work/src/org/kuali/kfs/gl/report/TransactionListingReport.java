@@ -125,13 +125,15 @@ public class TransactionListingReport {
 
             document.open();
 
-            float[] widths = { 5, 7, 5, 5, 5, 7, 7, 9, 35, 12, 12 };
+            float[] widths = { 5, 5, 7, 5, 5, 5, 7, 7, 9, 30, 12, 12 };
             PdfPTable transactionList = new PdfPTable(widths);
             transactionList.setHeaderRows(1);
             transactionList.setWidthPercentage(100);
 
             // Add headers
             PdfPCell cell = new PdfPCell(new Phrase("Fiscal Year", headerFont));
+            transactionList.addCell(cell);
+            cell = new PdfPCell(new Phrase("Chart", headerFont));
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("Account Number", headerFont));
             transactionList.addCell(cell);
@@ -166,6 +168,8 @@ public class TransactionListingReport {
                     Transaction tran = (Transaction) transactions.next();
 
                     cell = new PdfPCell(new Phrase(tran.getUniversityFiscalYear() == null ? " " : tran.getUniversityFiscalYear().toString(), textFont));
+                    transactionList.addCell(cell);
+                    cell = new PdfPCell(new Phrase("NEWCELL", textFont));
                     transactionList.addCell(cell);
                     cell = new PdfPCell(new Phrase(tran.getChartOfAccountsCode() + "-" + tran.getAccountNumber(), textFont));
                     transactionList.addCell(cell);
@@ -211,6 +215,8 @@ public class TransactionListingReport {
             }
 
             // Now add the total line
+            cell = new PdfPCell(new Phrase("", textFont));
+            transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("", textFont));
             transactionList.addCell(cell);
             DecimalFormat intf = new DecimalFormat();
