@@ -46,7 +46,7 @@ import org.kuali.test.parameters.TransactionalDocumentParameter;
 /**
  * This class tests the General Error Correction Document's persistence, routing, and PE generation.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumentRuleTestBase {

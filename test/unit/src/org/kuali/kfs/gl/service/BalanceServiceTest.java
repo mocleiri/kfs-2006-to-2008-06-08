@@ -36,7 +36,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * various tests for BalanceService, especially as it supports Account business rules; using hardcoded SQL for bootstrapping
  * 
- * @author Randall P. Embry (rpembry@indiana.edu)
+ * 
  */
 @WithTestSpringContext
 public class BalanceServiceTest extends KualiTestBaseWithSpring {

@@ -29,8 +29,8 @@ import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.Transaction;
 
 /**
- * @author jsissom
- * @version $Id: EncumbranceDao.java,v 1.9 2006-09-06 06:50:21 abyrne Exp $
+ * 
+ * @version $Id: EncumbranceDao.java,v 1.9.2.1 2006-09-26 16:28:29 bnelson Exp $
  */
 public interface EncumbranceDao {
     public Encumbrance getEncumbranceByTransaction(Transaction t);
