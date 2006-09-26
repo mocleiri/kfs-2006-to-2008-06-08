@@ -22,21 +22,27 @@
  */
 package org.kuali.module.financial.document;
 
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE7;
+import static org.kuali.test.fixtures.UserNameFixture.HSCHREIN;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
-import org.kuali.test.parameters.DisbursementVoucherDocumentParameter;
-import org.kuali.test.parameters.DocumentParameter;
-import org.kuali.test.parameters.TransactionalDocumentParameter;
-import org.kuali.test.WithTestSpringContext;
+import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
+import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.TestsWorkflowViaDatabase;
+import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.fixtures.AccountingLineFixture;
 import org.kuali.workflow.WorkflowTestUtils;
 
 import edu.iu.uis.eden.EdenConstants;
@@ -49,54 +55,41 @@ import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
  */
 @WithTestSpringContext
 public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBase {
-    public static final String COLLECTION_NAME = "DisbursementVoucherDocumentTest.collection1";
-    public static final String USER_NAME = "user1";
-    public static final String DV_USER_NAME = "dvUser1";
-    public static final String DOCUMENT_PARAMETER = "disbursementVoucherDocumentParameter1";
-    public static final String SOURCE_LINE7 = "sourceLine7";
 
     // The set of Route Nodes that the test document will progress through
 
-    private static final String ADHOC = "Adhoc Routing";
     private static final String ACCOUNT_REVIEW = "Account Review";
     private static final String ORG_REVIEW = "Org Review";
-    private static final String EMPLOYEE_INDICATOR = "Employee Indicator";
-    private static final String TAX_CONTROL_CODE = "Tax Control Code";
-    private static final String ALIEN_INDICATOR = "Alien Indicator";
-    private static final String PAYMENT_REASON = "Payment Reason";
-    private static final String PAYMENT_REASON_CAMPUS_CODE = "Payment Reason+Campus Code";
     private static final String CAMPUS_CODE = "Campus Code";
-    private static final String ALIEN_INDICATOR_PAYMENT_REASON = "Alien Indicator+Payment Reason";
-    private static final String PAYMENT_METHOD = "Payment Method";
 
     /*
      * @see org.kuali.core.document.TransactionalDocumentTestBase#setUp()
      */
     protected void setUp() throws Exception {
         super.setUp();
-        changeCurrentUser((String) getFixtureEntryFromCollection(COLLECTION_NAME, DV_USER_NAME).createObject());
+        changeCurrentUser(HSCHREIN.toString());
     }
 
 
     public void testConvertIntoCopy_clear_additionalCodeInvalidPayee() throws Exception {
         GlobalVariables.setMessageList(new ArrayList());
-        DisbursementVoucherDocumentParameter dvParameter = (DisbursementVoucherDocumentParameter) getDocumentParameterFixture();
-        DisbursementVoucherDocument document = (DisbursementVoucherDocument) dvParameter.createDocument(getDocumentService());
+        DisbursementVoucherDocument dvParameter = (DisbursementVoucherDocument ) getDocumentParameterFixture();
+        DisbursementVoucherDocument document = (DisbursementVoucherDocument ) getDocumentParameterFixture();
         document.getDvPayeeDetail().setDisbVchrPayeeIdNumber("1234");
         document.convertIntoCopy();
 
         // the dvParameter doc number needs to be resynced
-        dvParameter.setDocumentNumber(document.getFinancialDocumentNumber());
+        dvParameter.setFinancialDocumentNumber(document.getFinancialDocumentNumber());
         dvParameter.setDisbVchrContactPhoneNumber("");
         dvParameter.setDisbVchrContactEmailId("");
-        dvParameter.getPayeeDetail().setDisbVchrPayeePersonName("");
-        dvParameter.getPayeeDetail().setDisbVchrPayeeLine1Addr("");
-        dvParameter.getPayeeDetail().setDisbVchrPayeeLine2Addr("");
-        dvParameter.getPayeeDetail().setDisbVchrPayeeCityName("");
-        dvParameter.getPayeeDetail().setDisbVchrPayeeStateCode("");
-        dvParameter.getPayeeDetail().setDisbVchrPayeeZipCode("");
-        dvParameter.getPayeeDetail().setDisbVchrPayeeCountryCode("");
-        dvParameter.getPayeeDetail().setDisbVchrAlienPaymentCode(false);
+        dvParameter.getDvPayeeDetail().setDisbVchrPayeePersonName("");
+        dvParameter.getDvPayeeDetail().setDisbVchrPayeeLine1Addr("");
+        dvParameter.getDvPayeeDetail().setDisbVchrPayeeLine2Addr("");
+        dvParameter.getDvPayeeDetail().setDisbVchrPayeeCityName("");
+        dvParameter.getDvPayeeDetail().setDisbVchrPayeeStateCode("");
+        dvParameter.getDvPayeeDetail().setDisbVchrPayeeZipCode("");
+        dvParameter.getDvPayeeDetail().setDisbVchrPayeeCountryCode("");
+        dvParameter.getDvPayeeDetail().setDisbVchrAlienPaymentCode(false);
         dvParameter.setDvNonResidentAlienTax(new DisbursementVoucherNonResidentAlienTax());
         dvParameter.setDisbVchrPayeeTaxControlCode("");
 
@@ -119,7 +112,7 @@ public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBa
         calendar2.clear(Calendar.HOUR);
         document.setDisbursementVoucherDueDate(new Date(calendar2.getTimeInMillis()));
 
-        dvParameter.assertMatch(document);
+        assertMatch(dvParameter,document);
 
     }
 
@@ -169,47 +162,80 @@ public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBa
         return 2;
     }
 
-    /**
-     * Get names of fixture collections test class is using.
-     * 
-     * @return String[]
-     */
-    public String[] getFixtureCollectionNames() {
-        return new String[] { COLLECTION_NAME };
-    }
 
     /**
      * 
      * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
      */
-    public DocumentParameter getDocumentParameterFixture() {
-        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
+    public Document getDocumentParameterFixture() throws Exception {
+        DisbursementVoucherDocument document=DocumentTestUtils.createTransactionalDocument(getDocumentService(), DisbursementVoucherDocument.class, 2007, "06");
+        DisbursementVoucherPayeeDetail payeeDetail = new DisbursementVoucherPayeeDetail();
+        payeeDetail.setDisbVchrPayeeIdNumber("P000178071");
+        payeeDetail.setDisbVchrPayeePersonName("Jerry Neal");
+payeeDetail.setDisbVchrPayeeLine1Addr("Poplars 423");
+payeeDetail.setDisbVchrPayeeCountryCode("UK");
+payeeDetail.setDisbVchrPaymentReasonCode("B");
+payeeDetail.setDisbursementVoucherPayeeTypeCode("P");
+        payeeDetail.setFinancialDocumentNumber(document.getFinancialDocumentNumber());
+        // payee detail
+        document.setDvPayeeDetail(payeeDetail);
+        // payment info
+        document.setDisbVchrCheckTotalAmount(new KualiDecimal("100.00"));
+        document.setDisbVchrPaymentMethodCode("P");
+        document.setDisbursementVoucherDueDate(Date.valueOf("2010-01-24"));
+        document.setDisbursementVoucherDocumentationLocationCode("F");
+        // contact information
+        document.setCampusCode("BL");
+        document.setDisbVchrContactPhoneNumber("8081234567");
+        document.setDisbVchrContactPersonName("aynalem");
+        document.setDisbVchrCheckStubText("Test DV Check");
+        
+        return document;
     }
 
     /**
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
-    public List getTargetAccountingLineParametersFromFixtures() {
-        return new ArrayList();
+    @Override
+    public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
+        return new ArrayList<AccountingLineFixture>();
     }
 
     /**
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
-    public List getSourceAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE7).createObject());
+    @Override
+    public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
+        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(LINE7);
         return list;
     }
 
-    /**
-     * 
-     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
-     */
-    public String getUserName() {
-        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
+    public<T extends Document> void assertMatch(T document1,T document2) {
+        super.assertMatch(document1,document2);
+        DisbursementVoucherDocument d1 = (DisbursementVoucherDocument)document1;
+        DisbursementVoucherDocument d2 = (DisbursementVoucherDocument)document2;
+
+        assertPayeeDetail(d1.getDvPayeeDetail(),d2.getDvPayeeDetail());
+
+        Assert.assertEquals(d2.getDisbVchrCheckTotalAmount(), d2.getDisbVchrCheckTotalAmount());
+        Assert.assertEquals(d1.getDisbVchrPaymentMethodCode(), d2.getDisbVchrPaymentMethodCode());
+        Assert.assertEquals(d1.getDisbursementVoucherDueDate(), d2.getDisbursementVoucherDueDate());
+        Assert.assertEquals(d1.getDisbursementVoucherDocumentationLocationCode(), d2.getDisbursementVoucherDocumentationLocationCode());
+        Assert.assertEquals(d1.getDisbVchrContactEmailId(), d2.getDisbVchrContactEmailId());
+        Assert.assertEquals(d1.getDisbVchrContactPhoneNumber(), d2.getDisbVchrContactPhoneNumber());
+        Assert.assertEquals(d1.getDisbVchrPayeeTaxControlCode(), d2.getDisbVchrPayeeTaxControlCode());
+        Assert.assertEquals(d1.getDisbVchrContactPersonName(), d2.getDisbVchrContactPersonName());
+    }
+
+    protected void assertPayeeDetail(DisbursementVoucherPayeeDetail d1, DisbursementVoucherPayeeDetail d2) {
+        Assert.assertEquals(d1.getDisbVchrPayeeIdNumber(), d2.getDisbVchrPayeeIdNumber());
+        Assert.assertEquals(d1.getDisbVchrPayeePersonName(), d2.getDisbVchrPayeePersonName());
+        Assert.assertEquals(d1.getDisbVchrPayeeLine1Addr(), d2.getDisbVchrPayeeLine1Addr());
+        Assert.assertEquals(d1.getDisbVchrPayeeCountryCode(), d2.getDisbVchrPayeeCountryCode());
+        Assert.assertEquals(d1.getDisbVchrPaymentReasonCode(), d2.getDisbVchrPaymentReasonCode());
     }
 
 
