@@ -32,6 +32,7 @@ import org.kuali.core.bo.user.Options;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
+import org.kuali.module.gl.document.CorrectionDocument;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
@@ -243,4 +244,6 @@ public interface ReportService {
      * @param posterMode Mode the poster is running
      */
     public void generatePosterErrorTransactionListing(Date runDate, OriginEntryGroup group, int posterMode);
+    
+    public void correctionReport(CorrectionDocument cDocument, Date runDate);
 }
