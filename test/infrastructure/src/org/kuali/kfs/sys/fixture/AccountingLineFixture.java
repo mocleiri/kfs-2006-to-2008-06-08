@@ -23,6 +23,7 @@
 package org.kuali.test.fixtures;
 
 import static org.kuali.Constants.GL_DEBIT_CODE;
+import static org.kuali.Constants.GL_CREDIT_CODE;
 
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
@@ -45,6 +46,8 @@ public enum AccountingLineFixture {
     LINE11(null,2004,null,"UA","1912201","AC",null,"9980",null,"BOB","F","TI",null,null,null,null,GL_DEBIT_CODE,"1.10"),
     LINE12(null,2004,null,"UA","1912201","AC",null,"9897",null,"BOB","F","TI",null,null,null,null,GL_DEBIT_CODE,"1.10"),
     LINE13(null,2004,null,"UA","1912201","AC",null,"9899",null,"BOB","F","TI",null,null,null,null,GL_DEBIT_CODE,"1.10"),
+    LINE14(null,2004,null,"UA","1912201",null,null,"5033",null,null,null,"EX",null,null,"123",null,GL_DEBIT_CODE,"1.10"),
+    LINE15(null,2004,null,"UA","1912201",null,null,"5033",null,null,null,"EX",null,null,"123",null,GL_CREDIT_CODE,"1.10"),
     
 
     GEC_LINE1(null,2004,null,"BL","1031400",null,"ADV","5000","SSS","KUL3",null,"IN","ONE","01","123",null,null,"1.10"),
