@@ -25,8 +25,8 @@ package org.kuali.module.gl.bo;
 import org.kuali.core.bo.KualiCodeBase;
 
 /**
- * @author jsissom
- * @version $Id: OriginEntrySource.java,v 1.8 2006-06-24 21:18:45 jsissom Exp $
+ * 
+ * @version $Id: OriginEntrySource.java,v 1.8.4.1 2006-09-26 16:28:11 bnelson Exp $
  * 
  */
 
