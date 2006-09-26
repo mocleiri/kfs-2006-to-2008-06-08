@@ -41,14 +41,17 @@ import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.OptionsService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
-import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.gl.bo.CorrectionChange;
+import org.kuali.module.gl.bo.CorrectionChangeGroup;
+import org.kuali.module.gl.bo.CorrectionCriteria;
 import org.kuali.module.gl.bo.OriginEntryGroup;
-import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
 import org.kuali.module.gl.bo.Transaction;
+import org.kuali.module.gl.document.CorrectionDocument;
 import org.kuali.module.gl.service.BalanceService;
+import org.kuali.module.gl.service.CorrectionDocumentService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.PosterService;
@@ -66,6 +69,7 @@ import org.kuali.module.gl.util.NominalActivityClosingTransactionReport;
 import org.kuali.module.gl.util.Summary;
 import org.kuali.module.gl.util.TransactionListingReport;
 import org.kuali.module.gl.util.TransactionReport;
+import org.kuali.module.gl.web.optionfinder.SearchOperatorsFinder;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.ExceptionConverter;
@@ -772,4 +776,195 @@ public class ReportServiceImpl implements ReportService {
     public void setPersistenceService(PersistenceService persistenceService) {
         this.persistenceService = persistenceService;
     }
+    
+    
+    public void correctionReport(CorrectionDocument cDocument, Date runDate){
+        LOG.debug("correctionReport() started");
+        
+        String title = "General Ledger Correction Process Report";
+        String fileprefix = "GLCP";
+        
+        Font headerFont = FontFactory.getFont(FontFactory.COURIER, 12, Font.BOLD);
+        Font sectionFont = FontFactory.getFont(FontFactory.COURIER, 10, Font.BOLD);
+        Font textFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.NORMAL);
+        Font boldTextFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
+        
+        Document document = new Document(PageSize.A4.rotate());
+
+        SfPageHelper helper = new SfPageHelper();
+        helper.runDate = runDate;
+        helper.headerFont = headerFont;
+        helper.title = title;
+        
+        try {
+            String filename = onlineReportsDirectory + "/" + fileprefix + "_";
+
+            filename = filename +sdf.format(runDate);
+            filename = filename + ".pdf";
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
+            writer.setPageEvent(helper);
+            
+            document.open();
+                 
+            float[] summaryWidths = { 90, 10 };
+            PdfPTable summary = new PdfPTable(summaryWidths);
+            
+            PdfPCell cell;
+            cell = new PdfPCell(new Phrase(" ", sectionFont));
+            cell.setColspan(2);
+            cell.setBorder(Rectangle.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Summary of Input Group", sectionFont));
+            cell.setColspan(2);
+            cell.setBorder(Rectangle.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Total Debits/Blanks: " + cDocument.getCorrectionDebitTotalAmount().toString(), textFont));
+            cell.setColspan(2);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Total Credits: " + cDocument.getCorrectionCreditTotalAmount().toString(), textFont));
+            cell.setColspan(2);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("System and Edit Method", sectionFont));
+            cell.setColspan(2);
+            cell.setBorder(Rectangle.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("System: " + cDocument.getSystem(), textFont));
+            cell.setColspan(2);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+                        
+            cell = new PdfPCell(new Phrase("Edit Method: " + cDocument.getMethod(), textFont));
+            cell.setColspan(2);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+  
+            cell = new PdfPCell(new Phrase("Input and Output File", sectionFont));
+            cell.setColspan(2);
+            cell.setBorder(Rectangle.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+           
+            cell = new PdfPCell(new Phrase("Input Group ID:" + cDocument.getCorrectionInputGroupId().toString(), textFont));
+            cell.setColspan(2);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Output Group ID: " + cDocument.getCorrectionOutputGroupId().toString(), textFont));
+            cell.setColspan(2);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Edit Options and Action", sectionFont));
+            cell.setColspan(2);
+            cell.setBorder(Rectangle.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+            
+            String processBatch;
+            String outputOnly;
+            
+            if (cDocument.getCorrectionFileDelete()){
+                processBatch = "No";
+            } else {processBatch = "Yes";}
+            
+            if (cDocument.getCorrectionSelection()){
+                outputOnly = "Yes";
+            } else {outputOnly = "No";}
+            
+            cell = new PdfPCell(new Phrase("Process In Batch: " + processBatch, textFont));
+            cell.setColspan(2);
+            //cell.setBorder(Rectangle.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Output only records which match criteria? " + outputOnly, textFont));
+            cell.setColspan(2);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            summary.addCell(cell);
+            
+            if (cDocument.getCorrectionTypeCode().equals(CorrectionDocumentService.CORRECTION_TYPE_CRITERIA)){
+                
+                CorrectionDocumentService correctionDocumentService = (CorrectionDocumentService) SpringServiceLocator.getBeanFactory().getBean("glCorrectionDocumentService"); 
+                
+                cell = new PdfPCell(new Phrase("Search Criteria and Modification Criteria", sectionFont));
+                cell.setColspan(2);
+                cell.setBorder(Rectangle.NO_BORDER);
+                cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                summary.addCell(cell);
+                
+                SearchOperatorsFinder sof = new SearchOperatorsFinder();
+                Integer correctionChangeGroupNextLineNumber = cDocument.getCorrectionChangeGroupNextLineNumber();
+                String docId = cDocument.getFinancialDocumentNumber();
+                CorrectionChangeGroup ccg = new CorrectionChangeGroup();
+                
+
+                for (int i = 0; i <= correctionChangeGroupNextLineNumber.intValue(); i++) {
+                    ccg = correctionDocumentService.findByDocumentNumberAndCorrectionChangeGroupNumber(docId, i);
+                    if (ccg != null) {
+                        Integer groupNum = new Integer(i);
+                        cell = new PdfPCell(new Phrase("Group " + groupNum.toString(), textFont));
+                        cell.setColspan(2);
+                        cell.setBorder(Rectangle.NO_BORDER);
+                        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                        summary.addCell(cell);
+
+                        if (correctionDocumentService.findByDocumentNumberAndCorrectionGroupNumber(docId, i) != null) {
+                            
+                            cell = new PdfPCell(new Phrase("Search Criteria", boldTextFont));
+                            cell.setColspan(2);
+                            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                            summary.addCell(cell);
+                            
+                            List<CorrectionCriteria> criteriaList = correctionDocumentService.findByDocumentNumberAndCorrectionGroupNumber(docId, i);
+                            for(CorrectionCriteria cc: criteriaList){
+                                cell = new PdfPCell(new Phrase("Field: " + cc.getCorrectionFieldName() + 
+                                                               "   operator: " + sof.getKeyLabelMap().get(cc.getCorrectionOperatorCode()) + 
+                                                               "   value: " + cc.getCorrectionFieldValue(), textFont));
+                                cell.setColspan(2);
+                                cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                                summary.addCell(cell);
+                            }
+                        }
+                        if (correctionDocumentService.findByDocumentHeaderIdAndCorrectionGroupNumber(docId, i) != null) {
+                            cell = new PdfPCell(new Phrase("Modification Criteria", boldTextFont));
+                            cell.setColspan(2);
+                            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                            summary.addCell(cell);
+                            List<CorrectionChange> changeList = correctionDocumentService.findByDocumentHeaderIdAndCorrectionGroupNumber(docId, i);
+                            for(CorrectionChange cc: changeList){
+                                
+                                cell = new PdfPCell(new Phrase("Field: " + cc.getCorrectionFieldName() + 
+                                                               "   Replacement Value: " + cc.getCorrectionFieldValue(), textFont));
+                                cell.setColspan(2);
+                                cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                                summary.addCell(cell);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            document.add(summary);
+        
+        }
+        catch (Exception de) {
+            LOG.error("generateReport() Error creating PDF report", de);
+            throw new RuntimeException("Report Generation Failed");
+        }
+
+        document.close();
+        
+    }
+   
+    
 }
