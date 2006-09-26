@@ -30,7 +30,7 @@ import org.kuali.Constants;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.CashDrawer;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -39,7 +39,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class CashDrawerServiceTest extends KualiTestBaseWithFixtures {
+public class CashDrawerServiceTest extends KualiTestBaseWithSession {
     private static final String BLANK_WORKGROUP_NAME = "";
     private static final String VALID_WORKGROUP_NAME = "testWorkgroup";
     private static final String BLANK_DOC_ID = "    ";

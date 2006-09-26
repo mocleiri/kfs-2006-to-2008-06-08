@@ -22,12 +22,14 @@
  */
 package org.kuali.module.financial.service;
 
+import static org.kuali.test.MockServiceUtils.mockConfigurationServiceForFlexibleOffsetEnabled;
+import static org.kuali.test.fixtures.OffsetAccountFixture.OFFSET_ACCOUNT1;
+
 import java.lang.reflect.InvocationTargetException;
 
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.OffsetAccount;
-import org.kuali.test.KualiTestBaseWithFixtures;
-import static org.kuali.test.MockServiceUtils.mockConfigurationServiceForFlexibleOffsetEnabled;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -36,7 +38,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class FlexibleOffsetAccountServiceTest extends KualiTestBaseWithFixtures {
+public class FlexibleOffsetAccountServiceTest extends KualiTestBaseWithSession {
     private FlexibleOffsetAccountService service;
 
     protected void setUp() throws Exception {
@@ -46,17 +48,17 @@ public class FlexibleOffsetAccountServiceTest extends KualiTestBaseWithFixtures 
 
     public void testGetByPrimaryId_valid() throws NoSuchMethodException, InvocationTargetException {
         mockConfigurationServiceForFlexibleOffsetEnabled(true);
-        OffsetAccount offsetAccount = service.getByPrimaryIdIfEnabled(getFixtureString("blChartOfAccounts"), getFixtureString("blFlexAccountNumber"), getFixtureString("tofOffsetObjectCode"));
-        assertSparselyEqualFixture("offsetAccount1", offsetAccount);
-        assertEquals(getFixtureString("blChartOfAccounts"), offsetAccount.getChart().getChartOfAccountsCode());
-        assertEquals(getFixtureString("blFlexAccountNumber"), offsetAccount.getAccount().getAccountNumber());
-        assertEquals(getFixtureString("uaChartOfAccounts"), offsetAccount.getFinancialOffsetChartOfAccount().getChartOfAccountsCode());
-        assertEquals(getFixtureString("uaAccountNumber1"), offsetAccount.getFinancialOffsetAccount().getAccountNumber());
+        OffsetAccount offsetAccount = service.getByPrimaryIdIfEnabled(OFFSET_ACCOUNT1.chartOfAccountsCode, OFFSET_ACCOUNT1.accountNumber, OFFSET_ACCOUNT1.financialOffsetObjectCode);
+        assertSparselyEqualBean(OFFSET_ACCOUNT1.createOffsetAccount(), offsetAccount);
+        assertEquals(OFFSET_ACCOUNT1.chartOfAccountsCode, offsetAccount.getChart().getChartOfAccountsCode());
+        assertEquals(OFFSET_ACCOUNT1.accountNumber, offsetAccount.getAccount().getAccountNumber());
+        assertEquals(OFFSET_ACCOUNT1.financialOffsetChartOfAccountCode, offsetAccount.getFinancialOffsetChartOfAccount().getChartOfAccountsCode());
+        assertEquals(OFFSET_ACCOUNT1.financialOffsetAccountNumber, offsetAccount.getFinancialOffsetAccount().getAccountNumber());
     }
 
     public void testGetByPrimaryId_validDisabled() throws NoSuchMethodException, InvocationTargetException {
         mockConfigurationServiceForFlexibleOffsetEnabled(false);
-        assertNull(service.getByPrimaryIdIfEnabled(getFixtureString("blChartOfAccounts"), getFixtureString("blFlexAccountNumber"), getFixtureString("tofOffsetObjectCode")));
+        assertNull(service.getByPrimaryIdIfEnabled(OFFSET_ACCOUNT1.chartOfAccountsCode, OFFSET_ACCOUNT1.accountNumber, OFFSET_ACCOUNT1.financialOffsetAccountNumber));
     }
 
     public void testGetByPrimaryId_invalid() {
@@ -80,9 +82,5 @@ public class FlexibleOffsetAccountServiceTest extends KualiTestBaseWithFixtures 
         // This tests that no RuntimeException is thrown because the parameter is missing from the database
         // or contains a value other than Y or N.
         service.getEnabled();
-    }
-
-    private String getFixtureString(String fixtureName) {
-        return (String) getFixtureEntry(fixtureName).createObject();
     }
 }
