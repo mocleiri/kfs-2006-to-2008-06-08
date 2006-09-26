@@ -38,7 +38,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the <code>PreEncumbranceDocumentRule</code>s
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class PreEncumbranceDocumentRuleTest extends KualiTestBaseWithSession {
