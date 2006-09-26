@@ -32,17 +32,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.document.DocumentBase;
-import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.service.DictionaryValidationService;
-import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
-import org.kuali.module.gl.bo.CorrectionCriteria;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.CorrectionDocumentService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
+import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.service.ScrubberService;
 
 /**
@@ -135,7 +132,14 @@ public class CorrectionDocument extends DocumentBase {
             String docId = getDocumentHeader().getFinancialDocumentNumber();
             CorrectionDocumentService correctionDocumentService = (CorrectionDocumentService) SpringServiceLocator.getBeanFactory().getBean("glCorrectionDocumentService");
             CorrectionDocument oldDoc = correctionDocumentService.findByCorrectionDocumentHeaderId(docId);
-
+            
+            //create a PDF file for GLCP report
+            ReportService reportService = (ReportService) SpringServiceLocator.getBeanFactory().getBean("glReportService");
+            DateTimeService dateTimeService = SpringServiceLocator.getDateTimeService();
+            java.sql.Date today = dateTimeService.getCurrentSqlDate();
+            
+            reportService.correctionReport(oldDoc, today);
+            
             OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
             OriginEntryGroup approvedGLCP = originEntryGroupService.getExactMatchingEntryGroup(oldDoc.getCorrectionOutputGroupId().intValue());
 
