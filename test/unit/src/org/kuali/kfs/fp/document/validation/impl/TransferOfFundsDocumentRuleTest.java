@@ -36,13 +36,11 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.TransactionalDocumentRuleTestBase;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.SpringServiceLocator;
-import static org.kuali.core.util.SpringServiceLocator.KUALI_CONFIGURATION_SERVICE;
 import org.kuali.module.financial.document.TransferOfFundsDocument;
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
-import static org.kuali.test.MockServiceUtils.createMockConfigurationServiceForFlexibleOffsetEnabled;
+import static org.kuali.test.MockServiceUtils.mockConfigurationServiceForFlexibleOffsetEnabled;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.parameters.AccountingLineParameter;
 import org.kuali.test.parameters.TransactionalDocumentParameter;
@@ -573,12 +571,12 @@ public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTe
     }
 
     public void testProcessGenerateGeneralLedgerPendingEntries_validSourceExpenseFlexibleOffset() throws Exception {
-        SpringServiceLocator.mockService(KUALI_CONFIGURATION_SERVICE, createMockConfigurationServiceForFlexibleOffsetEnabled(true));
+        mockConfigurationServiceForFlexibleOffsetEnabled(true);
         testProcessGenerateGeneralLedgerPendingEntries(createLineFromFixture("flexibleExpenseSourceLine"), "expectedFlexibleExplicitSourcePendingEntryForExpense", "expectedFlexibleOffsetSourcePendingEntry");
     }
 
     public void testProcessGenerateGeneralLedgerPendingEntries_validSourceExpenseMissingOffsetDefinition() throws Exception {
-        SpringServiceLocator.mockService(KUALI_CONFIGURATION_SERVICE, createMockConfigurationServiceForFlexibleOffsetEnabled(true));
+        mockConfigurationServiceForFlexibleOffsetEnabled(true);
         testProcessGenerateGeneralLedgerPendingEntries(createDocumentFromParameter("tof2000documentParameter"), createLineFromFixture("flexibleExpenseSourceLine"), "expectedFlexibleExplicitSourcePendingEntryForExpense", "expectedFlexibleOffsetSourcePendingEntryMissingOffsetDefinition", false);
         assertGlobalErrorMapContains(Constants.GENERAL_LEDGER_PENDING_ENTRIES_TAB_ERRORS, KeyConstants.ERROR_DOCUMENT_NO_OFFSET_DEFINITION);
     }
