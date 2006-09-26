@@ -38,7 +38,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the <code>DistributionOfIncomeAndExpenseDocumentRule</code>s
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class DistributionOfIncomeAndExpenseDocumentRuleTest extends KualiTestBaseWithSession {
