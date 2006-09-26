@@ -28,7 +28,7 @@ import java.util.Date;
 import org.kuali.core.bo.KualiSystemCode;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetAggregationCode;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -37,7 +37,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures {
+public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithSession{
 
     private BudgetAggregationCode bac;
     private KualiCodeService kualiCodeService;
@@ -120,7 +120,7 @@ public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures 
      * retrieved from the DB. Every time after that, the object should be retrieved from the cache therefore time to retrieve should
      * be less than or equal to.
      * 
-     * 
+     * @author Aaron Godert (ag266@cornell.edu)
      */
     public void testCache() {
         long tsStart;

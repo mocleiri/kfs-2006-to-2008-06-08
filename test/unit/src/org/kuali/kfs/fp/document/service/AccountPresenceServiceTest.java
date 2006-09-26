@@ -21,12 +21,14 @@
  *
  */
 package org.kuali.module.financial.service;
+import static org.kuali.test.fixtures.AccountFixture.ACCOUNT_NON_PRESENCE_ACCOUNT;
+import static org.kuali.test.fixtures.AccountFixture.ACCOUNT_PRESENCE_ACCOUNT;
+import static org.kuali.test.fixtures.ObjectCodeFixture.OBJECT_CODE_BUDGETED_OBJECT_CODE;
+import static org.kuali.test.fixtures.ObjectCodeFixture.OBJECT_CODE_NON_BUDGET_OBJECT_CODE;
 
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -35,7 +37,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class AccountPresenceServiceTest extends KualiTestBaseWithFixtures {
+public class AccountPresenceServiceTest extends KualiTestBaseWithSession {
     private AccountPresenceService accountPresenceService;
     private BusinessObjectService businessObjectService;
 
@@ -53,7 +55,7 @@ public class AccountPresenceServiceTest extends KualiTestBaseWithFixtures {
      * @throws Exception
      */
     public void testAccountPresenceNonBudgetedObject() throws Exception {
-        assertFalse("Non budgeded object code passed ", accountPresenceService.isObjectCodeBudgetedForAccountPresence(getAccountWithPresenceControl(), getNonBudgetedObjectCode()));
+        assertFalse("Non budgeded object code passed ", accountPresenceService.isObjectCodeBudgetedForAccountPresence(ACCOUNT_PRESENCE_ACCOUNT.createAccount(businessObjectService), OBJECT_CODE_NON_BUDGET_OBJECT_CODE.createObjectCode(businessObjectService)));
 
     }
 
@@ -74,7 +76,7 @@ public class AccountPresenceServiceTest extends KualiTestBaseWithFixtures {
      * @throws Exception
      */
     public void testAccountNonPresenceNonBudgetedObject() throws Exception {
-        assertTrue("non budgeted object code failed on account without presence control ", accountPresenceService.isObjectCodeBudgetedForAccountPresence(getAccountWithoutPresenceControl(), getNonBudgetedObjectCode()));
+        assertTrue("non budgeted object code failed on account without presence control ", accountPresenceService.isObjectCodeBudgetedForAccountPresence(ACCOUNT_NON_PRESENCE_ACCOUNT.createAccount(businessObjectService), OBJECT_CODE_NON_BUDGET_OBJECT_CODE.createObjectCode(businessObjectService)));
 
     }
 
@@ -84,37 +86,7 @@ public class AccountPresenceServiceTest extends KualiTestBaseWithFixtures {
      * @throws Exception
      */
     public void testAccountNonPresenceBudgetedObject() throws Exception {
-        assertTrue("budgeted object code failed on account without presence control ", accountPresenceService.isObjectCodeBudgetedForAccountPresence(getAccountWithoutPresenceControl(), getBudgetedObjectCode()));
+        assertTrue("budgeted object code failed on account without presence control ", accountPresenceService.isObjectCodeBudgetedForAccountPresence(ACCOUNT_NON_PRESENCE_ACCOUNT.createAccount(businessObjectService), OBJECT_CODE_BUDGETED_OBJECT_CODE.createObjectCode(businessObjectService)));
 
-    }
-
-    private Account getAccountWithPresenceControl() {
-        Account account = new Account();
-        account.setChartOfAccountsCode(super.getFixtureEntry("accountChartWithPresenceControl").getValue());
-        account.setAccountNumber(super.getFixtureEntry("accountNumberWithPresenceControl").getValue());
-        return (Account) businessObjectService.retrieve(account);
-    }
-
-    private Account getAccountWithoutPresenceControl() {
-        Account account = new Account();
-        account.setChartOfAccountsCode(super.getFixtureEntry("accountChartWithoutPresenceControl").getValue());
-        account.setAccountNumber(super.getFixtureEntry("accountNumberWithoutPresenceControl").getValue());
-        return (Account) businessObjectService.retrieve(account);
-    }
-
-    private ObjectCode getNonBudgetedObjectCode() {
-        ObjectCode objectCode = new ObjectCode();
-        objectCode.setUniversityFiscalYear(Integer.decode(super.getFixtureEntry("currentFiscalYear").getValue()));
-        objectCode.setChartOfAccountsCode(super.getFixtureEntry("accountChartWithPresenceControl").getValue());
-        objectCode.setFinancialObjectCode(super.getFixtureEntry("nonBudgetedObjectCode").getValue());
-        return (ObjectCode) businessObjectService.retrieve(objectCode);
-    }
-
-    private ObjectCode getBudgetedObjectCode() {
-        ObjectCode objectCode = new ObjectCode();
-        objectCode.setUniversityFiscalYear(Integer.decode(super.getFixtureEntry("currentFiscalYear").getValue()));
-        objectCode.setChartOfAccountsCode(super.getFixtureEntry("accountChartWithPresenceControl").getValue());
-        objectCode.setFinancialObjectCode(super.getFixtureEntry("budgetedObjectCode").getValue());
-        return (ObjectCode) businessObjectService.retrieve(objectCode);
     }
 }
