@@ -40,8 +40,8 @@ import org.kuali.module.gl.dao.OriginEntryGroupDao;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
- * @author 
- * @version $Id: OriginEntryGroupDaoOjb.java,v 1.15.2.3 2006-09-24 23:15:09 jsissom Exp $ TODO Oracle Specific code here
+ *  
+ * @version $Id: OriginEntryGroupDaoOjb.java,v 1.15.2.4 2006-09-26 16:28:01 bnelson Exp $ TODO Oracle Specific code here
  */
 public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryGroupDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupDaoOjb.class);

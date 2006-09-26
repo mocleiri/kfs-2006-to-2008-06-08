@@ -36,7 +36,7 @@ import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
 
 /**
- * @author jsissom
+ * 
  * 
  */
 public interface OriginEntryService {

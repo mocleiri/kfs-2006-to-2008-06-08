@@ -33,7 +33,7 @@ import org.kuali.module.gl.bo.OriginEntrySource;
 /**
  * Test Flexible Offset in the scrubber
  * 
- * @author Bin Gao from Michigan State University
+ * 
  */
 @WithTestSpringContext
 public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
