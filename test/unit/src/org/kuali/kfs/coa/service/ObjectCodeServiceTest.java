@@ -36,7 +36,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the ObjectCode service.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class ObjectCodeServiceTest extends KualiTestBaseWithFixtures {
