@@ -73,7 +73,7 @@ public class UserSession implements Serializable {
      * @throws ResourceUnavailableException
      */
     public UserSession(String networkId) throws UserNotFoundException, WorkflowException {
-        this.kualiUser = SpringServiceLocator.getKualiUserService().getUser(new AuthenticationUserId(networkId));
+        this.kualiUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(networkId));
         this.workflowUser = SpringServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
         this.nextObjectKey = 0;
         this.objectMap = new HashMap();
@@ -84,10 +84,10 @@ public class UserSession implements Serializable {
      */
     public String getNetworkId() {
         if (backdoorUser != null) {
-            return backdoorUser.getPersonUserIdentifier();
+            return backdoorUser.getUniversalUser().getPersonUserIdentifier();
         }
         else {
-            return kualiUser.getPersonUserIdentifier();
+            return kualiUser.getUniversalUser().getPersonUserIdentifier();
         }
     }
 
@@ -98,7 +98,7 @@ public class UserSession implements Serializable {
      * @return String
      */
     public String getLoggedInUserNetworkId() {
-        return kualiUser.getPersonUserIdentifier();
+        return kualiUser.getUniversalUser().getPersonUserIdentifier();
     }
 
     /**
@@ -136,7 +136,7 @@ public class UserSession implements Serializable {
      */
     public void setBackdoorUser(String networkId) throws UserNotFoundException, WorkflowException {
         if (!"prd".equals(SpringServiceLocator.getKualiConfigurationService().getPropertyString("environment"))) {
-          this.backdoorUser = SpringServiceLocator.getKualiUserService().getUser(new AuthenticationUserId(networkId));
+          this.backdoorUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(networkId));
           this.backdoorWorkflowUser = SpringServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
           this.workflowDocMap = new HashMap();
         }
