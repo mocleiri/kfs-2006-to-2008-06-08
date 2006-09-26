@@ -886,7 +886,7 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
      */
     public void initiateDocument() {
         KualiUser currentUser = GlobalVariables.getUserSession().getKualiUser();
-        setDisbVchrContactPersonName(currentUser.getPersonName());
+        setDisbVchrContactPersonName(currentUser.getUniversalUser().getPersonName());
         setCampusCode(currentUser.getOrganization().getOrganizationPhysicalCampusCode());
 
         // due date
