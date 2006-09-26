@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.service.KualiUserService;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.dao.ChartDao;
 import org.kuali.module.chart.service.ChartService;
@@ -43,6 +44,7 @@ public class ChartServiceImpl implements ChartService {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ChartServiceImpl.class);
 
     private ChartDao chartDao;
+    private KualiUserService kualiUserService;
 
     /**
      * @see org.kuali.module.chart.service.ChartService#getByPrimaryId(java.lang.String)
@@ -97,14 +99,13 @@ public class ChartServiceImpl implements ChartService {
      */
     public List getChartsThatUserIsResponsibleFor(KualiUser kualiUser) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieving chartsResponsible list for user " + kualiUser.getPersonName());
+            LOG.debug("retrieving chartsResponsible list for user " + kualiUser.getUniversalUser().getPersonName());
         }
 
         // gets the list of accounts that the user is the Fiscal Officer of
         List chartList = chartDao.getChartsThatUserIsResponsibleFor(kualiUser);
-
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieved chartsResponsible list for user " + kualiUser.getPersonName());
+            LOG.debug("retrieved chartsResponsible list for user " + kualiUser.getUniversalUser().getPersonName());
         }
         return chartList;
     }
@@ -123,5 +124,8 @@ public class ChartServiceImpl implements ChartService {
         this.chartDao = chartDao;
     }
 
+    public void setKualiUserService(KualiUserService kualiUserService) {
+        this.kualiUserService = kualiUserService;
+    }    
 
 }

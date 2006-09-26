@@ -162,7 +162,7 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
     private KualiUser createKualiUser(String userid) {
         KualiUser user = new KualiUser();
         try {
-            user = SpringServiceLocator.getKualiUserService().getUser(new AuthenticationUserId(userid));
+            user = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(userid));
         }
         catch (Exception e) {
             e.printStackTrace();
