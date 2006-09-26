@@ -32,7 +32,7 @@ import org.kuali.module.gl.service.CorrectionDocumentService;
 /**
  * This class returns list of payment method key value pairs.
  * 
- * @author Nervous System Team (kualidev@oncourse.iu.edu)
+ * 
  */
 public class CorrectionEditMethodValuesFinder extends KeyValuesBase {
 

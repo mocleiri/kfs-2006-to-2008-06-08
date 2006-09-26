@@ -38,7 +38,7 @@ import org.kuali.module.gl.service.OriginEntryService;
 /**
  * This class returns list of payment method key value pairs.
  * 
- * @author Nervous System Team (kualidev@oncourse.iu.edu)
+ * 
  */
 public class CorrectionGroupEntriesFinder extends KeyValuesBase {
 
