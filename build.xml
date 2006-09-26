@@ -93,21 +93,27 @@
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
 		<property name="appenders" value="INFO, LogFile" />
+		<property file="${external.config.tokens.file}" />
+		<filterset id="external.config.filterset">
+			<filter token="settings-root-directory" value="${settings-root-directory}" />
+			<filter token="security-root-directory" value="${security-root-directory}" />			
+			<filter token="log4j-settings-file" value="${log4j-settings-file}" />
+			<filter token="log4j-batch-settings-file" value="${log4j-batch-settings-file}" />
+			<filter token="security-directory" value="${security-directory}" />
+			<filter token="logs-directory" value="${logs-directory}" />
+			<filter token="attachments-root-directory" value="${attachments-root-directory}" />
+			<filter token="htdocs-directory" value="${htdocs-directory}" />
+			<filter token="batch-reports-directory" value="${batch-reports-directory}" />
+			<filter token="online-reports-directory" value="${online-reports-directory}" />
+			<filter token="staging-directory" value="${staging-directory}" />
+			<filter token="plugin-deploy-root-directory" value="${plugin-deploy-root-directory}" />
+		</filterset>
 		<filterset id="general.filterset">
+			<filterset refid="external.config.filterset" />
 			<filter token="application" value="${ant.project.name}" />
 			<filter token="institution" value="${institution}" />
 			<filter token="environment" value="${build.environment}" />
 			<filter token="version" value="${project.cvs.tag}" />
-			<filter token="settings-directory" value="${settings.directory}/" />
-			<filter token="log4j-settings-file" value="${settings.directory}/${log4j.settings.file}" />
-			<filter token="log4j-batch-settings-file" value="${settings.directory}/${log4j.batch.settings.file}" />
-			<filter token="security-directory" value="${security.directory}/" />
-			<filter token="logs-directory" value="${logs.directory}/" />
-			<filter token="attachments-root-directory" value="${attachments.root.directory}" />
-			<filter token="htdocs-directory" value="${htdocs.directory}" />
-			<filter token="batch-reports-directory" value="${batch.reports.directory}" />
-			<filter token="online-reports-directory" value="${online.reports.directory}" />
-			<filter token="staging-directory" value="${staging.directory}" />
 			<filter token="application-url" value="${base.application.url}${ant.project.name}-${build.environment}" />
 			<filter token="cas-url" value="${base.cas.url}cas-${build.environment}" />
 			<filter token="base-workflow-url" value="${base.workflow.url}" />
@@ -182,6 +188,7 @@
 		</delete>
 		<delete dir="${attachments.root.directory}" failonerror="false" />
 		<delete dir="${htdocs.directory}" failonerror="false" />
+		<delete dir="${staging.directory}" failonerror="false" />
 	</target>
 
 	<target name="clean-workflow-local" if="is.local.build" depends="init-project-properties">
@@ -265,6 +272,7 @@
 		<unzip src="${static.content.zip}" dest="${htdocs.directory}" />
 		<mkdir dir="${batch.reports.directory}" />
 		<mkdir dir="${online.reports.directory}" />
+		<mkdir dir="${staging.directory}" />
 	</target>
 
 	<target name="filter-workflow-local" if="dist.workflow.local" depends="init-filter-sets,clean-workflow-local">
@@ -444,17 +452,13 @@
 		<get dest="${packaging.server.zip.file}" src="https://test.kuali.org/confluence/download/attachments/9969/${appserver}.zip" />
 		<unzip src="${packaging.server.zip.file}" dest="${packaging.contents.directory}" />
 	</target>
-
+	
 	<target name="dist-packaged-binary-only" depends="init-packaging,dist-local,dist">
 		<delete file="${appserver.localhost.dir}/${ant.project.name}-${build.environment}.xml" />
 		<copy file="${ant.project.name}-${build.environment}.war" todir="${appserver.deploy.dir}" />
 		<copy todir="${packaging.contents.directory}">
 			<fileset dir="." includes="*-packaged.*" />
 		</copy>
-		<copy todir="${external.config.directory}-source">
-			<fileset dir="${external.config.directory}" />
-		</copy>
-		<delete dir="${external.config.directory}" />
 		<zip basedir="${packaging.contents.directory}" destfile="${packaging.contents.directory}.zip" />
 	</target>
 	
