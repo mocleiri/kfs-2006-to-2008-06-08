@@ -48,7 +48,7 @@ import org.kuali.test.parameters.TransactionalDocumentParameter;
 /**
  * This class tests the Transfer of Funds Document's persistence, routing, and PE generation.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class TransferOfFundsDocumentRuleTest extends TransactionalDocumentRuleTestBase {

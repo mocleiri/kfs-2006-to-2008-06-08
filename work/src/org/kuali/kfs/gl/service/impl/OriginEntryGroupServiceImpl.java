@@ -40,8 +40,8 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.web.struts.action.CorrectionAction;
 
 /**
- * @author 
- * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.4 2006-09-24 23:15:07 jsissom Exp $
+ *  
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.5 2006-09-26 16:28:34 bnelson Exp $
  */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
