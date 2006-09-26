@@ -34,7 +34,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class is used to test GeneralErrorCorrectionDocument.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class YearEndGeneralErrorCorrectionDocumentTest extends TransactionalDocumentTestBase {

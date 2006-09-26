@@ -33,7 +33,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the BalanceType service.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class BalanceTypServiceTest extends KualiTestBaseWithFixtures {
