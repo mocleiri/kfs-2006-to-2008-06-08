@@ -22,23 +22,25 @@
  */
 package org.kuali.module.financial.document;
 
+import static org.kuali.test.fixtures.AccountingLineFixture.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.KeyConstants;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
+import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.core.exceptions.DocumentAuthorizationException;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.TestsWorkflowViaDatabase;
-import org.kuali.test.parameters.DocumentParameter;
-import org.kuali.test.parameters.TransactionalDocumentParameter;
-
+import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.fixtures.AccountingLineFixture;
 /**
  * This class is used to test InternalBillingDocument.
  * 
@@ -46,41 +48,24 @@ import org.kuali.test.parameters.TransactionalDocumentParameter;
  */
 @WithTestSpringContext
 public class InternalBillingDocumentTest extends TransactionalDocumentTestBase {
-    public static final String COLLECTION_NAME = "InternalBillingDocumentTest.collection1";
-    public static final String USER_NAME = "user1";
-    public static final String DOCUMENT_PARAMETER = "internalBillingDocumentParameter1";
-    private static final String SL_ACCT1 = "sourceLine2";
-    private static final String TL_ACCT1 = "targetLine2";
-    private static final String SL_ACCT2 = "sourceLine3";
-    private static final String TL_ACCT2 = "targetLine3";
-    public static final String SERIALIZED_LINE_PARAMTER = "serializedLine1";
-
-    /**
-     * Get names of fixture collections test class is using.
-     * 
-     * @return String[]
-     */
-    public String[] getFixtureCollectionNames() {
-        return new String[] { COLLECTION_NAME };
-    }
 
     /**
      * 
      * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
      */
-    public DocumentParameter getDocumentParameterFixture() {
-        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
+    public Document getDocumentParameterFixture() throws Exception {
+        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), InternalBillingDocument.class, 2007, "03");
     }
 
     /**
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
-    public List getTargetAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TL_ACCT1).createObject());
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TL_ACCT2).createObject());
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TL_ACCT1).createObject());
+    public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
+	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(LINE2);
+        list.add(LINE3);
+        list.add(LINE2);
         return list;
     }
 
@@ -88,21 +73,14 @@ public class InternalBillingDocumentTest extends TransactionalDocumentTestBase {
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
-    public List getSourceAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SL_ACCT1).createObject());
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SL_ACCT2).createObject());
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SL_ACCT1).createObject());
+    public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
+	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(LINE2);
+        list.add(LINE3);
+        list.add(LINE2);
         return list;
     }
 
-    /**
-     * 
-     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
-     */
-    public String getUserName() {
-        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
-    }
 
     /**
      * provides default count for Pending entry count.
