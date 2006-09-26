@@ -31,7 +31,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the MandatoryTransferEliminationCode service.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class MandatoryTransferEliminationCodeServiceTest extends KualiTestBaseWithSpring {

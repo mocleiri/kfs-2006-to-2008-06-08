@@ -34,7 +34,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class is used to test PreEncumbranceDocument.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class PreEncumbranceDocumentTest extends TransactionalDocumentTestBase {

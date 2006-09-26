@@ -34,7 +34,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the BudgetAggregationCode service.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures {
@@ -120,7 +120,7 @@ public class BudgetAggregationCodeServiceTest extends KualiTestBaseWithFixtures 
      * retrieved from the DB. Every time after that, the object should be retrieved from the cache therefore time to retrieve should
      * be less than or equal to.
      * 
-     * @author Aaron Godert (ag266@cornell.edu)
+     * 
      */
     public void testCache() {
         long tsStart;

@@ -32,7 +32,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the AccountPresenceService.
  * 
- * @author Kuali Financial Transactions Team ()
+ * 
  */
 @WithTestSpringContext
 public class AccountPresenceServiceTest extends KualiTestBaseWithFixtures {
