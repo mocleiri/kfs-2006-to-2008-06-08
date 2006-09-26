@@ -372,6 +372,13 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
+
+        <relationships>
+            <relationship objectAttributeName="finCoaManagerUniversal" >
+                <primitiveAttribute sourceName="finCoaManagerUniversalId" targetName="personUniversalIdentifier" />
+            </relationship>
+        </relationships>
+
     </businessObject>
 </dictionaryEntry>
 
