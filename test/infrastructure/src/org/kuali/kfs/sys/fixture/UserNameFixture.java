@@ -20,26 +20,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.kuali.module.financial.util;
+package org.kuali.test.fixtures;
 
-import org.kuali.core.bo.SourceAccountingLine;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.test.WithTestSpringContext;
 
-@WithTestSpringContext
-public class CashReceiptFamilyTestUtil {
+public enum UserNameFixture {
+    KHUNTLEY,DFOGLE,RJWEISS,RORENFRO,HSCHREIN,LRAAB;
 
-    public static SourceAccountingLine buildSourceAccountingLine(String financialDocumentNumber, Integer postingYear, Integer sequenceNumber) {
-        SourceAccountingLine line = new SourceAccountingLine();
-        line.setChartOfAccountsCode("BA");
-        line.setAccountNumber("1031400");
-        line.setFinancialObjectCode("5000");
-        line.setAmount(new KualiDecimal("1.00"));
-        line.setPostingYear(postingYear);
-        line.setFinancialDocumentNumber(financialDocumentNumber);
-        line.setSequenceNumber(sequenceNumber);
-        line.refresh();
-        
-        return line;
-    }
 }

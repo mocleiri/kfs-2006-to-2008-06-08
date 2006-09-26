@@ -20,26 +20,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.kuali.module.financial.util;
+package org.kuali.test.fixtures;
 
-import org.kuali.core.bo.SourceAccountingLine;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.test.WithTestSpringContext;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.module.chart.bo.ObjectCode;
 
-@WithTestSpringContext
-public class CashReceiptFamilyTestUtil {
+public enum ObjectCodeFixture {
+    OBJECT_CODE_NON_BUDGET_OBJECT_CODE("BL","3500",2004),
+    OBJECT_CODE_BUDGETED_OBJECT_CODE("BL","3000",2004);
 
-    public static SourceAccountingLine buildSourceAccountingLine(String financialDocumentNumber, Integer postingYear, Integer sequenceNumber) {
-        SourceAccountingLine line = new SourceAccountingLine();
-        line.setChartOfAccountsCode("BA");
-        line.setAccountNumber("1031400");
-        line.setFinancialObjectCode("5000");
-        line.setAmount(new KualiDecimal("1.00"));
-        line.setPostingYear(postingYear);
-        line.setFinancialDocumentNumber(financialDocumentNumber);
-        line.setSequenceNumber(sequenceNumber);
-        line.refresh();
-        
-        return line;
+    public final Integer universityFiscalYear;
+    public final String chartOfAccountsCode;
+    public final String financialObjectCode;
+
+    private ObjectCodeFixture(String chartOfAccountsCode,
+	    String financialObjectCode, Integer universityFiscalYear) {
+	this.universityFiscalYear = universityFiscalYear;
+	this.chartOfAccountsCode = chartOfAccountsCode;
+	this.financialObjectCode = financialObjectCode;
     }
+
+    public ObjectCode createObjectCode() {
+	ObjectCode objectCode = new ObjectCode();
+	objectCode.setUniversityFiscalYear(this.universityFiscalYear);
+	objectCode.setChartOfAccountsCode(this.chartOfAccountsCode);
+	objectCode.setFinancialObjectCode(this.financialObjectCode);
+	return objectCode;
+    }
+
+    public ObjectCode createObjectCode(BusinessObjectService businessObjectService) {
+	return (ObjectCode) businessObjectService.retrieve(this.createObjectCode());
+    }
+
 }
