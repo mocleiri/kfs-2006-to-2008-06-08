@@ -25,7 +25,7 @@ package org.kuali.module.gl.service;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
- * @author aapotts
+ * 
  * 
  */
 public interface ScrubberService {
