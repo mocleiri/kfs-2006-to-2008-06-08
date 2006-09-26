@@ -29,7 +29,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CheckBase;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -38,7 +38,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class CheckServiceTest extends KualiTestBaseWithFixtures {
+public class CheckServiceTest extends KualiTestBaseWithSession {
 
     private CheckService checkService;
     private Check check;
