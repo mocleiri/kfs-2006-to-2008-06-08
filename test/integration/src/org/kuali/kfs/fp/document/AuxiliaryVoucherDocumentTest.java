@@ -22,14 +22,16 @@
  */
 package org.kuali.module.financial.document;
 
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE4;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
-import org.kuali.test.parameters.DocumentParameter;
-import org.kuali.test.parameters.TransactionalDocumentParameter;
+import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
-
+import org.kuali.test.fixtures.AccountingLineFixture;
 /**
  * This class is used to test NonCheckDisbursementDocumentTest.
  * 
@@ -37,37 +39,23 @@ import org.kuali.test.WithTestSpringContext;
  */
 @WithTestSpringContext
 public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase {
-    public static final String COLLECTION_NAME = "AuxiliaryVoucherDocument.collection1";
-    public static final String USER_NAME = "user1";
-    public static final String DOCUMENT_PARAMETER = "auxiliaryVoucherDocument";
-    public static final String SOURCE_LINE4 = "sourceLine4";
-    public static final String TARGET_LINE4 = "targetLine4";
-
-
-    /**
-     * Get names of fixture collections test class is using.
-     * 
-     * @return String[]
-     */
-    public String[] getFixtureCollectionNames() {
-        return new String[] { COLLECTION_NAME };
-    }
 
     /**
      * 
      * @see org.kuali.core.document.DocumentTestCase#getDocumentParameterFixture()
      */
-    public DocumentParameter getDocumentParameterFixture() {
-        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
+    public Document getDocumentParameterFixture() throws Exception {
+        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), AuxiliaryVoucherDocument.class, 2007, "11");
     }
 
     /**
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
-    public List getTargetAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE4).createObject());
+    @Override
+    public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
+	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(LINE4);
         return list;
     }
 
@@ -75,18 +63,10 @@ public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase 
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
-    public List getSourceAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE4).createObject());
+    public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
+	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(LINE4);
         return list;
-    }
-
-    /**
-     * 
-     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
-     */
-    public String getUserName() {
-        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
     }
 
     /**
@@ -99,4 +79,23 @@ public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase 
         // when we get to this document, we'll fix the problem with blanket approving non check
         // disbursement document test
     }
+
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#testConvertIntoCopy_invalidYear()
+     * @see AuxiliaryVoucherDocument#getNullOrReasonNotToCopy(String, boolean)
+     */
+    @Override
+    public void testConvertIntoCopy_invalidYear() throws Exception {
+//      this test is not valid for the AV
+    }
+
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#testConvertIntoErrorCorrection_invalidYear()
+     * @see AuxiliaryVoucherDocument#getNullOrReasonNotToCopy(String, boolean)
+     */
+    @Override
+    public void testConvertIntoErrorCorrection_invalidYear() throws Exception {
+       //this test is not valid for the AV
+    }
+    
 }

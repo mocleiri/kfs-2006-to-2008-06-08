@@ -22,13 +22,16 @@
  */
 package org.kuali.module.financial.document;
 
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE1;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
-import org.kuali.test.parameters.DocumentParameter;
-import org.kuali.test.parameters.TransactionalDocumentParameter;
+import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.fixtures.AccountingLineFixture;
 
 /**
  * This class is used to test YearEndTransferOfFundsDocument. Note that structurally, there is no difference between a
@@ -39,37 +42,24 @@ import org.kuali.test.WithTestSpringContext;
  */
 @WithTestSpringContext
 public class YearEndTransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
-    public static final String COLLECTION_NAME = "YearEndTransferOfFundsDocumentTest.collection1";
-    public static final String USER_NAME = "user1";
-    public static final String DOCUMENT_PARAMETER = "yearEndTransferOfFundsDocumentParameter1";
-    public static final String SOURCE_LINE1 = "sourceLine1";
-    public static final String TARGET_LINE1 = "targetLine1";
-    public static final String SERIALIZED_LINE_PARAMTER = "serializedLine1";
 
-    /**
-     * Get names of fixture collections test class is using.
-     * 
-     * @return String[]
-     */
-    public String[] getFixtureCollectionNames() {
-        return new String[] { COLLECTION_NAME };
-    }
 
     /**
      * 
      * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
      */
-    public DocumentParameter getDocumentParameterFixture() {
-        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
+    public Document getDocumentParameterFixture() throws Exception{
+        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), YearEndTransferOfFundsDocument.class, 2007, "07");
     }
 
     /**
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
-    public List getTargetAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE1).createObject());
+    @Override
+    public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
+        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(LINE1);
         return list;
     }
 
@@ -77,17 +67,11 @@ public class YearEndTransferOfFundsDocumentTest extends TransactionalDocumentTes
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
-    public List getSourceAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE1).createObject());
+    @Override
+    public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
+        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(LINE1);
         return list;
     }
 
-    /**
-     * 
-     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
-     */
-    public String getUserName() {
-        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
-    }
 }

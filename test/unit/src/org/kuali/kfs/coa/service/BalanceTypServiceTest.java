@@ -27,7 +27,7 @@ import java.util.HashMap;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -36,7 +36,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class BalanceTypServiceTest extends KualiTestBaseWithFixtures {
+public class BalanceTypServiceTest extends KualiTestBaseWithSession {
     BusinessObjectService businessObjectService;
 
     private static final boolean ACTIVE = true;

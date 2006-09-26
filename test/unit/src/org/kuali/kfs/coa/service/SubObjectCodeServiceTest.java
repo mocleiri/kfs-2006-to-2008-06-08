@@ -24,7 +24,7 @@ package org.kuali.module.chart.service;
 
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.SubObjCd;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -33,7 +33,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class SubObjectCodeServiceTest extends KualiTestBaseWithFixtures {
+public class SubObjectCodeServiceTest extends KualiTestBaseWithSession {
 
     private SubObjectCodeService subObjectCodeService;
 
