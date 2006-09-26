@@ -24,10 +24,10 @@ package org.kuali.module.financial.service;
 
 import java.util.List;
 
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.ProcurementCardTransaction;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -36,7 +36,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class ProcurementCardDocumentServiceTest extends KualiTestBaseWithFixtures {
+public class ProcurementCardDocumentServiceTest extends KualiTestBaseWithSession {
     private ProcurementCardCreateDocumentService procurementCardCreateDocumentService;
     private ProcurementCardLoadTransactionsService procurementCardLoadTransactionsService;
     private static String PCDO_USER_NAME = KualiUser.SYSTEM_USER;
