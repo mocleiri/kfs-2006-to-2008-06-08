@@ -32,7 +32,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the SubAccount service.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class SubAccountServiceTest extends KualiTestBaseWithFixtures {
