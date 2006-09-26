@@ -92,6 +92,7 @@ public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBa
         dvParameter.getDvPayeeDetail().setDisbVchrAlienPaymentCode(false);
         dvParameter.setDvNonResidentAlienTax(new DisbursementVoucherNonResidentAlienTax());
         dvParameter.setDisbVchrPayeeTaxControlCode("");
+        dvParameter.getDvPayeeDetail().setDisbVchrPayeeIdNumber("");
 
         dvParameter.setDisbVchrContactPersonName(GlobalVariables.getUserSession().getKualiUser().getUniversalUser().getPersonName());
         // set to tomorrow
@@ -180,7 +181,6 @@ payeeDetail.setDisbursementVoucherPayeeTypeCode("P");
         // payee detail
         document.setDvPayeeDetail(payeeDetail);
         // payment info
-        document.setDisbVchrCheckTotalAmount(new KualiDecimal("100.00"));
         document.setDisbVchrPaymentMethodCode("P");
         document.setDisbursementVoucherDueDate(Date.valueOf("2010-01-24"));
         document.setDisbursementVoucherDocumentationLocationCode("F");
@@ -190,6 +190,14 @@ payeeDetail.setDisbursementVoucherPayeeTypeCode("P");
         document.setDisbVchrContactPersonName("aynalem");
         document.setDisbVchrCheckStubText("Test DV Check");
         
+        KualiDecimal amount = KualiDecimal.ZERO;
+        for(AccountingLineFixture fixture: getSourceAccountingLineParametersFromFixtures()){
+            amount=amount.add(fixture.amount);
+        }
+        for(AccountingLineFixture fixture:getTargetAccountingLineParametersFromFixtures()){
+            amount=amount.add(fixture.amount);
+        }
+        document.setDisbVchrCheckTotalAmount(amount);
         return document;
     }
 
