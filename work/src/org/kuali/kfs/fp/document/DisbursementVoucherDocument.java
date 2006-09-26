@@ -64,7 +64,7 @@ import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
- * @author Kuali Financial Transactions Team ()
+ * 
  */
 public class DisbursementVoucherDocument extends TransactionalDocumentBase {
     private Integer finDocNextRegistrantLineNbr;
