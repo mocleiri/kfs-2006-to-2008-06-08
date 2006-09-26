@@ -22,7 +22,8 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE4;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE14;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE15;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase 
     @Override
     public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
 	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(LINE4);
+        list.add(LINE14);
         return list;
     }
 
@@ -65,7 +66,7 @@ public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase 
      */
     public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
 	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(LINE4);
+        list.add(LINE15);
         return list;
     }
 
