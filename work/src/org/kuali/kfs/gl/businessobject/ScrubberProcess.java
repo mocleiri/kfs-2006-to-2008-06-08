@@ -73,7 +73,7 @@ import org.springframework.util.StringUtils;
  * variables in a spring service are shared between all code calling the service. This will make sure each run of the scrubber has
  * it's own instance variables instead of being shared.
  * 
- * @author Kuali
+ * 
  */
 public class ScrubberProcess {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ScrubberProcess.class);
