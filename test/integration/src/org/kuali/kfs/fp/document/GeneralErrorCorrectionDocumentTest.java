@@ -22,15 +22,16 @@
  */
 package org.kuali.module.financial.document;
 
+import static org.kuali.test.fixtures.AccountingLineFixture.GEC_LINE1;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
-import org.kuali.test.parameters.AccountingLineParameter;
-import org.kuali.test.parameters.DocumentParameter;
-import org.kuali.test.parameters.TransactionalDocumentParameter;
+import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
-
+import org.kuali.test.fixtures.AccountingLineFixture;
 /**
  * This class is used to test GeneralErrorCorrectionDocument.
  * 
@@ -38,37 +39,23 @@ import org.kuali.test.WithTestSpringContext;
  */
 @WithTestSpringContext
 public class GeneralErrorCorrectionDocumentTest extends TransactionalDocumentTestBase {
-    public static final String COLLECTION_NAME = "GeneralErrorCorrectionDocumentTest.collection1";
-    public static final String USER_NAME = "user1";
-    public static final String DOCUMENT_PARAMETER = "generalErrorCorrectionDocumentParameter1";
-    public static final String SOURCE_LINE1 = "sourceLine2";
-    public static final String TARGET_LINE1 = "targetLine2";
-    public static final String SERIALIZED_LINE_PARAMTER = "serializedLine1";
-
-    /**
-     * Get names of fixture collections test class is using.
-     * 
-     * @return String[]
-     */
-    public String[] getFixtureCollectionNames() {
-        return new String[] { COLLECTION_NAME };
-    }
 
     /**
      * 
      * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
      */
-    public DocumentParameter getDocumentParameterFixture() {
-        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
+    public Document getDocumentParameterFixture() throws Exception {
+        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), GeneralErrorCorrectionDocument.class, 2007, "07");
     }
 
     /**
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
-    public List getTargetAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(customizeAccountingLineParameter((AccountingLineParameter)getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE1).createObject()));
+    @Override
+    public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
+        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(GEC_LINE1);
         return list;
     }
 
@@ -76,24 +63,13 @@ public class GeneralErrorCorrectionDocumentTest extends TransactionalDocumentTes
      * 
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
-    public List getSourceAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(customizeAccountingLineParameter((AccountingLineParameter)getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE1).createObject()));
+    @Override
+    public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
+        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(GEC_LINE1);
         return list;
     }
-
-    /**
-     * 
-     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
-     */
-    public String getUserName() {
-        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
-    }
-    private AccountingLineParameter customizeAccountingLineParameter(AccountingLineParameter line){
-        line.setReferenceNumber("123");
-        line.setReferenceOriginCode("01");
-        return line;
-    }
+  
     /*
      * TODO: OLD CODE FOR FUTURE CONSIDERATION WHEN WE GET TO THIS DOCUMENT This should probably go in the rule test class
      * 
