@@ -43,7 +43,7 @@ import edu.iu.uis.eden.util.Utilities;
 /**
  * KualiOrgReviewAttribute should be used when using Orgs and thier inner details to do routing.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 public class KualiOrgReviewAttribute implements WorkflowAttribute {
 
