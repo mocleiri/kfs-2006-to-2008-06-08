@@ -45,6 +45,7 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.PostalZipCode;
 import org.kuali.core.bo.State;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
@@ -1155,10 +1156,8 @@ public class Account extends BusinessObjectBase implements AccountIntf {
     }
 
 
-    /**
-     * @return Returns the accountFiscalOfficerUser.
-     */
     public UniversalUser getAccountFiscalOfficerUser() {
+        accountFiscalOfficerUser = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(accountFiscalOfficerSystemIdentifier, accountFiscalOfficerUser);
         return accountFiscalOfficerUser;
     }
 
@@ -1171,14 +1170,10 @@ public class Account extends BusinessObjectBase implements AccountIntf {
         this.accountFiscalOfficerUser = accountFiscalOfficerUser;
     }
 
-
-    /**
-     * @return Returns the accountManagerUser.
-     */
     public UniversalUser getAccountManagerUser() {
+        accountManagerUser = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(accountManagerSystemIdentifier, accountManagerUser);
         return accountManagerUser;
     }
-
 
     /**
      * @param accountManagerUser The accountManagerUser to set.
@@ -1189,10 +1184,8 @@ public class Account extends BusinessObjectBase implements AccountIntf {
     }
 
 
-    /**
-     * @return Returns the accountSupervisoryUser.
-     */
     public UniversalUser getAccountSupervisoryUser() {
+        accountSupervisoryUser = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(accountsSupervisorySystemsIdentifier, accountSupervisoryUser);
         return accountSupervisoryUser;
     }
 
