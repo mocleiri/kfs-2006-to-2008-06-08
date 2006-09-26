@@ -47,7 +47,7 @@ import org.kuali.module.gl.util.SufficientFundsItem;
  * eventually post transactions to the G/L. It integrates with workflow and also contains two groupings of accounting lines: Expense
  * and target. Expense is the expense and target is the income lines.
  * 
- * @author Kuali Financial Transactions Team ()
+ * 
  */
 public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implements VoucherDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AuxiliaryVoucherDocument.class);
