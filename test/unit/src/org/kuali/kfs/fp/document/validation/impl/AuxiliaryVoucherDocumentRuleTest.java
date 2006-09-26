@@ -43,7 +43,7 @@ import org.kuali.test.parameters.TransactionalDocumentParameter;
 /**
  * This class tests the <code>{@link AuxiliaryVoucherDocument}</code>'s rules and PE generation.
  * 
- * @author Kuali Transaction Processing Team ()
+ * 
  */
 @WithTestSpringContext
 public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleTestBase {

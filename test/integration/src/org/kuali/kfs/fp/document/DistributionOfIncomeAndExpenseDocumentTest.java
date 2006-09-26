@@ -37,7 +37,7 @@ import org.kuali.test.TestsWorkflowViaDatabase;
 /**
  * This class is used to test DistributionOfIncomeAndExpenseDocument.
  * 
- * @author Kuali Transaction Processing Team ()
+ * 
  */
 @WithTestSpringContext
 public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDocumentTestBase {

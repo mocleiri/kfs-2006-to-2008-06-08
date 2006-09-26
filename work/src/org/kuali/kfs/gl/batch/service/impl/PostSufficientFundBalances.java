@@ -32,7 +32,7 @@ import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.SufficientFundBalancesDao;
 
 /**
- * @author jsissom
+ * 
  * 
  */
 public class PostSufficientFundBalances implements PostTransaction {

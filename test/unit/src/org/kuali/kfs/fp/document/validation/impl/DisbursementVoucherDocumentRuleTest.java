@@ -34,7 +34,7 @@ import org.kuali.test.KualiTestBaseWithFixtures;
 import org.kuali.test.WithTestSpringContext;
 
 /**
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class DisbursementVoucherDocumentRuleTest extends KualiTestBaseWithFixtures {

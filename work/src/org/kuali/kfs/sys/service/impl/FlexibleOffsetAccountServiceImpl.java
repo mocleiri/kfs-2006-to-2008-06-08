@@ -42,7 +42,7 @@ import org.kuali.module.gl.bo.OriginEntry;
 /**
  * This class implements FlexibleOffsetAccountService.
  * 
- * @author Kuali Financial Transactions Team ()
+ * 
  */
 public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(FlexibleOffsetAccountServiceImpl.class);
