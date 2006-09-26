@@ -34,7 +34,7 @@ import java.util.List;
 import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * @author Kuali Nervous System Team ()
+ * 
  */
 public class CorrectionChangeGroup extends BusinessObjectBase implements Comparable {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeGroup.class);
