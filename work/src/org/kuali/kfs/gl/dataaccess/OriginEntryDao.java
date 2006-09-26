@@ -31,8 +31,8 @@ import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
- * @author jsissom
- * @version $Id: OriginEntryDao.java,v 1.17.2.3 2006-09-24 23:15:10 jsissom Exp $
+ * 
+ * @version $Id: OriginEntryDao.java,v 1.17.2.4 2006-09-26 16:28:29 bnelson Exp $
  */
 public interface OriginEntryDao {
     public static final int SORT_DOCUMENT = 1;
