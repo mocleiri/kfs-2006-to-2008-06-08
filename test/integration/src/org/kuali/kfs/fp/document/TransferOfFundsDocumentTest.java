@@ -43,7 +43,7 @@ import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
 /**
  * This class is used to test TransferOfFundsDocument.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
