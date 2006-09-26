@@ -115,9 +115,9 @@
 			<filter token="environment" value="${build.environment}" />
 			<filter token="version" value="${project.cvs.tag}" />
 			<filter token="application-url" value="${base.application.url}${ant.project.name}-${build.environment}" />
-			<filter token="cas-url" value="${base.cas.url}cas-${build.environment}" />
+			<filter token="cas-url" value="${base.cas.url}${cas.application}-${build.environment}" />
 			<filter token="base-workflow-url" value="${base.workflow.url}" />
-			<filter token="workflow-url" value="${base.workflow.url}en-${build.environment}" />
+			<filter token="workflow-url" value="${base.workflow.url}${workflow.application}-${build.environment}" />
 			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
 			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
 			<filter token="driver-class" value="${driver.class}" />
@@ -455,10 +455,20 @@
 	
 	<target name="dist-packaged-binary-only" depends="init-packaging,dist-local,dist">
 		<delete file="${appserver.localhost.dir}/${ant.project.name}-${build.environment}.xml" />
-		<copy file="${ant.project.name}-${build.environment}.war" todir="${appserver.deploy.dir}" />
 		<copy todir="${packaging.contents.directory}">
 			<fileset dir="." includes="*-packaged.*" />
 		</copy>
+		<copy todir="${packaging.source.external.config.directory}">
+			<fileset dir="${external.config.directory}" />
+		</copy>
+		<delete dir="${external.config.directory}" />
+		<copy file="${ant.project.name}-${build.environment}.war" todir="${packaging.source.appserver.content.directory}" />
+		<copy todir="${packaging.source.appserver.content.directory}">
+			<fileset id="other.packaging.wars" dir="${appserver.deploy.dir}" includes="${cas.application}-*.war,${workflow.application}-*.war" />
+		</copy>
+		<delete>
+			<fileset refid="other.packaging.wars" />
+		</delete>
 		<zip basedir="${packaging.contents.directory}" destfile="${packaging.contents.directory}.zip" />
 	</target>
 	
