@@ -29,8 +29,8 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * @author jsissom
- * @version $Id: OriginEntryGroup.java,v 1.6.2.3 2006-09-24 23:15:09 jsissom Exp $
+ * 
+ * @version $Id: OriginEntryGroup.java,v 1.6.2.4 2006-09-26 16:28:11 bnelson Exp $
  * 
  */
 
