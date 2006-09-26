@@ -43,7 +43,7 @@ import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.service.ScrubberService;
 
 /**
- * @author Kuali Nervous System Team ()
+ * 
  */
 public class CorrectionDocument extends DocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionDocument.class);
