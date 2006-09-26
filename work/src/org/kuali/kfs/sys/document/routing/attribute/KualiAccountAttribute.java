@@ -65,7 +65,7 @@ import edu.iu.uis.eden.util.Utilities;
 /**
  * KualiAccountAttribute which should be used when using Accounts to do routing
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
 
@@ -597,7 +597,7 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
      * A helper class which defines a Fiscal Officer role. Implements an equals() and hashCode() method so that it can be used in a
      * Set to prevent the generation of needless duplicate requests.
      * 
-     * @author ewestfal
+     * 
      */
     private static class FiscalOfficerRole {
 
