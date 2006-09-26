@@ -23,17 +23,19 @@ package org.kuali.module.financial.document;
  *
  */
 
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE2;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
-import org.kuali.test.parameters.DocumentParameter;
-import org.kuali.test.parameters.TransactionalDocumentParameter;
-import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.TestsWorkflowViaDatabase;
-
+import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.fixtures.AccountingLineFixture;
 /**
  * This class is used to test DistributionOfIncomeAndExpenseDocument.
  * 
@@ -43,30 +45,12 @@ import org.kuali.test.TestsWorkflowViaDatabase;
 public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDocumentTestBase {
     private static final Log LOG = LogFactory.getLog(DistributionOfIncomeAndExpenseDocumentTest.class);
 
-    public static final String COLLECTION_NAME = "DistributionOfIncomeAndExpenseDocumentTest.collection1";
-    public static final String USER_NAME = "user1";
-    public static final String DOCUMENT_PARAMETER = "distributionOfIncomeAndExpenseDocumentParameter1";
-    public static final String SOURCE_LINE1 = "sourceLine2";
-    public static final String TARGET_LINE1 = "targetLine2";
-    public static final String SERIALIZED_LINE_PARAMTER = "serializedLine1";
-
     /**
-     * Get names of fixture collections test class is using.
-     * 
-     * @return String[]
-     */
-    @Override
-    public String[] getFixtureCollectionNames() {
-        return new String[] { COLLECTION_NAME };
-    }
-
-    /**
-     * 
      * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
      */
     @Override
-    public DocumentParameter getDocumentParameterFixture() {
-        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
+    public Document getDocumentParameterFixture() throws Exception{
+        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), DistributionOfIncomeAndExpenseDocument.class, 2007, "03");
     }
 
     /**
@@ -74,9 +58,9 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
     @Override
-    public List getTargetAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE1).createObject());
+    public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
+        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(LINE2);
         return list;
     }
 
@@ -85,20 +69,12 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
     @Override
-    public List getSourceAccountingLineParametersFromFixtures() {
-        ArrayList list = new ArrayList();
-        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE1).createObject());
+    public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
+	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+        list.add(LINE2);
         return list;
     }
 
-    /**
-     * 
-     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
-     */
-    @Override
-    public String getUserName() {
-        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
-    }
 
     // START TEST METHODS
     /**

@@ -32,7 +32,7 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.ServiceBillingDocument;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -43,16 +43,13 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class ServiceBillingDocumentRuleTest extends KualiTestBaseWithFixtures {
+public class ServiceBillingDocumentRuleTest extends KualiTestBaseWithSession {
 
 
     // ////////////////////////////////////////////////////////////////////////
     // Test methods start here //
     // ////////////////////////////////////////////////////////////////////////
 
-    /**
-     * @see org.kuali.test.KualiTestBaseWithFixtures#setUp()
-     */
     @Override
     protected void setUp() throws Exception {
         super.setUp();

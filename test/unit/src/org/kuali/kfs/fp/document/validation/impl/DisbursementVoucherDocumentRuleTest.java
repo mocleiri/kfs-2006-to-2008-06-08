@@ -30,30 +30,23 @@ import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
-
+import static org.kuali.test.fixtures.UserNameFixture.*;
 /**
  * 
  */
 @WithTestSpringContext
-public class DisbursementVoucherDocumentRuleTest extends KualiTestBaseWithFixtures {
-
-    private static final String COLLECTION_NAME = "DisbursementVoucherDocumentRuleTest.collection1";
-    private static final String SOURCE_LINE_1 = "sourceLine1";
-
+public class DisbursementVoucherDocumentRuleTest extends KualiTestBaseWithSession {
 
     // /////////////////////////////////////////////////////////////////////////
     // Test Methods Start Here //
     // /////////////////////////////////////////////////////////////////////////
 
-    /**
-     * @see org.kuali.test.KualiTestBaseWithFixtures#setUp()
-     */
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        changeCurrentUser("lraab");
+        changeCurrentUser(LRAAB.toString());
     }
 
     // public void testProcessTargetAccountingLineSufficientFundsCheckingPreparation_line_notNull() {
