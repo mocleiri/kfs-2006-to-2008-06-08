@@ -100,7 +100,7 @@ public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBa
         dvParameter.setDvNonResidentAlienTax(new DisbursementVoucherNonResidentAlienTax());
         dvParameter.setDisbVchrPayeeTaxControlCode("");
 
-        dvParameter.setDisbVchrContactPersonName(GlobalVariables.getUserSession().getKualiUser().getPersonName());
+        dvParameter.setDisbVchrContactPersonName(GlobalVariables.getUserSession().getKualiUser().getUniversalUser().getPersonName());
         // set to tomorrow
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
