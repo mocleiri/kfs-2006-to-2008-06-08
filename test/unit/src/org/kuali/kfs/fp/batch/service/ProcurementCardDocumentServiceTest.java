@@ -33,7 +33,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the services used to create ProcurementCard documents.
  * 
- * @author Kuali Financial Transactions ()
+ * 
  */
 @WithTestSpringContext
 public class ProcurementCardDocumentServiceTest extends KualiTestBaseWithFixtures {

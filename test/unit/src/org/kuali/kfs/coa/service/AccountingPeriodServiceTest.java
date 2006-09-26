@@ -37,7 +37,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the AccountingPeriod business object from a persistence standpoint using the BusinessObjectService.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class AccountingPeriodServiceTest extends KualiTestBaseWithFixtures {

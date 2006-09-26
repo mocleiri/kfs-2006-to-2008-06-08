@@ -37,7 +37,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class is used to test NonCheckDisbursementDocumentTest.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class NonCheckDisbursementDocumentTest extends TransactionalDocumentTestBase {
