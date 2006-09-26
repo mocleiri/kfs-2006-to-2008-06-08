@@ -26,6 +26,8 @@ import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConsta
 import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.RESTRICTED_SUB_FUND_GROUP_CODES;
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
+import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.PFIP_SUB_FUND_LINE;
 
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
@@ -36,9 +38,8 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.InternalBillingDocument;
-import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.KualiTestBaseWithSession;
 import org.kuali.test.WithTestSpringContext;
-
 /**
  * This class tests the business rules of the internal billing document. This is not implemented yet and needs to extend
  * TransactionalDocumentRuleTestBase. We'll fully implement this when we get to this document during development.
@@ -46,7 +47,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class InternalBillingDocumentRuleTest extends KualiTestBaseWithFixtures {
+public class InternalBillingDocumentRuleTest extends KualiTestBaseWithSession {
 
     // ////////////////////////////////////////////////////////////////////////
     // Test methods start here //
@@ -65,8 +66,8 @@ public class InternalBillingDocumentRuleTest extends KualiTestBaseWithFixtures {
         assertTrue(failedAsExpected);
     }
 
-    public final void testIsSubFundGroupAllowed_true() {
-        AccountingLine line = createLineFromFixture("expenseSourceLine");
+    public final void testIsSubFundGroupAllowed_true() throws Exception {
+        AccountingLine line = EXPENSE_LINE.createSourceAccountingLine();
         line.refresh();
         assertGlobalErrorMapEmpty();
         boolean actual = new InternalBillingDocumentRule().isSubFundGroupAllowed(line);
@@ -74,8 +75,8 @@ public class InternalBillingDocumentRuleTest extends KualiTestBaseWithFixtures {
         assertEquals(true, actual);
     }
 
-    public final void testIsSubFundGroupAllowed_false() {
-        AccountingLine line = createLineFromFixture("pfipSubFundSourceLine");
+    public final void testIsSubFundGroupAllowed_false() throws Exception {
+        AccountingLine line = PFIP_SUB_FUND_LINE.createSourceAccountingLine();
         line.refresh();
         assertGlobalErrorMapEmpty();
         boolean actual = new InternalBillingDocumentRule().isSubFundGroupAllowed(line);
@@ -90,10 +91,6 @@ public class InternalBillingDocumentRuleTest extends KualiTestBaseWithFixtures {
                 // change
                 "Account Number", "9544900", "Sub-Fund Group Code", "PFIP", "PFRI;PFIP" });
         assertEquals(false, actual);
-    }
-
-    private AccountingLine createLineFromFixture(String accountingLineFixtureName) {
-        return (AccountingLine) getFixtureEntry(accountingLineFixtureName).createObject();
     }
 
     /**
