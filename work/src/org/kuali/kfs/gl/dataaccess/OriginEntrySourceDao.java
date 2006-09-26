@@ -27,8 +27,8 @@ import java.util.Collection;
 import org.kuali.module.gl.bo.OriginEntrySource;
 
 /**
- * @author 
- * @version $Id: OriginEntrySourceDao.java,v 1.2.8.1 2006-09-21 00:28:20 bnelson Exp $
+ *  
+ * @version $Id: OriginEntrySourceDao.java,v 1.2.8.2 2006-09-26 16:28:30 bnelson Exp $
  * 
  */
 
