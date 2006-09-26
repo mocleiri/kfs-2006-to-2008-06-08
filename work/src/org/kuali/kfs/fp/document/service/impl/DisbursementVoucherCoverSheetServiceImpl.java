@@ -58,8 +58,8 @@ import com.lowagie.text.pdf.PdfStamper;
  * 
  * Service used for manipulating disbursement voucher cover sheets.
  * 
- * @author Kuali Financial Transactions Team ()
- * @version $Id: DisbursementVoucherCoverSheetServiceImpl.java,v 1.8.2.1 2006-09-21 00:28:06 bnelson Exp $
+ * 
+ * @version $Id: DisbursementVoucherCoverSheetServiceImpl.java,v 1.8.2.2 2006-09-26 16:28:18 bnelson Exp $
  */
 public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVoucherCoverSheetService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherCoverSheetServiceImpl.class);

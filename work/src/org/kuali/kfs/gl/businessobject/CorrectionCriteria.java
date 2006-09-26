@@ -31,7 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * @author Kuali Nervous System Team ()
+ * 
  */
 public class CorrectionCriteria extends BusinessObjectBase implements Comparable {
 
