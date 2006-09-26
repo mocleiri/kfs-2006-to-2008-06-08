@@ -42,7 +42,7 @@ import org.kuali.test.parameters.TransactionalDocumentParameter;
 /**
  * This class is used to test InternalBillingDocument.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class InternalBillingDocumentTest extends TransactionalDocumentTestBase {

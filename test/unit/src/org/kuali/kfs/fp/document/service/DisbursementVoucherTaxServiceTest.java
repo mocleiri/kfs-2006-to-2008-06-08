@@ -38,7 +38,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the DisbursementVoucherTax service.
  * 
- * @author Kuali Financial Transactions ()
+ * 
  */
 @WithTestSpringContext
 public class DisbursementVoucherTaxServiceTest extends KualiTestBaseWithFixtures {
