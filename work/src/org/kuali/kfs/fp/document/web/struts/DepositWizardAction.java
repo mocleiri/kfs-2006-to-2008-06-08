@@ -88,7 +88,7 @@ public class DepositWizardAction extends KualiAction {
         DocumentAuthorizer cmDocAuthorizer = SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(cmDocTypeName);
         KualiUser luser = GlobalVariables.getUserSession().getKualiUser();
         if (!cmDocAuthorizer.canInitiate(cmDocTypeName, luser)) {
-            throw new DocumentTypeAuthorizationException(luser.getPersonUserIdentifier(), "add deposits to", cmDocTypeName);
+            throw new DocumentTypeAuthorizationException(luser.getUniversalUser().getPersonUserIdentifier(), "add deposits to", cmDocTypeName);
         }
 
         // populate the outgoing form used by the JSP if it seems empty
