@@ -34,7 +34,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class...
  * 
- * @author Bin Gao from Michigan State University
+ * 
  */
 @WithTestSpringContext
 public class NightlyOutServiceTest extends KualiTestBaseWithSpring {
