@@ -70,8 +70,8 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
- * @author jsissom
- * @version $Id: PosterServiceImpl.java,v 1.42.2.3 2006-09-16 01:31:51 jsissom Exp $
+ * 
+ * @version $Id: PosterServiceImpl.java,v 1.42.2.4 2006-09-26 16:28:34 bnelson Exp $
  */
 public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
