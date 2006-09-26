@@ -35,7 +35,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the Check service.
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class CheckServiceTest extends KualiTestBaseWithFixtures {

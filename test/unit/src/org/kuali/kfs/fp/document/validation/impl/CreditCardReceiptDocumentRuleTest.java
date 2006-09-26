@@ -37,7 +37,7 @@ import org.kuali.test.WithTestSpringContext;
 /**
  * This class tests the <code>CreditCardReceiptDocumentRule</code>s
  * 
- * @author Kuali Nervous System Team ()
+ * 
  */
 @WithTestSpringContext
 public class CreditCardReceiptDocumentRuleTest extends KualiTestBaseWithSession {
