@@ -157,21 +157,21 @@ public class ScrubberProcess {
      * 
      * @param group
      */
-    public void scrubGroupReportOnly(OriginEntryGroup group) {
+    public void scrubGroupReportOnly(OriginEntryGroup group,String documentNumber) {
         LOG.debug("scrubGroupReportOnly() started");
 
-        scrubEntries(group);
+        scrubEntries(group,documentNumber);
     }
 
     public void scrubEntries() {
-        scrubEntries(null);
+        scrubEntries(null,null);
     }
 
     /**
      * Scrub all entries that need it in origin entry. Put valid scrubbed entries in a scrubber valid group, put errors in a
      * scrubber error group, and transactions with an expired account in the scrubber expired account group.
      */
-    public void scrubEntries(OriginEntryGroup group) {
+    public void scrubEntries(OriginEntryGroup group,String documentNumber) {
         LOG.debug("scrubEntries() started");
 
         // We are in report only mode if we pass a group to this method.
@@ -194,12 +194,11 @@ public class ScrubberProcess {
         setDescriptions();
 
         // Create the groups that will store the valid and error entries that come out of the scrubber
+        // We don't need groups for the reportOnlyMode
         if (!reportOnlyMode) {
             validGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_VALID, true, true, false);
             errorGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_ERROR, false, true, false);
             expiredGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_EXPIRED, false, true, false);
-        } else {
-            validGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_VALID, false, false, false);            
         }
 
         // get the origin entry groups to be processed by Scrubber
@@ -215,7 +214,7 @@ public class ScrubberProcess {
 
         // generate the reports based on the origin entries to be processed by scrubber
         if (reportOnlyMode) {
-            reportService.generateScrubberLedgerSummaryReportOnline(runDate, group);
+            reportService.generateScrubberLedgerSummaryReportOnline(runDate, group,documentNumber);
         } else {
             reportService.generateScrubberLedgerSummaryReportBatch(runDate, groupsToScrub);
         }
@@ -239,7 +238,7 @@ public class ScrubberProcess {
 
         // generate the scrubber status summary report
         if (reportOnlyMode) {
-            reportService.generateOnlineScrubberStatisticsReport(group.getId(), runDate, scrubberReport, scrubberReportErrors);
+            reportService.generateOnlineScrubberStatisticsReport(group.getId(), runDate, scrubberReport, scrubberReportErrors,documentNumber);
         }
         else {
             reportService.generateBatchScrubberStatisticsReport(runDate, scrubberReport, scrubberReportErrors);
@@ -253,7 +252,7 @@ public class ScrubberProcess {
         // Run the reports
         if ( reportOnlyMode ) {
             // Run transaction list
-            reportService.generateScrubberTransactionsOnline(runDate, validGroup);
+            reportService.generateScrubberTransactionsOnline(runDate, group,documentNumber);
         } else {
             // Run bad balance type report and removed transaction report
             reportService.generateScrubberBadBalanceTypeListingReport(runDate, groupsToScrub);
