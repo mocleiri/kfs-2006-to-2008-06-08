@@ -70,7 +70,7 @@ public interface ReportService {
      * @param - runDate Run date of the report
      * @param - group Group to summarize for the report
      */
-    public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group);
+    public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group,String documentNumber);
 
     /**
      * Scrubber General Ledger Transaction Summary report
@@ -96,7 +96,7 @@ public interface ReportService {
      * @param - scrubberReport Summary information
      * @param - scrubberReportErrors Map of transactions with errors or warnings
      */
-    public void generateOnlineScrubberStatisticsReport(Integer groupId, Date runDate, ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors);
+    public void generateOnlineScrubberStatisticsReport(Integer groupId, Date runDate, ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors,String documentNumber);
 
     /**
      * Scrubber Demerger Statistics report
@@ -120,7 +120,7 @@ public interface ReportService {
      * @param - runDate Run date of the report
      * @param validGroup Group with transactions
      */
-    public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup);
+    public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup,String documentNumber);
 
     /**
      * Scrubber Removed Transactions report
@@ -244,6 +244,12 @@ public interface ReportService {
      * @param posterMode Mode the poster is running
      */
     public void generatePosterErrorTransactionListing(Date runDate, OriginEntryGroup group, int posterMode);
-    
-    public void correctionReport(CorrectionDocument cDocument, Date runDate);
+
+    /**
+     * GLCP document info report
+     * 
+     * @param cDocument
+     * @param runDate
+     */
+    public void correctionOnlineReport(CorrectionDocument cDocument, Date runDate);
 }
