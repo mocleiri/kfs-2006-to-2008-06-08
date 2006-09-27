@@ -384,7 +384,13 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute {
                     org = account.getOrganizationCode();
                 }
                 if (!StringUtils.isEmpty(chart) && !StringUtils.isEmpty(org)) {
-                    buildOrgReviewHierarchy(0, chartOrgValues, SpringServiceLocator.getOrganizationService().getByPrimaryIdWithCaching(chart, org));
+                    Org docOrg = SpringServiceLocator.getOrganizationService().getByPrimaryIdWithCaching(chart, org);
+                    if (docOrg == null) {
+                        throw new RuntimeException("Org declared on the document cannot be found in the system, routing cannot continue.");
+                    }
+                    //  possibly duplicate add, but this is safe in a HashSet
+                    chartOrgValues.add(docOrg);
+                    buildOrgReviewHierarchy(0, chartOrgValues, docOrg);
                 }
                 else {
                     String xpathExp = null;
