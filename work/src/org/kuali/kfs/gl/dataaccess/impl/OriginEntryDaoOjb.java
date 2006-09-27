@@ -44,11 +44,6 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.OriginEntryDao;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-/**
- *  
- * @version $Id: OriginEntryDaoOjb.java,v 1.30.2.7 2006-09-26 16:28:01 bnelson Exp $
- */
-
 public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryDaoOjb.class);
 
@@ -268,6 +263,13 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
             qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
             qbc.addOrderByAscending(ACCOUNT_NUMBER);
             qbc.addOrderByAscending(SUB_ACCOUNT_NUMBER);
+            qbc.addOrderByAscending(FINANCIAL_OBJECT_CODE);
+            qbc.addOrderByAscending(FINANCIAL_OBJECT_TYPE_CODE);
+            qbc.addOrderByAscending(UNIVERSITY_FISCAL_PERIOD_CODE);
+            qbc.addOrderByAscending(FINANCIAL_DOCUMENT_TYPE_CODE);
+            qbc.addOrderByAscending(FINANCIAL_SYSTEM_ORIGINATION_CODE);
+            qbc.addOrderByAscending(FINANCIAL_DOCUMENT_NUMBER);
+            qbc.addOrderByAscending(TRANSACTION_LEDGER_ENTRY_DESCRIPTION);
         }
 
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
