@@ -48,6 +48,7 @@ public enum AccountingLineFixture {
     LINE13(null, 2004, null, "UA", "1912201", "AC", null, "9899", null, "BOB", "F", "TI", null, null, null, null, GL_DEBIT_CODE, "1.10"),
     LINE14(null, 2004, null, "UA", "1912201", null, null, "5033", null, null, null, "EX", null, null, "123", null, GL_DEBIT_CODE, "1.10"),
     LINE15(null, 2004, null, "UA", "1912201", null, null, "5033", null, null, null, "EX", null, null, "123", null, GL_CREDIT_CODE, "1.10"),
+    LINE16(null, 2004, null, "UA", "1912201", "AC", null, "1175", null, "BOB", "F", "IC", null, "01", "2004", null, GL_DEBIT_CODE, "1.10"),
 
 
     GEC_LINE1(null, 2004, null, "BL", "1031400", null, "ADV", "5000", "SSS", "KUL3", null, "IN", "ONE", "01", "123", null, null, "1.10"),
@@ -63,7 +64,7 @@ public enum AccountingLineFixture {
 
     FLEXIBLE_EXPENSE_LINE(null, 2004, null, "BL", "2231401", "AC", null, "9900", null, "BOB", "F", "EX", null, "01", "1", "blah", GL_DEBIT_CODE, "1000.00"),
     CASH_LINE(null, 2004, null, "BA", "6044900", null, null, "8000", null, "BOB", null, "ES", null, null, null, null, null, "1000.00"),
-    LOSSS_ON_RETIRE_LINE(null, 2004, null, "BA", "6044900", null, null, "5137", null, "BOB", null, "ES", null, null, null, null, null, "1000.00"),
+    LOSSS_ON_RETIRE_LINE(null, 2004, null, "BA", "6044900", null, null, "5137", "CF", "BOB", null, "ES", null, null, null, null, null, "1000.00"),
     ACCRUED_INCOME_LINE(null, 2004, null, "BA", "6044900", null, null, "8111", null, "BOB", null, "ES", null, "01", "2004", null, null, "1000.00"),
     ACCRUED_SICK_PAY_LINE(null, 2004, null, "UA", "1912201", null, null, "2998", null, "BOB", null, "ES", null, null, "01", "2004", null, "1000.00"),
     FUND_BALANCE_LINE(null, 2004, null, "BA", "6044900", null, null, "9899", null, "BOB", null, null, null, null, "01", "2004", GL_DEBIT_CODE, "1000.00"),
