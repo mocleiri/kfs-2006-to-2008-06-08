@@ -119,15 +119,19 @@ public class CorrectionAction extends KualiDocumentActionBase {
 
         CorrectionForm sForm = (CorrectionForm)GlobalVariables.getUserSession().retrieveObject(Constants.CORRECTION_FORM_KEY);
         if ( sForm != null ) {
-            // If we come from viewResults, that was a GET request so all our data is gone and needs to be
-            // replaced with what is in session.  If not, just the GL entries are gone and need to be replaced.
-            if ( "viewResults".equals(rForm.getMethodToCall()) ) {
-                LOG.debug("execute() retreiving complete form from session");
-                rForm.copy(sForm);
-            } else {
-                LOG.debug("execute() retreiving entries from session");
-                rForm.setAllEntries(sForm.getAllEntries());
-                rForm.setMatchingEntries(sForm.getMatchingEntries());
+            // If we are called from the docHandler, ignore session because we are either creating a new document
+            // or loading an old one
+            if ( ! "docHandler".equals(rForm.getMethodToCall()) ) {
+                // If we come from viewResults, that was a GET request so all our data is gone and needs to be
+                // replaced with what is in session.  If not, just the GL entries are gone and need to be replaced.
+                if ( "viewResults".equals(rForm.getMethodToCall()) ) {
+                    LOG.debug("execute() retreiving complete form from session");
+                    rForm.copy(sForm);
+                } else {
+                    LOG.debug("execute() retreiving entries from session");
+                    rForm.setAllEntries(sForm.getAllEntries());
+                    rForm.setMatchingEntries(sForm.getMatchingEntries());
+                }
             }
         }
 
@@ -169,8 +173,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
         }
 
         // Did they pick the edit method and system?
-        if (!checkMainDropdown(correctionForm) ) {
-            GlobalVariables.getErrorMap().putError("systemAndEditMethod", KeyConstants.ERROR_GL_ERROR_CORRECTION_SYSTEMFIELD_REQUIRED);
+        if (! checkMainDropdown(correctionForm) ) {
             return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
@@ -290,6 +293,9 @@ public class CorrectionAction extends KualiDocumentActionBase {
                     correctionForm.setChooseSystem("");
                 }
             }
+        } else {
+            correctionForm.setEditMethod("");
+            correctionForm.setChooseSystem("");
         }
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
@@ -377,6 +383,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
     public ActionForward confirmDeleteDocument(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         LOG.debug("confirmDeleteDocument() started");
 
+        // TODO Make sure they have picked a group
         CorrectionForm errorCorrectionForm = (CorrectionForm) form;
         loadAllEntries(errorCorrectionForm.getInputGroupId(), errorCorrectionForm);
         errorCorrectionForm.setDeleteFileFlag(true);
@@ -594,17 +601,11 @@ public class CorrectionAction extends KualiDocumentActionBase {
         CorrectionDocument document = correctionForm.getCorrectionDocument();
 
         if ( validOriginEntry(correctionForm) ) {
+            correctionForm.updateEntryForManualEdit();
             correctionForm.getAllEntries().add(correctionForm.getEntryForManualEdit());
 
             // Clear out the additional row
-            OriginEntry oe = new OriginEntry();
-            oe.setEntryId(0);
-            correctionForm.setEntryFinancialDocumentReversalDate("");
-            correctionForm.setEntryTransactionDate("");
-            correctionForm.setEntryTransactionLedgerEntryAmount("");
-            correctionForm.setEntryTransactionLedgerEntrySequenceNumber("");
-            correctionForm.setEntryUniversityFiscalYear("");
-            correctionForm.setEntryForManualEdit(oe);
+            correctionForm.clearEntryForManualEdit();
         }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
@@ -626,6 +627,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
             OriginEntry element = (OriginEntry)iter.next();
             if ( element.getEntryId() == entryId ) {
                 iter.remove();
+                break;
             }
         }
 
@@ -653,6 +655,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
                 correctionForm.setEntryTransactionLedgerEntryAmount(convertToString(element.getTransactionLedgerEntryAmount(),"KualiDecimal"));
                 correctionForm.setEntryTransactionLedgerEntrySequenceNumber(convertToString(element.getTransactionLedgerEntrySequenceNumber(),"Integer"));
                 correctionForm.setEntryUniversityFiscalYear(convertToString(element.getUniversityFiscalYear(), "Integer"));
+                break;
             }
         }
 
@@ -679,17 +682,11 @@ public class CorrectionAction extends KualiDocumentActionBase {
                 }
             }
 
+            correctionForm.updateEntryForManualEdit();
             correctionForm.getAllEntries().add(correctionForm.getEntryForManualEdit());
 
             // Clear out the additional row
-            OriginEntry oe = new OriginEntry();
-            oe.setEntryId(0);
-            correctionForm.setEntryFinancialDocumentReversalDate("");
-            correctionForm.setEntryTransactionDate("");
-            correctionForm.setEntryTransactionLedgerEntryAmount("");
-            correctionForm.setEntryTransactionLedgerEntrySequenceNumber("");
-            correctionForm.setEntryUniversityFiscalYear("");
-            correctionForm.setEntryForManualEdit(oe);
+            correctionForm.clearEntryForManualEdit();
         }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
@@ -835,15 +832,16 @@ public class CorrectionAction extends KualiDocumentActionBase {
     private boolean checkMainDropdown(CorrectionForm errorCorrectionForm) {
         LOG.debug("checkMainDropdown() started");
 
-        if (errorCorrectionForm.getChooseSystem() == null) {
+        boolean ret = true;
+        if ( StringUtils.isEmpty(errorCorrectionForm.getChooseSystem()) ) {
             GlobalVariables.getErrorMap().putError("systemAndEditMethod", KeyConstants.ERROR_GL_ERROR_CORRECTION_SYSTEMFIELD_REQUIRED);
-            return false;
+            ret =  false;
         }
-        if (errorCorrectionForm.getEditMethod() == null) {
+        if ( StringUtils.isEmpty(errorCorrectionForm.getEditMethod()) ) {
             GlobalVariables.getErrorMap().putError("systemAndEditMethod", KeyConstants.ERROR_GL_ERROR_CORRECTION_EDITMETHODFIELD_REQUIRED);
-            return false;
+            ret = false;
         }
-        return true;
+        return ret;
     }
 
     private boolean checkOriginEntryGroupSelection(CorrectionForm correctionForm) {
