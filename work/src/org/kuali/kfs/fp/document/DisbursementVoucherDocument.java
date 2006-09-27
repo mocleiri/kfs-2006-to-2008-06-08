@@ -126,7 +126,7 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
             if (kualiConfigurationService.getApplicationParameterRule("SYSTEM", "SufficientFundsExpenseObjectTypes").succeedsRule(ple.getFinancialObjectTypeCode())) {
                 //is an expense object type, keep checking
                 ple.refreshNonUpdateableReferences();
-                if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getSufficientFundsCode().getCode().equals(Constants.SF_TYPE_CASH_AT_ACCOUNT)) {
+                if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(Constants.SF_TYPE_CASH_AT_ACCOUNT)) {
                     //is a cash account
                     if (flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinancialCashObjectCode()) == null
                             && flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinAccountsPayableObjectCode()) == null) {
