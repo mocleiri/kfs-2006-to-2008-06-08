@@ -453,8 +453,11 @@
 		<unzip src="${packaging.server.zip.file}" dest="${packaging.contents.directory}" />
 	</target>
 	
-	<target name="dist-packaged-binary-only" depends="init-packaging,dist-local,dist">
+	<target name="dist-packaged-binary-only" depends="init-packaging,filter-local,dist-cas-local,filter-workflow-local,make-plugin-remote,make-plugin,dist">
 		<delete file="${appserver.localhost.dir}/${ant.project.name}-${build.environment}.xml" />
+		<copy todir="${plugin.deploy.directory}">
+			<fileset dir="${plugin.directory}" />
+		</copy>
 		<copy todir="${packaging.contents.directory}">
 			<fileset dir="." includes="*-packaged.*" />
 		</copy>
@@ -463,12 +466,9 @@
 		</copy>
 		<delete dir="${external.config.directory}" />
 		<copy file="${ant.project.name}-${build.environment}.war" todir="${packaging.source.appserver.content.directory}" />
-		<copy todir="${packaging.source.appserver.content.directory}">
-			<fileset id="other.packaging.wars" dir="${appserver.deploy.dir}" includes="${cas.application}-*.war,${workflow.application}-*.war" />
-		</copy>
-		<delete>
-			<fileset refid="other.packaging.wars" />
-		</delete>
+		<copy file="${build.workflow.appserver.directory}/${workflow.application}-${build.environment}.war" todir="${packaging.source.appserver.content.directory}" />
+		<copy file="${appserver.deploy.dir}/${cas.application}-${build.environment}.war" todir="${packaging.source.appserver.content.directory}" />
+		<delete file="${appserver.deploy.dir}/${cas.application}-${build.environment}.war" />
 		<zip basedir="${packaging.contents.directory}" destfile="${packaging.contents.directory}.zip" />
 	</target>
 	
