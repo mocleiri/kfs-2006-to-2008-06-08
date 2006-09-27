@@ -22,34 +22,28 @@
  */
 package org.kuali.test.fixtures;
 
-import java.sql.Timestamp;
-
-import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.module.chart.bo.Account;
 import org.kuali.module.financial.bo.OffsetAccount;
 
 public enum OffsetAccountFixture {
-OFFSET_ACCOUNT1("BL","2231401","8000","UA","1912201");
-    
+    OFFSET_ACCOUNT1("BL", "2231401", "8000", "UA", "1912201"),
+    ;
+
     public final String accountNumber;
     public final String chartOfAccountsCode;
     public final String financialOffsetObjectCode;
     public final String financialOffsetChartOfAccountCode;
     public final String financialOffsetAccountNumber;
 
-   
-
-    private OffsetAccountFixture(  String chartOfAccountsCode, String accountNumber,  String financialOffsetObjectCode,  String financialOffsetChartOfAccountCode,  String financialOffsetAccountNumber) {
-	this.accountNumber = accountNumber;
-	this.chartOfAccountsCode = chartOfAccountsCode;
-	this.financialOffsetObjectCode = financialOffsetObjectCode;
-	this.financialOffsetChartOfAccountCode = financialOffsetChartOfAccountCode;
-	this.financialOffsetAccountNumber = financialOffsetAccountNumber;
+    private OffsetAccountFixture(String chartOfAccountsCode, String accountNumber, String financialOffsetObjectCode, String financialOffsetChartOfAccountCode, String financialOffsetAccountNumber) {
+        this.accountNumber = accountNumber;
+        this.chartOfAccountsCode = chartOfAccountsCode;
+        this.financialOffsetObjectCode = financialOffsetObjectCode;
+        this.financialOffsetChartOfAccountCode = financialOffsetChartOfAccountCode;
+        this.financialOffsetAccountNumber = financialOffsetAccountNumber;
     }
 
     public OffsetAccount createOffsetAccount() {
-	OffsetAccount account = new OffsetAccount();
+        OffsetAccount account = new OffsetAccount();
         account.setAccountNumber(this.accountNumber);
         account.setChartOfAccountsCode(this.chartOfAccountsCode);
         account.setFinancialOffsetObjectCode(this.financialOffsetObjectCode);
@@ -58,6 +52,4 @@ OFFSET_ACCOUNT1("BL","2231401","8000","UA","1912201");
 
         return account;
     }
-
-
 }

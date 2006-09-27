@@ -22,8 +22,6 @@
  */
 package org.kuali.test.fixtures;
 
-
 public enum UserNameFixture {
     KHUNTLEY,DFOGLE,RJWEISS,RORENFRO,HSCHREIN,LRAAB;
-
 }
