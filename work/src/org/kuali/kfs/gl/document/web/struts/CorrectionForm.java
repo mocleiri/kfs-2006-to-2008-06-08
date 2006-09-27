@@ -56,7 +56,7 @@ public class CorrectionForm extends KualiDocumentFormBase {
     private Integer outputGroupId;
     private String inputFileName;
     protected FormFile sourceFile;
-    private boolean processInBatch = false;
+    private boolean processInBatch = true;
     private boolean matchCriteriaOnly = false;
     private boolean dataLoadedFlag = false;
     private boolean editableFlag = false;
@@ -111,7 +111,7 @@ public class CorrectionForm extends KualiDocumentFormBase {
         inputFileName = "";
         inputGroupId = null;
         outputGroupId = null;
-        processInBatch = false;
+        processInBatch = true;
         matchCriteriaOnly = false;
         dataLoadedFlag = false;
         editableFlag = false;
@@ -134,6 +134,28 @@ public class CorrectionForm extends KualiDocumentFormBase {
 
         entryForManualEdit = new OriginEntry();
         entryForManualEdit.setEntryId(0);
+    }
+
+    public void updateEntryForManualEdit() {
+        entryForManualEdit.setFieldValue("universityFiscalYear", getEntryUniversityFiscalYear());
+        entryForManualEdit.setFieldValue("transactionLedgerEntrySequenceNumber",getEntryTransactionLedgerEntrySequenceNumber());
+        entryForManualEdit.setFieldValue("transactionLedgerEntryAmount", getEntryTransactionLedgerEntryAmount());
+        entryForManualEdit.setFieldValue("transactionDate", getEntryTransactionDate());
+        entryForManualEdit.setFieldValue("financialDocumentReversalDate",getEntryFinancialDocumentReversalDate());
+    }
+
+    public void clearEntryForManualEdit() {
+        OriginEntry oe = new OriginEntry();
+        oe.setEntryId(0);
+        oe.setSubAccountNumber("");
+        oe.setFinancialSubObjectCode("");
+        oe.setProjectCode("");
+        setEntryFinancialDocumentReversalDate("");
+        setEntryTransactionDate("");
+        setEntryTransactionLedgerEntryAmount("");
+        setEntryTransactionLedgerEntrySequenceNumber("");
+        setEntryUniversityFiscalYear("");
+        setEntryForManualEdit(oe);
     }
 
     public Integer getAllEntriesSize() {
