@@ -201,9 +201,9 @@
                   <display:column class="infocell" sortable="true" title="Document Type" ><c:out value="${allEntries.financialDocumentTypeCode}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" title="Origin Code" ><c:out value="${allEntries.financialSystemOriginationCode}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" title="Document Number" ><c:out value="${allEntries.financialDocumentNumber}" />&nbsp;</display:column>
-                  <display:column class="infocell" sortable="true" title="Sequence Number" ><c:out value="${allEntries.transactionLedgerEntrySequenceNumber}" />&nbsp;</display:column>
+                  <display:column class="infocell" sortable="true" comparator="org.kuali.core.web.comparator.NumericCellComparator" title="Sequence Number" ><c:out value="${allEntries.transactionLedgerEntrySequenceNumber}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" title="Description" ><c:out value="${allEntries.transactionLedgerEntryDescription}" />&nbsp;</display:column>
-                  <display:column class="infocell" sortable="true" title="Amount" ><c:out value="${allEntries.transactionLedgerEntryAmount}" />&nbsp;</display:column>
+                  <display:column class="infocell" sortable="true" comparator="org.kuali.core.web.comparator.NumericCellComparator" title="Amount" ><c:out value="${allEntries.transactionLedgerEntryAmount}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" title="Debit Credit Indicator" ><c:out value="${allEntries.transactionDebitCreditCode}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" title="Transaction Date" ><c:out value="${allEntries.transactionDate}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" title="Org Doc Number" ><c:out value="${allEntries.organizationDocumentNumber}" />&nbsp;</display:column>
