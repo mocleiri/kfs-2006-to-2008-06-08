@@ -30,7 +30,7 @@ import static org.kuali.test.fixtures.AccountingLineFixture.CASH_LINE;
 import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_GEC_LINE;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE10;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE8;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE9;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE16;
 import static org.kuali.test.fixtures.AccountingLineFixture.LOSSS_ON_RETIRE_LINE;
 import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.*;
 
@@ -130,7 +130,7 @@ public class GeneralErrorCorrectionDocumentRuleTest extends TransactionalDocumen
 
     @Override
     protected final SourceAccountingLine getInvalidObjectTypeSourceLine() throws Exception {
-        return LINE9.createSourceAccountingLine();
+        return LINE16.createSourceAccountingLine();
     }
 
     @Override
