@@ -124,10 +124,7 @@ public class JournalVoucherDocumentRuleTest extends TransactionalDocumentRuleTes
      */
     @Override
     protected final List<SourceAccountingLine> getInvalidObjectSubTypeSourceLines() throws Exception {
-        List<SourceAccountingLine> retval = new ArrayList<SourceAccountingLine>();
-        retval.add(LINE12.createSourceAccountingLine());
-        retval.add(LINE12.createSourceAccountingLine());
-        return retval;
+        throw new RuntimeException("this doesnt apply to this document");
     }
 
     /**
@@ -136,10 +133,7 @@ public class JournalVoucherDocumentRuleTest extends TransactionalDocumentRuleTes
      */
     @Override
     protected final List<TargetAccountingLine> getInvalidObjectSubTypeTargetLines() throws Exception {
-        List<TargetAccountingLine> retval = new ArrayList<TargetAccountingLine>();
-        retval.add(LINE11.createTargetAccountingLine());
-        retval.add(getTargetLineParameter3());
-        return retval;
+        throw new RuntimeException("this doesnt apply to this document");
     }
 
     /**
@@ -246,10 +240,7 @@ public class JournalVoucherDocumentRuleTest extends TransactionalDocumentRuleTes
      */
     @Override
     protected final TransactionalDocument createDocumentWithInvalidObjectSubType() throws Exception {
-        TransactionalDocument retval = (TransactionalDocument) createDocument();
-        retval.setSourceAccountingLines(getInvalidObjectSubTypeSourceLines());
-        retval.setTargetAccountingLines(getInvalidObjectSubTypeTargetLines());
-        return retval;
+       throw new RuntimeException("this doesnt apply to this document");
     }
 
     /**
@@ -392,6 +383,7 @@ public class JournalVoucherDocumentRuleTest extends TransactionalDocumentRuleTes
     // /////////////////////////////////////////////////////////////////////////
     // Test Methods Start Here //
     // /////////////////////////////////////////////////////////////////////////
+    
     /**
      * method overridden from <code>{@link TransactionalDocumentRuleTestBase}</code> because all object codes are allowed in
      * <code>{@link JournalVoucherDocument}</code>
@@ -410,6 +402,16 @@ public class JournalVoucherDocumentRuleTest extends TransactionalDocumentRuleTes
     @Override
     public void testIsObjectSubTypeAllowed_InvalidSubType() {
     }
+
+    /**
+     * all obect sub types are alloed on the JV
+     * @see org.kuali.core.rule.TransactionalDocumentRuleTestBase#testAddAccountingLine_InvalidObjectSubType()
+     */
+    @Override
+    public void testAddAccountingLine_InvalidObjectSubType() throws Exception {
+        
+    }
+
 
     /**
      * This test is overriddden becaues <code>{@link JournalVoucherDocumentRule}</code> doesn't add offset entries.
