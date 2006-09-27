@@ -993,7 +993,11 @@ public class ScrubberProcess {
         KualiParameterRule objectSubTypeCodes = getRule(GLConstants.GlScrubberGroupRules.PLANT_INDEBTEDNESS_OBJ_SUB_TYPE_CODES);
         KualiParameterRule subFundGroupCodes = getRule(GLConstants.GlScrubberGroupRules.PLANT_INDEBTEDNESS_SUB_FUND_GROUP_CODES);
 
-        if (scrubbedEntry.getFinancialBalanceTypeCode().equals(scrubbedEntry.getOption().getActualFinancialBalanceTypeCd()) && subFundGroupCodes.succeedsRule(scrubbedEntry.getAccount().getSubFundGroupCode()) && objectSubTypeCodes.succeedsRule(scrubbedEntry.getFinancialObject().getFinancialObjectSubTypeCode())) {
+        if (scrubbedEntry.getFinancialBalanceTypeCode().equals(scrubbedEntry.getOption().getActualFinancialBalanceTypeCd()) && 
+                subFundGroupCodes.succeedsRule(scrubbedEntry.getAccount().getSubFundGroupCode()) && 
+                objectSubTypeCodes.succeedsRule(scrubbedEntry.getFinancialObject().getFinancialObjectSubTypeCode())) {
+            // Save this because the offset entry can't have it, but the transfer needs it
+            String subObjectCode = plantIndebtednessEntry.getFinancialSubObjectCode();
 
             plantIndebtednessEntry.setTransactionLedgerEntryDescription(Constants.PLANT_INDEBTEDNESS_ENTRY_DESCRIPTION);
 
@@ -1017,6 +1021,7 @@ public class ScrubberProcess {
             plantIndebtednessEntry.setTransactionDebitCreditCode(scrubbedEntry.getTransactionDebitCreditCode());
 
             plantIndebtednessEntry.setTransactionScrubberOffsetGenerationIndicator(true);
+            plantIndebtednessEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
 
             try {
                 flexibleOffsetAccountService.updateOffset(plantIndebtednessEntry);
@@ -1043,12 +1048,16 @@ public class ScrubberProcess {
             plantIndebtednessEntry.setAccountNumber(scrubbedEntry.getAccountNumber());
             plantIndebtednessEntry.setSubAccountNumber(scrubbedEntry.getSubAccountNumber());
 
-            if (scrubbedEntry.getChartOfAccountsCode().equals(scrubbedEntry.getAccount().getOrganization().getChartOfAccountsCode()) && scrubbedEntry.getAccount().getOrganizationCode().equals(scrubbedEntry.getAccount().getOrganization().getOrganizationCode()) && scrubbedEntry.getAccountNumber().equals(scrubbedEntry.getAccount().getAccountNumber()) && scrubbedEntry.getChartOfAccountsCode().equals(scrubbedEntry.getAccount().getChartOfAccountsCode())) {
+            if (scrubbedEntry.getChartOfAccountsCode().equals(scrubbedEntry.getAccount().getOrganization().getChartOfAccountsCode()) &&
+                    scrubbedEntry.getAccount().getOrganizationCode().equals(scrubbedEntry.getAccount().getOrganizationCode()) && 
+                    scrubbedEntry.getAccountNumber().equals(scrubbedEntry.getAccount().getAccountNumber()) && 
+                    scrubbedEntry.getChartOfAccountsCode().equals(scrubbedEntry.getAccount().getChartOfAccountsCode())) {
                 plantIndebtednessEntry.setAccountNumber(scrubbedEntry.getAccount().getOrganization().getCampusPlantAccountNumber());
                 plantIndebtednessEntry.setChartOfAccountsCode(scrubbedEntry.getAccount().getOrganization().getCampusPlantChartCode());
             }
 
             plantIndebtednessEntry.setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
+            plantIndebtednessEntry.setFinancialSubObjectCode(subObjectCode);
 
             StringBuffer litGenPlantXferFrom = new StringBuffer();
             litGenPlantXferFrom.append(transferDescription + " ");
@@ -1065,6 +1074,7 @@ public class ScrubberProcess {
 
             plantIndebtednessEntry.setFinancialObjectCode(scrubbedEntry.getChart().getFundBalanceObjectCode());
             plantIndebtednessEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinObjectTypeFundBalanceCd());
+            plantIndebtednessEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
 
             if (scrubbedEntry.isDebit()) {
                 plantIndebtednessEntry.setTransactionDebitCreditCode(Constants.GL_CREDIT_CODE);
