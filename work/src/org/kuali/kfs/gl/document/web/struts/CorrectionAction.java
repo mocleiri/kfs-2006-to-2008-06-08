@@ -207,6 +207,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
         document.setCorrectionInputGroupId(correctionForm.getInputGroupId());
         document.setCorrectionOutputGroupId(oeg.getId());
 
+        LOG.error("route() doc type name: " + correctionForm.getDocTypeName());
         return super.route(mapping, form, request, response);
     }
 
@@ -236,6 +237,10 @@ public class CorrectionAction extends KualiDocumentActionBase {
         // in all of the following cases we want to load the document
         if (ArrayUtils.contains(DOCUMENT_LOAD_COMMANDS, command) && correctionForm.getDocId() != null) {
             loadDocument(correctionForm);
+            CorrectionDocument document = correctionForm.getCorrectionDocument();
+            correctionForm.setProcessInBatch(! document.getCorrectionFileDelete());
+            correctionForm.setMatchCriteriaOnly(document.getCorrectionSelection());
+            loadAllEntries(document.getCorrectionInputGroupId(), correctionForm);
         }
         else if (IDocHandler.INITIATE_COMMAND.equals(command)) {
             correctionForm.clearForm();
@@ -261,7 +266,6 @@ public class CorrectionAction extends KualiDocumentActionBase {
 
         if (checkMainDropdown(correctionForm)) {
             // Clear out any entries that were already loaded
-            correctionForm.setAllEntries(new ArrayList());
             document.setCorrectionInputFileName(null);
             document.setCorrectionInputGroupId(null);
             document.setCorrectionOutputFileName(null);
@@ -273,7 +277,9 @@ public class CorrectionAction extends KualiDocumentActionBase {
             correctionForm.setDeleteFileFlag(false);
             correctionForm.setEditableFlag(false);
             correctionForm.setManualEditFlag(false);
-
+            correctionForm.setShowOutputFlag(false);
+            correctionForm.setAllEntries(new ArrayList());
+            
             if ( CorrectionDocumentService.SYSTEM_DATABASE.equals(correctionForm.getChooseSystem()) ) {
                 //if users choose database, then get the list of origin entry groups and set the default
 
@@ -352,6 +358,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
                 if ( CorrectionDocumentService.CORRECTION_TYPE_MANUAL.equals(correctionForm.getEditMethod()) ) {
                     correctionForm.setManualEditFlag(true);
                     correctionForm.setEditableFlag(false);
+                    correctionForm.setDeleteFileFlag(false);
                 }
                 correctionForm.setDataLoadedFlag(true);
             } else {
@@ -383,10 +390,18 @@ public class CorrectionAction extends KualiDocumentActionBase {
     public ActionForward confirmDeleteDocument(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         LOG.debug("confirmDeleteDocument() started");
 
-        // TODO Make sure they have picked a group
-        CorrectionForm errorCorrectionForm = (CorrectionForm) form;
-        loadAllEntries(errorCorrectionForm.getInputGroupId(), errorCorrectionForm);
-        errorCorrectionForm.setDeleteFileFlag(true);
+        CorrectionForm correctionForm = (CorrectionForm) form;
+
+        if (checkOriginEntryGroupSelection(correctionForm)) {
+            OriginEntryGroup oeg = CorrectionAction.originEntryGroupService.getExactMatchingEntryGroup(correctionForm.getInputGroupId());
+            if ( oeg.getProcess() ) {
+                loadAllEntries(correctionForm.getInputGroupId(), correctionForm);
+                correctionForm.setDeleteFileFlag(true);
+                correctionForm.setDataLoadedFlag(true);
+            } else {
+                GlobalVariables.getErrorMap().putError("documentsInSystem", KeyConstants.ERROR_GL_ERROR_GROUP_ALREADY_MARKED_NO_PROCESS);
+            }
+        }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
@@ -395,10 +410,25 @@ public class CorrectionAction extends KualiDocumentActionBase {
     public ActionForward deleteGroup(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         LOG.debug("deleteGroup() started");
 
-        CorrectionForm errorCorrectionForm = (CorrectionForm) form;
-        loadAllEntries(errorCorrectionForm.getInputGroupId(), errorCorrectionForm);
+        CorrectionForm correctionForm = (CorrectionForm) form;
+        CorrectionDocument document = correctionForm.getCorrectionDocument();
 
-        CorrectionAction.originEntryGroupService.dontProcessGroup(errorCorrectionForm.getInputGroupId());
+        CorrectionAction.originEntryGroupService.dontProcessGroup(correctionForm.getInputGroupId());
+        correctionForm.setEditMethod("");
+        correctionForm.setChooseSystem("");
+        document.setCorrectionInputFileName(null);
+        document.setCorrectionInputGroupId(null);
+        document.setCorrectionOutputFileName(null);
+        document.setCorrectionOutputGroupId(null);
+        document.setCorrectionCreditTotalAmount(null);
+        document.setCorrectionDebitTotalAmount(null);
+        document.setCorrectionRowCount(null);
+        correctionForm.setDataLoadedFlag(false);
+        correctionForm.setDeleteFileFlag(false);
+        correctionForm.setEditableFlag(false);
+        correctionForm.setManualEditFlag(false);
+        correctionForm.setShowOutputFlag(false);
+        correctionForm.setAllEntries(new ArrayList());
 
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
