@@ -24,7 +24,7 @@ package org.kuali.module.chart.service;
 
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.test.KualiTestBaseWithSpring;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -33,7 +33,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class AccountServiceTest extends KualiTestBaseWithSpring {
+public class AccountServiceTest extends KualiTestBase {
     private AccountService accountService;
 
     protected void setUp() throws Exception {

@@ -22,6 +22,7 @@
  */
 package org.kuali.module.financial.document;
 
+import static org.kuali.core.util.SpringServiceLocator.*;
 import static org.kuali.test.fixtures.AccountingLineFixture.GEC_LINE1;
 
 import java.util.ArrayList;
