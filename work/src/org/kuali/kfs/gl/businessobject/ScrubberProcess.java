@@ -996,8 +996,6 @@ public class ScrubberProcess {
         if (scrubbedEntry.getFinancialBalanceTypeCode().equals(scrubbedEntry.getOption().getActualFinancialBalanceTypeCd()) && 
                 subFundGroupCodes.succeedsRule(scrubbedEntry.getAccount().getSubFundGroupCode()) && 
                 objectSubTypeCodes.succeedsRule(scrubbedEntry.getFinancialObject().getFinancialObjectSubTypeCode())) {
-            // Save this because the offset entry can't have it, but the transfer needs it
-            String subObjectCode = plantIndebtednessEntry.getFinancialSubObjectCode();
 
             plantIndebtednessEntry.setTransactionLedgerEntryDescription(Constants.PLANT_INDEBTEDNESS_ENTRY_DESCRIPTION);
 
@@ -1057,7 +1055,7 @@ public class ScrubberProcess {
             }
 
             plantIndebtednessEntry.setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
-            plantIndebtednessEntry.setFinancialSubObjectCode(subObjectCode);
+            plantIndebtednessEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
 
             StringBuffer litGenPlantXferFrom = new StringBuffer();
             litGenPlantXferFrom.append(transferDescription + " ");
