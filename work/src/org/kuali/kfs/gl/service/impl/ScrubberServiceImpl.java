@@ -83,7 +83,7 @@ public class ScrubberServiceImpl implements ScrubberService, BeanFactoryAware {
      * 
      * @see org.kuali.module.gl.service.ScrubberService#scrubGroupReportOnly(org.kuali.module.gl.bo.OriginEntryGroup)
      */
-    public void scrubGroupReportOnly(OriginEntryGroup group) {
+    public void scrubGroupReportOnly(OriginEntryGroup group,String documentNumber) {
         LOG.debug("scrubGroupReportOnly() started");
 
         // The logic for this was moved into another object because the process was written using
@@ -91,7 +91,7 @@ public class ScrubberServiceImpl implements ScrubberService, BeanFactoryAware {
 
         ScrubberProcess sp = new ScrubberProcess(flexibleOffsetAccountService, documentTypeService, beanFactory, originEntryService, originEntryGroupService, dateTimeService, offsetDefinitionService, objectCodeService, kualiConfigurationService, universityDateDao, persistenceService, reportService, scrubberValidator);
 
-        sp.scrubGroupReportOnly(group);
+        sp.scrubGroupReportOnly(group,documentNumber);
     }
 
     /**
