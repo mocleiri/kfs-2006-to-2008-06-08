@@ -138,7 +138,7 @@ public class CorrectionDocument extends DocumentBase {
             DateTimeService dateTimeService = SpringServiceLocator.getDateTimeService();
             java.sql.Date today = dateTimeService.getCurrentSqlDate();
             
-            reportService.correctionReport(oldDoc, today);
+            reportService.correctionOnlineReport(oldDoc, today);
             
             OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
             OriginEntryGroup approvedGLCP = originEntryGroupService.getExactMatchingEntryGroup(oldDoc.getCorrectionOutputGroupId().intValue());
@@ -152,7 +152,7 @@ public class CorrectionDocument extends DocumentBase {
             ScrubberService scrubberService = (ScrubberService) SpringServiceLocator.getBeanFactory().getBean("glScrubberService");
 
             // Run the scrubber on this group to generate a bunch of reports.  The scrubber won't save anything when running it this way.
-            scrubberService.scrubGroupReportOnly(approvedGLCP);
+            scrubberService.scrubGroupReportOnly(approvedGLCP,docId);
         }
     }
 
