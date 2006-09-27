@@ -64,7 +64,6 @@ import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 import org.kuali.module.gl.util.ObjectHelper;
-import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.gl.util.StringHelper;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.util.StringUtils;
@@ -278,15 +277,15 @@ public class ScrubberProcess {
 
         DemergerReportData demergerReport = new DemergerReportData();
 
-        OriginEntryStatistics eOes = originEntryService.getStatistics(errorGroup.getId());
-        demergerReport.setErrorTransactionsRead(eOes.getRowCount());
-
         // Read all the documents from the error group and move all non-generated
         // transactions for these documents from the valid group into the error group
         Collection<OriginEntry> errorDocuments = originEntryService.getDocumentsByGroup(errorGroup);
         Iterator<OriginEntry> i = errorDocuments.iterator();
         while (i.hasNext()) {
             OriginEntry document = i.next();
+            
+            demergerReport.incrementErrorTransactionsRead();
+            demergerReport.incrementErrorTransactionsSaved();
 
             // Get all the transactions for the document in the valid group
             Integer lastId = -1;
@@ -386,9 +385,6 @@ public class ScrubberProcess {
                 originEntryService.save(transaction);
             }
         }
-
-        eOes = originEntryService.getStatistics(errorGroup.getId());
-        demergerReport.setErrorTransactionWritten(eOes.getRowCount());
 
         reportService.generateScrubberDemergerStatisticsReports(runDate, demergerReport);
     }
