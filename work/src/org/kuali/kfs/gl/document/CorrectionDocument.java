@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.kuali.Constants;
 import org.kuali.core.document.DocumentBase;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
@@ -126,33 +127,38 @@ public class CorrectionDocument extends DocumentBase {
         return ccg;
     }
 
+    @Override
     public void handleRouteStatusChange() {
+        LOG.debug("handleRouteStatusChange() started");
+
         super.handleRouteStatusChange();
-        if (getDocumentHeader().getWorkflowDocument().stateIsApproved()) {
-            String docId = getDocumentHeader().getFinancialDocumentNumber();
-            CorrectionDocumentService correctionDocumentService = (CorrectionDocumentService) SpringServiceLocator.getBeanFactory().getBean("glCorrectionDocumentService");
-            CorrectionDocument oldDoc = correctionDocumentService.findByCorrectionDocumentHeaderId(docId);
-            
-            //create a PDF file for GLCP report
-            ReportService reportService = (ReportService) SpringServiceLocator.getBeanFactory().getBean("glReportService");
+
+        ReportService reportService = (ReportService) SpringServiceLocator.getBeanFactory().getBean("glReportService");
+        ScrubberService scrubberService = (ScrubberService) SpringServiceLocator.getBeanFactory().getBean("glScrubberService");
+        CorrectionDocumentService correctionDocumentService = (CorrectionDocumentService) SpringServiceLocator.getBeanFactory().getBean("glCorrectionDocumentService");
+        OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
+
+        String docId = getDocumentHeader().getFinancialDocumentNumber();        
+        CorrectionDocument doc = correctionDocumentService.findByCorrectionDocumentHeaderId(docId);
+        OriginEntryGroup outputGroup = originEntryGroupService.getExactMatchingEntryGroup(doc.getCorrectionOutputGroupId().intValue());
+
+        if ( getDocumentHeader().getWorkflowDocument().stateIsFinal() ) {
+            if ( ! doc.getCorrectionFileDelete() ) {
+                LOG.debug("handleRouteStatusChange() Mark group as to be scrubbed");
+                outputGroup.setScrub(true);
+                originEntryGroupService.save(outputGroup);
+            }
+        }
+        if ( getDocumentHeader().getWorkflowDocument().stateIsEnroute() ) {
+            LOG.debug("handleRouteStatusChange() Run reports");
+
             DateTimeService dateTimeService = SpringServiceLocator.getDateTimeService();
             java.sql.Date today = dateTimeService.getCurrentSqlDate();
             
-            reportService.correctionOnlineReport(oldDoc, today);
-            
-            OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
-            OriginEntryGroup approvedGLCP = originEntryGroupService.getExactMatchingEntryGroup(oldDoc.getCorrectionOutputGroupId().intValue());
-
-            // Set this group to be processed by the nightly batch if the user wants it to be processed
-            if ( ! oldDoc.getCorrectionFileDelete() ) {
-                approvedGLCP.setScrub(true);
-                originEntryGroupService.save(approvedGLCP);
-            }
-
-            ScrubberService scrubberService = (ScrubberService) SpringServiceLocator.getBeanFactory().getBean("glScrubberService");
+            reportService.correctionOnlineReport(doc, today);
 
             // Run the scrubber on this group to generate a bunch of reports.  The scrubber won't save anything when running it this way.
-            scrubberService.scrubGroupReportOnly(approvedGLCP,docId);
+            scrubberService.scrubGroupReportOnly(outputGroup,docId);
         }
     }
 
