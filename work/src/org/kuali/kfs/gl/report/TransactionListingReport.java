@@ -125,7 +125,7 @@ public class TransactionListingReport {
 
             document.open();
 
-            float[] widths = { 5, 5, 7, 5, 5, 5, 7, 7, 9, 30, 12, 12 };
+            float[] widths = { 5, 8, 5, 5, 5, 7, 7, 9, 27, 12, 12 };
             PdfPTable transactionList = new PdfPTable(widths);
             transactionList.setHeaderRows(1);
             transactionList.setWidthPercentage(100);
@@ -221,7 +221,7 @@ public class TransactionListingReport {
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("", textFont));
-            cell.setColspan(7);
+            cell.setColspan(6);
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase(nf.format(debitTotal.doubleValue()), headerFont));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
