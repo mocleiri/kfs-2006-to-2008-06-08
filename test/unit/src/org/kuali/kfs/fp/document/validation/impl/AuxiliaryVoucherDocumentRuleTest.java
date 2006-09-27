@@ -86,7 +86,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     protected final TargetAccountingLine getInvalidObjectSubTypeTargetLine() throws Exception {
-        return  getAccruedSickPayTargetLineParameter();
+        return  LINE17.createTargetAccountingLine();
     }
 
     /**
