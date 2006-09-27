@@ -24,7 +24,7 @@ package org.kuali.module.financial.rules;
 
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
-
+import static org.kuali.core.util.SpringServiceLocator.*;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
