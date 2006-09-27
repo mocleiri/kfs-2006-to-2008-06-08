@@ -868,7 +868,7 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
         } else if ( "transactionDebitCreditCode".equals(fieldName) ) {
             setTransactionDebitCreditCode(fieldValue);
         } else if ( "transactionDate".equals(fieldName) ) {
-            if ( StringUtils.hasText(fieldName) ) {
+            if ( StringUtils.hasText(fieldValue) ) {
                 try {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     setTransactionDate(new java.sql.Date( (df.parse(fieldValue)).getTime() ) );
@@ -891,7 +891,7 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
         } else if ( "referenceFinancialDocumentNumber".equals(fieldName) ) {
             setReferenceFinancialDocumentNumber(fieldValue);
         } else if ( "financialDocumentReversalDate".equals(fieldName) ) {
-            if ( StringUtils.hasText(fieldName) ) {
+            if ( StringUtils.hasText(fieldValue) ) {
                 try {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     setFinancialDocumentReversalDate(new java.sql.Date( (df.parse(fieldValue)).getTime() ) );
