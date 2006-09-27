@@ -89,41 +89,36 @@ public class OriginEntryFieldFinder extends KeyValuesBase {
         String fieldType = getFieldType(fieldName);
         int fieldLength = getFieldLength(fieldName);
 
-        if ( "String".equals(fieldType) ) {
-            return value.length() <= fieldLength;
-        } else if ( "KualiDecimal".equals(fieldType) ) {
-            if ( value.length() > 0 ) {
-                try {
-                    KualiDecimal d = new KualiDecimal(value);
-                    return true;
-                } catch (NumberFormatException nfe) {
-                    return false;
-                }
-            }
-            return true;
-        } else if ( "Integer".equals(fieldType) ) {
-            if ( value.length() > 0 ) {
-                try {
-                    Integer d = new Integer(value);
-                    return true;
-                } catch (NumberFormatException nfe) {
-                    return false;
-                }
-            }
-            return true;
-        } else if ( "Date".equals(fieldType) ) {
-            if ( value.length() > 0 ) {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                try {
-                    Date d = df.parse(value);
-                    return true;
-                } catch (ParseException e) {
-                    return false;
-                }
-            }
+        if ( (value == null) || (value.length() == 0) ) {
             return true;
         }
-        return false;
+        if ( value.length() > fieldLength ) {
+            return false;
+        }
+        if ( "KualiDecimal".equals(fieldType) ) {
+            try {
+                KualiDecimal d = new KualiDecimal(value);
+                return true;
+            } catch (NumberFormatException nfe) {
+                return false;
+            }
+        } else if ( "Integer".equals(fieldType) ) {
+            try {
+                Integer d = new Integer(value);
+                return true;
+            } catch (NumberFormatException nfe) {
+                return false;
+            }
+        } else if ( "Date".equals(fieldType) ) {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date d = df.parse(value);
+                return true;
+            } catch (ParseException e) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public String getFieldType(String fieldName) {
@@ -146,67 +141,57 @@ public class OriginEntryFieldFinder extends KeyValuesBase {
     }
 
     public int getFieldLength(String fieldName) {
-        if (fieldName.equals("budgetYear")) {
+        if (fieldName.equals("universityFiscalYear")) {
             return 4;
-        }
-        if (fieldName.equals("chartOfAccountsCode")) {
-            return 2;
-        }
-        if (fieldName.equals("accountNumber")) {
-            return 7;
-        }
-        if (fieldName.equals("subAccountNumber")) {
+        } else if (fieldName.equals("transactionLedgerEntrySequenceNumber")) {
             return 5;
-        }
-        if (fieldName.equals("financialObjectCode")) {
-            return 4;
-        }
-        if (fieldName.equals("financialSubObjectCode")) {
-            return 3;
-        }
-        if (fieldName.equals("financialBalanceTypeCode")) {
-            return 2;
-        }
-        if (fieldName.equals("financialObjectTypeCode")) {
-            return 2;
-        }
-        if (fieldName.equals("universityFiscalPeriodCode")) {
-            return 2;
-        }
-        if (fieldName.equals("financialDocumentTypeCode")) {
-            return 4;
-        }
-        if (fieldName.equals("financialSystemOriginationCode")) {
-            return 2;
-        }
-        if (fieldName.equals("financialDocumentNumber")) {
-            return 14;
-        }
-        if (fieldName.equals("transactionLedgerEntryDescription")) {
-            return 40;
-        }
-        if (fieldName.equals("transactionDebitCreditCode")) {
-            return 1;
-        }
-        if (fieldName.equals("organizationDocumentNumber")) {
-            return 8;
-        }
-        if (fieldName.equals("projectCode")) {
+        } else if (fieldName.equals("transactionLedgerEntryAmount")) {
+            return 19;
+        } else if (fieldName.equals("transactionDate")) {
             return 10;
-        }
-        if (fieldName.equals("organizationReferenceId")) {
-            return 8;
-        }
-        if (fieldName.equals("referenceFinancialDocumentTypeCode")) {
+        } else if (fieldName.equals("financialDocumentReversalDate")) {
+            return 10;
+        } else if (fieldName.equals("budgetYear")) {
             return 4;
-        }
-        if (fieldName.equals("referenceFinancialSystemOriginationCode")) {
+        } else if (fieldName.equals("chartOfAccountsCode")) {
             return 2;
-        }
-        if (fieldName.equals("referenceFinancialDocumentNumber")) {
+        } else if (fieldName.equals("accountNumber")) {
+            return 7;
+        } else if (fieldName.equals("subAccountNumber")) {
+            return 5;
+        } else if (fieldName.equals("financialObjectCode")) {
+            return 4;
+        } else if (fieldName.equals("financialSubObjectCode")) {
+            return 3;
+        } else if (fieldName.equals("financialBalanceTypeCode")) {
+            return 2;
+        } else if (fieldName.equals("financialObjectTypeCode")) {
+            return 2;
+        } else if (fieldName.equals("universityFiscalPeriodCode")) {
+            return 2;
+        } else if (fieldName.equals("financialDocumentTypeCode")) {
+            return 4;
+        } else if (fieldName.equals("financialSystemOriginationCode")) {
+            return 2;
+        } else if (fieldName.equals("financialDocumentNumber")) {
             return 14;
-        }
-        if (fieldName.equals("transactionEncumbranceUpdateCode")) {
+        } else if (fieldName.equals("transactionLedgerEntryDescription")) {
+            return 40;
+        } else if (fieldName.equals("transactionDebitCreditCode")) {
+            return 1;
+        } else if (fieldName.equals("organizationDocumentNumber")) {
+            return 10;
+        } else if (fieldName.equals("projectCode")) {
+            return 10;
+        } else if (fieldName.equals("organizationReferenceId")) {
+            return 8;
+        } else if (fieldName.equals("referenceFinancialDocumentTypeCode")) {
+            return 4;
+        } else if (fieldName.equals("referenceFinancialSystemOriginationCode")) {
+            return 2;
+        } else if (fieldName.equals("referenceFinancialDocumentNumber")) {
+            return 14;
+        } else if (fieldName.equals("transactionEncumbranceUpdateCode")) {
             return 1;
         }
         return 0;
