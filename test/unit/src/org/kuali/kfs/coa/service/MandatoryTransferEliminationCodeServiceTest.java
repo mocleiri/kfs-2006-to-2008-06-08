@@ -25,7 +25,7 @@ package org.kuali.module.chart.service;
 import org.kuali.core.service.KualiCodeService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode;
-import org.kuali.test.KualiTestBaseWithSpring;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -34,7 +34,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class MandatoryTransferEliminationCodeServiceTest extends KualiTestBaseWithSpring {
+public class MandatoryTransferEliminationCodeServiceTest extends KualiTestBase {
 
     MandatoryTransferEliminationCode mtec;
     KualiCodeService kualiCodeService;
