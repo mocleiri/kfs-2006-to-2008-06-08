@@ -372,7 +372,7 @@ public class ReportServiceImpl implements ReportService {
      * 
      * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportOnline(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
      */
-    public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group) {
+    public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group, String documentNumber) {
         LOG.debug("generateScrubberLedgerSummaryReport() started");
 
         LedgerReport ledgerReport = new LedgerReport();
@@ -383,7 +383,7 @@ public class ReportServiceImpl implements ReportService {
 
         ledgerEntries = originEntryService.getSummaryByGroupId(g);
 
-        ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger_" + group.getId(), onlineReportsDirectory);
+        ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger_" + documentNumber, onlineReportsDirectory);
     }
 
     /**
@@ -431,13 +431,13 @@ public class ReportServiceImpl implements ReportService {
      * @see org.kuali.module.gl.service.ReportService#generateScrubberStatisticsReport(java.util.Date,
      *      org.kuali.module.gl.service.impl.scrubber.ScrubberReportData, java.util.Map)
      */
-    public void generateOnlineScrubberStatisticsReport(Integer groupId, Date runDate, ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors) {
+    public void generateOnlineScrubberStatisticsReport(Integer groupId, Date runDate, ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors,String documentNumber) {
         LOG.debug("generateScrubberStatisticsReport() started");
 
         List summary = buildScrubberReportSummary(scrubberReport);
 
         TransactionReport transactionReport = new TransactionReport();
-        transactionReport.generateReport(scrubberReportErrors, summary, runDate, "Scrubber Report ", "scrubber_" + groupId.toString(), onlineReportsDirectory);
+        transactionReport.generateReport(scrubberReportErrors, summary, runDate, "Scrubber Report ", "scrubber_" + documentNumber, onlineReportsDirectory);
     }
 
     /**
@@ -473,13 +473,13 @@ public class ReportServiceImpl implements ReportService {
         rept.generateReport(i, runDate, "Scrubber Input Transactions with Bad Balance Types", "scrubber_badbal", batchReportsDirectory);
     }
 
-    public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup) {
+    public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup,String documentNumber) {
         LOG.debug("generateScrubberTransactionsOnline() started");
 
         Iterator ti = originEntryService.getEntriesByGroupAccountOrder(validGroup);
 
         TransactionListingReport rept = new TransactionListingReport();
-        rept.generateReport(ti, runDate, "Output Transaction Listing From the Scrubber", "scrubber_listing_" + validGroup, onlineReportsDirectory);        
+        rept.generateReport(ti, runDate, "Output Transaction Listing From the Scrubber", "scrubber_listing_" + documentNumber, onlineReportsDirectory);        
     }
 
     /**
@@ -778,8 +778,8 @@ public class ReportServiceImpl implements ReportService {
     }
     
     
-    public void correctionReport(CorrectionDocument cDocument, Date runDate){
-        LOG.debug("correctionReport() started");
+    public void correctionOnlineReport(CorrectionDocument cDocument, Date runDate) {
+        LOG.debug("correctionOnlineReport() started");
         
         String title = "General Ledger Correction Process Report";
         String fileprefix = "GLCP";
@@ -797,7 +797,7 @@ public class ReportServiceImpl implements ReportService {
         helper.title = title;
         
         try {
-            String filename = onlineReportsDirectory + "/" + fileprefix + "_";
+            String filename = onlineReportsDirectory + "/" + fileprefix + "_" + cDocument.getFinancialDocumentNumber() + "_";
 
             filename = filename +sdf.format(runDate);
             filename = filename + ".pdf";
