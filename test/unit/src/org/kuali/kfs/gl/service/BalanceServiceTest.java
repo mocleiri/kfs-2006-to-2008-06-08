@@ -30,7 +30,7 @@ import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.module.gl.service.BalanceService;
-import org.kuali.test.KualiTestBaseWithSpring;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -39,7 +39,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class BalanceServiceTest extends KualiTestBaseWithSpring {
+public class BalanceServiceTest extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceServiceTest.class);
     private final static String ACCOUNT_NUMBER = "999test";
     private final static String CHART = "zx";

@@ -22,6 +22,7 @@
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.core.util.SpringServiceLocator.*;
 import junit.framework.AssertionFailedError;
 
 import org.kuali.Constants;
