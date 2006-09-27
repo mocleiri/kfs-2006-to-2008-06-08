@@ -23,6 +23,7 @@ package org.kuali.module.financial.document;
  *
  */
 
+import static org.kuali.core.util.SpringServiceLocator.*;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE2;
 
 import java.util.ArrayList;

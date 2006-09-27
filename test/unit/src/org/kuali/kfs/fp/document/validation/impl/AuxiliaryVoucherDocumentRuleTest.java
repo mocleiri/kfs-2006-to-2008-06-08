@@ -22,6 +22,7 @@
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.core.util.SpringServiceLocator.*;
 import static org.kuali.Constants.GL_CREDIT_CODE;
 import static org.kuali.Constants.GL_DEBIT_CODE;
 import static org.kuali.test.fixtures.AccountingLineFixture.*;
