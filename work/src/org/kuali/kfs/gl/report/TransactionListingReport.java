@@ -133,8 +133,6 @@ public class TransactionListingReport {
             // Add headers
             PdfPCell cell = new PdfPCell(new Phrase("Fiscal Year", headerFont));
             transactionList.addCell(cell);
-            cell = new PdfPCell(new Phrase("Chart", headerFont));
-            transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("Account Number", headerFont));
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("Object Code", headerFont));
@@ -168,8 +166,6 @@ public class TransactionListingReport {
                     Transaction tran = (Transaction) transactions.next();
 
                     cell = new PdfPCell(new Phrase(tran.getUniversityFiscalYear() == null ? " " : tran.getUniversityFiscalYear().toString(), textFont));
-                    transactionList.addCell(cell);
-                    cell = new PdfPCell(new Phrase("NEWCELL", textFont));
                     transactionList.addCell(cell);
                     cell = new PdfPCell(new Phrase(tran.getChartOfAccountsCode() + "-" + tran.getAccountNumber(), textFont));
                     transactionList.addCell(cell);
