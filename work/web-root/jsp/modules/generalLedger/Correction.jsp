@@ -115,9 +115,9 @@
                     <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|CorrectionGroupEntriesFinder" label="label" value="key" />
                   </html:select>
                   <br/><br/>  
-                  <html:image property="methodToCall.loadGroup.anchor${currentTabIndex}" src="images/tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntriesForManualEdit" title="Show All Entries For Manual Edit"/>
-                  <html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}" src="images/tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="saveToDeskTop" title="Save To Desk Top" onclick="excludeSubmitRestriction=true" />
-                  <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="images/tinybutton-deletergroup.gif" styleClass="tinybutton" alt="deleteDocument" title="Delete Document" />
+                  <html:image property="methodToCall.loadGroup.anchor${currentTabIndex}" src="images/tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntries" title="Show All Entries"/>
+                  <html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}" src="images/tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="saveToDeskTop" title="Save To Desktop" onclick="excludeSubmitRestriction=true" />
+                  <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="images/tinybutton-remgrpproc.gif" styleClass="tinybutton" alt="deleteDocument" title="Remove Group From Processing" />
                 </center> 
               </td>
             </tr>
@@ -309,8 +309,8 @@
             <c:if test="${KualiForm.deleteFileFlag == true}" >
               <tr>
                 <td>
-                  <STRONG> Do you want to delete this document? </STRONG>
-                  <html:image property="methodToCall.deleteGroup.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="Delete a Group" />
+                  <STRONG> Do you want mark this group so it is not processed? </STRONG>
+                  <html:image property="methodToCall.deleteGroup.anchor${currentTabIndex - 3}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="Mark Group so it is not processed" />
                 </td>
               </tr>
             </c:if>
@@ -319,7 +319,7 @@
       </c:if>
     </kul:tab>
     <kul:tab tabTitle="Edit Options and Action" defaultOpen="true" tabErrorKey="Edit Options and Action">
-      <c:if test="${KualiForm.dataLoadedFlag == true and ((KualiForm.editMethod == 'C') or (KualiForm.editMethod == 'M' and KualiForm.editableFlag == true))}">
+      <c:if test="${KualiForm.deleteFileFlag == false and KualiForm.dataLoadedFlag == true and ((KualiForm.editMethod == 'C') or (KualiForm.editMethod == 'M' and KualiForm.editableFlag == true))}">
         <div class="tab-container" align="center">
           <table cellpadding=0 class="datatable" summary="">
             <c:if test="${KualiForm.editMethod == 'C'}">
@@ -366,7 +366,7 @@
       </c:if>
     </kul:tab>
     <kul:tab tabTitle="Edit Criteria" defaultOpen="true" tabErrorKey="editCriteria">
-      <c:if test="${KualiForm.editMethod == 'C' and KualiForm.dataLoadedFlag == true}">
+      <c:if test="${KualiForm.deleteFileFlag == false and KualiForm.editMethod == 'C' and KualiForm.dataLoadedFlag == true}">
         <div class="tab-container" align="center"> 
           <table cellpadding=0 class="datatable" summary="">
             <tr>
@@ -482,7 +482,7 @@
                     </html:select>
                     Value:
                     <html:text property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldValue"/>
-                    <html:image property="methodToCall.removeCorrectionCriteria.criteria${group.correctionChangeGroupLineNumber}-${criteria.correctionCriteriaLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="delete search criterion" />
+                    <html:image property="methodToCall.removeCorrectionCriteria.criteria${group.correctionChangeGroupLineNumber}-${criteria.correctionCriteriaLineNumber}.anchor${currentTabIndex}" src="images/tinybutton-delete1.gif" styleClass="tinybutton" alt="Remove Search Criteria" />
                     <br>
                   </c:forEach>
                   Field:
@@ -499,11 +499,21 @@
                 </c:forEach>
               </td>
             </tr>
+            <tr>
+              <td>
+                <center>
+                  <c:if test="${KualiForm.showOutputFlag == true}">
+                    <strong>Show Matching Entries</strong>
+                    <html:image property="methodToCall.searchCancelForManualEdit.anchor${currentTabIndex - 3}" src="images/tinybutton-show.gif" styleClass="tinybutton" alt="Show Matching Entries" />
+                  </c:if>
+                  <c:if test="${KualiForm.showOutputFlag == false}">
+                    <strong>Show All Entries</strong>
+                    <html:image property="methodToCall.searchForManualEdit.anchor${currentTabIndex - 3}" src="images/tinybutton-show.gif" styleClass="tinybutton" alt="Show All Entries" />
+                  </c:if>
+                </center>
+              </td>
+            </tr>
           </table>
-          <div align="center" >
-            <html:image property="methodToCall.searchForManualEdit.anchor${currentTabIndex}" src="images/buttonsmall_search.gif" alt="search" styleClass="tinybutton" />
-            <html:image property="methodToCall.searchCancelForManualEdit.anchor${currentTabIndex}" src="images/buttonsmall_cancel.gif" alt="cancel" styleClass="tinybutton" />
-          </div>
         </div>
       </c:if>
     </kul:tab>
