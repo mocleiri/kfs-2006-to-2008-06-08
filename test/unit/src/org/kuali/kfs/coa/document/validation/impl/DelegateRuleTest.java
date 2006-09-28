@@ -30,13 +30,14 @@ import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Delegate;
 import org.kuali.test.WithTestSpringContext;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 /**
  * This class...
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class DelegateRuleTest extends ChartRuleTestBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DelegateRuleTest.class);
