@@ -1,11 +1,7 @@
 package org.kuali.workflow;
 
 import junit.framework.Assert;
-
-import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.document.Document;
-import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.test.monitor.ChangeMonitor;
@@ -14,19 +10,9 @@ import org.kuali.test.monitor.DocumentWorkflowRequestMonitor;
 import org.kuali.test.monitor.DocumentWorkflowStatusMonitor;
 
 import edu.iu.uis.eden.EdenConstants;
-import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
 import edu.iu.uis.eden.exception.WorkflowException;
 
 public class WorkflowTestUtils {
-
-    public static KualiWorkflowDocument refreshDocument(Document document, NetworkIdVO networkId) throws WorkflowException, UserNotFoundException {
-        Long docId = document.getDocumentHeader().getWorkflowDocument().getRouteHeaderId();
-        KualiWorkflowDocument workflowDocument = SpringServiceLocator.getWorkflowDocumentService().createWorkflowDocument(docId, SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(networkId.getNetworkId())));
-        GlobalVariables.getUserSession().setWorkflowDocument(workflowDocument);
-        GlobalVariables.putLocalDocReference(docId.toString());
-        document.getDocumentHeader().setWorkflowDocument(workflowDocument);
-        return workflowDocument;
-    }
 
     public static boolean isAtNode(Document document, String nodeName) throws WorkflowException {
         String[] nodeNames = document.getDocumentHeader().getWorkflowDocument().getNodeNames();

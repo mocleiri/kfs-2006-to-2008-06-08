@@ -22,23 +22,24 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE6;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE6;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+
 /**
  * This class is used to test PreEncumbranceDocument.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class PreEncumbranceDocumentTest extends TransactionalDocumentTestBase {
 
     /**

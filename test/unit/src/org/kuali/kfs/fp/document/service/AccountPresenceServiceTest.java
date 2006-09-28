@@ -21,15 +21,14 @@
  *
  */
 package org.kuali.module.financial.service;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 import static org.kuali.test.fixtures.AccountFixture.ACCOUNT_NON_PRESENCE_ACCOUNT;
 import static org.kuali.test.fixtures.AccountFixture.ACCOUNT_PRESENCE_ACCOUNT;
 import static org.kuali.test.fixtures.ObjectCodeFixture.OBJECT_CODE_BUDGETED_OBJECT_CODE;
 import static org.kuali.test.fixtures.ObjectCodeFixture.OBJECT_CODE_NON_BUDGET_OBJECT_CODE;
-
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.test.KualiTestBaseWithSession;
-import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the AccountPresenceService.
@@ -37,7 +36,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class AccountPresenceServiceTest extends KualiTestBaseWithSession {
+public class AccountPresenceServiceTest extends KualiTestBase {
     private AccountPresenceService accountPresenceService;
     private BusinessObjectService businessObjectService;
 

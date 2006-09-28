@@ -22,23 +22,24 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.ICA_LINE;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.ICA_LINE;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+
 /**
  * This class is used to test the IndirectCostAdjustmentDocument.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class IndirectCostAdjustmentDocumentTest extends TransactionalDocumentTestBase {
 
     /**
@@ -62,7 +63,7 @@ public class IndirectCostAdjustmentDocumentTest extends TransactionalDocumentTes
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
     public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(ICA_LINE);
         return list;
     }
@@ -84,5 +85,5 @@ public class IndirectCostAdjustmentDocumentTest extends TransactionalDocumentTes
     public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
         // do nothing to pass
     }
-     
+
 }
