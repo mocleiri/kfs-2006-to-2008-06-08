@@ -70,6 +70,7 @@ public enum AccountingLineFixture {
     ACCRUED_INCOME_LINE(null, 2004, null, "BA", "6044900", null, null, "8111", null, "BOB", null, "ES", null, "01", "2004", null, null, "1000.00"),
     ACCRUED_SICK_PAY_LINE(null, 2004, null, "UA", "1912201", null, null, "2998", null, "BOB", null, "ES", null, null, "01", "2004", null, "1000.00"),
     FUND_BALANCE_LINE(null, 2004, null, "BA", "6044900", null, null, "9899", null, "BOB", null, null, null, null, "01", "2004", GL_DEBIT_CODE, "1000.00"),
+    LINE2_TOF(null, 2004, null, "BL", "1031400", null, null, "1697", null, null, null, "TI", null, null, null, null, null, "1.10"),
     ;
 
     public final String accountNumber;
