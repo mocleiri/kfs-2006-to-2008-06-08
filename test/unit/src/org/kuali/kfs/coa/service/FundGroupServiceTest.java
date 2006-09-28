@@ -25,7 +25,7 @@ package org.kuali.module.chart.service;
 import org.kuali.core.service.KualiCodeService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.FundGroup;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -35,7 +35,7 @@ import org.kuali.test.WithTestSpringContext;
  */
 
 @WithTestSpringContext
-public class FundGroupServiceTest extends KualiTestBaseWithSession {
+public class FundGroupServiceTest extends KualiTestBase {
 
     KualiCodeService kualiCodeService;
 
