@@ -66,8 +66,8 @@ import org.kuali.module.gl.util.GeneralLedgerPendingEntryReport;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.LedgerReport;
 import org.kuali.module.gl.util.NominalActivityClosingTransactionReport;
-import org.kuali.module.gl.util.PosterInputSummaryEntryHolder;
-import org.kuali.module.gl.util.PosterInputSummaryReport;
+import org.kuali.module.gl.util.PosterOutputSummaryEntryHolder;
+import org.kuali.module.gl.util.PosterOutputSummaryReport;
 import org.kuali.module.gl.util.Summary;
 import org.kuali.module.gl.util.TransactionListingReport;
 import org.kuali.module.gl.util.TransactionReport;
@@ -973,17 +973,17 @@ public class ReportServiceImpl implements ReportService {
      * @see org.kuali.module.gl.service.ReportService#generatePosterInputTransactionSummaryReport(java.util.Date,
      *      java.util.Collection)
      */
-    public void generatePosterInputTransactionSummaryReport(Date runDate, Collection groups) {
+    public void generatePosterOutputTransactionSummaryReport(Date runDate, Collection groups) {
         LOG.debug("generatePosterInputTransactionSummaryReport() started");
 
         if (groups.size() <= 0) {
             return;
         }
 
-        PosterInputSummaryEntryHolder posterInputSummaryEntryHolder = originEntryService.getPosterInputSummaryByGroupId(groups);
+        PosterOutputSummaryEntryHolder posterInputSummaryEntryHolder = originEntryService.getPosterOutputSummaryByGroupId(groups);
         Map posterInputSummaryEntryMapGroupByBalanceType = posterInputSummaryEntryHolder.groupPosterInputSummaryEntryByBalanceType();
  
-        PosterInputSummaryReport posterInputSummaryReport = new PosterInputSummaryReport();
-        posterInputSummaryReport.generateReport(posterInputSummaryEntryMapGroupByBalanceType, runDate, "Poster Input Summary", "poster_input_summary", batchReportsDirectory);
+        PosterOutputSummaryReport posterInputSummaryReport = new PosterOutputSummaryReport();
+        posterInputSummaryReport.generateReport(posterInputSummaryEntryMapGroupByBalanceType, runDate, "Poster Output Summary", "poster_output_summary", batchReportsDirectory);
     }
 }
