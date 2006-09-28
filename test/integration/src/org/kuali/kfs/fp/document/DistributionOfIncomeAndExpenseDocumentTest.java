@@ -72,7 +72,7 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
      */
     @Override
     public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(LINE2);
         return list;
     }
@@ -97,7 +97,10 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
         // do nothing to pass
     }
 
-
+    /* Removing this test until the following Phase 2 issue is closed.
+     * https://test.kuali.org/jira/browse/KULEDOCS-1662
+     */
+    /*
     @TestsWorkflowViaDatabase
     public void testKULEDOCS_1401() throws Exception {
         String testDocId = null;
@@ -143,4 +146,5 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
             }
         }
     }
+    */
 }
