@@ -414,15 +414,15 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
     }
 
     /**
-     * @see org.kuali.module.gl.dao.OriginEntryDao#getPosterInputSummaryByGroupId(java.util.Collection)
+     * @see org.kuali.module.gl.dao.OriginEntryDao#getPosterOutputSummaryByGroupId(java.util.Collection)
      */
-    public Iterator getPosterInputSummaryByGroupId2(Collection groupIdList) {
+    public Iterator getPosterOutputSummaryByGroupId(Collection groupIdList) {
         LOG.debug("getPosterInputSummaryByGroupId() started");
 
         Collection ids = new ArrayList();
         for (Iterator iter = groupIdList.iterator(); iter.hasNext();) {
-            String element = (String) iter.next();
-            ids.add(element);
+            OriginEntryGroup element = (OriginEntryGroup) iter.next();
+            ids.add(element.getId());
         }
 
         Criteria criteria = new Criteria();
@@ -459,15 +459,15 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
     }
     
     /**
-     * @see org.kuali.module.gl.dao.OriginEntryDao#getPosterInputSummaryByGroupId(java.util.Collection)
+     * @see org.kuali.module.gl.dao.OriginEntryDao#getPosterOutputSummaryByGroupId(java.util.Collection)
      */
-    public Iterator getPosterInputSummaryByGroupId(Collection groupIdList) {
+    public Iterator getPosterOutputSummaryByGroupId2(Collection groupIdList) {
         LOG.debug("getPosterInputSummaryByGroupId() started");
 
         Collection ids = new ArrayList();
         for (Iterator iter = groupIdList.iterator(); iter.hasNext();) {
-            String element = (String) iter.next();
-            ids.add(element);
+            OriginEntryGroup element = (OriginEntryGroup) iter.next();
+            ids.add(element.getId());
         }
 
         Criteria criteria = new Criteria();
