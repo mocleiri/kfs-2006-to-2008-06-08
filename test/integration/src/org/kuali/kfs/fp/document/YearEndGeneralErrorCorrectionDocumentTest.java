@@ -22,17 +22,21 @@
  */
 package org.kuali.module.financial.document;
 
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.test.fixtures.AccountingLineFixture.GEC_LINE1;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.TransactionalDocumentTestBase;
-import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import org.kuali.module.financial.bo.GECSourceAccountingLine;
+import org.kuali.module.financial.bo.GECTargetAccountingLine;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
-import static org.kuali.test.fixtures.AccountingLineFixture.GEC_LINE1;
-import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 /**
  * This class is used to test GeneralErrorCorrectionDocument.
@@ -56,7 +60,7 @@ public class YearEndGeneralErrorCorrectionDocumentTest extends TransactionalDocu
      */
     @Override
     public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
-    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(GEC_LINE1);
         return list;
     }
@@ -67,9 +71,29 @@ public class YearEndGeneralErrorCorrectionDocumentTest extends TransactionalDocu
      */
     @Override
     public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(GEC_LINE1);
         return list;
     }
+    /**
+     * need to use GEC accounting line types
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#buildDocument()
+     */
+    @Override
+    protected Document buildDocument() throws Exception {
+        // put accounting lines into document parameter for later
+        TransactionalDocument document = (TransactionalDocument) getDocumentParameterFixture();
 
+        // set accountinglines to document
+        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
+            
+            document.addSourceAccountingLine(sourceFixture.createAccountingLine(GECSourceAccountingLine.class, document.getFinancialDocumentNumber(), document.getPostingYear(), document.getNextSourceLineNumber()));
+        }
+
+        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
+            document.addTargetAccountingLine(targetFixture.createAccountingLine(GECTargetAccountingLine.class, document.getFinancialDocumentNumber(), document.getPostingYear(), document.getNextTargetLineNumber()));
+        }
+
+        return document;
+    }
 }
