@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import org.kuali.core.document.Document;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.test.monitor.ChangeMonitor;
 import org.kuali.test.monitor.DocumentWorkflowNodeMonitor;
 import org.kuali.test.monitor.DocumentWorkflowRequestMonitor;
@@ -38,8 +39,8 @@ public class WorkflowTestUtils {
         Assert.assertTrue(ChangeMonitor.waitUntilChange(monitor, numSeconds, 5));
     }
 
-    public static void waitForApproveRequest(KualiWorkflowDocument document, String networkId) throws Exception {
-        DocumentWorkflowRequestMonitor monitor = new DocumentWorkflowRequestMonitor(document, networkId, EdenConstants.ACTION_REQUEST_APPROVE_REQ);
+    public static void waitForApproveRequest(Long docHeaderId, KualiUser user) throws Exception {
+        DocumentWorkflowRequestMonitor monitor = new DocumentWorkflowRequestMonitor(docHeaderId, user, EdenConstants.ACTION_REQUEST_APPROVE_REQ);
         Assert.assertTrue(ChangeMonitor.waitUntilChange(monitor, 240, 5));
     }
 
