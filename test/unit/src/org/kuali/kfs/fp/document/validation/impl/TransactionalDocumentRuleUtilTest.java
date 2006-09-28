@@ -22,15 +22,14 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import junit.framework.AssertionFailedError;
-
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
+import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodService;
+import static org.kuali.core.util.SpringServiceLocator.getBalanceTypService;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.financial.document.JournalVoucherDocument;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -39,7 +38,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class TransactionalDocumentRuleUtilTest extends KualiTestBaseWithSession {
+public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
 
     private static final String DOES_NOT_MATTER = "doesNotMatter";
 
