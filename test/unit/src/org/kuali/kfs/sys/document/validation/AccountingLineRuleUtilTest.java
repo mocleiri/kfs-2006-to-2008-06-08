@@ -22,6 +22,17 @@
  */
 package org.kuali.module.financial.rules;
 
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.AccountingLineOverride;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 import static org.kuali.test.fixtures.AccountFixture.ACCOUNT_NON_PRESENCE_ACCOUNT;
 import static org.kuali.test.fixtures.AccountFixture.ACCOUNT_PRESENCE_ACCOUNT_BUT_CLOSED;
 import static org.kuali.test.fixtures.AccountFixture.ACCOUNT_PRESENCE_ACCOUNT_WITH_EXPIRED;
@@ -34,25 +45,13 @@ import static org.kuali.test.fixtures.AccountFixture.EXPIRIED_ACCOUNT_NO_CONTINU
 import static org.kuali.test.fixtures.ObjectCodeFixture.OBJECT_CODE_BUDGETED_OBJECT_CODE;
 import static org.kuali.test.fixtures.ObjectCodeFixture.OBJECT_CODE_NON_BUDGET_OBJECT_CODE;
 
-import org.kuali.Constants;
-import org.kuali.KeyConstants;
-import org.kuali.core.bo.AccountingLine;
-import org.kuali.core.bo.AccountingLineOverride;
-import org.kuali.core.bo.SourceAccountingLine;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.test.KualiTestBaseWithSession;
-import org.kuali.test.WithTestSpringContext;
-
 /**
  * This class tests some methods of AccountingLineRuleUtil.
  * 
  * 
  */
 @WithTestSpringContext
-public class AccountingLineRuleUtilTest extends KualiTestBaseWithSession {
+public class AccountingLineRuleUtilTest extends KualiTestBase {
     private BusinessObjectService businessObjectService;
 
     protected void setUp() throws Exception {
@@ -198,5 +197,5 @@ public class AccountingLineRuleUtilTest extends KualiTestBaseWithSession {
             assertGlobalErrorMapContains(Constants.FINANCIAL_OBJECT_CODE_PROPERTY_NAME, expectedErrorKey);
         }
     }
- 
+
 }
