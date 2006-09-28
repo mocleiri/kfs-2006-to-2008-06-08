@@ -30,7 +30,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -39,7 +39,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class ObjectCodeServiceTest extends KualiTestBaseWithSession {
+public class ObjectCodeServiceTest extends KualiTestBase {
     public static final String CHART_CODE = TestConstants.Data4.CHART_CODE;
 
     private ObjectCodeService objectCodeService;
