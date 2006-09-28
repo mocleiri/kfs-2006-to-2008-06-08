@@ -244,7 +244,7 @@ public interface ReportService {
      * @param posterMode Mode the poster is running
      */
     public void generatePosterErrorTransactionListing(Date runDate, OriginEntryGroup group, int posterMode);
-
+    
     /**
      * GLCP document info report
      * 
@@ -252,4 +252,13 @@ public interface ReportService {
      * @param runDate
      */
     public void correctionOnlineReport(CorrectionDocument cDocument, Date runDate);
+    
+        /**
+     * Poster Input Transaction Summary Report: a summary of the three poster runs 
+     * (pulling in the  transactions from the main, reversal, and ICR posters) which we use for balancing.
+     * 
+     * @param runDate
+     * @param groups
+     */
+    public void generatePosterInputTransactionSummaryReport(Date runDate, Collection groups);
 }
