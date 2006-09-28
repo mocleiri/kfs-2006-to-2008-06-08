@@ -45,6 +45,10 @@ public enum GeneralLedgerPendingEntryFixture {
     EXPECTED_FLEXIBLE_EXPLICIT_SOURCE_PENDING_ENTRY_FOR_EXPENSE("BL", "2231401", null, "D", "AC", "TF", "TE", "9900", false, "BOB"),
     EXPECTED_FLEXIBLE_OFFSET_SOURCE_PENDING_ENTRY("UA", "1912201", null, "D", "AC", "TF", "AS", "8000", true, "BOB"),
     EXPECTED_FLEXIBLE_OFFSET_SOURCE_PENDING_ENTRY_MISSING_OFFSET_DEFINITION("BL", "2231401", null, "C", "AC", "TF", "--", "----", true, "BOB"),
+    EXPECTED_AV_EXPLICIT_TARGET_PENDING_ENTRY_FOR_EXPENSE(null, null, "BEER", "D", null, "AVAD", "ES", "9900", false, "BOB"),
+    EXPECTED_AV_EXPLICIT_SOURCE_PENDING_ENTRY_FOR_EXPENSE(null, null, null, "D", "AC", "AVAD", "ES", "1940", false, "BOB"),
+    EXPECTED_AV_EXPLICIT_SOURCE_PENDING_ENTRY(null, null, null, "D", "AC", "AVAD", "AS", "8111", false, "BOB"),
+    EXPECTED_AV_EXPLICIT_TARGET_PENDING_ENTRY(null, null, null, "D", "AC", "AVAD", "AS", "8111", false, "BOB"),
     ;
 
     public final String chartOfAccountsCode;
