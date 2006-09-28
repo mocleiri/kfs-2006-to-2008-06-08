@@ -68,7 +68,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public final TargetAccountingLine getAssetTargetLine() throws Exception {
-        return getAccruedIncomeTargetLineParameter();
+        return new TargetAccountingLine();
     }
 
     /**
@@ -77,7 +77,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     protected final TargetAccountingLine getValidObjectSubTypeTargetLine() throws Exception {
-        return getAccruedIncomeTargetLineParameter();
+        return new TargetAccountingLine();
     }
 
     /**
@@ -86,7 +86,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     protected final TargetAccountingLine getInvalidObjectSubTypeTargetLine() throws Exception {
-        return  LINE17.createTargetAccountingLine();
+        return  new TargetAccountingLine();
     }
 
     /**
@@ -119,10 +119,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     protected final List<TargetAccountingLine> getInvalidObjectSubTypeTargetLines() throws Exception {
-        List<TargetAccountingLine> retval = new ArrayList<TargetAccountingLine>();
-        retval.add(getAccruedSickPayTargetLineParameter());
-        retval.add(getAccruedSickPayTargetLineParameter());
-        return retval;
+        return new ArrayList();
     }
 
     /**
@@ -131,10 +128,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     protected final List<TargetAccountingLine> getValidObjectSubTypeTargetLines() throws Exception {
-        List retval = new ArrayList();
-        retval.add(getAccruedIncomeTargetLineParameter());
-        retval.add(getAccruedIncomeTargetLineParameter());
-        return retval;
+        return new ArrayList();
     }
 
     /**
@@ -223,7 +217,6 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     protected final TransactionalDocument createDocumentWithInvalidObjectSubType() throws Exception {
         AuxiliaryVoucherDocument retval = (AuxiliaryVoucherDocument) createDocument();
         retval.setSourceAccountingLines(getInvalidObjectSubTypeSourceLines());
-        retval.setTargetAccountingLines(getInvalidObjectSubTypeTargetLines());
         return retval;
     }
 
@@ -234,7 +227,6 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     protected final TransactionalDocument createDocumentUnbalanced() throws Exception {
         AuxiliaryVoucherDocument retval = (AuxiliaryVoucherDocument) createDocument();
         retval.setSourceAccountingLines(getInvalidObjectSubTypeSourceLines());
-        retval.addTargetAccountingLine(getValidObjectSubTypeTargetLine());
         return retval;
     }
 
@@ -255,7 +247,6 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     protected final TransactionalDocument createDocumentWithValidObjectSubType() throws Exception {
         AuxiliaryVoucherDocument retval = (AuxiliaryVoucherDocument) createDocument();
         retval.setSourceAccountingLines(getValidObjectSubTypeSourceLines());
-        retval.setTargetAccountingLines(getValidObjectSubTypeTargetLines());
         return retval;
     }
 
@@ -278,23 +269,6 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     }
 
 
-    /**
-     * Accessor for fixture 'targetLine2'
-     * 
-     * @return AccountingLineParameter
-     */
-    public final TargetAccountingLine getAccruedIncomeTargetLineParameter() throws Exception{
-        return ACCRUED_INCOME_LINE.createAccountingLine(TargetAccountingLine.class, Constants.GL_CREDIT_CODE);
-    }
-
-    /**
-     * Accessor for fixture 'targetLine2'
-     * 
-     * @return AccountingLineParameter
-     */
-    public final TargetAccountingLine getAccruedSickPayTargetLineParameter() throws Exception{
-        return ACCRUED_SICK_PAY_LINE.createAccountingLine(TargetAccountingLine.class, Constants.GL_DEBIT_CODE);
-    }
 
     /**
      * Accessor method for Explicit Source fixture used for testProcessGeneralLedgerPendingEntries test methods.
@@ -307,9 +281,8 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     }
 
     /**
-     * Accessor method for Explicit Target fixture used for testProcessGeneralLedgerPendingEntries test methods.
      * 
-     * @return GeneralLedgerPendingEntry pending entry fixture
+     * @see org.kuali.core.rule.TransactionalDocumentRuleTestBase#getExpectedExplicitTargetPendingEntry()
      */
     @Override
     public final GeneralLedgerPendingEntry getExpectedExplicitTargetPendingEntry() {
@@ -366,15 +339,6 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
         return EXPENSE_GEC_LINE.createAccountingLine(SourceAccountingLine.class, Constants.GL_DEBIT_CODE);
     }
 
-    /**
-     * 
-     * @see org.kuali.core.rule.TransactionalDocumentRuleTestBase#getExpenseTargetLine()
-     */
-    @Override
-    protected TargetAccountingLine getExpenseTargetLine() throws Exception {
-        return EXPENSE_GEC_LINE.createAccountingLine(TargetAccountingLine.class, Constants.GL_CREDIT_CODE);
-    }
-
     // ////////////////////////////////////////////////////////////////////////
     // Fixture methods end here //
     // ////////////////////////////////////////////////////////////////////////
@@ -382,6 +346,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     // ////////////////////////////////////////////////////////////////////////
     // Test methods start here //
     // ////////////////////////////////////////////////////////////////////////
+    
     /**
      * tests that true is returned for a debit code
      * 
@@ -436,4 +401,21 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     // ////////////////////////////////////////////////////////////////////////
     // Test methods end here //
     // ////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @see org.kuali.core.rule.TransactionalDocumentRuleTestBase#testIsObjectSubTypeAllowed_InvalidSubType()
+     */
+    @Override
+    public void testIsObjectSubTypeAllowed_InvalidSubType() throws Exception {
+        testIsObjectSubTypeAllowed(LINE17.createSourceAccountingLine(), false);   
+    }
+
+    /**
+     * @see org.kuali.core.rule.TransactionalDocumentRuleTestBase#testIsObjectCodeAllowed_InvalidObjectCode()
+     */
+    @Override
+    public void testIsObjectCodeAllowed_InvalidObjectCode() throws Exception {
+        //the way this tests works is not valid because of the way that the AV implements the object code restriction
+    }
+    
 }
