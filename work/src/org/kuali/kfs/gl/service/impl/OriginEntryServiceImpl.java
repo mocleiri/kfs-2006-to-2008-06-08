@@ -47,12 +47,12 @@ import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.util.LedgerEntry;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
-import org.kuali.module.gl.util.PosterInputSummaryEntry;
-import org.kuali.module.gl.util.PosterInputSummaryEntryHolder;
+import org.kuali.module.gl.util.PosterOutputSummaryEntry;
+import org.kuali.module.gl.util.PosterOutputSummaryEntryHolder;
 
 /**
  *  
- * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.6 2006-09-28 18:31:40 bgao Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.7 2006-09-28 20:20:50 bgao Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -382,52 +382,52 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     }
 
     /**
-     * @see org.kuali.module.gl.service.OriginEntryService#getPosterInputSummaryByGroupId(java.util.Collection)
+     * @see org.kuali.module.gl.service.OriginEntryService#getPosterOutputSummaryByGroupId(java.util.Collection)
      */
-    public PosterInputSummaryEntryHolder getPosterInputSummaryByGroupId(Collection groupIdList) {
-        PosterInputSummaryEntryHolder posterInputSummaryEntryHolder = new PosterInputSummaryEntryHolder();
+    public PosterOutputSummaryEntryHolder getPosterOutputSummaryByGroupId(Collection groupIdList) {
+        PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder = new PosterOutputSummaryEntryHolder();
 
         if (groupIdList.size() == 0) {
-            return posterInputSummaryEntryHolder;
+            return posterOutputSummaryEntryHolder;
         }
 
-        Iterator entrySummaryIterator = originEntryDao.getPosterInputSummaryByGroupId(groupIdList);
+        Iterator entrySummaryIterator = originEntryDao.getPosterOutputSummaryByGroupId(groupIdList);
         while (entrySummaryIterator.hasNext()) {
             Object[] entrySummary = (Object[]) entrySummaryIterator.next();            
-            PosterInputSummaryEntry posterInputSummaryEntry = new PosterInputSummaryEntry();
+            PosterOutputSummaryEntry posterOutputSummaryEntry = new PosterOutputSummaryEntry();
             int indexOfField = 0;
             
             Object tempEntry = entrySummary[indexOfField++];
-            String entry = tempEntry == null ? "" : tempEntry.toString();
-            posterInputSummaryEntry.setUniversityFiscalYear(new Integer(entry));
+            String entry = (tempEntry == null) ? "9999" : tempEntry.toString();
+            posterOutputSummaryEntry.setUniversityFiscalYear(new Integer(entry));
             
             tempEntry = entrySummary[indexOfField++];
-            entry = tempEntry == null ? "" : tempEntry.toString();
-            posterInputSummaryEntry.setFiscalPeriodCode(entry);
+            entry = (tempEntry == null) ? "" : tempEntry.toString();
+            posterOutputSummaryEntry.setFiscalPeriodCode(entry);
             
             tempEntry = entrySummary[indexOfField++];
-            entry = tempEntry == null ? "" : tempEntry.toString();
-            posterInputSummaryEntry.setBalanceTypeCode(entry);
+            entry = (tempEntry == null) ? "" : tempEntry.toString();
+            posterOutputSummaryEntry.setBalanceTypeCode(entry);
             
             tempEntry = entrySummary[indexOfField++];
-            entry = tempEntry == null ? "" : tempEntry.toString();
-            posterInputSummaryEntry.setFundGroup(entry);
+            entry = (tempEntry == null) ? "" : tempEntry.toString();
+            posterOutputSummaryEntry.setFundGroup(entry);
             
             tempEntry = entrySummary[indexOfField++];
-            String objectTypeCode = tempEntry == null ? "" : tempEntry.toString();
-            posterInputSummaryEntry.setObjectTypeCode(objectTypeCode);
+            String objectTypeCode = (tempEntry == null) ? "" : tempEntry.toString();
+            posterOutputSummaryEntry.setObjectTypeCode(objectTypeCode);
             
-            Object tempDebitCreditCode = entrySummary[indexOfField++];
-            String debitCreditCode = tempDebitCreditCode == null ? Constants.GL_BUDGET_CODE : tempDebitCreditCode.toString();
+            tempEntry = entrySummary[indexOfField++];
+            String debitCreditCode = (tempEntry == null) ? Constants.GL_BUDGET_CODE : tempEntry.toString();
             
             tempEntry = entrySummary[indexOfField];
-            entry = tempEntry == null ? "0" : tempEntry.toString();            
+            entry = (tempEntry == null) ? "0" : tempEntry.toString();            
             KualiDecimal amount = new KualiDecimal(entry);
             
-            posterInputSummaryEntry.setAmount(debitCreditCode, objectTypeCode, amount);           
-            posterInputSummaryEntryHolder.insertPosterInputSummaryEntry(posterInputSummaryEntry);
+            posterOutputSummaryEntry.setAmount(debitCreditCode, objectTypeCode, amount);           
+            posterOutputSummaryEntryHolder.insertPosterInputSummaryEntry(posterOutputSummaryEntry);
         }
-        return posterInputSummaryEntryHolder;       
+        return posterOutputSummaryEntryHolder;       
     }
     
 }
