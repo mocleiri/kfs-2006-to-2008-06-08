@@ -34,7 +34,7 @@ import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
-import org.kuali.module.gl.util.PosterInputSummaryEntryHolder;
+import org.kuali.module.gl.util.PosterOutputSummaryEntryHolder;
 
 /**
  * 
@@ -170,5 +170,5 @@ public interface OriginEntryService {
      * @param groupIdList the origin entry groups
      * @return a set of summarized information of poster input entries within the specified groups
      */    
-    public PosterInputSummaryEntryHolder getPosterInputSummaryByGroupId(Collection groupIdList);
+    public PosterOutputSummaryEntryHolder getPosterOutputSummaryByGroupId(Collection groupIdList);
 }

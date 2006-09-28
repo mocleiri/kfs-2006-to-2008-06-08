@@ -253,12 +253,12 @@ public interface ReportService {
      */
     public void correctionOnlineReport(CorrectionDocument cDocument, Date runDate);
     
-        /**
-     * Poster Input Transaction Summary Report: a summary of the three poster runs 
+    /**
+     * Poster output Summary Report: a summary of the three poster runs 
      * (pulling in the  transactions from the main, reversal, and ICR posters) which we use for balancing.
      * 
      * @param runDate
      * @param groups
      */
-    public void generatePosterInputTransactionSummaryReport(Date runDate, Collection groups);
+    public void generatePosterOutputTransactionSummaryReport(Date runDate, Collection groups);
 }
