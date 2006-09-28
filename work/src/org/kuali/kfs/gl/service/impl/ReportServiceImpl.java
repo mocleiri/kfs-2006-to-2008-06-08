@@ -66,6 +66,8 @@ import org.kuali.module.gl.util.GeneralLedgerPendingEntryReport;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.LedgerReport;
 import org.kuali.module.gl.util.NominalActivityClosingTransactionReport;
+import org.kuali.module.gl.util.PosterInputSummaryEntryHolder;
+import org.kuali.module.gl.util.PosterInputSummaryReport;
 import org.kuali.module.gl.util.Summary;
 import org.kuali.module.gl.util.TransactionListingReport;
 import org.kuali.module.gl.util.TransactionReport;
@@ -113,11 +115,11 @@ public class ReportServiceImpl implements ReportService {
     /**
      * @see org.kuali.module.gl.service.ReportService#generatePendingEntryReport(java.util.Date)
      */
-    public void generatePendingEntryReport(Date runDate,OriginEntryGroup group) {
+    public void generatePendingEntryReport(Date runDate, OriginEntryGroup group) {
         LOG.debug("generatePendingEntryReport() started");
 
         GeneralLedgerPendingEntryReport glper = new GeneralLedgerPendingEntryReport();
-        glper.generateReport(runDate,batchReportsDirectory,sdf,originEntryService.getEntriesByGroupReportOrder(group));
+        glper.generateReport(runDate, batchReportsDirectory, sdf, originEntryService.getEntriesByGroupReportOrder(group));
     }
 
     /**
@@ -367,7 +369,7 @@ public class ReportServiceImpl implements ReportService {
 
         ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger", batchReportsDirectory);
     }
-    
+
     /**
      * 
      * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportOnline(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
@@ -431,7 +433,7 @@ public class ReportServiceImpl implements ReportService {
      * @see org.kuali.module.gl.service.ReportService#generateScrubberStatisticsReport(java.util.Date,
      *      org.kuali.module.gl.service.impl.scrubber.ScrubberReportData, java.util.Map)
      */
-    public void generateOnlineScrubberStatisticsReport(Integer groupId, Date runDate, ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors,String documentNumber) {
+    public void generateOnlineScrubberStatisticsReport(Integer groupId, Date runDate, ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors, String documentNumber) {
         LOG.debug("generateScrubberStatisticsReport() started");
 
         List summary = buildScrubberReportSummary(scrubberReport);
@@ -473,13 +475,13 @@ public class ReportServiceImpl implements ReportService {
         rept.generateReport(i, runDate, "Scrubber Input Transactions with Bad Balance Types", "scrubber_badbal", batchReportsDirectory);
     }
 
-    public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup,String documentNumber) {
+    public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup, String documentNumber) {
         LOG.debug("generateScrubberTransactionsOnline() started");
 
         Iterator ti = originEntryService.getEntriesByGroupAccountOrder(validGroup);
 
         TransactionListingReport rept = new TransactionListingReport();
-        rept.generateReport(ti, runDate, "Output Transaction Listing From the Scrubber", "scrubber_listing_" + documentNumber, onlineReportsDirectory);        
+        rept.generateReport(ti, runDate, "Output Transaction Listing From the Scrubber", "scrubber_listing_" + documentNumber, onlineReportsDirectory);
     }
 
     /**
@@ -709,7 +711,7 @@ public class ReportServiceImpl implements ReportService {
             }
         }
     }
-    
+
     /**
      * @see org.kuali.module.gl.service.ReportService#generatePosterReversalTransactionsListing(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
      */
@@ -719,7 +721,7 @@ public class ReportServiceImpl implements ReportService {
         Iterator ti = originEntryService.getEntriesByGroupAccountOrder(originGroup);
 
         TransactionListingReport report = new TransactionListingReport();
-        report.generateReport(ti, runDate, "Reversal Poster Transaction Listing", "poster_reversal_list", batchReportsDirectory);     
+        report.generateReport(ti, runDate, "Reversal Poster Transaction Listing", "poster_reversal_list", batchReportsDirectory);
     }
 
     /**
@@ -732,12 +734,12 @@ public class ReportServiceImpl implements ReportService {
         Iterator ti = originEntryService.getEntriesByGroupAccountOrder(group);
 
         TransactionListingReport report = new TransactionListingReport();
-        if ( posterMode == PosterService.MODE_ENTRIES ) {
+        if (posterMode == PosterService.MODE_ENTRIES) {
             report.generateReport(ti, runDate, "Main Poster Error Transaction Listing", "poster_main_error_list", batchReportsDirectory);
         } else if ( posterMode == PosterService.MODE_ICR ) {
             report.generateReport(ti, runDate, "ICR Poster Error Transaction Listing", "poster_icr_error_list", batchReportsDirectory);
         } else if ( posterMode == PosterService.MODE_REVERSAL ) {
-            report.generateReport(ti, runDate, "Reversal Poster Error Transaction Listing", "poster_reversal_error_list", batchReportsDirectory);            
+            report.generateReport(ti, runDate, "Reversal Poster Error Transaction Listing", "poster_reversal_error_list", batchReportsDirectory);
         }
     }
 
@@ -764,7 +766,7 @@ public class ReportServiceImpl implements ReportService {
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
     }
-    
+
     public void setReversalService(ReversalService rs) {
         reversalService = rs;
     }
@@ -776,8 +778,8 @@ public class ReportServiceImpl implements ReportService {
     public void setPersistenceService(PersistenceService persistenceService) {
         this.persistenceService = persistenceService;
     }
-    
-    
+
+
     public void correctionOnlineReport(CorrectionDocument cDocument, Date runDate) {
         LOG.debug("correctionOnlineReport() started");
 
@@ -796,23 +798,23 @@ public class ReportServiceImpl implements ReportService {
         try {
             String filename = onlineReportsDirectory + "/glcp_" + cDocument.getFinancialDocumentNumber() + "_";
 
-            filename = filename +sdf.format(runDate);
+            filename = filename + sdf.format(runDate);
             filename = filename + ".pdf";
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
             writer.setPageEvent(helper);
-            
+
             document.open();
-                 
+
             float[] summaryWidths = { 90, 10 };
             PdfPTable summary = new PdfPTable(summaryWidths);
-            
+
             PdfPCell cell;
             cell = new PdfPCell(new Phrase(" ", sectionFont));
             cell.setColspan(2);
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-            
+
             cell = new PdfPCell(new Phrase("Summary of Input Group", sectionFont));
             cell.setColspan(2);
             cell.setBorder(Rectangle.NO_BORDER);
@@ -823,50 +825,50 @@ public class ReportServiceImpl implements ReportService {
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-            
+
             cell = new PdfPCell(new Phrase("Total Credits: " + cDocument.getCorrectionCreditTotalAmount().toString(), textFont));
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-            
+
             cell = new PdfPCell(new Phrase("Row Count: " + cDocument.getCorrectionRowCount(), textFont));
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-            
+
             cell = new PdfPCell(new Phrase("System and Edit Method", sectionFont));
             cell.setColspan(2);
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-            
+
             cell = new PdfPCell(new Phrase("System: " + cDocument.getSystem(), textFont));
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-                        
+
             cell = new PdfPCell(new Phrase("Edit Method: " + cDocument.getMethod(), textFont));
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-  
+
             cell = new PdfPCell(new Phrase("Input and Output File", sectionFont));
             cell.setColspan(2);
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-           
+
             cell = new PdfPCell(new Phrase("Input Group ID:" + cDocument.getCorrectionInputGroupId().toString(), textFont));
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-            
+
             cell = new PdfPCell(new Phrase("Output Group ID: " + cDocument.getCorrectionOutputGroupId().toString(), textFont));
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
 
-            if ( cDocument.getCorrectionInputFileName() != null ) {
+            if (cDocument.getCorrectionInputFileName() != null) {
                 cell = new PdfPCell(new Phrase("Input File Name: " + cDocument.getCorrectionInputFileName(), textFont));
                 cell.setColspan(2);
                 cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
@@ -878,33 +880,33 @@ public class ReportServiceImpl implements ReportService {
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-            
+
             String processBatch;
             String outputOnly;
-            
+
             if (cDocument.getCorrectionFileDelete()) {
                 processBatch = "No";
             } else {
                 processBatch = "Yes";
             }
-            
+
             if (cDocument.getCorrectionSelection()) {
                 outputOnly = "Yes";
             } else {
                 outputOnly = "No";
             }
-            
+
             cell = new PdfPCell(new Phrase("Process In Batch: " + processBatch, textFont));
             cell.setColspan(2);
-            //cell.setBorder(Rectangle.NO_BORDER);
+            // cell.setBorder(Rectangle.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-            
+
             cell = new PdfPCell(new Phrase("Output only records which match criteria? " + outputOnly, textFont));
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
-            
+
             if (cDocument.getCorrectionTypeCode().equals(CorrectionDocumentService.CORRECTION_TYPE_CRITERIA)) {
                 cell = new PdfPCell(new Phrase("Search Criteria and Modification Criteria", sectionFont));
                 cell.setColspan(2);
@@ -915,8 +917,8 @@ public class ReportServiceImpl implements ReportService {
                 SearchOperatorsFinder sof = new SearchOperatorsFinder();
 
                 for (Iterator ccgi = cDocument.getCorrectionChangeGroup().iterator(); ccgi.hasNext();) {
-                    CorrectionChangeGroup ccg = (CorrectionChangeGroup)ccgi.next();
- 
+                    CorrectionChangeGroup ccg = (CorrectionChangeGroup) ccgi.next();
+
                     cell = new PdfPCell(new Phrase("Group", boldTextFont));
                     cell.setColspan(2);
                     cell.setBorder(Rectangle.NO_BORDER);
@@ -929,7 +931,7 @@ public class ReportServiceImpl implements ReportService {
                     summary.addCell(cell);
 
                     for (Iterator ccri = ccg.getCorrectionCriteria().iterator(); ccri.hasNext();) {
-                        CorrectionCriteria cc = (CorrectionCriteria)ccri.next();
+                        CorrectionCriteria cc = (CorrectionCriteria) ccri.next();
 
                         cell = new PdfPCell(new Phrase("Field: " + cc.getCorrectionFieldName() + 
                                 " operator: " + sof.getKeyLabelMap().get(cc.getCorrectionOperatorCode()) + 
@@ -945,7 +947,7 @@ public class ReportServiceImpl implements ReportService {
                     summary.addCell(cell);
 
                     for (Iterator cchi = ccg.getCorrectionChange().iterator(); cchi.hasNext();) {
-                        CorrectionChange cc = (CorrectionChange)cchi.next();
+                        CorrectionChange cc = (CorrectionChange) cchi.next();
 
                         cell = new PdfPCell(new Phrase("Field: " + cc.getCorrectionFieldName() + 
                                 " Replacement Value: " + cc.getCorrectionFieldValue(), textFont));
@@ -954,8 +956,9 @@ public class ReportServiceImpl implements ReportService {
                         summary.addCell(cell);
                     }
                 }
-            }            
+            }
             document.add(summary);
+
         }
         catch (Exception de) {
             LOG.error("generateReport() Error creating PDF report", de);
@@ -964,5 +967,23 @@ public class ReportServiceImpl implements ReportService {
         finally {
             document.close();
         }
+    }
+
+    /**
+     * @see org.kuali.module.gl.service.ReportService#generatePosterInputTransactionSummaryReport(java.util.Date,
+     *      java.util.Collection)
+     */
+    public void generatePosterInputTransactionSummaryReport(Date runDate, Collection groups) {
+        LOG.debug("generatePosterInputTransactionSummaryReport() started");
+
+        if (groups.size() <= 0) {
+            return;
+        }
+
+        PosterInputSummaryEntryHolder posterInputSummaryEntryHolder = originEntryService.getPosterInputSummaryByGroupId(groups);
+        Map posterInputSummaryEntryMapGroupByBalanceType = posterInputSummaryEntryHolder.groupPosterInputSummaryEntryByBalanceType();
+ 
+        PosterInputSummaryReport posterInputSummaryReport = new PosterInputSummaryReport();
+        posterInputSummaryReport.generateReport(posterInputSummaryEntryMapGroupByBalanceType, runDate, "Poster Input Summary", "poster_input_summary", batchReportsDirectory);
     }
 }
