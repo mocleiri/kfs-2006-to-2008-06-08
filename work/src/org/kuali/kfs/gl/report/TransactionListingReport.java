@@ -125,7 +125,7 @@ public class TransactionListingReport {
 
             document.open();
 
-            float[] widths = { 5, 8, 5, 5, 5, 7, 7, 9, 27, 12, 12 };
+            float[] widths = { 5, 8, 5, 5, 5, 7, 6, 10, 27, 12, 12 };
             PdfPTable transactionList = new PdfPTable(widths);
             transactionList.setHeaderRows(1);
             transactionList.setWidthPercentage(100);
