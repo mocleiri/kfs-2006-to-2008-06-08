@@ -22,39 +22,38 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE7;
-import static org.kuali.test.fixtures.UserNameFixture.HSCHREIN;
-
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import junit.framework.Assert;
-
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE7;
+import static org.kuali.test.fixtures.UserNameFixture.CSWINSON;
+import static org.kuali.test.fixtures.UserNameFixture.HSCHREIN;
+import static org.kuali.test.fixtures.UserNameFixture.MYLARGE;
+import static org.kuali.test.fixtures.UserNameFixture.VPUTMAN;
 import org.kuali.workflow.WorkflowTestUtils;
 
 import edu.iu.uis.eden.EdenConstants;
-import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
 
 /**
  * This class is used to test DisbursementVoucherDocument.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = HSCHREIN)
 public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBase {
 
     // The set of Route Nodes that the test document will progress through
@@ -62,15 +61,6 @@ public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBa
     private static final String ACCOUNT_REVIEW = "Account Review";
     private static final String ORG_REVIEW = "Org Review";
     private static final String CAMPUS_CODE = "Campus Code";
-
-    /*
-     * @see org.kuali.core.document.TransactionalDocumentTestBase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        changeCurrentUser(HSCHREIN.toString());
-    }
-
 
     public void testConvertIntoCopy_clear_additionalCodeInvalidPayee() throws Exception {
         GlobalVariables.setMessageList(new ArrayList());
@@ -120,44 +110,44 @@ public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBa
 
     @TestsWorkflowViaDatabase
     public void testWorkflowRouting() throws Exception {
-        NetworkIdVO VPUTMAN = new NetworkIdVO("VPUTMAN");
-        NetworkIdVO CSWINSON = new NetworkIdVO("CSWINSON");
-        NetworkIdVO MYLARGE = new NetworkIdVO("MYLARGE");
-
         // save and route the document
         Document document = buildDocument();
+        final String docId = document.getFinancialDocumentNumber();
         getDocumentService().routeDocument(document, "routing test doc", null);
 
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ACCOUNT_REVIEW);
 
         // the document should now be routed to VPUTMAN as Fiscal Officer
-        KualiWorkflowDocument wfDoc = WorkflowTestUtils.refreshDocument(document, VPUTMAN);
+        changeCurrentUser(VPUTMAN);
+        document = getDocumentService().getByDocumentHeaderId(docId);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ACCOUNT_REVIEW));
-        assertTrue("Document should be enroute.", wfDoc.stateIsEnroute());
-        assertTrue("VPUTMAN should have an approve request.", wfDoc.isApprovalRequested());
+        assertTrue("Document should be enroute.", document.getDocumentHeader().getWorkflowDocument().stateIsEnroute());
+        assertTrue("VPUTMAN should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
         getDocumentService().approveDocument(document, "Test approving as VPUTMAN", null);
 
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ORG_REVIEW);
-
         // now doc should be in Org Review routing to CSWINSON
-        wfDoc = WorkflowTestUtils.refreshDocument(document, CSWINSON);
+        changeCurrentUser(CSWINSON);
+        document = getDocumentService().getByDocumentHeaderId(docId);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ORG_REVIEW));
-        assertTrue("CSWINSON should have an approve request.", wfDoc.isApprovalRequested());
+        assertTrue("CSWINSON should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
         getDocumentService().approveDocument(document, "Test approving as CSWINSON", null);
 
         // this is going to skip a bunch of other routing and end up at campus code
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), CAMPUS_CODE);
 
         // doc should be in "Campus Code" routing to MYLARGE
-        wfDoc = WorkflowTestUtils.refreshDocument(document, MYLARGE);
+        changeCurrentUser(MYLARGE);
+        document = getDocumentService().getByDocumentHeaderId(docId);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, CAMPUS_CODE));
-        assertTrue("Should have an approve request.", wfDoc.isApprovalRequested());
+        assertTrue("Should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
         getDocumentService().approveDocument(document, "Approve", null);
 
-        WorkflowTestUtils.waitForStatusChange(wfDoc, EdenConstants.ROUTE_HEADER_FINAL_CD);
+        WorkflowTestUtils.waitForStatusChange(document.getDocumentHeader().getWorkflowDocument(), EdenConstants.ROUTE_HEADER_FINAL_CD);
 
-        wfDoc = WorkflowTestUtils.refreshDocument(document, VPUTMAN);
-        assertTrue("Document should now be final.", wfDoc.stateIsFinal());
+        changeCurrentUser(VPUTMAN);
+        document = getDocumentService().getByDocumentHeaderId(docId);
+        assertTrue("Document should now be final.", document.getDocumentHeader().getWorkflowDocument().stateIsFinal());
     }
 
     protected int getExpectedPrePeCount() {
@@ -190,7 +180,7 @@ payeeDetail.setDisbursementVoucherPayeeTypeCode("P");
         document.setDisbVchrContactPhoneNumber("8081234567");
         document.setDisbVchrContactPersonName("aynalem");
         document.setDisbVchrCheckStubText("Test DV Check");
-        
+
         KualiDecimal amount = KualiDecimal.ZERO;
         for(AccountingLineFixture fixture: getSourceAccountingLineParametersFromFixtures()){
             amount=amount.add(fixture.amount);
