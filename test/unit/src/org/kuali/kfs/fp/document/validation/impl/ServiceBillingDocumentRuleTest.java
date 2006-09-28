@@ -22,19 +22,21 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
-import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
-
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
+import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentTypeService;
 import org.kuali.module.financial.document.ServiceBillingDocument;
-import org.kuali.test.KualiTestBaseWithSession;
+import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
+import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.KualiTestBase;
+import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
 
 /**
  * 
@@ -43,19 +45,13 @@ import org.kuali.test.WithTestSpringContext;
  * 
  * 
  */
-@WithTestSpringContext
-public class ServiceBillingDocumentRuleTest extends KualiTestBaseWithSession {
+@WithTestSpringContext(session = DFOGLE)
+public class ServiceBillingDocumentRuleTest extends KualiTestBase {
 
 
     // ////////////////////////////////////////////////////////////////////////
     // Test methods start here //
     // ////////////////////////////////////////////////////////////////////////
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        changeCurrentUser("DFOGLE");
-    }
 
     public final void testSave_nullDocument() throws Exception {
         boolean failedAsExpected = false;

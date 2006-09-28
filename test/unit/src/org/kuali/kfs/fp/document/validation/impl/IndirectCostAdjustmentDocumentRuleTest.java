@@ -23,19 +23,21 @@
 package org.kuali.module.financial.rules;
 
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
-import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
-
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
+import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentTypeService;
 import org.kuali.module.financial.document.IndirectCostAdjustmentDocument;
-import org.kuali.test.KualiTestBaseWithSession;
+import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
+import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.KualiTestBase;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 /**
  * This class tests the <code>{@link IndirectCostAdjustmentDocument}</code>'s rules and PE generation. This is not currently
@@ -44,8 +46,8 @@ import org.kuali.test.WithTestSpringContext;
  * 
  * 
  */
-@WithTestSpringContext
-public class IndirectCostAdjustmentDocumentRuleTest extends KualiTestBaseWithSession {
+@WithTestSpringContext(session = KHUNTLEY)
+public class IndirectCostAdjustmentDocumentRuleTest extends KualiTestBase {
     // ////////////////////////////////////////////////////////////////////////
     // Test methods start here //
     // ////////////////////////////////////////////////////////////////////////

@@ -22,17 +22,13 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.Constants.GL_CREDIT_CODE;
-import static org.kuali.Constants.GL_DEBIT_CODE;
-import static org.kuali.test.fixtures.AccountingLineFixture.*;
-import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.*;
-
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.Constants;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
@@ -41,17 +37,31 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.TransactionalDocumentRuleTestBase;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.SpringServiceLocator;
+import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentTypeService;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.financial.document.AuxiliaryVoucherDocument;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.ACCRUED_INCOME_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.ACCRUED_SICK_PAY_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_GEC_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.FUND_BALANCE_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE10;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE15;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE8;
+import org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+
 /**
  * This class tests the <code>{@link AuxiliaryVoucherDocument}</code>'s rules and PE generation.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleTestBase {
 
     private static final String KNOWN_DOCUMENT_TYPENAME = "KualiAuxiliaryVoucherDocument";
@@ -292,7 +302,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public final GeneralLedgerPendingEntry getExpectedExplicitSourcePendingEntry() {
-        return EXPECTED_AV_EXPLICIT_SOURCE_PENDING_ENTRY.createGeneralLedgerPendingEntry();
+        return GeneralLedgerPendingEntryFixture.EXPECTED_AV_EXPLICIT_SOURCE_PENDING_ENTRY.createGeneralLedgerPendingEntry();
     }
 
     /**
@@ -301,7 +311,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public final GeneralLedgerPendingEntry getExpectedExplicitTargetPendingEntry() {
-        return EXPECTED_AV_EXPLICIT_TARGET_PENDING_ENTRY.createGeneralLedgerPendingEntry();
+        return GeneralLedgerPendingEntryFixture.EXPECTED_AV_EXPLICIT_TARGET_PENDING_ENTRY.createGeneralLedgerPendingEntry();
     }
 
     /**
@@ -333,7 +343,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public GeneralLedgerPendingEntry getExpectedExplicitSourcePendingEntryForExpense() {
-        return EXPECTED_AV_EXPLICIT_SOURCE_PENDING_ENTRY_FOR_EXPENSE.createGeneralLedgerPendingEntry();
+        return GeneralLedgerPendingEntryFixture.EXPECTED_AV_EXPLICIT_SOURCE_PENDING_ENTRY_FOR_EXPENSE.createGeneralLedgerPendingEntry();
     }
 
     /**
@@ -343,7 +353,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public GeneralLedgerPendingEntry getExpectedExplicitTargetPendingEntryForExpense() {
-        return EXPECTED_AV_EXPLICIT_TARGET_PENDING_ENTRY_FOR_EXPENSE.createGeneralLedgerPendingEntry();
+        return GeneralLedgerPendingEntryFixture.EXPECTED_AV_EXPLICIT_TARGET_PENDING_ENTRY_FOR_EXPENSE.createGeneralLedgerPendingEntry();
     }
 
 
@@ -363,7 +373,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     // ////////////////////////////////////////////////////////////////////////
     // Test methods start here //
     // ////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * tests that true is returned for a debit code
      * 
@@ -424,7 +434,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public void testIsObjectSubTypeAllowed_InvalidSubType() throws Exception {
-        testIsObjectSubTypeAllowed(LINE17.createSourceAccountingLine(), false);   
+        testIsObjectSubTypeAllowed(AccountingLineFixture.LINE17.createSourceAccountingLine(), false);
     }
 
     /**
@@ -450,5 +460,5 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
 
     }
 
-    
+
 }

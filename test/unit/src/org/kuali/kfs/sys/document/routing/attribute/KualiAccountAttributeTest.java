@@ -28,7 +28,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.workflow.KualiWorkflowUtils;
 import org.w3c.dom.Node;
@@ -43,7 +43,7 @@ import edu.iu.uis.eden.routeheader.DocumentContent;
  * 
  */
 @WithTestSpringContext
-public class KualiAccountAttributeTest extends KualiTestBaseWithSession {
+public class KualiAccountAttributeTest extends KualiTestBase {
 
     KualiAccountAttribute attribute;
 

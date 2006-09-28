@@ -22,12 +22,6 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
-import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
-import static org.kuali.test.fixtures.AccountingLineFixture.*;
-import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +33,27 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.TransactionalDocumentRuleTestBase;
 import org.kuali.core.util.KualiDecimal;
+import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentTypeService;
 import org.kuali.module.financial.document.NonCheckDisbursementDocument;
+import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
+import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
+import static org.kuali.test.fixtures.AccountingLineFixture.ACCRUED_INCOME_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.ACCRUED_SICK_PAY_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_GEC_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE10;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE8;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_GEC_EXPLICIT_SOURCE_PENDING_ENTRY;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_GEC_EXPLICIT_SOURCE_PENDING_ENTRY_FOR_EXPENSE;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_GEC_EXPLICIT_TARGET_PENDING_ENTRY;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_GEC_EXPLICIT_TARGET_PENDING_ENTRY_FOR_EXPENSE;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_GEC_OFFSET_SOURCE_PENDING_ENTRY;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_GEC_OFFSET_TARGET_PENDING_ENTRY;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 
 /**
@@ -52,7 +63,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class NonCheckDisbursementDocumentRuleTest extends TransactionalDocumentRuleTestBase {
 
     private static final String KNOWN_DOCUMENT_TYPENAME = "KualiNonCheckDisbursementDocument";

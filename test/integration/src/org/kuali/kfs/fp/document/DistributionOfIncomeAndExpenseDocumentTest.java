@@ -23,9 +23,6 @@ package org.kuali.module.financial.document;
  *
  */
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE2;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,16 +30,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE2;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+
 /**
  * This class is used to test DistributionOfIncomeAndExpenseDocument.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDocumentTestBase {
     private static final Log LOG = LogFactory.getLog(DistributionOfIncomeAndExpenseDocumentTest.class);
 
@@ -71,7 +72,7 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
      */
     @Override
     public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(LINE2);
         return list;
     }
