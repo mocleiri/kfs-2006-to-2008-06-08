@@ -29,6 +29,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.TransactionalDocumentTestBase;
 import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.test.WithTestSpringContext;
@@ -36,6 +37,7 @@ import org.kuali.test.fixtures.AccountingLineFixture;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE1;
 import org.kuali.test.fixtures.UserNameFixture;
 import static org.kuali.test.fixtures.UserNameFixture.CSWINSON;
+import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
 import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 import static org.kuali.test.fixtures.UserNameFixture.RORENFRO;
 import static org.kuali.test.fixtures.UserNameFixture.RRUFFNER;
@@ -113,65 +115,48 @@ public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
     public void testWorkflowRouting() throws Exception {
         // save and route the document
         Document document = buildDocumentForWorkflowRoutingTest();
-        final String docId = document.getFinancialDocumentNumber();
+        final String docHeaderId = document.getFinancialDocumentNumber();
         routeDocument(document);
 
-        WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ACCOUNT_REVIEW);
-
         // the document should now be routed to VPUTMAN and RORENFRO as Fiscal Officers
-        changeCurrentUser(VPUTMAN);
-        document = getDocumentService().getByDocumentHeaderId(docId);
-        assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ACCOUNT_REVIEW));
-        assertTrue("Document should be enroute.", document.getDocumentHeader().getWorkflowDocument().stateIsEnroute());
-        assertTrue("VPUTMAN should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        getDocumentService().approveDocument(document, "Test approving as VPUTMAN", null);
+        WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ACCOUNT_REVIEW);
+        approve(docHeaderId, VPUTMAN, ACCOUNT_REVIEW);
+        approve(docHeaderId, RORENFRO, ACCOUNT_REVIEW);
 
-        changeCurrentUser(RORENFRO);
-        WorkflowTestUtils.waitForApproveRequest(document.getDocumentHeader().getWorkflowDocument(), RORENFRO.toString());
-        document = getDocumentService().getByDocumentHeaderId(docId);
-        assertTrue("RORENFRO should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        getDocumentService().approveDocument(document, "Test approving as RORENFRO", null);
-
+        // now doc should be in Org Review routing to CSWINSON, RRUFFNER, SEASON, and DFOGLE
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ORG_REVIEW);
-
-        // now doc should be in Org Review routing to CSWINSON, RRUFFNER, and SEASON
-        changeCurrentUser(CSWINSON);
-        document = getDocumentService().getByDocumentHeaderId(docId);
-        assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ORG_REVIEW));
-        assertTrue("CSWINSON should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        getDocumentService().approveDocument(document, "Test approving as CSWINSON", null);
-
-        changeCurrentUser(RRUFFNER);
-        WorkflowTestUtils.waitForApproveRequest(document.getDocumentHeader().getWorkflowDocument(), RRUFFNER.toString());
-        document = getDocumentService().getByDocumentHeaderId(docId);
-        assertTrue("RRUFFNER should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        getDocumentService().approveDocument(document, "Test approving as RRUFFNER", null);
-
-        changeCurrentUser(SEASON);
-        WorkflowTestUtils.waitForApproveRequest(document.getDocumentHeader().getWorkflowDocument(), SEASON.toString());
-        document = getDocumentService().getByDocumentHeaderId(docId);
-        assertTrue("SEASON should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        getDocumentService().approveDocument(document, "Test approving as SEASON", null);
-
+        approve(docHeaderId, CSWINSON, ORG_REVIEW);
+        approve(docHeaderId, RRUFFNER, ORG_REVIEW);
+        approve(docHeaderId, SEASON, ORG_REVIEW);
+        approve(docHeaderId, DFOGLE, ORG_REVIEW);
 
         // TODO once the sub fund node has been added, add code here to test it...
 
         WorkflowTestUtils.waitForStatusChange(document.getDocumentHeader().getWorkflowDocument(), EdenConstants.ROUTE_HEADER_FINAL_CD);
 
         changeCurrentUser(VPUTMAN);
-        document = getDocumentService().getByDocumentHeaderId(docId);
+        document = getDocumentService().getByDocumentHeaderId(docHeaderId);
         assertTrue("Document should now be final.", document.getDocumentHeader().getWorkflowDocument().stateIsFinal());
+    }
+
+    private void approve(String docHeaderId, UserNameFixture user, String expectedNode)
+        throws Exception
+    {
+        changeCurrentUser(user);
+        WorkflowTestUtils.waitForApproveRequest(Long.valueOf(docHeaderId), GlobalVariables.getUserSession().getKualiUser());
+        Document document = getDocumentService().getByDocumentHeaderId(docHeaderId);
+        assertTrue("Document should be at routing node " + expectedNode, WorkflowTestUtils.isAtNode(document, expectedNode));
+        assertTrue("Document should be enroute.", document.getDocumentHeader().getWorkflowDocument().stateIsEnroute());
+        assertTrue(user + " should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
+        getDocumentService().approveDocument(document, "Test approving as " + user, null);
     }
 
     private Document buildDocumentForWorkflowRoutingTest()
         throws Exception
     {
         TransactionalDocument document = (TransactionalDocument) buildDocument();
-        // todo: figure out which accounting lines the TOF needs to route to the people in the above test method.
-//        AccountingLineFixture.LINE2.addAsSourceTo(document);
-//        AccountingLineFixture.LINE2.addAsTargetTo(document);
-//        AccountingLineFixture.LINE3.addAsSourceTo(document);
-//        AccountingLineFixture.LINE3.addAsTargetTo(document);
+        AccountingLineFixture.LINE2_TOF.addAsSourceTo(document);
+        AccountingLineFixture.LINE2_TOF.addAsTargetTo(document);
         return document;
     } 
 }
