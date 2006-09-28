@@ -27,8 +27,10 @@ import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -116,7 +118,8 @@ public class PosterOutputSummaryReport {
         SortedSet sortedkeySet = new TreeSet(posterOutputSummaryEntryHolder.keySet());
         for(Iterator keyIterator=sortedkeySet.iterator(); keyIterator.hasNext();){
             String key = (String)keyIterator.next();
-            Collection collection = (Collection)posterOutputSummaryEntryHolder.get(key); 
+            List list = (List)posterOutputSummaryEntryHolder.get(key); 
+            Collections.sort(list);
             
             try{
                 Paragraph paragraph = new Paragraph("Balance Type Code: " + key, textFont);
@@ -125,7 +128,7 @@ public class PosterOutputSummaryReport {
                 Section section = chapter.addSection(paragraph);
                 section.add(blankParagraph);
                 
-                PdfPTable pdfTable = this.buildPdfTable(collection); 
+                PdfPTable pdfTable = this.buildPdfTable(list); 
                 section.add(pdfTable);
                 section.add(Chunk.NEXTPAGE);
             }

@@ -29,7 +29,7 @@ import org.kuali.core.util.KualiDecimal;
 /**
  * This class...
  */
-public class PosterOutputSummaryEntry{
+public class PosterOutputSummaryEntry implements Comparable{
     private Integer universityFiscalYear;
     private String fiscalPeriodCode;
     private String balanceTypeCode;
@@ -281,5 +281,44 @@ public class PosterOutputSummaryEntry{
        posterOutputSummaryEntry += "]";
         
         return posterOutputSummaryEntry;
+    }
+
+    public int compareTo(Object anotherPosterOutputSummaryEntry) {
+        int comparisonResult = 0;
+        
+        if (!(anotherPosterOutputSummaryEntry instanceof PosterOutputSummaryEntry)){
+            throw new ClassCastException("A PosterOutputSummaryEntry object expected.");
+        }
+        
+        if(anotherPosterOutputSummaryEntry == null){
+            return 1;
+        }
+        
+        PosterOutputSummaryEntry tempPosterOutputSummaryEntry = (PosterOutputSummaryEntry)anotherPosterOutputSummaryEntry;
+        comparisonResult = this.getUniversityFiscalYear().compareTo(tempPosterOutputSummaryEntry.getUniversityFiscalYear());
+        if(comparisonResult != 0){
+            return comparisonResult;
+        }
+        
+        comparisonResult = this.getFiscalPeriodCode().compareTo(tempPosterOutputSummaryEntry.getFiscalPeriodCode());
+        if(comparisonResult != 0){
+            return comparisonResult;
+        }        
+
+        comparisonResult = this.getBalanceTypeCode().compareTo(tempPosterOutputSummaryEntry.getBalanceTypeCode());
+        if(comparisonResult != 0){
+            return comparisonResult;
+        }
+        
+        comparisonResult = this.getFundGroup().compareTo(tempPosterOutputSummaryEntry.getFundGroup());
+        if(comparisonResult != 0){
+            return comparisonResult;
+        }        
+
+        comparisonResult = this.getObjectTypeCode().compareTo(tempPosterOutputSummaryEntry.getObjectTypeCode());
+        if(comparisonResult != 0){
+            return comparisonResult;
+        }                
+        return 0;
     }
 }
