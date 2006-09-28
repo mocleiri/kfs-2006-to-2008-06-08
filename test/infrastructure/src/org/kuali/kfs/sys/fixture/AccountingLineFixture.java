@@ -29,6 +29,7 @@ import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.document.TransactionalDocument;
 
 public enum AccountingLineFixture {
     LINE("1005", 2004, 1, "BL", "1031400", "AC", "ADV", "5000", "SSS", "KUL3", "Y", "IN", "ONE", "01", "1", "blah", GL_DEBIT_CODE, "2.50"),
@@ -176,5 +177,17 @@ public enum AccountingLineFixture {
         throws InstantiationException, IllegalAccessException
     {
         return createAccountingLine(TargetAccountingLine.class);
+    }
+
+    public void addAsSourceTo(TransactionalDocument document)
+        throws IllegalAccessException, InstantiationException
+    {
+        document.addSourceAccountingLine(createAccountingLine(SourceAccountingLine.class, document.getFinancialDocumentNumber(), document.getPostingYear(), document.getNextSourceLineNumber()));
+    }
+    
+    public void addAsTargetTo(TransactionalDocument document)
+        throws IllegalAccessException, InstantiationException
+    {
+        document.addTargetAccountingLine(createAccountingLine(TargetAccountingLine.class, document.getFinancialDocumentNumber(), document.getPostingYear(), document.getNextTargetLineNumber()));
     }
 }
