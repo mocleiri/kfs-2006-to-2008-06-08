@@ -88,8 +88,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
         if ( i.hasNext() ) {
             Object[] data = (Object[])i.next();
-            BigDecimal d = (BigDecimal)data[0];
-            return new KualiDecimal(d);
+            return (KualiDecimal)data[0];
         } else {
             return null;
         }
