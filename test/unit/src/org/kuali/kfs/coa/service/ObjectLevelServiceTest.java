@@ -24,7 +24,7 @@ package org.kuali.module.chart.service;
 
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjLevel;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -33,7 +33,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class ObjectLevelServiceTest extends KualiTestBaseWithSession {
+public class ObjectLevelServiceTest extends KualiTestBase {
     private ObjectLevelService objectLevelService;
 
     protected void setUp() throws Exception {

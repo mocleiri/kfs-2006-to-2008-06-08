@@ -26,11 +26,11 @@ import java.util.Collections;
 import java.util.List;
 
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 @WithTestSpringContext
-public class OrganizationService2Test extends KualiTestBaseWithSession {
+public class OrganizationService2Test extends KualiTestBase {
 
     private static final String GOOD_CHART = "BL";
     private static final String GOOD_ORG = "PSY";

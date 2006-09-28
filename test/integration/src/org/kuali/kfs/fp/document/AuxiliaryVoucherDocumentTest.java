@@ -21,32 +21,31 @@
  *
  */
 package org.kuali.module.financial.document;
-import static org.kuali.Constants.*;
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE14;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE15;
-
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
 import org.kuali.core.bo.SourceAccountingLine;
-import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.core.util.SpringServiceLocator;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE15;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+
 /**
  * This class is used to test NonCheckDisbursementDocumentTest.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase {
 
     /**
@@ -74,7 +73,7 @@ return  new ArrayList<AccountingLineFixture>();
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
     public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(LINE15);
         return list;
     }
@@ -94,7 +93,7 @@ return  new ArrayList<AccountingLineFixture>();
                 balance.setDebitCreditCode(GL_DEBIT_CODE.equals(line.getDebitCreditCode())?GL_CREDIT_CODE:GL_DEBIT_CODE);
                 document.addSourceAccountingLine(line);
                 document.addSourceAccountingLine(balance);
-                
+
             }
 
             return document;
@@ -136,5 +135,5 @@ return  new ArrayList<AccountingLineFixture>();
     protected int getExpectedPrePeCount() {
         return 2;
     }
-    
+
 }

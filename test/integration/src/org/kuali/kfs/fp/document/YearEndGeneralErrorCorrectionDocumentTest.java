@@ -22,23 +22,24 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.GEC_LINE1;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.GEC_LINE1;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+
 /**
  * This class is used to test GeneralErrorCorrectionDocument.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class YearEndGeneralErrorCorrectionDocumentTest extends TransactionalDocumentTestBase {
 
     /**
@@ -55,7 +56,7 @@ public class YearEndGeneralErrorCorrectionDocumentTest extends TransactionalDocu
      */
     @Override
     public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(GEC_LINE1);
         return list;
     }
@@ -66,7 +67,7 @@ public class YearEndGeneralErrorCorrectionDocumentTest extends TransactionalDocu
      */
     @Override
     public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(GEC_LINE1);
         return list;
     }

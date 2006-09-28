@@ -22,8 +22,6 @@
  */
 package org.kuali.core.service;
 
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,8 +30,9 @@ import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE;
 
 /**
  * This class tests the AccountingLine service.
@@ -41,7 +40,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class AccountingLineServiceTest extends KualiTestBaseWithSession {
+public class AccountingLineServiceTest extends KualiTestBase {
 
     private AccountingLineService accountingLineService;
     private SourceAccountingLine sline;
@@ -63,7 +62,7 @@ public class AccountingLineServiceTest extends KualiTestBaseWithSession {
      * @throws Exception
      */
     public void testPersistence() throws Exception {
-        
+
         AccountingLine line = null;
             accountingLineService.save(sline);
 
@@ -77,9 +76,9 @@ public class AccountingLineServiceTest extends KualiTestBaseWithSession {
             assertEquals(LINE.subAccountNumber, line.getSubAccountNumber());
             assertEquals(LINE.financialObjectCode, line.getFinancialObjectCode());
             assertEquals(LINE.financialSubObjectCode, line.getFinancialSubObjectCode());
-        
+
             accountingLineService.deleteAccountingLine((AccountingLineBase) line);
-        
+
     }
 
 
