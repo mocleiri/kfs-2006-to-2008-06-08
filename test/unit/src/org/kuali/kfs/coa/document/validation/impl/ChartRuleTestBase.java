@@ -38,11 +38,11 @@ import org.kuali.core.util.ErrorMessage;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
-public abstract class ChartRuleTestBase extends KualiTestBaseWithSession {
+public abstract class ChartRuleTestBase extends KualiTestBase {
 
     protected DictionaryValidationService dictionaryValidationService;
 

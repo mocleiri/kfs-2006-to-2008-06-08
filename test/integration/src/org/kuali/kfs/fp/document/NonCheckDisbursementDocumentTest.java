@@ -22,23 +22,24 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE4;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE4;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+
 /**
  * This class is used to test NonCheckDisbursementDocumentTest.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class NonCheckDisbursementDocumentTest extends TransactionalDocumentTestBase {
 
     /**
@@ -54,7 +55,7 @@ public class NonCheckDisbursementDocumentTest extends TransactionalDocumentTestB
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
     public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(LINE4);
         return list;
     }
@@ -64,7 +65,7 @@ public class NonCheckDisbursementDocumentTest extends TransactionalDocumentTestB
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
     public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(LINE4);
         return list;
     }
@@ -79,5 +80,5 @@ public class NonCheckDisbursementDocumentTest extends TransactionalDocumentTestB
         // when we get to this document, we'll fix the problem with blanket approving non check
         // disbursement document test
     }
-    
+
 }
