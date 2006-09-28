@@ -22,29 +22,34 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE1;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.TransactionalDocumentTestBase;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE1;
+import org.kuali.test.fixtures.UserNameFixture;
+import static org.kuali.test.fixtures.UserNameFixture.CSWINSON;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+import static org.kuali.test.fixtures.UserNameFixture.RORENFRO;
+import static org.kuali.test.fixtures.UserNameFixture.RRUFFNER;
+import static org.kuali.test.fixtures.UserNameFixture.SEASON;
+import static org.kuali.test.fixtures.UserNameFixture.VPUTMAN;
 import org.kuali.workflow.WorkflowTestUtils;
 
 import edu.iu.uis.eden.EdenConstants;
-import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
 /**
  * This class is used to test TransferOfFundsDocument.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
 
     // The set of Route Nodes that the test document will progress through
@@ -94,11 +99,9 @@ public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
 
     /**
      * User name fixture to be used for this test.
-     * 
-     * @param String name of user to use.
      */
-    protected String getTestUserName() {
-        return getUserName().toString();
+    protected UserNameFixture getTestUserName() {
+        return getUserName();
     }
 
 
@@ -108,55 +111,67 @@ public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
 
     @TestsWorkflowViaDatabase
     public void testWorkflowRouting() throws Exception {
-        NetworkIdVO VPUTMAN = new NetworkIdVO("VPUTMAN");
-        NetworkIdVO RORENFRO = new NetworkIdVO("RORENFRO");
-        NetworkIdVO CSWINSON = new NetworkIdVO("CSWINSON");
-        NetworkIdVO RRUFFNER = new NetworkIdVO("RRUFFNER");
-        NetworkIdVO SEASON = new NetworkIdVO("SEASON");
-
         // save and route the document
-        Document document = buildDocument();
+        Document document = buildDocumentForWorkflowRoutingTest();
+        final String docId = document.getFinancialDocumentNumber();
         routeDocument(document);
 
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ACCOUNT_REVIEW);
 
         // the document should now be routed to VPUTMAN and RORENFRO as Fiscal Officers
-        KualiWorkflowDocument wfDoc = WorkflowTestUtils.refreshDocument(document, VPUTMAN);
+        changeCurrentUser(VPUTMAN);
+        document = getDocumentService().getByDocumentHeaderId(docId);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ACCOUNT_REVIEW));
-        assertTrue("Document should be enroute.", wfDoc.stateIsEnroute());
-        assertTrue("VPUTMAN should have an approve request.", wfDoc.isApprovalRequested());
+        assertTrue("Document should be enroute.", document.getDocumentHeader().getWorkflowDocument().stateIsEnroute());
+        assertTrue("VPUTMAN should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
         getDocumentService().approveDocument(document, "Test approving as VPUTMAN", null);
 
-        WorkflowTestUtils.waitForApproveRequest(wfDoc, RORENFRO.getNetworkId());
-        wfDoc = WorkflowTestUtils.refreshDocument(document, RORENFRO);
-        assertTrue("RORENFRO should have an approve request.", wfDoc.isApprovalRequested());
+        changeCurrentUser(RORENFRO);
+        WorkflowTestUtils.waitForApproveRequest(document.getDocumentHeader().getWorkflowDocument(), RORENFRO.toString());
+        document = getDocumentService().getByDocumentHeaderId(docId);
+        assertTrue("RORENFRO should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
         getDocumentService().approveDocument(document, "Test approving as RORENFRO", null);
 
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ORG_REVIEW);
 
         // now doc should be in Org Review routing to CSWINSON, RRUFFNER, and SEASON
-        wfDoc = WorkflowTestUtils.refreshDocument(document, CSWINSON);
+        changeCurrentUser(CSWINSON);
+        document = getDocumentService().getByDocumentHeaderId(docId);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ORG_REVIEW));
-        assertTrue("CSWINSON should have an approve request.", wfDoc.isApprovalRequested());
+        assertTrue("CSWINSON should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
         getDocumentService().approveDocument(document, "Test approving as CSWINSON", null);
 
-        WorkflowTestUtils.waitForApproveRequest(wfDoc, RRUFFNER.getNetworkId());
-        wfDoc = WorkflowTestUtils.refreshDocument(document, RRUFFNER);
-        assertTrue("RRUFFNER should have an approve request.", wfDoc.isApprovalRequested());
+        changeCurrentUser(RRUFFNER);
+        WorkflowTestUtils.waitForApproveRequest(document.getDocumentHeader().getWorkflowDocument(), RRUFFNER.toString());
+        document = getDocumentService().getByDocumentHeaderId(docId);
+        assertTrue("RRUFFNER should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
         getDocumentService().approveDocument(document, "Test approving as RRUFFNER", null);
 
-        WorkflowTestUtils.waitForApproveRequest(wfDoc, SEASON.getNetworkId());
-        wfDoc = WorkflowTestUtils.refreshDocument(document, SEASON);
-        assertTrue("SEASON should have an approve request.", wfDoc.isApprovalRequested());
+        changeCurrentUser(SEASON);
+        WorkflowTestUtils.waitForApproveRequest(document.getDocumentHeader().getWorkflowDocument(), SEASON.toString());
+        document = getDocumentService().getByDocumentHeaderId(docId);
+        assertTrue("SEASON should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
         getDocumentService().approveDocument(document, "Test approving as SEASON", null);
 
 
         // TODO once the sub fund node has been added, add code here to test it...
 
-        WorkflowTestUtils.waitForStatusChange(wfDoc, EdenConstants.ROUTE_HEADER_FINAL_CD);
+        WorkflowTestUtils.waitForStatusChange(document.getDocumentHeader().getWorkflowDocument(), EdenConstants.ROUTE_HEADER_FINAL_CD);
 
-        wfDoc = WorkflowTestUtils.refreshDocument(document, VPUTMAN);
-        assertTrue("Document should now be final.", wfDoc.stateIsFinal());
+        changeCurrentUser(VPUTMAN);
+        document = getDocumentService().getByDocumentHeaderId(docId);
+        assertTrue("Document should now be final.", document.getDocumentHeader().getWorkflowDocument().stateIsFinal());
     }
 
+    private Document buildDocumentForWorkflowRoutingTest()
+        throws Exception
+    {
+        TransactionalDocument document = (TransactionalDocument) buildDocument();
+        // todo: figure out which accounting lines the TOF needs to route to the people in the above test method.
+//        AccountingLineFixture.LINE2.addAsSourceTo(document);
+//        AccountingLineFixture.LINE2.addAsTargetTo(document);
+//        AccountingLineFixture.LINE3.addAsSourceTo(document);
+//        AccountingLineFixture.LINE3.addAsTargetTo(document);
+        return document;
+    } 
 }
