@@ -22,10 +22,6 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE5;
-import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +34,14 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE5;
 import org.kuali.test.fixtures.UserNameFixture;
+import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
 import org.kuali.test.monitor.ChangeMonitor;
 import org.kuali.test.monitor.DocumentStatusMonitor;
 import org.kuali.test.monitor.DocumentWorkflowStatusMonitor;
@@ -53,19 +52,8 @@ import edu.iu.uis.eden.EdenConstants;
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = DFOGLE)
 public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
-
-    /**
-     * Override to change the current user to getUserName() which returns the user_jvdoc user.
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        super.changeCurrentUser(getUserName().toString());
-    }
-
 
     /**
      * Override to set the balance type on the document.<br/>
