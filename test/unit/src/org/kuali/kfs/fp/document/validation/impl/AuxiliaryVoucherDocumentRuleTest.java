@@ -28,6 +28,7 @@ import static org.kuali.Constants.GL_DEBIT_CODE;
 import static org.kuali.test.fixtures.AccountingLineFixture.*;
 import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.*;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,8 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.TransactionalDocumentRuleTestBase;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.financial.document.AuxiliaryVoucherDocument;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.test.DocumentTestUtils;
@@ -96,8 +99,8 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     @Override
     protected final List<SourceAccountingLine> getValidObjectSubTypeSourceLines() throws Exception {
         List<SourceAccountingLine> retval = new ArrayList<SourceAccountingLine>();
-        retval.add(getAccruedIncomeSourceLineParameter());
-        retval.add(getAccruedIncomeSourceLineParameter());
+        retval.add(LINE15.createAccountingLine(SourceAccountingLine.class, Constants.GL_CREDIT_CODE));
+        retval.add(LINE15.createAccountingLine(SourceAccountingLine.class, Constants.GL_DEBIT_CODE));
         return retval;
     }
 
@@ -182,7 +185,11 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     protected final Document createDocument() throws Exception {
-        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), AuxiliaryVoucherDocument.class, 2007, "11");
+        //AV document has a restriction on accounting period cannot be more than 2 periods behind current
+        Date date = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
+        AccountingPeriod accountingPeriod = SpringServiceLocator.getAccountingPeriodService().getByDate(date);
+        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), AuxiliaryVoucherDocument.class, accountingPeriod.getUniversityFiscalYear(), accountingPeriod.getUniversityFiscalPeriodCode());
+
     }
 
     /**
@@ -190,8 +197,11 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      * @see org.kuali.core.rule.TransactionalDocumentRuleTestBase#createDocument5()
      */
     @Override
-    protected final TransactionalDocument createDocument5() throws Exception {
-        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), AuxiliaryVoucherDocument.class, 2007, "11");
+    protected final TransactionalDocument createDocument5() throws Exception {   //AV document has a restriction on accounting period cannot be more than 2 periods behind current
+        Date date = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
+        AccountingPeriod accountingPeriod = SpringServiceLocator.getAccountingPeriodService().getByDate(date);
+        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), AuxiliaryVoucherDocument.class, accountingPeriod.getUniversityFiscalYear(), accountingPeriod.getUniversityFiscalPeriodCode());
+
     }
 
     /**
@@ -235,7 +245,11 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     protected final Document createDocumentInvalidDescription() throws Exception {
-        Document document =DocumentTestUtils.createTransactionalDocument(getDocumentService(), AuxiliaryVoucherDocument.class, 2005, "01");
+        //AV document has a restriction on accounting period cannot be more than 2 periods behind current
+        Date date = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
+        AccountingPeriod accountingPeriod = SpringServiceLocator.getAccountingPeriodService().getByDate(date);
+        Document document= DocumentTestUtils.createTransactionalDocument(getDocumentService(), AuxiliaryVoucherDocument.class, accountingPeriod.getUniversityFiscalYear(), accountingPeriod.getUniversityFiscalPeriodCode());
+
         document.getDocumentHeader().setFinancialDocumentDescription(null);
         return document;
     }
