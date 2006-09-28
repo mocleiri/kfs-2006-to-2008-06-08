@@ -39,6 +39,7 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.TransactionalDocumentRuleTestBase;
+import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.financial.document.AuxiliaryVoucherDocument;
@@ -71,7 +72,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public final TargetAccountingLine getAssetTargetLine() throws Exception {
-        return new TargetAccountingLine();
+        return ACCRUED_INCOME_LINE.createAccountingLine(TargetAccountingLine.class, Constants.GL_DEBIT_CODE);
     }
 
     /**
@@ -291,7 +292,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public final GeneralLedgerPendingEntry getExpectedExplicitSourcePendingEntry() {
-        return EXPECTED_GEC_EXPLICIT_SOURCE_PENDING_ENTRY.createGeneralLedgerPendingEntry();
+        return EXPECTED_AV_EXPLICIT_SOURCE_PENDING_ENTRY.createGeneralLedgerPendingEntry();
     }
 
     /**
@@ -300,27 +301,29 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public final GeneralLedgerPendingEntry getExpectedExplicitTargetPendingEntry() {
-        return EXPECTED_GEC_EXPLICIT_TARGET_PENDING_ENTRY.createGeneralLedgerPendingEntry();
+        return EXPECTED_AV_EXPLICIT_TARGET_PENDING_ENTRY.createGeneralLedgerPendingEntry();
     }
 
     /**
+     * AV doesnt create offsets
      * Accessor method for Offset Target fixture used for testProcessGeneralLedgerPendingEntries test methods.
      * 
      * @return GeneralLedgerPendingEntry pending entry fixture
      */
     @Override
     public final GeneralLedgerPendingEntry getExpectedOffsetTargetPendingEntry() {
-        return EXPECTED_GEC_OFFSET_TARGET_PENDING_ENTRY.createGeneralLedgerPendingEntry();
+        return new GeneralLedgerPendingEntry();
     }
 
     /**
+     * AV doesnt create offset
      * Accessor method for Offset Source fixture used for testProcessGeneralLedgerPendingEntries test methods.
      * 
      * @return GeneralLedgerPendingEntry pending entry fixture
      */
     @Override
     public final GeneralLedgerPendingEntry getExpectedOffsetSourcePendingEntry() {
-        return EXPECTED_GEC_OFFSET_SOURCE_PENDING_ENTRY.createGeneralLedgerPendingEntry();
+        return new GeneralLedgerPendingEntry();
     }
 
     /**
@@ -330,7 +333,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public GeneralLedgerPendingEntry getExpectedExplicitSourcePendingEntryForExpense() {
-        return EXPECTED_GEC_EXPLICIT_SOURCE_PENDING_ENTRY_FOR_EXPENSE.createGeneralLedgerPendingEntry();
+        return EXPECTED_AV_EXPLICIT_SOURCE_PENDING_ENTRY_FOR_EXPENSE.createGeneralLedgerPendingEntry();
     }
 
     /**
@@ -340,7 +343,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
      */
     @Override
     public GeneralLedgerPendingEntry getExpectedExplicitTargetPendingEntryForExpense() {
-        return EXPECTED_GEC_EXPLICIT_TARGET_PENDING_ENTRY_FOR_EXPENSE.createGeneralLedgerPendingEntry();
+        return EXPECTED_AV_EXPLICIT_TARGET_PENDING_ENTRY_FOR_EXPENSE.createGeneralLedgerPendingEntry();
     }
 
 
@@ -431,5 +434,21 @@ public class AuxiliaryVoucherDocumentRuleTest extends TransactionalDocumentRuleT
     public void testIsObjectCodeAllowed_InvalidObjectCode() throws Exception {
         //the way this tests works is not valid because of the way that the AV implements the object code restriction
     }
+
+    /**
+     * overriden because the AV doesnt create offset entries
+     * @see org.kuali.core.rule.TransactionalDocumentRuleTestBase#testProcessGenerateGeneralLedgerPendingEntries(org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
+     */
+    @Override
+    protected void testProcessGenerateGeneralLedgerPendingEntries(AccountingLine line, GeneralLedgerPendingEntry expectedExplicitEntry, GeneralLedgerPendingEntry expectedOffsetEntry) throws Exception {
+        TransactionalDocument document = createDocument5();
+        assertEquals(0, document.getGeneralLedgerPendingEntries().size());
+        getGenerateGeneralLedgerPendingEntriesRule().processGenerateGeneralLedgerPendingEntries(document, line, new GeneralLedgerPendingEntrySequenceHelper());
+        assertEquals(1, document.getGeneralLedgerPendingEntries().size());
+        assertSparselyEqualBean(expectedExplicitEntry, document.getGeneralLedgerPendingEntry(0));
+        assertSparselyEqualBean(expectedOffsetEntry, document.getGeneralLedgerPendingEntry(1));
+
+    }
+
     
 }
