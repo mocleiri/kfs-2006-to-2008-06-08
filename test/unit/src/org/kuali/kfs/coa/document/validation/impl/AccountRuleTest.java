@@ -578,7 +578,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         assertEquals("Terminated and Non-Professional staff should fail.", false, result);
         assertFieldErrorExists(fieldName, KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACTIVE_REQD_FOR_EMPLOYEE);
         assertFieldErrorExists(fieldName, KeyConstants.ERROR_DOCUMENT_ACCMAINT_PRO_TYPE_REQD_FOR_EMPLOYEE);
-        assertGlobalErrorMapSize(2);
+        assertGlobalErrorMapSize(1);
 
     }
 
