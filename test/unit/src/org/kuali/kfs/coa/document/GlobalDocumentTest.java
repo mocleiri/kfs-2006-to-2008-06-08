@@ -40,15 +40,16 @@ import org.kuali.module.chart.bo.AccountChangeDetail;
 import org.kuali.module.chart.bo.AccountChangeDocument;
 import org.kuali.module.chart.bo.DelegateChangeContainer;
 import org.kuali.module.chart.bo.DelegateChangeDocument;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.test.WithTestSpringContext;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 @SuppressWarnings("deprecation")
-@WithTestSpringContext
-public class GlobalDocumentTest extends KualiTestBaseWithSession {
+@WithTestSpringContext(session = KHUNTLEY)
+public class GlobalDocumentTest extends KualiTestBase {
 
     private static final Log LOG = LogFactory.getLog(GlobalDocumentTest.class);
 

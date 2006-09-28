@@ -21,19 +21,13 @@
  *
  */
 package org.kuali.module.financial.rules;
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.Constants.GL_CREDIT_CODE;
-import static org.kuali.Constants.GL_DEBIT_CODE;
-import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_LINE;
-import static org.kuali.test.fixtures.AccountingLineFixture.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.EXTERNAL_ENCUMBRANCE_LINE;
-import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.*;
-import static org.kuali.test.fixtures.UserNameFixture.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 import org.kuali.Constants;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
@@ -44,32 +38,39 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.TransactionalDocumentRuleTestBase;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
+import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentTypeService;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
-import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_LINE2;
+import static org.kuali.test.fixtures.AccountingLineFixture.EXTERNAL_ENCUMBRANCE_LINE;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE10;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE11;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE13;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE8;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE9;
+import static org.kuali.test.fixtures.AccountingLineFixture.SOURCE_LINE;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_JV_EXPLICIT_SOURCE_PENDING_ENTRY;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_JV_EXPLICIT_SOURCE_PENDING_ENTRY_FOR_EXPENSE;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_JV_EXPLICIT_TARGET_PENDING_ENTRY;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_JV_EXPLICIT_TARGET_PENDING_ENTRY_FOR_EXPENSE;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_OFFSET_SOURCE_PENDING_ENTRY;
+import static org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture.EXPECTED_OFFSET_TARGET_PENDING_ENTRY;
+import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
 
 /**
  * This class tests the JournalVoucherDocument's persistence, routing, and PE generation.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = DFOGLE)
 public class JournalVoucherDocumentRuleTest extends TransactionalDocumentRuleTestBase {
 
     private static final String KNOWN_DOCUMENT_TYPENAME = "KualiJournalVoucherDocument";
-
-    /**
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        changeCurrentUser(DFOGLE.toString());
-    }
-
 
     // /////////////////////////////////////////////////////////////////////////
     // Fixture Methods Start Here //
