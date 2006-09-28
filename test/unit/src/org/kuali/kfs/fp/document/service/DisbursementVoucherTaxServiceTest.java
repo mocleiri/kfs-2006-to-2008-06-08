@@ -32,7 +32,7 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
 /**
@@ -41,7 +41,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class DisbursementVoucherTaxServiceTest extends KualiTestBaseWithSession {
+public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
     private DisbursementVoucherTaxService disbursementVoucherTaxService;
     private DisbursementVoucherDocument dvDocument;
 

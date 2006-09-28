@@ -22,9 +22,6 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
-import static org.kuali.test.fixtures.AccountingLineFixture.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,16 +35,21 @@ import org.kuali.core.exceptions.DocumentAuthorizationException;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE2;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE3;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+
 /**
  * This class is used to test InternalBillingDocument.
  * 
  * 
  */
-@WithTestSpringContext
+@WithTestSpringContext(session = KHUNTLEY)
 public class InternalBillingDocumentTest extends TransactionalDocumentTestBase {
 
     /**
@@ -63,7 +65,7 @@ public class InternalBillingDocumentTest extends TransactionalDocumentTestBase {
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
     public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(LINE2);
         list.add(LINE3);
         list.add(LINE2);
@@ -75,7 +77,7 @@ public class InternalBillingDocumentTest extends TransactionalDocumentTestBase {
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
     public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(LINE2);
         list.add(LINE3);
         list.add(LINE2);
