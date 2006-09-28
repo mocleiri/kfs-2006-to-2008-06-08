@@ -47,10 +47,12 @@ import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.util.LedgerEntry;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
+import org.kuali.module.gl.util.PosterInputSummaryEntry;
+import org.kuali.module.gl.util.PosterInputSummaryEntryHolder;
 
 /**
  *  
- * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.5 2006-09-26 16:28:34 bnelson Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.6 2006-09-28 18:31:40 bgao Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -377,6 +379,55 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
     public OriginEntry getExactMatchingEntry(Integer entryId) {
         return originEntryDao.getExactMatchingEntry(entryId);
+    }
+
+    /**
+     * @see org.kuali.module.gl.service.OriginEntryService#getPosterInputSummaryByGroupId(java.util.Collection)
+     */
+    public PosterInputSummaryEntryHolder getPosterInputSummaryByGroupId(Collection groupIdList) {
+        PosterInputSummaryEntryHolder posterInputSummaryEntryHolder = new PosterInputSummaryEntryHolder();
+
+        if (groupIdList.size() == 0) {
+            return posterInputSummaryEntryHolder;
+        }
+
+        Iterator entrySummaryIterator = originEntryDao.getPosterInputSummaryByGroupId(groupIdList);
+        while (entrySummaryIterator.hasNext()) {
+            Object[] entrySummary = (Object[]) entrySummaryIterator.next();            
+            PosterInputSummaryEntry posterInputSummaryEntry = new PosterInputSummaryEntry();
+            int indexOfField = 0;
+            
+            Object tempEntry = entrySummary[indexOfField++];
+            String entry = tempEntry == null ? "" : tempEntry.toString();
+            posterInputSummaryEntry.setUniversityFiscalYear(new Integer(entry));
+            
+            tempEntry = entrySummary[indexOfField++];
+            entry = tempEntry == null ? "" : tempEntry.toString();
+            posterInputSummaryEntry.setFiscalPeriodCode(entry);
+            
+            tempEntry = entrySummary[indexOfField++];
+            entry = tempEntry == null ? "" : tempEntry.toString();
+            posterInputSummaryEntry.setBalanceTypeCode(entry);
+            
+            tempEntry = entrySummary[indexOfField++];
+            entry = tempEntry == null ? "" : tempEntry.toString();
+            posterInputSummaryEntry.setFundGroup(entry);
+            
+            tempEntry = entrySummary[indexOfField++];
+            String objectTypeCode = tempEntry == null ? "" : tempEntry.toString();
+            posterInputSummaryEntry.setObjectTypeCode(objectTypeCode);
+            
+            Object tempDebitCreditCode = entrySummary[indexOfField++];
+            String debitCreditCode = tempDebitCreditCode == null ? Constants.GL_BUDGET_CODE : tempDebitCreditCode.toString();
+            
+            tempEntry = entrySummary[indexOfField];
+            entry = tempEntry == null ? "0" : tempEntry.toString();            
+            KualiDecimal amount = new KualiDecimal(entry);
+            
+            posterInputSummaryEntry.setAmount(debitCreditCode, objectTypeCode, amount);           
+            posterInputSummaryEntryHolder.insertPosterInputSummaryEntry(posterInputSummaryEntry);
+        }
+        return posterInputSummaryEntryHolder;       
     }
     
 }
