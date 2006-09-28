@@ -22,15 +22,14 @@
  */
 package org.kuali.module.financial.service;
 
-import static org.kuali.test.MockServiceUtils.mockConfigurationServiceForFlexibleOffsetEnabled;
-import static org.kuali.test.fixtures.OffsetAccountFixture.OFFSET_ACCOUNT1;
-
 import java.lang.reflect.InvocationTargetException;
 
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.OffsetAccount;
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
+import static org.kuali.test.MockServiceUtils.mockConfigurationServiceForFlexibleOffsetEnabled;
 import org.kuali.test.WithTestSpringContext;
+import static org.kuali.test.fixtures.OffsetAccountFixture.OFFSET_ACCOUNT1;
 
 /**
  * This class...
@@ -38,7 +37,7 @@ import org.kuali.test.WithTestSpringContext;
  * 
  */
 @WithTestSpringContext
-public class FlexibleOffsetAccountServiceTest extends KualiTestBaseWithSession {
+public class FlexibleOffsetAccountServiceTest extends KualiTestBase {
     private FlexibleOffsetAccountService service;
 
     protected void setUp() throws Exception {
