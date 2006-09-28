@@ -713,6 +713,16 @@ public class NonCheckDisbursementDocumentRuleTest extends TransactionalDocumentR
 
         assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
+
+    /**
+     * @see org.kuali.core.rule.TransactionalDocumentRuleTestBase#testProcessRouteDocument_Unbalanced()
+     */
+    @Override
+    public void testProcessRouteDocument_Unbalanced() throws Exception {
+        //this tests doesnt apply to the NCD document
+    }
+    
+    
     // ////////////////////////////////////////////////////////////////////////
     // Test methods end here //
     // ////////////////////////////////////////////////////////////////////////
