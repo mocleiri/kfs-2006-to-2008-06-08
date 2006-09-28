@@ -21,16 +21,23 @@
  *
  */
 package org.kuali.module.financial.document;
-
+import static org.kuali.Constants.*;
 import static org.kuali.core.util.SpringServiceLocator.*;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE14;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE15;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.TransactionalDocumentTestBase;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
@@ -47,7 +54,10 @@ public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase 
      * @see org.kuali.core.document.DocumentTestCase#getDocumentParameterFixture()
      */
     public Document getDocumentParameterFixture() throws Exception {
-        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), AuxiliaryVoucherDocument.class, 2007, "11");
+        //AV document has a restriction on accounting period cannot be more than 2 periods behind current
+        Date date = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
+        AccountingPeriod accountingPeriod = SpringServiceLocator.getAccountingPeriodService().getByDate(date);
+        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), AuxiliaryVoucherDocument.class, accountingPeriod.getUniversityFiscalYear(), accountingPeriod.getUniversityFiscalPeriodCode());
     }
 
     /**
@@ -56,9 +66,7 @@ public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase 
      */
     @Override
     public List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
-	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(LINE14);
-        return list;
+return  new ArrayList<AccountingLineFixture>();
     }
 
     /**
@@ -69,6 +77,27 @@ public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase 
 	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(LINE15);
         return list;
+    }
+
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#buildDocument()
+     */
+    @Override
+    protected Document buildDocument() throws Exception {
+            // put accounting lines into document parameter for later
+            TransactionalDocument document = (TransactionalDocument) getDocumentParameterFixture();
+
+            // set accountinglines to document
+            for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
+                SourceAccountingLine line=sourceFixture.createAccountingLine(SourceAccountingLine.class, document.getFinancialDocumentNumber(), document.getPostingYear(), document.getNextSourceLineNumber());
+                SourceAccountingLine balance=sourceFixture.createAccountingLine(SourceAccountingLine.class, document.getFinancialDocumentNumber(), document.getPostingYear(), document.getNextSourceLineNumber());
+                balance.setDebitCreditCode(GL_DEBIT_CODE.equals(line.getDebitCreditCode())?GL_CREDIT_CODE:GL_DEBIT_CODE);
+                document.addSourceAccountingLine(line);
+                document.addSourceAccountingLine(balance);
+                
+            }
+
+            return document;
     }
 
     /**
@@ -98,6 +127,14 @@ public class AuxiliaryVoucherDocumentTest extends TransactionalDocumentTestBase 
     @Override
     public void testConvertIntoErrorCorrection_invalidYear() throws Exception {
        //this test is not valid for the AV
+    }
+
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getExpectedPrePeCount()
+     */
+    @Override
+    protected int getExpectedPrePeCount() {
+        return 2;
     }
     
 }
