@@ -247,12 +247,12 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
 
         if (dvDocument.getDvNonEmployeeTravel().getDvPersonalCarMileageAmount() == null) {
             LOG.error("Total Mileage must be given");
-            GlobalVariables.getErrorMap().putError(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_REQUIRED, "Total Mileage");
+            GlobalVariables.getErrorMap().putError("DVNonEmployeeTravelErrors", KeyConstants.ERROR_REQUIRED, "Total Mileage");
         }
 
         if (dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp() == null) {
             LOG.error("Travel Start Date must be given");
-            GlobalVariables.getErrorMap().putError(Constants.GENERAL_NONEMPLOYEE_TAB_ERRORS, KeyConstants.ERROR_REQUIRED, "Travel Start Date");
+            GlobalVariables.getErrorMap().putError("DVNonEmployeeTravelErrors", KeyConstants.ERROR_REQUIRED, "Travel Start Date");
         }
 
         if (GlobalVariables.getErrorMap().isEmpty()) {
@@ -280,16 +280,10 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
         DisbursementVoucherForm dvForm = (DisbursementVoucherForm) form;
         DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) dvForm.getDocument();
 
-//        try {
-            DisbursementVoucherNonEmployeeTravel dvNet = dvDocument.getDvNonEmployeeTravel();
-            if (dvNet != null) {
-                clearTravelMileageAmount(dvNet);
-            }
-//        }
-//        catch (RuntimeException e) {
-//            LOG.error("Error in clearing travel personal vehicle amount: " + e.getMessage());
-//            GlobalVariables.getErrorMap().putError("DVNonEmployeeTravelErrors", KeyConstants.ERROR_CUSTOM, e.getMessage());
-//        }
+        DisbursementVoucherNonEmployeeTravel dvNet = dvDocument.getDvNonEmployeeTravel();
+        if (dvNet != null) {
+            clearTravelMileageAmount(dvNet);
+        }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
 
