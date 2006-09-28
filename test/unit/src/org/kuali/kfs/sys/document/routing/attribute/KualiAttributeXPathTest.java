@@ -28,7 +28,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.kuali.test.KualiTestBaseWithSession;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.workflow.KualiWorkflowUtils;
 
@@ -41,7 +41,7 @@ import edu.iu.uis.eden.routeheader.DocumentContent;
  * 
  */
 @WithTestSpringContext
-public class KualiAttributeXPathTest extends KualiTestBaseWithSession {
+public class KualiAttributeXPathTest extends KualiTestBase {
 
     private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE = "//org.kuali.core.bo.SourceAccountingLine/account/subFundGroupCode or //org.kuali.core.bo.TargetAccountingLine/account/subFundGroupCode";
     private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_SOURCE = "//org.kuali.core.bo.SourceAccountingLine/account/subFundGroupCode";
