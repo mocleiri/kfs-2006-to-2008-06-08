@@ -22,7 +22,7 @@ Copyright 2005-2006  The Kuali Foundation.  All rights reserved.  Kuali is licen
 
 <h3><a name="Acknowledgements-ThirdPartyContributions"></a>Third Party Contributions</h3>
 
-<p>Portions of Kuali were developed by Indiana University, Cornell University, University of Hawaii, Michigan State University, University of Arizona, San Joaquin Delta Community College, University of California, and The rSmart Group. (<span class="nobr"><a href="http://www.kuali.org/" title="Visit page outside Confluence" rel="nofollow">http://www.kuali.org/</a></span>).</p>
+<p>Portions of Kuali were developed by Indiana University, Cornell University, University of Hawaii, Michigan State University, University of Arizona, San Joaquin Delta Community College, University of California, and <a href="http://www.rsmart.com/">The rSmart Group.</a> (<span class="nobr"><a href="http://www.kuali.org/" title="Visit page outside Confluence" rel="nofollow">http://www.kuali.org/</a></span>).</p>
 
 <p>This product includes software developed by the Apache Software Foundation (<span class="nobr"><a href="http://www.apache.org" title="Visit page outside Confluence" rel="nofollow">http://www.apache.org</a></span>).</p>
 
