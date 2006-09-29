@@ -43,6 +43,6 @@
         </c:choose>
     </tr>
         <tr valign="top">
-      <td colspan="4"><div id="footer-copyright"><bean:message key="app.copyright" /> <a target="_ack" href="html/acknowledgements.html">Acknowledgements</a></div></td>
+      <td colspan="4"><div id="footer-copyright"><bean:message key="app.copyright" /></div></td>
     </tr>
 </table>
