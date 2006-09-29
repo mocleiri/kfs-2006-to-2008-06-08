@@ -28,29 +28,20 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -59,9 +50,9 @@ import org.displaytag.tags.TableTagParameters;
 import org.displaytag.util.ParamEncoder;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
+import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
@@ -74,6 +65,7 @@ import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.document.CorrectionDocument;
+import org.kuali.module.gl.document.CorrectionDocumentAuthorizer;
 import org.kuali.module.gl.exception.LoadException;
 import org.kuali.module.gl.service.CorrectionDocumentService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
@@ -92,13 +84,6 @@ public class CorrectionAction extends KualiDocumentActionBase {
     private static OriginEntryService originEntryService;
     private static DateTimeService dateTimeService;
     private static KualiConfigurationService kualiConfigurationService;
-
-    private static final String[] DOCUMENT_LOAD_COMMANDS = {
-        IDocHandler.ACTIONLIST_COMMAND, 
-        IDocHandler.DOCSEARCH_COMMAND, 
-        IDocHandler.SUPERUSER_COMMAND, 
-        IDocHandler.HELPDESK_ACTIONLIST_COMMAND
-    };
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -157,30 +142,56 @@ public class CorrectionAction extends KualiDocumentActionBase {
     }
 
     /**
-     * Route the document
+     * Save the document when they click the save button
      */
     @Override
-    public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        LOG.debug("route() started");
+    public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        LOG.debug("save() started");
 
         CorrectionForm correctionForm = (CorrectionForm)form;
         CorrectionDocument document = correctionForm.getCorrectionDocument();
-
-        // Is there a description?
-        if ( StringUtils.isEmpty(document.getDocumentHeader().getFinancialDocumentDescription()) ) {
-            GlobalVariables.getErrorMap().putError("document.documentHeader.financialDocumentDescription", KeyConstants.ERROR_DOCUMENT_NO_DESCRIPTION);
-            return mapping.findForward(Constants.MAPPING_BASIC);
-        }
 
         // Did they pick the edit method and system?
         if (! checkMainDropdown(correctionForm) ) {
             return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
+        // Populate document
+        document.setCorrectionTypeCode(correctionForm.getEditMethod());
+        document.setCorrectionSelection(correctionForm.getMatchCriteriaOnly());
+        document.setCorrectionFileDelete(! correctionForm.getProcessInBatch());
+        document.setCorrectionInputFileName(correctionForm.getInputFileName());
+        document.setCorrectionOutputFileName(null); // this field is never used
+        document.setCorrectionInputGroupId(correctionForm.getInputGroupId());
+        document.setCorrectionOutputGroupId(null);
+
+        LOG.debug("save() doc type name: " + correctionForm.getDocTypeName());
+        return super.save(mapping, form, request, response);
+    }
+
+    /**
+     * Prepare for routing.  Return true if we're good to route, false if not
+     * @param correctionForm
+     * @return
+     */
+    private boolean prepareForRoute(CorrectionForm correctionForm) {
+        CorrectionDocument document = correctionForm.getCorrectionDocument();
+
+        // Is there a description?
+        if ( StringUtils.isEmpty(document.getDocumentHeader().getFinancialDocumentDescription()) ) {
+            GlobalVariables.getErrorMap().putError("document.documentHeader.financialDocumentDescription", KeyConstants.ERROR_DOCUMENT_NO_DESCRIPTION);
+            return false;
+        }
+
+        // Did they pick the edit method and system?
+        if (! checkMainDropdown(correctionForm) ) {
+            return false;
+        }
+
         // If it is criteria, are all the criteria valid?
         if ( CorrectionDocumentService.CORRECTION_TYPE_CRITERIA.equals(correctionForm.getEditMethod()) ) {
             if ( ! validChangeGroups(correctionForm) ) {
-                return mapping.findForward(Constants.MAPPING_BASIC);                
+                return false;
             }
         }
 
@@ -196,7 +207,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
         // Create output group
         java.sql.Date today = dateTimeService.getCurrentSqlDate();
         // Scrub is set to false when the document is initiated.  When the document is approved, it will be changed to true
-        OriginEntryGroup oeg = originEntryService.copyEntries(today, OriginEntrySource.GL_CORRECTION_PROCESS_EDOC, true, correctionForm.getProcessInBatch(), false, correctionForm.getAllEntries());
+        OriginEntryGroup oeg = originEntryService.copyEntries(today, OriginEntrySource.GL_CORRECTION_PROCESS_EDOC, true, false, true, correctionForm.getAllEntries());
 
         // Populate document
         document.setCorrectionTypeCode(correctionForm.getEditMethod());
@@ -207,8 +218,37 @@ public class CorrectionAction extends KualiDocumentActionBase {
         document.setCorrectionInputGroupId(correctionForm.getInputGroupId());
         document.setCorrectionOutputGroupId(oeg.getId());
 
-        LOG.error("route() doc type name: " + correctionForm.getDocTypeName());
-        return super.route(mapping, form, request, response);
+        LOG.debug("prepareForRoute() doc type name: " + correctionForm.getDocTypeName());
+        return true;
+    }
+
+    @Override
+    public ActionForward blanketApprove(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        LOG.debug("blanketApprove() started");
+
+        CorrectionForm correctionForm = (CorrectionForm)form;
+
+        if ( prepareForRoute(correctionForm) ) {
+            return super.blanketApprove(mapping, form, request, response);
+        } else {
+            return mapping.findForward(Constants.MAPPING_BASIC);            
+        }
+    }
+
+    /**
+     * Route the document
+     */
+    @Override
+    public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        LOG.debug("route() started");
+
+        CorrectionForm correctionForm = (CorrectionForm)form;
+
+        if ( prepareForRoute(correctionForm) ) {
+            return super.route(mapping, form, request, response);
+        } else {
+            return mapping.findForward(Constants.MAPPING_BASIC);            
+        }
     }
 
     public ActionForward manualEdit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
@@ -217,6 +257,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
         CorrectionForm correctionForm = (CorrectionForm) form;
         CorrectionDocument document = correctionForm.getCorrectionDocument();
 
+        correctionForm.clearEntryForManualEdit();
         correctionForm.setEditableFlag(true);
         correctionForm.setManualEditFlag(false);
         correctionForm.setProcessInBatch(true);
@@ -224,6 +265,11 @@ public class CorrectionAction extends KualiDocumentActionBase {
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
+    /**
+     * Called when the document is loaded from action list or doc search or a new document is created.
+     * 
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#docHandler(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
     @Override
     public ActionForward docHandler(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOG.debug("docHandler() started");
@@ -234,21 +280,38 @@ public class CorrectionAction extends KualiDocumentActionBase {
         CorrectionForm correctionForm = (CorrectionForm) form;
         String command = correctionForm.getCommand();
 
-        // in all of the following cases we want to load the document
-        if (ArrayUtils.contains(DOCUMENT_LOAD_COMMANDS, command) && correctionForm.getDocId() != null) {
-            loadDocument(correctionForm);
-            CorrectionDocument document = correctionForm.getCorrectionDocument();
-            correctionForm.setProcessInBatch(! document.getCorrectionFileDelete());
-            correctionForm.setMatchCriteriaOnly(document.getCorrectionSelection());
-            loadAllEntries(document.getCorrectionInputGroupId(), correctionForm);
-        }
-        else if (IDocHandler.INITIATE_COMMAND.equals(command)) {
+        if (IDocHandler.INITIATE_COMMAND.equals(command)) {
             correctionForm.clearForm();
             createDocument(correctionForm);
-        }
-        else {
-            LOG.error("docHandler() called with invalid parameter: " + command);
-            throw new IllegalStateException("docHandler called with invalid parameter: " + command);
+        } else {
+            loadDocument(correctionForm);
+            CorrectionDocument document = correctionForm.getCorrectionDocument();
+
+            CorrectionDocumentAuthorizer cda = new CorrectionDocumentAuthorizer();
+            Map editingMode = cda.getEditMode(document, GlobalVariables.getUserSession().getKualiUser());
+
+            if ( editingMode.get(AuthorizationConstants.TransactionalEditMode.FULL_ENTRY) != null ) {
+                // They have saved the document and they are retreiving it to be completed
+                correctionForm.setProcessInBatch(! document.getCorrectionFileDelete());
+                correctionForm.setMatchCriteriaOnly(document.getCorrectionSelection());
+                loadAllEntries(document.getCorrectionInputGroupId(), correctionForm);
+                correctionForm.setShowOutputFlag(false);
+                correctionForm.setDataLoadedFlag(true);
+                correctionForm.setInputFileName(document.getCorrectionInputFileName());
+                correctionForm.setInputGroupId(document.getCorrectionInputGroupId());
+                if (document.getCorrectionInputFileName() != null) {
+                    correctionForm.setChooseSystem(CorrectionDocumentService.SYSTEM_UPLOAD);
+                } else {
+                    correctionForm.setChooseSystem(CorrectionDocumentService.SYSTEM_DATABASE);
+                }
+                correctionForm.setEditMethod(document.getCorrectionTypeCode());
+            } else {
+                // They are calling this from their action list to look at it or approve it
+                correctionForm.setProcessInBatch(! document.getCorrectionFileDelete());
+                correctionForm.setMatchCriteriaOnly(document.getCorrectionSelection());
+                loadAllEntries(document.getCorrectionOutputGroupId(), correctionForm);
+                correctionForm.setShowOutputFlag(true);
+            }
         }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
@@ -279,7 +342,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
             correctionForm.setManualEditFlag(false);
             correctionForm.setShowOutputFlag(false);
             correctionForm.setAllEntries(new ArrayList());
-            
+
             if ( CorrectionDocumentService.SYSTEM_DATABASE.equals(correctionForm.getChooseSystem()) ) {
                 //if users choose database, then get the list of origin entry groups and set the default
 
@@ -486,7 +549,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
             loadAllEntries(newOriginEntryGroup.getId(), correctionForm);
 
             if ( CorrectionDocumentService.CORRECTION_TYPE_MANUAL.equals(correctionForm.getEditMethod()) ) {
-                correctionForm.setEditableFlag(true);
+                correctionForm.setEditableFlag(false);
                 correctionForm.setManualEditFlag(true);
             }
         } else {
