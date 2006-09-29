@@ -26,6 +26,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Delegate;
@@ -41,7 +42,7 @@ import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 public class DelegateRuleTest extends ChartRuleTestBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DelegateRuleTest.class);
-
+    private static final String ERROR_PREFIX = "document.newMaintainableObject.";
     private static final String CHART_GOOD_1 = "UA";
     private static final String ACCOUNT_GOOD_1 = "1912201";
     private static final String DOCTYPE_GOOD_1 = "ALL";
@@ -308,10 +309,11 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
+        assertGlobalErrorMapEmpty();
 
         // run the business rules
-        assertEquals(true, rule.checkSimpleRules());
+        rule.checkSimpleRules();
+        assertGlobalErrorMapEmpty();
 
     }
 
@@ -328,10 +330,11 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
+        assertGlobalErrorMapEmpty();
 
         // run the business rules
-        assertEquals(true, rule.checkSimpleRules());
+        rule.checkSimpleRules();
+        assertGlobalErrorMapEmpty();
 
     }
 
@@ -353,10 +356,11 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
+        assertGlobalErrorMapEmpty();
 
         // run the business rules
-        assertEquals(true, rule.checkSimpleRules());
+        rule.checkSimpleRules();
+        assertGlobalErrorMapEmpty();
     }
 
     public void testCheckSimpleRulesStartDateRule_startDateYesterday() {
@@ -377,10 +381,11 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
+        assertGlobalErrorMapEmpty();
 
         // run the business rules
-        assertEquals(false, rule.checkSimpleRules());
+        rule.checkSimpleRules();
+        assertGlobalErrorMapEmpty();
     }
 
     public void testCheckSimpleRulesStartDateRule_invalidFromAmt() {
@@ -396,10 +401,11 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
+        assertGlobalErrorMapEmpty();
 
         // run the business rules
-        assertEquals(false, rule.checkSimpleRules());
+        rule.checkSimpleRules();
+        assertGlobalErrorMapContains(ERROR_PREFIX + "finDocApprovalFromThisAmt", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_FROM_AMOUNT_NONNEGATIVE);
     }
 
     public void testCheckSimpleRulesStartDateRule_invalidToAmt() {
@@ -415,10 +421,11 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
+        assertGlobalErrorMapEmpty();
 
         // run the business rules
-        assertEquals(false, rule.checkSimpleRules());
+        rule.checkSimpleRules();
+        assertGlobalErrorMapContains(ERROR_PREFIX + "finDocApprovalToThisAmount", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
     }
 
     public void testCheckSimpleRulesStartDateRule_validFromAmtNullToAmt() {
@@ -434,10 +441,11 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
+        assertGlobalErrorMapEmpty();
 
         // run the business rules
-        assertEquals(false, rule.checkSimpleRules());
+        rule.checkSimpleRules();
+        assertGlobalErrorMapContains(ERROR_PREFIX + "finDocApprovalToThisAmount", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
     }
 
     public void testCheckSimpleRulesStartDateRule_nullFromAmtZeroPlusToAmt() {
@@ -453,10 +461,11 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
+        assertGlobalErrorMapEmpty();
 
         // run the business rules
-        assertEquals(false, rule.checkSimpleRules());
+        rule.checkSimpleRules();
+        assertGlobalErrorMapContains(ERROR_PREFIX + "finDocApprovalToThisAmount", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
     }
 
     public void testCheckSimpleRulesStartDateRule_validFromAmtLessThanToAmt() {
@@ -472,10 +481,11 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
+        assertGlobalErrorMapEmpty();
 
         // run the business rules
-        assertEquals(false, rule.checkSimpleRules());
+        rule.checkSimpleRules();
+        assertGlobalErrorMapContains(ERROR_PREFIX + "finDocApprovalToThisAmount", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
     }
 
 
@@ -492,8 +502,9 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
-        assertEquals(true, rule.checkDelegateUserRules(maintDoc));
+        assertGlobalErrorMapEmpty();
+        rule.checkDelegateUserRules(maintDoc);
+        assertGlobalErrorMapEmpty();
 
     }
 
@@ -507,9 +518,9 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
-        assertEquals(false, rule.checkDelegateUserRules(maintDoc));
-
+        assertGlobalErrorMapEmpty();
+        rule.checkDelegateUserRules(maintDoc);
+        assertGlobalErrorMapContains(ERROR_PREFIX + "accountDelegate.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE);
     }
 
     public void testcheckDelegateUserRules_badDelegate2() {
@@ -522,8 +533,9 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
-        assertEquals(false, rule.checkDelegateUserRules(maintDoc));
+        assertGlobalErrorMapEmpty();
+        rule.checkDelegateUserRules(maintDoc);
+        assertGlobalErrorMapEmpty();
 
     }
 
@@ -537,9 +549,9 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
-        assertEquals(false, rule.checkDelegateUserRules(maintDoc));
-
+        assertGlobalErrorMapEmpty();
+        rule.checkDelegateUserRules(maintDoc);
+        assertGlobalErrorMapContains(ERROR_PREFIX + "accountDelegate.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE);
     }
 
     /**
@@ -557,8 +569,9 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
-        assertEquals(false, rule.checkOnlyOnePrimaryRoute(maintDoc));
+        assertGlobalErrorMapEmpty();
+        rule.checkOnlyOnePrimaryRoute(maintDoc);
+        assertGlobalErrorMapEmpty();
     }
 
     /**
@@ -576,8 +589,9 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
-        assertEquals(false, rule.checkOnlyOnePrimaryRoute(maintDoc));
+        assertGlobalErrorMapEmpty();
+        rule.checkOnlyOnePrimaryRoute(maintDoc);
+        assertGlobalErrorMapEmpty();
     }
 
     /**
@@ -595,8 +609,9 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
-        assertEquals(false, rule.checkOnlyOnePrimaryRoute(maintDoc));
+        assertGlobalErrorMapEmpty();
+        rule.checkOnlyOnePrimaryRoute(maintDoc);
+        assertGlobalErrorMapEmpty();
     }
 
     /**
@@ -613,8 +628,9 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
-        assertEquals(true, rule.checkOnlyOnePrimaryRoute(maintDoc));
+        assertGlobalErrorMapEmpty();
+        rule.checkOnlyOnePrimaryRoute(maintDoc);
+        assertGlobalErrorMapEmpty();
     }
 
     /**
@@ -631,8 +647,9 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         rule.setupConvenienceObjects(maintDoc);
 
         // confirm that there are no errors to begin with
-        assertErrorCount(0);
-        assertEquals(true, rule.checkOnlyOnePrimaryRoute(maintDoc));
+        assertGlobalErrorMapEmpty();
+        rule.checkOnlyOnePrimaryRoute(maintDoc);
+        assertGlobalErrorMapEmpty();
     }
 
 }
