@@ -52,7 +52,7 @@ import org.kuali.module.gl.util.PosterOutputSummaryEntryHolder;
 
 /**
  *  
- * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.7 2006-09-28 20:20:50 bgao Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.8 2006-09-29 12:27:04 bgao Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -398,7 +398,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             int indexOfField = 0;
             
             Object tempEntry = entrySummary[indexOfField++];
-            String entry = (tempEntry == null) ? "9999" : tempEntry.toString();
+            String entry = (tempEntry == null) ? null : tempEntry.toString();
             posterOutputSummaryEntry.setUniversityFiscalYear(new Integer(entry));
             
             tempEntry = entrySummary[indexOfField++];
