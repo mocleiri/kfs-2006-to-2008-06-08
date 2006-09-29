@@ -32,7 +32,7 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * 
- * @version $Id: OriginEntryDao.java,v 1.17.2.6 2006-09-28 20:20:51 bgao Exp $
+ * @version $Id: OriginEntryDao.java,v 1.17.2.7 2006-09-29 12:27:04 bgao Exp $
  */
 public interface OriginEntryDao {
     public static final int SORT_DOCUMENT = 1;
@@ -146,8 +146,8 @@ public interface OriginEntryDao {
     /**
      * get the summarized information of poster input entries that belong to the entry groups with the given group id list
      * 
-     * @param groupIdList the origin entry groups
+     * @param groups the origin entry groups
      * @return a set of summarized information of poster input entries within the specified groups
      */       
-    public Iterator getPosterOutputSummaryByGroupId(Collection groupIdList);
+    public Iterator getPosterOutputSummaryByGroupId(Collection groups);
 }
