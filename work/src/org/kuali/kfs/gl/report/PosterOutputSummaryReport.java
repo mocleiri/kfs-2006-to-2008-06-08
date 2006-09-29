@@ -58,7 +58,7 @@ public class PosterOutputSummaryReport {
     private Font headerFont = FontFactory.getFont(FontFactory.COURIER, Font.DEFAULTSIZE, Font.BOLD);
     private Font textFont = FontFactory.getFont(FontFactory.COURIER, Font.DEFAULTSIZE, Font.NORMAL);
     private Font hiddenFieldFont = FontFactory.getFont(FontFactory.COURIER, 1, Font.NORMAL, new Color(0xFF, 0xFF, 0xFF));
-    
+
     private final float[] columnWidths = { 5, 5, 5, 7, 7, 7, 7 };
 
     /**
@@ -70,13 +70,13 @@ public class PosterOutputSummaryReport {
      * @param fileprefix the prefix of the generated report file
      * @param destinationDirectory the directory where the report is located
      */
-    public void generateReport(Map posterOutputSummaryEntryHolder, Date runDate, String title, String fileprefix, String destinationDirectory) {
+    public void generateReport(PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder, Date runDate, String title, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
         this.generatePDFReport(posterOutputSummaryEntryHolder, runDate, title, fileprefix, destinationDirectory);
     }
 
     // generate the PDF report with the given information
-    private void generatePDFReport(Map posterOutputSummaryEntryHolder, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
+    private void generatePDFReport(PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
         Document document = new Document(PageSize.A4.rotate());
 
         PDFPageHelper pageHelper = new PDFPageHelper();
@@ -96,7 +96,7 @@ public class PosterOutputSummaryReport {
             document.open();
             Chapter chapter = this.populateDocument(posterOutputSummaryEntryHolder);
             document.add(chapter);
-            
+
         }
         catch (Exception de) {
             LOG.error("generateReport() Error creating PDF report", de);
@@ -107,32 +107,39 @@ public class PosterOutputSummaryReport {
             this.closeDocument(document);
         }
     }
-    
-    private Chapter populateDocument(Map posterOutputSummaryEntryHolder){        
-        Paragraph title = new Paragraph("Poster Inout Transaction Summary", hiddenFieldFont);
+
+    private Chapter populateDocument(PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder) {
+        Paragraph title = new Paragraph("Poster Input Transaction Summary", hiddenFieldFont);
         Chapter chapter = new Chapter(title, 1);
-        
+
         Paragraph blankParagraph = new Paragraph("", textFont);
         blankParagraph.setSpacingAfter(10);
-        
-        SortedSet sortedkeySet = new TreeSet(posterOutputSummaryEntryHolder.keySet());
-        for(Iterator keyIterator=sortedkeySet.iterator(); keyIterator.hasNext();){
-            String key = (String)keyIterator.next();
-            List list = (List)posterOutputSummaryEntryHolder.get(key); 
+
+        Map entryMapByBalanceTypeCode = posterOutputSummaryEntryHolder.getEntryMapGroupedByBalanceTypeCode();
+        Map subTotalLine = posterOutputSummaryEntryHolder.getSubTotalLine();
+
+        SortedSet sortedkeySet = new TreeSet(entryMapByBalanceTypeCode.keySet());
+        for (Iterator keyIterator = sortedkeySet.iterator(); keyIterator.hasNext();) {
+            String key = (String) keyIterator.next();
+            List list = (List) entryMapByBalanceTypeCode.get(key);
             Collections.sort(list);
-            
-            try{
+
+            try {
                 Paragraph paragraph = new Paragraph("Balance Type Code: " + key, textFont);
                 paragraph.setSpacingAfter(10);
-                
+
                 Section section = chapter.addSection(paragraph);
                 section.add(blankParagraph);
-                
-                PdfPTable pdfTable = this.buildPdfTable(list); 
+
+                PdfPTable pdfTable = this.buildPdfTable(list);
+
+                PosterOutputSummaryEntry subTotal = (PosterOutputSummaryEntry) subTotalLine.get(key);
+                this.addRow(pdfTable, subTotal, textFont, true);
+
                 section.add(pdfTable);
                 section.add(Chunk.NEXTPAGE);
             }
-            catch(Exception e){
+            catch (Exception e) {
             }
         }
         return chapter;
@@ -161,7 +168,7 @@ public class PosterOutputSummaryReport {
 
         for (Iterator reportIter = entryCollection.iterator(); reportIter.hasNext();) {
             PosterOutputSummaryEntry posterOutputSummaryEntry = (PosterOutputSummaryEntry) reportIter.next();
-            this.addRow(entryTable, posterOutputSummaryEntry, textFont);
+            this.addRow(entryTable, posterOutputSummaryEntry, textFont, false);
         }
 
         return entryTable;
@@ -184,7 +191,7 @@ public class PosterOutputSummaryReport {
 
         PdfPCell cell = new PdfPCell(new Phrase("Fiscal Year", headerFont));
         entryTable.addCell(cell);
-        
+
         cell = new PdfPCell(new Phrase("Period Code", headerFont));
         entryTable.addCell(cell);
 
@@ -205,20 +212,28 @@ public class PosterOutputSummaryReport {
     }
 
     // add a row with the given ledger entry into PDF table
-    private void addRow(PdfPTable entryTable, PosterOutputSummaryEntry posterOutputSummaryEntry, Font textFont) {
+    private void addRow(PdfPTable entryTable, PosterOutputSummaryEntry posterOutputSummaryEntry, Font textFont, boolean isTotal) {
         PdfPCell cell = null;
-        
-        Integer fiscalYear = posterOutputSummaryEntry.getUniversityFiscalYear();
-        String stringFiscalYear = (fiscalYear != null) ? fiscalYear.toString() : "";
-        cell = new PdfPCell(new Phrase(stringFiscalYear, textFont));
-        entryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(posterOutputSummaryEntry.getFiscalPeriodCode(), textFont));
-        entryTable.addCell(cell);
-        
-        cell = new PdfPCell(new Phrase(posterOutputSummaryEntry.getFundGroup(), textFont));
-        entryTable.addCell(cell);
-        
+        if (isTotal) {
+            String totalDescription = "Total:";
+            cell = new PdfPCell(new Phrase(totalDescription, textFont));
+            cell.setColspan(3);
+            entryTable.addCell(cell);
+        }
+        else {
+            Integer fiscalYear = posterOutputSummaryEntry.getUniversityFiscalYear();
+            String stringFiscalYear = (fiscalYear != null) ? fiscalYear.toString() : "";
+            cell = new PdfPCell(new Phrase(stringFiscalYear, textFont));
+            entryTable.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(posterOutputSummaryEntry.getFiscalPeriodCode(), textFont));
+            entryTable.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(posterOutputSummaryEntry.getFundGroup(), textFont));
+            entryTable.addCell(cell);
+        }
+
         cell = new PdfPCell(new Phrase(this.formatNumber(posterOutputSummaryEntry.getDebitAmount()), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         entryTable.addCell(cell);
@@ -226,11 +241,11 @@ public class PosterOutputSummaryReport {
         cell = new PdfPCell(new Phrase(this.formatNumber(posterOutputSummaryEntry.getCreditAmount()), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         entryTable.addCell(cell);
-        
+
         cell = new PdfPCell(new Phrase(this.formatNumber(posterOutputSummaryEntry.getBudgetAmount()), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         entryTable.addCell(cell);
-        
+
         cell = new PdfPCell(new Phrase(this.formatNumber(posterOutputSummaryEntry.getNetAmount()), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         entryTable.addCell(cell);
