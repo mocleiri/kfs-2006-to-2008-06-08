@@ -32,7 +32,7 @@
 
     <%-- Future Modules --%>
     <%-- don't show except in test drive and development --%>
-    <c:if test="${ConfigProperties.environment == 'ptd' || ConfigProperties.environment == 'devx' || ConfigProperties.environment == 'dev2'}">
+    <c:if test="${ConfigProperties.environment == 'ptd' || ConfigProperties.environment == 'dev' || ConfigProperties.environment == 'dev2'}">
 	    <c:if test='${selectedTab == "portalFutureModulesBody"}'>
 	        <li class="red"><a class="red" href="portal.do?selectedTab=portalFutureModulesBody" title="Future Modules">Future Modules</a></li>
 	    </c:if>
