@@ -226,7 +226,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      */
     protected void assertFieldErrorExistence(String fieldName, String errorKey, boolean expectedResult) {
         boolean result = doesFieldErrorExist(fieldName, errorKey);
-        assertEquals("Existence check for Error on fieldName/errorKey: " + fieldName + "/" + errorKey, expectedResult, result);
+        assertEquals("Existence check for Error on fieldName/errorKey: " + fieldName + "/" + errorKey+". "+GlobalVariables.getErrorMap(), expectedResult, result);
     }
 
     /**
