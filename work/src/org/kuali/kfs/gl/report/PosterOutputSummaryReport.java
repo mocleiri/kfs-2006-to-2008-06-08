@@ -131,10 +131,7 @@ public class PosterOutputSummaryReport {
                 Section section = chapter.addSection(paragraph);
                 section.add(blankParagraph);
 
-                PdfPTable pdfTable = this.buildPdfTable(list);
-
-                PosterOutputSummaryEntry subTotal = (PosterOutputSummaryEntry) subTotalLine.get(key);
-                this.addRow(pdfTable, subTotal, textFont, true);
+                PdfPTable pdfTable = this.buildPdfTable(list, subTotalLine);
 
                 section.add(pdfTable);
                 section.add(Chunk.NEXTPAGE);
@@ -145,17 +142,8 @@ public class PosterOutputSummaryReport {
         return chapter;
     }
 
-    // draw a PDF table populated with the data held by entry holder
-    private PdfPTable drawPdfTable(Collection posterOutputSummaryEntryHolder) {
-        PdfPTable entryTable = null;
-        if (posterOutputSummaryEntryHolder != null) {
-            entryTable = this.buildPdfTable(posterOutputSummaryEntryHolder);
-        }
-        return entryTable;
-    }
-
     // draw a PDF table from a collection
-    private PdfPTable buildPdfTable(Collection entryCollection) {
+    private PdfPTable buildPdfTable(Collection<PosterOutputSummaryEntry> entryCollection, Map subTotalLine) {
         if (entryCollection == null || entryCollection.size() <= 0) {
             return this.buildEmptyTable();
         }
@@ -166,10 +154,29 @@ public class PosterOutputSummaryReport {
 
         this.addHeader(entryTable, headerFont);
 
+        String tempBalanceTypeCode  = "--";
+        Integer tempFiscalYear = new Integer(1000);
+        String keyOfSubTotalLine = null;
         for (Iterator reportIter = entryCollection.iterator(); reportIter.hasNext();) {
             PosterOutputSummaryEntry posterOutputSummaryEntry = (PosterOutputSummaryEntry) reportIter.next();
+
+            String balanceTypeCode  = posterOutputSummaryEntry.getBalanceTypeCode();
+            Integer fiscalYear = posterOutputSummaryEntry.getUniversityFiscalYear();            
+                        
+            if(!tempBalanceTypeCode.equals(balanceTypeCode) || tempFiscalYear.compareTo(fiscalYear) != 0){
+                tempBalanceTypeCode = balanceTypeCode;
+                tempFiscalYear = fiscalYear;
+                
+                if(keyOfSubTotalLine != null){
+                    PosterOutputSummaryEntry subTotal = (PosterOutputSummaryEntry) subTotalLine.get(keyOfSubTotalLine);
+                    this.addRow(entryTable, subTotal, textFont, true);
+                }                
+                keyOfSubTotalLine = balanceTypeCode + "-" + fiscalYear;
+            }            
             this.addRow(entryTable, posterOutputSummaryEntry, textFont, false);
         }
+        PosterOutputSummaryEntry subTotal = (PosterOutputSummaryEntry) subTotalLine.get(keyOfSubTotalLine);
+        this.addRow(entryTable, subTotal, textFont, true);
 
         return entryTable;
     }
@@ -216,7 +223,9 @@ public class PosterOutputSummaryReport {
         PdfPCell cell = null;
 
         if (isTotal) {
-            String totalDescription = "Total:";
+            String totalDescription = "Subtotal(" + posterOutputSummaryEntry.getUniversityFiscalYear() + ", ";
+            totalDescription += posterOutputSummaryEntry.getBalanceTypeCode() + "): ";
+            
             cell = new PdfPCell(new Phrase(totalDescription, textFont));
             cell.setColspan(3);
             entryTable.addCell(cell);
