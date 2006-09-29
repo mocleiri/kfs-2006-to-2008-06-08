@@ -237,24 +237,6 @@ public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
     }
 
     /**
-     * Override b/c the status changing is flakey with this doc b/c routing is special (goes straight to final).
-     * 
-     * @see org.kuali.core.document.DocumentTestBase#testRouteDocument()
-     */
-    @TestsWorkflowViaDatabase
-    public void testRouteDocument() throws Exception {
-        // save the original doc, wait for status change
-        Document document = buildDocument();
-        assertFalse("R".equals(document.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus()));
-        getDocumentService().routeDocument(document, "saving copy source document", null);
-        // jv docs go straight to final
-        DocumentWorkflowStatusMonitor routeMonitor = new DocumentWorkflowStatusMonitor(getDocumentService(), document.getDocumentHeader().getFinancialDocumentNumber(), EdenConstants.ROUTE_HEADER_FINAL_CD);
-        assertTrue(ChangeMonitor.waitUntilChange(routeMonitor, 240, 5));
-        DocumentStatusMonitor statusMonitor = new DocumentStatusMonitor(getDocumentService(), document.getDocumentHeader().getFinancialDocumentNumber(), Constants.DocumentStatusCodes.APPROVED);
-        assertTrue(ChangeMonitor.waitUntilChange(statusMonitor, 240, 5));
-    }
-
-    /**
      * 
      * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
      */
