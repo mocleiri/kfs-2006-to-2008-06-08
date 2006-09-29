@@ -88,6 +88,9 @@
 		<property name="base.application.url" value="${test.environment.url}" />
 		<property name="base.cas.url" value="${test.environment.url}" />
 		<property name="base.workflow.url" value="${test.environment.url}" />
+		<condition property="driver.class" value="${p6spy.driver.class}">
+			<equals arg1="${use.p6spy.local}" arg2="true"/>
+		</condition>
 		<property name="driver.class" value="${oracle.driver.class}" />
 		<condition property="appenders" value="INFO, LogFile, StdOut">
 			<equals arg1="${is.local.build}" arg2="true" />
