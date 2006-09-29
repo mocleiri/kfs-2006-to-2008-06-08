@@ -981,7 +981,7 @@ public class ReportServiceImpl implements ReportService {
         }
 
         PosterOutputSummaryEntryHolder posterInputSummaryEntryHolder = originEntryService.getPosterOutputSummaryByGroupId(groups);
-        posterInputSummaryEntryHolder.groupPosterInputSummaryEntryByBalanceType();
+        posterInputSummaryEntryHolder.groupPosterOutputSummaryEntryByBalanceType();
  
         PosterOutputSummaryReport posterInputSummaryReport = new PosterOutputSummaryReport();
         posterInputSummaryReport.generateReport(posterInputSummaryEntryHolder, runDate, "Poster Output Summary", "poster_output_summary", batchReportsDirectory);
