@@ -793,7 +793,7 @@ public class ReportServiceImpl implements ReportService {
         SfPageHelper helper = new SfPageHelper();
         helper.runDate = runDate;
         helper.headerFont = headerFont;
-        helper.title = "General Ledger Correction Process Report";
+        helper.title = "General Ledger Correction Process Report " + cDocument.getFinancialDocumentNumber();
 
         try {
             String filename = onlineReportsDirectory + "/glcp_" + cDocument.getFinancialDocumentNumber() + "_";
