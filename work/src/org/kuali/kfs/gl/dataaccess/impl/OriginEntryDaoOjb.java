@@ -178,7 +178,10 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
     public Iterator<OriginEntry> getBadBalanceEntries(Collection groups) {
         LOG.debug("getBadBalanceEntries() started");
 
-
+        if(groups.size()<=0) {
+            return null;
+        }
+        
         Collection ids = new ArrayList();
         for (Iterator iter = groups.iterator(); iter.hasNext();) {
             OriginEntryGroup element = (OriginEntryGroup) iter.next();
@@ -330,6 +333,10 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
      */
     public void deleteGroups(Collection<OriginEntryGroup> groups) {
         LOG.debug("deleteGroups() started");
+        
+        if(groups == null || groups.size()<=0) {
+            return;
+        }
 
         List ids = new ArrayList();
         for (Iterator iter = groups.iterator(); iter.hasNext();) {
@@ -372,6 +379,10 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
      */
     public Iterator getSummaryByGroupId(Collection groupIdList) {
         LOG.debug("getSummaryByGroupId() started");
+        
+        if(groupIdList == null || groupIdList.size()<=0) {
+            return null;
+        }
 
         Collection ids = new ArrayList();
         for (Iterator iter = groupIdList.iterator(); iter.hasNext();) {
@@ -416,11 +427,15 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
     /**
      * @see org.kuali.module.gl.dao.OriginEntryDao#getPosterOutputSummaryByGroupId(java.util.Collection)
      */
-    public Iterator getPosterOutputSummaryByGroupId(Collection groupIdList) {
+    public Iterator getPosterOutputSummaryByGroupId(Collection groups) {
         LOG.debug("getPosterInputSummaryByGroupId() started");
+        
+        if(groups == null || groups.size()<=0) {
+            return null;
+        }
 
         Collection ids = new ArrayList();
-        for (Iterator iter = groupIdList.iterator(); iter.hasNext();) {
+        for (Iterator iter = groups.iterator(); iter.hasNext();) {
             OriginEntryGroup element = (OriginEntryGroup) iter.next();
             ids.add(element.getId());
         }
@@ -461,11 +476,15 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
     /**
      * @see org.kuali.module.gl.dao.OriginEntryDao#getPosterOutputSummaryByGroupId(java.util.Collection)
      */
-    public Iterator getPosterOutputSummaryByGroupId2(Collection groupIdList) {
+    public Iterator getPosterOutputSummaryByGroupId2(Collection groups) {
         LOG.debug("getPosterInputSummaryByGroupId() started");
+        
+        if(groups == null || groups.size()<=0) {
+            return null;
+        }
 
         Collection ids = new ArrayList();
-        for (Iterator iter = groupIdList.iterator(); iter.hasNext();) {
+        for (Iterator iter = groups.iterator(); iter.hasNext();) {
             OriginEntryGroup element = (OriginEntryGroup) iter.next();
             ids.add(element.getId());
         }
