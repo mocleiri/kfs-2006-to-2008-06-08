@@ -30,6 +30,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.kuali.KeyConstants;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
@@ -50,7 +51,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
             private static final String GOOD2 = "UA";
             private static final String BAD1 = "ZZ";
         }
-
+        
         private class AccountNumber {
             private static final String GOOD1 = "1031400";
             private static final String CLOSED1 = "2231414";
@@ -999,9 +1000,15 @@ public class AccountRuleTest extends ChartRuleTestBase {
         assertGlobalErrorMapSize(1);
 
     }
-
+private void disableBeginBalanceLoadInd(){
+    Options options=SpringServiceLocator.getOptionsService().getCurrentYearOptions();
+    options.setFinancialBeginBalanceLoadInd(true);
+    SpringServiceLocator.getBusinessObjectService().save(options);
+}
     public void testCheckCloseAccountContinuation_NullContinuationCoaCode() {
 
+        //set preconditions
+        disableBeginBalanceLoadInd();
         Account oldAccount = new Account();
 
         MaintenanceDocument maintDoc = newMaintDoc(oldAccount, newAccount);
@@ -1025,6 +1032,8 @@ public class AccountRuleTest extends ChartRuleTestBase {
 
     public void testCheckCloseAccountContinuation_NullContinuationAccountNumber() {
 
+        //set preconditions
+        disableBeginBalanceLoadInd();
         Account oldAccount = new Account();
 
         MaintenanceDocument maintDoc = newMaintDoc(oldAccount, newAccount);
@@ -1055,7 +1064,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         boolean result;
 
         // account must be being closed
-        oldAccount.setAccountClosedIndicator(false);
+        oldAccount.setAccountClosedIndicator(true);
         newAccount.setAccountClosedIndicator(true);
         newAccount.setAccountExpirationDate(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
 
@@ -1265,7 +1274,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // run the rule
         result = rule.checkCgIncomeStreamRequired(newAccount);
         assertEquals("CG Account with invalid Income Stream data should fail.", false, result);
-        assertFieldErrorExists("incomeStreamAccount", KeyConstants.ERROR_EXISTENCE);
+        assertFieldErrorExists("incomeStreamAccountNumber", KeyConstants.ERROR_EXISTENCE);
         assertGlobalErrorMapSize(1);
 
     }
