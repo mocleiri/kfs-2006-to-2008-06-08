@@ -137,6 +137,9 @@
 			<filter token="keystore-password" value="${keystore.password}" />
 			<filter token="encryption-key" value="${encryption.key}" />
 		</filterset>
+		<condition property="batch.program.directory" value="/home/kultstb/batch/${build.environment}">
+			<equals arg1="${build.environment}" arg2="gl" />
+		</condition>
 		<property name="batch.program.directory" value="/home/kuldevb/batch/${build.environment}" />
 		<filterset id="batch.filterset">
 			<filter token="appenders" value="INFO, StdOut" />
