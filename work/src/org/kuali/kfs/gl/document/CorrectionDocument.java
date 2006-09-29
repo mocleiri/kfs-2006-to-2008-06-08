@@ -127,6 +127,11 @@ public class CorrectionDocument extends DocumentBase {
         return ccg;
     }
 
+    /**
+     * If the document final, change the process flag on the output origin entry group (if necessary)
+     * 
+     * @see org.kuali.core.document.DocumentBase#handleRouteStatusChange()
+     */
     @Override
     public void handleRouteStatusChange() {
         LOG.debug("handleRouteStatusChange() started");
@@ -138,27 +143,31 @@ public class CorrectionDocument extends DocumentBase {
         CorrectionDocumentService correctionDocumentService = (CorrectionDocumentService) SpringServiceLocator.getBeanFactory().getBean("glCorrectionDocumentService");
         OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
 
-        String docId = getDocumentHeader().getFinancialDocumentNumber();        
+        String docId = getDocumentHeader().getFinancialDocumentNumber();
         CorrectionDocument doc = correctionDocumentService.findByCorrectionDocumentHeaderId(docId);
-        OriginEntryGroup outputGroup = originEntryGroupService.getExactMatchingEntryGroup(doc.getCorrectionOutputGroupId().intValue());
 
         if ( getDocumentHeader().getWorkflowDocument().stateIsFinal() ) {
+            OriginEntryGroup outputGroup = originEntryGroupService.getExactMatchingEntryGroup(doc.getCorrectionOutputGroupId().intValue());
             if ( ! doc.getCorrectionFileDelete() ) {
-                LOG.debug("handleRouteStatusChange() Mark group as to be scrubbed");
-                outputGroup.setScrub(true);
+                LOG.debug("handleRouteStatusChange() Mark group as to be processed");
+                outputGroup.setProcess(true);
                 originEntryGroupService.save(outputGroup);
             }
         }
+
         if ( getDocumentHeader().getWorkflowDocument().stateIsEnroute() ) {
-            LOG.debug("handleRouteStatusChange() Run reports");
+            if ( doc.getCorrectionOutputGroupId() != null ) {
+                LOG.debug("handleRouteStatusChange() Run reports");
 
-            DateTimeService dateTimeService = SpringServiceLocator.getDateTimeService();
-            java.sql.Date today = dateTimeService.getCurrentSqlDate();
-            
-            reportService.correctionOnlineReport(doc, today);
+                OriginEntryGroup outputGroup = originEntryGroupService.getExactMatchingEntryGroup(doc.getCorrectionOutputGroupId().intValue());
+                DateTimeService dateTimeService = SpringServiceLocator.getDateTimeService();
+                java.sql.Date today = dateTimeService.getCurrentSqlDate();
 
-            // Run the scrubber on this group to generate a bunch of reports.  The scrubber won't save anything when running it this way.
-            scrubberService.scrubGroupReportOnly(outputGroup,docId);
+                reportService.correctionOnlineReport(doc, today);
+
+                // Run the scrubber on this group to generate a bunch of reports.  The scrubber won't save anything when running it this way.
+                scrubberService.scrubGroupReportOnly(outputGroup,docId);
+            }
         }
     }
 
