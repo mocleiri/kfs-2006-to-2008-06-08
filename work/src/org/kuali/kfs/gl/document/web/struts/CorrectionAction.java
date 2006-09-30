@@ -170,6 +170,30 @@ public class CorrectionAction extends KualiDocumentActionBase {
     }
 
     /**
+     * This needs to be done just in case they decide to save it when closing.
+     * 
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#close(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
+    @Override
+    public ActionForward close(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        LOG.debug("close() started");
+
+        CorrectionForm correctionForm = (CorrectionForm)form;
+        CorrectionDocument document = correctionForm.getCorrectionDocument();
+
+        // Populate document
+        document.setCorrectionTypeCode(correctionForm.getEditMethod());
+        document.setCorrectionSelection(correctionForm.getMatchCriteriaOnly());
+        document.setCorrectionFileDelete(! correctionForm.getProcessInBatch());
+        document.setCorrectionInputFileName(correctionForm.getInputFileName());
+        document.setCorrectionOutputFileName(null); // this field is never used
+        document.setCorrectionInputGroupId(correctionForm.getInputGroupId());
+        document.setCorrectionOutputGroupId(null);
+
+        return super.close(mapping, form, request, response);
+    }
+
+    /**
      * Prepare for routing.  Return true if we're good to route, false if not
      * @param correctionForm
      * @return
@@ -218,7 +242,6 @@ public class CorrectionAction extends KualiDocumentActionBase {
         document.setCorrectionInputGroupId(correctionForm.getInputGroupId());
         document.setCorrectionOutputGroupId(oeg.getId());
 
-        LOG.debug("prepareForRoute() doc type name: " + correctionForm.getDocTypeName());
         return true;
     }
 
