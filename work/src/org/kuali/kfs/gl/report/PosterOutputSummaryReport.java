@@ -26,27 +26,22 @@ import java.awt.Color;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.kuali.core.util.KualiDecimal;
 
-import com.lowagie.text.Chapter;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
-import com.lowagie.text.Section;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -59,7 +54,10 @@ public class PosterOutputSummaryReport {
     private Font textFont = FontFactory.getFont(FontFactory.COURIER, Font.DEFAULTSIZE, Font.NORMAL);
     private Font hiddenFieldFont = FontFactory.getFont(FontFactory.COURIER, 1, Font.NORMAL, new Color(0xFF, 0xFF, 0xFF));
 
-    private final float[] columnWidths = { 5, 5, 5, 7, 7, 7, 7 };
+    private static final int TYPE_DETAIL = 1;
+    private static final int TYPE_YEAR_BALANCE_SUBTOTAL = 2;
+    private static final int TYPE_BALANCE_SUBTOTAL = 3;
+    private static final int TYPE_TOTAL = 4;
 
     /**
      * This method generates report based on the given map of entries
@@ -70,7 +68,7 @@ public class PosterOutputSummaryReport {
      * @param fileprefix the prefix of the generated report file
      * @param destinationDirectory the directory where the report is located
      */
-    public void generateReport(PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
+    public void generateReport(Map<String,PosterOutputSummaryEntry> data, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
         Document document = new Document(PageSize.A4.rotate());
 
@@ -89,9 +87,12 @@ public class PosterOutputSummaryReport {
             writer.setPageEvent(pageHelper);
 
             document.open();
-            Chapter chapter = this.populateDocument(posterOutputSummaryEntryHolder);
-            document.add(chapter);
 
+            if ( data.size() == 0 ) {
+                document.add(buildEmptyTable());
+            } else {
+                printReport(data,document);
+            }
         }
         catch (Exception de) {
             LOG.error("generateReport() Error creating PDF report", de);
@@ -99,81 +100,72 @@ public class PosterOutputSummaryReport {
             throw new RuntimeException("Report Generation Failed");
         }
         finally {
-            this.closeDocument(document);
+            closeDocument(document);
         }
     }
 
-    private Chapter populateDocument(PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder) {
-        Paragraph title = new Paragraph("Poster Output Transaction Summary", hiddenFieldFont);
-        Chapter chapter = new Chapter(title, 1);
-
-        Paragraph blankParagraph = new Paragraph("", textFont);
-        blankParagraph.setSpacingAfter(10);
-
-        Map entryMapByBalanceTypeCode = posterOutputSummaryEntryHolder.getEntryMapGroupedByBalanceTypeCode();
-        Map subTotalLine = posterOutputSummaryEntryHolder.getSubTotalLine();
-
-        SortedSet sortedkeySet = new TreeSet(entryMapByBalanceTypeCode.keySet());
-        for (Iterator keyIterator = sortedkeySet.iterator(); keyIterator.hasNext();) {
-            String key = (String) keyIterator.next();
-            List list = (List) entryMapByBalanceTypeCode.get(key);
-            Collections.sort(list);
-
-            try {
-                Paragraph paragraph = new Paragraph("Balance Type Code: " + key, textFont);
-                paragraph.setSpacingAfter(10);
-
-                Section section = chapter.addSection(paragraph);
-                section.add(blankParagraph);
-
-                PdfPTable pdfTable = this.buildPdfTable(list, subTotalLine);
-
-                section.add(pdfTable);
-                section.add(Chunk.NEXTPAGE);
-            }
-            catch (Exception e) {
-            }
-        }
-        return chapter;
-    }
-
-    // draw a PDF table from a collection
-    private PdfPTable buildPdfTable(Collection<PosterOutputSummaryEntry> entryCollection, Map subTotalLine) {
-        if (entryCollection == null || entryCollection.size() <= 0) {
-            return this.buildEmptyTable();
-        }
-
-        PdfPTable entryTable = new PdfPTable(columnWidths);
+    private PdfPTable newTable() {
+        PdfPTable entryTable = new PdfPTable(new float[] { 5, 5, 5, 7, 7, 7, 7 });
         entryTable.setHeaderRows(1);
         entryTable.setWidthPercentage(100);
 
-        this.addHeader(entryTable, headerFont);
-
-        String tempBalanceTypeCode  = "--";
-        Integer tempFiscalYear = new Integer(1000);
-        String keyOfSubTotalLine = null;
-        for (Iterator reportIter = entryCollection.iterator(); reportIter.hasNext();) {
-            PosterOutputSummaryEntry posterOutputSummaryEntry = (PosterOutputSummaryEntry) reportIter.next();
-
-            String balanceTypeCode  = posterOutputSummaryEntry.getBalanceTypeCode();
-            Integer fiscalYear = posterOutputSummaryEntry.getUniversityFiscalYear();            
-                        
-            if(!tempBalanceTypeCode.equals(balanceTypeCode) || tempFiscalYear.compareTo(fiscalYear) != 0){
-                tempBalanceTypeCode = balanceTypeCode;
-                tempFiscalYear = fiscalYear;
-                
-                if(keyOfSubTotalLine != null){
-                    PosterOutputSummaryEntry subTotal = (PosterOutputSummaryEntry) subTotalLine.get(keyOfSubTotalLine);
-                    this.addRow(entryTable, subTotal, textFont, true);
-                }                
-                keyOfSubTotalLine = balanceTypeCode + "-" + fiscalYear;
-            }            
-            this.addRow(entryTable, posterOutputSummaryEntry, textFont, false);
-        }
-        PosterOutputSummaryEntry subTotal = (PosterOutputSummaryEntry) subTotalLine.get(keyOfSubTotalLine);
-        this.addRow(entryTable, subTotal, textFont, true);
-
+        addHeader(entryTable, headerFont);
         return entryTable;
+    }
+
+    private void printReport(Map<String,PosterOutputSummaryEntry> data,Document document) throws DocumentException {
+
+        PdfPTable entryTable = newTable();
+
+        PosterOutputSummaryEntry subTotalBalanceYear = new PosterOutputSummaryEntry();
+        PosterOutputSummaryEntry subTotalBalance = new PosterOutputSummaryEntry();
+        PosterOutputSummaryEntry total = new PosterOutputSummaryEntry();
+
+        Set sortedSet = new TreeSet(data.keySet());
+
+        boolean first = true;
+        for (Iterator reportIter = sortedSet.iterator(); reportIter.hasNext();) {
+            String key = (String)reportIter.next();
+            PosterOutputSummaryEntry entry = data.get(key);
+
+            if ( first ) {
+                first = false;
+                subTotalBalanceYear.setUniversityFiscalYear(entry.getUniversityFiscalYear());
+                subTotalBalanceYear.setBalanceTypeCode(entry.getBalanceTypeCode());
+
+                subTotalBalance.setBalanceTypeCode(entry.getBalanceTypeCode());
+            }
+
+            // Do we need to print a subtotal?
+            String balanceTypeCode  = entry.getBalanceTypeCode();
+            Integer fiscalYear = entry.getUniversityFiscalYear();            
+
+            if ( (! balanceTypeCode.equals(subTotalBalanceYear.getBalanceTypeCode())) || (! fiscalYear.equals(subTotalBalanceYear.getUniversityFiscalYear())) ) {
+                addRow(entryTable, subTotalBalanceYear, headerFont, PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL);
+                subTotalBalanceYear = new PosterOutputSummaryEntry();
+                subTotalBalanceYear.setUniversityFiscalYear(fiscalYear);
+                subTotalBalanceYear.setBalanceTypeCode(balanceTypeCode);
+            }
+            if ( ! balanceTypeCode.equals(subTotalBalance.getBalanceTypeCode()) ) {
+                addRow(entryTable, subTotalBalance, headerFont, PosterOutputSummaryReport.TYPE_BALANCE_SUBTOTAL);
+                subTotalBalance = new PosterOutputSummaryEntry();
+                subTotalBalance.setBalanceTypeCode(balanceTypeCode);
+                document.add(entryTable);
+                document.add(Chunk.NEXTPAGE);
+                entryTable = newTable();
+            }
+
+            addRow(entryTable, entry, textFont, PosterOutputSummaryReport.TYPE_DETAIL);
+            total.add(entry);
+            subTotalBalance.add(entry);
+            subTotalBalanceYear.add(entry);
+        }
+
+        addRow(entryTable, subTotalBalanceYear, headerFont, PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL);
+        addRow(entryTable, subTotalBalance, headerFont, PosterOutputSummaryReport.TYPE_BALANCE_SUBTOTAL);
+        addRow(entryTable, total, headerFont, PosterOutputSummaryReport.TYPE_TOTAL);
+
+        document.add(entryTable);
     }
 
     // draw a table with an informative messge, instead of data
@@ -214,18 +206,25 @@ public class PosterOutputSummaryReport {
     }
 
     // add a row with the given ledger entry into PDF table
-    private void addRow(PdfPTable entryTable, PosterOutputSummaryEntry posterOutputSummaryEntry, Font textFont, boolean isTotal) {
+    private void addRow(PdfPTable entryTable, PosterOutputSummaryEntry posterOutputSummaryEntry, Font textFont, int type) {
         PdfPCell cell = null;
 
-        if (isTotal) {
-            String totalDescription = "Subtotal(" + posterOutputSummaryEntry.getUniversityFiscalYear() + ", ";
-            totalDescription += posterOutputSummaryEntry.getBalanceTypeCode() + "): ";
-            
-            cell = new PdfPCell(new Phrase(totalDescription, textFont));
+        if ( type == PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL ) {
+            cell = new PdfPCell(new Phrase("Subtotal(" + posterOutputSummaryEntry.getUniversityFiscalYear() + ", " + posterOutputSummaryEntry.getBalanceTypeCode() + ")", textFont));
             cell.setColspan(3);
             entryTable.addCell(cell);
         }
-        else {
+        else if ( type == PosterOutputSummaryReport.TYPE_BALANCE_SUBTOTAL ) {
+            cell = new PdfPCell(new Phrase("Subtotal(" + posterOutputSummaryEntry.getBalanceTypeCode() + ")", textFont));
+            cell.setColspan(3);
+            entryTable.addCell(cell);
+        }
+        else if ( type == PosterOutputSummaryReport.TYPE_TOTAL ) {
+            cell = new PdfPCell(new Phrase("Total", textFont));
+            cell.setColspan(3);
+            entryTable.addCell(cell);            
+        }
+        else if ( type == PosterOutputSummaryReport.TYPE_DETAIL) {
             Integer fiscalYear = posterOutputSummaryEntry.getUniversityFiscalYear();
             String stringFiscalYear = (fiscalYear != null) ? fiscalYear.toString() : "";
             cell = new PdfPCell(new Phrase(stringFiscalYear, textFont));

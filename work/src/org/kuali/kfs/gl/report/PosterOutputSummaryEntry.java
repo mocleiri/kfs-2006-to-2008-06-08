@@ -26,10 +26,9 @@ import org.apache.commons.lang.ArrayUtils;
 import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
 
-/**
- * This class...
- */
 public class PosterOutputSummaryEntry implements Comparable{
+    private static String[] assetExpenseObjectTypeCodeList = new String[] { "AS", "EE", "ES", "EX", "TE" };
+
     private Integer universityFiscalYear;
     private String fiscalPeriodCode;
     private String balanceTypeCode;
@@ -40,9 +39,6 @@ public class PosterOutputSummaryEntry implements Comparable{
     private KualiDecimal budgetAmount;
     private KualiDecimal netAmount;
 
-    /**
-     * Constructs a PosterOutputSummaryEntry.java.
-     */
     public PosterOutputSummaryEntry() {
         creditAmount = KualiDecimal.ZERO;
         debitAmount = KualiDecimal.ZERO;
@@ -50,148 +46,8 @@ public class PosterOutputSummaryEntry implements Comparable{
         netAmount = KualiDecimal.ZERO;
     }
 
-    /**
-     * Gets the balanceTypeCode attribute.
-     * 
-     * @return Returns the balanceTypeCode.
-     */
-    public String getBalanceTypeCode() {
-        return balanceTypeCode;
-    }
-
-    /**
-     * Sets the balanceTypeCode attribute value.
-     * 
-     * @param balanceTypeCode The balanceTypeCode to set.
-     */
-    public void setBalanceTypeCode(String balanceTypeCode) {
-        this.balanceTypeCode = balanceTypeCode;
-    }
-
-    /**
-     * Gets the budgetAmount attribute.
-     * 
-     * @return Returns the budgetAmount.
-     */
-    public KualiDecimal getBudgetAmount() {
-        return budgetAmount;
-    }
-
-    /**
-     * Sets the budgetAmount attribute value.
-     * 
-     * @param budgetAmount The budgetAmount to set.
-     */
-    public void setBudgetAmount(KualiDecimal budgetAmount) {
-        this.budgetAmount = budgetAmount;
-    }
-
-    /**
-     * Gets the creditAmount attribute.
-     * 
-     * @return Returns the creditAmount.
-     */
-    public KualiDecimal getCreditAmount() {
-        return creditAmount;
-    }
-
-    /**
-     * Sets the creditAmount attribute value.
-     * 
-     * @param creditAmount The creditAmount to set.
-     */
-    public void setCreditAmount(KualiDecimal creditAmount) {
-        this.creditAmount = creditAmount;
-    }
-
-    /**
-     * Gets the deditAmount attribute.
-     * 
-     * @return Returns the deditAmount.
-     */
-    public KualiDecimal getDebitAmount() {
-        return debitAmount;
-    }
-
-    /**
-     * Sets the deditAmount attribute value.
-     * 
-     * @param deditAmount The deditAmount to set.
-     */
-    public void setDebitAmount(KualiDecimal debitAmount) {
-        this.debitAmount = debitAmount;
-    }
-
-    /**
-     * Gets the fundGroup attribute.
-     * 
-     * @return Returns the fundGroup.
-     */
-    public String getFundGroup() {
-        return fundGroup;
-    }
-
-    /**
-     * Sets the fundGroup attribute value.
-     * 
-     * @param fundGroup The fundGroup to set.
-     */
-    public void setFundGroup(String fundGroup) {
-        this.fundGroup = fundGroup;
-    }
-
-    /**
-     * Gets the objectTypeCode attribute.
-     * 
-     * @return Returns the objectTypeCode.
-     */
-    public String getObjectTypeCode() {
-        return objectTypeCode;
-    }
-
-    /**
-     * Sets the objectTypeCode attribute value.
-     * 
-     * @param objectTypeCode The objectTypeCode to set.
-     */
-    public void setObjectTypeCode(String objectTypeCode) {
-        this.objectTypeCode = objectTypeCode;
-    }
-
-    /**
-     * Gets the universityFiscalYear attribute.
-     * 
-     * @return Returns the universityFiscalYear.
-     */
-    public Integer getUniversityFiscalYear() {
-        return universityFiscalYear;
-    }
-
-    /**
-     * Sets the universityFiscalYear attribute value.
-     * 
-     * @param universityFiscalYear The universityFiscalYear to set.
-     */
-    public void setUniversityFiscalYear(Integer universityFiscalYear) {
-        this.universityFiscalYear = universityFiscalYear;
-    }
-
-    /**
-     * Gets the netAmount attribute.
-     * 
-     * @return Returns the netAmount.
-     */
-    public KualiDecimal getNetAmount() {
-        return netAmount;
-    }
-
-    /**
-     * Sets the netAmount attribute value.
-     * 
-     * @param netAmount The netAmount to set.
-     */
-    public void setNetAmount(KualiDecimal netAmount) {
-        this.netAmount = netAmount;
+    public String getKey() {
+        return universityFiscalYear + "-" + balanceTypeCode + "-" + fiscalPeriodCode + "-" + fundGroup; 
     }
 
     /**
@@ -210,8 +66,6 @@ public class PosterOutputSummaryEntry implements Comparable{
         // calculate the net amount
         setNetAmount(netAmount.add(posterInputSummaryEntry.getNetAmount()));
     }
-
-    private static String[] assetExpenseObjectTypeCodeList = new String[] { "AS", "EE", "ES", "EX", "TE" };
 
     /**
      * add the amounts of two summary entries
@@ -242,22 +96,6 @@ public class PosterOutputSummaryEntry implements Comparable{
         }
     }
 
-    /**
-     * Gets the fiscalPeriodCode attribute. 
-     * @return Returns the fiscalPeriodCode.
-     */
-    public String getFiscalPeriodCode() {
-        return fiscalPeriodCode;
-    }
-
-    /**
-     * Sets the fiscalPeriodCode attribute value.
-     * @param fiscalPeriodCode The fiscalPeriodCode to set.
-     */
-    public void setFiscalPeriodCode(String fiscalPeriodCode) {
-        this.fiscalPeriodCode = fiscalPeriodCode;
-    }
-    
     public String toString(){
        String posterOutputSummaryEntry = "";
        posterOutputSummaryEntry += "[UniversityFiscalYear: " + this.getUniversityFiscalYear();
@@ -275,41 +113,80 @@ public class PosterOutputSummaryEntry implements Comparable{
     }
 
     public int compareTo(Object anotherPosterOutputSummaryEntry) {
-        int comparisonResult = 0;
-        
-        if (!(anotherPosterOutputSummaryEntry instanceof PosterOutputSummaryEntry)){
-            throw new ClassCastException("A PosterOutputSummaryEntry object expected.");
-        }
-        
-        if(anotherPosterOutputSummaryEntry == null){
-            return 1;
-        }
-        
         PosterOutputSummaryEntry tempPosterOutputSummaryEntry = (PosterOutputSummaryEntry)anotherPosterOutputSummaryEntry;
-        comparisonResult = this.getUniversityFiscalYear().compareTo(tempPosterOutputSummaryEntry.getUniversityFiscalYear());
-        if(comparisonResult != 0){
-            return comparisonResult;
-        }
-        
-        comparisonResult = this.getFiscalPeriodCode().compareTo(tempPosterOutputSummaryEntry.getFiscalPeriodCode());
-        if(comparisonResult != 0){
-            return comparisonResult;
-        }        
 
-        comparisonResult = this.getBalanceTypeCode().compareTo(tempPosterOutputSummaryEntry.getBalanceTypeCode());
-        if(comparisonResult != 0){
-            return comparisonResult;
-        }
-        
-        comparisonResult = this.getFundGroup().compareTo(tempPosterOutputSummaryEntry.getFundGroup());
-        if(comparisonResult != 0){
-            return comparisonResult;
-        }        
+        return getKey().compareTo(tempPosterOutputSummaryEntry.getKey());
+    }
 
-        comparisonResult = this.getObjectTypeCode().compareTo(tempPosterOutputSummaryEntry.getObjectTypeCode());
-        if(comparisonResult != 0){
-            return comparisonResult;
-        }                
-        return 0;
+    public String getFiscalPeriodCode() {
+        return fiscalPeriodCode;
+    }
+
+    public void setFiscalPeriodCode(String fiscalPeriodCode) {
+        this.fiscalPeriodCode = fiscalPeriodCode;
+    }
+
+    public String getBalanceTypeCode() {
+        return balanceTypeCode;
+    }
+
+    public void setBalanceTypeCode(String balanceTypeCode) {
+        this.balanceTypeCode = balanceTypeCode;
+    }
+
+    public KualiDecimal getBudgetAmount() {
+        return budgetAmount;
+    }
+
+    public void setBudgetAmount(KualiDecimal budgetAmount) {
+        this.budgetAmount = budgetAmount;
+    }
+
+    public KualiDecimal getCreditAmount() {
+        return creditAmount;
+    }
+
+    public void setCreditAmount(KualiDecimal creditAmount) {
+        this.creditAmount = creditAmount;
+    }
+
+    public KualiDecimal getDebitAmount() {
+        return debitAmount;
+    }
+
+    public void setDebitAmount(KualiDecimal debitAmount) {
+        this.debitAmount = debitAmount;
+    }
+
+    public String getFundGroup() {
+        return fundGroup;
+    }
+
+    public void setFundGroup(String fundGroup) {
+        this.fundGroup = fundGroup;
+    }
+
+    public String getObjectTypeCode() {
+        return objectTypeCode;
+    }
+
+    public void setObjectTypeCode(String objectTypeCode) {
+        this.objectTypeCode = objectTypeCode;
+    }
+
+    public Integer getUniversityFiscalYear() {
+        return universityFiscalYear;
+    }
+
+    public void setUniversityFiscalYear(Integer universityFiscalYear) {
+        this.universityFiscalYear = universityFiscalYear;
+    }
+
+    public KualiDecimal getNetAmount() {
+        return netAmount;
+    }
+
+    public void setNetAmount(KualiDecimal netAmount) {
+        this.netAmount = netAmount;
     }
 }
