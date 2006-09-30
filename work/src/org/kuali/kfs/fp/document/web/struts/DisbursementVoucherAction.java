@@ -86,6 +86,12 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
                     if ((amount == null) || (amount.intValue() == 0)) {
                         clearTravelMileageAmount(dvNet);
                     }
+
+                    // clear values derived from perDiemRate if that amount has been (manually) cleared
+                    KualiDecimal rate = dvNet.getDisbVchrPerdiemRate();
+                    if ((rate == null) || rate.isZero()) {
+                        clearTravelPerDiem(dvNet);
+                    }
                 }
             }
         }
@@ -218,17 +224,18 @@ public class DisbursementVoucherAction extends KualiTransactionalDocumentActionB
         DisbursementVoucherForm dvForm = (DisbursementVoucherForm) form;
         DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) dvForm.getDocument();
 
-        try {
-            dvDocument.getDvNonEmployeeTravel().setDisbVchrPerdiemCalculatedAmt(null);
-            dvDocument.getDvNonEmployeeTravel().setDisbVchrPerdiemActualAmount(null);
-        }
-        catch (RuntimeException e) {
-            LOG.error("Error in clearing travel per diem: " + e.getMessage());
-            GlobalVariables.getErrorMap().putError("DVNonEmployeeTravelErrors", KeyConstants.ERROR_CUSTOM, e.getMessage());
+        DisbursementVoucherNonEmployeeTravel dvNet = dvDocument.getDvNonEmployeeTravel();
+        if (dvNet != null) {
+            clearTravelPerDiem(dvNet);
         }
 
         return mapping.findForward(Constants.MAPPING_BASIC);
 
+    }
+
+    private void clearTravelPerDiem(DisbursementVoucherNonEmployeeTravel dvNet) {
+        dvNet.setDisbVchrPerdiemCalculatedAmt(null);
+        dvNet.setDisbVchrPerdiemActualAmount(null);
     }
 
     /**
