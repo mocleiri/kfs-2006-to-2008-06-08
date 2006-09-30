@@ -180,6 +180,9 @@ public class CorrectionForm extends KualiDocumentFormBase {
         entryForManualEdit = c.entryForManualEdit;
         groups = c.groups;
         setDocument(c.getDocument());
+        setDocTypeName(c.getDocTypeName());
+        setDocumentActionFlags(c.getDocumentActionFlags());
+        setDocId(c.getDocId());
     }
 
     public CorrectionDocument getCorrectionDocument() {
