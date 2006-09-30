@@ -195,13 +195,6 @@ public class PosterOutputSummaryEntry implements Comparable{
     }
 
     /**
-     * Calculate the net amount
-     */
-    public void calculateNetAmount() {
-        setNetAmount(creditAmount.subtract(debitAmount));
-    }
-
-    /**
      * add the amounts of two summary entries
      */
     public void add(PosterOutputSummaryEntry posterInputSummaryEntry) {
@@ -215,40 +208,38 @@ public class PosterOutputSummaryEntry implements Comparable{
         setBudgetAmount(budgetAmount.add(posterInputSummaryEntry.getBudgetAmount()));
 
         // calculate the net amount
-        setNetAmount(creditAmount.subtract(debitAmount));
+        setNetAmount(netAmount.add(posterInputSummaryEntry.getNetAmount()));
     }
+
+    private static String[] assetExpenseObjectTypeCodeList = new String[] { "AS", "EE", "ES", "EX", "TE" };
 
     /**
      * add the amounts of two summary entries
      */
     public void setAmount(String debitCreditCode, String objectTypeCode, KualiDecimal amount) {
-        String[] objectTypeCodeListCredit = new String[] { "AS", "EE", "ES", "EX", "TE" };
-        String[] objectTypeCodeListDebit = new String[] { "CH", "FB", "TI", "IC", "IN", "LI" };
 
         if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
-            boolean isObjectTypeCodeInList = ArrayUtils.contains(objectTypeCodeListCredit, objectTypeCode);
-            if (isObjectTypeCodeInList) {
-                setDebitAmount(amount);
+            setCreditAmount(creditAmount.add(amount));
+            if ( ArrayUtils.contains(assetExpenseObjectTypeCodeList, objectTypeCode) ) {
+                setNetAmount(netAmount.subtract(amount));
             }
             else {
-                setCreditAmount(amount);
+                setNetAmount(netAmount.add(amount));
             }
         }
         else if (Constants.GL_DEBIT_CODE.equals(debitCreditCode)) {
-            boolean isObjectTypeCodeInList = ArrayUtils.contains(objectTypeCodeListDebit, objectTypeCode);
-            if (isObjectTypeCodeInList) {
-                setCreditAmount(amount);
+            setDebitAmount(debitAmount.add(amount));
+            if ( ArrayUtils.contains(assetExpenseObjectTypeCodeList, objectTypeCode) ) {
+                setNetAmount(netAmount.add(amount));
             }
             else {
-                setDebitAmount(amount);
+                setNetAmount(netAmount.subtract(amount));
             }
         }
         else {
+            setNetAmount(netAmount.add(amount));
             setBudgetAmount(amount);
         }
-
-        // calculate the net amount
-        setNetAmount(creditAmount.subtract(debitAmount));
     }
 
     /**

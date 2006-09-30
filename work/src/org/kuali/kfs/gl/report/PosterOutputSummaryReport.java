@@ -70,13 +70,8 @@ public class PosterOutputSummaryReport {
      * @param fileprefix the prefix of the generated report file
      * @param destinationDirectory the directory where the report is located
      */
-    public void generateReport(PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder, Date runDate, String title, String fileprefix, String destinationDirectory) {
+    public void generateReport(PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
-        this.generatePDFReport(posterOutputSummaryEntryHolder, runDate, title, fileprefix, destinationDirectory);
-    }
-
-    // generate the PDF report with the given information
-    private void generatePDFReport(PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
         Document document = new Document(PageSize.A4.rotate());
 
         PDFPageHelper pageHelper = new PDFPageHelper();
@@ -109,7 +104,7 @@ public class PosterOutputSummaryReport {
     }
 
     private Chapter populateDocument(PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder) {
-        Paragraph title = new Paragraph("Poster Input Transaction Summary", hiddenFieldFont);
+        Paragraph title = new Paragraph("Poster Output Transaction Summary", hiddenFieldFont);
         Chapter chapter = new Chapter(title, 1);
 
         Paragraph blankParagraph = new Paragraph("", textFont);
