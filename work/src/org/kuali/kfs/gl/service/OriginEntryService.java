@@ -30,11 +30,10 @@ import java.util.Map;
 
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
-import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
-import org.kuali.module.gl.util.PosterOutputSummaryEntryHolder;
+import org.kuali.module.gl.util.PosterOutputSummaryEntry;
 
 /**
  * 
@@ -168,7 +167,7 @@ public interface OriginEntryService {
      * get the summarized information of poster input entries that belong to the entry groups with the given group id list
      * 
      * @param groupIdList the origin entry groups
-     * @return a set of summarized information of poster input entries within the specified groups
+     * @return a map of summarized information of poster input entries within the specified groups
      */    
-    public PosterOutputSummaryEntryHolder getPosterOutputSummaryByGroupId(Collection groupIdList);
+    public Map<String,PosterOutputSummaryEntry> getPosterOutputSummaryByGroupId(Collection groupIdList);
 }
