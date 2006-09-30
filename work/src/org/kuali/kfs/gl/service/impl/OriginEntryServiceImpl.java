@@ -28,8 +28,8 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,7 +39,6 @@ import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
-import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.OriginEntryDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
@@ -48,11 +47,10 @@ import org.kuali.module.gl.util.LedgerEntry;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.gl.util.PosterOutputSummaryEntry;
-import org.kuali.module.gl.util.PosterOutputSummaryEntryHolder;
 
 /**
  *  
- * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.10 2006-09-30 02:58:49 jsissom Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.11 2006-09-30 16:55:08 jsissom Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -293,6 +291,8 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      * @see org.kuali.module.gl.service.OriginEntryService#getSummaryByGroupId(Collection)
      */
     public LedgerEntryHolder getSummaryByGroupId(Collection groupIdList) {
+        LOG.debug("getSummaryByGroupId() started");
+
         LedgerEntryHolder ledgerEntryHolder = new LedgerEntryHolder();
 
         if (groupIdList.size() == 0) {
@@ -373,22 +373,32 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      * @see org.kuali.module.gl.service.OriginEntryService#getMatchingEntriesByCollection(java.util.Map)
      */
     public Collection getMatchingEntriesByCollection(Map searchCriteria) {
-        return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
+        LOG.debug("getMatchingEntriesByCollection() started");
 
+        return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
     }
 
+    /**
+     * 
+     * @see org.kuali.module.gl.service.OriginEntryService#getExactMatchingEntry(java.lang.Integer)
+     */
     public OriginEntry getExactMatchingEntry(Integer entryId) {
+        LOG.debug("getExactMatchingEntry() started");
+
         return originEntryDao.getExactMatchingEntry(entryId);
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.service.OriginEntryService#getPosterOutputSummaryByGroupId(java.util.Collection)
      */
-    public PosterOutputSummaryEntryHolder getPosterOutputSummaryByGroupId(Collection groupIdList) {
-        PosterOutputSummaryEntryHolder posterOutputSummaryEntryHolder = new PosterOutputSummaryEntryHolder();
+    public Map<String,PosterOutputSummaryEntry> getPosterOutputSummaryByGroupId(Collection groupIdList) {
+        LOG.debug("getPosterOutputSummaryByGroupId() started");
+
+        Map<String,PosterOutputSummaryEntry> output = new HashMap<String,PosterOutputSummaryEntry>();
 
         if (groupIdList.size() == 0) {
-            return posterOutputSummaryEntryHolder;
+            return output;
         }
 
         Iterator entrySummaryIterator = originEntryDao.getPosterOutputSummaryByGroupId(groupIdList);
@@ -396,37 +406,43 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             Object[] entrySummary = (Object[]) entrySummaryIterator.next();            
             PosterOutputSummaryEntry posterOutputSummaryEntry = new PosterOutputSummaryEntry();
             int indexOfField = 0;
-            
+
             Object tempEntry = entrySummary[indexOfField++];
-            String entry = (tempEntry == null) ? null : tempEntry.toString();
+            String entry = (tempEntry == null) ? "" : tempEntry.toString();
+            posterOutputSummaryEntry.setBalanceTypeCode(entry);
+
+            tempEntry = entrySummary[indexOfField++];
+            entry = (tempEntry == null) ? null : tempEntry.toString();
             posterOutputSummaryEntry.setUniversityFiscalYear(new Integer(entry));
-            
+
             tempEntry = entrySummary[indexOfField++];
             entry = (tempEntry == null) ? "" : tempEntry.toString();
             posterOutputSummaryEntry.setFiscalPeriodCode(entry);
-            
-            tempEntry = entrySummary[indexOfField++];
-            entry = (tempEntry == null) ? "" : tempEntry.toString();
-            posterOutputSummaryEntry.setBalanceTypeCode(entry);
-            
+
             tempEntry = entrySummary[indexOfField++];
             entry = (tempEntry == null) ? "" : tempEntry.toString();
             posterOutputSummaryEntry.setFundGroup(entry);
-            
+
             tempEntry = entrySummary[indexOfField++];
             String objectTypeCode = (tempEntry == null) ? "" : tempEntry.toString();
             posterOutputSummaryEntry.setObjectTypeCode(objectTypeCode);
-            
+
             tempEntry = entrySummary[indexOfField++];
             String debitCreditCode = (tempEntry == null) ? Constants.GL_BUDGET_CODE : tempEntry.toString();
-            
+
             tempEntry = entrySummary[indexOfField];
             entry = (tempEntry == null) ? "0" : tempEntry.toString();            
             KualiDecimal amount = new KualiDecimal(entry);
 
             posterOutputSummaryEntry.setAmount(debitCreditCode, objectTypeCode, amount);
-            posterOutputSummaryEntryHolder.insertPosterOutputSummaryEntry(posterOutputSummaryEntry);
+
+            if ( output.containsKey(posterOutputSummaryEntry.getKey()) ) {
+                PosterOutputSummaryEntry pose = output.get(posterOutputSummaryEntry.getKey());
+                pose.add(posterOutputSummaryEntry);
+            } else {
+                output.put(posterOutputSummaryEntry.getKey(),posterOutputSummaryEntry);
+            }
         }
-        return posterOutputSummaryEntryHolder;
+        return output;
     }
 }
