@@ -52,7 +52,7 @@ import org.kuali.module.gl.util.PosterOutputSummaryEntryHolder;
 
 /**
  *  
- * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.9 2006-09-29 13:36:58 bgao Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.10 2006-09-30 02:58:49 jsissom Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -423,11 +423,10 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             tempEntry = entrySummary[indexOfField];
             entry = (tempEntry == null) ? "0" : tempEntry.toString();            
             KualiDecimal amount = new KualiDecimal(entry);
-            
-            posterOutputSummaryEntry.setAmount(debitCreditCode, objectTypeCode, amount);           
+
+            posterOutputSummaryEntry.setAmount(debitCreditCode, objectTypeCode, amount);
             posterOutputSummaryEntryHolder.insertPosterOutputSummaryEntry(posterOutputSummaryEntry);
         }
-        return posterOutputSummaryEntryHolder;       
+        return posterOutputSummaryEntryHolder;
     }
-    
 }
