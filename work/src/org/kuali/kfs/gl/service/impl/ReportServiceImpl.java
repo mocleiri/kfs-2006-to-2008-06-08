@@ -41,7 +41,6 @@ import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.OptionsService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
@@ -66,7 +65,6 @@ import org.kuali.module.gl.util.GeneralLedgerPendingEntryReport;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.LedgerReport;
 import org.kuali.module.gl.util.NominalActivityClosingTransactionReport;
-import org.kuali.module.gl.util.PosterOutputSummaryEntryHolder;
 import org.kuali.module.gl.util.PosterOutputSummaryReport;
 import org.kuali.module.gl.util.Summary;
 import org.kuali.module.gl.util.TransactionListingReport;
@@ -743,43 +741,6 @@ public class ReportServiceImpl implements ReportService {
         }
     }
 
-    public void setOriginEntryService(OriginEntryService originEntryService) {
-        this.originEntryService = originEntryService;
-    }
-
-    public void setBalanceService(BalanceService bs) {
-        balanceService = bs;
-    }
-
-    public void setOptionsService(OptionsService os) {
-        optionsService = os;
-    }
-
-    public void setDateTimeService(DateTimeService dts) {
-        dateTimeService = dts;
-    }
-
-    public void setKualiConfigurationService(KualiConfigurationService kcs) {
-        kualiConfigurationService = kcs;
-    }
-
-    public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
-        this.originEntryGroupService = originEntryGroupService;
-    }
-
-    public void setReversalService(ReversalService rs) {
-        reversalService = rs;
-    }
-
-    public PersistenceService getPersistenceService() {
-        return persistenceService;
-    }
-
-    public void setPersistenceService(PersistenceService persistenceService) {
-        this.persistenceService = persistenceService;
-    }
-
-
     public void correctionOnlineReport(CorrectionDocument cDocument, Date runDate) {
         LOG.debug("correctionOnlineReport() started");
 
@@ -980,10 +941,39 @@ public class ReportServiceImpl implements ReportService {
             return;
         }
 
-        PosterOutputSummaryEntryHolder posterInputSummaryEntryHolder = originEntryService.getPosterOutputSummaryByGroupId(groups);
-        posterInputSummaryEntryHolder.groupPosterOutputSummaryEntryByBalanceType();
- 
         PosterOutputSummaryReport posterInputSummaryReport = new PosterOutputSummaryReport();
-        posterInputSummaryReport.generateReport(posterInputSummaryEntryHolder, runDate, "Poster Output Summary", "poster_output_summary", batchReportsDirectory);
+        posterInputSummaryReport.generateReport(originEntryService.getPosterOutputSummaryByGroupId(groups), runDate, "Poster Output Summary", "poster_output_summary", batchReportsDirectory);
+    }
+
+    public void setOriginEntryService(OriginEntryService originEntryService) {
+        this.originEntryService = originEntryService;
+    }
+
+    public void setBalanceService(BalanceService bs) {
+        balanceService = bs;
+    }
+
+    public void setOptionsService(OptionsService os) {
+        optionsService = os;
+    }
+
+    public void setDateTimeService(DateTimeService dts) {
+        dateTimeService = dts;
+    }
+
+    public void setKualiConfigurationService(KualiConfigurationService kcs) {
+        kualiConfigurationService = kcs;
+    }
+
+    public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
+        this.originEntryGroupService = originEntryGroupService;
+    }
+
+    public void setReversalService(ReversalService rs) {
+        reversalService = rs;
+    }
+
+    public void setPersistenceService(PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
     }
 }
