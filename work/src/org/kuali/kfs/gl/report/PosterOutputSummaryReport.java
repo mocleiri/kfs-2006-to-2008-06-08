@@ -41,6 +41,7 @@ import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -134,24 +135,40 @@ public class PosterOutputSummaryReport {
                 subTotalBalanceYear.setBalanceTypeCode(entry.getBalanceTypeCode());
 
                 subTotalBalance.setBalanceTypeCode(entry.getBalanceTypeCode());
+
+                Paragraph paragraph = new Paragraph("Fiscal Year: " + entry.getUniversityFiscalYear() + " Balance Type Code: " + entry.getBalanceTypeCode(), headerFont);
+                paragraph.setSpacingAfter(10);
+
+                document.add(paragraph);
             }
 
             // Do we need to print a subtotal?
             String balanceTypeCode  = entry.getBalanceTypeCode();
             Integer fiscalYear = entry.getUniversityFiscalYear();            
 
+            boolean newPage = false;
             if ( (! balanceTypeCode.equals(subTotalBalanceYear.getBalanceTypeCode())) || (! fiscalYear.equals(subTotalBalanceYear.getUniversityFiscalYear())) ) {
                 addRow(entryTable, subTotalBalanceYear, headerFont, PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL);
                 subTotalBalanceYear = new PosterOutputSummaryEntry();
                 subTotalBalanceYear.setUniversityFiscalYear(fiscalYear);
                 subTotalBalanceYear.setBalanceTypeCode(balanceTypeCode);
+
+                newPage = true;
             }
             if ( ! balanceTypeCode.equals(subTotalBalance.getBalanceTypeCode()) ) {
                 addRow(entryTable, subTotalBalance, headerFont, PosterOutputSummaryReport.TYPE_BALANCE_SUBTOTAL);
                 subTotalBalance = new PosterOutputSummaryEntry();
                 subTotalBalance.setBalanceTypeCode(balanceTypeCode);
+            }
+            if ( newPage ) {
                 document.add(entryTable);
                 document.add(Chunk.NEXTPAGE);
+
+                Paragraph paragraph = new Paragraph("Fiscal Year: " + entry.getUniversityFiscalYear() + " Balance Type Code: " + entry.getBalanceTypeCode(), headerFont);
+                paragraph.setSpacingAfter(10);
+
+                document.add(paragraph);
+
                 entryTable = newTable();
             }
 
