@@ -75,7 +75,6 @@ public class ScrubberServiceImpl implements ScrubberService, BeanFactoryAware {
         // If we are in test mode
         if (beanFactory.containsBean("testDateTimeService")) {
             dateTimeService = (DateTimeService) beanFactory.getBean("testDateTimeService");
-            reportService = (ReportService) beanFactory.getBean("testReportService");
         }
     }
 
