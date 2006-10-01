@@ -56,9 +56,10 @@ public class PosterOutputSummaryReport {
     private Font hiddenFieldFont = FontFactory.getFont(FontFactory.COURIER, 1, Font.NORMAL, new Color(0xFF, 0xFF, 0xFF));
 
     private static final int TYPE_DETAIL = 1;
-    private static final int TYPE_YEAR_BALANCE_SUBTOTAL = 2;
-    private static final int TYPE_BALANCE_SUBTOTAL = 3;
-    private static final int TYPE_TOTAL = 4;
+    private static final int TYPE_YEAR_PERIOD_BALANCE_SUBTOTAL = 2;
+    private static final int TYPE_YEAR_BALANCE_SUBTOTAL = 3;
+    private static final int TYPE_BALANCE_SUBTOTAL = 4;
+    private static final int TYPE_TOTAL = 5;
 
     /**
      * This method generates report based on the given map of entries
@@ -118,6 +119,7 @@ public class PosterOutputSummaryReport {
 
         PdfPTable entryTable = newTable();
 
+        PosterOutputSummaryEntry subTotalPeriodBalanceYear = new PosterOutputSummaryEntry();
         PosterOutputSummaryEntry subTotalBalanceYear = new PosterOutputSummaryEntry();
         PosterOutputSummaryEntry subTotalBalance = new PosterOutputSummaryEntry();
         PosterOutputSummaryEntry total = new PosterOutputSummaryEntry();
@@ -131,6 +133,10 @@ public class PosterOutputSummaryReport {
 
             if ( first ) {
                 first = false;
+                subTotalPeriodBalanceYear.setUniversityFiscalYear(entry.getUniversityFiscalYear());
+                subTotalPeriodBalanceYear.setBalanceTypeCode(entry.getBalanceTypeCode());
+                subTotalPeriodBalanceYear.setFiscalPeriodCode(entry.getFiscalPeriodCode());
+
                 subTotalBalanceYear.setUniversityFiscalYear(entry.getUniversityFiscalYear());
                 subTotalBalanceYear.setBalanceTypeCode(entry.getBalanceTypeCode());
 
@@ -144,9 +150,19 @@ public class PosterOutputSummaryReport {
 
             // Do we need to print a subtotal?
             String balanceTypeCode  = entry.getBalanceTypeCode();
-            Integer fiscalYear = entry.getUniversityFiscalYear();            
+            Integer fiscalYear = entry.getUniversityFiscalYear();
+            String fiscalPeriod = entry.getFiscalPeriodCode();
 
             boolean newPage = false;
+
+            if ( (! fiscalPeriod.equals(subTotalPeriodBalanceYear.getFiscalPeriodCode())) || (! balanceTypeCode.equals(subTotalPeriodBalanceYear.getBalanceTypeCode())) || (! fiscalYear.equals(subTotalPeriodBalanceYear.getUniversityFiscalYear())) ) {
+                addRow(entryTable, subTotalPeriodBalanceYear, headerFont, PosterOutputSummaryReport.TYPE_YEAR_PERIOD_BALANCE_SUBTOTAL);
+                subTotalPeriodBalanceYear = new PosterOutputSummaryEntry();
+                subTotalPeriodBalanceYear.setUniversityFiscalYear(entry.getUniversityFiscalYear());
+                subTotalPeriodBalanceYear.setBalanceTypeCode(entry.getBalanceTypeCode());
+                subTotalPeriodBalanceYear.setFiscalPeriodCode(entry.getFiscalPeriodCode());
+            }
+
             if ( (! balanceTypeCode.equals(subTotalBalanceYear.getBalanceTypeCode())) || (! fiscalYear.equals(subTotalBalanceYear.getUniversityFiscalYear())) ) {
                 addRow(entryTable, subTotalBalanceYear, headerFont, PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL);
                 subTotalBalanceYear = new PosterOutputSummaryEntry();
@@ -176,8 +192,10 @@ public class PosterOutputSummaryReport {
             total.add(entry);
             subTotalBalance.add(entry);
             subTotalBalanceYear.add(entry);
+            subTotalPeriodBalanceYear.add(entry);
         }
 
+        addRow(entryTable, subTotalPeriodBalanceYear, headerFont, PosterOutputSummaryReport.TYPE_YEAR_PERIOD_BALANCE_SUBTOTAL);
         addRow(entryTable, subTotalBalanceYear, headerFont, PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL);
         addRow(entryTable, subTotalBalance, headerFont, PosterOutputSummaryReport.TYPE_BALANCE_SUBTOTAL);
         addRow(entryTable, total, headerFont, PosterOutputSummaryReport.TYPE_TOTAL);
@@ -223,16 +241,21 @@ public class PosterOutputSummaryReport {
     }
 
     // add a row with the given ledger entry into PDF table
-    private void addRow(PdfPTable entryTable, PosterOutputSummaryEntry posterOutputSummaryEntry, Font textFont, int type) {
+    private void addRow(PdfPTable entryTable, PosterOutputSummaryEntry entry, Font textFont, int type) {
         PdfPCell cell = null;
 
-        if ( type == PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL ) {
-            cell = new PdfPCell(new Phrase("Subtotal(" + posterOutputSummaryEntry.getUniversityFiscalYear() + ", " + posterOutputSummaryEntry.getBalanceTypeCode() + ")", textFont));
+        if ( type == PosterOutputSummaryReport.TYPE_YEAR_PERIOD_BALANCE_SUBTOTAL ) {
+            cell = new PdfPCell(new Phrase("Subtotal(" + entry.getFiscalPeriodCode() + ", " + entry.getUniversityFiscalYear() + ", " + entry.getBalanceTypeCode() + ")", textFont));
+            cell.setColspan(3);
+            entryTable.addCell(cell);        
+        }
+        else if ( type == PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL ) {
+            cell = new PdfPCell(new Phrase("Subtotal(" + entry.getUniversityFiscalYear() + ", " + entry.getBalanceTypeCode() + ")", textFont));
             cell.setColspan(3);
             entryTable.addCell(cell);
         }
         else if ( type == PosterOutputSummaryReport.TYPE_BALANCE_SUBTOTAL ) {
-            cell = new PdfPCell(new Phrase("Subtotal(" + posterOutputSummaryEntry.getBalanceTypeCode() + ")", textFont));
+            cell = new PdfPCell(new Phrase("Subtotal(" + entry.getBalanceTypeCode() + ")", textFont));
             cell.setColspan(3);
             entryTable.addCell(cell);
         }
@@ -242,31 +265,31 @@ public class PosterOutputSummaryReport {
             entryTable.addCell(cell);            
         }
         else if ( type == PosterOutputSummaryReport.TYPE_DETAIL) {
-            Integer fiscalYear = posterOutputSummaryEntry.getUniversityFiscalYear();
+            Integer fiscalYear = entry.getUniversityFiscalYear();
             String stringFiscalYear = (fiscalYear != null) ? fiscalYear.toString() : "";
             cell = new PdfPCell(new Phrase(stringFiscalYear, textFont));
             entryTable.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(posterOutputSummaryEntry.getFiscalPeriodCode(), textFont));
+            cell = new PdfPCell(new Phrase(entry.getFiscalPeriodCode(), textFont));
             entryTable.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(posterOutputSummaryEntry.getFundGroup(), textFont));
+            cell = new PdfPCell(new Phrase(entry.getFundGroup(), textFont));
             entryTable.addCell(cell);
         }
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(posterOutputSummaryEntry.getDebitAmount()), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(entry.getDebitAmount()), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         entryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(posterOutputSummaryEntry.getCreditAmount()), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(entry.getCreditAmount()), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         entryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(posterOutputSummaryEntry.getBudgetAmount()), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(entry.getBudgetAmount()), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         entryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(posterOutputSummaryEntry.getNetAmount()), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(entry.getNetAmount()), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         entryTable.addCell(cell);
     }
