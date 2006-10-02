@@ -101,9 +101,9 @@
                     <text size="3" />
                 </control>
 
-                <summary>Sub-Object Code</summary>
+                <summary><![CDATA[&nbsp;]]></summary>
                 <description>
-                    <![CDATA[&nbsp;]]>
+                    The code to define this sub-object. This is the code that should be entered in the sub-object field of the accounting line on financial documents.
                 </description>
             </attribute>
 
@@ -121,9 +121,9 @@
                     <text size="40" />
                 </control>
 
-                <summary>Sub-Object Code Name</summary>
+                <summary><![CDATA[&nbsp;]]></summary>
                 <description>
-                    <![CDATA[&nbsp;]]>
+                    The long descriptive name of this Sub-object Code. This name will appear on the accounting line in financial documents as well as in searches and reports.
                 </description>
             </attribute>
 
@@ -145,7 +145,7 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                    <![CDATA[&nbsp;]]>
+                    The abbreviated name for this Sub-object Code. This name may be used in reports where there is not enough space to accommodate the Sub-object Code Name.
                 </description>
             </attribute>
 
