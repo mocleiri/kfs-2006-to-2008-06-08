@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.Constants;
+import org.kuali.workflow.WorkflowTestUtils;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
@@ -234,6 +235,24 @@ public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
             assertEquality(postCorrectId, postCorrectLine.getFinancialDocumentNumber());
             assertEquality(preCorrectLine.getAmount().negated(), postCorrectLine.getAmount());
         }
+    }
+
+    /**
+     * Override b/c the status changing is flakey with this doc b/c routing is special (goes straight to final).
+     * 
+     * @see org.kuali.core.document.DocumentTestBase#testRouteDocument()
+     */
+    @TestsWorkflowViaDatabase
+    public void testRouteDocument() throws Exception {
+        // save the original doc, wait for status change
+        Document document = buildDocument();
+        assertFalse("R".equals(document.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus()));
+        getDocumentService().routeDocument(document, "saving copy source document", null);
+        // jv docs go straight to final
+        WorkflowTestUtils.waitForStatusChange(document.getDocumentHeader().getWorkflowDocument(), EdenConstants.ROUTE_HEADER_FINAL_CD);
+        // also check the Kuali (not Workflow) document status
+        DocumentStatusMonitor statusMonitor = new DocumentStatusMonitor(getDocumentService(), document.getDocumentHeader().getFinancialDocumentNumber(), Constants.DocumentStatusCodes.APPROVED);
+        assertTrue(ChangeMonitor.waitUntilChange(statusMonitor, 240, 5));
     }
 
     /**
