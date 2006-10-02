@@ -57,7 +57,7 @@ public class InternalBillingDocumentTest extends TransactionalDocumentTestBase {
      * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
      */
     public Document getDocumentParameterFixture() throws Exception {
-        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), InternalBillingDocument.class, 2007, "03");
+        return DocumentTestUtils.createDocument(getDocumentService(), InternalBillingDocument.class);
     }
 
     /**
