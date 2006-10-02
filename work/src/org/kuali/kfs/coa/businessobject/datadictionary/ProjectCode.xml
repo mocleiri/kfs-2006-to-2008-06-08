@@ -56,9 +56,9 @@
             <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator">
                 <label>Active Indicator</label>
                 <shortLabel>Active</shortLabel>
-                <summary>Active Indicator</summary>
+                <summary><![CDATA[&nbsp;]]></summary>
                 <description>
-                    <![CDATA[&nbsp;]]>
+                    Active Indicator
                 </description>
             </attributeReference>
 
@@ -67,7 +67,7 @@
                 <control>
                     <text size="2" />
                 </control>
-                <summary>Chart Of Accounts Code</summary>
+                <summary><![CDATA[&nbsp;]]></summary>
             </attributeReference>
 
 
@@ -125,9 +125,9 @@
                     <text size="10" />
                 </control>
 
-                <summary>Project Code</summary>
+                <summary><![CDATA[&nbsp;]]></summary>
                 <description>
-                    <![CDATA[&nbsp;]]>
+                    The unique code to identify a project.
                 </description>
             </attribute>
 
@@ -149,7 +149,7 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                    <![CDATA[&nbsp;]]>
+                    Project Description
                 </description>
             </attribute>
 
@@ -167,9 +167,9 @@
                     <text size="40" />
                 </control>
 
-                <summary>Project Name</summary>
+                <summary><![CDATA[&nbsp;]]></summary>
                 <description>
-                    <![CDATA[&nbsp;]]>
+                    The long descriptive name of this Project Code. This name appears on the accounting line in financial documents as well as in searches and reports.
                 </description>
             </attribute>
 
