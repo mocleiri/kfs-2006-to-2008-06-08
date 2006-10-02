@@ -52,7 +52,7 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDoc
      */
     @Override
     public Document getDocumentParameterFixture() throws Exception{
-        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), DistributionOfIncomeAndExpenseDocument.class, 2007, "03");
+        return DocumentTestUtils.createDocument(getDocumentService(), DistributionOfIncomeAndExpenseDocument.class);
     }
 
     /**
