@@ -54,7 +54,7 @@
                     <text size="2" />
                 </control>
 
-                <summary>Financial System Origination Code</summary>
+                <summary><![CDATA[&nbsp;]]></summary>
                 <description>The code uniquely identifying a particular origination.</description>
             </attribute>
 
@@ -70,8 +70,8 @@
                 </control>
 
 
-                <summary>Message Of The Day</summary>
-                <description>Message Of The Day...</description>
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The current system message to KFS users.</description>
             </attribute>
 
 
