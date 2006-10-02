@@ -42,7 +42,9 @@
           </c:otherwise>
         </c:choose>
     </tr>
-        <tr valign="top">
-      <td colspan="4"><div id="footer-copyright"><bean:message key="app.copyright" /></div></td>
-    </tr>
 </table>
+
+ <div class="footerbevel">&nbsp;</div>
+  <div id="footer-copyright"> <bean:message key="app.copyright" /></div>
+
+
