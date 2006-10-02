@@ -46,7 +46,6 @@ public class ConfigPropertiesTest extends KualiTestBase {
     private static final String COMPLEX_TESTING_KEY = "complex.testing.key";
     private static final String COMPLEX_TESTING_VALUE = "complex testing value";
 
-
     private static boolean setUpOnce = false;
     private static ConfigProperties configConstants;
 
