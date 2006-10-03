@@ -168,16 +168,16 @@ public class AccountPreRules extends MaintenancePreRulesBase {
         if (StringUtils.isNotBlank(newAccount.getContractControlAccountNumber())) {
             Account account = checkForContinuationAccount("Contract Control Account", newAccount.getContractControlFinCoaCode(), newAccount.getContractControlAccountNumber(), "");
             if (ObjectUtils.isNotNull(account)) { // override old user inputs
-                newAccount.setContractControlFinCoaCode(account.getAccountNumber());
-                newAccount.setContractControlAccountNumber(account.getChartOfAccountsCode());
+                newAccount.setContractControlFinCoaCode(account.getChartOfAccountsCode());
+                newAccount.setContractControlAccountNumber(account.getAccountNumber());
             }
         }
 
         if (StringUtils.isNotBlank(newAccount.getIndirectCostRecoveryAcctNbr())) {
             Account account = checkForContinuationAccount("Indirect Cost Recovery Account", newAccount.getIndirectCostRcvyFinCoaCode(), newAccount.getIndirectCostRecoveryAcctNbr(), "");
             if (ObjectUtils.isNotNull(account)) { // override old user inputs
-                newAccount.setIndirectCostRcvyFinCoaCode(account.getAccountNumber());
-                newAccount.setIndirectCostRecoveryAcctNbr(account.getChartOfAccountsCode());
+                newAccount.setIndirectCostRcvyFinCoaCode(account.getChartOfAccountsCode());
+                newAccount.setIndirectCostRecoveryAcctNbr(account.getAccountNumber());
             }
         }
 
