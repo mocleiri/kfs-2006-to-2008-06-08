@@ -888,11 +888,14 @@ public class CorrectionAction extends KualiDocumentActionBase {
             }
 
             // Now check that the data is valid
-            if ( ! StringUtils.isEmpty(fieldValue) ) {
+            if ( ! StringUtils.isEmpty(fieldValue) && oeff.allowNull(fieldName)) {
                 if ( ! oeff.isValidValue(fieldName,fieldValue) ) {
                     GlobalVariables.getErrorMap().putError("searchResults", KeyConstants.ERROR_GL_ERROR_CORRECTION_INVALID_VALUE, new String[] { fieldDisplayName,fieldValue });
                     valid = false;
                 }
+            } else if (!oeff.allowNull(fieldName) && StringUtils.isEmpty(fieldValue)) {
+                GlobalVariables.getErrorMap().putError("searchResults", KeyConstants.ERROR_GL_ERROR_CORRECTION_INVALID_VALUE, new String[] { fieldDisplayName,fieldValue });
+                valid = false;
             }
         }
 
@@ -1056,6 +1059,13 @@ public class CorrectionAction extends KualiDocumentActionBase {
         List groups = document.getCorrectionChangeGroup();
         OriginEntryFieldFinder oeff = new OriginEntryFieldFinder();
 
+
+        // Now, if they only want matches in the output group, go through them again and delete items that don't match any of the groups
+        // This means that matches within a group are ANDed and each group is ORed
+        if ( correctionForm.getMatchCriteriaOnly() ) {
+            removeNonMatchingEntries(correctionForm.getAllEntries(), groups);
+        }
+        
         for (Iterator oei = correctionForm.getAllEntries().iterator(); oei.hasNext();) {
             OriginEntry oe = (OriginEntry)oei.next();
 
@@ -1081,12 +1091,6 @@ public class CorrectionAction extends KualiDocumentActionBase {
                     }
                 }
             }
-        }
-
-        // Now, if they only want matches in the output group, go through them again and delete items that don't match any of the groups
-        // This means that matches within a group are ANDed and each group is ORed
-        if ( correctionForm.getMatchCriteriaOnly() ) {
-            removeNonMatchingEntries(correctionForm.getAllEntries(), groups);
         }
 
         // Calculate the debit/credit/row count
