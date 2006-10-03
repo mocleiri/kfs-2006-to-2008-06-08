@@ -30,10 +30,14 @@ public class OriginEntryStatistics {
     private Integer rowCount = 0;
 
     public void addDebit(KualiDecimal d) {
-        debitTotalAmount = debitTotalAmount.add(d);
+        if (d != null) {
+            debitTotalAmount = debitTotalAmount.add(d);
+        }
     }
     public void addCredit(KualiDecimal c) {
-        creditTotalAmount = creditTotalAmount.add(c);
+        if (c != null) {
+            creditTotalAmount = creditTotalAmount.add(c);
+        }
     }
     public void incrementCount() {
         rowCount++;

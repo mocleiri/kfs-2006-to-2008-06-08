@@ -89,8 +89,11 @@ public class OriginEntryFieldFinder extends KeyValuesBase {
         String fieldType = getFieldType(fieldName);
         int fieldLength = getFieldLength(fieldName);
 
-        if ( (value == null) || (value.length() == 0) ) {
+        if ( allowNull(fieldName) && (value == null || value.length() == 0)) {
             return true;
+        }
+        if (!allowNull(fieldName) && (value == null || value.length() == 0)) {
+            return false;
         }
         if ( value.length() > fieldLength ) {
             return false;
@@ -140,6 +143,13 @@ public class OriginEntryFieldFinder extends KeyValuesBase {
         return "String";
     }
 
+    public boolean allowNull(String fieldName) {
+        if (fieldName.equals("transactionLedgerEntryAmount")) {
+            return false;
+        }
+        return true;
+    }
+    
     public int getFieldLength(String fieldName) {
         if (fieldName.equals("universityFiscalYear")) {
             return 4;
