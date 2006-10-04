@@ -888,12 +888,12 @@ public class CorrectionAction extends KualiDocumentActionBase {
             }
 
             // Now check that the data is valid
-            if ( ! StringUtils.isEmpty(fieldValue) && oeff.allowNull(fieldName)) {
+            if ( ! StringUtils.isEmpty(fieldValue)) {
                 if ( ! oeff.isValidValue(fieldName,fieldValue) ) {
                     GlobalVariables.getErrorMap().putError("searchResults", KeyConstants.ERROR_GL_ERROR_CORRECTION_INVALID_VALUE, new String[] { fieldDisplayName,fieldValue });
                     valid = false;
                 }
-            } else if (!oeff.allowNull(fieldName) && StringUtils.isEmpty(fieldValue)) {
+            } else if (!oeff.allowNull(fieldName) ) {
                 GlobalVariables.getErrorMap().putError("searchResults", KeyConstants.ERROR_GL_ERROR_CORRECTION_INVALID_VALUE, new String[] { fieldDisplayName,fieldValue });
                 valid = false;
             }
