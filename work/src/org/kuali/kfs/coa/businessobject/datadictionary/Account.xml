@@ -434,7 +434,7 @@
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
-                <description>The date on which the Account became effective. Use the calendar icon to select and format the date.</description>
+                <description>The date on which the Account became effective.</description>
             </attributeReference>
 
             <attributeReference name="accountExpirationDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericTimestamp">
@@ -443,7 +443,7 @@
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
-                <description>The date on which the Account expires and will no longer accept transactions. Use the calendar icon to select and format the date.</description>
+                <description>The date on which the Account expires and will no longer accept transactions.</description>
             </attributeReference>
 
             <attributeReference name="continuationFinChrtOfAcctCd" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
