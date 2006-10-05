@@ -312,7 +312,7 @@ public class WireCharge extends BusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("universityFiscalYear", this.universityFiscalYear.toString());
+        m.put("universityFiscalYear", getUniversityFiscalYear());
         return m;
     }
 }
