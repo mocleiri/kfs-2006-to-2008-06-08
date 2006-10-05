@@ -131,7 +131,6 @@ public class AuxiliaryVoucherDocumentRule extends TransactionalDocumentRuleBase 
      *      org.kuali.core.bo.AccountingLine)
      */
     public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) throws IllegalStateException {
-        IsDebitUtils.disallowErrorCorrectionDocumentCheck(this, transactionalDocument);
         String debitCreditCode = accountingLine.getDebitCreditCode();
         if (StringUtils.isBlank(debitCreditCode)) {
             throw new IllegalStateException(IsDebitUtils.isDebitCalculationIllegalStateExceptionMessage);
