@@ -188,6 +188,18 @@
 		</patternset>
 	</target>
 
+	<target name="init-source-only-package">
+		<property name="package.type" value="source" />	
+	</target>
+
+	<target name="init-binary-only-package">
+		<property name="package.type" value="binary" />
+	</target>
+	
+	<target name="init-binary-and-source-package">
+		<property name="package.type" value="both" />
+	</target>
+			
 	<target name="init-package-directories" depends="init-project-properties">
 		<delete dir="${packaging.contents.directory}" />
 		<mkdir dir="${packaging.contents.directory}" />
@@ -401,23 +413,22 @@
 		<zip destfile="settings.zip" basedir="${settings.directory}" />
 		<zip destfile="security.zip" basedir="${security.directory}" />
 	</target>
-	
+
 	<target name="make-source-only-package" depends="init-package-directories">
-		<property name="package.type" value="source" />
 		<copy todir="${packaging.distribution.directory}" includeemptydirs="false">
 			<fileset dir="${basedir}" excludes="**/*.class,${packaged.build.properties.files}" />
 		</copy>
 	</target>
 
 	<target name="make-binary-only-package" depends="init-package-directories,dist">
-		<property name="package.type" value="binary" />
 		<copy file="${ant.project.name}-${build.environment}.war" todir="${build.appserver.directory}" />
 		<ant target="clean-project" />
 		<copy todir="${packaging.distribution.directory}" includeemptydirs="false">
 			<fileset dir="${basedir}" includes="*.*,licenses/**/*,build/**/*" excludes="${packaged.build.properties.files}" />
 		</copy>
-		<delete file="${build.appserver.directory}/${ant.project.name}-${build.environment}.war" />
 	</target>
+	
+	<target name="make-binary-and-source-package" depends="make-source-only-package,make-binary-only-package" />
 	
 	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
 	<target name="test">
@@ -493,10 +504,6 @@
 		</ant>
 	</target>
 		
-	<target name="dist-source-only-package" depends="make-source-only-package,dist-package"/>
-		
-	<target name="dist-binary-only-package" depends="make-binary-only-package,dist-package"/>
-	
 	<target name="dist-package" depends="init-package-directories">
 		<copy todir="${packaging.distribution.directory}">
 			<fileset dir="${basedir}" includes="${packaged.build.properties.files}" />
@@ -508,6 +515,12 @@
 		<delete file="${packaging.contents.directory}-${package.type}.zip" />
 		<zip basedir="${packaging.contents.directory}" destfile="${packaging.contents.directory}-${package.type}.zip" />
 	</target>
+
+	<target name="dist-source-only-package" depends="init-source-only-package,make-source-only-package,dist-package"/>
+		
+	<target name="dist-binary-only-package" depends="init-binary-only-package,make-binary-only-package,dist-package"/>
+	
+	<target name="dist-binary-and-source-package" depends="init-binary-and-source-package,make-binary-and-source-package,dist-package" />
 	
 	<target name="continuous-integration" depends="make-tests,test">
 		<fail if="tests.failed" message="Tests failed" />
