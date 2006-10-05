@@ -23,11 +23,12 @@
 package org.kuali.module.financial.document;
 
 import static org.kuali.Constants.EMPTY_STRING;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
 import static org.kuali.Constants.AuxiliaryVoucher.ACCRUAL_DOC_TYPE;
 import static org.kuali.Constants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE;
 import static org.kuali.Constants.AuxiliaryVoucher.RECODE_DOC_TYPE;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,12 +36,14 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.AuxiliaryVoucherAccountingLineParser;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
-import org.kuali.module.gl.util.SufficientFundsItem;
+
+import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * This is the business object that represents the AuxiliaryVoucherDocument in Kuali. This is a transactional document that will
@@ -261,5 +264,54 @@ public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implemen
         // posting year not checked per KULEDOCS-1543.
 
         return null; // no reason not to copy
+    }
+    /**
+     * Overrides to call super, and then makes sure this is an error correction. If it is an error correction, it calls the AV
+     * specific error correction helper method.
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentBase#performConversion(int)
+     */
+    @Override
+    protected void performConversion(int operation) throws WorkflowException {
+        super.performConversion(operation);
+
+        // process special for error corrections
+        if (ERROR_CORRECTING == operation) {
+            processAuxiliaryVoucherErrorCorrections();
+        }
+    }
+
+    /**
+     * KULEDOCS-1700
+     * This method iterates over each source line and flip the sign on the amount to
+     * nullify the super's effect, then flip the debit/credit code b/c an error corrected AV flips the debit/credit code.
+     */
+    private void processAuxiliaryVoucherErrorCorrections() {
+        Iterator i = getSourceAccountingLines().iterator();
+
+            int index = 0;
+            while (i.hasNext()) {
+                SourceAccountingLine sLine = (SourceAccountingLine) i.next();
+
+                String debitCreditCode = sLine.getDebitCreditCode();
+
+                if (StringUtils.isNotBlank(debitCreditCode)) {
+                    // negate the amount to to nullify the effects of the super, b/c super flipped it the first time through
+                    sLine.setAmount(sLine.getAmount().negated()); // offsets the effect the super
+
+                    // now just flip the debit/credit code
+                    if (GL_DEBIT_CODE.equals(debitCreditCode)) {
+                        sLine.setDebitCreditCode(GL_CREDIT_CODE);
+                    }
+                    else if (GL_CREDIT_CODE.equals(debitCreditCode)) {
+                        sLine.setDebitCreditCode(GL_DEBIT_CODE);
+                    }
+                    else {
+                        throw new IllegalStateException("SourceAccountingLine at index " + index + " does not have a debit/credit " + "code associated with it.  This should never have occured. Please contact your system administrator.");
+
+                    }
+                    index++;
+                }
+            }
     }
 }
