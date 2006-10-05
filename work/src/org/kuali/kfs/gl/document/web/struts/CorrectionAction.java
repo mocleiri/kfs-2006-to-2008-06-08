@@ -718,11 +718,24 @@ public class CorrectionAction extends KualiDocumentActionBase {
 
         if ( validOriginEntry(correctionForm) ) {
             correctionForm.updateEntryForManualEdit();
+            
+            //new entryId is always 0, so give it a unique Id, SequenceAccessorService is used.
+            Long newEntryId = SpringServiceLocator.getSequenceAccessorService().getNextAvailableSequenceNumber("GL_ORIGIN_ENTRY_T_SEQ");
+            correctionForm.getEntryForManualEdit().setEntryId(new Integer (newEntryId.intValue()));
+            
             correctionForm.getAllEntries().add(correctionForm.getEntryForManualEdit());
 
             // Clear out the additional row
             correctionForm.clearEntryForManualEdit();
         }
+        
+        
+        //Calculate the debit/credit/row count
+        OriginEntryStatistics oes = getStatistics(correctionForm.getAllEntries());
+        document.setCorrectionCreditTotalAmount(oes.getCreditTotalAmount());
+        document.setCorrectionDebitTotalAmount(oes.getDebitTotalAmount());
+        document.setCorrectionRowCount(oes.getRowCount());
+        
 
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
@@ -746,6 +759,13 @@ public class CorrectionAction extends KualiDocumentActionBase {
                 break;
             }
         }
+        
+        //Calculate the debit/credit/row count
+        OriginEntryStatistics oes = getStatistics(correctionForm.getAllEntries());
+        document.setCorrectionCreditTotalAmount(oes.getCreditTotalAmount());
+        document.setCorrectionDebitTotalAmount(oes.getDebitTotalAmount());
+        document.setCorrectionRowCount(oes.getRowCount());
+        
 
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
@@ -764,7 +784,7 @@ public class CorrectionAction extends KualiDocumentActionBase {
         // Find it and put it in the editing spot
         for (Iterator iter = correctionForm.getAllEntries().iterator(); iter.hasNext();) {
             OriginEntry element = (OriginEntry)iter.next();
-            if ( element.getEntryId() == entryId ) {
+            if ( element.getEntryId() == entryId) {
                 correctionForm.setEntryForManualEdit(element);
                 correctionForm.setEntryFinancialDocumentReversalDate(convertToString(element.getFinancialDocumentReversalDate(), "Date"));
                 correctionForm.setEntryTransactionDate(convertToString(element.getTransactionDate(), "Date"));
@@ -774,6 +794,8 @@ public class CorrectionAction extends KualiDocumentActionBase {
                 break;
             }
         }
+        
+       
 
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
@@ -804,6 +826,12 @@ public class CorrectionAction extends KualiDocumentActionBase {
             // Clear out the additional row
             correctionForm.clearEntryForManualEdit();
         }
+        
+        //Calculate the debit/credit/row count
+        OriginEntryStatistics oes = getStatistics(correctionForm.getAllEntries());
+        document.setCorrectionCreditTotalAmount(oes.getCreditTotalAmount());
+        document.setCorrectionDebitTotalAmount(oes.getDebitTotalAmount());
+        document.setCorrectionRowCount(oes.getRowCount());
 
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
