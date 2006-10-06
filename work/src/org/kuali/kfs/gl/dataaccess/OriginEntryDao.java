@@ -32,12 +32,13 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * 
- * @version $Id: OriginEntryDao.java,v 1.17.2.7 2006-09-29 12:27:04 bgao Exp $
+ * @version $Id: OriginEntryDao.java,v 1.17.2.8 2006-10-06 14:33:42 bgao Exp $
  */
 public interface OriginEntryDao {
     public static final int SORT_DOCUMENT = 1;
     public static final int SORT_ACCOUNT = 2;
     public static final int SORT_REPORT = 3;
+    public static final int SORT_LISTING_REPORT = 4; 
 
     /**
      * Get the total amount of transactions in a group
