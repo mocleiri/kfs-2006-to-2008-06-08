@@ -406,7 +406,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
 
         ReportQueryByCriteria query = QueryFactory.newReportQuery(OriginEntry.class, criteria);
 
-        String attributeList[] = { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")", "count(" + PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE + ")" };
+        String attributeList[] = { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")", "count(*)" };
 
         String groupList[] = { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE };
 
