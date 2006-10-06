@@ -490,7 +490,7 @@ public class ReportServiceImpl implements ReportService {
     public void generateScrubberRemovedTransactions(Date runDate, OriginEntryGroup errorGroup) {
         LOG.debug("generateScrubberRemovedTransactions() started");
 
-        Iterator ti = originEntryService.getEntriesByGroupAccountOrder(errorGroup);
+        Iterator ti = originEntryService.getEntriesByGroupListingReportOrder(errorGroup);
 
         TransactionListingReport rept = new TransactionListingReport();
         rept.generateReport(ti, runDate, "Error Listing - Transactions Remove From the Scrubber", "scrubber_errors", batchReportsDirectory);
