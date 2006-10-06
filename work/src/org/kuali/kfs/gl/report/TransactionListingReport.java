@@ -125,7 +125,7 @@ public class TransactionListingReport {
 
             document.open();
 
-            float[] widths = { 5, 8, 5, 5, 5, 7, 6, 10, 27, 12, 12 };
+            float[] widths = { 5, 9, 6, 5, 5, 5, 6, 5, 7, 27, 10, 10, 8 };
             PdfPTable transactionList = new PdfPTable(widths);
             transactionList.setHeaderRows(1);
             transactionList.setWidthPercentage(100);
@@ -134,6 +134,8 @@ public class TransactionListingReport {
             PdfPCell cell = new PdfPCell(new Phrase("Fiscal Year", headerFont));
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("Account Number", headerFont));
+            transactionList.addCell(cell);
+            cell = new PdfPCell(new Phrase("Balance Type", headerFont));
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("Object Code", headerFont));
             transactionList.addCell(cell);
@@ -153,10 +155,13 @@ public class TransactionListingReport {
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("Credit Amount", headerFont));
             transactionList.addCell(cell);
+            cell = new PdfPCell(new Phrase("Budget Amount", headerFont));
+            transactionList.addCell(cell);
 
             int transactionCount = 0;
             KualiDecimal debitTotal = KualiDecimal.ZERO;
             KualiDecimal creditTotal = KualiDecimal.ZERO;
+            KualiDecimal budgetTotal = KualiDecimal.ZERO;
 
             DecimalFormat nf = new DecimalFormat();
             nf.applyPattern("###,###,###,##0.00");
@@ -168,6 +173,8 @@ public class TransactionListingReport {
                     cell = new PdfPCell(new Phrase(tran.getUniversityFiscalYear() == null ? " " : tran.getUniversityFiscalYear().toString(), textFont));
                     transactionList.addCell(cell);
                     cell = new PdfPCell(new Phrase(tran.getChartOfAccountsCode() + "-" + tran.getAccountNumber(), textFont));
+                    transactionList.addCell(cell);
+                    cell = new PdfPCell(new Phrase(tran.getFinancialBalanceTypeCode(), textFont));
                     transactionList.addCell(cell);
                     cell = new PdfPCell(new Phrase(tran.getFinancialObjectCode(), textFont));
                     transactionList.addCell(cell);
@@ -196,9 +203,19 @@ public class TransactionListingReport {
                     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     transactionList.addCell(cell);
 
-                    if (!Constants.GL_DEBIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
+                    if (Constants.GL_CREDIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
                         cell = new PdfPCell(new Phrase(nf.format(tran.getTransactionLedgerEntryAmount().doubleValue()), textFont));
                         creditTotal = creditTotal.add(tran.getTransactionLedgerEntryAmount());
+                    }
+                    else {
+                        cell = new PdfPCell(new Phrase(nf.format(0), textFont));
+                    }
+                    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    transactionList.addCell(cell);
+                    
+                    if (Constants.GL_BUDGET_CODE.equals(tran.getTransactionDebitCreditCode())) {
+                        cell = new PdfPCell(new Phrase(nf.format(tran.getTransactionLedgerEntryAmount().doubleValue()), textFont));
+                        budgetTotal = creditTotal.add(tran.getTransactionLedgerEntryAmount());
                     }
                     else {
                         cell = new PdfPCell(new Phrase(nf.format(0), textFont));
@@ -215,6 +232,9 @@ public class TransactionListingReport {
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("", textFont));
             transactionList.addCell(cell);
+            cell = new PdfPCell(new Phrase("", textFont));
+            transactionList.addCell(cell);
+            
             DecimalFormat intf = new DecimalFormat();
             intf.applyPattern("###,###");
             cell = new PdfPCell(new Phrase(intf.format(transactionCount), headerFont));
@@ -227,6 +247,10 @@ public class TransactionListingReport {
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase(nf.format(creditTotal.doubleValue()), headerFont));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            transactionList.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase(nf.format(budgetTotal.doubleValue()), headerFont));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             transactionList.addCell(cell);
 
