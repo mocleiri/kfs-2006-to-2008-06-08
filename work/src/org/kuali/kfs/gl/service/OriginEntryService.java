@@ -81,6 +81,14 @@ public interface OriginEntryService {
      * @return
      */
     public Iterator<OriginEntry> getEntriesByGroupReportOrder(OriginEntryGroup oeg);
+    
+    /**
+     * Return all entries for a group sorted across the columns in report from left to right.
+     * 
+     * @param oeg
+     * @return
+     */
+    public Iterator<OriginEntry> getEntriesByGroupListingReportOrder(OriginEntryGroup oeg);
 
     /**
      * Return all entries for the groups where the balance type is empty
