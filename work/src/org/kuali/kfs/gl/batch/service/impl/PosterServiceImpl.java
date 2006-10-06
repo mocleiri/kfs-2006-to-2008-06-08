@@ -71,7 +71,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * 
- * @version $Id: PosterServiceImpl.java,v 1.42.2.4 2006-09-26 16:28:34 bnelson Exp $
+ * @version $Id: PosterServiceImpl.java,v 1.42.2.5 2006-10-06 20:16:49 rpembry Exp $
  */
 public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
@@ -459,7 +459,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
         }
         else if ("#".equals(icrEntry.getAccountNumber())) {
             e.setAccountNumber(et.getAccount().getIndirectCostRecoveryAcctNbr());
-            e.setChartOfAccountsCode(et.getAccount().getChartOfAccountsCode());
+            e.setChartOfAccountsCode(et.getAccount().getIndirectCostRcvyFinCoaCode());
             e.setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
         }
         else {
