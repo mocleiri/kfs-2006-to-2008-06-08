@@ -50,7 +50,7 @@ import org.kuali.module.gl.util.PosterOutputSummaryEntry;
 
 /**
  *  
- * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.11 2006-09-30 16:55:08 jsissom Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.12 2006-10-06 14:33:42 bgao Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
@@ -173,6 +173,12 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         LOG.debug("getEntriesByGroupAccountOrder() started");
 
         return originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_REPORT);
+    }
+    
+    public Iterator<OriginEntry> getEntriesByGroupListingReportOrder(OriginEntryGroup oeg) {
+        LOG.debug("getEntriesByGroupAccountOrder() started");
+
+        return originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_LISTING_REPORT);
     }
 
     /**
