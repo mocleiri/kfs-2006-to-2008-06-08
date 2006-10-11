@@ -543,6 +543,28 @@
 	
 	<target name="dist-binary-and-source-package" depends="init-binary-and-source-package,make-binary-and-source-package,dist-package" />
 	
+	<target name="dist-all-remote" depends="clean,filter-project,filter-workflow-local,dist,make-plugin-remote,make-plugin,dist-batch">
+		<ant target="update-war">
+			<property name="source.war.directory" value="${build.workflow.appserver.directory}" />
+			<property name="application" value="${workflow.application}" />
+		</ant>
+		<ant target="update-war">
+			<property name="source.war.directory" value="${build.cas.appserver.directory}" />
+			<property name="application" value="${cas.application}" />
+		</ant>
+		<copy file="${ant.project.name}-${build.environment}.war" todir="${appserver.deploy.dir}" />
+		<copy todir="${plugin.deploy.directory}">
+			<fileset dir="${plugin.directory}" />
+		</copy>
+		<ant target="filter-local" inheritall="false">
+			<property name="is.local.build" value="true" />
+			<property name="context.docbase" value="" />
+			<property name="local.plugin.classes" value="" />
+			<property name="local.plugin.lib" value="" />
+			<property name="appenders" value="INFO, LogFile" />
+		</ant>
+	</target>
+	
 	<target name="continuous-integration" depends="make-tests,test">
 		<fail if="tests.failed" message="Tests failed" />
 	</target>
