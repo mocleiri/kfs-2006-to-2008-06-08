@@ -153,7 +153,10 @@
 			<filter token="encryption-key" value="${encryption.key}" />
 		</filterset>
 		<condition property="batch.program.directory" value="/home/kultstb/batch/${build.environment}">
-			<equals arg1="${build.environment}" arg2="gl" />
+			<or>
+				<equals arg1="${build.environment}" arg2="ptd" />
+				<equals arg1="${build.environment}" arg2="gl" />
+			</or>
 		</condition>
 		<property name="batch.program.directory" value="/home/kuldevb/batch/${build.environment}" />
 		<filterset id="batch.filterset">
