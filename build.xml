@@ -487,7 +487,7 @@
 		<jar jarfile="${ant.project.name}-${build.environment}.war" basedir="${war.directory}" compress="false" />
 	</target>
 
-	<target name="dist-plugin" depends="make-source,make-plugin-remote,make-plugin" description="Build plugin zip for remote deployment">
+	<target name="dist-plugin" depends="make-source,make-plugin-remote,make-plugin">
 		<zip destfile="en-plugins.zip" basedir="${plugin.directory}" />
 	</target>
 
