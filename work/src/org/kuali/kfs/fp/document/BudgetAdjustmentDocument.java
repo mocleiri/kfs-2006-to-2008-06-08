@@ -28,17 +28,15 @@ package org.kuali.module.financial.document;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
+import org.kuali.Constants;
 import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLineParser;
-import org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine;
-import org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine;
-import org.kuali.module.financial.rules.BudgetAdjustmentDocumentRuleConstants;
 import org.kuali.module.financial.rules.TransactionalDocumentRuleUtil;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -100,6 +98,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
     /**
      * Returns the total current budget amount from the source lines.
+     * 
      * @return KualiDecimal
      */
     public KualiDecimal getSourceCurrentBudgetTotal() {
@@ -114,7 +113,17 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     }
 
     /**
+     * This method retrieves the total current budget amount formatted as currency.
+     * 
+     * @return String
+     */
+    public String getCurrencyFormattedSourceCurrentBudgetTotal() {
+        return (String) new CurrencyFormatter().format(getSourceCurrentBudgetTotal());
+    }
+
+    /**
      * Returns the total current budget income amount from the source lines.
+     * 
      * @return KualiDecimal
      */
     public KualiDecimal getSourceCurrentBudgetIncomeTotal() {
@@ -132,6 +141,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
     /**
      * Returns the total current budget expense amount from the source lines.
+     * 
      * @return KualiDecimal
      */
     public KualiDecimal getSourceCurrentBudgetExpenseTotal() {
@@ -149,6 +159,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
     /**
      * Returns the total current budget amount from the target lines.
+     * 
      * @return KualiDecimal
      */
     public KualiDecimal getTargetCurrentBudgetTotal() {
@@ -163,7 +174,17 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     }
 
     /**
+     * This method retrieves the total current budget amount formatted as currency.
+     * 
+     * @return String
+     */
+    public String getCurrencyFormattedTargetCurrentBudgetTotal() {
+        return (String) new CurrencyFormatter().format(getTargetCurrentBudgetTotal());
+    }
+
+    /**
      * Returns the total current budget income amount from the target lines.
+     * 
      * @return KualiDecimal
      */
     public KualiDecimal getTargetCurrentBudgetIncomeTotal() {
@@ -181,6 +202,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
     /**
      * Returns the total current budget expense amount from the target lines.
+     * 
      * @return KualiDecimal
      */
     public KualiDecimal getTargetCurrentBudgetExpenseTotal() {
@@ -198,6 +220,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
     /**
      * Returns the total base budget amount from the source lines.
+     * 
      * @return KualiDecimal
      */
     public KualiInteger getSourceBaseBudgetTotal() {
@@ -211,8 +234,19 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
         return baseBudgetTotal;
     }
 
+
+    /**
+     * This method retrieves the total base budget amount formatted as currency.
+     * 
+     * @return String
+     */
+    public String getCurrencyFormattedSourceBaseBudgetTotal() {
+        return (String) new CurrencyFormatter().format(getSourceBaseBudgetTotal());
+    }
+
     /**
      * Returns the total base budget income amount from the source lines.
+     * 
      * @return KualiDecimal
      */
     public KualiInteger getSourceBaseBudgetIncomeTotal() {
@@ -230,6 +264,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
     /**
      * Returns the total base budget expense amount from the source lines.
+     * 
      * @return KualiDecimal
      */
     public KualiInteger getSourceBaseBudgetExpenseTotal() {
@@ -247,6 +282,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
     /**
      * Returns the total base budget amount from the target lines.
+     * 
      * @return KualiDecimal
      */
     public KualiInteger getTargetBaseBudgetTotal() {
@@ -261,7 +297,17 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     }
 
     /**
+     * This method retrieves the total base budget amount formatted as currency.
+     * 
+     * @return String
+     */
+    public String getCurrencyFormattedTargetBaseBudgetTotal() {
+        return (String) new CurrencyFormatter().format(getTargetBaseBudgetTotal());
+    }
+
+    /**
      * Returns the total base budget income amount from the target lines.
+     * 
      * @return KualiDecimal
      */
     public KualiInteger getTargetBaseBudgetIncomeTotal() {
@@ -279,6 +325,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
     /**
      * Returns the total base budget expense amount from the target lines.
+     * 
      * @return KualiDecimal
      */
     public KualiInteger getTargetBaseBudgetExpenseTotal() {
@@ -373,8 +420,8 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     }
 
     /**
-     * The base checks that the posting year is the current year, not a requirement
-     * for the ba document.
+     * The base checks that the posting year is the current year, not a requirement for the ba document.
+     * 
      * @see org.kuali.core.document.TransactionalDocumentBase#getAllowsCopy()
      */
     @Override
@@ -383,8 +430,8 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     }
 
     /**
-     * The base checks that the posting year is the current year, not a requirement
-     * for the ba document.
+     * The base checks that the posting year is the current year, not a requirement for the ba document.
+     * 
      * @see org.kuali.core.document.TransactionalDocumentBase#getAllowsErrorCorrection()
      */
     @Override
@@ -406,5 +453,21 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     @Override
     protected String getNullOrReasonNotToErrorCorrect() {
         return null;
+    }
+
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentBase#getSourceAccountingLinesSectionTitle()
+     */
+    @Override
+    public String getSourceAccountingLinesSectionTitle() {
+        return Constants.BudgetAdjustmentDocumentConstants.SOURCE_BA;
+    }
+
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentBase#getTargetAccountingLinesSectionTitle()
+     */
+    @Override
+    public String getTargetAccountingLinesSectionTitle() {
+        return Constants.BudgetAdjustmentDocumentConstants.TARGET_BA;
     }
 }

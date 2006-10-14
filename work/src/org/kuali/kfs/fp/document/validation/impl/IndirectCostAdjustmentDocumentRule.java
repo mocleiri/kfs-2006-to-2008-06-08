@@ -27,16 +27,12 @@ import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
-import org.kuali.core.bo.SourceAccountingLine;
-import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.gl.util.SufficientFundsItemHelper.SufficientFundsItem;
 
 /**
  * Business rule(s) applicable to IndirectCostAdjustment documents.
@@ -62,8 +58,8 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
 
     /**
      * same logic as
-     * <code>IsDebitUtils#isDebitConsideringType(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)</code>
-     * but has the following accounting line restrictions: for grant lines(source):
+     * <code>IsDebitUtils#isDebitConsideringType(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)</code> but
+     * has the following accounting line restrictions: for grant lines(source):
      * <ol>
      * <li>only allow expense object type codes
      * </ol>
@@ -104,7 +100,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
             valid = !rule.failsRule(objectSubTypeCode);
 
             if (!valid) {
-                reportError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_INVALID_OBJ_SUB_TYPE, new String[] { objectCode.getFinancialObjectCode(), objectSubTypeCode });
+                reportError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_INVALID_OBJ_SUB_TYPE, objectCode.getFinancialObjectCode(), objectSubTypeCode);
             }
         }
         return valid;
@@ -187,7 +183,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
      */
 
     protected boolean processCommonCustomAccountingLineBusinessRules(AccountingLine accountingLine) {
-    //refresh line since this document calls the custom rules first. KULEDOCS-1406
+        // refresh line since this document calls the custom rules first. KULEDOCS-1406
         accountingLine.refresh();
         boolean isValid = isChartOfAccountsAllowed(accountingLine);
         if (isValid) {
@@ -204,11 +200,11 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
      */
     private boolean isAccountAllowed(AccountingLine accountingLine) {
         boolean isValid = true;
-        if (isValid && isSourceAccountingLine(accountingLine)) {
+        if (isValid && accountingLine.isSourceAccountingLine()) {
             String icrAccount = accountingLine.getAccount().getIndirectCostRecoveryAcctNbr();
             isValid &= StringUtils.isNotBlank(icrAccount);
             if (!isValid) {
-                reportError(PropertyConstants.ACCOUNT, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_GRANT_INVALID_ACCOUNT, new String[] { accountingLine.getAccountNumber() });
+                reportError(PropertyConstants.ACCOUNT, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_GRANT_INVALID_ACCOUNT, accountingLine.getAccountNumber());
             }
         }
         return isValid;
@@ -227,7 +223,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
     private boolean isChartOfAccountsAllowed(AccountingLine accountingLine) {
         boolean isValid = true;
 
-        if (isSourceAccountingLine(accountingLine)) {
+        if (accountingLine.isSourceAccountingLine()) {
             String icrExpense = accountingLine.getChart().getIcrExpenseFinancialObjectCd();
             isValid &= StringUtils.isNotBlank(icrExpense);
             if (!isValid) {
@@ -243,59 +239,5 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
         }
 
         return isValid;
-    }
-
-    /**
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(org.kuali.core.document.TransactionalDocument,
-     *      org.kuali.core.bo.SourceAccountingLine)
-     */
-    @Override
-    protected SufficientFundsItem processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, SourceAccountingLine sourceAccountingLine) {
-        return processAccountingLineSufficientFundsCheckingPreparation(transactionalDocument, sourceAccountingLine);
-    }
-
-
-    /**
-     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processTargetAccountingLineSufficientFundsCheckingPreparation(org.kuali.core.document.TransactionalDocument,
-     *      org.kuali.core.bo.TargetAccountingLine)
-     */
-    @Override
-    protected SufficientFundsItem processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, TargetAccountingLine targetAccountingLine) {
-        return processAccountingLineSufficientFundsCheckingPreparation(transactionalDocument, targetAccountingLine);
-    }
-
-    /**
-     * Prepares the input item that will be used for sufficient funds checking.
-     * 
-     * fi_dica:lp_proc_grant_ln,lp_proc_rcpt_ln conslidated
-     * 
-     * @param transactionalDocument TODO
-     * @param accountingLine
-     * 
-     * @return <code>SufficientFundsItem</code>
-     */
-    private final SufficientFundsItem processAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
-        String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
-        String accountNumber = accountingLine.getAccountNumber();
-        String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
-        String financialObjectCode = accountingLine.getFinancialObjectCode();
-        String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
-        Integer fiscalYear = accountingLine.getPostingYear();
-        String financialObjectTypeCode = accountingLine.getObjectTypeCode();
-        KualiDecimal lineAmount = accountingLine.getAmount();
-        String offsetDebitCreditCode = null;
-        // fi_dica:lp_proc_grant_ln.36-2...62-2
-        // fi_dica:lp_proc_rcpt_ln.36-2...69-2
-        if (isDebit(transactionalDocument, accountingLine)) {
-            offsetDebitCreditCode = Constants.GL_CREDIT_CODE;
-        }
-        else {
-            offsetDebitCreditCode = Constants.GL_DEBIT_CODE;
-        }
-        lineAmount = lineAmount.abs();
-
-        String sufficientFundsObjectCode = SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(chartOfAccountsCode, financialObjectCode, accountSufficientFundsCode, financialObjectLevelCode);
-        SufficientFundsItem item = buildSufficentFundsItem(accountNumber, accountSufficientFundsCode, lineAmount, chartOfAccountsCode, sufficientFundsObjectCode, offsetDebitCreditCode, financialObjectCode, financialObjectLevelCode, fiscalYear, financialObjectTypeCode);
-        return item;
     }
 }
