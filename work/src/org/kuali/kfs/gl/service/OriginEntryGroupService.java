@@ -30,20 +30,18 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * @author Laran Evans <lc278@cornell.edu>
- * @version $Id: OriginEntryGroupService.java,v 1.7.2.1 2006-07-26 21:51:40 abyrne Exp $
+ * @version $Id: OriginEntryGroupService.java,v 1.7.2.1.2.4 2006-09-06 22:37:21 tdurkin Exp $
  */
 
 public interface OriginEntryGroupService {
     /**
-     * Create the backup group which has all the entries from
-     * all the groups where all the flags are set Y.
+     * Create the backup group which has all the entries from all the groups where all the flags are set Y.
      * 
      */
     public void createBackupGroup();
 
     /**
-     * Delete all the groups (and entries) where the
-     * group is this many days old or older
+     * Delete all the groups (and entries) where the group is this many days old or older
      * 
      * @param days
      */
@@ -105,6 +103,10 @@ public interface OriginEntryGroupService {
      * @param group
      */
     public void save(OriginEntryGroup group);
-    
+
     public OriginEntryGroup getExactMatchingEntryGroup(Integer id);
+
+    public Collection getAllOriginEntryGroup();
+
+    public Collection getRecentGroupsByDays(int days);
 }
