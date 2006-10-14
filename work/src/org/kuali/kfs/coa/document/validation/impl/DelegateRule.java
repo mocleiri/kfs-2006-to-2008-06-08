@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/validation/impl/DelegateRule.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.rules;
 
@@ -28,7 +33,6 @@ import org.apache.commons.lang.time.DateUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.core.bo.user.KualiUser;
-import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.DocumentType;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
@@ -38,10 +42,9 @@ import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 
 /**
- * Validates content of a <code>{@link AccountDelegate}</code> maintenance document upon triggering of a 
- * approve, save, or route event.
+ * This class...
  * 
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class DelegateRule extends MaintenanceDocumentRuleBase {
 
@@ -155,13 +158,11 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     protected boolean checkSimpleRules() {
 
         boolean success = true;
-        boolean newActive;
         KualiDecimal fromAmount = newDelegate.getFinDocApprovalFromThisAmt();
         KualiDecimal toAmount = newDelegate.getFinDocApprovalToThisAmount();
-        newActive = newDelegate.isAccountDelegateActiveIndicator();
 
-        // start date must be greater than or equal to today if active
-        if ((ObjectUtils.isNotNull(newDelegate.getAccountDelegateStartDate())) && newActive) {
+        // start date must be greater than or equal to today
+        if (ObjectUtils.isNotNull(newDelegate.getAccountDelegateStartDate())) {
             Timestamp today = getDateTimeService().getCurrentTimestamp();
             today.setTime(DateUtils.truncate(today, Calendar.DAY_OF_MONTH).getTime());
             if (newDelegate.getAccountDelegateStartDate().before(today)) {
@@ -201,10 +202,10 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
                 }
             }
         }
-
+        
         // the account that has been chosen cannot be closed
         Account account = newDelegate.getAccount();
-        if (ObjectUtils.isNotNull(account)) {
+        if(ObjectUtils.isNotNull(account)) {
             if (account.isAccountClosedIndicator()) {
                 putFieldError("accountNumber", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_ACCT_NOT_CLOSED);
                 success &= false;
@@ -236,15 +237,15 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
         if (!newActive) {
             return success;
         }
-
+    
         // exit if document group corresponding to document type = "EX"
         documentType = newDelegate.getDocumentType();
-        if (ObjectUtils.isNotNull(documentType)) {
+        if(ObjectUtils.isNotNull(documentType)) {
             if ((documentType.getFinancialDocumentGroupCode()).equals("EX")) {
                 return success;
             }
         }
-
+        
         // if its a new document, we are only interested if they have chosen this one
         // to be a primary route
         if (document.isNew()) {
@@ -326,20 +327,20 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
                 blockingDocumentExists = false;
                 for (Iterator iter = primaryRoutes.iterator(); iter.hasNext();) {
                     Delegate delegate = (Delegate) iter.next();
-
+                 
                     // don't consider as blocking if document group corresponding to document type = "EX"
                     documentType = delegate.getDocumentType();
-                    if (ObjectUtils.isNotNull(documentType)) {
+                    if(ObjectUtils.isNotNull(documentType)) {
                         if (!(documentType.getFinancialDocumentGroupCode()).equals("EX")) {
                             blockingDocumentExists = true;
                             blockingDocType = delegate.getFinancialDocumentTypeCode();
                         }
-                    }
+                    }                   
                 }
 
                 // add the error if blocking document found
-
-                if (blockingDocumentExists == true) {
+                
+                if (blockingDocumentExists == true){
                     putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_PRIMARY_ROUTE_ALREADY_EXISTS_FOR_NEW_ALL, blockingDocType);
                     success &= false;
                     return success; // we're done, no sense in continuing
@@ -382,26 +383,21 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
         if (ObjectUtils.isNull(newDelegate.getAccountDelegate())) {
             return success;
         }
-        UniversalUser user = newDelegate.getAccountDelegate();
+        KualiUser user = newDelegate.getAccountDelegate();
 
-        // user must be an active kuali user
-        if (!user.isActiveKualiUser()) {
-            success = false;
-            putFieldError("accountDelegate.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE_KUALI_USER);
-        }
-        
         // user must be of the allowable statuses (A - Active)
         if (apcRuleFails(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.DELEGATE_USER_EMP_STATUSES, user.getEmployeeStatusCode())) {
-            success = false;
+            success &= false;
             putFieldError("accountDelegate.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE);
         }
-        
+
         // user must be of the allowable types (P - Professional)
         if (apcRuleFails(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.DELEGATE_USER_EMP_TYPES, user.getEmployeeTypeCode())) {
-            success = false;
+            success &= false;
             putFieldError("accountDelegate.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_PROFESSIONAL);
         }
 
         return success;
     }
+
 }

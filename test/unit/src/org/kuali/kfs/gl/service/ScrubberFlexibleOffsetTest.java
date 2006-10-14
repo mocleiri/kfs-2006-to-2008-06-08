@@ -36,7 +36,9 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
 
     private ScrubberService scrubberService;
 
-    @Override
+    /**
+     * @see junit.framework.TestCase#setUp()
+     */
     protected void setUp() throws Exception {
         super.setUp();
 

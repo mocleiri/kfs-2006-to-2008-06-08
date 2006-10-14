@@ -36,6 +36,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  *  
+ * @version $Id: OriginEntryGroupDaoOjb.java,v 1.15.2.5 2006-10-14 02:29:34 jbmorris Exp $ TODO Oracle Specific code here
  */
 public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryGroupDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupDaoOjb.class);
