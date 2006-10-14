@@ -22,6 +22,8 @@ import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 /**
  * This class piggy backs on all of the functionality in the KualiTransactionalDocumentActionBase.
  * 
+ * 
+ * @version $Id: PreEncumbranceAction.java,v 1.2.8.3 2006-10-14 02:29:28 jbmorris Exp $
  */
 public class PreEncumbranceAction extends KualiTransactionalDocumentActionBase {
 }

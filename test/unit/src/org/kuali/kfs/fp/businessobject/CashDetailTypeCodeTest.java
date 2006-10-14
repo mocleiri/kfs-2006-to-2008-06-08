@@ -27,7 +27,7 @@ import org.kuali.test.KualiTestBase;
  * 
  */
 public class CashDetailTypeCodeTest extends KualiTestBase {
-    private CashDetailTypeCode cdtc = null;
+    CashDetailTypeCode cdtc = null;
     public static final boolean ACTIVE_IND = true;
     public static final String GUID = "123456789012345678901234567890123456";
     public static final String NAME = "NAME";
@@ -35,7 +35,16 @@ public class CashDetailTypeCodeTest extends KualiTestBase {
     public static final Long VER_NBR = new Long(1);
     public static final String DESCRIPTION = "Description";
 
-    @Override
+    /**
+     * Constructs a CashDetailTypeCodeTest.java.
+     */
+    public CashDetailTypeCodeTest() {
+        super();
+    }
+
+    /*
+     * @see TestCase#setUp()
+     */
     protected void setUp() throws Exception {
         super.setUp();
         cdtc = new CashDetailTypeCode();
@@ -46,6 +55,14 @@ public class CashDetailTypeCodeTest extends KualiTestBase {
         cdtc.setObjectId(GUID);
         cdtc.setVersionNumber(VER_NBR);
         cdtc.setDescription(DESCRIPTION);
+    }
+
+    /*
+     * @see TestCase#tearDown()
+     */
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        cdtc = null;
     }
 
     public void testCashDetailTypePojo() {

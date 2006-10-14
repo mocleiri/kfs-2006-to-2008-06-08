@@ -37,7 +37,7 @@
             <title>Fiscal Year Function Control Lookup</title>
 
             <menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.FiscalYearFunctionControl"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.FiscalYearFunctionControl">Create New</a>]]>
             </menubar>
 
             <instructions>Lookup an Fiscal Year Function Control</instructions>
@@ -94,8 +94,8 @@
                     <checkbox />
                 </control>
 
-                <summary>financialSystemFunctionActiveIndicator</summary>
-                <description>financialSystemFunctionActiveIndicator description...</description>
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The Yes/No indicator of an active function.</description>
                 
                <formatterClass>org.kuali.core.web.format.BooleanFormatter</formatterClass>
             </attribute>
