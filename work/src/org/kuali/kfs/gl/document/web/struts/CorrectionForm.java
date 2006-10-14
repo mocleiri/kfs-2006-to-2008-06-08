@@ -58,7 +58,6 @@ public class CorrectionForm extends KualiDocumentFormBase {
     private boolean manualEditFlag = false;
     private boolean deleteFileFlag = false;
     private boolean showOutputFlag = false;
-    private boolean showSummaryOutputFlag = false;
     private Collection allEntries;
     private Collection matchingEntries;
     private String entryUniversityFiscalYear;
@@ -351,13 +350,5 @@ public class CorrectionForm extends KualiDocumentFormBase {
 
     public void setManualEditFlag(boolean manualEditFlag) {
         this.manualEditFlag = manualEditFlag;
-    }
-
-    public boolean getShowSummaryOutputFlag() {
-        return showSummaryOutputFlag;
-    }
-
-    public void setShowSummaryOutputFlag(boolean showSummaryOutputFlag) {
-        this.showSummaryOutputFlag = showSummaryOutputFlag;
     }
 }

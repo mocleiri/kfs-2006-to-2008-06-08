@@ -44,7 +44,7 @@
             <title>Account Delegate Lookup</title>
 
             <menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Delegate"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>&nbsp;<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.DelegateChangeContainer"><img src="images/tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Delegate"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
             </menubar>
 
             <instructions>Lookup an Account Delegate</instructions>
@@ -105,9 +105,7 @@
                 <control>
                     <hidden />
                 </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Account Delegate Universal ID</summary>
                 <description>The Universal ID (ie, unique identifier) of the Account Delegate.</description>
             </attributeReference>
 
@@ -118,9 +116,7 @@
                 <control>
                     <kualiUser universalIdAttributeName="accountDelegateSystemId" userIdAttributeName="accountDelegate.personUserIdentifier" personNameAttributeName="accountDelegate.personName" />
                 </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Account Delegate User ID</summary>
                 <description>The user ID of the designated delegate for the Fiscal Officer for the Account.</description>
             </attributeReference>
 
@@ -131,9 +127,7 @@
                 <control>
                     <hidden />
                 </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Account Delegate Name</summary>
                 <description>The Name of the Account Delegate.</description>
             </attributeReference>
 
@@ -169,9 +163,7 @@
             <attributeReference name="accountDelegateActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean">
                 <label>Account Delegate Active</label>
                 <shortLabel>DelegateActive</shortLabel>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
+                <summary>Account Delegate Active</summary>
                 <description>Radioboxes in the entry form that indicate if the Account delegation is active or inactive. If "Both" is checked in the Lookup, then both "Yes" (active) or "No" (inactive) values are listed in the search.</description>
             </attributeReference>
 
