@@ -166,33 +166,17 @@ public class Account extends BusinessObjectBase implements AccountIntf {
         return isInCgFundGroup();
     }
 
-    public static boolean isInCg(SubFundGroup subFundGroup) {
-        if (subFundGroup != null) {
-            return Constants.CONTRACTS_AND_GRANTS.equals(subFundGroup.getFundGroupCode());
-        }
-        else {
-            // If sub fund group is missing
-            return false;
-        }
-    }
-    
     private boolean isInCgFundGroup() {
         if (getSubFundGroup() != null) {
             return Constants.CONTRACTS_AND_GRANTS.equals(getSubFundGroup().getFundGroupCode());
         }
         else {
-            if (getSubFundGroupCode()!=null && getSubFundGroupCode().length()>0) {
-                throw new Error("Unable to determine whether this account is a CG account");
-            }
             // If sub fund group is missing
             return false;
         }
     }
 
     private boolean isInCgSubFundGroup() {
-        if (true) {
-            throw new Error("You must also fix the method isInCg(SubFundGroup subFundGroup)");
-        }
         return Constants.CONTRACTS_AND_GRANTS.equals(getSubFundGroupCode());
     }
 
