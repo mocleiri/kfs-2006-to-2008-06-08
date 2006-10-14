@@ -45,6 +45,7 @@ import org.kuali.module.gl.util.PosterOutputSummaryEntry;
 
 /**
  *  
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.13 2006-10-14 02:29:37 jbmorris Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);

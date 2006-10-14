@@ -34,6 +34,10 @@ import org.kuali.module.gl.dao.OriginEntryGroupDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.web.struts.action.CorrectionAction;
 
+/**
+ *  
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.6 2006-10-14 02:29:37 jbmorris Exp $
+ */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
 
@@ -267,7 +271,7 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
      */
     public OriginEntryGroup getExactMatchingEntryGroup(Integer id) {
         return originEntryGroupDao.getExactMatchingEntryGroup(id);
-        }
+    }
 
     /**
      * 
@@ -285,7 +289,8 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
 
     public void setOriginEntryGroupDao(OriginEntryGroupDao oegd) {
         originEntryGroupDao = oegd;
-}
+    }
+
     public void setOriginEntryDao(OriginEntryDao oed) {
         originEntryDao = oed;
     }
