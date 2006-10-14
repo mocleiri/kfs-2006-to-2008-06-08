@@ -156,7 +156,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
                 // calling workflow service to bypass business rule checks
                 if (!pcardDocument.getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
                     workflowDocumentService.route(pcardDocument.getDocumentHeader().getWorkflowDocument(), "", null);
-            }
+                }
                 else {
                     LOG.warn("Document " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + " is already ENROUTE. Route status out of sync with FP_DOC_HEADER_T");
                 }
@@ -304,11 +304,13 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
             }
             // In case errorText is still too long, truncate it and indicate so.
             int documentExplanationMaxLength = dataDictionaryService.getAttributeMaxLength(AttributeReferenceDummy.class.getName(), PropertyConstants.DOCUMENT_EXPLANATION);
-            if (errorText.length() > documentExplanationMaxLength) {
-                String truncatedMessage = " ... TRUNCATED.";
-                errorText = errorText.substring(0, documentExplanationMaxLength - truncatedMessage.length()) + truncatedMessage;
+            if (errorText.length() <= documentExplanationMaxLength) {
+                pcardDocument.setExplanation(errorText);
             }
-            pcardDocument.setExplanation(errorText);
+            else {
+                String tuncatedMessage = " ... TRUNCATED.";
+                errorText = errorText.substring(0, documentExplanationMaxLength - tuncatedMessage.length()) + tuncatedMessage;
+            }
         }
         catch (WorkflowException e) {
             LOG.error("Error creating pcdo documents: " + e.getMessage());
@@ -509,20 +511,15 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         targetLine.refresh();
 
         if (!AccountingLineRuleUtil.isValidObjectCode(targetLine.getObjectCode(), dataDictionaryService.getDataDictionary())) {
-            String tempErrorText = "Chart " + targetLine.getChartOfAccountsCode() + 
-                    " Object Code " + targetLine.getFinancialObjectCode() + " is invalid; using default Object Code.";
-            LOG.info(tempErrorText);
-            errorText += " " + tempErrorText;
+            LOG.info("Object Code " + targetLine.getFinancialObjectCode() + " is invalid; using default Object Code.");
+            errorText += (" Object Code " + targetLine.getFinancialObjectCode() + " is invalid; using default Object Code.");
 
             targetLine.setFinancialObjectCode(getDefaultObjectCode());
         }
 
         if (StringUtils.isNotBlank(targetLine.getSubAccountNumber()) && !AccountingLineRuleUtil.isValidSubAccount(targetLine.getSubAccount(), dataDictionaryService.getDataDictionary())) {
-            String tempErrorText = "Chart " + targetLine.getChartOfAccountsCode() +
-                    " Account " + targetLine.getAccountNumber() +
-                    " Sub Account " + targetLine.getSubAccountNumber() + " is invalid; Setting Sub Account to blank.";
-            LOG.info(tempErrorText);
-            errorText += " " + tempErrorText;
+            LOG.info("Sub Account " + targetLine.getSubAccountNumber() + " is invalid; Setting to blank.");
+            errorText += " Sub Account " + targetLine.getSubAccountNumber() + " is invalid; Setting to blank.";
 
             targetLine.setSubAccountNumber("");
         }
@@ -531,12 +528,8 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         targetLine.refresh();
 
         if (StringUtils.isNotBlank(targetLine.getFinancialSubObjectCode()) && !AccountingLineRuleUtil.isValidSubObjectCode(targetLine.getSubObjectCode(), dataDictionaryService.getDataDictionary())) {
-            String tempErrorText = "Chart " + targetLine.getChartOfAccountsCode() +
-                    " Account " + targetLine.getAccountNumber() +
-                    " Object Code " + targetLine.getFinancialObjectCode() +
-                    " Sub Object Code " + targetLine.getFinancialSubObjectCode() + " is invalid; setting Sub Object to blank.";
-            LOG.info(tempErrorText);
-            errorText += " " + tempErrorText;
+            LOG.info("Sub Object Code " + targetLine.getFinancialSubObjectCode() + " is invalid; setting to blank.");
+            errorText += " Sub Object Code " + targetLine.getFinancialSubObjectCode() + " is invalid; setting to blank.";
 
             targetLine.setFinancialSubObjectCode("");
         }
@@ -549,9 +542,8 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         }
 
         if (!AccountingLineRuleUtil.isValidAccount(targetLine.getAccount(), dataDictionaryService.getDataDictionary()) || targetLine.getAccount().isExpired()) {
-            String tempErrorText = "Chart " + targetLine.getChartOfAccountsCode() + " Account " + targetLine.getAccountNumber() + " is invalid; using error account.";
-            LOG.info(tempErrorText);
-            errorText += " " + tempErrorText;
+            LOG.info("Account " + targetLine.getAccountNumber() + " is invalid; using error account.");
+            errorText += " Account " + targetLine.getAccountNumber() + " is invalid; using error Chart & Account.";
 
             targetLine.setChartOfAccountsCode(getErrorChartCode());
             targetLine.setAccountNumber(getErrorAccountNumber());
