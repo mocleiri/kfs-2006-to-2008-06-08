@@ -127,11 +127,11 @@ public class UserSession implements Serializable {
      * @throws EdenUserNotFoundException
      */
     public void setBackdoorUser(String networkId) throws UserNotFoundException, WorkflowException {
-       if (!"prd".equals(SpringServiceLocator.getKualiConfigurationService().getPropertyString("environment"))) {
-        this.backdoorUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(networkId));
-        this.backdoorWorkflowUser = SpringServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
-        this.workflowDocMap = new HashMap();
-       }
+        if (!"prd".equals(SpringServiceLocator.getKualiConfigurationService().getPropertyString("environment"))) {
+          this.backdoorUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(networkId));
+          this.backdoorWorkflowUser = SpringServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
+          this.workflowDocMap = new HashMap();
+        }
     }
 
     /**

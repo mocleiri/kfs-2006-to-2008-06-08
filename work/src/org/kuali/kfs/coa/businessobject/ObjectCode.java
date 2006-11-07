@@ -22,9 +22,7 @@ import java.util.LinkedHashMap;
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.bo.KualiCode;
-import org.kuali.core.bo.Options;
-import org.kuali.core.bo.Summarizable;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetAggregationCode;
@@ -35,7 +33,7 @@ import org.kuali.module.gl.bo.SufficientFundRebuild;
 /**
  * 
  */
-public class ObjectCode extends BusinessObjectBase implements Summarizable {
+public class ObjectCode extends BusinessObjectBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjectCode.class);
 
     private static final long serialVersionUID = -965833141452795485L;
@@ -55,6 +53,7 @@ public class ObjectCode extends BusinessObjectBase implements Summarizable {
     private String nextYearFinancialObjectCode;
     private String finObjMandatoryTrnfrelimCd;
     private String financialFederalFundedCode;
+
 
     private transient BudgetAggregationCode financialBudgetAggregation;
     private transient MandatoryTransferEliminationCode finObjMandatoryTrnfrelim;
@@ -248,9 +247,9 @@ public class ObjectCode extends BusinessObjectBase implements Summarizable {
      * @return - Returns the financialBudgetAggregationCd
      * 
      */
-    /*public BudgetAggregationCode getFinancialBudgetAggregation() {
+    public BudgetAggregationCode getFinancialBudgetAggregation() {
         return financialBudgetAggregation;
-    }*/
+    }
 
     /**
      * Sets the financialBudgetAggregationCd attribute.
@@ -258,9 +257,9 @@ public class ObjectCode extends BusinessObjectBase implements Summarizable {
      * @param financialBudgetAggregationCd The financialBudgetAggregationCd to set.
      * @deprecated
      */
-    /*public void setFinancialBudgetAggregation(BudgetAggregationCode financialBudgetAggregationCd) {
+    public void setFinancialBudgetAggregation(BudgetAggregationCode financialBudgetAggregationCd) {
         this.financialBudgetAggregation = financialBudgetAggregationCd;
-    }*/
+    }
 
     /**
      * Gets the universityFiscal attribute.
@@ -583,10 +582,6 @@ public class ObjectCode extends BusinessObjectBase implements Summarizable {
         this.objectCode = objectCode;
     }
 
-    public BudgetAggregationCode getFinancialBudgetAggregation() {
-        return financialBudgetAggregation;
-    }
-
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -630,30 +625,6 @@ public class ObjectCode extends BusinessObjectBase implements Summarizable {
         catch (Exception ex) {
             LOG.error("Problem updating sufficient funds rebuild table: ", ex);
         }
-    }
-
-    public boolean isActive() {
-        return this.financialObjectActiveCode;
-    }
-
-    public void setActive(boolean a) {
-        this.financialObjectActiveCode=a;
-    }
-
-    public void setCode(String code) {
-        this.chartOfAccountsCode=code;
-    }
-
-    public void setName(String name) {
-        this.financialObjectCodeName=name;
-    }
-
-    public String getCode() {
-        return this.financialObjectCode;
-    }
-
-    public String getName() {
-        return this.financialObjectCodeName;
     }
 
 }

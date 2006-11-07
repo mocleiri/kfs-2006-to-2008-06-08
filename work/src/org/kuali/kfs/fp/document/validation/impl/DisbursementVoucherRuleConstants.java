@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/validation/impl/DisbursementVoucherRuleConstants.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
 
@@ -21,7 +26,7 @@ package org.kuali.module.financial.rules;
 /**
  * Holds constants for disbursement voucher and payee documents.
  * 
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public interface DisbursementVoucherRuleConstants {
 
@@ -48,7 +53,7 @@ public interface DisbursementVoucherRuleConstants {
     public static String NO_DOCUMENTATION_LOCATION = "N";
 
     // apc security group constants
-    public static String DV_DOCUMENT_PARAMETERS_GROUP_NM = "Kuali.FinancialTransactionProcessing.DisbursementVoucherDocument";
+    public static String DV_DOCUMENT_PARAMETERS_GROUP_NM = "DVDocumentParameters";
     public static String GLOBAL_FIELD_RESTRICTIONS_GROUP_NM = "DVGlobalFieldRestrictions";
     public static String PAYMENT_OBJECT_LEVEL_GROUP_NM = "DVPaymentObjectLevelRestrictions";
     public static String PAYMENT_OBJECT_CODE_GROUP_NM = "DVPaymentObjectCodeRestrictions";
@@ -90,13 +95,14 @@ public interface DisbursementVoucherRuleConstants {
     public static String TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM = "TAX_DOCUMENTATION_LOCATION_CODE";
     public static String W9_OWNERSHIP_TYPES_PARM_NM = "W9_OWNERSHIP_TYPES";
     public static String NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM = "NONEMPLOYEE_TRAVEL_PAYMENT_REASONS";
-    public static String NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM = "NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_INDICATOR";
     public static String PREPAID_TRAVEL_PAY_REASONS_PARM_NM = "PREPAID_TRAVEL_PAYMENT_REASONS";
     public static String REVOLVING_FUND_PAY_REASONS_PARM_NM = "REVOLVING_FUND_PAYMENT_REASONS";
     public static String RESEARCH_PAY_REASONS_PARM_NM = "RESEARCH_PAYMENT_REASONS";
     public static String RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM = "RESEARCH_NON_VENDOR_PAY_LIMIT_AMOUNT";
     public static String PERFORM_PREPAID_EMPL_PARM_NM = "PERFORM_PREPAID_ACTIVE_EMPLOPYEE_IND";
+    public static String PERFORM_EMPL_OUTSIDE_PAYROLL_PARM_NM = "RFORM_EMPL_PAID_OUTSIDE_PAYROLL_IND";
     public static String MOVING_PAY_REASONS_PARM_NM = "MOVING_PAYMENT_REASONS";
+    public static String SWITCH_DEBIT_CREDIT_ACCOUNT_TYPES_PARM_NM = "SWITCH_DEBIT_CREDIT_ACCOUNT_TYPES";
 
     public static String TAX_TYPE_SSN = "1";
     public static String TAX_TYPE_FEIN = "0";

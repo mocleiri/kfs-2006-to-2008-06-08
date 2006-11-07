@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/impl/OriginEntryGroupDaoOjb.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.dao.ojb;
 
@@ -35,17 +40,12 @@ import org.kuali.module.gl.dao.OriginEntryGroupDao;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
- *  
+ * @author Laran Evans <lc278@cornell.edu>
+ * @version $Id: OriginEntryGroupDaoOjb.java,v 1.10.2.1 2006-07-26 21:51:20 abyrne Exp $
+ * TODO Oracle Specific code here
  */
 public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryGroupDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupDaoOjb.class);
-
-    private static final String DATE = "date";
-    private static final String ID = "id";
-    private static final String SOURCE_CODE = "sourceCode";
-    private static final String PROCESS = "process";
-    private static final String VALID = "valid";
-    private static final String SCRUB = "scrub";
 
     public OriginEntryGroupDaoOjb() {
         super();
@@ -53,29 +53,23 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
 
     /**
      * 
-     * @see org.kuali.module.gl.dao.OriginEntryGroupDao#copyGroup(org.kuali.module.gl.bo.OriginEntryGroup,
-     *      org.kuali.module.gl.bo.OriginEntryGroup)
+     * @see org.kuali.module.gl.dao.OriginEntryGroupDao#copyGroup(org.kuali.module.gl.bo.OriginEntryGroup, org.kuali.module.gl.bo.OriginEntryGroup)
      */
-    public void copyGroup(OriginEntryGroup fromGroup, OriginEntryGroup toGroup) {
+    public void copyGroup(OriginEntryGroup fromGroup,OriginEntryGroup toGroup) {
         LOG.debug("copyGroup() started");
 
-        String sql = "insert into GL_ORIGIN_ENTRY_T (ORIGIN_ENTRY_ID, OBJ_ID, VER_NBR, ORIGIN_ENTRY_GRP_ID, ACCOUNT_NBR,FDOC_NBR, FDOC_REF_NBR, FDOC_REF_TYP_CD, " + "FDOC_REVERSAL_DT, FDOC_TYP_CD, FIN_BALANCE_TYP_CD, FIN_COA_CD,FIN_OBJ_TYP_CD, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FS_ORIGIN_CD, FS_REF_ORIGIN_CD, " + "ORG_DOC_NBR, ORG_REFERENCE_ID,PROJECT_CD, SUB_ACCT_NBR, TRANSACTION_DT, TRN_DEBIT_CRDT_CD, TRN_ENCUM_UPDT_CD, TRN_ENTR_SEQ_NBR, TRN_LDGR_ENTR_AMT," + "TRN_LDGR_ENTR_DESC, UNIV_FISCAL_PRD_CD, UNIV_FISCAL_YR, TRN_SCRBBR_OFST_GEN_IND, BDGT_YR) " + "select gl_origin_entry_t_seq.nextval, sys_guid(), 1, " + toGroup.getId() + ", ACCOUNT_NBR, FDOC_NBR, FDOC_REF_NBR, FDOC_REF_TYP_CD, FDOC_REVERSAL_DT, " + "FDOC_TYP_CD, FIN_BALANCE_TYP_CD, FIN_COA_CD, FIN_OBJ_TYP_CD, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FS_ORIGIN_CD, FS_REF_ORIGIN_CD, ORG_DOC_NBR,ORG_REFERENCE_ID, "
-                + "PROJECT_CD, SUB_ACCT_NBR, TRANSACTION_DT, TRN_DEBIT_CRDT_CD, TRN_ENCUM_UPDT_CD, TRN_ENTR_SEQ_NBR, TRN_LDGR_ENTR_AMT,TRN_LDGR_ENTR_DESC, UNIV_FISCAL_PRD_CD, " + "UNIV_FISCAL_YR, TRN_SCRBBR_OFST_GEN_IND, BDGT_YR from GL_ORIGIN_ENTRY_T where ORIGIN_ENTRY_GRP_ID = " + fromGroup.getId();
+        String sql = "insert into GL_ORIGIN_ENTRY_T (ORIGIN_ENTRY_ID, OBJ_ID, VER_NBR, ORIGIN_ENTRY_GRP_ID, ACCOUNT_NBR,FDOC_NBR, FDOC_REF_NBR, FDOC_REF_TYP_CD, " +
+                "FDOC_REVERSAL_DT, FDOC_TYP_CD, FIN_BALANCE_TYP_CD, FIN_COA_CD,FIN_OBJ_TYP_CD, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FS_ORIGIN_CD, FS_REF_ORIGIN_CD, " +
+                "ORG_DOC_NBR, ORG_REFERENCE_ID,PROJECT_CD, SUB_ACCT_NBR, TRANSACTION_DT, TRN_DEBIT_CRDT_CD, TRN_ENCUM_UPDT_CD, TRN_ENTR_SEQ_NBR, TRN_LDGR_ENTR_AMT," +
+                "TRN_LDGR_ENTR_DESC, UNIV_FISCAL_PRD_CD, UNIV_FISCAL_YR, TRN_SCRBBR_OFST_GEN_IND, BDGT_YR) " +
+                "select gl_origin_entry_t_seq.nextval, sys_guid(), 1, " + toGroup.getId() + ", ACCOUNT_NBR, FDOC_NBR, FDOC_REF_NBR, FDOC_REF_TYP_CD, FDOC_REVERSAL_DT, " + 
+                "FDOC_TYP_CD, FIN_BALANCE_TYP_CD, FIN_COA_CD, FIN_OBJ_TYP_CD, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FS_ORIGIN_CD, FS_REF_ORIGIN_CD, ORG_DOC_NBR,ORG_REFERENCE_ID, " +
+                "PROJECT_CD, SUB_ACCT_NBR, TRANSACTION_DT, TRN_DEBIT_CRDT_CD, TRN_ENCUM_UPDT_CD, TRN_ENTR_SEQ_NBR, TRN_LDGR_ENTR_AMT,TRN_LDGR_ENTR_DESC, UNIV_FISCAL_PRD_CD, " +
+                "UNIV_FISCAL_YR, TRN_SCRBBR_OFST_GEN_IND, BDGT_YR from GL_ORIGIN_ENTRY_T where ORIGIN_ENTRY_GRP_ID = " + fromGroup.getId();
 
         sqlCommand(sql);
     }
 
-    public Collection<OriginEntryGroup> getGroupsFromSourceForDate(String sourceCode, Date date) {
-        LOG.debug("getGroupsFromSourceForDay() started");
-
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo(DATE, date);
-        criteria.addEqualTo(SOURCE_CODE, sourceCode);
-        
-        return getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(OriginEntryGroup.class, criteria));
-        
-    }
-    
     /**
      * 
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getOlderGroups(Date)
@@ -84,9 +78,9 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
         LOG.debug("getOlderGroups() started");
 
         Criteria criteria = new Criteria();
-        criteria.addLessOrEqualThan(DATE, day);
+        criteria.addLessOrEqualThan("date", day);
 
-        return getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(OriginEntryGroup.class, criteria));
+        return getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(OriginEntryGroup.class,criteria));
     }
 
     /**
@@ -98,13 +92,13 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
 
         List ids = new ArrayList();
         for (Iterator iter = groups.iterator(); iter.hasNext();) {
-            OriginEntryGroup element = (OriginEntryGroup) iter.next();
+            OriginEntryGroup element = (OriginEntryGroup)iter.next();
             ids.add(element.getId());
         }
         Criteria criteria = new Criteria();
-        criteria.addIn(ID, ids);
+        criteria.addIn("id",ids);
 
-        getPersistenceBrokerTemplate().deleteByQuery(QueryFactory.newQuery(OriginEntryGroup.class, criteria));
+        getPersistenceBrokerTemplate().deleteByQuery(QueryFactory.newQuery(OriginEntryGroup.class,criteria));
         getPersistenceBrokerTemplate().clearCache();
     }
 
@@ -113,7 +107,7 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getMatchingGroups(java.util.Map)
      */
     public Collection getMatchingGroups(Map searchCriteria) {
-        LOG.debug("getMatchingGroups() started");
+        LOG.debug("getPendingEntries() started");
 
         Criteria criteria = new Criteria();
         for (Iterator iterator = searchCriteria.keySet().iterator(); iterator.hasNext();) {
@@ -133,9 +127,9 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
         LOG.debug("getPosterGroups() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(SOURCE_CODE, groupSourceCode);
-        criteria.addEqualTo(PROCESS, Boolean.TRUE);
-        criteria.addEqualTo(VALID, Boolean.TRUE);
+        criteria.addEqualTo("sourceCode", groupSourceCode);
+        criteria.addEqualTo("process", Boolean.TRUE);
+        criteria.addEqualTo("valid", Boolean.TRUE);
 
         QueryByCriteria qbc = QueryFactory.newQuery(OriginEntryGroup.class, criteria);
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
@@ -149,11 +143,11 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
         LOG.debug("getGroupsToBackup() started");
 
         Criteria criteria = new Criteria();
-        criteria.addLessOrEqualThan(DATE, groupDate);
-        criteria.addEqualTo(SOURCE_CODE, OriginEntrySource.BACKUP);
-        criteria.addEqualTo(SCRUB, Boolean.TRUE);
-        criteria.addEqualTo(PROCESS, Boolean.TRUE);
-        criteria.addEqualTo(VALID, Boolean.TRUE);
+        criteria.addLessOrEqualThan("date", groupDate);
+        criteria.addEqualTo("sourceCode", OriginEntrySource.BACKUP);
+        criteria.addEqualTo("scrub", Boolean.TRUE);
+        criteria.addEqualTo("process", Boolean.TRUE);
+        criteria.addEqualTo("valid", Boolean.TRUE);
 
         QueryByCriteria qbc = QueryFactory.newQuery(OriginEntryGroup.class, criteria);
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
@@ -167,10 +161,10 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
         LOG.debug("getScrubberGroups() started");
 
         Criteria criteria = new Criteria();
-        criteria.addLessOrEqualThan(DATE, groupDate);
-        criteria.addEqualTo(SCRUB, Boolean.TRUE);
-        criteria.addEqualTo(PROCESS, Boolean.TRUE);
-        criteria.addEqualTo(VALID, Boolean.TRUE);
+        criteria.addLessOrEqualThan("date", groupDate);
+        criteria.addEqualTo("scrub", Boolean.TRUE);
+        criteria.addEqualTo("process", Boolean.TRUE);
+        criteria.addEqualTo("valid", Boolean.TRUE);
 
         QueryByCriteria qbc = QueryFactory.newQuery(OriginEntryGroup.class, criteria);
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
@@ -225,19 +219,4 @@ public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implemen
             }
         }
     }
-
-    /**
-     * 
-     * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getRecentGroups(Date)
-     */
-    public Collection<OriginEntryGroup> getRecentGroups(Date day) {
-        LOG.debug("getOlderGroups() started");
-
-        Criteria criteria = new Criteria();
-        criteria.addGreaterOrEqualThan(DATE, day);
-
-        return getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(OriginEntryGroup.class, criteria));
-    }
-
-
 }

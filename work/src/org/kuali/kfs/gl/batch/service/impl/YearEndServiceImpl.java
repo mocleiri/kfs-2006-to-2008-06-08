@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.batch.closing.year.service.impl;
 
@@ -28,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.Constants;
-import org.kuali.KeyConstants;
 import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
@@ -36,7 +40,9 @@ import org.kuali.module.chart.service.BalanceTypService;
 import org.kuali.module.chart.service.ObjectTypeService;
 import org.kuali.module.chart.service.PriorYearAccountService;
 import org.kuali.module.chart.service.SubFundGroupService;
-import org.kuali.module.gl.GLConstants;
+import org.kuali.module.gl.batch.closing.year.reporting.BalanceForwardReport;
+import org.kuali.module.gl.batch.closing.year.reporting.EncumbranceClosingReport;
+import org.kuali.module.gl.batch.closing.year.reporting.NominalActivityClosingReport;
 import org.kuali.module.gl.batch.closing.year.service.YearEndService;
 import org.kuali.module.gl.batch.closing.year.service.impl.helper.BalanceForwardRuleHelper;
 import org.kuali.module.gl.batch.closing.year.service.impl.helper.EncumbranceClosingRuleHelper;
@@ -50,7 +56,6 @@ import org.kuali.module.gl.dao.EncumbranceDao;
 import org.kuali.module.gl.service.BalanceService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
-import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.util.FatalErrorException;
 import org.kuali.module.gl.util.ObjectHelper;
 import org.kuali.module.gl.util.OriginEntryOffsetPair;
@@ -59,13 +64,18 @@ import org.kuali.module.gl.util.Summary;
 /**
  * This class owns the logic to perform year end tasks.
  * 
-  */
+ * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
+ * @version $Id$
+ */
 public class YearEndServiceImpl implements YearEndService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(YearEndServiceImpl.class);
 
     private EncumbranceDao encumbranceDao;
     private OriginEntryService originEntryService;
     private OriginEntryGroupService originEntryGroupService;
+    private EncumbranceClosingReport encumbranceClosingReport;
+    private BalanceForwardReport balanceForwardReport;
+    private NominalActivityClosingReport nominalActivityClosingReport;
     private DateTimeService dateTimeService;
     private BalanceService balanceService;
     private BalanceTypService balanceTypeService;
@@ -74,18 +84,11 @@ public class YearEndServiceImpl implements YearEndService {
     private PriorYearAccountService priorYearAccountService;
     private SubFundGroupService subFundGroupService;
     private EncumbranceClosingRuleHelper encumbranceClosingRuleHelper;
-    private ReportService reportService;
-
-    public static final DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public YearEndServiceImpl() {
         super();
     }
 
-    /**
-     * 
-     * @see org.kuali.module.gl.batch.closing.year.service.YearEndService#closeNominalActivity()
-     */
     public void closeNominalActivity() {
 
         // Do some preliminary setup, getting application parameters.
@@ -102,13 +105,14 @@ public class YearEndServiceImpl implements YearEndService {
 
         Map jobParameters = new HashMap();
 
-        varFiscalYear = new Integer(kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR));
+        varFiscalYear = new Integer(kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "UNIV_FISCAL_YR"));
 
         // 680 003670 DISPLAY "TRANSACTION_DT" UPON ENVIRONMENT-NAME.
         // 681 003680 ACCEPT VAR-UNIV-DT FROM ENVIRONMENT-VALUE.
 
+        DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.TRANSACTION_DT)).getTime());
+            varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "TRANSACTION_DT")).getTime());
         }
         catch (ParseException pe) {
             LOG.error("Failed to parse TRANSACTION_DT from kualiConfigurationService");
@@ -118,21 +122,136 @@ public class YearEndServiceImpl implements YearEndService {
         // 682 003690 DISPLAY "NET_EXP_OBJECT_CD" UPON ENVIRONMENT-NAME.
         // 683 003700 ACCEPT VAR-NET-EXP-OBJECT-CD FROM ENVIRONMENT-VALUE.
 
-        varNetExpenseObjectCode = kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.NET_EXP_OBJECT_CD);
-        varNetRevenueObjectCode = kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.NET_REV_OBJECT_CD);
-        varFundBalanceObjectCode = kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.FUND_BAL_OBJECT_CD);
-        varFundBalanceObjectTypeCode = kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.FUND_BAL_OBJ_TYP_CD);
+        try {
 
-        jobParameters.put(GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR, varFiscalYear);
-        jobParameters.put(GLConstants.ColumnNames.UNIV_DT, varTransactionDate);
-        jobParameters.put(GLConstants.ColumnNames.NET_EXP_OBJECT_CD, varNetExpenseObjectCode);
-        jobParameters.put(GLConstants.ColumnNames.NET_REV_OBJECT_CD, varNetRevenueObjectCode);
-        jobParameters.put(GLConstants.ColumnNames.FUND_BAL_OBJECT_CD, varFundBalanceObjectCode);
-        jobParameters.put(GLConstants.ColumnNames.FUND_BAL_OBJ_TYP_CD, varFundBalanceObjectTypeCode);
+            varNetExpenseObjectCode = kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "NET_EXP_OBJECT_CD");
 
-        OriginEntryGroup nominalClosingOriginEntryGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_CLOSE_NOMINAL_BALANCES, false, false, false);
+        }
+        catch (ApplicationParameterException e) {
+
+            LOG.error("Unable to get NET_EXP_OBJECT_CD from kualiConfigurationService");
+            throw new RuntimeException("Unable to get net expense object code from kualiConfigurationService", e);
+
+        }
+
+        // 684 003710 DISPLAY "NET_REV_OBJECT_CD" UPON ENVIRONMENT-NAME.
+        // 685 003720 ACCEPT VAR-NET-REV-OBJECT-CD FROM ENVIRONMENT-VALUE.
+
+        try {
+
+            varNetRevenueObjectCode = kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "NET_REV_OBJECT_CD");
+
+        }
+        catch (ApplicationParameterException e) {
+
+            LOG.error("Unable to get NET_REV_OBJECT_CD from kualiConfigurationService");
+            throw new RuntimeException("Unable to get net revenue object code from kualiConfigurationService", e);
+
+        }
+
+        // 686 003730 DISPLAY "FUND_BAL_OBJECT_CD" UPON ENVIRONMENT-NAME.
+        // 687 003740 ACCEPT VAR-FUND-BAL-OBJECT-CD FROM ENVIRONMENT-VALUE.
+
+        try {
+
+            varFundBalanceObjectCode = kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "FUND_BAL_OBJECT_CD");
+
+        }
+        catch (ApplicationParameterException e) {
+
+            LOG.error("Unable to get FUND_BAL_OBJECT_CD from kualiConfigurationService");
+            throw new RuntimeException("Unable to get fund balance object code from kualiConfigurationService", e);
+
+        }
+
+        // 688 003750 DISPLAY "FUND_BAL_OBJ_TYP_CD" UPON ENVIRONMENT-NAME.
+        // 689 003760 ACCEPT VAR-FUND-BAL-OBJ-TYP-CD FROM ENVIRONMENT-VALUE.
+
+        try {
+
+            varFundBalanceObjectTypeCode = kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "FUND_BAL_OBJ_TYP_CD");
+
+        }
+        catch (ApplicationParameterException e) {
+
+            LOG.error("Unable to get FUND_BAL_OBJECT_TYP_CD from kualiConfigurationService");
+            throw new RuntimeException("Unable to get fund balance object type code from kualiConfigurationService", e);
+
+        }
+
+        jobParameters.put("UNIV-FISCAL-YR", varFiscalYear);
+        jobParameters.put("UNIV-DT", varTransactionDate);
+        jobParameters.put("NET-EXP-OBJECT-CD", varNetExpenseObjectCode);
+        jobParameters.put("NET-REV-OBJECT-CD", varNetRevenueObjectCode);
+        jobParameters.put("FUND-BAL-OBJECT-CD", varFundBalanceObjectCode);
+        jobParameters.put("FUND-BAL-OBJ-TYP-CD", varFundBalanceObjectTypeCode);
+
+        OriginEntryGroup nominalClosingOriginEntryGroup = originEntryGroupService.createGroup(varTransactionDate, "YECN", false, false, false);
+
+        // 720 004070 2000-DRIVER.
+        // 721 004080 MOVE VAR-UNIV-FISCAL-YR
+        // 722 004090 TO GLGLBL-UNIV-FISCAL-YR
+        // 723 004100 EXEC SQL
+        // 724 004110 OPEN GLBL_CURSOR
+        // 725 004120 END-EXEC.
+        // 726 IF RETURN-CODE NOT = ZERO
+        // 727 DISPLAY ' RETURN CODE 4120 ' RETURN-CODE.
+        // 728 004130 IF SQLCODE = 0
+        // 729 004140 DISPLAY 'GLBL_CURSOR OPENED'
+        // 730 004150 ELSE
+        // 731 004160 DISPLAY 'THERE WAS A SEVERE SQL ERROR'
+        // 732 004170 ' IN OPENING THE GLBL_CURSOR '
+        // 733 004180 SQLCODE
+        // 734 004190 MOVE 'Y' TO WS-FATAL-ERROR-FLAG
+        // 735 004200 GO TO 2000-DRIVER-EXIT.
+        // 736 004210 MOVE 0 TO WS-SEQ-NBR.
+        // 737 004220 FETCH-CURSOR.
+        // 738 004230 MOVE SPACES TO DCLGL-BALANCE-T.
+        // 739 004240 EXEC SQL
+        // 740 004250 FETCH GLBL_CURSOR
+        // 741 004260 INTO :GLGLBL-UNIV-FISCAL-YR,
+        // 742 004270 :GLGLBL-FIN-COA-CD,
+        // 743 004280 :GLGLBL-ACCOUNT-NBR,
+        // 744 004290 :GLGLBL-SUB-ACCT-NBR,
+        // 745 004300 :GLGLBL-FIN-OBJECT-CD,
+        // 746 004310 :GLGLBL-FIN-SUB-OBJ-CD,
+        // 747 004320 :GLGLBL-FIN-BALANCE-TYP-CD,
+        // 748 004330 :GLGLBL-FIN-OBJ-TYP-CD,
+        // 749 004340 :GLGLBL-ACLN-ANNL-BAL-AMT,
+        // 750 004350 :GLGLBL-FIN-BEG-BAL-LN-AMT,
+        // 751 004360 :GLGLBL-CONTR-GR-BB-AC-AMT,
+        // 752 004370 :GLGLBL-MO1-ACCT-LN-AMT,
+        // 753 004380 :GLGLBL-MO2-ACCT-LN-AMT,
+        // 754 004390 :GLGLBL-MO3-ACCT-LN-AMT,
+        // 755 004400 :GLGLBL-MO4-ACCT-LN-AMT,
+        // 756 004410 :GLGLBL-MO5-ACCT-LN-AMT,
+        // 757 004420 :GLGLBL-MO6-ACCT-LN-AMT,
+        // 758 004430 :GLGLBL-MO7-ACCT-LN-AMT,
+        // 759 004440 :GLGLBL-MO8-ACCT-LN-AMT,
+        // 760 004450 :GLGLBL-MO9-ACCT-LN-AMT,
+        // 761 004460 :GLGLBL-MO10-ACCT-LN-AMT,
+        // 762 004470 :GLGLBL-MO11-ACCT-LN-AMT,
+        // 763 004480 :GLGLBL-MO12-ACCT-LN-AMT,
+        // 764 004490 :GLGLBL-MO13-ACCT-LN-AMT
+        // 765 004510 END-EXEC.
 
         Iterator<Balance> balanceIterator = balanceService.findBalancesForFiscalYear(varFiscalYear);
+
+        // 766 IF RETURN-CODE NOT = ZERO
+        // 767 DISPLAY 'RETURN CODE 4510 ' RETURN-CODE.
+        // 768 004520 EVALUATE SQLCODE
+        // 769 004530 WHEN 0
+        // 770 004540 GO TO FETCH-PROCESS
+        // 771 004550 WHEN +100
+        // 772 004560 WHEN +1403
+        // 773 004570 GO TO 2000-DRIVER-EXIT
+        // 774 004580 WHEN OTHER
+        // 775 004590 DISPLAY 'SEVERE SQL ERROR AFTER FETCH '
+        // 776 DISPLAY ' SQL CODE IS ' SQLCODE
+        // 777 004600 MOVE 'Y' TO WS-FATAL-ERROR-FLAG
+        // 778 004610 GO TO 2000-DRIVER-EXIT
+        // 779 004620 END-EVALUATE.
+        // 780 004630 FETCH-PROCESS.
 
         String accountNumberHold = null;
 
@@ -150,9 +269,16 @@ public class YearEndServiceImpl implements YearEndService {
         while (balanceIterator.hasNext()) {
 
             Balance balance = balanceIterator.next();
-            String actualFinancial = balance.getOption().getActualFinancialBalanceTypeCd();
+
+            // 781 004640 PERFORM 2500-PROCESS-UNIT-OF-WORK
+
+            // 786 004690 2500-PROCESS-UNIT-OF-WORK.
+            // 787 004700 ADD +1 TO GLBL-READ-COUNT.
 
             globalReadCount++;
+
+            // 788 004710 MOVE 'Y' TO WS-SELECT-SW.
+
             selectSw = true;
 
             try {
@@ -236,7 +362,7 @@ public class YearEndServiceImpl implements YearEndService {
                     // 860 005430 IF GLGLBL-FIN-OBJ-TYP-CD = 'ES' OR 'EX' OR 'EE'
                     // 861 005440 OR 'TE'
 
-                    if (ObjectHelper.isOneOf(balance.getObjectTypeCode(), kualiConfigurationService.getApplicationParameterValues(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_NET_EXPENSE_OBJECT_TYPE_CODE))) {
+                    if (ObjectHelper.isOneOf(balance.getObjectTypeCode(), new String[] { "ES", "EX", "EE", "TE" })) {
 
                         // 862 005450 MOVE VAR-NET-EXP-OBJECT-CD
                         // 863 005460 TO FIN-OBJECT-CD OF GLEN-RECORD
@@ -255,30 +381,83 @@ public class YearEndServiceImpl implements YearEndService {
 
                     }
 
+                    // 867 005500 MOVE ALL '-'
+                    // 868 005510 TO FIN-SUB-OBJ-CD OF GLEN-RECORD.
+
                     activityEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
-                    activityEntry.setFinancialBalanceTypeCode(balance.getOption().getNominalFinancialBalanceTypeCode());
+
+                    // 869 005520 MOVE 'NB'
+                    // 870 005530 TO FIN-BALANCE-TYP-CD OF GLEN-RECORD.
+
+                    activityEntry.setFinancialBalanceTypeCode("NB");
+
+                    // 871 005540 MOVE GLGLBL-UNIV-FISCAL-YR
+                    // 872 005550 TO CAOBJT-UNIV-FISCAL-YR.
+                    // 873 005560 MOVE GLGLBL-FIN-COA-CD
+                    // 874 005570 TO CAOBJT-FIN-COA-CD.
+                    // 875 005580 MOVE GLGLBL-FIN-OBJECT-CD
+                    // 876 005590 TO CAOBJT-FIN-OBJECT-CD.
+                    // 877 005600 EXEC SQL
+                    // 878 005610 SELECT FIN_OBJ_TYP_CD
+                    // 879 005620 INTO :CAOBJT-FIN-OBJ-TYP-CD :CAOBJT-FOTC-I
+                    // 880 005630 FROM CA_OBJECT_CODE_T
+                    // 881 005640 WHERE UNIV_FISCAL_YR = RTRIM(:CAOBJT-UNIV-FISCAL-YR)
+                    // 882 005650 AND FIN_COA_CD = RTRIM(:CAOBJT-FIN-COA-CD)
+                    // 883 005660 AND FIN_OBJECT_CD = RTRIM(:CAOBJT-FIN-OBJECT-CD)
+                    // 884 005670 END-EXEC.
+                    // 885 IF RETURN-CODE NOT = ZERO
+                    // 886 DISPLAY ' RETURN CODE 5670 ' RETURN-CODE.
+                    // 887 005680 IF CAOBJT-FOTC-I < ZERO
+                    // 888 005690 MOVE SPACES TO CAOBJT-FIN-OBJ-TYP-CD
+                    // 889 005700 END-IF
+                    // 890 005710 EVALUATE SQLCODE
+                    // 891 005720 WHEN 0
+                    // 892 005730 MOVE CAOBJT-FIN-OBJ-TYP-CD TO FIN-OBJ-TYP-CD
+                    // 893 005740 WS-FIN-OBJ-TYP-CD
+                    // 894 005750 WHEN +100
+                    // 895 005760 WHEN +1403
+                    // 896 005770 MOVE SPACES TO FIN-OBJ-TYP-CD
+                    // 897 005780 WS-FIN-OBJ-TYP-CD
+                    // 898 005790 MOVE 'Y' TO WS-NON-FATAL-ERROR-FLAG
+                    // 899 005800 ADD +1 TO NON-FATAL-COUNT
+                    // 900 005810 MOVE 'OBJECT CODE ' TO PRINT-DATA
+                    // 901 005820 MOVE CAOBJT-FIN-OBJECT-CD TO PRINT-DATA (14:4)
+                    // 902 005830 MOVE ' NOT IN TABLE' TO PRINT-DATA (20:13)
+                    // 903 005840 WRITE PRINT-DATA
+                    // 904 005850 PERFORM CK-PRINT-STATUS THRU CK-PRINT-STATUS-EXIT
+                    // 905 005860 WHEN OTHER
 
                     if (null == balance.getObjectTypeCode()) {
+
+                        // 906 005870 DISPLAY ' ERROR ACCESSING OBJECT TABLE FOR '
+                        // 907 005880 CAOBJT-FIN-OBJECT-CD
+                        // 908 005890 MOVE 'Y' TO WS-FATAL-ERROR-FLAG
+                        // 909 005900 GO TO 4100-WRITE-ACTIVITY-EXIT
+
                         throw new FatalErrorException(" ERROR ACCESSING OBJECT TABLE FOR ");
 
                     }
+
+                    // 910 005910 END-EVALUATE.
+                    // 911 005920 MOVE GLGLBL-FIN-OBJ-TYP-CD
+                    // 912 005930 TO FIN-OBJ-TYP-CD OF GLEN-RECORD.
 
                     activityEntry.setFinancialObjectTypeCode(balance.getObjectTypeCode());
 
                     // 913 005940 MOVE '13'
                     // 914 005950 TO UNIV-FISCAL-PRD-CD OF GLEN-RECORD.
 
-                    activityEntry.setUniversityFiscalPeriodCode(Constants.MONTH13);
+                    activityEntry.setUniversityFiscalPeriodCode("13");
 
                     // 915 005960 MOVE 'ACLO'
                     // 916 005970 TO FDOC-TYP-CD OF GLEN-RECORD.
 
-                    activityEntry.setFinancialDocumentTypeCode(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_ANNAL_CLOSING_DOC_TYPE));
+                    activityEntry.setFinancialDocumentTypeCode("ACLO");
 
                     // 917 005980 MOVE 'MF'
                     // 918 005990 TO FS-ORIGIN-CD OF GLEN-RECORD.
 
-                    activityEntry.setFinancialSystemOriginationCode(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_ORIGINATION_CODE));
+                    activityEntry.setFinancialSystemOriginationCode("MF");
 
                     // 919 006000 STRING 'AC'
                     // 920 006010 GLGLBL-ACCOUNT-NBR
@@ -286,7 +465,7 @@ public class YearEndServiceImpl implements YearEndService {
                     // 922 006030 DELIMITED BY SIZE
                     // 923 006040 INTO FDOC-NBR OF GLEN-RECORD.
 
-                    activityEntry.setFinancialDocumentNumber(new StringBuffer(actualFinancial).append(balance.getAccountNumber()).toString());
+                    activityEntry.setFinancialDocumentNumber(new StringBuffer("AC").append(balance.getAccountNumber()).toString());
 
                     // 924 006050 MOVE WS-SEQ-NBR
                     // 925 006060 TO TRN-ENTR-SEQ-NBR OF GLEN-RECORD.
@@ -296,7 +475,7 @@ public class YearEndServiceImpl implements YearEndService {
                     // 926 006070 IF GLGLBL-FIN-OBJ-TYP-CD = 'EX' OR 'ES' OR 'EE'
                     // 927 006080 OR 'TE'
 
-                    if (ObjectHelper.isOneOf(balance.getObjectTypeCode(), kualiConfigurationService.getApplicationParameterValues(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_NET_EXPENSE_OBJECT_TYPE_CODE))) {
+                    if (ObjectHelper.isOneOf(balance.getObjectTypeCode(), new String[] { "EX", "ES", "EE", "TE" })) {
 
                         // 928 006090 STRING 'CLS ENT TO NE FOR '
                         // 929 006100 GLGLBL-SUB-ACCT-NBR
@@ -310,8 +489,7 @@ public class YearEndServiceImpl implements YearEndService {
                         // 937 006180 DELIMITED BY SIZE INTO
                         // 938 006190 TRN-LDGR-ENTR-DESC OF GLEN-RECORD
 
-                        StringBuffer neDescription = new StringBuffer(kualiConfigurationService.getPropertyString(KeyConstants.MSG_CLOSE_ENTRY_TO_NOMINAL_EXPENSE));
-                        neDescription.append(balance.getSubAccountNumber()).append("-").append(balance.getObjectCode()).append("-").append(balance.getSubObjectCode());
+                        StringBuffer neDescription = new StringBuffer("CLS ENT TO NE FOR ").append(balance.getSubAccountNumber()).append("-").append(balance.getObjectCode()).append("-").append(balance.getSubObjectCode());
                         int socLength = null == balance.getSubObjectCode() ? 0 : balance.getSubObjectCode().length();
                         while (3 > socLength++) {
                             neDescription.append(' ');
@@ -335,8 +513,7 @@ public class YearEndServiceImpl implements YearEndService {
                         // 949 006300 DELIMITED BY SIZE INTO
                         // 950 006310 TRN-LDGR-ENTR-DESC OF GLEN-RECORD.
 
-                        StringBuffer nrDescription = new StringBuffer(kualiConfigurationService.getPropertyString(KeyConstants.MSG_CLOSE_ENTRY_TO_NOMINAL_REVENUE));
-                        nrDescription.append(balance.getSubAccountNumber()).append("-").append(balance.getObjectCode()).append("-").append(balance.getSubObjectCode());
+                        StringBuffer nrDescription = new StringBuffer("CLS ENT TO NR FOR ").append(balance.getSubAccountNumber()).append("-").append(balance.getObjectCode()).append("-").append(balance.getSubObjectCode());
                         int socLength = null == balance.getSubObjectCode() ? 0 : balance.getSubObjectCode().length();
                         while (3 > socLength++) {
                             nrDescription.append(' ');
@@ -376,7 +553,7 @@ public class YearEndServiceImpl implements YearEndService {
 
                         // 969 006470 IF CAOTYP-FIN-OBJTYP-DBCR-CD = 'C' OR 'D'
 
-                        if (ObjectHelper.isOneOf(balance.getObjectType().getFinObjectTypeDebitcreditCd(), new String[] { Constants.GL_CREDIT_CODE, Constants.GL_DEBIT_CODE })) {
+                        if (ObjectHelper.isOneOf(balance.getObjectType().getFinObjectTypeDebitcreditCd(), new String[] { "C", "D" })) {
 
                             // 970 006480 MOVE CAOTYP-FIN-OBJTYP-DBCR-CD
                             // 971 006490 TO WS-FIN-OBJTYP-DBCR-CD
@@ -697,7 +874,7 @@ public class YearEndServiceImpl implements YearEndService {
                     // 1082 007570 MOVE 'NB'
                     // 1083 007580 TO FIN-BALANCE-TYP-CD OF GLEN-RECORD.
 
-                    offsetEntry.setFinancialBalanceTypeCode(balance.getOption().getNominalFinancialBalanceTypeCode());
+                    offsetEntry.setFinancialBalanceTypeCode("NB");
 
                     // 1084 007590 MOVE VAR-FUND-BAL-OBJ-TYP-CD
                     // 1085 007600 TO FIN-OBJ-TYP-CD OF GLEN-RECORD.
@@ -707,17 +884,17 @@ public class YearEndServiceImpl implements YearEndService {
                     // 1086 007610 MOVE '13'
                     // 1087 007620 TO UNIV-FISCAL-PRD-CD OF GLEN-RECORD.
 
-                    offsetEntry.setUniversityFiscalPeriodCode(Constants.MONTH13);
+                    offsetEntry.setUniversityFiscalPeriodCode("13");
 
                     // 1088 007630 MOVE 'ACLO'
                     // 1089 007640 TO FDOC-TYP-CD OF GLEN-RECORD.
 
-                    offsetEntry.setFinancialDocumentTypeCode(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_ANNAL_CLOSING_DOC_TYPE));
+                    offsetEntry.setFinancialDocumentTypeCode("ACLO");
 
                     // 1090 007650 MOVE 'MF'
                     // 1091 007660 TO FS-ORIGIN-CD OF GLEN-RECORD.
 
-                    offsetEntry.setFinancialSystemOriginationCode(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_ORIGINATION_CODE));
+                    offsetEntry.setFinancialSystemOriginationCode("MF");
 
                     // 1092 007670 STRING 'AC'
                     // 1093 007680 GLGLBL-ACCOUNT-NBR
@@ -725,7 +902,7 @@ public class YearEndServiceImpl implements YearEndService {
                     // 1095 007700 DELIMITED BY SIZE
                     // 1096 007710 INTO FDOC-NBR OF GLEN-RECORD.
 
-                    offsetEntry.setFinancialDocumentNumber(new StringBuffer(actualFinancial).append(balance.getAccountNumber()).toString());
+                    offsetEntry.setFinancialDocumentNumber(new StringBuffer("AC").append(balance.getAccountNumber()).toString());
 
                     // 1097 007720 MOVE WS-SEQ-NBR
                     // 1098 007730 TO TRN-ENTR-SEQ-NBR OF GLEN-RECORD.
@@ -744,8 +921,7 @@ public class YearEndServiceImpl implements YearEndService {
                     // 1108 007830 DELIMITED BY SIZE INTO
                     // 1109 007840 TRN-LDGR-ENTR-DESC OF GLEN-RECORD.
 
-                    StringBuffer fbDescription = new StringBuffer(kualiConfigurationService.getPropertyString(KeyConstants.MSG_CLOSE_ENTRY_TO_NOMINAL_BUDGET));
-                    fbDescription.append(balance.getSubAccountNumber()).append("-").append(balance.getObjectCode()).append("-").append(balance.getSubObjectCode());
+                    StringBuffer fbDescription = new StringBuffer("CLS ENT TO FB FOR ").append(balance.getSubAccountNumber()).append("-").append(balance.getObjectCode()).append("-").append(balance.getSubObjectCode());
                     int socLength = null == balance.getSubObjectCode() ? 0 : balance.getSubObjectCode().length();
                     while (3 > socLength++) {
                         fbDescription.append(' ');
@@ -932,7 +1108,8 @@ public class YearEndServiceImpl implements YearEndService {
         statistics.add(summary);
 
         Date runDate = new Date(dateTimeService.getCurrentDate().getTime());
-        reportService.generateNominalActivityClosingStatisticsReport(jobParameters, statistics, runDate);
+        nominalActivityClosingReport.generateStatisticsReport(jobParameters, statistics, runDate);
+
     }
 
     /**
@@ -954,8 +1131,7 @@ public class YearEndServiceImpl implements YearEndService {
         // 811 004940 OR 'TE' OR 'TI'
         // 812 004950 OR 'EE' OR 'CH' OR 'IC' OR 'IN')
 
-        String actualFinancial = balance.getOption().getActualFinancialBalanceTypeCd();
-        if (actualFinancial.equals(balance.getBalanceTypeCode()) && ObjectHelper.isOneOf(balance.getObjectTypeCode(), kualiConfigurationService.getApplicationParameterValues(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE))) {
+        if ("AC".equals(balance.getBalanceTypeCode()) && ObjectHelper.isOneOf(balance.getObjectTypeCode(), new String[] { "ES", "EX", "TE", "TI", "EE", "CH", "IC", "IN" })) {
 
             // 813 004960 NEXT SENTENCE
 
@@ -1032,21 +1208,44 @@ public class YearEndServiceImpl implements YearEndService {
      * upon one another in terms of expected behavior.
      */
     public void forwardBalances() {
-        LOG.debug("forwardBalances() started");
 
-        Date varTransactionDate;
+        Integer varFiscalYear = null;
+        Date varTransactionDate = null;
+
         try {
-            varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.TRANSACTION_DT)).getTime());
+
+            varFiscalYear = new Integer(kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "UNIV_FISCAL_YR"));
+
         }
-        catch (ParseException e) {
-            LOG.error("forwardBalances() Unable to parse transaction date", e);
-            throw new IllegalArgumentException("Unable to parse transaction date");
+        catch (ApplicationParameterException e) {
+
+            LOG.error("Unable to get UNIV_FISCAL_YR from kualiConfigurationService");
+            throw new RuntimeException("Unable to get university fiscal year from kualiConfigurationService", e);
+
         }
 
-        Integer varFiscalYear = new Integer(kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR));
+        try {
 
-        OriginEntryGroup unclosedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_BEGINNING_BALANCE, false, false, false);
-        OriginEntryGroup closedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_BEGINNING_BALANCE_PRIOR_YEAR, false, false, false);
+            DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "TRANSACTION_DT")).getTime());
+
+        }
+        catch (ApplicationParameterException e) {
+
+            LOG.error("Unable to get TRANSACTION_DT from kualiConfigurationService");
+            throw new RuntimeException("Unable to get transaction date from kualiConfigurationService", e);
+
+        }
+        catch (ParseException pe) {
+
+            LOG.error("Failed to parse TRANSACTION_DT from kualiConfigurationService");
+            throw new RuntimeException("Unable to get transaction date from kualiConfigurationService", pe);
+
+        }
+
+        OriginEntryGroup unclosedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, "YEBB", false, false, false);
+        OriginEntryGroup closedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, "YEBC", false, false, false);
+        ;
 
         BalanceForwardRuleHelper balanceForwardRuleHelper = new BalanceForwardRuleHelper(varFiscalYear, varTransactionDate, closedPriorYearAccountGroup, unclosedPriorYearAccountGroup);
 
@@ -1095,7 +1294,8 @@ public class YearEndServiceImpl implements YearEndService {
         statistics.add(summary);
 
         Date runDate = new Date(dateTimeService.getCurrentDate().getTime());
-        reportService.generateBalanceForwardStatisticsReport(statistics, runDate);
+        balanceForwardReport.generateStatisticsReport(statistics, runDate);
+
     }
 
     /**
@@ -1107,20 +1307,42 @@ public class YearEndServiceImpl implements YearEndService {
         Integer varFiscalYear = null;
         Date varTransactionDate = null;
 
-        String YEAR_END_SCRIPT_NAME = Constants.GENERAL_LEDGER_YEAR_END_SCRIPT;
-        String FIELD_FISCAL_YEAR = GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR;
-        String FIELD_TRANSACTION_DATE = GLConstants.ColumnNames.TRANSACTION_DT;
-
+        String YEAR_END_SCRIPT_NAME = "fis_gl_year_end.sh";
+        String FIELD_FISCAL_YEAR = "UNIV_FISCAL_YR";
+        String FIELD_TRANSACTION_DATE = "TRANSACTION_DT";
+        String TRANSACTION_DATE_FORMAT = "yyyy-MM-dd";
+        
         // Get the current fiscal year.
-        varFiscalYear = new Integer(kualiConfigurationService.getApplicationParameterValue(YEAR_END_SCRIPT_NAME, FIELD_FISCAL_YEAR));
+        try {
+            
+            varFiscalYear = new Integer(kualiConfigurationService.getApplicationParameterValue(YEAR_END_SCRIPT_NAME, FIELD_FISCAL_YEAR));
+            
+        }
+        catch (ApplicationParameterException e) {
+            
+            LOG.error("Unable to get UNIV_FISCAL_YR from kualiConfigurationService");
+            throw new RuntimeException("Unable to get university fiscal year from kualiConfigurationService", e);
+            
+        }
 
         // Get the current date (transaction date).
         try {
+            
+            DateFormat transactionDateFormat = new SimpleDateFormat(TRANSACTION_DATE_FORMAT);
             varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue(YEAR_END_SCRIPT_NAME, FIELD_TRANSACTION_DATE)).getTime());
+            
+        }
+        catch (ApplicationParameterException e) {
+            
+            LOG.error("Unable to get TRANSACTION_DT from kualiConfigurationService");
+            throw new RuntimeException("Unable to get transaction date from kualiConfigurationService", e);
+            
         }
         catch (ParseException pe) {
+            
             LOG.error("Failed to parse TRANSACTION_DT from kualiConfigurationService");
             throw new RuntimeException("Unable to get transaction date from kualiConfigurationService", pe);
+            
         }
 
         // counters for the report
@@ -1129,15 +1351,15 @@ public class YearEndServiceImpl implements YearEndService {
         int originEntriesWritten = 0;
 
         OriginEntryGroup originEntryGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_ENCUMBRANCE_CLOSING, true, true, true);
-
+        
         // encumbranceDao will return all encumbrances for the fiscal year sorted properly by all of the appropriate keys.
         Iterator encumbranceIterator = encumbranceDao.getEncumbrancesToClose(varFiscalYear);
         while (encumbranceIterator.hasNext()) {
-
+            
             Encumbrance encumbrance = (Encumbrance) encumbranceIterator.next();
             encumbrancesRead++;
 
-            // if the encumbrance is not completely relieved
+            // if the encumbrance is not completely relieved 
             if (encumbranceClosingRuleHelper.anEntryShouldBeCreatedForThisEncumbrance(encumbrance)) {
 
                 encumbrancesSelected++;
@@ -1146,55 +1368,55 @@ public class YearEndServiceImpl implements YearEndService {
                 OriginEntryOffsetPair beginningBalanceEntryPair = EncumbranceClosingOriginEntryFactory.createBeginningBalanceEntryOffsetPair(encumbrance, varFiscalYear, varTransactionDate);
 
                 if (beginningBalanceEntryPair.isFatalErrorFlag()) {
-
+                    
                     continue;
-
+                    
                 }
                 else {
-
+                    
                     beginningBalanceEntryPair.getEntry().setGroup(originEntryGroup);
                     beginningBalanceEntryPair.getOffset().setGroup(originEntryGroup);
 
                     // save the entries.
-
+                    
                     originEntryService.createEntry(beginningBalanceEntryPair.getEntry(), originEntryGroup);
                     originEntryService.createEntry(beginningBalanceEntryPair.getOffset(), originEntryGroup);
                     originEntriesWritten += 2;
-
+                    
                 }
-
+                
                 // handle cost sharing if appropriate.
-
+                
                 boolean isEligibleForCostShare = false;
 
                 try {
-
+                    
                     isEligibleForCostShare = encumbranceClosingRuleHelper.isEncumbranceEligibleForCostShare(beginningBalanceEntryPair.getEntry(), beginningBalanceEntryPair.getOffset(), encumbrance, beginningBalanceEntryPair.getEntry().getFinancialObjectTypeCode());
-
+                    
                 }
                 catch (FatalErrorException fee) {
-
+                    
                     LOG.info(fee.getMessage());
-
+                    
                 }
 
                 if (isEligibleForCostShare) {
-
+                    
                     // build and save an additional pair of origin entries to carry forward the encumbrance.
-
+                    
                     OriginEntryOffsetPair costShareBeginningBalanceEntryPair = EncumbranceClosingOriginEntryFactory.createCostShareBeginningBalanceEntryOffsetPair(encumbrance, beginningBalanceEntryPair.getEntry().getTransactionDebitCreditCode());
 
                     if (!costShareBeginningBalanceEntryPair.isFatalErrorFlag()) {
-
+                        
                         costShareBeginningBalanceEntryPair.getEntry().setGroup(originEntryGroup);
                         costShareBeginningBalanceEntryPair.getOffset().setGroup(originEntryGroup);
 
                         // save the cost share entries.
-
+                        
                         originEntryService.createEntry(costShareBeginningBalanceEntryPair.getEntry(), originEntryGroup);
                         originEntryService.createEntry(costShareBeginningBalanceEntryPair.getOffset(), originEntryGroup);
                         originEntriesWritten += 2;
-
+                        
                     }
                 }
             }
@@ -1221,54 +1443,140 @@ public class YearEndServiceImpl implements YearEndService {
         statistics.add(summary);
 
         Date runDate = new Date(dateTimeService.getCurrentDate().getTime());
-        reportService.generateEncumbranceClosingStatisticsReport(statistics, runDate);
+        encumbranceClosingReport.generateStatisticsReport(statistics, runDate);
     }
 
+    /**
+     * @see org.kuali.module.gl.batch.closing.year.service.YearEndService#orgReversionsCarryForwards()
+     */
+    public void orgReversionsCarryForwards() {
+        LOG.debug("orgReversionsCarryForwards() started");
+        // TODO Write this
+    }
+
+    /**
+     * Field accessor for EncumbranceDao. 
+     * 
+     * @param encumbranceDao The encumbranceDao to set.
+     */
     public void setEncumbranceDao(EncumbranceDao encumbranceDao) {
         this.encumbranceDao = encumbranceDao;
     }
 
+    /**
+     * Field accessor for OriginEntryService.
+     * 
+     * @param originEntryService The originEntryService to set.
+     */
     public void setOriginEntryService(OriginEntryService originEntryService) {
         this.originEntryService = originEntryService;
     }
 
-    public void setReportService(ReportService reportService) {
-        this.reportService = reportService;
+    /**
+     * Field accessor for EncumbranceClosingReport.
+     * 
+     * @param encumbranceClosingReport The encumbranceClosingReport to set.
+     */
+    public void setEncumbranceClosingReport(EncumbranceClosingReport encumbranceClosingReport) {
+        this.encumbranceClosingReport = encumbranceClosingReport;
     }
 
+    /**
+     * Field accessor for BalanceForwardReport.
+     * 
+     * @param balanceForwardReport The balanceForwardReport to set.
+     */
+    public void setBalanceForwardReport(BalanceForwardReport balanceForwardReport) {
+        this.balanceForwardReport = balanceForwardReport;
+    }
+
+    /**
+     * Field accessor for DateTimeService.
+     * 
+     * @param dateTimeService The dateTimeService to set.
+     */
     public void setDateTimeService(DateTimeService dateTimeService) {
         this.dateTimeService = dateTimeService;
     }
 
+    /**
+     * Field accessor for OriginEntryGroupService.
+     * 
+     * @param originEntryGroupService The originEntryGroupService to set.
+     */
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
     }
 
+    /**
+     * Field accessor for EncumbranceClosingRuleHelper.
+     * 
+     * @param yearEndEncumbranceClosingRuleHelper
+     */
     public void setEncumbranceClosingRuleHelper(EncumbranceClosingRuleHelper encumbranceClosingRuleHelper) {
         this.encumbranceClosingRuleHelper = encumbranceClosingRuleHelper;
     }
 
+    /**
+     * Field accessor for BalanceService.
+     * 
+     * @param balanceService The balanceService to set.
+     */
     public void setBalanceService(BalanceService balanceService) {
         this.balanceService = balanceService;
     }
 
+    /**
+     * Field accessor for BalanceTypService.
+     * 
+     * @param balanceTypeService The balanceTypeService to set.
+     */
     public void setBalanceTypeService(BalanceTypService balanceTypeService) {
         this.balanceTypeService = balanceTypeService;
     }
 
+    /**
+     * Field accessor for ObjectTypeService.
+     * 
+     * @param objectTypeService The objectTypeService to set.
+     */
     public void setObjectTypeService(ObjectTypeService objectTypeService) {
         this.objectTypeService = objectTypeService;
     }
 
+    /**
+     * Field accessor for KualiConfigurationService.
+     * 
+     * @param kualiConfigurationService
+     */
     public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
         this.kualiConfigurationService = kualiConfigurationService;
     }
 
+    /**
+     * Field accessor for PriorYearAccountService.
+     * 
+     * @param priorYearAccountService
+     */
     public void setPriorYearAccountService(PriorYearAccountService priorYearAccountService) {
         this.priorYearAccountService = priorYearAccountService;
     }
 
+    /**
+     * Field accessor for SubFundGroupService.
+     * 
+     * @param subFundGroupService
+     */
     public void setSubFundGroupService(SubFundGroupService subFundGroupService) {
         this.subFundGroupService = subFundGroupService;
+    }
+
+    /**
+     * Field accessor for NominalActivityClosingReport.
+     * 
+     * @param nominalActivityClosingReport
+     */
+    public void setNominalActivityClosingReport(NominalActivityClosingReport nominalActivityClosingReport) {
+        this.nominalActivityClosingReport = nominalActivityClosingReport;
     }
 }
