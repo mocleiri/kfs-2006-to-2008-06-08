@@ -17,9 +17,6 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.Constants.GL_CREDIT_CODE;
-import static org.kuali.Constants.GL_DEBIT_CODE;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +24,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
@@ -185,17 +184,13 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
 
         /* payment reason must be selected before an accounting line can be entered */
         if (StringUtils.isBlank(dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
-            if(!errors.containsMessageKey(KeyConstants.ERROR_DV_ADD_LINE_MISSING_PAYMENT_REASON)) {
-                errors.putErrorWithoutFullErrorPath(PropertyConstants.DOCUMENT + "." + PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, KeyConstants.ERROR_DV_ADD_LINE_MISSING_PAYMENT_REASON);
-            }
+            errors.putErrorWithoutFullErrorPath(PropertyConstants.DOCUMENT + "." + PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, KeyConstants.ERROR_DV_ADD_LINE_MISSING_PAYMENT_REASON);
             allow = false;
         }
 
         /* payee must be selected before an accounting line can be entered */
         if (StringUtils.isBlank(dvDocument.getDvPayeeDetail().getDisbVchrPayeeIdNumber())) {
-            if(!errors.containsMessageKey(KeyConstants.ERROR_DV_ADD_LINE_MISSING_PAYEE)) {
-                errors.putErrorWithoutFullErrorPath(PropertyConstants.DOCUMENT + "." + PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYEE_ID_NUMBER, KeyConstants.ERROR_DV_ADD_LINE_MISSING_PAYEE);
-            }
+            errors.putErrorWithoutFullErrorPath(PropertyConstants.DOCUMENT + "." + PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYEE_ID_NUMBER, KeyConstants.ERROR_DV_ADD_LINE_MISSING_PAYEE);
             allow = false;
         }
 
@@ -259,7 +254,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
             LOG.debug("validating non resident alien tax");
             validateNonResidentAlienInformation(dvDocument);
         }
-
+        
         // non-employee travel
 
         // retrieve nonemployee travel payment reasons
@@ -282,8 +277,8 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         validateDocumentAmounts(dvDocument);
 
         LOG.debug("validating accounting line counts");
-        validateAccountingLineCounts(dvDocument);
-
+        validateAccountingLineCounts(dvDocument);          
+        
         LOG.debug("validating documentaton location");
         validateDocumentationLocation(dvDocument);
 
@@ -365,7 +360,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         explicitEntry.setTransactionLedgerEntrySequenceNumber(new Integer(sequenceHelper.getSequenceCounter()));
         explicitEntry.setFinancialObjectCode(wireCharge.getExpenseFinancialObjectCode());
         explicitEntry.setFinancialSubObjectCode(GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_OBJECT_CODE);
-        explicitEntry.setFinancialObjectTypeCode(SpringServiceLocator.getOptionsService().getCurrentYearOptions().getFinObjTypeExpenditureexpCd());
+        explicitEntry.setFinancialObjectTypeCode(OBJECT_TYPE_CODE.EXPENSE_EXPENDITURE);
         explicitEntry.setTransactionDebitCreditCode(GL_DEBIT_CODE);
 
         if (Constants.COUNTRY_CODE_UNITED_STATES.equals(dvDocument.getDvWireTransfer().getDisbVchrBankCountryCode())) {
@@ -871,7 +866,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
                 Map<String, String> paymentReasonParams = new HashMap<String, String>();
                 paymentReasonParams.put("code", paymentReasonCode);
                 // TODO: should we not ignore active flag?
-                Collection<PaymentReasonCode> paymentReasons = SpringServiceLocator.getKeyValuesNonCachedService().findMatching(PaymentReasonCode.class, paymentReasonParams);
+                Collection<PaymentReasonCode> paymentReasons = SpringServiceLocator.getKeyValuesService().findMatching(PaymentReasonCode.class, paymentReasonParams);
 
                 String prName = "(Description unavailable)";
 
@@ -1112,17 +1107,16 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
     /**
      * 
      * This method...
-     * 
      * @param document
      */
     private void validateAccountingLineCounts(DisbursementVoucherDocument dvDocument) {
         ErrorMap errors = GlobalVariables.getErrorMap();
 
-        if (dvDocument.getSourceAccountingLines().size() < 1) {
+        if(dvDocument.getSourceAccountingLines().size()<1) {
             errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_NO_ACCOUNTING_LINES);
         }
     }
-
+    
     /**
      * Checks the amounts on the document for reconciliation.
      * 
