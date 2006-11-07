@@ -1,20 +1,3 @@
-<%--
- Copyright 2005-2006 The Kuali Foundation.
- 
- $Source: /opt/cvs/kfs/work/web-root/jsp/modules/generalLedger/ModifiedInquiry.jsp,v $
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
---%>
 <%@ include file="/jsp/core/tldHeader.jsp"%>
 
 <kul:pageLookup showDocumentInfo="false"
@@ -61,14 +44,14 @@
 						<td height="30" colspan=2 class="infoline"><html:image
 							property="methodToCall.search" value="search"
 							src="images/buttonsmall_search.gif" styleClass="tinybutton"
-							alt="search" title="search" border="0" /> <html:image
+							alt="search" border="0" /> <html:image
 							property="methodToCall.clearValues" value="clearValues"
 							src="images/buttonsmall_clear.gif" styleClass="tinybutton"
-							alt="clear" title="clear" border="0" /> <c:if test="${KualiForm.formKey!=''}">
+							alt="clear" border="0" /> <c:if test="${KualiForm.formKey!=''}">
 							<a
-								href='<c:out value="${KualiForm.backLocation}?methodToCall=refresh&docFormKey=${KualiForm.formKey}" />'  title="cancel">
+								href='<c:out value="${KualiForm.backLocation}?methodToCall=refresh&docFormKey=${KualiForm.formKey}" />'>
 							<img src="images/buttonsmall_cancel.gif" class="tinybutton"
-								border="0" alt="cancel" title="cancel"/> </a>
+								border="0" /> </a>
 						</c:if> <!-- Optional extra button --> <c:if
 							test="${not empty KualiForm.lookupable.extraButtonSource}">
 							<a
@@ -116,7 +99,7 @@
 								<c:choose>
 
 									<c:when test="${column.propertyURL != \"\"}">
-											<a href="<c:out value="${column.propertyURL}"/>" title="${column.propertyValue}"
+											<a href="<c:out value="${column.propertyURL}"/>"
 												target="blank"><c:out value="${column.propertyValue}" /></a>	
 									</c:when>
 	
@@ -139,7 +122,7 @@
 										title="${column.columnTitle}"
 										comparator="${column.comparator}">
 
-										<a href="<c:out value="${column.propertyURL}"/>" title="${column.propertyValue}"
+										<a href="<c:out value="${column.propertyURL}"/>"
 											target="blank"><c:out value="${column.propertyValue}" /></a>
 
 									</display:column>
