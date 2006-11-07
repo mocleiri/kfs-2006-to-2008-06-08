@@ -108,11 +108,11 @@ public class ReportServiceImpl implements ReportService {
     /**
      * @see org.kuali.module.gl.service.ReportService#generatePendingEntryReport(java.util.Date)
      */
-    public void generatePendingEntryReport(Date runDate,OriginEntryGroup group) {
+    public void generatePendingEntryReport(Date runDate, OriginEntryGroup group) {
         LOG.debug("generatePendingEntryReport() started");
 
         GeneralLedgerPendingEntryReport glper = new GeneralLedgerPendingEntryReport();
-        glper.generateReport(runDate,batchReportsDirectory,sdf,originEntryService.getEntriesByGroupReportOrder(group));
+        glper.generateReport(runDate, batchReportsDirectory, sdf, originEntryService.getEntriesByGroupReportOrder(group));
     }
 
     /**
@@ -362,7 +362,7 @@ public class ReportServiceImpl implements ReportService {
 
         ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger", batchReportsDirectory);
     }
-    
+
     /**
      * 
      * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportOnline(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
@@ -704,7 +704,7 @@ public class ReportServiceImpl implements ReportService {
             }
         }
     }
-    
+
     /**
      * @see org.kuali.module.gl.service.ReportService#generatePosterReversalTransactionsListing(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
      */
@@ -714,7 +714,7 @@ public class ReportServiceImpl implements ReportService {
         Iterator ti = originEntryService.getEntriesByGroupAccountOrder(originGroup);
 
         TransactionListingReport report = new TransactionListingReport();
-        report.generateReport(ti, runDate, "Reversal Poster Transaction Listing", "poster_reversal_list", batchReportsDirectory);     
+        report.generateReport(ti, runDate, "Reversal Poster Transaction Listing", "poster_reversal_list", batchReportsDirectory);
     }
 
     /**
@@ -727,12 +727,12 @@ public class ReportServiceImpl implements ReportService {
         Iterator ti = originEntryService.getEntriesByGroupAccountOrder(group);
 
         TransactionListingReport report = new TransactionListingReport();
-        if ( posterMode == PosterService.MODE_ENTRIES ) {
+        if (posterMode == PosterService.MODE_ENTRIES) {
             report.generateReport(ti, runDate, "Main Poster Error Transaction Listing", "poster_main_error_list", batchReportsDirectory);
         } else if ( posterMode == PosterService.MODE_ICR ) {
             report.generateReport(ti, runDate, "ICR Poster Error Transaction Listing", "poster_icr_error_list", batchReportsDirectory);
         } else if ( posterMode == PosterService.MODE_REVERSAL ) {
-            report.generateReport(ti, runDate, "Reversal Poster Error Transaction Listing", "poster_reversal_error_list", batchReportsDirectory);            
+            report.generateReport(ti, runDate, "Reversal Poster Error Transaction Listing", "poster_reversal_error_list", batchReportsDirectory);
         }
     }
 
@@ -963,7 +963,7 @@ public class ReportServiceImpl implements ReportService {
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
     }
-    
+
     public void setReversalService(ReversalService rs) {
         reversalService = rs;
     }

@@ -1,22 +1,29 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentRule.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
 import static org.kuali.KeyConstants.GeneralErrorCorrection.ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_SUB_TYPE_CODE;
 import static org.kuali.KeyConstants.GeneralErrorCorrection.ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE;
 import static org.kuali.KeyConstants.GeneralErrorCorrection.ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_WITH_SUB_TYPE_CODE;
@@ -37,15 +44,17 @@ import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import org.kuali.module.gl.util.SufficientFundsItemHelper.SufficientFundsItem;
 
 /**
  * Business rule(s) applicable to <code>{@link org.kuali.module.financial.document.GeneralErrorCorrectionDocument}</code>
  * instances.
  * 
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRuleBase {
 
@@ -146,7 +155,7 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
 
         return retval;
     }
-
+    
     /**
      * @see TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument, AccountingLine,
      *      GeneralLedgerPendingEntry)
@@ -162,10 +171,10 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
         explicitEntry.setReferenceFinancialSystemOriginationCode(null);
         explicitEntry.setReferenceFinancialDocumentTypeCode(null);
     }
-
+    
     /**
      * Builds an appropriately formatted string to be used for the <code>transactionLedgerEntryDescription</code>. It is built
-     * using information from the <code>{@link AccountingLine}</code>. Format is "01-12345: blah blah blah".
+     * using information from the <code>{@link AccountingLine}</code>.  Format is "01-12345: blah blah blah".
      * 
      * @param line
      * @param transactionalDocument
@@ -173,19 +182,22 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
      */
     private String buildTransactionLedgerEntryDescriptionUsingRefOriginAndRefDocNumber(TransactionalDocument transactionalDocument, AccountingLine line) {
         String description = "";
-        description = line.getReferenceOriginCode() + "-" + line.getReferenceNumber();
-
-        if (StringUtils.isNotBlank(line.getFinancialDocumentLineDescription())) {
-            description += ": " + line.getFinancialDocumentLineDescription();
+        if(StringUtils.isBlank(line.getReferenceOriginCode()) || StringUtils.isBlank(line.getReferenceNumber())) {
+            throw new IllegalStateException("Reference Origin Code and Reference Document Number are required and should be validated before this point.");
         }
-        else {
+        
+        description = line.getReferenceOriginCode() + "-" + line.getReferenceNumber();
+        
+        if(StringUtils.isNotBlank(line.getFinancialDocumentLineDescription())) {
+            description += ": " + line.getFinancialDocumentLineDescription();
+        } else {
             description += ": " + transactionalDocument.getDocumentHeader().getFinancialDocumentDescription();
         }
-
-        if (description.length() > GENERAL_LEDGER_PENDING_ENTRY_CODE.GLPE_DESCRIPTION_MAX_LENGTH) {
-            description = description.substring(0, GENERAL_LEDGER_PENDING_ENTRY_CODE.GLPE_DESCRIPTION_MAX_LENGTH - 3) + "...";
+        
+        if(description.length() > GENERAL_LEDGER_PENDING_ENTRY_CODE.GLPE_DESCRIPTION_MAX_LENGTH) {
+            description = description.substring(0, GENERAL_LEDGER_PENDING_ENTRY_CODE.GLPE_DESCRIPTION_MAX_LENGTH - 3)+ "...";
         }
-
+            
         return description;
     }
 
@@ -288,5 +300,72 @@ public class GeneralErrorCorrectionDocumentRule extends TransactionalDocumentRul
         }
 
         return valid;
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument,
+     *      org.kuali.core.bo.SourceAccountingLine)
+     */
+    @Override
+    protected SufficientFundsItem processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, SourceAccountingLine sourceAccountingLine) {
+        return processAccountingLineSufficientFundsCheckingPreparation(transactionalDocument, sourceAccountingLine);
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument,
+     *      org.kuali.core.bo.TargetAccountingLine)
+     */
+    @Override
+    protected SufficientFundsItem processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, TargetAccountingLine targetAccountingLine) {
+        return processAccountingLineSufficientFundsCheckingPreparation(transactionalDocument, targetAccountingLine);
+    }
+
+    /**
+     * Helper method to build a <code>{@link SufficientFundsItem}</code> from a <code>{@link TransactionalDocument}</code> and a
+     * <code>{@link AccountingLine}</code>
+     * 
+     * @param document
+     * @param accountingLine
+     * @return SufficientFundsItem
+     */
+    private SufficientFundsItem processAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument document, AccountingLine accountingLine) {
+        SufficientFundsItem item = null;
+        String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
+        String accountNumber = accountingLine.getAccountNumber();
+        String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
+        String financialObjectCode = accountingLine.getObjectCode().getFinancialObjectCode();
+        String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
+        KualiDecimal lineAmount = getGeneralLedgerPendingEntryAmountForAccountingLine(accountingLine);
+        Integer fiscalYear = accountingLine.getPostingYear();
+        String financialObjectTypeCode = accountingLine.getObjectTypeCode();
+
+        // always credit
+        String debitCreditCode = null;
+
+        if (isDebit(document, accountingLine)) {
+            debitCreditCode = GL_CREDIT_CODE;
+        }
+        else {
+            debitCreditCode = GL_DEBIT_CODE;
+        }
+        String sufficientFundsObjectCode = getSufficientFundsObjectCode(chartOfAccountsCode, financialObjectCode, accountSufficientFundsCode, financialObjectLevelCode);
+        item = buildSufficentFundsItem(accountNumber, accountSufficientFundsCode, lineAmount, chartOfAccountsCode, sufficientFundsObjectCode, debitCreditCode, financialObjectCode, financialObjectLevelCode, fiscalYear, financialObjectTypeCode);
+
+        return item;
+    }
+
+    /**
+     * Helper method to get the sufficient funds object code.
+     * 
+     * @param chartOfAccountsCode
+     * @param financialObjectCode
+     * @param accountSufficientFundsCode
+     * @param financialObjectLevelCode
+     * @return String
+     */
+    private String getSufficientFundsObjectCode(String chartOfAccountsCode, String financialObjectCode, String accountSufficientFundsCode, String financialObjectLevelCode) {
+        return SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(chartOfAccountsCode, financialObjectCode, accountSufficientFundsCode, financialObjectLevelCode);
     }
 }
