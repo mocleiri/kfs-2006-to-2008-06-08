@@ -21,12 +21,12 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.IcrAutomatedEntry">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Indirect Cost Recovery Automated Entry Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="balanceTypeCode" />
@@ -39,11 +39,15 @@
                 <field attributeName="offsetBalanceSheetObjectCodeNumber" />
                 <field attributeName="transactionDebitIndicator" />
                 <field attributeName="awardIndrCostRcvyRatePct" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Indirect Cost Recovery Automated Entry Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.IcrAutomatedEntry"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup an Indirect Cost Recovery Automated Entry</instructions>
 
