@@ -42,6 +42,11 @@ import org.kuali.module.gl.dao.BalanceDao;
 import org.kuali.module.gl.util.OJBUtility;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
+/**
+ *  
+ *  
+ * @version $Id: BalanceDaoOjb.java,v 1.44.2.4 2006-10-14 02:29:34 jbmorris Exp $
+ */
 public class BalanceDaoOjb extends PersistenceBrokerDaoSupport implements BalanceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceDaoOjb.class);
     private KualiConfigurationService kualiConfigurationService;
