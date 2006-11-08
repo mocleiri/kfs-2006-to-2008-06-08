@@ -1,20 +1,3 @@
-<%--
- Copyright 2005-2006 The Kuali Foundation.
- 
- $Source: /opt/cvs/kfs/work/web-root/jsp/modules/financial/JournalVoucher.jsp,v $
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
---%>
 <%@ include file="/jsp/core/tldHeader.jsp"%>
 <%@ taglib prefix="c" uri="/tlds/c.tld"%>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
@@ -86,8 +69,8 @@
 							alt="press this button to refresh the page after changing the accounting period" />
 						</NOSCRIPT>
 						<kul:lookup
-							boClassName="org.kuali.module.chart.bo.AccountingPeriod" 
-							fieldLabel="${journalVoucherAttributes.accountingPeriod.label}"/>
+							boClassName="org.kuali.module.chart.bo.AccountingPeriod"
+							hideReturnLink="true" />
 					</c:if></td>
 				</tr>
 				<tr>
@@ -136,8 +119,7 @@
 						<kul:lookup
 							boClassName="org.kuali.module.chart.bo.codes.BalanceTyp"
 							fieldConversions="code:selectedBalanceType.code"
-							lookupParameters="selectedBalanceType.code:code" 
-							 fieldLabel="${journalVoucherAttributes.balanceTypeCode.label}" />
+							lookupParameters="selectedBalanceType.code:code" />
 					</c:if></td>
 				</tr>
 				<tr>
@@ -166,7 +148,7 @@
 		includeObjectTypeCode="true" />
 	<kul:generalLedgerPendingEntries />
 	<kul:notes />
-	<kul:adHocRecipients />
+	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
 	<kul:routeLog />
 	<kul:panelFooter />
 	<kul:documentControls transactionalDocument="true" />
