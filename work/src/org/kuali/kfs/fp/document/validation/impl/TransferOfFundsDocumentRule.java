@@ -26,7 +26,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.KeyConstants;
 import org.kuali.core.bo.AccountingLine;
-import org.kuali.core.bo.Options;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
@@ -63,15 +62,13 @@ public class TransferOfFundsDocumentRule extends TransactionalDocumentRuleBase i
      */
     @Override
     protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        Options options = SpringServiceLocator.getOptionsService().getCurrentYearOptions();
-
         explicitEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_ACTUAL);
         if (isExpense(accountingLine)) {
-            explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferExpenseCode());
+            explicitEntry.setFinancialObjectTypeCode(OBJECT_TYPE_CODE.TRANSFER_EXPENSE);
         }
         else {
             if (isIncome(accountingLine)) {
-                explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferIncomeCode());
+                explicitEntry.setFinancialObjectTypeCode(OBJECT_TYPE_CODE.TRANSFER_INCOME);
             }
             else {
                 explicitEntry.setFinancialObjectTypeCode(TransactionalDocumentRuleUtil.getObjectCodeTypeCodeWithoutSideEffects(accountingLine));
