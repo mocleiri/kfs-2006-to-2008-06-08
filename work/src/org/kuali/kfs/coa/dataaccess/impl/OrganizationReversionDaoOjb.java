@@ -52,7 +52,6 @@ public class OrganizationReversionDaoOjb extends PersistenceBrokerDaoSupport imp
         LOG.debug("getCategories() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("organizationReversionCategoryActiveIndicator", true);
         QueryByCriteria q = QueryFactory.newQuery(OrganizationReversionCategory.class, criteria);
         q.addOrderByAscending("organizationReversionSortCode");
 
