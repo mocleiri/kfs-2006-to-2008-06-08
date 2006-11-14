@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006 The Kuali Foundation.
- 
- $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/datadictionary/BillingAddress.xml,v $
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -26,7 +9,7 @@
         <inquiry>
             <title>Billing Address Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="billingCampusCode" />
                 <field attributeName="billingName" />
                 <field attributeName="billingLine1Address" />
@@ -37,11 +20,13 @@
                 <field attributeName="billingCountryCode" />
                 <field attributeName="billingPhoneNumber" />
                 <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Billing Address Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.BillingAddress">Create New</a>]]></menubar>
 
             <instructions>Lookup a Billing Address</instructions>
 
@@ -95,7 +80,7 @@
                 <description>billingCampusCode description...</description>
 			</attribute>
 
-            <attribute name="billingCityName" forceUppercase="true">
+            <attribute name="billingCityName">
                 <label>Billing City Name</label>
                 <shortLabel>Name</shortLabel>
 
@@ -125,7 +110,7 @@
                 <description>billingCountryCode description...</description>
 			</attribute>
 
-            <attribute name="billingLine1Address" forceUppercase="true">
+            <attribute name="billingLine1Address">
                 <label>Billing Line1 Address</label>
                 <shortLabel>Address</shortLabel>
 
@@ -140,12 +125,12 @@
                 <description>billingLine1Address description...</description>
 			</attribute>
 
-            <attribute name="billingLine2Address" forceUppercase="true">
+            <attribute name="billingLine2Address">
                 <label>Billing Line2 Address</label>
                 <shortLabel>Address</shortLabel>
 
                 <maxLength>45</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="47" />
@@ -155,7 +140,7 @@
                 <description>billingLine2Address description...</description>
 			</attribute>
 
-            <attribute name="billingName" forceUppercase="true">
+            <attribute name="billingName">
                 <label>Billing Name</label>
                 <shortLabel>Name</shortLabel>
 
@@ -175,7 +160,7 @@
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>45</maxLength>
-                <validationPattern><phoneNumber /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="47" />

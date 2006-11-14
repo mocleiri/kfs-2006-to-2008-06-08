@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.rules.budget;
 
@@ -27,7 +32,6 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
@@ -50,7 +54,7 @@ public class BudgetPersonnelRule {
         for (Iterator iter = personnel.iterator(); iter.hasNext();) {
             BudgetUser person = (BudgetUser) iter.next();
             if (ObjectUtils.isNotNull(person.getUser()) && person.getUser().getEmployeeStatusCode() != null && StringUtils.contains(INVALID_STATUSES, person.getUser().getEmployeeStatusCode())) {
-                personnelAuditErrors.add(new AuditError("document.budget.audit.personnel." + person.getPersonSystemIdentifier() + ".status", KraKeyConstants.AUDIT_PERSONNEL_STATUS, "personnel", new String[] { person.getUser().getPersonName(), person.getUser().getEmployeeStatusCode() }));
+                personnelAuditErrors.add(new AuditError("document.budget.audit.personnel." + person.getPersonUniversalIdentifier() + ".status", KraKeyConstants.AUDIT_PERSONNEL_STATUS, "personnel", new String[] { person.getUser().getPersonName(), person.getUser().getEmployeeStatusCode() }));
                 if (person.isPersonProjectDirectorIndicator()) {
                     List<AuditError> parametersAuditErrors = new ArrayList<AuditError>();
                     parametersAuditErrors.add(new AuditError("document.budget.audit.parameters.pd.status", KraKeyConstants.AUDIT_PERSONNEL_STATUS, "parameters", new String[] { person.getUser().getPersonName(), person.getUser().getEmployeeStatusCode() }));
@@ -151,7 +155,7 @@ public class BudgetPersonnelRule {
 
                     UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
 
-                    if (userAppointmentTaskPeriod.getTotalFeeRemissionsAmount().compareTo(userAppointmentTaskPeriod.getAgencyRequestedFeesAmount().add(userAppointmentTaskPeriod.getInstitutionRequestedFeesAmount())) != 0) {
+                    if (userAppointmentTaskPeriod.getTotalFeeRemissionsAmount().compareTo(userAppointmentTaskPeriod.getAgencyRequestedFeesAmount().add(userAppointmentTaskPeriod.getUniversityRequestedFeesAmount())) != 0) {
                         GlobalVariables.getErrorMap().putError("feeRemissions", KeyConstants.ERROR_FEE_REMISSION_DISTRIBUTION);
                         valid = false;
                     }
@@ -166,20 +170,17 @@ public class BudgetPersonnelRule {
         return valid;
     }
 
-    protected boolean processInsertPersonnelBusinessRules(List personnelList, BudgetUser newBudgetUser, boolean isToBeNamed) {
+    protected boolean processInsertPersonnelBusinessRules(List personnelList, BudgetUser newBudgetUser) {
         boolean valid = true;
 
-        if (StringUtils.isNotEmpty(newBudgetUser.getPersonSystemIdentifier())) {
+        if (StringUtils.isNotEmpty(newBudgetUser.getPersonUniversalIdentifier())) {
             for (Iterator budgetUserIter = personnelList.iterator(); budgetUserIter.hasNext();) {
-                if (StringUtils.equals(newBudgetUser.getPersonSystemIdentifier(), ((BudgetUser) budgetUserIter.next()).getPersonSystemIdentifier())) {
+                if (StringUtils.equals(newBudgetUser.getPersonUniversalIdentifier(), ((BudgetUser) budgetUserIter.next()).getPersonUniversalIdentifier())) {
                     GlobalVariables.getErrorMap().putError("newPersonnel", KeyConstants.ERROR_PERSON_ALREADY_EXISTS_ON_BUDGET, new String[] {});
                     valid = false;
                     break;
                 }
             }
-        } else if (!isToBeNamed) {
-            GlobalVariables.getErrorMap().putError("newPersonnel", KeyConstants.ERROR_PERSON_NOT_SELECTED, new String[] {});
-            valid = false;
         }
         return valid;
     }
@@ -204,7 +205,7 @@ public class BudgetPersonnelRule {
                     GlobalVariables.getErrorMap().addToErrorPath("userAppointmentTask[" + userAppointmentTaskListIndex + "].userAppointmentTaskPeriod[" + userAppointmentTaskPeriodIndex + "]");
 
                     UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
-                    if (StringUtils.equals(userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
+                    if (StringUtils.equals(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
                         if (userAppointmentTaskPeriod.getPersonWeeksAmount().compareTo(new Integer(13)) == 1) {
                             GlobalVariables.getErrorMap().putError("personWeeksAmount", KeyConstants.ERROR_PERSONNEL_SUMMER_WEEKS_TOO_MUCH, new String[] { "Period " + (userAppointmentTaskPeriodIndex + 1), "13" });
                             valid = false;
@@ -266,22 +267,22 @@ public class BudgetPersonnelRule {
                         Integer periodNumber = new Integer(userAppointmentTaskPeriodIndex + 1);
 
                         UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
-                        if (!StringUtils.equals(userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString()) &&
-                                !StringUtils.contains(appointmentTypeMappings.get("gradResAssistant").toString(), userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode()) &&
-                                !StringUtils.contains(appointmentTypeMappings.get("hourly").toString(), userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode())) {
+                        if (!StringUtils.equals(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString()) &&
+                                !StringUtils.contains(appointmentTypeMappings.get("gradResAssistant").toString(), userAppointmentTaskPeriod.getUniversityAppointmentTypeCode()) &&
+                                !StringUtils.contains(appointmentTypeMappings.get("hourly").toString(), userAppointmentTaskPeriod.getUniversityAppointmentTypeCode())) {
                             if (periodEffortMap.get(periodNumber) == null) {
-                                periodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount()));
+                                periodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount()));
                             }
                             else {
-                                periodEffortMap.put(periodNumber, ((KualiInteger) periodEffortMap.get(periodNumber)).add(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount())));
+                                periodEffortMap.put(periodNumber, ((KualiInteger) periodEffortMap.get(periodNumber)).add(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount())));
                             }
                         }
-                        else if (StringUtils.equals(userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
+                        else if (StringUtils.equals(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
                             if (summerPeriodEffortMap.get(periodNumber) == null) {
-                                summerPeriodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount()));
+                                summerPeriodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount()));
                             }
                             else {
-                                summerPeriodEffortMap.put(periodNumber, ((KualiInteger) summerPeriodEffortMap.get(periodNumber)).add(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount())));
+                                summerPeriodEffortMap.put(periodNumber, ((KualiInteger) summerPeriodEffortMap.get(periodNumber)).add(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount())));
                             }
                         }
                     }
@@ -313,8 +314,7 @@ public class BudgetPersonnelRule {
     
     protected boolean verifyRequiredFields(Document document) {
         Budget budget = ((BudgetDocument)document).getBudget();
-        
-        DataDictionaryService dataDictionaryService = SpringServiceLocator.getDataDictionaryService();
+            
         HashMap appointmentTypeMappings = SpringServiceLocator.getBudgetPersonnelService().getAppointmentTypeMappings();
         
         boolean valid = true;
@@ -331,100 +331,100 @@ public class BudgetPersonnelRule {
                 for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
                     GlobalVariables.getErrorMap().addToErrorPath("userAppointmentTaskPeriod[" + period + "]");
                     
-                    if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.FULL_YEAR).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) { //Salary
+                    if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.FULL_YEAR).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Salary
                         if (userAppointmentTaskPeriod.getAgencyPercentEffortAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyPercentEffortAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyPercentEffortAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyPercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Agency Percent Effort Amount");
                             valid = false;
                         }
                         
-                        if (userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionCostSharePercentEffortAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionCostSharePercentEffortAmount"));
+                        if (userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universityCostSharePercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Institution Cost Share Percent Effort Amount");
                             valid = false;
                         }
                         
-                    } else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.ACADEMIC_YEAR_SUMMER).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) { //Academic 9/Summer
+                    } else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.ACADEMIC_YEAR_SUMMER).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Academic 9/Summer
                         if (userAppointmentTaskPeriod.getPersonWeeksAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("personWeeksAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "personWeeksAmount"));
+                            GlobalVariables.getErrorMap().putError("personWeeksAmount", KeyConstants.ERROR_REQUIRED, "Number of Weeks");
                             valid = false;
                         }
                         
                         if (userAppointmentTaskPeriod.getAgencyPercentEffortAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyPercentEffortAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyPercentEffortAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyPercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Agency Percent Effort Amount");
                             valid = false;
                         }
                         
-                        if (userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionCostSharePercentEffortAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionCostSharePercentEffortAmount"));
+                        if (userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universityCostSharePercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Institution Cost Share Percent Effort Amount");
                             valid = false;
                         }
-                    } else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.HOURLY).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) { //Hourly
+                    } else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.HOURLY).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Hourly
                         if (userAppointmentTaskPeriod.getUserHourlyRate() == null) {
-                            GlobalVariables.getErrorMap().putError("userHourlyRate", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userHourlyRate"));
+                            GlobalVariables.getErrorMap().putError("userHourlyRate", KeyConstants.ERROR_REQUIRED, "Hourly Rate");
                             valid = false;
                         }
                         
                         if (userAppointmentTaskPeriod.getUserAgencyHours() == null) {
-                            GlobalVariables.getErrorMap().putError("userAgencyHours", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userAgencyHours"));
+                            GlobalVariables.getErrorMap().putError("userAgencyHours", KeyConstants.ERROR_REQUIRED, "Agency Request Number of Hours");
                             valid = false;
                         }
                         
-                        if (userAppointmentTaskPeriod.getUserInstitutionHours() == null) {
-                            GlobalVariables.getErrorMap().putError("userInstitutionHours", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userInstitutionHours"));
+                        if (userAppointmentTaskPeriod.getUserUniversityHours() == null) {
+                            GlobalVariables.getErrorMap().putError("userUniversityHours", KeyConstants.ERROR_REQUIRED, "Institution Request Number of Hours");
                             valid = false;
                         }
-                    } else if(StringUtils.contains(appointmentTypeMappings.get(KraConstants.GRADUATE_ASSISTANT).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) { //Grad Asst
+                    } else if(StringUtils.contains(appointmentTypeMappings.get(KraConstants.GRADUATE_ASSISTANT).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Grad Asst
                         if (userAppointmentTaskPeriod.getAgencyFullTimeEquivalentPercent() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyFullTimeEquivalentPercent", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyPercentEffortAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyFullTimeEquivalentPercent", KeyConstants.ERROR_REQUIRED, "Agency Percent Effort");
                             valid = false;
                         }
                         
                         if (userAppointmentTaskPeriod.getAgencySalaryAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencySalaryAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencySalaryAmount"));
+                            GlobalVariables.getErrorMap().putError("agencySalaryAmount", KeyConstants.ERROR_REQUIRED, "Agency Salary Amount");
                             valid = false;
                         }
                         
                         if (userAppointmentTaskPeriod.getAgencyHealthInsuranceAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyHealthInsuranceAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyHealthInsuranceAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyHealthInsuranceAmount", KeyConstants.ERROR_REQUIRED, "Agency Health Insurance Amount");
                             valid = false;
                         }
                         
                         if (userAppointmentTaskPeriod.getUserCreditHoursNumber() == null) {
-                            GlobalVariables.getErrorMap().putError("userCreditHoursNumber", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userCreditHoursNumber"));
+                            GlobalVariables.getErrorMap().putError("userCreditHoursNumber", KeyConstants.ERROR_REQUIRED, "Number of Credit Hours");
                             valid = false;
                         }
                         
                         if (userAppointmentTaskPeriod.getUserCreditHourAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("userCreditHourAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userCreditHourAmount"));
+                            GlobalVariables.getErrorMap().putError("userCreditHourAmount", KeyConstants.ERROR_REQUIRED, "Amount Per Credit Hour");
                             valid = false;
                         }
                         
                         if (userAppointmentTaskPeriod.getUserMiscellaneousFeeAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("userMiscellaneousFeesAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userMiscellaneousFeeAmount"));
+                            GlobalVariables.getErrorMap().putError("userMiscellaneousFeesAmount", KeyConstants.ERROR_REQUIRED, "Miscellaneous Fees Amount");
                             valid = false;
                         }
                         
                         if (userAppointmentTaskPeriod.getAgencyRequestedFeesAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyRequestedFeesAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyRequestedFeesAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyRequestedFeesAmount", KeyConstants.ERROR_REQUIRED, "Agency Requested Fees");
                             valid = false;
                         }
                         
-                        if (userAppointmentTaskPeriod.getInstitutionRequestedFeesAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionRequestedFeesAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionRequestedFeesAmount"));
+                        if (userAppointmentTaskPeriod.getUniversityRequestedFeesAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universityRequestedFeesAmount", KeyConstants.ERROR_REQUIRED, "Institution Requested Fees");
                             valid = false;
                         }
                         
-                        if (userAppointmentTaskPeriod.getInstitutionFullTimeEquivalentPercent() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionFullTimeEquivalentPercent", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionCostSharePercentEffortAmount"));
+                        if (userAppointmentTaskPeriod.getUniversityFullTimeEquivalentPercent() == null) {
+                            GlobalVariables.getErrorMap().putError("universityFullTimeEquivalentPercent", KeyConstants.ERROR_REQUIRED, "Institution Percent Effort");
                             valid = false;
                         }
 
-                        if (userAppointmentTaskPeriod.getInstitutionSalaryAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionSalaryAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionSalaryAmount"));
+                        if (userAppointmentTaskPeriod.getUniversitySalaryAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universitySalaryAmount", KeyConstants.ERROR_REQUIRED, "Institution Salary Amount");
                             valid = false;
                         }
                         
-                        if (userAppointmentTaskPeriod.getInstitutionHealthInsuranceAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionHealthInsuranceAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionHealthInsuranceAmount"));
+                        if (userAppointmentTaskPeriod.getUniversityHealthInsuranceAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universityHealthInsuranceAmount", KeyConstants.ERROR_REQUIRED, "Institution Health Insurance Amount");
                             valid = false;
                         }
                         

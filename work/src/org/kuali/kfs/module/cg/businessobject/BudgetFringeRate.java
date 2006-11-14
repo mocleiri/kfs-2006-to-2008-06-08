@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.bo;
 
@@ -29,15 +34,15 @@ import org.kuali.core.util.ObjectUtils;
 /**
  * Budget Fringe Rate Business Object
  * 
- * 
+ * @author Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetFringeRate extends BusinessObjectBase {
 
     private static final long serialVersionUID = -1305514388024735249L;
-    private String researchDocumentNumber;
-    private String institutionAppointmentTypeCode;
+    private String documentHeaderId;
+    private String universityAppointmentTypeCode;
     private KualiDecimal contractsAndGrantsFringeRateAmount;
-    private KualiDecimal institutionCostShareFringeRateAmount;
+    private KualiDecimal universityCostShareFringeRateAmount;
     private Timestamp budgetLastUpdateTimestamp;
 
     private AppointmentType appointmentType;
@@ -50,28 +55,22 @@ public class BudgetFringeRate extends BusinessObjectBase {
         super();
         appointmentType = new AppointmentType();
     }
-    
-    public BudgetFringeRate(String researchDocumentNumber, String institutionAppointmentTypeCode) {
-        this();
-        this.researchDocumentNumber = researchDocumentNumber;
-        this.institutionAppointmentTypeCode = institutionAppointmentTypeCode;
+
+    public BudgetFringeRate(String documentHeaderId, String universityAppointmentTypeCode, KualiDecimal contractsAndGrantsFringeRateAmount, KualiDecimal universityCostShareFringeRateAmount, AppointmentType appointmentType) {
+        this(documentHeaderId, universityAppointmentTypeCode, contractsAndGrantsFringeRateAmount, universityCostShareFringeRateAmount, appointmentType, null, null);
     }
 
-    public BudgetFringeRate(String researchDocumentNumber, String institutionAppointmentTypeCode, KualiDecimal contractsAndGrantsFringeRateAmount, KualiDecimal institutionCostShareFringeRateAmount, AppointmentType appointmentType) {
-        this(researchDocumentNumber, institutionAppointmentTypeCode, contractsAndGrantsFringeRateAmount, institutionCostShareFringeRateAmount, appointmentType, null, null);
-    }
-
-    public BudgetFringeRate(String researchDocumentNumber, AppointmentType appointmentType) {
-        this(researchDocumentNumber, appointmentType.getAppointmentTypeCode(), appointmentType.getFringeRateAmount(), appointmentType.getCostShareFringeRateAmount(), appointmentType, null, null);
+    public BudgetFringeRate(String documentHeaderId, AppointmentType appointmentType) {
+        this(documentHeaderId, appointmentType.getAppointmentTypeCode(), appointmentType.getFringeRateAmount(), appointmentType.getCostShareFringeRateAmount(), appointmentType, null, null);
     }
 
 
-    public BudgetFringeRate(String researchDocumentNumber, String institutionAppointmentTypeCode, KualiDecimal contractsAndGrantsFringeRateAmount, KualiDecimal institutionCostShareFringeRateAmount, AppointmentType appointmentType, String objectId, Long versionNumber) {
+    public BudgetFringeRate(String documentHeaderId, String universityAppointmentTypeCode, KualiDecimal contractsAndGrantsFringeRateAmount, KualiDecimal universityCostShareFringeRateAmount, AppointmentType appointmentType, String objectId, Long versionNumber) {
         super();
-        this.researchDocumentNumber = researchDocumentNumber;
-        this.institutionAppointmentTypeCode = institutionAppointmentTypeCode;
+        this.documentHeaderId = documentHeaderId;
+        this.universityAppointmentTypeCode = universityAppointmentTypeCode;
         this.contractsAndGrantsFringeRateAmount = contractsAndGrantsFringeRateAmount;
-        this.institutionCostShareFringeRateAmount = institutionCostShareFringeRateAmount;
+        this.universityCostShareFringeRateAmount = universityCostShareFringeRateAmount;
         this.appointmentType = appointmentType;
         setObjectId(objectId);
         setVersionNumber(versionNumber);
@@ -165,8 +164,8 @@ public class BudgetFringeRate extends BusinessObjectBase {
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put("researchDocumentNumber", this.researchDocumentNumber);
-        m.put("institutionAppointmentTypeCode", this.institutionAppointmentTypeCode);
+        m.put("documentHeaderId", this.documentHeaderId);
+        m.put("universityAppointmentTypeCode", this.universityAppointmentTypeCode);
         return m;
     }
 
@@ -186,7 +185,7 @@ public class BudgetFringeRate extends BusinessObjectBase {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        String hashString = this.getResearchDocumentNumber() + "|" + this.getInstitutionAppointmentTypeCode() + "|" + this.getAppointmentType().toString() + "|" + this.getAppointmentTypeCostShareFringeRateAmount().toString() + "|" + this.getAppointmentTypeFringeRateAmount().toString() + "|" + this.getBudgetLastUpdateTimestamp().toString() + "|" + this.getContractsAndGrantsFringeRateAmount().toString() + "|" + this.getInstitutionCostShareFringeRateAmount().toString();
+        String hashString = this.getDocumentHeaderId() + "|" + this.getUniversityAppointmentTypeCode() + "|" + this.getAppointmentType().toString() + "|" + this.getAppointmentTypeCostShareFringeRateAmount().toString() + "|" + this.getAppointmentTypeFringeRateAmount().toString() + "|" + this.getBudgetLastUpdateTimestamp().toString() + "|" + this.getContractsAndGrantsFringeRateAmount().toString() + "|" + this.getUniversityCostShareFringeRateAmount().toString();
         return hashString.hashCode();
     }
 
@@ -220,8 +219,8 @@ public class BudgetFringeRate extends BusinessObjectBase {
 
         if (ObjectUtils.isNotNull(obj) && obj instanceof BudgetFringeRate) {
             BudgetFringeRate objCompare = (BudgetFringeRate) obj;
-            equals &= this.researchDocumentNumber.equals(objCompare.getResearchDocumentNumber());
-            equals &= this.institutionAppointmentTypeCode.equals(objCompare.getInstitutionAppointmentTypeCode());
+            equals &= this.documentHeaderId.equals(objCompare.getDocumentHeaderId());
+            equals &= this.universityAppointmentTypeCode.equals(objCompare.getUniversityAppointmentTypeCode());
             if (this.budgetLastUpdateTimestamp == null && objCompare.getBudgetLastUpdateTimestamp() == null) {
             }
             else {
@@ -232,10 +231,10 @@ public class BudgetFringeRate extends BusinessObjectBase {
             else {
                 equals &= this.contractsAndGrantsFringeRateAmount != null && objCompare.getContractsAndGrantsFringeRateAmount() != null && this.contractsAndGrantsFringeRateAmount.equals(objCompare.getContractsAndGrantsFringeRateAmount());
             }
-            if (this.institutionCostShareFringeRateAmount == null && objCompare.getInstitutionCostShareFringeRateAmount() == null) {
+            if (this.universityCostShareFringeRateAmount == null && objCompare.getUniversityCostShareFringeRateAmount() == null) {
             }
             else {
-                equals &= this.institutionCostShareFringeRateAmount != null && objCompare.getInstitutionCostShareFringeRateAmount() != null && this.institutionCostShareFringeRateAmount.equals(objCompare.getInstitutionCostShareFringeRateAmount());
+                equals &= this.universityCostShareFringeRateAmount != null && objCompare.getUniversityCostShareFringeRateAmount() != null && this.universityCostShareFringeRateAmount.equals(objCompare.getUniversityCostShareFringeRateAmount());
             }
         }
 
@@ -257,17 +256,17 @@ public class BudgetFringeRate extends BusinessObjectBase {
     }
 
     /**
-     * @return Returns the researchDocumentNumber.
+     * @return Returns the documentHeaderId.
      */
-    public String getResearchDocumentNumber() {
-        return researchDocumentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * @param researchDocumentNumber The researchDocumentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
      */
-    public void setResearchDocumentNumber(String researchDocumentNumber) {
-        this.researchDocumentNumber = researchDocumentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
@@ -285,31 +284,31 @@ public class BudgetFringeRate extends BusinessObjectBase {
     }
 
     /**
-     * @return Returns the institutionAppointmentTypeCode.
+     * @return Returns the universityAppointmentTypeCode.
      */
-    public String getInstitutionAppointmentTypeCode() {
-        return institutionAppointmentTypeCode;
+    public String getUniversityAppointmentTypeCode() {
+        return universityAppointmentTypeCode;
     }
 
     /**
-     * @param institutionAppointmentTypeCode The institutionAppointmentTypeCode to set.
+     * @param universityAppointmentTypeCode The universityAppointmentTypeCode to set.
      */
-    public void setInstitutionAppointmentTypeCode(String institutionAppointmentTypeCode) {
-        this.institutionAppointmentTypeCode = institutionAppointmentTypeCode;
+    public void setUniversityAppointmentTypeCode(String universityAppointmentTypeCode) {
+        this.universityAppointmentTypeCode = universityAppointmentTypeCode;
     }
 
     /**
-     * @return Returns the institutionCostShareFringeRateAmount.
+     * @return Returns the universityCostShareFringeRateAmount.
      */
-    public KualiDecimal getInstitutionCostShareFringeRateAmount() {
-        return institutionCostShareFringeRateAmount;
+    public KualiDecimal getUniversityCostShareFringeRateAmount() {
+        return universityCostShareFringeRateAmount;
     }
 
     /**
-     * @param institutionCostShareFringeRateAmount The institutionCostShareFringeRateAmount to set.
+     * @param universityCostShareFringeRateAmount The universityCostShareFringeRateAmount to set.
      */
-    public void setInstitutionCostShareFringeRateAmount(KualiDecimal institutionCostShareFringeRateAmount) {
-        this.institutionCostShareFringeRateAmount = institutionCostShareFringeRateAmount;
+    public void setUniversityCostShareFringeRateAmount(KualiDecimal universityCostShareFringeRateAmount) {
+        this.universityCostShareFringeRateAmount = universityCostShareFringeRateAmount;
     }
 
     /**

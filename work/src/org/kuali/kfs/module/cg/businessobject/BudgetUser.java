@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.bo;
 
@@ -33,7 +38,7 @@ import org.kuali.module.kra.budget.service.BudgetPersonnelService;
 /**
  * This class...
  * 
- * 
+ * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetUser extends BusinessObjectBase implements Comparable {
 
@@ -47,22 +52,16 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
         super();
         budgetPersonnelService = SpringServiceLocator.getBudgetPersonnelService();
     }
-    
-    public BudgetUser(String researchDocumentNumber, Integer budgetUserSequenceNumber) {
-        this();
-        this.researchDocumentNumber = researchDocumentNumber;
-        this.budgetUserSequenceNumber = budgetUserSequenceNumber;
-    }
 
     public BudgetUser(BudgetUser budgetUser) {
         this();
-        this.researchDocumentNumber = budgetUser.getResearchDocumentNumber();
+        this.documentHeaderId = budgetUser.getDocumentHeaderId();
         this.budgetUserSequenceNumber = budgetUser.getBudgetUserSequenceNumber();
         this.fiscalCampusCode = budgetUser.getFiscalCampusCode();
         this.primaryDepartmentCode = budgetUser.getPrimaryDepartmentCode();
         this.baseSalary = budgetUser.getBaseSalary();
         this.role = budgetUser.getRole();
-        this.personSystemIdentifier = budgetUser.getPersonSystemIdentifier();
+        this.personUniversalIdentifier = budgetUser.getPersonUniversalIdentifier();
         this.personNamePrefixText = budgetUser.getPersonNamePrefixText();
         this.personNameSuffixText = budgetUser.getPersonNameSuffixText();
         this.personSalaryJustificationText = budgetUser.getPersonSalaryJustificationText();
@@ -75,15 +74,15 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
         this.userAppointmentTasks = new ArrayList(budgetUser.getUserAppointmentTasks());
     }
 
-    private String researchDocumentNumber; // RDOC_NBR
+    private String documentHeaderId; // ER_REF_TRACK_NBR
     private Integer budgetUserSequenceNumber; // BDGT_USR_SEQ_NBR
     private String fiscalCampusCode; // EMP_FSCL_CMP_CD
     private String primaryDepartmentCode; // EMP_PRM_DEPT_CD
     private KualiDecimal baseSalary; // PRSN_BASE_SLRY
     private Integer budgetSalaryFiscalYear;
     private String role; //
-    private String personSystemIdentifier; // PERSON_SYS_ID
-    private UniversalUser user; // referenced object for PERSON_SYS_ID
+    private String personUniversalIdentifier; // PERSON_UNVL_ID
+    private UniversalUser user; // referenced object for PERSON_UNVL_ID
     private String appointmentTypeCode; // Not present in the database - only for the convenience of the user interface
     private boolean personSeniorKeyIndicator;
     private boolean personSecretarialClericalIndicator;
@@ -105,7 +104,7 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
 
     public void initializeBudgetUser(BudgetDocument budgetDocument) {
         this.setBudgetUserSequenceNumber(budgetDocument.getPersonnelNextSequenceNumber());
-        this.setResearchDocumentNumber(budgetDocument.getFinancialDocumentNumber());
+        this.setDocumentHeaderId(budgetDocument.getFinancialDocumentNumber());
         this.synchronizeUserObject();
         this.createUserAppointmentTasks(budgetDocument);
     }
@@ -119,7 +118,7 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("researchDocumentNumber", this.researchDocumentNumber);
+        m.put("documentHeaderId", this.documentHeaderId);
         m.put("userSequenceNumber", this.budgetUserSequenceNumber);
         return m;
     }
@@ -146,22 +145,22 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
 
 
     /**
-     * Gets the researchDocumentNumber attribute.
+     * Gets the documentHeaderId attribute.
      * 
-     * @return Returns the researchDocumentNumber.
+     * @return Returns the documentHeaderId.
      */
-    public String getResearchDocumentNumber() {
-        return researchDocumentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
 
     /**
-     * Sets the researchDocumentNumber attribute value.
+     * Sets the documentHeaderId attribute value.
      * 
-     * @param researchDocumentNumber The researchDocumentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
      */
-    public void setResearchDocumentNumber(String researchDocumentNumber) {
-        this.researchDocumentNumber = researchDocumentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
 
@@ -225,22 +224,22 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
 
 
     /**
-     * Gets the personSystemIdentifier attribute.
+     * Gets the personUniversalIdentifier attribute.
      * 
-     * @return Returns the personSystemIdentifier.
+     * @return Returns the personUniversalIdentifier.
      */
-    public String getPersonSystemIdentifier() {
-        return personSystemIdentifier;
+    public String getPersonUniversalIdentifier() {
+        return personUniversalIdentifier;
     }
 
 
     /**
-     * Sets the personSystemIdentifier attribute value.
+     * Sets the personUniversalIdentifier attribute value.
      * 
-     * @param personSystemIdentifier The personSystemIdentifier to set.
+     * @param personUniversalIdentifier The personUniversalIdentifier to set.
      */
-    public void setPersonSystemIdentifier(String personSystemIdentifier) {
-        this.personSystemIdentifier = personSystemIdentifier;
+    public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
+        this.personUniversalIdentifier = personUniversalIdentifier;
     }
 
 
@@ -388,7 +387,7 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
      * Makes sure that copied fields between the referenced UniversalUser object and this object are properly synchronized.
      */
     public void synchronizeUserObject() {
-        if (this.getPersonSystemIdentifier() != null) {
+        if (this.getPersonUniversalIdentifier() != null) {
             this.refreshReferenceObject("user");
             if (this.user.getPersonBaseSalaryAmount() != null) {
                 this.baseSalary = this.user.getPersonBaseSalaryAmount();
@@ -436,12 +435,12 @@ public class BudgetUser extends BusinessObjectBase implements Comparable {
     public void logState() {
         LOG.info("userSequenceNumber: (" + this.budgetUserSequenceNumber + ")");
         /* LOG.info(" version: (" + this.getVersion() +")"); */
-        LOG.info("  researchDocumentNumber: (" + this.researchDocumentNumber + ")");
+        LOG.info("  documentHeaderId: (" + this.documentHeaderId + ")");
         LOG.info("  fiscalCampusCode: (" + this.fiscalCampusCode + ")");
         LOG.info("  primaryDepartmentCode: (" + this.primaryDepartmentCode + ")");
         LOG.info("  baseSalary: (" + this.baseSalary + ")");
         LOG.info("  role: (" + this.role + ")");
-        LOG.info("  personSystemIdentifier: (" + this.personSystemIdentifier + ")");
+        LOG.info("  personUniversalIdentifier: (" + this.personUniversalIdentifier + ")");
         LOG.info("  appointmentTypeCode: (" + this.appointmentTypeCode + ")");
         LOG.info("  personSeniorKeyIndicator: (" + this.personSeniorKeyIndicator + ")");
         LOG.info("  personSecretarialClericalIndicator: (" + this.personSecretarialClericalIndicator + ")");

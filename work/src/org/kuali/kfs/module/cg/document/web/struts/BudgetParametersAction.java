@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.web.struts.action;
 
@@ -55,7 +60,7 @@ import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 /**
  * This class handles Actions for Research Administration.
  * 
- * 
+ * @author KRA (era_team@indiana.edu)
  */
 
 public class BudgetParametersAction extends BudgetAction {
@@ -74,7 +79,7 @@ public class BudgetParametersAction extends BudgetAction {
         
 //      On first load, set the default task name for the initial task.
         if (budgetForm.getBudgetDocument().getTaskListSize() == 0) {
-            String DEFAULT_BUDGET_TASK_NAME = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "defaultBudgetTaskName");
+            String DEFAULT_BUDGET_TASK_NAME = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("KraDevelopmentGroup", "defaultBudgetTaskName");
             budgetForm.getNewTask().setBudgetTaskName(DEFAULT_BUDGET_TASK_NAME + " 1");
             budgetForm.getNewTask().setBudgetTaskOnCampus(true);
         }
@@ -110,11 +115,10 @@ public class BudgetParametersAction extends BudgetAction {
         referenceObjects.add("modularBudget");
         referenceObjects.add("indirectCost");
         referenceObjects.add("thirdPartyCostShareItems");
-        referenceObjects.add("institutionCostShareItems");
-        referenceObjects.add("institutionCostSharePersonnelItems");
+        referenceObjects.add("universityCostShareItems");
+        referenceObjects.add("universityCostSharePersonnelItems");
         referenceObjects.add("adHocPermissions");
         referenceObjects.add("adHocOrgs");
-        referenceObjects.add("adHocWorkgroups");
 
         SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(budgetForm.getBudgetDocument().getBudget(), referenceObjects);
 
@@ -130,9 +134,34 @@ public class BudgetParametersAction extends BudgetAction {
         KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
         // Logic for Cost Share question.
-        ActionForward preRulesForward = preRulesCheck(mapping, form, request, response, "saveParameters");
-        if (preRulesForward != null) {
-            return preRulesForward;
+        String costShareRemoved = SpringServiceLocator.getBudgetService().buildCostShareRemovedCode(budgetForm.getBudgetDocument());
+        if (StringUtils.isNotBlank(costShareRemoved)) {
+            if (question == null) {
+
+                // Build our confirmation message with proper context.
+                StringBuffer confirmationText = new StringBuffer();
+                if (costShareRemoved.contains(KraConstants.INSTITUTION_COST_SHARE_CODE)) {
+                    confirmationText.append("Institution Cost Share");
+                }
+                if (costShareRemoved.contains(KraConstants.THIRD_PARTY_COST_SHARE_CODE)) {
+                    if (costShareRemoved.indexOf(KraConstants.THIRD_PARTY_COST_SHARE_CODE) != 0) {
+                        confirmationText.append(" and ");
+                    }
+                    confirmationText.append("Third Party Cost Share");
+                }
+                String confirmationQuestion = super.buildBudgetConfirmationQuestion(confirmationText.toString(), kualiConfiguration);
+
+                // Ask for confirmation.
+                return this.performQuestionWithoutInput(mapping, form, request, response, Constants.DOCUMENT_DELETE_QUESTION, confirmationQuestion, Constants.CONFIRMATION_QUESTION, "saveParameters", "");
+            }
+
+            Object buttonClicked = request.getParameter(Constants.QUESTION_CLICKED_BUTTON);
+
+            if ((Constants.DOCUMENT_DELETE_QUESTION.equals(question)) && ConfirmationQuestion.YES.equals(buttonClicked)) {
+                // If 'yes' button was clicked, save.
+                super.save(mapping, form, request, response);
+            }
+            return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
         super.save(mapping, form, request, response);
@@ -158,7 +187,7 @@ public class BudgetParametersAction extends BudgetAction {
             AppointmentType appType = (AppointmentType) iter.next();
 
             BudgetFringeRate currentFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRate(i);
-            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getFinancialDocumentNumber(), appType.getAppointmentTypeCode(), appType.getFringeRateAmount(), currentFringeRate.getInstitutionCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
+            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getFinancialDocumentNumber(), appType.getAppointmentTypeCode(), appType.getFringeRateAmount(), currentFringeRate.getUniversityCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
 
             budgetFringeRate.set(i, bfr);
             i++;
@@ -166,7 +195,7 @@ public class BudgetParametersAction extends BudgetAction {
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
-    public ActionForward copyInstitutionCostShareLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward copyUniversityCostShareLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // get the form
         BudgetForm budgetForm = (BudgetForm) form;
         // get the fringe rate list
@@ -280,13 +309,35 @@ public class BudgetParametersAction extends BudgetAction {
     }
 
     public ActionForward deletePeriodLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Object question = request.getParameter(Constants.QUESTION_INST_ATTRIBUTE_NAME);
+        KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
-        ((BudgetForm) form).getBudgetDocument().setPeriodToDelete(Integer.toString(getLineToDelete(request)));
-        ActionForward preRulesForward = preRulesCheck(mapping, form, request, response);
-        if (preRulesForward != null) {
-            return preRulesForward;
+        // Logic for DocCancelQuestion.
+        if (question == null) {
+
+            // Build our confirmation message with proper context.
+            BudgetForm budgetForm = (BudgetForm) form;
+            BudgetPeriod periodToDelete = budgetForm.getBudgetDocument().getBudget().getPeriod(getLineToDelete(request));
+            String confirmationQuestion = super.buildBudgetConfirmationQuestion(periodToDelete.getBudgetPeriodLabel(), kualiConfiguration);
+
+            // Ask for confirmation.
+            return this.performQuestionWithoutInput(mapping, form, request, response, Constants.DOCUMENT_DELETE_QUESTION, confirmationQuestion, Constants.CONFIRMATION_QUESTION, "deletePeriodLine", Integer.toString(getLineToDelete(request)));
         }
-        
+
+        Object buttonClicked = request.getParameter(Constants.QUESTION_CLICKED_BUTTON);
+
+        if ((Constants.DOCUMENT_DELETE_QUESTION.equals(question)) && ConfirmationQuestion.YES.equals(buttonClicked)) {
+
+            // Remove the period & set the new period start date.
+            BudgetForm budgetForm = (BudgetForm) form;
+            budgetForm.getBudgetDocument().getBudget().getPeriods().remove(Integer.parseInt(request.getParameter("context")));
+
+            Date defaultNextBeginDate = budgetForm.getBudgetDocument().getBudget().getDefaultNextPeriodBeginDate();
+            if (defaultNextBeginDate != null) {
+                budgetForm.getNewPeriod().setBudgetPeriodBeginDate(defaultNextBeginDate);
+            }
+        }
+
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
@@ -299,14 +350,35 @@ public class BudgetParametersAction extends BudgetAction {
     }
 
     public ActionForward deleteTaskLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-        ((BudgetForm) form).getBudgetDocument().setTaskToDelete(Integer.toString(getLineToDelete(request)));
-        ActionForward preRulesForward = preRulesCheck(mapping, form, request, response);
-        if (preRulesForward != null) {
-            return preRulesForward;
+        Object question = request.getParameter(Constants.QUESTION_INST_ATTRIBUTE_NAME);
+        KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
+
+        // Logic for DocCancelQuestion.
+        if (question == null) {
+
+            // Build our confirmation with proper context.
+            BudgetForm budgetForm = (BudgetForm) form;
+            BudgetTask taskToDelete = budgetForm.getBudgetDocument().getBudget().getTask(getLineToDelete(request));
+            String confirmationQuestion = super.buildBudgetConfirmationQuestion(taskToDelete.getBudgetTaskName(), kualiConfiguration);
+
+            // Ask for confirmation.
+            return this.performQuestionWithoutInput(mapping, form, request, response, Constants.DOCUMENT_DELETE_QUESTION, confirmationQuestion, Constants.CONFIRMATION_QUESTION, "deleteTaskLine", Integer.toString(getLineToDelete(request)));
         }
-        
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        else {
+
+            Object buttonClicked = request.getParameter(Constants.QUESTION_CLICKED_BUTTON);
+
+            if ((Constants.DOCUMENT_DELETE_QUESTION.equals(question)) && ConfirmationQuestion.NO.equals(buttonClicked)) {
+                // If no button clicked, reload the confirmation page.
+            }
+            else {
+                // Remove the task from the task list.
+                BudgetForm budgetForm = (BudgetForm) form;
+                budgetForm.getBudgetDocument().getBudget().getTasks().remove(Integer.parseInt(request.getParameter("context")));
+            }
+
+            return mapping.findForward(Constants.MAPPING_BASIC);
+        }
     }
 
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -321,14 +393,14 @@ public class BudgetParametersAction extends BudgetAction {
                     // coming back from Agency lookup - To Be Named selected
                     budget.setBudgetAgency(null);
                     budget.setBudgetAgencyNumber(null);
-                    BudgetModular modularBudget = budget.getModularBudget() != null ? budget.getModularBudget() : new BudgetModular(budget.getResearchDocumentNumber());
+                    BudgetModular modularBudget = budget.getModularBudget() != null ? budget.getModularBudget() : new BudgetModular(budget.getDocumentHeaderId());
                     resetModularBudget(budget, modularBudget);
                     budget.setModularBudget(modularBudget);
                 }
                 else if (request.getParameter("document.budget.budgetAgencyNumber") != null) {
                     // coming back from an Agnecy lookup - Agency selected
                     budget.setAgencyToBeNamedIndicator(false);
-                    BudgetModular modularBudget = budget.getModularBudget() != null ? budget.getModularBudget() : new BudgetModular(budget.getResearchDocumentNumber());
+                    BudgetModular modularBudget = budget.getModularBudget() != null ? budget.getModularBudget() : new BudgetModular(budget.getDocumentHeaderId());
                     budget.refreshReferenceObject("budgetAgency");
                     budget.getBudgetAgency().refresh();
                     if (budget.getBudgetAgency().getAgencyExtension() != null) {

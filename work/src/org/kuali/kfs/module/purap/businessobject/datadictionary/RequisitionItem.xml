@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2006 The Kuali Foundation.
- 
- $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/datadictionary/RequisitionItem.xml,v $
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -26,7 +9,7 @@
         <inquiry>
             <title>Requisition Item Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="capitalAssetTransactionTypeCode" />
                 <field attributeName="externalOrganizationB2bProductReferenceNumber" />
                 <field attributeName="externalOrganizationB2bProductTypeName" />
@@ -41,20 +24,22 @@
                 <field attributeName="itemTypeCode" />
                 <field attributeName="itemUnitOfMeasureCode" />
                 <field attributeName="itemUnitPrice" />
-                <field attributeName="purapDocumentIdentifier" />
-                <field attributeName="itemIdentifier" />
+                <field attributeName="requisitionIdentifier" />
+                <field attributeName="requisitionItemIdentifier" />
                 <field attributeName="requisitionLineIdentifier" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Requisition Item Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.RequisitionItem">Create New</a>]]></menubar>
+
             <instructions>Lookup an Requisition Item</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="itemDescription" />
+                    <sortAttribute attributeName="capitalAssetTransactionTypeCode" />
                 </sortAttributes>
             </defaultSort>
 
@@ -73,8 +58,8 @@
                 <lookupField attributeName="itemTypeCode" required="false" />
                 <lookupField attributeName="itemUnitOfMeasureCode" required="false" />
                 <lookupField attributeName="itemUnitPrice" required="false" />
-                <lookupField attributeName="purapDocumentIdentifier" required="false" />
-                <lookupField attributeName="itemIdentifier" required="false" />
+                <lookupField attributeName="requisitionIdentifier" required="false" />
+                <lookupField attributeName="requisitionItemIdentifier" required="false" />
                 <lookupField attributeName="requisitionLineIdentifier" required="false" />
             </lookupFields>
 
@@ -93,8 +78,8 @@
                 <field attributeName="itemTypeCode" />
                 <field attributeName="itemUnitOfMeasureCode" />
                 <field attributeName="itemUnitPrice" />
-                <field attributeName="purapDocumentIdentifier" />
-                <field attributeName="itemIdentifier" />
+                <field attributeName="requisitionIdentifier" />
+                <field attributeName="requisitionItemIdentifier" />
                 <field attributeName="requisitionLineIdentifier" />
             </resultFields>
         </lookup>
@@ -309,7 +294,7 @@
                 <description>itemUnitPrice description...</description>
 			</attribute>
 
-            <attribute name="purapDocumentIdentifier" forceUppercase="true">
+            <attribute name="requisitionIdentifier" forceUppercase="true">
                 <label>Requisition Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
@@ -320,11 +305,11 @@
                     <text size="10" />
                 </control>
 
-                <summary>purapDocumentIdentifier</summary>
-                <description>purapDocumentIdentifier description...</description>
+                <summary>requisitionIdentifier</summary>
+                <description>requisitionIdentifier description...</description>
 			</attribute>
 
-            <attribute name="itemIdentifier" forceUppercase="true">
+            <attribute name="requisitionItemIdentifier" forceUppercase="true">
                 <label>Requisition Item Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
@@ -335,8 +320,8 @@
                     <text size="12" />
                 </control>
 
-                <summary>itemIdentifier</summary>
-                <description>itemIdentifier description...</description>
+                <summary>requisitionItemIdentifier</summary>
+                <description>requisitionItemIdentifier description...</description>
 			</attribute>
 
             <attribute name="requisitionLineIdentifier" forceUppercase="true">

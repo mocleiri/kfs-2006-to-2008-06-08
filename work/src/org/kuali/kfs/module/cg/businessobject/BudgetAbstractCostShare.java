@@ -1,19 +1,26 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.kra.budget.bo;
@@ -25,11 +32,11 @@ import java.util.List;
 import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public abstract class BudgetAbstractCostShare extends BusinessObjectBase {
 
-    protected String researchDocumentNumber;
+    protected String documentHeaderId;
     protected Integer budgetCostShareSequenceNumber;
     protected String budgetCostShareDescription;
     protected List budgetPeriodCostShare;
@@ -46,18 +53,18 @@ public abstract class BudgetAbstractCostShare extends BusinessObjectBase {
      * Populates the key fields for BudgetAbstractPeriodCostShare object. This could be done on object creation, unfortunatly at that time
      * we don't have budgetCostShareSequenceNumber set yet (object is created on page load, while sequence number is set on pressing "add"
      * on the page). Thus we opted for this solution.
-     * @param researchDocumentNumber
+     * @param documentHeaderId
      * @param periods
      * @param budgetAbstractCostShare
      */
-    public void populateKeyFields(String researchDocumentNumber, List<BudgetPeriod> periods) {
-        this.setResearchDocumentNumber(researchDocumentNumber);
+    public void populateKeyFields(String documentHeaderId, List<BudgetPeriod> periods) {
+        this.setDocumentHeaderId(documentHeaderId);
 
         for (int i = 0; i < periods.size(); i++) {
             BudgetPeriod period = periods.get(i);
             BudgetAbstractPeriodCostShare budgetAbstractPeriodCostShare = this.getBudgetPeriodCostShareItem(i);
 
-            budgetAbstractPeriodCostShare.setResearchDocumentNumber(researchDocumentNumber);
+            budgetAbstractPeriodCostShare.setDocumentHeaderId(documentHeaderId);
             budgetAbstractPeriodCostShare.setBudgetCostShareSequenceNumber(this.getBudgetCostShareSequenceNumber());
             budgetAbstractPeriodCostShare.setBudgetPeriodSequenceNumber(period.getBudgetPeriodSequenceNumber());
         }
@@ -68,23 +75,23 @@ public abstract class BudgetAbstractCostShare extends BusinessObjectBase {
     public abstract BudgetAbstractPeriodCostShare getBudgetPeriodCostShareItem(int index);
     
     /**
-     * Gets the researchDocumentNumber attribute.
+     * Gets the documentHeaderId attribute.
      * 
-     * @return - Returns the researchDocumentNumber
+     * @return - Returns the documentHeaderId
      * 
      */
-    public String getResearchDocumentNumber() {
-        return researchDocumentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * Sets the researchDocumentNumber attribute.
+     * Sets the documentHeaderId attribute.
      * 
-     * @param researchDocumentNumber The researchDocumentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
      * 
      */
-    public void setResearchDocumentNumber(String researchDocumentNumber) {
-        this.researchDocumentNumber = researchDocumentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
@@ -133,7 +140,7 @@ public abstract class BudgetAbstractCostShare extends BusinessObjectBase {
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put("researchDocumentNumber", this.researchDocumentNumber);
+        m.put("documentHeaderId", this.documentHeaderId);
         m.put("budgetCostShareSequenceNumber", this.budgetCostShareSequenceNumber);
 
         return m;

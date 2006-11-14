@@ -1,19 +1,26 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.kra.budget.bo;
@@ -23,16 +30,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.kra.budget.KraConstants;
 
 /**
- * 
+ * @author mmorgan
  */
 public class BudgetIndirectCost extends BusinessObjectBase {
 
-    private String researchDocumentNumber;
+    private String documentHeaderId; // ER_REF_TRACK_NBR
 
     /**
      * This is the top left of the IDC parameters form.
@@ -57,7 +61,8 @@ public class BudgetIndirectCost extends BusinessObjectBase {
     private List budgetTaskPeriodIndirectCostItems;
 
     /**
-     * Default no-arg constructor.
+     * Default no-arg constructor. TODO Add lookup to APC for budgetPurposeCode and budgetBaseCode instead of hardcoding the
+     * defaults.
      */
     public BudgetIndirectCost() {
         super();
@@ -69,22 +74,23 @@ public class BudgetIndirectCost extends BusinessObjectBase {
         this.setBudgetUnrecoveredIndirectCostIndicator(false);
         this.setBudgetManualMtdcIndicator(false);
 
-        KualiConfigurationService configurationService = SpringServiceLocator.getKualiConfigurationService();
-        this.setBudgetPurposeCode(configurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.BUDGET_PURPOSE_CODE_DEFAULT_VALUE_PARAMETER_NAME));
-        this.setBudgetBaseCode(configurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.BUDGET_BASE_CODE_DEFAULT_VALUE_PARAMETER_NAME));
-        this.setBudgetManualRateIndicator(configurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.BUDGET_MANUAL_RATE_INDICATOR_DEFAULT_VALUE_PARAMETER_NAME));
+        // Default values for budgetPurposeCode, budgetBaseCode and budgetManualRateIndicator should be pulled
+        // from the application constants instead of being hard-coded here.
+        this.setBudgetPurposeCode("RS");
+        this.setBudgetBaseCode("MT");
+        this.setBudgetManualRateIndicator("N");
 
         this.budgetTaskPeriodIndirectCostItems = new ArrayList();
     }
 
     /**
-     * Constructor with researchDocumentNumber.
+     * Constructor with documentHeaderId.
      * 
-     * @param String researchDocumentNumber
+     * @param String documentHeaderId
      */
-    public BudgetIndirectCost(String researchDocumentNumber) {
+    public BudgetIndirectCost(String documentHeaderId) {
         this();
-        this.setResearchDocumentNumber(researchDocumentNumber);
+        this.setDocumentHeaderId(documentHeaderId);
     }
 
     /**
@@ -96,7 +102,8 @@ public class BudgetIndirectCost extends BusinessObjectBase {
         // First call default constructor.
         this();
 
-        this.setResearchDocumentNumber(idc.getResearchDocumentNumber());
+        // TODO this should probably be called in super()
+        this.setDocumentHeaderId(idc.getDocumentHeaderId());
         this.setVersionNumber(idc.getVersionNumber());
         this.setObjectId(idc.getObjectId());
 
@@ -111,23 +118,23 @@ public class BudgetIndirectCost extends BusinessObjectBase {
     }
 
     /**
-     * Gets the researchDocumentNumber attribute.
+     * Gets the documentHeaderId attribute.
      * 
-     * @return - Returns the researchDocumentNumber
+     * @return - Returns the documentHeaderId
      * 
      */
-    public String getResearchDocumentNumber() {
-        return researchDocumentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * Sets the researchDocumentNumber attribute.
+     * Sets the documentHeaderId attribute.
      * 
-     * @param researchDocumentNumber The researchDocumentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
      * 
      */
-    public void setResearchDocumentNumber(String researchDocumentNumber) {
-        this.researchDocumentNumber = researchDocumentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**

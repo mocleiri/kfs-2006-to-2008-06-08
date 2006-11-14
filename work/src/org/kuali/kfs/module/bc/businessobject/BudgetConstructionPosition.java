@@ -1,36 +1,39 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionPosition.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ResponsibilityCenter;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetConstructionPosition extends BusinessObjectBase {
 
@@ -61,17 +64,13 @@ public class BudgetConstructionPosition extends BusinessObjectBase {
 	private String iuPositionType;
 	private String positionLockUserIdentifier;
 
-    private List pendingBudgetConstructionAppointmentFunding;
-    private List budgetConstructionPositionSelect;
+    private BudgetConstructionPositionSelect positionSelect;
     private ResponsibilityCenter responsibilityCenter;
-    private UniversalUser positionLockUser;
     
 	/**
 	 * Default constructor.
 	 */
 	public BudgetConstructionPosition() {
-        budgetConstructionPositionSelect = new ArrayList();
-        pendingBudgetConstructionAppointmentFunding = new ArrayList();;
 
 	}
 
@@ -621,44 +620,24 @@ public class BudgetConstructionPosition extends BusinessObjectBase {
 	}
 
 
-    /**
-     * Gets the pendingBudgetConstructionAppointmentFunding list.
-     * 
-     * @return - Returns the pendingBudgetConstructionAppointmentFunding list
-     * 
-     */
-    public List getPendingBudgetConstructionAppointmentFunding() { 
-        return pendingBudgetConstructionAppointmentFunding;
-    }
-
-    /**
-     * Sets the pendingBudgetConstructionAppointmentFunding list.
-     * 
-     * @param - pendingBudgetConstructionAppointmentFunding The pendingBudgetConstructionAppointmentFunding list to set.
-     * @deprecated
-     */
-    public void setPendingBudgetConstructionAppointmentFunding(List pendingBudgetConstructionAppointmentFunding) {
-        this.pendingBudgetConstructionAppointmentFunding = pendingBudgetConstructionAppointmentFunding;
-    }
-
 	/**
-	 * Gets the budgetConstructionPositionSelect list.
+	 * Gets the positionSelect attribute.
 	 * 
-	 * @return - Returns the budgetConstructionPositionSelect list
+	 * @return - Returns the positionSelect
 	 * 
 	 */
-	public List getBudgetConstructionPositionSelect() { 
-		return budgetConstructionPositionSelect;
+	public BudgetConstructionPositionSelect getPositionSelect() { 
+		return positionSelect;
 	}
 
 	/**
-	 * Sets the budgetConstructionPositionSelect list.
+	 * Sets the positionSelect attribute.
 	 * 
-	 * @param - budgetConstructionPositionSelect The budgetConstructionPositionSelect list to set.
+	 * @param - positionSelect The positionSelect to set.
 	 * @deprecated
 	 */
-	public void setBudgetConstructionPositionSelect(List budgetConstructionPositionSelect) {
-		this.budgetConstructionPositionSelect = budgetConstructionPositionSelect;
+	public void setPositionSelect(BudgetConstructionPositionSelect positionSelect) {
+		this.positionSelect = positionSelect;
 	}
 
     /**
@@ -676,25 +655,6 @@ public class BudgetConstructionPosition extends BusinessObjectBase {
      */
     public void setResponsibilityCenter(ResponsibilityCenter responsibilityCenter) {
         this.responsibilityCenter = responsibilityCenter;
-    }
-
-    /**
-     * Gets the positionLockUser attribute value. 
-     * @return Returns the positionLockUser
-     */
-    public UniversalUser getPositionLockUser() {
-        positionLockUser = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(positionLockUserIdentifier, positionLockUser);
-        return positionLockUser;
-    }
-
-    /**
-     * Sets the positionLockUser attribute.
-     * 
-     * @param - positionLockUser The positionLockUser to set.
-     * @deprecated
-     */
-    public void setPositionLockUser(UniversalUser positionLockUser) {
-        this.positionLockUser = positionLockUser;
     }
 
     /**

@@ -1,19 +1,26 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 package org.kuali.module.kra.budget.bo;
 
@@ -35,15 +42,15 @@ import org.kuali.module.cg.bo.ProjectDirector;
  * 
  * This class...
  * 
- * 
+ * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
  */
 public class Budget extends BusinessObjectBase {
 
     private static final long serialVersionUID = 8113894775967293272L;
-    private String researchDocumentNumber;
+    private String documentHeaderId;
     private Long budgetParentTrackNumber;
     private String budgetName;
-    private boolean institutionCostShareIndicator;
+    private boolean universityCostShareIndicator;
     private String budgetProgramAnnouncementNumber;
     private String budgetProjectDirectorSystemId;
     private boolean budgetThirdPartyCostShareIndicator;
@@ -74,18 +81,17 @@ public class Budget extends BusinessObjectBase {
     private List graduateAssistantRates;
     private List nonpersonnelItems;
     private List personnel;
-    private List institutionCostShareItems;
+    private List universityCostShareItems;
     private List thirdPartyCostShareItems;
-    private List institutionCostSharePersonnelItems;
+    private List universityCostSharePersonnelItems;
     private List<BudgetAdHocPermission> adHocPermissions;
     private List<BudgetAdHocOrg> adHocOrgs;
-    private List<BudgetAdHocWorkgroup> adHocWorkgroups;
 
     private BudgetIndirectCost indirectCost;
 
     private List allUserAppointmentTasks;
     private List allUserAppointmentTaskPeriods;
-    private List allInstitutionCostSharePeriods;
+    private List allUniversityCostSharePeriods;
     private List allThirdPartyCostSharePeriods;
     private List<BudgetIndirectCostLookup> budgetIndirectCostLookups;
     
@@ -101,19 +107,18 @@ public class Budget extends BusinessObjectBase {
         graduateAssistantRates = new ArrayList();
         nonpersonnelItems = new ArrayList();
         personnel = new ArrayList();
-        institutionCostShareItems = new ArrayList();
+        universityCostShareItems = new ArrayList();
         thirdPartyCostShareItems = new ArrayList();
-        institutionCostSharePersonnelItems = new ArrayList();
+        universityCostSharePersonnelItems = new ArrayList();
         adHocPermissions = new ArrayList<BudgetAdHocPermission>();
         adHocOrgs = new ArrayList<BudgetAdHocOrg>();
-        adHocWorkgroups = new ArrayList<BudgetAdHocWorkgroup>();
         budgetIndirectCostLookups = new ArrayList<BudgetIndirectCostLookup>();
 
     }
 
-    public Budget(String researchDocumentNumber) {
+    public Budget(String documentHeaderId) {
         this();
-        this.researchDocumentNumber = researchDocumentNumber;
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
@@ -146,21 +151,6 @@ public class Budget extends BusinessObjectBase {
      */
     public void setProjectDirector(ProjectDirector projectDirector) {
         this.projectDirector = projectDirector;
-    }
-    
-    /**
-     * Gets the project director from the personnel list as a BudgetUser
-     * 
-     * @return BudgetUser the project director
-     */
-    public BudgetUser getProjectDirectorFromList() {
-        for (Iterator iter = this.personnel.iterator(); iter.hasNext();) {
-            BudgetUser person = (BudgetUser) iter.next();
-            if (person.isPersonProjectDirectorIndicator()) {
-                return person;
-            }
-        }
-        return null;
     }
 
     /**
@@ -307,17 +297,17 @@ public class Budget extends BusinessObjectBase {
     }
 
     /**
-     * @return Returns the institutionCostShareIndicator.
+     * @return Returns the universityCostShareIndicator.
      */
-    public boolean isInstitutionCostShareIndicator() {
-        return institutionCostShareIndicator;
+    public boolean isUniversityCostShareIndicator() {
+        return universityCostShareIndicator;
     }
 
     /**
-     * @param institutionCostShareIndicator The institutionCostShareIndicator to set.
+     * @param universityCostShareIndicator The universityCostShareIndicator to set.
      */
-    public void setInstitutionCostShareIndicator(boolean institutionCostShareIndicator) {
-        this.institutionCostShareIndicator = institutionCostShareIndicator;
+    public void setUniversityCostShareIndicator(boolean universityCostShareIndicator) {
+        this.universityCostShareIndicator = universityCostShareIndicator;
     }
 
     /**
@@ -424,7 +414,7 @@ public class Budget extends BusinessObjectBase {
     protected LinkedHashMap toStringMapper() {
         // TODO Auto-generated method stub
         LinkedHashMap map = new LinkedHashMap();
-        map.put("researchDocumentNumber", this.researchDocumentNumber);
+        map.put("documentHeaderId", this.documentHeaderId);
         return map;
     }
 
@@ -449,17 +439,17 @@ public class Budget extends BusinessObjectBase {
     }
 
     /**
-     * @return Returns the researchDocumentNumber.
+     * @return Returns the documentHeaderId.
      */
-    public String getResearchDocumentNumber() {
-        return researchDocumentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * @param researchDocumentNumber The researchDocumentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
      */
-    public void setResearchDocumentNumber(String researchDocumentNumber) {
-        this.researchDocumentNumber = researchDocumentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     // /**
@@ -729,24 +719,24 @@ public class Budget extends BusinessObjectBase {
     }
 
     /**
-     * @return Returns the institutionCostShareItems.
+     * @return Returns the universityCostShareItems.
      */
-    public List getInstitutionCostShareItems() {
-        return institutionCostShareItems;
+    public List getUniversityCostShareItems() {
+        return universityCostShareItems;
     }
 
-    public BudgetInstitutionCostShare getInstitutionCostShareItem(int index) {
-        while (getInstitutionCostShareItems().size() <= index) {
-            getInstitutionCostShareItems().add(new BudgetInstitutionCostShare());
+    public BudgetUniversityCostShare getUniversityCostShareItem(int index) {
+        while (getUniversityCostShareItems().size() <= index) {
+            getUniversityCostShareItems().add(new BudgetUniversityCostShare());
         }
-        return (BudgetInstitutionCostShare) getInstitutionCostShareItems().get(index);
+        return (BudgetUniversityCostShare) getUniversityCostShareItems().get(index);
     }
 
     /**
-     * @param institutionCostShareItems The institutionCostShareItems to set.
+     * @param universityCostShareItems The universityCostShareItems to set.
      */
-    public void setInstitutionCostShareItems(List institutionCostShareItems) {
-        this.institutionCostShareItems = institutionCostShareItems;
+    public void setUniversityCostShareItems(List universityCostShareItems) {
+        this.universityCostShareItems = universityCostShareItems;
     }
 
     /**
@@ -899,27 +889,27 @@ public class Budget extends BusinessObjectBase {
     }
 
     /**
-     * @return Returns the allInstitutionCostSharePeriods.
+     * @return Returns the allUniversityCostSharePeriods.
      */
-    public List getAllInstitutionCostSharePeriods() {
-        return allInstitutionCostSharePeriods;
+    public List getAllUniversityCostSharePeriods() {
+        return allUniversityCostSharePeriods;
     }
 
     /**
-     * @param allInstitutionCostSharePeriods The allInstitutionCostSharePeriods to set.
+     * @param allUniversityCostSharePeriods The allUniversityCostSharePeriods to set.
      */
-    public void setAllInstitutionCostSharePeriods(List allInstitutionCostSharePeriods) {
-        this.allInstitutionCostSharePeriods = allInstitutionCostSharePeriods;
+    public void setAllUniversityCostSharePeriods(List allUniversityCostSharePeriods) {
+        this.allUniversityCostSharePeriods = allUniversityCostSharePeriods;
     }
 
 
-    public List getAllInstitutionCostSharePeriods(boolean forceRefreshPriorToSave) {
-        if (allInstitutionCostSharePeriods == null) {
+    public List getAllUniversityCostSharePeriods(boolean forceRefreshPriorToSave) {
+        if (allUniversityCostSharePeriods == null) {
             List list = new ArrayList();
-            for (Iterator i = institutionCostShareItems.iterator(); i.hasNext();) {
-                BudgetInstitutionCostShare costShareItem = (BudgetInstitutionCostShare) i.next();
+            for (Iterator i = universityCostShareItems.iterator(); i.hasNext();) {
+                BudgetUniversityCostShare costShareItem = (BudgetUniversityCostShare) i.next();
                 if (forceRefreshPriorToSave) {
-                    costShareItem = new BudgetInstitutionCostShare(costShareItem);
+                    costShareItem = new BudgetUniversityCostShare(costShareItem);
                     costShareItem.refreshReferenceObject("budgetPeriodCostShare");
                 }
                 list.addAll(costShareItem.getBudgetPeriodCostShare());
@@ -927,29 +917,29 @@ public class Budget extends BusinessObjectBase {
             return list;
         }
         else {
-            return allInstitutionCostSharePeriods;
+            return allUniversityCostSharePeriods;
         }
     }
 
     /**
-     * @return Returns the institutionCostSharePersonnelItems.
+     * @return Returns the universityCostSharePersonnelItems.
      */
-    public List getInstitutionCostSharePersonnelItems() {
-        return institutionCostSharePersonnelItems;
+    public List getUniversityCostSharePersonnelItems() {
+        return universityCostSharePersonnelItems;
     }
 
-    public InstitutionCostSharePersonnel getInstitutionCostSharePersonnelItem(int index) {
-        while (getInstitutionCostSharePersonnelItems().size() <= index) {
-            getInstitutionCostSharePersonnelItems().add(new InstitutionCostSharePersonnel());
+    public UniversityCostSharePersonnel getUniversityCostSharePersonnelItem(int index) {
+        while (getUniversityCostSharePersonnelItems().size() <= index) {
+            getUniversityCostSharePersonnelItems().add(new UniversityCostSharePersonnel());
         }
-        return (InstitutionCostSharePersonnel) getInstitutionCostSharePersonnelItems().get(index);
+        return (UniversityCostSharePersonnel) getUniversityCostSharePersonnelItems().get(index);
     }
 
     /**
-     * @param institutionCostSharePersonnelItems The institutionCostSharePersonnelItems to set.
+     * @param universityCostSharePersonnelItems The universityCostSharePersonnelItems to set.
      */
-    public void setInstitutionCostSharePersonnelItems(List institutionCostSharePersonnelItems) {
-        this.institutionCostSharePersonnelItems = institutionCostSharePersonnelItems;
+    public void setUniversityCostSharePersonnelItems(List universityCostSharePersonnelItems) {
+        this.universityCostSharePersonnelItems = universityCostSharePersonnelItems;
     }
 
 
@@ -1011,27 +1001,6 @@ public class Budget extends BusinessObjectBase {
             this.getAdHocOrgs().add(new BudgetAdHocOrg());
         }
         return this.getAdHocOrgs().get(index);
-    }
-
-    public List<BudgetAdHocWorkgroup> getAdHocWorkgroups() {
-        return adHocWorkgroups;
-    }
-
-    public void setAdHocWorkgroups(List<BudgetAdHocWorkgroup> adHocWorkgroups) {
-        this.adHocWorkgroups = adHocWorkgroups;
-    }
-    
-    /**
-     * Gets the BudgetAdHocWorkgroup item at given index.
-     * 
-     * @param index
-     * @return BudgetAdHocWorkgroup
-     */
-    public BudgetAdHocWorkgroup getBudgetAdHocWorkgroupItem(int index) {
-        while (this.getAdHocWorkgroups().size() <= index) {
-            this.getAdHocWorkgroups().add(new BudgetAdHocWorkgroup());
-        }
-        return this.getAdHocWorkgroups().get(index);
     }
 
     public Date getDefaultNextPeriodBeginDate() {

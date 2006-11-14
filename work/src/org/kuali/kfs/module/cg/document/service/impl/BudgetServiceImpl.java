@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.service.impl;
 
@@ -22,7 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.document.Document;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
@@ -39,6 +43,8 @@ import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 import org.kuali.module.kra.budget.bo.UserAppointmentTask;
 import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
+import org.kuali.module.kra.budget.dao.BudgetPeriodDao;
+import org.kuali.module.kra.budget.dao.BudgetTaskDao;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.service.BudgetCostShareService;
 import org.kuali.module.kra.budget.service.BudgetFringeRateService;
@@ -49,15 +55,12 @@ import org.kuali.module.kra.budget.service.BudgetPersonnelService;
 import org.kuali.module.kra.budget.service.BudgetService;
 import org.kuali.module.kra.budget.web.struts.form.BudgetNonpersonnelCopyOverBoHelper;
 
-import edu.iu.uis.eden.clientapp.WorkflowInfo;
-import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
-import edu.iu.uis.eden.clientapp.vo.RouteNodeInstanceVO;
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * This class...
  * 
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetServiceImpl implements BudgetService {
 
@@ -65,10 +68,11 @@ public class BudgetServiceImpl implements BudgetService {
     private BudgetGraduateAssistantRateService budgetGraduateAssistantRateService;
     private BudgetPersonnelService budgetPersonnelService;
     private BudgetCostShareService budgetCostShareService;
+    private BudgetTaskDao budgetTaskDao;
+    private BudgetPeriodDao budgetPeriodDao;
     private DocumentService documentService;
     private BudgetModularService budgetModularService;
     private BudgetIndirectCostService budgetIndirectCostService;
-    private BusinessObjectService businessObjectService;
 
     /**
      * @see org.kuali.module.kra.budget.service.BudgetService#initializeBudget(org.kuali.module.kra.budget.bo.Budget)
@@ -91,9 +95,9 @@ public class BudgetServiceImpl implements BudgetService {
         Document databaseDocument = documentService.getByDocumentHeaderId(budgetDocument.getFinancialDocumentNumber());
 
         Budget budget = budgetDocument.getBudget();
-        String researchDocumentNumber = budget.getResearchDocumentNumber();
+        String documentHeaderId = budget.getDocumentHeaderId();
         List personnel = budget.getPersonnel();
-        List institutionCostSharePersonnelItems = budget.getInstitutionCostSharePersonnelItems();
+        List universityCostSharePersonnelItems = budget.getUniversityCostSharePersonnelItems();
 
         if (budgetDocument.isCleanseBudgetOnSave()) {
             if (databaseDocument != null) {
@@ -103,7 +107,7 @@ public class BudgetServiceImpl implements BudgetService {
                 // associated task/period are no longer in the list.
                 cleanseNonpersonnel(budgetDocument);
                 budgetPersonnelService.cleansePersonnel(budgetDocument);
-                budgetCostShareService.cleanseCostShare(budget.isInstitutionCostShareIndicator(), budget.getInstitutionCostShareItems(), budget.isBudgetThirdPartyCostShareIndicator(), budget.getThirdPartyCostShareItems(), personnel, budget.getInstitutionCostSharePersonnelItems());
+                budgetCostShareService.cleanseCostShare(budget.isUniversityCostShareIndicator(), budget.getUniversityCostShareItems(), budget.isBudgetThirdPartyCostShareIndicator(), budget.getThirdPartyCostShareItems(), personnel, budget.getUniversityCostSharePersonnelItems());
                 cleanseModular(budgetDocument);
 
                 // Find what's changed that has a down-stream effect on other parts of the Budget, if anything, since the last save
@@ -143,7 +147,7 @@ public class BudgetServiceImpl implements BudgetService {
             budgetPersonnelService.reconcileProjectDirector(budgetDocument);
 
             // Add new Cost Share data based on personnel
-            budgetCostShareService.reconcileCostShare(researchDocumentNumber, personnel, institutionCostSharePersonnelItems);
+            budgetCostShareService.reconcileCostShare(documentHeaderId, personnel, universityCostSharePersonnelItems);
 
             // Clean up indirect cost and task/period items.
             budgetIndirectCostService.reconcileIndirectCost(budgetDocument);
@@ -153,20 +157,14 @@ public class BudgetServiceImpl implements BudgetService {
     /**
      * @see org.kuali.module.kra.budget.service.BudgetService#isCostShareInclusionModified(org.kuali.module.kra.budget.document.BudgetDocument)
      */
-    public String buildCostShareRemovedCode(BudgetDocument budgetDocument) {
-        
-        BudgetDocument databaseBudgetDocument;
-        try {
-            databaseBudgetDocument = (BudgetDocument) documentService.getByDocumentHeaderId(budgetDocument.getFinancialDocumentNumber());
-        } catch (WorkflowException e) {
-            throw new RuntimeException("Exception retrieving document: " + e);
-        }
+    public String buildCostShareRemovedCode(BudgetDocument budgetDocument) throws WorkflowException {
+        BudgetDocument databaseBudgetDocument = (BudgetDocument) documentService.getByDocumentHeaderId(budgetDocument.getFinancialDocumentNumber());
         if (databaseBudgetDocument == null) {
             return "";
         }
 
         StringBuffer codes = new StringBuffer();
-        if (databaseBudgetDocument.getBudget().isInstitutionCostShareIndicator() && !budgetDocument.getBudget().isInstitutionCostShareIndicator()) {
+        if (databaseBudgetDocument.getBudget().isUniversityCostShareIndicator() && !budgetDocument.getBudget().isUniversityCostShareIndicator()) {
             codes.append(KraConstants.INSTITUTION_COST_SHARE_CODE);
         }
         if (databaseBudgetDocument.getBudget().isBudgetThirdPartyCostShareIndicator() && !budgetDocument.getBudget().isBudgetThirdPartyCostShareIndicator()) {
@@ -193,7 +191,7 @@ public class BudgetServiceImpl implements BudgetService {
      * @return
      */
     private boolean isInstitutionCostShareInclusionModified(BudgetDocument budgetDocument, BudgetDocument databaseBudgetDocument) {
-        return !(budgetDocument.getBudget().isInstitutionCostShareIndicator() == databaseBudgetDocument.getBudget().isInstitutionCostShareIndicator());
+        return !(budgetDocument.getBudget().isUniversityCostShareIndicator() == databaseBudgetDocument.getBudget().isUniversityCostShareIndicator());
     }
 
     /**
@@ -203,7 +201,7 @@ public class BudgetServiceImpl implements BudgetService {
      * @return
      */
     private boolean isInstitutionCostShareIncludeBoxChecked(BudgetDocument budgetDocument) {
-        return budgetDocument.getBudget().isInstitutionCostShareIndicator();
+        return budgetDocument.getBudget().isUniversityCostShareIndicator();
     }
 
     /**
@@ -244,7 +242,7 @@ public class BudgetServiceImpl implements BudgetService {
             // if Institution Cost Share check box or Third Party Cost share check boxes are un-checked,
             // set the corresponding amounts to zero.
             if (!(isInstitutionCostShareCheckBoxChecked)) {
-                budgetNonpersonnel.setBudgetInstitutionCostShareAmount(new KualiInteger(0));
+                budgetNonpersonnel.setBudgetUniversityCostShareAmount(new KualiInteger(0));
             }
             if (!(isThirdPartyCostShareCheckBoxChecked)) {
                 budgetNonpersonnel.setBudgetThirdPartyCostShareAmount(new KualiInteger(0));
@@ -265,7 +263,7 @@ public class BudgetServiceImpl implements BudgetService {
 
                         // indicators should always be false for these "new period" items
                         budgetNonpersonnelCopyOverBoHelper.setAgencyCopyIndicator(false);
-                        budgetNonpersonnelCopyOverBoHelper.setBudgetInstitutionCostShareCopyIndicator(false);
+                        budgetNonpersonnelCopyOverBoHelper.setBudgetUniversityCostShareCopyIndicator(false);
                         budgetNonpersonnelCopyOverBoHelper.setBudgetThirdPartyCostShareCopyIndicator(false);
 
                         // add it to the Budget Document per the standard methods provided.
@@ -287,8 +285,8 @@ public class BudgetServiceImpl implements BudgetService {
                 if (budgetNonpersonnel.getAgencyCopyIndicator()) {
                     budgetNonpersonnel.setAgencyRequestAmount(budgetNonpersonnelCopyOverBoHelper.getBudgetInflatedAgencyAmount());
                 }
-                if (budgetNonpersonnel.getBudgetInstitutionCostShareCopyIndicator()) {
-                    budgetNonpersonnel.setBudgetInstitutionCostShareAmount(budgetNonpersonnelCopyOverBoHelper.getBudgetInflatedInstitutionCostShareAmount());
+                if (budgetNonpersonnel.getBudgetUniversityCostShareCopyIndicator()) {
+                    budgetNonpersonnel.setBudgetUniversityCostShareAmount(budgetNonpersonnelCopyOverBoHelper.getBudgetInflatedUniversityCostShareAmount());
                 }
                 if (budgetNonpersonnel.getBudgetThirdPartyCostShareCopyIndicator()) {
                     budgetNonpersonnel.setBudgetThirdPartyCostShareAmount(budgetNonpersonnelCopyOverBoHelper.getBudgetInflatedThirdPartyCostShareAmount());
@@ -318,14 +316,14 @@ public class BudgetServiceImpl implements BudgetService {
                 UserAppointmentTask userAppointmentTask = (UserAppointmentTask) userAppointmentTaskIter.next();
                 for (Iterator userAppointmentTaskPeriodIter = userAppointmentTask.getUserAppointmentTaskPeriods().iterator(); userAppointmentTaskPeriodIter.hasNext();) {
                     UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
-                    userAppointmentTaskPeriod.setInstitutionCostSharePercentEffortAmount(new KualiInteger(0));
-                    userAppointmentTaskPeriod.setUserInstitutionHours(new KualiInteger(0));
-                    userAppointmentTaskPeriod.setInstitutionFullTimeEquivalentPercent(new KualiInteger(0));
-                    userAppointmentTaskPeriod.setInstitutionHealthInsuranceAmount(new KualiInteger(0));
-                    userAppointmentTaskPeriod.setInstitutionRequestedFeesAmount(new KualiInteger(0));
-                    userAppointmentTaskPeriod.setInstitutionSalaryAmount(new KualiInteger(0));
-                    userAppointmentTaskPeriod.setInstitutionCostShareFringeBenefitTotalAmount(new KualiInteger(0));
-                    userAppointmentTaskPeriod.setInstitutionCostShareRequestTotalAmount(new KualiInteger(0));
+                    userAppointmentTaskPeriod.setUniversityCostSharePercentEffortAmount(new KualiInteger(0));
+                    userAppointmentTaskPeriod.setUserUniversityHours(new KualiInteger(0));
+                    userAppointmentTaskPeriod.setUniversityFullTimeEquivalentPercent(new KualiInteger(0));
+                    userAppointmentTaskPeriod.setUniversityHealthInsuranceAmount(new KualiInteger(0));
+                    userAppointmentTaskPeriod.setUniversityRequestedFeesAmount(new KualiInteger(0));
+                    userAppointmentTaskPeriod.setUniversitySalaryAmount(new KualiInteger(0));
+                    userAppointmentTaskPeriod.setUniversityCostShareFringeBenefitTotalAmount(new KualiInteger(0));
+                    userAppointmentTaskPeriod.setUniversityCostShareRequestTotalAmount(new KualiInteger(0));
                 }
             }
         }
@@ -378,10 +376,8 @@ public class BudgetServiceImpl implements BudgetService {
         for (Iterator i = budgetNonpersonnelItems.iterator(); i.hasNext();) {
             BudgetNonpersonnel budgetNonpersonnel = (BudgetNonpersonnel) i.next();
 
-            BudgetTask budgetTask = (BudgetTask) businessObjectService.retrieve(new BudgetTask(budgetNonpersonnel.getResearchDocumentNumber(), budgetNonpersonnel.getBudgetTaskSequenceNumber()));
-            
-            BudgetPeriod budgetPeriod = (BudgetPeriod) businessObjectService.retrieve(
-                    new BudgetPeriod(budgetNonpersonnel.getResearchDocumentNumber(), budgetNonpersonnel.getBudgetPeriodSequenceNumber()));
+            BudgetTask budgetTask = budgetTaskDao.getBudgetTask(budgetNonpersonnel.getDocumentHeaderId(), budgetNonpersonnel.getBudgetTaskSequenceNumber());
+            BudgetPeriod budgetPeriod = budgetPeriodDao.getBudgetPeriod(budgetNonpersonnel.getDocumentHeaderId(), budgetNonpersonnel.getBudgetPeriodSequenceNumber());
 
             if (!ObjectUtils.collectionContainsObjectWithIdentitcalKey(budgetTasks, budgetTask) || !ObjectUtils.collectionContainsObjectWithIdentitcalKey(budgetPeriods, budgetPeriod)) {
                 i.remove();
@@ -403,7 +399,7 @@ public class BudgetServiceImpl implements BudgetService {
             if (ObjectUtils.isNotNull(budget.getModularBudget())) {
                 versionNumber = budget.getModularBudget().getVersionNumber();
             }
-            budget.setModularBudget(new BudgetModular(budget.getResearchDocumentNumber()));
+            budget.setModularBudget(new BudgetModular(budget.getDocumentHeaderId()));
             if (versionNumber != null) {
                 budget.getModularBudget().setVersionNumber(versionNumber);
             }
@@ -414,9 +410,7 @@ public class BudgetServiceImpl implements BudgetService {
 
             for (Iterator i = modularPeriods.iterator(); i.hasNext();) {
                 BudgetModularPeriod currentModularPeriod = (BudgetModularPeriod) i.next();
-                
-                BudgetPeriod budgetPeriod = (BudgetPeriod) businessObjectService.retrieve(
-                        new BudgetPeriod(currentModularPeriod.getResearchDocumentNumber(), currentModularPeriod.getBudgetPeriodSequenceNumber()));
+                BudgetPeriod budgetPeriod = budgetPeriodDao.getBudgetPeriod(currentModularPeriod.getDocumentHeaderId(), currentModularPeriod.getBudgetPeriodSequenceNumber());
 
                 if (!ObjectUtils.collectionContainsObjectWithIdentitcalKey(budgetPeriods, budgetPeriod)) {
                     i.remove();
@@ -527,6 +521,24 @@ public class BudgetServiceImpl implements BudgetService {
     }
 
     /**
+     * Sets the budgetTaskDao attribute value.
+     * 
+     * @param The budgetTaskDao to set.
+     */
+    public void setBudgetTaskDao(BudgetTaskDao budgetTaskDao) {
+        this.budgetTaskDao = budgetTaskDao;
+    }
+
+    /**
+     * Sets the budgetTaskDao attribute value.
+     * 
+     * @param The budgetTaskDao to set.
+     */
+    public void setBudgetPeriodDao(BudgetPeriodDao budgetPeriodDao) {
+        this.budgetPeriodDao = budgetPeriodDao;
+    }
+
+    /**
      * Sets the budgetPersonnelService attribute value.
      * 
      * @param budgetPersonnelService The budgetPersonnelService to set.
@@ -567,9 +579,5 @@ public class BudgetServiceImpl implements BudgetService {
      */
     public void setBudgetIndirectCostService(BudgetIndirectCostService budgetIndirectCostService) {
         this.budgetIndirectCostService = budgetIndirectCostService;
-    }
-
-    public void setBusinessObjectService(BusinessObjectService businessObjectService) {
-        this.businessObjectService = businessObjectService;
     }
 }

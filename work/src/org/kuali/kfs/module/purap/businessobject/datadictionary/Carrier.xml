@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006 The Kuali Foundation.
- 
- $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/datadictionary/Carrier.xml,v $
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -26,15 +9,17 @@
         <inquiry>
             <title>Carrier Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="carrierCode" />
                 <field attributeName="carrierDescription" />
                 <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Carrier Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.Carrier">Create New</a>]]></menubar>
 
             <instructions>Lookup a Carrier</instructions>
 
@@ -47,9 +32,7 @@
             <lookupFields>
                 <lookupField attributeName="carrierCode" required="false" />
                 <lookupField attributeName="carrierDescription" required="false" />
-                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" >
-                	<defaultValue>Y</defaultValue>
-                </lookupField>
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -76,7 +59,7 @@
                 <description>carrierCode description...</description>
 			</attribute>
 
-            <attribute name="carrierDescription" forceUppercase="true">
+            <attribute name="carrierDescription" >
                 <label>Carrier Description</label>
                 <shortLabel>Description</shortLabel>
 
