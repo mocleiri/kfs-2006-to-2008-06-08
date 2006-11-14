@@ -1,41 +1,48 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/impl/EncumbranceDaoOjb.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.dao.ojb;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ojb.broker.query.Criteria;
-import org.apache.ojb.broker.query.Query;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
-import org.kuali.Constants;
 import org.kuali.PropertyConstants;
+import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.EncumbranceDao;
-import org.kuali.module.gl.util.OJBUtility;
+import org.kuali.module.gl.util.BusinessObjectHandler;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
+/**
+ * @author Kuali General Ledger Team <kualigltech@oncourse.iu.edu>
+ * @version $Id: EncumbranceDaoOjb.java,v 1.8.2.1 2006-07-26 21:51:20 abyrne Exp $
+ */
 public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements EncumbranceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EncumbranceDaoOjb.class);
 
@@ -50,16 +57,16 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
         LOG.debug("getEncumbranceByTransaction() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, t.getUniversityFiscalYear());
-        crit.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE, t.getChartOfAccountsCode());
-        crit.addEqualTo(PropertyConstants.ACCOUNT_NUMBER, t.getAccountNumber());
-        crit.addEqualTo(PropertyConstants.SUB_ACCOUNT_NUMBER, t.getSubAccountNumber());
-        crit.addEqualTo(PropertyConstants.OBJECT_CODE, t.getFinancialObjectCode());
-        crit.addEqualTo(PropertyConstants.SUB_OBJECT_CODE, t.getFinancialSubObjectCode());
-        crit.addEqualTo(PropertyConstants.BALANCE_TYPE_CODE, t.getFinancialBalanceTypeCode());
-        crit.addEqualTo(PropertyConstants.DOCUMENT_TYPE_CODE, t.getFinancialDocumentTypeCode());
-        crit.addEqualTo(PropertyConstants.ORIGIN_CODE, t.getFinancialSystemOriginationCode());
-        crit.addEqualTo(PropertyConstants.DOCUMENT_NUMBER, t.getFinancialDocumentNumber());
+        crit.addEqualTo("universityFiscalYear", t.getUniversityFiscalYear());
+        crit.addEqualTo("chartOfAccountsCode", t.getChartOfAccountsCode());
+        crit.addEqualTo("accountNumber", t.getAccountNumber());
+        crit.addEqualTo("subAccountNumber", t.getSubAccountNumber());
+        crit.addEqualTo("objectCode", t.getFinancialObjectCode());
+        crit.addEqualTo("subObjectCode", t.getFinancialSubObjectCode());
+        crit.addEqualTo("balanceTypeCode", t.getFinancialBalanceTypeCode());
+        crit.addEqualTo("documentTypeCode", t.getFinancialDocumentTypeCode());
+        crit.addEqualTo("originCode", t.getFinancialSystemOriginationCode());
+        crit.addEqualTo("documentNumber", t.getFinancialDocumentNumber());
 
         QueryByCriteria qbc = QueryFactory.newQuery(Encumbrance.class, crit);
         return (Encumbrance) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
@@ -71,15 +78,15 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
     public Iterator getEncumbrancesToClose(Integer fiscalYear) {
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
+        criteria.addEqualTo("universityFiscalYear", fiscalYear);
 
         QueryByCriteria query = new QueryByCriteria(Encumbrance.class, criteria);
-        query.addOrderByAscending(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        query.addOrderByAscending(PropertyConstants.ACCOUNT_NUMBER);
-        query.addOrderByAscending(PropertyConstants.SUB_ACCOUNT_NUMBER);
-        query.addOrderByAscending(PropertyConstants.OBJECT_CODE);
-        query.addOrderByAscending(PropertyConstants.SUB_OBJECT_CODE);
-        query.addOrderByAscending(PropertyConstants.BALANCE_TYPE_CODE);
+        query.addOrderByAscending("chartOfAccountsCode");
+        query.addOrderByAscending("accountNumber");
+        query.addOrderByAscending("subAccountNumber");
+        query.addOrderByAscending("objectCode");
+        query.addOrderByAscending("subObjectCode");
+        query.addOrderByAscending("balanceTypeCode");
 
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
@@ -100,8 +107,8 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
         LOG.debug("purgeYearByChart() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(PropertyConstants.CHART, chartOfAccountsCode);
-        criteria.addLessThan(PropertyConstants.UNIVERSITY_FISCAL_YEAR, new Integer(year));
+        criteria.addEqualTo("chartOfAccountsCode", chartOfAccountsCode);
+        criteria.addLessThan("universityFiscalYear", new Integer(year));
 
         getPersistenceBrokerTemplate().deleteByQuery(new QueryByCriteria(Encumbrance.class, criteria));
 
@@ -149,33 +156,17 @@ public class EncumbranceDaoOjb extends PersistenceBrokerDaoSupport implements En
 
         return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
     }
-
+    
     /**
      * @see org.kuali.module.gl.dao.EncumbranceDao#findOpenEncumbrance(java.util.Map)
      */
     public Iterator findOpenEncumbrance(Map fieldValues) {
         LOG.debug("findOpenEncumbrance() started");
 
-        Query query = this.getOpenEncumbranceQuery(fieldValues);
-        OJBUtility.limitResultSize(query);
+        Criteria criteria = BusinessObjectHandler.buildCriteriaFromMap(fieldValues, new Encumbrance());
+        QueryByCriteria query = QueryFactory.newReportQuery(Encumbrance.class, criteria);
+        
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
-    }
-
-    /**
-     * @see org.kuali.module.gl.dao.EncumbranceDao#getOpenEncumbranceRecordCount(java.util.Map)
-     */
-    public Integer getOpenEncumbranceRecordCount(Map fieldValues) {
-        LOG.debug("getOpenEncumbranceRecordCount() started");
-
-        Query query = this.getOpenEncumbranceQuery(fieldValues);
-        return getPersistenceBrokerTemplate().getCount(query);
-    }
-
-    // build the query for encumbrance search
-    private Query getOpenEncumbranceQuery(Map fieldValues) {
-        Criteria criteria = OJBUtility.buildCriteriaFromMap(fieldValues, new Encumbrance());
-        criteria.addIn(PropertyConstants.BALANCE_TYPE_CODE, Arrays.asList(Constants.ENCUMBRANCE_BALANCE_TYPE));
-        return QueryFactory.newQuery(Encumbrance.class, criteria);
     }
 
     /**

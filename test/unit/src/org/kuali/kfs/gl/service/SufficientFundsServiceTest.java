@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source$
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service;
 
@@ -26,8 +31,6 @@ import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.module.gl.util.SufficientFundsItem;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
-import org.kuali.test.suite.CrossSectionSuite;
-import org.kuali.test.suite.AnnotationTestSuite;
 
 @WithTestSpringContext
 public class SufficientFundsServiceTest extends KualiTestBase {
@@ -35,7 +38,6 @@ public class SufficientFundsServiceTest extends KualiTestBase {
     private SufficientFundsService sufficientFundsService = null;
     private UnitTestSqlDao unitTestSqlDao = null;
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -72,8 +74,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211101","C", "GENX", 1000, 300, 100, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                            ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                            " };
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -95,8 +97,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211101","C", "GENX", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                            ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                            " };
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -118,8 +120,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211101","C", "GENX", -1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                            ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                            " };
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -142,8 +144,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211101","C", "GENX", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                            ",
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                            " };
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  ",
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -165,8 +167,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211101","C", "GENX", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                            ",
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                            " };
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  ",
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -188,8 +190,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211101","C", "GENX", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                            ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                            " };
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -211,8 +213,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211101","C", "GENX", 1000, 100, 100, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -234,8 +236,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211101","C", "GENX", 1000, 100, 100, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                       " };
+                "2007BL0211101-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -257,8 +259,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211301","H", "    ", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                       " };
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -280,8 +282,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211301","H", "    ", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -303,8 +305,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211301","H", "    ", -1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                       " };
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -327,8 +329,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211301", "H", "    ", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                       ",
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                       " };
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  ",
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -350,8 +352,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211301","H", "    ", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                       ",
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                       " };
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  ",
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -373,8 +375,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211301","H", "    ", 1000, 0, 500, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                       " };
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -396,8 +398,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211301","H", "    ", 1000, 100, 100, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                       " };
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -419,8 +421,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211301","H", "    ", 1000, 0, 200, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                       " };
+                "2007BL0211301-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----8000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -442,8 +444,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211501","L", "S&E", 1000, 300, 100, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -465,8 +467,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211501","L", "S&E", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                       " };
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -488,8 +490,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211501","L", "S&E", -1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -512,8 +514,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211501","L", "S&E", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                       ",
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  ",
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -535,8 +537,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211501","L", "S&E", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                       ",
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  ",
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -558,8 +560,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211501","L", "S&E", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                       " };
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -581,8 +583,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211501","L", "S&E", 1000, 100, 100, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -604,8 +606,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211501","L", "S&E", 1000, 100, 100, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                       " };
+                "2007BL0211501-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -627,8 +629,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211701","O", "5000", 1000, 300, 100, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -650,8 +652,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211701","O", "5000", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                       " };
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -673,8 +675,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211701","O", "5000", -1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -697,8 +699,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211701","O", "5000", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                       ",
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  ",
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -720,8 +722,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211701","O", "5000", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                       ",
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  ",
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -743,8 +745,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211701","O", "5000", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                       " };
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -766,8 +768,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211701","O", "5000", 1000, 100, 100, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -789,8 +791,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211701","O", "5000", 1000, 100, 100, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                       " };
+                "2007BL0211701-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -813,8 +815,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211901","A", "    ", 1000, 300, 100, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -831,14 +833,13 @@ public class SufficientFundsServiceTest extends KualiTestBase {
 
     }
 
-    @AnnotationTestSuite(CrossSectionSuite.class)
     public void testSufficientFunds_AccountNegativeBalanceCreditExpense() throws Exception {
 
         prepareSufficientFundsData("0211901","A", "    ", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                       " };
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00C2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  300.00D2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -860,8 +861,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211901","A", "    ", -1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -884,8 +885,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211901","A", "    ", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                       ",
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  ",
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -907,8 +908,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211901","A", "    ", 100, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                       ",
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00D2006-01-05          ----------                                                                  ",
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1500.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -930,8 +931,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211901","A", "    ", 1000, 300, 200, false);
 
         String[] stringInput = new String[] {
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                       " };
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                  500.01C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -953,8 +954,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211901","A", "    ", 1000, 100, 100, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                       " };
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.00C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();
@@ -976,8 +977,8 @@ public class SufficientFundsServiceTest extends KualiTestBase {
         prepareSufficientFundsData("0211901","A", "    ", 1000, 100, 100, true);
 
         String[] stringInput = new String[] {
-                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                       ",
-                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN      00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                       " };
+                "2007BL0211901-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01D2006-01-05          ----------                                                                  ",
+                "2007BL4631638-----5000---ACEX07DI  01CSHRTRIN 00000Rite Quality Office Supplies Inc.                 1300.01C2006-01-05          ----------                                                                  " };
 
 
         List transactions = new ArrayList();

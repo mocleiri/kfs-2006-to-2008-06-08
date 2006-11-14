@@ -1,37 +1,37 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/validation/impl/OrgRule.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.rules;
 
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
-import org.kuali.core.bo.user.KualiGroup;
 import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
@@ -44,8 +44,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrgRule.class);
 
     protected static final String APC_HRMS_ACTIVE_KEY = "Org.HrmsOrgActive";
-    protected static final String PLANT_WORKGROUP_PARM_NAME = "Org.PlantWorkgroup";
-    
+
     private OrganizationService orgService;
 
     private Org oldOrg;
@@ -87,10 +86,10 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         success &= checkOrgClosureRules(document);
 
         // check that end date is greater than begin date and Reports To Chart/Org should not be same as this Chart/Org
-        success &= checkSimpleRules(document);
-
-        // check that defaultAccount is present unless
-        // ( (orgType = U or C) and ( document is a "create new" ))
+        success &= checkSimpleRules();
+        
+        // check that defaultAccount is present unless 
+        //    ( (orgType = U or C) and ( document is a "create new" ))
         success &= checkDefaultAccountNumber(document);
         return success;
     }
@@ -114,10 +113,10 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         success &= checkExistenceAndActive();
 
         // check that end date is greater than begin date and Reports To Chart/Org should not be same as this Chart/Org
-        success &= checkSimpleRules(document);
-
-        // check that defaultAccount is present unless
-        // ( (orgType = U or C) and ( document is a "create new" ))
+        success &= checkSimpleRules();
+        
+        // check that defaultAccount is present unless 
+        //    ( (orgType = U or C) and ( document is a "create new" ))
         success &= checkDefaultAccountNumber(document);
 
         success &= checkOrgClosureRules(document);
@@ -144,10 +143,10 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         checkOrgClosureRules(document);
 
         // check that end date is greater than begin date and Reports To Chart/Org should not be same as this Chart/Org
-        checkSimpleRules(document);
-
-        // check that defaultAccount is present unless
-        // ( (orgType = U or C) and ( document is a "create new" ))
+        checkSimpleRules();
+        
+        // check that defaultAccount is present unless 
+        //    ( (orgType = U or C) and ( document is a "create new" ))
         checkDefaultAccountNumber(document);
 
         return true;
@@ -177,35 +176,29 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
             return success;
         }
 
-        /* KULCOA-1132 - exit if the user is not a member of the
-           plant maintainer work group.  */
-        
-        //get user
-        KualiUser user = GlobalVariables.getUserSession().getKualiUser();
-        
-        //if not authroized to edit plant fields, exit with true
-        if( isPlantAuthorized(user) == false ){
+        // exit without doing any tests if not a chart manager
+        if (!isChartManager) {
             return true;
         }
-        
+
         // require Org Plant ChartCode
         success &= checkEmptyBOField("organizationPlantChartCode", newOrg.getOrganizationPlantChartCode(), "Organization Plant Chart of Accounts Code");
-        
+
         // require Org Plant AccountNumber
         success &= checkEmptyBOField("organizationPlantAccountNumber", newOrg.getOrganizationPlantAccountNumber(), "Organization Plant Account Number");
-        
+
         // require Campus Plant ChartCode
         success &= checkEmptyBOField("campusPlantChartCode", newOrg.getCampusPlantChartCode(), "Campus Plant Chart of Accounts Code");
-        
+
         // require Org Plant ChartCode
         success &= checkEmptyBOField("campusPlantAccountNumber", newOrg.getCampusPlantAccountNumber(), "Campus Plant Account Number");
-        
+
         // validate Org Plant Account
         success &= getDictionaryValidationService().validateReferenceExistsAndIsActive(newOrg, "organizationPlantAccount", "accountClosedIndicator", true, true, MAINTAINABLE_ERROR_PREFIX + "organizationPlantAccountNumber", "Organization Plant Account");
-        
+
         // validate Campus Plant Account
         success &= getDictionaryValidationService().validateReferenceExistsAndIsActive(newOrg, "campusPlantAccount", "accountClosedIndicator", true, true, MAINTAINABLE_ERROR_PREFIX + "campusPlantAccountNumber", "Campus Plant Account");
-        
+
         return success;
     }
 
@@ -341,7 +334,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         return success;
     }
 
-    protected boolean checkSimpleRules(MaintenanceDocument document) {
+    protected boolean checkSimpleRules() {
 
         boolean success = true;
         String lastReportsToChartOfAccountsCode;
@@ -363,106 +356,59 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
             }
         }
 
-        // start date must be greater than or equal to today if new Document
-        if ((ObjectUtils.isNotNull(newOrg.getOrganizationBeginDate()) && (document.isNew()))) {
-            Timestamp today = getDateTimeService().getCurrentTimestamp();
-            today.setTime(DateUtils.truncate(today, Calendar.DAY_OF_MONTH).getTime());
-            if (newOrg.getOrganizationBeginDate().before(today)) {
-                putFieldError("organizationBeginDate", KeyConstants.ERROR_DOCUMENT_ORGMAINT_STARTDATE_IN_PAST);
+        // Reports To Chart/Org should not be same as this Chart/Org
+        // However, allow special case where organizationCode = "UNIV"
+        if ((ObjectUtils.isNotNull(newOrg.getReportsToChartOfAccountsCode())) && (ObjectUtils.isNotNull(newOrg.getReportsToOrganizationCode())) && (ObjectUtils.isNotNull(newOrg.getChartOfAccountsCode())) && (ObjectUtils.isNotNull(newOrg.getOrganizationCode())) && (!(newOrg.getOrganizationCode().equals("UNIV")))) {
+
+            if ((newOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode())) && (newOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode())))
+
+            {
+                putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_SAME_ORG);
                 success &= false;
             }
-        }
-        
-        boolean orgMustReportToSelf = false;
-        if (applyApcRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, newOrg.getOrganizationTypeCode())) {
-            orgMustReportToSelf = true;
-        }
-        
-        // Reports To Chart/Org should not be same as this Chart/Org
-        // However, allow special case where organization type is listed in the business rules
-        if ( ObjectUtils.isNotNull(newOrg.getReportsToChartOfAccountsCode()) 
-                && ObjectUtils.isNotNull(newOrg.getReportsToOrganizationCode()) 
-                && ObjectUtils.isNotNull(newOrg.getChartOfAccountsCode())
-                && ObjectUtils.isNotNull(newOrg.getOrganizationCode()) ) {
-            if ( !orgMustReportToSelf ) {
-                
-                if ((newOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode())) 
-                        && (newOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode()))) {
-                    putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_SAME_ORG);
-                    success = false;
-                } else {
-                    // Don't allow a circular reference on Reports to Chart/Org
-                    // terminate the search when a top-level org is found                    
-                    lastReportsToChartOfAccountsCode = newOrg.getReportsToChartOfAccountsCode();
-                    lastReportsToOrganizationCode = newOrg.getReportsToOrganizationCode();
-                    continueSearch = true;
-                    loopCount = 0;
-                    do {
-                        tempOrg = orgService.getByPrimaryId(lastReportsToChartOfAccountsCode, lastReportsToOrganizationCode);
-                        loopCount++;;
-                        if (ObjectUtils.isNull(tempOrg)) {
-                            continueSearch = false;
-                            // if a null is returned on the first iteration, then the reports-to org does not exist
-                            // fail the validation
-                            if ( loopCount == 1 ) {
-                                putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_MUST_EXIST);
-                                success = false;
-                            }
-                        } else {
-                            // on the first iteration, check whether the reports-to organization is active
-                            if ( loopCount == 1 && !tempOrg.isOrganizationActiveIndicator() ) {
-                                putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_MUST_EXIST);
-                                success = false;
-                                continueSearch = false;
-                            } else {
-                                // LOG.info("Found Org = " + lastReportsToChartOfAccountsCode + "/" + lastReportsToOrganizationCode);
-                                lastReportsToChartOfAccountsCode = tempOrg.getReportsToChartOfAccountsCode();
-                                lastReportsToOrganizationCode = tempOrg.getReportsToOrganizationCode();
-        
-                                if ((tempOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode())) 
-                                        && (tempOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode())) ) {
-                                    putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_CIRCULAR_REF_TO_SAME_ORG);
-                                    success = false;
-                                    continueSearch = false;
-                                }
-                            }
-                        }
-                        if (loopCount > maxLoopCount) {
+            else
+
+            // Dont't allow a circular reference on Reports to Chart/Org
+            // However, do allow special case where organizationCode = "UNIV"
+            {
+                lastReportsToChartOfAccountsCode = newOrg.getReportsToChartOfAccountsCode();
+                lastReportsToOrganizationCode = newOrg.getReportsToOrganizationCode();
+                continueSearch = true;
+                loopCount = 0;
+                do {
+                    tempOrg = orgService.getByPrimaryId(lastReportsToChartOfAccountsCode, lastReportsToOrganizationCode);
+                    loopCount = loopCount + 1;
+                    if (ObjectUtils.isNull(tempOrg)) {
+                        continueSearch = false;
+                    }
+                    else {
+//                      LOG.info("Found Org = " + lastReportsToChartOfAccountsCode + "/" + lastReportsToOrganizationCode);
+                        lastReportsToChartOfAccountsCode = tempOrg.getReportsToChartOfAccountsCode();
+                        lastReportsToOrganizationCode = tempOrg.getReportsToOrganizationCode();
+ 
+                        if ((tempOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode())) && (tempOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode())) && (!tempOrg.getReportsToOrganizationCode().equals("UNIV"))) {
+                            putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_CIRCULAR_REF_TO_SAME_ORG);
+                            success &= false;
                             continueSearch = false;
                         }
-                        // stop the search if we reach an org that must report to itself 
-                        if ( continueSearch 
-                                && applyApcRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, tempOrg.getOrganizationTypeCode()) ) {
-                            continueSearch = false;
-                        }
-    
-                    } while (continueSearch == true);
-                } // end else (checking for circular ref)
-            } else { // org must report to self (university level organization)
-                if ( !(newOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode()) 
-                        && newOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode()) ) ) {
-                    putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_MUST_BE_SAME_ORG);
-                    success = false;
-                }
-                // org must be the only one of that type
-                KualiParameterRule rule = configService.getApplicationParameterRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
-                String topLevelOrgTypeCode = rule.getParameterText();
-                List<Org> topLevelOrgs = orgService.getActiveOrgsByType( topLevelOrgTypeCode );
-                if ( !topLevelOrgs.isEmpty() ) {
-                    putFieldError( "organizationTypeCode", 
-                            KeyConstants.ERROR_DOCUMENT_ORGMAINT_ONLY_ONE_TOP_LEVEL_ORG,
-                            topLevelOrgs.get(0).getChartOfAccountsCode()+"-"+topLevelOrgs.get(0).getOrganizationCode() );
-                    success = false;
-                }
-            }
+                    }
+                    if (loopCount > maxLoopCount) {
+                        continueSearch = false;
+                    }
+                    if (lastReportsToOrganizationCode.equals("UNIV")) {
+                        continueSearch = false;
+                    }
+
+                } while (continueSearch == true);
+            } // end else
         }
 
 
         return success;
     }
 
-    // check that defaultAccount is present unless
-    // ( (orgType = U or C) and ( document is a "create new" ))
+    // check that defaultAccount is present unless 
+    //    ( (orgType = U or C) and ( document is a "create new" ))
 
     protected boolean checkDefaultAccountNumber(MaintenanceDocument document) {
 
@@ -471,6 +417,8 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         boolean exemptOrganizationTypeCode = false;
         String organizationTypeCode;
 
+        // begin date must be greater than or equal to end date
+     
         missingDefaultAccountNumber = StringUtils.isBlank(newOrg.getOrganizationDefaultAccountNumber());
 
         if (ObjectUtils.isNotNull(newOrg.getOrganizationTypeCode())) {
@@ -479,13 +427,13 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                 exemptOrganizationTypeCode = true;
             }
         }
-        if (missingDefaultAccountNumber && (!exemptOrganizationTypeCode || !document.isNew())) {
+        if (missingDefaultAccountNumber && (!exemptOrganizationTypeCode | !document.isNew())) {
             putFieldError("organizationDefaultAccountNumber", KeyConstants.ERROR_DOCUMENT_ORGMAINT_DEFAULT_ACCOUNT_NUMBER_REQUIRED);
             success &= false;
         }
         return success;
-    }
-
+    }   
+    
     /**
      * 
      * This method compares an old and new value, and determines if they've changed.
@@ -537,10 +485,10 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         boolean success = user.isManagerForChart(newOrg.getChartOfAccountsCode());
 
         if (success) {
-            LOG.info("User: [" + user.getUniversalUser().getPersonUserIdentifier() + "] " + user.getUniversalUser().getPersonName() + " is a Chart Manager for this Org's Chart: " + newOrg.getChartOfAccountsCode());
+            LOG.info("User: [" + user.getPersonUserIdentifier() + "] " + user.getPersonName() + " is a Chart Manager for this Org's Chart: " + newOrg.getChartOfAccountsCode());
         }
         else {
-            LOG.info("User: [" + user.getUniversalUser().getPersonUserIdentifier() + "] " + user.getUniversalUser().getPersonName() + " is NOT a Chart Manager for this Org's Chart: " + newOrg.getChartOfAccountsCode());
+            LOG.info("User: [" + user.getPersonUserIdentifier() + "] " + user.getPersonName() + " is NOT a Chart Manager for this Org's Chart: " + newOrg.getChartOfAccountsCode());
         }
 
         return success;
@@ -591,26 +539,4 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         this.orgService = orgService;
     }
 
-    /**
-     * 
-     * This method tests whether the specified user is part of the group that grants authorization to the Plant fields.
-     * 
-     * @param user - the user to test
-     * @return - true if user is part of the group, false otherwise
-     * 
-     */
-    protected boolean isPlantAuthorized(KualiUser user) {
-
-        // attempt to get the group name that grants access to the Plant fields
-        String allowedPlantWorkgroup = getConfigService().getApplicationParameterValue(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, PLANT_WORKGROUP_PARM_NAME);
-
-        if (user.isMember(new KualiGroup(allowedPlantWorkgroup))) {
-            LOG.info("User '" + user.getUniversalUser().getPersonUserIdentifier() + "' is a member of the group '" + allowedPlantWorkgroup + "', which gives them access to the Plant fields.");
-            return true;
-        }
-        else {
-            LOG.info("User '" + user.getUniversalUser().getPersonUserIdentifier() + "' is not a member of the group '" + allowedPlantWorkgroup + "', so they have no access to the Plant fields.");
-            return false;
-        }
-    }
 }
