@@ -1,49 +1,49 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/OriginEntrySource.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.bo;
 
 import org.kuali.core.bo.KualiCodeBase;
 
 /**
+ * @author jsissom
+ * @version $Id: OriginEntrySource.java,v 1.2.2.2 2006-02-03 20:53:30 rkirkend Exp $
  * 
  */
 
 public class OriginEntrySource extends KualiCodeBase {
-    public static final String BACKUP = "BACK";
-    public static final String COLLECTOR = "COLL";
-    public static final String GENERATE_BY_EDOC = "EDOC";
-    public static final String EXTERNAL = "EXT";
-    public static final String GL_CORRECTION_PROCESS_EDOC = "GLCP";
-    public static final String ICR_TRANSACTIONS = "ICR";
-    public static final String ICR_POSTER_ERROR = "ICRE";
-    public static final String ICR_POSTER_VALID = "ICRV";
-    public static final String MAIN_POSTER_ERROR = "MPE";
-    public static final String MAIN_POSTER_VALID = "MPV";
-    public static final String REVERSAL_POSTER_ERROR = "RPE";
-    public static final String REVERSAL_POSTER_VALID = "RPV";
-    public static final String SCRUBBER_ERROR = "SCE";
-    public static final String SCRUBBER_VALID = "SCV";
-    public static final String SCRUBBER_EXPIRED = "SCX";
-    public static final String YEAR_END_BEGINNING_BALANCE = "YEBB";
-    public static final String YEAR_END_BEGINNING_BALANCE_PRIOR_YEAR = "YEBC";
-    public static final String YEAR_END_CLOSE_NOMINAL_BALANCES = "YECN";
-    public static final String YEAR_END_ENCUMBRANCE_CLOSING = "YEEC";
-    public static final String YEAR_END_ORG_REVERSION = "YEOR";
+    static final private long serialVersionUID = 1l;
+    public static String SCRUBBER_VALID = "SCV";
+    public static String SCRUBBER_ERROR = "SCE";
+    public static String SCRUBBER_EXPIRED = "SCX";
+    public static String MAIN_POSTER_VALID = "MPV";
+    public static String MAIN_POSTER_ERROR = "MPE";
+    public static String REVERSAL_POSTER_VALID = "RPV";
+    public static String REVERSAL_POSTER_ERROR = "RPE";
+    public static String ICR_TRANSACTIONS = "ICR";
+    public static String ICR_POSTER_VALID = "ICRV";
+    public static String ICR_POSTER_ERROR = "ICRE";
+    public static String GENERATE_BY_EDOC = "EDOC";
+    public static String EXTERNAL = "EXT";
 
     // Code base has all the fields we need
 }

@@ -1,19 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/impl/CorrectionCriteriaDaoOjb.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.dao.ojb;
 
@@ -27,28 +32,30 @@ import org.kuali.module.gl.dao.CorrectionCriteriaDao;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 public class CorrectionCriteriaDaoOjb extends PersistenceBrokerDaoSupport implements CorrectionCriteriaDao {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionCriteriaDaoOjb.class);
 
-    /**
+    public CorrectionCriteriaDaoOjb() {
+        super();
+    }
+
+    /*
+     * (non-Javadoc)
      * 
-     * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#delete(org.kuali.module.gl.bo.CorrectionCriteria)
+     * @see org.kuali.module.gl.dao.CorrectionSearchCriterionDao#delete(org.kuali.module.gl.bo.CorrectionSearchCriterion)
      */
     public void delete(CorrectionCriteria criterion) {
-        LOG.debug("delete() started");
-
         getPersistenceBrokerTemplate().delete(criterion);
     }
 
-    /**
+    /*
+     * (non-Javadoc)
      * 
-     * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#findByDocumentNumberAndCorrectionGroupNumber(java.lang.String, java.lang.Integer)
+     * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#findByDocumentNumberAndCorrectionGroupId(java.lang.String,
+     *      java.lang.Integer)
      */
-    public List findByDocumentNumberAndCorrectionGroupNumber(String documentNumber, Integer correctionGroupLineNumber) {
-        LOG.debug("findByDocumentNumberAndCorrectionGroupNumber() started");
-
+    public List findByDocumentNumberAndCorrectionGroupNumber(Integer documentNumber, Integer correctionGroupLineNumber) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("financialDocumentNumber", documentNumber);
-        criteria.addEqualTo("correctionChangeGroupLineNumber", correctionGroupLineNumber);
+        criteria.addEqualTo("FDOC_NBR", documentNumber);
+        criteria.addEqualTo("GL_COR_CHG_GRP_LN_NBR", correctionGroupLineNumber);
 
         Class clazz = CorrectionCriteria.class;
         QueryByCriteria query = QueryFactory.newQuery(clazz, criteria);
@@ -63,8 +70,6 @@ public class CorrectionCriteriaDaoOjb extends PersistenceBrokerDaoSupport implem
      * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#save(org.kuali.module.gl.bo.CorrectionCriteria)
      */
     public void save(CorrectionCriteria criterion) {
-        LOG.debug("save() started");
-
         getPersistenceBrokerTemplate().store(criterion);
     }
 }

@@ -1,19 +1,26 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/SubFundGroup.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
@@ -23,7 +30,7 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class SubFundGroup extends BusinessObjectBase {
 
@@ -45,11 +52,10 @@ public class SubFundGroup extends BusinessObjectBase {
     private String fundGroupCode;
     private String fundGroupBudgetAdjustmentRestrictionLevelCode;
     private String accountRestrictedStatusCode;
-
+    
     private FundGroup fundGroup;
     private SubFundGroupType subFundGroupType;
-    private RestrictedStatus accountRestrictedStatus;
-
+    
     /**
      * Gets the subFundGroupCode attribute.
      * 
@@ -200,8 +206,7 @@ public class SubFundGroup extends BusinessObjectBase {
     }
 
     /**
-     * Gets the fundGroupBudgetAdjustmentRestrictionLevelCode attribute.
-     * 
+     * Gets the fundGroupBudgetAdjustmentRestrictionLevelCode attribute. 
      * @return Returns the fundGroupBudgetAdjustmentRestrictionLevelCode.
      */
     public String getFundGroupBudgetAdjustmentRestrictionLevelCode() {
@@ -210,7 +215,6 @@ public class SubFundGroup extends BusinessObjectBase {
 
     /**
      * Sets the fundGroupBudgetAdjustmentRestrictionLevelCode attribute value.
-     * 
      * @param fundGroupBudgetAdjustmentRestrictionLevelCode The fundGroupBudgetAdjustmentRestrictionLevelCode to set.
      */
     public void setFundGroupBudgetAdjustmentRestrictionLevelCode(String fundGroupBudgetAdjustmentRestrictionLevelCode) {
@@ -218,8 +222,7 @@ public class SubFundGroup extends BusinessObjectBase {
     }
 
     /**
-     * Gets the accountRestrictedStatusCode attribute.
-     * 
+     * Gets the accountRestrictedStatusCode attribute. 
      * @return Returns the accountRestrictedStatusCode.
      */
     public String getAccountRestrictedStatusCode() {
@@ -228,7 +231,6 @@ public class SubFundGroup extends BusinessObjectBase {
 
     /**
      * Sets the accountRestrictedStatusCode attribute value.
-     * 
      * @param accountRestrictedStatusCode The accountRestrictedStatusCode to set.
      */
     public void setAccountRestrictedStatusCode(String accountRestrictedStatusCode) {
@@ -236,8 +238,7 @@ public class SubFundGroup extends BusinessObjectBase {
     }
 
     /**
-     * Gets the subFundGroupType attribute.
-     * 
+     * Gets the subFundGroupType attribute. 
      * @return Returns the subFundGroupType.
      */
     public SubFundGroupType getSubFundGroupType() {
@@ -246,41 +247,12 @@ public class SubFundGroup extends BusinessObjectBase {
 
     /**
      * Sets the subFundGroupType attribute value.
-     * 
      * @param subFundGroupType The subFundGroupType to set.
      * @deprecated
      */
     public void setSubFundGroupType(SubFundGroupType subFundGroupType) {
         this.subFundGroupType = subFundGroupType;
     }
-
-
-    /**
-     * Gets the accountRestrictedStatus attribute.
-     * 
-     * @return Returns the accountRestrictedStatus.
-     */
-    public RestrictedStatus getAccountRestrictedStatus() {
-        return accountRestrictedStatus;
-    }
-
-    /**
-     * Sets the accountRestrictedStatus attribute value.
-     * 
-     * @param accountRestrictedStatus The accountRestrictedStatus to set.
-     */
-    public void setAccountRestrictedStatus(RestrictedStatus accountRestrictedStatus) {
-        this.accountRestrictedStatus = accountRestrictedStatus;
-    }
-
-    /**
-     * @return Returns the code and description in format: xx - xxxxxxxxxxxxxxxx
-     */
-    public String getCodeAndDescription() {
-        String theString = getSubFundGroupCode() + " - " + getSubFundGroupDescription();
-        return theString;
-    }
-
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
@@ -292,6 +264,6 @@ public class SubFundGroup extends BusinessObjectBase {
 
 
         return m;
-    }
-
+    }    
+    
 }
