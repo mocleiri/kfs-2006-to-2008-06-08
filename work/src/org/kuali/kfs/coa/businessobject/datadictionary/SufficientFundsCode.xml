@@ -21,16 +21,16 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.codes.SufficientFundsCode">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Sufficient Funds Code</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
                 <field attributeName="active" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <titleAttribute>code</titleAttribute>

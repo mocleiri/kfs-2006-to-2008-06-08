@@ -1,34 +1,38 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/Chart.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.bo.Summarizable;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.util.SpringServiceLocator;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class Chart extends BusinessObjectBase implements Summarizable {
+public class Chart extends BusinessObjectBase {
 
     private static final long serialVersionUID = 4129020803214027609L;
 
@@ -47,7 +51,7 @@ public class Chart extends BusinessObjectBase implements Summarizable {
     private String icrExpenseFinancialObjectCd;
     private String incBdgtEliminationsFinObjCd;
     private String expBdgtEliminationsFinObjCd;
-    private String fundBalanceObjectCode;
+
 
     private ObjectCode incBdgtEliminationsFinObj;
     private ObjectCode expBdgtEliminationsFinObj;
@@ -59,7 +63,6 @@ public class Chart extends BusinessObjectBase implements Summarizable {
     private ObjectCode finAccountsReceivableObj;
     private ObjectCode finInternalEncumbranceObj;
     private ObjectCode icrExpenseFinancialObject;
-    private ObjectCode fundBalanceObject;
     private UniversalUser finCoaManagerUniversal;
     private Chart reportsToChartOfAccounts;
 
@@ -231,8 +234,13 @@ public class Chart extends BusinessObjectBase implements Summarizable {
         this.finAccountsReceivableObj = finAccountsReceivableObj;
     }
 
+    /**
+     * Gets the finCoaManagerUniversal attribute.
+     * 
+     * @return - Returns the finCoaManagerUniversal
+     * 
+     */
     public UniversalUser getFinCoaManagerUniversal() {
-        finCoaManagerUniversal = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(finCoaManagerUniversalId, finCoaManagerUniversal);
         return finCoaManagerUniversal;
     }
 
@@ -580,58 +588,4 @@ public class Chart extends BusinessObjectBase implements Summarizable {
     public void setReportsToChartOfAccountsCode(String reportsToChartOfAccountsCode) {
         this.reportsToChartOfAccountsCode = reportsToChartOfAccountsCode;
     }
-
-    /**
-     * Gets the fundBalanceObject attribute.
-     * 
-     * @return Returns the fundBalanceObject.
-     */
-    public ObjectCode getFundBalanceObject() {
-        return fundBalanceObject;
-    }
-
-    /**
-     * Sets the fundBalanceObject attribute value.
-     * 
-     * @param fundBalanceObject The fundBalanceObject to set.
-     * @deprecated
-     */
-    public void setFundBalanceObject(ObjectCode fundBalanceObject) {
-        this.fundBalanceObject = fundBalanceObject;
-    }
-
-    /**
-     * Gets the fundBalanceObjectCode attribute.
-     * 
-     * @return Returns the fundBalanceObjectCode.
-     */
-    public String getFundBalanceObjectCode() {
-        return fundBalanceObjectCode;
-    }
-
-    /**
-     * Sets the fundBalanceObjectCode attribute value.
-     * 
-     * @param fundBalanceObjectCode The fundBalanceObjectCode to set.
-     */
-    public void setFundBalanceObjectCode(String fundBalanceObjectCode) {
-        this.fundBalanceObjectCode = fundBalanceObjectCode;
-    }
-    
-    /**
-     * @return Returns the code and description in format: xx - xxxxxxxxxxxxxxxx
-     */
-    public String getCodeAndDescription() {
-        String theString = getChartOfAccountsCode() + " - " + getFinChartOfAccountDescription();
-        return theString;
-    }
-
-    public String getCode() {
-        return this.chartOfAccountsCode;
-    }
-
-    public String getName() {
-        return this.finChartOfAccountDescription;
-    }
-
 }

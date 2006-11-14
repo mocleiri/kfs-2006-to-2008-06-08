@@ -77,13 +77,4 @@ public interface OrganizationService {
      */
     public List getActiveChildOrgs(String chartOfAccountsCode, String organizationCode);
 
-    /**
-     * 
-     * Returns a list of active organizations with the given organization type code.
-     * 
-     * @param organizationTypeCode
-     * @return
-     */
-    public List<Org> getActiveOrgsByType( String organizationTypeCode );
-    
 }

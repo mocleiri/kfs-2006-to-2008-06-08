@@ -26,7 +26,7 @@
         <inquiry>
             <title>Credit Card Vendor Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="financialDocumentCreditCardVendorNumber" />
                 <field attributeName="financialDocumentCreditCardVendorName" />
                 <field attributeName="financialDocumentCreditCardTypeCode" />
@@ -40,11 +40,15 @@
                 <field attributeName="expenseFinancialObjectCode" />
                 <field attributeName="expenseFinancialSubObjectCode" />
                 <field attributeName="expenseSubAccountNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Credit Card Vendor Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.CreditCardVendor">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Credit Card Vendor</instructions>
 

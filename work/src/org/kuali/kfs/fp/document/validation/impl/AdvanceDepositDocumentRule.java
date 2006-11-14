@@ -1,26 +1,30 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/validation/impl/AdvanceDepositDocumentRule.java,v $
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * http://kualiproject.org/license.html
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
 
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
-import org.kuali.KeyConstants.CashReceipt;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.FinancialDocument;
 import org.kuali.core.document.TransactionalDocument;
@@ -30,16 +34,14 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.financial.bo.AdvanceDepositDetail;
 import org.kuali.module.financial.document.AdvanceDepositDocument;
-import org.kuali.module.financial.document.CashReceiptFamilyBase;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
-import static org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
 
 /**
  * Business rules applicable to Advance Deposit documents.
  * 
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class AdvanceDepositDocumentRule extends CashReceiptFamilyRule implements GenerateGeneralLedgerDocumentPendingEntriesRule {
+public class AdvanceDepositDocumentRule extends CashReceiptDocumentRule implements GenerateGeneralLedgerDocumentPendingEntriesRule {
     /**
      * For Advance Deposit documents, the document is balanced if the sum total of advance deposits equals the sum total of the
      * accounting lines.
@@ -95,7 +97,7 @@ public class AdvanceDepositDocumentRule extends CashReceiptFamilyRule implements
     }
 
     /**
-     * Overrides to validate all of the deposits associated with this document.
+     * Overrides to call super and then to validate all of the deposits associated with this document.
      * 
      * @see org.kuali.core.rule.DocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.Document)
      */
@@ -104,8 +106,7 @@ public class AdvanceDepositDocumentRule extends CashReceiptFamilyRule implements
         boolean isValid = super.processCustomSaveDocumentBusinessRules(document);
 
         if (isValid) {
-            isValid &= validateAccountingLineTotal((CashReceiptFamilyBase) document);
-            isValid &= validateAdvanceDeposits((AdvanceDepositDocument) document);
+            isValid = validateAdvanceDeposits((AdvanceDepositDocument) document);
         }
 
         return isValid;
@@ -127,20 +128,13 @@ public class AdvanceDepositDocumentRule extends CashReceiptFamilyRule implements
             isValid &= AdvanceDepositDocumentRuleUtil.validateAdvanceDeposit(advanceDepositDocument.getAdvanceDepositDetail(i));
             GlobalVariables.getErrorMap().removeFromErrorPath(propertyName);
         }
-
-        // don't bother checking the total if some deposits are broken
-        if (isValid && advanceDepositDocument.getTotalAdvanceDepositAmount().isZero()) {
-            isValid = false;
-            GlobalVariables.getErrorMap().putError(PropertyConstants.ADVANCE_DEPOSIT_DETAIL, CashReceipt.ERROR_ZERO_TOTAL, "Advance Deposit Total");
-        }
-
         GlobalVariables.getErrorMap().removeFromErrorPath(Constants.DOCUMENT_PROPERTY_NAME);
         return isValid;
     }
 
     /**
      * Generates bank offset GLPEs for deposits, if enabled.
-     * 
+     *
      * @see org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule#processGenerateDocumentGeneralLedgerPendingEntries(org.kuali.core.document.FinancialDocument,org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
      */
     public boolean processGenerateDocumentGeneralLedgerPendingEntries(FinancialDocument financialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
@@ -154,8 +148,7 @@ public class AdvanceDepositDocumentRule extends CashReceiptFamilyRule implements
                 GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
                 if (!TransactionalDocumentRuleUtil.populateBankOffsetGeneralLedgerPendingEntry(detail.getFinancialDocumentBankAccount(), detail.getFinancialDocumentAdvanceDepositAmount(), advanceDepositDocument, advanceDepositDocument.getPostingYear(), sequenceHelper, bankOffsetEntry, Constants.ADVANCE_DEPOSITS_LINE_ERRORS)) {
                     success = false;
-                    continue; // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at
-                    // all.
+                    continue;  // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at all.
                 }
                 bankOffsetEntry.setTransactionLedgerEntryDescription(TransactionalDocumentRuleUtil.formatProperty(KeyConstants.AdvanceDeposit.DESCRIPTION_GLPE_BANK_OFFSET, displayedDepositNumber++));
                 advanceDepositDocument.getGeneralLedgerPendingEntries().add(bankOffsetEntry);
