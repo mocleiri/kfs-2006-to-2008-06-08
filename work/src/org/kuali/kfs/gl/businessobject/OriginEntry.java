@@ -26,8 +26,8 @@ import java.util.LinkedHashMap;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.core.bo.BusinessObjectBase;
-import org.kuali.core.bo.Options;
 import org.kuali.core.bo.OriginationCode;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
@@ -46,6 +46,8 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.exception.LoadException;
 import org.springframework.util.StringUtils;
 
+/**
+ */
 public class OriginEntry extends BusinessObjectBase implements Transaction {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntry.class);
 
@@ -182,8 +184,8 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
 
     public OriginEntry(String line) {
         try {
-        setFromTextFile(line, 0);
-    }
+            setFromTextFile(line, 0);
+        }
         catch (LoadException e) {
             LOG.error("OriginEntry() Error loading line", e);
         }
@@ -222,14 +224,13 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
             return null;
         }
         else {
-
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
             sdf.setLenient(beLenientWithDates);
 
-                java.util.Date d = sdf.parse(sdate);
-                return new Date(d.getTime());
-            }
-            }
+            java.util.Date d = sdf.parse(sdate);
+            return new Date(d.getTime());
+        }
+    }
 
     private String formatDate(Date date) {
         if (date == null) {
@@ -260,7 +261,6 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
                 GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "University Fiscal Year" });
                 throw new LoadException("Invalid university fiscal year");
             }
-
         }
         else {
             setUniversityFiscalYear(null);
@@ -280,7 +280,7 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
         if (!"     ".equals(line.substring(51, 56)) && !"00000".equals(line.substring(51, 56))) {
             try {
                 setTransactionLedgerEntrySequenceNumber(new Integer(line.substring(51, 56).trim()));
-        }
+            }
             catch (NumberFormatException e) {
                 GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Sequence Number" });
                 throw new LoadException("Invalid sequence number");
@@ -956,6 +956,6 @@ public class OriginEntry extends BusinessObjectBase implements Transaction {
             return getTransactionEncumbranceUpdateCode();        
         } else {
             throw new IllegalArgumentException("Invalid Field Name " + fieldName);
-}
+        }
     }
 }
