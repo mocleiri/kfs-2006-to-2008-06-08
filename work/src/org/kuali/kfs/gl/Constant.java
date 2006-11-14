@@ -17,7 +17,6 @@
  */
 package org.kuali.module.gl.web;
 
-
 /**
  * This class contains the constants being used by balance inquiry screens of general ledger
  * 
@@ -52,6 +51,10 @@ public final class Constant {
 
     public static final String BALANCE_TYPE_PE = "PE";
     public static final String BALANCE_TYPE_CB = "CB";
+
+    public static final String OBJECT_TYPE_EE = "EE";
+    public static final String OBJECT_TYPE_ES = "ES";
+    public static final String OBJECT_TYPE_EX = "EX";
 
     public static final String CONSOLIDATED_SUB_ACCOUNT_NUMBER = "*ALL*";
     public static final String CONSOLIDATED_SUB_OBJECT_CODE = "*ALL*";
