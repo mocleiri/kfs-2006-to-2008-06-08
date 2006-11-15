@@ -41,6 +41,7 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.KFSUser;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel;
@@ -878,9 +879,9 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
      * generic, shared logic used to iniate a dv document
      */
     public void initiateDocument() {
-        KualiUser currentUser = GlobalVariables.getUserSession().getKualiUser();
-        setDisbVchrContactPersonName(currentUser.getUniversalUser().getPersonName());
-        setCampusCode(currentUser.getOrganization().getOrganizationPhysicalCampusCode());
+        UniversalUser currentUser = GlobalVariables.getUserSession().getUniversalUser();
+        setDisbVchrContactPersonName(currentUser.getPersonName());
+        setCampusCode(((KFSUser)currentUser.getModuleUser( KFSUser.MODULE_ID )).getOrganization().getOrganizationPhysicalCampusCode());
 
         // due date
         Calendar calendar = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
