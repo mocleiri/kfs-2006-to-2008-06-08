@@ -52,7 +52,7 @@ public class ChartRule extends MaintenanceDocumentRuleBase {
         
         UniversalUser chartManager = null;
         try {
-           chartManager = getKualiUserService().getUniversalUser( chart.getFinCoaManagerUniversalId() );
+           chartManager = getUniversalUserService().getUniversalUser( chart.getFinCoaManagerUniversalId() );
          } catch (UserNotFoundException e) {
              result = false;
              putFieldError("finCoaManagerUniversal.personUserIdentifier",KeyConstants.ERROR_DOCUMENT_CHART_MANAGER_MUST_EXIST);
