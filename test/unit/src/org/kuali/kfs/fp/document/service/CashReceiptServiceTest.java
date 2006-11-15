@@ -121,7 +121,7 @@ public class CashReceiptServiceTest extends KualiTestBase {
     public final void testGetCashReceiptVerificationUnit_validUser() {
         String expectedUnit = Constants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_VERIFICATION_UNIT;
 
-        String unit = getCashReceiptService().getCashReceiptVerificationUnitForUser(GlobalVariables.getUserSession().getKualiUser());
+        String unit = getCashReceiptService().getCashReceiptVerificationUnitForUser(GlobalVariables.getUserSession().getUniversalUser());
         assertEquals(expectedUnit, unit);
     }
 
