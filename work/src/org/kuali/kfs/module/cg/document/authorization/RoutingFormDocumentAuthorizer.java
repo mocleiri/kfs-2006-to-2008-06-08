@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.kuali.core.authorization.DocumentActionFlags;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.DocumentAuthorizerBase;
 import org.kuali.module.kra.budget.document.BudgetDocument;
@@ -28,12 +29,12 @@ import org.kuali.module.kra.budget.document.BudgetDocument;
 public class RoutingFormDocumentAuthorizer extends DocumentAuthorizerBase {
 
     @Override
-    public Map getEditMode(Document d, KualiUser u) {
+    public Map getEditMode(Document d, UniversalUser u) {
         // TODO Auto-generated method stub
         return super.getEditMode(d, u);
     }
 
-    public DocumentActionFlags getDocumentActionFlags(Document document, KualiUser user) {
+    public DocumentActionFlags getDocumentActionFlags(Document document, UniversalUser user) {
 
         DocumentActionFlags flags = new DocumentActionFlags();
 
