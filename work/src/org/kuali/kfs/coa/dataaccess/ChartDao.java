@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.module.chart.bo.Chart;
 
 /**
@@ -35,5 +36,5 @@ public interface ChartDao {
 
     public Chart getByPrimaryId(String chartOfAccountsCode);
 
-    public List getChartsThatUserIsResponsibleFor(KualiUser kualiUser);
+    public List getChartsThatUserIsResponsibleFor(UniversalUser kualiUser);
 }

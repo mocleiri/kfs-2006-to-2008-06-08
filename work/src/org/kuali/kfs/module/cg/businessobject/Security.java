@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.module.chart.bo.KFSUser;
 
 /**
  * 
@@ -29,7 +30,7 @@ public class Security extends BusinessObjectBase {
 
     private String personUniversalIdentifier;
 
-    private KualiUser kualiUser;
+    private KFSUser kfsUser;
 
     /**
      * Default no-arg constructor.
@@ -61,8 +62,8 @@ public class Security extends BusinessObjectBase {
      * 
      * @return Returns the kualiUser.
      */
-    public KualiUser getKualiUser() {
-        return kualiUser;
+    public KFSUser getKFSUser() {
+        return kfsUser;
     }
 
     /**
@@ -71,8 +72,8 @@ public class Security extends BusinessObjectBase {
      * @param kualiUser The kualiUser to set.
      * @deprecated
      */
-    public void setKualiUser(KualiUser kualiUser) {
-        this.kualiUser = kualiUser;
+    public void setKFSUser(KFSUser kfsUser) {
+        this.kfsUser = kfsUser;
     }
 
     /**
