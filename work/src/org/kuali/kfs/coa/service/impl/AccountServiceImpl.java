@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.KualiUserService;
 import org.kuali.module.chart.bo.Account;
@@ -75,15 +76,15 @@ public class AccountServiceImpl implements AccountService {
     /**
      * @see org.kuali.module.chart.service.AccountService#getAccountsThatUserIsResponsibleFor(org.kuali.bo.user.KualiUser)
      */
-    public List getAccountsThatUserIsResponsibleFor(KualiUser kualiUser) {
+    public List getAccountsThatUserIsResponsibleFor(UniversalUser universalUser) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieving accountsResponsible list for user " + kualiUser.getUniversalUser().getPersonName());
+            LOG.debug("retrieving accountsResponsible list for user " + universalUser.getPersonName());
         }
 
         // gets the list of accounts that the user is the Fiscal Officer of
-        List accountList = accountDao.getAccountsThatUserIsResponsibleFor(kualiUser);
+        List accountList = accountDao.getAccountsThatUserIsResponsibleFor(universalUser);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieved accountsResponsible list for user " + kualiUser.getUniversalUser().getPersonName());
+            LOG.debug("retrieved accountsResponsible list for user " + universalUser.getPersonName());
         }
         return accountList;
     }
