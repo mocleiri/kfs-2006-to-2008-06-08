@@ -18,6 +18,39 @@
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
+    <bean id="KFS_ModuleUserService" class="org.kuali.module.chart.service.impl.KFSUserServiceImpl">
+    	<property name="moduleId">
+    		<value>KFS</value>
+    	</property>
+    	<property name="moduleName">
+    		<value>Kuali Financial System</value>
+    	</property>
+    	<property name="propertyList">
+    		<list>
+    			<value>chartOfAccountsCode</value>
+    			<value>organizationCode</value>
+    		</list>
+    	</property>
+        <property name="kfsUserDao">
+            <ref bean="kfsUserDao" />
+        </property>
+        <property name="universalUserService">
+            <ref bean="universalUserService" />
+        </property>
+        <property name="accountService">
+            <ref bean="accountService" />
+        </property>
+        <property name="chartService">
+            <ref bean="chartService" />
+        </property>
+    </bean>
+
+    <bean id="kfsUserDao" class="org.kuali.module.chart.dao.ojb.KFSUserDaoOjb">
+        <property name="jcdAlias">
+            <value>dataSource</value>
+        </property>
+    </bean>
+
     <bean id="balanceTypService" class="org.kuali.module.chart.service.impl.BalanceTypServiceImpl">
         <property name="kualiCodeService">
             <ref bean="kualiCodeService" />
@@ -234,9 +267,9 @@
         </property>
     </bean>
 
-    <bean id="workflow-org.kuali.core.bo.user.KualiUser-Lookupable" parent="workflowLookupable" singleton="false">
+    <bean id="workflow-org.kuali.module.chart.bo.KFSUser-Lookupable" parent="workflowLookupable" singleton="false">
         <property name="businessObjectClassName">
-            <value>org.kuali.core.bo.user.KualiUser</value>
+            <value>org.kuali.module.chart.bo.KFSUser</value>
         </property>
     </bean>
 
