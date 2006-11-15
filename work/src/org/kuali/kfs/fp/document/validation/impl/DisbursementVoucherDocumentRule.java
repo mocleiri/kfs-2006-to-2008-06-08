@@ -99,14 +99,14 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
             // if approval is requested and it is special conditions routing and the user is in a special conditions routing
             // workgroup then
             // the line is accessible
-            if (transactionalDocument.getDocumentHeader().getWorkflowDocument().isApprovalRequested() && dvAuthorizer.isSpecialRouting(transactionalDocument, GlobalVariables.getUserSession().getKualiUser()) && (isUserInTaxGroup() || isUserInTravelGroup() || isUserInFRNGroup() || isUserInWireGroup() || isUserInDvAdminGroup())) {
+            if (transactionalDocument.getDocumentHeader().getWorkflowDocument().isApprovalRequested() && dvAuthorizer.isSpecialRouting(transactionalDocument, GlobalVariables.getUserSession().getUniversalUser()) && (isUserInTaxGroup() || isUserInTravelGroup() || isUserInFRNGroup() || isUserInWireGroup() || isUserInDvAdminGroup())) {
                 isAccessible = true;
             }
         }
 
         // report (and log) errors
         if (!isAccessible) {
-            String[] errorParams = new String[] { accountingLine.getAccountNumber(), GlobalVariables.getUserSession().getKualiUser().getUniversalUser().getPersonUserIdentifier() };
+            String[] errorParams = new String[] { accountingLine.getAccountNumber(), GlobalVariables.getUserSession().getUniversalUser().getPersonUserIdentifier() };
             GlobalVariables.getErrorMap().putError(PropertyConstants.ACCOUNT_NUMBER, action.accessibilityErrorKey, errorParams);
         }
 
@@ -134,7 +134,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
 
         // amounts can only decrease
         DisbursementVoucherDocumentAuthorizer dvAuthorizer = (DisbursementVoucherDocumentAuthorizer) SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(dvDocument);
-        if (dvAuthorizer.isSpecialRouting(dvDocument, GlobalVariables.getUserSession().getKualiUser()) && (isUserInTaxGroup() || isUserInTravelGroup() || isUserInFRNGroup() || isUserInWireGroup())) {
+        if (dvAuthorizer.isSpecialRouting(dvDocument, GlobalVariables.getUserSession().getUniversalUser()) && (isUserInTaxGroup() || isUserInTravelGroup() || isUserInFRNGroup() || isUserInWireGroup())) {
             boolean approveOK = true;
 
             // users in foreign or wire workgroup can increase or decrease amounts because of currency conversion
@@ -1288,7 +1288,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group
      */
     private boolean isUserInTaxGroup() {
-        return GlobalVariables.getUserSession().getKualiUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_TAX_GROUP));
+        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_TAX_GROUP));
     }
 
     /**
@@ -1297,7 +1297,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group
      */
     private boolean isUserInTravelGroup() {
-        return GlobalVariables.getUserSession().getKualiUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_TRAVEL_GROUP));
+        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_TRAVEL_GROUP));
     }
 
     /**
@@ -1306,7 +1306,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group
      */
     private boolean isUserInFRNGroup() {
-        return GlobalVariables.getUserSession().getKualiUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_FRN_GROUP));
+        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_FRN_GROUP));
     }
 
     /**
@@ -1315,7 +1315,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group
      */
     private boolean isUserInWireGroup() {
-        return GlobalVariables.getUserSession().getKualiUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_WIRE_GROUP));
+        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_WIRE_GROUP));
     }
 
     /**
@@ -1324,7 +1324,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group, false otherwise
      */
     private boolean isUserInDvAdminGroup() {
-        return GlobalVariables.getUserSession().getKualiUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_ADMIN_GROUP));
+        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_ADMIN_GROUP));
     }
 
     /**
