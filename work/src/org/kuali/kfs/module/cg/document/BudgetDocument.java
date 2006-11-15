@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.IllegalObjectStateException;
 import org.kuali.core.exceptions.UserNotFoundException;
@@ -403,16 +404,16 @@ public class BudgetDocument extends ResearchDocumentBase {
     @Override
     public void populateDocumentForRouting() {
         KualiTransactionalDocumentInformation transInfo = new KualiTransactionalDocumentInformation();
-        DocumentInitiator initiatior = new DocumentInitiator();
+        DocumentInitiator initiator = new DocumentInitiator();
         String initiatorNetworkId = documentHeader.getWorkflowDocument().getInitiatorNetworkId();
         try {
-            KualiUser initiatorUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(initiatorNetworkId));
-            initiatior.setKualiUser(initiatorUser);
+            UniversalUser initiatorUser = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(initiatorNetworkId));
+            initiator.setUniversalUser(initiatorUser);
         }
         catch (UserNotFoundException e) {
             throw new RuntimeException(e);
         }
-        transInfo.setDocumentInitiator(initiatior);
+        transInfo.setDocumentInitiator(initiator);
         KualiDocumentXmlMaterializer xmlWrapper = new KualiDocumentXmlMaterializer();
         xmlWrapper.setDocument(this);
         xmlWrapper.setKualiTransactionalDocumentInformation(transInfo);
