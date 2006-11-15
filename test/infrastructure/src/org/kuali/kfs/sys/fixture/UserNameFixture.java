@@ -19,6 +19,7 @@ package org.kuali.test.fixtures;
 
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.SpringServiceLocator;
 import junit.framework.Assert;
@@ -52,9 +53,11 @@ public enum UserNameFixture {
         return new AuthenticationUserId(toString());
     }
 
-    public KualiUser getKualiUser()
-        throws UserNotFoundException
-    {
+    public KualiUser getKualiUser() throws UserNotFoundException {
         return SpringServiceLocator.getKualiUserService().getKualiUser(getAuthenticationUserId());
+    }
+
+    public UniversalUser getUniversalUser() throws UserNotFoundException {
+        return SpringServiceLocator.getUniversalUserService().getUniversalUser(getAuthenticationUserId());
     }
 }
