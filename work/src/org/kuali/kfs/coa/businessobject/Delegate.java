@@ -272,7 +272,7 @@ public class Delegate extends BusinessObjectBase {
     }
 
     public UniversalUser getAccountDelegate() {
-        accountDelegate = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(accountDelegateSystemId, accountDelegate);
+        accountDelegate = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountDelegateSystemId, accountDelegate);
         return accountDelegate;
     }
 
