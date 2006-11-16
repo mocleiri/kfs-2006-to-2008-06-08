@@ -18,7 +18,7 @@
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-    <bean id="KFS_ModuleUserService" class="org.kuali.module.chart.service.impl.KFSUserServiceImpl">
+    <bean id="KFS-ModuleUserService" class="org.kuali.module.chart.service.impl.KFSUserServiceImpl">
     	<property name="moduleId">
     		<value>KFS</value>
     	</property>
@@ -281,4 +281,37 @@
 
     <bean id="OrgReviewLookupable" class="org.kuali.workflow.attribute.OrgReviewLookupableImpl" singleton="false"/>
     <bean id="accountLookupable" class="org.kuali.module.chart.lookup.KualiAccountLookupableImpl" singleton="false" parent="kualiLookupable" />
+
+		<bean id="chart-Module" class="org.kuali.core.Module">
+    	<property name="moduleId">
+    		<value>chart</value>
+    	</property>
+    	<property name="moduleName">
+    		<value>Kuali Chart Of Accounts</value>
+    	</property>
+    	<property name="moduleUserService">
+    		<ref bean="chartUserService" />
+    	</property>
+		</bean>
+		
+    <bean id="chartUserService" class="org.kuali.module.chart.service.impl.KFSUserServiceImpl">
+    	<property name="propertyList">
+    		<list>
+    			<value>chartOfAccountsCode</value>
+    			<value>organizationCode</value>
+    		</list>
+    	</property>
+      <property name="kfsUserDao">
+          <ref bean="kfsUserDao" />
+      </property>
+      <property name="universalUserService">
+          <ref bean="universalUserService" />
+      </property>
+      <property name="accountService">
+          <ref bean="accountService" />
+      </property>
+      <property name="chartService">
+          <ref bean="chartService" />
+      </property>
+    </bean>
 </beans>
