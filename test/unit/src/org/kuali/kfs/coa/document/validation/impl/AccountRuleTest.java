@@ -395,11 +395,11 @@ public class AccountRuleTest extends ChartRuleTestBase {
 
     }
 
-    private KualiUser getKualiUserByUserName(String userName) {
+    private UniversalUser getKualiUserByUserName(String userName) {
         AuthenticationUserId userId = new AuthenticationUserId(userName);
-        KualiUser user = null;
+        UniversalUser user = null;
         try {
-            user = SpringServiceLocator.getKualiUserService().getKualiUser(userId);
+            user = SpringServiceLocator.getUniversalUserService().getUniversalUser(userId);
         }
         catch (UserNotFoundException e) {
             assertTrue("An Exception should not be thrown.", false);
