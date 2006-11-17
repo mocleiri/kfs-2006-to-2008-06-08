@@ -38,6 +38,7 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.IcrAutomatedEntry;
+import org.kuali.module.chart.bo.KFSUser;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.gl.service.BalanceService;
@@ -900,7 +901,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
              putFieldError("accountFiscalOfficerUser.personUserIdentifier",KeyConstants.ERROR_DOCUMENT_ACCOUNT_FISCAL_OFFICER_MUST_EXIST);
          }
         
-        if (fiscalOfficer!=null && !getKualiUserService().isActiveKualiUser( fiscalOfficer ) ) {
+        if (fiscalOfficer!=null && !fiscalOfficer.isActiveForModule( KFSUser.MODULE_ID ) ) {
             result=false;
             putFieldError("accountFiscalOfficerUser.personUserIdentifier",KeyConstants.ERROR_DOCUMENT_ACCOUNT_FISCAL_OFFICER_MUST_BE_KUALI_USER);
         }
