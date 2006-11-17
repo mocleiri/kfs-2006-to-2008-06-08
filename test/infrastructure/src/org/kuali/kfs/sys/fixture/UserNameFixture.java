@@ -18,7 +18,6 @@
 package org.kuali.test.fixtures;
 
 import org.kuali.core.bo.user.AuthenticationUserId;
-import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.ModuleUser;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
@@ -47,7 +46,7 @@ public enum UserNameFixture {
     ;
 
     static {
-        Assert.assertEquals(KualiUser.SYSTEM_USER, KULUSER.toString());
+        //Assert.assertEquals(KualiUser.SYSTEM_USER, KULUSER.toString());
     }
 
     public AuthenticationUserId getAuthenticationUserId() {
