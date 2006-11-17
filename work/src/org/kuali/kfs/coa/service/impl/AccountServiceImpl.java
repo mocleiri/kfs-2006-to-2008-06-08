@@ -41,7 +41,6 @@ public class AccountServiceImpl implements AccountService {
     private static final Logger LOG = Logger.getLogger(AccountServiceImpl.class);
 
     private AccountDao accountDao;
-    private KualiUserService kualiUserService;
 
     /**
      * Retrieves an Account object based on primary key.
@@ -127,10 +126,6 @@ public class AccountServiceImpl implements AccountService {
      */
     public void setAccountDao(AccountDao accountDao) {
         this.accountDao = accountDao;
-    }
-
-    public void setKualiUserService(KualiUserService kualiUserService) {
-        this.kualiUserService = kualiUserService;
     }
 
 }

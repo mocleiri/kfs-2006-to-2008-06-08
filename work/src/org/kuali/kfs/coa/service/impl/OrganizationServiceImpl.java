@@ -32,7 +32,6 @@ import org.kuali.module.chart.service.OrganizationService;
  */
 public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationDao organizationDao;
-    private KualiUserService kualiUserService;
     
     /**
      * Implements the getByPrimaryId method defined by OrganizationService.
@@ -79,10 +78,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         this.organizationDao = organizationDao;
     }
 
-    public void setKualiUserService(KualiUserService kualiUserService) {
-        this.kualiUserService = kualiUserService;
-    }    
-    
     /**
      * 
      * @see org.kuali.module.chart.service.OrganizationService#getActiveAccountsByOrg(java.lang.String, java.lang.String)
