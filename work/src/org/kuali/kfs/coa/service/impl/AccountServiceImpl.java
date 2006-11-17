@@ -23,10 +23,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.kuali.core.bo.user.KualiUser;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.KualiUserService;
+
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 import org.kuali.module.chart.dao.AccountDao;

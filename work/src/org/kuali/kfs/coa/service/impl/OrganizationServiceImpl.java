@@ -20,7 +20,7 @@ package org.kuali.module.chart.service.impl;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.KualiUserService;
+
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
 import org.kuali.module.chart.service.OrganizationService;
