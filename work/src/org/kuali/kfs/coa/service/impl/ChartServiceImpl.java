@@ -40,7 +40,6 @@ public class ChartServiceImpl implements ChartService {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ChartServiceImpl.class);
 
     private ChartDao chartDao;
-    private KualiUserService kualiUserService;
 
     /**
      * @see org.kuali.module.chart.service.ChartService#getByPrimaryId(java.lang.String)
@@ -119,9 +118,5 @@ public class ChartServiceImpl implements ChartService {
     public void setChartDao(ChartDao chartDao) {
         this.chartDao = chartDao;
     }
-
-    public void setKualiUserService(KualiUserService kualiUserService) {
-        this.kualiUserService = kualiUserService;
-    }    
 
 }
