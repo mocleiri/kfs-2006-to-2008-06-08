@@ -21,7 +21,6 @@ import junit.framework.Assert;
 import org.kuali.core.document.Document;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.test.monitor.ChangeMonitor;
 import org.kuali.test.monitor.DocumentWorkflowNodeMonitor;

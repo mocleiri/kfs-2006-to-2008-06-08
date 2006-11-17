@@ -20,7 +20,7 @@ package org.kuali.module.chart.dao;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.core.bo.user.KualiUser;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
