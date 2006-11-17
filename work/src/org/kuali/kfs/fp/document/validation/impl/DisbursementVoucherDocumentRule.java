@@ -33,7 +33,7 @@ import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.KualiGroup;
-import org.kuali.core.bo.user.KualiUser;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.FinancialDocument;
