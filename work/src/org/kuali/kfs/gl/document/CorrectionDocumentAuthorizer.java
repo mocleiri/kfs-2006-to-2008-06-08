@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.authorization.AuthorizationConstants;
-import org.kuali.core.bo.user.KualiUser;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.DocumentAuthorizerBase;
