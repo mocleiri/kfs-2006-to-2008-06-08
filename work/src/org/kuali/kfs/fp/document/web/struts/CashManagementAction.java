@@ -34,7 +34,7 @@ import org.kuali.Constants.DepositConstants;
 import org.kuali.KeyConstants.CashManagement;
 import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.authorization.DocumentAuthorizer;
-import org.kuali.core.bo.user.KualiUser;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
