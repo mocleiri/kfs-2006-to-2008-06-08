@@ -33,7 +33,6 @@ public class ProjectCodeServiceImpl implements ProjectCodeService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProjectCodeServiceImpl.class);
 
     private ProjectCodeDao projectCodeDao;
-    private KualiUserService kualiUserService;
     
     /**
      * Retrieves an ProjectCode object based on primary key.
@@ -68,9 +67,5 @@ public class ProjectCodeServiceImpl implements ProjectCodeService {
     public void setProjectCodeDao(ProjectCodeDao projectCodeDao) {
         this.projectCodeDao = projectCodeDao;
     }
-
-    public void setKualiUserService(KualiUserService kualiUserService) {
-        this.kualiUserService = kualiUserService;
-    }  
 
 }
