@@ -17,7 +17,7 @@
  */
 package org.kuali.module.chart.service.impl;
 
-import org.kuali.core.service.KualiUserService;
+
 import org.kuali.module.chart.bo.PriorYearAccount;
 import org.kuali.module.chart.dao.PriorYearAccountDao;
 import org.kuali.module.chart.service.PriorYearAccountService;

@@ -20,7 +20,7 @@ package org.kuali.module.kra.routingform.document;
 import java.util.Map;
 
 import org.kuali.core.authorization.DocumentActionFlags;
-import org.kuali.core.bo.user.KualiUser;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.DocumentAuthorizerBase;
