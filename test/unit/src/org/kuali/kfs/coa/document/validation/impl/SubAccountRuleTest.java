@@ -23,7 +23,7 @@ import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapSi
 
 import org.kuali.KeyConstants;
 import org.kuali.core.bo.user.AuthenticationUserId;
-import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
@@ -156,10 +156,10 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
         return subAccount;
     }
 
-    private KualiUser createKualiUser(String userid) {
-        KualiUser user = new KualiUser();
+    private UniversalUser createKualiUser(String userid) {
+        UniversalUser user = new UniversalUser();
         try {
-            user = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(userid));
+            user = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(userid));
         }
         catch (Exception e) {
             e.printStackTrace();
