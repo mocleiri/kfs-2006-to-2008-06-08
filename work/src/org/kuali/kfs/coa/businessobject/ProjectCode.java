@@ -18,7 +18,7 @@
 package org.kuali.module.chart.bo;
 
 import org.kuali.core.bo.KualiCodeBase;
-import org.kuali.core.bo.user.KualiUser;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.SpringServiceLocator;
