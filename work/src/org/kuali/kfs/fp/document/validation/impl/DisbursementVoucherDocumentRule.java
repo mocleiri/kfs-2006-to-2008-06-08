@@ -50,6 +50,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import org.kuali.module.chart.bo.KFSUser;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
 import org.kuali.module.financial.bo.NonResidentAlienTaxPercent;
@@ -911,7 +912,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         }
 
         // initiator campus code restrictions
-        String initiatorCampusCode = getInitiator(document).getOrganization().getOrganizationPhysicalCampusCode();
+        String initiatorCampusCode = ((KFSUser)getInitiator(document).getModuleUser( KFSUser.MODULE_ID )).getOrganization().getOrganizationPhysicalCampusCode();
         executeApplicationParameterRestriction(CAMPUS_DOC_LOCATION_GROUP_NM, CAMPUS_CODE_PARM_PREFIX + initiatorCampusCode, document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location");
     }
 
@@ -1007,7 +1008,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
 
         // if a uuid was found, check it against the initiator uuid
         if (StringUtils.isNotBlank(uuid)) {
-            KualiUser initUser = getInitiator(document);
+            UniversalUser initUser = getInitiator(document);
             if (uuid.equals(initUser.getPersonUniversalIdentifier())) {
                 GlobalVariables.getErrorMap().putError(PropertyConstants.DV_PAYEE_DETAIL + "." + PropertyConstants.DISB_VCHR_PAYEE_ID_NUMBER, KeyConstants.ERROR_PAYEE_INITIATOR);
             }
@@ -1333,11 +1334,11 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @param document
      * @return <code>KualiUser</code>
      */
-    private KualiUser getInitiator(TransactionalDocument document) {
-        KualiUser initUser = null;
+    private UniversalUser getInitiator(TransactionalDocument document) {
+        UniversalUser initUser = null;
         try {
 
-            initUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId()));
+            initUser = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId()));
         }
         catch (UserNotFoundException e) {
             throw new RuntimeException("Document Initiator not found " + e.getMessage());
