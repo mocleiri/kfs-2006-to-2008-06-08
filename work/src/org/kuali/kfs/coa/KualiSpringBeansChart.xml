@@ -18,33 +18,6 @@
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-    <bean id="KFS-ModuleUserService" class="org.kuali.module.chart.service.impl.KFSUserServiceImpl">
-    	<property name="moduleId">
-    		<value>KFS</value>
-    	</property>
-    	<property name="moduleName">
-    		<value>Kuali Financial System</value>
-    	</property>
-    	<property name="propertyList">
-    		<list>
-    			<value>chartOfAccountsCode</value>
-    			<value>organizationCode</value>
-    		</list>
-    	</property>
-        <property name="kfsUserDao">
-            <ref bean="kfsUserDao" />
-        </property>
-        <property name="universalUserService">
-            <ref bean="universalUserService" />
-        </property>
-        <property name="accountService">
-            <ref bean="accountService" />
-        </property>
-        <property name="chartService">
-            <ref bean="chartService" />
-        </property>
-    </bean>
-
     <bean id="kfsUserDao" class="org.kuali.module.chart.dao.ojb.KFSUserDaoOjb">
         <property name="jcdAlias">
             <value>dataSource</value>
