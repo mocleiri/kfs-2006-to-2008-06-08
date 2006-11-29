@@ -15,7 +15,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<class-descriptor class="org.kuali.module.chart.bo.KFSUser" table="FP_FIS_USER_T">
+<class-descriptor class="org.kuali.module.chart.bo.ChartUser" table="FP_FIS_USER_T">
     <field-descriptor name="personUniversalIdentifier" column="PERSON_UNVL_ID" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
