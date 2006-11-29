@@ -50,7 +50,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.module.chart.bo.KFSUser;
+import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
 import org.kuali.module.financial.bo.NonResidentAlienTaxPercent;
@@ -912,7 +912,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
         }
 
         // initiator campus code restrictions
-        String initiatorCampusCode = ((KFSUser)getInitiator(document).getModuleUser( KFSUser.MODULE_ID )).getOrganization().getOrganizationPhysicalCampusCode();
+        String initiatorCampusCode = ((ChartUser)getInitiator(document).getModuleUser( ChartUser.MODULE_ID )).getOrganization().getOrganizationPhysicalCampusCode();
         executeApplicationParameterRestriction(CAMPUS_DOC_LOCATION_GROUP_NM, CAMPUS_CODE_PARM_PREFIX + initiatorCampusCode, document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location");
     }
 
