@@ -37,7 +37,7 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.KFSUser;
+import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.service.OrganizationService;
 
@@ -536,7 +536,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     protected boolean isChartManager(UniversalUser user) {
 
         // see if this person is manager for the requested chart
-        boolean success = ((KFSUser)user.getModuleUser( KFSUser.MODULE_ID )).isManagerForChart(newOrg.getChartOfAccountsCode());
+        boolean success = ((ChartUser)user.getModuleUser( ChartUser.MODULE_ID )).isManagerForChart(newOrg.getChartOfAccountsCode());
 
         if (success) {
             LOG.info("User: [" + user.getPersonUserIdentifier() + "] " + user.getPersonName() + " is a Chart Manager for this Org's Chart: " + newOrg.getChartOfAccountsCode());
