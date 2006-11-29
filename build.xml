@@ -115,6 +115,8 @@
 			<filter token="log4j-settings-file" value="${settings.directory}/${log4j.settings.file}" />
 			<filter token="log4j-batch-settings-file" value="${settings.directory}/${log4j.batch.settings.file}" />
 			<filter token="security-directory" value="${security.directory}" />
+			<filter token="settings-directory" value="${settings.directory}" />
+			<filter token="mail-relay-server" value="${mail.relay.server}" />
 			<filter token="logs-directory" value="${logs.directory}" />
 			<filter token="attachments-root-directory" value="${attachments.root.directory}" />
 			<filter token="htdocs-directory" value="${htdocs.directory}" />
@@ -136,21 +138,19 @@
 			<filter token="cas-url" value="${base.cas.url}${cas.application}-${build.environment}" />
 			<filter token="base-workflow-url" value="${base.workflow.url}" />
 			<filter token="workflow-url" value="${base.workflow.url}${workflow.application}-${build.environment}" />
-			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
-			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
-			<filter token="driver-class" value="${driver.class}" />
 			<filter token="context-docbase" value="${context.docbase}" />
+			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
+			<filter token="driver-class" value="${driver.class}" />
+			<filter token="datasource-url" value="${datasource.url}" />
+			<filter token="datasource-username" value="${datasource.username}" />
+			<filter token="datasource-password" value="${datasource.password}" />
+			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
+			<filter token="workflow-webservices-keystore-password" value="${workflow.webservices.keystore.password}" />
+			<filter token="encryption-key" value="${encryption.key}" />
 			<filter token="appenders" value="${appenders}" />
 			<filter token="batch-logger" value="" />
 			<filter token="variable-ojb-properties" value="${application.ojb.properties}" />
 			<filter token="use-auto-commit" value="1" />
-		</filterset>
-		<filterset id="security.filterset">
-			<filter token="datasource-url" value="${datasource.url}" />
-			<filter token="datasource-username" value="${datasource.username}" />
-			<filter token="datasource-password" value="${datasource.password}" />
-			<filter token="keystore-password" value="${keystore.password}" />
-			<filter token="encryption-key" value="${encryption.key}" />
 		</filterset>
 		<condition property="batch.program.directory" value="/home/kultstb/batch/${build.environment}">
 			<or>
@@ -326,7 +326,6 @@
 		</copy>
 		<copy todir="${security.directory}" overwrite="true">
 			<fileset dir="${build.security.directory}" excludes="${webservices.keystore.files}" />
-			<filterset refid="security.filterset" />
 			<filterset refid="general.filterset" />
 		</copy>
 		<copy todir="${security.directory}" overwrite="true">
@@ -546,7 +545,7 @@
 	
 	<target name="dist-binary-and-source-package" depends="init-binary-and-source-package,make-binary-and-source-package,dist-package" />
 		
-	<target name="continuous-integration" depends="make-tests,test">
+	<target name="continuous-integration" depends="clean,make-tests,test">
 		<fail if="tests.failed" message="Tests failed" />
 	</target>
 
