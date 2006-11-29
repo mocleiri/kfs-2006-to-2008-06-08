@@ -33,7 +33,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.module.chart.bo.KFSUser;
+import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.bo.BillingAddress;
@@ -85,7 +85,7 @@ public class RequisitionDocument extends PurchasingDocumentBase {
 
         // ripierce: the PostingYear has already been set before we come to this method.
 
-        KFSUser currentUser = (KFSUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( KFSUser.MODULE_ID );
+        ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
         this.setChartOfAccountsCode(currentUser.getChartOfAccountsCode());
         this.setOrganizationCode(currentUser.getOrganization().getOrganizationCode());
         this.setDeliveryCampusCode(currentUser.getUniversalUser().getCampusCode());
@@ -190,7 +190,7 @@ public class RequisitionDocument extends PurchasingDocumentBase {
     public void convertIntoCopy() throws WorkflowException, ValidationException {
         super.convertIntoCopy();
 
-        KFSUser currentUser = (KFSUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( KFSUser.MODULE_ID );
+        ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
 
         // Set req status to INPR.
         this.setStatusCode(PurapConstants.RequisitionStatuses.IN_PROCESS);
