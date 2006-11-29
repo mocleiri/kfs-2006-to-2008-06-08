@@ -35,7 +35,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
-import org.kuali.module.chart.bo.KFSUser;
+import org.kuali.module.chart.bo.ChartUser;
 
 /**
  * Validates content of a <code>{@link AccountDelegate}</code> maintenance document upon triggering of a 
@@ -385,7 +385,7 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
         UniversalUser user = newDelegate.getAccountDelegate();
 
         // user must be an active kuali user
-        if (!user.isActiveForModule( KFSUser.MODULE_ID ) ) {
+        if (!user.isActiveForModule( ChartUser.MODULE_ID ) ) {
             success = false;
             putFieldError("accountDelegate.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE_KUALI_USER);
         }
