@@ -18,11 +18,9 @@
 package org.kuali.test.fixtures;
 
 import org.kuali.core.bo.user.AuthenticationUserId;
-import org.kuali.core.bo.user.ModuleUser;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.SpringServiceLocator;
-import junit.framework.Assert;
 
 public enum UserNameFixture {
 
