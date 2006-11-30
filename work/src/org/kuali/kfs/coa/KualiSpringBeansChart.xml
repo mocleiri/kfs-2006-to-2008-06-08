@@ -45,7 +45,7 @@
     	</property>
 	</bean>
 		
-    <bean id="chartUserService" class="org.kuali.module.chart.service.impl.ChartUserServiceImpl">
+    <bean id="chartUserService" class="org.kuali.module.chart.service.impl.ChartUserServiceImpl" parent="kualiModuleUserServiceBase">
     	<property name="propertyList">
     		<list>
     			<value>chartOfAccountsCode</value>
@@ -55,9 +55,6 @@
     	</property>
       <property name="chartUserDao">
           <ref bean="chartUserDao" />
-      </property>
-      <property name="universalUserService">
-          <ref bean="universalUserService" />
       </property>
       <property name="accountService">
           <ref bean="accountService" />
