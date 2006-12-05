@@ -27,4 +27,6 @@ public class PurapRuleConstants {
 
     // RULE NAMES
 
+    public static final String ALLOWED_EMPLOYEE_TYPE_RULE = "AllowedEmployeeTypes";
+
 }
