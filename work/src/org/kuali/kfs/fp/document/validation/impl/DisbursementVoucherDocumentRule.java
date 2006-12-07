@@ -1321,7 +1321,7 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      */
     private boolean isUserInFRNGroup() {
         if ( frnGroupName == null ) {
-            frnGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_FRN_WORKGROUP );
+            frnGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_FOREIGNDRAFT_WORKGROUP );
         }
         return GlobalVariables.getUserSession().getUniversalUser().isMember( frnGroupName );
     }
