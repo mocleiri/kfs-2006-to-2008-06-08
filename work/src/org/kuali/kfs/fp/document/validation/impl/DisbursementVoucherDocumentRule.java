@@ -43,6 +43,7 @@ import org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.rules.RulesUtils;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
@@ -75,6 +76,12 @@ import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBase implements DisbursementVoucherRuleConstants, GenerateGeneralLedgerDocumentPendingEntriesRule {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherDocumentRule.class);
 
+    private static String taxGroupName;
+    private static String travelGroupName;
+    private static String wireTransferGroupName;
+    private static String frnGroupName;
+    private static String adminGroupName;
+    
     /**
      * Constructs a DisbursementVoucherDocumentRule instance.
      */
@@ -1289,7 +1296,10 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group
      */
     private boolean isUserInTaxGroup() {
-        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_TAX_GROUP));
+        if ( taxGroupName == null ) {
+            taxGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_TAX_WORKGROUP );
+        }
+        return GlobalVariables.getUserSession().getUniversalUser().isMember( taxGroupName );
     }
 
     /**
@@ -1298,7 +1308,10 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group
      */
     private boolean isUserInTravelGroup() {
-        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_TRAVEL_GROUP));
+        if ( travelGroupName == null ) {
+            travelGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_TRAVEL_WORKGROUP );
+        }
+        return GlobalVariables.getUserSession().getUniversalUser().isMember( travelGroupName );
     }
 
     /**
@@ -1307,7 +1320,10 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group
      */
     private boolean isUserInFRNGroup() {
-        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_FRN_GROUP));
+        if ( frnGroupName == null ) {
+            frnGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_FRN_WORKGROUP );
+        }
+        return GlobalVariables.getUserSession().getUniversalUser().isMember( frnGroupName );
     }
 
     /**
@@ -1316,7 +1332,10 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group
      */
     private boolean isUserInWireGroup() {
-        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_WIRE_GROUP));
+        if ( wireTransferGroupName == null ) {
+            wireTransferGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_WIRETRANSFER_WORKGROUP );
+        }
+        return GlobalVariables.getUserSession().getUniversalUser().isMember( wireTransferGroupName );
     }
 
     /**
@@ -1325,7 +1344,10 @@ public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBa
      * @return true if user is in group, false otherwise
      */
     private boolean isUserInDvAdminGroup() {
-        return GlobalVariables.getUserSession().getUniversalUser().isMember(new KualiGroup(KualiGroup.KUALI_DV_ADMIN_GROUP));
+        if ( adminGroupName == null ) {
+            adminGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_ADMIN_WORKGROUP );
+        }
+        return GlobalVariables.getUserSession().getUniversalUser().isMember( adminGroupName );
     }
 
     /**
