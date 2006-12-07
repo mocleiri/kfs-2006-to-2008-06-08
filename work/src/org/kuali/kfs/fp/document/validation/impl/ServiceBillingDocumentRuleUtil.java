@@ -74,7 +74,7 @@ public class ServiceBillingDocumentRuleUtil {
             return false;
         }
 
-        if (user.isMember(new KualiGroup(control.getWorkgroupName()))) {
+        if (user.isMember( control.getWorkgroupName() )) {
             return true;
         }
         else {
