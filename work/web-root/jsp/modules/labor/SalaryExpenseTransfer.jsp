@@ -18,14 +18,14 @@
 <%@ include file="/jsp/core/tldHeader.jsp"%>
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiSalaryExpenseTransferDocument"
-	htmlFormAction="financialSalaryExpenseTransfer" renderMultipart="true"
+	htmlFormAction="laborSalaryExpenseTransfer" renderMultipart="true"
 	showTabButtons="true">
 
 	<kul:hiddenDocumentFields />
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
 	<fin:accountingLines editingMode="${KualiForm.editingMode}"
 		editableAccounts="${KualiForm.editableAccounts}" />
-	<kul:generalLedgerPendingEntries />
+	<ld:laborLedgerPendingEntries />
 	<kul:notes />
 	<kul:adHocRecipients />
 	<kul:routeLog />

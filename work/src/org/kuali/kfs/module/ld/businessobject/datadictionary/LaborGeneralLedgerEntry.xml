@@ -30,12 +30,13 @@
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialBalanceTypeCode" />
-                <field attributeName="financialDocumentNumber" />
+                <field attributeName="documentNumber" />
                 <field attributeName="financialDocumentReversalDate" />
                 <field attributeName="financialDocumentTypeCode" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialSubObjectCode" />
+                <field attributeName="financialSystemOriginationCode" />
                 <field attributeName="organizationDocumentNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
@@ -71,12 +72,13 @@
                 <lookupField attributeName="accountNumber" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="financialBalanceTypeCode" required="false" />
-                <lookupField attributeName="financialDocumentNumber" required="false" />
+                <lookupField attributeName="documentNumber" required="false" />
                 <lookupField attributeName="financialDocumentReversalDate" required="false" />
                 <lookupField attributeName="financialDocumentTypeCode" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialObjectTypeCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="financialSystemOriginationCode" required="false" />
                 <lookupField attributeName="organizationDocumentNumber" required="false" />
                 <lookupField attributeName="organizationReferenceId" required="false" />
                 <lookupField attributeName="projectCode" required="false" />
@@ -98,12 +100,13 @@
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialBalanceTypeCode" />
-                <field attributeName="financialDocumentNumber" />
+                <field attributeName="documentNumber" />
                 <field attributeName="financialDocumentReversalDate" />
                 <field attributeName="financialDocumentTypeCode" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialSubObjectCode" />
+                <field attributeName="financialSystemOriginationCode" />
                 <field attributeName="organizationDocumentNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
@@ -169,8 +172,8 @@
                 <description>financialBalanceTypeCode description...</description>
 			</attribute>
 
-            <attribute name="financialDocumentNumber" forceUppercase="true">
-                <label>Financial Document Number</label>
+            <attribute name="documentNumber" forceUppercase="true">
+                <label>Document Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>14</maxLength>
@@ -180,8 +183,8 @@
                     <text size="16" />
                 </control>
 
-                <summary>financialDocumentNumber</summary>
-                <description>financialDocumentNumber description...</description>
+                <summary>documentNumber</summary>
+                <description>documentNumber description...</description>
 			</attribute>
 
             <attribute name="financialDocumentReversalDate" forceUppercase="true">
@@ -273,6 +276,17 @@
                 <summary>organizationDocumentNumber</summary>
                 <description>organizationDocumentNumber description...</description>
 			</attribute>
+
+            <attribute name="financialSystemOriginationCode" forceUppercase="false">
+                <label>Origin Code</label>
+                <shortLabel>Origin Code</shortLabel>
+                <maxLength>2</maxLength>
+                <control>
+                    <text size="3" />
+                </control>
+                <summary>originCode</summary>
+                <description>The code corresponding to the system which created the General Ledger entry, e.g., 01 = Kuali Financial System (KFS).</description>
+            </attribute>
 
             <attribute name="organizationReferenceId" forceUppercase="true">
                 <label>Organization Reference Id</label>

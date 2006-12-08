@@ -2,7 +2,7 @@
 <!--
  Copyright 2005-2006 The Kuali Foundation.
  
- $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/document/datadictionary/ResearchRiskTypeMaintenanceDocument.xml,v $
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/document/datadictionary/GrantDescriptionMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -22,38 +22,37 @@
 
 <dictionaryEntry>
     <maintenanceDocument>
-        <businessObjectClass>org.kuali.module.kra.routingform.bo.ResearchRiskType</businessObjectClass>
+        <businessObjectClass>org.kuali.module.cg.bo.GrantDescription</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
         <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>KRA_PRE_AWARD_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiResearchRiskTypeMaintenanceDocument</documentTypeName>
-        <documentTypeCode>RRT</documentTypeCode>
+        <documentTypeName>KualiContractsAndGrantsGrantDescriptionMaintenanceDocument</documentTypeName>
+        <documentTypeCode>GDES</documentTypeCode>
 
-        <label>Research Risk Type Maintenance Document</label>
-        <shortLabel>ResearchRiskTypeMaintDoc</shortLabel>
+        <label>Grant Description Maintenance Document</label>
+        <shortLabel>GrantDescriptionMaintDoc</shortLabel>
 
-        <summary>Research Risk Type Maintenance Document</summary>
-        <description>Document used to create or update Research Risk Type objects</description>
+        <summary>Grant Description Maintenance Document</summary>
+        <description>Document used to create or update Grant Description objects</description>
+
         <lockingKeys>
-            <field attributeName="researchRiskTypeCode" />
+            <field attributeName="grantDescriptionCode" />
         </lockingKeys>
 
         <maintainableSections>
-            <maintainableSection title="Edit Risk Type Code">
+            <maintainableSection title="Edit Grant Description">
                 <maintainableItems>
-                    <maintainableField name="researchRiskTypeCode" required="true" />
-                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="false" />
-                    <maintainableField name="researchRiskTypeDescription" required="false" />
-                    <maintainableField name="controlAttributeTypeCode" required="true" />
-                    <maintainableField name="versionNumber" />
+                    <maintainableField name="grantDescriptionCode" required="true" />
+                    <maintainableField name="grantDescription" required="true" />
+                    <maintainableField name="grantDescriptionActiveCode" required="true" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>

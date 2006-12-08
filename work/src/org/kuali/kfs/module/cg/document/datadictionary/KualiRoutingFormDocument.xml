@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  $Source$
  
@@ -23,6 +23,8 @@
 <dictionaryEntry>
     <researchDocument>
         <documentClass>org.kuali.module.kra.routingform.document.RoutingFormDocument</documentClass>
+        <businessRulesClass>org.kuali.module.kra.routingform.rules.RoutingFormDocumentRule</businessRulesClass>
+        <preRulesCheckClass>org.kuali.module.kra.routingform.rules.RoutingFormDocumentPreRules</preRulesCheckClass>
 
         <documentAuthorizerClass>org.kuali.module.kra.routingform.document.RoutingFormDocumentAuthorizer</documentAuthorizerClass>
         <authorizations>
@@ -118,7 +120,7 @@
                 <shortLabel>Routing Form Announcement</shortLabel>
 
                 <maxLength>110</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
 
                 <control>
                     <text size="112" />
@@ -462,21 +464,6 @@
                 <description>routingFormNewSpaceIndicator description...</description>
       </attribute>
 
-            <attribute name="routingFormOffCampusDescription" forceUppercase="true">
-                <label>Routing Form Off Campus Description</label>
-                <shortLabel>Description</shortLabel>
-
-                <maxLength>1000</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <textarea rows="5" cols="80"/>
-                </control>
-
-                <summary>routingFormOffCampusDescription</summary>
-                <description>routingFormOffCampusDescription description...</description>
-      </attribute>
-
             <attribute name="routingFormOffCampusIndicator" forceUppercase="true">
                 <label>Routing Form Off Campus Indicator</label>
                 <shortLabel>Indicator</shortLabel>
@@ -585,7 +572,7 @@
                 <shortLabel>Title</shortLabel>
 
                 <maxLength>500</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
 
                 <control>
                     <textarea rows="5" cols="80"/>
@@ -668,8 +655,8 @@
                 <description>routingFormSubcontractorIndicator description...</description>
       </attribute>
 
-            <attribute name="researchDocumentNumber" forceUppercase="true">
-                <label>Research Document Number</label>
+            <attribute name="documentNumber" forceUppercase="true">
+                <label>Document Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>14</maxLength>
@@ -679,8 +666,8 @@
                     <text size="16" />
                 </control>
 
-                <summary>researchDocumentNumber</summary>
-                <description>researchDocumentNumber description...</description>
+                <summary>documentNumber</summary>
+                <description>documentNumber description...</description>
       </attribute>
 
             <attribute name="researchTypeCode" forceUppercase="true">
@@ -772,13 +759,13 @@
 
             <attribute name="projectAbstract" forceUppercase="true">
                 <label>Project Abstract</label>
-                <shortLabel>Project Abstract</shortLabel>
+                <shortLabel>Abstract</shortLabel>
 
-                <maxLength>12</maxLength>
-                <validationPattern><numeric /></validationPattern>
+                <maxLength>4000</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
 
                 <control>
-                    <text size="14" />
+                    <textarea rows="3" cols="60"/>
                 </control>
 
                 <summary>projectAbstract</summary>
@@ -859,6 +846,13 @@
                 <summary>subcontractorNextSequenceNumber</summary>
                 <description>subcontractorNextSequenceNumber description...</description>
       </attribute>
+
+            <attributeReference name="routingFormAgency" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
+                <label>Agency</label>
+                <shortLabel>Number</shortLabel>
+                <summary>Budget Agency</summary>
+                <description>Budget Agency...</description>
+            </attributeReference>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
