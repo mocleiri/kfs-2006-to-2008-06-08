@@ -144,7 +144,7 @@ public class BudgetAction extends KualiDocumentActionBase {
     public ActionForward load(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         BudgetForm budgetForm = (BudgetForm) form;
-        budgetForm.setDocId(budgetForm.getBudgetDocument().getFinancialDocumentNumber());
+        budgetForm.setDocId(budgetForm.getBudgetDocument().getDocumentNumber());
         this.loadDocument(budgetForm);
 
         return mapping.findForward(Constants.MAPPING_BASIC);
@@ -156,7 +156,7 @@ public class BudgetAction extends KualiDocumentActionBase {
         BudgetForm budgetForm = (BudgetForm) form;
 
         if (IDocHandler.INITIATE_COMMAND.equals(budgetForm.getCommand())) {
-            budgetForm.getBudgetDocument().getBudget().setResearchDocumentNumber(budgetForm.getBudgetDocument().getFinancialDocumentNumber());
+            budgetForm.getBudgetDocument().getBudget().setDocumentNumber(budgetForm.getBudgetDocument().getDocumentNumber());
             SpringServiceLocator.getBudgetService().initializeBudget(budgetForm.getBudgetDocument());
         }
         return forward;
@@ -300,10 +300,13 @@ public class BudgetAction extends KualiDocumentActionBase {
 
         // This is so that tab states are not shared between pages.
         budgetForm.newTabState(true, true);
+        
+        setupBudgetCostSharePermissionDisplay(budgetForm);
 
         SpringServiceLocator.getBudgetIndirectCostService().refreshIndirectCost(budgetForm.getBudgetDocument());
         budgetForm.setBudgetIndirectCostFormHelper(new BudgetIndirectCostFormHelper(budgetForm));
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
+        budgetForm.getNewInstitutionCostShare().setPermissionIndicator(true);
 
         return mapping.findForward("costshare");
     }
@@ -423,6 +426,14 @@ public class BudgetAction extends KualiDocumentActionBase {
             adHocRouteWorkgroups.add(adHocRouteWorkgroup);
         }
         return adHocRouteWorkgroups;
+    }
+    
+    protected static void setupBudgetCostSharePermissionDisplay(BudgetForm budgetForm) {
+        String costSharePermissionCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(
+                KraConstants.KRA_ADMIN_GROUP_NAME, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
+        if (costSharePermissionCode.equals(KraConstants.COST_SHARE_PERMISSION_CODE_OPTIONAL)) {
+            budgetForm.setDisplayCostSharePermission(true);
+        }
     }
 
     /**
