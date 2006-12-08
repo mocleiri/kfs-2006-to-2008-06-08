@@ -27,49 +27,16 @@ public class PurapConstants {
 
     //Miscellaneous generic constants
     public static final String NONE = "NONE";
-    public static final String CREATE_NEW_DIVISION = "Create a New Division";
+    public static final String CREATE_NEW_DIVISION = "create division";
     public static final String NAME_DELIM = ", ";
     public static final String VENDOR_LOOKUPABLE_IMPL = "vendorLookupable";
     public static final String DASH = "-";
     public static final String VENDOR_HEADER_ATTR = "vendorHeader";
-    public static int VNDR_MIN_NUM_LOOKUP_CRITERIA = 1;
-    public static int VNDR_LOOKUP_MIN_NAME_LENGTH = 2;
 
     //Vendor Tax Types
     public static final String TAX_TYPE_FEIN = "FEIN";
     public static final String TAX_TYPE_SSN = "SSN";
     //public static final String TAX_TYPE_ITIN = "ITIN";  //are we implementing this in Kuali??
-    
-    //North American phone number formats as regular expressions
-    public static final String GENERIC_PHONE_FORMAT_1 = "\\d{3}-\\d{3}-\\d{4}";
-    public static final String GENERIC_PHONE_FORMAT_2 = "\\(\\d{3}\\)\\s\\d{3}-\\d{4}";
-    public static final String GENERIC_PHONE_FORMAT_3 = "\\d{3}\\s\\d{3}\\s\\d{4}";
-    
-    public static final String[] GENERIC_PHONE_NUMBER_FORMATS = {
-        GENERIC_PHONE_FORMAT_1,
-        GENERIC_PHONE_FORMAT_2,
-        GENERIC_PHONE_FORMAT_3
-    };
-    public static final int GENERIC_DEFAULT_PHONE_NUM_DIGITS = 10;
-      
-    //Tax Number formats as  regular expressions
-    public static final String TAX_NUM_FORMAT_1 = "\\d{3}\\d{2}\\d{4}";
-    public static final String TAX_NUM_FORMAT_2 = "\\d{3}-\\d{2}-\\d{4}";
-    
-    public static final String[] TAX_NUMBER_FORMATS = {
-        TAX_NUM_FORMAT_1,
-        TAX_NUM_FORMAT_2,
-    };
-    
-    public static final int DEFAULT_TAX_NUM_DIGITS = 9;
-    public static final String NOT_ALLOWED_TAX_NUMBER = "356001673";
-    public static final String ALL_ZEROS_TAX_NUMBER = "000000000";
-    public static final String THREE_ZEROES = "000";
-    public static final String THREE_SIXES = "666";
-    public static final String TWO_ZEROES = "00";
-    public static final String FOUR_ZEROES = "0000";
-    
-    public static final KualiDecimal VENDOR_MIN_ORDER_AMOUNT = new KualiDecimal(100000);
     
     public static class RequisitionStatuses {
         public static String IN_PROCESS = "INPR";
