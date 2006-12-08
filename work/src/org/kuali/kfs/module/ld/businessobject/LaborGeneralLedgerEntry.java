@@ -35,6 +35,7 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.PropertyConstants;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
@@ -51,7 +52,8 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	private String financialObjectTypeCode;
 	private String universityFiscalPeriodCode;
 	private String financialDocumentTypeCode;
-	private String financialDocumentNumber;
+    private String financialSystemOriginationCode;
+    private String documentNumber;
 	private Integer transactionLedgerEntrySequenceNumber;
 	private String transactionLedgerEntryDescription;
 	private KualiDecimal transactionLedgerEntryAmount;
@@ -80,7 +82,8 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
     private OriginationCode referenceOriginationCode;
     private DocumentHeader financialDocument;
     private DocumentHeader referenceFinancialDocument;
-  
+    private OriginationCode financialSystemOrigination;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -91,7 +94,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the universityFiscalYear attribute.
 	 * 
-	 * @return - Returns the universityFiscalYear
+	 * @return Returns the universityFiscalYear
 	 * 
 	 */
 	public Integer getUniversityFiscalYear() { 
@@ -101,7 +104,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the universityFiscalYear attribute.
 	 * 
-	 * @param - universityFiscalYear The universityFiscalYear to set.
+	 * @param universityFiscalYear The universityFiscalYear to set.
 	 * 
 	 */
 	public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -112,7 +115,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
-	 * @return - Returns the chartOfAccountsCode
+	 * @return Returns the chartOfAccountsCode
 	 * 
 	 */
 	public String getChartOfAccountsCode() { 
@@ -122,7 +125,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the chartOfAccountsCode attribute.
 	 * 
-	 * @param - chartOfAccountsCode The chartOfAccountsCode to set.
+	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
 	 * 
 	 */
 	public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -133,7 +136,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the accountNumber attribute.
 	 * 
-	 * @return - Returns the accountNumber
+	 * @return Returns the accountNumber
 	 * 
 	 */
 	public String getAccountNumber() { 
@@ -143,7 +146,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the accountNumber attribute.
 	 * 
-	 * @param - accountNumber The accountNumber to set.
+	 * @param accountNumber The accountNumber to set.
 	 * 
 	 */
 	public void setAccountNumber(String accountNumber) {
@@ -154,7 +157,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the subAccountNumber attribute.
 	 * 
-	 * @return - Returns the subAccountNumber
+	 * @return Returns the subAccountNumber
 	 * 
 	 */
 	public String getSubAccountNumber() { 
@@ -164,7 +167,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the subAccountNumber attribute.
 	 * 
-	 * @param - subAccountNumber The subAccountNumber to set.
+	 * @param subAccountNumber The subAccountNumber to set.
 	 * 
 	 */
 	public void setSubAccountNumber(String subAccountNumber) {
@@ -175,7 +178,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the financialObjectCode attribute.
 	 * 
-	 * @return - Returns the financialObjectCode
+	 * @return Returns the financialObjectCode
 	 * 
 	 */
 	public String getFinancialObjectCode() { 
@@ -185,7 +188,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the financialObjectCode attribute.
 	 * 
-	 * @param - financialObjectCode The financialObjectCode to set.
+	 * @param financialObjectCode The financialObjectCode to set.
 	 * 
 	 */
 	public void setFinancialObjectCode(String financialObjectCode) {
@@ -196,7 +199,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the financialSubObjectCode attribute.
 	 * 
-	 * @return - Returns the financialSubObjectCode
+	 * @return Returns the financialSubObjectCode
 	 * 
 	 */
 	public String getFinancialSubObjectCode() { 
@@ -206,7 +209,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the financialSubObjectCode attribute.
 	 * 
-	 * @param - financialSubObjectCode The financialSubObjectCode to set.
+	 * @param financialSubObjectCode The financialSubObjectCode to set.
 	 * 
 	 */
 	public void setFinancialSubObjectCode(String financialSubObjectCode) {
@@ -217,7 +220,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the financialBalanceTypeCode attribute.
 	 * 
-	 * @return - Returns the financialBalanceTypeCode
+	 * @return Returns the financialBalanceTypeCode
 	 * 
 	 */
 	public String getFinancialBalanceTypeCode() { 
@@ -227,7 +230,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the financialBalanceTypeCode attribute.
 	 * 
-	 * @param - financialBalanceTypeCode The financialBalanceTypeCode to set.
+	 * @param financialBalanceTypeCode The financialBalanceTypeCode to set.
 	 * 
 	 */
 	public void setFinancialBalanceTypeCode(String financialBalanceTypeCode) {
@@ -238,7 +241,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the financialObjectTypeCode attribute.
 	 * 
-	 * @return - Returns the financialObjectTypeCode
+	 * @return Returns the financialObjectTypeCode
 	 * 
 	 */
 	public String getFinancialObjectTypeCode() { 
@@ -248,7 +251,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the financialObjectTypeCode attribute.
 	 * 
-	 * @param - financialObjectTypeCode The financialObjectTypeCode to set.
+	 * @param financialObjectTypeCode The financialObjectTypeCode to set.
 	 * 
 	 */
 	public void setFinancialObjectTypeCode(String financialObjectTypeCode) {
@@ -259,7 +262,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the universityFiscalPeriodCode attribute.
 	 * 
-	 * @return - Returns the universityFiscalPeriodCode
+	 * @return Returns the universityFiscalPeriodCode
 	 * 
 	 */
 	public String getUniversityFiscalPeriodCode() { 
@@ -269,7 +272,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the universityFiscalPeriodCode attribute.
 	 * 
-	 * @param - universityFiscalPeriodCode The universityFiscalPeriodCode to set.
+	 * @param universityFiscalPeriodCode The universityFiscalPeriodCode to set.
 	 * 
 	 */
 	public void setUniversityFiscalPeriodCode(String universityFiscalPeriodCode) {
@@ -280,7 +283,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the financialDocumentTypeCode attribute.
 	 * 
-	 * @return - Returns the financialDocumentTypeCode
+	 * @return Returns the financialDocumentTypeCode
 	 * 
 	 */
 	public String getFinancialDocumentTypeCode() { 
@@ -290,39 +293,54 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the financialDocumentTypeCode attribute.
 	 * 
-	 * @param - financialDocumentTypeCode The financialDocumentTypeCode to set.
+	 * @param financialDocumentTypeCode The financialDocumentTypeCode to set.
 	 * 
 	 */
 	public void setFinancialDocumentTypeCode(String financialDocumentTypeCode) {
 		this.financialDocumentTypeCode = financialDocumentTypeCode;
 	}
 
+    /**
+     * Gets the financialSystemOriginationCode attribute. 
+     * @return Returns the financialSystemOriginationCode.
+     */
+    public String getFinancialSystemOriginationCode() {
+        return financialSystemOriginationCode;
+    }
 
+    /**
+     * Sets the financialSystemOriginationCode attribute value.
+     * @param financialSystemOriginationCode The financialSystemOriginationCode to set.
+     */
+    public void setFinancialSystemOriginationCode(String financialSystemOriginationCode) {
+        this.financialSystemOriginationCode = financialSystemOriginationCode;
+    }     
+    
 	/**
-	 * Gets the financialDocumentNumber attribute.
+	 * Gets the documentNumber attribute.
 	 * 
-	 * @return - Returns the financialDocumentNumber
+	 * @return Returns the documentNumber
 	 * 
 	 */
-	public String getFinancialDocumentNumber() { 
-		return financialDocumentNumber;
+	public String getDocumentNumber() { 
+		return documentNumber;
 	}
 
 	/**
-	 * Sets the financialDocumentNumber attribute.
+	 * Sets the documentNumber attribute.
 	 * 
-	 * @param - financialDocumentNumber The financialDocumentNumber to set.
+	 * @param documentNumber The documentNumber to set.
 	 * 
 	 */
-	public void setFinancialDocumentNumber(String financialDocumentNumber) {
-		this.financialDocumentNumber = financialDocumentNumber;
+	public void setDocumentNumber(String documentNumber) {
+		this.documentNumber = documentNumber;
 	}
 
 
 	/**
 	 * Gets the transactionLedgerEntrySequenceNumber attribute.
 	 * 
-	 * @return - Returns the transactionLedgerEntrySequenceNumber
+	 * @return Returns the transactionLedgerEntrySequenceNumber
 	 * 
 	 */
 	public Integer getTransactionLedgerEntrySequenceNumber() { 
@@ -332,7 +350,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the transactionLedgerEntrySequenceNumber attribute.
 	 * 
-	 * @param - transactionLedgerEntrySequenceNumber The transactionLedgerEntrySequenceNumber to set.
+	 * @param transactionLedgerEntrySequenceNumber The transactionLedgerEntrySequenceNumber to set.
 	 * 
 	 */
 	public void setTransactionLedgerEntrySequenceNumber(Integer transactionLedgerEntrySequenceNumber) {
@@ -343,7 +361,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the transactionLedgerEntryDescription attribute.
 	 * 
-	 * @return - Returns the transactionLedgerEntryDescription
+	 * @return Returns the transactionLedgerEntryDescription
 	 * 
 	 */
 	public String getTransactionLedgerEntryDescription() { 
@@ -353,7 +371,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the transactionLedgerEntryDescription attribute.
 	 * 
-	 * @param - transactionLedgerEntryDescription The transactionLedgerEntryDescription to set.
+	 * @param transactionLedgerEntryDescription The transactionLedgerEntryDescription to set.
 	 * 
 	 */
 	public void setTransactionLedgerEntryDescription(String transactionLedgerEntryDescription) {
@@ -364,7 +382,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the transactionLedgerEntryAmount attribute.
 	 * 
-	 * @return - Returns the transactionLedgerEntryAmount
+	 * @return Returns the transactionLedgerEntryAmount
 	 * 
 	 */
 	public KualiDecimal getTransactionLedgerEntryAmount() { 
@@ -374,7 +392,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the transactionLedgerEntryAmount attribute.
 	 * 
-	 * @param - transactionLedgerEntryAmount The transactionLedgerEntryAmount to set.
+	 * @param transactionLedgerEntryAmount The transactionLedgerEntryAmount to set.
 	 * 
 	 */
 	public void setTransactionLedgerEntryAmount(KualiDecimal transactionLedgerEntryAmount) {
@@ -385,7 +403,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the transactionDebitCreditCode attribute.
 	 * 
-	 * @return - Returns the transactionDebitCreditCode
+	 * @return Returns the transactionDebitCreditCode
 	 * 
 	 */
 	public String getTransactionDebitCreditCode() { 
@@ -395,7 +413,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the transactionDebitCreditCode attribute.
 	 * 
-	 * @param - transactionDebitCreditCode The transactionDebitCreditCode to set.
+	 * @param transactionDebitCreditCode The transactionDebitCreditCode to set.
 	 * 
 	 */
 	public void setTransactionDebitCreditCode(String transactionDebitCreditCode) {
@@ -406,7 +424,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the transactionDate attribute.
 	 * 
-	 * @return - Returns the transactionDate
+	 * @return Returns the transactionDate
 	 * 
 	 */
 	public Date getTransactionDate() { 
@@ -416,7 +434,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the transactionDate attribute.
 	 * 
-	 * @param - transactionDate The transactionDate to set.
+	 * @param transactionDate The transactionDate to set.
 	 * 
 	 */
 	public void setTransactionDate(Date transactionDate) {
@@ -427,7 +445,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the organizationDocumentNumber attribute.
 	 * 
-	 * @return - Returns the organizationDocumentNumber
+	 * @return Returns the organizationDocumentNumber
 	 * 
 	 */
 	public String getOrganizationDocumentNumber() { 
@@ -437,7 +455,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the organizationDocumentNumber attribute.
 	 * 
-	 * @param - organizationDocumentNumber The organizationDocumentNumber to set.
+	 * @param organizationDocumentNumber The organizationDocumentNumber to set.
 	 * 
 	 */
 	public void setOrganizationDocumentNumber(String organizationDocumentNumber) {
@@ -448,7 +466,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the projectCode attribute.
 	 * 
-	 * @return - Returns the projectCode
+	 * @return Returns the projectCode
 	 * 
 	 */
 	public String getProjectCode() { 
@@ -458,7 +476,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the projectCode attribute.
 	 * 
-	 * @param - projectCode The projectCode to set.
+	 * @param projectCode The projectCode to set.
 	 * 
 	 */
 	public void setProjectCode(String projectCode) {
@@ -469,7 +487,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the organizationReferenceId attribute.
 	 * 
-	 * @return - Returns the organizationReferenceId
+	 * @return Returns the organizationReferenceId
 	 * 
 	 */
 	public String getOrganizationReferenceId() { 
@@ -479,7 +497,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the organizationReferenceId attribute.
 	 * 
-	 * @param - organizationReferenceId The organizationReferenceId to set.
+	 * @param organizationReferenceId The organizationReferenceId to set.
 	 * 
 	 */
 	public void setOrganizationReferenceId(String organizationReferenceId) {
@@ -490,7 +508,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the referenceFinancialDocumentTypeCode attribute.
 	 * 
-	 * @return - Returns the referenceFinancialDocumentTypeCode
+	 * @return Returns the referenceFinancialDocumentTypeCode
 	 * 
 	 */
 	public String getReferenceFinancialDocumentTypeCode() { 
@@ -500,7 +518,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the referenceFinancialDocumentTypeCode attribute.
 	 * 
-	 * @param - referenceFinancialDocumentTypeCode The referenceFinancialDocumentTypeCode to set.
+	 * @param referenceFinancialDocumentTypeCode The referenceFinancialDocumentTypeCode to set.
 	 * 
 	 */
 	public void setReferenceFinancialDocumentTypeCode(String referenceFinancialDocumentTypeCode) {
@@ -511,7 +529,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the referenceFinancialSystemOriginationCode attribute.
 	 * 
-	 * @return - Returns the referenceFinancialSystemOriginationCode
+	 * @return Returns the referenceFinancialSystemOriginationCode
 	 * 
 	 */
 	public String getReferenceFinancialSystemOriginationCode() { 
@@ -521,7 +539,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the referenceFinancialSystemOriginationCode attribute.
 	 * 
-	 * @param - referenceFinancialSystemOriginationCode The referenceFinancialSystemOriginationCode to set.
+	 * @param referenceFinancialSystemOriginationCode The referenceFinancialSystemOriginationCode to set.
 	 * 
 	 */
 	public void setReferenceFinancialSystemOriginationCode(String referenceFinancialSystemOriginationCode) {
@@ -532,7 +550,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the referenceFinancialDocumentNumber attribute.
 	 * 
-	 * @return - Returns the referenceFinancialDocumentNumber
+	 * @return Returns the referenceFinancialDocumentNumber
 	 * 
 	 */
 	public String getReferenceFinancialDocumentNumber() { 
@@ -542,7 +560,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the referenceFinancialDocumentNumber attribute.
 	 * 
-	 * @param - referenceFinancialDocumentNumber The referenceFinancialDocumentNumber to set.
+	 * @param referenceFinancialDocumentNumber The referenceFinancialDocumentNumber to set.
 	 * 
 	 */
 	public void setReferenceFinancialDocumentNumber(String referenceFinancialDocumentNumber) {
@@ -553,7 +571,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the financialDocumentReversalDate attribute.
 	 * 
-	 * @return - Returns the financialDocumentReversalDate
+	 * @return Returns the financialDocumentReversalDate
 	 * 
 	 */
 	public Date getFinancialDocumentReversalDate() { 
@@ -563,7 +581,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the financialDocumentReversalDate attribute.
 	 * 
-	 * @param - financialDocumentReversalDate The financialDocumentReversalDate to set.
+	 * @param financialDocumentReversalDate The financialDocumentReversalDate to set.
 	 * 
 	 */
 	public void setFinancialDocumentReversalDate(Date financialDocumentReversalDate) {
@@ -574,7 +592,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the transactionEncumbranceUpdateCode attribute.
 	 * 
-	 * @return - Returns the transactionEncumbranceUpdateCode
+	 * @return Returns the transactionEncumbranceUpdateCode
 	 * 
 	 */
 	public String getTransactionEncumbranceUpdateCode() { 
@@ -584,7 +602,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the transactionEncumbranceUpdateCode attribute.
 	 * 
-	 * @param - transactionEncumbranceUpdateCode The transactionEncumbranceUpdateCode to set.
+	 * @param transactionEncumbranceUpdateCode The transactionEncumbranceUpdateCode to set.
 	 * 
 	 */
 	public void setTransactionEncumbranceUpdateCode(String transactionEncumbranceUpdateCode) {
@@ -595,7 +613,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the financialObject attribute.
 	 * 
-	 * @return - Returns the financialObject
+	 * @return Returns the financialObject
 	 * 
 	 */
 	public ObjectCode getFinancialObject() { 
@@ -605,7 +623,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the financialObject attribute.
 	 * 
-	 * @param - financialObject The financialObject to set.
+	 * @param financialObject The financialObject to set.
 	 * @deprecated
 	 */
 	public void setFinancialObject(ObjectCode financialObject) {
@@ -615,7 +633,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the account attribute.
 	 * 
-	 * @return - Returns the account
+	 * @return Returns the account
 	 * 
 	 */
 	public Account getAccount() { 
@@ -625,7 +643,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the account attribute.
 	 * 
-	 * @param - account The account to set.
+	 * @param account The account to set.
 	 * @deprecated
 	 */
 	public void setAccount(Account account) {
@@ -635,7 +653,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
-	 * @return - Returns the chartOfAccounts
+	 * @return Returns the chartOfAccounts
 	 * 
 	 */
 	public Chart getChartOfAccounts() { 
@@ -645,7 +663,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 	/**
 	 * Sets the chartOfAccounts attribute.
 	 * 
-	 * @param - chartOfAccounts The chartOfAccounts to set.
+	 * @param chartOfAccounts The chartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -840,7 +858,24 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * Gets the financialSystemOrigination attribute. 
+     * @return Returns the financialSystemOrigination.
+     */
+    public OriginationCode getFinancialSystemOrigination() {
+        return financialSystemOrigination;
+    }
+
+    /**
+     * Sets the financialSystemOrigination attribute value.
+     * @param financialSystemOrigination The financialSystemOrigination to set.
+     * @deprecated
+     */
+    public void setFinancialSystemOrigination(OriginationCode financialSystemOrigination) {
+        this.financialSystemOrigination = financialSystemOrigination;
+    }    
+    
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
@@ -856,7 +891,7 @@ public class LaborGeneralLedgerEntry extends BusinessObjectBase {
         m.put("financialObjectTypeCode", this.financialObjectTypeCode);
         m.put("universityFiscalPeriodCode", this.universityFiscalPeriodCode);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.transactionLedgerEntrySequenceNumber != null) {
             m.put("transactionLedgerEntrySequenceNumber", this.transactionLedgerEntrySequenceNumber.toString());
         }
