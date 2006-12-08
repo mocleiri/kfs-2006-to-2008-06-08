@@ -1,5 +1,5 @@
 <%--
- Copyright 2006 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  $Source$
  
@@ -83,7 +83,18 @@
                 <tbody>
                 <tr>
                   <th class="bord-l-b"><div align="left"><kul:htmlAttributeLabel attributeEntry="${DataDictionary.BudgetNonpersonnel.attributes.budgetNonpersonnelSubCategoryCode}" skipHelpUrl="true" noColon="true" /></div></th>
-                  <th class="bord-l-b"><div align="left"><kul:htmlAttributeLabel attributeEntry="${DataDictionary.BudgetNonpersonnel.attributes.budgetNonpersonnelDescription}" skipHelpUrl="true" noColon="true" /></div></th>
+                  <th class="bord-l-b">
+                    <div align="left">
+                      <c:choose>
+                        <c:when test="${KraConstants.SUBCONTRACTOR_CATEGORY_CODE ne nonpersonnelCategory.code}">
+                          <kul:htmlAttributeLabel attributeEntry="${DataDictionary.BudgetNonpersonnel.attributes.budgetNonpersonnelDescription}" skipHelpUrl="true" noColon="true" />
+                        </c:when>
+                        <c:otherwise>
+                          Name
+                        </c:otherwise>
+                      </c:choose>
+                    </div>
+                  </th>
                   <c:if test="${! viewOnly }"><th class="bord-l-b"><div align="center">Copy to Future Periods </div></th></c:if>
                   <th class="bord-l-b"><div align="center"><kul:htmlAttributeLabel attributeEntry="${DataDictionary.BudgetNonpersonnel.attributes.agencyRequestAmount}" skipHelpUrl="true" noColon="true" /></div></th>
                   <th class="bord-l-b"><div align="center"><kul:htmlAttributeLabel attributeEntry="${DataDictionary.BudgetNonpersonnel.attributes.budgetInstitutionCostShareAmount}" skipHelpUrl="true" noColon="true" /></div></th>
@@ -95,7 +106,7 @@
                 <c:if test="${! viewOnly }">
                 <tr>
                   <td class="infoline">
-		                <input type="hidden" name="newNonpersonnel[${i}].researchDocumentNumber" value="${KualiForm.document.financialDocumentNumber}" />
+		                <input type="hidden" name="newNonpersonnel[${i}].documentNumber" value="${KualiForm.document.documentNumber}" />
 		                <input type="hidden" name="newNonpersonnel[${i}].budgetTaskSequenceNumber" value="${KualiForm.currentTaskNumber}" />
 		                <input type="hidden" name="newNonpersonnel[${i}].budgetPeriodSequenceNumber" value="${KualiForm.currentPeriodNumber}" />
 		                <input type="hidden" name="newNonpersonnel[${i}].budgetNonpersonnelCategoryCode" value="${nonpersonnelCategory.code}" />
@@ -155,7 +166,7 @@
 	                <c:if test="${nonpersonnelItem.budgetNonpersonnelCategoryCode eq nonpersonnelCategory.code and nonpersonnelItem.budgetPeriodSequenceNumber eq KualiForm.currentPeriodNumber and nonpersonnelItem.budgetTaskSequenceNumber eq KualiForm.currentTaskNumber}">
 		                <tr>
 		                  <td class="datacell">
-						            <html:hidden property="document.budget.nonpersonnelItem[${ctr}].researchDocumentNumber" />
+						            <html:hidden property="document.budget.nonpersonnelItem[${ctr}].documentNumber" />
 						            <html:hidden property="document.budget.nonpersonnelItem[${ctr}].budgetTaskSequenceNumber" />
 						            <html:hidden property="document.budget.nonpersonnelItem[${ctr}].budgetPeriodSequenceNumber" />
 						            <html:hidden property="document.budget.nonpersonnelItem[${ctr}].budgetNonpersonnelCategoryCode" />
@@ -261,7 +272,7 @@
   
   <logic:iterate id="nonpersonnelItem" name="KualiForm" property="document.budget.nonpersonnelItems" indexId="ctr">
     <c:if test="${nonpersonnelItem.budgetPeriodSequenceNumber ne KualiForm.currentPeriodNumber or nonpersonnelItem.budgetTaskSequenceNumber ne KualiForm.currentTaskNumber}">
-	    <html:hidden property="document.budget.nonpersonnelItem[${ctr}].researchDocumentNumber" />
+	    <html:hidden property="document.budget.nonpersonnelItem[${ctr}].documentNumber" />
 	    <html:hidden property="document.budget.nonpersonnelItem[${ctr}].subcontractorNumber" />
 	    <html:hidden property="document.budget.nonpersonnelItem[${ctr}].budgetTaskSequenceNumber" />
 	    <html:hidden property="document.budget.nonpersonnelItem[${ctr}].budgetPeriodSequenceNumber" />

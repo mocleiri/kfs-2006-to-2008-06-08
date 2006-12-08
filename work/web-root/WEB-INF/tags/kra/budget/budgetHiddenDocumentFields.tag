@@ -23,19 +23,19 @@
 
 <c:set var="excludeBudgetParameteres" value="${not empty excludeBudgetParameteres}"/>
 
-    <html:hidden property="document.budget.researchDocumentNumber" />
+    <html:hidden property="document.budget.documentNumber" />
     <html:hidden property="document.budget.versionNumber" />
     <html:hidden property="document.documentHeader.financialDocumentStatusCode" />
 		
     <c:if test="${includeDocumenHeaderIdFields == 'true' || includeDocumenHeaderIdFields == 'TRUE'}">
       <html:hidden property="document.documentHeader.versionNumber" />
-      <html:hidden property="document.documentHeader.financialDocumentNumber" />
+      <html:hidden property="document.documentHeader.documentNumber" />
     </c:if>
 
     <c:if test="${includeTaskPeriodLists == 'true' || includeTaskPeriodLists== 'TRUE'}">
       <!-- save state for Budget Tasks -->
       <logic:iterate id="tasks" name="KualiForm" property="document.budget.tasks" indexId="ctr">
-        <html:hidden property="document.budget.task[${ctr}].researchDocumentNumber" />
+        <html:hidden property="document.budget.task[${ctr}].documentNumber" />
         <html:hidden property="document.budget.task[${ctr}].budgetTaskSequenceNumber" />
         <html:hidden property="document.budget.task[${ctr}].budgetTaskName" />
         <html:hidden property="document.budget.task[${ctr}].versionNumber" />
@@ -43,7 +43,7 @@
       </logic:iterate>
       <!-- save state for Budget Periods -->
       <logic:iterate id="periods" name="KualiForm" property="document.budget.periods" indexId="ctr">
-        <html:hidden property="document.budget.period[${ctr}].researchDocumentNumber" />
+        <html:hidden property="document.budget.period[${ctr}].documentNumber" />
         <html:hidden property="document.budget.period[${ctr}].budgetPeriodSequenceNumber" />
         <html:hidden property="document.budget.period[${ctr}].budgetPeriodBeginDate" />
         <html:hidden property="document.budget.period[${ctr}].budgetPeriodEndDate" />
