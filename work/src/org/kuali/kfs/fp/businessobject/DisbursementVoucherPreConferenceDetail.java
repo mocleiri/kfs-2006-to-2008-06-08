@@ -26,13 +26,14 @@ import java.util.List;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private String dvConferenceDestinationName;
     private Date disbVchrConferenceStartDate;
     private Date disbVchrConferenceEndDate;
@@ -50,13 +51,13 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
 
@@ -79,19 +80,19 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     }
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
     /**
      * Gets the dvConferenceDestinationName attribute.
      * 
-     * @return - Returns the dvConferenceDestinationName
+     * @return Returns the dvConferenceDestinationName
      * 
      */
     public String getDvConferenceDestinationName() {
@@ -112,7 +113,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     /**
      * Gets the disbVchrConferenceStartDate attribute.
      * 
-     * @return - Returns the disbVchrConferenceStartDate
+     * @return Returns the disbVchrConferenceStartDate
      * 
      */
     public Date getDisbVchrConferenceStartDate() {
@@ -133,7 +134,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     /**
      * Gets the disbVchrConferenceEndDate attribute.
      * 
-     * @return - Returns the disbVchrConferenceEndDate
+     * @return Returns the disbVchrConferenceEndDate
      * 
      */
     public Date getDisbVchrConferenceEndDate() {
@@ -154,7 +155,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     /**
      * Gets the disbVchrConferenceTotalAmt attribute.
      * 
-     * @return - Returns the disbVchrConferenceTotalAmt
+     * @return Returns the disbVchrConferenceTotalAmt
      * 
      */
     public KualiDecimal getDisbVchrConferenceTotalAmt() {
@@ -184,7 +185,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
     /**
      * Gets the disbVchrExpenseCode attribute.
      * 
-     * @return - Returns the disbVchrExpenseCode
+     * @return Returns the disbVchrExpenseCode
      * 
      */
     public String getDisbVchrExpenseCode() {
@@ -207,7 +208,7 @@ public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 }

@@ -22,6 +22,7 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 
+import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.Options;
 import org.kuali.core.service.DateTimeService;
@@ -51,7 +52,7 @@ public class AccountingPeriod extends BusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return - Returns the universityFiscalYear
+     * @return Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -72,7 +73,7 @@ public class AccountingPeriod extends BusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodCode attribute.
      * 
-     * @return - Returns the universityFiscalPeriodCode
+     * @return Returns the universityFiscalPeriodCode
      * 
      */
     public String getUniversityFiscalPeriodCode() {
@@ -93,7 +94,7 @@ public class AccountingPeriod extends BusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodName attribute.
      * 
-     * @return - Returns the universityFiscalPeriodName
+     * @return Returns the universityFiscalPeriodName
      * 
      */
     public String getUniversityFiscalPeriodName() {
@@ -114,7 +115,7 @@ public class AccountingPeriod extends BusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodStatusCode attribute.
      * 
-     * @return - Returns the universityFiscalPeriodStatusCode
+     * @return Returns the universityFiscalPeriodStatusCode
      * 
      */
     public String getUniversityFiscalPeriodStatusCode() {
@@ -135,7 +136,7 @@ public class AccountingPeriod extends BusinessObjectBase {
     /**
      * Gets the budgetRolloverIndicator attribute.
      * 
-     * @return - Returns the budgetRolloverIndicator
+     * @return Returns the budgetRolloverIndicator
      * 
      */
     public boolean isBudgetRolloverIndicator() {
@@ -157,7 +158,7 @@ public class AccountingPeriod extends BusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodEndDate attribute.
      * 
-     * @return - Returns the universityFiscalPeriodEndDate
+     * @return Returns the universityFiscalPeriodEndDate
      * 
      */
     public Date getUniversityFiscalPeriodEndDate() {
@@ -172,6 +173,14 @@ public class AccountingPeriod extends BusinessObjectBase {
      */
     public void setUniversityFiscalPeriodEndDate(Date universityFiscalPeriodEndDate) {
         this.universityFiscalPeriodEndDate = universityFiscalPeriodEndDate;
+    }
+    
+    /**
+     * Determine if the current account period is open
+     * @return true if the accounting period is open; otherwise, false
+     */
+    public boolean isOpen(){       
+        return Constants.ACCOUNTING_PERIOD_STATUS_OPEN.equals(this.getUniversityFiscalPeriodStatusCode());
     }
 
     /**
