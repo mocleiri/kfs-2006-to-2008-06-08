@@ -1,7 +1,8 @@
+
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/LedgerEntry.java,v $
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/LaborOriginEntry.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,6 @@ package org.kuali.module.labor.bo;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
@@ -38,14 +38,16 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.UniversityDate;
-import org.kuali.PropertyConstants;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class LedgerEntry extends BusinessObjectBase {
+public class LaborOriginEntry extends BusinessObjectBase {
 
+	private Integer originEntryIdentifier;
+	private Integer originEntryGroupIdentifier;
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
 	private String accountNumber;
@@ -56,11 +58,11 @@ public class LedgerEntry extends BusinessObjectBase {
 	private String financialObjectTypeCode;
 	private String universityFiscalPeriodCode;
 	private String financialDocumentTypeCode;
+	private String positionNumber;
+	private String projectCode;
     private String financialSystemOriginationCode;
     private String documentNumber;
 	private Integer transactionLedgerEntrySequenceNumber;
-	private String positionNumber;
-	private String projectCode;
 	private String transactionLedgerEntryDescription;
 	private KualiDecimal transactionLedgerEntryAmount;
 	private String transactionDebitCreditCode;
@@ -77,6 +79,9 @@ public class LedgerEntry extends BusinessObjectBase {
 	private BigDecimal transactionTotalHours;
 	private Integer payrollEndDateFiscalYear;
 	private String payrollEndDateFiscalPeriodCode;
+	private String financialDocumentApprovedCode;
+	private String transactionEntryOffsetCode;
+	private Date transactionEntryProcessedTimestamp;
 	private String emplid;
 	private Integer employeeRecord;
 	private String earnCode;
@@ -91,7 +96,7 @@ public class LedgerEntry extends BusinessObjectBase {
 	private String laborLedgerOriginalFinancialSubObjectCode;
 	private String hrmsCompany;
 	private String setid;
-	private Timestamp transactionDateTimeStamp;
+	private Date transactionDateTimeStamp;
 
     private ObjectCode laborLedgerOriginalFinancialObject;
 	private ObjectCode financialObject;
@@ -99,30 +104,72 @@ public class LedgerEntry extends BusinessObjectBase {
 	private Account account;
 	private Chart laborLedgerOriginalChartOfAccounts;
 	private Account laborLedgerOriginalAccount;
-    private SubAccount subAccount;
-    private SubAccount laborLedgerOriginalSubAccount;
-    private SubObjCd financialSubObject;
-    private SubObjCd laborLedgerOriginalFinancialSubObject;
     private ObjectType financialObjectType;
     private BalanceTyp balanceType;
     private AccountingPeriod universityFiscalPeriod;
-    private AccountingPeriod payrollEndDateFiscalPeriod;
     private DocumentType documentType;
-    private DocumentType referenceDocumentType;
+    private SubAccount subAccount;
+    private SubObjCd financialSubObject;
+    private ProjectCode project;
+    private DocumentHeader financialDocument;
+    private DocumentType referenceFinancialDocumentType;
+    private OriginationCode referenceFinancialSystemOrigination;
+    private AccountingPeriod payrollEndDateFiscalPeriod;
+    private SubAccount laborLedgerOriginalSubAccount;
+    private SubObjCd laborLedgerOriginalFinancialSubObject;
     private Options option;
     private UniversityDate reversalDate;
-    private OriginationCode referenceOriginationCode;
-    private ProjectCode project;
-    private DocumentHeader documentHeader;
+    private OriginEntryGroup originEntryGroup;
     private OriginationCode financialSystemOrigination;
-    private LedgerBalance ledgerBalance;
     
 	/**
 	 * Default constructor.
 	 */
-	public LedgerEntry() {
+	public LaborOriginEntry() {
 
 	}
+
+	/**
+	 * Gets the originEntryIdentifier attribute.
+	 * 
+	 * @return Returns the originEntryIdentifier
+	 * 
+	 */
+	public Integer getOriginEntryIdentifier() { 
+		return originEntryIdentifier;
+	}
+
+	/**
+	 * Sets the originEntryIdentifier attribute.
+	 * 
+	 * @param originEntryIdentifier The originEntryIdentifier to set.
+	 * 
+	 */
+	public void setOriginEntryIdentifier(Integer originEntryIdentifier) {
+		this.originEntryIdentifier = originEntryIdentifier;
+	}
+
+
+	/**
+	 * Gets the originEntryGroupIdentifier attribute.
+	 * 
+	 * @return Returns the originEntryGroupIdentifier
+	 * 
+	 */
+	public Integer getOriginEntryGroupIdentifier() { 
+		return originEntryGroupIdentifier;
+	}
+
+	/**
+	 * Sets the originEntryGroupIdentifier attribute.
+	 * 
+	 * @param originEntryGroupIdentifier The originEntryGroupIdentifier to set.
+	 * 
+	 */
+	public void setOriginEntryGroupIdentifier(Integer originEntryGroupIdentifier) {
+		this.originEntryGroupIdentifier = originEntryGroupIdentifier;
+	}
+
 
 	/**
 	 * Gets the universityFiscalYear attribute.
@@ -323,22 +370,6 @@ public class LedgerEntry extends BusinessObjectBase {
 		return financialDocumentTypeCode;
 	}
 
-    /**
-     * Gets the financialSystemOriginationCode attribute. 
-     * @return Returns the financialSystemOriginationCode.
-     */
-    public String getFinancialSystemOriginationCode() {
-        return financialSystemOriginationCode;
-    }
-
-    /**
-     * Sets the financialSystemOriginationCode attribute value.
-     * @param financialSystemOriginationCode The financialSystemOriginationCode to set.
-     */
-    public void setFinancialSystemOriginationCode(String financialSystemOriginationCode) {
-        this.financialSystemOriginationCode = financialSystemOriginationCode;
-    }    
-    
 	/**
 	 * Sets the financialDocumentTypeCode attribute.
 	 * 
@@ -347,48 +378,6 @@ public class LedgerEntry extends BusinessObjectBase {
 	 */
 	public void setFinancialDocumentTypeCode(String financialDocumentTypeCode) {
 		this.financialDocumentTypeCode = financialDocumentTypeCode;
-	}
-
-
-	/**
-	 * Gets the documentNumber attribute.
-	 * 
-	 * @return Returns the documentNumber
-	 * 
-	 */
-	public String getDocumentNumber() { 
-		return documentNumber;
-	}
-
-	/**
-	 * Sets the documentNumber attribute.
-	 * 
-	 * @param documentNumber The documentNumber to set.
-	 * 
-	 */
-	public void setDocumentNumber(String documentNumber) {
-		this.documentNumber = documentNumber;
-	}
-
-
-	/**
-	 * Gets the transactionLedgerEntrySequenceNumber attribute.
-	 * 
-	 * @return Returns the transactionLedgerEntrySequenceNumber
-	 * 
-	 */
-	public Integer getTransactionLedgerEntrySequenceNumber() { 
-		return transactionLedgerEntrySequenceNumber;
-	}
-
-	/**
-	 * Sets the transactionLedgerEntrySequenceNumber attribute.
-	 * 
-	 * @param transactionLedgerEntrySequenceNumber The transactionLedgerEntrySequenceNumber to set.
-	 * 
-	 */
-	public void setTransactionLedgerEntrySequenceNumber(Integer transactionLedgerEntrySequenceNumber) {
-		this.transactionLedgerEntrySequenceNumber = transactionLedgerEntrySequenceNumber;
 	}
 
 
@@ -431,6 +420,63 @@ public class LedgerEntry extends BusinessObjectBase {
 	 */
 	public void setProjectCode(String projectCode) {
 		this.projectCode = projectCode;
+	}
+
+    /**
+     * Gets the financialSystemOriginationCode attribute. 
+     * @return Returns the financialSystemOriginationCode.
+     */
+    public String getFinancialSystemOriginationCode() {
+        return financialSystemOriginationCode;
+    }
+
+    /**
+     * Sets the financialSystemOriginationCode attribute value.
+     * @param financialSystemOriginationCode The financialSystemOriginationCode to set.
+     */
+    public void setFinancialSystemOriginationCode(String financialSystemOriginationCode) {
+        this.financialSystemOriginationCode = financialSystemOriginationCode;
+    }
+    
+	/**
+	 * Gets the documentNumber attribute.
+	 * 
+	 * @return Returns the documentNumber
+	 * 
+	 */
+	public String getDocumentNumber() { 
+		return documentNumber;
+	}
+
+	/**
+	 * Sets the documentNumber attribute.
+	 * 
+	 * @param documentNumber The documentNumber to set.
+	 * 
+	 */
+	public void setDocumentNumber(String documentNumber) {
+		this.documentNumber = documentNumber;
+	}
+
+
+	/**
+	 * Gets the transactionLedgerEntrySequenceNumber attribute.
+	 * 
+	 * @return Returns the transactionLedgerEntrySequenceNumber
+	 * 
+	 */
+	public Integer getTransactionLedgerEntrySequenceNumber() { 
+		return transactionLedgerEntrySequenceNumber;
+	}
+
+	/**
+	 * Sets the transactionLedgerEntrySequenceNumber attribute.
+	 * 
+	 * @param transactionLedgerEntrySequenceNumber The transactionLedgerEntrySequenceNumber to set.
+	 * 
+	 */
+	public void setTransactionLedgerEntrySequenceNumber(Integer transactionLedgerEntrySequenceNumber) {
+		this.transactionLedgerEntrySequenceNumber = transactionLedgerEntrySequenceNumber;
 	}
 
 
@@ -771,6 +817,69 @@ public class LedgerEntry extends BusinessObjectBase {
 
 
 	/**
+	 * Gets the financialDocumentApprovedCode attribute.
+	 * 
+	 * @return Returns the financialDocumentApprovedCode
+	 * 
+	 */
+	public String getFinancialDocumentApprovedCode() { 
+		return financialDocumentApprovedCode;
+	}
+
+	/**
+	 * Sets the financialDocumentApprovedCode attribute.
+	 * 
+	 * @param financialDocumentApprovedCode The financialDocumentApprovedCode to set.
+	 * 
+	 */
+	public void setFinancialDocumentApprovedCode(String financialDocumentApprovedCode) {
+		this.financialDocumentApprovedCode = financialDocumentApprovedCode;
+	}
+
+
+	/**
+	 * Gets the transactionEntryOffsetCode attribute.
+	 * 
+	 * @return Returns the transactionEntryOffsetCode
+	 * 
+	 */
+	public String getTransactionEntryOffsetCode() { 
+		return transactionEntryOffsetCode;
+	}
+
+	/**
+	 * Sets the transactionEntryOffsetCode attribute.
+	 * 
+	 * @param transactionEntryOffsetCode The transactionEntryOffsetCode to set.
+	 * 
+	 */
+	public void setTransactionEntryOffsetCode(String transactionEntryOffsetCode) {
+		this.transactionEntryOffsetCode = transactionEntryOffsetCode;
+	}
+
+
+	/**
+	 * Gets the transactionEntryProcessedTimestamp attribute.
+	 * 
+	 * @return Returns the transactionEntryProcessedTimestamp
+	 * 
+	 */
+	public Date getTransactionEntryProcessedTimestamp() { 
+		return transactionEntryProcessedTimestamp;
+	}
+
+	/**
+	 * Sets the transactionEntryProcessedTimestamp attribute.
+	 * 
+	 * @param transactionEntryProcessedTimestamp The transactionEntryProcessedTimestamp to set.
+	 * 
+	 */
+	public void setTransactionEntryProcessedTimestamp(Date transactionEntryProcessedTimestamp) {
+		this.transactionEntryProcessedTimestamp = transactionEntryProcessedTimestamp;
+	}
+
+
+	/**
 	 * Gets the emplid attribute.
 	 * 
 	 * @return Returns the emplid
@@ -1070,7 +1179,7 @@ public class LedgerEntry extends BusinessObjectBase {
 	 * @return Returns the transactionDateTimeStamp
 	 * 
 	 */
-	public Timestamp getTransactionDateTimeStamp() { 
+	public Date getTransactionDateTimeStamp() { 
 		return transactionDateTimeStamp;
 	}
 
@@ -1080,7 +1189,7 @@ public class LedgerEntry extends BusinessObjectBase {
 	 * @param transactionDateTimeStamp The transactionDateTimeStamp to set.
 	 * 
 	 */
-	public void setTransactionDateTimeStamp(Timestamp transactionDateTimeStamp) {
+	public void setTransactionDateTimeStamp(Date transactionDateTimeStamp) {
 		this.transactionDateTimeStamp = transactionDateTimeStamp;
 	}
 
@@ -1206,23 +1315,6 @@ public class LedgerEntry extends BusinessObjectBase {
 	}
 
     /**
-     * Gets the universityFiscalPeriod attribute. 
-     * @return Returns the universityFiscalPeriod.
-     */
-    public AccountingPeriod getUniversityFiscalPeriod() {
-        return universityFiscalPeriod;
-    }
-
-    /**
-     * Sets the universityFiscalPeriod attribute value.
-     * @param universityFiscalPeriod The universityFiscalPeriod to set.
-     * @deprecated
-     */
-    public void setUniversityFiscalPeriod(AccountingPeriod universityFiscalPeriod) {
-        this.universityFiscalPeriod = universityFiscalPeriod;
-    }
-
-    /**
      * Gets the balanceType attribute. 
      * @return Returns the balanceType.
      */
@@ -1240,23 +1332,6 @@ public class LedgerEntry extends BusinessObjectBase {
     }
 
     /**
-     * Gets the documentHeader attribute. 
-     * @return Returns the documentHeader.
-     */
-    public DocumentHeader getDocumentHeader() {
-        return documentHeader;
-    }
-
-    /**
-     * Sets the documentHeader attribute value.
-     * @param documentHeader The documentHeader to set.
-     * @deprecated
-     */
-    public void setDocumentHeader(DocumentHeader documentHeader) {
-        this.documentHeader = documentHeader;
-    }
-
-    /**
      * Gets the documentType attribute. 
      * @return Returns the documentType.
      */
@@ -1271,6 +1346,23 @@ public class LedgerEntry extends BusinessObjectBase {
      */
     public void setDocumentType(DocumentType documentType) {
         this.documentType = documentType;
+    }
+
+    /**
+     * Gets the financialDocument attribute. 
+     * @return Returns the financialDocument.
+     */
+    public DocumentHeader getFinancialDocument() {
+        return financialDocument;
+    }
+
+    /**
+     * Sets the financialDocument attribute value.
+     * @param financialDocument The financialDocument to set.
+     * @deprecated
+     */
+    public void setFinancialDocument(DocumentHeader financialDocument) {
+        this.financialDocument = financialDocument;
     }
 
     /**
@@ -1393,37 +1485,37 @@ public class LedgerEntry extends BusinessObjectBase {
     }
 
     /**
-     * Gets the referenceDocumentType attribute. 
-     * @return Returns the referenceDocumentType.
+     * Gets the referenceFinancialDocumentType attribute. 
+     * @return Returns the referenceFinancialDocumentType.
      */
-    public DocumentType getReferenceDocumentType() {
-        return referenceDocumentType;
+    public DocumentType getReferenceFinancialDocumentType() {
+        return referenceFinancialDocumentType;
     }
 
     /**
-     * Sets the referenceDocumentType attribute value.
-     * @param referenceDocumentType The referenceDocumentType to set.
+     * Sets the referenceFinancialDocumentType attribute value.
+     * @param referenceFinancialDocumentType The referenceFinancialDocumentType to set.
      * @deprecated
      */
-    public void setReferenceDocumentType(DocumentType referenceDocumentType) {
-        this.referenceDocumentType = referenceDocumentType;
+    public void setReferenceFinancialDocumentType(DocumentType referenceFinancialDocumentType) {
+        this.referenceFinancialDocumentType = referenceFinancialDocumentType;
     }
 
     /**
-     * Gets the referenceOriginationCode attribute. 
-     * @return Returns the referenceOriginationCode.
+     * Gets the referenceFinancialSystemOrigination attribute. 
+     * @return Returns the referenceFinancialSystemOrigination.
      */
-    public OriginationCode getReferenceOriginationCode() {
-        return referenceOriginationCode;
+    public OriginationCode getReferenceFinancialSystemOrigination() {
+        return referenceFinancialSystemOrigination;
     }
 
     /**
-     * Sets the referenceOriginationCode attribute value.
-     * @param referenceOriginationCode The referenceOriginationCode to set.
+     * Sets the referenceFinancialSystemOrigination attribute value.
+     * @param referenceFinancialSystemOrigination The referenceFinancialSystemOrigination to set.
      * @deprecated
      */
-    public void setReferenceOriginationCode(OriginationCode referenceOriginationCode) {
-        this.referenceOriginationCode = referenceOriginationCode;
+    public void setReferenceFinancialSystemOrigination(OriginationCode referenceFinancialSystemOrigination) {
+        this.referenceFinancialSystemOrigination = referenceFinancialSystemOrigination;
     }
 
     /**
@@ -1461,6 +1553,40 @@ public class LedgerEntry extends BusinessObjectBase {
     }
 
     /**
+     * Gets the universityFiscalPeriod attribute. 
+     * @return Returns the universityFiscalPeriod.
+     */
+    public AccountingPeriod getUniversityFiscalPeriod() {
+        return universityFiscalPeriod;
+    }
+
+    /**
+     * Sets the universityFiscalPeriod attribute value.
+     * @param universityFiscalPeriod The universityFiscalPeriod to set.
+     * @deprecated
+     */
+    public void setUniversityFiscalPeriod(AccountingPeriod universityFiscalPeriod) {
+        this.universityFiscalPeriod = universityFiscalPeriod;
+    }    
+
+    /**
+     * Gets the originEntryGroup. 
+     * @return Returns the originEntryGroup.
+     */    
+    public OriginEntryGroup getOriginEntryGroup() {
+        return originEntryGroup;
+    }
+
+    /**
+     * Sets the originEntryGroup attribute value.
+     * @param originEntryGroup The originEntryGroup to set.
+     * @deprecated
+     */    
+    public void setOriginEntryGroup(OriginEntryGroup originEntryGroup) {
+        this.originEntryGroup = originEntryGroup;
+    }    
+    
+    /**
      * Gets the financialSystemOrigination attribute. 
      * @return Returns the financialSystemOrigination.
      */
@@ -1475,47 +1601,18 @@ public class LedgerEntry extends BusinessObjectBase {
      */
     public void setFinancialSystemOrigination(OriginationCode financialSystemOrigination) {
         this.financialSystemOrigination = financialSystemOrigination;
-    }    
-
-    /**
-     * Gets the ledgerBalance attribute. 
-     * @return Returns the ledgerBalance.
-     */
-    public LedgerBalance getLedgerBalance() {
-        return ledgerBalance;
     }
 
-    /**
-     * Sets the ledgerBalance attribute value.
-     * @param ledgerBalance The ledgerBalance to set.
-     * @deprecated
-     */
-    public void setLedgerBalance(LedgerBalance ledgerBalance) {
-        this.ledgerBalance = ledgerBalance;
-    }    
-    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
-        if (this.universityFiscalYear != null) {
-            m.put("universityFiscalYear", this.universityFiscalYear.toString());
-        }
-        m.put("chartOfAccountsCode", this.chartOfAccountsCode);
-        m.put("accountNumber", this.accountNumber);
-        m.put("subAccountNumber", this.subAccountNumber);
-        m.put("financialObjectCode", this.financialObjectCode);
-        m.put("financialSubObjectCode", this.financialSubObjectCode);
-        m.put("financialBalanceTypeCode", this.financialBalanceTypeCode);
-        m.put("financialObjectTypeCode", this.financialObjectTypeCode);
-        m.put("universityFiscalPeriodCode", this.universityFiscalPeriodCode);
-        m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
-        if (this.transactionLedgerEntrySequenceNumber != null) {
-            m.put("transactionLedgerEntrySequenceNumber", this.transactionLedgerEntrySequenceNumber.toString());
+        if (this.originEntryIdentifier != null) {
+            m.put("originEntryIdentifier", this.originEntryIdentifier.toString());
         }
         return m;
     }
-
+    
+    
 }

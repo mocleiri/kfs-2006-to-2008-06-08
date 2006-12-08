@@ -21,7 +21,7 @@
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetPeriodThirdPartyCostShare">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Third Party Cost Share</title>
@@ -33,7 +33,7 @@
 
         <attributes>
 
-            <attribute name="researchDocumentNumber" forceUppercase="true">
+            <attribute name="documentNumber" forceUppercase="true">
                 <label>Budget Number</label>
                 <shortLabel>Budget Number</shortLabel>
 
@@ -119,6 +119,8 @@
                 <description>versionNumber description...</description>
             </attribute>
         </attributes>
+        
+        <objectLabel>Budget Third Party Cost Share</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

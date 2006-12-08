@@ -22,10 +22,10 @@
 
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetGraduateAssistantRate">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
-            <attribute name="researchDocumentNumber" forceUppercase="true">
+            <attribute name="documentNumber" forceUppercase="true">
                 <label>Budget Number</label>
                 <shortLabel>Budget Number</shortLabel>
 
@@ -214,7 +214,8 @@
                 <description>versionNumber description...</description>
             </attribute>
         </attributes>
-        
+
+		<objectLabel>Budget Graduate Assistant Rate</objectLabel>        
     </businessObject>
 </dictionaryEntry>
 

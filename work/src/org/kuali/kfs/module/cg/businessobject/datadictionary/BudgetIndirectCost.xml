@@ -21,10 +21,10 @@
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetIndirectCost">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
         <attributes>
 
-            <attribute name="researchDocumentNumber" forceUppercase="true">
+            <attribute name="documentNumber" forceUppercase="true">
                 <label>Document Header Id</label>
                 <shortLabel>Document Header Id</shortLabel>
 
@@ -167,5 +167,6 @@
 
         </collections>
 
+		<objectLabel>Budget Indirect Cost</objectLabel>
     </businessObject>
 </dictionaryEntry>

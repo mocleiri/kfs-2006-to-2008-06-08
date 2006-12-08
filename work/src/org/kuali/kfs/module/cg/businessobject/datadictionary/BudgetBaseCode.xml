@@ -22,7 +22,7 @@
 <dictionaryEntry>
 
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetBaseCode">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
             <title>Budget Base Code Inquiry</title>
 
@@ -85,5 +85,6 @@
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
         </attributes>
+        <objectLabel>Budget Base Code</objectLabel>
     </businessObject>
 </dictionaryEntry>
