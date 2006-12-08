@@ -48,7 +48,7 @@ public class PurapServiceImpl implements PurapService {
         success = this.updateStatus(document, statusToSet);
 
 // TODO: make this work.
-//        success = this.updateStatusHistory(document, statusToSet);
+//        success &= this.updateStatusHistory(document, statusToSet);
 
         LOG.debug("updateStatusAndStatusHistory(): leaving method.");
         return success;
@@ -73,7 +73,7 @@ public class PurapServiceImpl implements PurapService {
         
         success = true;
         if (success) {
-            LOG.debug("Status of document #"+document.getFinancialDocumentNumber()+" has been changed from "+
+            LOG.debug("Status of document #"+document.getDocumentNumber()+" has been changed from "+
                oldStatus+" to "+newStatus);
         }
         
@@ -105,7 +105,7 @@ public class PurapServiceImpl implements PurapService {
 
         success = true;
         if (success) {
-            LOG.debug("StatusHistory of document #"+document.getFinancialDocumentNumber()+" has been changed from "
+            LOG.debug("StatusHistory of document #"+document.getDocumentNumber()+" has been changed from "
                     +oldStatus+" to "+newStatus);
         }
         

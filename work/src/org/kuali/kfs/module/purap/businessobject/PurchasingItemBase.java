@@ -44,6 +44,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	private String externalOrganizationB2bProductReferenceNumber;
 	private String externalOrganizationB2bProductTypeName;
 	private boolean itemAssignedToTradeInIndicator;
+    private KualiDecimal extendedPrice; //not currently in DB
 
 	private CapitalAssetTransactionType capitalAssetTransactionType;
 	private ItemType itemType;
@@ -52,13 +53,14 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	 * Default constructor.
 	 */
 	public PurchasingItemBase() {
-
+	    //TODO: Chris - default itemType (should probably get this from spring or Constants file)
+        itemTypeCode = "ITEM";
 	}
 
 	/**
 	 * Gets the ItemIdentifier attribute.
 	 * 
-	 * @return - Returns the ItemIdentifier
+	 * @return Returns the ItemIdentifier
 	 * 
 	 */
 	public Integer getItemIdentifier() { 
@@ -68,7 +70,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the ItemIdentifier attribute.
 	 * 
-	 * @param - ItemIdentifier The ItemIdentifier to set.
+	 * @param ItemIdentifier The ItemIdentifier to set.
 	 * 
 	 */
 	public void setItemIdentifier(Integer ItemIdentifier) {
@@ -79,7 +81,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemLineNumber attribute.
 	 * 
-	 * @return - Returns the itemLineNumber
+	 * @return Returns the itemLineNumber
 	 * 
 	 */
 	public Integer getItemLineNumber() { 
@@ -89,7 +91,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemLineNumber attribute.
 	 * 
-	 * @param - itemLineNumber The itemLineNumber to set.
+	 * @param itemLineNumber The itemLineNumber to set.
 	 * 
 	 */
 	public void setItemLineNumber(Integer itemLineNumber) {
@@ -100,7 +102,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the capitalAssetTransactionTypeCode attribute.
 	 * 
-	 * @return - Returns the capitalAssetTransactionTypeCode
+	 * @return Returns the capitalAssetTransactionTypeCode
 	 * 
 	 */
 	public String getCapitalAssetTransactionTypeCode() { 
@@ -110,7 +112,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the capitalAssetTransactionTypeCode attribute.
 	 * 
-	 * @param - capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
+	 * @param capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
 	 * 
 	 */
 	public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
@@ -121,7 +123,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemUnitOfMeasureCode attribute.
 	 * 
-	 * @return - Returns the itemUnitOfMeasureCode
+	 * @return Returns the itemUnitOfMeasureCode
 	 * 
 	 */
 	public String getItemUnitOfMeasureCode() { 
@@ -131,7 +133,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemUnitOfMeasureCode attribute.
 	 * 
-	 * @param - itemUnitOfMeasureCode The itemUnitOfMeasureCode to set.
+	 * @param itemUnitOfMeasureCode The itemUnitOfMeasureCode to set.
 	 * 
 	 */
 	public void setItemUnitOfMeasureCode(String itemUnitOfMeasureCode) {
@@ -141,7 +143,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemCatalogNumber attribute.
 	 * 
-	 * @return - Returns the itemCatalogNumber
+	 * @return Returns the itemCatalogNumber
 	 * 
 	 */
 	public String getItemCatalogNumber() { 
@@ -151,7 +153,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemCatalogNumber attribute.
 	 * 
-	 * @param - itemCatalogNumber The itemCatalogNumber to set.
+	 * @param itemCatalogNumber The itemCatalogNumber to set.
 	 * 
 	 */
 	public void setItemCatalogNumber(String itemCatalogNumber) {
@@ -162,7 +164,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemDescription attribute.
 	 * 
-	 * @return - Returns the itemDescription
+	 * @return Returns the itemDescription
 	 * 
 	 */
 	public String getItemDescription() { 
@@ -172,7 +174,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemDescription attribute.
 	 * 
-	 * @param - itemDescription The itemDescription to set.
+	 * @param itemDescription The itemDescription to set.
 	 * 
 	 */
 	public void setItemDescription(String itemDescription) {
@@ -183,7 +185,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemCapitalAssetNoteText attribute.
 	 * 
-	 * @return - Returns the itemCapitalAssetNoteText
+	 * @return Returns the itemCapitalAssetNoteText
 	 * 
 	 */
 	public String getItemCapitalAssetNoteText() { 
@@ -193,7 +195,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemCapitalAssetNoteText attribute.
 	 * 
-	 * @param - itemCapitalAssetNoteText The itemCapitalAssetNoteText to set.
+	 * @param itemCapitalAssetNoteText The itemCapitalAssetNoteText to set.
 	 * 
 	 */
 	public void setItemCapitalAssetNoteText(String itemCapitalAssetNoteText) {
@@ -204,7 +206,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemUnitPrice attribute.
 	 * 
-	 * @return - Returns the itemUnitPrice
+	 * @return Returns the itemUnitPrice
 	 * 
 	 */
 	public BigDecimal getItemUnitPrice() { 
@@ -214,7 +216,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemUnitPrice attribute.
 	 * 
-	 * @param - itemUnitPrice The itemUnitPrice to set.
+	 * @param itemUnitPrice The itemUnitPrice to set.
 	 * 
 	 */
 	public void setItemUnitPrice(BigDecimal itemUnitPrice) {
@@ -224,7 +226,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemTypeCode attribute.
 	 * 
-	 * @return - Returns the itemTypeCode
+	 * @return Returns the itemTypeCode
 	 * 
 	 */
 	public String getItemTypeCode() { 
@@ -234,7 +236,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemTypeCode attribute.
 	 * 
-	 * @param - itemTypeCode The itemTypeCode to set.
+	 * @param itemTypeCode The itemTypeCode to set.
 	 * 
 	 */
 	public void setItemTypeCode(String itemTypeCode) {
@@ -245,7 +247,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the requisitionLineIdentifier attribute.
 	 * 
-	 * @return - Returns the requisitionLineIdentifier
+	 * @return Returns the requisitionLineIdentifier
 	 * 
 	 */
 	public String getRequisitionLineIdentifier() { 
@@ -255,7 +257,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the LineIdentifier attribute.
 	 * 
-	 * @param - LineIdentifier The LineIdentifier to set.
+	 * @param LineIdentifier The LineIdentifier to set.
 	 * 
 	 */
 	public void setRequisitionLineIdentifier(String requisitionLineIdentifier) {
@@ -266,7 +268,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemAuxiliaryPartIdentifier attribute.
 	 * 
-	 * @return - Returns the itemAuxiliaryPartIdentifier
+	 * @return Returns the itemAuxiliaryPartIdentifier
 	 * 
 	 */
 	public String getItemAuxiliaryPartIdentifier() { 
@@ -276,7 +278,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemAuxiliaryPartIdentifier attribute.
 	 * 
-	 * @param - itemAuxiliaryPartIdentifier The itemAuxiliaryPartIdentifier to set.
+	 * @param itemAuxiliaryPartIdentifier The itemAuxiliaryPartIdentifier to set.
 	 * 
 	 */
 	public void setItemAuxiliaryPartIdentifier(String itemAuxiliaryPartIdentifier) {
@@ -287,7 +289,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the externalOrganizationB2bProductReferenceNumber attribute.
 	 * 
-	 * @return - Returns the externalOrganizationB2bProductReferenceNumber
+	 * @return Returns the externalOrganizationB2bProductReferenceNumber
 	 * 
 	 */
 	public String getExternalOrganizationB2bProductReferenceNumber() { 
@@ -297,7 +299,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the externalOrganizationB2bProductReferenceNumber attribute.
 	 * 
-	 * @param - externalOrganizationB2bProductReferenceNumber The externalOrganizationB2bProductReferenceNumber to set.
+	 * @param externalOrganizationB2bProductReferenceNumber The externalOrganizationB2bProductReferenceNumber to set.
 	 * 
 	 */
 	public void setExternalOrganizationB2bProductReferenceNumber(String externalOrganizationB2bProductReferenceNumber) {
@@ -308,7 +310,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the externalOrganizationB2bProductTypeName attribute.
 	 * 
-	 * @return - Returns the externalOrganizationB2bProductTypeName
+	 * @return Returns the externalOrganizationB2bProductTypeName
 	 * 
 	 */
 	public String getExternalOrganizationB2bProductTypeName() { 
@@ -318,7 +320,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the externalOrganizationB2bProductTypeName attribute.
 	 * 
-	 * @param - externalOrganizationB2bProductTypeName The externalOrganizationB2bProductTypeName to set.
+	 * @param externalOrganizationB2bProductTypeName The externalOrganizationB2bProductTypeName to set.
 	 * 
 	 */
 	public void setExternalOrganizationB2bProductTypeName(String externalOrganizationB2bProductTypeName) {
@@ -329,7 +331,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemAssignedToTradeInIndicator attribute.
 	 * 
-	 * @return - Returns the itemAssignedToTradeInIndicator
+	 * @return Returns the itemAssignedToTradeInIndicator
 	 * 
 	 */
 	public boolean getItemAssignedToTradeInIndicator() { 
@@ -339,7 +341,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemAssignedToTradeInIndicator attribute.
 	 * 
-	 * @param - itemAssignedToTradeInIndicator The itemAssignedToTradeInIndicator to set.
+	 * @param itemAssignedToTradeInIndicator The itemAssignedToTradeInIndicator to set.
 	 * 
 	 */
 	public void setItemAssignedToTradeInIndicator(boolean itemAssignedToTradeInIndicator) {
@@ -349,7 +351,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the capitalAssetTransactionType attribute.
 	 * 
-	 * @return - Returns the capitalAssetTransactionType
+	 * @return Returns the capitalAssetTransactionType
 	 * 
 	 */
 	public CapitalAssetTransactionType getCapitalAssetTransactionType() { 
@@ -359,7 +361,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the capitalAssetTransactionType attribute.
 	 * 
-	 * @param - capitalAssetTransactionType The capitalAssetTransactionType to set.
+	 * @param capitalAssetTransactionType The capitalAssetTransactionType to set.
 	 * @deprecated
 	 */
 	public void setCapitalAssetTransactionType(CapitalAssetTransactionType capitalAssetTransactionType) {
@@ -369,7 +371,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Gets the itemType attribute.
 	 * 
-	 * @return - Returns the itemType
+	 * @return Returns the itemType
 	 * 
 	 */
 	public ItemType getItemType() { 
@@ -379,7 +381,7 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	/**
 	 * Sets the itemType attribute.
 	 * 
-	 * @param - itemType The itemType to set.
+	 * @param itemType The itemType to set.
 	 * @deprecated
 	 */
 	public void setItemType(ItemType itemType) {
@@ -387,7 +389,23 @@ public class PurchasingItemBase extends BusinessObjectBase implements Purchasing
 	}
 
 	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * Gets the extendedPrice attribute. 
+     * @return Returns the extendedPrice.
+     */
+    public KualiDecimal getExtendedPrice() {
+        return extendedPrice;
+    }
+
+    /**
+     * Sets the extendedPrice attribute value.
+     * @param extendedPrice The extendedPrice to set.
+     */
+    public void setExtendedPrice(KualiDecimal extendedPrice) {
+        this.extendedPrice = extendedPrice;
+    }
+
+    /**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
