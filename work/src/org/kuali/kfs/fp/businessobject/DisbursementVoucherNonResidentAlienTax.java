@@ -23,13 +23,14 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.lookup.keyvalues.TaxIncomeClassValuesFinder;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private KualiDecimal federalIncomeTaxPercent;
     private KualiDecimal stateIncomeTaxPercent;
     private String incomeClassCode;
@@ -51,30 +52,30 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
     /**
      * Gets the federalIncomeTaxPercent attribute.
      * 
-     * @return - Returns the federalIncomeTaxPercent
+     * @return Returns the federalIncomeTaxPercent
      * 
      */
     public KualiDecimal getFederalIncomeTaxPercent() {
@@ -95,7 +96,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     /**
      * Gets the stateIncomeTaxPercent attribute.
      * 
-     * @return - Returns the stateIncomeTaxPercent
+     * @return Returns the stateIncomeTaxPercent
      * 
      */
     public KualiDecimal getStateIncomeTaxPercent() {
@@ -116,7 +117,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     /**
      * Gets the incomeClassCode attribute.
      * 
-     * @return - Returns the incomeClassCode
+     * @return Returns the incomeClassCode
      * 
      */
     public String getIncomeClassCode() {
@@ -137,7 +138,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     /**
      * Gets the postalCountryCode attribute.
      * 
-     * @return - Returns the postalCountryCode
+     * @return Returns the postalCountryCode
      * 
      */
     public String getPostalCountryCode() {
@@ -158,7 +159,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     /**
      * Gets the incomeTaxTreatyExemptCode attribute.
      * 
-     * @return - Returns the incomeTaxTreatyExemptCode
+     * @return Returns the incomeTaxTreatyExemptCode
      * 
      */
     public boolean isIncomeTaxTreatyExemptCode() {
@@ -179,7 +180,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     /**
      * Gets the foreignSourceIncomeCode attribute.
      * 
-     * @return - Returns the foreignSourceIncomeCode
+     * @return Returns the foreignSourceIncomeCode
      * 
      */
     public boolean isForeignSourceIncomeCode() {
@@ -200,7 +201,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     /**
      * Gets the incomeTaxGrossUpCode attribute.
      * 
-     * @return - Returns the incomeTaxGrossUpCode
+     * @return Returns the incomeTaxGrossUpCode
      * 
      */
     public boolean isIncomeTaxGrossUpCode() {
@@ -221,7 +222,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     /**
      * Gets the referenceFinancialSystemOriginationCode attribute.
      * 
-     * @return - Returns the referenceFinancialSystemOriginationCode
+     * @return Returns the referenceFinancialSystemOriginationCode
      * 
      */
     public String getReferenceFinancialSystemOriginationCode() {
@@ -242,7 +243,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     /**
      * Gets the referenceFinancialDocumentNumber attribute.
      * 
-     * @return - Returns the referenceFinancialDocumentNumber
+     * @return Returns the referenceFinancialDocumentNumber
      * 
      */
     public String getReferenceFinancialDocumentNumber() {
@@ -277,7 +278,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
     /**
      * Gets the incomeClass attribute.
      * 
-     * @return - Returns the incomeClass
+     * @return Returns the incomeClass
      * 
      */
     public TaxIncomeClassCode getIncomeClass() {
@@ -312,7 +313,7 @@ public class DisbursementVoucherNonResidentAlienTax extends BusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 

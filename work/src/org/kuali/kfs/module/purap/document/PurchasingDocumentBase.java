@@ -18,10 +18,10 @@
 package org.kuali.module.purap.document;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.TypedArrayList;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Campus;
 import org.kuali.module.chart.bo.Chart;
@@ -32,7 +32,9 @@ import org.kuali.module.purap.bo.FundingSource;
 import org.kuali.module.purap.bo.PurchaseOrderCostSource;
 import org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod;
 import org.kuali.module.purap.bo.PurchasingItem;
+import org.kuali.module.purap.bo.PurchasingItemBase;
 import org.kuali.module.purap.bo.RecurringPaymentType;
+import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.bo.RequisitionSource;
 import org.kuali.module.purap.bo.VendorContract;
 import org.kuali.module.purap.bo.VendorDetail;
@@ -128,12 +130,12 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     private VendorContract vendorContract;
     
     //COLLECTIONS
-    private List items;
+    private List<PurchasingItem> items;
     
 
     public PurchasingDocumentBase() {
         super();
-        items = new ArrayList();
+        items = new TypedArrayList(PurchasingItemBase.class);
     }
 
     
@@ -184,7 +186,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the fundingSourceCode attribute.
      * 
-     * @return - Returns the fundingSourceCode
+     * @return Returns the fundingSourceCode
      * 
      */
     public String getFundingSourceCode() { 
@@ -194,7 +196,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the fundingSourceCode attribute.
      * 
-     * @param - fundingSourceCode The fundingSourceCode to set.
+     * @param fundingSourceCode The fundingSourceCode to set.
      * 
      */
     public void setFundingSourceCode(String fundingSourceCode) {
@@ -204,7 +206,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the requisitionSourceCode attribute.
      * 
-     * @return - Returns the requisitionSourceCode
+     * @return Returns the requisitionSourceCode
      * 
      */
     public String getRequisitionSourceCode() { 
@@ -214,7 +216,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the requisitionSourceCode attribute.
      * 
-     * @param - requisitionSourceCode The requisitionSourceCode to set.
+     * @param requisitionSourceCode The requisitionSourceCode to set.
      * 
      */
     public void setRequisitionSourceCode(String requisitionSourceCode) {
@@ -224,7 +226,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the purchaseOrderTransmissionMethodCode attribute.
      * 
-     * @return - Returns the purchaseOrderTransmissionMethodCode
+     * @return Returns the purchaseOrderTransmissionMethodCode
      * 
      */
     public String getPurchaseOrderTransmissionMethodCode() { 
@@ -234,7 +236,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the purchaseOrderTransmissionMethodCode attribute.
      * 
-     * @param - purchaseOrderTransmissionMethodCode The purchaseOrderTransmissionMethodCode to set.
+     * @param purchaseOrderTransmissionMethodCode The purchaseOrderTransmissionMethodCode to set.
      * 
      */
     public void setPurchaseOrderTransmissionMethodCode(String purchaseOrderTransmissionMethodCode) {
@@ -244,7 +246,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the purchaseOrderCostSourceCode attribute.
      * 
-     * @return - Returns the purchaseOrderCostSourceCode
+     * @return Returns the purchaseOrderCostSourceCode
      * 
      */
     public String getPurchaseOrderCostSourceCode() { 
@@ -254,7 +256,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the purchaseOrderCostSourceCode attribute.
      * 
-     * @param - purchaseOrderCostSourceCode The purchaseOrderCostSourceCode to set.
+     * @param purchaseOrderCostSourceCode The purchaseOrderCostSourceCode to set.
      * 
      */
     public void setPurchaseOrderCostSourceCode(String purchaseOrderCostSourceCode) {
@@ -264,7 +266,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryRequiredDateReasonCode attribute.
      * 
-     * @return - Returns the deliveryRequiredDateReasonCode
+     * @return Returns the deliveryRequiredDateReasonCode
      * 
      */
     public String getDeliveryRequiredDateReasonCode() { 
@@ -274,7 +276,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryRequiredDateReasonCode attribute.
      * 
-     * @param - deliveryRequiredDateReasonCode The deliveryRequiredDateReasonCode to set.
+     * @param deliveryRequiredDateReasonCode The deliveryRequiredDateReasonCode to set.
      * 
      */
     public void setDeliveryRequiredDateReasonCode(String deliveryRequiredDateReasonCode) {
@@ -284,7 +286,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the recurringPaymentTypeCode attribute.
      * 
-     * @return - Returns the recurringPaymentTypeCode
+     * @return Returns the recurringPaymentTypeCode
      * 
      */
     public String getRecurringPaymentTypeCode() { 
@@ -294,7 +296,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the recurringPaymentTypeCode attribute.
      * 
-     * @param - recurringPaymentTypeCode The recurringPaymentTypeCode to set.
+     * @param recurringPaymentTypeCode The recurringPaymentTypeCode to set.
      * 
      */
     public void setRecurringPaymentTypeCode(String recurringPaymentTypeCode) {
@@ -304,7 +306,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return - Returns the chartOfAccountsCode
+     * @return Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() { 
@@ -314,7 +316,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the chartOfAccountsCode attribute.
      * 
-     * @param - chartOfAccountsCode The chartOfAccountsCode to set.
+     * @param chartOfAccountsCode The chartOfAccountsCode to set.
      * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -324,7 +326,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the organizationCode attribute.
      * 
-     * @return - Returns the organizationCode
+     * @return Returns the organizationCode
      * 
      */
     public String getOrganizationCode() { 
@@ -334,7 +336,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the organizationCode attribute.
      * 
-     * @param - organizationCode The organizationCode to set.
+     * @param organizationCode The organizationCode to set.
      * 
      */
     public void setOrganizationCode(String organizationCode) {
@@ -344,7 +346,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryCampusCode attribute.
      * 
-     * @return - Returns the deliveryCampusCode
+     * @return Returns the deliveryCampusCode
      * 
      */
     public String getDeliveryCampusCode() { 
@@ -354,7 +356,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryCampusCode attribute.
      * 
-     * @param - deliveryCampusCode The deliveryCampusCode to set.
+     * @param deliveryCampusCode The deliveryCampusCode to set.
      * 
      */
     public void setDeliveryCampusCode(String deliveryCampusCode) {
@@ -364,7 +366,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the purchaseOrderTotalLimit attribute.
      * 
-     * @return - Returns the purchaseOrderTotalLimit
+     * @return Returns the purchaseOrderTotalLimit
      * 
      */
     public KualiDecimal getPurchaseOrderTotalLimit() { 
@@ -374,7 +376,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the purchaseOrderTotalLimit attribute.
      * 
-     * @param - purchaseOrderTotalLimit The purchaseOrderTotalLimit to set.
+     * @param purchaseOrderTotalLimit The purchaseOrderTotalLimit to set.
      * 
      */
     public void setPurchaseOrderTotalLimit(KualiDecimal purchaseOrderTotalLimit) {
@@ -384,7 +386,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorName attribute.
      * 
-     * @return - Returns the vendorName
+     * @return Returns the vendorName
      * 
      */
     public String getVendorName() { 
@@ -394,7 +396,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorName attribute.
      * 
-     * @param - vendorName The vendorName to set.
+     * @param vendorName The vendorName to set.
      * 
      */
     public void setVendorName(String vendorName) {
@@ -404,7 +406,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorLine1Address attribute.
      * 
-     * @return - Returns the vendorLine1Address
+     * @return Returns the vendorLine1Address
      * 
      */
     public String getVendorLine1Address() { 
@@ -414,7 +416,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorLine1Address attribute.
      * 
-     * @param - vendorLine1Address The vendorLine1Address to set.
+     * @param vendorLine1Address The vendorLine1Address to set.
      * 
      */
     public void setVendorLine1Address(String vendorLine1Address) {
@@ -424,7 +426,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorLine2Address attribute.
      * 
-     * @return - Returns the vendorLine2Address
+     * @return Returns the vendorLine2Address
      * 
      */
     public String getVendorLine2Address() { 
@@ -434,7 +436,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorLine2Address attribute.
      * 
-     * @param - vendorLine2Address The vendorLine2Address to set.
+     * @param vendorLine2Address The vendorLine2Address to set.
      * 
      */
     public void setVendorLine2Address(String vendorLine2Address) {
@@ -444,7 +446,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorCityName attribute.
      * 
-     * @return - Returns the vendorCityName
+     * @return Returns the vendorCityName
      * 
      */
     public String getVendorCityName() { 
@@ -454,7 +456,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorCityName attribute.
      * 
-     * @param - vendorCityName The vendorCityName to set.
+     * @param vendorCityName The vendorCityName to set.
      * 
      */
     public void setVendorCityName(String vendorCityName) {
@@ -464,7 +466,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorStateCode attribute.
      * 
-     * @return - Returns the vendorStateCode
+     * @return Returns the vendorStateCode
      * 
      */
     public String getVendorStateCode() { 
@@ -474,7 +476,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorStateCode attribute.
      * 
-     * @param - vendorStateCode The vendorStateCode to set.
+     * @param vendorStateCode The vendorStateCode to set.
      * 
      */
     public void setVendorStateCode(String vendorStateCode) {
@@ -484,7 +486,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorPostalCode attribute.
      * 
-     * @return - Returns the vendorPostalCode
+     * @return Returns the vendorPostalCode
      * 
      */
     public String getVendorPostalCode() { 
@@ -494,7 +496,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorPostalCode attribute.
      * 
-     * @param - vendorPostalCode The vendorPostalCode to set.
+     * @param vendorPostalCode The vendorPostalCode to set.
      * 
      */
     public void setVendorPostalCode(String vendorPostalCode) {
@@ -504,7 +506,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorCountryCode attribute.
      * 
-     * @return - Returns the vendorCountryCode
+     * @return Returns the vendorCountryCode
      * 
      */
     public String getVendorCountryCode() { 
@@ -514,7 +516,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorCountryCode attribute.
      * 
-     * @param - vendorCountryCode The vendorCountryCode to set.
+     * @param vendorCountryCode The vendorCountryCode to set.
      * 
      */
     public void setVendorCountryCode(String vendorCountryCode) {
@@ -524,7 +526,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorRestrictedIndicator attribute.
      * 
-     * @return - Returns the vendorRestrictedIndicator
+     * @return Returns the vendorRestrictedIndicator
      * 
      */
     public boolean getVendorRestrictedIndicator() { 
@@ -534,7 +536,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorRestrictedIndicator attribute.
      * 
-     * @param - vendorRestrictedIndicator The vendorRestrictedIndicator to set.
+     * @param vendorRestrictedIndicator The vendorRestrictedIndicator to set.
      * 
      */
     public void setVendorRestrictedIndicator(boolean vendorRestrictedIndicator) {
@@ -544,7 +546,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorPhoneNumber attribute.
      * 
-     * @return - Returns the vendorPhoneNumber
+     * @return Returns the vendorPhoneNumber
      * 
      */
     public String getVendorPhoneNumber() { 
@@ -554,7 +556,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorPhoneNumber attribute.
      * 
-     * @param - vendorPhoneNumber The vendorPhoneNumber to set.
+     * @param vendorPhoneNumber The vendorPhoneNumber to set.
      * 
      */
     public void setVendorPhoneNumber(String vendorPhoneNumber) {
@@ -564,7 +566,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorFaxNumber attribute.
      * 
-     * @return - Returns the vendorFaxNumber
+     * @return Returns the vendorFaxNumber
      * 
      */
     public String getVendorFaxNumber() { 
@@ -574,7 +576,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorFaxNumber attribute.
      * 
-     * @param - vendorFaxNumber The vendorFaxNumber to set.
+     * @param vendorFaxNumber The vendorFaxNumber to set.
      * 
      */
     public void setVendorFaxNumber(String vendorFaxNumber) {
@@ -584,7 +586,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorContractGeneratedIdentifier attribute.
      * 
-     * @return - Returns the vendorContractGeneratedIdentifier
+     * @return Returns the vendorContractGeneratedIdentifier
      * 
      */
     public Integer getVendorContractGeneratedIdentifier() { 
@@ -594,7 +596,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorContractGeneratedIdentifier attribute.
      * 
-     * @param - vendorContractGeneratedIdentifier The vendorContractGeneratedIdentifier to set.
+     * @param vendorContractGeneratedIdentifier The vendorContractGeneratedIdentifier to set.
      * 
      */
     public void setVendorContractGeneratedIdentifier(Integer vendorContractGeneratedIdentifier) {
@@ -604,7 +606,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the vendorNoteText attribute.
      * 
-     * @return - Returns the vendorNoteText
+     * @return Returns the vendorNoteText
      * 
      */
     public String getVendorNoteText() { 
@@ -614,7 +616,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the vendorNoteText attribute.
      * 
-     * @param - vendorNoteText The vendorNoteText to set.
+     * @param vendorNoteText The vendorNoteText to set.
      * 
      */
     public void setVendorNoteText(String vendorNoteText) {
@@ -624,7 +626,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the requestorPersonName attribute.
      * 
-     * @return - Returns the requestorPersonName
+     * @return Returns the requestorPersonName
      * 
      */
     public String getRequestorPersonName() { 
@@ -634,7 +636,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the requestorPersonName attribute.
      * 
-     * @param - requestorPersonName The requestorPersonName to set.
+     * @param requestorPersonName The requestorPersonName to set.
      * 
      */
     public void setRequestorPersonName(String requestorPersonName) {
@@ -644,7 +646,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the requestorPersonEmailAddress attribute.
      * 
-     * @return - Returns the requestorPersonEmailAddress
+     * @return Returns the requestorPersonEmailAddress
      * 
      */
     public String getRequestorPersonEmailAddress() { 
@@ -654,7 +656,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the requestorPersonEmailAddress attribute.
      * 
-     * @param - requestorPersonEmailAddress The requestorPersonEmailAddress to set.
+     * @param requestorPersonEmailAddress The requestorPersonEmailAddress to set.
      * 
      */
     public void setRequestorPersonEmailAddress(String requestorPersonEmailAddress) {
@@ -664,7 +666,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the requestorPersonPhoneNumber attribute.
      * 
-     * @return - Returns the requestorPersonPhoneNumber
+     * @return Returns the requestorPersonPhoneNumber
      * 
      */
     public String getRequestorPersonPhoneNumber() { 
@@ -674,7 +676,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the requestorPersonPhoneNumber attribute.
      * 
-     * @param - requestorPersonPhoneNumber The requestorPersonPhoneNumber to set.
+     * @param requestorPersonPhoneNumber The requestorPersonPhoneNumber to set.
      * 
      */
     public void setRequestorPersonPhoneNumber(String requestorPersonPhoneNumber) {
@@ -684,7 +686,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the nonInstitutionFundOrgChartOfAccountsCode attribute.
      * 
-     * @return - Returns the nonInstitutionFundOrgChartOfAccountsCode
+     * @return Returns the nonInstitutionFundOrgChartOfAccountsCode
      * 
      */
     public String getNonInstitutionFundOrgChartOfAccountsCode() { 
@@ -694,7 +696,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the nonInstitutionFundOrgChartOfAccountsCode attribute.
      * 
-     * @param - nonInstitutionFundOrgChartOfAccountsCode The nonInstitutionFundOrgChartOfAccountsCode to set.
+     * @param nonInstitutionFundOrgChartOfAccountsCode The nonInstitutionFundOrgChartOfAccountsCode to set.
      * 
      */
     public void setNonInstitutionFundOrgChartOfAccountsCode(String nonInstitutionFundOrgChartOfAccountsCode) {
@@ -704,7 +706,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the nonInstitutionFundOrganizationCode attribute.
      * 
-     * @return - Returns the nonInstitutionFundOrganizationCode
+     * @return Returns the nonInstitutionFundOrganizationCode
      * 
      */
     public String getNonInstitutionFundOrganizationCode() { 
@@ -714,7 +716,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the nonInstitutionFundOrganizationCode attribute.
      * 
-     * @param - nonInstitutionFundOrganizationCode The nonInstitutionFundOrganizationCode to set.
+     * @param nonInstitutionFundOrganizationCode The nonInstitutionFundOrganizationCode to set.
      * 
      */
     public void setNonInstitutionFundOrganizationCode(String nonInstitutionFundOrganizationCode) {
@@ -724,7 +726,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the nonInstitutionFundChartOfAccountsCode attribute.
      * 
-     * @return - Returns the nonInstitutionFundChartOfAccountsCode
+     * @return Returns the nonInstitutionFundChartOfAccountsCode
      * 
      */
     public String getNonInstitutionFundChartOfAccountsCode() { 
@@ -734,7 +736,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the nonInstitutionFundChartOfAccountsCode attribute.
      * 
-     * @param - nonInstitutionFundChartOfAccountsCode The nonInstitutionFundChartOfAccountsCode to set.
+     * @param nonInstitutionFundChartOfAccountsCode The nonInstitutionFundChartOfAccountsCode to set.
      * 
      */
     public void setNonInstitutionFundChartOfAccountsCode(String nonInstitutionFundChartOfAccountsCode) {
@@ -744,7 +746,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the nonInstitutionFundAccountNumber attribute.
      * 
-     * @return - Returns the nonInstitutionFundAccountNumber
+     * @return Returns the nonInstitutionFundAccountNumber
      * 
      */
     public String getNonInstitutionFundAccountNumber() { 
@@ -754,7 +756,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the nonInstitutionFundAccountNumber attribute.
      * 
-     * @param - nonInstitutionFundAccountNumber The nonInstitutionFundAccountNumber to set.
+     * @param nonInstitutionFundAccountNumber The nonInstitutionFundAccountNumber to set.
      * 
      */
     public void setNonInstitutionFundAccountNumber(String nonInstitutionFundAccountNumber) {
@@ -764,7 +766,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryBuildingCode attribute.
      * 
-     * @return - Returns the deliveryBuildingCode
+     * @return Returns the deliveryBuildingCode
      * 
      */
     public String getDeliveryBuildingCode() { 
@@ -774,7 +776,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryBuildingCode attribute.
      * 
-     * @param - deliveryBuildingCode The deliveryBuildingCode to set.
+     * @param deliveryBuildingCode The deliveryBuildingCode to set.
      * 
      */
     public void setDeliveryBuildingCode(String deliveryBuildingCode) {
@@ -784,7 +786,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryBuildingName attribute.
      * 
-     * @return - Returns the deliveryBuildingName
+     * @return Returns the deliveryBuildingName
      * 
      */
     public String getDeliveryBuildingName() { 
@@ -794,7 +796,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryBuildingName attribute.
      * 
-     * @param - deliveryBuildingName The deliveryBuildingName to set.
+     * @param deliveryBuildingName The deliveryBuildingName to set.
      * 
      */
     public void setDeliveryBuildingName(String deliveryBuildingName) {
@@ -804,7 +806,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryBuildingRoomNumber attribute.
      * 
-     * @return - Returns the deliveryBuildingRoomNumber
+     * @return Returns the deliveryBuildingRoomNumber
      * 
      */
     public String getDeliveryBuildingRoomNumber() { 
@@ -814,7 +816,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryBuildingRoomNumber attribute.
      * 
-     * @param - deliveryBuildingRoomNumber The deliveryBuildingRoomNumber to set.
+     * @param deliveryBuildingRoomNumber The deliveryBuildingRoomNumber to set.
      * 
      */
     public void setDeliveryBuildingRoomNumber(String deliveryBuildingRoomNumber) {
@@ -824,7 +826,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryBuildingLine1Address attribute.
      * 
-     * @return - Returns the deliveryBuildingLine1Address
+     * @return Returns the deliveryBuildingLine1Address
      * 
      */
     public String getDeliveryBuildingLine1Address() { 
@@ -834,7 +836,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryBuildingLine1Address attribute.
      * 
-     * @param - deliveryBuildingLine1Address The deliveryBuildingLine1Address to set.
+     * @param deliveryBuildingLine1Address The deliveryBuildingLine1Address to set.
      * 
      */
     public void setDeliveryBuildingLine1Address(String deliveryBuildingLine1Address) {
@@ -844,7 +846,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryBuildingLine2Address attribute.
      * 
-     * @return - Returns the deliveryBuildingLine2Address
+     * @return Returns the deliveryBuildingLine2Address
      * 
      */
     public String getDeliveryBuildingLine2Address() { 
@@ -854,7 +856,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryBuildingLine2Address attribute.
      * 
-     * @param - deliveryBuildingLine2Address The deliveryBuildingLine2Address to set.
+     * @param deliveryBuildingLine2Address The deliveryBuildingLine2Address to set.
      * 
      */
     public void setDeliveryBuildingLine2Address(String deliveryBuildingLine2Address) {
@@ -864,7 +866,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryCityName attribute.
      * 
-     * @return - Returns the deliveryCityName
+     * @return Returns the deliveryCityName
      * 
      */
     public String getDeliveryCityName() { 
@@ -874,7 +876,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryCityName attribute.
      * 
-     * @param - deliveryCityName The deliveryCityName to set.
+     * @param deliveryCityName The deliveryCityName to set.
      * 
      */
     public void setDeliveryCityName(String deliveryCityName) {
@@ -884,7 +886,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryStateCode attribute.
      * 
-     * @return - Returns the deliveryStateCode
+     * @return Returns the deliveryStateCode
      * 
      */
     public String getDeliveryStateCode() { 
@@ -894,7 +896,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryStateCode attribute.
      * 
-     * @param - deliveryStateCode The deliveryStateCode to set.
+     * @param deliveryStateCode The deliveryStateCode to set.
      * 
      */
     public void setDeliveryStateCode(String deliveryStateCode) {
@@ -904,7 +906,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryPostalCode attribute.
      * 
-     * @return - Returns the deliveryPostalCode
+     * @return Returns the deliveryPostalCode
      * 
      */
     public String getDeliveryPostalCode() { 
@@ -914,7 +916,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryPostalCode attribute.
      * 
-     * @param - deliveryPostalCode The deliveryPostalCode to set.
+     * @param deliveryPostalCode The deliveryPostalCode to set.
      * 
      */
     public void setDeliveryPostalCode(String deliveryPostalCode) {
@@ -924,7 +926,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryCountryCode attribute.
      * 
-     * @return - Returns the deliveryCountryCode
+     * @return Returns the deliveryCountryCode
      * 
      */
     public String getDeliveryCountryCode() { 
@@ -934,7 +936,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryCountryCode attribute.
      * 
-     * @param - deliveryCountryCode The deliveryCountryCode to set.
+     * @param deliveryCountryCode The deliveryCountryCode to set.
      * 
      */
     public void setDeliveryCountryCode(String deliveryCountryCode) {
@@ -944,7 +946,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryToName attribute.
      * 
-     * @return - Returns the deliveryToName
+     * @return Returns the deliveryToName
      * 
      */
     public String getDeliveryToName() { 
@@ -954,7 +956,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryToName attribute.
      * 
-     * @param - deliveryToName The deliveryToName to set.
+     * @param deliveryToName The deliveryToName to set.
      * 
      */
     public void setDeliveryToName(String deliveryToName) {
@@ -964,7 +966,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryToEmailAddress attribute.
      * 
-     * @return - Returns the deliveryToEmailAddress
+     * @return Returns the deliveryToEmailAddress
      * 
      */
     public String getDeliveryToEmailAddress() { 
@@ -974,7 +976,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryToEmailAddress attribute.
      * 
-     * @param - deliveryToEmailAddress The deliveryToEmailAddress to set.
+     * @param deliveryToEmailAddress The deliveryToEmailAddress to set.
      * 
      */
     public void setDeliveryToEmailAddress(String deliveryToEmailAddress) {
@@ -984,7 +986,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryToPhoneNumber attribute.
      * 
-     * @return - Returns the deliveryToPhoneNumber
+     * @return Returns the deliveryToPhoneNumber
      * 
      */
     public String getDeliveryToPhoneNumber() { 
@@ -994,7 +996,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryToPhoneNumber attribute.
      * 
-     * @param - deliveryToPhoneNumber The deliveryToPhoneNumber to set.
+     * @param deliveryToPhoneNumber The deliveryToPhoneNumber to set.
      * 
      */
     public void setDeliveryToPhoneNumber(String deliveryToPhoneNumber) {
@@ -1004,7 +1006,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryRequiredDate attribute.
      * 
-     * @return - Returns the deliveryRequiredDate
+     * @return Returns the deliveryRequiredDate
      * 
      */
     public Date getDeliveryRequiredDate() { 
@@ -1014,7 +1016,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryRequiredDate attribute.
      * 
-     * @param - deliveryRequiredDate The deliveryRequiredDate to set.
+     * @param deliveryRequiredDate The deliveryRequiredDate to set.
      * 
      */
     public void setDeliveryRequiredDate(Date deliveryRequiredDate) {
@@ -1024,7 +1026,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryInstructionText attribute.
      * 
-     * @return - Returns the deliveryInstructionText
+     * @return Returns the deliveryInstructionText
      * 
      */
     public String getDeliveryInstructionText() { 
@@ -1034,7 +1036,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryInstructionText attribute.
      * 
-     * @param - deliveryInstructionText The deliveryInstructionText to set.
+     * @param deliveryInstructionText The deliveryInstructionText to set.
      * 
      */
     public void setDeliveryInstructionText(String deliveryInstructionText) {
@@ -1044,7 +1046,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the purchaseOrderBeginDate attribute.
      * 
-     * @return - Returns the purchaseOrderBeginDate
+     * @return Returns the purchaseOrderBeginDate
      * 
      */
     public Date getPurchaseOrderBeginDate() { 
@@ -1054,7 +1056,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the purchaseOrderBeginDate attribute.
      * 
-     * @param - purchaseOrderBeginDate The purchaseOrderBeginDate to set.
+     * @param purchaseOrderBeginDate The purchaseOrderBeginDate to set.
      * 
      */
     public void setPurchaseOrderBeginDate(Date purchaseOrderBeginDate) {
@@ -1064,7 +1066,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the purchaseOrderEndDate attribute.
      * 
-     * @return - Returns the purchaseOrderEndDate
+     * @return Returns the purchaseOrderEndDate
      * 
      */
     public Date getPurchaseOrderEndDate() { 
@@ -1074,7 +1076,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the purchaseOrderEndDate attribute.
      * 
-     * @param - purchaseOrderEndDate The purchaseOrderEndDate to set.
+     * @param purchaseOrderEndDate The purchaseOrderEndDate to set.
      * 
      */
     public void setPurchaseOrderEndDate(Date purchaseOrderEndDate) {
@@ -1084,7 +1086,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the institutionContactName attribute.
      * 
-     * @return - Returns the institutionContactName
+     * @return Returns the institutionContactName
      * 
      */
     public String getInstitutionContactName() { 
@@ -1094,7 +1096,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the institutionContactName attribute.
      * 
-     * @param - institutionContactName The institutionContactName to set.
+     * @param institutionContactName The institutionContactName to set.
      * 
      */
     public void setInstitutionContactName(String institutionContactName) {
@@ -1104,7 +1106,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the institutionContactPhoneNumber attribute.
      * 
-     * @return - Returns the institutionContactPhoneNumber
+     * @return Returns the institutionContactPhoneNumber
      * 
      */
     public String getInstitutionContactPhoneNumber() { 
@@ -1114,7 +1116,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the institutionContactPhoneNumber attribute.
      * 
-     * @param - institutionContactPhoneNumber The institutionContactPhoneNumber to set.
+     * @param institutionContactPhoneNumber The institutionContactPhoneNumber to set.
      * 
      */
     public void setInstitutionContactPhoneNumber(String institutionContactPhoneNumber) {
@@ -1124,7 +1126,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the institutionContactEmailAddress attribute.
      * 
-     * @return - Returns the institutionContactEmailAddress
+     * @return Returns the institutionContactEmailAddress
      * 
      */
     public String getInstitutionContactEmailAddress() { 
@@ -1134,7 +1136,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the institutionContactEmailAddress attribute.
      * 
-     * @param - institutionContactEmailAddress The institutionContactEmailAddress to set.
+     * @param institutionContactEmailAddress The institutionContactEmailAddress to set.
      * 
      */
     public void setInstitutionContactEmailAddress(String institutionContactEmailAddress) {
@@ -1144,7 +1146,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the billingName attribute.
      * 
-     * @return - Returns the billingName
+     * @return Returns the billingName
      * 
      */
     public String getBillingName() { 
@@ -1154,7 +1156,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the billingName attribute.
      * 
-     * @param - billingName The billingName to set.
+     * @param billingName The billingName to set.
      * 
      */
     public void setBillingName(String billingName) {
@@ -1164,7 +1166,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the billingLine1Address attribute.
      * 
-     * @return - Returns the billingLine1Address
+     * @return Returns the billingLine1Address
      * 
      */
     public String getBillingLine1Address() { 
@@ -1174,7 +1176,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the billingLine1Address attribute.
      * 
-     * @param - billingLine1Address The billingLine1Address to set.
+     * @param billingLine1Address The billingLine1Address to set.
      * 
      */
     public void setBillingLine1Address(String billingLine1Address) {
@@ -1184,7 +1186,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the billingLine2Address attribute.
      * 
-     * @return - Returns the billingLine2Address
+     * @return Returns the billingLine2Address
      * 
      */
     public String getBillingLine2Address() { 
@@ -1194,7 +1196,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the billingLine2Address attribute.
      * 
-     * @param - billingLine2Address The billingLine2Address to set.
+     * @param billingLine2Address The billingLine2Address to set.
      * 
      */
     public void setBillingLine2Address(String billingLine2Address) {
@@ -1204,7 +1206,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the billingCityName attribute.
      * 
-     * @return - Returns the billingCityName
+     * @return Returns the billingCityName
      * 
      */
     public String getBillingCityName() { 
@@ -1214,7 +1216,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the billingCityName attribute.
      * 
-     * @param - billingCityName The billingCityName to set.
+     * @param billingCityName The billingCityName to set.
      * 
      */
     public void setBillingCityName(String billingCityName) {
@@ -1224,7 +1226,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the billingStateCode attribute.
      * 
-     * @return - Returns the billingStateCode
+     * @return Returns the billingStateCode
      * 
      */
     public String getBillingStateCode() { 
@@ -1234,7 +1236,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the billingStateCode attribute.
      * 
-     * @param - billingStateCode The billingStateCode to set.
+     * @param billingStateCode The billingStateCode to set.
      * 
      */
     public void setBillingStateCode(String billingStateCode) {
@@ -1244,7 +1246,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the billingPostalCode attribute.
      * 
-     * @return - Returns the billingPostalCode
+     * @return Returns the billingPostalCode
      * 
      */
     public String getBillingPostalCode() { 
@@ -1254,7 +1256,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the billingPostalCode attribute.
      * 
-     * @param - billingPostalCode The billingPostalCode to set.
+     * @param billingPostalCode The billingPostalCode to set.
      * 
      */
     public void setBillingPostalCode(String billingPostalCode) {
@@ -1264,7 +1266,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the billingCountryCode attribute.
      * 
-     * @return - Returns the billingCountryCode
+     * @return Returns the billingCountryCode
      * 
      */
     public String getBillingCountryCode() { 
@@ -1274,7 +1276,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the billingCountryCode attribute.
      * 
-     * @param - billingCountryCode The billingCountryCode to set.
+     * @param billingCountryCode The billingCountryCode to set.
      * 
      */
     public void setBillingCountryCode(String billingCountryCode) {
@@ -1284,7 +1286,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the billingPhoneNumber attribute.
      * 
-     * @return - Returns the billingPhoneNumber
+     * @return Returns the billingPhoneNumber
      * 
      */
     public String getBillingPhoneNumber() { 
@@ -1294,7 +1296,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the billingPhoneNumber attribute.
      * 
-     * @param - billingPhoneNumber The billingPhoneNumber to set.
+     * @param billingPhoneNumber The billingPhoneNumber to set.
      * 
      */
     public void setBillingPhoneNumber(String billingPhoneNumber) {
@@ -1304,7 +1306,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the externalOrganizationB2bSupplierIdentifier attribute.
      * 
-     * @return - Returns the externalOrganizationB2bSupplierIdentifier
+     * @return Returns the externalOrganizationB2bSupplierIdentifier
      * 
      */
     public String getExternalOrganizationB2bSupplierIdentifier() { 
@@ -1314,7 +1316,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the externalOrganizationB2bSupplierIdentifier attribute.
      * 
-     * @param - externalOrganizationB2bSupplierIdentifier The externalOrganizationB2bSupplierIdentifier to set.
+     * @param externalOrganizationB2bSupplierIdentifier The externalOrganizationB2bSupplierIdentifier to set.
      * 
      */
     public void setExternalOrganizationB2bSupplierIdentifier(String externalOrganizationB2bSupplierIdentifier) {
@@ -1324,7 +1326,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the contractManagerCode attribute.
      * 
-     * @return - Returns the contractManagerCode
+     * @return Returns the contractManagerCode
      * 
      */
     public Integer getContractManagerCode() { 
@@ -1334,7 +1336,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the contractManagerCode attribute.
      * 
-     * @param - contractManagerCode The contractManagerCode to set.
+     * @param contractManagerCode The contractManagerCode to set.
      * 
      */
     public void setContractManagerCode(Integer contractManagerCode) {
@@ -1344,7 +1346,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the purchaseOrderAutomaticIndicator attribute.
      * 
-     * @return - Returns the purchaseOrderAutomaticIndicator
+     * @return Returns the purchaseOrderAutomaticIndicator
      * 
      */
     public boolean getPurchaseOrderAutomaticIndicator() { 
@@ -1354,7 +1356,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the purchaseOrderAutomaticIndicator attribute.
      * 
-     * @param - purchaseOrderAutomaticIndicator The purchaseOrderAutomaticIndicator to set.
+     * @param purchaseOrderAutomaticIndicator The purchaseOrderAutomaticIndicator to set.
      * 
      */
     public void setPurchaseOrderAutomaticIndicator(boolean purchaseOrderAutomaticIndicator) {
@@ -1364,7 +1366,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the fundingSource attribute.
      * 
-     * @return - Returns the fundingSource
+     * @return Returns the fundingSource
      * 
      */
     public FundingSource getFundingSource() { 
@@ -1374,7 +1376,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the fundingSource attribute.
      * 
-     * @param - fundingSource The fundingSource to set.
+     * @param fundingSource The fundingSource to set.
      * @deprecated
      */
     public void setFundingSource(FundingSource fundingSource) {
@@ -1384,7 +1386,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the requisitionSource attribute.
      * 
-     * @return - Returns the requisitionSource
+     * @return Returns the requisitionSource
      * 
      */
     public RequisitionSource getRequisitionSource() { 
@@ -1394,7 +1396,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the requisitionSource attribute.
      * 
-     * @param - requisitionSource The requisitionSource to set.
+     * @param requisitionSource The requisitionSource to set.
      * @deprecated
      */
     public void setRequisitionSource(RequisitionSource requisitionSource) {
@@ -1404,7 +1406,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the purchaseOrderTransmissionMethod attribute.
      * 
-     * @return - Returns the purchaseOrderTransmissionMethod
+     * @return Returns the purchaseOrderTransmissionMethod
      * 
      */
     public PurchaseOrderTransmissionMethod getPurchaseOrderTransmissionMethod() { 
@@ -1414,7 +1416,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the purchaseOrderTransmissionMethod attribute.
      * 
-     * @param - purchaseOrderTransmissionMethod The purchaseOrderTransmissionMethod to set.
+     * @param purchaseOrderTransmissionMethod The purchaseOrderTransmissionMethod to set.
      * @deprecated
      */
     public void setPurchaseOrderTransmissionMethod(PurchaseOrderTransmissionMethod purchaseOrderTransmissionMethod) {
@@ -1424,7 +1426,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the purchaseOrderCostSource attribute.
      * 
-     * @return - Returns the purchaseOrderCostSource
+     * @return Returns the purchaseOrderCostSource
      * 
      */
     public PurchaseOrderCostSource getPurchaseOrderCostSource() { 
@@ -1434,7 +1436,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the purchaseOrderCostSource attribute.
      * 
-     * @param - purchaseOrderCostSource The purchaseOrderCostSource to set.
+     * @param purchaseOrderCostSource The purchaseOrderCostSource to set.
      * @deprecated
      */
     public void setPurchaseOrderCostSource(PurchaseOrderCostSource purchaseOrderCostSource) {
@@ -1444,7 +1446,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryRequiredDateReason attribute.
      * 
-     * @return - Returns the deliveryRequiredDateReason
+     * @return Returns the deliveryRequiredDateReason
      * 
      */
     public DeliveryRequiredDateReason getDeliveryRequiredDateReason() { 
@@ -1454,7 +1456,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryRequiredDateReason attribute.
      * 
-     * @param - deliveryRequiredDateReason The deliveryRequiredDateReason to set.
+     * @param deliveryRequiredDateReason The deliveryRequiredDateReason to set.
      * @deprecated
      */
     public void setDeliveryRequiredDateReason(DeliveryRequiredDateReason deliveryRequiredDateReason) {
@@ -1464,7 +1466,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the recurringPaymentType attribute.
      * 
-     * @return - Returns the recurringPaymentType
+     * @return Returns the recurringPaymentType
      * 
      */
     public RecurringPaymentType getRecurringPaymentType() { 
@@ -1474,7 +1476,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the recurringPaymentType attribute.
      * 
-     * @param - recurringPaymentType The recurringPaymentType to set.
+     * @param recurringPaymentType The recurringPaymentType to set.
      * @deprecated
      */
     public void setRecurringPaymentType(RecurringPaymentType recurringPaymentType) {
@@ -1484,7 +1486,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the organization attribute.
      * 
-     * @return - Returns the organization
+     * @return Returns the organization
      * 
      */
     public Org getOrganization() { 
@@ -1494,7 +1496,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the organization attribute.
      * 
-     * @param - organization The organization to set.
+     * @param organization The organization to set.
      * @deprecated
      */
     public void setOrganization(Org organization) {
@@ -1504,7 +1506,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return - Returns the chartOfAccounts
+     * @return Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() { 
@@ -1514,7 +1516,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the chartOfAccounts attribute.
      * 
-     * @param - chartOfAccounts The chartOfAccounts to set.
+     * @param chartOfAccounts The chartOfAccounts to set.
      * @deprecated
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -1524,7 +1526,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the deliveryCampus attribute.
      * 
-     * @return - Returns the deliveryCampus
+     * @return Returns the deliveryCampus
      * 
      */
     public Campus getDeliveryCampus() { 
@@ -1534,7 +1536,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the deliveryCampus attribute.
      * 
-     * @param - deliveryCampus The deliveryCampus to set.
+     * @param deliveryCampus The deliveryCampus to set.
      * @deprecated
      */
     public void setDeliveryCampus(Campus deliveryCampus) {
@@ -1544,7 +1546,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the nonInstitutionFundOrgChartOfAccounts attribute.
      * 
-     * @return - Returns the nonInstitutionFundOrgChartOfAccounts
+     * @return Returns the nonInstitutionFundOrgChartOfAccounts
      * 
      */
     public Chart getNonInstitutionFundOrgChartOfAccounts() { 
@@ -1554,7 +1556,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the nonInstitutionFundOrgChartOfAccounts attribute.
      * 
-     * @param - nonInstitutionFundOrgChartOfAccounts The nonInstitutionFundOrgChartOfAccounts to set.
+     * @param nonInstitutionFundOrgChartOfAccounts The nonInstitutionFundOrgChartOfAccounts to set.
      * @deprecated
      */
     public void setNonInstitutionFundOrgChartOfAccounts(Chart nonInstitutionFundOrgChartOfAccounts) {
@@ -1564,7 +1566,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the nonInstitutionFundOrganization attribute.
      * 
-     * @return - Returns the nonInstitutionFundOrganization
+     * @return Returns the nonInstitutionFundOrganization
      * 
      */
     public Org getNonInstitutionFundOrganization() { 
@@ -1574,7 +1576,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the nonInstitutionFundOrganization attribute.
      * 
-     * @param - nonInstitutionFundOrganization The nonInstitutionFundOrganization to set.
+     * @param nonInstitutionFundOrganization The nonInstitutionFundOrganization to set.
      * @deprecated
      */
     public void setNonInstitutionFundOrganization(Org nonInstitutionFundOrganization) {
@@ -1584,7 +1586,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the nonInstitutionFundAccount attribute.
      * 
-     * @return - Returns the nonInstitutionFundAccount
+     * @return Returns the nonInstitutionFundAccount
      * 
      */
     public Account getNonInstitutionFundAccount() { 
@@ -1594,7 +1596,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the nonInstitutionFundAccount attribute.
      * 
-     * @param - nonInstitutionFundAccount The nonInstitutionFundAccount to set.
+     * @param nonInstitutionFundAccount The nonInstitutionFundAccount to set.
      * @deprecated
      */
     public void setNonInstitutionFundAccount(Account nonInstitutionFundAccount) {
@@ -1604,7 +1606,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Gets the nonInstitutionFundChartOfAccounts attribute.
      * 
-     * @return - Returns the nonInstitutionFundChartOfAccounts
+     * @return Returns the nonInstitutionFundChartOfAccounts
      * 
      */
     public Chart getNonInstitutionFundChartOfAccounts() { 
@@ -1614,7 +1616,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     /**
      * Sets the nonInstitutionFundChartOfAccounts attribute.
      * 
-     * @param - nonInstitutionFundChartOfAccounts The nonInstitutionFundChartOfAccounts to set.
+     * @param nonInstitutionFundChartOfAccounts The nonInstitutionFundChartOfAccounts to set.
      * @deprecated
      */
     public void setNonInstitutionFundChartOfAccounts(Chart nonInstitutionFundChartOfAccounts) {
@@ -1680,13 +1682,47 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     }
 
     public void addItem(PurchasingItem item) {
-        //for now set the line number to the position
-        item.setItemLineNumber(items.size());
-        items.add(item);
+        int itemLinePosition = items.size();
+        if(item.getItemLineNumber()!=null) {
+            itemLinePosition = item.getItemLineNumber().intValue();
+        }
+       
+        //if the user entered something set line number to that
+        if(itemLinePosition>1&&itemLinePosition<items.size()) {
+            itemLinePosition = item.getItemLineNumber() - 1;
+        }
+        
+        items.add(itemLinePosition,item);
+        renumberItems(itemLinePosition);
     }
-    //TODO: this may run into struts problems, look at accountingline or intbilling (but watch for inheritance) to fix
+    
+    public void deleteItem(int lineNum) {
+        if(items.remove(lineNum)==null) {
+            //throw error here
+        }
+        renumberItems(lineNum);
+    }
+    
+    public void renumberItems(int start) {
+        for (int i = start; i<items.size(); i++) {
+            PurchasingItem item = (PurchasingItem)items.get(i);
+            item.setItemLineNumber(new Integer(i+1));
+        }
+    }
+    
     public PurchasingItem getItem(int pos) {
+        while (getItems().size() <= pos) {
+            //TODO: totally incorrect shouldn't be ReqItem fix later
+            getItems().add(new RequisitionItem());
+        }
         return (PurchasingItem)items.get(pos);
+    }
+    public KualiDecimal getTotal() {
+        KualiDecimal total = new KualiDecimal("0");
+        for (PurchasingItem item : items) {
+           total = total.add(item.getExtendedPrice());
+       }
+       return total;
     }
 
     /**
