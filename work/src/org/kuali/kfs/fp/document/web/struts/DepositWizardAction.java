@@ -37,7 +37,6 @@ import org.kuali.Constants.CashDrawerConstants;
 import org.kuali.core.authorization.DocumentAuthorizer;
 
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
 import org.kuali.core.exceptions.InfrastructureException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.GlobalVariables;
@@ -83,9 +82,7 @@ public class DepositWizardAction extends KualiAction {
         String cmDocTypeName = SpringServiceLocator.getDataDictionaryService().getDocumentTypeNameByClass(CashManagementDocument.class);
         DocumentAuthorizer cmDocAuthorizer = SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(cmDocTypeName);
         UniversalUser luser = GlobalVariables.getUserSession().getUniversalUser();
-        if (!cmDocAuthorizer.canInitiate(cmDocTypeName, luser)) {
-            throw new DocumentTypeAuthorizationException(luser.getPersonUserIdentifier(), "add deposits to", cmDocTypeName);
-        }
+        cmDocAuthorizer.canInitiate(cmDocTypeName, luser);
 
         // populate the outgoing form used by the JSP if it seems empty
         String cmDocId = dwForm.getCashManagementDocId();
@@ -115,13 +112,13 @@ public class DepositWizardAction extends KualiAction {
         if (!cd.isOpen()) {
             CashDrawerStatusCodeFormatter f = new CashDrawerStatusCodeFormatter();
 
-            String cmDocId = cmDoc.getFinancialDocumentNumber();
+            String cmDocId = cmDoc.getDocumentNumber();
             String currentState = cd.getStatusCode();
 
             throw new CashDrawerStateException(verificationUnit, cmDocId, (String) f.format(CashDrawerConstants.STATUS_OPEN), (String) f.format(cd.getStatusCode()));
         }
 
-        dform.setCashManagementDocId(cmDoc.getFinancialDocumentNumber());
+        dform.setCashManagementDocId(cmDoc.getDocumentNumber());
         dform.setCashDrawerVerificationUnit(verificationUnit);
 
         dform.setDepositTypeCode(depositTypeCode);
