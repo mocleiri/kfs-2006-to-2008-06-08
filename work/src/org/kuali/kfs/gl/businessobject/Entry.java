@@ -35,6 +35,7 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.PropertyConstants;
 
 /**
  * 
@@ -53,7 +54,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     private String universityFiscalPeriodCode;
     private String financialDocumentTypeCode;
     private String financialSystemOriginationCode;
-    private String financialDocumentNumber;
+    private String documentNumber;
     private Integer transactionLedgerEntrySequenceNumber;
     private String transactionLedgerEntryDescription;
     private KualiDecimal transactionLedgerEntryAmount;
@@ -112,7 +113,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
         setUniversityFiscalPeriodCode(t.getUniversityFiscalPeriodCode());
         setFinancialDocumentTypeCode(t.getFinancialDocumentTypeCode());
         setFinancialSystemOriginationCode(t.getFinancialSystemOriginationCode());
-        setFinancialDocumentNumber(t.getFinancialDocumentNumber());
+        setDocumentNumber(t.getDocumentNumber());
         setTransactionLedgerEntrySequenceNumber(t.getTransactionLedgerEntrySequenceNumber());
         setTransactionLedgerEntryDescription(t.getTransactionLedgerEntryDescription());
         setTransactionLedgerEntryAmount(t.getTransactionLedgerEntryAmount());
@@ -153,7 +154,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return - Returns the universityFiscalYear
+     * @return Returns the universityFiscalYear
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -171,7 +172,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return - Returns the chartOfAccountsCode
+     * @return Returns the chartOfAccountsCode
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -189,7 +190,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return - Returns the accountNumber
+     * @return Returns the accountNumber
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -207,7 +208,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the subAccountNumber attribute.
      * 
-     * @return - Returns the subAccountNumber
+     * @return Returns the subAccountNumber
      */
     public String getSubAccountNumber() {
         return subAccountNumber;
@@ -225,7 +226,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return - Returns the financialObjectCode
+     * @return Returns the financialObjectCode
      */
     public String getFinancialObjectCode() {
         return financialObjectCode;
@@ -243,7 +244,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the financialSubObjectCode attribute.
      * 
-     * @return - Returns the financialSubObjectCode
+     * @return Returns the financialSubObjectCode
      */
     public String getFinancialSubObjectCode() {
         return financialSubObjectCode;
@@ -261,7 +262,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the financialBalanceTypeCode attribute.
      * 
-     * @return - Returns the financialBalanceTypeCode
+     * @return Returns the financialBalanceTypeCode
      */
     public String getFinancialBalanceTypeCode() {
         return financialBalanceTypeCode;
@@ -279,7 +280,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the financialObjectTypeCode attribute.
      * 
-     * @return - Returns the financialObjectTypeCode
+     * @return Returns the financialObjectTypeCode
      */
     public String getFinancialObjectTypeCode() {
         return financialObjectTypeCode;
@@ -297,7 +298,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the universityFiscalPeriodCode attribute.
      * 
-     * @return - Returns the universityFiscalPeriodCode
+     * @return Returns the universityFiscalPeriodCode
      */
     public String getUniversityFiscalPeriodCode() {
         return universityFiscalPeriodCode;
@@ -315,7 +316,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return - Returns the financialDocumentTypeCode
+     * @return Returns the financialDocumentTypeCode
      */
     public String getFinancialDocumentTypeCode() {
         return financialDocumentTypeCode;
@@ -333,7 +334,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the financialSystemOriginationCode attribute.
      * 
-     * @return - Returns the financialSystemOriginationCode
+     * @return Returns the financialSystemOriginationCode
      */
     public String getFinancialSystemOriginationCode() {
         return financialSystemOriginationCode;
@@ -349,27 +350,27 @@ public class Entry extends BusinessObjectBase implements Transaction {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
     /**
      * Gets the transactionLedgerEntrySequenceNumber attribute.
      * 
-     * @return - Returns the transactionLedgerEntrySequenceNumber
+     * @return Returns the transactionLedgerEntrySequenceNumber
      */
     public Integer getTransactionLedgerEntrySequenceNumber() {
         return transactionLedgerEntrySequenceNumber;
@@ -387,7 +388,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the transactionLedgerEntryDescription attribute.
      * 
-     * @return - Returns the transactionLedgerEntryDescription
+     * @return Returns the transactionLedgerEntryDescription
      */
     public String getTransactionLedgerEntryDescription() {
         return transactionLedgerEntryDescription;
@@ -405,7 +406,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the transactionLedgerEntryAmount attribute.
      * 
-     * @return - Returns the transactionLedgerEntryAmount
+     * @return Returns the transactionLedgerEntryAmount
      */
     public KualiDecimal getTransactionLedgerEntryAmount() {
         return transactionLedgerEntryAmount;
@@ -423,7 +424,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the transactionDebitCreditCode attribute.
      * 
-     * @return - Returns the transactionDebitCreditCode
+     * @return Returns the transactionDebitCreditCode
      */
     public String getTransactionDebitCreditCode() {
         return transactionDebitCreditCode;
@@ -441,7 +442,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the transactionDate attribute.
      * 
-     * @return - Returns the transactionDate
+     * @return Returns the transactionDate
      */
     public Date getTransactionDate() {
         return transactionDate;
@@ -459,7 +460,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the organizationDocumentNumber attribute.
      * 
-     * @return - Returns the organizationDocumentNumber
+     * @return Returns the organizationDocumentNumber
      */
     public String getOrganizationDocumentNumber() {
         return organizationDocumentNumber;
@@ -477,7 +478,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the projectCode attribute.
      * 
-     * @return - Returns the projectCode
+     * @return Returns the projectCode
      */
     public String getProjectCode() {
         return projectCode;
@@ -495,7 +496,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the organizationReferenceId attribute.
      * 
-     * @return - Returns the organizationReferenceId
+     * @return Returns the organizationReferenceId
      */
     public String getOrganizationReferenceId() {
         return organizationReferenceId;
@@ -513,7 +514,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the referenceFinancialDocumentTypeCode attribute.
      * 
-     * @return - Returns the referenceFinancialDocumentTypeCode
+     * @return Returns the referenceFinancialDocumentTypeCode
      */
     public String getReferenceFinancialDocumentTypeCode() {
         return referenceFinancialDocumentTypeCode;
@@ -531,7 +532,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the referenceFinancialSystemOriginationCode attribute.
      * 
-     * @return - Returns the referenceFinancialSystemOriginationCode
+     * @return Returns the referenceFinancialSystemOriginationCode
      */
     public String getReferenceFinancialSystemOriginationCode() {
         return referenceFinancialSystemOriginationCode;
@@ -549,7 +550,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the referenceFinancialDocumentNumber attribute.
      * 
-     * @return - Returns the referenceFinancialDocumentNumber
+     * @return Returns the referenceFinancialDocumentNumber
      */
     public String getReferenceFinancialDocumentNumber() {
         return referenceFinancialDocumentNumber;
@@ -567,7 +568,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the financialDocumentReversalDate attribute.
      * 
-     * @return - Returns the financialDocumentReversalDate
+     * @return Returns the financialDocumentReversalDate
      */
     public Date getFinancialDocumentReversalDate() {
         return financialDocumentReversalDate;
@@ -585,7 +586,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the transactionEncumbranceUpdateCode attribute.
      * 
-     * @return - Returns the transactionEncumbranceUpdateCode
+     * @return Returns the transactionEncumbranceUpdateCode
      */
     public String getTransactionEncumbranceUpdateCode() {
         return transactionEncumbranceUpdateCode;
@@ -603,7 +604,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the transactionPostingDate attribute.
      * 
-     * @return - Returns the transactionPostingDate
+     * @return Returns the transactionPostingDate
      */
     public Date getTransactionPostingDate() {
         return transactionPostingDate;
@@ -621,7 +622,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the transactionDateTimeStamp attribute.
      * 
-     * @return - Returns the transactionDateTimeStamp
+     * @return Returns the transactionDateTimeStamp
      */
     public Date getTransactionDateTimeStamp() {
         return transactionDateTimeStamp;
@@ -639,7 +640,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
     /**
      * Gets the budgetYear attribute.
      * 
-     * @return - Returns the budgetYear
+     * @return Returns the budgetYear
      */
     public String getBudgetYear() {
         return budgetYear;
@@ -774,7 +775,7 @@ public class Entry extends BusinessObjectBase implements Transaction {
         m.put("universityFiscalPeriodCode", this.universityFiscalPeriodCode);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
         m.put("financialSystemOriginationCode", this.financialSystemOriginationCode);
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("transactionLedgerEntrySequenceNumber", this.transactionLedgerEntrySequenceNumber.toString());
         return m;
     }

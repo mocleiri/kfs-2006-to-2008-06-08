@@ -81,7 +81,7 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends KualiTestBase {
             {
                 // create a DIE doc
                 DistributionOfIncomeAndExpenseDocument createdDoc = (DistributionOfIncomeAndExpenseDocument) getDocumentService().getNewDocument(DistributionOfIncomeAndExpenseDocument.class);
-                testDocId = createdDoc.getFinancialDocumentNumber();
+                testDocId = createdDoc.getDocumentNumber();
 
                 // populate and save it
                 createdDoc.getDocumentHeader().setFinancialDocumentDescription("created by testKULEDOCS_1401");
@@ -90,7 +90,7 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends KualiTestBase {
                 createdDoc.addSourceAccountingLine(getSourceAccountingLineAccessibleAccount());
                 createdDoc.addTargetAccountingLine(getTargetAccountingLineAccessibleAccount());
 
-                getDocumentService().saveDocument(createdDoc);
+                getDocumentService().saveDocument(createdDoc, null, null);
             }
 
             {
