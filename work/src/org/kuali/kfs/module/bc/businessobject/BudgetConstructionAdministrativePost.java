@@ -30,7 +30,7 @@ public class BudgetConstructionAdministrativePost extends BusinessObjectBase {
 	private String emplid;
 	private String positionNumber;
 	private String administrativePost;
-
+  
 	/**
 	 * Default constructor.
 	 */
@@ -41,7 +41,7 @@ public class BudgetConstructionAdministrativePost extends BusinessObjectBase {
 	/**
 	 * Gets the emplid attribute.
 	 * 
-	 * @return - Returns the emplid
+	 * @return Returns the emplid
 	 * 
 	 */
 	public String getEmplid() { 
@@ -51,7 +51,7 @@ public class BudgetConstructionAdministrativePost extends BusinessObjectBase {
 	/**
 	 * Sets the emplid attribute.
 	 * 
-	 * @param - emplid The emplid to set.
+	 * @param emplid The emplid to set.
 	 * 
 	 */
 	public void setEmplid(String emplid) {
@@ -62,7 +62,7 @@ public class BudgetConstructionAdministrativePost extends BusinessObjectBase {
 	/**
 	 * Gets the positionNumber attribute.
 	 * 
-	 * @return - Returns the positionNumber
+	 * @return Returns the positionNumber
 	 * 
 	 */
 	public String getPositionNumber() { 
@@ -72,7 +72,7 @@ public class BudgetConstructionAdministrativePost extends BusinessObjectBase {
 	/**
 	 * Sets the positionNumber attribute.
 	 * 
-	 * @param - positionNumber The positionNumber to set.
+	 * @param positionNumber The positionNumber to set.
 	 * 
 	 */
 	public void setPositionNumber(String positionNumber) {
@@ -83,7 +83,7 @@ public class BudgetConstructionAdministrativePost extends BusinessObjectBase {
 	/**
 	 * Gets the administrativePost attribute.
 	 * 
-	 * @return - Returns the administrativePost
+	 * @return Returns the administrativePost
 	 * 
 	 */
 	public String getAdministrativePost() { 
@@ -93,21 +93,21 @@ public class BudgetConstructionAdministrativePost extends BusinessObjectBase {
 	/**
 	 * Sets the administrativePost attribute.
 	 * 
-	 * @param - administrativePost The administrativePost to set.
+	 * @param administrativePost The administrativePost to set.
 	 * 
 	 */
 	public void setAdministrativePost(String administrativePost) {
 		this.administrativePost = administrativePost;
 	}
 
-
-	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
         m.put("emplid", this.emplid);
         m.put("positionNumber", this.positionNumber);
-	    return m;
+        return m;
     }
+
 }

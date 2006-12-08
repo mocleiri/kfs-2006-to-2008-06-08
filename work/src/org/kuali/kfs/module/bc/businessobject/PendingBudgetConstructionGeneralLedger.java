@@ -30,13 +30,15 @@ import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.bo.Balance;
+import org.kuali.module.labor.bo.LaborObject;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 
-	private String financialDocumentNumber;
+	private String documentNumber;
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
 	private String accountNumber;
@@ -55,9 +57,10 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	private Account account;
     private SubAccount subAccount;
     private SubObjCd financialSubObject;
-    private Balance financialBalanceType;
+    private Balance financialBalance;
     private BalanceTyp balanceType;
     private ObjectType objectType;
+    private LaborObject laborObject;
     
 	/**
 	 * Default constructor.
@@ -67,30 +70,30 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	}
 
 	/**
-	 * Gets the financialDocumentNumber attribute.
+	 * Gets the documentNumber attribute.
 	 * 
-	 * @return - Returns the financialDocumentNumber
+	 * @return Returns the documentNumber
 	 * 
 	 */
-	public String getFinancialDocumentNumber() { 
-		return financialDocumentNumber;
+	public String getDocumentNumber() { 
+		return documentNumber;
 	}
 
 	/**
-	 * Sets the financialDocumentNumber attribute.
+	 * Sets the documentNumber attribute.
 	 * 
-	 * @param - financialDocumentNumber The financialDocumentNumber to set.
+	 * @param documentNumber The documentNumber to set.
 	 * 
 	 */
-	public void setFinancialDocumentNumber(String financialDocumentNumber) {
-		this.financialDocumentNumber = financialDocumentNumber;
+	public void setDocumentNumber(String documentNumber) {
+		this.documentNumber = documentNumber;
 	}
 
 
 	/**
 	 * Gets the universityFiscalYear attribute.
 	 * 
-	 * @return - Returns the universityFiscalYear
+	 * @return Returns the universityFiscalYear
 	 * 
 	 */
 	public Integer getUniversityFiscalYear() { 
@@ -100,7 +103,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the universityFiscalYear attribute.
 	 * 
-	 * @param - universityFiscalYear The universityFiscalYear to set.
+	 * @param universityFiscalYear The universityFiscalYear to set.
 	 * 
 	 */
 	public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -111,7 +114,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
-	 * @return - Returns the chartOfAccountsCode
+	 * @return Returns the chartOfAccountsCode
 	 * 
 	 */
 	public String getChartOfAccountsCode() { 
@@ -121,7 +124,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the chartOfAccountsCode attribute.
 	 * 
-	 * @param - chartOfAccountsCode The chartOfAccountsCode to set.
+	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
 	 * 
 	 */
 	public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -132,7 +135,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the accountNumber attribute.
 	 * 
-	 * @return - Returns the accountNumber
+	 * @return Returns the accountNumber
 	 * 
 	 */
 	public String getAccountNumber() { 
@@ -142,7 +145,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the accountNumber attribute.
 	 * 
-	 * @param - accountNumber The accountNumber to set.
+	 * @param accountNumber The accountNumber to set.
 	 * 
 	 */
 	public void setAccountNumber(String accountNumber) {
@@ -153,7 +156,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the subAccountNumber attribute.
 	 * 
-	 * @return - Returns the subAccountNumber
+	 * @return Returns the subAccountNumber
 	 * 
 	 */
 	public String getSubAccountNumber() { 
@@ -163,7 +166,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the subAccountNumber attribute.
 	 * 
-	 * @param - subAccountNumber The subAccountNumber to set.
+	 * @param subAccountNumber The subAccountNumber to set.
 	 * 
 	 */
 	public void setSubAccountNumber(String subAccountNumber) {
@@ -174,7 +177,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the financialObjectCode attribute.
 	 * 
-	 * @return - Returns the financialObjectCode
+	 * @return Returns the financialObjectCode
 	 * 
 	 */
 	public String getFinancialObjectCode() { 
@@ -184,7 +187,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the financialObjectCode attribute.
 	 * 
-	 * @param - financialObjectCode The financialObjectCode to set.
+	 * @param financialObjectCode The financialObjectCode to set.
 	 * 
 	 */
 	public void setFinancialObjectCode(String financialObjectCode) {
@@ -195,7 +198,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the financialSubObjectCode attribute.
 	 * 
-	 * @return - Returns the financialSubObjectCode
+	 * @return Returns the financialSubObjectCode
 	 * 
 	 */
 	public String getFinancialSubObjectCode() { 
@@ -205,7 +208,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the financialSubObjectCode attribute.
 	 * 
-	 * @param - financialSubObjectCode The financialSubObjectCode to set.
+	 * @param financialSubObjectCode The financialSubObjectCode to set.
 	 * 
 	 */
 	public void setFinancialSubObjectCode(String financialSubObjectCode) {
@@ -216,7 +219,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the financialBalanceTypeCode attribute.
 	 * 
-	 * @return - Returns the financialBalanceTypeCode
+	 * @return Returns the financialBalanceTypeCode
 	 * 
 	 */
 	public String getFinancialBalanceTypeCode() { 
@@ -226,7 +229,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the financialBalanceTypeCode attribute.
 	 * 
-	 * @param - financialBalanceTypeCode The financialBalanceTypeCode to set.
+	 * @param financialBalanceTypeCode The financialBalanceTypeCode to set.
 	 * 
 	 */
 	public void setFinancialBalanceTypeCode(String financialBalanceTypeCode) {
@@ -237,7 +240,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the financialObjectTypeCode attribute.
 	 * 
-	 * @return - Returns the financialObjectTypeCode
+	 * @return Returns the financialObjectTypeCode
 	 * 
 	 */
 	public String getFinancialObjectTypeCode() { 
@@ -247,7 +250,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the financialObjectTypeCode attribute.
 	 * 
-	 * @param - financialObjectTypeCode The financialObjectTypeCode to set.
+	 * @param financialObjectTypeCode The financialObjectTypeCode to set.
 	 * 
 	 */
 	public void setFinancialObjectTypeCode(String financialObjectTypeCode) {
@@ -258,7 +261,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the accountLineAnnualBalanceAmount attribute.
 	 * 
-	 * @return - Returns the accountLineAnnualBalanceAmount
+	 * @return Returns the accountLineAnnualBalanceAmount
 	 * 
 	 */
 	public KualiDecimal getAccountLineAnnualBalanceAmount() { 
@@ -268,7 +271,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the accountLineAnnualBalanceAmount attribute.
 	 * 
-	 * @param - accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
+	 * @param accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
 	 * 
 	 */
 	public void setAccountLineAnnualBalanceAmount(KualiDecimal accountLineAnnualBalanceAmount) {
@@ -279,7 +282,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the financialBeginningBalanceLineAmount attribute.
 	 * 
-	 * @return - Returns the financialBeginningBalanceLineAmount
+	 * @return Returns the financialBeginningBalanceLineAmount
 	 * 
 	 */
 	public KualiDecimal getFinancialBeginningBalanceLineAmount() { 
@@ -289,7 +292,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the financialBeginningBalanceLineAmount attribute.
 	 * 
-	 * @param - financialBeginningBalanceLineAmount The financialBeginningBalanceLineAmount to set.
+	 * @param financialBeginningBalanceLineAmount The financialBeginningBalanceLineAmount to set.
 	 * 
 	 */
 	public void setFinancialBeginningBalanceLineAmount(KualiDecimal financialBeginningBalanceLineAmount) {
@@ -300,7 +303,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the budgetConstructionMonthly attribute.
 	 * 
-	 * @return - Returns the budgetConstructionMonthly
+	 * @return Returns the budgetConstructionMonthly
 	 * 
 	 */
 	public BudgetConstructionMonthly getBudgetConstructionMonthly() { 
@@ -310,7 +313,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the budgetConstructionMonthly attribute.
 	 * 
-	 * @param - budgetConstructionMonthly The budgetConstructionMonthly to set.
+	 * @param budgetConstructionMonthly The budgetConstructionMonthly to set.
 	 * @deprecated
 	 */
 	public void setBudgetConstructionMonthly(BudgetConstructionMonthly budgetConstructionMonthly) {
@@ -320,7 +323,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the financialObject attribute.
 	 * 
-	 * @return - Returns the financialObject
+	 * @return Returns the financialObject
 	 * 
 	 */
 	public ObjectCode getFinancialObject() { 
@@ -330,7 +333,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the financialObject attribute.
 	 * 
-	 * @param - financialObject The financialObject to set.
+	 * @param financialObject The financialObject to set.
 	 * @deprecated
 	 */
 	public void setFinancialObject(ObjectCode financialObject) {
@@ -340,7 +343,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
-	 * @return - Returns the chartOfAccounts
+	 * @return Returns the chartOfAccounts
 	 * 
 	 */
 	public Chart getChartOfAccounts() { 
@@ -350,7 +353,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the chartOfAccounts attribute.
 	 * 
-	 * @param - chartOfAccounts The chartOfAccounts to set.
+	 * @param chartOfAccounts The chartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -360,7 +363,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Gets the account attribute.
 	 * 
-	 * @return - Returns the account
+	 * @return Returns the account
 	 * 
 	 */
 	public Account getAccount() { 
@@ -370,7 +373,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 	/**
 	 * Sets the account attribute.
 	 * 
-	 * @param - account The account to set.
+	 * @param account The account to set.
 	 * @deprecated
 	 */
 	public void setAccount(Account account) {
@@ -412,20 +415,20 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialBalanceType attribute. 
-     * @return Returns the financialBalanceType.
+     * Gets the financialBalance attribute. 
+     * @return Returns the financialBalance.
      */
-    public Balance getFinancialBalanceType() {
-        return financialBalanceType;
+    public Balance getFinancialBalance() {
+        return financialBalance;
     }
 
     /**
-     * Sets the financialBalanceType attribute value.
-     * @param financialBalanceType The financialBalanceType to set.
+     * Sets the financialBalance attribute value.
+     * @param financialBalance The financialBalance to set.
      * @deprecated
      */
-    public void setFinancialBalanceType(Balance financialBalanceType) {
-        this.financialBalanceType = financialBalanceType;
+    public void setFinancialBalance(Balance financialBalance) {
+        this.financialBalance = financialBalance;
     }
 
     /**
@@ -478,13 +481,30 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
     public void setBudgetConstructionHeader(BudgetConstructionHeader budgetConstructionHeader) {
         this.budgetConstructionHeader = budgetConstructionHeader;
     }    
+
+    /**
+     * Gets the laborObject attribute. 
+     * @return Returns the laborObject.
+     */
+    public LaborObject getLaborObject() {
+        return laborObject;
+    }
+
+    /**
+     * Sets the laborObject attribute value.
+     * @param laborObject The laborObject to set.
+     * @deprecated
+     */
+    public void setLaborObject(LaborObject laborObject) {
+        this.laborObject = laborObject;
+    }        
     
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }
@@ -496,6 +516,7 @@ public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
         m.put("financialBalanceTypeCode", this.financialBalanceTypeCode);
         m.put("financialObjectTypeCode", this.financialObjectTypeCode);
         return m;
-    }    
-    
+    }
+
+  
 }

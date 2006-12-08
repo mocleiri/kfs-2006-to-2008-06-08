@@ -21,19 +21,19 @@
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.InstitutionCostSharePersonnel">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Institution Cost Share Personnel</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="researchDocumentNumber" />
+                <field attributeName="documentNumber" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
         <attributes>
 
-            <attribute name="researchDocumentNumber" forceUppercase="true">
+            <attribute name="documentNumber" forceUppercase="true">
                 <label>Budget Number</label>
                 <shortLabel>Budget Number</shortLabel>
 
@@ -127,6 +127,7 @@
 
         </attributes>
 
+		<objectLabel>Institution Cost Share Personnel</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

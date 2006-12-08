@@ -18,7 +18,9 @@
 
 package org.kuali.module.budget.bo;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
 
@@ -34,17 +36,22 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	private String grade;
 	private String iuClassificationLevel;
 
+    private List budgetConstructionSalarySocialSecurity;
+    private List pendingBudgetConstructionAppointmentFunding;
+    
 	/**
 	 * Default constructor.
 	 */
 	public BudgetConstructionIntendedIncumbent() {
-
+        budgetConstructionSalarySocialSecurity = new ArrayList();
+        pendingBudgetConstructionAppointmentFunding = new ArrayList();
+        
 	}
 
 	/**
 	 * Gets the emplid attribute.
 	 * 
-	 * @return - Returns the emplid
+	 * @return Returns the emplid
 	 * 
 	 */
 	public String getEmplid() { 
@@ -54,7 +61,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Sets the emplid attribute.
 	 * 
-	 * @param - emplid The emplid to set.
+	 * @param emplid The emplid to set.
 	 * 
 	 */
 	public void setEmplid(String emplid) {
@@ -65,7 +72,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Gets the personName attribute.
 	 * 
-	 * @return - Returns the personName
+	 * @return Returns the personName
 	 * 
 	 */
 	public String getPersonName() { 
@@ -75,7 +82,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Sets the personName attribute.
 	 * 
-	 * @param - personName The personName to set.
+	 * @param personName The personName to set.
 	 * 
 	 */
 	public void setPersonName(String personName) {
@@ -86,7 +93,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Gets the setidSalary attribute.
 	 * 
-	 * @return - Returns the setidSalary
+	 * @return Returns the setidSalary
 	 * 
 	 */
 	public String getSetidSalary() { 
@@ -96,7 +103,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Sets the setidSalary attribute.
 	 * 
-	 * @param - setidSalary The setidSalary to set.
+	 * @param setidSalary The setidSalary to set.
 	 * 
 	 */
 	public void setSetidSalary(String setidSalary) {
@@ -107,7 +114,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Gets the salaryAdministrationPlan attribute.
 	 * 
-	 * @return - Returns the salaryAdministrationPlan
+	 * @return Returns the salaryAdministrationPlan
 	 * 
 	 */
 	public String getSalaryAdministrationPlan() { 
@@ -117,7 +124,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Sets the salaryAdministrationPlan attribute.
 	 * 
-	 * @param - salaryAdministrationPlan The salaryAdministrationPlan to set.
+	 * @param salaryAdministrationPlan The salaryAdministrationPlan to set.
 	 * 
 	 */
 	public void setSalaryAdministrationPlan(String salaryAdministrationPlan) {
@@ -128,7 +135,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Gets the grade attribute.
 	 * 
-	 * @return - Returns the grade
+	 * @return Returns the grade
 	 * 
 	 */
 	public String getGrade() { 
@@ -138,7 +145,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Sets the grade attribute.
 	 * 
-	 * @param - grade The grade to set.
+	 * @param grade The grade to set.
 	 * 
 	 */
 	public void setGrade(String grade) {
@@ -149,7 +156,7 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Gets the iuClassificationLevel attribute.
 	 * 
-	 * @return - Returns the iuClassificationLevel
+	 * @return Returns the iuClassificationLevel
 	 * 
 	 */
 	public String getIuClassificationLevel() { 
@@ -159,19 +166,53 @@ public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 	/**
 	 * Sets the iuClassificationLevel attribute.
 	 * 
-	 * @param - iuClassificationLevel The iuClassificationLevel to set.
+	 * @param iuClassificationLevel The iuClassificationLevel to set.
 	 * 
 	 */
 	public void setIuClassificationLevel(String iuClassificationLevel) {
 		this.iuClassificationLevel = iuClassificationLevel;
 	}
 
-	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("emplid", this.emplid);
-	    return m;
+    /**
+     * Gets the budgetConstructionSalarySocialSecurity attribute. 
+     * @return Returns the budgetConstructionSalarySocialSecurity.
+     */
+    public List getBudgetConstructionSalarySocialSecurity() {
+        return budgetConstructionSalarySocialSecurity;
     }
+
+    /**
+     * Sets the budgetConstructionSalarySocialSecurity attribute value.
+     * @param budgetConstructionSalarySocialSecurity The budgetConstructionSalarySocialSecurity to set.
+     */
+    public void setBudgetConstructionSalarySocialSecurity(List budgetConstructionSalarySocialSecurity) {
+        this.budgetConstructionSalarySocialSecurity = budgetConstructionSalarySocialSecurity;
+    }
+
+    /**
+     * Gets the pendingBudgetConstructionAppointmentFunding attribute. 
+     * @return Returns the pendingBudgetConstructionAppointmentFunding.
+     */
+    public List getPendingBudgetConstructionAppointmentFunding() {
+        return pendingBudgetConstructionAppointmentFunding;
+    }
+
+    /**
+     * Sets the pendingBudgetConstructionAppointmentFunding attribute value.
+     * @param pendingBudgetConstructionAppointmentFunding The pendingBudgetConstructionAppointmentFunding to set.
+     */
+    public void setPendingBudgetConstructionAppointmentFunding(List pendingBudgetConstructionAppointmentFunding) {
+        this.pendingBudgetConstructionAppointmentFunding = pendingBudgetConstructionAppointmentFunding;
+    }
+
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
+        m.put("emplid", this.emplid);
+        return m;
+    }
+    
+    
 }

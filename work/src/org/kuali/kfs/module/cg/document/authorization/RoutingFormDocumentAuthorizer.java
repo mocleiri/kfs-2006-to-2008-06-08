@@ -36,7 +36,7 @@ public class RoutingFormDocumentAuthorizer extends DocumentAuthorizerBase {
 
     public DocumentActionFlags getDocumentActionFlags(Document document, UniversalUser user) {
 
-        DocumentActionFlags flags = new DocumentActionFlags();
+        DocumentActionFlags flags = super.getDocumentActionFlags(document, user);
 
         flags.setCanAcknowledge(false);
         flags.setCanApprove(false);
@@ -46,6 +46,7 @@ public class RoutingFormDocumentAuthorizer extends DocumentAuthorizerBase {
         flags.setCanFYI(false);
         flags.setCanClose(false);
         flags.setCanSave(true);
+        flags.setCanReload(true);
 
         return flags;
     }
