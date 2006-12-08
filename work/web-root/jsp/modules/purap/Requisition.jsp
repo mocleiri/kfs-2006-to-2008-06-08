@@ -31,16 +31,16 @@
 		includePostingYear="true"
         postingYearAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" >
 
-    	<purap:requisitiondetail
-	    	documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
+    	<purap:purapDocumentDetail
+	    	documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"
+	    	detailSectionLabel="Requisition Detail" />
     </kul:documentOverview>
 
     <purap:vendor
         documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"
         displayRequisitionFields="true" />
 
-    <purap:items
-        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
+    <purap:items />
 
     <purap:paymentinfo
         documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />

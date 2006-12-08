@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.bo.user.AuthenticationUserId;
 
@@ -40,14 +41,12 @@ import org.kuali.core.workflow.KualiTransactionalDocumentInformation;
 import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetAdHocOrg;
-import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
 import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUser;
-import org.kuali.module.kra.budget.service.BudgetPermissionsService;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -78,7 +77,7 @@ public class BudgetDocument extends ResearchDocumentBase {
     public BudgetDocument() {
         super();
         budget = new Budget();
-        budget.setResearchDocumentNumber(this.financialDocumentNumber);
+        budget.setDocumentNumber(this.documentNumber);
         budgetTaskNextSequenceNumber = new Integer(1);
         budgetPeriodNextSequenceNumber = new Integer(1);
         personnelNextSequenceNumber = new Integer(1);
@@ -100,7 +99,7 @@ public class BudgetDocument extends ResearchDocumentBase {
 //        try {
 //            SpringServiceLocator.getBudgetService().prepareBudgetForSave(this);
 //        } catch (WorkflowException e) {
-//            throw new RuntimeException("no document found for researchDocumentNumber '" + this.documentHeader + "'", e);
+//            throw new RuntimeException("no document found for documentNumber '" + this.documentHeader + "'", e);
 //        }
 //    }
     
@@ -170,7 +169,7 @@ public class BudgetDocument extends ResearchDocumentBase {
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put("researchDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
 
         return m;
     }
@@ -206,7 +205,7 @@ public class BudgetDocument extends ResearchDocumentBase {
         }
 
         budgetPeriod.setBudgetPeriodSequenceNumber(getBudgetPeriodNextSequenceNumber());
-        budgetPeriod.setResearchDocumentNumber(this.getFinancialDocumentNumber());
+        budgetPeriod.setDocumentNumber(this.getDocumentNumber());
         this.budget.getPeriods().add(budgetPeriod);
 
         setBudgetPeriodNextSequenceNumber(new Integer(getBudgetPeriodNextSequenceNumber().intValue() + 1));
@@ -214,7 +213,7 @@ public class BudgetDocument extends ResearchDocumentBase {
 
     public void addTask(BudgetTask budgetTask) {
         budgetTask.setBudgetTaskSequenceNumber(getBudgetTaskNextSequenceNumber());
-        budgetTask.setResearchDocumentNumber(this.getFinancialDocumentNumber());
+        budgetTask.setDocumentNumber(this.getDocumentNumber());
         if (this.budget.isAgencyModularIndicator() && this.budget.getTasks().size() == 0) {
             this.budget.getModularBudget().setBudgetModularTaskNumber(budgetTask.getBudgetTaskSequenceNumber());
         }
@@ -238,7 +237,7 @@ public class BudgetDocument extends ResearchDocumentBase {
 
     public void addInstitutionCostShare(List<BudgetPeriod> periods, BudgetInstitutionCostShare budgetInstitutionCostShare) {
         budgetInstitutionCostShare.setBudgetCostShareSequenceNumber(this.getInstitutionCostShareNextSequenceNumber());
-        budgetInstitutionCostShare.populateKeyFields(this.getFinancialDocumentNumber(), periods);
+        budgetInstitutionCostShare.populateKeyFields(this.getDocumentNumber(), periods);
         
         this.budget.getInstitutionCostShareItems().add(budgetInstitutionCostShare);
         
@@ -247,7 +246,7 @@ public class BudgetDocument extends ResearchDocumentBase {
 
     public void addThirdPartyCostShare(List<BudgetPeriod> periods, BudgetThirdPartyCostShare budgetThirdPartyCostShare) {
         budgetThirdPartyCostShare.setBudgetCostShareSequenceNumber(this.getThirdPartyCostShareNextSequenceNumber());
-        budgetThirdPartyCostShare.populateKeyFields(this.getFinancialDocumentNumber(), periods);
+        budgetThirdPartyCostShare.populateKeyFields(this.getDocumentNumber(), periods);
 
         this.budget.getThirdPartyCostShareItems().add(budgetThirdPartyCostShare);
         
@@ -289,7 +288,7 @@ public class BudgetDocument extends ResearchDocumentBase {
      */
     public Document copy() throws WorkflowException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         Document copyDoc = super.copy();
-        ObjectUtils.setObjectPropertyDeep(((BudgetDocument) copyDoc).getBudget(), "researchDocumentNumber", String.class, copyDoc.getFinancialDocumentNumber());
+        ObjectUtils.setObjectPropertyDeep(((BudgetDocument) copyDoc).getBudget(), PropertyConstants.DOCUMENT_NUMBER, String.class, copyDoc.getDocumentNumber());
         return copyDoc;
     }
 
@@ -477,26 +476,34 @@ public class BudgetDocument extends ResearchDocumentBase {
      * @return String
      */
     public String buildCostShareOrgReportXml(boolean encloseContent) {
+        
+        String costSharePermissionCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(
+                KraConstants.KRA_ADMIN_GROUP_NAME, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
+        
         StringBuffer xml = new StringBuffer();
         if (encloseContent) {
             xml.append("<documentContent>");
         }
+        
         List costShareItems = this.getBudget().getInstitutionCostShareItems();
         for (Iterator iter = costShareItems.iterator(); iter.hasNext();) {
             BudgetInstitutionCostShare costShare = (BudgetInstitutionCostShare) iter.next();
-            xml.append("<chartOrg><chartOfAccountsCode>");
-            if (costShare.getChartOfAccountsCode() != null) {
-                xml.append(costShare.getChartOfAccountsCode());
+            if (costShare.isPermissionIndicator() || costSharePermissionCode.equals(KraConstants.COST_SHARE_PERMISSION_CODE_TRUE)) {
+                xml.append("<chartOrg><chartOfAccountsCode>");
+                if (costShare.getChartOfAccountsCode() != null) {
+                    xml.append(costShare.getChartOfAccountsCode());
+                }
+                xml.append("</chartOfAccountsCode><organizationCode>");
+                if (costShare.getOrganizationCode() != null) {
+                    xml.append(costShare.getOrganizationCode());
+                }
+                xml.append("</organizationCode></chartOrg>");
             }
-            xml.append("</chartOfAccountsCode><organizationCode>");
-            if (costShare.getOrganizationCode() != null) {
-                xml.append(costShare.getOrganizationCode());
-            }
-            xml.append("</organizationCode></chartOrg>");
         }
         if (encloseContent) {
             xml.append("</documentContent>");
         }
+        
         return xml.toString();
     }
     
@@ -538,7 +545,7 @@ public class BudgetDocument extends ResearchDocumentBase {
         if (encloseContent) {
             xml.append("<documentContent>");
         }
-        List<BudgetAdHocOrg> orgs = SpringServiceLocator.getBudgetPermissionsService().getBudgetAdHocOrgs(this.getFinancialDocumentNumber(), permissionTypeCode);
+        List<BudgetAdHocOrg> orgs = SpringServiceLocator.getBudgetPermissionsService().getBudgetAdHocOrgs(this.getDocumentNumber(), permissionTypeCode);
         for (BudgetAdHocOrg org: orgs) {
             xml.append("<chartOrg><chartOfAccountsCode>");
             xml.append(org.getFiscalCampusCode());
