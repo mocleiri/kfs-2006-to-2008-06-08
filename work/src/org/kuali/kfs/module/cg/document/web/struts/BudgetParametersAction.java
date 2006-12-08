@@ -17,7 +17,6 @@
  */
 package org.kuali.module.kra.budget.web.struts.action;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,12 +24,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
-import org.kuali.core.question.ConfirmationQuestion;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
@@ -158,7 +155,7 @@ public class BudgetParametersAction extends BudgetAction {
             AppointmentType appType = (AppointmentType) iter.next();
 
             BudgetFringeRate currentFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRate(i);
-            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getFinancialDocumentNumber(), appType.getAppointmentTypeCode(), appType.getFringeRateAmount(), currentFringeRate.getInstitutionCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
+            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getDocumentNumber(), appType.getAppointmentTypeCode(), appType.getFringeRateAmount(), currentFringeRate.getInstitutionCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
 
             budgetFringeRate.set(i, bfr);
             i++;
@@ -177,7 +174,7 @@ public class BudgetParametersAction extends BudgetAction {
             AppointmentType appType = (AppointmentType) iter.next();
 
             BudgetFringeRate currentFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRate(i);
-            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getFinancialDocumentNumber(), appType.getAppointmentTypeCode(), currentFringeRate.getContractsAndGrantsFringeRateAmount(), appType.getCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
+            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getDocumentNumber(), appType.getAppointmentTypeCode(), currentFringeRate.getContractsAndGrantsFringeRateAmount(), appType.getCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
 
             budgetFringeRate.set(i, bfr);
             i++;
@@ -257,7 +254,7 @@ public class BudgetParametersAction extends BudgetAction {
                     periodRates[j] = currentGraduateAssistantRate.getCampusMaximumPeriodRate(j + 1);
                 }
             }
-            BudgetGraduateAssistantRate budgetGraduateAssistantRate = new BudgetGraduateAssistantRate(budgetForm.getDocument().getFinancialDocumentNumber(), gar.getCampusCode(), periodRates[0], periodRates[1], periodRates[2], periodRates[3], periodRates[4], periodRates[5], gar, currentGraduateAssistantRate.getObjectId(), currentGraduateAssistantRate.getVersionNumber());
+            BudgetGraduateAssistantRate budgetGraduateAssistantRate = new BudgetGraduateAssistantRate(budgetForm.getDocument().getDocumentNumber(), gar.getCampusCode(), periodRates[0], periodRates[1], periodRates[2], periodRates[3], periodRates[4], periodRates[5], gar, currentGraduateAssistantRate.getObjectId(), currentGraduateAssistantRate.getVersionNumber());
 
             graduateAssistantRate.set(i, budgetGraduateAssistantRate);
             i++;
@@ -321,14 +318,14 @@ public class BudgetParametersAction extends BudgetAction {
                     // coming back from Agency lookup - To Be Named selected
                     budget.setBudgetAgency(null);
                     budget.setBudgetAgencyNumber(null);
-                    BudgetModular modularBudget = budget.getModularBudget() != null ? budget.getModularBudget() : new BudgetModular(budget.getResearchDocumentNumber());
+                    BudgetModular modularBudget = budget.getModularBudget() != null ? budget.getModularBudget() : new BudgetModular(budget.getDocumentNumber());
                     resetModularBudget(budget, modularBudget);
                     budget.setModularBudget(modularBudget);
                 }
                 else if (request.getParameter("document.budget.budgetAgencyNumber") != null) {
                     // coming back from an Agnecy lookup - Agency selected
                     budget.setAgencyToBeNamedIndicator(false);
-                    BudgetModular modularBudget = budget.getModularBudget() != null ? budget.getModularBudget() : new BudgetModular(budget.getResearchDocumentNumber());
+                    BudgetModular modularBudget = budget.getModularBudget() != null ? budget.getModularBudget() : new BudgetModular(budget.getDocumentNumber());
                     budget.refreshReferenceObject("budgetAgency");
                     budget.getBudgetAgency().refresh();
                     if (budget.getBudgetAgency().getAgencyExtension() != null) {

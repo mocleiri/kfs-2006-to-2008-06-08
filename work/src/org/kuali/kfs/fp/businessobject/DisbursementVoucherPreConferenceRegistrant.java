@@ -22,13 +22,14 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private Integer financialDocumentLineNumber;
     private String disbVchrPreConfDepartmentCd;
     private String dvConferenceRegistrantName;
@@ -43,30 +44,30 @@ public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBa
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
     /**
      * Gets the financialDocumentLineNumber attribute.
      * 
-     * @return - Returns the financialDocumentLineNumber
+     * @return Returns the financialDocumentLineNumber
      * 
      */
     public Integer getFinancialDocumentLineNumber() {
@@ -87,7 +88,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBa
     /**
      * Gets the disbVchrPreConfDepartmentCd attribute.
      * 
-     * @return - Returns the disbVchrPreConfDepartmentCd
+     * @return Returns the disbVchrPreConfDepartmentCd
      * 
      */
     public String getDisbVchrPreConfDepartmentCd() {
@@ -108,7 +109,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBa
     /**
      * Gets the dvConferenceRegistrantName attribute.
      * 
-     * @return - Returns the dvConferenceRegistrantName
+     * @return Returns the dvConferenceRegistrantName
      * 
      */
     public String getDvConferenceRegistrantName() {
@@ -129,7 +130,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBa
     /**
      * Gets the dvPreConferenceRequestNumber attribute.
      * 
-     * @return - Returns the dvPreConferenceRequestNumber
+     * @return Returns the dvPreConferenceRequestNumber
      * 
      */
     public String getDvPreConferenceRequestNumber() {
@@ -150,7 +151,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBa
     /**
      * Gets the disbVchrExpenseAmount attribute.
      * 
-     * @return - Returns the disbVchrExpenseAmount
+     * @return Returns the disbVchrExpenseAmount
      * 
      */
     public KualiDecimal getDisbVchrExpenseAmount() {
@@ -173,7 +174,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBa
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (financialDocumentLineNumber != null) {
             m.put("financialDocumentLineNumber", this.financialDocumentLineNumber.toString());
         }
