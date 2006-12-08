@@ -25,13 +25,14 @@ import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.financial.document.CashReceiptDocument;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class CashReceiptHeader extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private String explanation;
     private Integer nextCheckSequenceId;
     private Integer nextCreditCardCashReceiptLineNumber;
@@ -53,30 +54,30 @@ public class CashReceiptHeader extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
 
     /**
      * Gets the explanation attribute.
      * 
-     * @return - Returns the explanation
+     * @return Returns the explanation
      * 
      */
     public String getExplanation() {
@@ -97,7 +98,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
     /**
      * Gets the nextCheckSequenceId attribute.
      * 
-     * @return - Returns the nextCheckSequenceId
+     * @return Returns the nextCheckSequenceId
      * 
      */
     public Integer getNextCheckSequenceId() {
@@ -118,7 +119,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
     /**
      * Gets the nextCreditCardCashReceiptLineNumber attribute.
      * 
-     * @return - Returns the nextCreditCardCashReceiptLineNumber
+     * @return Returns the nextCreditCardCashReceiptLineNumber
      * 
      */
     public Integer getNextCreditCardCashReceiptLineNumber() {
@@ -139,7 +140,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
     /**
      * Gets the nextCreditCardCashieringDocumentLineNumber attribute.
      * 
-     * @return - Returns the nextCreditCardCashieringDocumentLineNumber
+     * @return Returns the nextCreditCardCashieringDocumentLineNumber
      * 
      */
     public Integer getNextCreditCardCashieringDocumentLineNumber() {
@@ -160,7 +161,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
     /**
      * Gets the nextRevolvingFundLineNumber attribute.
      * 
-     * @return - Returns the nextRevolvingFundLineNumber
+     * @return Returns the nextRevolvingFundLineNumber
      * 
      */
     public Integer getNextRevolvingFundLineNumber() {
@@ -181,7 +182,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
     /**
      * Gets the nextAdvanceDepositLineNumber attribute.
      * 
-     * @return - Returns the nextAdvanceDepositLineNumber
+     * @return Returns the nextAdvanceDepositLineNumber
      * 
      */
     public Integer getNextAdvanceDepositLineNumber() {
@@ -202,7 +203,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
     /**
      * Gets the workgroupName attribute.
      * 
-     * @return - Returns the workgroupName
+     * @return Returns the workgroupName
      * 
      */
     public String getWorkgroupName() {
@@ -223,7 +224,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
     /**
      * Gets the depositDate attribute.
      * 
-     * @return - Returns the depositDate
+     * @return Returns the depositDate
      * 
      */
     public Date getDepositDate() {
@@ -244,7 +245,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
     /**
      * Gets the cashReceiptDocument attribute.
      * 
-     * @return - Returns the cashReceiptDocument
+     * @return Returns the cashReceiptDocument
      * 
      */
     public CashReceiptDocument getCashReceiptDocument() {
@@ -264,7 +265,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
     /**
      * Gets the depositCashReceiptControl list.
      * 
-     * @return - Returns the depositCashReceiptControl list
+     * @return Returns the depositCashReceiptControl list
      * 
      */
     public List getDepositCashReceiptControl() {
@@ -286,7 +287,7 @@ public class CashReceiptHeader extends BusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 }

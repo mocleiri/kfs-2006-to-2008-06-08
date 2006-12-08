@@ -52,7 +52,7 @@ public class CheckServiceTest extends KualiTestBase {
         documentNumber=createDocument();
         // setup check
         check = new CheckBase();
-        check.setFinancialDocumentNumber(documentNumber);
+        check.setDocumentNumber(documentNumber);
         check.setAmount(new KualiDecimal("314.15"));
         check.setCheckDate(getDateTimeService().getCurrentSqlDate());
         check.setCheckNumber("2112");
@@ -107,7 +107,7 @@ public class CheckServiceTest extends KualiTestBase {
     private String createDocument() throws Exception{
         CashReceiptDocument document = DocumentTestUtils.createDocument(getDocumentService(), CashReceiptDocument.class);
         LINE18.addAsSourceTo(document);
-        getDocumentService().saveDocument(document);
-        return document.getFinancialDocumentNumber();
+        getDocumentService().saveDocument(document, null, null);
+        return document.getDocumentNumber();
     }
 }
