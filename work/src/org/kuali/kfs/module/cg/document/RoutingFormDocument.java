@@ -23,23 +23,23 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.exceptions.IllegalObjectStateException;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.format.CurrencyFormatter;
+import org.kuali.module.cg.bo.Agency;
 import org.kuali.module.cg.bo.CatalogOfFederalDomesticAssistanceReference;
 import org.kuali.module.chart.bo.Campus;
 import org.kuali.module.kra.budget.document.ResearchDocumentBase;
 import org.kuali.module.kra.routingform.bo.ContractGrantProposal;
 import org.kuali.module.kra.routingform.bo.RoutingFormAgency;
 import org.kuali.module.kra.routingform.bo.RoutingFormBudget;
-import org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk;
 import org.kuali.module.kra.routingform.bo.RoutingFormInstitutionCostShare;
 import org.kuali.module.kra.routingform.bo.RoutingFormKeyword;
 import org.kuali.module.kra.routingform.bo.RoutingFormOtherCostShare;
 import org.kuali.module.kra.routingform.bo.RoutingFormPurpose;
-import org.kuali.module.kra.routingform.bo.RoutingFormResearchRiskStudy;
+import org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk;
 import org.kuali.module.kra.routingform.bo.RoutingFormResearchType;
 import org.kuali.module.kra.routingform.bo.RoutingFormStatus;
 import org.kuali.module.kra.routingform.bo.RoutingFormSubcontractor;
@@ -50,7 +50,6 @@ import org.kuali.module.kra.routingform.bo.SubmissionType;
  */
 public class RoutingFormDocument extends ResearchDocumentBase {
 
-	private String researchDocumentNumber;
 	private boolean agencyAdditionalShippingInstructionsIndicator;
 	private boolean agencyFederalPassThroughNotAvailableIndicator;
 	private String agencyFederalPassThroughNumber;
@@ -79,7 +78,6 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	private Date routingFormLastUpdateDate;
 	private Long routingFormLastUpdateSystemIdentifier;
 	private boolean routingFormNewSpaceIndicator;
-	private String routingFormOffCampusDescription;
 	private boolean routingFormOffCampusIndicator;
 	private boolean routingFormOtherOrganizationIndicator;
 	private String routingFormOtherPurposeDescription;
@@ -106,6 +104,8 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     private Integer otherCostShareNextSequenceNumber;
     private Integer projectDirectorNextSequenceNumber;
     private Integer subcontractorNextSequenceNumber;
+    private boolean routingFormAgencyToBeNamedIndicator;
+    private String routingFormCatalogOfFederalDomesticAssistanceNumber;    
     
     // monetary attributes
     private KualiDecimal totalInstitutionCostShareAmount = KualiDecimal.ZERO;
@@ -126,11 +126,20 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     private List<RoutingFormInstitutionCostShare> routingFormInstitutionCostShares;
     private List<RoutingFormOtherCostShare> routingFormOtherCostShares;
     private List<RoutingFormSubcontractor> routingFormSubcontractors;
+    private Agency federalPassThroughAgency;
    
 	/**
 	 * Default constructor.
 	 */
 	public RoutingFormDocument() {
+        super();
+        
+        creditPercentNextSequenceNumber = new Integer(1);
+        institutionCostShareNextSequenceNumber = new Integer(1);
+        otherCostShareNextSequenceNumber = new Integer(1);
+        projectDirectorNextSequenceNumber = new Integer(1);
+        subcontractorNextSequenceNumber = new Integer(1);
+        
         routingFormResearchRisks = new ArrayList<RoutingFormResearchRisk>();
         routingFormKeywords = new ArrayList<RoutingFormKeyword>();
         routingFormInstitutionCostShares = new ArrayList<RoutingFormInstitutionCostShare>();
@@ -138,31 +147,23 @@ public class RoutingFormDocument extends ResearchDocumentBase {
         routingFormSubcontractors = new ArrayList<RoutingFormSubcontractor>();
 	}
 
-	/**
-	 * Gets the researchDocumentNumber attribute.
-	 * 
-	 * @return - Returns the researchDocumentNumber
-	 * 
-	 */
-	public String getResearchDocumentNumber() { 
-		return researchDocumentNumber;
-	}
+    /**
+     * Ensures required fields for supporting objects are properly set since we don't use transient objects.
+     */
+	@Override
+    public void prepareForSave() {
+        super.prepareForSave();
+        
+        String documentNumber = this.getDocumentHeader().getDocumentNumber();
+        
+        this.getContractGrantProposal().setDocumentNumber(documentNumber);
+        this.getRoutingFormAgency().setDocumentNumber(documentNumber);
+    }
 
-	/**
-	 * Sets the researchDocumentNumber attribute.
-	 * 
-	 * @param - researchDocumentNumber The researchDocumentNumber to set.
-	 * 
-	 */
-	public void setResearchDocumentNumber(String researchDocumentNumber) {
-		this.researchDocumentNumber = researchDocumentNumber;
-	}
-
-
-	/**
+    /**
 	 * Gets the agencyAdditionalShippingInstructionsIndicator attribute.
 	 * 
-	 * @return - Returns the agencyAdditionalShippingInstructionsIndicator
+	 * @return Returns the agencyAdditionalShippingInstructionsIndicator
 	 * 
 	 */
 	public boolean getAgencyAdditionalShippingInstructionsIndicator() { 
@@ -172,7 +173,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the agencyAdditionalShippingInstructionsIndicator attribute.
 	 * 
-	 * @param - agencyAdditionalShippingInstructionsIndicator The agencyAdditionalShippingInstructionsIndicator to set.
+	 * @param agencyAdditionalShippingInstructionsIndicator The agencyAdditionalShippingInstructionsIndicator to set.
 	 * 
 	 */
 	public void setAgencyAdditionalShippingInstructionsIndicator(boolean agencyAdditionalShippingInstructionsIndicator) {
@@ -183,7 +184,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the agencyFederalPassThroughNotAvailableIndicator attribute.
 	 * 
-	 * @return - Returns the agencyFederalPassThroughNotAvailableIndicator
+	 * @return Returns the agencyFederalPassThroughNotAvailableIndicator
 	 * 
 	 */
 	public boolean getAgencyFederalPassThroughNotAvailableIndicator() { 
@@ -193,7 +194,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the agencyFederalPassThroughNotAvailableIndicator attribute.
 	 * 
-	 * @param - agencyFederalPassThroughNotAvailableIndicator The agencyFederalPassThroughNotAvailableIndicator to set.
+	 * @param agencyFederalPassThroughNotAvailableIndicator The agencyFederalPassThroughNotAvailableIndicator to set.
 	 * 
 	 */
 	public void setAgencyFederalPassThroughNotAvailableIndicator(boolean agencyFederalPassThroughNotAvailableIndicator) {
@@ -204,7 +205,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the agencyFederalPassThroughNumber attribute.
 	 * 
-	 * @return - Returns the agencyFederalPassThroughNumber
+	 * @return Returns the agencyFederalPassThroughNumber
 	 * 
 	 */
 	public String getAgencyFederalPassThroughNumber() { 
@@ -214,7 +215,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the agencyFederalPassThroughNumber attribute.
 	 * 
-	 * @param - agencyFederalPassThroughNumber The agencyFederalPassThroughNumber to set.
+	 * @param agencyFederalPassThroughNumber The agencyFederalPassThroughNumber to set.
 	 * 
 	 */
 	public void setAgencyFederalPassThroughNumber(String agencyFederalPassThroughNumber) {
@@ -225,7 +226,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the grantNumber attribute.
 	 * 
-	 * @return - Returns the grantNumber
+	 * @return Returns the grantNumber
 	 * 
 	 */
 	public String getGrantNumber() { 
@@ -235,7 +236,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the grantNumber attribute.
 	 * 
-	 * @param - grantNumber The grantNumber to set.
+	 * @param grantNumber The grantNumber to set.
 	 * 
 	 */
 	public void setGrantNumber(String grantNumber) {
@@ -246,7 +247,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormAnnouncementNumber attribute.
 	 * 
-	 * @return - Returns the routingFormAnnouncementNumber
+	 * @return Returns the routingFormAnnouncementNumber
 	 * 
 	 */
 	public String getRoutingFormAnnouncementNumber() { 
@@ -256,7 +257,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormAnnouncementNumber attribute.
 	 * 
-	 * @param - routingFormAnnouncementNumber The routingFormAnnouncementNumber to set.
+	 * @param routingFormAnnouncementNumber The routingFormAnnouncementNumber to set.
 	 * 
 	 */
 	public void setRoutingFormAnnouncementNumber(String routingFormAnnouncementNumber) {
@@ -267,7 +268,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormBudgetNumber attribute.
 	 * 
-	 * @return - Returns the routingFormBudgetNumber
+	 * @return Returns the routingFormBudgetNumber
 	 * 
 	 */
 	public String getRoutingFormBudgetNumber() { 
@@ -277,7 +278,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormBudgetNumber attribute.
 	 * 
-	 * @param - routingFormBudgetNumber The routingFormBudgetNumber to set.
+	 * @param routingFormBudgetNumber The routingFormBudgetNumber to set.
 	 * 
 	 */
 	public void setRoutingFormBudgetNumber(String routingFormBudgetNumber) {
@@ -288,7 +289,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormConflictOfInterestCurrentIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormConflictOfInterestCurrentIndicator
+	 * @return Returns the routingFormConflictOfInterestCurrentIndicator
 	 * 
 	 */
 	public boolean getRoutingFormConflictOfInterestCurrentIndicator() { 
@@ -298,7 +299,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormConflictOfInterestCurrentIndicator attribute.
 	 * 
-	 * @param - routingFormConflictOfInterestCurrentIndicator The routingFormConflictOfInterestCurrentIndicator to set.
+	 * @param routingFormConflictOfInterestCurrentIndicator The routingFormConflictOfInterestCurrentIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormConflictOfInterestCurrentIndicator(boolean routingFormConflictOfInterestCurrentIndicator) {
@@ -309,7 +310,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormConflictOfInterestExistsIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormConflictOfInterestExistsIndicator
+	 * @return Returns the routingFormConflictOfInterestExistsIndicator
 	 * 
 	 */
 	public boolean getRoutingFormConflictOfInterestExistsIndicator() { 
@@ -319,7 +320,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormConflictOfInterestExistsIndicator attribute.
 	 * 
-	 * @param - routingFormConflictOfInterestExistsIndicator The routingFormConflictOfInterestExistsIndicator to set.
+	 * @param routingFormConflictOfInterestExistsIndicator The routingFormConflictOfInterestExistsIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormConflictOfInterestExistsIndicator(boolean routingFormConflictOfInterestExistsIndicator) {
@@ -330,7 +331,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormContactFaxNumber attribute.
 	 * 
-	 * @return - Returns the routingFormContactFaxNumber
+	 * @return Returns the routingFormContactFaxNumber
 	 * 
 	 */
 	public String getRoutingFormContactFaxNumber() { 
@@ -340,7 +341,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormContactFaxNumber attribute.
 	 * 
-	 * @param - routingFormContactFaxNumber The routingFormContactFaxNumber to set.
+	 * @param routingFormContactFaxNumber The routingFormContactFaxNumber to set.
 	 * 
 	 */
 	public void setRoutingFormContactFaxNumber(String routingFormContactFaxNumber) {
@@ -351,7 +352,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormContactPhoneNumber attribute.
 	 * 
-	 * @return - Returns the routingFormContactPhoneNumber
+	 * @return Returns the routingFormContactPhoneNumber
 	 * 
 	 */
 	public String getRoutingFormContactPhoneNumber() { 
@@ -361,7 +362,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormContactPhoneNumber attribute.
 	 * 
-	 * @param - routingFormContactPhoneNumber The routingFormContactPhoneNumber to set.
+	 * @param routingFormContactPhoneNumber The routingFormContactPhoneNumber to set.
 	 * 
 	 */
 	public void setRoutingFormContactPhoneNumber(String routingFormContactPhoneNumber) {
@@ -372,7 +373,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormContactSystemsIdentifier attribute.
 	 * 
-	 * @return - Returns the routingFormContactSystemsIdentifier
+	 * @return Returns the routingFormContactSystemsIdentifier
 	 * 
 	 */
 	public Long getRoutingFormContactSystemsIdentifier() { 
@@ -382,7 +383,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormContactSystemsIdentifier attribute.
 	 * 
-	 * @param - routingFormContactSystemsIdentifier The routingFormContactSystemsIdentifier to set.
+	 * @param routingFormContactSystemsIdentifier The routingFormContactSystemsIdentifier to set.
 	 * 
 	 */
 	public void setRoutingFormContactSystemsIdentifier(Long routingFormContactSystemsIdentifier) {
@@ -393,7 +394,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormCoProjectDirectorIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormCoProjectDirectorIndicator
+	 * @return Returns the routingFormCoProjectDirectorIndicator
 	 * 
 	 */
 	public boolean getRoutingFormCoProjectDirectorIndicator() { 
@@ -403,7 +404,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormCoProjectDirectorIndicator attribute.
 	 * 
-	 * @param - routingFormCoProjectDirectorIndicator The routingFormCoProjectDirectorIndicator to set.
+	 * @param routingFormCoProjectDirectorIndicator The routingFormCoProjectDirectorIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormCoProjectDirectorIndicator(boolean routingFormCoProjectDirectorIndicator) {
@@ -414,7 +415,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormCreditPercentIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormCreditPercentIndicator
+	 * @return Returns the routingFormCreditPercentIndicator
 	 * 
 	 */
 	public boolean getRoutingFormCreditPercentIndicator() { 
@@ -424,7 +425,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormCreditPercentIndicator attribute.
 	 * 
-	 * @param - routingFormCreditPercentIndicator The routingFormCreditPercentIndicator to set.
+	 * @param routingFormCreditPercentIndicator The routingFormCreditPercentIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormCreditPercentIndicator(boolean routingFormCreditPercentIndicator) {
@@ -435,7 +436,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormCreateDate attribute.
 	 * 
-	 * @return - Returns the routingFormCreateDate
+	 * @return Returns the routingFormCreateDate
 	 * 
 	 */
 	public Date getRoutingFormCreateDate() { 
@@ -445,7 +446,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormCreateDate attribute.
 	 * 
-	 * @param - routingFormCreateDate The routingFormCreateDate to set.
+	 * @param routingFormCreateDate The routingFormCreateDate to set.
 	 * 
 	 */
 	public void setRoutingFormCreateDate(Date routingFormCreateDate) {
@@ -456,7 +457,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormCostShareIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormCostShareIndicator
+	 * @return Returns the routingFormCostShareIndicator
 	 * 
 	 */
 	public boolean getRoutingFormCostShareIndicator() { 
@@ -466,7 +467,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormCostShareIndicator attribute.
 	 * 
-	 * @param - routingFormCostShareIndicator The routingFormCostShareIndicator to set.
+	 * @param routingFormCostShareIndicator The routingFormCostShareIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormCostShareIndicator(boolean routingFormCostShareIndicator) {
@@ -477,7 +478,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormFederalPassThroughIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormFederalPassThroughIndicator
+	 * @return Returns the routingFormFederalPassThroughIndicator
 	 * 
 	 */
 	public boolean getRoutingFormFederalPassThroughIndicator() { 
@@ -487,7 +488,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormFederalPassThroughIndicator attribute.
 	 * 
-	 * @param - routingFormFederalPassThroughIndicator The routingFormFederalPassThroughIndicator to set.
+	 * @param routingFormFederalPassThroughIndicator The routingFormFederalPassThroughIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormFederalPassThroughIndicator(boolean routingFormFederalPassThroughIndicator) {
@@ -498,7 +499,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormFellowFirstName attribute.
 	 * 
-	 * @return - Returns the routingFormFellowFirstName
+	 * @return Returns the routingFormFellowFirstName
 	 * 
 	 */
 	public String getRoutingFormFellowFirstName() { 
@@ -508,7 +509,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormFellowFirstName attribute.
 	 * 
-	 * @param - routingFormFellowFirstName The routingFormFellowFirstName to set.
+	 * @param routingFormFellowFirstName The routingFormFellowFirstName to set.
 	 * 
 	 */
 	public void setRoutingFormFellowFirstName(String routingFormFellowFirstName) {
@@ -519,7 +520,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormFellowEmailAddress attribute.
 	 * 
-	 * @return - Returns the routingFormFellowEmailAddress
+	 * @return Returns the routingFormFellowEmailAddress
 	 * 
 	 */
 	public String getRoutingFormFellowEmailAddress() { 
@@ -529,7 +530,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormFellowEmailAddress attribute.
 	 * 
-	 * @param - routingFormFellowEmailAddress The routingFormFellowEmailAddress to set.
+	 * @param routingFormFellowEmailAddress The routingFormFellowEmailAddress to set.
 	 * 
 	 */
 	public void setRoutingFormFellowEmailAddress(String routingFormFellowEmailAddress) {
@@ -540,7 +541,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormFellowFullName attribute.
 	 * 
-	 * @return - Returns the routingFormFellowFullName
+	 * @return Returns the routingFormFellowFullName
 	 * 
 	 */
 	public String getRoutingFormFellowFullName() { 
@@ -550,7 +551,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormFellowFullName attribute.
 	 * 
-	 * @param - routingFormFellowFullName The routingFormFellowFullName to set.
+	 * @param routingFormFellowFullName The routingFormFellowFullName to set.
 	 * 
 	 */
 	public void setRoutingFormFellowFullName(String routingFormFellowFullName) {
@@ -561,7 +562,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormFellowLastName attribute.
 	 * 
-	 * @return - Returns the routingFormFellowLastName
+	 * @return Returns the routingFormFellowLastName
 	 * 
 	 */
 	public String getRoutingFormFellowLastName() { 
@@ -571,7 +572,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormFellowLastName attribute.
 	 * 
-	 * @param - routingFormFellowLastName The routingFormFellowLastName to set.
+	 * @param routingFormFellowLastName The routingFormFellowLastName to set.
 	 * 
 	 */
 	public void setRoutingFormFellowLastName(String routingFormFellowLastName) {
@@ -582,7 +583,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormForeignPartnerIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormForeignPartnerIndicator
+	 * @return Returns the routingFormForeignPartnerIndicator
 	 * 
 	 */
 	public boolean getRoutingFormForeignPartnerIndicator() { 
@@ -592,7 +593,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormForeignPartnerIndicator attribute.
 	 * 
-	 * @param - routingFormForeignPartnerIndicator The routingFormForeignPartnerIndicator to set.
+	 * @param routingFormForeignPartnerIndicator The routingFormForeignPartnerIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormForeignPartnerIndicator(boolean routingFormForeignPartnerIndicator) {
@@ -603,7 +604,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormForeignTravelIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormForeignTravelIndicator
+	 * @return Returns the routingFormForeignTravelIndicator
 	 * 
 	 */
 	public boolean getRoutingFormForeignTravelIndicator() { 
@@ -613,7 +614,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormForeignTravelIndicator attribute.
 	 * 
-	 * @param - routingFormForeignTravelIndicator The routingFormForeignTravelIndicator to set.
+	 * @param routingFormForeignTravelIndicator The routingFormForeignTravelIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormForeignTravelIndicator(boolean routingFormForeignTravelIndicator) {
@@ -624,7 +625,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormIncomeIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormIncomeIndicator
+	 * @return Returns the routingFormIncomeIndicator
 	 * 
 	 */
 	public boolean getRoutingFormIncomeIndicator() { 
@@ -634,7 +635,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormIncomeIndicator attribute.
 	 * 
-	 * @param - routingFormIncomeIndicator The routingFormIncomeIndicator to set.
+	 * @param routingFormIncomeIndicator The routingFormIncomeIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormIncomeIndicator(boolean routingFormIncomeIndicator) {
@@ -645,7 +646,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormInventionIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormInventionIndicator
+	 * @return Returns the routingFormInventionIndicator
 	 * 
 	 */
 	public boolean getRoutingFormInventionIndicator() { 
@@ -655,7 +656,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormInventionIndicator attribute.
 	 * 
-	 * @param - routingFormInventionIndicator The routingFormInventionIndicator to set.
+	 * @param routingFormInventionIndicator The routingFormInventionIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormInventionIndicator(boolean routingFormInventionIndicator) {
@@ -666,7 +667,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormLayDescription attribute.
 	 * 
-	 * @return - Returns the routingFormLayDescription
+	 * @return Returns the routingFormLayDescription
 	 * 
 	 */
 	public String getRoutingFormLayDescription() { 
@@ -676,7 +677,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormLayDescription attribute.
 	 * 
-	 * @param - routingFormLayDescription The routingFormLayDescription to set.
+	 * @param routingFormLayDescription The routingFormLayDescription to set.
 	 * 
 	 */
 	public void setRoutingFormLayDescription(String routingFormLayDescription) {
@@ -687,7 +688,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormLastUpdateDate attribute.
 	 * 
-	 * @return - Returns the routingFormLastUpdateDate
+	 * @return Returns the routingFormLastUpdateDate
 	 * 
 	 */
 	public Date getRoutingFormLastUpdateDate() { 
@@ -697,7 +698,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormLastUpdateDate attribute.
 	 * 
-	 * @param - routingFormLastUpdateDate The routingFormLastUpdateDate to set.
+	 * @param routingFormLastUpdateDate The routingFormLastUpdateDate to set.
 	 * 
 	 */
 	public void setRoutingFormLastUpdateDate(Date routingFormLastUpdateDate) {
@@ -708,7 +709,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormLastUpdateSystemIdentifier attribute.
 	 * 
-	 * @return - Returns the routingFormLastUpdateSystemIdentifier
+	 * @return Returns the routingFormLastUpdateSystemIdentifier
 	 * 
 	 */
 	public Long getRoutingFormLastUpdateSystemIdentifier() { 
@@ -718,7 +719,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormLastUpdateSystemIdentifier attribute.
 	 * 
-	 * @param - routingFormLastUpdateSystemIdentifier The routingFormLastUpdateSystemIdentifier to set.
+	 * @param routingFormLastUpdateSystemIdentifier The routingFormLastUpdateSystemIdentifier to set.
 	 * 
 	 */
 	public void setRoutingFormLastUpdateSystemIdentifier(Long routingFormLastUpdateSystemIdentifier) {
@@ -729,7 +730,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormNewSpaceIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormNewSpaceIndicator
+	 * @return Returns the routingFormNewSpaceIndicator
 	 * 
 	 */
 	public boolean getRoutingFormNewSpaceIndicator() { 
@@ -739,7 +740,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormNewSpaceIndicator attribute.
 	 * 
-	 * @param - routingFormNewSpaceIndicator The routingFormNewSpaceIndicator to set.
+	 * @param routingFormNewSpaceIndicator The routingFormNewSpaceIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormNewSpaceIndicator(boolean routingFormNewSpaceIndicator) {
@@ -748,30 +749,9 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 
 
 	/**
-	 * Gets the routingFormOffCampusDescription attribute.
-	 * 
-	 * @return - Returns the routingFormOffCampusDescription
-	 * 
-	 */
-	public String getRoutingFormOffCampusDescription() { 
-		return routingFormOffCampusDescription;
-	}
-
-	/**
-	 * Sets the routingFormOffCampusDescription attribute.
-	 * 
-	 * @param - routingFormOffCampusDescription The routingFormOffCampusDescription to set.
-	 * 
-	 */
-	public void setRoutingFormOffCampusDescription(String routingFormOffCampusDescription) {
-		this.routingFormOffCampusDescription = routingFormOffCampusDescription;
-	}
-
-
-	/**
 	 * Gets the routingFormOffCampusIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormOffCampusIndicator
+	 * @return Returns the routingFormOffCampusIndicator
 	 * 
 	 */
 	public boolean getRoutingFormOffCampusIndicator() { 
@@ -781,7 +761,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormOffCampusIndicator attribute.
 	 * 
-	 * @param - routingFormOffCampusIndicator The routingFormOffCampusIndicator to set.
+	 * @param routingFormOffCampusIndicator The routingFormOffCampusIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormOffCampusIndicator(boolean routingFormOffCampusIndicator) {
@@ -792,7 +772,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormOtherOrganizationIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormOtherOrganizationIndicator
+	 * @return Returns the routingFormOtherOrganizationIndicator
 	 * 
 	 */
 	public boolean getRoutingFormOtherOrganizationIndicator() { 
@@ -802,7 +782,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormOtherOrganizationIndicator attribute.
 	 * 
-	 * @param - routingFormOtherOrganizationIndicator The routingFormOtherOrganizationIndicator to set.
+	 * @param routingFormOtherOrganizationIndicator The routingFormOtherOrganizationIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormOtherOrganizationIndicator(boolean routingFormOtherOrganizationIndicator) {
@@ -813,7 +793,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormOtherPurposeDescription attribute.
 	 * 
-	 * @return - Returns the routingFormOtherPurposeDescription
+	 * @return Returns the routingFormOtherPurposeDescription
 	 * 
 	 */
 	public String getRoutingFormOtherPurposeDescription() { 
@@ -823,7 +803,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormOtherPurposeDescription attribute.
 	 * 
-	 * @param - routingFormOtherPurposeDescription The routingFormOtherPurposeDescription to set.
+	 * @param routingFormOtherPurposeDescription The routingFormOtherPurposeDescription to set.
 	 * 
 	 */
 	public void setRoutingFormOtherPurposeDescription(String routingFormOtherPurposeDescription) {
@@ -834,7 +814,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormOtherTypeDescription attribute.
 	 * 
-	 * @return - Returns the routingFormOtherTypeDescription
+	 * @return Returns the routingFormOtherTypeDescription
 	 * 
 	 */
 	public String getRoutingFormOtherTypeDescription() { 
@@ -844,7 +824,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormOtherTypeDescription attribute.
 	 * 
-	 * @param - routingFormOtherTypeDescription The routingFormOtherTypeDescription to set.
+	 * @param routingFormOtherTypeDescription The routingFormOtherTypeDescription to set.
 	 * 
 	 */
 	public void setRoutingFormOtherTypeDescription(String routingFormOtherTypeDescription) {
@@ -855,7 +835,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormParentNumber attribute.
 	 * 
-	 * @return - Returns the routingFormParentNumber
+	 * @return Returns the routingFormParentNumber
 	 * 
 	 */
 	public String getRoutingFormParentNumber() { 
@@ -865,7 +845,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormParentNumber attribute.
 	 * 
-	 * @param - routingFormParentNumber The routingFormParentNumber to set.
+	 * @param routingFormParentNumber The routingFormParentNumber to set.
 	 * 
 	 */
 	public void setRoutingFormParentNumber(String routingFormParentNumber) {
@@ -876,7 +856,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormPhysicalCampusCode attribute.
 	 * 
-	 * @return - Returns the routingFormPhysicalCampusCode
+	 * @return Returns the routingFormPhysicalCampusCode
 	 * 
 	 */
 	public String getRoutingFormPhysicalCampusCode() { 
@@ -886,7 +866,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormPhysicalCampusCode attribute.
 	 * 
-	 * @param - routingFormPhysicalCampusCode The routingFormPhysicalCampusCode to set.
+	 * @param routingFormPhysicalCampusCode The routingFormPhysicalCampusCode to set.
 	 * 
 	 */
 	public void setRoutingFormPhysicalCampusCode(String routingFormPhysicalCampusCode) {
@@ -897,7 +877,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormPriorGrantNumber attribute.
 	 * 
-	 * @return - Returns the routingFormPriorGrantNumber
+	 * @return Returns the routingFormPriorGrantNumber
 	 * 
 	 */
 	public String getRoutingFormPriorGrantNumber() { 
@@ -907,7 +887,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormPriorGrantNumber attribute.
 	 * 
-	 * @param - routingFormPriorGrantNumber The routingFormPriorGrantNumber to set.
+	 * @param routingFormPriorGrantNumber The routingFormPriorGrantNumber to set.
 	 * 
 	 */
 	public void setRoutingFormPriorGrantNumber(String routingFormPriorGrantNumber) {
@@ -918,7 +898,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormProjectTitle attribute.
 	 * 
-	 * @return - Returns the routingFormProjectTitle
+	 * @return Returns the routingFormProjectTitle
 	 * 
 	 */
 	public String getRoutingFormProjectTitle() { 
@@ -928,7 +908,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormProjectTitle attribute.
 	 * 
-	 * @param - routingFormProjectTitle The routingFormProjectTitle to set.
+	 * @param routingFormProjectTitle The routingFormProjectTitle to set.
 	 * 
 	 */
 	public void setRoutingFormProjectTitle(String routingFormProjectTitle) {
@@ -939,7 +919,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormPurposeCode attribute.
 	 * 
-	 * @return - Returns the routingFormPurposeCode
+	 * @return Returns the routingFormPurposeCode
 	 * 
 	 */
 	public String getRoutingFormPurposeCode() { 
@@ -949,7 +929,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormPurposeCode attribute.
 	 * 
-	 * @param - routingFormPurposeCode The routingFormPurposeCode to set.
+	 * @param routingFormPurposeCode The routingFormPurposeCode to set.
 	 * 
 	 */
 	public void setRoutingFormPurposeCode(String routingFormPurposeCode) {
@@ -959,7 +939,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
 	 * Gets the routingFormSpaceRequiredDescription attribute.
 	 * 
-	 * @return - Returns the routingFormSpaceRequiredDescription
+	 * @return Returns the routingFormSpaceRequiredDescription
 	 * 
 	 */
 	public String getRoutingFormSpaceRequiredDescription() { 
@@ -969,7 +949,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormSpaceRequiredDescription attribute.
 	 * 
-	 * @param - routingFormSpaceRequiredDescription The routingFormSpaceRequiredDescription to set.
+	 * @param routingFormSpaceRequiredDescription The routingFormSpaceRequiredDescription to set.
 	 * 
 	 */
 	public void setRoutingFormSpaceRequiredDescription(String routingFormSpaceRequiredDescription) {
@@ -980,7 +960,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormSpaceRequiredIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormSpaceRequiredIndicator
+	 * @return Returns the routingFormSpaceRequiredIndicator
 	 * 
 	 */
 	public boolean getRoutingFormSpaceRequiredIndicator() { 
@@ -990,7 +970,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormSpaceRequiredIndicator attribute.
 	 * 
-	 * @param - routingFormSpaceRequiredIndicator The routingFormSpaceRequiredIndicator to set.
+	 * @param routingFormSpaceRequiredIndicator The routingFormSpaceRequiredIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormSpaceRequiredIndicator(boolean routingFormSpaceRequiredIndicator) {
@@ -1001,7 +981,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormStatusCode attribute.
 	 * 
-	 * @return - Returns the routingFormStatusCode
+	 * @return Returns the routingFormStatusCode
 	 * 
 	 */
 	public String getRoutingFormStatusCode() { 
@@ -1011,7 +991,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormStatusCode attribute.
 	 * 
-	 * @param - routingFormStatusCode The routingFormStatusCode to set.
+	 * @param routingFormStatusCode The routingFormStatusCode to set.
 	 * 
 	 */
 	public void setRoutingFormStatusCode(String routingFormStatusCode) {
@@ -1022,7 +1002,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormSubcontractorIndicator attribute.
 	 * 
-	 * @return - Returns the routingFormSubcontractorIndicator
+	 * @return Returns the routingFormSubcontractorIndicator
 	 * 
 	 */
 	public boolean getRoutingFormSubcontractorIndicator() { 
@@ -1032,7 +1012,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormSubcontractorIndicator attribute.
 	 * 
-	 * @param - routingFormSubcontractorIndicator The routingFormSubcontractorIndicator to set.
+	 * @param routingFormSubcontractorIndicator The routingFormSubcontractorIndicator to set.
 	 * 
 	 */
 	public void setRoutingFormSubcontractorIndicator(boolean routingFormSubcontractorIndicator) {
@@ -1042,7 +1022,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the institutionAccountNumber attribute.
 	 * 
-	 * @return - Returns the institutionAccountNumber
+	 * @return Returns the institutionAccountNumber
 	 * 
 	 */
 	public String getInstitutionAccountNumber() { 
@@ -1052,7 +1032,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the institutionAccountNumber attribute.
 	 * 
-	 * @param - institutionAccountNumber The institutionAccountNumber to set.
+	 * @param institutionAccountNumber The institutionAccountNumber to set.
 	 * 
 	 */
 	public void setInstitutionAccountNumber(String institutionAccountNumber) {
@@ -1063,7 +1043,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Gets the researchTypeCode attribute.
      * 
-     * @return - Returns the researchTypeCode
+     * @return Returns the researchTypeCode
      * 
      */
     public String getResearchTypeCode() { 
@@ -1073,7 +1053,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Sets the researchTypeCode attribute.
      * 
-     * @param - researchTypeCode The researchTypeCode to set.
+     * @param researchTypeCode The researchTypeCode to set.
      * 
      */
     public void setResearchTypeCode(String researchTypeCode) {
@@ -1084,7 +1064,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Gets the submissionTypeCode attribute.
      * 
-     * @return - Returns the submissionTypeCode
+     * @return Returns the submissionTypeCode
      * 
      */
     public String getSubmissionTypeCode() { 
@@ -1094,7 +1074,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Sets the submissionTypeCode attribute.
      * 
-     * @param - submissionTypeCode The submissionTypeCode to set.
+     * @param submissionTypeCode The submissionTypeCode to set.
      * 
      */
     public void setSubmissionTypeCode(String submissionTypeCode) {
@@ -1105,7 +1085,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Gets the previousFederalIdentifier attribute.
      * 
-     * @return - Returns the previousFederalIdentifier
+     * @return Returns the previousFederalIdentifier
      * 
      */
     public String getPreviousFederalIdentifier() { 
@@ -1115,7 +1095,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Sets the previousFederalIdentifier attribute.
      * 
-     * @param - previousFederalIdentifier The previousFederalIdentifier to set.
+     * @param previousFederalIdentifier The previousFederalIdentifier to set.
      * 
      */
     public void setPreviousFederalIdentifier(String previousFederalIdentifier) {
@@ -1126,7 +1106,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Gets the routingFormPhysicalCampus attribute.
 	 * 
-	 * @return - Returns the routingFormPhysicalCampus
+	 * @return Returns the routingFormPhysicalCampus
 	 * 
 	 */
 	public Campus getRoutingFormPhysicalCampus() { 
@@ -1136,7 +1116,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
 	/**
 	 * Sets the routingFormPhysicalCampus attribute.
 	 * 
-	 * @param - routingFormPhysicalCampus The routingFormPhysicalCampus to set.
+	 * @param routingFormPhysicalCampus The routingFormPhysicalCampus to set.
 	 * @deprecated
 	 */
 	public void setRoutingFormPhysicalCampus(Campus routingFormPhysicalCampus) {
@@ -1260,7 +1240,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Gets the federalIdentifier attribute.
      * 
-     * @return - Returns the federalIdentifier
+     * @return Returns the federalIdentifier
      * 
      */
     public String getFederalIdentifier() { 
@@ -1270,7 +1250,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Sets the federalIdentifier attribute.
      * 
-     * @param - federalIdentifier The federalIdentifier to set.
+     * @param federalIdentifier The federalIdentifier to set.
      * 
      */
     public void setFederalIdentifier(String federalIdentifier) {
@@ -1281,7 +1261,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Gets the grantsGovernmentConfirmationNumber attribute.
      * 
-     * @return - Returns the grantsGovernmentConfirmationNumber
+     * @return Returns the grantsGovernmentConfirmationNumber
      * 
      */
     public String getGrantsGovernmentConfirmationNumber() { 
@@ -1291,7 +1271,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Sets the grantsGovernmentConfirmationNumber attribute.
      * 
-     * @param - grantsGovernmentConfirmationNumber The grantsGovernmentConfirmationNumber to set.
+     * @param grantsGovernmentConfirmationNumber The grantsGovernmentConfirmationNumber to set.
      * 
      */
     public void setGrantsGovernmentConfirmationNumber(String grantsGovernmentConfirmationNumber) {
@@ -1302,7 +1282,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Gets the grantsGovernmentSubmissionIndicator attribute.
      * 
-     * @return - Returns the grantsGovernmentSubmissionIndicator
+     * @return Returns the grantsGovernmentSubmissionIndicator
      * 
      */
     public boolean isGrantsGovernmentSubmissionIndicator() { 
@@ -1312,7 +1292,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Sets the grantsGovernmentSubmissionIndicator attribute.
      * 
-     * @param - grantsGovernmentSubmissionIndicator The grantsGovernmentSubmissionIndicator to set.
+     * @param grantsGovernmentSubmissionIndicator The grantsGovernmentSubmissionIndicator to set.
      * 
      */
     public void setGrantsGovernmentSubmissionIndicator(boolean grantsGovernmentSubmissionIndicator) {
@@ -1323,7 +1303,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Gets the projectAbstract attribute.
      * 
-     * @return - Returns the projectAbstract
+     * @return Returns the projectAbstract
      * 
      */
     public String getProjectAbstract() { 
@@ -1333,7 +1313,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     /**
      * Sets the projectAbstract attribute.
      * 
-     * @param - projectAbstract The projectAbstract to set.
+     * @param projectAbstract The projectAbstract to set.
      * 
      */
     public void setProjectAbstract(String projectAbstract) {
@@ -1341,11 +1321,11 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     }
     
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
-        m.put("researchDocumentNumber", this.researchDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
     
@@ -1486,7 +1466,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
      * @param routingFormInstitutionCostShare
      */
     public final void prepareNewRoutingFormInstitutionCostShare(RoutingFormInstitutionCostShare routingFormInstitutionCostShare) {
-        routingFormInstitutionCostShare.setResearchDocumentNumber(this.getResearchDocumentNumber());
+        routingFormInstitutionCostShare.setDocumentNumber(this.getDocumentNumber());
     }
 
     /**
@@ -1549,7 +1529,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
      * @param routingFormOtherCostShare
      */
     public final void prepareNewRoutingFormOtherCostShare(RoutingFormOtherCostShare routingFormOtherCostShare) {
-        routingFormOtherCostShare.setResearchDocumentNumber(this.getResearchDocumentNumber());
+        routingFormOtherCostShare.setDocumentNumber(this.getDocumentNumber());
     }
 
     /**
@@ -1612,7 +1592,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
      * @param routingFormSubcontractor
      */
     public final void prepareNewRoutingFormSubcontractor(RoutingFormSubcontractor routingFormSubcontractor) {
-        routingFormSubcontractor.setResearchDocumentNumber(this.getResearchDocumentNumber());
+        routingFormSubcontractor.setDocumentNumber(this.getDocumentNumber());
     }
 
     /**
@@ -1717,5 +1697,61 @@ public class RoutingFormDocument extends ResearchDocumentBase {
     public void setTotalSubcontractorAmount(KualiDecimal totalSubcontractorAmount) {
         this.totalSubcontractorAmount = totalSubcontractorAmount;
     }
+    
+    public Agency getFederalPassThroughAgency() {
+        return federalPassThroughAgency;
+    }
 
+    public void setFederalPassThroughAgency(Agency federalPassThroughAgency) {
+        this.federalPassThroughAgency = federalPassThroughAgency;
+    }
+
+    @Override
+    public List buildListOfDeletionAwareLists() {
+        List list = new ArrayList();
+        //TODO Figure out a way to add the appropriate number of lists on the 2nd pass
+        if (routingFormResearchRisks.isEmpty()) {
+            for (int i = 0; i < 6; i++) {
+                list.add(new ArrayList());
+            }
+        }
+        else {
+            for (RoutingFormResearchRisk researchRisk: this.routingFormResearchRisks) {
+                list.add(researchRisk.getResearchRiskStudies());
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Gets the routingFormAgencyToBeNamedIndicator attribute. 
+     * @return Returns the routingFormAgencyToBeNamedIndicator.
+     */
+    public boolean isRoutingFormAgencyToBeNamedIndicator() {
+        return routingFormAgencyToBeNamedIndicator;
+    }
+
+    /**
+     * Sets the routingFormAgencyToBeNamedIndicator attribute value.
+     * @param routingFormAgencyToBeNamedIndicator The routingFormAgencyToBeNamedIndicator to set.
+     */
+    public void setRoutingFormAgencyToBeNamedIndicator(boolean routingFormAgencyToBeNamedIndicator) {
+        this.routingFormAgencyToBeNamedIndicator = routingFormAgencyToBeNamedIndicator;
+    }
+
+    /**
+     * Gets the routingFormCatalogOfFederalDomesticAssistanceNumber attribute. 
+     * @return Returns the routingFormCatalogOfFederalDomesticAssistanceNumber.
+     */
+    public String getRoutingFormCatalogOfFederalDomesticAssistanceNumber() {
+        return routingFormCatalogOfFederalDomesticAssistanceNumber;
+    }
+
+    /**
+     * Sets the routingFormCatalogOfFederalDomesticAssistanceNumber attribute value.
+     * @param routingFormCatalogOfFederalDomesticAssistanceNumber The routingFormCatalogOfFederalDomesticAssistanceNumber to set.
+     */
+    public void setRoutingFormCatalogOfFederalDomesticAssistanceNumber(String routingFormCatalogOfFederalDomesticAssistanceNumber) {
+        this.routingFormCatalogOfFederalDomesticAssistanceNumber = routingFormCatalogOfFederalDomesticAssistanceNumber;
+    }
 }
