@@ -19,7 +19,9 @@
 package org.kuali.module.budget.bo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
@@ -58,25 +60,29 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	private boolean positionSalaryChangeIndicator;
 
     private ObjectCode financialObject;
-	private BudgetConstructionSalaryFunding budgetConstructionSalaryFunding;
 	private Chart chartOfAccounts;
 	private Account account;
     private SubAccount subAccount;
     private SubObjCd financialSubObject;
-    
     private BudgetConstructionPosition budgetConstructionPosition;
+    private BudgetConstructionAdministrativePost budgetConstructionAdministrativePost;
+    private BudgetConstructionAccountReports budgetConstructionAccountReports;
+    
+    private List budgetConstructionSalaryFunding;
+    private List budgetConstructionAppointmentFundingReason;
     
 	/**
 	 * Default constructor.
 	 */
 	public PendingBudgetConstructionAppointmentFunding() {
+        budgetConstructionSalaryFunding = new ArrayList();
 
 	}
 
 	/**
 	 * Gets the universityFiscalYear attribute.
 	 * 
-	 * @return - Returns the universityFiscalYear
+	 * @return Returns the universityFiscalYear
 	 * 
 	 */
 	public Integer getUniversityFiscalYear() { 
@@ -86,7 +92,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the universityFiscalYear attribute.
 	 * 
-	 * @param - universityFiscalYear The universityFiscalYear to set.
+	 * @param universityFiscalYear The universityFiscalYear to set.
 	 * 
 	 */
 	public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -97,7 +103,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
-	 * @return - Returns the chartOfAccountsCode
+	 * @return Returns the chartOfAccountsCode
 	 * 
 	 */
 	public String getChartOfAccountsCode() { 
@@ -107,7 +113,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the chartOfAccountsCode attribute.
 	 * 
-	 * @param - chartOfAccountsCode The chartOfAccountsCode to set.
+	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
 	 * 
 	 */
 	public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -118,7 +124,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the accountNumber attribute.
 	 * 
-	 * @return - Returns the accountNumber
+	 * @return Returns the accountNumber
 	 * 
 	 */
 	public String getAccountNumber() { 
@@ -128,7 +134,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the accountNumber attribute.
 	 * 
-	 * @param - accountNumber The accountNumber to set.
+	 * @param accountNumber The accountNumber to set.
 	 * 
 	 */
 	public void setAccountNumber(String accountNumber) {
@@ -139,7 +145,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the subAccountNumber attribute.
 	 * 
-	 * @return - Returns the subAccountNumber
+	 * @return Returns the subAccountNumber
 	 * 
 	 */
 	public String getSubAccountNumber() { 
@@ -149,7 +155,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the subAccountNumber attribute.
 	 * 
-	 * @param - subAccountNumber The subAccountNumber to set.
+	 * @param subAccountNumber The subAccountNumber to set.
 	 * 
 	 */
 	public void setSubAccountNumber(String subAccountNumber) {
@@ -160,7 +166,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the financialObjectCode attribute.
 	 * 
-	 * @return - Returns the financialObjectCode
+	 * @return Returns the financialObjectCode
 	 * 
 	 */
 	public String getFinancialObjectCode() { 
@@ -170,7 +176,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the financialObjectCode attribute.
 	 * 
-	 * @param - financialObjectCode The financialObjectCode to set.
+	 * @param financialObjectCode The financialObjectCode to set.
 	 * 
 	 */
 	public void setFinancialObjectCode(String financialObjectCode) {
@@ -181,7 +187,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the financialSubObjectCode attribute.
 	 * 
-	 * @return - Returns the financialSubObjectCode
+	 * @return Returns the financialSubObjectCode
 	 * 
 	 */
 	public String getFinancialSubObjectCode() { 
@@ -191,7 +197,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the financialSubObjectCode attribute.
 	 * 
-	 * @param - financialSubObjectCode The financialSubObjectCode to set.
+	 * @param financialSubObjectCode The financialSubObjectCode to set.
 	 * 
 	 */
 	public void setFinancialSubObjectCode(String financialSubObjectCode) {
@@ -202,7 +208,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the positionNumber attribute.
 	 * 
-	 * @return - Returns the positionNumber
+	 * @return Returns the positionNumber
 	 * 
 	 */
 	public String getPositionNumber() { 
@@ -212,7 +218,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the positionNumber attribute.
 	 * 
-	 * @param - positionNumber The positionNumber to set.
+	 * @param positionNumber The positionNumber to set.
 	 * 
 	 */
 	public void setPositionNumber(String positionNumber) {
@@ -223,7 +229,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the emplid attribute.
 	 * 
-	 * @return - Returns the emplid
+	 * @return Returns the emplid
 	 * 
 	 */
 	public String getEmplid() { 
@@ -233,7 +239,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the emplid attribute.
 	 * 
-	 * @param - emplid The emplid to set.
+	 * @param emplid The emplid to set.
 	 * 
 	 */
 	public void setEmplid(String emplid) {
@@ -244,7 +250,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentFundingDurationCode attribute.
 	 * 
-	 * @return - Returns the appointmentFundingDurationCode
+	 * @return Returns the appointmentFundingDurationCode
 	 * 
 	 */
 	public String getAppointmentFundingDurationCode() { 
@@ -254,7 +260,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentFundingDurationCode attribute.
 	 * 
-	 * @param - appointmentFundingDurationCode The appointmentFundingDurationCode to set.
+	 * @param appointmentFundingDurationCode The appointmentFundingDurationCode to set.
 	 * 
 	 */
 	public void setAppointmentFundingDurationCode(String appointmentFundingDurationCode) {
@@ -265,7 +271,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentRequestedCsfAmount attribute.
 	 * 
-	 * @return - Returns the appointmentRequestedCsfAmount
+	 * @return Returns the appointmentRequestedCsfAmount
 	 * 
 	 */
 	public KualiDecimal getAppointmentRequestedCsfAmount() { 
@@ -275,7 +281,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentRequestedCsfAmount attribute.
 	 * 
-	 * @param - appointmentRequestedCsfAmount The appointmentRequestedCsfAmount to set.
+	 * @param appointmentRequestedCsfAmount The appointmentRequestedCsfAmount to set.
 	 * 
 	 */
 	public void setAppointmentRequestedCsfAmount(KualiDecimal appointmentRequestedCsfAmount) {
@@ -286,7 +292,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentRequestedCsfFteQuantity attribute.
 	 * 
-	 * @return - Returns the appointmentRequestedCsfFteQuantity
+	 * @return Returns the appointmentRequestedCsfFteQuantity
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedCsfFteQuantity() { 
@@ -296,7 +302,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentRequestedCsfFteQuantity attribute.
 	 * 
-	 * @param - appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
+	 * @param appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
 	 * 
 	 */
 	public void setAppointmentRequestedCsfFteQuantity(BigDecimal appointmentRequestedCsfFteQuantity) {
@@ -307,7 +313,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentRequestedCsfTimePercent attribute.
 	 * 
-	 * @return - Returns the appointmentRequestedCsfTimePercent
+	 * @return Returns the appointmentRequestedCsfTimePercent
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedCsfTimePercent() { 
@@ -317,7 +323,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentRequestedCsfTimePercent attribute.
 	 * 
-	 * @param - appointmentRequestedCsfTimePercent The appointmentRequestedCsfTimePercent to set.
+	 * @param appointmentRequestedCsfTimePercent The appointmentRequestedCsfTimePercent to set.
 	 * 
 	 */
 	public void setAppointmentRequestedCsfTimePercent(BigDecimal appointmentRequestedCsfTimePercent) {
@@ -328,7 +334,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentTotalIntendedAmount attribute.
 	 * 
-	 * @return - Returns the appointmentTotalIntendedAmount
+	 * @return Returns the appointmentTotalIntendedAmount
 	 * 
 	 */
 	public KualiDecimal getAppointmentTotalIntendedAmount() { 
@@ -338,7 +344,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentTotalIntendedAmount attribute.
 	 * 
-	 * @param - appointmentTotalIntendedAmount The appointmentTotalIntendedAmount to set.
+	 * @param appointmentTotalIntendedAmount The appointmentTotalIntendedAmount to set.
 	 * 
 	 */
 	public void setAppointmentTotalIntendedAmount(KualiDecimal appointmentTotalIntendedAmount) {
@@ -349,7 +355,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentTotalIntendedFteQuantity attribute.
 	 * 
-	 * @return - Returns the appointmentTotalIntendedFteQuantity
+	 * @return Returns the appointmentTotalIntendedFteQuantity
 	 * 
 	 */
 	public BigDecimal getAppointmentTotalIntendedFteQuantity() { 
@@ -359,7 +365,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentTotalIntendedFteQuantity attribute.
 	 * 
-	 * @param - appointmentTotalIntendedFteQuantity The appointmentTotalIntendedFteQuantity to set.
+	 * @param appointmentTotalIntendedFteQuantity The appointmentTotalIntendedFteQuantity to set.
 	 * 
 	 */
 	public void setAppointmentTotalIntendedFteQuantity(BigDecimal appointmentTotalIntendedFteQuantity) {
@@ -370,7 +376,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentRequestedAmount attribute.
 	 * 
-	 * @return - Returns the appointmentRequestedAmount
+	 * @return Returns the appointmentRequestedAmount
 	 * 
 	 */
 	public KualiDecimal getAppointmentRequestedAmount() { 
@@ -380,7 +386,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentRequestedAmount attribute.
 	 * 
-	 * @param - appointmentRequestedAmount The appointmentRequestedAmount to set.
+	 * @param appointmentRequestedAmount The appointmentRequestedAmount to set.
 	 * 
 	 */
 	public void setAppointmentRequestedAmount(KualiDecimal appointmentRequestedAmount) {
@@ -391,7 +397,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentRequestedTimePercent attribute.
 	 * 
-	 * @return - Returns the appointmentRequestedTimePercent
+	 * @return Returns the appointmentRequestedTimePercent
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedTimePercent() { 
@@ -401,7 +407,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentRequestedTimePercent attribute.
 	 * 
-	 * @param - appointmentRequestedTimePercent The appointmentRequestedTimePercent to set.
+	 * @param appointmentRequestedTimePercent The appointmentRequestedTimePercent to set.
 	 * 
 	 */
 	public void setAppointmentRequestedTimePercent(BigDecimal appointmentRequestedTimePercent) {
@@ -412,7 +418,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentRequestedFteQuantity attribute.
 	 * 
-	 * @return - Returns the appointmentRequestedFteQuantity
+	 * @return Returns the appointmentRequestedFteQuantity
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedFteQuantity() { 
@@ -422,7 +428,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentRequestedFteQuantity attribute.
 	 * 
-	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
+	 * @param appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
 	 * 
 	 */
 	public void setAppointmentRequestedFteQuantity(BigDecimal appointmentRequestedFteQuantity) {
@@ -433,7 +439,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentRequestedPayRate attribute.
 	 * 
-	 * @return - Returns the appointmentRequestedPayRate
+	 * @return Returns the appointmentRequestedPayRate
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedPayRate() { 
@@ -443,7 +449,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentRequestedPayRate attribute.
 	 * 
-	 * @param - appointmentRequestedPayRate The appointmentRequestedPayRate to set.
+	 * @param appointmentRequestedPayRate The appointmentRequestedPayRate to set.
 	 * 
 	 */
 	public void setAppointmentRequestedPayRate(BigDecimal appointmentRequestedPayRate) {
@@ -454,7 +460,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentFundingDeleteIndicator attribute.
 	 * 
-	 * @return - Returns the appointmentFundingDeleteIndicator
+	 * @return Returns the appointmentFundingDeleteIndicator
 	 * 
 	 */
 	public boolean isAppointmentFundingDeleteIndicator() { 
@@ -465,7 +471,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentFundingDeleteIndicator attribute.
 	 * 
-	 * @param - appointmentFundingDeleteIndicator The appointmentFundingDeleteIndicator to set.
+	 * @param appointmentFundingDeleteIndicator The appointmentFundingDeleteIndicator to set.
 	 * 
 	 */
 	public void setAppointmentFundingDeleteIndicator(boolean appointmentFundingDeleteIndicator) {
@@ -476,7 +482,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the appointmentFundingMonth attribute.
 	 * 
-	 * @return - Returns the appointmentFundingMonth
+	 * @return Returns the appointmentFundingMonth
 	 * 
 	 */
 	public Integer getAppointmentFundingMonth() { 
@@ -486,7 +492,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the appointmentFundingMonth attribute.
 	 * 
-	 * @param - appointmentFundingMonth The appointmentFundingMonth to set.
+	 * @param appointmentFundingMonth The appointmentFundingMonth to set.
 	 * 
 	 */
 	public void setAppointmentFundingMonth(Integer appointmentFundingMonth) {
@@ -497,7 +503,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the positionObjectChangeIndicator attribute.
 	 * 
-	 * @return - Returns the positionObjectChangeIndicator
+	 * @return Returns the positionObjectChangeIndicator
 	 * 
 	 */
 	public boolean isPositionObjectChangeIndicator() { 
@@ -508,7 +514,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the positionObjectChangeIndicator attribute.
 	 * 
-	 * @param - positionObjectChangeIndicator The positionObjectChangeIndicator to set.
+	 * @param positionObjectChangeIndicator The positionObjectChangeIndicator to set.
 	 * 
 	 */
 	public void setPositionObjectChangeIndicator(boolean positionObjectChangeIndicator) {
@@ -519,7 +525,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the positionSalaryChangeIndicator attribute.
 	 * 
-	 * @return - Returns the positionSalaryChangeIndicator
+	 * @return Returns the positionSalaryChangeIndicator
 	 * 
 	 */
 	public boolean isPositionSalaryChangeIndicator() { 
@@ -530,7 +536,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the positionSalaryChangeIndicator attribute.
 	 * 
-	 * @param - positionSalaryChangeIndicator The positionSalaryChangeIndicator to set.
+	 * @param positionSalaryChangeIndicator The positionSalaryChangeIndicator to set.
 	 * 
 	 */
 	public void setPositionSalaryChangeIndicator(boolean positionSalaryChangeIndicator) {
@@ -541,7 +547,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the financialObject attribute.
 	 * 
-	 * @return - Returns the financialObject
+	 * @return Returns the financialObject
 	 * 
 	 */
 	public ObjectCode getFinancialObject() { 
@@ -551,7 +557,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the financialObject attribute.
 	 * 
-	 * @param - financialObject The financialObject to set.
+	 * @param financialObject The financialObject to set.
 	 * @deprecated
 	 */
 	public void setFinancialObject(ObjectCode financialObject) {
@@ -559,29 +565,9 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	}
 
 	/**
-	 * Gets the budgetConstructionSalaryFunding attribute.
-	 * 
-	 * @return - Returns the budgetConstructionSalaryFunding
-	 * 
-	 */
-	public BudgetConstructionSalaryFunding getBudgetConstructionSalaryFunding() { 
-		return budgetConstructionSalaryFunding;
-	}
-
-	/**
-	 * Sets the budgetConstructionSalaryFunding attribute.
-	 * 
-	 * @param - budgetConstructionSalaryFunding The budgetConstructionSalaryFunding to set.
-	 * @deprecated
-	 */
-	public void setBudgetConstructionSalaryFunding(BudgetConstructionSalaryFunding budgetConstructionSalaryFunding) {
-		this.budgetConstructionSalaryFunding = budgetConstructionSalaryFunding;
-	}
-
-	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
-	 * @return - Returns the chartOfAccounts
+	 * @return Returns the chartOfAccounts
 	 * 
 	 */
 	public Chart getChartOfAccounts() { 
@@ -591,7 +577,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the chartOfAccounts attribute.
 	 * 
-	 * @param - chartOfAccounts The chartOfAccounts to set.
+	 * @param chartOfAccounts The chartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -601,7 +587,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Gets the account attribute.
 	 * 
-	 * @return - Returns the account
+	 * @return Returns the account
 	 * 
 	 */
 	public Account getAccount() { 
@@ -611,7 +597,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
 	/**
 	 * Sets the account attribute.
 	 * 
-	 * @param - account The account to set.
+	 * @param account The account to set.
 	 * @deprecated
 	 */
 	public void setAccount(Account account) {
@@ -655,7 +641,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
     /**
      * Gets the budgetConstructionPosition attribute.
      * 
-     * @return - Returns the budgetConstructionPosition
+     * @return Returns the budgetConstructionPosition
      * 
      */
     public BudgetConstructionPosition getBudgetConstructionPosition() { 
@@ -665,18 +651,88 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
     /**
      * Sets the budgetConstructionPosition attribute.
      * 
-     * @param - budgetConstructionPosition The budgetConstructionPosition to set.
+     * @param budgetConstructionPosition The budgetConstructionPosition to set.
      * @deprecated
      */
     public void setBudgetConstructionPosition(BudgetConstructionPosition budgetConstructionPosition) {
         this.budgetConstructionPosition = budgetConstructionPosition;
     }
 
-	/**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
+    /**
+     * Gets the budgetConstructionSalaryFunding list.
+     * 
+     * @return Returns the budgetConstructionSalaryFunding list
+     * 
+     */
+    public List getBudgetConstructionSalaryFunding() { 
+        return budgetConstructionSalaryFunding;
+    }
+
+    /**
+     * Sets the budgetConstructionSalaryFunding list.
+     * 
+     * @param budgetConstructionSalaryFunding The budgetConstructionSalaryFunding list to set.
+     * @deprecated
+     */
+    public void setBudgetConstructionSalaryFunding(List budgetConstructionSalaryFunding) {
+        this.budgetConstructionSalaryFunding = budgetConstructionSalaryFunding;
+    }
+
+    /**
+     * Gets the budgetConstructionAppointmentFundingReason attribute. 
+     * @return Returns the budgetConstructionAppointmentFundingReason.
+     */
+    public List getBudgetConstructionAppointmentFundingReason() {
+        return budgetConstructionAppointmentFundingReason;
+    }
+
+    /**
+     * Sets the budgetConstructionAppointmentFundingReason attribute value.
+     * @param budgetConstructionAppointmentFundingReason The budgetConstructionAppointmentFundingReason to set.
+     */
+    public void setBudgetConstructionAppointmentFundingReason(List budgetConstructionAppointmentFundingReason) {
+        this.budgetConstructionAppointmentFundingReason = budgetConstructionAppointmentFundingReason;
+    }
+
+    /**
+     * Gets the budgetConstructionAdministrativePost attribute. 
+     * @return Returns the budgetConstructionAdministrativePost.
+     */
+    public BudgetConstructionAdministrativePost getBudgetConstructionAdministrativePost() {
+        return budgetConstructionAdministrativePost;
+    }
+
+    /**
+     * Sets the budgetConstructionAdministrativePost attribute value.
+     * @param budgetConstructionAdministrativePost The budgetConstructionAdministrativePost to set.
+     * @deprecated
+     */
+    public void setBudgetConstructionAdministrativePost(BudgetConstructionAdministrativePost budgetConstructionAdministrativePost) {
+        this.budgetConstructionAdministrativePost = budgetConstructionAdministrativePost;
+    }    
+
+    /**
+     * Gets the budgetConstructionAccountReports attribute. 
+     * @return Returns the budgetConstructionAccountReports.
+     */
+    public BudgetConstructionAccountReports getBudgetConstructionAccountReports() {
+        return budgetConstructionAccountReports;
+    }
+
+    /**
+     * Sets the budgetConstructionAccountReports attribute value.
+     * @param budgetConstructionAccountReports The budgetConstructionAccountReports to set.
+     * @deprecated
+     */
+    public void setBudgetConstructionAccountReports(BudgetConstructionAccountReports budgetConstructionAccountReports) {
+        this.budgetConstructionAccountReports = budgetConstructionAccountReports;
+    }    
+    
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }
@@ -687,6 +743,7 @@ public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectB
         m.put("financialSubObjectCode", this.financialSubObjectCode);
         m.put("positionNumber", this.positionNumber);
         m.put("emplid", this.emplid);
-	    return m;
+        return m;
     }
+
 }

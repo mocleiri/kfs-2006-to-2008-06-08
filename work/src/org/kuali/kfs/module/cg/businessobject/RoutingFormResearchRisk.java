@@ -19,17 +19,20 @@
 package org.kuali.module.kra.routingform.bo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class RoutingFormResearchRisk extends BusinessObjectBase {
 
-	private String researchDocumentNumber;
+	private String documentNumber;
 	private String researchRiskTypeCode;
 	private String researchRiskDescription;
 	private String dataPresentIndicator;
@@ -44,41 +47,41 @@ public class RoutingFormResearchRisk extends BusinessObjectBase {
 	 */
 	public RoutingFormResearchRisk() {
         newResearchRiskStudy = new RoutingFormResearchRiskStudy();
-	    researchRiskStudies = new ArrayList();
+	    researchRiskStudies = new ArrayList<RoutingFormResearchRiskStudy>();
 	}
     
-    public RoutingFormResearchRisk(String researchDocumentNumber, ResearchRiskType researchRiskType) {
+    public RoutingFormResearchRisk(String documentNumber, ResearchRiskType researchRiskType) {
         super();
-        this.researchDocumentNumber = researchDocumentNumber;
+        this.documentNumber = documentNumber;
         this.researchRiskTypeCode = researchRiskType.getResearchRiskTypeCode();
         this.researchRiskType = researchRiskType;
     }
 
 	/**
-	 * Gets the researchDocumentNumber attribute.
+	 * Gets the documentNumber attribute.
 	 * 
-	 * @return - Returns the researchDocumentNumber
+	 * @return Returns the documentNumber
 	 * 
 	 */
-	public String getResearchDocumentNumber() { 
-		return researchDocumentNumber;
+	public String getDocumentNumber() { 
+		return documentNumber;
 	}
 
 	/**
-	 * Sets the researchDocumentNumber attribute.
+	 * Sets the documentNumber attribute.
 	 * 
-	 * @param - researchDocumentNumber The researchDocumentNumber to set.
+	 * @param documentNumber The documentNumber to set.
 	 * 
 	 */
-	public void setResearchDocumentNumber(String researchDocumentNumber) {
-		this.researchDocumentNumber = researchDocumentNumber;
+	public void setDocumentNumber(String documentNumber) {
+		this.documentNumber = documentNumber;
 	}
 
 
 	/**
 	 * Gets the researchRiskTypeCode attribute.
 	 * 
-	 * @return - Returns the researchRiskTypeCode
+	 * @return Returns the researchRiskTypeCode
 	 * 
 	 */
 	public String getResearchRiskTypeCode() { 
@@ -88,7 +91,7 @@ public class RoutingFormResearchRisk extends BusinessObjectBase {
 	/**
 	 * Sets the researchRiskTypeCode attribute.
 	 * 
-	 * @param - researchRiskTypeCode The researchRiskTypeCode to set.
+	 * @param researchRiskTypeCode The researchRiskTypeCode to set.
 	 * 
 	 */
 	public void setResearchRiskTypeCode(String researchRiskTypeCode) {
@@ -99,7 +102,7 @@ public class RoutingFormResearchRisk extends BusinessObjectBase {
 	/**
 	 * Gets the researchRiskDescription attribute.
 	 * 
-	 * @return - Returns the researchRiskDescription
+	 * @return Returns the researchRiskDescription
 	 * 
 	 */
 	public String getResearchRiskDescription() { 
@@ -109,7 +112,7 @@ public class RoutingFormResearchRisk extends BusinessObjectBase {
 	/**
 	 * Sets the researchRiskDescription attribute.
 	 * 
-	 * @param - researchRiskDescription The researchRiskDescription to set.
+	 * @param researchRiskDescription The researchRiskDescription to set.
 	 * 
 	 */
 	public void setResearchRiskDescription(String researchRiskDescription) {
@@ -120,7 +123,7 @@ public class RoutingFormResearchRisk extends BusinessObjectBase {
 	/**
 	 * Gets the dataPresentIndicator attribute.
 	 * 
-	 * @return - Returns the dataPresentIndicator
+	 * @return Returns the dataPresentIndicator
 	 * 
 	 */
 	public String getDataPresentIndicator() { 
@@ -130,7 +133,7 @@ public class RoutingFormResearchRisk extends BusinessObjectBase {
 	/**
 	 * Sets the dataPresentIndicator attribute.
 	 * 
-	 * @param - dataPresentIndicator The dataPresentIndicator to set.
+	 * @param dataPresentIndicator The dataPresentIndicator to set.
 	 * 
 	 */
 	public void setDataPresentIndicator(String dataPresentIndicator) {
@@ -171,6 +174,13 @@ public class RoutingFormResearchRisk extends BusinessObjectBase {
     }
     
     public void addNewResearchRiskStudyToList() {
+        // set the sequence number
+        if (this.researchRiskStudies.isEmpty()) {
+            this.newResearchRiskStudy.setRoutingFormResearchRiskStudySequenceNumber(new Integer(1));
+        } else {
+            this.newResearchRiskStudy.setRoutingFormResearchRiskStudySequenceNumber(
+                    this.researchRiskStudies.get(this.researchRiskStudies.size() - 1).getRoutingFormResearchRiskStudySequenceNumber() + 1);
+        }
         this.researchRiskStudies.add(this.newResearchRiskStudy);
         this.newResearchRiskStudy = new RoutingFormResearchRiskStudy();
     }
@@ -178,7 +188,7 @@ public class RoutingFormResearchRisk extends BusinessObjectBase {
     /**
      * Sets the researchRiskStudies attribute.
      * 
-     * @param - researchRiskStudies The researchRiskStudies to set.
+     * @param researchRiskStudies The researchRiskStudies to set.
      */
     public void setResearchRiskStudies(List<RoutingFormResearchRiskStudy> researchRiskStudies) {
         this.researchRiskStudies = researchRiskStudies;
@@ -191,13 +201,13 @@ public class RoutingFormResearchRisk extends BusinessObjectBase {
     public void setNewResearchRiskStudy(RoutingFormResearchRiskStudy newResearchRiskStudy) {
         this.newResearchRiskStudy = newResearchRiskStudy;
     }
-
+    
     /**
-	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("researchDocumentNumber", this.researchDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("researchRiskTypeCode", this.researchRiskTypeCode);
 	    return m;
     }

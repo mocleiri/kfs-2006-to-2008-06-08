@@ -18,6 +18,8 @@
 package org.kuali.module.kra.routingform.web.struts.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,9 +28,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.action.KualiDocumentActionBase;
+import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
+
+import edu.iu.uis.eden.clientapp.IDocHandler;
 
 public class RoutingFormAction extends KualiDocumentActionBase {
     
@@ -41,17 +48,17 @@ public class RoutingFormAction extends KualiDocumentActionBase {
     }
     
     public ActionForward researchrisks(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        RoutingForm routingForm = (RoutingForm) form;
         
-        // Setup research risks if this is the first entry into page.
+        RoutingForm routingForm = (RoutingForm) form;
+        routingForm.setDocId(routingForm.getDocument().getDocumentNumber());
+        this.loadDocument(routingForm);
+        
+//      Setup research risks if this is the first entry into page.
         if (routingForm.getRoutingFormDocument().getRoutingFormResearchRisks().isEmpty()) {
-            routingForm.getRoutingFormDocument().setRoutingFormResearchRisks(
-                    SpringServiceLocator.getRoutingFormResearchRiskService().getAllRoutingFormDocumentResearchRisks(
-                            routingForm.getRoutingFormDocument().getFinancialDocumentNumber()));
+            SpringServiceLocator.getRoutingFormResearchRiskService().setupResearchRisks(routingForm.getRoutingFormDocument());
         }
         
         routingForm.setTabStates(new ArrayList());
-        
         return mapping.findForward("researchrisks");
     }
     
@@ -96,7 +103,32 @@ public class RoutingFormAction extends KualiDocumentActionBase {
     }
     
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        RoutingForm routingForm = (RoutingForm) form;
+
+        // Check if user has permission to save
+        routingForm.populateAuthorizationFields(SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(routingForm.getRoutingFormDocument()));
+        if (!"TRUE".equals(routingForm.getEditingMode().get(AuthorizationConstants.EditMode.VIEW_ONLY))) {
+            super.save(mapping, form, request, response);
+        }
+
+        // TODO RF Audit Mode
+        /*
+        if (routingForm.isAuditActivated()) {
+            routingForm.newTabState(true, true);
+            return mapping.findForward("auditmode");
+        }
+        */
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
+    public ActionForward docHandler(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        ActionForward forward = super.docHandler(mapping, form, request, response);
+        RoutingForm routingForm = (RoutingForm) form;
+
+        if (IDocHandler.INITIATE_COMMAND.equals(routingForm.getCommand())) {
+            routingForm.getRoutingFormDocument().setDocumentNumber(routingForm.getRoutingFormDocument().getDocumentNumber());
+        }
+        return forward;
+    }
 }

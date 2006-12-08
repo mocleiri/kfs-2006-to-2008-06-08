@@ -27,10 +27,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
+import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
-import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.web.struts.form.BudgetCostShareFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 
@@ -63,6 +65,8 @@ public class BudgetCostShareAction extends BudgetAction {
         ActionForward forward = super.execute(mapping, form, request, response);
         
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
+        
+        setupBudgetCostSharePermissionDisplay(budgetForm);
 
         return forward;
     }
@@ -103,6 +107,7 @@ public class BudgetCostShareAction extends BudgetAction {
 
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
+        budgetForm.getNewInstitutionCostShare().setPermissionIndicator(true);
 
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
@@ -208,5 +213,12 @@ public class BudgetCostShareAction extends BudgetAction {
         }
 
         return super.save(mapping, form, request, response);
+    }
+    
+    @Override
+    public ActionForward reload(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ActionForward forward = super.reload(mapping, form, request, response);
+        ((BudgetForm) form).getNewInstitutionCostShare().setPermissionIndicator(true);
+        return forward;
     }
 }
