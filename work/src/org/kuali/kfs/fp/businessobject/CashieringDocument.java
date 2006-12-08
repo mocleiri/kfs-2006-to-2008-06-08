@@ -22,13 +22,14 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class CashieringDocument extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private String depositFinancialSystemOriginationCode;
     private String financialDocumentDepositNumber;
     private KualiDecimal financialDocumentCheckAmount;
@@ -51,30 +52,30 @@ public class CashieringDocument extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
 
     /**
      * Gets the depositFinancialSystemOriginationCode attribute.
      * 
-     * @return - Returns the depositFinancialSystemOriginationCode
+     * @return Returns the depositFinancialSystemOriginationCode
      * 
      */
     public String getDepositFinancialSystemOriginationCode() {
@@ -95,7 +96,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the financialDocumentDepositNumber attribute.
      * 
-     * @return - Returns the financialDocumentDepositNumber
+     * @return Returns the financialDocumentDepositNumber
      * 
      */
     public String getFinancialDocumentDepositNumber() {
@@ -116,7 +117,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the financialDocumentCheckAmount attribute.
      * 
-     * @return - Returns the financialDocumentCheckAmount
+     * @return Returns the financialDocumentCheckAmount
      * 
      */
     public KualiDecimal getFinancialDocumentCheckAmount() {
@@ -137,7 +138,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the financialDocumentAdvanceDepositAmount attribute.
      * 
-     * @return - Returns the financialDocumentAdvanceDepositAmount
+     * @return Returns the financialDocumentAdvanceDepositAmount
      * 
      */
     public KualiDecimal getFinancialDocumentAdvanceDepositAmount() {
@@ -158,7 +159,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the financialDocumentRevolvingFundAmount attribute.
      * 
-     * @return - Returns the financialDocumentRevolvingFundAmount
+     * @return Returns the financialDocumentRevolvingFundAmount
      * 
      */
     public KualiDecimal getFinancialDocumentRevolvingFundAmount() {
@@ -179,7 +180,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the financialDocumentNextCreditCardLineNumber attribute.
      * 
-     * @return - Returns the financialDocumentNextCreditCardLineNumber
+     * @return Returns the financialDocumentNextCreditCardLineNumber
      * 
      */
     public Integer getFinancialDocumentNextCreditCardLineNumber() {
@@ -200,7 +201,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the financialDocumentCashAmount attribute.
      * 
-     * @return - Returns the financialDocumentCashAmount
+     * @return Returns the financialDocumentCashAmount
      * 
      */
     public KualiDecimal getFinancialDocumentCashAmount() {
@@ -221,7 +222,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the financialDocumentCreditCardAmount attribute.
      * 
-     * @return - Returns the financialDocumentCreditCardAmount
+     * @return Returns the financialDocumentCreditCardAmount
      * 
      */
     public KualiDecimal getFinancialDocumentCreditCardAmount() {
@@ -242,7 +243,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the financialDocumentTotalCoinAmount attribute.
      * 
-     * @return - Returns the financialDocumentTotalCoinAmount
+     * @return Returns the financialDocumentTotalCoinAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTotalCoinAmount() {
@@ -263,7 +264,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the financialDocumentChangeOutAmount attribute.
      * 
-     * @return - Returns the financialDocumentChangeOutAmount
+     * @return Returns the financialDocumentChangeOutAmount
      * 
      */
     public KualiDecimal getFinancialDocumentChangeOutAmount() {
@@ -284,7 +285,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the nextCheckLineNumber attribute.
      * 
-     * @return - Returns the nextCheckLineNumber
+     * @return Returns the nextCheckLineNumber
      * 
      */
     public Integer getNextCheckLineNumber() {
@@ -305,7 +306,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the nextAdvanceDepositLineNumber attribute.
      * 
-     * @return - Returns the nextAdvanceDepositLineNumber
+     * @return Returns the nextAdvanceDepositLineNumber
      * 
      */
     public Integer getNextAdvanceDepositLineNumber() {
@@ -326,7 +327,7 @@ public class CashieringDocument extends BusinessObjectBase {
     /**
      * Gets the nextRevolvingFundLineNumber attribute.
      * 
-     * @return - Returns the nextRevolvingFundLineNumber
+     * @return Returns the nextRevolvingFundLineNumber
      * 
      */
     public Integer getNextRevolvingFundLineNumber() {
@@ -349,7 +350,7 @@ public class CashieringDocument extends BusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 }

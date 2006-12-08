@@ -25,19 +25,19 @@ import java.util.List;
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.DocumentHeader;
-import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.SubAccount;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class BudgetConstructionHeader extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
     private String accountNumber;
@@ -67,30 +67,30 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param - financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
 
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return - Returns the universityFiscalYear
+     * @return Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -100,7 +100,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the universityFiscalYear attribute.
      * 
-     * @param - universityFiscalYear The universityFiscalYear to set.
+     * @param universityFiscalYear The universityFiscalYear to set.
      * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -111,7 +111,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return - Returns the chartOfAccountsCode
+     * @return Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -121,7 +121,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the chartOfAccountsCode attribute.
      * 
-     * @param - chartOfAccountsCode The chartOfAccountsCode to set.
+     * @param chartOfAccountsCode The chartOfAccountsCode to set.
      * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -132,7 +132,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return - Returns the accountNumber
+     * @return Returns the accountNumber
      * 
      */
     public String getAccountNumber() {
@@ -142,7 +142,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the accountNumber attribute.
      * 
-     * @param - accountNumber The accountNumber to set.
+     * @param accountNumber The accountNumber to set.
      * 
      */
     public void setAccountNumber(String accountNumber) {
@@ -153,7 +153,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the subAccountNumber attribute.
      * 
-     * @return - Returns the subAccountNumber
+     * @return Returns the subAccountNumber
      * 
      */
     public String getSubAccountNumber() {
@@ -163,7 +163,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the subAccountNumber attribute.
      * 
-     * @param - subAccountNumber The subAccountNumber to set.
+     * @param subAccountNumber The subAccountNumber to set.
      * 
      */
     public void setSubAccountNumber(String subAccountNumber) {
@@ -174,7 +174,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the organizationLevelCode attribute.
      * 
-     * @return - Returns the organizationLevelCode
+     * @return Returns the organizationLevelCode
      * 
      */
     public Integer getOrganizationLevelCode() {
@@ -184,7 +184,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the organizationLevelCode attribute.
      * 
-     * @param - organizationLevelCode The organizationLevelCode to set.
+     * @param organizationLevelCode The organizationLevelCode to set.
      * 
      */
     public void setOrganizationLevelCode(Integer organizationLevelCode) {
@@ -195,7 +195,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the organizationLevelChartOfAccountsCode attribute.
      * 
-     * @return - Returns the organizationLevelChartOfAccountsCode
+     * @return Returns the organizationLevelChartOfAccountsCode
      * 
      */
     public String getOrganizationLevelChartOfAccountsCode() {
@@ -205,7 +205,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the organizationLevelChartOfAccountsCode attribute.
      * 
-     * @param - organizationLevelChartOfAccountsCode The organizationLevelChartOfAccountsCode to set.
+     * @param organizationLevelChartOfAccountsCode The organizationLevelChartOfAccountsCode to set.
      * 
      */
     public void setOrganizationLevelChartOfAccountsCode(String organizationLevelChartOfAccountsCode) {
@@ -216,7 +216,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the organizationLevelOrganizationCode attribute.
      * 
-     * @return - Returns the organizationLevelOrganizationCode
+     * @return Returns the organizationLevelOrganizationCode
      * 
      */
     public String getOrganizationLevelOrganizationCode() {
@@ -226,7 +226,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the organizationLevelOrganizationCode attribute.
      * 
-     * @param - organizationLevelOrganizationCode The organizationLevelOrganizationCode to set.
+     * @param organizationLevelOrganizationCode The organizationLevelOrganizationCode to set.
      * 
      */
     public void setOrganizationLevelOrganizationCode(String organizationLevelOrganizationCode) {
@@ -237,7 +237,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the budgetLockUserIdentifier attribute.
      * 
-     * @return - Returns the budgetLockUserIdentifier
+     * @return Returns the budgetLockUserIdentifier
      * 
      */
     public String getBudgetLockUserIdentifier() {
@@ -247,7 +247,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the budgetLockUserIdentifier attribute.
      * 
-     * @param - budgetLockUserIdentifier The budgetLockUserIdentifier to set.
+     * @param budgetLockUserIdentifier The budgetLockUserIdentifier to set.
      * 
      */
     public void setBudgetLockUserIdentifier(String budgetLockUserIdentifier) {
@@ -258,7 +258,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the budgetTransactionLockUserIdentifier attribute.
      * 
-     * @return - Returns the budgetTransactionLockUserIdentifier
+     * @return Returns the budgetTransactionLockUserIdentifier
      * 
      */
     public String getBudgetTransactionLockUserIdentifier() {
@@ -268,7 +268,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the budgetTransactionLockUserIdentifier attribute.
      * 
-     * @param - budgetTransactionLockUserIdentifier The budgetTransactionLockUserIdentifier to set.
+     * @param budgetTransactionLockUserIdentifier The budgetTransactionLockUserIdentifier to set.
      * 
      */
     public void setBudgetTransactionLockUserIdentifier(String budgetTransactionLockUserIdentifier) {
@@ -279,7 +279,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return - Returns the chartOfAccounts
+     * @return Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -289,7 +289,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the chartOfAccounts attribute.
      * 
-     * @param - chartOfAccounts The chartOfAccounts to set.
+     * @param chartOfAccounts The chartOfAccounts to set.
      * @deprecated
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -299,7 +299,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the account attribute.
      * 
-     * @return - Returns the account
+     * @return Returns the account
      * 
      */
     public Account getAccount() {
@@ -309,7 +309,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the account attribute.
      * 
-     * @param - account The account to set.
+     * @param account The account to set.
      * @deprecated
      */
     public void setAccount(Account account) {
@@ -324,7 +324,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the budgetLockUser attribute.
      * 
-     * @param - budgetLockUser The budgetLockUser to set.
+     * @param budgetLockUser The budgetLockUser to set.
      * @deprecated
      */
     public void setBudgetLockUser(UniversalUser budgetLockUser) {
@@ -334,7 +334,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Gets the budgetConstructionAccountSelect list.
      * 
-     * @return - Returns the budgetConstructionAccountSelect list
+     * @return Returns the budgetConstructionAccountSelect list
      * 
      */
     public List getBudgetConstructionAccountSelect() {
@@ -344,7 +344,7 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     /**
      * Sets the budgetConstructionAccountSelect list.
      * 
-     * @param - budgetConstructionAccountSelect The budgetConstructionAccountSelect list to set.
+     * @param budgetConstructionAccountSelect The budgetConstructionAccountSelect list to set.
      * 
      */
     public void setBudgetConstructionAccountSelect(List budgetConstructionAccountSelect) {
@@ -421,11 +421,11 @@ public class BudgetConstructionHeader extends BusinessObjectBase {
     }    
     
     /**
-     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }

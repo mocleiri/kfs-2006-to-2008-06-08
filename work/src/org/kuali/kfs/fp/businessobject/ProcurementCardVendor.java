@@ -21,13 +21,14 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class ProcurementCardVendor extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private Integer financialDocumentTransactionLineNumber;
     private String vendorName;
     private String vendorLine1Address;
@@ -47,30 +48,30 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
 
     /**
      * Gets the financialDocumentTransactionLineNumber attribute.
      * 
-     * @return - Returns the financialDocumentTransactionLineNumber
+     * @return Returns the financialDocumentTransactionLineNumber
      * 
      */
     public Integer getFinancialDocumentTransactionLineNumber() {
@@ -91,7 +92,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     /**
      * Gets the vendorName attribute.
      * 
-     * @return - Returns the vendorName
+     * @return Returns the vendorName
      * 
      */
     public String getVendorName() {
@@ -112,7 +113,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     /**
      * Gets the vendorLine1Address attribute.
      * 
-     * @return - Returns the vendorLine1Address
+     * @return Returns the vendorLine1Address
      * 
      */
     public String getVendorLine1Address() {
@@ -133,7 +134,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     /**
      * Gets the vendorLine2Address attribute.
      * 
-     * @return - Returns the vendorLine2Address
+     * @return Returns the vendorLine2Address
      * 
      */
     public String getVendorLine2Address() {
@@ -154,7 +155,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     /**
      * Gets the vendorCityName attribute.
      * 
-     * @return - Returns the vendorCityName
+     * @return Returns the vendorCityName
      * 
      */
     public String getVendorCityName() {
@@ -175,7 +176,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     /**
      * Gets the vendorStateCode attribute.
      * 
-     * @return - Returns the vendorStateCode
+     * @return Returns the vendorStateCode
      * 
      */
     public String getVendorStateCode() {
@@ -196,7 +197,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     /**
      * Gets the vendorZipCode attribute.
      * 
-     * @return - Returns the vendorZipCode
+     * @return Returns the vendorZipCode
      * 
      */
     public String getVendorZipCode() {
@@ -217,7 +218,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     /**
      * Gets the visaVendorIdentifier attribute.
      * 
-     * @return - Returns the visaVendorIdentifier
+     * @return Returns the visaVendorIdentifier
      * 
      */
     public String getVisaVendorIdentifier() {
@@ -238,7 +239,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     /**
      * Gets the vendorOrderNumber attribute.
      * 
-     * @return - Returns the vendorOrderNumber
+     * @return Returns the vendorOrderNumber
      * 
      */
     public String getVendorOrderNumber() {
@@ -259,7 +260,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
     /**
      * Gets the transactionMerchantCategoryCode attribute.
      * 
-     * @return - Returns the transactionMerchantCategoryCode
+     * @return Returns the transactionMerchantCategoryCode
      * 
      */
     public String getTransactionMerchantCategoryCode() {
@@ -282,7 +283,7 @@ public class ProcurementCardVendor extends BusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.financialDocumentTransactionLineNumber != null) {
             m.put("financialDocumentTransactionLineNumber", this.financialDocumentTransactionLineNumber.toString());
         }

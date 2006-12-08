@@ -22,13 +22,14 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class CoinDetail extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private String financialDocumentTypeCode;
     private String financialDocumentColumnTypeCode;
     private KualiDecimal financialDocumentFiftyCentAmount;
@@ -47,30 +48,30 @@ public class CoinDetail extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
 
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return - Returns the financialDocumentTypeCode
+     * @return Returns the financialDocumentTypeCode
      * 
      */
     public String getFinancialDocumentTypeCode() {
@@ -91,7 +92,7 @@ public class CoinDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentColumnTypeCode attribute.
      * 
-     * @return - Returns the financialDocumentColumnTypeCode
+     * @return Returns the financialDocumentColumnTypeCode
      * 
      */
     public String getFinancialDocumentColumnTypeCode() {
@@ -112,7 +113,7 @@ public class CoinDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentFiftyCentAmount attribute.
      * 
-     * @return - Returns the financialDocumentFiftyCentAmount
+     * @return Returns the financialDocumentFiftyCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentFiftyCentAmount() {
@@ -133,7 +134,7 @@ public class CoinDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentTwentyFiveCentAmount attribute.
      * 
-     * @return - Returns the financialDocumentTwentyFiveCentAmount
+     * @return Returns the financialDocumentTwentyFiveCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTwentyFiveCentAmount() {
@@ -154,7 +155,7 @@ public class CoinDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentTenCentAmount attribute.
      * 
-     * @return - Returns the financialDocumentTenCentAmount
+     * @return Returns the financialDocumentTenCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTenCentAmount() {
@@ -175,7 +176,7 @@ public class CoinDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentFiveCentAmount attribute.
      * 
-     * @return - Returns the financialDocumentFiveCentAmount
+     * @return Returns the financialDocumentFiveCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentFiveCentAmount() {
@@ -196,7 +197,7 @@ public class CoinDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentOneCentAmount attribute.
      * 
-     * @return - Returns the financialDocumentOneCentAmount
+     * @return Returns the financialDocumentOneCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentOneCentAmount() {
@@ -217,7 +218,7 @@ public class CoinDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentOtherCentAmount attribute.
      * 
-     * @return - Returns the financialDocumentOtherCentAmount
+     * @return Returns the financialDocumentOtherCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentOtherCentAmount() {
@@ -238,7 +239,7 @@ public class CoinDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentHundredCentAmount attribute.
      * 
-     * @return - Returns the financialDocumentHundredCentAmount
+     * @return Returns the financialDocumentHundredCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentHundredCentAmount() {
@@ -261,7 +262,7 @@ public class CoinDetail extends BusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
         m.put("financialDocumentColumnTypeCode", this.financialDocumentColumnTypeCode);
         return m;

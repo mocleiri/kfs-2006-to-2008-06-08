@@ -20,44 +20,15 @@
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRoutingFormDocument"
 	htmlFormAction="researchRoutingFormResearchRisks" headerDispatch="save"
-	feedbackKey="app.krafeedback.link" headerTabActive="researchrisks">
+	feedbackKey="app.krafeedback.link" headerTabActive="researchrisks"
+	showTabButtons="true">
+	
+	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
 
 	<kra-rf:routingFormHiddenDocumentFields />
 
+	<kra-rf:routingFormResearchRisks/>
 
-	<div class="msg-excol">
-		<div class="right">
-			<div class="excol">
-				<input name="imageField" type="image" class="tinybutton"
-					src="images/tinybutton-expandall.gif">
-				<input name="imageField" type="image" class="tinybutton"
-					src="images/tinybutton-collapseall.gif">
-			</div>
-		</div>
-	</div>
+	<kul:documentControls transactionalDocument="false" suppressRoutingControls="true" viewOnly="${KualiForm.editingMode['viewOnly']}" />
 
-	<table width="100%" cellpadding="0" cellspacing="0">
-		<tr>
-			<td class="column-left">
-				<img src="images/pixel_clear.gif" alt="" width="20" height="20">
-			</td>
-			<td>
-				<div id="workarea">
-				
-				<kra-rf:routingFormResearchRisks/>
-
-<%-- %>
-					<kra-rf:routingFormResearchRisksMultiLine>
-					</kra-rf:routingFormResearchRisksMultiLine>
-
-					<kra-rf:routingFormResearchRisksDescrption>
-					</kra-rf:routingFormResearchRisksDescrption>
-					--%>
-
-				</div>
-			</td>
-		</tr>
-	</table>
-	
-	<div class="globalbuttons"> <a href="overview.html"><img src="images/buttonsmall_save.gif" alt="save" width="53" height="18" hspace="5" border="0"></a><a href="confirm-cancel.html"><img src="images/buttonsmall_cancel.gif" alt="cancel" width="66" height="18" hspace="5" border="0"></a> </div>
 </kul:documentPage>

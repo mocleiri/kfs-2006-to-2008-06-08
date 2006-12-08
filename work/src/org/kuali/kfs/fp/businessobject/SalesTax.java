@@ -25,13 +25,14 @@ import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class SalesTax extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private String financialDocumentLineTypeCode;
     private Integer financialDocumentLineNumber;
     private String chartOfAccountsCode;
@@ -51,30 +52,30 @@ public class SalesTax extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
 
     /**
      * Gets the financialDocumentLineTypeCode attribute.
      * 
-     * @return - Returns the financialDocumentLineTypeCode
+     * @return Returns the financialDocumentLineTypeCode
      * 
      */
     public String getFinancialDocumentLineTypeCode() {
@@ -95,7 +96,7 @@ public class SalesTax extends BusinessObjectBase {
     /**
      * Gets the financialDocumentLineNumber attribute.
      * 
-     * @return - Returns the financialDocumentLineNumber
+     * @return Returns the financialDocumentLineNumber
      * 
      */
     public Integer getFinancialDocumentLineNumber() {
@@ -116,7 +117,7 @@ public class SalesTax extends BusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return - Returns the chartOfAccountsCode
+     * @return Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -137,7 +138,7 @@ public class SalesTax extends BusinessObjectBase {
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return - Returns the accountNumber
+     * @return Returns the accountNumber
      * 
      */
     public String getAccountNumber() {
@@ -158,7 +159,7 @@ public class SalesTax extends BusinessObjectBase {
     /**
      * Gets the financialDocumentGrossSalesAmount attribute.
      * 
-     * @return - Returns the financialDocumentGrossSalesAmount
+     * @return Returns the financialDocumentGrossSalesAmount
      * 
      */
     public KualiDecimal getFinancialDocumentGrossSalesAmount() {
@@ -179,7 +180,7 @@ public class SalesTax extends BusinessObjectBase {
     /**
      * Gets the financialDocumentTaxableSalesAmount attribute.
      * 
-     * @return - Returns the financialDocumentTaxableSalesAmount
+     * @return Returns the financialDocumentTaxableSalesAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTaxableSalesAmount() {
@@ -200,7 +201,7 @@ public class SalesTax extends BusinessObjectBase {
     /**
      * Gets the financialDocumentSaleDate attribute.
      * 
-     * @return - Returns the financialDocumentSaleDate
+     * @return Returns the financialDocumentSaleDate
      * 
      */
     public Date getFinancialDocumentSaleDate() {
@@ -221,7 +222,7 @@ public class SalesTax extends BusinessObjectBase {
     /**
      * Gets the account attribute.
      * 
-     * @return - Returns the account
+     * @return Returns the account
      * 
      */
     public Account getAccount() {
@@ -241,7 +242,7 @@ public class SalesTax extends BusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return - Returns the chartOfAccounts
+     * @return Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -263,7 +264,7 @@ public class SalesTax extends BusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("financialDocumentLineTypeCode", this.financialDocumentLineTypeCode);
         if (this.financialDocumentLineNumber != null) {
             m.put("financialDocumentLineNumber", this.financialDocumentLineNumber.toString());

@@ -114,6 +114,7 @@ public class BudgetForm extends KualiDocumentFormBase {
     private boolean auditActivated;
     private boolean includeAdHocPermissions;
     private boolean includeBudgetIdcRates;
+    private boolean displayCostSharePermission;
     
 
     public BudgetForm() {
@@ -621,7 +622,7 @@ public class BudgetForm extends KualiDocumentFormBase {
      */
     public Integer getCurrentPeriodNumber() {
         if (currentPeriodNumber == null) {
-            currentPeriodNumber = SpringServiceLocator.getBudgetPeriodService().getFirstBudgetPeriod(((BudgetDocument) getDocument()).getFinancialDocumentNumber()).getBudgetPeriodSequenceNumber();
+            currentPeriodNumber = SpringServiceLocator.getBudgetPeriodService().getFirstBudgetPeriod(((BudgetDocument) getDocument()).getDocumentNumber()).getBudgetPeriodSequenceNumber();
         }
         return currentPeriodNumber;
     }
@@ -638,7 +639,7 @@ public class BudgetForm extends KualiDocumentFormBase {
      */
     public Integer getCurrentTaskNumber() {
         if (currentTaskNumber == null) {
-            currentTaskNumber = SpringServiceLocator.getBudgetTaskService().getFirstBudgetTask(((BudgetDocument) getDocument()).getFinancialDocumentNumber()).getBudgetTaskSequenceNumber();
+            currentTaskNumber = SpringServiceLocator.getBudgetTaskService().getFirstBudgetTask(((BudgetDocument) getDocument()).getDocumentNumber()).getBudgetTaskSequenceNumber();
         }
         return currentTaskNumber;
     }
@@ -949,5 +950,13 @@ public class BudgetForm extends KualiDocumentFormBase {
      */
     public void setCurrentOutputAgencyPeriod(String currentOutputAgencyPeriod) {
         this.currentOutputAgencyPeriod = currentOutputAgencyPeriod;
+    }
+
+    public boolean isDisplayCostSharePermission() {
+        return displayCostSharePermission;
+    }
+
+    public void setDisplayCostSharePermission(boolean displayCostSharePermission) {
+        this.displayCostSharePermission = displayCostSharePermission;
     }
 }
