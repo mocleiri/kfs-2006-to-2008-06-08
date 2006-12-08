@@ -182,7 +182,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * If unauthorized changes have been made, then fail and log errors.
      * 
      * @param document - document to test
-     * @return - false if any unauthorized changes are made, true otherwise
+     * @return false if any unauthorized changes are made, true otherwise
      * 
      */
     protected boolean checkCgFieldsNotAuthorized(MaintenanceDocument document) {
@@ -456,7 +456,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * 
      * This method tests if all fields in the Cost Sharing section are empty.
      * 
-     * @return - true if the cost sharing values passed in are empty, otherwise false.
+     * @return true if the cost sharing values passed in are empty, otherwise false.
      * 
      */
     protected boolean checkCgCostSharingIsEmpty() {
@@ -476,7 +476,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * 
      * This method tests if all fields in the ICR section are empty.
      * 
-     * @return - true if the ICR values passed in are empty, otherwise false.
+     * @return true if the ICR values passed in are empty, otherwise false.
      * 
      */
     protected boolean checkCgIcrIsEmpty() {
@@ -500,7 +500,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * This method tests whether the specified user is part of the group that grants authorization to the CG fields.
      * 
      * @param user - the user to test
-     * @return - true if user is part of the group, false otherwise
+     * @return true if user is part of the group, false otherwise
      * 
      */
     protected boolean isCgAuthorized(UniversalUser user) {
@@ -524,7 +524,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * 
      * @param value - String value to be tested
      * @param fieldName - name of the field being tested
-     * @return - false if there is any value in value, otherwise true
+     * @return false if there is any value in value, otherwise true
      * 
      */
     protected boolean disallowAnyValues(String value, String fieldName) {
@@ -545,7 +545,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * @param oldValue - the original String value of the field
      * @param newValue - the new String value of the field
      * @param fieldName - name of the field being tested
-     * @return - false if there is any difference between the old and new, true otherwise
+     * @return false if there is any difference between the old and new, true otherwise
      * 
      */
     protected boolean disallowChangedValues(String oldValue, String newValue, String fieldName) {
