@@ -23,13 +23,14 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 public class RevolvingFundDetail extends BusinessObjectBase {
 
-    private String financialDocumentNumber;
+    private String documentNumber;
     private String financialDocumentTypeCode;
     private String financialDocumentColumnTypeCode;
     private Integer financialDocumentLineNumber;
@@ -48,30 +49,30 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocumentNumber attribute.
+     * Gets the documentNumber attribute.
      * 
-     * @return - Returns the financialDocumentNumber
+     * @return Returns the documentNumber
      * 
      */
-    public String getFinancialDocumentNumber() {
-        return financialDocumentNumber;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
     /**
-     * Sets the financialDocumentNumber attribute.
+     * Sets the documentNumber attribute.
      * 
-     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * @param documentNumber The documentNumber to set.
      * 
      */
-    public void setFinancialDocumentNumber(String financialDocumentNumber) {
-        this.financialDocumentNumber = financialDocumentNumber;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
 
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return - Returns the financialDocumentTypeCode
+     * @return Returns the financialDocumentTypeCode
      * 
      */
     public String getFinancialDocumentTypeCode() {
@@ -92,7 +93,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentColumnTypeCode attribute.
      * 
-     * @return - Returns the financialDocumentColumnTypeCode
+     * @return Returns the financialDocumentColumnTypeCode
      * 
      */
     public String getFinancialDocumentColumnTypeCode() {
@@ -113,7 +114,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentLineNumber attribute.
      * 
-     * @return - Returns the financialDocumentLineNumber
+     * @return Returns the financialDocumentLineNumber
      * 
      */
     public Integer getFinancialDocumentLineNumber() {
@@ -134,7 +135,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentRevolvingFundDate attribute.
      * 
-     * @return - Returns the financialDocumentRevolvingFundDate
+     * @return Returns the financialDocumentRevolvingFundDate
      * 
      */
     public Date getFinancialDocumentRevolvingFundDate() {
@@ -155,7 +156,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentRevolvingFundReferenceNumber attribute.
      * 
-     * @return - Returns the financialDocumentRevolvingFundReferenceNumber
+     * @return Returns the financialDocumentRevolvingFundReferenceNumber
      * 
      */
     public String getFinancialDocumentRevolvingFundReferenceNumber() {
@@ -176,7 +177,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentRevolvingFundDescription attribute.
      * 
-     * @return - Returns the financialDocumentRevolvingFundDescription
+     * @return Returns the financialDocumentRevolvingFundDescription
      * 
      */
     public String getFinancialDocumentRevolvingFundDescription() {
@@ -197,7 +198,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentRevolvingFundAmount attribute.
      * 
-     * @return - Returns the financialDocumentRevolvingFundAmount
+     * @return Returns the financialDocumentRevolvingFundAmount
      * 
      */
     public KualiDecimal getFinancialDocumentRevolvingFundAmount() {
@@ -218,7 +219,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentBankCode attribute.
      * 
-     * @return - Returns the financialDocumentBankCode
+     * @return Returns the financialDocumentBankCode
      * 
      */
     public String getFinancialDocumentBankCode() {
@@ -239,7 +240,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
     /**
      * Gets the financialDocumentBankAccountNumber attribute.
      * 
-     * @return - Returns the financialDocumentBankAccountNumber
+     * @return Returns the financialDocumentBankAccountNumber
      * 
      */
     public String getFinancialDocumentBankAccountNumber() {
@@ -261,7 +262,7 @@ public class RevolvingFundDetail extends BusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("financialDocumentNumber", this.financialDocumentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
         m.put("financialDocumentColumnTypeCode", this.financialDocumentColumnTypeCode);
         if (this.financialDocumentLineNumber != null) {

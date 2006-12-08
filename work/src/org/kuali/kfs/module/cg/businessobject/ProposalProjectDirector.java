@@ -21,6 +21,7 @@ package org.kuali.module.cg.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.UniversalUser;
 
 /**
  * 
@@ -35,7 +36,7 @@ public class ProposalProjectDirector extends BusinessObjectBase {
     private boolean proposalPrimaryProjectDirectorIndicator;
     private String proposalProjectDirectorProjectTitle;
 
-    private ContractsAndGrantsProjectDirectorView personUniversal;
+    private ProjectDirector projectDirector;
 
     /**
      * Default constructor.
@@ -47,7 +48,7 @@ public class ProposalProjectDirector extends BusinessObjectBase {
     /**
      * Gets the personUniversalIdentifier attribute.
      * 
-     * @return - Returns the personUniversalIdentifier
+     * @return Returns the personUniversalIdentifier
      * 
      */
     public String getPersonUniversalIdentifier() {
@@ -68,7 +69,7 @@ public class ProposalProjectDirector extends BusinessObjectBase {
     /**
      * Gets the proposalNumber attribute.
      * 
-     * @return - Returns the proposalNumber
+     * @return Returns the proposalNumber
      * 
      */
     public Long getProposalNumber() {
@@ -89,7 +90,7 @@ public class ProposalProjectDirector extends BusinessObjectBase {
     /**
      * Gets the proposalProjectDirectorNote1Text attribute.
      * 
-     * @return - Returns the proposalProjectDirectorNote1Text
+     * @return Returns the proposalProjectDirectorNote1Text
      * 
      */
     public String getProposalProjectDirectorNote1Text() {
@@ -110,7 +111,7 @@ public class ProposalProjectDirector extends BusinessObjectBase {
     /**
      * Gets the proposalProjectDirectorNote2Text attribute.
      * 
-     * @return - Returns the proposalProjectDirectorNote2Text
+     * @return Returns the proposalProjectDirectorNote2Text
      * 
      */
     public String getProposalProjectDirectorNote2Text() {
@@ -131,7 +132,7 @@ public class ProposalProjectDirector extends BusinessObjectBase {
     /**
      * Gets the proposalProjectDirectorNote3Text attribute.
      * 
-     * @return - Returns the proposalProjectDirectorNote3Text
+     * @return Returns the proposalProjectDirectorNote3Text
      * 
      */
     public String getProposalProjectDirectorNote3Text() {
@@ -152,7 +153,7 @@ public class ProposalProjectDirector extends BusinessObjectBase {
     /**
      * Gets the proposalPrimaryProjectDirectorIndicator attribute.
      * 
-     * @return - Returns the proposalPrimaryProjectDirectorIndicator
+     * @return Returns the proposalPrimaryProjectDirectorIndicator
      * 
      */
     public boolean isProposalPrimaryProjectDirectorIndicator() {
@@ -174,7 +175,7 @@ public class ProposalProjectDirector extends BusinessObjectBase {
     /**
      * Gets the proposalProjectDirectorProjectTitle attribute.
      * 
-     * @return - Returns the proposalProjectDirectorProjectTitle
+     * @return Returns the proposalProjectDirectorProjectTitle
      * 
      */
     public String getProposalProjectDirectorProjectTitle() {
@@ -194,8 +195,8 @@ public class ProposalProjectDirector extends BusinessObjectBase {
     /**
      * @return Returns the personUniversal.
      */
-    public ContractsAndGrantsProjectDirectorView getPersonUniversal() {
-        return personUniversal;
+    public ProjectDirector getProjectDirector() {
+        return projectDirector;
     }
 
     /**
