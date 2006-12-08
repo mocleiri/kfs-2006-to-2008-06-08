@@ -67,7 +67,7 @@ public class GlobalDocumentTest extends KualiTestBase {
         // make sure the doc is setup
         assertNotNull(document);
         assertNotNull(document.getDocumentHeader());
-        assertNotNull(document.getDocumentHeader().getFinancialDocumentNumber());
+        assertNotNull(document.getDocumentHeader().getDocumentNumber());
 
         assertEquals("Global document should always appear as a New.", true, document.isNew());
         assertEquals("Global document should never appear as an edit.", false, document.isEdit());
@@ -89,7 +89,7 @@ public class GlobalDocumentTest extends KualiTestBase {
         // make sure the doc is setup
         assertNotNull(document);
         assertNotNull(document.getDocumentHeader());
-        assertNotNull(document.getDocumentHeader().getFinancialDocumentNumber());
+        assertNotNull(document.getDocumentHeader().getDocumentNumber());
 
         assertEquals("Global document should always appear as a New.", true, document.isNew());
         assertEquals("Global document should never appear as an edit.", false, document.isEdit());
@@ -111,7 +111,7 @@ public class GlobalDocumentTest extends KualiTestBase {
         // get local references to the Maintainable and the BO
         Maintainable newMaintainable = document.getNewMaintainableObject();
         DelegateChangeContainer bo = (DelegateChangeContainer) newMaintainable.getBusinessObject();
-        String finDocNumber = document.getFinancialDocumentNumber();
+        String finDocNumber = document.getDocumentNumber();
         document.getDocumentHeader().setFinancialDocumentDescription("blah");
 
         System.err.println("DOC_NBR = " + finDocNumber);
@@ -132,23 +132,23 @@ public class GlobalDocumentTest extends KualiTestBase {
         AccountChangeDetail account;
 
         account = new AccountChangeDetail();
-        account.setFinancialDocumentNumber(finDocNumber);
+        account.setDocumentNumber(finDocNumber);
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031400");
         bo.addAccount(account);
 
         account = new AccountChangeDetail();
-        account.setFinancialDocumentNumber(finDocNumber);
+        account.setDocumentNumber(finDocNumber);
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031420");
         bo.addAccount(account);
 
         account = new AccountChangeDetail();
-        account.setFinancialDocumentNumber(finDocNumber);
+        account.setDocumentNumber(finDocNumber);
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031467");
         bo.addAccount(account);
-        getDocumentService().saveDocument(document);
+        getDocumentService().saveDocument(document, null, null);
 
         // now that it worked, lets cancel the doc so it doesnt lock for others
         getDocumentService().cancelDocument(document, "cancelling test document");
@@ -164,7 +164,7 @@ public class GlobalDocumentTest extends KualiTestBase {
         // get local references to the Maintainable and the BO
         Maintainable newMaintainable = document.getNewMaintainableObject();
         DelegateChangeContainer bo = (DelegateChangeContainer) newMaintainable.getBusinessObject();
-        String finDocNumber = document.getFinancialDocumentNumber();
+        String finDocNumber = document.getDocumentNumber();
         document.getDocumentHeader().setFinancialDocumentDescription("blah");
 
         List<DelegateChangeDocument> changes = new ArrayList();
@@ -182,31 +182,31 @@ public class GlobalDocumentTest extends KualiTestBase {
         AccountChangeDetail account;
 
         account = new AccountChangeDetail();
-        account.setFinancialDocumentNumber(finDocNumber);
+        account.setDocumentNumber(finDocNumber);
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031400");
         bo.addAccount(account);
 
         account = new AccountChangeDetail();
-        account.setFinancialDocumentNumber(finDocNumber);
+        account.setDocumentNumber(finDocNumber);
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031420");
         bo.addAccount(account);
 
         account = new AccountChangeDetail();
-        account.setFinancialDocumentNumber(finDocNumber);
+        account.setDocumentNumber(finDocNumber);
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031467");
         bo.addAccount(account);
 
-        getDocumentService().saveDocument(document);
+        getDocumentService().saveDocument(document, null, null);
 
         // clear the document, and re-load it from the DB
         document = null;
         document = (MaintenanceDocument) getDocumentService().getByDocumentHeaderId(finDocNumber);
         assertNotNull("Document should not be null after loaded from the DB.", document);
         assertNotNull("Document Header should not be null after loaded from the DB.", document.getDocumentHeader());
-        assertNotNull("Document FinDocNumber should not be null after loaded from the DB.", document.getDocumentHeader().getFinancialDocumentNumber());
+        assertNotNull("Document FinDocNumber should not be null after loaded from the DB.", document.getDocumentHeader().getDocumentNumber());
 
         // document should show up as a 'New' document
         assertEquals("Global document should always appear as a New.", true, document.isNew());
@@ -250,7 +250,7 @@ public class GlobalDocumentTest extends KualiTestBase {
         // get local references to the Maintainable and the BO
         Maintainable newMaintainable = document.getNewMaintainableObject();
         DelegateChangeContainer bo = (DelegateChangeContainer) newMaintainable.getBusinessObject();
-        String finDocNumber = document.getFinancialDocumentNumber();
+        String finDocNumber = document.getDocumentNumber();
         document.getDocumentHeader().setFinancialDocumentDescription("blah");
 
         List<DelegateChangeDocument> changes = new ArrayList();
@@ -268,31 +268,31 @@ public class GlobalDocumentTest extends KualiTestBase {
         AccountChangeDetail account;
 
         account = new AccountChangeDetail();
-        account.setFinancialDocumentNumber(finDocNumber);
+        account.setDocumentNumber(finDocNumber);
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031400");
         bo.addAccount(account);
 
         account = new AccountChangeDetail();
-        account.setFinancialDocumentNumber(finDocNumber);
+        account.setDocumentNumber(finDocNumber);
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031420");
         bo.addAccount(account);
 
         account = new AccountChangeDetail();
-        account.setFinancialDocumentNumber(finDocNumber);
+        account.setDocumentNumber(finDocNumber);
         account.setChartOfAccountsCode("BL");
         account.setAccountNumber("1031467");
         bo.addAccount(account);
 
-        getDocumentService().saveDocument(document);
+        getDocumentService().saveDocument(document, null, null);
 
         // clear the document, and re-load it from the DB
         document = null;
         document = (MaintenanceDocument) getDocumentService().getByDocumentHeaderId(finDocNumber);
         assertNotNull("Document should not be null after loaded from the DB.", document);
         assertNotNull("Document Header should not be null after loaded from the DB.", document.getDocumentHeader());
-        assertNotNull("Document FinDocNumber should not be null after loaded from the DB.", document.getDocumentHeader().getFinancialDocumentNumber());
+        assertNotNull("Document FinDocNumber should not be null after loaded from the DB.", document.getDocumentHeader().getDocumentNumber());
 
         // document should show up as a 'New' document
         assertEquals("Global document should always appear as a New.", true, document.isNew());
