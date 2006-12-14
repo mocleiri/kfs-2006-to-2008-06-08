@@ -54,6 +54,17 @@
 		<tstamp>
 			<format property="project.cvs.tag" pattern="MM/dd/yyyy hh:mm aa" />
 		</tstamp>
+        <condition property="datasource.platform"
+        	value="edu.iu.uis.eden.database.platform.MySQLPlatform">
+            <equals arg1="${datasource.ojb.platform}" arg2="MySQL" />
+        </condition>
+        <property name="datasource.platform"
+        	value="edu.iu.uis.eden.database.platform.OraclePlatform" />
+        <condition property="datasource.driver.name"
+        	value="com.mysql.jdbc.Driver">
+            <equals arg1="${datasource.ojb.platform}" arg2="MySQL" />
+        </condition>
+        <property name="datasource.driver.name" value="oracle.jdbc.driver.OracleDriver" />
 		<condition property="context.docbase" value=' docBase="${basedir}${file.separator}work${file.separator}web-root"'>
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
@@ -142,6 +153,9 @@
 			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
 			<filter token="driver-class" value="${driver.class}" />
 			<filter token="datasource-url" value="${datasource.url}" />
+			<filter token="datasource-ojb-platform" value="${datasource.ojb.platform}" />
+			<filter token="datasource-platform" value="${datasource.platform}" />
+			<filter token="datasource-driver-name" value="${datasource.driver.name}" />
 			<filter token="datasource-username" value="${datasource.username}" />
 			<filter token="datasource-password" value="${datasource.password}" />
 			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
