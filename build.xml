@@ -60,11 +60,19 @@
         </condition>
         <property name="datasource.platform"
         	value="edu.iu.uis.eden.database.platform.OraclePlatform" />
-        <condition property="datasource.driver.name"
+
+		<condition property="datasource.driver.name"
         	value="com.mysql.jdbc.Driver">
             <equals arg1="${datasource.ojb.platform}" arg2="MySQL" />
         </condition>
         <property name="datasource.driver.name" value="oracle.jdbc.driver.OracleDriver" />
+
+		<condition property="driver.class"
+        	value="com.mysql.jdbc.Driver">
+            <equals arg1="${datasource.ojb.platform}" arg2="MySQL" />
+        </condition>
+        <property name="driver.class" value="oracle.jdbc.driver.OracleDriver" />
+		
 		<condition property="context.docbase" value=' docBase="${basedir}${file.separator}work${file.separator}web-root"'>
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
@@ -184,6 +192,7 @@
 		</filterset>
 		<filterset id="plugin.filterset">
 			<filter token="variable-ojb-properties" value="${plugin.ojb.properties}" />
+			<filter token="datasource-ojb-platform" value="${datasource.ojb.platform}" />
 			<filter token="use-auto-commit" value="0" />
 		</filterset>
 	</target>
