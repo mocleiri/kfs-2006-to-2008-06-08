@@ -130,7 +130,7 @@
 		<condition property="driver.class" value="${p6spy.driver.class}">
 			<equals arg1="${use.p6spy.local}" arg2="true"/>
 		</condition>
-		<property name="driver.class" value="${oracle.driver.class}" />
+		<property name="driver.class" value="${driver.class}" />
 
 		<condition property="appenders" value="INFO, LogFile, StdOut">
 			<equals arg1="${is.local.build}" arg2="true" />
@@ -588,16 +588,21 @@
 		<property name="${workflow.application}.plugin.dir" value="${basedir}" />
 		<property name="${workflow.application}.institution" value="${ant.project.name}" />
 		<property name="${workflow.application}.src.dist.loc" value="${workflow.project.directory}/dist" />
+
 		<propertyset id="en-properties">
 		  <propertyref prefix="${workflow.application}."/>
 		  <mapper type="glob" from="${workflow.application}.*" to="*"/>
 		</propertyset>
-		<ant dir="${workflow.project.directory}" target="clean" inheritall="false"/>
+		<ant dir="${workflow.project.directory}" target="clean" inheritall="false">
+			<property name="datasource.ojb.platform" value="${datasource.ojb.fsplatform}" />
+		</ant>
 		<ant dir="${workflow.project.directory}" target="dist" inheritall="false">
+			<property name="datasource.ojb.platform" value="${datasource.ojb.platform}" />
 			<propertyset refid="en-properties" />
 		</ant>
 		<copy file="${workflow.project.directory}/${workflow.application}-${build.environment}.war" todir="${build.workflow.appserver.directory}" overwrite="true" />
 		<ant dir="${workflow.project.directory}" target="dist-client-not-iu" inheritall="false">
+			<property name="datasource.ojb.platform" value="${datasource.ojb.platform}" />
 			<propertyset refid="${workflow.application}-properties" />
 		</ant>
 		<copy file="${workflow.project.directory}/dist/workflow-client-${workflow.version}.jar" todir="${lib.directory}" overwrite="true" />
