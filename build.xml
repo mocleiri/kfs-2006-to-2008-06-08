@@ -67,6 +67,12 @@
         </condition>
         <property name="datasource.driver.name" value="oracle.jdbc.driver.OracleDriver" />
 
+		<condition property="ojb.sequencemanager.class"
+        	value="org.apache.ojb.broker.util.sequence.SequenceManagerStoredProcedureImpl">
+            <equals arg1="${datasource.ojb.platform}" arg2="MySQL" />
+        </condition>
+        <property name="ojb.sequencemanager.class" value="org.apache.ojb.broker.util.sequence.SequenceManagerNextValImpl" />
+
 		<condition property="driver.class"
         	value="com.mysql.jdbc.Driver">
             <equals arg1="${datasource.ojb.platform}" arg2="MySQL" />
@@ -120,10 +126,12 @@
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
 		<property name="local.plugin.lib" value="" />
+
 		<condition property="driver.class" value="${p6spy.driver.class}">
 			<equals arg1="${use.p6spy.local}" arg2="true"/>
 		</condition>
 		<property name="driver.class" value="${oracle.driver.class}" />
+
 		<condition property="appenders" value="INFO, LogFile, StdOut">
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
@@ -166,6 +174,7 @@
 			<filter token="datasource-driver-name" value="${datasource.driver.name}" />
 			<filter token="datasource-username" value="${datasource.username}" />
 			<filter token="datasource-password" value="${datasource.password}" />
+			<filter token="ojb-sequencemanager-class" value="${ojb.sequencemanager.class}" />
 			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
 			<filter token="workflow-webservices-keystore-password" value="${workflow.webservices.keystore.password}" />
 			<filter token="encryption-key" value="${encryption.key}" />
@@ -193,6 +202,7 @@
 		<filterset id="plugin.filterset">
 			<filter token="variable-ojb-properties" value="${plugin.ojb.properties}" />
 			<filter token="datasource-ojb-platform" value="${datasource.ojb.platform}" />
+			<filter token="ojb-sequencemanager-class" value="${ojb.sequencemanager.class}" />
 			<filter token="use-auto-commit" value="0" />
 		</filterset>
 	</target>
