@@ -266,6 +266,11 @@
 		<delete failonerror="false">
 			<fileset dir="${appserver.lib.dir}" includes="${appserver.library.list}" />
 		</delete>
+		<delete failonerror="false">
+			<fileset dir="${appserver.lib.dir}">
+				<present targetdir="${local.build.appserver.directory}" />
+			</fileset>
+		</delete>
 		<delete file="${appserver.lib.dir}/${log4j.library}"/>
 		<delete failonerror="false">
 			<fileset dir="${appserver.localhost.dir}" includes="${ant.project.name}-*.xml" />
@@ -345,6 +350,9 @@
 	<target name="filter-local" if="is.local.build" depends="init-filter-sets">
 		<copy todir="${appserver.lib.dir}" overwrite="true">
 			<fileset dir="${build.appserver.directory}" includes="${appserver.library.list}" />
+		</copy>
+		<copy todir="${appserver.lib.dir}" overwrite="true">
+			<fileset dir="${local.build.appserver.directory}" />
 		</copy>
 		<copy todir="${settings.directory}" overwrite="true">
 			<fileset dir="${build.settings.directory}" />
