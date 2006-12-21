@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: toc.xml,v 1.1 2006-08-08 23:20:54 dbeutel Exp $ -->
-<div1 id="TOC">
-  <head>Expanded Table of Contents</head>
-  <?GENERATE-EXPANDED-TOC?>	
-</div1>
