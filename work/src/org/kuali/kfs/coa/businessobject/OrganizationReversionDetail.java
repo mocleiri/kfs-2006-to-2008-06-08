@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/OrganizationReversionDetail.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +20,13 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 
 /**
  * 
  */
-public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
+public class OrganizationReversionDetail extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
@@ -49,7 +51,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -70,7 +72,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -91,7 +93,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationCode attribute.
      * 
-     * @return Returns the organizationCode
+     * @return - Returns the organizationCode
      * 
      */
     public String getOrganizationCode() {
@@ -112,7 +114,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationReversionCategoryCode attribute.
      * 
-     * @return Returns the organizationReversionCategoryCode
+     * @return - Returns the organizationReversionCategoryCode
      * 
      */
     public String getOrganizationReversionCategoryCode() {
@@ -133,7 +135,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationReversionCode attribute.
      * 
-     * @return Returns the organizationReversionCode
+     * @return - Returns the organizationReversionCode
      * 
      */
     public String getOrganizationReversionCode() {
@@ -154,7 +156,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationReversionObjectCode attribute.
      * 
-     * @return Returns the organizationReversionObjectCode
+     * @return - Returns the organizationReversionObjectCode
      * 
      */
     public String getOrganizationReversionObjectCode() {
@@ -175,7 +177,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationReversionObject attribute.
      * 
-     * @return Returns the organizationReversionObject
+     * @return - Returns the organizationReversionObject
      * 
      */
     public ObjectCode getOrganizationReversionObject() {
@@ -195,7 +197,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the organization attribute.
      * 
-     * @return Returns the organization
+     * @return - Returns the organization
      * 
      */
     public Org getOrganization() {
@@ -215,7 +217,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
