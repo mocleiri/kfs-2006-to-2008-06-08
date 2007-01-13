@@ -1,98 +1,108 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.document;
-
-import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodService;
-import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
-import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
-import static org.kuali.core.util.SpringServiceLocator.getTransactionalDocumentDictionaryService;
-import static org.kuali.module.financial.document.TransactionalDocumentTestUtils.saveDocument;
-import static org.kuali.module.financial.document.TransactionalDocumentTestUtils.testGetNewDocument_byDocumentClass;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE7;
-import static org.kuali.test.fixtures.UserNameFixture.CSWINSON;
-import static org.kuali.test.fixtures.UserNameFixture.HSCHREIN;
-import static org.kuali.test.fixtures.UserNameFixture.MYLARGE;
-import static org.kuali.test.fixtures.UserNameFixture.VPUTMAN;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import junit.framework.Assert;
-
-import org.kuali.core.bo.SourceAccountingLine;
-import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
-import org.kuali.core.document.TransactionalDocument;
+import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
-import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
-import org.kuali.test.DocumentTestUtils;
-import org.kuali.test.KualiTestBase;
-import org.kuali.test.TestsWorkflowViaDatabase;
+import org.kuali.test.parameters.DisbursementVoucherDocumentParameter;
+import org.kuali.test.parameters.DocumentParameter;
+import org.kuali.test.parameters.TransactionalDocumentParameter;
 import org.kuali.test.WithTestSpringContext;
-import org.kuali.test.fixtures.AccountingLineFixture;
+import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.workflow.WorkflowTestUtils;
 
 import edu.iu.uis.eden.EdenConstants;
+import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
 
 /**
  * This class is used to test DisbursementVoucherDocument.
  * 
- * 
+ * @author Kuali Nervous System Team ()
  */
-@WithTestSpringContext(session = HSCHREIN)
-public class DisbursementVoucherDocumentTest extends KualiTestBase {
+@WithTestSpringContext
+public class DisbursementVoucherDocumentTest extends TransactionalDocumentTestBase {
+    public static final String COLLECTION_NAME = "DisbursementVoucherDocumentTest.collection1";
+    public static final String USER_NAME = "user1";
+    public static final String DV_USER_NAME = "dvUser1";
+    public static final String DOCUMENT_PARAMETER = "disbursementVoucherDocumentParameter1";
+    public static final String SOURCE_LINE7 = "sourceLine7";
 
-    public static final Class<DisbursementVoucherDocument> DOCUMENT_CLASS = DisbursementVoucherDocument.class;
     // The set of Route Nodes that the test document will progress through
 
+    private static final String ADHOC = "Adhoc Routing";
     private static final String ACCOUNT_REVIEW = "Account Review";
     private static final String ORG_REVIEW = "Org Review";
+    private static final String EMPLOYEE_INDICATOR = "Employee Indicator";
+    private static final String TAX_CONTROL_CODE = "Tax Control Code";
+    private static final String ALIEN_INDICATOR = "Alien Indicator";
+    private static final String PAYMENT_REASON = "Payment Reason";
+    private static final String PAYMENT_REASON_CAMPUS_CODE = "Payment Reason+Campus Code";
     private static final String CAMPUS_CODE = "Campus Code";
+    private static final String ALIEN_INDICATOR_PAYMENT_REASON = "Alien Indicator+Payment Reason";
+    private static final String PAYMENT_METHOD = "Payment Method";
 
-    public final void testConvertIntoCopy_clear_additionalCodeInvalidPayee() throws Exception {
+    /*
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#setUp()
+     */
+    protected void setUp() throws Exception {
+        super.setUp();
+        changeCurrentUser((String) getFixtureEntryFromCollection(COLLECTION_NAME, DV_USER_NAME).createObject());
+    }
+
+
+    public void testConvertIntoCopy_clear_additionalCodeInvalidPayee() throws Exception {
         GlobalVariables.setMessageList(new ArrayList());
-        DisbursementVoucherDocument dvParameter = (DisbursementVoucherDocument) getDocumentParameterFixture();
-        DisbursementVoucherDocument document = (DisbursementVoucherDocument) getDocumentParameterFixture();
+        DisbursementVoucherDocumentParameter dvParameter = (DisbursementVoucherDocumentParameter) getDocumentParameterFixture();
+        DisbursementVoucherDocument document = (DisbursementVoucherDocument) dvParameter.createDocument(getDocumentService());
         document.getDvPayeeDetail().setDisbVchrPayeeIdNumber("1234");
         document.convertIntoCopy();
 
         // the dvParameter doc number needs to be resynced
-        dvParameter.setDocumentNumber(document.getDocumentNumber());
+        dvParameter.setDocumentNumber(document.getFinancialDocumentNumber());
         dvParameter.setDisbVchrContactPhoneNumber("");
         dvParameter.setDisbVchrContactEmailId("");
-        dvParameter.getDvPayeeDetail().setDisbVchrPayeePersonName("");
-        dvParameter.getDvPayeeDetail().setDisbVchrPayeeLine1Addr("");
-        dvParameter.getDvPayeeDetail().setDisbVchrPayeeLine2Addr("");
-        dvParameter.getDvPayeeDetail().setDisbVchrPayeeCityName("");
-        dvParameter.getDvPayeeDetail().setDisbVchrPayeeStateCode("");
-        dvParameter.getDvPayeeDetail().setDisbVchrPayeeZipCode("");
-        dvParameter.getDvPayeeDetail().setDisbVchrPayeeCountryCode("");
-        dvParameter.getDvPayeeDetail().setDisbVchrAlienPaymentCode(false);
+        dvParameter.getPayeeDetail().setDisbVchrPayeePersonName("");
+        dvParameter.getPayeeDetail().setDisbVchrPayeeLine1Addr("");
+        dvParameter.getPayeeDetail().setDisbVchrPayeeLine2Addr("");
+        dvParameter.getPayeeDetail().setDisbVchrPayeeCityName("");
+        dvParameter.getPayeeDetail().setDisbVchrPayeeStateCode("");
+        dvParameter.getPayeeDetail().setDisbVchrPayeeZipCode("");
+        dvParameter.getPayeeDetail().setDisbVchrPayeeCountryCode("");
+        dvParameter.getPayeeDetail().setDisbVchrAlienPaymentCode(false);
         dvParameter.setDvNonResidentAlienTax(new DisbursementVoucherNonResidentAlienTax());
         dvParameter.setDisbVchrPayeeTaxControlCode("");
-        dvParameter.getDvPayeeDetail().setDisbVchrPayeeIdNumber("");
 
-        dvParameter.setDisbVchrContactPersonName(GlobalVariables.getUserSession().getUniversalUser().getPersonName());
+        dvParameter.setDisbVchrContactPersonName(GlobalVariables.getUserSession().getKualiUser().getUniversalUser().getPersonName());
         // set to tomorrow
-        Calendar calendar = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
+        Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.clear(Calendar.MILLISECOND);
         calendar.clear(Calendar.SECOND);
@@ -109,223 +119,98 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
         calendar2.clear(Calendar.HOUR);
         document.setDisbursementVoucherDueDate(new Date(calendar2.getTimeInMillis()));
 
-        assertMatch(dvParameter, document);
+        dvParameter.assertMatch(document);
 
     }
 
     @TestsWorkflowViaDatabase
-    public final void testWorkflowRouting() throws Exception {
+    public void testWorkflowRouting() throws Exception {
+        NetworkIdVO VPUTMAN = new NetworkIdVO("VPUTMAN");
+        NetworkIdVO CSWINSON = new NetworkIdVO("CSWINSON");
+        NetworkIdVO MYLARGE = new NetworkIdVO("MYLARGE");
+
         // save and route the document
         Document document = buildDocument();
-        final String docId = document.getDocumentNumber();
         getDocumentService().routeDocument(document, "routing test doc", null);
 
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ACCOUNT_REVIEW);
 
         // the document should now be routed to VPUTMAN as Fiscal Officer
-        changeCurrentUser(VPUTMAN);
-        document = getDocumentService().getByDocumentHeaderId(docId);
+        KualiWorkflowDocument wfDoc = WorkflowTestUtils.refreshDocument(document, VPUTMAN);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ACCOUNT_REVIEW));
-        assertTrue("Document should be enroute.", document.getDocumentHeader().getWorkflowDocument().stateIsEnroute());
-        assertTrue("VPUTMAN should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
+        assertTrue("Document should be enroute.", wfDoc.stateIsEnroute());
+        assertTrue("VPUTMAN should have an approve request.", wfDoc.isApprovalRequested());
         getDocumentService().approveDocument(document, "Test approving as VPUTMAN", null);
 
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ORG_REVIEW);
+
         // now doc should be in Org Review routing to CSWINSON
-        changeCurrentUser(CSWINSON);
-        document = getDocumentService().getByDocumentHeaderId(docId);
+        wfDoc = WorkflowTestUtils.refreshDocument(document, CSWINSON);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ORG_REVIEW));
-        assertTrue("CSWINSON should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
+        assertTrue("CSWINSON should have an approve request.", wfDoc.isApprovalRequested());
         getDocumentService().approveDocument(document, "Test approving as CSWINSON", null);
 
         // this is going to skip a bunch of other routing and end up at campus code
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), CAMPUS_CODE);
 
         // doc should be in "Campus Code" routing to MYLARGE
-        changeCurrentUser(MYLARGE);
-        document = getDocumentService().getByDocumentHeaderId(docId);
+        wfDoc = WorkflowTestUtils.refreshDocument(document, MYLARGE);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, CAMPUS_CODE));
-        assertTrue("Should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
+        assertTrue("Should have an approve request.", wfDoc.isApprovalRequested());
         getDocumentService().approveDocument(document, "Approve", null);
 
-        WorkflowTestUtils.waitForStatusChange(document.getDocumentHeader().getWorkflowDocument(), EdenConstants.ROUTE_HEADER_FINAL_CD);
+        WorkflowTestUtils.waitForStatusChange(wfDoc, EdenConstants.ROUTE_HEADER_FINAL_CD);
 
-        changeCurrentUser(VPUTMAN);
-        document = getDocumentService().getByDocumentHeaderId(docId);
-        assertTrue("Document should now be final.", document.getDocumentHeader().getWorkflowDocument().stateIsFinal());
+        wfDoc = WorkflowTestUtils.refreshDocument(document, VPUTMAN);
+        assertTrue("Document should now be final.", wfDoc.stateIsFinal());
     }
 
-    private int getExpectedPrePeCount() {
+    protected int getExpectedPrePeCount() {
         return 2;
     }
 
-    private Document getDocumentParameterFixture() throws Exception {
-        DisbursementVoucherDocument document = DocumentTestUtils.createDocument(getDocumentService(), DisbursementVoucherDocument.class);
-        DisbursementVoucherPayeeDetail payeeDetail = new DisbursementVoucherPayeeDetail();
-        payeeDetail.setDisbVchrPayeeIdNumber("P000178071");
-        payeeDetail.setDisbVchrPayeePersonName("Jerry Neal");
-        payeeDetail.setDisbVchrPayeeLine1Addr("Poplars 423");
-        payeeDetail.setDisbVchrPayeeCountryCode("UK");
-        payeeDetail.setDisbVchrPaymentReasonCode("B");
-        payeeDetail.setDisbursementVoucherPayeeTypeCode("P");
-        payeeDetail.setDocumentNumber(document.getDocumentNumber());
-        // payee detail
-        document.setDvPayeeDetail(payeeDetail);
-        // payment info
-        document.setDisbVchrPaymentMethodCode("P");
-        document.setDisbursementVoucherDueDate(Date.valueOf("2010-01-24"));
-        document.setDisbursementVoucherDocumentationLocationCode("F");
-        // contact information
-        document.setCampusCode("BL");
-        document.setDisbVchrContactPhoneNumber("8081234567");
-        document.setDisbVchrContactPersonName("aynalem");
-        document.setDisbVchrCheckStubText("Test DV Check");
-
-        KualiDecimal amount = KualiDecimal.ZERO;
-        for (AccountingLineFixture fixture : getSourceAccountingLineParametersFromFixtures()) {
-            amount = amount.add(fixture.amount);
-        }
-        for (AccountingLineFixture fixture : getTargetAccountingLineParametersFromFixtures()) {
-            amount = amount.add(fixture.amount);
-        }
-        document.setDisbVchrCheckTotalAmount(amount);
-        return document;
+    /**
+     * Get names of fixture collections test class is using.
+     * 
+     * @return String[]
+     */
+    public String[] getFixtureCollectionNames() {
+        return new String[] { COLLECTION_NAME };
     }
 
-    private List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
-        return new ArrayList<AccountingLineFixture>();
+    /**
+     * 
+     * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
+     */
+    public DocumentParameter getDocumentParameterFixture() {
+        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
     }
 
-    private List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(LINE7);
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
+     */
+    public List getTargetAccountingLineParametersFromFixtures() {
+        return new ArrayList();
+    }
+
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
+     */
+    public List getSourceAccountingLineParametersFromFixtures() {
+        ArrayList list = new ArrayList();
+        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE7).createObject());
         return list;
     }
 
-    private <T extends Document> void assertMatch(T document1, T document2) {
-        TransactionalDocumentTestUtils.assertMatch(document1, document2);
-        DisbursementVoucherDocument d1 = (DisbursementVoucherDocument) document1;
-        DisbursementVoucherDocument d2 = (DisbursementVoucherDocument) document2;
-
-        assertPayeeDetail(d1.getDvPayeeDetail(), d2.getDvPayeeDetail());
-
-        Assert.assertEquals(d2.getDisbVchrCheckTotalAmount(), d2.getDisbVchrCheckTotalAmount());
-        Assert.assertEquals(d1.getDisbVchrPaymentMethodCode(), d2.getDisbVchrPaymentMethodCode());
-        Assert.assertEquals(d1.getDisbursementVoucherDueDate(), d2.getDisbursementVoucherDueDate());
-        Assert.assertEquals(d1.getDisbursementVoucherDocumentationLocationCode(), d2.getDisbursementVoucherDocumentationLocationCode());
-        Assert.assertEquals(d1.getDisbVchrContactEmailId(), d2.getDisbVchrContactEmailId());
-        Assert.assertEquals(d1.getDisbVchrContactPhoneNumber(), d2.getDisbVchrContactPhoneNumber());
-        Assert.assertEquals(d1.getDisbVchrPayeeTaxControlCode(), d2.getDisbVchrPayeeTaxControlCode());
-        Assert.assertEquals(d1.getDisbVchrContactPersonName(), d2.getDisbVchrContactPersonName());
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
+     */
+    public String getUserName() {
+        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
     }
 
-    private void assertPayeeDetail(DisbursementVoucherPayeeDetail d1, DisbursementVoucherPayeeDetail d2) {
-        Assert.assertEquals(d1.getDisbVchrPayeeIdNumber(), d2.getDisbVchrPayeeIdNumber());
-        Assert.assertEquals(d1.getDisbVchrPayeePersonName(), d2.getDisbVchrPayeePersonName());
-        Assert.assertEquals(d1.getDisbVchrPayeeLine1Addr(), d2.getDisbVchrPayeeLine1Addr());
-        Assert.assertEquals(d1.getDisbVchrPayeeCountryCode(), d2.getDisbVchrPayeeCountryCode());
-        Assert.assertEquals(d1.getDisbVchrPaymentReasonCode(), d2.getDisbVchrPaymentReasonCode());
-    }
-
-
-    public final void testAddAccountingLine() throws Exception {
-        List<SourceAccountingLine> sourceLines = generateSouceAccountingLines();
-        List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
-        int expectedSourceTotal = sourceLines.size();
-        int expectedTargetTotal = targetLines.size();
-        TransactionalDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
-    }
-
-    public final void testGetNewDocument() throws Exception {
-        testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
-    }
-
-    public final void testConvertIntoCopy_invalidYear() throws Exception {
-        TransactionalDocumentTestUtils.testConvertIntoCopy_invalidYear(buildDocument(), getAccountingPeriodService());
-    }
-
-    public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        TransactionalDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
-
-    }
-
-    public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
-    }
-
-    public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
-    }
-
-    public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
-        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), getTransactionalDocumentDictionaryService(), getAccountingPeriodService());
-    }
-
-    @TestsWorkflowViaDatabase
-    public final void testConvertIntoErrorCorrection() throws Exception {
-        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), getDocumentService(), getTransactionalDocumentDictionaryService());
-    }
-
-    @TestsWorkflowViaDatabase
-    public final void testRouteDocument() throws Exception {
-        TransactionalDocumentTestUtils.testRouteDocument(buildDocument(), getDocumentService());
-    }
-
-    @TestsWorkflowViaDatabase
-    public final void testSaveDocument() throws Exception {
-        // get document parameter
-        TransactionalDocument document = buildDocument();
-        document.prepareForSave();
-
-        // save
-        saveDocument(document, getDocumentService());
-
-        // retrieve
-        TransactionalDocument result = (TransactionalDocument) getDocumentService().getByDocumentHeaderId(document.getDocumentNumber());
-        // verify
-        assertMatch(document, result);
-
-    }
-
-    @TestsWorkflowViaDatabase
-    public final void testConvertIntoCopy() throws Exception {
-        TransactionalDocumentTestUtils.testConvertIntoCopy(buildDocument(), getDocumentService(), getExpectedPrePeCount());
-    }
-
-    // test util methods
-    private List<SourceAccountingLine> generateSouceAccountingLines() throws Exception {
-        List<SourceAccountingLine> sourceLines = new ArrayList<SourceAccountingLine>();
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-            sourceLines.add(sourceFixture.createSourceAccountingLine());
-        }
-
-        return sourceLines;
-    }
-
-    private List<TargetAccountingLine> generateTargetAccountingLines() throws Exception {
-        List<TargetAccountingLine> targetLines = new ArrayList<TargetAccountingLine>();
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            targetLines.add(targetFixture.createTargetAccountingLine());
-        }
-
-        return targetLines;
-    }
-
-    private DisbursementVoucherDocument buildDocument() throws Exception {
-        // put accounting lines into document parameter for later
-        DisbursementVoucherDocument document = (DisbursementVoucherDocument) getDocumentParameterFixture();
-
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-            sourceFixture.addAsSourceTo(document);
-        }
-
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            targetFixture.addAsTargetTo(document);
-        }
-
-        return document;
-    }
 
 }
