@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/service/impl/OriginEntryGroupServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +32,12 @@ import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.dao.OriginEntryDao;
 import org.kuali.module.gl.dao.OriginEntryGroupDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
-import org.springframework.transaction.annotation.Transactional;
+import org.kuali.module.gl.web.struts.action.CorrectionAction;
 
-@Transactional
+/**
+ *  
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.6 2006-10-14 02:29:37 jbmorris Exp $
+ */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
 
@@ -266,7 +271,7 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
      */
     public OriginEntryGroup getExactMatchingEntryGroup(Integer id) {
         return originEntryGroupDao.getExactMatchingEntryGroup(id);
-        }
+    }
 
     /**
      * 
@@ -284,7 +289,8 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
 
     public void setOriginEntryGroupDao(OriginEntryGroupDao oegd) {
         originEntryGroupDao = oegd;
-}
+    }
+
     public void setOriginEntryDao(OriginEntryDao oed) {
         originEntryDao = oed;
     }

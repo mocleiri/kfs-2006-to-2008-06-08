@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/batch/service/impl/SufficientFundsRebuilderServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +27,7 @@ import java.util.Map;
 
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
-import org.kuali.core.bo.Options;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.dao.OptionsDao;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
@@ -43,9 +45,7 @@ import org.kuali.module.gl.service.SufficientFundRebuildService;
 import org.kuali.module.gl.service.SufficientFundsRebuilderService;
 import org.kuali.module.gl.service.SufficientFundsService;
 import org.kuali.module.gl.util.Summary;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebuilderService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundsRebuilderServiceImpl.class);
 

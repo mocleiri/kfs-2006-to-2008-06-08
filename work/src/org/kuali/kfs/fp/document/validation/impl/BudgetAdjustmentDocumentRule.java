@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/validation/impl/BudgetAdjustmentDocumentRule.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +37,8 @@ import static org.kuali.module.financial.rules.BudgetAdjustmentDocumentRuleConst
 import static org.kuali.module.financial.rules.BudgetAdjustmentDocumentRuleConstants.RESTRICTED_OBJECT_CODES;
 import static org.kuali.module.financial.rules.BudgetAdjustmentDocumentRuleConstants.RESTRICTED_OBJECT_SUB_TYPE_CODES;
 import static org.kuali.module.financial.rules.BudgetAdjustmentDocumentRuleConstants.TRANSFER_OBJECT_CODE_PARM_NM;
+import static org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.OBJECT_TYPE_CODE.INCOME_CASH;
+import static org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.OBJECT_TYPE_CODE.TRANSFER_INCOME;
 import static org.kuali.module.financial.rules.TransferOfFundsDocumentRuleConstants.TRANSFER_OF_FUNDS_DOC_TYPE_CODE;
 
 import java.util.ArrayList;
@@ -48,7 +52,6 @@ import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
-import org.kuali.core.bo.Options;
 import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.FinancialDocument;
@@ -320,8 +323,7 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
                     populateExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, sequenceHelper, explicitEntry);
 
                     /* override and set object type to income */
-                    Options options = SpringServiceLocator.getOptionsService().getCurrentYearOptions();
-                    explicitEntry.setFinancialObjectTypeCode(options.getFinObjectTypeIncomecashCode());
+                    explicitEntry.setFinancialObjectTypeCode(INCOME_CASH);
 
                     /* D/C code is empty for BA, set correct balance type, correct amount */
                     explicitEntry.setTransactionDebitCreditCode("");
@@ -347,9 +349,9 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
                     accountingLine.setAmount(streamAmount);
                     explicitEntry = new GeneralLedgerPendingEntry();
                     populateExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, sequenceHelper, explicitEntry);
-
+                    
                     /* override and set object type to transfer */
-                    explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferIncomeCode());
+                    explicitEntry.setFinancialObjectTypeCode(TRANSFER_INCOME);
 
                     /* set document type to tof */
                     explicitEntry.setFinancialDocumentTypeCode(getTransferDocumentType());
@@ -608,23 +610,22 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
             amountValid = false;
         }
 
-        // if not an error correction, all amounts must be positive
-        if (!isErrorCorrection(document)) {
-            amountValid &= checkAmountSign(budgetAccountingLine.getCurrentBudgetAdjustmentAmount(), PropertyConstants.CURRENT_BUDGET_ADJUSTMENT_AMOUNT, "Current");
-            amountValid &= checkAmountSign(budgetAccountingLine.getBaseBudgetAdjustmentAmount().kualiDecimalValue(), PropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT, "Base");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth1LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_1_LINE_AMOUNT, "Month 1");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth2LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_2_LINE_AMOUNT, "Month 2");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth3LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_3_LINE_AMOUNT, "Month 3");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth4LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_4_LINE_AMOUNT, "Month 4");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth5LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_5_LINE_AMOUNT, "Month 5");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth6LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_6_LINE_AMOUNT, "Month 6");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth7LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_7_LINE_AMOUNT, "Month 7");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth8LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_8_LINE_AMOUNT, "Month 8");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth8LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_9_LINE_AMOUNT, "Month 9");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth10LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_10_LINE_AMOUNT, "Month 10");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth10LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_11_LINE_AMOUNT, "Month 11");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth12LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_12_LINE_AMOUNT, "Month 12");
-        }
+        // if not an error correction, all amounts must be positive, else all amounts must be negative
+        boolean isErrorCorrection = isErrorCorrection(document);
+        amountValid &= checkAmountSign(budgetAccountingLine.getCurrentBudgetAdjustmentAmount(), PropertyConstants.CURRENT_BUDGET_ADJUSTMENT_AMOUNT, "Current", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getBaseBudgetAdjustmentAmount().kualiDecimalValue(), PropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT, "Base", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth1LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_1_LINE_AMOUNT, "Month 1", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth2LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_2_LINE_AMOUNT, "Month 2", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth3LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_3_LINE_AMOUNT, "Month 3", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth4LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_4_LINE_AMOUNT, "Month 4", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth5LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_5_LINE_AMOUNT, "Month 5", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth6LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_6_LINE_AMOUNT, "Month 6", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth7LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_7_LINE_AMOUNT, "Month 7", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth8LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_8_LINE_AMOUNT, "Month 8", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth8LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_9_LINE_AMOUNT, "Month 9", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth10LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_10_LINE_AMOUNT, "Month 10", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth10LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_11_LINE_AMOUNT, "Month 11", !isErrorCorrection);
+        amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth12LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_12_LINE_AMOUNT, "Month 12", !isErrorCorrection);
 
         return amountValid;
     }
@@ -706,18 +707,23 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
     }
 
     /**
-     * Helper method to check if an amount is negative and add an error if not.
+     * Helper method to check if an amount is negative or positive and add an error if not.
      * 
      * @param amount to check
      * @param propertyName to add error under
      * @param label for error
+     * @param positive where to check amount is positive (true) or negative (false)
      * @return boolean indicating if the value has the requested sign
      */
-    private boolean checkAmountSign(KualiDecimal amount, String propertyName, String label) {
+    private boolean checkAmountSign(KualiDecimal amount, String propertyName, String label, boolean positive) {
         boolean correctSign = true;
 
-        if (amount.isNegative()) {
+        if (positive && amount.isNegative()) {
             GlobalVariables.getErrorMap().putError(propertyName, KeyConstants.ERROR_BA_AMOUNT_NEGATIVE, label);
+            correctSign = false;
+        }
+        else if (!positive && amount.isPositive()) {
+            GlobalVariables.getErrorMap().putError(propertyName, KeyConstants.ERROR_BA_AMOUNT_POSITIVE, label);
             correctSign = false;
         }
 

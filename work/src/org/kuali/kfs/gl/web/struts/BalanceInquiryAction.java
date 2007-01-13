@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/web/struts/BalanceInquiryAction.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,7 +113,7 @@ public class BalanceInquiryAction extends KualiAction {
         kualiLookupable.validateSearchParameters(lookupForm.getFields());
 
         try {
-            displayList = kualiLookupable.performLookup(lookupForm, resultTable, true);
+            displayList = SpringServiceLocator.getLookupService().performLookup(lookupForm, kualiLookupable, resultTable, true);
 
             Object[] resultTableAsArray = resultTable.toArray();
 
