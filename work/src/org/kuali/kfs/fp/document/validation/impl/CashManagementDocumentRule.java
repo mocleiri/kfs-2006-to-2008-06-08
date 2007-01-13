@@ -1,21 +1,26 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
-
-import static org.kuali.core.util.AssertionUtils.assertThat;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -24,10 +29,10 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.Constants;
+import org.kuali.Constants.DocumentStatusCodes.CashReceipt;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
-import org.kuali.Constants.DocumentStatusCodes.CashReceipt;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.FinancialDocument;
 import org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
@@ -46,7 +51,7 @@ import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 /**
  * Business rule(s) applicable to Cash Management Document.
  * 
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class CashManagementDocumentRule extends FinancialDocumentRuleBase implements GenerateGeneralLedgerDocumentPendingEntriesRule {
     private static final Logger LOG = Logger.getLogger(CashManagementDocumentRule.class);
@@ -83,10 +88,10 @@ public class CashManagementDocumentRule extends FinancialDocumentRuleBase implem
      * @param cmd
      */
     private void verifyUserIsDocumentInitiator(CashManagementDocument cmd) {
-        UniversalUser currentUser = GlobalVariables.getUserSession().getUniversalUser();
+        KualiUser currentUser = GlobalVariables.getUserSession().getKualiUser();
         if (cmd.getDocumentHeader() != null && cmd.getDocumentHeader().getWorkflowDocument() != null) {
             String cmdInitiatorNetworkId = cmd.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
-            if (!cmdInitiatorNetworkId.equalsIgnoreCase(currentUser.getPersonUserIdentifier())) {
+            if (!cmdInitiatorNetworkId.equals(currentUser.getPersonUserIdentifier())) {
                 throw new IllegalStateException("The current user (" + currentUser.getPersonUserIdentifier() + ") is not the individual (" + cmdInitiatorNetworkId + ") that initiated this document.");
             }
         }
@@ -188,7 +193,7 @@ public class CashManagementDocumentRule extends FinancialDocumentRuleBase implem
             CashReceiptDocument cashReceipt = depositCashReceiptControl.getCashReceiptHeader().getCashReceiptDocument();
             String crState = cashReceipt.getDocumentHeader().getFinancialDocumentStatusCode();
             if (!desiredCRStates.contains(crState)) {
-                throw new IllegalStateException("Cash receipt document number " + cashReceipt.getDocumentNumber() + " is not in an appropriate state for the associated CashManagementDocument to be submitted.");
+                throw new IllegalStateException("Cash receipt document number " + cashReceipt.getFinancialDocumentNumber() + " is not in an appropriate state for the associated CashManagementDocument to be submitted.");
             }
         }
     }
@@ -218,7 +223,7 @@ public class CashManagementDocumentRule extends FinancialDocumentRuleBase implem
 
     /**
      * Generates bank offset GLPEs for deposits, if enabled.
-     * 
+     *
      * @see org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule#processGenerateDocumentGeneralLedgerPendingEntries(org.kuali.core.document.FinancialDocument,org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
      */
     public boolean processGenerateDocumentGeneralLedgerPendingEntries(FinancialDocument financialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
@@ -235,8 +240,7 @@ public class CashManagementDocumentRule extends FinancialDocumentRuleBase implem
                 GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
                 if (!TransactionalDocumentRuleUtil.populateBankOffsetGeneralLedgerPendingEntry(deposit.getBankAccount(), deposit.getDepositAmount(), cashManagementDocument, universityFiscalYear, sequenceHelper, bankOffsetEntry, Constants.CASH_MANAGEMENT_DEPOSIT_ERRORS)) {
                     success = false;
-                    continue; // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at
-                                // all.
+                    continue;  // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at all.
                 }
                 bankOffsetEntry.setTransactionLedgerEntryDescription(createDescription(deposit, interimDepositNumber++));
                 cashManagementDocument.getGeneralLedgerPendingEntries().add(bankOffsetEntry);
@@ -262,19 +266,19 @@ public class CashManagementDocumentRule extends FinancialDocumentRuleBase implem
             descriptionKey = KeyConstants.CashManagement.DESCRIPTION_GLPE_BANK_OFFSET_FINAL;
         }
         else {
-            assertThat(Constants.DepositConstants.DEPOSIT_TYPE_INTERIM.equals(deposit.getDepositTypeCode()), deposit.getDepositTypeCode());
+            assert Constants.DepositConstants.DEPOSIT_TYPE_INTERIM.equals(deposit.getDepositTypeCode()) : deposit.getDepositTypeCode();
             descriptionKey = KeyConstants.CashManagement.DESCRIPTION_GLPE_BANK_OFFSET_INTERIM;
         }
         return TransactionalDocumentRuleUtil.formatProperty(descriptionKey, interimDepositNumber);
     }
 
     /**
-     * Gets the fiscal year for the GLPEs generated by this document. This works the same way as in TransactionalDocumentBase. The
-     * property is down in TransactionalDocument because no FinancialDocument (currently only CashManagementDocument) allows the
-     * user to override it. So, that logic is duplicated here. A comment in TransactionalDocumentBase says that this implementation
-     * is a hack right now because it's intended to be set by the
-     * <code>{@link org.kuali.module.chart.service.AccountingPeriodService}</code>, which suggests to me that pulling that
-     * property up to FinancialDocument is preferable to duplicating this logic here.
+     * Gets the fiscal year for the GLPEs generated by this document.
+     * This works the same way as in TransactionalDocumentBase.  The property is down in TransactionalDocument because no FinancialDocument
+     * (currently only CashManagementDocument) allows the user to override it.  So, that logic is duplicated here.  A comment in
+     * TransactionalDocumentBase says that this implementation is a hack right now because it's intended to be set by the
+     * <code>{@link org.kuali.module.chart.service.AccountingPeriodService}</code>, which suggests to me that pulling that property
+     * up to FinancialDocument is preferable to duplicating this logic here.
      * 
      * @return the fiscal year for the GLPEs generated by this document
      */

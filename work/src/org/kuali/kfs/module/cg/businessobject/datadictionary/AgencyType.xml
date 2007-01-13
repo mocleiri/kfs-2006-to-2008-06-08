@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/AgencyType.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -27,7 +29,7 @@
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
-                <field attributeName="rowActiveIndicator" />
+                <field attributeName="active" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
@@ -41,13 +43,13 @@
             <lookupFields>
                 <lookupField attributeName="code" required="false" />
                 <lookupField attributeName="name" required="false" />
-                <lookupField attributeName="rowActiveIndicator" required="false" />
+                <lookupField attributeName="active" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="code" noInquiry="true" />
                 <field attributeName="name" />
-                <field attributeName="rowActiveIndicator" />
+                <field attributeName="active" />
             </resultFields>
         </lookup>
 
@@ -94,7 +96,7 @@
                 <description>The description of the Agency Type.</description>
             </attribute>
 
-            <attribute name="rowActiveIndicator" forceUppercase="false">
+            <attribute name="active" forceUppercase="false">
                 <label>Active Indicator</label>
                 <shortLabel>Active Indicator</shortLabel>
 

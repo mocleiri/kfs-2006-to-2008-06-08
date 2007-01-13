@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/dataaccess/impl/AccountDaoOjb.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,15 +27,15 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.Constants;
 import org.kuali.core.AccountResponsibility;
+
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 import org.kuali.module.chart.dao.AccountDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * This class is the OJB implementation of the AccountDao interface.
@@ -44,8 +46,6 @@ import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements AccountDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountDaoOjb.class);
 
-    private DateTimeService dateTimeService;
-    
     /**
      * Retrieves account business object by primary key
      * 
@@ -155,7 +155,7 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
                 // there is some test data that
                 // contains null startDates, therefore this check.
                 if (ObjectUtils.isNotNull(accountDelegate.getAccountDelegateStartDate())) {
-                    if (!accountDelegate.getAccountDelegateStartDate().after(dateTimeService.getCurrentDate())) {
+                    if (!accountDelegate.getAccountDelegateStartDate().after(new Date())) {
                         Account account = getByPrimaryId(accountDelegate.getChartOfAccountsCode(), accountDelegate.getAccount().getAccountNumber());
                         AccountResponsibility accountResponsibility = new AccountResponsibility(AccountResponsibility.DELEGATED_RESPONSIBILITY, accountDelegate.getFinDocApprovalFromThisAmt(), accountDelegate.getFinDocApprovalToThisAmount(), accountDelegate.getFinancialDocumentTypeCode(), account);
                         delegatedResponsibilities.add(accountResponsibility);
@@ -171,10 +171,5 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
 
         Criteria criteria = new Criteria();
         return getPersistenceBrokerTemplate().getIteratorByQuery(QueryFactory.newQuery(Account.class, criteria));
-    }
-    
-
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
     }
 }

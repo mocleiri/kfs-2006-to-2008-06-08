@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/fp/document/validation/impl/IndirectCostAdjustmentDocumentRuleTest.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -49,7 +51,7 @@ public class IndirectCostAdjustmentDocumentRuleTest extends KualiTestBase {
         boolean failedAsExpected = false;
 
         try {
-            SpringServiceLocator.getDocumentService().saveDocument(null);
+            SpringServiceLocator.getDocumentService().saveDocument(null, null, null);
         }
         catch (IllegalArgumentException e) {
             failedAsExpected = true;

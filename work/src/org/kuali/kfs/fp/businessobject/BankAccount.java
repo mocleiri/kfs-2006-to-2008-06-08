@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/BankAccount.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +17,34 @@
  */
 package org.kuali.module.financial.bo;
 
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ */
+
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -27,7 +54,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 /**
  * 
  */
-public class BankAccount extends PersistableBusinessObjectBase {
+public class BankAccount extends BusinessObjectBase {
     private String finDocumentBankAccountDesc;
     private String finDocumentBankAccountNumber;
     private String financialDocumentBankCode;
@@ -54,7 +81,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the bank attribute.
      * 
-     * @return Returns the financialDocumentBankCode
+     * @return - Returns the financialDocumentBankCode
      * 
      */
     public Bank getBank() {
@@ -74,7 +101,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentBankCode attribute.
      * 
-     * @return Returns the financialDocumentBankCode
+     * @return - Returns the financialDocumentBankCode
      * 
      */
     public String getFinancialDocumentBankCode() {
@@ -94,7 +121,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocumentBankAccountDesc attribute.
      * 
-     * @return Returns the finDocumentBankAccountDesc
+     * @return - Returns the finDocumentBankAccountDesc
      * 
      */
     public String getFinDocumentBankAccountDesc() {
@@ -114,7 +141,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocumentBankAccount attribute.
      * 
-     * @return Returns the finDocumentBankAccountNumber
+     * @return - Returns the finDocumentBankAccountNumber
      * 
      */
     public String getFinDocumentBankAccountNumber() {
@@ -190,7 +217,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the cashOffsetAccount attribute.
      * 
-     * @return Returns the cashOffsetAccount
+     * @return - Returns the cashOffsetAccount
      * 
      */
     public Account getCashOffsetAccount() {
@@ -210,7 +237,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the cashOffsetFinancialChartOfAccount attribute.
      * 
-     * @return Returns the cashOffsetFinancialChartOfAccount
+     * @return - Returns the cashOffsetFinancialChartOfAccount
      * 
      */
     public Chart getCashOffsetFinancialChartOfAccount() {
