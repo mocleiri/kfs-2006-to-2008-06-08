@@ -109,6 +109,10 @@
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
 		<property name="appenders" value="INFO, LogFile" />
+		<condition property="institution.spring.beans.import" value="${institution.spring.beans.import.value}">
+			<available file="${institution.spring.beans.file}" />
+		</condition>
+		<property name="institution.spring.beans.import" value="" />
 		<filterset id="external.config.filterset">
 			<filter token="settings-root-directory" value="${settings.root.directory}" />
 			<filter token="security-root-directory" value="${security.root.directory}" />			
