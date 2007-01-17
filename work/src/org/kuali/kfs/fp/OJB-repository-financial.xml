@@ -19,6 +19,7 @@
 <class-descriptor class="org.kuali.module.financial.document.InternalBillingDocument" table="FP_INT_BILL_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -59,6 +60,7 @@
 
 <class-descriptor class="org.kuali.module.financial.bo.InternalBillingItem" table="FP_INT_BILL_ITM_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="itemSequenceId" column="FDOC_ITM_NBR" jdbc-type="INTEGER" primarykey="true" autoincrement="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="itemStockNumber" column="FDOC_ITM_STCK_NBR" jdbc-type="VARCHAR" />
@@ -73,6 +75,7 @@
 <class-descriptor class="org.kuali.module.financial.document.ServiceBillingDocument" table="FP_INT_BILL_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -115,6 +118,7 @@
 <class-descriptor class="org.kuali.module.financial.document.AuxiliaryVoucherDocument" table="FP_ACRL_VCHR_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -152,6 +156,7 @@
 <class-descriptor class="org.kuali.module.financial.document.PreEncumbranceDocument" table="FP_PRE_ENCUM_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -188,6 +193,7 @@
 <class-descriptor class="org.kuali.module.financial.document.DistributionOfIncomeAndExpenseDocument" table="FP_DISTRIB_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -218,6 +224,7 @@
 <class-descriptor class="org.kuali.module.financial.document.YearEndDistributionOfIncomeAndExpenseDocument" table="FP_DISTRIB_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -248,6 +255,7 @@
 <class-descriptor class="org.kuali.module.financial.document.GeneralErrorCorrectionDocument" table="FP_ERROR_COR_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -442,6 +450,7 @@
 <class-descriptor class="org.kuali.module.financial.document.YearEndTransferOfFundsDocument" table="FP_FND_TRNFR_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -483,6 +492,7 @@
 <class-descriptor class="org.kuali.module.financial.document.YearEndGeneralErrorCorrectionDocument" table="FP_ERROR_COR_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -523,6 +533,7 @@
 <class-descriptor class="org.kuali.module.financial.document.TransferOfFundsDocument" table="FP_FND_TRNFR_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -564,6 +575,7 @@
 <class-descriptor class="org.kuali.module.financial.document.JournalVoucherDocument" table="FP_JRNL_VCHR_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -655,8 +667,8 @@
 
 <!--  CASH RECEIPT DOCUMENT MAPPINGS -->
 <class-descriptor class="org.kuali.module.financial.document.CashReceiptDocument" table="FP_CASH_RCPT_DOC_T">
-    <!--   common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="nextSourceLineNumber" column="FDOC_NXT_LINE_NBR" jdbc-type="INTEGER" />
@@ -781,6 +793,7 @@
 <class-descriptor class="org.kuali.module.financial.document.CreditCardReceiptDocument" table="FP_CASH_RCPT_DOC_T">
     <!--   common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="nextSourceLineNumber" column="FDOC_NXT_LINE_NBR" jdbc-type="INTEGER" />
@@ -846,8 +859,8 @@
 
 <!--  ADVANCED DEPOSIT DOCUMENT MAPPINGS -->
 <class-descriptor class="org.kuali.module.financial.document.AdvanceDepositDocument" table="FP_CASH_RCPT_DOC_T">
-    <!--   common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="nextSourceLineNumber" column="FDOC_NXT_LINE_NBR" jdbc-type="INTEGER" />
@@ -945,8 +958,8 @@
 <class-descriptor class="org.kuali.module.financial.document.CashManagementDocument" table="FP_DEPOSIT_HDR_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
-    <!-- <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/> -->
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
 
     <!-- CashManagement-specific attributes -->
@@ -1076,6 +1089,7 @@
 <class-descriptor class="org.kuali.module.financial.document.IndirectCostAdjustmentDocument" table="FP_ICR_ADJ_DOC_T">
     <!--  common transactional document base attributes -->
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
@@ -1109,6 +1123,7 @@
 <!--  GENERATED MAPPING -->
 <class-descriptor class="org.kuali.module.financial.document.NonCheckDisbursementDocument" table="FP_NCHK_DSBRSDOC_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
     <field-descriptor name="nextSourceLineNumber" column="FDOC_NXT_LINE_NBR" jdbc-type="INTEGER" />
     <field-descriptor name="postingPeriodCode" column="FDOC_POST_PRD_CD" jdbc-type="VARCHAR" />
@@ -1140,6 +1155,7 @@
 
 <class-descriptor class="org.kuali.module.financial.document.DisbursementVoucherDocument" table="FP_DV_DOC_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="nextSourceLineNumber" column="FDOC_NXT_LINE_NBR" jdbc-type="INTEGER" />
     <field-descriptor name="finDocNextRegistrantLineNbr" column="FDOC_NXT_REG_NBR" jdbc-type="INTEGER" />
@@ -1534,6 +1550,7 @@
 
 <class-descriptor class="org.kuali.module.financial.document.ProcurementCardDocument" table="FP_PRCRMNT_DOC_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="nextTargetLineNumber" column="FDOC_NXT_LINE_NBR" jdbc-type="INTEGER" />
     <field-descriptor name="explanation" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR" />
@@ -1946,6 +1963,7 @@
 
 <class-descriptor class="org.kuali.module.financial.document.YearEndBudgetAdjustmentDocument" table="FP_BDGT_ADJ_DOC_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="nextSourceLineNumber" column="FDOC_NXT_FRM_NBR" jdbc-type="INTEGER" />
     <field-descriptor name="nextTargetLineNumber" column="FDOC_NXT_TO_NBR" jdbc-type="INTEGER" />
@@ -1976,6 +1994,7 @@
 
 <class-descriptor class="org.kuali.module.financial.document.BudgetAdjustmentDocument" table="FP_BDGT_ADJ_DOC_T">
     <field-descriptor name="financialDocumentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="nextSourceLineNumber" column="FDOC_NXT_FRM_NBR" jdbc-type="INTEGER" />
     <field-descriptor name="nextTargetLineNumber" column="FDOC_NXT_TO_NBR" jdbc-type="INTEGER" />
