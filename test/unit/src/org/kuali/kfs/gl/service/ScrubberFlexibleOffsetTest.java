@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service;
 
@@ -26,7 +33,7 @@ import org.kuali.module.gl.bo.OriginEntrySource;
 /**
  * Test Flexible Offset in the scrubber
  * 
- * 
+ * @author Bin Gao from Michigan State University
  */
 @WithTestSpringContext
 public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
@@ -34,26 +41,21 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
 
     private ScrubberService scrubberService;
 
-    @Override
+    /**
+     * @see junit.framework.TestCase#setUp()
+     */
     protected void setUp() throws Exception {
         super.setUp();
 
         scrubberService = (ScrubberService) beanFactory.getBean(GLSpringBeansRegistry.glScrubberService);
-        scrubberService.setDateTimeService(dateTimeService);
+
         // Get the test date time service so we can specify the date/time of the run
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, 1);
         c.set(Calendar.MONTH, Calendar.JANUARY);
         c.set(Calendar.YEAR, 2006);
-        
-        // since the cutoff time  is set to 10am (https://test.kuali.org/confluence/display/KFSP1/Scrubber+cutoff+time+configuration)
-        // we want to ensure that the time is always after that time so the cutoff algorithm is not invoked
-        c.set(Calendar.HOUR_OF_DAY, 23);
-        c.set(Calendar.MINUTE, 59);
-        c.set(Calendar.SECOND, 59);
-        
         date = c.getTime();
-        dateTimeService.setCurrentDate(date);
+        dateTimeService.currentDate = date;
     }
 
     /**
@@ -68,13 +70,13 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
         updateDocTypeForScrubberOffsetGeneration();
         setOffsetAccounts();
 
-        String[] input = new String[] { "2007BA9120656-----4190---ACEX02ID0101NOFLEX001     00000TEST FLEXIBLE OFFSET - NO FLEX                    2000.00D2006-01-01          ----------                                       ", "2007BA6044900-----4190---ACEX02ID0101NOFLEX002     00000TEST FLEXIBLE OFFSET - FLEX                       1000.00D2006-01-01          ----------                                       ", "2007BL1023200-----4190---ACEX02ID0101NOFLEX003     00000TEST FLEXIBLE OFFSET - FLEX                       3000.00D2006-01-01          ----------                                       ", "2007BL1023200-----7030---ACEX02ID0101NOFLEX004     00000TEST FLEXIBLE OFFSET - FLEX                       3500.00D2006-01-01          ----------                                       ", "2007BL2331473-----4190---ACEX02ID0101NOFLEX005     00000TEST FLEXIBLE OFFSET - FLEX                       4000.00D2006-01-01          ----------                                       ", };
+        String[] input = new String[] { "2007BA9120656-----4190---ACEX02ID0101NOFLEX00100000TEST FLEXIBLE OFFSET - NO FLEX                    2000.00D2006-01-01          ----------                                  ", "2007BA6044900-----4190---ACEX02ID0101NOFLEX00200000TEST FLEXIBLE OFFSET - FLEX                       1000.00D2006-01-01          ----------                                  ", "2007BL1023200-----4190---ACEX02ID0101NOFLEX00300000TEST FLEXIBLE OFFSET - FLEX                       3000.00D2006-01-01          ----------                                  ", "2007BL1023200-----7030---ACEX02ID0101NOFLEX00400000TEST FLEXIBLE OFFSET - FLEX                       3500.00D2006-01-01          ----------                                  ", "2007BL2331473-----4190---ACEX02ID0101NOFLEX00500000TEST FLEXIBLE OFFSET - FLEX                       4000.00D2006-01-01          ----------                                  ", };
 
-        EntryHolder[] output = new EntryHolder[] { new EntryHolder(OriginEntrySource.BACKUP, "2007BA9120656-----4190---ACEX02ID0101NOFLEX001     00000TEST FLEXIBLE OFFSET - NO FLEX                    2000.00D2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.BACKUP, "2007BA6044900-----4190---ACEX02ID0101NOFLEX002     00000TEST FLEXIBLE OFFSET - FLEX                       1000.00D2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.BACKUP, "2007BL1023200-----4190---ACEX02ID0101NOFLEX003     00000TEST FLEXIBLE OFFSET - FLEX                       3000.00D2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.BACKUP, "2007BL1023200-----7030---ACEX02ID0101NOFLEX004     00000TEST FLEXIBLE OFFSET - FLEX                       3500.00D2006-01-01          ----------                                       "),
-                new EntryHolder(OriginEntrySource.BACKUP, "2007BL2331473-----4190---ACEX02ID0101NOFLEX005     00000TEST FLEXIBLE OFFSET - FLEX                       4000.00D2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA9120656-----4190---ACEX02ID0101NOFLEX001     00000TEST FLEXIBLE OFFSET - NO FLEX                    2000.00D2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA9120656-----8000---ACAS02ID0101NOFLEX001     00000GENERATED OFFSET                                  2000.00C2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4190---ACEX02ID0101NOFLEX002     00000TEST FLEXIBLE OFFSET - FLEX                       1000.00D2006-01-01          ----------                                       "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----8000---ACAS02ID0101NOFLEX002     00000GENERATED OFFSET                                  1000.00C2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1023200-----4190---ACEX02ID0101NOFLEX003     00000TEST FLEXIBLE OFFSET - FLEX                       3000.00D2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1023200-----8000---ACAS02ID0101NOFLEX003     00000GENERATED OFFSET                                  3000.00C2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL9520004-----8611---ACAS02ID0101NOFLEX004     00000GENERATED CAPITALIZATION                          3500.00D2006-01-01          ----------                                       "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL9520004-----9899---ACFB02ID0101NOFLEX004     00000GENERATED CAPITALIZATION                          3500.00C2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1023200-----7030---ACEX02ID0101NOFLEX004     00000TEST FLEXIBLE OFFSET - FLEX                       3500.00D2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1023200-----8000---ACAS02ID0101NOFLEX004     00000GENERATED OFFSET                                  3500.00C2006-01-01          ----------                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL2331473-----4190---ACEX02ID0101NOFLEX005     00000TEST FLEXIBLE OFFSET - FLEX                       4000.00D2006-01-01          ----------                                       "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL2331473-----8000---ACAS02ID0101NOFLEX005     00000GENERATED OFFSET                                  4000.00C2006-01-01          ----------                                       "), };
+        EntryHolder[] output = new EntryHolder[] { new EntryHolder(OriginEntrySource.BACKUP, "2007BA9120656-----4190---ACEX02ID0101NOFLEX00100000TEST FLEXIBLE OFFSET - NO FLEX                    2000.00D2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.BACKUP, "2007BA6044900-----4190---ACEX02ID0101NOFLEX00200000TEST FLEXIBLE OFFSET - FLEX                       1000.00D2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.BACKUP, "2007BL1023200-----4190---ACEX02ID0101NOFLEX00300000TEST FLEXIBLE OFFSET - FLEX                       3000.00D2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.BACKUP, "2007BL1023200-----7030---ACEX02ID0101NOFLEX00400000TEST FLEXIBLE OFFSET - FLEX                       3500.00D2006-01-01          ----------                                  "),
+                new EntryHolder(OriginEntrySource.BACKUP, "2007BL2331473-----4190---ACEX02ID0101NOFLEX00500000TEST FLEXIBLE OFFSET - FLEX                       4000.00D2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA9120656-----4190---ACEX02ID0101NOFLEX00100000TEST FLEXIBLE OFFSET - NO FLEX                    2000.00D2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA9120656-----8000---ACAS02ID0101NOFLEX00100000GENERATED OFFSET                                  2000.00C2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4190---ACEX02ID0101NOFLEX00200000TEST FLEXIBLE OFFSET - FLEX                       1000.00D2006-01-01          ----------                                  "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----8000---ACAS02ID0101NOFLEX00200000GENERATED OFFSET                                  1000.00C2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1023200-----4190---ACEX02ID0101NOFLEX00300000TEST FLEXIBLE OFFSET - FLEX                       3000.00D2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1023200-----8000---ACAS02ID0101NOFLEX00300000GENERATED OFFSET                                  3000.00C2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL9520004-----8611---ACAS02ID0101NOFLEX00400000GENERATED CAPITALIZATION                          3500.00D2006-01-01          ----------                                  "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL9520004-----9899---ACFB02ID0101NOFLEX00400000GENERATED CAPITALIZATION                          3500.00C2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1023200-----7030---ACEX02ID0101NOFLEX00400000TEST FLEXIBLE OFFSET - FLEX                       3500.00D2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL1023200-----8000---ACAS02ID0101NOFLEX00400000GENERATED OFFSET                                  3500.00C2006-01-01          ----------                                  "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL2331473-----4190---ACEX02ID0101NOFLEX00500000TEST FLEXIBLE OFFSET - FLEX                       4000.00D2006-01-01          ----------                                  "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL2331473-----8000---ACAS02ID0101NOFLEX00500000GENERATED OFFSET                                  4000.00C2006-01-01          ----------                                  "), };
 
         scrub(input);
         assertOriginEntries(4, output);
