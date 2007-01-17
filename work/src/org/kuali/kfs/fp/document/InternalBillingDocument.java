@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.Constants;
 import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.bo.AccountingLineParserBase;
@@ -157,4 +159,5 @@ public class InternalBillingDocument extends TransactionalDocumentBase {
     public AccountingLineParser getAccountingLineParser() {
         return new AccountingLineParserBase();
     }
+
 }
