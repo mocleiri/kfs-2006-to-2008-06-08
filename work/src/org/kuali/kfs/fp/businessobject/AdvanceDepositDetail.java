@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/AdvanceDepositDetail.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +21,17 @@ package org.kuali.module.financial.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.document.AdvanceDepositDocument;
-import org.kuali.PropertyConstants;
 
 /**
  * This business object represents the advance deposit detail business object that is used by the Advance Deposit Document.
  * 
  * 
  */
-public class AdvanceDepositDetail extends PersistableBusinessObjectBase {
-    private String documentNumber;
+public class AdvanceDepositDetail extends BusinessObjectBase {
+    private String financialDocumentNumber;
     private String financialDocumentTypeCode;
     private String financialDocumentColumnTypeCode;
     private Integer financialDocumentLineNumber;
@@ -53,23 +54,23 @@ public class AdvanceDepositDetail extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     /**
@@ -307,7 +308,7 @@ public class AdvanceDepositDetail extends PersistableBusinessObjectBase {
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
         m.put("financialDocumentColumnTypeCode", this.financialDocumentColumnTypeCode);
         if (this.financialDocumentLineNumber != null) {

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/IndirectCostRecoveryExclusionType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +20,13 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.codes.ICRTypeCode;
 
 /**
  * 
  */
-public class IndirectCostRecoveryExclusionType extends PersistableBusinessObjectBase {
+public class IndirectCostRecoveryExclusionType extends BusinessObjectBase {
 
     private String accountIndirectCostRecoveryTypeCode;
     private String chartOfAccountsCode;
@@ -40,7 +42,7 @@ public class IndirectCostRecoveryExclusionType extends PersistableBusinessObject
     /**
      * Gets the accountIndirectCostRecoveryTypeCode attribute.
      * 
-     * @return Returns the accountIndirectCostRecoveryTypeCode
+     * @return - Returns the accountIndirectCostRecoveryTypeCode
      * 
      */
     public String getAccountIndirectCostRecoveryTypeCode() {
@@ -61,7 +63,7 @@ public class IndirectCostRecoveryExclusionType extends PersistableBusinessObject
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -82,7 +84,7 @@ public class IndirectCostRecoveryExclusionType extends PersistableBusinessObject
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return Returns the financialObjectCode
+     * @return - Returns the financialObjectCode
      * 
      */
     public String getFinancialObjectCode() {
@@ -103,7 +105,7 @@ public class IndirectCostRecoveryExclusionType extends PersistableBusinessObject
     /**
      * Gets the chart attribute.
      * 
-     * @return Returns the chart
+     * @return - Returns the chart
      * 
      */
     public Chart getChart() {

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/AccountDescription.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +21,12 @@ package org.kuali.module.chart.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.Building;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class AccountDescription extends PersistableBusinessObjectBase {
+public class AccountDescription extends BusinessObjectBase {
 
     private static final long serialVersionUID = 6233459415790165510L;
 
@@ -48,7 +50,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -69,7 +71,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return Returns the accountNumber
+     * @return - Returns the accountNumber
      * 
      */
     public String getAccountNumber() {
@@ -90,7 +92,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
     /**
      * Gets the campusDescription attribute.
      * 
-     * @return Returns the campusDescription
+     * @return - Returns the campusDescription
      * 
      */
     public String getCampusDescription() {
@@ -111,7 +113,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationDescription attribute.
      * 
-     * @return Returns the organizationDescription
+     * @return - Returns the organizationDescription
      * 
      */
     public String getOrganizationDescription() {
@@ -132,7 +134,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
     /**
      * Gets the responsibilityCenterDescription attribute.
      * 
-     * @return Returns the responsibilityCenterDescription
+     * @return - Returns the responsibilityCenterDescription
      * 
      */
     public String getResponsibilityCenterDescription() {
@@ -153,7 +155,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
     /**
      * Gets the campusCode attribute.
      * 
-     * @return Returns the campusCode
+     * @return - Returns the campusCode
      * 
      */
     public String getCampusCode() {
@@ -174,7 +176,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
     /**
      * Gets the buildingCode attribute.
      * 
-     * @return Returns the buildingCode
+     * @return - Returns the buildingCode
      * 
      */
     public String getBuildingCode() {

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/DisbursementVoucherPreConferenceRegistrant.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +20,15 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class DisbursementVoucherPreConferenceRegistrant extends PersistableBusinessObjectBase {
+public class DisbursementVoucherPreConferenceRegistrant extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private Integer financialDocumentLineNumber;
     private String disbVchrPreConfDepartmentCd;
     private String dvConferenceRegistrantName;
@@ -42,30 +43,30 @@ public class DisbursementVoucherPreConferenceRegistrant extends PersistableBusin
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     /**
      * Gets the financialDocumentLineNumber attribute.
      * 
-     * @return Returns the financialDocumentLineNumber
+     * @return - Returns the financialDocumentLineNumber
      * 
      */
     public Integer getFinancialDocumentLineNumber() {
@@ -86,7 +87,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends PersistableBusin
     /**
      * Gets the disbVchrPreConfDepartmentCd attribute.
      * 
-     * @return Returns the disbVchrPreConfDepartmentCd
+     * @return - Returns the disbVchrPreConfDepartmentCd
      * 
      */
     public String getDisbVchrPreConfDepartmentCd() {
@@ -107,7 +108,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends PersistableBusin
     /**
      * Gets the dvConferenceRegistrantName attribute.
      * 
-     * @return Returns the dvConferenceRegistrantName
+     * @return - Returns the dvConferenceRegistrantName
      * 
      */
     public String getDvConferenceRegistrantName() {
@@ -128,7 +129,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends PersistableBusin
     /**
      * Gets the dvPreConferenceRequestNumber attribute.
      * 
-     * @return Returns the dvPreConferenceRequestNumber
+     * @return - Returns the dvPreConferenceRequestNumber
      * 
      */
     public String getDvPreConferenceRequestNumber() {
@@ -149,7 +150,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends PersistableBusin
     /**
      * Gets the disbVchrExpenseAmount attribute.
      * 
-     * @return Returns the disbVchrExpenseAmount
+     * @return - Returns the disbVchrExpenseAmount
      * 
      */
     public KualiDecimal getDisbVchrExpenseAmount() {
@@ -172,7 +173,7 @@ public class DisbursementVoucherPreConferenceRegistrant extends PersistableBusin
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         if (financialDocumentLineNumber != null) {
             m.put("financialDocumentLineNumber", this.financialDocumentLineNumber.toString());
         }

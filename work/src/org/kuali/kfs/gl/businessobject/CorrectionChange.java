@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/CorrectionChange.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +21,14 @@ package org.kuali.module.gl.bo;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.PropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class CorrectionChange extends PersistableBusinessObjectBase implements Comparable {
+public class CorrectionChange extends BusinessObjectBase implements Comparable {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private Integer correctionChangeGroupLineNumber;
     private Integer correctionChangeLineNumber;
     private Integer correctionStartPosition;
@@ -40,9 +41,9 @@ public class CorrectionChange extends PersistableBusinessObjectBase implements C
 
     }
 
-    public CorrectionChange(String documentNumber,Integer correctionChangeGroupLineNumber,Integer correctionChangeLineNumber) {
+    public CorrectionChange(String financialDocumentNumber,Integer correctionChangeGroupLineNumber,Integer correctionChangeLineNumber) {
         super();
-        this.documentNumber = documentNumber;
+        this.financialDocumentNumber = financialDocumentNumber;
         this.correctionChangeGroupLineNumber = correctionChangeGroupLineNumber;
         this.correctionChangeLineNumber = correctionChangeLineNumber;
     }
@@ -51,12 +52,12 @@ public class CorrectionChange extends PersistableBusinessObjectBase implements C
         return (versionNumber == null) && StringUtils.isEmpty(correctionFieldValue);
     }
 
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
@@ -95,8 +96,8 @@ public class CorrectionChange extends PersistableBusinessObjectBase implements C
     public int compareTo(Object o) {
         CorrectionChange cc = (CorrectionChange)o;
 
-        String thisFdocNbr = documentNumber == null ? "" : documentNumber;
-        String thatFdocNbr = cc.documentNumber == null ? "" : cc.documentNumber;
+        String thisFdocNbr = financialDocumentNumber == null ? "" : financialDocumentNumber;
+        String thatFdocNbr = cc.financialDocumentNumber == null ? "" : cc.financialDocumentNumber;
         int c = thisFdocNbr.compareTo(thatFdocNbr);
 
         if ( c == 0 ) {
@@ -120,7 +121,7 @@ public class CorrectionChange extends PersistableBusinessObjectBase implements C
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         if (this.correctionChangeGroupLineNumber != null) {
             m.put("correctionChangeGroupLineNumber", this.correctionChangeGroupLineNumber.toString());
         }
