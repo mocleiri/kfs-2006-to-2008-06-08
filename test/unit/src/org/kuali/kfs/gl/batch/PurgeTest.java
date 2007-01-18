@@ -240,12 +240,17 @@ public class PurgeTest extends KualiTestBase {
     }
 
     private int getInt(Map values, String field) {
-        BigDecimal number = (BigDecimal) values.get(field);
-        if (number == null) {
+        Object o = values.get(field);
+        if (o == null) {
             return -1;
-        }
-        else {
+        } else if (o instanceof BigDecimal) {
+            BigDecimal number = (BigDecimal) o;
             return number.intValue();
+        } else if (o instanceof Long) {
+            Long number = (Long) o;
+            return number.intValue();
+        } else {
+            return -1;
         }
     }
 }
