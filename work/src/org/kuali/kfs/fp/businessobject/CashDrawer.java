@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/CashDrawer.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +22,13 @@ import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
  * 
  */
-public class CashDrawer extends PersistableBusinessObjectBase {
+public class CashDrawer extends BusinessObjectBase {
     private String workgroupName;
     private String statusCode;
 
@@ -91,7 +93,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the workgroupName attribute.
      * 
-     * @return Returns the workgroupName
+     * @return - Returns the workgroupName
      * 
      */
     public String getWorkgroupName() {
@@ -112,7 +114,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the statusCode attribute.
      * 
-     * @return Returns the statusCode
+     * @return - Returns the statusCode
      * 
      */
     public String getStatusCode() {
@@ -133,7 +135,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the cashDrawerTotalAmount attribute.
      * 
-     * @return Returns the cashDrawerTotalAmount
+     * @return - Returns the cashDrawerTotalAmount
      * 
      */
     public KualiDecimal getCashDrawerTotalAmount() {
@@ -154,7 +156,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentHundredDollarAmount attribute.
      * 
-     * @return Returns the financialDocumentHundredDollarAmount
+     * @return - Returns the financialDocumentHundredDollarAmount
      * 
      */
     public KualiDecimal getFinancialDocumentHundredDollarAmount() {
@@ -175,7 +177,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentFiftyDollarAmount attribute.
      * 
-     * @return Returns the financialDocumentFiftyDollarAmount
+     * @return - Returns the financialDocumentFiftyDollarAmount
      * 
      */
     public KualiDecimal getFinancialDocumentFiftyDollarAmount() {
@@ -196,7 +198,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTwentyDollarAmount attribute.
      * 
-     * @return Returns the financialDocumentTwentyDollarAmount
+     * @return - Returns the financialDocumentTwentyDollarAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTwentyDollarAmount() {
@@ -217,7 +219,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTenDollarAmount attribute.
      * 
-     * @return Returns the financialDocumentTenDollarAmount
+     * @return - Returns the financialDocumentTenDollarAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTenDollarAmount() {
@@ -238,7 +240,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentFiveDollarAmount attribute.
      * 
-     * @return Returns the financialDocumentFiveDollarAmount
+     * @return - Returns the financialDocumentFiveDollarAmount
      * 
      */
     public KualiDecimal getFinancialDocumentFiveDollarAmount() {
@@ -259,7 +261,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTwoDollarAmount attribute.
      * 
-     * @return Returns the financialDocumentTwoDollarAmount
+     * @return - Returns the financialDocumentTwoDollarAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTwoDollarAmount() {
@@ -280,7 +282,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentOneDollarAmount attribute.
      * 
-     * @return Returns the financialDocumentOneDollarAmount
+     * @return - Returns the financialDocumentOneDollarAmount
      * 
      */
     public KualiDecimal getFinancialDocumentOneDollarAmount() {
@@ -301,7 +303,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentOtherDollarAmount attribute.
      * 
-     * @return Returns the financialDocumentOtherDollarAmount
+     * @return - Returns the financialDocumentOtherDollarAmount
      * 
      */
     public KualiDecimal getFinancialDocumentOtherDollarAmount() {
@@ -322,7 +324,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentFiftyCentAmount attribute.
      * 
-     * @return Returns the financialDocumentFiftyCentAmount
+     * @return - Returns the financialDocumentFiftyCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentFiftyCentAmount() {
@@ -343,7 +345,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTwentyFiveCentAmount attribute.
      * 
-     * @return Returns the financialDocumentTwentyFiveCentAmount
+     * @return - Returns the financialDocumentTwentyFiveCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTwentyFiveCentAmount() {
@@ -364,7 +366,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTenCentAmount attribute.
      * 
-     * @return Returns the financialDocumentTenCentAmount
+     * @return - Returns the financialDocumentTenCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTenCentAmount() {
@@ -385,7 +387,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentFiveCentAmount attribute.
      * 
-     * @return Returns the financialDocumentFiveCentAmount
+     * @return - Returns the financialDocumentFiveCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentFiveCentAmount() {
@@ -406,7 +408,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentOneCentAmount attribute.
      * 
-     * @return Returns the financialDocumentOneCentAmount
+     * @return - Returns the financialDocumentOneCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentOneCentAmount() {
@@ -427,7 +429,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentOtherCentAmount attribute.
      * 
-     * @return Returns the financialDocumentOtherCentAmount
+     * @return - Returns the financialDocumentOtherCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentOtherCentAmount() {
@@ -448,7 +450,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentHundredCentAmount attribute.
      * 
-     * @return Returns the financialDocumentHundredCentAmount
+     * @return - Returns the financialDocumentHundredCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentHundredCentAmount() {
@@ -469,7 +471,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentMiscellaneousAdvanceAmount attribute.
      * 
-     * @return Returns the financialDocumentMiscellaneousAdvanceAmount
+     * @return - Returns the financialDocumentMiscellaneousAdvanceAmount
      * 
      */
     public KualiDecimal getFinancialDocumentMiscellaneousAdvanceAmount() {
@@ -490,7 +492,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
     /**
      * Gets the referenceFinancialDocumentNumber attribute.
      * 
-     * @return Returns the referenceFinancialDocumentNumber
+     * @return - Returns the referenceFinancialDocumentNumber
      * 
      */
     public String getReferenceFinancialDocumentNumber() {
