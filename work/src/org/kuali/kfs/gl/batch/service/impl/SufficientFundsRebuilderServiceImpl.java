@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service.impl;
 
@@ -25,7 +32,7 @@ import java.util.Map;
 
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
-import org.kuali.core.bo.Options;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.dao.OptionsDao;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
@@ -43,9 +50,11 @@ import org.kuali.module.gl.service.SufficientFundRebuildService;
 import org.kuali.module.gl.service.SufficientFundsRebuilderService;
 import org.kuali.module.gl.service.SufficientFundsService;
 import org.kuali.module.gl.util.Summary;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ * @author Anthony Potts
+ */
+
 public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebuilderService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundsRebuilderServiceImpl.class);
 
@@ -196,10 +205,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
     private void calculateSufficientFundsByAccount(SufficientFundRebuild sfrb) {
         Account sfrbAccount = accountService.getByPrimaryId(sfrb.getChartOfAccountsCode(), sfrb.getAccountNumberFinancialObjectCode());
 
-        if ((sfrbAccount.getAccountSufficientFundsCode() != null) && (Constants.SF_TYPE_ACCOUNT.equals(sfrbAccount.getAccountSufficientFundsCode()) || 
-                Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(sfrbAccount.getAccountSufficientFundsCode()) || 
-                Constants.SF_TYPE_CONSOLIDATION.equals(sfrbAccount.getAccountSufficientFundsCode()) || Constants.SF_TYPE_LEVEL.equals(sfrbAccount.getAccountSufficientFundsCode()) || 
-                Constants.SF_TYPE_OBJECT.equals(sfrbAccount.getAccountSufficientFundsCode()) || Constants.SF_TYPE_NO_CHECKING.equals(sfrbAccount.getAccountSufficientFundsCode()))) {
+        if ((sfrbAccount.getAccountSufficientFundsCode() != null) && (Constants.SF_TYPE_ACCOUNT.equals(sfrbAccount.getAccountSufficientFundsCode()) || Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(sfrbAccount.getAccountSufficientFundsCode()) || Constants.SF_TYPE_CONSOLIDATION.equals(sfrbAccount.getAccountSufficientFundsCode()) || Constants.SF_TYPE_LEVEL.equals(sfrbAccount.getAccountSufficientFundsCode()) || Constants.SF_TYPE_OBJECT.equals(sfrbAccount.getAccountSufficientFundsCode()) || Constants.SF_TYPE_NO_CHECKING.equals(sfrbAccount.getAccountSufficientFundsCode()))) {
             ++sfrbRecordsDeletedCount;
             sufficientFundBalancesDao.deleteByAccountNumber(universityFiscalYear, sfrb.getChartOfAccountsCode(), sfrbAccount.getAccountNumber());
 
@@ -228,7 +234,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
                     // we have a change or are on the last record, write out the data if there is any
                     currentFinObjectCd = tempFinObjectCd;
 
-                    if (currentSfbl != null && amountsAreNonZero(currentSfbl)) {
+                    if (currentSfbl != null) {
                         sufficientFundBalancesDao.save(currentSfbl);
                         ++sfblInsertedCount;
                     }
@@ -244,7 +250,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
                     currentSfbl.setCurrentBudgetBalanceAmount(KualiDecimal.ZERO);
                 }
 
-                if (sfrbAccount.isForContractsAndGrants()) {
+                if (sfrbAccount.isInCg()) {
                     balance.setAccountLineAnnualBalanceAmount(balance.getAccountLineAnnualBalanceAmount().add(balance.getContractsGrantsBeginningBalanceAmount()));
                 }
 
@@ -257,7 +263,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
             }
 
             // save the last one
-            if (currentSfbl != null && amountsAreNonZero(currentSfbl)) {
+            if (currentSfbl != null) {
                 sufficientFundBalancesDao.save(currentSfbl);
                 ++sfblInsertedCount;
             }
@@ -270,14 +276,6 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
         }
     }
 
-    private boolean amountsAreNonZero(SufficientFundBalances sfbl) {
-        boolean zero = true;
-        zero &= KualiDecimal.ZERO.equals(sfbl.getAccountActualExpenditureAmt());
-        zero &= KualiDecimal.ZERO.equals(sfbl.getAccountEncumbranceAmount());
-        zero &= KualiDecimal.ZERO.equals(sfbl.getCurrentBudgetBalanceAmount());
-        return !zero;
-    }
-    
     private void processObjectOrAccount(Account sfrbAccount, Balance balance) {
         if ( options.getFinObjTypeExpenditureexpCd().equals(balance.getObjectTypeCode()) || 
                 options.getFinObjTypeExpendNotExp().equals(balance.getObjectTypeCode()) || 
