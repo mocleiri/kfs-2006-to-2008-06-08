@@ -151,6 +151,7 @@
 			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
 			<filter token="workflow-webservices-keystore-password" value="${workflow.webservices.keystore.password}" />
 			<filter token="encryption-key" value="${encryption.key}" />
+			<filter token="institution-spring-beans-import" value="${institution.spring.beans.import}" />
 			<filter token="appenders" value="${appenders}" />
 			<filter token="batch-logger" value="" />
 			<filter token="variable-ojb-properties" value="${application.ojb.properties}" />
