@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.gl.bo;
@@ -19,17 +28,16 @@ package org.kuali.module.gl.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.PropertyConstants;
 
 /**
- * 
+ * @author Kuali Nervous System Team ()
  */
-public class EntryMove extends PersistableBusinessObjectBase {
+public class EntryMove extends BusinessObjectBase {
 
     private String personUniversalIdentifier;
     private Integer universityFiscalYear;
@@ -43,7 +51,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     private String universityFiscalPeriodCode;
     private String financialDocumentTypeCode;
     private String financialSystemOriginationCode;
-    private String documentNumber;
+    private String financialDocumentNumber;
     private Integer transactionLedgerEntrySequenceNumber;
     private String transactionLedgerEntryDescription;
     private KualiDecimal transactionLedgerEntryAmount;
@@ -75,7 +83,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the personUniversalIdentifier attribute.
      * 
-     * @return Returns the personUniversalIdentifier
+     * @return - Returns the personUniversalIdentifier
      * 
      */
     public String getPersonUniversalIdentifier() {
@@ -96,7 +104,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -117,7 +125,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -138,7 +146,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return Returns the accountNumber
+     * @return - Returns the accountNumber
      * 
      */
     public String getAccountNumber() {
@@ -159,7 +167,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the subAccountNumber attribute.
      * 
-     * @return Returns the subAccountNumber
+     * @return - Returns the subAccountNumber
      * 
      */
     public String getSubAccountNumber() {
@@ -180,7 +188,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return Returns the financialObjectCode
+     * @return - Returns the financialObjectCode
      * 
      */
     public String getFinancialObjectCode() {
@@ -201,7 +209,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the financialSubObjectCode attribute.
      * 
-     * @return Returns the financialSubObjectCode
+     * @return - Returns the financialSubObjectCode
      * 
      */
     public String getFinancialSubObjectCode() {
@@ -222,7 +230,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the financialBalanceTypeCode attribute.
      * 
-     * @return Returns the financialBalanceTypeCode
+     * @return - Returns the financialBalanceTypeCode
      * 
      */
     public String getFinancialBalanceTypeCode() {
@@ -243,7 +251,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObjectTypeCode attribute.
      * 
-     * @return Returns the financialObjectTypeCode
+     * @return - Returns the financialObjectTypeCode
      * 
      */
     public String getFinancialObjectTypeCode() {
@@ -264,7 +272,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodCode attribute.
      * 
-     * @return Returns the universityFiscalPeriodCode
+     * @return - Returns the universityFiscalPeriodCode
      * 
      */
     public String getUniversityFiscalPeriodCode() {
@@ -285,7 +293,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
      * 
      */
     public String getFinancialDocumentTypeCode() {
@@ -306,7 +314,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the financialSystemOriginationCode attribute.
      * 
-     * @return Returns the financialSystemOriginationCode
+     * @return - Returns the financialSystemOriginationCode
      * 
      */
     public String getFinancialSystemOriginationCode() {
@@ -325,30 +333,30 @@ public class EntryMove extends PersistableBusinessObjectBase {
 
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
     /**
      * Gets the transactionLedgerEntrySequenceNumber attribute.
      * 
-     * @return Returns the transactionLedgerEntrySequenceNumber
+     * @return - Returns the transactionLedgerEntrySequenceNumber
      * 
      */
     public Integer getTransactionLedgerEntrySequenceNumber() {
@@ -369,7 +377,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionLedgerEntryDescription attribute.
      * 
-     * @return Returns the transactionLedgerEntryDescription
+     * @return - Returns the transactionLedgerEntryDescription
      * 
      */
     public String getTransactionLedgerEntryDescription() {
@@ -390,7 +398,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionLedgerEntryAmount attribute.
      * 
-     * @return Returns the transactionLedgerEntryAmount
+     * @return - Returns the transactionLedgerEntryAmount
      * 
      */
     public KualiDecimal getTransactionLedgerEntryAmount() {
@@ -411,7 +419,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionDebitCreditCode attribute.
      * 
-     * @return Returns the transactionDebitCreditCode
+     * @return - Returns the transactionDebitCreditCode
      * 
      */
     public String getTransactionDebitCreditCode() {
@@ -432,7 +440,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionDate attribute.
      * 
-     * @return Returns the transactionDate
+     * @return - Returns the transactionDate
      * 
      */
     public Date getTransactionDate() {
@@ -453,7 +461,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationDocumentNumber attribute.
      * 
-     * @return Returns the organizationDocumentNumber
+     * @return - Returns the organizationDocumentNumber
      * 
      */
     public String getOrganizationDocumentNumber() {
@@ -474,7 +482,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the projectCode attribute.
      * 
-     * @return Returns the projectCode
+     * @return - Returns the projectCode
      * 
      */
     public String getProjectCode() {
@@ -495,7 +503,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationReferenceId attribute.
      * 
-     * @return Returns the organizationReferenceId
+     * @return - Returns the organizationReferenceId
      * 
      */
     public String getOrganizationReferenceId() {
@@ -516,7 +524,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the referenceFinancialDocumentTypeCode attribute.
      * 
-     * @return Returns the referenceFinancialDocumentTypeCode
+     * @return - Returns the referenceFinancialDocumentTypeCode
      * 
      */
     public String getReferenceFinancialDocumentTypeCode() {
@@ -537,7 +545,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the referenceFinancialSystemOriginationCode attribute.
      * 
-     * @return Returns the referenceFinancialSystemOriginationCode
+     * @return - Returns the referenceFinancialSystemOriginationCode
      * 
      */
     public String getReferenceFinancialSystemOriginationCode() {
@@ -558,7 +566,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the referenceFinancialDocumentNumber attribute.
      * 
-     * @return Returns the referenceFinancialDocumentNumber
+     * @return - Returns the referenceFinancialDocumentNumber
      * 
      */
     public String getReferenceFinancialDocumentNumber() {
@@ -579,7 +587,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentReversalDate attribute.
      * 
-     * @return Returns the financialDocumentReversalDate
+     * @return - Returns the financialDocumentReversalDate
      * 
      */
     public Date getFinancialDocumentReversalDate() {
@@ -600,7 +608,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionEncumbranceUpdateCode attribute.
      * 
-     * @return Returns the transactionEncumbranceUpdateCode
+     * @return - Returns the transactionEncumbranceUpdateCode
      * 
      */
     public String getTransactionEncumbranceUpdateCode() {
@@ -621,7 +629,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionPostingDate attribute.
      * 
-     * @return Returns the transactionPostingDate
+     * @return - Returns the transactionPostingDate
      * 
      */
     public Date getTransactionPostingDate() {
@@ -642,7 +650,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionDateTimeStamp attribute.
      * 
-     * @return Returns the transactionDateTimeStamp
+     * @return - Returns the transactionDateTimeStamp
      * 
      */
     public Date getTransactionDateTimeStamp() {
@@ -663,7 +671,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetYear attribute.
      * 
-     * @return Returns the budgetYear
+     * @return - Returns the budgetYear
      * 
      */
     public String getBudgetYear() {
@@ -684,7 +692,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObject attribute.
      * 
-     * @return Returns the financialObject
+     * @return - Returns the financialObject
      * 
      */
     public ObjectCode getFinancialObject() {
@@ -704,7 +712,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the account attribute.
      * 
-     * @return Returns the account
+     * @return - Returns the account
      * 
      */
     public Account getAccount() {
@@ -724,7 +732,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -760,7 +768,7 @@ public class EntryMove extends PersistableBusinessObjectBase {
         m.put("universityFiscalPeriodCode", this.universityFiscalPeriodCode);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
         m.put("financialSystemOriginationCode", this.financialSystemOriginationCode);
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         if (this.transactionLedgerEntrySequenceNumber != null) {
             m.put("transactionLedgerEntrySequenceNumber", this.transactionLedgerEntrySequenceNumber.toString());
         }

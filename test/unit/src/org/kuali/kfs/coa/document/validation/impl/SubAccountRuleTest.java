@@ -1,38 +1,37 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.rules;
 
-import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
-import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapEmpty;
-import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapSize;
-
 import org.kuali.KeyConstants;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.core.bo.user.AuthenticationUserId;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.SubAccount;
-import org.kuali.test.WithTestSpringContext;
-import org.kuali.test.fixtures.UserNameFixture;
 
-@WithTestSpringContext(session = KHUNTLEY)
+@WithTestSpringContext
 public class SubAccountRuleTest extends ChartRuleTestBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SubAccountRuleTest.class);
@@ -45,8 +44,8 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
     private static final String NEW_SUBACCOUNT_NAME = "A New SubAccount";
 
     // CG authorized test users
-    private static final UserNameFixture GOOD_CG_USERID = UserNameFixture.KCOPLEY;
-    private static final UserNameFixture BAD_CG_USERID = UserNameFixture.JHAVENS;
+    private static final String GOOD_CG_USERID = "KCOPLEY"; // KCOPLEY
+    private static final String BAD_CG_USERID = "JHAVENS"; // JHAVENS
 
     // CG bad fund group test
     private static final String BAD_FUND_GRP_CHART = "BL";
@@ -60,7 +59,13 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
 
     SubAccount newSubAccount;
     SubAccount oldSubAccount;
+    SubAccountRule rule;
     MaintenanceDocument maintDoc;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        rule = new SubAccountRule();
+    }
 
     /**
      * 
@@ -81,7 +86,7 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
      * @param finReportChartCode
      * @param finReportOrgCode
      * @param finReportingCode
-     * @return returns a SubAccount instance populated with the data provided
+     * @return - returns a SubAccount instance populated with the data provided
      * 
      */
     private SubAccount newSubAccount(String chartOfAccountsCode, String accountNumber, String subAccountNumber, String subAccountName, boolean subAccountActiveIndicator, String finReportChartCode, String finReportOrgCode, String finReportingCode) {
@@ -126,7 +131,7 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
      * @param costShareChartCode
      * @param costShareAccountNumber
      * @param costShareSubAccountNumber
-     * @return returns a SubAccount instance populated with the data provided
+     * @return - returns a SubAccount instance populated with the data provided
      * 
      */
     private SubAccount newA21SubAccount(String chartOfAccountsCode, String accountNumber, String subAccountNumber, String subAccountName, boolean subAccountActiveIndicator, String finReportChartCode, String finReportOrgCode, String finReportingCode, String subAccountTypeCode, String icrTypeCode, String finSeriesId, String icrChartCode, String icrAccountNumber, boolean offCampusCode, String costShareChartCode, String costShareAccountNumber, String costShareSubAccountNumber) {
@@ -154,10 +159,10 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
         return subAccount;
     }
 
-    private UniversalUser createKualiUser(String userid) {
-        UniversalUser user = new UniversalUser();
+    private KualiUser createKualiUser(String userid) {
+        KualiUser user = new KualiUser();
         try {
-            user = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(userid));
+            user = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(userid));
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -167,66 +172,62 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
     }
 
     public void testCheckForPartiallyEnteredReportingFields_nullChartAndAccount() {
-        SubAccountRule rule = new SubAccountRule();
 
         // setup rule, document, and bo
         newSubAccount = newSubAccount(null, null, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null);
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
 
         // confirm that there are no errors to begin with
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
 
         // run the rule, should return true
         assertEquals(true, rule.checkForPartiallyEnteredReportingFields());
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
 
     }
 
     public void testCheckForPartiallyEnteredReportingFields_goodChartNullAccount() {
-        SubAccountRule rule = new SubAccountRule();
 
         // setup rule, document, and bo
         newSubAccount = newSubAccount(GOOD_CHART, null, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null);
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
 
         // confirm that there are no errors to begin with
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
 
         // run the rule, should return true
         assertEquals(true, rule.checkForPartiallyEnteredReportingFields());
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
 
     }
 
     public void testCheckForPartiallyEnteredReportingFields_nullChartGoodAccount() {
-        SubAccountRule rule = new SubAccountRule();
 
         // setup rule, document, and bo
         newSubAccount = newSubAccount(null, GOOD_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null);
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
 
         // confirm that there are no errors to begin with
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
 
         // run the rule, should return true
         assertEquals(true, rule.checkForPartiallyEnteredReportingFields());
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
 
     }
 
     public void testCheckForPartiallyEnteredReportingFields_goodChartAndAccount() {
-        SubAccountRule rule = new SubAccountRule();
 
         // setup rule, document, and bo
         newSubAccount = newSubAccount(GOOD_CHART, GOOD_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null);
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
 
         // confirm that there are no errors to begin with
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
 
         // run the rule, should return true
         assertEquals(true, rule.checkForPartiallyEnteredReportingFields());
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
 
     }
 
@@ -237,14 +238,16 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
 
         // confirm that there are no errors to begin with
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
 
         // run the rule, should return true
         boolean result = rule.checkForPartiallyEnteredReportingFields();
+        showErrorMap();
         assertEquals(false, result);
-        assertGlobalErrorMapSize(1);
+        assertErrorCount(1);
         assertGlobalErrorExists(KeyConstants.ERROR_DOCUMENT_SUBACCTMAINT_RPTCODE_ALL_FIELDS_IF_ANY_FIELDS);
-        GlobalVariables.getErrorMap().clear();
+        clearErrors();
+
     }
 
     public void testCheckForPartiallyEnteredReportingFields_notAllFinReportCodesEntered() {
@@ -279,15 +282,14 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
      * 
      * This method simulates a user that has permission to deal with CG accounts
      */
-    public void testIsCgAuthorized_goodUser() throws UserNotFoundException {
-        SubAccountRule rule = new SubAccountRule();
-        UniversalUser user = GOOD_CG_USERID.getUniversalUser();
+    public void testIsCgAuthorized_goodUser() {
+        KualiUser user = createKualiUser(GOOD_CG_USERID);
         // setup rule, document, and bo
         newSubAccount = newSubAccount(GOOD_CHART, GOOD_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null);
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
 
         // confirm that there are no errors to begin with
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
         assertEquals(true, rule.isCgAuthorized(user));
 
     }
@@ -296,44 +298,42 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
      * 
      * This method simulates a user that does not have permission to deal with CG accounts
      */
-    public void testIsCgAuthorized_badUser() throws UserNotFoundException {
-        SubAccountRule rule = new SubAccountRule();
-        UniversalUser user = BAD_CG_USERID.getUniversalUser();
+    public void testIsCgAuthorized_badUser() {
+        KualiUser user = createKualiUser(BAD_CG_USERID);
         // setup rule, document, and bo
         newSubAccount = newSubAccount(GOOD_CHART, GOOD_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null);
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
 
         // confirm that there are no errors to begin with
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
         assertEquals(false, rule.isCgAuthorized(user));
     }
 
     public void testCheckCgRules_badFundGroup() {
-        SubAccountRule rule = new SubAccountRule();
         // setup rule, document, and bo
         newSubAccount = newSubAccount(BAD_FUND_GRP_CHART, BAD_FUND_GRP_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null);
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
 
         // confirm that there are no errors to begin with
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
         assertEquals(true, rule.checkCgRules(maintDoc));
     }
 
     public void testCheckCgRules_badA21SubAccountAccountType() throws Exception {
-        SubAccountRule rule = new SubAccountRule();
         // setup rule, document, and bo
         // newSubAccount = newSubAccount(GOOD_CHART, GOOD_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null,
         // null);
         newSubAccount = newA21SubAccount(GOOD_FUND_GRP_CHART, GOOD_FUND_GRP_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null, BAD_SUB_ACCT_TYPE, null, null, null, null, false, null, null, null);
         String fieldName = "a21SubAccount.subAccountTypeCode";
+        changeCurrentUser(GOOD_CG_USERID);
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
         rule.setCgAuthorized(true);
 
         // confirm that there are no errors to begin with
-        assertGlobalErrorMapEmpty();
+        assertErrorCount(0);
         assertEquals(false, rule.checkCgRules(maintDoc));
         assertFieldErrorExists(fieldName, KeyConstants.ERROR_DOCUMENT_SUBACCTMAINT_INVALI_SUBACCOUNT_TYPE_CODES);
-        assertGlobalErrorMapSize(1);
+        assertErrorCount(1);
     }
 
     /**

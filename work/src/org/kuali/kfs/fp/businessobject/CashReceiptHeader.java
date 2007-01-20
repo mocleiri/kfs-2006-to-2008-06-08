@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/CashReceiptHeader.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +23,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.financial.document.CashReceiptDocument;
-import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class CashReceiptHeader extends PersistableBusinessObjectBase {
+public class CashReceiptHeader extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private String explanation;
     private Integer nextCheckSequenceId;
     private Integer nextCreditCardCashReceiptLineNumber;
@@ -52,30 +53,30 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
     /**
      * Gets the explanation attribute.
      * 
-     * @return Returns the explanation
+     * @return - Returns the explanation
      * 
      */
     public String getExplanation() {
@@ -96,7 +97,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     /**
      * Gets the nextCheckSequenceId attribute.
      * 
-     * @return Returns the nextCheckSequenceId
+     * @return - Returns the nextCheckSequenceId
      * 
      */
     public Integer getNextCheckSequenceId() {
@@ -117,7 +118,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     /**
      * Gets the nextCreditCardCashReceiptLineNumber attribute.
      * 
-     * @return Returns the nextCreditCardCashReceiptLineNumber
+     * @return - Returns the nextCreditCardCashReceiptLineNumber
      * 
      */
     public Integer getNextCreditCardCashReceiptLineNumber() {
@@ -138,7 +139,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     /**
      * Gets the nextCreditCardCashieringDocumentLineNumber attribute.
      * 
-     * @return Returns the nextCreditCardCashieringDocumentLineNumber
+     * @return - Returns the nextCreditCardCashieringDocumentLineNumber
      * 
      */
     public Integer getNextCreditCardCashieringDocumentLineNumber() {
@@ -159,7 +160,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     /**
      * Gets the nextRevolvingFundLineNumber attribute.
      * 
-     * @return Returns the nextRevolvingFundLineNumber
+     * @return - Returns the nextRevolvingFundLineNumber
      * 
      */
     public Integer getNextRevolvingFundLineNumber() {
@@ -180,7 +181,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     /**
      * Gets the nextAdvanceDepositLineNumber attribute.
      * 
-     * @return Returns the nextAdvanceDepositLineNumber
+     * @return - Returns the nextAdvanceDepositLineNumber
      * 
      */
     public Integer getNextAdvanceDepositLineNumber() {
@@ -201,7 +202,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     /**
      * Gets the workgroupName attribute.
      * 
-     * @return Returns the workgroupName
+     * @return - Returns the workgroupName
      * 
      */
     public String getWorkgroupName() {
@@ -222,7 +223,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     /**
      * Gets the depositDate attribute.
      * 
-     * @return Returns the depositDate
+     * @return - Returns the depositDate
      * 
      */
     public Date getDepositDate() {
@@ -243,7 +244,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     /**
      * Gets the cashReceiptDocument attribute.
      * 
-     * @return Returns the cashReceiptDocument
+     * @return - Returns the cashReceiptDocument
      * 
      */
     public CashReceiptDocument getCashReceiptDocument() {
@@ -263,7 +264,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
     /**
      * Gets the depositCashReceiptControl list.
      * 
-     * @return Returns the depositCashReceiptControl list
+     * @return - Returns the depositCashReceiptControl list
      * 
      */
     public List getDepositCashReceiptControl() {
@@ -285,7 +286,7 @@ public class CashReceiptHeader extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 }

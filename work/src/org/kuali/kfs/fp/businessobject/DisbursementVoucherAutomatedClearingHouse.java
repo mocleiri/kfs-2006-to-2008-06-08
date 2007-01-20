@@ -1,29 +1,38 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Financial Transactions Team ()
  */
-public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusinessObjectBase {
+public class DisbursementVoucherAutomatedClearingHouse extends BusinessObjectBase {
 
     private String disbursementVoucherAutomatedClearingHouseProfileNumber;
     private String disbVchrPaymentMethodCode;
@@ -49,7 +58,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbursementVoucherAutomatedClearingHouseProfileNumber attribute.
      * 
-     * @return Returns the disbursementVoucherAutomatedClearingHouseProfileNumber
+     * @return - Returns the disbursementVoucherAutomatedClearingHouseProfileNumber
      * 
      */
     public String getDisbursementVoucherAutomatedClearingHouseProfileNumber() {
@@ -71,7 +80,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbVchrPaymentMethodCode attribute.
      * 
-     * @return Returns the disbVchrPaymentMethodCode
+     * @return - Returns the disbVchrPaymentMethodCode
      * 
      */
     public String getDisbVchrPaymentMethodCode() {
@@ -92,7 +101,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbursementVoucherBankName attribute.
      * 
-     * @return Returns the disbursementVoucherBankName
+     * @return - Returns the disbursementVoucherBankName
      * 
      */
     public String getDisbursementVoucherBankName() {
@@ -113,7 +122,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbVchrBankRoutingNumber attribute.
      * 
-     * @return Returns the disbVchrBankRoutingNumber
+     * @return - Returns the disbVchrBankRoutingNumber
      * 
      */
     public String getDisbVchrBankRoutingNumber() {
@@ -134,7 +143,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbVchrBankCityName attribute.
      * 
-     * @return Returns the disbVchrBankCityName
+     * @return - Returns the disbVchrBankCityName
      * 
      */
     public String getDisbVchrBankCityName() {
@@ -155,7 +164,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbVchrBankStateCode attribute.
      * 
-     * @return Returns the disbVchrBankStateCode
+     * @return - Returns the disbVchrBankStateCode
      * 
      */
     public String getDisbVchrBankStateCode() {
@@ -176,7 +185,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbVchrBankCountryName attribute.
      * 
-     * @return Returns the disbVchrBankCountryName
+     * @return - Returns the disbVchrBankCountryName
      * 
      */
     public String getDisbVchrBankCountryName() {
@@ -197,7 +206,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbVchrAttentionLineText attribute.
      * 
-     * @return Returns the disbVchrAttentionLineText
+     * @return - Returns the disbVchrAttentionLineText
      * 
      */
     public String getDisbVchrAttentionLineText() {
@@ -218,7 +227,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbVchrAdditionalWireText attribute.
      * 
-     * @return Returns the disbVchrAdditionalWireText
+     * @return - Returns the disbVchrAdditionalWireText
      * 
      */
     public String getDisbVchrAdditionalWireText() {
@@ -239,7 +248,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbVchrPayeeAccountNumber attribute.
      * 
-     * @return Returns the disbVchrPayeeAccountNumber
+     * @return - Returns the disbVchrPayeeAccountNumber
      * 
      */
     public String getDisbVchrPayeeAccountNumber() {
@@ -260,7 +269,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbursementVoucherPayeeAccountName attribute.
      * 
-     * @return Returns the disbursementVoucherPayeeAccountName
+     * @return - Returns the disbursementVoucherPayeeAccountName
      * 
      */
     public String getDisbursementVoucherPayeeAccountName() {
@@ -281,7 +290,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbursementVoucherPayeeAccountTypeCode attribute.
      * 
-     * @return Returns the disbursementVoucherPayeeAccountTypeCode
+     * @return - Returns the disbursementVoucherPayeeAccountTypeCode
      * 
      */
     public String getDisbursementVoucherPayeeAccountTypeCode() {
@@ -302,7 +311,7 @@ public class DisbursementVoucherAutomatedClearingHouse extends PersistableBusine
     /**
      * Gets the disbursementVoucherWireTransferFeeWaiverIndicator attribute.
      * 
-     * @return Returns the disbursementVoucherWireTransferFeeWaiverIndicator
+     * @return - Returns the disbursementVoucherWireTransferFeeWaiverIndicator
      * 
      */
     public boolean isDisbursementVoucherWireTransferFeeWaiverIndicator() {
