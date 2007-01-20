@@ -1,5 +1,7 @@
 <%--
- Copyright 2006 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/financial/DepositWizard.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -156,19 +158,19 @@ function checkAllOrNone() {
 						<td>
 						<div align="center"><html:checkbox
 							property="depositWizardHelper[${ctr}].selectedValue"
-							value="${cashReceipt.documentNumber}" /></div>
+							value="${cashReceipt.financialDocumentNumber}" /></div>
 						</td>
 						<td>
 						<div align="center"><b>${(ctr + 1)}</b></div>
 						</td>
 						<td>
 						<div align="center"><a
-							href="financialCashReceipt.do?methodToCall=docHandler&docId=${cashReceipt.documentHeader.documentNumber}&command=displayDocSearchView"
+							href="financialCashReceipt.do?methodToCall=docHandler&docId=${cashReceipt.documentHeader.financialDocumentNumber}&command=displayDocSearchView"
 							target="new"> <kul:htmlControlAttribute
-							property="depositableCashReceipt[${ctr}].documentNumber"
-							attributeEntry="${cashReceiptAttributes.documentNumber}"
+							property="depositableCashReceipt[${ctr}].financialDocumentNumber"
+							attributeEntry="${cashReceiptAttributes.financialDocumentNumber}"
 							readOnly="true" /> </a> <html:hidden
-							property="depositableCashReceipt[${ctr}].documentHeader.documentNumber" />
+							property="depositableCashReceipt[${ctr}].documentHeader.financialDocumentNumber" />
 						</div>
 						</td>
 						<td>
