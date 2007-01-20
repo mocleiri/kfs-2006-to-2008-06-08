@@ -1,5 +1,7 @@
 <%--
- Copyright 2006 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/purap/Requisition.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -44,9 +46,7 @@
         documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
 
     <purap:delivery
-        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" 
-        displayRequisitionFields="true"
-        />
+        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
 
     <purap:additional
         documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"

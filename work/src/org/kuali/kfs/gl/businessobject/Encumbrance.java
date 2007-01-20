@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/Encumbrance.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.Options;
 import org.kuali.core.bo.OriginationCode;
 import org.kuali.core.document.DocumentType;
@@ -35,7 +37,7 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
  * 
  * 
  */
-public class Encumbrance extends PersistableBusinessObjectBase {
+public class Encumbrance extends BusinessObjectBase {
     static final long serialVersionUID = -7494473472438516396L;
 
     private Integer universityFiscalYear;
@@ -66,7 +68,7 @@ public class Encumbrance extends PersistableBusinessObjectBase {
     private OriginationCode originationCode;
     private Options option;
 
-    private TransientBalanceInquiryAttributes dummyBusinessObject;
+    private DummyBusinessObject dummyBusinessObject;
 
     public Encumbrance() {
     }
@@ -87,7 +89,7 @@ public class Encumbrance extends PersistableBusinessObjectBase {
         accountLineEncumbranceAmount = new KualiDecimal("0");
         accountLineEncumbranceClosedAmount = new KualiDecimal("0");
         accountLineEncumbrancePurgeCode = " ";
-        this.dummyBusinessObject = new TransientBalanceInquiryAttributes();
+        this.dummyBusinessObject = new DummyBusinessObject();
     }
 
     protected LinkedHashMap toStringMapper() {
@@ -416,7 +418,7 @@ public class Encumbrance extends PersistableBusinessObjectBase {
      * 
      * @return Returns the dummyBusinessObject.
      */
-    public TransientBalanceInquiryAttributes getDummyBusinessObject() {
+    public DummyBusinessObject getDummyBusinessObject() {
         return dummyBusinessObject;
     }
 
@@ -425,7 +427,7 @@ public class Encumbrance extends PersistableBusinessObjectBase {
      * 
      * @param dummyBusinessObject The dummyBusinessObject to set.
      */
-    public void setDummyBusinessObject(TransientBalanceInquiryAttributes dummyBusinessObject) {
+    public void setDummyBusinessObject(DummyBusinessObject dummyBusinessObject) {
         this.dummyBusinessObject = dummyBusinessObject;
     }
 
