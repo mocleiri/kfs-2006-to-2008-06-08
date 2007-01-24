@@ -441,7 +441,7 @@
 		<copy file="${ant.project.name}-${build.environment}.war" todir="${build.appserver.directory}" />
 		<ant target="clean-project" />
 		<copy todir="${packaging.distribution.directory}" includeemptydirs="false">
-			<fileset dir="${basedir}" includes="*.*,licenses/**/*,build/**/*" excludes="${packaged.build.properties.files}" />
+			<fileset dir="${basedir}" includes="*.*,${licenses.directory}/**/*,${build.directory}/**/*" excludes="${packaged.build.properties.files}" />
 		</copy>
 	</target>
 	
@@ -573,6 +573,9 @@
 			<propertyset refid="${workflow.application}-properties" />
 		</ant>
 		<copy file="${workflow.project.directory}/dist/workflow-client-${workflow.version}.jar" todir="${lib.directory}" overwrite="true" />
+		<copy todir="${licenses.directory}">
+			<fileset dir="${workflow.project.directory}/${licenses.directory}" />
+		</copy>
 		<!--<ant dir="${workflow.project.directory}" target="bundle-workflow" inheritall="false">
 			<propertyset refid="${workflow.application}-properties" />
 		</ant>
