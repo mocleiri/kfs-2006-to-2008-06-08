@@ -64,9 +64,10 @@
 		<condition property="base.cas.url" value="${local.environment.url}">
 			<equals arg1="${is.local.cas.build}" arg2="true" />
 		</condition>
+		<!--
 		<condition property="base.workflow.url" value="${local.environment.url}">
 			<equals arg1="${is.local.workflow.build}" arg2="true" />
-		</condition>
+		</condition>-->
 		<condition property="base.application.url" value="${prod.environment.url}">
 			<or>
 				<equals arg1="${build.environment}" arg2="ptd" />
@@ -85,17 +86,18 @@
 				<equals arg1="${build.environment}" arg2="gl" />
 			</or>
 		</condition>
+		<!--
 		<condition property="base.workflow.url" value="${prod.environment.url}">
 			<or>
 				<equals arg1="${build.environment}" arg2="ptd" />
 				<equals arg1="${build.environment}" arg2="gl" />
 			</or>
-		</condition>
+		</condition>-->
 		<property name="base.application.url" value="${test.environment.url}" />
 		<property name="base.htdocs.url" value="${test.environment.url}" />
 		<property name="htdocs.url" value="${base.htdocs.url}${ant.project.name}/${build.environment}/" />
 		<property name="base.cas.url" value="${test.environment.url}" />
-		<property name="base.workflow.url" value="${test.environment.url}" />
+		<!--<property name="base.workflow.url" value="${test.environment.url}" />-->
 		<condition property="local.plugin.classes" value="${local.plugin.classes.token}">
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
@@ -150,8 +152,9 @@
 			<filter token="htdocs-logs-url" value="${htdocs.url}logs/" />
 			<filter token="htdocs-staging-url" value="${htdocs.url}staging/" />
 			<filter token="cas-url" value="${base.cas.url}${ant.project.name}-${build.environment}/cas" />
-			<filter token="base-workflow-url" value="${base.workflow.url}" />
-			<filter token="workflow-url" value="${base.workflow.url}${workflow.application}-${build.environment}" />
+			<!--<filter token="base-workflow-url" value="${base.workflow.url}" />
+			<filter token="workflow-url" value="${base.workflow.url}${workflow.application}-${build.environment}" />-->
+			<filter token="workflow-url" value="${base.application.url}${ant.project.name}-${build.environment}/${workflow.application}" />
 			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
 			<filter token="driver-class" value="${driver.class}" />
 			<filter token="datasource-url" value="${datasource.url}" />
@@ -271,6 +274,7 @@
 		</delete>
 		<delete file="${workflow.usr.directory}/workflow.xml" />
 		<delete dir="${plugin.deploy.directory}" failonerror="false" />
+		<delete dir="work/web-root/en" failonerror="false"/>
 	</target>
 	
 	<!-- wrapper based on naming convention required by workflow build script -->
@@ -469,10 +473,12 @@
 	</target>
 
 	<target name="dist-workflow-local" if="dist.workflow.local" depends="filter-workflow-local,make-plugin,make-plugin-local">
-		<ant target="update-war">
+		<!-- no longer copy the WAR -->
+		<!--<ant target="update-war">
 			<property name="source.war.directory" value="${build.workflow.appserver.directory}" />
 			<property name="application" value="${workflow.application}" />
-		</ant>
+		</ant>-->
+		<unzip dest="work/web-root" src="build/configurationFiles/workflow/appserver/workflow-embedded-content.zip"/>
 		<copy todir="${plugin.deploy.directory}">
 			<fileset dir="${plugin.directory}" excludes="**/*.jar"/>
 		</copy>
@@ -511,10 +517,16 @@
 		  <mapper type="glob" from="${workflow.application}.*" to="*"/>
 		</propertyset>
 		<ant dir="${workflow.project.directory}" target="clean" inheritall="false"/>
+		<ant dir="${workflow.project.directory}" target="dist-embedded-web-content" inheritall="false">
+			<propertyset refid="en-properties" />
+		</ant>
+		<copy file="${workflow.project.directory}/dist/workflow-embedded-content.zip" todir="${build.workflow.appserver.directory}" overwrite="true" />		
+		<!--
 		<ant dir="${workflow.project.directory}" target="dist" inheritall="false">
 			<propertyset refid="en-properties" />
 		</ant>
 		<copy file="${workflow.project.directory}/${workflow.application}-${build.environment}.war" todir="${build.workflow.appserver.directory}" overwrite="true" />
+		-->
 		<ant dir="${workflow.project.directory}" target="dist-client-not-iu" inheritall="false">
 			<propertyset refid="${workflow.application}-properties" />
 		</ant>
