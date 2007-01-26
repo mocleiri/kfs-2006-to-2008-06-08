@@ -19,9 +19,9 @@ package org.kuali.module.chart.dao.ojb;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.dao.ProjectCodeDao;
-import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
  * 
  * 
  */
-public class ProjectCodeDaoOjb extends PersistenceBrokerDaoSupport implements ProjectCodeDao {
+public class ProjectCodeDaoOjb extends PlatformAwareDaoBaseOjb implements ProjectCodeDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProjectCodeDaoOjb.class);
 
     /**

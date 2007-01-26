@@ -19,9 +19,9 @@ package org.kuali.module.chart.dao.ojb;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.dao.SubAccountDao;
-import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
  * 
  * 
  */
-public class SubAccountDaoOjb extends PersistenceBrokerDaoSupport implements SubAccountDao {
+public class SubAccountDaoOjb extends PlatformAwareDaoBaseOjb implements SubAccountDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SubAccountDaoOjb.class);
 
     /**
