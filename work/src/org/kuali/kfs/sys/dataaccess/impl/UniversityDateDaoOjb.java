@@ -25,15 +25,15 @@ import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.PropertyConstants;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.UniversityDateDao;
-import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * 
  * 
  */
-public class UniversityDateDaoOjb extends PersistenceBrokerDaoSupport implements UniversityDateDao {
+public class UniversityDateDaoOjb extends PlatformAwareDaoBaseOjb implements UniversityDateDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(UniversityDateDaoOjb.class);
 
     public UniversityDateDaoOjb() {
