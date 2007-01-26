@@ -29,17 +29,17 @@ import java.util.Map;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.util.Guid;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.dao.OriginEntryGroupDao;
-import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  *  
- * @version $Id: OriginEntryGroupDaoOjb.java,v 1.15.2.5.2.2 2007-01-17 20:05:49 aapotts Exp $
+ * @version $Id: OriginEntryGroupDaoOjb.java,v 1.15.2.5.2.3 2007-01-26 20:19:42 aapotts Exp $
  */
-public class OriginEntryGroupDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryGroupDao {
+public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements OriginEntryGroupDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupDaoOjb.class);
 
     private static final String DATE = "date";
