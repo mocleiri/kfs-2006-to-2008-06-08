@@ -28,13 +28,13 @@ import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.Constants;
 import org.kuali.core.AccountResponsibility;
 import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 import org.kuali.module.chart.dao.AccountDao;
-import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * This class is the OJB implementation of the AccountDao interface.
@@ -42,7 +42,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
  * 
  */
 
-public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements AccountDao {
+public class AccountDaoOjb extends PlatformAwareDaoBaseOjb implements AccountDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountDaoOjb.class);
 
     /**
