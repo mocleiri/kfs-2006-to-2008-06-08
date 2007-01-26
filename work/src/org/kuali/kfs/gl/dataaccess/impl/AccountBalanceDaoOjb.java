@@ -32,20 +32,19 @@ import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.PropertyConstants;
-import org.kuali.core.dao.ojb.AbstractDaoOjb;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.OptionsService;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.AccountBalanceDao;
 import org.kuali.module.gl.util.OJBUtility;
-import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * TODO: remove Oracle specific code!
  * 
  */
-public class AccountBalanceDaoOjb extends AbstractDaoOjb implements AccountBalanceDao {
+public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements AccountBalanceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceDaoOjb.class);
 
     private DateTimeService dateTimeService;
