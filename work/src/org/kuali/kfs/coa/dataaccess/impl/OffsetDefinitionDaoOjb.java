@@ -19,6 +19,7 @@ package org.kuali.module.chart.dao.ojb;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.dao.OffsetDefinitionDao;
 import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
@@ -29,7 +30,7 @@ import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
  * 
  * 
  */
-public class OffsetDefinitionDaoOjb extends PersistenceBrokerDaoSupport implements OffsetDefinitionDao {
+public class OffsetDefinitionDaoOjb extends PlatformAwareDaoBaseOjb implements OffsetDefinitionDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OffsetDefinitionDaoOjb.class);
 
     /*
