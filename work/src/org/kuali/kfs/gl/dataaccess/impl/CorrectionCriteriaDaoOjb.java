@@ -22,11 +22,11 @@ import java.util.List;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.gl.bo.CorrectionCriteria;
 import org.kuali.module.gl.dao.CorrectionCriteriaDao;
-import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-public class CorrectionCriteriaDaoOjb extends PersistenceBrokerDaoSupport implements CorrectionCriteriaDao {
+public class CorrectionCriteriaDaoOjb extends PlatformAwareDaoBaseOjb implements CorrectionCriteriaDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionCriteriaDaoOjb.class);
 
     /**
