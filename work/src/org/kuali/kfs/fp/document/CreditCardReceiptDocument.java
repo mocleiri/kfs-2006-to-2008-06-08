@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/CreditCardReceiptDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -130,7 +132,7 @@ public class CreditCardReceiptDocument extends CashReceiptFamilyBase {
     public final void prepareNewCreditCardReceipt(CreditCardDetail creditCardReceiptDetail) {
         creditCardReceiptDetail.setFinancialDocumentLineNumber(this.nextCcCrLineNumber);
         creditCardReceiptDetail.setFinancialDocumentColumnTypeCode(Constants.CreditCardReceiptConstants.CASH_RECEIPT_CREDIT_CARD_RECEIPT_COLUMN_TYPE_CODE);
-        creditCardReceiptDetail.setDocumentNumber(this.getDocumentNumber());
+        creditCardReceiptDetail.setFinancialDocumentNumber(this.getFinancialDocumentNumber());
         creditCardReceiptDetail.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(this.getClass()));
     }
 
