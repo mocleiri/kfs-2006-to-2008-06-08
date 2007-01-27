@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/document/web/struts/CorrectionForm.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +58,6 @@ public class CorrectionForm extends KualiDocumentFormBase {
     private boolean manualEditFlag = false;
     private boolean deleteFileFlag = false;
     private boolean showOutputFlag = false;
-    private boolean showSummaryOutputFlag = false;
     private Collection allEntries;
     private Collection matchingEntries;
     private String entryUniversityFiscalYear;
@@ -349,13 +350,5 @@ public class CorrectionForm extends KualiDocumentFormBase {
 
     public void setManualEditFlag(boolean manualEditFlag) {
         this.manualEditFlag = manualEditFlag;
-    }
-
-    public boolean getShowSummaryOutputFlag() {
-        return showSummaryOutputFlag;
-    }
-
-    public void setShowSummaryOutputFlag(boolean showSummaryOutputFlag) {
-        this.showSummaryOutputFlag = showSummaryOutputFlag;
     }
 }
