@@ -1,5 +1,7 @@
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/datadictionary/SubAccountMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -44,8 +46,7 @@
         <summary>Sub-Account maintenance document</summary>
         <description>Document used to create or update Sub-Account objects</description>
         <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_SUB_ACCOUNT" />
-
-        <allowsCopy>true</allowsCopy>
+        
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />

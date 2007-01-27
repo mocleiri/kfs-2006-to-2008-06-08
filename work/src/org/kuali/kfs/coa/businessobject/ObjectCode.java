@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/ObjectCode.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@ import java.util.LinkedHashMap;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.KualiCode;
 import org.kuali.core.bo.Options;
 import org.kuali.core.bo.Summarizable;
@@ -33,7 +35,7 @@ import org.kuali.module.gl.bo.SufficientFundRebuild;
 /**
  * 
  */
-public class ObjectCode extends PersistableBusinessObjectBase implements Summarizable {
+public class ObjectCode extends BusinessObjectBase implements Summarizable {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjectCode.class);
 
     private static final long serialVersionUID = -965833141452795485L;

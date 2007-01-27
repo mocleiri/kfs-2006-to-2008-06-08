@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/OriginEntryDao.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,6 +27,7 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * 
+ * @version $Id: OriginEntryDao.java,v 1.17.2.9 2006-10-14 02:29:33 jbmorris Exp $
  */
 public interface OriginEntryDao {
     public static final int SORT_DOCUMENT = 1;

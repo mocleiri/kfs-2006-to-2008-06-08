@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/integration/src/org/kuali/kfs/fp/document/DisbursementVoucherDocumentTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +42,6 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
 import org.kuali.test.DocumentTestUtils;
@@ -92,7 +93,7 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
 
         dvParameter.setDisbVchrContactPersonName(GlobalVariables.getUserSession().getUniversalUser().getPersonName());
         // set to tomorrow
-        Calendar calendar = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
+        Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.clear(Calendar.MILLISECOND);
         calendar.clear(Calendar.SECOND);

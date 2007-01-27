@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,12 +54,11 @@ import org.kuali.module.gl.util.FatalErrorException;
 import org.kuali.module.gl.util.ObjectHelper;
 import org.kuali.module.gl.util.OriginEntryOffsetPair;
 import org.kuali.module.gl.util.Summary;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class owns the logic to perform year end tasks.
- */
-@Transactional
+ * 
+  */
 public class YearEndServiceImpl implements YearEndService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(YearEndServiceImpl.class);
 
@@ -74,8 +75,8 @@ public class YearEndServiceImpl implements YearEndService {
     private EncumbranceClosingRuleHelper encumbranceClosingRuleHelper;
     private ReportService reportService;
 
-    public static final String TRANSACTION_DATE_FORMAT_STRING = "yyyy-MM-dd";
-    
+    public static final DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     public YearEndServiceImpl() {
         super();
     }
@@ -106,7 +107,6 @@ public class YearEndServiceImpl implements YearEndService {
         // 681 003680 ACCEPT VAR-UNIV-DT FROM ENVIRONMENT-VALUE.
 
         try {
-            DateFormat transactionDateFormat = new SimpleDateFormat(TRANSACTION_DATE_FORMAT_STRING);
             varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.TRANSACTION_DT)).getTime());
         }
         catch (ParseException pe) {
@@ -1035,7 +1035,6 @@ public class YearEndServiceImpl implements YearEndService {
 
         Date varTransactionDate;
         try {
-            DateFormat transactionDateFormat = new SimpleDateFormat(TRANSACTION_DATE_FORMAT_STRING);
             varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue(Constants.GENERAL_LEDGER_YEAR_END_SCRIPT, GLConstants.ColumnNames.TRANSACTION_DT)).getTime());
         }
         catch (ParseException e) {
@@ -1116,7 +1115,6 @@ public class YearEndServiceImpl implements YearEndService {
 
         // Get the current date (transaction date).
         try {
-            DateFormat transactionDateFormat = new SimpleDateFormat(TRANSACTION_DATE_FORMAT_STRING);
             varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue(YEAR_END_SCRIPT_NAME, FIELD_TRANSACTION_DATE)).getTime());
         }
         catch (ParseException pe) {

@@ -2,6 +2,8 @@
 <!--
  Copyright 2005-2006 The Kuali Foundation.
  
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/Chart.xml,v $
+ 
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -20,12 +22,12 @@
 
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.Chart">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Chart Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="finCoaManagerUniversal.personName" />
                 <field attributeName="finChartOfAccountDescription" />
@@ -42,11 +44,15 @@
                 <field attributeName="icrIncomeFinancialObjectCode" />
                 <field attributeName="icrExpenseFinancialObjectCd" />
                 <field attributeName="fundBalanceObjectCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Chart Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Chart"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup a Chart</instructions>
 
@@ -243,7 +249,7 @@
 
                 <maxLength>2</maxLength>
                 <required>true</required>
-
+                
                 <control>
                 	<text size="2"/>
                 </control>
@@ -390,7 +396,6 @@
             </relationship>
         </relationships>
 
-		<objectLabel>Chart</objectLabel>
     </businessObject>
 </dictionaryEntry>
 
