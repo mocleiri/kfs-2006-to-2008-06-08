@@ -1,17 +1,24 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will 
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.web.struts.action;
 
@@ -33,8 +40,8 @@ import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.Constants.CashDrawerConstants;
 import org.kuali.core.authorization.DocumentAuthorizer;
-
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
 import org.kuali.core.exceptions.InfrastructureException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.GlobalVariables;
@@ -58,7 +65,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * This class handles actions for the deposit wizard, which is used to create deposits that bundle groupings of Cash Receipt
  * documents.
  * 
- * 
+ * @author Kuali Nervous System Team ()
  */
 public class DepositWizardAction extends KualiAction {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DepositWizardAction.class);
@@ -79,8 +86,10 @@ public class DepositWizardAction extends KualiAction {
         // check authorization manually, since the auth-check isn't inherited by this class
         String cmDocTypeName = SpringServiceLocator.getDataDictionaryService().getDocumentTypeNameByClass(CashManagementDocument.class);
         DocumentAuthorizer cmDocAuthorizer = SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(cmDocTypeName);
-        UniversalUser luser = GlobalVariables.getUserSession().getUniversalUser();
-        cmDocAuthorizer.canInitiate(cmDocTypeName, luser);
+        KualiUser luser = GlobalVariables.getUserSession().getKualiUser();
+        if (!cmDocAuthorizer.canInitiate(cmDocTypeName, luser)) {
+            throw new DocumentTypeAuthorizationException(luser.getUniversalUser().getPersonUserIdentifier(), "add deposits to", cmDocTypeName);
+        }
 
         // populate the outgoing form used by the JSP if it seems empty
         String cmDocId = dwForm.getCashManagementDocId();
@@ -110,13 +119,13 @@ public class DepositWizardAction extends KualiAction {
         if (!cd.isOpen()) {
             CashDrawerStatusCodeFormatter f = new CashDrawerStatusCodeFormatter();
 
-            String cmDocId = cmDoc.getDocumentNumber();
+            String cmDocId = cmDoc.getFinancialDocumentNumber();
             String currentState = cd.getStatusCode();
 
             throw new CashDrawerStateException(verificationUnit, cmDocId, (String) f.format(CashDrawerConstants.STATUS_OPEN), (String) f.format(cd.getStatusCode()));
         }
 
-        dform.setCashManagementDocId(cmDoc.getDocumentNumber());
+        dform.setCashManagementDocId(cmDoc.getFinancialDocumentNumber());
         dform.setCashDrawerVerificationUnit(verificationUnit);
 
         dform.setDepositTypeCode(depositTypeCode);

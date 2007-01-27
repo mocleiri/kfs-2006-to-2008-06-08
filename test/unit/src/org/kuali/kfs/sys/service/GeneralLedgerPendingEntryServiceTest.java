@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/sys/service/GeneralLedgerPendingEntryServiceTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +35,6 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
     private final String docHeaderId = "1003";
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -80,7 +81,7 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
                 generalLedgerPendingEntry = (GeneralLedgerPendingEntry) (entries.next());
                 ++counter;
 
-                System.out.println(counter + ":" + generalLedgerPendingEntry.getDocumentNumber());
+                System.out.println(counter + ":" + generalLedgerPendingEntry.getFinancialDocumentNumber());
             }
         }
         catch (Exception e) {
@@ -95,7 +96,7 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
         GeneralLedgerPendingEntry generalLedgerPendingEntry = new GeneralLedgerPendingEntry();
 
         generalLedgerPendingEntry.setFinancialSystemOriginationCode("01");
-        generalLedgerPendingEntry.setDocumentNumber(docHeaderId);
+        generalLedgerPendingEntry.setFinancialDocumentNumber(docHeaderId);
         generalLedgerPendingEntry.setChartOfAccountsCode("BA");
         generalLedgerPendingEntry.setFinancialObjectCode("1130");
         generalLedgerPendingEntry.setFinancialBalanceTypeCode("AX");
@@ -105,7 +106,7 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
         generalLedgerPendingEntry.setTransactionLedgerEntryAmount(new KualiDecimal("8.8"));
         generalLedgerPendingEntry.setTransactionLedgerEntryDescription("9");
         generalLedgerPendingEntry.setTransactionDebitCreditCode("D");
-        generalLedgerPendingEntry.setTransactionDate(new java.sql.Date(SpringServiceLocator.getDateTimeService().getCurrentDate().getTime()));
+        generalLedgerPendingEntry.setTransactionDate(new java.sql.Date(new java.util.Date().getTime()));
         generalLedgerPendingEntry.setFinancialDocumentTypeCode("12");
         generalLedgerPendingEntry.setTransactionLedgerEntrySequenceNumber(new Integer(1));
         return generalLedgerPendingEntry;
