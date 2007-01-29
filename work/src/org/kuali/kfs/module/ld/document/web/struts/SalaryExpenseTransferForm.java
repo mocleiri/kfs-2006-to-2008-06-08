@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/document/web/struts/SalaryExpenseTransferForm.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +17,7 @@
  */
 package org.kuali.module.labor.web.struts.form;
 
-import static org.kuali.core.util.SpringServiceLocator.getUniversalUserService;
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.kuali.core.bo.SourceAccountingLine;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.labor.document.SalaryExpenseTransferDocument;
 
 /**
@@ -34,9 +27,7 @@ import org.kuali.module.labor.document.SalaryExpenseTransferDocument;
  * 
  * 
  */
-public class SalaryExpenseTransferForm extends LaborDocumentFormBase {
-    private UniversalUser user;
-    private String userId;
+public class SalaryExpenseTransferForm extends KualiTransactionalDocumentFormBase {
 
     /**
      * Constructs a SalaryExpenseTransferForm instance and sets up the appropriately casted document.
@@ -52,53 +43,4 @@ public class SalaryExpenseTransferForm extends LaborDocumentFormBase {
     public SalaryExpenseTransferDocument getSalaryExpenseTransferDocument() {
         return (SalaryExpenseTransferDocument) getDocument();
     }
-    
-    /**
-     * Sets the <code>{@link UniversalUser}</code> through the <code>personUserIdentifier</code> attribute value
-     *
-     * @param uid <code>personUserIdentifier</code>
-     */
-    public void setUserId(String uid) throws UserNotFoundException {
-        if (uid != null) {
-            //  This may happen during populate when there is no initial user
-            user = getUniversalUserService().getUniversalUser(uid);
-        }
-    }
-    
-    /**
-     * Gets the <code>personUserIdentifier</code> attribute value from the <code>{@link UniversalUser}</code> instance
-     *
-     * @return String <code>personUserIdentifier</code>
-     */
-    public String getUserId() {
-        String retval = null;
-        if (user != null) {
-            retval = user.getPersonUniversalIdentifier();
-        }
-        return retval;
-    }
-
-    /**
-     * Sets the <code>{@link UniversalUser}</code> through the <code>personUserIdentifier</code> attribute value
-     *
-     * @param uid <code>personUserIdentifier</code>
-     */
-    public void setPersonName(String personName) throws UserNotFoundException {
-        if (personName != null) {
-            //  This may happen during populate when there is no initial user
-            user = getUniversalUserService().getUniversalUser(personName);
-        }
-    }
-    /**
-     * Gets the <code>personName</code> attribute value from the <code>{@link UniversalUser}</code> instance
-     *
-     * @return String <code>personName</code>
-     */
-    public String getPersonName() {
-        String retval = null;
-        if (user != null) {
-            retval = user.getPersonName();
-        }
-        return retval;
-    }   
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +17,7 @@
  */
 package org.kuali.module.gl.service.impl;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -26,9 +29,7 @@ import org.kuali.module.gl.dao.ReversalDao;
 import org.kuali.module.gl.service.ReversalService;
 import org.kuali.module.gl.util.LedgerEntry;
 import org.kuali.module.gl.util.LedgerEntryHolder;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class ReversalServiceImpl implements ReversalService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ReversalServiceImpl.class);
 

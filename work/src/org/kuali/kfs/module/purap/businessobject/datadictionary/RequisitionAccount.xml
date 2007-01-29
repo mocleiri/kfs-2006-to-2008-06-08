@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -24,22 +9,25 @@
         <inquiry>
             <title>Requisition Account Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountLinePercent" />
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />
+                <field attributeName="itemLineNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
                 <field attributeName="requisitionAccountIdentifier" />
-                <field attributeName="requisitionItemIdentifier" />
+                <field attributeName="requisitionIdentifier" />
                 <field attributeName="subAccountNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Requisition Account Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.RequisitionAccount">Create New</a>]]></menubar>
 
             <instructions>Lookup an Requisition Account</instructions>
 
@@ -55,10 +43,11 @@
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="itemLineNumber" required="false" />
                 <lookupField attributeName="organizationReferenceId" required="false" />
                 <lookupField attributeName="projectCode" required="false" />
                 <lookupField attributeName="requisitionAccountIdentifier" required="false" />
-                <lookupField attributeName="requisitionItemIdentifier" required="false" />
+                <lookupField attributeName="requisitionIdentifier" required="false" />
                 <lookupField attributeName="subAccountNumber" required="false" />
             </lookupFields>
 
@@ -68,10 +57,11 @@
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />
+                <field attributeName="itemLineNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
                 <field attributeName="requisitionAccountIdentifier" />
-                <field attributeName="requisitionItemIdentifier" />
+                <field attributeName="requisitionIdentifier" />
                 <field attributeName="subAccountNumber" />
             </resultFields>
         </lookup>
@@ -153,6 +143,21 @@
                 <description>financialSubObjectCode description...</description>
 			</attribute>
 
+            <attribute name="itemLineNumber" forceUppercase="true">
+                <label>Item Line Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>3</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>itemLineNumber</summary>
+                <description>itemLineNumber description...</description>
+			</attribute>
+
             <attribute name="organizationReferenceId" forceUppercase="true">
                 <label>Organization Reference Id</label>
                 <shortLabel>Id</shortLabel>
@@ -198,19 +203,19 @@
                 <description>requisitionAccountIdentifier description...</description>
 			</attribute>
 
-            <attribute name="requisitionItemIdentifier" forceUppercase="true">
-                <label>Requisition Item Identifier</label>
+            <attribute name="requisitionIdentifier" forceUppercase="true">
+                <label>Requisition Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
-                <maxLength>10</maxLength>
+                <maxLength>8</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="12" />
+                    <text size="10" />
                 </control>
 
-                <summary>requisitionItemIdentifier</summary>
-                <description>requisitionItemIdentifier description...</description>
+                <summary>requisitionIdentifier</summary>
+                <description>requisitionIdentifier description...</description>
 			</attribute>
 
             <attribute name="subAccountNumber" forceUppercase="true">

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/document/SalaryExpenseTransferDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +18,12 @@
 package org.kuali.module.labor.document;
 
 import org.kuali.Constants;
-import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.module.labor.bo.LaborLedgerAccountingLineParser;
 
 /**
  * 
  */
-public class SalaryExpenseTransferDocument extends LaborDocument {
-
-    private String emplid;
-    
-    public String getEmplid() {
-        return emplid;
-    }
-
-    public void setEmplid(String emplid) {
-        this.emplid = emplid;
-    }
+public class SalaryExpenseTransferDocument extends TransactionalDocumentBase {
 
     /**
      * Initializes the array lists and some basic info.
@@ -59,13 +49,4 @@ public class SalaryExpenseTransferDocument extends LaborDocument {
     public String getTargetAccountingLinesSectionTitle() {
         return Constants.TO;
     }
-    
-    /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
-     */
-    @Override
-    public AccountingLineParser getAccountingLineParser() {
-        return new LaborLedgerAccountingLineParser();        
-    }    
 }
-

@@ -1,17 +1,24 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.document;
 
@@ -20,21 +27,17 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kuali.Constants;
-import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.authorization.DocumentActionFlags;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.DocumentAuthorizerBase;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.module.kra.KraConstants;
-import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
 import org.kuali.module.kra.budget.service.BudgetPermissionsService;
 
 /**
  * DocumentAuthorizer class for KRA Budget Documents.
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetDocumentAuthorizer extends DocumentAuthorizerBase {
     private static Log LOG = LogFactory.getLog(BudgetDocumentAuthorizer.class);
@@ -43,71 +46,10 @@ public class BudgetDocumentAuthorizer extends DocumentAuthorizerBase {
      * @see org.kuali.core.authorization.DocumentAuthorizer#getEditMode(org.kuali.core.document.Document,
      *      org.kuali.core.bo.user.KualiUser)
      */
-    public Map getEditMode(Document d, UniversalUser u) {
-        
-        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
-        BudgetPermissionsService permissionsService = SpringServiceLocator.getBudgetPermissionsService();
-        BudgetDocument budgetDocument = (BudgetDocument) d;
-        String permissionCode = AuthorizationConstants.EditMode.UNVIEWABLE;
-        KualiWorkflowDocument workflowDocument = budgetDocument.getDocumentHeader().getWorkflowDocument();
-        
-        // Check default user permissions
-        if (workflowDocument.getInitiatorNetworkId().equalsIgnoreCase(u.getPersonUserIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
-            return finalizeEditMode(budgetDocument, permissionCode);
-        }
-        
-        if (u.getPersonUniversalIdentifier().equals(budgetDocument.getBudget().getBudgetProjectDirectorSystemId())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getApplicationParameterValue(
-                    KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.PROJECT_DIRECTOR_BUDGET_PERMISSION));
-        }
-            
-        // Check ad-hoc user permissions
-        BudgetAdHocPermission budgetAdHocPermission = permissionsService.getBudgetAdHocPermission(budgetDocument.getDocumentNumber(), u.getPersonUniversalIdentifier());
-        if (budgetAdHocPermission != null) {
-            if (KraConstants.PERMISSION_MOD_CODE.equals(budgetAdHocPermission.getBudgetPermissionCode())) {
-                permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
-                return finalizeEditMode(budgetDocument, permissionCode);
-            } else {
-                permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.VIEW_ONLY);
-            }
-        }
-        
-        // Check default org permissions - project director
-        if (!budgetDocument.getBudget().getPersonnel().isEmpty()) {
-            if (permissionsService.isUserInOrgHierarchy(budgetDocument.buildProjectDirectorReportXml(true), u.getPersonUniversalIdentifier())) {
-                permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getApplicationParameterValue(
-                        KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.PROJECT_DIRECTOR_ORG_BUDGET_PERMISSION));
-            }
-        }
-        
-        // Check default org permissions - cost sharing orgs
-        if (permissionsService.isUserInOrgHierarchy(budgetDocument.buildCostShareOrgReportXml(true), u.getPersonUniversalIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getApplicationParameterValue(
-                    KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.COST_SHARE_ORGS_BUDGET_PERMISSION));
-        }
-        
-        // Check ad-hoc org permissions (mod first, then read)
-        if (permissionsService.isUserInOrgHierarchy(budgetDocument.buildAdhocOrgReportXml(KraConstants.PERMISSION_MOD_CODE, true), u.getPersonUniversalIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
-            return finalizeEditMode(budgetDocument, permissionCode);
-        }
-        
-        if (permissionsService.isUserInOrgHierarchy(budgetDocument.buildAdhocOrgReportXml(KraConstants.PERMISSION_READ_CODE, true), u.getPersonUniversalIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.VIEW_ONLY);
-        }
-        
-        // Check global document type permissions
-        if (canModify(workflowDocument.getDocumentType(), u)) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
-            return finalizeEditMode(budgetDocument, permissionCode);
-        }
-        
-        if (canView(workflowDocument.getDocumentType(), u)) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.VIEW_ONLY);
-        }
-        
-        return finalizeEditMode(budgetDocument, permissionCode);
+    public Map getEditMode(Document d, KualiUser u) {
+        Map editModeMap = new HashMap();
+        editModeMap.put(SpringServiceLocator.getBudgetPermissionsService().getUserPermissionCode((BudgetDocument) d, u), "TRUE");
+        return editModeMap;
     }
     
     /**
@@ -117,7 +59,7 @@ public class BudgetDocumentAuthorizer extends DocumentAuthorizerBase {
      * @see org.kuali.core.authorization.DocumentAuthorizer#getDocumentActionFlags(org.kuali.core.document.Document,
      *      org.kuali.core.bo.user.KualiUser)
      */
-    public DocumentActionFlags getDocumentActionFlags(Document document, UniversalUser user) {
+    public DocumentActionFlags getDocumentActionFlags(Document document, KualiUser user) {
         LOG.debug("calling BudgetDocumentAuthorizer.getDocumentActionFlags");
 
         DocumentActionFlags flags = super.getDocumentActionFlags(document, user);
@@ -129,71 +71,16 @@ public class BudgetDocumentAuthorizer extends DocumentAuthorizerBase {
         flags.setCanDisapprove(false);
         flags.setCanFYI(false);
         flags.setCanClose(false);
-        flags.setCanSave(true);
-        flags.setCanAnnotate(true);
 
         BudgetDocument budgetDocument = (BudgetDocument) document;
         
-        // use inherited canRoute, canAnnotate, and canReload values
+        
+        if (user.getPersonUniversalIdentifier().equals(budgetDocument.getBudget().getBudgetProjectDirectorSystemId())) {
+            flags.setCanSave(true);
+        }
+
+        // else use inherited canSave, canRoute, canAnnotate, and canReload values
 
         return flags;
-    }
-    
-    /**
-     * Set the permission code to the "higher-precedent" value, based on the 2 values passed in
-     * 
-     * @param String orgXml
-     * @param String uuid
-     * @return boolean
-     */
-    private String getPermissionCodeByPrecedence(String currentCode, String candidateCode) {
-        if (currentCode.equals(AuthorizationConstants.EditMode.FULL_ENTRY) || candidateCode.equals(AuthorizationConstants.EditMode.FULL_ENTRY)) {
-            return AuthorizationConstants.EditMode.FULL_ENTRY;
-        }
-        if (currentCode.equals(AuthorizationConstants.EditMode.VIEW_ONLY) || candidateCode.equals(AuthorizationConstants.EditMode.VIEW_ONLY)) {
-            return AuthorizationConstants.EditMode.VIEW_ONLY;
-        }
-        return AuthorizationConstants.EditMode.UNVIEWABLE;
-    }
-    
-    /**
-     * Finalize the permission code & the map and return
-     * 
-     * @param BudgetDocument budgetDocument
-     * @param String permissionCode
-     * @return Map
-     */
-    private Map finalizeEditMode(BudgetDocument budgetDocument, String permissionCode) {
-        // If doc is approved, full entry should become view only
-        if (permissionCode.equals(AuthorizationConstants.EditMode.FULL_ENTRY) 
-                && budgetDocument.getDocumentHeader().getFinancialDocumentStatusCode().equals(Constants.DocumentStatusCodes.APPROVED)) {
-            permissionCode = AuthorizationConstants.EditMode.VIEW_ONLY;
-        }
-        
-        Map editModeMap = new HashMap();
-        editModeMap.put(permissionCode, "TRUE");
-        return editModeMap;
-    }
-    
-    /**
-     * Check whether user is a global modifier
-     * 
-     * @param documentTypeName
-     * @param user
-     * @return true if the given user is allowed to modify documents of the given document type
-     */
-    public boolean canModify(String documentTypeName, UniversalUser user) {
-        return SpringServiceLocator.getAuthorizationService().isAuthorized(user, Constants.PERMISSION_MODIFY, documentTypeName);
-    }
-    
-    /**
-     * Check whether user is a global viewer
-     * 
-     * @param documentTypeName
-     * @param user
-     * @return true if the given user is allowed to view documents of the given document type
-     */
-    public boolean canView(String documentTypeName, UniversalUser user) {
-        return SpringServiceLocator.getAuthorizationService().isAuthorized(user, Constants.PERMISSION_VIEW, documentTypeName);
     }
 }

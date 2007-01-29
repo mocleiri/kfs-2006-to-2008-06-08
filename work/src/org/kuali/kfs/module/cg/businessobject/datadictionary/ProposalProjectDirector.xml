@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -24,16 +9,21 @@
         <inquiry>
             <title>Proposal Project Director Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="personUniversalIdentifier" />
                 <field attributeName="proposalNumber" />
                 <field attributeName="proposalPrimaryProjectDirectorIndicator" />
+                <field attributeName="proposalProjectDirectorNote1Text" />
+                <field attributeName="proposalProjectDirectorNote2Text" />
+                <field attributeName="proposalProjectDirectorNote3Text" />
                 <field attributeName="proposalProjectDirectorProjectTitle" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Proposal Project Director Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.cg.bo.ProposalProjectDirector">Create New</a>]]></menubar>
 
             <instructions>Look up a Proposal Project Director</instructions>
 
@@ -47,6 +37,9 @@
                 <lookupField attributeName="personUniversalIdentifier" required="false" />
                 <lookupField attributeName="proposalNumber" required="false" />
                 <lookupField attributeName="proposalPrimaryProjectDirectorIndicator" required="false" />
+                <lookupField attributeName="proposalProjectDirectorNote1Text" required="false" />
+                <lookupField attributeName="proposalProjectDirectorNote2Text" required="false" />
+                <lookupField attributeName="proposalProjectDirectorNote3Text" required="false" />
                 <lookupField attributeName="proposalProjectDirectorProjectTitle" required="false" />
             </lookupFields>
 
@@ -54,6 +47,9 @@
                 <field attributeName="personUniversalIdentifier" />
                 <field attributeName="proposalNumber" />
                 <field attributeName="proposalPrimaryProjectDirectorIndicator" />
+                <field attributeName="proposalProjectDirectorNote1Text" />
+                <field attributeName="proposalProjectDirectorNote2Text" />
+                <field attributeName="proposalProjectDirectorNote3Text" />
                 <field attributeName="proposalProjectDirectorProjectTitle" />
             </resultFields>
         </lookup>
@@ -102,6 +98,51 @@
 
                 <summary>proposalPrimaryProjectDirectorIndicator</summary>
                 <description>proposalPrimaryProjectDirectorIndicator description...</description>
+			</attribute>
+
+            <attribute name="proposalProjectDirectorNote1Text" forceUppercase="true">
+                <label>Proposal Project Director Note1 Text</label>
+                <shortLabel>Text</shortLabel>
+
+                <maxLength>50</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="52" />
+                </control>
+
+                <summary>proposalProjectDirectorNote1Text</summary>
+                <description>proposalProjectDirectorNote1Text description...</description>
+			</attribute>
+
+            <attribute name="proposalProjectDirectorNote2Text" forceUppercase="true">
+                <label>Proposal Project Director Note2 Text</label>
+                <shortLabel>Text</shortLabel>
+
+                <maxLength>50</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="52" />
+                </control>
+
+                <summary>proposalProjectDirectorNote2Text</summary>
+                <description>proposalProjectDirectorNote2Text description...</description>
+			</attribute>
+
+            <attribute name="proposalProjectDirectorNote3Text" forceUppercase="true">
+                <label>Proposal Project Director Note3 Text</label>
+                <shortLabel>Text</shortLabel>
+
+                <maxLength>50</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="52" />
+                </control>
+
+                <summary>proposalProjectDirectorNote3Text</summary>
+                <description>proposalProjectDirectorNote3Text description...</description>
 			</attribute>
 
             <attribute name="proposalProjectDirectorProjectTitle" forceUppercase="true">

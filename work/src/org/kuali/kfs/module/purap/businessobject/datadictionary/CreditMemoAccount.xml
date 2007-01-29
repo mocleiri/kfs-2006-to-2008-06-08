@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -24,23 +9,26 @@
         <inquiry>
             <title>Credit Memo Account Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountLinePercent" />
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="creditMemoAccountIdentifier" />
-                <field attributeName="creditMemoItemIdentifier" />
+                <field attributeName="creditMemoIdentifier" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="itemAccountTotalAmount" />
+                <field attributeName="itemLineNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
                 <field attributeName="subAccountNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Credit Memo Account Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.CreditMemoAccount">Create New</a>]]></menubar>
 
             <instructions>Lookup a Credit Memo Account</instructions>
 
@@ -55,10 +43,11 @@
                 <lookupField attributeName="accountNumber" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="creditMemoAccountIdentifier" required="false" />
-                <lookupField attributeName="creditMemoItemIdentifier" required="false" />
+                <lookupField attributeName="creditMemoIdentifier" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
                 <lookupField attributeName="itemAccountTotalAmount" required="false" />
+                <lookupField attributeName="itemLineNumber" required="false" />
                 <lookupField attributeName="organizationReferenceId" required="false" />
                 <lookupField attributeName="projectCode" required="false" />
                 <lookupField attributeName="subAccountNumber" required="false" />
@@ -69,10 +58,11 @@
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="creditMemoAccountIdentifier" />
-                <field attributeName="creditMemoItemIdentifier" />
+                <field attributeName="creditMemoIdentifier" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="itemAccountTotalAmount" />
+                <field attributeName="itemLineNumber" />
                 <field attributeName="organizationReferenceId" />
                 <field attributeName="projectCode" />
                 <field attributeName="subAccountNumber" />
@@ -141,19 +131,19 @@
                 <description>creditMemoAccountIdentifier description...</description>
 			</attribute>
 
-            <attribute name="creditMemoItemIdentifier" forceUppercase="true">
-                <label>Credit Memo Item Identifier</label>
+            <attribute name="creditMemoIdentifier" forceUppercase="true">
+                <label>Credit Memo Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
-                <maxLength>10</maxLength>
+                <maxLength>9</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="12" />
+                    <text size="11" />
                 </control>
 
-                <summary>creditMemoItemIdentifier</summary>
-                <description>creditMemoItemIdentifier description...</description>
+                <summary>creditMemoIdentifier</summary>
+                <description>creditMemoIdentifier description...</description>
 			</attribute>
 
             <attribute name="financialObjectCode" forceUppercase="true">
@@ -199,6 +189,21 @@
 
                 <summary>itemAccountTotalAmount</summary>
                 <description>itemAccountTotalAmount description...</description>
+			</attribute>
+
+            <attribute name="itemLineNumber" forceUppercase="true">
+                <label>Item Line Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>itemLineNumber</summary>
+                <description>itemLineNumber description...</description>
 			</attribute>
 
             <attribute name="organizationReferenceId" forceUppercase="true">

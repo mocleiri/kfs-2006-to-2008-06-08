@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +27,6 @@ import java.util.List;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.web.uidraw.KeyLabelPair;
-import org.kuali.PropertyConstants;
 
 public class OriginEntryFieldFinder extends KeyValuesBase {
 
@@ -42,7 +43,7 @@ public class OriginEntryFieldFinder extends KeyValuesBase {
         activeLabels.add(new KeyLabelPair("universityFiscalPeriodCode", "Fiscal Period"));
         activeLabels.add(new KeyLabelPair("financialDocumentTypeCode", "Document Type"));
         activeLabels.add(new KeyLabelPair("financialSystemOriginationCode", "Origin code"));
-        activeLabels.add(new KeyLabelPair(PropertyConstants.DOCUMENT_NUMBER, "Document Number"));
+        activeLabels.add(new KeyLabelPair("financialDocumentNumber", "Document Number"));
         activeLabels.add(new KeyLabelPair("transactionLedgerEntrySequenceNumber", "Sequence Number"));
         activeLabels.add(new KeyLabelPair("transactionLedgerEntryDescription", "Description"));
         activeLabels.add(new KeyLabelPair("transactionLedgerEntryAmount", "Amount"));
@@ -177,7 +178,7 @@ public class OriginEntryFieldFinder extends KeyValuesBase {
             return 4;
         } else if (fieldName.equals("financialSystemOriginationCode")) {
             return 2;
-        } else if (fieldName.equals(PropertyConstants.DOCUMENT_NUMBER)) {
+        } else if (fieldName.equals("financialDocumentNumber")) {
             return 14;
         } else if (fieldName.equals("transactionLedgerEntryDescription")) {
             return 40;

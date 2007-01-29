@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.purap.bo;
@@ -19,13 +28,13 @@ package org.kuali.module.purap.bo;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class PaymentRequestItem extends PersistableBusinessObjectBase {
+public class PaymentRequestItem extends BusinessObjectBase {
 
 	private Integer paymentRequestItemIdentifier;
 	private Integer paymentRequestIdentifier;
@@ -56,7 +65,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the paymentRequestItemIdentifier attribute.
 	 * 
-	 * @return Returns the paymentRequestItemIdentifier
+	 * @return - Returns the paymentRequestItemIdentifier
 	 * 
 	 */
 	public Integer getPaymentRequestItemIdentifier() { 
@@ -66,7 +75,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the paymentRequestItemIdentifier attribute.
 	 * 
-	 * @param paymentRequestItemIdentifier The paymentRequestItemIdentifier to set.
+	 * @param - paymentRequestItemIdentifier The paymentRequestItemIdentifier to set.
 	 * 
 	 */
 	public void setPaymentRequestItemIdentifier(Integer paymentRequestItemIdentifier) {
@@ -77,7 +86,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the paymentRequestIdentifier attribute.
 	 * 
-	 * @return Returns the paymentRequestIdentifier
+	 * @return - Returns the paymentRequestIdentifier
 	 * 
 	 */
 	public Integer getPaymentRequestIdentifier() { 
@@ -87,7 +96,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the paymentRequestIdentifier attribute.
 	 * 
-	 * @param paymentRequestIdentifier The paymentRequestIdentifier to set.
+	 * @param - paymentRequestIdentifier The paymentRequestIdentifier to set.
 	 * 
 	 */
 	public void setPaymentRequestIdentifier(Integer paymentRequestIdentifier) {
@@ -98,7 +107,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemLineNumber attribute.
 	 * 
-	 * @return Returns the itemLineNumber
+	 * @return - Returns the itemLineNumber
 	 * 
 	 */
 	public Integer getItemLineNumber() { 
@@ -108,7 +117,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemLineNumber attribute.
 	 * 
-	 * @param itemLineNumber The itemLineNumber to set.
+	 * @param - itemLineNumber The itemLineNumber to set.
 	 * 
 	 */
 	public void setItemLineNumber(Integer itemLineNumber) {
@@ -119,7 +128,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemTypeCode attribute.
 	 * 
-	 * @return Returns the itemTypeCode
+	 * @return - Returns the itemTypeCode
 	 * 
 	 */
 	public String getItemTypeCode() { 
@@ -129,7 +138,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemTypeCode attribute.
 	 * 
-	 * @param itemTypeCode The itemTypeCode to set.
+	 * @param - itemTypeCode The itemTypeCode to set.
 	 * 
 	 */
 	public void setItemTypeCode(String itemTypeCode) {
@@ -140,7 +149,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemDescription attribute.
 	 * 
-	 * @return Returns the itemDescription
+	 * @return - Returns the itemDescription
 	 * 
 	 */
 	public String getItemDescription() { 
@@ -150,7 +159,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemDescription attribute.
 	 * 
-	 * @param itemDescription The itemDescription to set.
+	 * @param - itemDescription The itemDescription to set.
 	 * 
 	 */
 	public void setItemDescription(String itemDescription) {
@@ -161,7 +170,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemCatalogNumber attribute.
 	 * 
-	 * @return Returns the itemCatalogNumber
+	 * @return - Returns the itemCatalogNumber
 	 * 
 	 */
 	public String getItemCatalogNumber() { 
@@ -171,7 +180,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemCatalogNumber attribute.
 	 * 
-	 * @param itemCatalogNumber The itemCatalogNumber to set.
+	 * @param - itemCatalogNumber The itemCatalogNumber to set.
 	 * 
 	 */
 	public void setItemCatalogNumber(String itemCatalogNumber) {
@@ -182,7 +191,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemAuxiliaryPartIdentifier attribute.
 	 * 
-	 * @return Returns the itemAuxiliaryPartIdentifier
+	 * @return - Returns the itemAuxiliaryPartIdentifier
 	 * 
 	 */
 	public String getItemAuxiliaryPartIdentifier() { 
@@ -192,7 +201,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemAuxiliaryPartIdentifier attribute.
 	 * 
-	 * @param itemAuxiliaryPartIdentifier The itemAuxiliaryPartIdentifier to set.
+	 * @param - itemAuxiliaryPartIdentifier The itemAuxiliaryPartIdentifier to set.
 	 * 
 	 */
 	public void setItemAuxiliaryPartIdentifier(String itemAuxiliaryPartIdentifier) {
@@ -203,7 +212,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemUnitOfMeasureCode attribute.
 	 * 
-	 * @return Returns the itemUnitOfMeasureCode
+	 * @return - Returns the itemUnitOfMeasureCode
 	 * 
 	 */
 	public String getItemUnitOfMeasureCode() { 
@@ -213,7 +222,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemUnitOfMeasureCode attribute.
 	 * 
-	 * @param itemUnitOfMeasureCode The itemUnitOfMeasureCode to set.
+	 * @param - itemUnitOfMeasureCode The itemUnitOfMeasureCode to set.
 	 * 
 	 */
 	public void setItemUnitOfMeasureCode(String itemUnitOfMeasureCode) {
@@ -224,7 +233,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemInvoicedQuantity attribute.
 	 * 
-	 * @return Returns the itemInvoicedQuantity
+	 * @return - Returns the itemInvoicedQuantity
 	 * 
 	 */
 	public KualiDecimal getItemInvoicedQuantity() { 
@@ -234,7 +243,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemInvoicedQuantity attribute.
 	 * 
-	 * @param itemInvoicedQuantity The itemInvoicedQuantity to set.
+	 * @param - itemInvoicedQuantity The itemInvoicedQuantity to set.
 	 * 
 	 */
 	public void setItemInvoicedQuantity(KualiDecimal itemInvoicedQuantity) {
@@ -245,7 +254,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemUnitPrice attribute.
 	 * 
-	 * @return Returns the itemUnitPrice
+	 * @return - Returns the itemUnitPrice
 	 * 
 	 */
 	public BigDecimal getItemUnitPrice() { 
@@ -255,7 +264,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemUnitPrice attribute.
 	 * 
-	 * @param itemUnitPrice The itemUnitPrice to set.
+	 * @param - itemUnitPrice The itemUnitPrice to set.
 	 * 
 	 */
 	public void setItemUnitPrice(BigDecimal itemUnitPrice) {
@@ -266,7 +275,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the purchaseOrderItemUnitPrice attribute.
 	 * 
-	 * @return Returns the purchaseOrderItemUnitPrice
+	 * @return - Returns the purchaseOrderItemUnitPrice
 	 * 
 	 */
 	public BigDecimal getPurchaseOrderItemUnitPrice() { 
@@ -276,7 +285,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderItemUnitPrice attribute.
 	 * 
-	 * @param purchaseOrderItemUnitPrice The purchaseOrderItemUnitPrice to set.
+	 * @param - purchaseOrderItemUnitPrice The purchaseOrderItemUnitPrice to set.
 	 * 
 	 */
 	public void setPurchaseOrderItemUnitPrice(BigDecimal purchaseOrderItemUnitPrice) {
@@ -287,7 +296,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemExtendedPrice attribute.
 	 * 
-	 * @return Returns the itemExtendedPrice
+	 * @return - Returns the itemExtendedPrice
 	 * 
 	 */
 	public KualiDecimal getItemExtendedPrice() { 
@@ -297,7 +306,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemExtendedPrice attribute.
 	 * 
-	 * @param itemExtendedPrice The itemExtendedPrice to set.
+	 * @param - itemExtendedPrice The itemExtendedPrice to set.
 	 * 
 	 */
 	public void setItemExtendedPrice(KualiDecimal itemExtendedPrice) {
@@ -308,7 +317,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the capitalAssetTransactionTypeCode attribute.
 	 * 
-	 * @return Returns the capitalAssetTransactionTypeCode
+	 * @return - Returns the capitalAssetTransactionTypeCode
 	 * 
 	 */
 	public String getCapitalAssetTransactionTypeCode() { 
@@ -318,7 +327,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the capitalAssetTransactionTypeCode attribute.
 	 * 
-	 * @param capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
+	 * @param - capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
 	 * 
 	 */
 	public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
@@ -329,7 +338,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemCapitalAssetNoteText attribute.
 	 * 
-	 * @return Returns the itemCapitalAssetNoteText
+	 * @return - Returns the itemCapitalAssetNoteText
 	 * 
 	 */
 	public String getItemCapitalAssetNoteText() { 
@@ -339,7 +348,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemCapitalAssetNoteText attribute.
 	 * 
-	 * @param itemCapitalAssetNoteText The itemCapitalAssetNoteText to set.
+	 * @param - itemCapitalAssetNoteText The itemCapitalAssetNoteText to set.
 	 * 
 	 */
 	public void setItemCapitalAssetNoteText(String itemCapitalAssetNoteText) {
@@ -350,7 +359,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the purchaseOrderCommodityCode attribute.
 	 * 
-	 * @return Returns the purchaseOrderCommodityCode
+	 * @return - Returns the purchaseOrderCommodityCode
 	 * 
 	 */
 	public String getPurchaseOrderCommodityCode() { 
@@ -360,7 +369,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderCommodityCode attribute.
 	 * 
-	 * @param purchaseOrderCommodityCode The purchaseOrderCommodityCode to set.
+	 * @param - purchaseOrderCommodityCode The purchaseOrderCommodityCode to set.
 	 * 
 	 */
 	public void setPurchaseOrderCommodityCode(String purchaseOrderCommodityCode) {
@@ -371,7 +380,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the itemAssignedToTradeInIndicator attribute.
 	 * 
-	 * @return Returns the itemAssignedToTradeInIndicator
+	 * @return - Returns the itemAssignedToTradeInIndicator
 	 * 
 	 */
 	public boolean getItemAssignedToTradeInIndicator() { 
@@ -381,7 +390,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the itemAssignedToTradeInIndicator attribute.
 	 * 
-	 * @param itemAssignedToTradeInIndicator The itemAssignedToTradeInIndicator to set.
+	 * @param - itemAssignedToTradeInIndicator The itemAssignedToTradeInIndicator to set.
 	 * 
 	 */
 	public void setItemAssignedToTradeInIndicator(boolean itemAssignedToTradeInIndicator) {
@@ -392,7 +401,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the paymentRequest attribute.
 	 * 
-	 * @return Returns the paymentRequest
+	 * @return - Returns the paymentRequest
 	 * 
 	 */
 	public PaymentRequest getPaymentRequest() { 
@@ -402,7 +411,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the paymentRequest attribute.
 	 * 
-	 * @param paymentRequest The paymentRequest to set.
+	 * @param - paymentRequest The paymentRequest to set.
 	 * @deprecated
 	 */
 	public void setPaymentRequest(PaymentRequest paymentRequest) {
@@ -410,7 +419,7 @@ public class PaymentRequestItem extends PersistableBusinessObjectBase {
 	}
 
 	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
