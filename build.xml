@@ -101,10 +101,33 @@
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
 		<property name="local.plugin.lib" value="" />
+		<condition property="datasource.url" value="${mysql.datasource.url}">
+			<equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" />
+		</condition>
+		<property name="datasource.url" value="${oracle.datasource.url}" />
 		<condition property="driver.class" value="${p6spy.driver.class}">
 			<equals arg1="${use.p6spy.local}" arg2="true"/>
 		</condition>
+		<condition property="driver.class" value="${mysql.driver.class}">
+			<equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" />
+		</condition>
 		<property name="driver.class" value="${oracle.driver.class}" />
+		<condition property="p6spy.real.driver.class" value="${mysql.driver.class}">
+			<equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" />
+		</condition>
+		<property name="p6spy.real.driver.class" value="${oracle.driver.class}" />
+		<condition property="ojb.sequencemanager.class" value="${mysql.sequence.manager.class}">
+			<equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" />
+		</condition>
+		<property name="ojb.sequencemanager.class" value="${oracle.sequence.manager.class}" />
+	    <condition property="database.platform.class" value="${mysql.database.platform}">
+	    		<equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" />
+	    </condition>
+		<property name="database.platform.class" value="${oracle.database.platform}" />
+	    <condition property="workflow.database.platform.class" value="${mysql.workflow.database.platform}">
+	    		<equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" />
+	    </condition>
+		<property name="workflow.database.platform.class" value="${oracle.workflow.database.platform}" />
 		<condition property="appenders" value="INFO, LogFile, StdOut">
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
@@ -144,10 +167,15 @@
 			<filter token="workflow-url" value="${base.workflow.url}${workflow.application}-${build.environment}" />
 			<filter token="context-docbase" value="${context.docbase}" />
 			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
-			<filter token="driver-class" value="${driver.class}" />
 			<filter token="datasource-url" value="${datasource.url}" />
 			<filter token="datasource-username" value="${datasource.username}" />
 			<filter token="datasource-password" value="${datasource.password}" />
+			<filter token="driver-class" value="${driver.class}" />
+			<filter token="p6spy-real-driver-class" value="${p6spy.real.driver.class}" />
+			<filter token="ojb-platform" value="${ojb.platform}" />
+			<filter token="ojb-sequencemanager-class" value="${ojb.sequencemanager.class}" />
+			<filter token="database-platform-class" value="${database.platform.class}" />
+			<filter token="workflow-database-platform-class" value="${workflow.database.platform.class}" />
 			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
 			<filter token="workflow-webservices-keystore-password" value="${workflow.webservices.keystore.password}" />
 			<filter token="encryption-key" value="${encryption.key}" />
@@ -238,6 +266,11 @@
 		<delete failonerror="false">
 			<fileset dir="${appserver.lib.dir}" includes="${appserver.library.list}" />
 		</delete>
+		<delete failonerror="false">
+			<fileset dir="${appserver.lib.dir}">
+				<present targetdir="${local.build.appserver.directory}" />
+			</fileset>
+		</delete>
 		<delete file="${appserver.lib.dir}/${log4j.library}"/>
 		<delete failonerror="false">
 			<fileset dir="${appserver.localhost.dir}" includes="${ant.project.name}-*.xml" />
@@ -317,6 +350,9 @@
 	<target name="filter-local" if="is.local.build" depends="init-filter-sets">
 		<copy todir="${appserver.lib.dir}" overwrite="true">
 			<fileset dir="${build.appserver.directory}" includes="${appserver.library.list}" />
+		</copy>
+		<copy todir="${appserver.lib.dir}" overwrite="true">
+			<fileset dir="${local.build.appserver.directory}" />
 		</copy>
 		<copy todir="${settings.directory}" overwrite="true">
 			<fileset dir="${build.settings.directory}" />
@@ -403,9 +439,11 @@
 		</copy>
 		<copy file="${build.tokenized.resources.directory}/OJB.properties" todir="${plugin.classes.directory}" overwrite="true">
 			<filterset refid="plugin.filterset" />
+			<filterset refid="general.filterset" />
 		</copy>
 		<copy file="${build.tokenized.resources.directory}/OJB-repository.xml" todir="${plugin.classes.directory}" overwrite="true">
 			<filterset refid="plugin.filterset" />
+			<filterset refid="general.filterset" />
 		</copy>
 		<copy file="${build.workflow.directory}/plugin/workflow.xml" todir="${plugin.metainf.directory}"/>
 	</target>
@@ -560,20 +598,21 @@
 		<property name="${workflow.application}.plugin.dir" value="${basedir}" />
 		<property name="${workflow.application}.institution" value="${ant.project.name}" />
 		<property name="${workflow.application}.src.dist.loc" value="${workflow.project.directory}/dist" />
+		<property name="${workflow.application}.datasource.ojb.platform" value="${ojb.platform}" />
 		<propertyset id="en-properties">
 		  <propertyref prefix="${workflow.application}."/>
 		  <mapper type="glob" from="${workflow.application}.*" to="*"/>
 		</propertyset>
 		<ant dir="${workflow.project.directory}" target="clean" inheritall="false"/>
 		<ant dir="${workflow.project.directory}" target="dist" inheritall="false">
-			<propertyset refid="en-properties" />
+			<propertyset refid="${workflow.application}-properties" />
 		</ant>
 		<copy file="${workflow.project.directory}/${workflow.application}-${build.environment}.war" todir="${build.workflow.appserver.directory}" overwrite="true" />
 		<ant dir="${workflow.project.directory}" target="dist-client-not-iu" inheritall="false">
 			<propertyset refid="${workflow.application}-properties" />
 		</ant>
 		<copy file="${workflow.project.directory}/dist/workflow-client-${workflow.version}.jar" todir="${lib.directory}" overwrite="true" />
-		<copy todir="${licenses.directory}">
+		<copy todir="${licenses.directory}/kew">
 			<fileset dir="${workflow.project.directory}/${licenses.directory}" />
 		</copy>
 		<!--<ant dir="${workflow.project.directory}" target="bundle-workflow" inheritall="false">
