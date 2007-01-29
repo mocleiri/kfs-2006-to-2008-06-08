@@ -18,11 +18,7 @@
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-    <bean id="travelMileageRateDao" class="org.kuali.module.financial.dao.ojb.TravelMileageRateDaoOjb">
-        <property name="jcdAlias">
-            <value>dataSource</value>
-        </property>
-    </bean>
+    <bean id="travelMileageRateDao" class="org.kuali.module.financial.dao.ojb.TravelMileageRateDaoOjb" parent="platformAwareDao" />
 
     <bean id="disbursementVoucherTaxService" class="org.kuali.module.financial.service.impl.DisbursementVoucherTaxServiceImpl">
         <property name="kualiConfigurationService">
