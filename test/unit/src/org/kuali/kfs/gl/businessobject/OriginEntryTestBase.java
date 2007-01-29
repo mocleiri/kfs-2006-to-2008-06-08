@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/gl/businessobject/OriginEntryTestBase.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.service.ConfigurableDateService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.SpringServiceLocator;
@@ -36,24 +37,30 @@ import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.test.KualiTestBase;
 import org.springframework.beans.factory.BeanFactory;
 
+/**
+ */
 public class OriginEntryTestBase extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryTestBase.class);
 
     protected BeanFactory beanFactory;
-    protected ConfigurableDateService dateTimeService;
+    protected TestDateTimeService dateTimeService;
     protected PersistenceService persistenceService;
     protected UnitTestSqlDao unitTestSqlDao = null;
     protected OriginEntryGroupService originEntryGroupService = null;
     protected OriginEntryService originEntryService = null;
     protected OriginEntryDao originEntryDao = null;
     protected KualiConfigurationService kualiConfigurationService = null;
-    protected Date date;
+    protected Date date = new Date();
 
     public OriginEntryTestBase() {
         super();
     }
 
-    @Override
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.test.AbstractTransactionalSpringContextTests#onSetUpInTransaction()
+     */
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -61,9 +68,8 @@ public class OriginEntryTestBase extends KualiTestBase {
 
         beanFactory = SpringServiceLocator.getBeanFactory();
 
-        dateTimeService = (ConfigurableDateService) beanFactory.getBean("testDateTimeService");
-        date = dateTimeService.getCurrentDate();
-        
+        dateTimeService = (TestDateTimeService) beanFactory.getBean("testDateTimeService");
+
         // Other objects needed for the tests
         persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
         unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("glUnitTestSqlDao");
@@ -93,7 +99,7 @@ public class OriginEntryTestBase extends KualiTestBase {
     }
 
     protected void loadInputTransactions(String groupCode, String[] transactions) {
-        OriginEntryGroup group = originEntryGroupService.createGroup(new java.sql.Date(dateTimeService.getCurrentDate().getTime()), groupCode, true, true, true);
+        OriginEntryGroup group = originEntryGroupService.createGroup(new java.sql.Date(new java.util.Date().getTime()), groupCode, true, true, true);
         loadTransactions(transactions, group);
     }
 
