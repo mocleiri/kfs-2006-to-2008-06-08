@@ -1,45 +1,49 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.document;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.core.bo.AccountingLineParser;
-
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.DocumentHeader;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.lookup.keyvalues.DisbursementVoucherDocumentationLocationValuesFinder;
 import org.kuali.core.lookup.keyvalues.PaymentMethodValuesFinder;
 import org.kuali.core.rules.RulesUtils;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel;
@@ -50,13 +54,11 @@ import org.kuali.module.financial.bo.DisbursementVoucherPreConferenceRegistrant;
 import org.kuali.module.financial.bo.DisbursementVoucherWireTransfer;
 import org.kuali.module.financial.bo.Payee;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
-import org.kuali.module.financial.service.FlexibleOffsetAccountService;
-import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class DisbursementVoucherDocument extends TransactionalDocumentBase {
     private Integer finDocNextRegistrantLineNbr;
@@ -100,47 +102,7 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
         dvPayeeDetail = new DisbursementVoucherPayeeDetail();
         dvPreConferenceDetail = new DisbursementVoucherPreConferenceDetail();
         dvWireTransfer = new DisbursementVoucherWireTransfer();
-        disbVchrCheckTotalAmount = new KualiDecimal(0);
     }
-
-    
-    /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getPendingLedgerEntriesForSufficientFundsChecking()
-     */
-    @Override
-    public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
-        List<GeneralLedgerPendingEntry> ples = new ArrayList();
-        
-        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
-        FlexibleOffsetAccountService flexibleOffsetAccountService = SpringServiceLocator.getFlexibleOffsetAccountService();
-        
-        for (GeneralLedgerPendingEntry ple : this.getGeneralLedgerPendingEntries()) {
-            if (kualiConfigurationService.getApplicationParameterRule("SYSTEM", "SufficientFundsExpenseObjectTypes").succeedsRule(ple.getFinancialObjectTypeCode())) {
-                //is an expense object type, keep checking
-                ple.refreshNonUpdateableReferences();
-                if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(Constants.SF_TYPE_CASH_AT_ACCOUNT)) {
-                    //is a cash account
-                    if (flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinancialCashObjectCode()) == null
-                            && flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinAccountsPayableObjectCode()) == null) {
-                        //does not have a flexible offset for cash or liability, set the object code to cash and add to list of PLEs to check for SF
-                        
-                        ple = (GeneralLedgerPendingEntry)ObjectUtils.deepCopy(ple);
-                        ple.setFinancialObjectCode(ple.getChart().getFinancialCashObjectCode());
-                        ple.setTransactionDebitCreditCode(ple.getTransactionDebitCreditCode().equals(Constants.GL_DEBIT_CODE) ? Constants.GL_CREDIT_CODE : Constants.GL_DEBIT_CODE);
-                        ples.add(ple);
-                    }
-                    
-                } else {
-                    //is not a cash account, process as normal
-                    ples.add(ple);
-                }
-            }
-        }
-
-        return ples;
-    }
-
-
 
     /**
      * Gets the finDocNextRegistrantLineNbr attribute.
@@ -307,9 +269,7 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
      * 
      */
     public void setDisbVchrCheckTotalAmount(KualiDecimal disbVchrCheckTotalAmount) {
-        if (disbVchrCheckTotalAmount != null) {
-            this.disbVchrCheckTotalAmount = disbVchrCheckTotalAmount;
-        }
+        this.disbVchrCheckTotalAmount = disbVchrCheckTotalAmount;
     }
 
     /**
@@ -765,22 +725,22 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
     @Override
     public void prepareForSave() {
         if (dvWireTransfer != null) {
-            dvWireTransfer.setDocumentNumber(this.documentNumber);
+            dvWireTransfer.setFinancialDocumentNumber(this.financialDocumentNumber);
         }
 
         if (dvNonResidentAlienTax != null) {
-            dvNonResidentAlienTax.setDocumentNumber(this.documentNumber);
+            dvNonResidentAlienTax.setFinancialDocumentNumber(this.financialDocumentNumber);
         }
 
-        dvPayeeDetail.setDocumentNumber(this.documentNumber);
+        dvPayeeDetail.setFinancialDocumentNumber(this.financialDocumentNumber);
 
         if (dvNonEmployeeTravel != null) {
-            dvNonEmployeeTravel.setDocumentNumber(this.documentNumber);
+            dvNonEmployeeTravel.setFinancialDocumentNumber(this.financialDocumentNumber);
             dvNonEmployeeTravel.setTotalTravelAmount(dvNonEmployeeTravel.getTotalTravelAmount());
         }
 
         if (dvPreConferenceDetail != null) {
-            dvPreConferenceDetail.setDocumentNumber(this.documentNumber);
+            dvPreConferenceDetail.setFinancialDocumentNumber(this.financialDocumentNumber);
             dvPreConferenceDetail.setDisbVchrConferenceTotalAmt(dvPreConferenceDetail.getDisbVchrConferenceTotalAmt());
         }
     }
@@ -877,9 +837,9 @@ public class DisbursementVoucherDocument extends TransactionalDocumentBase {
      * generic, shared logic used to iniate a dv document
      */
     public void initiateDocument() {
-        UniversalUser currentUser = GlobalVariables.getUserSession().getUniversalUser();
+        KualiUser currentUser = GlobalVariables.getUserSession().getKualiUser();
         setDisbVchrContactPersonName(currentUser.getPersonName());
-        setCampusCode(((ChartUser)currentUser.getModuleUser( ChartUser.MODULE_ID )).getOrganization().getOrganizationPhysicalCampusCode());
+        setCampusCode(currentUser.getOrganization().getOrganizationPhysicalCampusCode());
 
         // due date
         Calendar calendar = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
