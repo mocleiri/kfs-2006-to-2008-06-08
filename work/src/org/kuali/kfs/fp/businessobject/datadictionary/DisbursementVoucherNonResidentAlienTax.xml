@@ -2,6 +2,8 @@
 <!--
  Copyright 2005-2006 The Kuali Foundation.
  
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/datadictionary/DisbursementVoucherNonResidentAlienTax.xml,v $
+ 
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -136,7 +138,7 @@
                 <description>The code to specify that the Nonresident Alien (NRA) Tax is "grossed up" to the original Account, expressed as "Yes" or "No".</description>
             </attribute>
 
-            <attributeReference name="referenceFinancialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="documentNumber">
+            <attributeReference name="referenceFinancialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber">
                 <label>Reference Doc</label>
                 <shortLabel>Ref Doc</shortLabel>
                 <description>A free-form text field that identifies a reference document for the Nonresident Alien (NRA) Tax.</description>

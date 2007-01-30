@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/dataaccess/impl/OrganizationReversionDaoOjb.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,15 +22,12 @@ import java.util.List;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.chart.bo.OrganizationReversion;
 import org.kuali.module.chart.bo.OrganizationReversionCategory;
 import org.kuali.module.chart.dao.OrganizationReversionDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-/**
- * 
- */
-public class OrganizationReversionDaoOjb extends PersistenceBrokerDaoSupport implements OrganizationReversionDao {
+public class OrganizationReversionDaoOjb extends PlatformAwareDaoBaseOjb implements OrganizationReversionDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrganizationReversionDaoOjb.class);
 
     /**
@@ -50,7 +49,6 @@ public class OrganizationReversionDaoOjb extends PersistenceBrokerDaoSupport imp
         LOG.debug("getCategories() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("organizationReversionCategoryActiveIndicator", true);
         QueryByCriteria q = QueryFactory.newQuery(OrganizationReversionCategory.class, criteria);
         q.addOrderByAscending("organizationReversionSortCode");
 

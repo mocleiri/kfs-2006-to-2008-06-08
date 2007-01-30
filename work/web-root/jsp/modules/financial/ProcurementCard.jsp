@@ -1,5 +1,7 @@
 <%--
- Copyright 2006 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/financial/ProcurementCard.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,7 +22,7 @@
 	showTabButtons="true">
 
 	<html:hidden
-		property="document.procurementCardHolder.documentNumber" />
+		property="document.procurementCardHolder.financialDocumentNumber" />
 	<html:hidden property="document.procurementCardHolder.cardHolderName" />
 	<html:hidden
 		property="document.procurementCardHolder.cardHolderAlternateName" />

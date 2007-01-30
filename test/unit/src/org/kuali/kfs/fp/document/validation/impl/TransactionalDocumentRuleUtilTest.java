@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/fp/document/validation/impl/TransactionalDocumentRuleUtilTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +17,16 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodService;
-import static org.kuali.core.util.SpringServiceLocator.getBalanceTypService;
-import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapEmpty;
-
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.util.SpringServiceLocator;
+import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodService;
+import static org.kuali.core.util.SpringServiceLocator.getBalanceTypService;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
+
 /**
  * Class for unit testing the functionality of <code>{@link TransactionalDocumentRuleUtil}</code>
  * 
@@ -99,21 +99,21 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
      * @return Timestamp
      */
     private java.sql.Date getSqlDateYesterday() {
-        return new java.sql.Date(SpringServiceLocator.getDateTimeService().getCurrentDate().getTime() - ONE_DAY_MILLIS);
+        return new java.sql.Date(System.currentTimeMillis() - ONE_DAY_MILLIS);
     }
 
     /**
      * Fixture accessor method for getting a <code>{@link java.sql.Date}</code> instance that is in the future.
      */
     private java.sql.Date getSqlDateTomorrow() {
-        return new java.sql.Date(SpringServiceLocator.getDateTimeService().getCurrentDate().getTime() + ONE_DAY_MILLIS);
+        return new java.sql.Date(System.currentTimeMillis() + ONE_DAY_MILLIS);
     }
 
     /**
      * @return today's java.sql.Date
      */
     private java.sql.Date getSqlDateToday() {
-        return new java.sql.Date(SpringServiceLocator.getDateTimeService().getCurrentDate().getTime());
+        return new java.sql.Date(System.currentTimeMillis());
     }
 
     // /////////////////////////////////////////////////////////////////////////

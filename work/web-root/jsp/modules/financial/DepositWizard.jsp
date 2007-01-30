@@ -1,18 +1,3 @@
-<%--
- Copyright 2006 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
---%>
 <%@ include file="/jsp/core/tldHeader.jsp"%>
 
 <c:set var="rawDepositTypeCode" value="${KualiForm.depositTypeCode}" />
@@ -156,19 +141,19 @@ function checkAllOrNone() {
 						<td>
 						<div align="center"><html:checkbox
 							property="depositWizardHelper[${ctr}].selectedValue"
-							value="${cashReceipt.documentNumber}" /></div>
+							value="${cashReceipt.financialDocumentNumber}" /></div>
 						</td>
 						<td>
 						<div align="center"><b>${(ctr + 1)}</b></div>
 						</td>
 						<td>
 						<div align="center"><a
-							href="financialCashReceipt.do?methodToCall=docHandler&docId=${cashReceipt.documentHeader.documentNumber}&command=displayDocSearchView"
+							href="financialCashReceipt.do?methodToCall=docHandler&docId=${cashReceipt.documentHeader.financialDocumentNumber}&command=displayDocSearchView"
 							target="new"> <kul:htmlControlAttribute
-							property="depositableCashReceipt[${ctr}].documentNumber"
-							attributeEntry="${cashReceiptAttributes.documentNumber}"
+							property="depositableCashReceipt[${ctr}].financialDocumentNumber"
+							attributeEntry="${cashReceiptAttributes.financialDocumentNumber}"
 							readOnly="true" /> </a> <html:hidden
-							property="depositableCashReceipt[${ctr}].documentHeader.documentNumber" />
+							property="depositableCashReceipt[${ctr}].documentHeader.financialDocumentNumber" />
 						</div>
 						</td>
 						<td>
@@ -260,12 +245,12 @@ function checkAllOrNone() {
 
 			<div id="globalbuttons" class="globalbuttons"><html:image
 				property="methodToCall.createDeposit"
-				src="images/buttonsmall_create.gif" alt="create" title="create"
+				src="images/buttonsmall_create.gif" alt="create"
 				styleClass="tinybutton" /> <html:image
 				property="methodToCall.refresh" src="images/buttonsmall_refresh.gif"
-				alt="refresh" title="refresh" styleClass="tinybutton" /> <html:image
+				alt="refresh" styleClass="tinybutton" /> <html:image
 				property="methodToCall.cancel" src="images/buttonsmall_cancel.gif"
-				alt="cancel" title="cancel" styleClass="tinybutton" /></div>
+				alt="cancel" styleClass="tinybutton" /></div>
 		</kul:tab>
 	</c:if>
 
@@ -286,8 +271,8 @@ function checkAllOrNone() {
 
 		<div id="globalbuttons" class="globalbuttons"><html:image
 			property="methodToCall.refresh" src="images/buttonsmall_refresh.gif"
-			alt="refresh" title="refresh" styleClass="tinybutton" /> <html:image
+			alt="refresh" styleClass="tinybutton" /> <html:image
 			property="methodToCall.cancel" src="images/buttonsmall_cancel.gif"
-			alt="cancel" title="cancel" styleClass="tinybutton" /></div>
+			alt="cancel" styleClass="tinybutton" /></div>
 	</c:if>
 </kul:page>

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Agency;
@@ -36,7 +38,7 @@ import org.kuali.PropertyConstants;
  * 
  * 
  */
-public class Budget extends PersistableBusinessObjectBase {
+public class Budget extends BusinessObjectBase {
 
     private static final long serialVersionUID = 8113894775967293272L;
     private String documentNumber;
@@ -46,6 +48,7 @@ public class Budget extends PersistableBusinessObjectBase {
     private String budgetProgramAnnouncementNumber;
     private String budgetProjectDirectorSystemId;
     private boolean budgetThirdPartyCostShareIndicator;
+    private String budgetStatusCode;
     private KualiDecimal budgetPersonnelInflationRate;
     private KualiDecimal budgetNonpersonnelInflationRate;
     private String electronicResearchAdministrationGrantNumber;
@@ -232,6 +235,20 @@ public class Budget extends PersistableBusinessObjectBase {
      */
     public void setBudgetProjectDirectorSystemId(String budgetProjectDirectorSystemId) {
         this.budgetProjectDirectorSystemId = budgetProjectDirectorSystemId;
+    }
+
+    /**
+     * @return Returns the budgetStatusCode.
+     */
+    public String getBudgetStatusCode() {
+        return budgetStatusCode;
+    }
+
+    /**
+     * @param budgetStatusCode The budgetStatusCode to set.
+     */
+    public void setBudgetStatusCode(String budgetStatusCode) {
+        this.budgetStatusCode = budgetStatusCode;
     }
 
     /**
@@ -446,10 +463,23 @@ public class Budget extends PersistableBusinessObjectBase {
         this.documentNumber = documentNumber;
     }
 
+    // /**
+    // * @return Returns the budgetDocument.
+    // */
+    // public BudgetDocument getBudgetDocument() {
+    // return budgetDocument;
+    // }
+    // /**
+    // * @param budgetDocument The budgetDocument to set.
+    // */
+    // public void setBudgetDocument(BudgetDocument budgetDocument) {
+    // this.budgetDocument = budgetDocument;
+    // }
+
     /**
      * @return Returns the fringeRates.
      */
-    public List<BudgetFringeRate> getFringeRates() {
+    public List getFringeRates() {
         return fringeRates;
     }
 
@@ -508,7 +538,7 @@ public class Budget extends PersistableBusinessObjectBase {
      * 
      * @return Returns the nonpersonnelItems.
      */
-    public List<BudgetNonpersonnel> getNonpersonnelItems() {
+    public List getNonpersonnelItems() {
         return nonpersonnelItems;
     }
 
@@ -797,7 +827,7 @@ public class Budget extends PersistableBusinessObjectBase {
         return getAllUserAppointmentTaskPeriods(false);
     }
 
-    public List<UserAppointmentTaskPeriod> getAllUserAppointmentTaskPeriods(boolean forceRefreshPriorToSave) {
+    public List getAllUserAppointmentTaskPeriods(boolean forceRefreshPriorToSave) {
         if (allUserAppointmentTaskPeriods == null) {
             List list = new ArrayList();
             for (Iterator i = getAllUserAppointmentTasks(forceRefreshPriorToSave).iterator(); i.hasNext();) {

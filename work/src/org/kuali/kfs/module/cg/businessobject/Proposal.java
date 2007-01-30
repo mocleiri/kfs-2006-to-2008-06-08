@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/Proposal.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,54 +18,34 @@
 
 package org.kuali.module.cg.bo;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.ojb.broker.PersistenceBroker;
-import org.apache.ojb.broker.PersistenceBrokerException;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.core.util.TypedArrayList;
-import org.kuali.module.kra.routingform.bo.RoutingFormBudget;
-import org.kuali.module.kra.routingform.bo.RoutingFormOrganization;
-import org.kuali.module.kra.routingform.bo.RoutingFormSubcontractor;
-import org.kuali.module.kra.routingform.document.RoutingFormDocument;
-import org.kuali.module.cg.lookup.valueFinder.NextProposalNumberFinder;
 
 /**
  * 
  */
-public class Proposal extends PersistableBusinessObjectBase {
+public class Proposal extends BusinessObjectBase {
 
-    private static final String PROPOSAL_CODE = "P";
     private Long proposalNumber;
-    private Date proposalBeginningDate;
-    private Date proposalEndingDate;
-    
-    /**
-     * This field is for write-only to the database via OJB, not the corresponding property of this BO.
-     * OJB uses reflection to read it, so the compiler warns because it doesn't know.
-     * @see #getProposalTotalAmount
-     * @see #setProposalTotalAmount
-     */
-    @SuppressWarnings({"UnusedDeclaration"})
+    private Timestamp proposalBeginningDate;
+    private Timestamp proposalEndingDate;
     private KualiDecimal proposalTotalAmount;
-    
     private KualiDecimal proposalDirectCostAmount;
     private KualiDecimal proposalIndirectCostAmount;
-    private Date proposalRejectedDate;
-    private Date proposalLastUpdateDate;
-    private Date proposalDueDate;
+    private Timestamp proposalRejectedDate;
+    private Timestamp proposalLastUpdateDate;
+    private Timestamp proposalDueDate;
     private KualiDecimal proposalTotalProjectAmount;
-    private Date proposalSubmissionDate;
+    private Timestamp proposalSubmissionDate;
     private boolean proposalFederalPassThroughIndicator;
     private String oldProposalNumber;
     private String grantNumber;
-    private Date proposalClosingDate;
+    private Timestamp proposalClosingDate;
     private String proposalAwardTypeCode;
     private String agencyNumber;
     private String proposalStatusCode;
@@ -72,84 +54,28 @@ public class Proposal extends PersistableBusinessObjectBase {
     private String proposalFellowName;
     private String proposalPurposeCode;
     private String proposalProjectTitle;
-    private List<ProposalSubcontractor> proposalSubcontractors;
-    private List<ProposalOrganization> proposalOrganizations;
-    private List<ProposalProjectDirector> proposalProjectDirectors;
-    private List<ProposalResearchRisk> proposalResearchRisks;
+    private List proposalSubcontractor;
+    private List proposalOrganization;
+    private List proposalProjectDirector;
+    private List proposalDiary;
 
+    private ResearchType researchType;
     private ProposalAwardType proposalAwardType;
     private Agency agency;
     private ProposalStatus proposalStatus;
     private Agency federalPassThroughAgency;
     private ProposalPurpose proposalPurpose;
-    private CatalogOfFederalDomesticAssistanceReference cfda;
 
     /**
      * Default constructor.
      */
-    @SuppressWarnings({"unchecked"})  // todo: generify TypedArrayList and rename to something appropriate like AlwaysGettableArrayList
     public Proposal() {
-        // Must use TypedArrayList because its get() method automatically grows the array for Struts.
-        proposalSubcontractors = new TypedArrayList(ProposalSubcontractor.class);
-        proposalOrganizations = new TypedArrayList(ProposalOrganization.class);
-        proposalProjectDirectors = new TypedArrayList(ProposalProjectDirector.class);
-        proposalResearchRisks = new TypedArrayList(ProposalResearchRisk.class);
+        proposalSubcontractor = new ArrayList();
+        proposalOrganization = new ArrayList();
+        proposalProjectDirector = new ArrayList();
+        proposalDiary = new ArrayList();
     }
 
-    public Proposal(RoutingFormDocument routingFormDocument) {
-        this();
-        
-        Long newProposalNumber = NextProposalNumberFinder.getLongValue();
-        this.setProposalNumber(newProposalNumber);
-        this.setProposalStatusCode(PROPOSAL_CODE);
-
-        //Values coming from RoutingFormDocument (ER_RF_DOC_T)
-        this.setProposalProjectTitle(routingFormDocument.getRoutingFormProjectTitle().substring(0, 250));
-        this.setProposalPurposeCode(routingFormDocument.getRoutingFormPurposeCode());
-        this.setProposalAwardTypeCode("N");
-        this.setGrantNumber(routingFormDocument.getGrantNumber());
-        this.setCfdaNumber(routingFormDocument.getRoutingFormCatalogOfFederalDomesticAssistanceNumber());
-        this.setProposalFellowName(routingFormDocument.getRoutingFormFellowFullName());
-        this.setProposalFederalPassThroughIndicator(routingFormDocument.getRoutingFormFederalPassThroughIndicator());
-        this.setFederalPassThroughAgencyNumber(routingFormDocument.getAgencyFederalPassThroughNumber());
-        
-        //Values coming from Routing Form Budget BO (ER_RF_BDGT_T)
-        RoutingFormBudget routingFormBudget = routingFormDocument.getRoutingFormBudget();
-        this.setProposalBeginningDate(routingFormBudget.getRoutingFormBudgetStartDate());
-        this.setProposalEndingDate(routingFormBudget.getRoutingFormBudgetEndDate());
-        this.setProposalTotalAmount((routingFormBudget.getRoutingFormBudgetDirectAmount() != null ? routingFormBudget.getRoutingFormBudgetDirectAmount() : new KualiInteger(0)).add(routingFormBudget.getRoutingFormBudgetIndirectCostAmount() != null ? routingFormBudget.getRoutingFormBudgetIndirectCostAmount() : new KualiInteger(0)).kualiDecimalValue());
-        this.setProposalDirectCostAmount((routingFormBudget.getRoutingFormBudgetDirectAmount() != null ? routingFormBudget.getRoutingFormBudgetDirectAmount() : new KualiInteger(0)).kualiDecimalValue());
-        this.setProposalIndirectCostAmount((routingFormBudget.getRoutingFormBudgetIndirectCostAmount() != null ? routingFormBudget.getRoutingFormBudgetIndirectCostAmount() : new KualiInteger(0)).kualiDecimalValue());
-        this.setProposalDueDate(routingFormDocument.getRoutingFormAgency().getRoutingFormDueDate());
-
-        //Values coming from RoutingFormAgency (ER_RF_AGNCY_T)
-        this.setAgencyNumber(routingFormDocument.getRoutingFormAgency().getAgencyNumber());
-
-        //Values coming from the list of Subcontractors (ER_RF_SUBCNR_T)
-        for (RoutingFormSubcontractor routingFormSubcontractor : routingFormDocument.getRoutingFormSubcontractors()) {
-            this.getProposalSubcontractors().add(new ProposalSubcontractor(newProposalNumber, routingFormSubcontractor));
-        }
-
-        for (RoutingFormOrganization routingFormOrganization : routingFormDocument.getRoutingFormOrganizations()) {
-            //construct a new ProposalOrganization using the current RoutingFormOrganization as a template.
-            ProposalOrganization proposalOrganization = new ProposalOrganization(newProposalNumber, routingFormOrganization);
-            
-            //check to see if the list or ProposalOrganizations already contains an entry with this key; add it to the list if it does not.
-            if (!ObjectUtils.collectionContainsObjectWithIdentitcalKey(this.getProposalOrganizations(), proposalOrganization)) {
-                this.getProposalOrganizations().add(proposalOrganization);
-            }
-        }
-        
-        //Can't do yet?
-        this.setProposalSubmissionDate(SpringServiceLocator.getDateTimeService().getCurrentSqlDate());
-        //can't do Project Director until RoutingFormPersonnel is done.
-        /**
-          - er.er_rf_prjdr_t.person_unvl_id - person_unvl_id
-          - er.er_rf_prjdr_t.prpsl_prm_pjd_ind - prpsl_prmprjdr_ind
-        */
-        
-    }
-    
     /**
      * Gets the proposalNumber attribute.
      * 
@@ -177,7 +103,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @return Returns the proposalBeginningDate
      * 
      */
-    public Date getProposalBeginningDate() {
+    public Timestamp getProposalBeginningDate() {
         return proposalBeginningDate;
     }
 
@@ -187,7 +113,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @param proposalBeginningDate The proposalBeginningDate to set.
      * 
      */
-    public void setProposalBeginningDate(Date proposalBeginningDate) {
+    public void setProposalBeginningDate(Timestamp proposalBeginningDate) {
         this.proposalBeginningDate = proposalBeginningDate;
     }
 
@@ -198,7 +124,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @return Returns the proposalEndingDate
      * 
      */
-    public Date getProposalEndingDate() {
+    public Timestamp getProposalEndingDate() {
         return proposalEndingDate;
     }
 
@@ -208,7 +134,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @param proposalEndingDate The proposalEndingDate to set.
      * 
      */
-    public void setProposalEndingDate(Date proposalEndingDate) {
+    public void setProposalEndingDate(Timestamp proposalEndingDate) {
         this.proposalEndingDate = proposalEndingDate;
     }
 
@@ -220,53 +146,19 @@ public class Proposal extends PersistableBusinessObjectBase {
      * 
      */
     public KualiDecimal getProposalTotalAmount() {
-        KualiDecimal direct = getProposalDirectCostAmount();
-        KualiDecimal indirect = getProposalIndirectCostAmount();
-        return ObjectUtils.isNull(direct) || ObjectUtils.isNull(indirect) ? null : direct.add(indirect);
+        return proposalTotalAmount;
     }
 
     /**
-     * Does nothing.  This property is determined by the direct and indirect cost amounts.
-     * This setter is here only because without it, the maintenance framework won't display this attribute.
+     * Sets the proposalTotalAmount attribute.
      * 
      * @param proposalTotalAmount The proposalTotalAmount to set.
      * 
      */
     public void setProposalTotalAmount(KualiDecimal proposalTotalAmount) {
-        // do nothing
+        this.proposalTotalAmount = proposalTotalAmount;
     }
 
-    /**
-     * OJB calls this method as the first operation before this BO is inserted into the database.
-     * The database contains CGPRPSL_TOT_AMT, a denormalized column that
-     * Kuali does not use but needs to maintain with this method because OJB bypasses the getter.
-     * 
-     * @param persistenceBroker from OJB
-     * @throws PersistenceBrokerException
-     */
-    @Override
-    public void beforeInsert(PersistenceBroker persistenceBroker)
-        throws PersistenceBrokerException
-    {
-        super.beforeInsert(persistenceBroker);
-        proposalTotalAmount = getProposalTotalAmount();
-    }
-
-    /**
-     * OJB calls this method as the first operation before this BO is updated to the database.
-     * The database contains CGPRPSL_TOT_AMT, a denormalized column that
-     * Kuali does not use but needs to maintain with this method because OJB bypasses the getter.
-     * 
-     * @param persistenceBroker from OJB
-     * @throws PersistenceBrokerException
-     */
-    @Override
-    public void beforeUpdate(PersistenceBroker persistenceBroker)
-        throws PersistenceBrokerException
-    {
-        super.beforeUpdate(persistenceBroker);
-        proposalTotalAmount = getProposalTotalAmount();
-    }
 
     /**
      * Gets the proposalDirectCostAmount attribute.
@@ -316,7 +208,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @return Returns the proposalRejectedDate
      * 
      */
-    public Date getProposalRejectedDate() {
+    public Timestamp getProposalRejectedDate() {
         return proposalRejectedDate;
     }
 
@@ -326,7 +218,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @param proposalRejectedDate The proposalRejectedDate to set.
      * 
      */
-    public void setProposalRejectedDate(Date proposalRejectedDate) {
+    public void setProposalRejectedDate(Timestamp proposalRejectedDate) {
         this.proposalRejectedDate = proposalRejectedDate;
     }
 
@@ -337,7 +229,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @return Returns the proposalLastUpdateDate
      * 
      */
-    public Date getProposalLastUpdateDate() {
+    public Timestamp getProposalLastUpdateDate() {
         return proposalLastUpdateDate;
     }
 
@@ -347,7 +239,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @param proposalLastUpdateDate The proposalLastUpdateDate to set.
      * 
      */
-    public void setProposalLastUpdateDate(Date proposalLastUpdateDate) {
+    public void setProposalLastUpdateDate(Timestamp proposalLastUpdateDate) {
         this.proposalLastUpdateDate = proposalLastUpdateDate;
     }
 
@@ -358,7 +250,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @return Returns the proposalDueDate
      * 
      */
-    public Date getProposalDueDate() {
+    public Timestamp getProposalDueDate() {
         return proposalDueDate;
     }
 
@@ -368,7 +260,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @param proposalDueDate The proposalDueDate to set.
      * 
      */
-    public void setProposalDueDate(Date proposalDueDate) {
+    public void setProposalDueDate(Timestamp proposalDueDate) {
         this.proposalDueDate = proposalDueDate;
     }
 
@@ -400,7 +292,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @return Returns the proposalSubmissionDate
      * 
      */
-    public Date getProposalSubmissionDate() {
+    public Timestamp getProposalSubmissionDate() {
         return proposalSubmissionDate;
     }
 
@@ -410,7 +302,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @param proposalSubmissionDate The proposalSubmissionDate to set.
      * 
      */
-    public void setProposalSubmissionDate(Date proposalSubmissionDate) {
+    public void setProposalSubmissionDate(Timestamp proposalSubmissionDate) {
         this.proposalSubmissionDate = proposalSubmissionDate;
     }
 
@@ -484,7 +376,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @return Returns the proposalClosingDate
      * 
      */
-    public Date getProposalClosingDate() {
+    public Timestamp getProposalClosingDate() {
         return proposalClosingDate;
     }
 
@@ -494,7 +386,7 @@ public class Proposal extends PersistableBusinessObjectBase {
      * @param proposalClosingDate The proposalClosingDate to set.
      * 
      */
-    public void setProposalClosingDate(Date proposalClosingDate) {
+    public void setProposalClosingDate(Timestamp proposalClosingDate) {
         this.proposalClosingDate = proposalClosingDate;
     }
 
@@ -666,6 +558,27 @@ public class Proposal extends PersistableBusinessObjectBase {
         this.proposalProjectTitle = proposalProjectTitle;
     }
 
+
+    /**
+     * Gets the researchType attribute.
+     * 
+     * @return Returns the researchType
+     * 
+     */
+    public ResearchType getResearchType() {
+        return researchType;
+    }
+
+    /**
+     * Sets the researchType attribute.
+     * 
+     * @param researchType The researchType to set.
+     * @deprecated
+     */
+    public void setResearchType(ResearchType researchType) {
+        this.researchType = researchType;
+    }
+
     /**
      * Gets the proposalAwardType attribute.
      * 
@@ -767,95 +680,76 @@ public class Proposal extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the cfda attribute.
-     *
-     * @return Returns the cfda
-     *
-     */
-    public CatalogOfFederalDomesticAssistanceReference getCfda() {
-        return cfda;
-    }
-
-    /**
-     * Sets the cfda attribute.
-     *
-     * @param cfda The cfda to set.
-     * @deprecated
-     */
-    public void setCfda(CatalogOfFederalDomesticAssistanceReference cfda) {
-        this.cfda = cfda;
-    }
-
-    /**
-     * Gets the proposalSubcontractors list.
+     * Gets the proposalSubcontractor list.
      * 
-     * @return Returns the proposalSubcontractors list
+     * @return Returns the proposalSubcontractor list
      * 
      */
-    public List<ProposalSubcontractor> getProposalSubcontractors() {
-        return proposalSubcontractors;
+    public List getProposalSubcontractor() {
+        return proposalSubcontractor;
     }
 
     /**
-     * Sets the proposalSubcontractors list.
+     * Sets the proposalSubcontractor list.
      * 
-     * @param proposalSubcontractors The proposalSubcontractors list to set.
+     * @param proposalSubcontractor The proposalSubcontractor list to set.
      * 
      */
-    public void setProposalSubcontractors(List<ProposalSubcontractor> proposalSubcontractors) {
-        this.proposalSubcontractors = proposalSubcontractors;
+    public void setProposalSubcontractor(List proposalSubcontractor) {
+        this.proposalSubcontractor = proposalSubcontractor;
     }
 
     /**
-     * @return Returns the proposalOrganizations.
+     * @return Returns the proposalOrganization.
      */
-    public List<ProposalOrganization> getProposalOrganizations() {
-        return proposalOrganizations;
+    public List getProposalOrganization() {
+        return proposalOrganization;
     }
 
     /**
-     * @param proposalOrganizations The proposalOrganizations to set.
+     * @param proposalOrganization The proposalOrganization to set.
      */
-    public void setProposalOrganizations(List<ProposalOrganization> proposalOrganizations) {
-        this.proposalOrganizations = proposalOrganizations;
+    public void setProposalOrganization(List proposalOrganization) {
+        this.proposalOrganization = proposalOrganization;
     }
 
     /**
-     * @return Returns the proposalProjectDirectors.
+     * @return Returns the proposalProjectDirector.
      */
-    public List<ProposalProjectDirector> getProposalProjectDirectors() {
-        return proposalProjectDirectors;
+    public List getProposalProjectDirector() {
+        return proposalProjectDirector;
     }
 
     /**
-     * @param proposalProjectDirectors The proposalProjectDirectors to set.
+     * @param proposalProjectDirector The proposalProjectDirector to set.
      */
-    public void setProposalProjectDirectors(List<ProposalProjectDirector> proposalProjectDirectors) {
-        this.proposalProjectDirectors = proposalProjectDirectors;
+    public void setProposalProjectDirector(List proposalProjectDirector) {
+        this.proposalProjectDirector = proposalProjectDirector;
     }
 
     /**
-     * @return Returns the proposalResearchRisks.
+     * @return Returns the proposalDiary.
      */
-    public List<ProposalResearchRisk> getProposalResearchRisks() {
-        return proposalResearchRisks;
+    public List getProposalDiary() {
+        return proposalDiary;
     }
 
     /**
-     * @param proposalResearchRisks The proposalResearchRisks to set.
+     * @param proposalDiary The proposalDiary to set.
      */
-    public void setProposalResearchRisks(List<ProposalResearchRisk> proposalResearchRisks) {
-        this.proposalResearchRisks = proposalResearchRisks;
+    public void setProposalDiary(List proposalDiary) {
+        this.proposalDiary = proposalDiary;
     }
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap<String, String> m = new LinkedHashMap<String, String>();
+        LinkedHashMap m = new LinkedHashMap();
         if (this.proposalNumber != null) {
             m.put("proposalNumber", this.proposalNumber.toString());
         }
         return m;
     }
+
 }

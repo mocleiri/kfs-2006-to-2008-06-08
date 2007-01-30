@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,12 +70,12 @@ public class IsDebitTestUtils {
     }
 
     private static class ImportLines {
-        public static final String DEFAULT = "BA,6044900,x,objc,x,x,x,0";
-        public static final String WITH_DESCRIPTION = "BA,6044900,x,objc,x,x,x,description,0";
-        public static final String WITH_REF_NUM_AND_DESCRIPTION = "BA,6044900,x,objc,x,x,x,refnum,description,0";
-        public static final String WITH_REF_NUM = "BA,6044900,x,objc,x,x,x,refnum,0";
-        public static final String WITH_ORIGIN_CODE_AND_REF_NUM_AND_DESCRIPTION = "BA,6044900,x,objc,x,x,x,01,refnum,description,0";
-        public static final String WITHOUT_OBJECT_CODE = "BA,6044900,x,x,x,x,0";
+        public static final String DEFAULT = "BA,6044900,x,objc,x,x,x,x,0";
+        public static final String WITH_DESCRIPTION = "BA,6044900,x,objc,x,x,x,description,x,0";
+        public static final String WITH_REF_NUM_AND_DESCRIPTION = "BA,6044900,x,objc,x,x,x,refnum,description,x,0";
+        public static final String WITH_REF_NUM = "BA,6044900,x,objc,x,x,x,refnum,x,0";
+        public static final String WITH_ORIGIN_CODE_AND_REF_NUM_AND_DESCRIPTION = "BA,6044900,x,objc,x,x,x,01,refnum,description,x,0";
+        public static final String WITHOUT_OBJECT_CODE = "BA,6044900,x,x,x,x,x,0";
     }
 
 

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/SufficientFundBalances.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -32,7 +34,7 @@ import org.kuali.module.chart.bo.ObjectCode;
 /**
  * 
  */
-public class SufficientFundBalances extends PersistableBusinessObjectBase {
+public class SufficientFundBalances extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
@@ -48,7 +50,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     private Account account;
 
     public static final String BLANKS = "                 ";
-    public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Default constructor.
@@ -148,7 +150,6 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
             return null;
         }
         else {
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
             sdf.setLenient(beLenientWithDates);
 
             try {
@@ -166,7 +167,6 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
             return "          ";
         }
         else {
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
             return sdf.format(date);
         }
     }
@@ -174,7 +174,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -195,7 +195,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -216,7 +216,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return Returns the accountNumber
+     * @return - Returns the accountNumber
      * 
      */
     public String getAccountNumber() {
@@ -237,7 +237,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return Returns the financialObjectCode
+     * @return - Returns the financialObjectCode
      * 
      */
     public String getFinancialObjectCode() {
@@ -258,7 +258,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the accountSufficientFundsCode attribute.
      * 
-     * @return Returns the accountSufficientFundsCode
+     * @return - Returns the accountSufficientFundsCode
      * 
      */
     public String getAccountSufficientFundsCode() {
@@ -279,7 +279,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the currentBudgetBalanceAmount attribute.
      * 
-     * @return Returns the currentBudgetBalanceAmount
+     * @return - Returns the currentBudgetBalanceAmount
      * 
      */
     public KualiDecimal getCurrentBudgetBalanceAmount() {
@@ -300,7 +300,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the accountActualExpenditureAmt attribute.
      * 
-     * @return Returns the accountActualExpenditureAmt
+     * @return - Returns the accountActualExpenditureAmt
      * 
      */
     public KualiDecimal getAccountActualExpenditureAmt() {
@@ -321,7 +321,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the accountEncumbranceAmount attribute.
      * 
-     * @return Returns the accountEncumbranceAmount
+     * @return - Returns the accountEncumbranceAmount
      * 
      */
     public KualiDecimal getAccountEncumbranceAmount() {
@@ -342,7 +342,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionDateTimeStamp attribute.
      * 
-     * @return Returns the transactionDateTimeStamp
+     * @return - Returns the transactionDateTimeStamp
      * 
      */
     public Date getTransactionDateTimeStamp() {
@@ -363,7 +363,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the objectCode attribute.
      * 
-     * @return Returns the objectCode
+     * @return - Returns the objectCode
      * 
      */
     public ObjectCode getObjectCode() {
@@ -383,7 +383,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the chart attribute.
      * 
-     * @return Returns the chart
+     * @return - Returns the chart
      * 
      */
     public Chart getChart() {
@@ -403,7 +403,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     /**
      * Gets the account attribute.
      * 
-     * @return Returns the account
+     * @return - Returns the account
      * 
      */
     public Account getAccount() {
