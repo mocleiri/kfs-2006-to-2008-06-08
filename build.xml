@@ -462,6 +462,7 @@
 	</target>
 	
 	<target name="dist" depends="make-source">
+		<unzip dest="${war.directory}" src="build/configurationFiles/workflow/appserver/workflow-embedded-content.zip"/>
 		<copy todir="${war.directory}">
 			<fileset dir="${webroot.directory}" excludes="WEB-INF/classes/**/**" />
 		</copy>
