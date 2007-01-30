@@ -1,5 +1,7 @@
 <%--
- Copyright 2006 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/generalLedger/Correction.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -30,8 +32,6 @@
   <html:hidden property="deleteFileFlag"/>
   <html:hidden property="showOutputFlag"/>
   <html:hidden property="inputFileName"/>
-  <html:hidden property="showSummaryOutputFlag"/>
- 
 
   <c:if test="${debug == true}">
     <kul:tab tabTitle="Debug" defaultOpen="true" tabErrorKey="debug">
@@ -68,10 +68,10 @@
       <div class="tab-container" align="center"> 
 	    <table cellpadding="0" class="datatable" summary=""> 
           <tr>
-            <c:if test="${KualiForm.showOutputFlag == true or KualiForm.showSummaryOutputFlag == true}">
+            <c:if test="${KualiForm.showOutputFlag == true}">
               <td align="left" valign="middle" class="subhead"><span class="subhead-left">Summary of Output Group</span></td>
             </c:if>
-            <c:if test="${KualiForm.showOutputFlag == false or KualiForm.showSummaryOutputFlag == true}">
+            <c:if test="${KualiForm.showOutputFlag == false}">
               <td align="left" valign="middle" class="subhead"><span class="subhead-left">Summary of Input Group</span></td>
             </c:if>
           </tr>
@@ -195,7 +195,7 @@
                   </c:otherwise>
                 </c:choose>
                 <display:table class="datatable-100" cellspacing="0" cellpadding="0" name="${groupForTable}" id="allEntries" pagesize="10"
-                    requestURI="generalLedgerCorrection.do?methodToCall=viewResults&document.documentNumber=${KualiForm.document.documentHeader.documentNumber}" >
+                    requestURI="generalLedgerCorrection.do?methodToCall=viewResults&document.financialDocumentNumber=${KualiForm.document.documentHeader.financialDocumentNumber}" >
                   <c:choose>
                     <c:when test="${KualiForm.editableFlag == true and KualiForm.showOutputFlag == false}">
                       <display:column title="Manual Edit" >
@@ -218,7 +218,7 @@
                   <display:column class="infocell" sortable="true" title="Fiscal Period" ><c:out value="${allEntries.universityFiscalPeriodCode}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" title="Document Type" ><c:out value="${allEntries.financialDocumentTypeCode}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" title="Origin Code" ><c:out value="${allEntries.financialSystemOriginationCode}" />&nbsp;</display:column>
-                  <display:column class="infocell" sortable="true" title="Document Number" ><c:out value="${allEntries.documentNumber}" />&nbsp;</display:column>
+                  <display:column class="infocell" sortable="true" title="Document Number" ><c:out value="${allEntries.financialDocumentNumber}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" comparator="org.kuali.core.web.comparator.NumericCellComparator" title="Sequence Number" ><c:out value="${allEntries.transactionLedgerEntrySequenceNumber}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" title="Description" ><c:out value="${allEntries.transactionLedgerEntryDescription}" />&nbsp;</display:column>
                   <display:column class="infocell" sortable="true" comparator="org.kuali.core.web.comparator.NumericCellComparator" title="Amount" ><c:out value="${allEntries.transactionLedgerEntryAmount}" />&nbsp;</display:column>
@@ -298,7 +298,7 @@
                         <td><html:text property="entryForManualEdit.universityFiscalPeriodCode" size="6"/></td>
                         <td><html:text property="entryForManualEdit.financialDocumentTypeCode" size="10"/></td>
                         <td><html:text property="entryForManualEdit.financialSystemOriginationCode" size="6"/></td>
-                        <td><html:text property="entryForManualEdit.documentNumber" size="9"/></td>
+                        <td><html:text property="entryForManualEdit.financialDocumentNumber" size="9"/></td>
                         <td><html:text property="entryTransactionLedgerEntrySequenceNumber" size="9"/></td>
                         <td><html:text property="entryForManualEdit.transactionLedgerEntryDescription" size="11"/></td>
                         <td><html:text property="entryTransactionLedgerEntryAmount" size="7"/></td>
@@ -396,7 +396,7 @@
                 <td colspan="2" align="left" class="bord-l-b" style="padding: 4px; vertical-align: top;"> 
                   <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].versionNumber"/>
                   <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeGroupLineNumber"/>
-                  <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].documentNumber"/>
+                  <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].financialDocumentNumber"/>
                   <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaNextLineNumber"/>
                   <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeNextLineNumber"/>
                   <strong>Group:</strong>
@@ -419,7 +419,7 @@
                   <c:forEach items="${group.correctionCriteria}" var="criteria" varStatus="cc">
                     Field:
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].versionNumber"/>
-                    <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].documentNumber"/>
+                    <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].financialDocumentNumber"/>
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionChangeGroupLineNumber"/>
                     <html:select property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldName">
                       <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
@@ -445,7 +445,7 @@
                   <c:forEach items="${group.correctionChange}" var="change">
                     Field:
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].versionNumber"/>
-                    <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].documentNumber"/>
+                    <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].financialDocumentNumber"/>
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionChangeGroupLineNumber"/>
                     <html:select property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldName">
                       <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
@@ -483,13 +483,13 @@
                 <c:forEach var="group" items="${KualiForm.document.correctionChangeGroup}"> 
                   <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].versionNumber"/>
                   <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeGroupLineNumber"/>
-                  <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].documentNumber"/>
+                  <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].financialDocumentNumber"/>
                   <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaNextLineNumber"/>
                   <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeNextLineNumber"/>
                   <c:forEach items="${group.correctionCriteria}" var="criteria" varStatus="cc">
                     Field:
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].versionNumber"/>
-                    <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].documentNumber"/>
+                    <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].financialDocumentNumber"/>
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionChangeGroupLineNumber"/>
                     <html:select property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldName">
                       <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
@@ -549,12 +549,12 @@
     <c:forEach var="group" items="${KualiForm.document.correctionChangeGroup}"> 
       <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].versionNumber"/>
       <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeGroupLineNumber"/>
-      <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].documentNumber"/>
+      <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].financialDocumentNumber"/>
       <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaNextLineNumber"/>
       <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeNextLineNumber"/>
       <c:forEach items="${group.correctionCriteria}" var="criteria" varStatus="cc">
         <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].versionNumber"/>
-        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].documentNumber"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].financialDocumentNumber"/>
         <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionChangeGroupLineNumber"/>
         <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldName"/>
         <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionOperatorCode"/>
@@ -562,7 +562,7 @@
       </c:forEach>
       <c:forEach items="${group.correctionChange}" var="change">
         <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].versionNumber"/>
-        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].documentNumber"/>
+        <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].financialDocumentNumber"/>
         <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionChangeGroupLineNumber"/>
         <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldName"/>
         <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldValue"/>
@@ -619,7 +619,7 @@
         </tr>
         <tr>
           <td>
-            <display:table class="datatable-100" cellspacing="0" requestURIcontext="false" cellpadding="0" name="${KualiForm.allEntries}" id="allEntries" pagesize="10" requestURI="generalLedgerCorrection.do?methodToCall=viewResults&document.documentNumber=${KualiForm.document.documentHeader.documentNumber}" >
+            <display:table class="datatable-100" cellspacing="0" requestURIcontext="false" cellpadding="0" name="${KualiForm.allEntries}" id="allEntries" pagesize="10" requestURI="generalLedgerCorrection.do?methodToCall=viewResults&document.financialDocumentNumber=${KualiForm.document.documentHeader.financialDocumentNumber}" >
               <display:column class="infocell" sortable="true" title="Origin Entry Id" ><c:out value="${allEntries.entryId}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Fiscal Year" ><c:out value="${allEntries.universityFiscalYear}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Chart Code" ><c:out value="${allEntries.chartOfAccountsCode}" />&nbsp;</display:column>
@@ -632,7 +632,7 @@
               <display:column class="infocell" sortable="true" title="Fiscal Period" ><c:out value="${allEntries.universityFiscalPeriodCode}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Document Type" ><c:out value="${allEntries.financialDocumentTypeCode}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Origin Code" ><c:out value="${allEntries.financialSystemOriginationCode}" />&nbsp;</display:column>
-              <display:column class="infocell" sortable="true" title="Document Number" ><c:out value="${allEntries.documentNumber}" />&nbsp;</display:column>
+              <display:column class="infocell" sortable="true" title="Document Number" ><c:out value="${allEntries.financialDocumentNumber}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Sequence Number" ><c:out value="${allEntries.transactionLedgerEntrySequenceNumber}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Description" ><c:out value="${allEntries.transactionLedgerEntryDescription}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Amount" ><c:out value="${allEntries.transactionLedgerEntryAmount}" />&nbsp;</display:column>
@@ -643,8 +643,8 @@
               <display:column class="infocell" sortable="true" title="Org Ref ID" ><c:out value="${allEntries.organizationReferenceId}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Ref Doc Type" ><c:out value="${allEntries.referenceFinancialDocumentTypeCode}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Ref Origin Code" ><c:out value="${allEntries.referenceFinancialSystemOriginationCode}" />&nbsp;</display:column>
-              <display:column class="infocell" sortable="true" title="Ref Doc Number" ><c:out value="${allEntries.documentNumber}" />&nbsp;</display:column>
-              <display:column class="infocell" sortable="true" title="Reversal Date" ><c:out value="${allEntries.documentNumber}" />&nbsp;</display:column>
+              <display:column class="infocell" sortable="true" title="Ref Doc Number" ><c:out value="${allEntries.financialDocumentNumber}" />&nbsp;</display:column>
+              <display:column class="infocell" sortable="true" title="Reversal Date" ><c:out value="${allEntries.financialDocumentNumber}" />&nbsp;</display:column>
               <display:column class="infocell" sortable="true" title="Enc Update Code" ><c:out value="${allEntries.transactionEncumbranceUpdateCode}" />&nbsp;</display:column>
             </display:table>
           </td>

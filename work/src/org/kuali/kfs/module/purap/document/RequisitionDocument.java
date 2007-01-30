@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/RequisitionDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +18,11 @@
 
 package org.kuali.module.purap.document;
 
-import static org.kuali.core.util.SpringServiceLocator.getKualiConfigurationService;
-
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+
 
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.DocumentHeader;
@@ -31,16 +32,13 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.bo.BillingAddress;
-import org.kuali.module.purap.bo.SourceDocumentReference;
 import org.kuali.module.purap.bo.VendorContract;
 import org.kuali.module.purap.bo.VendorDetail;
-import org.kuali.module.purap.util.PhoneNumberUtils;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -67,23 +65,6 @@ public class RequisitionDocument extends PurchasingDocumentBase {
 	 */
 	public RequisitionDocument() {
         super();
-        
-        SourceDocumentReference sourceDocumentReference = new SourceDocumentReference();
-        
-        sourceDocumentReference.setSourceDocumentIdentifier(this.getIdentifier());
-        sourceDocumentReference.setSourceFinancialDocumentTypeCode("REQ");
-        // This line is giving this error:
-        /*
-        javax.servlet.ServletException: OJB operation; SQL []; ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
-        ; nested exception is java.sql.SQLException: ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
-        */
-        //sourceDocumentReference.setSourceDocumentObjectIdentifier(this.getObjectId());
-        sourceDocumentReference.setSourceDocumentObjectIdentifier("objectID");
-        sourceDocumentReferences = new TypedArrayList(SourceDocumentReference.class);
-        sourceDocumentReferences.add(sourceDocumentReference);
-
-      
-        
     }
 
     public void refreshAllReferences() {
@@ -99,31 +80,42 @@ public class RequisitionDocument extends PurchasingDocumentBase {
         this.setStatusCode( PurapConstants.RequisitionStatuses.IN_PROCESS );
         this.setPurchaseOrderCostSourceCode( PurapConstants.POCostSources.ESTIMATE );
         this.setPurchaseOrderTransmissionMethodCode( PurapConstants.POTransmissionMethods.FAX );
-        
-        this.setFundingSourceCode(getKualiConfigurationService().getApplicationParameterValue("PurapAdminGroup","PURAP.REQUISITION_DEFAULT_FUNDING_SOURCE"));
+        this.setFundingSourceCode("IUAC");
+        // TODO set default funding source in params or make non-IU specific
+
+        // ripierce: the PostingYear has already been set before we come to this method.
 
         ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
         this.setChartOfAccountsCode(currentUser.getChartOfAccountsCode());
         this.setOrganizationCode(currentUser.getOrganization().getOrganizationCode());
         this.setDeliveryCampusCode(currentUser.getUniversalUser().getCampusCode());
-        this.setRequestorPersonName(currentUser.getUniversalUser().getPersonName());
-        this.setRequestorPersonEmailAddress(currentUser.getUniversalUser().getPersonEmailAddress());
-        this.setRequestorPersonPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(currentUser.getUniversalUser().getPersonLocalPhoneNumber()));
-        
+
         // Set the purchaseOrderTotalLimit
-        if (ObjectUtils.isNull(getPurchaseOrderTotalLimit())) {
-            KualiDecimal purchaseOrderTotalLimit = SpringServiceLocator.getRequisitionService().getApoLimit(
-              this.getVendorContractGeneratedIdentifier(), this.getChartOfAccountsCode(), this.getOrganizationCode());
-            if (ObjectUtils.isNotNull(purchaseOrderTotalLimit)) {
-                this.setPurchaseOrderTotalLimit(purchaseOrderTotalLimit);
-            }
+        KualiDecimal purchaseOrderTotalLimit = SpringServiceLocator.getVendorService().getApoLimitFromContract(
+          this.getVendorContractGeneratedIdentifier(), this.getChartOfAccountsCode(), this.getOrganizationCode()) ;
+
+        if (ObjectUtils.isNull(purchaseOrderTotalLimit)) {
+            purchaseOrderTotalLimit = SpringServiceLocator.getRequisitionService().getApoLimit(this.getChartOfAccountsCode(), 
+              this.getOrganizationCode());
+        }
+        if (ObjectUtils.isNotNull(purchaseOrderTotalLimit)) {
+            this.setPurchaseOrderTotalLimit(purchaseOrderTotalLimit);
         }
 
         BillingAddress billingAddress = new BillingAddress();
         billingAddress.setBillingCampusCode(this.getDeliveryCampusCode());
         Map keys = SpringServiceLocator.getPersistenceService().getPrimaryKeyFieldValues(billingAddress);
         billingAddress = (BillingAddress) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(BillingAddress.class, keys);
-        this.templateBillingAddress(billingAddress);
+        if (ObjectUtils.isNotNull(billingAddress)) {
+            this.setBillingName(billingAddress.getBillingName());
+            this.setBillingLine1Address(billingAddress.getBillingLine1Address());
+            this.setBillingLine2Address(billingAddress.getBillingLine2Address());
+            this.setBillingCityName(billingAddress.getBillingCityName());
+            this.setBillingStateCode(billingAddress.getBillingStateCode());
+            this.setBillingPostalCode(billingAddress.getBillingPostalCode());
+            this.setBillingCountryCode(billingAddress.getBillingCountryCode());
+            this.setBillingPhoneNumber(billingAddress.getBillingPhoneNumber());
+        }
 
 // TODO  WAIT ON ITEM LOGIC  (CHRIS AND DAVID SHOULD FIX THIS HERE)
 //        // add new item for freight
@@ -177,7 +169,7 @@ public class RequisitionDocument extends PurchasingDocumentBase {
             Timestamp allowedCopyDate = new Timestamp(c.getTime().getTime());
 
             Calendar c2 = Calendar.getInstance();
-            c2.setTime(SpringServiceLocator.getDateTimeService().getCurrentDate());
+            c2.setTime(new java.util.Date());
             c2.set(Calendar.HOUR, 11);
             c2.set(Calendar.MINUTE, 59);
             c2.set(Calendar.SECOND, 59);
@@ -319,23 +311,13 @@ public class RequisitionDocument extends PurchasingDocumentBase {
 
         // DOCUMENT PROCESSED
         if (this.getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            
-            if (SpringServiceLocator.getRequisitionService().isAutomaticPurchaseOrderAllowed(this)) {
-                PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(this);
-                //TODO how do we override the doc initiator?
-                try {
-                    poDocument = (PurchaseOrderDocument)SpringServiceLocator.getDocumentService().routeDocument(poDocument, null, null);
-                }
-                catch (WorkflowException e) {
-                    LOG.error("Error routing PO document: " + e.getMessage());
-                    throw new RuntimeException("Error routing PO document: " + e.getMessage());
-                }
-            }
-            else {
-                // TODO else set REQ status to "AWAITING_CONTRACT_MANAGER_ASSIGNMENT"
-                SpringServiceLocator.getPurapService().updateStatusAndStatusHistory(this, PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN);
-                SpringServiceLocator.getRequisitionService().save(this);
-            }
+            PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(this);
+//            if (SpringServiceLocator.getRequisitionService().isAutomaticPurchaseOrderAllowed(this)) {
+//                PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(this);
+//            }
+//            else {
+//                // TODO else set REQ status to "AWAITING_CONTRACT_MANAGER_ASSIGNMENT"
+//            }
         }
         // DOCUMENT DISAPPROVED
         else if (this.getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
