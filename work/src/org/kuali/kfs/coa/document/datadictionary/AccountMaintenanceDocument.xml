@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/datadictionary/AccountMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -36,16 +38,12 @@
         <documentTypeName>KualiAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>ACCT</documentTypeCode>
 
-		<webScriptFile>chart/accountDocument.js</webScriptFile>
-
         <label>Account Maintenance Document</label>
         <shortLabel>AcctMaintDoc</shortLabel>
 
         <summary>Account maintenance document</summary>
         <description>Document used to create or update Account objects</description>
 		<help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ACCOUNT" />
-
-        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
@@ -72,7 +70,6 @@
             <!--  comment program out if not in use at your institution -->
             <reference attributeName="program" activeIndicatorAttributeName="programActiveIndicator" attributeToHighlightOnFail="programCode" />
             <reference attributeName="budgetRecordingLevel" activeIndicatorAttributeName="active" attributeToHighlightOnFail="budgetRecordingLevelCode" />
-            <reference attributeName="acctIndirectCostRcvyType" activeIndicatorAttributeName="active" attributeToHighlightOnFail="acctIndirectCostRcvyTypeCd" />
         </defaultExistenceChecks>
 
         <maintainableSections>
@@ -96,7 +93,7 @@
                     <maintainableField name="accountOffCampusIndicator" required="false" />
                     <maintainableField name="accountClosedIndicator" required="false" />
                     <maintainableField name="accountTypeCode" required="true" />
-                    <maintainableField name="subFundGroupCode" required="true" webUILeaveFieldFunction="onblur_subFundGroup" webUILeaveFieldCallbackFunction="checkRestrictedStatusCode_Callback" />
+                    <maintainableField name="subFundGroupCode" required="true" />
                     <!--  comment programCode out if not in use at your institution -->
                     <maintainableField name="programCode" required="false" />
                     <maintainableField name="accountsFringesBnftIndicator" required="false">
@@ -105,7 +102,7 @@
                     <maintainableField name="reportsToChartOfAccountsCode" required="false" />
                     <maintainableField name="reportsToAccountNumber" required="false" />
                     <maintainableField name="financialHigherEdFunctionCd" required="true" />
-                    <maintainableField name="accountRestrictedStatusCode" required="true"  webUILeaveFieldFunction="onblur_accountRestrictedStatusCode" webUILeaveFieldCallbackFunction="checkRestrictedStatusCode_Callback" />
+                    <maintainableField name="accountRestrictedStatusCode" required="true" />
                     <maintainableField name="accountRestrictedStatusDate" required="false" />
                     <maintainableField name="endowmentIncomeAcctFinCoaCd" required="false" />
                     <maintainableField name="endowmentIncomeAccountNumber" required="false" />
@@ -146,7 +143,7 @@
                     <maintainableField name="financialIcrSeriesIdentifier" required="false" />
                     <maintainableField name="indirectCostRcvyFinCoaCode" required="false" />
                     <maintainableField name="indirectCostRecoveryAcctNbr" required="false" />
-                    <maintainableField name="accountCfdaNumber" required="false" />
+                    <maintainableField name="cgCatlfFedDomestcAssistNbr" required="false" />
                 </maintainableItems>
             </maintainableSection>
             <maintainableSection title="Guidelines And Purpose">
