@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/test/infrastructure/src/org/kuali/kfs/sys/KualiTestConstants.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -115,12 +117,12 @@ public interface KualiTestConstants {
 
         public static class Data5 {
             public static final String BUDGET_AGGREGATION_CODE1 = "O";
-            public static final String BUDGET_AGGREGATION_NAME1 = "OBJECT";
+            public static final String BUDGET_AGGREGATION_NAME1 = "Object";
             public static final String BUDGET_AGGREGATION_CODE2 = "L";
-            public static final String BUDGET_AGGREGATION_NAME2 = "OBJECT LEVEL";
+            public static final String BUDGET_AGGREGATION_NAME2 = "Object Level";
 
             public static final String FEDERAL_FUNDED_CODE1 = "F";
-            public static final String FEDERAL_FUNDED_NAME1 = "FEDERALLY FUNDED AND OWNED";
+            public static final String FEDERAL_FUNDED_NAME1 = "Federally funded and owned";
             public static final String FEDERAL_FUNDED_CODE_BAD = "A";
             public static final String FEDERAL_FUNDED_NAME_BAD = "This is a bad code name";
         }
