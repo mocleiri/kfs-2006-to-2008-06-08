@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/service/impl/BalanceServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.IteratorUtils;
-import org.kuali.core.bo.Options;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.OptionsService;
 import org.kuali.core.util.KualiDecimal;
@@ -34,12 +36,13 @@ import org.kuali.module.gl.bo.GlSummary;
 import org.kuali.module.gl.dao.BalanceDao;
 import org.kuali.module.gl.service.BalanceService;
 import org.kuali.module.gl.util.OJBUtility;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * 
  * This class is the OJB implementation of the Balance Service
+ * 
+ * 
  */
-@Transactional
 public class BalanceServiceImpl implements BalanceService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceServiceImpl.class);
 

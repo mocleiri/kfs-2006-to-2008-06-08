@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/batch/service/impl/ProcurementCardCreateDocumentServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,6 +14,31 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+/*
+ * Kuali License Info
+ */
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.service.impl;
 
@@ -98,8 +125,8 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
                 documentService.validateAndPersistDocument(pcardDocument, new SaveOnlyDocumentEvent(pcardDocument));
             }
             catch (Exception e) {
-                LOG.error("Error persisting document # " + pcardDocument.getDocumentHeader().getDocumentNumber() + " " + e.getMessage());
-                throw new RuntimeException("Error persisting document # " + pcardDocument.getDocumentHeader().getDocumentNumber() + " " + e.getMessage());
+                LOG.error("Error persisting document # " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + " " + e.getMessage());
+                throw new RuntimeException("Error persisting document # " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + " " + e.getMessage());
             }
         }
 
@@ -123,19 +150,19 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         for (Iterator iter = documentList.iterator(); iter.hasNext();) {
             ProcurementCardDocument pcardDocument = (ProcurementCardDocument) iter.next();
             try {
-                LOG.info("Routing PCDO document # " + pcardDocument.getDocumentHeader().getDocumentNumber() + ".");
+                LOG.info("Routing PCDO document # " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + ".");
                 documentService.prepareWorkflowDocument(pcardDocument);
             
                 // calling workflow service to bypass business rule checks
                 if (!pcardDocument.getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
                     workflowDocumentService.route(pcardDocument.getDocumentHeader().getWorkflowDocument(), "", null);
-            }
+                }
                 else {
-                    LOG.warn("Document " + pcardDocument.getDocumentHeader().getDocumentNumber() + " is already ENROUTE. Route status out of sync with FP_DOC_HEADER_T");
+                    LOG.warn("Document " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + " is already ENROUTE. Route status out of sync with FP_DOC_HEADER_T");
                 }
             }
             catch (WorkflowException e) {
-                LOG.error("Error routing document # " + pcardDocument.getDocumentHeader().getDocumentNumber() + " " + e.getMessage());
+                LOG.error("Error routing document # " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + " " + e.getMessage());
                 throw new RuntimeException(e.getMessage());
             }
         }
@@ -177,11 +204,11 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
                 pcardDocument.getDocumentHeader().setFinancialDocumentDescription("Auto Approved On " + (new TimestampFormatter()).format(currentDate) + ".");
 
                 try {
-                    LOG.info("Auto approving document # " + pcardDocument.getDocumentHeader().getDocumentNumber());
+                    LOG.info("Auto approving document # " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber());
                     documentService.superUserApproveDocument(pcardDocument, "");
                 }
                 catch (WorkflowException e) {
-                    LOG.error("Error auto approving document # " + pcardDocument.getDocumentHeader().getDocumentNumber() + " " + e.getMessage());
+                    LOG.error("Error auto approving document # " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + " " + e.getMessage());
                     throw new RuntimeException(e.getMessage());
                 }
             }
@@ -277,11 +304,13 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
             }
             // In case errorText is still too long, truncate it and indicate so.
             int documentExplanationMaxLength = dataDictionaryService.getAttributeMaxLength(AttributeReferenceDummy.class.getName(), PropertyConstants.DOCUMENT_EXPLANATION);
-            if (errorText.length() > documentExplanationMaxLength) {
-                String truncatedMessage = " ... TRUNCATED.";
-                errorText = errorText.substring(0, documentExplanationMaxLength - truncatedMessage.length()) + truncatedMessage;
+            if (errorText.length() <= documentExplanationMaxLength) {
+                pcardDocument.setExplanation(errorText);
             }
-            pcardDocument.setExplanation(errorText);
+            else {
+                String tuncatedMessage = " ... TRUNCATED.";
+                errorText = errorText.substring(0, documentExplanationMaxLength - tuncatedMessage.length()) + tuncatedMessage;
+            }
         }
         catch (WorkflowException e) {
             LOG.error("Error creating pcdo documents: " + e.getMessage());
@@ -300,7 +329,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
     private void createCardHolderRecord(ProcurementCardDocument pcardDocument, ProcurementCardTransaction transaction) {
         ProcurementCardHolder cardHolder = new ProcurementCardHolder();
 
-        cardHolder.setDocumentNumber(pcardDocument.getDocumentNumber());
+        cardHolder.setFinancialDocumentNumber(pcardDocument.getFinancialDocumentNumber());
         cardHolder.setAccountNumber(transaction.getAccountNumber());
         cardHolder.setCardCycleAmountLimit(transaction.getCardCycleAmountLimit());
         cardHolder.setCardCycleVolumeLimit(transaction.getCardCycleVolumeLimit());
@@ -332,7 +361,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         ProcurementCardTransactionDetail transactionDetail = new ProcurementCardTransactionDetail();
 
         // set the document transaction detail fields from the loaded transaction record
-        transactionDetail.setDocumentNumber(pcardDocument.getDocumentNumber());
+        transactionDetail.setFinancialDocumentNumber(pcardDocument.getFinancialDocumentNumber());
         transactionDetail.setFinancialDocumentTransactionLineNumber(transactionLineNumber);
         transactionDetail.setTransactionDate(transaction.getTransactionDate());
         transactionDetail.setTransactionReferenceNumber(transaction.getTransactionReferenceNumber());
@@ -372,7 +401,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
     private void createTransactionVendorRecord(ProcurementCardDocument pcardDocument, ProcurementCardTransaction transaction, ProcurementCardTransactionDetail transactionDetail) {
         ProcurementCardVendor transactionVendor = new ProcurementCardVendor();
 
-        transactionVendor.setDocumentNumber(pcardDocument.getDocumentNumber());
+        transactionVendor.setFinancialDocumentNumber(pcardDocument.getFinancialDocumentNumber());
         transactionVendor.setFinancialDocumentTransactionLineNumber(transactionDetail.getFinancialDocumentTransactionLineNumber());
         transactionVendor.setTransactionMerchantCategoryCode(transaction.getTransactionMerchantCategoryCode());
         transactionVendor.setVendorCityName(transaction.getVendorCityName());
@@ -421,7 +450,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
     private ProcurementCardTargetAccountingLine createTargetAccountingLine(ProcurementCardTransaction transaction, ProcurementCardTransactionDetail docTransactionDetail) {
         ProcurementCardTargetAccountingLine targetLine = new ProcurementCardTargetAccountingLine();
 
-        targetLine.setDocumentNumber(docTransactionDetail.getDocumentNumber());
+        targetLine.setFinancialDocumentNumber(docTransactionDetail.getFinancialDocumentNumber());
         targetLine.setFinancialDocumentTransactionLineNumber(docTransactionDetail.getFinancialDocumentTransactionLineNumber());
         targetLine.setChartOfAccountsCode(transaction.getChartOfAccountsCode());
         targetLine.setAccountNumber(transaction.getAccountNumber());
@@ -450,7 +479,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
     private ProcurementCardSourceAccountingLine createSourceAccountingLine(ProcurementCardTransaction transaction, ProcurementCardTransactionDetail docTransactionDetail) {
         ProcurementCardSourceAccountingLine sourceLine = new ProcurementCardSourceAccountingLine();
 
-        sourceLine.setDocumentNumber(docTransactionDetail.getDocumentNumber());
+        sourceLine.setFinancialDocumentNumber(docTransactionDetail.getFinancialDocumentNumber());
         sourceLine.setFinancialDocumentTransactionLineNumber(docTransactionDetail.getFinancialDocumentTransactionLineNumber());
         sourceLine.setChartOfAccountsCode(getDefaultChartCode());
         sourceLine.setAccountNumber(getDefaultAccountNumber());
@@ -482,20 +511,15 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         targetLine.refresh();
 
         if (!AccountingLineRuleUtil.isValidObjectCode(targetLine.getObjectCode(), dataDictionaryService.getDataDictionary())) {
-            String tempErrorText = "Chart " + targetLine.getChartOfAccountsCode() + 
-                    " Object Code " + targetLine.getFinancialObjectCode() + " is invalid; using default Object Code.";
-            LOG.info(tempErrorText);
-            errorText += " " + tempErrorText;
+            LOG.info("Object Code " + targetLine.getFinancialObjectCode() + " is invalid; using default Object Code.");
+            errorText += (" Object Code " + targetLine.getFinancialObjectCode() + " is invalid; using default Object Code.");
 
             targetLine.setFinancialObjectCode(getDefaultObjectCode());
         }
 
         if (StringUtils.isNotBlank(targetLine.getSubAccountNumber()) && !AccountingLineRuleUtil.isValidSubAccount(targetLine.getSubAccount(), dataDictionaryService.getDataDictionary())) {
-            String tempErrorText = "Chart " + targetLine.getChartOfAccountsCode() +
-                    " Account " + targetLine.getAccountNumber() +
-                    " Sub Account " + targetLine.getSubAccountNumber() + " is invalid; Setting Sub Account to blank.";
-            LOG.info(tempErrorText);
-            errorText += " " + tempErrorText;
+            LOG.info("Sub Account " + targetLine.getSubAccountNumber() + " is invalid; Setting to blank.");
+            errorText += " Sub Account " + targetLine.getSubAccountNumber() + " is invalid; Setting to blank.";
 
             targetLine.setSubAccountNumber("");
         }
@@ -504,12 +528,8 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         targetLine.refresh();
 
         if (StringUtils.isNotBlank(targetLine.getFinancialSubObjectCode()) && !AccountingLineRuleUtil.isValidSubObjectCode(targetLine.getSubObjectCode(), dataDictionaryService.getDataDictionary())) {
-            String tempErrorText = "Chart " + targetLine.getChartOfAccountsCode() +
-                    " Account " + targetLine.getAccountNumber() +
-                    " Object Code " + targetLine.getFinancialObjectCode() +
-                    " Sub Object Code " + targetLine.getFinancialSubObjectCode() + " is invalid; setting Sub Object to blank.";
-            LOG.info(tempErrorText);
-            errorText += " " + tempErrorText;
+            LOG.info("Sub Object Code " + targetLine.getFinancialSubObjectCode() + " is invalid; setting to blank.");
+            errorText += " Sub Object Code " + targetLine.getFinancialSubObjectCode() + " is invalid; setting to blank.";
 
             targetLine.setFinancialSubObjectCode("");
         }
@@ -522,9 +542,8 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         }
 
         if (!AccountingLineRuleUtil.isValidAccount(targetLine.getAccount(), dataDictionaryService.getDataDictionary()) || targetLine.getAccount().isExpired()) {
-            String tempErrorText = "Chart " + targetLine.getChartOfAccountsCode() + " Account " + targetLine.getAccountNumber() + " is invalid; using error account.";
-            LOG.info(tempErrorText);
-            errorText += " " + tempErrorText;
+            LOG.info("Account " + targetLine.getAccountNumber() + " is invalid; using error account.");
+            errorText += " Account " + targetLine.getAccountNumber() + " is invalid; using error Chart & Account.";
 
             targetLine.setChartOfAccountsCode(getErrorChartCode());
             targetLine.setAccountNumber(getErrorAccountNumber());
