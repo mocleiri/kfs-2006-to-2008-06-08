@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
@@ -24,31 +9,31 @@
         <inquiry>
             <title>Account Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="chartOfAccounts.codeAndDescription" />
+            <inquiryFields>
+                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
                 <field attributeName="accountName" />
-                <field attributeName="organization.codeAndDescription" />
+                <field attributeName="organizationCode" />
                 <field attributeName="accountPhysicalCampusCode" />
                 <field attributeName="accountEffectiveDate" />
                 <field attributeName="accountExpirationDate" />
                 <field attributeName="accountZipCode" />
                 <field attributeName="accountCityName" />
-                <field attributeName="accountState.codeAndDescription" />
+                <field attributeName="accountStateCode" />
                 <field attributeName="accountStreetAddress" />
                 <field attributeName="accountOffCampusIndicator" />
                 <field attributeName="accountClosedIndicator" />
                 <field attributeName="accountTypeCode" />
-                <field attributeName="subFundGroup.codeAndDescription" />
+                <field attributeName="subFundGroupCode" />
                 <!--  comment programCode out if not in use at your institution -->
-                <field attributeName="program.codeAndDescription" />
+                <field attributeName="programCode" />
                 <field attributeName="accountsFringesBnftIndicator" />
                 <field attributeName="reportsToChartOfAccountsCode" />
                 <field attributeName="reportsToAccountNumber" />
-                <field attributeName="financialHigherEdFunction.codeAndDescription" />
+                <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="accountRestrictedStatusCode" />
                 <field attributeName="accountRestrictedStatusDate" />
-                <field attributeName="endowmentIncomeChartOfAccounts.codeAndDescription" />
+                <field attributeName="endowmentIncomeAcctFinCoaCd" />
                 <field attributeName="endowmentIncomeAccountNumber" />
 
                 <field attributeName="accountResponsibilitySectionBlank" />
@@ -61,8 +46,15 @@
                 <field attributeName="continuationAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
                 <field attributeName="incomeStreamAccountNumber" />
-				<field attributeName="budgetRecordingLevelCode" noInquiry="true" /> 
-                <field attributeName="accountSufficientFundsCode" noInquiry="true" />
+                <!--	Those two fields generate ERROR!! 
+                    This is somehow related to the fact that these fields use the generic
+                    FS_Codes_Desc_T code table instead of having their own.
+                    The problem is that the inquiry screen gets an error.
+                    We will solve this problem as part of the APC refactoring project.
+                    
+                    <field attributeName="budgetRecordingLevelCode" /> 
+                    <field attributeName="accountSufficientFundsCode" />
+                -->
 
                 <field attributeName="pendingAcctSufficientFundsIndicator" />
                 <field attributeName="extrnlFinEncumSufficntFndIndicator" />
@@ -75,11 +67,11 @@
 
                 <field attributeName="contractControlFinCoaCode" />
                 <field attributeName="contractControlAccountNumber" />
-                <field attributeName="acctIndirectCostRcvyType.codeAndDescription" />
+                <field attributeName="acctIndirectCostRcvyTypeCd" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="indirectCostRcvyFinCoaCode" />
                 <field attributeName="indirectCostRecoveryAcctNbr" />
-                <field attributeName="accountCfdaNumber" />
+                <field attributeName="cgCatlfFedDomestcAssistNbr" />
 
                 <field attributeName="guidelinesAndPurposeSectionBlank" />
                 <field attributeName="guidelinesAndPurposeSection" />
@@ -97,15 +89,15 @@
                 <field attributeName="accountDescription.campusCode" />
                 <field attributeName="accountDescription.buildingCode" />
 
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-        	<lookupableID>accountLookupable</lookupableID>
             <title>Account Lookup</title>
 
             <menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.AccountChangeDocument"><img src="images/tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Account">Create New</a>
+			                  <a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.AccountChangeDocument">Create New Global</a>]]>
             </menubar>
 
             <instructions>Lookup an Account</instructions>
@@ -130,20 +122,16 @@
             </lookupFields>
 
             <resultFields>
-                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
+                <field attributeName="accountFiscalOfficerUser.personName" forceInquiry="true" />
+                <field attributeName="accountManagerUser.personName" forceInquiry="true" />
+                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountName" />
                 <field attributeName="organizationCode" />
                 <field attributeName="accountTypeCode" />
-                <field attributeName="subFundGroupCode" />
-                <field attributeName="programCode" />
-                <field attributeName="accountFiscalOfficerUser.personUserIdentifier" />               
-                <field attributeName="accountFiscalOfficerUser.personName" forceInquiry="true" />
-                <field attributeName="accountClosedIndicator" />                
-                <field attributeName="accountManagerUser.personName" forceInquiry="true" />
                 <field attributeName="accountCreateDate" />
                 <field attributeName="accountExpirationDate" />
-
+                <field attributeName="accountClosedIndicator" />
             </resultFields>
         </lookup>
 
@@ -152,32 +140,6 @@
         <attributes>
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <description>The code that identifies the Chart of Accounts for an Account. It is part of the primary key. Kuali accommodates more than one Chart of Accounts.</description>
-            </attributeReference>
-
-           <attributeReference name="chartOfAccounts.codeAndDescription" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="codeAndDescription">
-                <label>Chart Code</label>
-                <shortLabel>Chart Code</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Chart Code and Description</description>
-            </attributeReference>
-            
-           <attributeReference name="endowmentIncomeChartOfAccounts.codeAndDescription" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="codeAndDescription">
-                <label>Endowment Chart of Accounts Code</label>
-                <shortLabel>Endowment Chart Code</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Endowment Chart Code and Description</description>
             </attributeReference>
 
             <!--  ROOT REFERENCE FOR ACCOUNT NUMBER -->
@@ -224,22 +186,9 @@
             </attributeReference>
 
 
-           <attributeReference name="organization.codeAndDescription" sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="codeAndDescription">
-                <label>Organization Code</label>
-                <shortLabel>Org Code</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Organization Code and Description</description>
-            </attributeReference>
-
             <attributeReference name="accountTypeCode" sourceClassName="org.kuali.module.chart.bo.AcctType" sourceAttributeName="accountTypeCode">
 
-                <label>Acct Type Code</label>
+                <label>Account Type Code</label>
                 <shortLabel>AcctType</shortLabel>
                 <control>
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.AcctTypeValuesFinder" />
@@ -269,20 +218,6 @@
                 <description>The code used to categorize Accounts for internal resource management, and to relate the Account to a Fund through the Sub-Fund Groups.</description>
             </attributeReference>
             <!--  comment programCode out if not in use at your institution -->
- 
-           <attributeReference name="subFundGroup.codeAndDescription" sourceClassName="org.kuali.module.chart.bo.SubFundGroup" sourceAttributeName="codeAndDescription">
-                <label>Sub-Fund Group Code</label>
-                <shortLabel>Sub-Fund Group Code</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Sub-Fund Group Code and Description</description>
-            </attributeReference>
-             
             <attributeReference name="programCode" sourceClassName="org.kuali.module.chart.bo.Program" sourceAttributeName="programCode">
                 <label>Program Code</label>
                 <shortLabel>ProgramCd</shortLabel>
@@ -293,18 +228,6 @@
                 <description>The program code for this account.</description>
             </attributeReference>
 
-           <attributeReference name="program.codeAndDescription" sourceClassName="org.kuali.module.chart.bo.SubFundGroup" sourceAttributeName="codeAndDescription">
-                <label>Program Code</label>
-                <shortLabel>Program Code</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Program Code and Description</description>
-            </attributeReference>
 
             <attributeReference name="accountsFringesBnftIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator">
                 <label>Account Fringe Benefit</label>
@@ -335,19 +258,6 @@
                 </summary>
                 <description>The code that indicates the specific purpose of the activities recorded in the Account.</description>
             </attribute>
-
-           <attributeReference name="financialHigherEdFunction.codeAndDescription" sourceClassName="org.kuali.module.chart.bo.HigherEdFunction" sourceAttributeName="codeAndDescription">
-                <label>Higher Ed Function Code</label>
-                <shortLabel>Higher Ed Function Code</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Higher Ed Function Code</description>
-            </attributeReference>
 
             <attributeReference name="accountRestrictedStatusCode" sourceClassName="org.kuali.module.chart.bo.RestrictedStatus" sourceAttributeName="accountRestrictedStatusCode">
                 <label>Account Restricted Status Code</label>
@@ -400,19 +310,6 @@
                 <description>A 2-character code for the state in which the Account is managed.</description>
             </attributeReference>
 
-           <attributeReference name="accountState.codeAndDescription" sourceClassName="org.kuali.core.bo.State" sourceAttributeName="codeAndDescription">
-                <label>Account State Code</label>
-                <shortLabel>Account State Code</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Account State Code and Description</description>
-            </attributeReference>
-
             <attribute name="accountStreetAddress" forceUppercase="false">
                 <label>Account Street Address</label>
                 <shortLabel>StreetAddr</shortLabel>
@@ -434,7 +331,7 @@
             </attribute>
 
             <attributeReference name="accountZipCode" sourceClassName="org.kuali.core.bo.PostalZipCode" sourceAttributeName="postalZipCode">
-                <label>Account Postal Code</label>
+                <label>Account Zip Code</label>
                 <shortLabel>ZipCode</shortLabel>
                 <required>true</required>
                 <summary>
@@ -672,19 +569,6 @@
                 <description>The code for a particular Indirect Cost Recovery base. The "type" contains Object Codes that are excluded from indirect cost charges.</description>
             </attributeReference>
 
-           <attributeReference name="acctIndirectCostRcvyType.codeAndDescription" sourceClassName="org.kuali.module.chart.bo.codes.ICRTypeCode" sourceAttributeName="codeAndDescription">
-                <label>Account Indirect Cost Recovery Type Code</label>
-                <shortLabel>Account Indirect Cost Recovery Type Code</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Account Indirect Cost Recovery Type Code and Description</description>
-            </attributeReference>
-
             <attributeReference name="acctCustomIndCstRcvyExclCd" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="oneDigitTextCode">
                 <label>Account Customized Indirect Cost Exclusion Code</label>
                 <shortLabel>IndCstExclCd</shortLabel>
@@ -823,15 +707,25 @@
                 <description>A checkbox that indicates if the Account will use presence control, i.e., sufficient funds checking by Object Code.</description>
             </attributeReference>
 
-            <attributeReference name="accountCfdaNumber" sourceClassName="org.kuali.module.cg.bo.CatalogOfFederalDomesticAssistanceReference" sourceAttributeName="cfdaNumber">
-                <label>Catalog of Federal Domestic Assistance Number</label>
+            <attribute name="cgCatlfFedDomestcAssistNbr" forceUppercase="false">
+                <label>Code Of Federal Domestic Assistance Number</label>
                 <shortLabel>FedDomAssisNum</shortLabel>
+
+                <maxLength>6</maxLength>
+                <validationPattern>
+                    <anyCharacter />
+                </validationPattern>
                 <required>false</required>
+
+                <control>
+                    <text size="6" />
+                </control>
+
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>Numeric identifier for the federal government sources for awards. The label is required for the Audit of Federal Domestic Assistance conducted under OMB regulation A-133.</description>
-            </attributeReference>
+            </attribute>
 
             <attributeReference name="accountOffCampusIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator">
                 <label>Account Off Campus Indicator</label>
@@ -844,7 +738,7 @@
             </attributeReference>
 
             <attribute name="accountClosedIndicator" forceUppercase="false">
-                <label>Closed?</label>
+                <label>Account Closed Indicator</label>
                 <shortLabel>AcctClosed</shortLabel>
 
                 <maxLength>1</maxLength>
@@ -1074,34 +968,13 @@
 
         <collections>
             <collection name="subAccounts">
-                <label>Sub-Accounts</label>
-                <shortLabel>Sub-Accounts</shortLabel>
+                <label>Sub Accounts</label>
+                <shortLabel>SubAccounts</shortLabel>
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>accounts with some hierarchical subrelationship to this one</description>
             </collection>
         </collections>
-        
-        <relationships>
-            <relationship objectAttributeName="accountFiscalOfficerUser" >
-                <primitiveAttribute sourceName="accountFiscalOfficerSystemIdentifier" targetName="personUniversalIdentifier" />
-            </relationship>
-
-            <relationship objectAttributeName="accountSupervisoryUser" >
-                <primitiveAttribute sourceName="accountsSupervisorySystemsIdentifier" targetName="personUniversalIdentifier" />
-            </relationship>
-
-            <relationship objectAttributeName="accountManagerUser" >
-                <primitiveAttribute sourceName="accountManagerSystemIdentifier" targetName="personUniversalIdentifier" />
-            </relationship>
-
-            <relationship objectAttributeName="accountGuideline" >
-                <primitiveAttribute sourceName="chartOfAccountsCode" targetName="chartOfAccountsCode" />
-                <primitiveAttribute sourceName="accountNumber" targetName="accountNumber" />
-            </relationship>
-        </relationships>
-        
-        <objectLabel>Account</objectLabel>
     </businessObject>
 </dictionaryEntry>
