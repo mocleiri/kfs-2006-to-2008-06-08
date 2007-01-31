@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/ObjectCode.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -29,7 +31,7 @@
         <inquiry>
             <title>Object Code Inquiry</title>
 
-            <inquirySections><inquirySection title="Object Code Detail"><inquiryFields>
+            <inquirySections><inquirySection title="Object Code 1"><inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialObjectCode" />
@@ -39,6 +41,9 @@
                 <field attributeName="reportsToFinancialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialObjectLevelCode" />
+             </inquiryFields>
+             </inquirySection>
+             <inquirySection title="Object code 2"><inquiryFields>
                 <field attributeName="financialObjectSubTypeCode" />
                 <field attributeName="historicalFinancialObjectCode" />
                 <field attributeName="financialObjectActiveCode" />
@@ -377,8 +382,6 @@
                 <shortLabel>FedFundCd</shortLabel>
 
                 <maxLength>1</maxLength>
-                <required>true</required>
-                
                 <control>
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.FederalFundedCodeValuesFinder" />
                 </control>
