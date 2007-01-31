@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/dataaccess/impl/OrganizationDaoOjb.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,17 +23,16 @@ import java.util.List;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * This class is the OJB implementation of the OrganizationDao interface.
- * 
- * 
  */
-public class OrganizationDaoOjb extends PersistenceBrokerDaoSupport implements OrganizationDao {
+public class OrganizationDaoOjb extends PlatformAwareDaoBaseOjb implements OrganizationDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrganizationDaoOjb.class);
 
     /*
@@ -91,25 +92,6 @@ public class OrganizationDaoOjb extends PersistenceBrokerDaoSupport implements O
         criteria.addEqualTo("organizationActiveIndicator", Boolean.TRUE);
 
         orgs = (List) getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Org.class, criteria));
-
-        if (orgs.isEmpty() || orgs.size() == 0) {
-            return Collections.EMPTY_LIST;
-        }
-        return orgs;
-    }
-
-    /**
-     * 
-     * @see org.kuali.module.chart.dao.OrganizationDao#getActiveOrgsByType(java.lang.String)
-     */
-    public List<Org> getActiveOrgsByType(String organizationTypeCode) {
-        List<Org> orgs = new ArrayList<Org>();
-
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo("organizationTypeCode", organizationTypeCode);
-        criteria.addEqualTo("organizationActiveIndicator", Boolean.TRUE);
-
-        orgs = (List<Org>)getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Org.class, criteria));
 
         if (orgs.isEmpty() || orgs.size() == 0) {
             return Collections.EMPTY_LIST;

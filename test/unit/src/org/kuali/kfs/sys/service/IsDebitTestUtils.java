@@ -1,17 +1,24 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
 
@@ -46,7 +53,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 /**
  * IsDebitTestUtils
  * 
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class IsDebitTestUtils {
     /**
@@ -68,12 +75,12 @@ public class IsDebitTestUtils {
     }
 
     private static class ImportLines {
-        public static final String DEFAULT = "BA,6044900,x,objc,x,x,x,0";
-        public static final String WITH_DESCRIPTION = "BA,6044900,x,objc,x,x,x,description,0";
-        public static final String WITH_REF_NUM_AND_DESCRIPTION = "BA,6044900,x,objc,x,x,x,refnum,description,0";
-        public static final String WITH_REF_NUM = "BA,6044900,x,objc,x,x,x,refnum,0";
-        public static final String WITH_ORIGIN_CODE_AND_REF_NUM_AND_DESCRIPTION = "BA,6044900,x,objc,x,x,x,01,refnum,description,0";
-        public static final String WITHOUT_OBJECT_CODE = "BA,6044900,x,x,x,x,0";
+        public static final String DEFAULT = "BA,6044900,x,objc,x,x,x,x,0";
+        public static final String WITH_DESCRIPTION = "BA,6044900,x,objc,x,x,x,description,x,0";
+        public static final String WITH_REF_NUM_AND_DESCRIPTION = "BA,6044900,x,objc,x,x,x,refnum,description,x,0";
+        public static final String WITH_ORIGIN_CODE_AND_REF_NUM = "BA,6044900,x,objc,x,x,x,01,refnum,x,0";
+        public static final String WITH_ORIGIN_CODE_AND_REF_NUM_AND_DESCRIPTION = "BA,6044900,x,objc,x,x,x,01,refnum,description,x,0";
+        public static final String WITHOUT_OBJECT_CODE = "BA,6044900,x,x,x,x,x,0";
     }
 
 
@@ -97,7 +104,7 @@ public class IsDebitTestUtils {
         targetLines.put(GeneralErrorCorrectionDocument.class, ImportLines.WITH_ORIGIN_CODE_AND_REF_NUM_AND_DESCRIPTION);
         targetLines.put(IndirectCostAdjustmentDocument.class, ImportLines.WITHOUT_OBJECT_CODE);
         targetLines.put(InternalBillingDocument.class, ImportLines.DEFAULT);
-        targetLines.put(PreEncumbranceDocument.class, ImportLines.WITH_REF_NUM);
+        targetLines.put(PreEncumbranceDocument.class, ImportLines.WITH_ORIGIN_CODE_AND_REF_NUM);
         targetLines.put(ServiceBillingDocument.class, ImportLines.WITH_DESCRIPTION);
         targetLines.put(TransferOfFundsDocument.class, ImportLines.DEFAULT);
     }
@@ -133,14 +140,14 @@ public class IsDebitTestUtils {
             if (unparsedLine == null) {
                 throw new IllegalArgumentException("no value found in sourceMap for: " + transactionalDocument.getClass() + ";" + lineClass);
             }
-            line = transactionalDocument.getAccountingLineParser().parseSourceAccountingLine(transactionalDocument, unparsedLine);
+            line = transactionalDocument.getAccountingLineParser().parseSourceAccountingLine(transactionalDocument,unparsedLine);
         }
         else if (TargetAccountingLine.class.isAssignableFrom(lineClass)) {
             unparsedLine = targetLines.get(transactionalDocument.getClass());
             if (unparsedLine == null) {
                 throw new IllegalArgumentException("no value found in targetMap for: " + transactionalDocument.getClass() + ";" + lineClass);
             }
-            line = transactionalDocument.getAccountingLineParser().parseTargetAccountingLine(transactionalDocument, unparsedLine);
+            line = transactionalDocument.getAccountingLineParser().parseTargetAccountingLine(transactionalDocument,unparsedLine);
         }
         else {
             throw new IllegalArgumentException("invalid accounting line type (" + lineClass + ")");
@@ -157,7 +164,7 @@ public class IsDebitTestUtils {
      * @param amount
      * @return AccountingLine
      */
-    public static AccountingLine getExpenseLine(TransactionalDocument transactionalDocument, Class<? extends AccountingLine> lineClass, KualiDecimal amount) {
+    public static AccountingLine getExpenseLine(TransactionalDocument transactionalDocument, Class<? extends AccountingLine> lineClass, KualiDecimal amount)  {
         return getAccountingLine(transactionalDocument, lineClass, amount, BaChartObjectCodes.EXPENSE);
     }
 
@@ -167,7 +174,7 @@ public class IsDebitTestUtils {
      * @param amount
      * @return AccountingLine
      */
-    public static AccountingLine getAssetLine(TransactionalDocument transactionalDocument, Class<? extends AccountingLine> lineClass, KualiDecimal amount) {
+    public static AccountingLine getAssetLine(TransactionalDocument transactionalDocument, Class<? extends AccountingLine> lineClass, KualiDecimal amount)  {
         return getAccountingLine(transactionalDocument, lineClass, amount, BaChartObjectCodes.ASSET);
     }
 
@@ -191,16 +198,16 @@ public class IsDebitTestUtils {
         return getAccountingLine(transactionalDocument, lineClass, amount, BaChartObjectCodes.LIABILITY);
     }
 
-    /**
-     * 
-     * @param documentTypeService
-     * @param dataDicitionaryService
-     * @param transactionalDocument
-     * @param accountingLine
-     * @return
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     */
+/**
+ * 
+ * @param documentTypeService
+ * @param dataDicitionaryService
+ * @param transactionalDocument
+ * @param accountingLine
+ * @return
+ * @throws InstantiationException
+ * @throws IllegalAccessException
+ */
     public static boolean isDebit(DocumentTypeService documentTypeService, DataDictionaryService dataDicitionaryService, TransactionalDocument transactionalDocument, AccountingLine accountingLine) throws InstantiationException, IllegalAccessException {
         String documentTypeName = documentTypeService.getDocumentTypeNameByClass(transactionalDocument.getClass());
         AccountingLineRule rule = (AccountingLineRule) dataDicitionaryService.getDataDictionary().getBusinessRulesClass(documentTypeName).newInstance();

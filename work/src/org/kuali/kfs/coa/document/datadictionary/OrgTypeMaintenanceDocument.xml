@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/datadictionary/OrgTypeMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -39,9 +41,7 @@
         <summary>Organization Type Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Organization Types, or modify existing Organization Types.</description>
         <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ORGANIZATION_TYPE" />
-
-        <allowsCopy>true</allowsCopy>
-
+        
         <lockingKeys>
             <field attributeName="organizationTypeCode" />
         </lockingKeys>

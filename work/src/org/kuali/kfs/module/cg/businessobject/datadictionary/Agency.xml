@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
@@ -22,9 +7,9 @@
         <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Agency Inquiry</title>
+            <title>Contracts and Grants Agency Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="agencyNumber" />
                 <field attributeName="reportingName" />
                 <field attributeName="fullName" />
@@ -32,14 +17,18 @@
                 <field attributeName="historicalIndicator" />
                 <field attributeName="inStateIndicator" />
                 <field attributeName="indirectAmount" />
-                <field attributeName="reportsToAgencyNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+                <field attributeName="reportsToAgency.agencyNumber" />
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Agency Lookup</title>
+            <title>Contracts and Grants Agency Lookup</title>
 
-            <instructions>Lookup an Agency</instructions>
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.cg.bo.Agency">Create New</a>]]>
+            </menubar>
+
+            <instructions>Lookup a Contracts and Grants Agency</instructions>
 
             <defaultSort attributeName="fullName" sortAscending="true" />
 
@@ -48,7 +37,6 @@
                 <lookupField attributeName="reportingName" required="false" />
                 <lookupField attributeName="fullName" required="false" />
                 <lookupField attributeName="agencyType.name" required="false" />
-                <lookupField attributeName="historicalIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -59,7 +47,7 @@
                 <field attributeName="historicalIndicator" />
                 <field attributeName="inStateIndicator" />
                 <field attributeName="indirectAmount" />
-                <field attributeName="reportsToAgencyNumber" />
+                <field attributeName="reportsToAgency.agencyNumber" />
             </resultFields>
 
         </lookup>
@@ -76,13 +64,13 @@
                 <validationPattern>
                     <alphaNumeric exactLength="5" />
                 </validationPattern>
-                <required>false</required>
+                <required>true</required>
                 <control>
                     <text size="5" />
                 </control>
 
                 <summary>Agency Number</summary>
-                <description> Agency Number.</description>
+                <description>Contracts and Grants Agency Number.</description>
             </attribute>
 
             <attribute name="reportingName" forceUppercase="true">
@@ -94,13 +82,13 @@
                 <validationPattern>
                     <anyCharacter allowWhitespace="true" />
                 </validationPattern>
-                <required>false</required>
+                <required>true</required>
                 <control>
                     <text size="30" />
                 </control>
 
                 <summary>Agency Reporting Name</summary>
-                <description> Agency Reporting Name</description>
+                <description>Contracts and Grants Agency Reporting Name</description>
             </attribute>
 
             <attribute name="fullName" forceUppercase="true">
@@ -112,22 +100,21 @@
                 <validationPattern>
                     <anyCharacter allowWhitespace="true" />
                 </validationPattern>
-                <required>false</required>
+                <required>true</required>
                 <control>
                     <text size="50" />
                 </control>
 
                 <summary>Agency Full Name</summary>
-                <description>Agency Full Name</description>
+                <description>Contracts And Grants Agency Full Name</description>
             </attribute>
-            
             <attributeReference name="agencyType.name" sourceClassName="org.kuali.module.cg.bo.AgencyType" sourceAttributeName="name">
 
                 <required>true</required>
             </attributeReference>
 
             <attributeReference name="agencyTypeCode" sourceClassName="org.kuali.module.cg.bo.AgencyType" sourceAttributeName="code">
-                <required>false</required>
+                <required>true</required>
             </attributeReference>
 
             <attribute name="historicalIndicator" forceUppercase="false">
@@ -141,7 +128,7 @@
                 </control>
 
                 <summary>Historical Indicator</summary>
-                <description>Agency Historical Indicator</description>
+                <description>Contracts And Grants Agency Historical Indicator</description>
             </attribute>
 
             <attribute name="inStateIndicator" forceUppercase="false">
@@ -169,15 +156,14 @@
                 </validationPattern>
 
                 <control>
-                    <currency size="20" formattedMaxLength="12"/>
+                    <text size="20" />
                 </control>
 
                 <summary>Indirect Amount</summary>
                 <description>Indirect Amount</description>
-                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attribute>
 
-            <attributeReference name="reportsToAgencyNumber" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
+            <attributeReference name="reportsToAgency.agencyNumber" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
                 <label>Reports To Agency Number</label>
                 <shortLabel>Reports To Agency Number</shortLabel>
                 <summary>Reports To Agency Number</summary>

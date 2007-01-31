@@ -1,30 +1,33 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.Constants.EMPTY_STRING;
-import static org.kuali.Constants.GL_CREDIT_CODE;
-import static org.kuali.Constants.GL_DEBIT_CODE;
-import static org.kuali.PropertyConstants.BALANCE_TYPE;
-
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.bo.SourceAccountingLine;
@@ -32,7 +35,7 @@ import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.financial.bo.JournalVoucherAccountingLineParser;
-import org.kuali.module.gl.util.SufficientFundsItem;
+import org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -42,15 +45,13 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * Voucher is unique in that we only make use of one accounting line list: the source accounting lines seeing as a JV only records
  * accounting lines as debits or credits.
  * 
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class JournalVoucherDocument extends TransactionalDocumentBase implements VoucherDocument {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(JournalVoucherDocument.class);
-
     // document specific attributes
     private String balanceTypeCode; // balanceType key
     private BalanceTyp balanceType;
-    private java.sql.Date reversalDate;
+    private Timestamp reversalDate;
 
     /**
      * Constructs a JournalVoucherDocument instance.
@@ -58,18 +59,6 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
     public JournalVoucherDocument() {
         super();
         this.balanceType = new BalanceTyp();
-    }
-
-    /**
-     * 
-     * @see org.kuali.core.document.TransactionalDocumentBase#checkSufficientFunds()
-     */
-    @Override
-    public List<SufficientFundsItem> checkSufficientFunds() {
-        LOG.debug("checkSufficientFunds() started");
-
-        // This document does not do sufficient funds checking
-        return new ArrayList<SufficientFundsItem>();
     }
 
     /**
@@ -113,9 +102,9 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
     /**
      * This method retrieves the reversal date associated with this document.
      * 
-     * @return java.sql.Date
+     * @return Timestamp
      */
-    public java.sql.Date getReversalDate() {
+    public Timestamp getReversalDate() {
         return reversalDate;
     }
 
@@ -124,7 +113,7 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
      * 
      * @param reversalDate
      */
-    public void setReversalDate(java.sql.Date reversalDate) {
+    public void setReversalDate(Timestamp reversalDate) {
         this.reversalDate = reversalDate;
     }
 
@@ -135,7 +124,7 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return EMPTY_STRING;
+        return Constants.EMPTY_STRING;
     }
 
     /**
@@ -145,7 +134,7 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return EMPTY_STRING;
+        return Constants.EMPTY_STRING;
     }
 
     /**
@@ -160,7 +149,7 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
-            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(GL_DEBIT_CODE)) {
+            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(Constants.GL_DEBIT_CODE)) {
                 debitTotal = debitTotal.add(al.getAmount());
             }
         }
@@ -180,7 +169,7 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
-            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(GL_CREDIT_CODE)) {
+            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(Constants.GL_CREDIT_CODE)) {
                 creditTotal = creditTotal.add(al.getAmount());
             }
         }
@@ -248,7 +237,7 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
     private void processJournalVoucherErrorCorrections() {
         Iterator i = getSourceAccountingLines().iterator();
 
-        this.refreshReferenceObject(BALANCE_TYPE);
+        this.refreshReferenceObject(PropertyConstants.BALANCE_TYPE);
 
         if (this.getBalanceType().isFinancialOffsetGenerationIndicator()) { // make sure this is not a single amount entered JV
             int index = 0;
@@ -262,11 +251,11 @@ public class JournalVoucherDocument extends TransactionalDocumentBase implements
                     sLine.setAmount(sLine.getAmount().negated()); // offsets the effect the super
 
                     // now just flip the debit/credit code
-                    if (GL_DEBIT_CODE.equals(debitCreditCode)) {
-                        sLine.setDebitCreditCode(GL_CREDIT_CODE);
+                    if (TransactionalDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.DEBIT.equals(debitCreditCode)) {
+                        sLine.setDebitCreditCode(TransactionalDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.CREDIT);
                     }
-                    else if (GL_CREDIT_CODE.equals(debitCreditCode)) {
-                        sLine.setDebitCreditCode(GL_DEBIT_CODE);
+                    else if (TransactionalDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.CREDIT.equals(debitCreditCode)) {
+                        sLine.setDebitCreditCode(TransactionalDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.DEBIT);
                     }
                     else {
                         throw new IllegalStateException("SourceAccountingLine at index " + index + " does not have a debit/credit " + "code associated with it.  This should never have occured. Please contact your system administrator.");

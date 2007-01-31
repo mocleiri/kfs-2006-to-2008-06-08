@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/OffsetDefinition.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +17,42 @@
  */
 package org.kuali.module.chart.bo;
 
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ */
+
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.document.DocumentType;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 /**
  * 
  */
-public class OffsetDefinition extends PersistableBusinessObjectBase {
+public class OffsetDefinition extends BusinessObjectBase {
 
     private static final long serialVersionUID = -6150010338773403021L;
 
@@ -51,7 +78,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -71,7 +98,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscal attribute.
      * 
-     * @return Returns the universityFiscal
+     * @return - Returns the universityFiscal
      * 
      */
     public Options getUniversityFiscal() {
@@ -91,7 +118,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
      * 
      */
 
@@ -112,7 +139,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialBalanceTypeCode attribute.
      * 
-     * @return Returns the financialBalanceTypeCode
+     * @return - Returns the financialBalanceTypeCode
      * 
      */
     public String getFinancialBalanceTypeCode() {
@@ -151,7 +178,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return Returns the financialObjectCode
+     * @return - Returns the financialObjectCode
      * 
      */
 
@@ -171,7 +198,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObject attribute.
      * 
-     * @return Returns the financialObject
+     * @return - Returns the financialObject
      * 
      */
 
@@ -192,7 +219,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
 
@@ -214,7 +241,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * 
      * Gets the chartOfAccounts object
      * 
-     * @return a Chart object
+     * @return - a Chart object
      * 
      */
     public Chart getChartOfAccounts() {

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/sys/document/routing/attribute/KualiAccountAttributeTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +39,20 @@ import edu.iu.uis.eden.routeheader.DocumentContent;
  */
 @WithTestSpringContext
 public class KualiAccountAttributeTest extends KualiTestBase {
+
+    KualiAccountAttribute attribute;
+
+    /**
+     * Constructs a KualiAccountAttributeTest.java.
+     */
+    public KualiAccountAttributeTest() {
+        super();
+    }
+
+    public void setUp() throws Exception {
+        super.setUp();
+        attribute = new KualiAccountAttribute();
+    }
 
     public void testGetFiscalOfficerCriteria_TOFOneLiner() throws IOException, InvalidXmlException, XPathExpressionException {
 

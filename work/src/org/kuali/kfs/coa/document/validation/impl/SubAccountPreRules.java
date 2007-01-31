@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/validation/impl/SubAccountPreRules.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.core.authorization.MaintenanceDocumentAuthorizations;
 import org.kuali.core.authorization.MaintenanceDocumentAuthorizer;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
@@ -81,7 +83,7 @@ public class SubAccountPreRules extends MaintenancePreRulesBase {
     }
     
     private void copyICRFromAccount( MaintenanceDocument document ) {
-        UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
+        KualiUser user = GlobalVariables.getUserSession().getKualiUser();
         
         // get the correct documentAuthorizer for this document
         MaintenanceDocumentAuthorizer documentAuthorizer = (MaintenanceDocumentAuthorizer) getDocumentAuthorizationService().getDocumentAuthorizer(document);

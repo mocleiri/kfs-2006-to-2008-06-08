@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/service/ChartService.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,8 +20,7 @@ package org.kuali.module.chart.service;
 import java.util.List;
 import java.util.Map;
 
-
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.module.chart.bo.Chart;
 
 /**
@@ -60,6 +61,6 @@ public interface ChartService {
      * @param kualiUser
      * @return
      */
-    public List getChartsThatUserIsResponsibleFor(UniversalUser kualiUser);
+    public List getChartsThatUserIsResponsibleFor(KualiUser kualiUser);
 
 }

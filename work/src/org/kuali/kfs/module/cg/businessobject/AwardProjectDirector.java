@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/AwardProjectDirector.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +20,20 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 
 /**
  * 
  */
-public class AwardProjectDirector extends PersistableBusinessObjectBase {
+public class AwardProjectDirector extends BusinessObjectBase {
 
     private String personUniversalIdentifier;
     private Long proposalNumber;
     private boolean awardPrimaryProjectDirectorIndicator;
+    private String awardProjectDirectorNote1Text;
+    private String awardProjectDirectorNote2Text;
+    private String awardProjectDirectorNote3Text;
     private String awardProjectDirectorProjectTitle;
 
     private ProjectDirector projectDirector;
@@ -101,6 +106,69 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase {
      */
     public void setAwardPrimaryProjectDirectorIndicator(boolean awardPrimaryProjectDirectorIndicator) {
         this.awardPrimaryProjectDirectorIndicator = awardPrimaryProjectDirectorIndicator;
+    }
+
+
+    /**
+     * Gets the awardProjectDirectorNote1Text attribute.
+     * 
+     * @return Returns the awardProjectDirectorNote1Text
+     * 
+     */
+    public String getAwardProjectDirectorNote1Text() {
+        return awardProjectDirectorNote1Text;
+    }
+
+    /**
+     * Sets the awardProjectDirectorNote1Text attribute.
+     * 
+     * @param awardProjectDirectorNote1Text The awardProjectDirectorNote1Text to set.
+     * 
+     */
+    public void setAwardProjectDirectorNote1Text(String awardProjectDirectorNote1Text) {
+        this.awardProjectDirectorNote1Text = awardProjectDirectorNote1Text;
+    }
+
+
+    /**
+     * Gets the awardProjectDirectorNote2Text attribute.
+     * 
+     * @return Returns the awardProjectDirectorNote2Text
+     * 
+     */
+    public String getAwardProjectDirectorNote2Text() {
+        return awardProjectDirectorNote2Text;
+    }
+
+    /**
+     * Sets the awardProjectDirectorNote2Text attribute.
+     * 
+     * @param awardProjectDirectorNote2Text The awardProjectDirectorNote2Text to set.
+     * 
+     */
+    public void setAwardProjectDirectorNote2Text(String awardProjectDirectorNote2Text) {
+        this.awardProjectDirectorNote2Text = awardProjectDirectorNote2Text;
+    }
+
+
+    /**
+     * Gets the awardProjectDirectorNote3Text attribute.
+     * 
+     * @return Returns the awardProjectDirectorNote3Text
+     * 
+     */
+    public String getAwardProjectDirectorNote3Text() {
+        return awardProjectDirectorNote3Text;
+    }
+
+    /**
+     * Sets the awardProjectDirectorNote3Text attribute.
+     * 
+     * @param awardProjectDirectorNote3Text The awardProjectDirectorNote3Text to set.
+     * 
+     */
+    public void setAwardProjectDirectorNote3Text(String awardProjectDirectorNote3Text) {
+        this.awardProjectDirectorNote3Text = awardProjectDirectorNote3Text;
     }
 
 

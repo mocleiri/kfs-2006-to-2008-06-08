@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2006 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
@@ -22,9 +7,9 @@
         <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Subcontractor Inquiry</title>
+            <title>Contracts and Grants Subcontractor</title>
 
-            <inquirySections><inquirySection title="Subcontractor Inquiry"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="subcontractorNumber" />
                 <field attributeName="subcontractorName" />
                 <field attributeName="subcontractorAddressLine1" />
@@ -33,12 +18,15 @@
                 <field attributeName="subcontractorStateCode" />
                 <field attributeName="subcontractorZipCode" />
                 <field attributeName="subcontractorCountryCode" />
-                <field attributeName="active" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Subcontractor Lookup</title>
+            <title>Subcontractor</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.cg.bo.Subcontractor">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup an Subcontractor</instructions>
 
@@ -51,9 +39,6 @@
                 <lookupField attributeName="subcontractorStateCode" required="false" />
                 <lookupField attributeName="subcontractorZipCode" required="false" />
                 <lookupField attributeName="subcontractorCountryCode" required="false" />
-                <lookupField attributeName="active" required="false">
-                    <defaultValue>Y</defaultValue>
-                </lookupField>
             </lookupFields>
 
             <resultFields>
@@ -65,7 +50,6 @@
                 <field attributeName="subcontractorStateCode" />
                 <field attributeName="subcontractorZipCode" />
                 <field attributeName="subcontractorCountryCode" />
-                <field attributeName="active" />
             </resultFields>
         </lookup>
 
@@ -87,7 +71,7 @@
                 </control>
 
                 <summary>Subcontractor Number</summary>
-                <description>Subcontractor Number.</description>
+                <description>Contracts and Grants Subcontractor Number.</description>
             </attribute>
 
             <attribute name="subcontractorName" forceUppercase="true">
@@ -106,7 +90,7 @@
                 </control>
 
                 <summary>Subcontractor Name</summary>
-                <description>Subcontractor Name</description>
+                <description>Contracts and Grants Subcontractor Name</description>
             </attribute>
 
             <attribute name="subcontractorAddressLine1" forceUppercase="false">
@@ -125,7 +109,7 @@
                 </control>
 
                 <summary>Subcontractor Address Line 1</summary>
-                <description>Subcontractor Address Line 1</description>
+                <description>Contracts And Grants Subcontractor Address Line 1</description>
             </attribute>
 
             <attribute name="subcontractorAddressLine2" forceUppercase="false">
@@ -143,7 +127,7 @@
                 </control>
 
                 <summary>Subcontractor Address Line 2</summary>
-                <description>Subcontractor Address Line 2</description>
+                <description>Contracts And Grants Subcontractor Address Line 2</description>
             </attribute>
 
             <attribute name="subcontractorCity" forceUppercase="false">
@@ -162,7 +146,7 @@
                 </control>
 
                 <summary>Subcontractor City</summary>
-                <description>Subcontractor City</description>
+                <description>Contracts And Grants Subcontractor City</description>
             </attribute>
 
             <attribute name="subcontractorStateCode" forceUppercase="true">
@@ -221,8 +205,6 @@
                 <summary>Country Code</summary>
                 <description>Subcontractor Country Code</description>
             </attribute>
-
-            <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 

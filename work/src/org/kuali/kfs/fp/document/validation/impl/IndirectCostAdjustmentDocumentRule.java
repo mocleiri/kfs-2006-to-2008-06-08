@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
 
@@ -20,17 +27,21 @@ import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.gl.util.SufficientFundsItemHelper.SufficientFundsItem;
 
 /**
  * Business rule(s) applicable to IndirectCostAdjustment documents.
  * 
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRuleBase implements IndirectCostAdjustmentDocumentRuleConstants {
 
@@ -51,8 +62,8 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
 
     /**
      * same logic as
-     * <code>IsDebitUtils#isDebitConsideringType(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)</code> but
-     * has the following accounting line restrictions: for grant lines(source):
+     * <code>IsDebitUtils#isDebitConsideringType(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)</code>
+     * but has the following accounting line restrictions: for grant lines(source):
      * <ol>
      * <li>only allow expense object type codes
      * </ol>
@@ -93,7 +104,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
             valid = !rule.failsRule(objectSubTypeCode);
 
             if (!valid) {
-                reportError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_INVALID_OBJ_SUB_TYPE, objectCode.getFinancialObjectCode(), objectSubTypeCode);
+                reportError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_INVALID_OBJ_SUB_TYPE, new String[] { objectCode.getFinancialObjectCode(), objectSubTypeCode });
             }
         }
         return valid;
@@ -176,7 +187,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
      */
 
     protected boolean processCommonCustomAccountingLineBusinessRules(AccountingLine accountingLine) {
-        // refresh line since this document calls the custom rules first. KULEDOCS-1406
+    //refresh line since this document calls the custom rules first. KULEDOCS-1406
         accountingLine.refresh();
         boolean isValid = isChartOfAccountsAllowed(accountingLine);
         if (isValid) {
@@ -193,11 +204,11 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
      */
     private boolean isAccountAllowed(AccountingLine accountingLine) {
         boolean isValid = true;
-        if (isValid && accountingLine.isSourceAccountingLine()) {
+        if (isValid && isSourceAccountingLine(accountingLine)) {
             String icrAccount = accountingLine.getAccount().getIndirectCostRecoveryAcctNbr();
             isValid &= StringUtils.isNotBlank(icrAccount);
             if (!isValid) {
-                reportError(PropertyConstants.ACCOUNT, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_GRANT_INVALID_ACCOUNT, accountingLine.getAccountNumber());
+                reportError(PropertyConstants.ACCOUNT, KeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_GRANT_INVALID_ACCOUNT, new String[] { accountingLine.getAccountNumber() });
             }
         }
         return isValid;
@@ -216,7 +227,7 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
     private boolean isChartOfAccountsAllowed(AccountingLine accountingLine) {
         boolean isValid = true;
 
-        if (accountingLine.isSourceAccountingLine()) {
+        if (isSourceAccountingLine(accountingLine)) {
             String icrExpense = accountingLine.getChart().getIcrExpenseFinancialObjectCd();
             isValid &= StringUtils.isNotBlank(icrExpense);
             if (!isValid) {
@@ -232,5 +243,59 @@ public class IndirectCostAdjustmentDocumentRule extends TransactionalDocumentRul
         }
 
         return isValid;
+    }
+
+    /**
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.SourceAccountingLine)
+     */
+    @Override
+    protected SufficientFundsItem processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, SourceAccountingLine sourceAccountingLine) {
+        return processAccountingLineSufficientFundsCheckingPreparation(transactionalDocument, sourceAccountingLine);
+    }
+
+
+    /**
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processTargetAccountingLineSufficientFundsCheckingPreparation(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.TargetAccountingLine)
+     */
+    @Override
+    protected SufficientFundsItem processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, TargetAccountingLine targetAccountingLine) {
+        return processAccountingLineSufficientFundsCheckingPreparation(transactionalDocument, targetAccountingLine);
+    }
+
+    /**
+     * Prepares the input item that will be used for sufficient funds checking.
+     * 
+     * fi_dica:lp_proc_grant_ln,lp_proc_rcpt_ln conslidated
+     * 
+     * @param transactionalDocument TODO
+     * @param accountingLine
+     * 
+     * @return <code>SufficientFundsItem</code>
+     */
+    private final SufficientFundsItem processAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
+        String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
+        String accountNumber = accountingLine.getAccountNumber();
+        String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
+        String financialObjectCode = accountingLine.getFinancialObjectCode();
+        String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
+        Integer fiscalYear = accountingLine.getPostingYear();
+        String financialObjectTypeCode = accountingLine.getObjectTypeCode();
+        KualiDecimal lineAmount = accountingLine.getAmount();
+        String offsetDebitCreditCode = null;
+        // fi_dica:lp_proc_grant_ln.36-2...62-2
+        // fi_dica:lp_proc_rcpt_ln.36-2...69-2
+        if (isDebit(transactionalDocument, accountingLine)) {
+            offsetDebitCreditCode = Constants.GL_CREDIT_CODE;
+        }
+        else {
+            offsetDebitCreditCode = Constants.GL_DEBIT_CODE;
+        }
+        lineAmount = lineAmount.abs();
+
+        String sufficientFundsObjectCode = SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(chartOfAccountsCode, financialObjectCode, accountSufficientFundsCode, financialObjectLevelCode);
+        SufficientFundsItem item = buildSufficentFundsItem(accountNumber, accountSufficientFundsCode, lineAmount, chartOfAccountsCode, sufficientFundsObjectCode, offsetDebitCreditCode, financialObjectCode, financialObjectLevelCode, fiscalYear, financialObjectTypeCode);
+        return item;
     }
 }

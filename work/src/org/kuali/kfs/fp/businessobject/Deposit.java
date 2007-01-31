@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.document.CashManagementDocument;
 import org.kuali.PropertyConstants;
@@ -30,7 +32,7 @@ import org.kuali.PropertyConstants;
 /**
  * 
  */
-public class Deposit extends PersistableBusinessObjectBase {
+public class Deposit extends BusinessObjectBase {
     // primary key
     private String documentNumber;
     private Integer financialDocumentDepositLineNumber;

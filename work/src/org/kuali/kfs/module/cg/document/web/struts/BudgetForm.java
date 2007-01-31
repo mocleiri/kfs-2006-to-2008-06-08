@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,28 +30,28 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.datadictionary.DataDictionary;
 import org.kuali.core.datadictionary.DocumentEntry;
-import org.kuali.core.datadictionary.HeaderNavigation;
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.struts.form.KualiDocumentFormBase;
+import org.kuali.core.datadictionary.HeaderNavigation;
 import org.kuali.core.web.uidraw.KeyLabelPair;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetAdHocOrg;
 import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
 import org.kuali.module.kra.budget.bo.BudgetFringeRate;
 import org.kuali.module.kra.budget.bo.BudgetGraduateAssistantRate;
-import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
 import org.kuali.module.kra.budget.bo.BudgetTypeCode;
+import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 import org.kuali.module.kra.budget.bo.NonpersonnelCategory;
 import org.kuali.module.kra.budget.document.BudgetDocument;
-import org.kuali.module.kra.document.ResearchDocument;
-import org.kuali.module.kra.web.struts.form.ResearchDocumentFormBase;
 
 
 /**
@@ -57,7 +59,7 @@ import org.kuali.module.kra.web.struts.form.ResearchDocumentFormBase;
  * 
  * 
  */
-public class BudgetForm extends ResearchDocumentFormBase {
+public class BudgetForm extends KualiDocumentFormBase {
 
     private static final long serialVersionUID = 1L;
 
@@ -144,11 +146,6 @@ public class BudgetForm extends ResearchDocumentFormBase {
         this.setHeaderNavigationTabs(budgetDocumentEntry.getHeaderTabNavigation());
     }
 
-    @Override
-    public ResearchDocument getResearchDocument() {
-        return this.getBudgetDocument();
-    }
-
     /**
      * Checks for methodToCall parameter, and if not populated in form calls utility method to parse the string from the request.
      */
@@ -179,6 +176,26 @@ public class BudgetForm extends ResearchDocumentFormBase {
         }
         else {
             enableHeaderNavigation("modular");
+        }
+    }
+
+    public void disableHeaderNavigation(String headerTabNavigateTo) {
+        for (int i = 0; i < this.getHeaderNavigationTabs().length; i++) {
+            HeaderNavigation currentNav = (HeaderNavigation) this.getHeaderNavigationTabs()[i];
+            if (headerTabNavigateTo.equals(currentNav.getHeaderTabNavigateTo())) {
+                currentNav.setDisabled(true);
+                return;
+            }
+        }
+    }
+
+    public void enableHeaderNavigation(String headerTabNavigateTo) {
+        for (int i = 0; i < this.getHeaderNavigationTabs().length; i++) {
+            HeaderNavigation currentNav = (HeaderNavigation) this.getHeaderNavigationTabs()[i];
+            if (headerTabNavigateTo.equals(currentNav.getHeaderTabNavigateTo())) {
+                currentNav.setDisabled(false);
+                return;
+            }
         }
     }
 

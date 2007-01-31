@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/PreEncumbranceDocument.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,6 +30,9 @@ import org.kuali.module.gl.util.SufficientFundsItem;
  * The Pre-Encumbrance document provides the capability to record encumbrances independently of purchase orders, travel, or Physical
  * Plant work orders. These transactions are for the use of the account manager to earmark funds for which unofficial commitments
  * have already been made.
+ * 
+ * 
+ * @version $Id: PreEncumbranceDocument.java,v 1.7.2.3 2006-10-14 02:29:22 jbmorris Exp $
  */
 public class PreEncumbranceDocument extends TransactionalDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PreEncumbranceDocument.class);
