@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/coa/document/validation/impl/AccountRuleTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +17,15 @@
  */
 package org.kuali.module.chart.rules;
 
-import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
-import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapEmpty;
-import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapSize;
-
+import static org.kuali.core.util.SpringServiceLocator.getKualiUserService;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.kuali.KeyConstants;
-import org.kuali.core.bo.Options;
 import org.kuali.core.bo.user.AuthenticationUserId;
+import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
@@ -33,6 +33,7 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.test.WithTestSpringContext;
+import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 @WithTestSpringContext(session = KHUNTLEY)
 public class AccountRuleTest extends ChartRuleTestBase {
@@ -393,11 +394,11 @@ public class AccountRuleTest extends ChartRuleTestBase {
 
     }
 
-    private UniversalUser getKualiUserByUserName(String userName) {
+    private KualiUser getKualiUserByUserName(String userName) {
         AuthenticationUserId userId = new AuthenticationUserId(userName);
-        UniversalUser user = null;
+        KualiUser user = null;
         try {
-            user = SpringServiceLocator.getUniversalUserService().getUniversalUser(userId);
+            user = SpringServiceLocator.getKualiUserService().getKualiUser(userId);
         }
         catch (UserNotFoundException e) {
             assertTrue("An Exception should not be thrown.", false);
@@ -958,9 +959,8 @@ public class AccountRuleTest extends ChartRuleTestBase {
         Calendar testCalendar;
         Timestamp testTimestamp;
 
-        // get today's date (or whatever's provided by the DateTimeService)
+        // get today's date
         testCalendar = Calendar.getInstance();
-        testCalendar.setTime(SpringServiceLocator.getDateTimeService().getCurrentDate());
         testCalendar = DateUtils.truncate(testCalendar, Calendar.DAY_OF_MONTH);
         testTimestamp = new Timestamp(testCalendar.getTimeInMillis());
 
@@ -1101,7 +1101,7 @@ private void disableBeginBalanceLoadInd(){
         newAccount.setFinancialIcrSeriesIdentifier(null);
         newAccount.setIndirectCostRcvyFinCoaCode(null);
         newAccount.setIndirectCostRecoveryAcctNbr(null);
-        newAccount.setAccountCfdaNumber(null);
+        newAccount.setCgCatlfFedDomestcAssistNbr(null);
 
         // run the rule
         result = rule.checkCgRequiredFields(newAccount);
@@ -1113,7 +1113,7 @@ private void disableBeginBalanceLoadInd(){
         assertFieldErrorExists("financialIcrSeriesIdentifier", KeyConstants.ERROR_REQUIRED);
         assertFieldErrorExists("indirectCostRcvyFinCoaCode", KeyConstants.ERROR_REQUIRED);
         assertFieldErrorExists("indirectCostRecoveryAcctNbr", KeyConstants.ERROR_REQUIRED);
-        assertFieldErrorExists("accountCfdaNumber", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("cgCatlfFedDomestcAssistNbr", KeyConstants.ERROR_REQUIRED);
 
     }
 
@@ -1138,16 +1138,17 @@ private void disableBeginBalanceLoadInd(){
         // make sure all the required fields are missing
         newAccount.setContractControlFinCoaCode(Accounts.ChartCode.GOOD1);
         newAccount.setContractControlAccountNumber(Accounts.AccountNumber.GOOD1);
-        newAccount.setAcctIndirectCostRcvyTypeCd("10");
-        newAccount.setFinancialIcrSeriesIdentifier("001");
+        newAccount.setAcctIndirectCostRcvyTypeCd("001");
+        newAccount.setFinancialIcrSeriesIdentifier("A");
         newAccount.setIndirectCostRcvyFinCoaCode(Accounts.ChartCode.GOOD1);
         newAccount.setIndirectCostRecoveryAcctNbr(Accounts.AccountNumber.GOOD1);
-        newAccount.setAccountCfdaNumber("001");
+        newAccount.setCgCatlfFedDomestcAssistNbr("001");
 
         // run the rule
         result = rule.checkCgRequiredFields(newAccount);
-        assertGlobalErrorMapEmpty();
         assertEquals("Rule should return true with no missing fields.", true, result);
+        assertGlobalErrorMapEmpty();
+
     }
 
     @SuppressWarnings("deprecation")
