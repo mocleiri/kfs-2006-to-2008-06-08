@@ -2,6 +2,8 @@
 <!--
  Copyright 2006 The Kuali Foundation.
  
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/RoutingFormOtherCostShare.xml,v $
+ 
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -87,7 +89,7 @@
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="6" />
                 </control>
 
                 <summary>routingFormCostShareSequenceNumber</summary>
@@ -117,7 +119,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="16" />
                 </control>
 
                 <summary>documentNumber</summary>

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/infrastructure/src/org/kuali/kfs/DocumentTestUtils.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +23,6 @@ import org.kuali.core.document.DocumentHeader;
 import org.kuali.core.document.DocumentNote;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.InternalBillingItem;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -61,7 +62,7 @@ public class DocumentTestUtils {
      * @return new DocumentNote initialized with the given values
      */
     public static DocumentNote createDocumentNote(String documentHeaderId, UniversalUser documentNoteAuthor, String documentNoteText) {
-        java.util.Date now = SpringServiceLocator.getDateTimeService().getCurrentDate();
+        java.util.Date now = new java.util.Date();
         DocumentNote documentNote = new DocumentNote();
         documentNote.setDocumentNumber(documentHeaderId);
         documentNote.setFinDocumentAuthorUniversalId(documentNoteAuthor.getPersonUniversalIdentifier());

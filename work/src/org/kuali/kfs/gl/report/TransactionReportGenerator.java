@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/report/TransactionReportGenerator.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -248,7 +250,7 @@ public class TransactionReportGenerator {
                 errorTable.addCell(cell);
                 cell = new PdfPCell(new Phrase(transaction.getFinancialSystemOriginationCode(), textFont));
                 errorTable.addCell(cell);
-                cell = new PdfPCell(new Phrase(transaction.getDocumentNumber(), textFont));
+                cell = new PdfPCell(new Phrase(transaction.getFinancialDocumentNumber(), textFont));
                 errorTable.addCell(cell);
 
                 String squenceNumber = transaction.getUniversityFiscalYear() == null ? "NULL" : transaction.getTransactionLedgerEntrySequenceNumber().toString();

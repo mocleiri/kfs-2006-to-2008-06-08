@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +22,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.module.kra.budget.KraConstants;
 
 /**
  * 
  */
-public class BudgetIndirectCost extends PersistableBusinessObjectBase {
+public class BudgetIndirectCost extends BusinessObjectBase {
 
     private String documentNumber;
 

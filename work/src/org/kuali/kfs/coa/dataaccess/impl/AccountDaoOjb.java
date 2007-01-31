@@ -1,17 +1,20 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (c) 2004, 2005 The National Association of College and University
+ * Business Officers, Cornell University, Trustees of Indiana University,
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the
+ * University of Arizona, and the r*smart group. Licensed under the Educational
+ * Community License Version 1.0 (the "License"); By obtaining, using and/or
+ * copying this Original Work, you agree that you have read, understand, and
+ * will comply with the terms and conditions of the Educational Community
+ * License. You may obtain a copy of the License at:
+ * http://kualiproject.org/license.html THE SOFTWARE IS PROVIDED "AS IS",
+ * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ * THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package org.kuali.module.chart.dao.ojb;
 
@@ -25,27 +28,24 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.Constants;
 import org.kuali.core.AccountResponsibility;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.DateTimeService;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 import org.kuali.module.chart.dao.AccountDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * This class is the OJB implementation of the AccountDao interface.
  * 
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 
 public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements AccountDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountDaoOjb.class);
 
-    private DateTimeService dateTimeService;
-    
     /**
      * Retrieves account business object by primary key
      * 
@@ -70,12 +70,12 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
      * @param kualiUser
      * @return a list of Accounts that the user has responsibility for
      */
-    public List getAccountsThatUserIsResponsibleFor(UniversalUser universalUser) {
+    public List getAccountsThatUserIsResponsibleFor(KualiUser kualiUser) {
         LOG.debug("getAccountsThatUserIsResponsibleFor() started");
 
         List accountResponsibilities = new ArrayList();
-        accountResponsibilities.addAll(getFiscalOfficerResponsibilities(universalUser));
-        accountResponsibilities.addAll(getDelegatedResponsibilities(universalUser));
+        accountResponsibilities.addAll(getFiscalOfficerResponsibilities(kualiUser));
+        accountResponsibilities.addAll(getDelegatedResponsibilities(kualiUser));
         return accountResponsibilities;
     }
 
@@ -127,10 +127,10 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
     /**
      * method to get the fo responsibilities for the account
      */
-    private List getFiscalOfficerResponsibilities(UniversalUser universalUser) {
+    private List getFiscalOfficerResponsibilities(KualiUser kualiUser) {
         List fiscalOfficerResponsibilities = new ArrayList();
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("accountFiscalOfficerSystemIdentifier", universalUser.getPersonUniversalIdentifier());
+        criteria.addEqualTo("accountFiscalOfficerSystemIdentifier", kualiUser.getPersonUniversalIdentifier());
         Collection accounts = getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Account.class, criteria));
         for (Iterator iter = accounts.iterator(); iter.hasNext();) {
             Account account = (Account) iter.next();
@@ -143,10 +143,10 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
     /**
      * method to get the fo delegated responsibilities for the account
      */
-    private List getDelegatedResponsibilities(UniversalUser universalUser) {
+    private List getDelegatedResponsibilities(KualiUser kualiUser) {
         List delegatedResponsibilities = new ArrayList();
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("accountDelegateSystemId", universalUser.getPersonUniversalIdentifier());
+        criteria.addEqualTo("accountDelegateSystemId", kualiUser.getPersonUniversalIdentifier());
         Collection accountDelegates = getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Delegate.class, criteria));
         for (Iterator iter = accountDelegates.iterator(); iter.hasNext();) {
             Delegate accountDelegate = (Delegate) iter.next();
@@ -155,7 +155,7 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
                 // there is some test data that
                 // contains null startDates, therefore this check.
                 if (ObjectUtils.isNotNull(accountDelegate.getAccountDelegateStartDate())) {
-                    if (!accountDelegate.getAccountDelegateStartDate().after(dateTimeService.getCurrentDate())) {
+                    if (!accountDelegate.getAccountDelegateStartDate().after(new Date())) {
                         Account account = getByPrimaryId(accountDelegate.getChartOfAccountsCode(), accountDelegate.getAccount().getAccountNumber());
                         AccountResponsibility accountResponsibility = new AccountResponsibility(AccountResponsibility.DELEGATED_RESPONSIBILITY, accountDelegate.getFinDocApprovalFromThisAmt(), accountDelegate.getFinDocApprovalToThisAmount(), accountDelegate.getFinancialDocumentTypeCode(), account);
                         delegatedResponsibilities.add(accountResponsibility);
@@ -171,10 +171,5 @@ public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements Accoun
 
         Criteria criteria = new Criteria();
         return getPersistenceBrokerTemplate().getIteratorByQuery(QueryFactory.newQuery(Account.class, criteria));
-    }
-    
-
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
     }
 }

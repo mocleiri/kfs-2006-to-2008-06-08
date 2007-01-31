@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/inquiry/InquirableFinancialDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +46,7 @@ public class InquirableFinancialDocument {
             return Constants.EMPTY_STRING;
         }
 
-        String docNumber = transaction.getDocumentNumber();
+        String docNumber = transaction.getFinancialDocumentNumber();
         String originationCode = transaction.getFinancialSystemOriginationCode();
 
         return getUrl(originationCode, docNumber);
@@ -52,7 +54,7 @@ public class InquirableFinancialDocument {
 
     private String getUrl(String originCode, String docNumber) {
         if (Constants.ORIGIN_CODE_KUALI.equals(originCode) && !StringUtils.isBlank(docNumber)) {
-            return kualiConfigurationService.getPropertyString(Constants.WORKFLOW_URL_KEY) + "/DocHandler.do?docId=" + docNumber + "&command=displayDocSearchView";
+            return kualiConfigurationService.getPropertyString("workflow.base.url") + "/DocHandler.do?docId=" + docNumber + "&command=displayDocSearchView";
         }
         return Constants.EMPTY_STRING;
     }

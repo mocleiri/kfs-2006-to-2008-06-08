@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/AssignContractManagerDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +32,8 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.bo.AssignContractManagerDetail;
+
+import edu.iu.uis.eden.exception.WorkflowException;
 
 public class AssignContractManagerDocument extends TransactionalDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AssignContractManagerDocument.class);
@@ -97,22 +101,35 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
                 
                 // Get the requisition for this AssignContractManagerDetail.
                 RequisitionDocument req = detail.getRequisition();
-
+   
                 // If the ContractManagerCode of the saved req is not null it means that another
                 //   AssignContractManagerDocument already assigned the contract manager.
                 //   If so we won't assign it here but will send an fyi to the initiator of this document.
+// TODO: check the logic of the following if.
                 if (ObjectUtils.isNotNull(req.getContractManagerCode()) &&
                   req.getStatusCode().equals(PurapConstants.RequisitionStatuses.CLOSED) && 
                   !req.getContractManagerCode().equals(detail.getContractManagerCode())) {
                     // TODO: send a workflow fyi here.
-                }
-
-                if (ObjectUtils.isNull(req.getContractManagerCode())) {
+                    this.getDocumentHeader().getWorkflowDocument().isFYIRequested();
+                    try {
+                        this.getDocumentHeader().getWorkflowDocument().fyi();
+                    }
+                    catch (WorkflowException e) {
+                        e.printStackTrace();
+                    }
+                } else {
                     req.setContractManagerCode(detail.getContractManagerCode());                    
-                    SpringServiceLocator.getPurapService().updateStatusAndStatusHistory(req, PurapConstants.RequisitionStatuses.CLOSED);
-                    SpringServiceLocator.getRequisitionService().save(req);
-                    // TODO:  what do we do if the save fails for one or more reqs in the list?                    
-                    PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(req);
+                    boolean success = SpringServiceLocator.getPurapService().updateStatusAndStatusHistory(req, 
+                      PurapConstants.RequisitionStatuses.CLOSED);
+                    if (success) {
+                        LOG.debug("Status and status history have been updated for requisition #"+detail.getRequisitionIdentifier());
+                        SpringServiceLocator.getRequisitionService().save(req);
+                        // TODO:  what do we do if the save fails for one or more reqs in the list?                    
+                        // TODO: create PO here.                        
+                    }
+                    else {
+                        LOG.info("FAILURE while updating status and status history for requisition #"+detail.getRequisitionIdentifier());
+                    }
                 }
             }
         }

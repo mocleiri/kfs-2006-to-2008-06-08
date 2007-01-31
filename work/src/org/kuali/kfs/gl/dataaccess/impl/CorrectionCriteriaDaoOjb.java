@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/impl/CorrectionCriteriaDaoOjb.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +22,10 @@ import java.util.List;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.kuali.PropertyConstants;
 import org.kuali.module.gl.bo.CorrectionCriteria;
 import org.kuali.module.gl.dao.CorrectionCriteriaDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
+import org.kuali.PropertyConstants;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 public class CorrectionCriteriaDaoOjb extends PersistenceBrokerDaoSupport implements CorrectionCriteriaDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionCriteriaDaoOjb.class);

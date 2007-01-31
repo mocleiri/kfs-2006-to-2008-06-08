@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -28,7 +30,6 @@
                 <field attributeName="budgetOnCampusIndicator" />
                 <field attributeName="budgetPurposeCode" />
                 <field attributeName="budgetIndirectCostRate" />
-                <field attributeName="active" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
@@ -43,16 +44,12 @@
                 <lookupField attributeName="budgetOnCampusIndicator" required="false" />
                 <lookupField attributeName="budgetPurposeCode" required="false" />
                 <lookupField attributeName="budgetIndirectCostRate" required="false" />
-                <lookupField attributeName="active" required="false">
-                    <defaultValue>Y</defaultValue>
-                </lookupField>
             </lookupFields>
 
             <resultFields>
                 <field attributeName="budgetOnCampusIndicator" />
                 <field attributeName="budgetPurposeCode" />
                 <field attributeName="budgetIndirectCostRate" />
-                <field attributeName="active" />
             </resultFields>
         </lookup>
 
@@ -94,8 +91,6 @@
                 <summary>Budget Indirect Cost Rate.</summary>
                 <description>Budget Indirect Cost Rate.</description>
             </attribute>
-
-            <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
         </attributes>

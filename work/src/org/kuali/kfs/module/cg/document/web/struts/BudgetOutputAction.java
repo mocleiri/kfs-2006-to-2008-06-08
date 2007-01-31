@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +50,7 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.WebUtils;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.module.kra.budget.xml.BudgetXml;
@@ -124,7 +126,7 @@ public class BudgetOutputAction extends BudgetAction {
 
         // Retrieve the environment we're in.
         KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
-        String env = kualiConfigurationService.getPropertyString(Constants.ENVIRONMENT_KEY);
+        String env = kualiConfigurationService.getPropertyString("environment");
 
         WebUtils.saveMimeOutputStreamAsFile(response, "application/pdf", baos, "kraBudget-" + env + budgetDoc.getBudget().getDocumentNumber() + ".pdf");
 
@@ -165,7 +167,7 @@ public class BudgetOutputAction extends BudgetAction {
 
         // Retrieve the environment we're in.
         KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
-        String env = kualiConfigurationService.getPropertyString(Constants.ENVIRONMENT_KEY);
+        String env = kualiConfigurationService.getPropertyString("environment");
 
         WebUtils.saveMimeOutputStreamAsFile(response, "text/xml", baos, "kraBudget-" + env + budgetDoc.getBudget().getDocumentNumber() + ".xml");
 
@@ -254,8 +256,9 @@ public class BudgetOutputAction extends BudgetAction {
             urlString = STYLESHEET_URL_OR_PATH;
         }
         else {
-            String APPLICATION_BASE_URL_KEY = kualiConfigurationService.getPropertyString(Constants.APPLICATION_URL_KEY);
-            urlString = APPLICATION_BASE_URL_KEY + STYLESHEET_URL_OR_PATH;
+            // following is like returnUrl in KualiCore
+            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+            urlString = baseUrl + STYLESHEET_URL_OR_PATH;
         }
 
         if (GENERIC_BY_TASK.equals(currentOutputReportType)) {

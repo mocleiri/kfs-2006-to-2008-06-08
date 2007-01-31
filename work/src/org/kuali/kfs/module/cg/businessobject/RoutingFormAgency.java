@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormAgency.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +21,14 @@ package org.kuali.module.kra.routingform.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.cg.bo.Agency;
 import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class RoutingFormAgency extends PersistableBusinessObjectBase {
+public class RoutingFormAgency extends BusinessObjectBase {
 
 	private String documentNumber;
 	private String agencyAddressDescription;
@@ -55,7 +57,7 @@ public class RoutingFormAgency extends PersistableBusinessObjectBase {
 	private Date routingFormSubmitDate;
 
     private RoutingFormDueDateType routingFormDueDateType;
-    private Agency agency;
+    private Agency routingFormAgency;
     
 	/**
 	 * Default constructor.
@@ -393,6 +395,7 @@ public class RoutingFormAgency extends PersistableBusinessObjectBase {
 	 * Sets the agencyNumber attribute.
 	 * 
 	 * @param agencyNumber The agencyNumber to set.
+	 * 
 	 */
 	public void setAgencyNumber(String agencyNumber) {
 		this.agencyNumber = agencyNumber;
@@ -613,16 +616,12 @@ public class RoutingFormAgency extends PersistableBusinessObjectBase {
         return m;
     }
 
-    public Agency getAgency() {
-        return agency;
+    public Agency getRoutingFormAgency() {
+        return routingFormAgency;
     }
-    
-    /**
-     * @param agency
-     * @deprecated
-     */
-    public void setAgency(Agency routingFormAgency) {
-        this.agency = routingFormAgency;
+
+    public void setRoutingFormAgency(Agency routingFormAgency) {
+        this.routingFormAgency = routingFormAgency;
     }
 
 }

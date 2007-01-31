@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/dataaccess/impl/PriorYearAccountDaoOjb.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,16 +19,11 @@ package org.kuali.module.chart.dao.ojb;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.chart.bo.PriorYearAccount;
 import org.kuali.module.chart.dao.PriorYearAccountDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-/**
- * This class...
- * 
- * 
- */
-public class PriorYearAccountDaoOjb extends PersistenceBrokerDaoSupport implements PriorYearAccountDao {
+public class PriorYearAccountDaoOjb extends PlatformAwareDaoBaseOjb implements PriorYearAccountDao {
 
     /**
      * @see org.kuali.module.chart.dao.PriorYearAccountDao#getByPrimaryId(java.lang.String, java.lang.String)

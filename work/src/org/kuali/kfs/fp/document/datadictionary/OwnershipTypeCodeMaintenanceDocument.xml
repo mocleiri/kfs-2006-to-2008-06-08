@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/datadictionary/OwnershipTypeCodeMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -40,9 +42,7 @@
 
         <summary>Ownership Type Code Maintenance Document</summary>
         <description>Document used to create or update Ownership Type objects</description>
-        <help securityGroupName="Kuali.DisbursementVoucher.Help" parameterName="DISBURSEMENT_VOUCHER_HELP_OWNERSHIP_TYPE_CODE" />
-
-        <allowsCopy>true</allowsCopy>
+       <help securityGroupName="Kuali.DisbursementVoucher.Help" parameterName="DISBURSEMENT_VOUCHER_HELP_OWNERSHIP_TYPE_CODE" />
 
         <lockingKeys>
             <field attributeName="code" />

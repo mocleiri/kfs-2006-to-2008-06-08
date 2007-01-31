@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/impl/CorrectionChangeDaoOjb.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +22,11 @@ import java.util.List;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.kuali.PropertyConstants;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.dao.CorrectionChangeDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-public class CorrectionChangeDaoOjb extends PersistenceBrokerDaoSupport implements CorrectionChangeDao {
+public class CorrectionChangeDaoOjb extends PlatformAwareDaoBaseOjb implements CorrectionChangeDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeDaoOjb.class);
 
     /**
@@ -46,7 +47,7 @@ public class CorrectionChangeDaoOjb extends PersistenceBrokerDaoSupport implemen
         LOG.debug("findByDocumentHeaderIdAndCorrectionGroupNumber() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.addEqualTo("financialDocumentNumber", documentNumber);
         criteria.addEqualTo("correctionChangeGroupLineNumber", correctionGroupLineNumber);
 
         QueryByCriteria query = QueryFactory.newQuery(CorrectionChange.class, criteria);
