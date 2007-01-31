@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormBudget.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +22,13 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class RoutingFormBudget extends PersistableBusinessObjectBase {
+public class RoutingFormBudget extends BusinessObjectBase {
 
 	private String documentNumber;
 	private Integer routingFormBudgetMaximumPeriodNumber;
@@ -36,11 +38,7 @@ public class RoutingFormBudget extends PersistableBusinessObjectBase {
 	private BigDecimal routingFormBudgetIndirectCostAmount;
 	private String routingFormBudgetIndirectCostDescription;
 	private Date routingFormBudgetStartDate;
-    private BigDecimal routingFormBudgetTotalDirectAmount;
-    private Date routingFormBudgetTotalEndDate;
-    private BigDecimal routingFormBudgetTotalIndirectCostAmount;
-    private Date routingFormBudgetTotalStartDate;
-   
+
 	/**
 	 * Default constructor.
 	 */
@@ -215,77 +213,13 @@ public class RoutingFormBudget extends PersistableBusinessObjectBase {
 		this.routingFormBudgetStartDate = routingFormBudgetStartDate;
 	}
 
-    /**
-     * Gets the routingFormBudgetTotalDirectAmount attribute. 
-     * @return Returns the routingFormBudgetTotalDirectAmount.
-     */
-    public BigDecimal getRoutingFormBudgetTotalDirectAmount() {
-        return routingFormBudgetTotalDirectAmount;
-    }
 
-    /**
-     * Sets the routingFormBudgetTotalDirectAmount attribute value.
-     * @param routingFormBudgetTotalDirectAmount The routingFormBudgetTotalDirectAmount to set.
-     */
-    public void setRoutingFormBudgetTotalDirectAmount(BigDecimal routingFormBudgetTotalDirectAmount) {
-        this.routingFormBudgetTotalDirectAmount = routingFormBudgetTotalDirectAmount;
-    }
-
-    /**
-     * Gets the routingFormBudgetTotalEndDate attribute. 
-     * @return Returns the routingFormBudgetTotalEndDate.
-     */
-    public Date getRoutingFormBudgetTotalEndDate() {
-        return routingFormBudgetTotalEndDate;
-    }
-
-    /**
-     * Sets the routingFormBudgetTotalEndDate attribute value.
-     * @param routingFormBudgetTotalEndDate The routingFormBudgetTotalEndDate to set.
-     */
-    public void setRoutingFormBudgetTotalEndDate(Date routingFormBudgetTotalEndDate) {
-        this.routingFormBudgetTotalEndDate = routingFormBudgetTotalEndDate;
-    }
-
-    /**
-     * Gets the routingFormBudgetTotalIndirectCostAmount attribute. 
-     * @return Returns the routingFormBudgetTotalIndirectCostAmount.
-     */
-    public BigDecimal getRoutingFormBudgetTotalIndirectCostAmount() {
-        return routingFormBudgetTotalIndirectCostAmount;
-    }
-
-    /**
-     * Sets the routingFormBudgetTotalIndirectCostAmount attribute value.
-     * @param routingFormBudgetTotalIndirectCostAmount The routingFormBudgetTotalIndirectCostAmount to set.
-     */
-    public void setRoutingFormBudgetTotalIndirectCostAmount(BigDecimal routingFormBudgetTotalIndirectCostAmount) {
-        this.routingFormBudgetTotalIndirectCostAmount = routingFormBudgetTotalIndirectCostAmount;
-    }
-
-    /**
-     * Gets the routingFormBudgetTotalStartDate attribute. 
-     * @return Returns the routingFormBudgetTotalStartDate.
-     */
-    public Date getRoutingFormBudgetTotalStartDate() {
-        return routingFormBudgetTotalStartDate;
-    }
-
-    /**
-     * Sets the routingFormBudgetTotalStartDate attribute value.
-     * @param routingFormBudgetTotalStartDate The routingFormBudgetTotalStartDate to set.
-     */
-    public void setRoutingFormBudgetTotalStartDate(Date routingFormBudgetTotalStartDate) {
-        this.routingFormBudgetTotalStartDate = routingFormBudgetTotalStartDate;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
-        return m;
+	    return m;
     }
-
 }

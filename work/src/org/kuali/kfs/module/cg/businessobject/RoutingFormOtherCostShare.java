@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormOtherCostShare.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +21,18 @@ package org.kuali.module.kra.routingform.bo;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
 
 /**
  * 
  */
-public class RoutingFormOtherCostShare extends PersistableBusinessObjectBase {
+public class RoutingFormOtherCostShare extends BusinessObjectBase {
 
 	private Integer routingFormCostShareSequenceNumber;
 	private String documentNumber;
 	private String routingFormCostShareSourceName;
-	private KualiDecimal routingFormCostShareAmount;
+	private BigDecimal routingFormCostShareAmount;
 
 	/**
 	 * Default constructor.
@@ -108,7 +109,7 @@ public class RoutingFormOtherCostShare extends PersistableBusinessObjectBase {
 	 * @return Returns the routingFormCostShareAmount
 	 * 
 	 */
-	public KualiDecimal getRoutingFormCostShareAmount() { 
+	public BigDecimal getRoutingFormCostShareAmount() { 
 		return routingFormCostShareAmount;
 	}
 
@@ -118,7 +119,7 @@ public class RoutingFormOtherCostShare extends PersistableBusinessObjectBase {
 	 * @param routingFormCostShareAmount The routingFormCostShareAmount to set.
 	 * 
 	 */
-	public void setRoutingFormCostShareAmount(KualiDecimal routingFormCostShareAmount) {
+	public void setRoutingFormCostShareAmount(BigDecimal routingFormCostShareAmount) {
 		this.routingFormCostShareAmount = routingFormCostShareAmount;
 	}
 

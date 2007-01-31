@@ -1,7 +1,7 @@
 /*
  * Copyright 2006 The Kuali Foundation.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormStatus.java,v $
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormPurpose.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,37 +25,37 @@ import org.kuali.core.bo.BusinessObjectBase;
 /**
  * 
  */
-public class RoutingFormStatus extends BusinessObjectBase {
+public class RoutingFormPurpose extends BusinessObjectBase {
 
-	private String routingFormStatusCode;
-	private boolean dataObjectMaintenanceCodeActiveIndicator;
-	private String routingFormStatusDescription;
+	private String routingFormPurposeCode;
+	private String dataObjectMaintenanceCodeActiveIndicator;
+	private String routingFormPurposeDescription;
 
 	/**
 	 * Default constructor.
 	 */
-	public RoutingFormStatus() {
+	public RoutingFormPurpose() {
 
 	}
 
 	/**
-	 * Gets the routingFormStatusCode attribute.
+	 * Gets the routingFormPurposeCode attribute.
 	 * 
-	 * @return Returns the routingFormStatusCode
+	 * @return Returns the routingFormPurposeCode
 	 * 
 	 */
-	public String getRoutingFormStatusCode() { 
-		return routingFormStatusCode;
+	public String getRoutingFormPurposeCode() { 
+		return routingFormPurposeCode;
 	}
 
 	/**
-	 * Sets the routingFormStatusCode attribute.
+	 * Sets the routingFormPurposeCode attribute.
 	 * 
-	 * @param routingFormStatusCode The routingFormStatusCode to set.
+	 * @param routingFormPurposeCode The routingFormPurposeCode to set.
 	 * 
 	 */
-	public void setRoutingFormStatusCode(String routingFormStatusCode) {
-		this.routingFormStatusCode = routingFormStatusCode;
+	public void setRoutingFormPurposeCode(String routingFormPurposeCode) {
+		this.routingFormPurposeCode = routingFormPurposeCode;
 	}
 
 
@@ -65,7 +65,7 @@ public class RoutingFormStatus extends BusinessObjectBase {
 	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
 	 * 
 	 */
-	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+	public String getDataObjectMaintenanceCodeActiveIndicator() { 
 		return dataObjectMaintenanceCodeActiveIndicator;
 	}
 
@@ -75,29 +75,29 @@ public class RoutingFormStatus extends BusinessObjectBase {
 	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
 	 * 
 	 */
-	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+	public void setDataObjectMaintenanceCodeActiveIndicator(String dataObjectMaintenanceCodeActiveIndicator) {
 		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
 	}
 
 
 	/**
-	 * Gets the routingFormStatusDescription attribute.
+	 * Gets the routingFormPurposeDescription attribute.
 	 * 
-	 * @return Returns the routingFormStatusDescription
+	 * @return Returns the routingFormPurposeDescription
 	 * 
 	 */
-	public String getRoutingFormStatusDescription() { 
-		return routingFormStatusDescription;
+	public String getRoutingFormPurposeDescription() { 
+		return routingFormPurposeDescription;
 	}
 
 	/**
-	 * Sets the routingFormStatusDescription attribute.
+	 * Sets the routingFormPurposeDescription attribute.
 	 * 
-	 * @param routingFormStatusDescription The routingFormStatusDescription to set.
+	 * @param routingFormPurposeDescription The routingFormPurposeDescription to set.
 	 * 
 	 */
-	public void setRoutingFormStatusDescription(String routingFormStatusDescription) {
-		this.routingFormStatusDescription = routingFormStatusDescription;
+	public void setRoutingFormPurposeDescription(String routingFormPurposeDescription) {
+		this.routingFormPurposeDescription = routingFormPurposeDescription;
 	}
 
 
@@ -106,7 +106,7 @@ public class RoutingFormStatus extends BusinessObjectBase {
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("routingFormStatusCode", this.routingFormStatusCode);
+        m.put("routingFormPurposeCode", this.routingFormPurposeCode);
 	    return m;
     }
 }

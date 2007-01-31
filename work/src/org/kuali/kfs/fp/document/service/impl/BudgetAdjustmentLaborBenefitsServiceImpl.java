@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/service/impl/BudgetAdjustmentLaborBenefitsServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +36,7 @@ import org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
 import org.kuali.module.financial.service.BudgetAdjustmentLaborBenefitsService;
 import org.kuali.module.labor.bo.BenefitsCalculation;
-import org.kuali.module.labor.bo.PositionObjectBenefit;
+import org.kuali.module.labor.bo.LaborObjectBenefit;
 
 /**
  * These service performs methods related to the generation of labor benefit accounting lines for the budget adjustment document.
@@ -76,7 +78,7 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
             Collection objectBenefits = retrieveLaborObjectBenefits(fiscalYear, line);
             if (objectBenefits != null) {
                 for (Iterator iterator = objectBenefits.iterator(); iterator.hasNext();) {
-                    PositionObjectBenefit objectBenefit = (PositionObjectBenefit) iterator.next();
+                    LaborObjectBenefit objectBenefit = (LaborObjectBenefit) iterator.next();
                     BenefitsCalculation benefitsCalculation = objectBenefit.getBenefitsCalculation();
 
                     // now create and set properties for the benefit line
@@ -146,7 +148,7 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
         searchCriteria.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, line.getChartOfAccountsCode());
         searchCriteria.put(PropertyConstants.FINANCIAL_OBJECT_CODE, line.getFinancialObjectCode());
 
-        return getBusinessObjectService().findMatching(PositionObjectBenefit.class, searchCriteria);
+        return getBusinessObjectService().findMatching(LaborObjectBenefit.class, searchCriteria);
     }
 
     /**

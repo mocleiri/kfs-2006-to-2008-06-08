@@ -1,17 +1,24 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.web.struts.form;
 
@@ -24,20 +31,17 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
-import org.kuali.core.lookup.LookupUtils;
 import org.kuali.core.lookup.Lookupable;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.form.LookupForm;
 import org.kuali.core.web.uidraw.Field;
 import org.kuali.core.web.uidraw.Row;
-import org.kuali.module.gl.GLConstants;
-import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
  * This class is the action form for balance inquiries.
  * 
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class BalanceInquiryForm extends LookupForm {
     private static final long serialVersionUID = 1L;
@@ -65,18 +69,18 @@ public class BalanceInquiryForm extends LookupForm {
         try {
             Lookupable localLookupable = null;
             Lookupable localPendingEntryLookupable = null;
-
+            
             if (StringUtils.isBlank(request.getParameter(Constants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME)) && StringUtils.isBlank(getLookupableImplServiceName())) {
-
+                
                 // get the business object class for the lookup
                 String localBusinessObjectClassName = request.getParameter(Constants.BUSINESS_OBJECT_CLASS_ATTRIBUTE);
                 setBusinessObjectClassName(localBusinessObjectClassName);
-
+                
                 if (StringUtils.isBlank(localBusinessObjectClassName)) {
                     LOG.error("Business object class not passed to lookup.");
                     throw new RuntimeException("Business object class not passed to lookup.");
                 }
-
+                
                 // call data dictionary service to get lookup impl for bo class
                 String lookupImplID = SpringServiceLocator.getBusinessObjectDictionaryService().getLookupableID(Class.forName(localBusinessObjectClassName));
                 if (lookupImplID == null) {
@@ -86,15 +90,15 @@ public class BalanceInquiryForm extends LookupForm {
                 setLookupableImplServiceName(lookupImplID);
             }
             localLookupable = SpringServiceLocator.getLookupable(getLookupableImplServiceName());
-
+            
             if (localLookupable == null) {
                 LOG.error("Lookup impl not found for lookup impl name " + getLookupableImplServiceName());
                 throw new RuntimeException("Lookup impl not found for lookup impl name " + getLookupableImplServiceName());
             }
 
             // (laran) I put this here to allow the Exception to be thrown if the localLookupable is null.
-            if (Entry.class.getName().equals(getBusinessObjectClassName())) {
-                localPendingEntryLookupable = SpringServiceLocator.getLookupable(GLConstants.LookupableBeanKeys.PENDING_ENTRY);
+            if("org.kuali.module.gl.bo.Entry".equals(getBusinessObjectClassName())) {
+                localPendingEntryLookupable = SpringServiceLocator.getLookupable("glPendingEntryLookupableImpl");
             }
 
             if (request.getParameter(Constants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME) != null) {
@@ -109,22 +113,21 @@ public class BalanceInquiryForm extends LookupForm {
                 setFormKey(request.getParameter(Constants.DOC_FORM_KEY));
             }
 
-            if (request.getParameter(Constants.RETURN_LOCATION_PARAMETER) != null) {
-                setBackLocation(request.getParameter(Constants.RETURN_LOCATION_PARAMETER));
+            if (request.getParameter("returnLocation") != null) {
+                setBackLocation(request.getParameter("returnLocation"));
             }
-            if (request.getParameter(Constants.CONVERSION_FIELDS_PARAMETER) != null) {
-                setConversionFields(request.getParameter(Constants.CONVERSION_FIELDS_PARAMETER));
+            if (request.getParameter("conversionFields") != null) {
+                setConversionFields(request.getParameter("conversionFields"));
             }
-
+            
             // init lookupable with bo class
             localLookupable.setBusinessObjectClass(Class.forName(getBusinessObjectClassName()));
-            if (null != localPendingEntryLookupable) {
+            if(null != localPendingEntryLookupable) {
                 localPendingEntryLookupable.setBusinessObjectClass(GeneralLedgerPendingEntry.class);
             }
-
+            
             Map fieldValues = new HashMap();
             Map formFields = getFields();
-            Class boClass = Class.forName(getBusinessObjectClassName());
             for (Iterator iter = localLookupable.getRows().iterator(); iter.hasNext();) {
                 Row row = (Row) iter.next();
 
@@ -140,10 +143,6 @@ public class BalanceInquiryForm extends LookupForm {
                     if (request.getParameter(field.getPropertyName()) != null) {
                         field.setPropertyValue(request.getParameter(field.getPropertyName()));
                     }
-
-                    // force uppercase if necessary
-                    field.setPropertyValue(LookupUtils.forceUppercase(boClass, field.getPropertyName(), field.getPropertyValue()));
-
                     fieldValues.put(field.getPropertyName(), field.getPropertyValue());
                 }
             }
@@ -187,7 +186,7 @@ public class BalanceInquiryForm extends LookupForm {
             }
             setFieldConversions(fieldConversionMap);
             localLookupable.setFieldConversions(fieldConversionMap);
-            if (null != localPendingEntryLookupable) {
+            if(null != localPendingEntryLookupable) {
                 localPendingEntryLookupable.setFieldConversions(fieldConversionMap);
             }
             setLookupable(localLookupable);
@@ -330,7 +329,7 @@ public class BalanceInquiryForm extends LookupForm {
     public void setHideReturnLink(boolean hideReturnLink) {
         this.hideReturnLink = hideReturnLink;
     }
-
+    
 
     /**
      * @param pendingEntryLookupable
@@ -338,8 +337,8 @@ public class BalanceInquiryForm extends LookupForm {
     public void setPendingEntryLookupable(Lookupable pendingEntryLookupable) {
         this.pendingEntryLookupable = pendingEntryLookupable;
     }
-
-
+    
+    
     /**
      * @return Returns the pendingEntryLookupable.
      */

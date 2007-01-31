@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/datadictionary/UniversityBudgetOfficeFunctionMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -41,8 +43,6 @@
         <summary>University Budget Office Function Maintenance Document</summary>
         <description>Document used to create or update University Budget Office Function Maintenance Document objects</description>
         <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_UNIVERSITY_BUDGET_OFFICE_FUNCTION" />
-
-        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="financialUniversityBudgetOfficeFunctionCode" />

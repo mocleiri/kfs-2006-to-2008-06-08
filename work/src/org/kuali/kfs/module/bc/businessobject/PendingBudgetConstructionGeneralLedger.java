@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/PendingBudgetConstructionGeneralLedger.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +20,7 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -34,7 +36,7 @@ import org.kuali.PropertyConstants;
 /**
  * 
  */
-public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessObjectBase {
+public class PendingBudgetConstructionGeneralLedger extends BusinessObjectBase {
 
 	private String documentNumber;
 	private Integer universityFiscalYear;
@@ -55,6 +57,7 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
 	private Account account;
     private SubAccount subAccount;
     private SubObjCd financialSubObject;
+    private Balance financialBalance;
     private BalanceTyp balanceType;
     private ObjectType objectType;
     private LaborObject laborObject;
@@ -409,6 +412,23 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
      */
     public void setSubAccount(SubAccount subAccount) {
         this.subAccount = subAccount;
+    }
+
+    /**
+     * Gets the financialBalance attribute. 
+     * @return Returns the financialBalance.
+     */
+    public Balance getFinancialBalance() {
+        return financialBalance;
+    }
+
+    /**
+     * Sets the financialBalance attribute value.
+     * @param financialBalance The financialBalance to set.
+     * @deprecated
+     */
+    public void setFinancialBalance(Balance financialBalance) {
+        this.financialBalance = financialBalance;
     }
 
     /**

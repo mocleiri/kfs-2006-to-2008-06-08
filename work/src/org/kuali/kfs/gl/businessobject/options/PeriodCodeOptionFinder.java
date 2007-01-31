@@ -1,34 +1,41 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.web.optionfinder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.Constants;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.lookup.valueFinder.ValueFinder;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.uidraw.KeyLabelPair;
 import org.kuali.module.gl.bo.UniversityDate;
+import org.kuali.module.gl.web.Constant;
 
 /**
  * This class...
  * 
- * 
+ * @author Bin Gao from Michigan State University
  */
 public class GLPeriodCodeOptionFinder extends KeyValuesBase implements ValueFinder {
 
@@ -45,25 +52,25 @@ public class GLPeriodCodeOptionFinder extends KeyValuesBase implements ValueFind
      */
     public List getKeyValues() {
         List labels = new ArrayList();
-        labels.add(new KeyLabelPair(Constants.MONTH1, Constants.MONTH1));
-        labels.add(new KeyLabelPair(Constants.MONTH2, Constants.MONTH2));
-        labels.add(new KeyLabelPair(Constants.MONTH3, Constants.MONTH3));
-        labels.add(new KeyLabelPair(Constants.MONTH4, Constants.MONTH4));
+        labels.add(new KeyLabelPair(Constant.MONTH1, Constant.MONTH1));
+        labels.add(new KeyLabelPair(Constant.MONTH2, Constant.MONTH2));
+        labels.add(new KeyLabelPair(Constant.MONTH3, Constant.MONTH3));
+        labels.add(new KeyLabelPair(Constant.MONTH4, Constant.MONTH4));
 
-        labels.add(new KeyLabelPair(Constants.MONTH5, Constants.MONTH5));
-        labels.add(new KeyLabelPair(Constants.MONTH6, Constants.MONTH6));
-        labels.add(new KeyLabelPair(Constants.MONTH7, Constants.MONTH7));
-        labels.add(new KeyLabelPair(Constants.MONTH8, Constants.MONTH8));
+        labels.add(new KeyLabelPair(Constant.MONTH5, Constant.MONTH5));
+        labels.add(new KeyLabelPair(Constant.MONTH6, Constant.MONTH6));
+        labels.add(new KeyLabelPair(Constant.MONTH7, Constant.MONTH7));
+        labels.add(new KeyLabelPair(Constant.MONTH8, Constant.MONTH8));
 
-        labels.add(new KeyLabelPair(Constants.MONTH9, Constants.MONTH9));
-        labels.add(new KeyLabelPair(Constants.MONTH10, Constants.MONTH10));
-        labels.add(new KeyLabelPair(Constants.MONTH11, Constants.MONTH11));
-        labels.add(new KeyLabelPair(Constants.MONTH12, Constants.MONTH12));
+        labels.add(new KeyLabelPair(Constant.MONTH9, Constant.MONTH9));
+        labels.add(new KeyLabelPair(Constant.MONTH10, Constant.MONTH10));
+        labels.add(new KeyLabelPair(Constant.MONTH11, Constant.MONTH11));
+        labels.add(new KeyLabelPair(Constant.MONTH12, Constant.MONTH12));
 
-        labels.add(new KeyLabelPair(Constants.MONTH13, Constants.MONTH13));
-        labels.add(new KeyLabelPair(Constants.ANNUAL_BALANCE, Constants.ANNUAL_BALANCE));
-        labels.add(new KeyLabelPair(Constants.BEGINNING_BALANCE, Constants.BEGINNING_BALANCE));
-        labels.add(new KeyLabelPair(Constants.CG_BEGINNING_BALANCE, Constants.CG_BEGINNING_BALANCE));
+        labels.add(new KeyLabelPair(Constant.MONTH13, Constant.MONTH13));
+        labels.add(new KeyLabelPair(Constant.ANNUAL_BALNCE, Constant.ANNUAL_BALNCE));
+        labels.add(new KeyLabelPair(Constant.BEGINNING_BALNCE, Constant.BEGINNING_BALNCE));
+        labels.add(new KeyLabelPair(Constant.CG_BEGINNING_BALNCE, Constant.CG_BEGINNING_BALNCE));
 
         return labels;
     }

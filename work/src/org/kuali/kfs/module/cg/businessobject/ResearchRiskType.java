@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/ResearchRiskType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +20,20 @@ package org.kuali.module.kra.routingform.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-
-import edu.iu.uis.eden.workgroup.Workgroup;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Class representing a ResearchRiskType.
  * 
  */
-public class ResearchRiskType extends PersistableBusinessObjectBase {
+public class ResearchRiskType extends BusinessObjectBase {
 
 	private String researchRiskTypeCode;
 	private boolean dataObjectMaintenanceCodeActiveIndicator;
 	private String researchRiskTypeDescription;
+	private boolean researchRiskBiosafetyIndicator;
     private String controlAttributeTypeCode;
-    private Integer researchRiskTypeSortNumber;
-    private String researchRiskTypeNotificationGroupText;
-    private String researchRiskTypeNotificationValue;
-    
+
     private ControlAttributeType controlAttributeType;
-    private Workgroup routeWorkgroup;
     
 	/**
 	 * Default constructor.
@@ -108,6 +104,27 @@ public class ResearchRiskType extends PersistableBusinessObjectBase {
 		this.researchRiskTypeDescription = researchRiskTypeDescription;
 	}
 
+
+	/**
+	 * Gets the researchRiskBiosafetyIndicator attribute.
+	 * 
+	 * @return Returns the researchRiskBiosafetyIndicator
+	 * 
+	 */
+	public boolean isResearchRiskBiosafetyIndicator() { 
+		return researchRiskBiosafetyIndicator;
+	}
+
+	/**
+	 * Sets the researchRiskBiosafetyIndicator attribute.
+	 * 
+	 * @param researchRiskBiosafetyIndicator The researchRiskBiosafetyIndicator to set.
+	 * 
+	 */
+	public void setResearchRiskBiosafetyIndicator(boolean researchRiskBiosafetyIndicator) {
+		this.researchRiskBiosafetyIndicator = researchRiskBiosafetyIndicator;
+	}
+
     /**
      * Gets the controlAttributeTypeCode attribute. 
      * @return Returns the controlAttributeTypeCode.
@@ -124,54 +141,6 @@ public class ResearchRiskType extends PersistableBusinessObjectBase {
         this.controlAttributeTypeCode = controlAttributeTypeCode;
     }
 
-    /**
-     * Gets the researchRiskTypeSortNumber attribute. 
-     * @return Returns the researchRiskTypeSortNumber.
-     */
-    public Integer getResearchRiskTypeSortNumber() {
-        return researchRiskTypeSortNumber;
-    }
-
-    /**
-     * Sets the researchRiskTypeSortNumber attribute value.
-     * @param researchRiskTypeSortNumber The researchRiskTypeSortNumber to set.
-     */
-    public void setResearchRiskTypeSortNumber(Integer researchRiskTypeSortNumber) {
-        this.researchRiskTypeSortNumber = researchRiskTypeSortNumber;
-    }        
-
-    /**
-     * Gets the researchRiskTypeNotificationGroupText attribute. 
-     * @return Returns the researchRiskTypeNotificationGroupText.
-     */
-    public String getResearchRiskTypeNotificationGroupText() {
-        return researchRiskTypeNotificationGroupText;
-    }
-
-    /**
-     * Sets the researchRiskTypeNotificationGroupText attribute value.
-     * @param researchRiskTypeNotificationGroupText The researchRiskTypeNotificationGroupText to set.
-     */
-    public void setResearchRiskTypeNotificationGroupText(String researchRiskTypeNotificationGroupText) {
-        this.researchRiskTypeNotificationGroupText = researchRiskTypeNotificationGroupText;
-    }    
-
-    /**
-     * Gets the researchRiskTypeNotificationValue attribute. 
-     * @return Returns the researchRiskTypeNotificationValue.
-     */
-    public String getResearchRiskTypeNotificationValue() {
-        return researchRiskTypeNotificationValue;
-    }
-
-    /**
-     * Sets the researchRiskTypeNotificationValue attribute value.
-     * @param researchRiskTypeNotificationValue The researchRiskTypeNotificationValue to set.
-     */
-    public void setResearchRiskTypeNotificationValue(String researchRiskTypeNotificationValue) {
-        this.researchRiskTypeNotificationValue = researchRiskTypeNotificationValue;
-    }
-  
     /**
      * Gets the controlAttributeType attribute. 
      * @return Returns the controlAttributeType.
@@ -196,5 +165,6 @@ public class ResearchRiskType extends PersistableBusinessObjectBase {
         LinkedHashMap m = new LinkedHashMap();      
         m.put("researchRiskTypeCode", this.researchRiskTypeCode);
         return m;
-    }
+    }    
+
 }
