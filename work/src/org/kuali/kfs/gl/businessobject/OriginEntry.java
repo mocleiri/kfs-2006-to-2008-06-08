@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.bo;
 
@@ -21,13 +28,10 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
 import org.kuali.Constants;
-import org.kuali.KeyConstants;
-import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.OriginationCode;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.document.DocumentType;
-import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
@@ -39,18 +43,19 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.gl.exception.LoadException;
 import org.springframework.util.StringUtils;
 
-public class OriginEntry extends PersistableBusinessObjectBase implements Transaction {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntry.class);
-
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
+/**
+ * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
+ * @version $Id: OriginEntry.java,v 1.29.2.3 2006-07-26 21:49:56 abyrne Exp $
+ */
+public class OriginEntry extends BusinessObjectBase implements Transaction {
+    static final long serialVersionUID = -2498312988235747448L;
 
     private Integer entryId;
     private Integer entryGroupId;
     private String accountNumber;
-    private String documentNumber;
+    private String financialDocumentNumber;
     private String referenceFinancialDocumentNumber;
     private String referenceFinancialDocumentTypeCode;
     private Date financialDocumentReversalDate;
@@ -98,7 +103,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
 
     public OriginEntry(GeneralLedgerPendingEntry glpe) {
         accountNumber = glpe.getAccountNumber();
-        documentNumber = glpe.getDocumentNumber();
+        financialDocumentNumber = glpe.getFinancialDocumentNumber();
         referenceFinancialDocumentNumber = glpe.getReferenceFinancialDocumentNumber();
         referenceFinancialDocumentTypeCode = glpe.getReferenceFinancialDocumentTypeCode();
         financialDocumentReversalDate = glpe.getFinancialDocumentReversalDate();
@@ -138,14 +143,14 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
 
         setFinancialDocumentTypeCode(financialDocumentTypeCode);
         setFinancialSystemOriginationCode(financialSystemOriginationCode);
-
+        
         setFinancialObjectCode(Constants.EMPTY_STRING);
         setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
         setFinancialBalanceTypeCode(Constants.EMPTY_STRING);
         setFinancialObjectTypeCode(Constants.EMPTY_STRING);
-        setDocumentNumber(Constants.EMPTY_STRING);
+        setFinancialDocumentNumber(Constants.EMPTY_STRING);
         setFinancialDocumentReversalDate(null);
-
+        
         setUniversityFiscalYear(new Integer(0));
         setUniversityFiscalPeriodCode(Constants.EMPTY_STRING);
 
@@ -163,7 +168,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         setReferenceFinancialSystemOriginationCode(Constants.EMPTY_STRING);
         setReferenceFinancialDocumentNumber(Constants.EMPTY_STRING);
     }
-
+    
     /**
      * 
      */
@@ -177,17 +182,12 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
     }
 
     public OriginEntry(String line) {
-        try {
-        setFromTextFile(line, 0);
-    }
-        catch (LoadException e) {
-            LOG.error("OriginEntry() Error loading line", e);
-        }
+        setFromTextFile(line);
     }
 
     public void setTransaction(Transaction t) {
         setAccountNumber(t.getAccountNumber());
-        setDocumentNumber(t.getDocumentNumber());
+        setFinancialDocumentNumber(t.getFinancialDocumentNumber());
         setReferenceFinancialDocumentNumber(t.getReferenceFinancialDocumentNumber());
         setReferenceFinancialDocumentTypeCode(t.getReferenceFinancialDocumentTypeCode());
         setFinancialDocumentReversalDate(t.getFinancialDocumentReversalDate());
@@ -213,199 +213,157 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         setUniversityFiscalYear(t.getUniversityFiscalYear());
     }
 
-    private java.sql.Date parseDate(String sdate, boolean beLenientWithDates) throws ParseException {
-        if ((sdate == null) || (sdate.trim().length() == 0)) {
-            return null;
+    private java.sql.Date parseDate(String sdate, boolean beLenientWithDates) {
+      if ((sdate == null) || (sdate.trim().length() == 0)) {
+        return null;
+      } else {
+          
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(beLenientWithDates);
+        
+        try {
+          java.util.Date d = sdf.parse(sdate);
+          return new Date(d.getTime());
+        } catch (ParseException e) {
+          return null;
         }
-        else {
-
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-            sdf.setLenient(beLenientWithDates);
-
-                java.util.Date d = sdf.parse(sdate);
-                return new Date(d.getTime());
-            }
-            }
-
-    private String formatDate(Date date) {
-        if (date == null) {
-            return "          ";
-        }
-        else {
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-            return sdf.format(date);
-        }
+      }
     }
 
-    private String getValue(String line, int s, int e) {
-        String v = line.substring(s, e);
+    private String formatDate(Date date) {
+      if ( date == null ) {
+        return "          ";
+      } else {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+      }
+    }
+
+    private String getValue(String line,int s,int e) {
+        String v = line.substring(s,e);
         return StringUtils.trimTrailingWhitespace(v);
     }
 
-    // lineNumber is for showing error message
-    public void setFromTextFile(String line, int lineNumber) throws LoadException {
+    public void setFromTextFile(String line) {
 
-        // Just in case
-        line = line + SPACES;
+      // Just in case
+      line = line + SPACES;
 
-        if (!"    ".equals(line.substring(0, 4))) {
-            try {
-                setUniversityFiscalYear(new Integer(line.substring(0, 4)));
-            }
-            catch (NumberFormatException e) {
-                GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "University Fiscal Year" });
-                throw new LoadException("Invalid university fiscal year");
-            }
+      if (!"    ".equals(line.substring(0, 4))) {
+          setUniversityFiscalYear(new Integer(line.substring(0, 4)));
+      } else {
+          setUniversityFiscalYear(null);
+      }
 
-        }
-        else {
-            setUniversityFiscalYear(null);
-        }
-
-        setChartOfAccountsCode(getValue(line, 4, 6));
-        setAccountNumber(getValue(line, 6, 13));
-        setSubAccountNumber(getValue(line, 13, 18));
-        setFinancialObjectCode(getValue(line, 18, 22));
-        setFinancialSubObjectCode(getValue(line, 22, 25));
-        setFinancialBalanceTypeCode(getValue(line, 25, 27));
-        setFinancialObjectTypeCode(getValue(line, 27, 29));
-        setUniversityFiscalPeriodCode(getValue(line, 29, 31));
-        setFinancialDocumentTypeCode(getValue(line, 31, 35));
-        setFinancialSystemOriginationCode(getValue(line, 35, 37));
-        setDocumentNumber(getValue(line, 37, 51));
-        if (!"     ".equals(line.substring(51, 56)) && !"00000".equals(line.substring(51, 56))) {
-            try {
-                setTransactionLedgerEntrySequenceNumber(new Integer(line.substring(51, 56).trim()));
-        }
-            catch (NumberFormatException e) {
-                GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Sequence Number" });
-                throw new LoadException("Invalid sequence number");
-            }
-        }
-        else {
-            setTransactionLedgerEntrySequenceNumber(null);
-        }
-        setTransactionLedgerEntryDescription(getValue(line, 56, 96));
-
-        try {
-            setTransactionLedgerEntryAmount(new KualiDecimal(line.substring(96, 113).trim()));
-        }
-        catch (NumberFormatException e) {
-            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Ledger Entry Amount" });
-            throw new LoadException("Invalid Entry Amount");
-        }
-
-        setTransactionDebitCreditCode(line.substring(113, 114));
-
-        try {
-            setTransactionDate(parseDate(line.substring(114, 124), false));
-        }
-        catch (ParseException e) {
-            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Date" });
-            throw new LoadException("Invalid Transaction Date");
-        }
-
-        setOrganizationDocumentNumber(getValue(line, 124, 134));
-        setProjectCode(getValue(line, 134, 144));
-        setOrganizationReferenceId(getValue(line, 144, 152));
-        setReferenceFinancialDocumentTypeCode(getValue(line, 152, 156));
-        setReferenceFinancialSystemOriginationCode(getValue(line, 156, 158));
-        setReferenceFinancialDocumentNumber(getValue(line, 158, 172));
-        try {
-            setFinancialDocumentReversalDate(parseDate(line.substring(172, 182), true));
-        }
-        catch (ParseException e) {
-            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Financial Document Reversal Date" });
-            throw new LoadException("Invalid Reversal Date");
-        }
-
-        setTransactionEncumbranceUpdateCode(line.substring(182, 183));
+      setChartOfAccountsCode(getValue(line,4, 6));
+      setAccountNumber(getValue(line,6, 13));
+      setSubAccountNumber(getValue(line,13, 18));
+      setFinancialObjectCode(getValue(line,18, 22));
+      setFinancialSubObjectCode(getValue(line,22, 25));
+      setFinancialBalanceTypeCode(getValue(line,25, 27));
+      setFinancialObjectTypeCode(getValue(line,27, 29));
+      setUniversityFiscalPeriodCode(getValue(line,29, 31));
+      setFinancialDocumentTypeCode(getValue(line,31, 35));
+      setFinancialSystemOriginationCode(getValue(line,35, 37));
+      setFinancialDocumentNumber(getValue(line,37, 46));
+      if (! "     ".equals(line.substring(46, 51)) && ! "00000".equals(line.substring(46, 51)) ) {
+          setTransactionLedgerEntrySequenceNumber(new Integer(line.substring(46, 51).trim()));
+      } else {
+          setTransactionLedgerEntrySequenceNumber(null);
+      }
+      setTransactionLedgerEntryDescription(getValue(line,51, 91));
+      setTransactionLedgerEntryAmount(new KualiDecimal(line.substring(91, 108).trim()));
+      setTransactionDebitCreditCode(line.substring(108, 109));
+      setTransactionDate(parseDate(line.substring(109, 119), false));
+      setOrganizationDocumentNumber(getValue(line,119, 129));
+      setProjectCode(getValue(line,129, 139));
+      setOrganizationReferenceId(getValue(line,139, 147));
+      setReferenceFinancialDocumentTypeCode(getValue(line,147, 151));
+      setReferenceFinancialSystemOriginationCode(getValue(line,151, 153));
+      setReferenceFinancialDocumentNumber(getValue(line,153, 162));
+      setFinancialDocumentReversalDate(parseDate(line.substring(162, 172), true));
+      setTransactionEncumbranceUpdateCode(line.substring(172, 173));
     }
 
     private static String SPACES = "                                                                                                              ";
 
-    private String getField(int size, String value) {
-        if (value == null) {
-            return SPACES.substring(0, size);
+    private String getField(int size,String value) {
+      if ( value == null ) {
+        return SPACES.substring(0,size);
+      } else {
+        if ( value.length() < size) {
+          return value + SPACES.substring(0,size - value.length());
+        } else {
+          return value;
         }
-        else {
-            if (value.length() < size) {
-                return value + SPACES.substring(0, size - value.length());
-            }
-            else {
-                return value;
-            }
-        }
+      }
     }
 
     public String getLine() {
-        StringBuffer sb = new StringBuffer();
-        if (universityFiscalYear == null) {
-            sb.append("    ");
-        }
-        else {
-            sb.append(universityFiscalYear);
-        }
+      StringBuffer sb = new StringBuffer();
+      if ( universityFiscalYear == null ) {
+        sb.append("    ");
+      } else {
+        sb.append(universityFiscalYear);
+      }
 
-        sb.append(getField(2, chartOfAccountsCode));
-        sb.append(getField(7, accountNumber));
-        sb.append(getField(5, subAccountNumber));
-        sb.append(getField(4, financialObjectCode));
-        sb.append(getField(3, financialSubObjectCode));
-        sb.append(getField(2, financialBalanceTypeCode));
-        sb.append(getField(2, financialObjectTypeCode));
-        sb.append(getField(2, universityFiscalPeriodCode));
-        sb.append(getField(4, financialDocumentTypeCode));
-        sb.append(getField(2, financialSystemOriginationCode));
-        sb.append(getField(14, documentNumber));
+      sb.append(getField(2,chartOfAccountsCode));
+      sb.append(getField(7,accountNumber));
+      sb.append(getField(5,subAccountNumber));
+      sb.append(getField(4,financialObjectCode));
+      sb.append(getField(3,financialSubObjectCode));
+      sb.append(getField(2,financialBalanceTypeCode));
+      sb.append(getField(2,financialObjectTypeCode));
+      sb.append(getField(2,universityFiscalPeriodCode));
+      sb.append(getField(4,financialDocumentTypeCode));
+      sb.append(getField(2,financialSystemOriginationCode));
+      sb.append(getField(9,financialDocumentNumber));
 
-        // This is the cobol code for transaction sequence numbers.
-        // 3025 019280 IF TRN-ENTR-SEQ-NBR OF GLEN-RECORD NOT NUMERIC
-        // 3026 019290 MOVE ZEROES TO TRN-ENTR-SEQ-NBR OF GLEN-RECORD
-        // 3027 019300 END-IF
-        // 3028 019310 IF TRN-ENTR-SEQ-NBR OF GLEN-RECORD = SPACES
-        // 3029 019320 MOVE ZEROES
-        // 3030 019330 TO TRN-ENTR-SEQ-NBR OF ALT-GLEN-RECORD
-        // 3031 019340 ELSE
-        // 3032 019350 MOVE TRN-ENTR-SEQ-NBR OF GLEN-RECORD
-        // 3033 019360 TO TRN-ENTR-SEQ-NBR OF ALT-GLEN-RECORD
-        // 3034 019370 END-IF
-
-        if (transactionLedgerEntrySequenceNumber == null) {
-            sb.append("00000");
-        }
-        else {
-            // Format to a length of 5
-            String seqNum = transactionLedgerEntrySequenceNumber.toString();
-            while (5 > seqNum.length()) {
-                seqNum = "0" + seqNum;
-            }
-            sb.append(seqNum);
-        }
-        sb.append(getField(40, transactionLedgerEntryDescription));
-        if (transactionLedgerEntryAmount == null) {
-            sb.append("                 ");
-        }
-        else {
-            String a = transactionLedgerEntryAmount.toString();
-            sb.append("                 ".substring(0, 17 - a.length()));
-            sb.append(a);
-        }
-        sb.append(getField(1, transactionDebitCreditCode));
-        sb.append(formatDate(transactionDate));
-        sb.append(getField(10, organizationDocumentNumber));
-        sb.append(getField(10, projectCode));
-        sb.append(getField(8, organizationReferenceId));
-        sb.append(getField(4, referenceFinancialDocumentTypeCode));
-        sb.append(getField(2, referenceFinancialSystemOriginationCode));
-        sb.append(getField(14, referenceFinancialDocumentNumber));
-        sb.append(formatDate(financialDocumentReversalDate));
-        sb.append(getField(1, transactionEncumbranceUpdateCode));
-        // pad to full length of 173 chars.
-        while (173 > sb.toString().length()) {
-            sb.append(' ');
-        }
-        return sb.toString();
+      // This is the cobol code for transaction sequence numbers.
+//      3025  019280     IF TRN-ENTR-SEQ-NBR OF GLEN-RECORD NOT NUMERIC
+//      3026  019290        MOVE ZEROES TO TRN-ENTR-SEQ-NBR OF GLEN-RECORD
+//      3027  019300     END-IF
+//      3028  019310     IF TRN-ENTR-SEQ-NBR OF GLEN-RECORD = SPACES
+//      3029  019320        MOVE ZEROES
+//      3030  019330          TO TRN-ENTR-SEQ-NBR OF ALT-GLEN-RECORD
+//      3031  019340     ELSE
+//      3032  019350        MOVE TRN-ENTR-SEQ-NBR OF GLEN-RECORD
+//      3033  019360          TO TRN-ENTR-SEQ-NBR OF ALT-GLEN-RECORD
+//      3034  019370     END-IF
+      
+      if ( transactionLedgerEntrySequenceNumber == null ) {
+        sb.append("00000");
+      } else {
+          // Format to a length of 5
+          String seqNum = transactionLedgerEntrySequenceNumber.toString();
+          while(5 > seqNum.length()) {
+              seqNum = "0" + seqNum;
+          }
+          sb.append(seqNum);
+      }
+      sb.append(getField(40,transactionLedgerEntryDescription));
+      if ( transactionLedgerEntryAmount == null ) {
+        sb.append("                 ");
+      } else {
+        String a = transactionLedgerEntryAmount.toString();
+        sb.append("                 ".substring(0,17 - a.length()));
+        sb.append(a);
+      }
+      sb.append(getField(1,transactionDebitCreditCode));
+      sb.append(formatDate(transactionDate));
+      sb.append(getField(10,organizationDocumentNumber));
+      sb.append(getField(10,projectCode));
+      sb.append(getField(8,organizationReferenceId));
+      sb.append(getField(4,referenceFinancialDocumentTypeCode));
+      sb.append(getField(2,referenceFinancialSystemOriginationCode));
+      sb.append(getField(9,referenceFinancialDocumentNumber));
+      sb.append(formatDate(financialDocumentReversalDate));
+      sb.append(getField(1,transactionEncumbranceUpdateCode));
+      // pad to full length of 173 chars.
+      while(173 > sb.toString().length()) {
+          sb.append(' ');
+      }
+      return sb.toString();
     }
 
     protected LinkedHashMap toStringMapper() {
@@ -421,7 +379,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         map.put("financialObjectTypeCode", financialObjectTypeCode);
         map.put("financialSubObjectCode", financialSubObjectCode);
         map.put("financialBalanceTypeCode", financialBalanceTypeCode);
-        map.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        map.put("financialDocumentNumber", financialDocumentNumber);
         map.put("financialDocumentTypeCode", financialDocumentTypeCode);
         map.put("financialSystemOriginationCode", financialSystemOriginationCode);
         map.put("transactionLedgerEntrySequenceNumber", transactionLedgerEntrySequenceNumber);
@@ -434,16 +392,15 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
     }
 
     public void setGroup(OriginEntryGroup oeg) {
-        if (oeg != null) {
-            entryGroupId = oeg.getId();
-            group = oeg;
-        }
-        else {
-            entryGroupId = null;
-            group = null;
-        }
+      if ( oeg != null ) {
+        entryGroupId = oeg.getId();
+        group = oeg;
+      } else {
+        entryGroupId = null;
+        group = null;
+      }
     }
-
+    
     public boolean isTransactionScrubberOffsetGenerationIndicator() {
         return transactionScrubberOffsetGenerationIndicator;
     }
@@ -453,13 +410,11 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
     }
 
     public A21SubAccount getA21SubAccount() {
-        return a21SubAccount;
+      return a21SubAccount;
     }
-
     public void setA21SubAccount(A21SubAccount subAccount) {
-        a21SubAccount = subAccount;
+      a21SubAccount = subAccount;
     }
-
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -492,12 +447,12 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         this.transactionDebitCreditCode = transactionDebitCreditCode;
     }
 
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     public Date getFinancialDocumentReversalDate() {
@@ -788,7 +743,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         this.origination = origination;
     }
 
-
+    
     public DocumentType getReferenceDocumentType() {
         return referenceDocumentType;
     }
@@ -797,161 +752,26 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         this.referenceDocumentType = referenceDocumentType;
     }
 
+    /**
+     * @return Returns the budgetYear.
+     */
     public String getBudgetYear() {
         return budgetYear;
     }
 
+    /**
+     * @param budgetYear The budgetYear to set.
+     */
     public void setBudgetYear(String budgetYear) {
         this.budgetYear = budgetYear;
     }
-
+    
     public boolean isDebit() {
         return Constants.GL_DEBIT_CODE.equals(this.transactionDebitCreditCode);
     }
-
     public boolean isCredit() {
         return Constants.GL_CREDIT_CODE.equals(this.transactionDebitCreditCode);
     }
 
-    public void setFieldValue(String fieldName,String fieldValue) {
-        if ( "universityFiscalYear".equals(fieldName) ) {
-            if ( StringUtils.hasText(fieldValue) ) {
-                setUniversityFiscalYear(Integer.parseInt(fieldValue));
-            } else {
-                setUniversityFiscalYear(null);
-            }
-        } else if ( "chartOfAccountsCode".equals(fieldName) ) {
-            setChartOfAccountsCode(fieldValue);
-        } else if ( "accountNumber".equals(fieldName) ) {
-            setAccountNumber(fieldValue);
-        } else if ( "subAccountNumber".equals(fieldName) ) {
-            setSubAccountNumber(fieldValue);
-        } else if ( "financialObjectCode".equals(fieldName) ) {
-            setFinancialObjectCode(fieldValue);
-        } else if ( "financialSubObjectCode".equals(fieldName) ) {
-            setFinancialSubObjectCode(fieldValue);
-        } else if ( "financialBalanceTypeCode".equals(fieldName) ) {
-            setFinancialBalanceTypeCode(fieldValue);
-        } else if ( "financialObjectTypeCode".equals(fieldName) ) {
-            setFinancialObjectTypeCode(fieldValue);
-        } else if ( "universityFiscalPeriodCode".equals(fieldName) ) {
-            setUniversityFiscalPeriodCode(fieldValue);
-        } else if ( "financialDocumentTypeCode".equals(fieldName) ) {
-            setFinancialDocumentTypeCode(fieldValue);
-        } else if ( "financialSystemOriginationCode".equals(fieldName) ) {
-            setFinancialSystemOriginationCode(fieldValue);
-        } else if ( PropertyConstants.DOCUMENT_NUMBER.equals(fieldName) ) {
-            setDocumentNumber(fieldValue);
-        } else if ( "transactionLedgerEntrySequenceNumber".equals(fieldName) ) {
-            if ( StringUtils.hasText(fieldValue) ) {
-                setTransactionLedgerEntrySequenceNumber(Integer.parseInt(fieldValue));
-            } else {
-                setTransactionLedgerEntrySequenceNumber(null);
-            }
-        } else if ( "transactionLedgerEntryDescription".equals(fieldName) ) {
-            setTransactionLedgerEntryDescription(fieldValue);
-        } else if ( "transactionLedgerEntryAmount".equals(fieldName) ) {
-            if ( StringUtils.hasText(fieldValue) ) {
-                setTransactionLedgerEntryAmount(new KualiDecimal(fieldValue));
-            } else {
-                setTransactionLedgerEntryAmount(null);
-            }
-        } else if ( "transactionDebitCreditCode".equals(fieldName) ) {
-            setTransactionDebitCreditCode(fieldValue);
-        } else if ( "transactionDate".equals(fieldName) ) {
-            if ( StringUtils.hasText(fieldValue) ) {
-                try {
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    setTransactionDate(new java.sql.Date( (df.parse(fieldValue)).getTime() ) );
-                } catch (ParseException e) {
-                    setTransactionDate(null);
-                }
-            } else {
-                setTransactionDate(null);
-            }
-        } else if ( "organizationDocumentNumber".equals(fieldName) ) {
-            setOrganizationDocumentNumber(fieldValue);
-        } else if ( "projectCode".equals(fieldName) ) {
-            setProjectCode(fieldValue);
-        } else if ( "organizationReferenceId".equals(fieldName) ) {
-            setOrganizationReferenceId(fieldValue);
-        } else if ( "referenceFinancialDocumentTypeCode".equals(fieldName) ) {
-            setReferenceFinancialDocumentTypeCode(fieldValue);
-        } else if ( "referenceFinancialSystemOriginationCode".equals(fieldName) ) {
-            setReferenceFinancialSystemOriginationCode(fieldValue);
-        } else if ( "referenceFinancialDocumentNumber".equals(fieldName) ) {
-            setReferenceFinancialDocumentNumber(fieldValue);
-        } else if ( "financialDocumentReversalDate".equals(fieldName) ) {
-            if ( StringUtils.hasText(fieldValue) ) {
-                try {
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    setFinancialDocumentReversalDate(new java.sql.Date( (df.parse(fieldValue)).getTime() ) );
-                } catch (ParseException e) {
-                    setFinancialDocumentReversalDate(null);
-                }
-            } else {
-                setFinancialDocumentReversalDate(null);
-            }
-        } else if ( "transactionEncumbranceUpdateCode".equals(fieldName) ) {
-            setTransactionEncumbranceUpdateCode(fieldValue);
-        } else {
-            throw new IllegalArgumentException("Invalid Field Name " + fieldName);
-        }        
-    }
 
-    public Object getFieldValue(String fieldName) {
-        if ( "universityFiscalYear".equals(fieldName) ) {
-            return getUniversityFiscalYear();
-        } else if ( "chartOfAccountsCode".equals(fieldName) ) {
-            return getChartOfAccountsCode();
-        } else if ( "accountNumber".equals(fieldName) ) {
-            return getAccountNumber();
-        } else if ( "subAccountNumber".equals(fieldName) ) {
-            return getSubAccountNumber();
-        } else if ( "financialObjectCode".equals(fieldName) ) {
-            return getFinancialObjectCode();
-        } else if ( "financialSubObjectCode".equals(fieldName) ) {
-            return getFinancialSubObjectCode();
-        } else if ( "financialBalanceTypeCode".equals(fieldName) ) {
-            return getFinancialBalanceTypeCode();
-        } else if ( "financialObjectTypeCode".equals(fieldName) ) {
-            return getFinancialObjectTypeCode();
-        } else if ( "universityFiscalPeriodCode".equals(fieldName) ) {
-            return getUniversityFiscalPeriodCode();
-        } else if ( "financialDocumentTypeCode".equals(fieldName) ) {
-            return getFinancialDocumentTypeCode();
-        } else if ( "financialSystemOriginationCode".equals(fieldName) ) {
-            return getFinancialSystemOriginationCode();
-        } else if ( PropertyConstants.DOCUMENT_NUMBER.equals(fieldName) ) {
-            return getDocumentNumber();
-        } else if ( "transactionLedgerEntrySequenceNumber".equals(fieldName) ) {
-            return getTransactionLedgerEntrySequenceNumber();
-        } else if ( "transactionLedgerEntryDescription".equals(fieldName) ) {
-            return getTransactionLedgerEntryDescription();
-        } else if ( "transactionLedgerEntryAmount".equals(fieldName) ) {
-            return getTransactionLedgerEntryAmount();
-        } else if ( "transactionDebitCreditCode".equals(fieldName) ) {
-            return getTransactionDebitCreditCode();
-        } else if ( "transactionDate".equals(fieldName) ) {
-            return getTransactionDate();
-        } else if ( "organizationDocumentNumber".equals(fieldName) ) {
-            return getOrganizationDocumentNumber();
-        } else if ( "projectCode".equals(fieldName) ) {
-            return getProjectCode();
-        } else if ( "organizationReferenceId".equals(fieldName) ) {
-            return getOrganizationReferenceId();
-        } else if ( "referenceFinancialDocumentTypeCode".equals(fieldName) ) {
-            return getReferenceFinancialDocumentTypeCode();
-        } else if ( "referenceFinancialSystemOriginationCode".equals(fieldName) ) {
-            return getReferenceFinancialSystemOriginationCode();
-        } else if ( "referenceFinancialDocumentNumber".equals(fieldName) ) {
-            return getReferenceFinancialDocumentNumber();
-        } else if ( "financialDocumentReversalDate".equals(fieldName) ) {
-            return getFinancialDocumentReversalDate();
-        } else if ( "transactionEncumbranceUpdateCode".equals(fieldName) ) {
-            return getTransactionEncumbranceUpdateCode();        
-        } else {
-            throw new IllegalArgumentException("Invalid Field Name " + fieldName);
-}
-    }
 }
