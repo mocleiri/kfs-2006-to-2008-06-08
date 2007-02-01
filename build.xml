@@ -8,9 +8,9 @@
 	<target name="echo-properties" depends="init-filter-sets" description="Print all build properties that have been set">
 		<echoproperties />
 	</target>
-	
+
 	<target name="dist-test-local" depends="dist-local,make-tests" description="Prepare local configuration and tokenized resources and compile tests on a development workstation" />
-	
+
 	<target name="test-local" depends="init-project-properties,test" description="Run all unit tests and format results"/>
 
 	<target name="clean" depends="clean-project,clean-local,clean-workflow-local" description="Remove all build output" />
@@ -123,12 +123,12 @@
 		<property name="institution.spring.beans.import" value="" />
 		<property name="scheduler.spring.beans.import" value="" />
 		<condition property="scheduler.spring.jobstore.properties" value="${scheduler.spring.ram.jobstore.properties}">
-			<equals arg1="${is.local.build}" arg2="true" />			
+			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
 		<property name="scheduler.spring.jobstore.properties" value="${scheduler.spring.jdbc.jobstore.properties}" />
 		<filterset id="external.config.filterset">
 			<filter token="settings-root-directory" value="${settings.root.directory}" />
-			<filter token="security-root-directory" value="${security.root.directory}" />			
+			<filter token="security-root-directory" value="${security.root.directory}" />
 			<filter token="log4j-settings-file" value="${settings.directory}/${log4j.settings.file}" />
 			<filter token="security-directory" value="${security.directory}" />
 			<filter token="settings-directory" value="${settings.directory}" />
@@ -178,7 +178,7 @@
 			<filter token="use-auto-commit" value="0" />
 		</filterset>
 	</target>
-	
+
 	<target name="init-make-references" depends="init-filter-sets">
 		<path id="compile.source.classpath">
 			<fileset dir="${appserver.lib.dir}" includes="*.jar" />
@@ -187,6 +187,8 @@
 		<path id="compile.tests.classpath">
 			<path refid="compile.source.classpath" />
 			<fileset dir="${test.lib.directory}" includes="*.jar" />
+			<pathelement location="${build.workflow.appserver.directory}/classes"/>
+			<fileset dir="${build.workflow.appserver.directory}" includes="*.jar"/>
 		</path>
 		<patternset id="non.java.resources">
 			<include name="**/*.properties" />
@@ -197,17 +199,17 @@
 	</target>
 
 	<target name="init-source-only-package">
-		<property name="package.type" value="source" />	
+		<property name="package.type" value="source" />
 	</target>
 
 	<target name="init-binary-only-package">
 		<property name="package.type" value="binary" />
 	</target>
-	
+
 	<target name="init-binary-and-source-package">
 		<property name="package.type" value="both" />
 	</target>
-			
+
 	<target name="init-package-directories" depends="init-project-properties">
 		<delete dir="${packaging.contents.directory}" />
 		<mkdir dir="${packaging.contents.directory}" />
@@ -276,18 +278,18 @@
 		<delete dir="${plugin.deploy.directory}" failonerror="false" />
 		<delete dir="work/web-root/en" failonerror="false"/>
 	</target>
-	
+
 	<!-- wrapper based on naming convention required by workflow build script -->
 	<target name="clean-plugin" depends="clean"/>
 
 	<target name="filter-project-log4j" unless="use.p6spy.local" depends="init-filter-sets">
 		<copy file="${build.appserver.directory}/${log4j.library}" todir="${lib.directory}"/>
 	</target>
-	
+
 	<target name="filter-project-p6spy" if="use.p6spy.local" depends="filter-project-log4j">
 		<copy file="${build.appserver.directory}/${log4j.library}" todir="${appserver.lib.dir}"/>
 	</target>
-	
+
 	<target name="filter-project" depends="filter-project-p6spy">
 		<mkdir dir="${metainf.directory}" />
 		<copy file="${build.tokenized.resources.directory}/${tomcat.context.file}" todir="${metainf.directory}" overwrite="true">
@@ -328,7 +330,7 @@
 			<filterset refid="general.filterset" />
 		</copy>
 	</target>
-	
+
 	<target name="filter-workflow-local" if="dist.workflow.local" depends="init-filter-sets">
 		<copy todir="${appserver.classes.dir}" overwrite="true">
 			<fileset dir="${build.workflow.appserver.directory}" includes="${workflow.appserver.classes.list}" />
@@ -373,7 +375,7 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
 	<target name="make-plugin-remote" depends="init-make-references,filter-project">
 		<copy todir="${plugin.classes.directory}">
 			<fileset dir="${war.classes.directory}" />
@@ -392,25 +394,25 @@
 		</copy>
 		<copy file="${build.workflow.directory}/plugin/workflow.xml" todir="${plugin.metainf.directory}"/>
 	</target>
-	
+
 	<target name="make-plugin-local" depends="init-project-properties">
 		<copy todir="${plugin.classes.directory}">
 			<fileset dir="${source.directory}" includes="**/*repository*" />
 		</copy>
 	</target>
-	
+
 	<target name="make-zips" depends="filter-local,filter-workflow-local">
 		<zip destfile="settings.zip" basedir="${settings.directory}" />
 		<zip destfile="security.zip" basedir="${security.directory}" />
 		<zip destfile="skel.zip" basedir="${static.directory}" />
 	</target>
-	
+
 	<target name="make-source-only-package" depends="init-package-directories">
 		<copy todir="${packaging.distribution.directory}" includeemptydirs="false">
 			<fileset dir="${basedir}" excludes="**/*.class,${packaged.build.properties.files}" />
 		</copy>
 	</target>
-	
+
 	<target name="make-javadoc" depends="init-project-properties">
 		<mkdir dir="${packaging.javadoc.directory}"/>
 	    <javadoc destdir="${packaging.javadoc.directory}" packagenames="org.*" locale="en" useexternalfile="yes" maxmemory="512M">
@@ -428,15 +430,15 @@
 			<fileset dir="${basedir}" includes="*.*,licenses/**/*,build/**/*" excludes="${packaged.build.properties.files}" />
 		</copy>
 	</target>
-	
+
 	<target name="make-binary-and-source-package" depends="make-source-only-package,make-binary-only-package" />
-	
+
 	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
 	<target name="test">
 		<mkdir dir="${test.temp.directory}" />
 		<mkdir dir="${test.xml.results.directory}" />
 		<junit showoutput="true" fork="true" forkmode="once" failureproperty="tests.failed" errorproperty="tests.errored" tempdir="${test.temp.directory}" maxmemory="512M">
-			<jvmarg value="-Dorg.kuali.test.KualiTestBase.skipOpenOrInProgressOrReopenedJiraIssues"/> 
+			<jvmarg value="-Dorg.kuali.test.KualiTestBase.skipOpenOrInProgressOrReopenedJiraIssues"/>
 			<classpath>
 				<path refid="compile.tests.classpath" />
 				<pathelement location="${test.classes.directory}" />
@@ -444,7 +446,8 @@
 			<formatter type="xml" />
 			<batchtest todir="${test.xml.results.directory}">
 				<fileset dir="${test.source.directory}">
-					<include name="**/*Test.java" />
+					<!--<include name="**/*Test.java" />-->
+					<include name="**/TransferOfFundsDocumentTest.java" />
 					<exclude name="**/TransactionalDocumentRuleTest.java" />
 					<exclude name="**/${test.spring.shutdown}.java" />
 				</fileset>
@@ -460,7 +463,7 @@
 		</junitreport>
 		<echo message="Generated test results: ${test.html.results.directory}/index.html" />
 	</target>
-	
+
 	<target name="dist" depends="make-source">
 		<unzip dest="${war.directory}" src="build/configurationFiles/workflow/appserver/workflow-embedded-content.zip"/>
 		<copy todir="${war.directory}">
@@ -484,7 +487,7 @@
 			<fileset dir="${plugin.directory}" excludes="**/*.jar"/>
 		</copy>
 	</target>
-	
+
 	<target name="dist-package" depends="init-package-directories">
 		<copy todir="${packaging.distribution.directory}">
 			<fileset dir="${basedir}" includes="${packaged.build.properties.files}" />
@@ -498,11 +501,11 @@
 	</target>
 
 	<target name="dist-source-only-package" depends="init-source-only-package,make-source-only-package,dist-package"/>
-		
+
 	<target name="dist-binary-only-package" depends="init-binary-only-package,make-binary-only-package,dist-package"/>
-	
+
 	<target name="dist-binary-and-source-package" depends="init-binary-and-source-package,make-binary-and-source-package,dist-package" />
-		
+
 	<target name="continuous-integration" depends="clean,make-tests,test">
 		<fail if="tests.failed" message="Tests failed" />
 	</target>
@@ -521,7 +524,7 @@
 		<ant dir="${workflow.project.directory}" target="dist-embedded-web-content" inheritall="false">
 			<propertyset refid="en-properties" />
 		</ant>
-		<copy file="${workflow.project.directory}/dist/workflow-embedded-content.zip" todir="${build.workflow.appserver.directory}" overwrite="true" />		
+		<copy file="${workflow.project.directory}/dist/workflow-embedded-content.zip" todir="${build.workflow.appserver.directory}" overwrite="true" />
 		<!--
 		<ant dir="${workflow.project.directory}" target="dist" inheritall="false">
 			<propertyset refid="en-properties" />
@@ -542,7 +545,7 @@
 		</ant>
 		<zip destfile="${dependencies.project.directory}/workflow-${workflow.version}-doc.zip" basedir="${workflow.project.directory}/dist/api" />-->
 	</target>
-	
+
 	<target name="update-war">
 		<property name="temp.directory" value="temp" />
 		<mkdir dir="${temp.directory}"/>
@@ -554,16 +557,16 @@
 		<jar jarfile="${appserver.deploy.dir}/${application}-${build.environment}.war" basedir="${temp.directory}"  />
 		<delete dir="${temp.directory}" />
 	</target>
-	
+
 	<target name="help" description="Describe public targets">
 		<echo>--- OVERVIEW ---
-			 
+
 	the following configuration files are involved in the build process
 			- build.xml
 			- build.properties
 			- build/*
 			- ${user.home}\${ant.project.name}-build.properties
-			
+
 	you should start using this build script as follows
 			- copy build/configurationFiles/userHomeDirectory/${ant.project.name}-build.properties to ${user.home}
 			- obtain the values for ${datasource.username}, ${datasource.password}, ${webservices.keystore.password}
@@ -577,30 +580,30 @@
 			- click the "Run/Stop/Restart MyEclipse Application Servers" button in the "Java (default)" perspective in
 			eclipse to start tomcat
 			- launch a browser and access http://localhost:8080/kuali-dev
-			
-	you can override the default log4j settings for your local deployments by copying 
+
+	you can override the default log4j settings for your local deployments by copying
 		build/configurationFiles/externalConfigDirectory/settings/${log4j.settings.file} to
 			${user.home}/${log4j.settings.file} and modifying as desired.  you will also need to run the dist-local target
 			for this change to take effect.
-			
+
 			if you would like to suggest a configuration change, enter a Jira issue in the KULCFG project with the details
-			
+
 			--- TARGETS ---
 
 			dist-local: prepares tokenized resources and local configuration files and deploys tomcat context file on development workstation
 			- this target should be run each time you update the project, change property values in ${user.home}\${ant.project.name}-build.properties,
 			or make a change that you want to apply to the application workflow plugin
 			- tomcat should not be running when you are executing this target
-			
+
 			echo-properties: executes ant echoproperties task, thereby printing out all the properties that have been set
 
 			dist-test-local: runs dist-local and make-tests to prepare for running the tests locally without disturbing cas and workflow, if they
 			are running in tomcat locally
-			
+
 			test-local: runs all project tests and generates results
 			- you should run dist-test-local before running this target, if the criteria listed above for runinng dist-local are met
 			- if you are running cas or workflow locally, you need to start tomcat after running dist-test-local and before running this target
-			
+
 			clean: removes all build output
 		</echo>
 	</target>
