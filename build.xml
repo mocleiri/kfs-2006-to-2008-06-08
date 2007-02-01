@@ -435,6 +435,7 @@
 
 	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
 	<target name="test">
+		<property name="tests.includes" value="**/*Test.java"/>
 		<mkdir dir="${test.temp.directory}" />
 		<mkdir dir="${test.xml.results.directory}" />
 		<junit showoutput="true" fork="true" forkmode="once" failureproperty="tests.failed" errorproperty="tests.errored" tempdir="${test.temp.directory}" maxmemory="512M">
@@ -446,7 +447,7 @@
 			<formatter type="xml" />
 			<batchtest todir="${test.xml.results.directory}">
 				<fileset dir="${test.source.directory}">
-					<include name="**/*Test.java" />
+					<include name="${tests.includes}" />
 					<exclude name="**/TransactionalDocumentRuleTest.java" />
 					<exclude name="**/${test.spring.shutdown}.java" />
 				</fileset>
