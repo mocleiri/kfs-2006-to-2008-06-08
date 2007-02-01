@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/AdvanceDepositDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,7 +124,7 @@ public class AdvanceDepositDocument extends CashReceiptFamilyBase {
     public final void prepareNewAdvanceDeposit(AdvanceDepositDetail advanceDepositDetail) {
         advanceDepositDetail.setFinancialDocumentLineNumber(this.nextAdvanceDepositLineNumber);
         advanceDepositDetail.setFinancialDocumentColumnTypeCode(Constants.AdvanceDepositConstants.CASH_RECEIPT_ADVANCE_DEPOSIT_COLUMN_TYPE_CODE);
-        advanceDepositDetail.setDocumentNumber(this.getDocumentNumber());
+        advanceDepositDetail.setFinancialDocumentNumber(this.getFinancialDocumentNumber());
         advanceDepositDetail.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(this.getClass()));
     }
 

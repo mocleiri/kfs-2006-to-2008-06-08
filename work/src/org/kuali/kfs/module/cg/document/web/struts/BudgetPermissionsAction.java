@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +27,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.authorization.DocumentActionFlags;
 import org.kuali.core.bo.AdHocRoutePerson;
 import org.kuali.core.bo.AdHocRouteWorkgroup;
@@ -34,7 +37,6 @@ import org.kuali.core.rule.event.AddAdHocRoutePersonEvent;
 import org.kuali.core.rule.event.AddAdHocRouteWorkgroupEvent;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.kra.KraKeyConstants;
 import org.kuali.module.kra.budget.bo.BudgetAdHocOrg;
 import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
 import org.kuali.module.kra.budget.bo.BudgetAdHocWorkgroup;
@@ -143,7 +145,7 @@ public class BudgetPermissionsAction extends BudgetAction {
 
         if (budgetForm.getNewAdHocOrg().getFiscalCampusCode() == null) {
             // Add page error.
-            GlobalVariables.getErrorMap().putError("newAdHocOrg", KraKeyConstants.ERROR_NO_ORG_SELECTED, new String[] {});
+            GlobalVariables.getErrorMap().putError("newAdHocOrg", KeyConstants.ERROR_NO_ORG_SELECTED, new String[] {});
         }
         else {
             BudgetAdHocOrg newAdHocOrg = budgetForm.getNewAdHocOrg();
@@ -189,12 +191,12 @@ public class BudgetPermissionsAction extends BudgetAction {
         budgetForm.getBudgetDocument().getBudget().setAdHocOrgs(adHocOrgs);
         budgetForm.getBudgetDocument().getBudget().setAdHocWorkgroups(adHocWorkgroups);
         
-        ActionForward forward = super.save(mapping, budgetForm, request, response);
+        SpringServiceLocator.getDocumentService().updateDocument(budgetForm.getBudgetDocument());
         
         budgetForm.getBudgetDocument().populateDocumentForRouting();
         budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().saveRoutingData();
-        
-        return forward;
+
+        return super.save(mapping, budgetForm, request, response);
     }
     
     
@@ -205,10 +207,10 @@ public class BudgetPermissionsAction extends BudgetAction {
         
         budgetForm.setNewAdHocPermission(new BudgetAdHocPermission());
         budgetForm.setNewAdHocOrg(new BudgetAdHocOrg());
-        budgetForm.setNewAdHocRouteWorkgroup(new AdHocRouteWorkgroup());
-        budgetForm.setNewAdHocWorkgroupPermissionCode("");
         
         ActionForward forward = super.reload(mapping, budgetForm, request, response);
+        
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObject(budgetForm.getBudgetDocument().getBudget(), "adHocPermissions");
         
         return forward;
     }

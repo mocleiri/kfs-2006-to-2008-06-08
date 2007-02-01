@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/sys/document/workflow/KualiWorkflowUtils.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +84,6 @@ public class KualiWorkflowUtils {
     public static final String FIS_USER_DOC_TYPE = "KualiUserMaintenanceDocument";
     public static final String ORGANIZATION_DOC_TYPE = "KualiOrganizationMaintenanceDocument";
     public static final String PROJECT_CODE_DOC_TYPE = "KualiProjectCodeMaintenanceDocument";
-     public static final String KRA_BUDGET_DOC_TYPE = "KualiBudgetDocument";
     public static final String SIMPLE_MAINTENANCE_DOC_TYPE = "KualiSimpleMaintenanceDocument";
 
     public static final Set SOURCE_LINE_ONLY_DOCUMENT_TYPES = new HashSet();
@@ -126,7 +127,7 @@ public class KualiWorkflowUtils {
      * statements can use required workflow functions as part of the XPath statements.
      * 
      * @param document - document
-     * @return a fully initialized XPath instance that has access to the workflow resolver and namespace.
+     * @return - a fully initialized XPath instance that has access to the workflow resolver and namespace.
      * 
      */
     public final static XPath getXPath(Document document) {
@@ -255,7 +256,7 @@ public class KualiWorkflowUtils {
         params.put(Constants.DISPATCH_REQUEST_PARAMETER, "getAttributeHelpText");
         params.put(Constants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, field.getBusinessObjectClassName());
         params.put(PropertyConstants.ATTRIBUTE_NAME, field.getPropertyName());
-        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString(Constants.APPLICATION_URL_KEY) + "/help.do", params);
+        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString(Constants.APPLICATION_BASE_URL_KEY) + "/help.do", params);
     }
 
     /**

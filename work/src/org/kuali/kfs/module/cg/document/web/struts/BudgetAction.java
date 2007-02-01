@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +30,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.bo.AdHocRoutePerson;
 import org.kuali.core.bo.AdHocRouteWorkgroup;
@@ -36,8 +39,8 @@ import org.kuali.core.question.ConfirmationQuestion;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.kra.KraConstants;
-import org.kuali.module.kra.KraKeyConstants;
+import org.kuali.core.web.struts.action.KualiDocumentActionBase;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
 import org.kuali.module.kra.budget.bo.BudgetAdHocWorkgroup;
 import org.kuali.module.kra.budget.rules.event.EnterModularEvent;
@@ -47,13 +50,14 @@ import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.module.kra.budget.web.struts.form.BudgetIndirectCostFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetNonpersonnelFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetOverviewFormHelper;
-import org.kuali.module.kra.web.struts.action.ResearchDocumentActionBase;
+
+import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * This class handles Actions for Research Administration.
  */
 
-public class BudgetAction extends ResearchDocumentActionBase {
+public class BudgetAction extends KualiDocumentActionBase {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetAction.class);
 
@@ -144,6 +148,18 @@ public class BudgetAction extends ResearchDocumentActionBase {
         this.loadDocument(budgetForm);
 
         return mapping.findForward(Constants.MAPPING_BASIC);
+    }
+
+    public ActionForward docHandler(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        ActionForward forward = super.docHandler(mapping, form, request, response);
+        BudgetForm budgetForm = (BudgetForm) form;
+
+        if (IDocHandler.INITIATE_COMMAND.equals(budgetForm.getCommand())) {
+            budgetForm.getBudgetDocument().getBudget().setDocumentNumber(budgetForm.getBudgetDocument().getDocumentNumber());
+            SpringServiceLocator.getBudgetService().initializeBudget(budgetForm.getBudgetDocument());
+        }
+        return forward;
     }
 
     public ActionForward update(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -347,7 +363,7 @@ public class BudgetAction extends ResearchDocumentActionBase {
      * @throws Exception
      */
     protected String buildBudgetConfirmationQuestion(String confirmationContext, KualiConfigurationService kualiConfiguration) throws Exception {
-        return StringUtils.replace(kualiConfiguration.getPropertyString(KraKeyConstants.QUESTION_KRA_DELETE_CONFIRMATION), "{0}", confirmationContext);
+        return StringUtils.replace(kualiConfiguration.getPropertyString(KeyConstants.QUESTION_BUDGET_DELETE_CONFIRMATION), "{0}", confirmationContext);
     }
 
     /**

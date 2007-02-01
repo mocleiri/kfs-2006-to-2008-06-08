@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/AcctType.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,19 +21,23 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.AcctType">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Account Type</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountTypeCode" />
                 <field attributeName="accountTypeName" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Account Type Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.AcctType"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup an Account Type</instructions>
 
@@ -89,8 +95,6 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        
-        <objectLabel>Account Type</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

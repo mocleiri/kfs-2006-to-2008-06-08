@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -24,12 +26,12 @@
 -->
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.ObjectCodeCurrent">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Object Code Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialObjectCode" />
@@ -46,7 +48,7 @@
                 <field attributeName="finObjMandatoryTrnfrelimCd" />
                 <field attributeName="financialFederalFundedCode" />
                 <field attributeName="nextYearFinancialObjectCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
         <!-- 
             NOTE!!!
@@ -55,6 +57,10 @@
         -->
         <lookup>
             <title>Object Code Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCode"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup an Object Code</instructions>
 
@@ -333,11 +339,10 @@
 
                 <maxLength>1</maxLength>
                 <required>true</required>
-                <control><text size="1"/>
-                <!-- 
-                        <select valuesFinderClass="org.kuali.core.lookup.keyvalues.BudgetAggregationCodeValuesFinder" />
-                -->
-				</control>                <summary>
+                <control>
+                	<select valuesFinderClass="org.kuali.core.lookup.keyvalues.BudgetAggregationCodeValuesFinder" />
+				</control>
+                <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>The code that indicates at what level the Object Code can be used for budgeting, expressed as a 1-character code, where O = Object Code level, C = consolidation level, and L = the level itself.</description>
@@ -361,12 +366,10 @@
             </attribute>
 
             <attribute name="financialFederalFundedCode" forceUppercase="true">
-                <label>Federal Funded Code</label>
+                <label>Federally Funded Code</label>
                 <shortLabel>FedFundCd</shortLabel>
-				
-                <maxLength>1</maxLength>
 
-				<required>true</required>
+                <maxLength>1</maxLength>
 
                 <control>
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.FederalFundedCodeValuesFinder" />
@@ -404,6 +407,5 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Object Code Current</objectLabel>
     </businessObject>
 </dictionaryEntry>

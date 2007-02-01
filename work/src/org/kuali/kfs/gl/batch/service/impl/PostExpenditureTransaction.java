@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/batch/service/impl/PostExpenditureTransaction.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +35,12 @@ import org.kuali.module.gl.bo.ExpenditureTransaction;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.ExpenditureTransactionDao;
 import org.kuali.module.gl.service.IcrTransaction;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-@Transactional
+/**
+ * 
+ * 
+ */
 public class PostExpenditureTransaction implements IcrTransaction, PostTransaction {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PostExpenditureTransaction.class);
 

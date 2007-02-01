@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/batch/service/impl/VerifyTransactionImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,7 +112,7 @@ public class VerifyTransactionImpl implements VerifyTransaction {
         if ((t.getFinancialSystemOriginationCode() == null) || (t.getFinancialSystemOriginationCode().trim().length() == 0)) {
             errors.add(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_ORIGIN_CODE_NOT_BE_NULL));
         }
-        if ((t.getDocumentNumber() == null) || (t.getDocumentNumber().trim().length() == 0)) {
+        if ((t.getFinancialDocumentNumber() == null) || (t.getFinancialDocumentNumber().trim().length() == 0)) {
             errors.add(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_DOCUMENT_NUMBER_NOT_BE_NULL));
         }
         if (t.getTransactionLedgerEntrySequenceNumber() == null) {

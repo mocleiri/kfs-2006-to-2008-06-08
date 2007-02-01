@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/impl/EntryDaoOjb.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,11 +25,11 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
-import org.kuali.PropertyConstants;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.EntryDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
+import org.kuali.PropertyConstants;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * 

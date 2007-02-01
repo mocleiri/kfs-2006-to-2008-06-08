@@ -1,31 +1,35 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.Constants.BALANCE_TYPE_PRE_ENCUMBRANCE;
-import static org.kuali.PropertyConstants.REFERENCE_NUMBER;
-import static org.kuali.PropertyConstants.REVERSAL_DATE;
-import static org.kuali.core.util.AssertionUtils.assertThat;
-import static org.kuali.module.financial.rules.PreEncumbranceDocumentRuleConstants.PRE_ENCUMBRANCE_DOCUMENT_SECURITY_GROUPING;
-import static org.kuali.module.financial.rules.PreEncumbranceDocumentRuleConstants.RESTRICTED_OBJECT_TYPE_CODES;
-import static org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
+import java.sql.Timestamp;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
+import static org.kuali.PropertyConstants.REFERENCE_NUMBER;
+import static org.kuali.PropertyConstants.REFERENCE_ORIGIN_CODE;
+import static org.kuali.PropertyConstants.REVERSAL_DATE;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
@@ -33,15 +37,19 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.financial.document.PreEncumbranceDocument;
+import static org.kuali.module.financial.rules.PreEncumbranceDocumentRuleConstants.PRE_ENCUMBRANCE_DOCUMENT_SECURITY_GROUPING;
+import static org.kuali.module.financial.rules.PreEncumbranceDocumentRuleConstants.RESTRICTED_OBJECT_TYPE_CODES;
 import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 
 /**
  * Business rule(s) applicable to PreEncumbrance documents.
  * 
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
 
@@ -73,19 +81,22 @@ public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
     }
 
     /**
-     * This method checks that there is a value in a disencumbrance line's reference number field. This cannot be done by the
-     * DataDictionary validation because not all documents require it. It does not validate the existence of the referenced
-     * document.
+     * This method checks that values exist in a disencumbrance line's two reference fields. This cannot be done by the
+     * DataDictionary validation because not all documents require them.
      * 
      * @param accountingLine
      * 
-     * @return True if the required external encumbrance reference field is valid, false otherwise.
+     * @return True if all of the required external encumbrance reference fields are valid, false otherwise.
      */
     private boolean isRequiredReferenceFieldsValid(AccountingLine accountingLine) {
         boolean valid = true;
 
-        if (accountingLine.isTargetAccountingLine()) {
+        if (isTargetAccountingLine(accountingLine)) {
             BusinessObjectEntry boe = SpringServiceLocator.getDataDictionaryService().getDataDictionary().getBusinessObjectEntry(TargetAccountingLine.class);
+            if (StringUtils.isEmpty(accountingLine.getReferenceOriginCode())) {
+                putRequiredPropertyError(boe, REFERENCE_ORIGIN_CODE);
+                valid = false;
+            }
             if (StringUtils.isEmpty(accountingLine.getReferenceNumber())) {
                 putRequiredPropertyError(boe, REFERENCE_NUMBER);
                 valid = false;
@@ -135,7 +146,7 @@ public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
      * @return boolean True if this document does not have a reversal date earlier than the current date, false otherwise.
      */
     private boolean isReversalDateValidForRouting(PreEncumbranceDocument preEncumbranceDocument) {
-        java.sql.Date reversalDate = preEncumbranceDocument.getReversalDate();
+        Timestamp reversalDate = preEncumbranceDocument.getReversalDate();
         return TransactionalDocumentRuleUtil.isValidReversalDate(reversalDate, DOCUMENT_ERROR_PREFIX + REVERSAL_DATE);
     }
 
@@ -175,30 +186,51 @@ public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
      */
     @Override
     protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        explicitEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_PRE_ENCUMBRANCE);
+        explicitEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_CODE.PRE_ENCUMBRANCE);
 
         // set the reversal date to what was chosen by the user in the interface
         PreEncumbranceDocument peDoc = (PreEncumbranceDocument) transactionalDocument;
         if (peDoc.getReversalDate() != null) {
-            explicitEntry.setFinancialDocumentReversalDate(peDoc.getReversalDate());
+            explicitEntry.setFinancialDocumentReversalDate(new java.sql.Date(peDoc.getReversalDate().getTime()));
         }
         explicitEntry.setTransactionEntryProcessedTs(null);
-        if (accountingLine.isSourceAccountingLine()) {
-            explicitEntry.setTransactionEncumbranceUpdateCode(Constants.ENCUMB_UPDT_DOCUMENT_CD);
+        if (isSourceAccountingLine(accountingLine)) {
+            explicitEntry.setTransactionEncumbranceUpdateCode(ENCUMBRANCE_UPDATE_CODES.ENCUMBRANCE);
         }
         else {
-            assertThat(accountingLine.isTargetAccountingLine(), accountingLine);
-            explicitEntry.setTransactionEncumbranceUpdateCode(Constants.ENCUMB_UPDT_REFERENCE_DOCUMENT_CD);
-            explicitEntry.setReferenceFinancialSystemOriginationCode(SpringServiceLocator.getHomeOriginationService().getHomeOrigination().getFinSystemHomeOriginationCode());
+            assert isTargetAccountingLine(accountingLine) : accountingLine;
+            explicitEntry.setTransactionEncumbranceUpdateCode(ENCUMBRANCE_UPDATE_CODES.DISENCUMBRANCE);
+            explicitEntry.setReferenceFinancialSystemOriginationCode(accountingLine.getReferenceOriginCode());
             explicitEntry.setReferenceFinancialDocumentNumber(accountingLine.getReferenceNumber());
-            explicitEntry.setReferenceFinancialDocumentTypeCode(explicitEntry.getFinancialDocumentTypeCode()); // "PE"
+            explicitEntry.setReferenceFinancialDocumentTypeCode(REFERENCE_DOCUMENT_TYPE_CODES.PRE_ENCUMBRANCE);
         }
+    }
+
+    /**
+     * This method contains Pre Encumbrance document specific GLPE offset entry attribute assignments.
+     * 
+     * @see TransactionalDocumentRuleBase#customizeOffsetGeneralLedgerPendingEntry(TransactionalDocument, AccountingLine,
+     *      GeneralLedgerPendingEntry, GeneralLedgerPendingEntry)
+     */
+    @Override
+    protected boolean customizeOffsetGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+        boolean success = true;
+        offsetEntry.setFinancialObjectTypeCode(explicitEntry.getFinancialObjectTypeCode());
+        OffsetDefinition offsetDefinition = SpringServiceLocator.getOffsetDefinitionService().getByPrimaryId(transactionalDocument.getPostingYear(), explicitEntry.getChartOfAccountsCode(), explicitEntry.getFinancialDocumentTypeCode(), explicitEntry.getFinancialBalanceTypeCode());
+        if (ObjectUtils.isNull(offsetDefinition)) {
+            success = false; // The superclass already puts an error for a missing offset definition, so do nothing here.
+        }
+        else {
+            offsetEntry.setFinancialSubObjectCode(offsetDefinition.getFinancialSubObjectCode());
+        }
+        return success;
     }
 
     /**
      * limits only to expense object type codes
      * 
-     * @see IsDebitUtils#isDebitConsideringSection(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringSection(TransactionalDocumentRuleBase, TransactionalDocument,
+     *      AccountingLine)
      * 
      * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)

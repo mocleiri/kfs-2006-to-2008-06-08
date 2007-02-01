@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/coa/document/validation/impl/ChartRuleTestBase.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +25,7 @@ import java.util.Map;
 
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.document.MaintenanceDocumentBase;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
@@ -47,7 +49,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * @return a populated MaintenanceDocument instance
      * 
      */
-    protected MaintenanceDocument newMaintDoc(PersistableBusinessObject newBo) {
+    protected MaintenanceDocument newMaintDoc(BusinessObject newBo) {
         return newMaintDoc(null, newBo);
     }
 
@@ -61,7 +63,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * @return a populated MaintenanceDocument instance
      * 
      */
-    protected MaintenanceDocument newMaintDoc(PersistableBusinessObject oldBo, PersistableBusinessObject newBo) {
+    protected MaintenanceDocument newMaintDoc(BusinessObject oldBo, BusinessObject newBo) {
 
         // disallow null value for newBo
         if (null == newBo) {
@@ -102,7 +104,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * @return a populated and ready-to-test rule, of the specified class
      * 
      */
-    protected MaintenanceDocumentRule setupMaintDocRule(PersistableBusinessObject newBo, Class ruleClass) {
+    protected MaintenanceDocumentRule setupMaintDocRule(BusinessObject newBo, Class ruleClass) {
         MaintenanceDocument maintDoc = newMaintDoc(newBo);
         return setupMaintDocRule(maintDoc, ruleClass);
     }
@@ -120,7 +122,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * @return a populated and ready-to-test rule, of the specified class
      * 
      */
-    protected MaintenanceDocumentRule setupMaintDocRule(PersistableBusinessObject oldBo, PersistableBusinessObject newBo, Class ruleClass) {
+    protected MaintenanceDocumentRule setupMaintDocRule(BusinessObject oldBo, BusinessObject newBo, Class ruleClass) {
 
         MaintenanceDocument maintDoc = newMaintDoc(oldBo, newBo);
 
@@ -157,7 +159,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
         return rule;
     }
 
-    protected void testDefaultExistenceCheck(PersistableBusinessObject bo, String fieldName, boolean shouldFail) {
+    protected void testDefaultExistenceCheck(BusinessObject bo, String fieldName, boolean shouldFail) {
 
         // init the error path
         GlobalVariables.getErrorMap().addToErrorPath("document.newMaintainableObject");

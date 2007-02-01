@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/JournalVoucherAccountingLineParser.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -41,12 +43,14 @@ import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * <code>JournalVoucherDocument</code> accounting line parser
+ * 
+ * 
  */
 public class JournalVoucherAccountingLineParser extends AuxiliaryVoucherAccountingLineParser {
     private String balanceTypeCode;
-    private static final String[] NON_OFFSET_ENTRY = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, OBJECT_TYPE_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, AMOUNT };
-    private static final String[] OFFSET_ENTRY = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, OBJECT_TYPE_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, DEBIT, CREDIT };
-    private static final String[] ENCUMBRANCE_ENTRY = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, OBJECT_TYPE_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, REFERENCE_ORIGIN_CODE, REFERENCE_TYPE_CODE, REFERENCE_NUMBER, DEBIT, CREDIT };
+    private static final String[] NON_OFFSET_ENTRY = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, OBJECT_TYPE_CODE, ORGANIZATION_REFERENCE_ID, OVERRIDE_CODE, AMOUNT };
+    private static final String[] OFFSET_ENTRY = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, OBJECT_TYPE_CODE, ORGANIZATION_REFERENCE_ID, OVERRIDE_CODE, DEBIT, CREDIT };
+    private static final String[] ENCUMBRANCE_ENTRY = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, OBJECT_TYPE_CODE, ORGANIZATION_REFERENCE_ID, REFERENCE_ORIGIN_CODE, REFERENCE_TYPE_CODE, REFERENCE_NUMBER, OVERRIDE_CODE, DEBIT, CREDIT };
 
     /**
      * Constructs a JournalVoucherAccountingLineParser.java.
@@ -59,6 +63,7 @@ public class JournalVoucherAccountingLineParser extends AuxiliaryVoucherAccounti
     }
 
     /**
+     * 
      * @see org.kuali.core.bo.AccountingLineParserBase#performCustomSourceAccountingLinePopulation(java.util.Map,
      *      org.kuali.core.bo.SourceAccountingLine, java.lang.String)
      */

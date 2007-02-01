@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/datadictionary/ObjectConsMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -40,9 +42,7 @@
         <summary>Object Consolidation Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Object Consolidations, or modify existing Object Consolidations.</description>
         <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_OBJECT_CONSOLIDATION" />
-
-        <allowsCopy>true</allowsCopy>
-
+        
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
             <field attributeName="finConsolidationObjectCode" />
