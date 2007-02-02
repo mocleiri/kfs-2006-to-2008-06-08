@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +21,8 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.bo.PostalZipCode;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.service.KualiConfigurationService;
@@ -93,13 +97,36 @@ public class AccountPreRules extends MaintenancePreRulesBase {
         }
         SubFundGroup subFundGroup = copyAccount.getSubFundGroup();
 
-        // KULCOA-1112 : if the sub fund group has a restriction code, override whatever the user selected
+        boolean useSubFundGroup = false;
         if (StringUtils.isNotBlank(subFundGroup.getAccountRestrictedStatusCode())) {
             restrictedStatusCode = subFundGroup.getAccountRestrictedStatusCode().trim();
             String subFundGroupCd = subFundGroup.getSubFundGroupCode();
-            newAccount.setAccountRestrictedStatusCode(restrictedStatusCode);
+            useSubFundGroup = askOrAnalyzeYesNoQuestion("SubFundGroup" + subFundGroupCd, buildSubFundGroupConfirmationQuestion(subFundGroupCd, restrictedStatusCode));
+            if (useSubFundGroup) {
+                // then set defaults for account based on this
+                newAccount.setAccountRestrictedStatusCode(restrictedStatusCode);
+            }
+            else {
+                // the user did not want to use this sub fund group so we wipe it out
+                newAccount.setSubFundGroupCode(Constants.EMPTY_STRING);
+            }
         }
 
+    }
+
+    /**
+     * 
+     * This method builds up the message string that gets sent to the user regarding using this SubFundGroup
+     * 
+     * @param subFundGroupCd
+     * @param restrictedStatusCd
+     * @return
+     */
+    protected String buildSubFundGroupConfirmationQuestion(String subFundGroupCd, String restrictedStatusCd) {
+        String result = configService.getPropertyString(KeyConstants.QUESTION_ACCT_SUB_FUND_RESTRICTED_STATUS);
+        result = StringUtils.replace(result, "{0}", subFundGroupCd);
+        result = StringUtils.replace(result, "{1}", restrictedStatusCd);
+        return result;
     }
 
     /**
@@ -136,16 +163,16 @@ public class AccountPreRules extends MaintenancePreRulesBase {
         if (StringUtils.isNotBlank(newAccount.getContractControlAccountNumber())) {
             Account account = checkForContinuationAccount("Contract Control Account", newAccount.getContractControlFinCoaCode(), newAccount.getContractControlAccountNumber(), "");
             if (ObjectUtils.isNotNull(account)) { // override old user inputs
-                newAccount.setContractControlAccountNumber(account.getAccountNumber());
-                newAccount.setContractControlFinCoaCode(account.getChartOfAccountsCode());
+                newAccount.setContractControlFinCoaCode(account.getAccountNumber());
+                newAccount.setContractControlAccountNumber(account.getChartOfAccountsCode());
             }
         }
 
         if (StringUtils.isNotBlank(newAccount.getIndirectCostRecoveryAcctNbr())) {
             Account account = checkForContinuationAccount("Indirect Cost Recovery Account", newAccount.getIndirectCostRcvyFinCoaCode(), newAccount.getIndirectCostRecoveryAcctNbr(), "");
             if (ObjectUtils.isNotNull(account)) { // override old user inputs
-                newAccount.setIndirectCostRecoveryAcctNbr(account.getAccountNumber());
-                newAccount.setIndirectCostRcvyFinCoaCode(account.getChartOfAccountsCode());
+                newAccount.setIndirectCostRcvyFinCoaCode(account.getAccountNumber());
+                newAccount.setIndirectCostRecoveryAcctNbr(account.getChartOfAccountsCode());
             }
         }
 

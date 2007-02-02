@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/service/impl/OriginEntryServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +32,6 @@ import java.util.Map;
 
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -42,9 +43,10 @@ import org.kuali.module.gl.util.LedgerEntry;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.gl.util.PosterOutputSummaryEntry;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ *  
+ */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
 
@@ -54,8 +56,6 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
     private OriginEntryDao originEntryDao;
     private OriginEntryGroupService originEntryGroupService;
-    
-    private DateTimeService dateTimeService;
 
     /**
      * 
@@ -258,7 +258,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public void loadFlatFile(String filename, String groupSourceCode, boolean isValid, boolean isProcessed, boolean isScrub) {
         LOG.debug("loadFlatFile() started");
 
-        java.sql.Date groupDate = new java.sql.Date(dateTimeService.getCurrentDate().getTime());
+        java.sql.Date groupDate = new java.sql.Date(System.currentTimeMillis());
         OriginEntryGroup newGroup = originEntryGroupService.createGroup(groupDate, groupSourceCode, isValid, isProcessed, isScrub);
 
         BufferedReader input = null;
@@ -444,10 +444,5 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             }
         }
         return output;
-    }
-    
-
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
     }
 }

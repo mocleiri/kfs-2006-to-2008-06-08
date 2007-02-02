@@ -1,6 +1,8 @@
 <!--
  Copyright 2005-2006 The Kuali Foundation.
  
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/Org.xml,v $
+ 
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -22,9 +24,8 @@
 
         <inquiry>
             <title>Organization Code Inquiry</title>
-			<inquirableClass>org.kuali.module.chart.maintenance.OrgInquirable</inquirableClass>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
 
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="organizationCode" />
@@ -56,6 +57,7 @@
                 <field attributeName="campusPlantChartCode" />
                 <field attributeName="campusPlantAccountNumber" />
 
+<!-- 
 		        <field attributeName="editHrmsUnitSectionBlank" />
 		        <field attributeName="editHrmsUnitSection" />     
 		        <field attributeName="organizationExtension.hrmsCompany" />       
@@ -78,11 +80,16 @@
 		        <field attributeName="organizationExtension.fiscalApproverUniversal.personName" />
 		        
 		        <field attributeName="organizationExtension.hrmsLastUpdateDate" />
-            </inquiryFields></inquirySection></inquirySections>
+-->	        
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Organization Code Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Org"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup an Organization</instructions>
 
@@ -167,8 +174,8 @@
 
 
             <attribute name="codeAndDescription" forceUppercase="false">
-                <label>Organization Code and Description</label>
-                <shortLabel>Org Code and Des</shortLabel>
+                <label>Organization Code</label>
+                <shortLabel>Org Code</shortLabel>
 
                 <maxLength>45</maxLength>
 
@@ -176,8 +183,8 @@
                     <text size="45" />
                 </control>
 
-                <summary>Organization Code and Des</summary>
-                <description>Organization Code and Description</description>
+                <summary>Organization Code</summary>
+                <description>Organization Code</description>
 
             </attribute>
 
@@ -773,7 +780,6 @@
             </relationship>
         </relationships>
 
-		<objectLabel>Organization Code</objectLabel>
     </businessObject>
 </dictionaryEntry>
 
