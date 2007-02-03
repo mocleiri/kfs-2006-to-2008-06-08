@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,7 +125,8 @@ public class UserSession implements Serializable {
      * @throws EdenUserNotFoundException
      */
     public void setBackdoorUser(String networkId) throws UserNotFoundException, WorkflowException {
-       if (!"prd".equals(SpringServiceLocator.getKualiConfigurationService().getPropertyString(Constants.ENVIRONMENT_KEY))) {
+       // only allow backdoor in non-production environments
+       if ( !SpringServiceLocator.getKualiConfigurationService().isProductionEnvironment() ) {
         this.backdoorUser = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(networkId));
         this.backdoorWorkflowUser = SpringServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
         this.workflowDocMap = new HashMap();

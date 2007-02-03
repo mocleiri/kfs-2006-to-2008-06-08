@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +29,7 @@ import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.Constants.DocumentStatusCodes.CashReceipt;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.FinancialDocument;
 import org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
@@ -83,11 +85,11 @@ public class CashManagementDocumentRule extends FinancialDocumentRuleBase implem
      * @param cmd
      */
     private void verifyUserIsDocumentInitiator(CashManagementDocument cmd) {
-        UniversalUser currentUser = GlobalVariables.getUserSession().getUniversalUser();
+        KualiUser currentUser = GlobalVariables.getUserSession().getKualiUser();
         if (cmd.getDocumentHeader() != null && cmd.getDocumentHeader().getWorkflowDocument() != null) {
             String cmdInitiatorNetworkId = cmd.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
-            if (!cmdInitiatorNetworkId.equalsIgnoreCase(currentUser.getPersonUserIdentifier())) {
-                throw new IllegalStateException("The current user (" + currentUser.getPersonUserIdentifier() + ") is not the individual (" + cmdInitiatorNetworkId + ") that initiated this document.");
+            if (!cmdInitiatorNetworkId.equalsIgnoreCase(currentUser.getUniversalUser().getPersonUserIdentifier())) {
+                throw new IllegalStateException("The current user (" + currentUser.getUniversalUser().getPersonUserIdentifier() + ") is not the individual (" + cmdInitiatorNetworkId + ") that initiated this document.");
             }
         }
     }
@@ -188,7 +190,7 @@ public class CashManagementDocumentRule extends FinancialDocumentRuleBase implem
             CashReceiptDocument cashReceipt = depositCashReceiptControl.getCashReceiptHeader().getCashReceiptDocument();
             String crState = cashReceipt.getDocumentHeader().getFinancialDocumentStatusCode();
             if (!desiredCRStates.contains(crState)) {
-                throw new IllegalStateException("Cash receipt document number " + cashReceipt.getDocumentNumber() + " is not in an appropriate state for the associated CashManagementDocument to be submitted.");
+                throw new IllegalStateException("Cash receipt document number " + cashReceipt.getFinancialDocumentNumber() + " is not in an appropriate state for the associated CashManagementDocument to be submitted.");
             }
         }
     }

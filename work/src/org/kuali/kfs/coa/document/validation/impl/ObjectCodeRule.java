@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/validation/impl/ObjectCodeRule.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -29,7 +31,6 @@ import org.kuali.core.document.Document;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjLevel;
@@ -56,6 +57,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
     final static String OBJECT_CODE_ILLEGAL_VALUES = "ObjectCodeIllegalValues";
     final static String OBJECT_CODE_VALID_BUDGET_AGGREGATION_CODES = "ObjectCodeValidBudgetAggregationCodes";
     final static String OBJECT_CODE_VALID_YEAR_CODE_EXCEPTIONS = "ObjectCodeValidYearCodeExceptions";
+    final static String OBJECT_CODE_VALID_MANDATORY_TRANSFER_ELIMINATION_CODES = "ObjectCodeValidMandatoryTransferEliminationCodes";
     final static String OBJECT_CODE_VALID_FEDERAL_FUNDED_CODES = "ObjectCodeValidFederalFundedCodes";
 
 
@@ -65,6 +67,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
     private static Set illegalValues;
     private static Set validYearCodeExceptions;
     private static Set validBudgetAggregationCodes;
+    private static Set validMandatoryTransferEliminationCodes;
     private static Set validFederalFundedCodes;
 
     private final static int CHART_CODE = 1;
@@ -79,6 +82,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
         illegalValues = retrieveParameterSet(OBJECT_CODE_ILLEGAL_VALUES);
         validYearCodeExceptions = retrieveParameterSet(OBJECT_CODE_VALID_YEAR_CODE_EXCEPTIONS);
         validBudgetAggregationCodes = retrieveParameterSet(OBJECT_CODE_VALID_BUDGET_AGGREGATION_CODES);
+        validMandatoryTransferEliminationCodes = retrieveParameterSet(OBJECT_CODE_VALID_MANDATORY_TRANSFER_ELIMINATION_CODES);
         validFederalFundedCodes = retrieveParameterSet(OBJECT_CODE_VALID_FEDERAL_FUNDED_CODES);
 
         dateTimeService = SpringServiceLocator.getDateTimeService();
@@ -165,9 +169,35 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
             result = false;
         }
 
+        String mandatoryTransferEliminationCode = objectCode.getFinObjMandatoryTrnfrelimCd();
+
+        if (mandatoryTransferEliminationCode != null && !isLegalMandatoryTransferEliminationCode(mandatoryTransferEliminationCode)) {
+            this.putFieldError("finObjMandatoryTrnfrelimCd", KeyConstants.ERROR_DOCUMENT_OBJCODE_MUST_ONEOF_VALID, "Mandatory Transfer Or Eliminations Code");
+            result = false;
+        }
+
         objectCode.refresh();
 
         // Chart code (fin_coa_cd) must be valid - handled by dd
+
+        // Object level (obj_level_code) must be valid
+        if (!isValid(objectCode, OBJECT_LEVEL)) {
+            this.putFieldError("financialObjectLevelCode", KeyConstants.ERROR_DOCUMENT_OBJCODE_MUST_BEVALID, "Object Level Code");
+            result = false;
+        }
+
+        // Object Type must be valid
+        if (!isValid(objectCode, OBJECT_TYPE)) {
+            this.putFieldError("financialObjectTypeCode", KeyConstants.ERROR_DOCUMENT_OBJCODE_MUST_BEVALID, "Object Type Code");
+
+            result = false;
+        }
+
+        // Sub type must be valid
+        if (!isValid(objectCode, SUB_TYPE)) {
+            this.putFieldError("financialObjectSubTypeCode", KeyConstants.ERROR_DOCUMENT_OBJCODE_MUST_BEVALID, "Object Sub Type Code");
+            result = false;
+        }
 
         if (!this.consolidationTableDoesNotHave(chartCode, objCode)) {
             this.putFieldError("financialObjectCode", KeyConstants.ERROR_DOCUMENT_OBJCODE_CONSOLIDATION_ERROR, chartCode+"-"+objCode);
@@ -276,11 +306,52 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
         return true;
     }
 
+
+    /**
+     * 
+     * This is just a guess of how to do this.
+     * 
+     * If OJB gives us back a solid object, then it seems the mapping validates the current value, but we must beware of proxy
+     * related exceptions that occur upon calling the nested object's methods.
+     * 
+     * @param objectCode
+     * @param field
+     * @return
+     */
+    // See Aaron's notes here: http://fms.dfa.cornell.edu:8080/confluence/display/KULEDOCS/Notes+on+Existence+Checking
+    // and here: http://fms.dfa.cornell.edu:8080/confluence/display/KULEDOCS/Notes+on+Null+Checking+within+Business+Rule+Classes
+    protected boolean isValid(ObjectCode objectCode, int field) {
+        try {
+            switch (field) {
+                case CHART_CODE:
+                    return objectCode.getChartOfAccounts().getChartOfAccountsCode().equals(objectCode.getChartOfAccountsCode());
+                case OBJECT_LEVEL:
+                    return objectCode.getFinancialObjectLevel().getFinancialObjectLevelCode().equals(objectCode.getFinancialObjectLevelCode());
+                case OBJECT_TYPE:
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("isValid: " + objectCode.getFinancialObjectType().getCode());
+                        LOG.debug("isValid: " + objectCode.getFinancialObjectTypeCode());
+                    }
+                    return objectCode.getFinancialObjectType().getCode().equals(objectCode.getFinancialObjectTypeCode());
+                case SUB_TYPE:
+                    return objectCode.getFinancialObjectSubType().getCode().equals(objectCode.getFinancialObjectSubTypeCode());
+            }
+        }
+        catch (PersistenceBrokerException e) {
+            return false;
+        }
+        catch (NullPointerException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     /**
      * 
      */
-    public boolean isValidYear(Integer year) {
-        if (year==null) return false;
+    public boolean isValidYear(Integer year) { 
         int enteredYear = year.intValue();
         int currentYear = dateTimeService.getCurrentFiscalYear().intValue();
         if ((enteredYear-currentYear) == 0 || (enteredYear-currentYear) == 1)
@@ -295,7 +366,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
      * 
      * @param set - methods returns false if the Set is null
      * @param value to seek
-     * @return true iff Set exists and contains given value
+     * @return - true iff Set exists and contains given value
      */
     protected boolean permitted(Set set, Object value) {
         if (set != null) {
@@ -340,14 +411,8 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
         return result;
     }
 
-    /**
-     * 
-     * @deprecated KULCOA-1245 - This check for existence of a mandatory transfer elimination code has been moved to the ObjectCode Document xml.
-     * @param mandatoryTransferEliminationCode 
-     * @return
-     */
     protected boolean isLegalMandatoryTransferEliminationCode(String mandatoryTransferEliminationCode) {
-        boolean result = false;
+        boolean result = permitted(validMandatoryTransferEliminationCodes, mandatoryTransferEliminationCode);
         return result;
     }
 

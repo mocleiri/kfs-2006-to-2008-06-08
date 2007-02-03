@@ -1,18 +1,3 @@
-<%--
- Copyright 2005-2006 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
---%>
 <%@ include file="/jsp/core/tldHeader.jsp"%>
 <%@ taglib prefix="c" uri="/tlds/c.tld"%>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
@@ -92,7 +77,7 @@
 								value="value" />
 						</html:select>
 						<noscript><html:image src="images/tinybutton-select.gif"
-							styleClass="tinybutton" alt="change check entry mode" title="change check entry mode" /></noscript>
+							styleClass="tinybutton" alt="change check entry mode" /></noscript>
 						</td>
 					</c:if>
 				</tr>
@@ -107,7 +92,7 @@
 							write="false" property="document.totalCashAmount" />
 					</c:if> <c:if test="${!readOnly}">
 						<kul:htmlControlAttribute property="document.totalCashAmount"
-							attributeEntry="${cashReceiptAttributes.totalCashAmount}" styleClass="amount" />
+							attributeEntry="${cashReceiptAttributes.totalCashAmount}" />
 					</c:if></td>
 				</tr>
 				<tr>
@@ -121,7 +106,7 @@
 							write="false" property="document.totalCoinAmount" />
 					</c:if> <c:if test="${!readOnly}">
 						<kul:htmlControlAttribute property="document.totalCoinAmount"
-							attributeEntry="${cashReceiptAttributes.totalCoinAmount}" styleClass="amount" />
+							attributeEntry="${cashReceiptAttributes.totalCoinAmount}" />
 					</c:if></td>
 				</tr>
 				<tr>
@@ -133,7 +118,7 @@
 					<td width="35%" align="left" valign="middle">$${KualiForm.document.currencyFormattedSumTotalAmount}&nbsp;&nbsp;&nbsp;
 					<c:if test="${!readOnly}">
 						<html:image src="images/tinybutton-recalculate.gif"
-							styleClass="tinybutton" alt="recalculate total" title="recalculate total" />
+							styleClass="tinybutton" alt="recalculate total" />
 					</c:if> <c:if test="${readOnly}"> &nbsp; </c:if></td>
 				</tr>
 			</tbody>
@@ -150,7 +135,7 @@
 		extraSourceRowFields="financialDocumentLineDescription" />
 	<kul:generalLedgerPendingEntries />
 	<kul:notes />
-	<kul:adHocRecipients />
+	<kul:adHocRecipients editingMode="${KualiForm.editingMode}"/>
 	<kul:routeLog />
 	<kul:panelFooter />
 	<kul:documentControls

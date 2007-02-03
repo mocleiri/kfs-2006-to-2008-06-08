@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/web/struts/CashReceiptForm.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -189,9 +191,9 @@ public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
             financialDocumentStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashReceipt.MSG_VERIFIED_BUT_NOT_AWAITING_DEPOSIT);
         }
         else if (financialDocumentStatusCode.equals(CashReceipt.INTERIM) || financialDocumentStatusCode.equals(CashReceipt.FINAL)) {
-            CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getDocumentNumber());
+            CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getFinancialDocumentNumber());
             if (cmd != null) {
-                String cmdFinancialDocNbr = cmd.getDocumentNumber();
+                String cmdFinancialDocNbr = cmd.getFinancialDocumentNumber();
 
                 String loadCMDocUrl = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashManagement.URL_LOAD_DOCUMENT_CASH_MGMT);
                 loadCMDocUrl = StringUtils.replace(loadCMDocUrl, "{0}", cmdFinancialDocNbr);
@@ -201,9 +203,9 @@ public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
             }
         }
         else if (financialDocumentStatusCode.equals(Constants.DocumentStatusCodes.APPROVED)) {
-            CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getDocumentNumber());
+            CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getFinancialDocumentNumber());
             if (cmd != null) {
-                String cmdFinancialDocNbr = cmd.getDocumentNumber();
+                String cmdFinancialDocNbr = cmd.getFinancialDocumentNumber();
 
                 String loadCMDocUrl = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashManagement.URL_LOAD_DOCUMENT_CASH_MGMT);
                 loadCMDocUrl = StringUtils.replace(loadCMDocUrl, "{0}", cmdFinancialDocNbr);

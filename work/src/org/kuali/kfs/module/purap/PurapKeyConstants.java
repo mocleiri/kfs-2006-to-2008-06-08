@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/PurapKeyConstants.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,9 +44,6 @@ public class PurapKeyConstants {
     public static final String ERROR_FIRST_TWO_FEIN = "error.vendorMaint.first.two.fein";
     public static final String ERROR_TAX_NUMBER_INVALID = "error.vendorMaint.taxNumber.invalid";
     public static final String ERROR_TAX_NUMBER_NOT_ALLOWED = "error.vendorMaint.taxNumber.notAllowed";
-    public static final String ERROR_OWNERSHIP_CATEGORY_CODE_NOT_ALLOWED = "error.vendorMaint.ownershipCategoryCode.notAllowed";
-    public static final String ERROR_OWNERSHIP_TYPE_CODE_NOT_ALLOWED = "error.vendorMaint.ownershipTypeCode.notAllowed";
-    public static final String ERROR_INACTIVE_REASON_REQUIRED = "error.vendorMaint.inactiveReason.required";
     
     //Vendor Lookup
     public static final String ERROR_VENDOR_LOOKUP_NAME_TOO_SHORT = "error.vendorLookup.name.too.short";
@@ -63,12 +62,6 @@ public class PurapKeyConstants {
     public static final String ERROR_US_REQUIRES_ZIP = "error.vendorMaint.vendorAddress.USRequiresZip";
     public static final String ERROR_FAX_NUMBER = "error.vendorMaint.vendorAddress.faxNumber";
     public static final String ERROR_ADDRESS_TYPE = "error.vendorMaint.vendorAddress.addressType";
-    public static final String ERROR_ADDRESS_TYPE_DIVISIONS = "error.vendorMaint.vendorAddress.addressType.divisions";
-    public static final String ERROR_ADDRESS_DEFAULT_CAMPUS = "error.vendorMaint.vendorDefaultAddress.campusCode";
-    public static final String ERROR_ADDRESS_DEFAULT_INDICATOR = "error.vendorMaint.vendorAddress.vendorDefaultAddressIndicator";
-    public static final String ERROR_ADDRESS_DEFAULT_CAMPUS_NOT_ALLOWED = "error.vendorMaint.vendorDefaultCampus.notAllowed";
-    public static final String ERROR_ADDRESS_DEFAULT_ADDRESS_NOT_ALLOWED = "error.vendorMaint.vendorDefaultAddress.notAllowed";
-    
     
     // Vendor Maintenance Contract
     public static final String ERROR_VENDOR_CONTRACT_NO_APO_LIMIT = "error.vendorContract.noApoLimit";

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/report/TransactionReport.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -263,7 +265,7 @@ public class TransactionReport {
                             warnings.addCell(cell);
                             cell = new PdfPCell(new Phrase(tran.getFinancialSystemOriginationCode(), textFont));
                             warnings.addCell(cell);
-                            cell = new PdfPCell(new Phrase(tran.getDocumentNumber(), textFont));
+                            cell = new PdfPCell(new Phrase(tran.getFinancialDocumentNumber(), textFont));
                             warnings.addCell(cell);
                             if (tran.getTransactionLedgerEntrySequenceNumber() == null) {
                                 cell = new PdfPCell(new Phrase("NULL", textFont));
