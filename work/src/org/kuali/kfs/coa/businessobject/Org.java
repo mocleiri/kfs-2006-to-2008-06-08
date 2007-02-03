@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/Org.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +17,31 @@
  */
 package org.kuali.module.chart.bo;
 
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ */
+
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -23,18 +50,18 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.kuali.Constants;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.Country;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.PostalZipCode;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
 
 /**
  * 
  */
-public class Org extends PersistableBusinessObjectBase {
+public class Org extends BusinessObjectBase {
     private static final Logger LOG = Logger.getLogger(Org.class);
 
     private static final long serialVersionUID = 121873645110037203L;
@@ -101,7 +128,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationCode attribute.
      * 
-     * @return Returns the organizationCode
+     * @return - Returns the organizationCode
      * 
      */
     public String getOrganizationCode() {
@@ -121,7 +148,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationName attribute.
      * 
-     * @return Returns the organizationName
+     * @return - Returns the organizationName
      * 
      */
     public String getOrganizationName() {
@@ -141,7 +168,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationCityName attribute.
      * 
-     * @return Returns the organizationCityName
+     * @return - Returns the organizationCityName
      * 
      */
     public String getOrganizationCityName() {
@@ -161,7 +188,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationStateCode attribute.
      * 
-     * @return Returns the organizationStateCode
+     * @return - Returns the organizationStateCode
      * 
      */
     public String getOrganizationStateCode() {
@@ -181,7 +208,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationZipCode attribute.
      * 
-     * @return Returns the organizationZipCode
+     * @return - Returns the organizationZipCode
      * 
      */
     public String getOrganizationZipCode() {
@@ -201,7 +228,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationBeginDate attribute.
      * 
-     * @return Returns the organizationBeginDate
+     * @return - Returns the organizationBeginDate
      * 
      */
     public Date getOrganizationBeginDate() {
@@ -221,7 +248,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationEndDate attribute.
      * 
-     * @return Returns the organizationEndDate
+     * @return - Returns the organizationEndDate
      * 
      */
     public Date getOrganizationEndDate() {
@@ -241,7 +268,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationActiveIndicator attribute.
      * 
-     * @return Returns the organizationActiveIndicator
+     * @return - Returns the organizationActiveIndicator
      * 
      */
     public boolean isOrganizationActiveIndicator() {
@@ -261,7 +288,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationInFinancialProcessingIndicator attribute.
      * 
-     * @return Returns the organizationInFinancialProcessingIndicator
+     * @return - Returns the organizationInFinancialProcessingIndicator
      * 
      */
     public boolean isOrganizationInFinancialProcessingIndicator() {
@@ -281,7 +308,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -301,7 +328,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationDefaultAccount attribute.
      * 
-     * @return Returns the organizationDefaultAccount
+     * @return - Returns the organizationDefaultAccount
      * 
      */
     public Account getOrganizationDefaultAccount() {
@@ -319,7 +346,7 @@ public class Org extends PersistableBusinessObjectBase {
     }
 
     public UniversalUser getOrganizationManagerUniversal() {
-        organizationManagerUniversal = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(organizationManagerUniversalId, organizationManagerUniversal);
+        organizationManagerUniversal = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(organizationManagerUniversalId, organizationManagerUniversal);
         return organizationManagerUniversal;
     }
 
@@ -336,7 +363,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the responsibilityCenter attribute.
      * 
-     * @return Returns the responsibilityCenter
+     * @return - Returns the responsibilityCenter
      * 
      */
     public ResponsibilityCenter getResponsibilityCenter() {
@@ -356,7 +383,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationPhysicalCampus attribute.
      * 
-     * @return Returns the organizationPhysicalCampus
+     * @return - Returns the organizationPhysicalCampus
      * 
      */
     public Campus getOrganizationPhysicalCampus() {
@@ -376,7 +403,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationType attribute.
      * 
-     * @return Returns the organizationType
+     * @return - Returns the organizationType
      * 
      */
     public OrgType getOrganizationType() {
@@ -396,7 +423,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the reportsToOrganization attribute.
      * 
-     * @return Returns the reportsToOrganization
+     * @return - Returns the reportsToOrganization
      * 
      */
     public Org getReportsToOrganization() {
@@ -416,7 +443,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the reportsToChartOfAccounts attribute.
      * 
-     * @return Returns the reportsToChartOfAccounts
+     * @return - Returns the reportsToChartOfAccounts
      * 
      */
     public Chart getReportsToChartOfAccounts() {
@@ -436,7 +463,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationPlantAccount attribute.
      * 
-     * @return Returns the organizationPlantAccount
+     * @return - Returns the organizationPlantAccount
      * 
      */
     public Account getOrganizationPlantAccount() {
@@ -456,7 +483,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the campusPlantAccount attribute.
      * 
-     * @return Returns the campusPlantAccount
+     * @return - Returns the campusPlantAccount
      * 
      */
     public Account getCampusPlantAccount() {
@@ -476,7 +503,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationPlantChart attribute.
      * 
-     * @return Returns the organizationPlantChart
+     * @return - Returns the organizationPlantChart
      * 
      */
     public Chart getOrganizationPlantChart() {
@@ -496,7 +523,7 @@ public class Org extends PersistableBusinessObjectBase {
     /**
      * Gets the campusPlantChart attribute.
      * 
-     * @return Returns the campusPlantChart
+     * @return - Returns the campusPlantChart
      * 
      */
     public Chart getCampusPlantChart() {
@@ -904,7 +931,7 @@ public class Org extends PersistableBusinessObjectBase {
         params.put("conversionFields", "");
         params.put("returnLocation", "");
 
-        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString(Constants.WORKFLOW_URL_KEY) + "/Lookup.do", params);
+        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString("workflow.base.url") + "/Lookup.do", params);
     }
 
     /**
@@ -944,7 +971,7 @@ public class Org extends PersistableBusinessObjectBase {
      * @return Returns the code and description in format: xx - xxxxxxxxxxxxxxxx
      */
     public String getCodeAndDescription() {
-        String theString = getOrganizationCode() + "-" + getOrganizationName();
+        String theString = getOrganizationCode() + " - " + getOrganizationName();
         return theString;
     }
 

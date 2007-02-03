@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -383,7 +385,7 @@ public class BalanceForwardRuleHelper {
                     // 1076 006030 OR 'PFCMR ')
 
                     // Contract and grants balances.
-                    if (priorYearAccount.isForContractsAndGrants() || ObjectHelper.isOneOf(subFundGroup.getSubFundGroupCode().trim(), new String[] { "SDCI", "PFCMR" })) {
+                    if (priorYearAccount.isInCg() || ObjectHelper.isOneOf(subFundGroup.getSubFundGroupCode().trim(), new String[] { "SDCI", "PFCMR" })) {
 
                         // 1077 006040 MOVE 'Y' TO WS-SELECT-ACTIVE-SW
 

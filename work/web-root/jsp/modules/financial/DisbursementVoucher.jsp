@@ -1,6 +1,8 @@
 <%--
  Copyright 2005-2006 The Kuali Foundation.
  
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/financial/DisbursementVoucher.jsp,v $
+ 
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -46,18 +48,18 @@
 
 	<kul:hiddenDocumentFields />
 
-	<html:hidden property="document.dvPayeeDetail.documentNumber" />
+	<html:hidden property="document.dvPayeeDetail.financialDocumentNumber" />
 	<html:hidden property="document.dvPayeeDetail.versionNumber" />
 	<html:hidden
-		property="document.dvNonEmployeeTravel.documentNumber" />
+		property="document.dvNonEmployeeTravel.financialDocumentNumber" />
 	<html:hidden property="document.dvNonEmployeeTravel.versionNumber" />
 	<html:hidden
-		property="document.dvPreConferenceDetail.documentNumber" />
+		property="document.dvPreConferenceDetail.financialDocumentNumber" />
 	<html:hidden property="document.dvPreConferenceDetail.versionNumber" />
-	<html:hidden property="document.dvWireTransfer.documentNumber" />
+	<html:hidden property="document.dvWireTransfer.financialDocumentNumber" />
 	<html:hidden property="document.dvWireTransfer.versionNumber" />
 	<html:hidden
-		property="document.dvNonResidentAlienTax.documentNumber" />
+		property="document.dvNonResidentAlienTax.financialDocumentNumber" />
 	<html:hidden property="document.dvNonResidentAlienTax.versionNumber" />
 
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />

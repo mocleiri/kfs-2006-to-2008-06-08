@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/service/impl/CashReceiptCoverSheetServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -157,7 +159,7 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
             PdfStamper stamper = new PdfStamper(new PdfReader(searchPath + File.separator + templateName), returnStream);
             AcroFields populatedCoverSheet = stamper.getAcroFields();
 
-            populatedCoverSheet.setField(DOCUMENT_NUMBER_FIELD, document.getDocumentNumber());
+            populatedCoverSheet.setField(DOCUMENT_NUMBER_FIELD, document.getFinancialDocumentNumber());
             populatedCoverSheet.setField(INITIATOR_FIELD, document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId());
             populatedCoverSheet.setField(CREATED_DATE_FIELD, document.getDocumentHeader().getWorkflowDocument().getCreateDate().toString());
             populatedCoverSheet.setField(AMOUNT_FIELD, document.getSumTotalAmount().toString());
@@ -182,17 +184,17 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
             populatedCoverSheet.setField(COIN_FIELD, document.getTotalCoinAmount().toString());
             /*
              * Fields currently not used. Pulling them out. These are advanced features of the CR which will come during the
-             * post-3/31 timeframe populatedCoverSheet.setField( CREDIT_CARD_FIELD, document.getDocumentNumber() );
-             * populatedCoverSheet.setField( ADV_DEPOSIT_FIELD, document.getDocumentNumber() );
-             * populatedCoverSheet.setField( CHANGE_OUT_FIELD, document.getDocumentNumber() );
-             * populatedCoverSheet.setField( REVIV_FUND_OUT_FIELD, document.getDocumentNumber() );
+             * post-3/31 timeframe populatedCoverSheet.setField( CREDIT_CARD_FIELD, document.getFinancialDocumentNumber() );
+             * populatedCoverSheet.setField( ADV_DEPOSIT_FIELD, document.getFinancialDocumentNumber() );
+             * populatedCoverSheet.setField( CHANGE_OUT_FIELD, document.getFinancialDocumentNumber() );
+             * populatedCoverSheet.setField( REVIV_FUND_OUT_FIELD, document.getFinancialDocumentNumber() );
              */
 
             stamper.setFormFlattening(true);
             stamper.close();
         }
         catch (Exception e) {
-            LOG.error("Error creating coversheet for: " + document.getDocumentNumber() + ". ::" + e);
+            LOG.error("Error creating coversheet for: " + document.getFinancialDocumentNumber() + ". ::" + e);
             throw e;
         }
     }

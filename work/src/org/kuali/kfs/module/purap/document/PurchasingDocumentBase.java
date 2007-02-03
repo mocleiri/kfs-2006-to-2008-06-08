@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/PurchasingDocumentBase.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +21,12 @@ import java.sql.Date;
 import java.util.List;
 
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Campus;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.bo.BillingAddress;
 import org.kuali.module.purap.bo.DeliveryRequiredDateReason;
 import org.kuali.module.purap.bo.FundingSource;
 import org.kuali.module.purap.bo.PurchaseOrderCostSource;
@@ -36,7 +36,6 @@ import org.kuali.module.purap.bo.PurchasingItemBase;
 import org.kuali.module.purap.bo.RecurringPaymentType;
 import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.bo.RequisitionSource;
-import org.kuali.module.purap.bo.VendorAddress;
 import org.kuali.module.purap.bo.VendorContract;
 import org.kuali.module.purap.bo.VendorDetail;
 
@@ -108,14 +107,11 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     private Integer contractManagerCode;
     private boolean purchaseOrderAutomaticIndicator;
 
-    // NOT PERSISTED IN DB
-    private String vendorNumber; 
-    private Integer vendorAddressGeneratedIdentifier;
-    private String vendorContractName;
-    private String supplierDiversityLabel;
-    private String vendorContactsLabel;
-    private String contractManagerName;
-    private boolean deliveryBuildingOther; 
+    private String vendorNumber; //not persisted in db
+    private Integer vendorAddressGeneratedIdentifier; //not persisted in db
+    private String vendorContractName; //not persisted in db
+    private String supplierDiversityLabel; //not persisted in db
+    private String vendorContactsLabel; //not persisted in db
     
     // REFERENCE OBJECTS
     private FundingSource fundingSource;
@@ -184,43 +180,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
 
         this.setVendorContract(vendorContract);
         this.setVendorContractName(vendorContract.getVendorContractName());
-    }
-    
-    /**
-     * Convenience method to set vendor address fields based on a given VendorAddress.
-     * 
-     * @param vendorAddress
-     */
-    public void templateVendorAddress(VendorAddress vendorAddress) {
-        if (vendorAddress == null) {
-            return;
-        }
-        this.setVendorLine1Address(vendorAddress.getVendorLine1Address());
-        this.setVendorLine2Address(vendorAddress.getVendorLine2Address());
-        this.setVendorCityName(vendorAddress.getVendorCityName());
-        this.setVendorStateCode(vendorAddress.getVendorStateCode());
-        this.setVendorPostalCode(vendorAddress.getVendorZipCode());
-        this.setVendorCountryCode(vendorAddress.getVendorCountryCode());
-        this.setVendorFaxNumber(vendorAddress.getVendorFaxNumber());
     }    
-    
-    /**
-     * Convenience method to set billing address fields based on a given BillingAddress.
-     * 
-     * @param billingAddress
-     */
-    public void templateBillingAddress(BillingAddress billingAddress) {
-        if (ObjectUtils.isNotNull(billingAddress)) {
-            this.setBillingName(billingAddress.getBillingName());
-            this.setBillingLine1Address(billingAddress.getBillingLine1Address());
-            this.setBillingLine2Address(billingAddress.getBillingLine2Address());
-            this.setBillingCityName(billingAddress.getBillingCityName());
-            this.setBillingStateCode(billingAddress.getBillingStateCode());
-            this.setBillingPostalCode(billingAddress.getBillingPostalCode());
-            this.setBillingCountryCode(billingAddress.getBillingCountryCode());
-            this.setBillingPhoneNumber(billingAddress.getBillingPhoneNumber());
-        }
-    }
     
     // GETTERS AND SETTERS    
     /**
@@ -1703,13 +1663,6 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
         this.vendorContract = vendorContract;
     }
 
-    public String getContractManagerName() {
-        return contractManagerName;
-    }
-
-    public void setContractManagerName(String contractManagerName) {
-        this.contractManagerName = contractManagerName;
-    }
 
     /**
      * Gets the items attribute. 
@@ -1719,6 +1672,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
         return items;
     }
 
+
     /**
      * Sets the items attribute value.
      * @param items The items to set.
@@ -1726,23 +1680,6 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     public void setItems(List items) {
         this.items = items;
     }
-
-    /**
-     * Gets the deliveryBuildingOther attribute. 
-     * @return Returns the deliveryBuildingOther.
-     */
-    public boolean isDeliveryBuildingOther() {
-        return deliveryBuildingOther;
-    }
-
-    /**
-     * Sets the deliveryBuildingOther attribute value.
-     * @param deliveryBuildingOther The deliveryBuildingOther to set.
-     */
-    public void setDeliveryBuildingOther(boolean deliveryBuildingOther) {
-        this.deliveryBuildingOther = deliveryBuildingOther;
-    }
-
 
     public void addItem(PurchasingItem item) {
         int itemLinePosition = items.size();
@@ -1787,11 +1724,6 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
        }
        return total;
     }
-
-    public void setVendorContactsLabel(String vendorContactsLabel) {
-        this.vendorContactsLabel = vendorContactsLabel;
-    }
-
 
     /**
      * @see org.kuali.core.document.TransactionalDocumentBase#buildListOfDeletionAwareLists()

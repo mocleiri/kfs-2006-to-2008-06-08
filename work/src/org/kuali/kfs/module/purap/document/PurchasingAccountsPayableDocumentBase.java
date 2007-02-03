@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/PurchasingAccountsPayableDocumentBase.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +17,14 @@
  */
 package org.kuali.module.purap.document;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.kuali.Constants;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.module.purap.bo.SourceDocumentReference;
 import org.kuali.module.purap.bo.Status;
 import org.kuali.module.purap.bo.StatusHistory;
 import org.kuali.module.purap.bo.VendorDetail;
@@ -42,7 +45,6 @@ public abstract class PurchasingAccountsPayableDocumentBase extends Transactiona
 
     // COMMON ELEMENTS
     protected List<StatusHistory> statusHistories;
-    protected List<SourceDocumentReference> sourceDocumentReferences;
 
     // REFERENCE OBJECTS
     private Status status;
@@ -56,9 +58,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends Transactiona
     // OVERRIDEN METHODS
     @Override
     public KualiDecimal getTotalDollarAmount() {
-        //FIXME get real total
-//        return Constants.ZERO;
-        return new KualiDecimal(100);
+        return Constants.ZERO;
     }
 
     /**
@@ -66,7 +66,6 @@ public abstract class PurchasingAccountsPayableDocumentBase extends Transactiona
      */
     public void refreshAllReferences() {
         this.refreshReferenceObject("status");
-        this.refreshReferenceObject("vendorDetail");
     }
 
     /**
@@ -74,7 +73,9 @@ public abstract class PurchasingAccountsPayableDocumentBase extends Transactiona
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
-        m.put("identifier", this.identifier);
+        if (getIdentifier() != null) {
+            m.put("identifier", getIdentifier().toString());
+        }
         return m;
     }
 
@@ -178,12 +179,5 @@ public abstract class PurchasingAccountsPayableDocumentBase extends Transactiona
     public void setVendorDetail(VendorDetail vendorDetail) {
         this.vendorDetail = vendorDetail;
     }
-    
-    public List<SourceDocumentReference> getSourceDocumentReferences() {
-        return sourceDocumentReferences;
-    }
 
-    public void setSourceDocumentReferences(List<SourceDocumentReference> sourceDocumentReferences) {
-        this.sourceDocumentReferences = sourceDocumentReferences;
-    }
 }
