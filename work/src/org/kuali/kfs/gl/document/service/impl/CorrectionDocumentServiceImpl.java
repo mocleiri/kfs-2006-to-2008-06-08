@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +26,7 @@ import org.kuali.module.gl.dao.CorrectionChangeGroupDao;
 import org.kuali.module.gl.dao.CorrectionCriteriaDao;
 import org.kuali.module.gl.document.CorrectionDocument;
 import org.kuali.module.gl.service.CorrectionDocumentService;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class CorrectionDocumentServiceImpl implements CorrectionDocumentService {
 
     private CorrectionChangeGroupDao correctionChangeGroupDao;

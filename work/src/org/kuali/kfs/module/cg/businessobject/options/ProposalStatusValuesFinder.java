@@ -1,7 +1,10 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/options/ProposalStatusValuesFinder.java,v $
+ * 
+ * Licensed under the Educational Community License, Version 1.0 (the "License")
+;
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
@@ -36,7 +39,16 @@ public class ProposalStatusValuesFinder extends KeyValuesBase {
         KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         Collection codes = boService.findAll(ProposalStatus.class);
 
-        List<KeyLabelPair> labels = new ArrayList<KeyLabelPair>();
+        List sortList = (List) codes;
+
+//        // calling comparator.
+//        AccountTypeCodeComparator accTypeCodeComparator = new AccountTypeCodeComparator();
+//
+//        // sort using comparator.
+//        Collections.sort(sortList, accTypeCodeComparator);
+//
+
+        List labels = new ArrayList();
         labels.add(new KeyLabelPair("", ""));
 
 
@@ -48,4 +60,6 @@ public class ProposalStatusValuesFinder extends KeyValuesBase {
 
         return labels;
     }
+
+
 }

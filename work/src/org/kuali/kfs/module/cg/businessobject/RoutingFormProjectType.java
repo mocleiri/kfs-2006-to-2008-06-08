@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormProjectType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +20,17 @@ package org.kuali.module.kra.routingform.bo;
 
 import java.util.LinkedHashMap;
 
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.ObjectUtils;
 
 /**
  * 
  */
-public class RoutingFormProjectType extends PersistableBusinessObjectBase {
+public class RoutingFormProjectType extends BusinessObjectBase {
 
 	private String projectTypeCode;
 	private String documentNumber;
+	private String projectTypeDescription;
 
     private ProjectType projectType;
     
@@ -39,14 +41,6 @@ public class RoutingFormProjectType extends PersistableBusinessObjectBase {
 
 	}
 
-    /**
-     * Constructs with projectTypeCode argument.
-     * @param projectTypeCode
-     */
-    public RoutingFormProjectType(String projectTypeCode) {
-        this.projectTypeCode = projectTypeCode;
-    }
-    
 	/**
 	 * Gets the projectTypeCode attribute.
 	 * 
@@ -89,6 +83,26 @@ public class RoutingFormProjectType extends PersistableBusinessObjectBase {
 	}
 
 
+	/**
+	 * Gets the projectTypeDescription attribute.
+	 * 
+	 * @return Returns the projectTypeDescription
+	 * 
+	 */
+	public String getProjectTypeDescription() { 
+		return projectTypeDescription;
+	}
+
+	/**
+	 * Sets the projectTypeDescription attribute.
+	 * 
+	 * @param projectTypeDescription The projectTypeDescription to set.
+	 * 
+	 */
+	public void setProjectTypeDescription(String projectTypeDescription) {
+		this.projectTypeDescription = projectTypeDescription;
+	}
+
     /**
      * Gets the projectType attribute. 
      * @return Returns the projectType.
@@ -107,21 +121,6 @@ public class RoutingFormProjectType extends PersistableBusinessObjectBase {
     }
 
     /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        boolean equals = false;
-
-        if (ObjectUtils.isNotNull(obj) && obj instanceof RoutingFormProjectType) {
-            RoutingFormProjectType routingFormProjectType = (RoutingFormProjectType) obj;
-            
-            equals = this.projectTypeCode.equals(routingFormProjectType.getProjectTypeCode());
-        }
-        
-        return equals;
-    }
-    
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
@@ -131,11 +130,5 @@ public class RoutingFormProjectType extends PersistableBusinessObjectBase {
         return m;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode() {
-        String hashString = this.getDocumentNumber() + "|" + this.getProjectTypeCode() + "|" + this.getDocumentNumber();
-        return hashString.hashCode();
-    }
+
 }

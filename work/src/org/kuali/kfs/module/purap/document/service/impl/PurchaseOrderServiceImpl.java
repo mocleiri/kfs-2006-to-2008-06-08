@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/service/impl/PurchaseOrderServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +49,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             poDocument.populatePurchaseOrderFromRequisition(reqDocument);
             // TODO set other default info
             // TODO set initiator of document as contract manager (is that right?)
-            documentService.updateDocument(poDocument);
+            documentService.saveDocument(poDocument, null, null);
         }
         catch (WorkflowException e) {
             LOG.error("Error creating PO document: " + e.getMessage());

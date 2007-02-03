@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/document/service/RoutingFormService.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +17,6 @@
  */
 package org.kuali.module.kra.routingform.service;
 
-import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -34,14 +35,4 @@ public interface RoutingFormService {
      * @throws WorkflowException
      */
     public void prepareRoutingFormForSave(RoutingFormDocument RoutingFormDocument) throws WorkflowException;
-    public BudgetDocument retrieveBudgetForLinking(String budgetDocumentNumber) throws WorkflowException;
-    public void linkImportBudgetDataToRoutingForm(RoutingFormDocument routingFormDocument, String budgetDocumentHeaderId) throws WorkflowException;
-
-    /**
-     * This method will determine if Grants Gov checkbox has changed from checked to unchecked.
-     * 
-     * @param routingFormDocument
-     * @return boolean
-     */
-    public boolean isGrantsGovModified(RoutingFormDocument routingFormDocument);
 }

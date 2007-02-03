@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/OrganizationRoutingModelName.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +22,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class OrganizationRoutingModelName extends PersistableBusinessObjectBase {
+public class OrganizationRoutingModelName extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String organizationCode;
@@ -46,7 +48,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -56,7 +58,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Sets the chartOfAccountsCode attribute.
      * 
-     * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * @param - chartOfAccountsCode The chartOfAccountsCode to set.
      * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -67,7 +69,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Gets the organizationCode attribute.
      * 
-     * @return Returns the organizationCode
+     * @return - Returns the organizationCode
      * 
      */
     public String getOrganizationCode() {
@@ -77,7 +79,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Sets the organizationCode attribute.
      * 
-     * @param organizationCode The organizationCode to set.
+     * @param - organizationCode The organizationCode to set.
      * 
      */
     public void setOrganizationCode(String organizationCode) {
@@ -88,7 +90,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Gets the organizationRoutingModelName attribute.
      * 
-     * @return Returns the organizationRoutingModelName
+     * @return - Returns the organizationRoutingModelName
      * 
      */
     public String getOrganizationRoutingModelName() {
@@ -98,7 +100,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Sets the organizationRoutingModelName attribute.
      * 
-     * @param organizationRoutingModelName The organizationRoutingModelName to set.
+     * @param - organizationRoutingModelName The organizationRoutingModelName to set.
      * 
      */
     public void setOrganizationRoutingModelName(String organizationRoutingModelName) {
@@ -109,7 +111,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Gets the organization attribute.
      * 
-     * @return Returns the organization
+     * @return - Returns the organization
      * 
      */
     public Org getOrganization() {
@@ -119,7 +121,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Sets the organization attribute.
      * 
-     * @param organization The organization to set.
+     * @param - organization The organization to set.
      * @deprecated
      */
     public void setOrganization(Org organization) {
@@ -129,7 +131,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -139,7 +141,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     /**
      * Sets the chartOfAccounts attribute.
      * 
-     * @param chartOfAccounts The chartOfAccounts to set.
+     * @param - chartOfAccounts The chartOfAccounts to set.
      * @deprecated
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -165,7 +167,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
     }
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

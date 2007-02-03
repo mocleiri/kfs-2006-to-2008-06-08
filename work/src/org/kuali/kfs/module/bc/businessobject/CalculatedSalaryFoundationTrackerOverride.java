@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/CalculatedSalaryFoundationTrackerOverride.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -32,7 +34,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 /**
  * 
  */
-public class CalculatedSalaryFoundationTrackerOverride extends PersistableBusinessObjectBase {
+public class CalculatedSalaryFoundationTrackerOverride extends BusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;

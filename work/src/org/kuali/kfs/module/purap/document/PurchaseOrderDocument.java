@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/PurchaseOrderDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +18,14 @@
 
 package org.kuali.module.purap.document;
 
-import java.sql.Date;
+import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.bo.PaymentTermType;
 import org.kuali.module.purap.bo.PurchaseOrderVendorChoice;
 import org.kuali.module.purap.bo.RecurringPaymentFrequency;
 import org.kuali.module.purap.bo.ShippingPaymentTerms;
 import org.kuali.module.purap.bo.ShippingTitle;
-import org.kuali.module.purap.bo.VendorDetail;
 
 /**
  * Requisition Document
@@ -36,11 +34,13 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchaseOrderDocument.class);
 
     private Date purchaseOrderCreateDate;
+    private String purchaseOrderGeneralDescription;
     private Integer requisitionIdentifier;
     private String purchaseOrderVendorChoiceCode;
     private String vendorPaymentTermsCode;
     private String vendorShippingTitleCode;
     private String vendorShippingPaymentTermsCode;
+    private KualiDecimal purchaseOrderTotalAmount;
     private String recurringPaymentFrequencyCode;
     private KualiDecimal recurringPaymentAmount;
     private Date recurringPaymentDate;
@@ -58,7 +58,6 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     private Integer purchaseOrderPreviousIdentifier;
     private Integer alternateVendorHeaderGeneratedIdentifier;
     private Integer alternateVendorDetailAssignedIdentifier;
-    private String alternateVendorNumber; //not persisted in db
     private String alternateVendorName;
     private String statusChange;
     private String statusChangeNote;
@@ -77,9 +76,8 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     }
 
     public void populatePurchaseOrderFromRequisition(RequisitionDocument requisitionDocument) {
-// TODO fix this (is this data correct?  is there a better way of doing this?
-//        this.setPurchaseOrderCreateDate(requisitionDocument.getDocumentHeader().getWorkflowDocument().getCreateDate());
-        this.setPurchaseOrderCreateDate(SpringServiceLocator.getDateTimeService().getCurrentSqlDate());
+// TODO check this (is this data correct?  is there a better way of doing this?
+        this.setPurchaseOrderCreateDate(requisitionDocument.getDocumentHeader().getWorkflowDocument().getCreateDate());
         
         this.getDocumentHeader().setOrganizationDocumentNumber(requisitionDocument.getDocumentHeader().getOrganizationDocumentNumber());
         this.getDocumentHeader().setFinancialDocumentDescription(requisitionDocument.getDocumentHeader().getFinancialDocumentDescription());
@@ -281,6 +279,14 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         this.purchaseOrderCreateDate = purchaseOrderCreateDate;
     }
 
+    public String getPurchaseOrderGeneralDescription() {
+        return purchaseOrderGeneralDescription;
+    }
+
+    public void setPurchaseOrderGeneralDescription(String purchaseOrderGeneralDescription) {
+        this.purchaseOrderGeneralDescription = purchaseOrderGeneralDescription;
+    }
+
     public Date getPurchaseOrderInitialOpenDate() {
         return purchaseOrderInitialOpenDate;
     }
@@ -327,6 +333,14 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
 
     public void setPurchaseOrderQuoteVendorNoteText(String purchaseOrderQuoteVendorNoteText) {
         this.purchaseOrderQuoteVendorNoteText = purchaseOrderQuoteVendorNoteText;
+    }
+
+    public KualiDecimal getPurchaseOrderTotalAmount() {
+        return purchaseOrderTotalAmount;
+    }
+
+    public void setPurchaseOrderTotalAmount(KualiDecimal purchaseOrderTotalAmount) {
+        this.purchaseOrderTotalAmount = purchaseOrderTotalAmount;
     }
 
     public String getPurchaseOrderVendorChoiceCode() {
@@ -449,58 +463,4 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         this.statusChangeNote = statusChangeNote;
     }
 
-    
-    /**
-     * Gets the alternateVendorNumber attribute. 
-     * @return Returns the alternateVendorNumber.
-     */
-    public String getAlternateVendorNumber() {
-        String hdrGenId = "";
-        String detAssgndId = "";
-        String vendorNumber = "";
-        if( this.alternateVendorHeaderGeneratedIdentifier != null ) {
-            hdrGenId = this.alternateVendorHeaderGeneratedIdentifier.toString();
-        }
-        if( this.alternateVendorDetailAssignedIdentifier != null ) {
-            detAssgndId = this.alternateVendorDetailAssignedIdentifier.toString();
-        }
-        if (!StringUtils.isEmpty(hdrGenId) && !StringUtils.isEmpty(detAssgndId)) {
-            vendorNumber = hdrGenId+"-"+detAssgndId;
-        }
-        return vendorNumber;
-    }
-
-    /**
-     * Sets the alternateVendorNumber attribute value.
-     * @param alternateVendorNumber The vendorNumber to set.
-     */
-    public void setAlternateVendorNumber(String vendorNumber) {
-        if (! StringUtils.isEmpty(vendorNumber)) {
-            int dashInd = vendorNumber.indexOf("-");
-            if (vendorNumber.length() >= dashInd) {
-                String vndrHdrGenId = vendorNumber.substring( 0, dashInd );
-                String vndrDetailAssgnedId = vendorNumber.substring( dashInd + 1 );
-                if (!StringUtils.isEmpty(vndrHdrGenId) && !StringUtils.isEmpty(vndrDetailAssgnedId)) {
-                    this.alternateVendorHeaderGeneratedIdentifier = new Integer(vndrHdrGenId);
-                    this.alternateVendorDetailAssignedIdentifier = new Integer(vndrDetailAssgnedId);
-                }
-            }
-        } else {
-            this.alternateVendorNumber = vendorNumber;
-        }
-    }
-    
-    /**
-     * Convenience method to set alternate vendor fields based on a given VendorDetail.
-     * 
-     * @param vendorDetail
-     */
-    public void templateAlternateVendor(VendorDetail vendorDetail) {
-        if (vendorDetail == null) {
-            return;
-        }
-    
-        this.setAlternateVendorNumber(vendorDetail.getVendorHeaderGeneratedIdentifier() + PurapConstants.DASH + vendorDetail.getVendorDetailAssignedIdentifier());
-        this.setAlternateVendorName(vendorDetail.getVendorName());
-    }
 }

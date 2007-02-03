@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -185,6 +187,51 @@
                 <description>routingFormConflictOfInterestExistsIndicator description...</description>
       </attribute>
 
+            <attribute name="routingFormContactFaxNumber" forceUppercase="true">
+                <label>Routing Form Contact Fax Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>routingFormContactFaxNumber</summary>
+                <description>routingFormContactFaxNumber description...</description>
+      </attribute>
+
+            <attribute name="routingFormContactPhoneNumber" forceUppercase="true">
+                <label>Routing Form Contact Phone Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>routingFormContactPhoneNumber</summary>
+                <description>routingFormContactPhoneNumber description...</description>
+      </attribute>
+
+            <attribute name="routingFormContactSystemsIdentifier" forceUppercase="true">
+                <label>Routing Form Contact Systems Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>routingFormContactSystemsIdentifier</summary>
+                <description>routingFormContactSystemsIdentifier description...</description>
+      </attribute>
+
             <attribute name="routingFormCostShareIndicator" forceUppercase="true">
                 <label>Routing Form Cost Share Indicator</label>
                 <shortLabel>Indicator</shortLabel>
@@ -302,6 +349,62 @@
                 <description>routingFormFellowLastName description...</description>
       </attribute>
 
+            <attribute name="routingFormForeignPartnerIndicator" forceUppercase="true">
+                <label>Routing Form Foreign Partner Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormForeignPartnerIndicator</summary>
+                <description>routingFormForeignPartnerIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormForeignTravelIndicator" forceUppercase="true">
+                <label>Routing Form Foreign Travel Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormForeignTravelIndicator</summary>
+                <description>routingFormForeignTravelIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormIncomeIndicator" forceUppercase="true">
+                <label>Routing Form Income Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormIncomeIndicator</summary>
+                <description>routingFormIncomeIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormInventionIndicator" forceUppercase="true">
+                <label>Routing Form Invention Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormInventionIndicator</summary>
+                <description>routingFormInventionIndicator description...</description>
+      </attribute>
+
             <attribute name="routingFormLastUpdateDate" forceUppercase="true">
                 <label>Routing Form Last Update Date</label>
                 <shortLabel>Date</shortLabel>
@@ -347,6 +450,34 @@
                 <description>routingFormLayDescription description...</description>
       </attribute>
 
+            <attribute name="routingFormNewSpaceIndicator" forceUppercase="true">
+                <label>Routing Form New Space Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormNewSpaceIndicator</summary>
+                <description>routingFormNewSpaceIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormOffCampusIndicator" forceUppercase="true">
+                <label>Routing Form Off Campus Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormOffCampusIndicator</summary>
+                <description>routingFormOffCampusIndicator description...</description>
+      </attribute>
+
             <attribute name="routingFormOtherOrganizationIndicator" forceUppercase="true">
                 <label>Routing Form Other Organization Indicator</label>
                 <shortLabel>Indicator</shortLabel>
@@ -366,30 +497,15 @@
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>50</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <text size="12" />
+                    <text size="52" />
                 </control>
 
                 <summary>routingFormOtherPurposeDescription</summary>
                 <description>routingFormOtherPurposeDescription description...</description>
       </attribute>
-
-            <attribute name="projectTypeOtherDescription" forceUppercase="true">
-                <label>Project Type Other Description</label>
-                <shortLabel>Description</shortLabel>
-
-                <maxLength>75</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="12" />
-                </control>
-
-                <summary>projectTypeOtherDescription</summary>
-                <description>projectTypeOtherDescription description...</description>
-			</attribute>
 
             <attribute name="routingFormOtherTypeDescription" forceUppercase="true">
                 <label>Routing Form Other Type Description</label>
@@ -467,7 +583,7 @@
       </attribute>
 
             <attribute name="routingFormPurposeCode" forceUppercase="true">
-                <label>Project Purpose</label>
+                <label>Routing Form Purpose Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>1</maxLength>
@@ -561,7 +677,7 @@
                 <maxLength>1</maxLength>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.kra.routingform.lookup.keyvalues.ResearchTypeCodeValuesFinder" />
+                    <checkbox />
                 </control>
 
                 <summary>researchTypeCode</summary>
@@ -569,8 +685,8 @@
       </attribute>
 
             <attribute name="submissionTypeCode" forceUppercase="true">
-                <label>Submission Type</label>
-                <shortLabel>Code</shortLabel>
+                <label>Submission Type Code</label>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>1</maxLength>
 
@@ -587,7 +703,7 @@
                 <shortLabel>Identifier</shortLabel>
 
                 <maxLength>12</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+                <validationPattern><numeric /></validationPattern>
 
                 <control>
                     <text size="12" />
@@ -803,7 +919,6 @@
         
         
         <allowsNoteDelete>true</allowsNoteDelete>
-        <displayTopicFieldInNotes>true</displayTopicFieldInNotes>
         <!--  attachmentTypesValuesFinderClass>org.kuali.module.kra.budget.lookup.keyvalues.BudgetBaseCodeValuesFinder</attachmentTypesValuesFinderClass -->
     </researchDocument>
 </dictionaryEntry>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/document/datadictionary/GrantDescriptionMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -41,8 +43,6 @@
         <summary>Grant Description Maintenance Document</summary>
         <description>Document used to create or update Grant Description objects</description>
 
-        <allowsCopy>true</allowsCopy>
-
         <lockingKeys>
             <field attributeName="grantDescriptionCode" />
         </lockingKeys>
@@ -52,10 +52,7 @@
                 <maintainableItems>
                     <maintainableField name="grantDescriptionCode" required="true" />
                     <maintainableField name="grantDescription" required="true" />
-                    <maintainableField name="grantDescriptionActiveCode" required="true">
-						<defaultValue>true</defaultValue>
-					</maintainableField>
-					<maintainableField name="versionNumber" />
+                    <maintainableField name="grantDescriptionActiveCode" required="true" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>
