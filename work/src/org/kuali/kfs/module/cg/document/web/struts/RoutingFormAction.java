@@ -93,7 +93,7 @@ public class RoutingFormAction extends ResearchDocumentActionBase {
                 if (budgetOverviewFormHelper.getBudgetPeriod().getBudgetPeriodSequenceNumber().compareTo(routingFormBudget.getRoutingFormBudgetMinimumPeriodNumber()) >= 0 &&
                         budgetOverviewFormHelper.getBudgetPeriod().getBudgetPeriodSequenceNumber().compareTo(routingFormBudget.getRoutingFormBudgetMaximumPeriodNumber()) <= 0) {
                     budgetOverviewFormHelper.setSelected(true);
-                }
+        }
             }
         }
         return mapping.findForward("link");
@@ -139,4 +139,5 @@ public class RoutingFormAction extends ResearchDocumentActionBase {
         }
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
+
 }

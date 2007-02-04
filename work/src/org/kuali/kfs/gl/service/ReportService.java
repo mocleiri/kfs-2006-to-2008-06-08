@@ -21,14 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.bo.Options;
+import org.kuali.kfs.bo.Options;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.document.CorrectionDocument;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
-import org.kuali.module.gl.util.Message;
 
 /**
  */
