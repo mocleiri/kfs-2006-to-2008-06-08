@@ -16,14 +16,15 @@
 package org.kuali.module.labor.document;
 
 import org.kuali.Constants;
-import org.kuali.core.bo.AccountingLineParser;
-import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.core.document.Copyable;
+import org.kuali.core.document.Correctable;
+import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.module.labor.bo.LaborLedgerAccountingLineParser;
 
 /**
- * 
+ * Class representing the Salary Expense Transfer Document.
  */
-public class SalaryExpenseTransferDocument extends LaborDocument {
+public class SalaryExpenseTransferDocument extends LaborDocument implements Copyable, Correctable{
 
     private String emplid;
     
@@ -45,7 +46,7 @@ public class SalaryExpenseTransferDocument extends LaborDocument {
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.FinancialDocument#getSourceAccountingLinesSectionTitle()
      */
     public String getSourceAccountingLinesSectionTitle() {
         return Constants.FROM;
@@ -54,14 +55,14 @@ public class SalaryExpenseTransferDocument extends LaborDocument {
     /**
      * Overrides the base implementation to return "To".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLinesSectionTitle()
      */
     public String getTargetAccountingLinesSectionTitle() {
         return Constants.TO;
     }
     
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.FinancialDocument#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
