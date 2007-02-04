@@ -23,8 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.DocumentHeader;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
@@ -195,8 +195,8 @@ public class RequisitionDocument extends PurchasingDocumentBase {
      * Perform logic needed to copy Requisition Document
      */
     @Override
-    public void convertIntoCopy() throws WorkflowException, ValidationException {
-        super.convertIntoCopy();
+    public void toCopy() throws WorkflowException, ValidationException {
+        super.toCopy();
 
         ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
 
@@ -321,11 +321,11 @@ public class RequisitionDocument extends PurchasingDocumentBase {
         if (this.getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
             
             if (SpringServiceLocator.getRequisitionService().isAutomaticPurchaseOrderAllowed(this)) {
-                PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(this);
+            PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(this);
                 //TODO how do we override the doc initiator?
                 try {
                     poDocument = (PurchaseOrderDocument)SpringServiceLocator.getDocumentService().routeDocument(poDocument, null, null);
-                }
+        }
                 catch (WorkflowException e) {
                     LOG.error("Error routing PO document: " + e.getMessage());
                     throw new RuntimeException("Error routing PO document: " + e.getMessage());
