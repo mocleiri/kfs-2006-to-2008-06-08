@@ -19,8 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.Constants;
-import org.kuali.core.bo.AccountingLineParser;
-import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.core.document.Copyable;
+import org.kuali.core.document.Correctable;
+import org.kuali.kfs.bo.AccountingLineParser;
+import org.kuali.kfs.document.AccountingDocumentBase;
 import org.kuali.module.financial.bo.PreEncumbranceDocumentAccountingLineParser;
 import org.kuali.module.gl.util.SufficientFundsItem;
 
@@ -29,7 +31,7 @@ import org.kuali.module.gl.util.SufficientFundsItem;
  * Plant work orders. These transactions are for the use of the account manager to earmark funds for which unofficial commitments
  * have already been made.
  */
-public class PreEncumbranceDocument extends TransactionalDocumentBase {
+public class PreEncumbranceDocument extends AccountingDocumentBase implements Copyable, Correctable{
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PreEncumbranceDocument.class);
 
     private java.sql.Date reversalDate;
