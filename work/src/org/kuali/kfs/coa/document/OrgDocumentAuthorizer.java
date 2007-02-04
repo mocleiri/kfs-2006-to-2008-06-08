@@ -22,7 +22,7 @@ import org.kuali.core.bo.user.KualiGroup;
 import org.kuali.core.bo.user.UniversalUser;
 
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.document.MaintenanceDocumentAuthorizerBase;
+import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase;
 import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.exceptions.GroupNotFoundException;
 import org.kuali.core.service.KualiConfigurationService;
