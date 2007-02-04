@@ -44,7 +44,7 @@ import org.springframework.beans.factory.BeanFactory;
 
 /**
  * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
- * @version $Id: OriginEntryTestBase.java,v 1.21.2.1 2006-07-26 21:52:17 abyrne Exp $
+ * @version $Id: OriginEntryTestBase.java,v 1.21.2.1.2.3 2006-09-06 22:38:50 tdurkin Exp $
  */
 public class OriginEntryTestBase extends KualiTestBaseWithSpringOnly {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryTestBase.class);
@@ -159,25 +159,27 @@ public class OriginEntryTestBase extends KualiTestBaseWithSpringOnly {
      * @param requiredEntries
      */
     protected void assertOriginEntries(int groupCount, EntryHolder[] requiredEntries) {
-
         persistenceService.getPersistenceBroker().clearCache();
 
         List groups = unitTestSqlDao.sqlSelect("select * from gl_origin_entry_grp_t order by origin_entry_grp_src_cd");
         assertEquals("Number of groups is wrong", groupCount, groups.size());
 
         Collection c = originEntryDao.testingGetAllEntries();
-        assertEquals("Wrong number of transactions in Origin Entry", requiredEntries.length, c.size());
 
-        // This is for debugging purposes
-         for (Iterator iter = groups.iterator(); iter.hasNext();) {
-         Map element = (Map) iter.next();
-         System.err.println("G:" + element.get("ORIGIN_ENTRY_GRP_ID") + " " + element.get("ORIGIN_ENTRY_GRP_SRC_CD"));
-         }
-        
-         for (Iterator iter = c.iterator(); iter.hasNext();) {
-         OriginEntry element = (OriginEntry) iter.next();
-         System.err.println("L:" + element.getEntryGroupId() + " " + element.getLine());
-         }
+        // This is for debugging purposes - change to true for output
+        if (true) {
+            for (Iterator iter = groups.iterator(); iter.hasNext();) {
+                Map element = (Map) iter.next();
+                System.err.println("G:" + element.get("ORIGIN_ENTRY_GRP_ID") + " " + element.get("ORIGIN_ENTRY_GRP_SRC_CD"));
+            }
+
+            for (Iterator iter = c.iterator(); iter.hasNext();) {
+                OriginEntry element = (OriginEntry) iter.next();
+                System.err.println("L:" + element.getEntryGroupId() + " " + element.getLine());
+            }
+        }
+
+        assertEquals("Wrong number of transactions in Origin Entry", requiredEntries.length, c.size());
 
         int count = 0;
         for (Iterator iter = c.iterator(); iter.hasNext();) {
@@ -235,7 +237,7 @@ public class OriginEntryTestBase extends KualiTestBaseWithSpringOnly {
 
     protected void setApplicationConfigurationFlag(String name, boolean value) {
         unitTestSqlDao.sqlCommand("delete from fs_parm_t where fs_scr_nm = 'SYSTEM' and fs_parm_nm = '" + name + "'");
-        unitTestSqlDao.sqlCommand("insert into fs_parm_t (fs_scr_nm,fs_parm_nm,obj_id,ver_nbr,fs_parm_txt,fs_parm_desc,fs_mult_val_ind," + "fs_parm_oper,fs_active_ind) values ('SYSTEM','" + name + "',SYS_GUID(),1,'" + (value ? "Y" : "N") + "','Y','N',null,'Y')");
+        unitTestSqlDao.sqlCommand("insert into fs_parm_t (fs_scr_nm,fs_parm_nm,obj_id,ver_nbr,fs_parm_txt,fs_parm_desc,fs_mult_val_ind" + ") values ('SYSTEM','" + name + "',SYS_GUID(),1,'" + (value ? "Y" : "N") + "','Y','N')");
     }
 
 

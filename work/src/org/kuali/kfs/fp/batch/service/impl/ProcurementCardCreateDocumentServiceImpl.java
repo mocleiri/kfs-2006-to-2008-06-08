@@ -1,21 +1,4 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
- * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/batch/service/impl/ProcurementCardCreateDocumentServiceImpl.java,v $
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
  * Kuali License Info
  */
 /*
@@ -93,7 +76,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * Implementation of ProcurementCardCreateDocumentService
  * 
  * @see org.kuali.module.financial.service.ProcurementCardCreateDocumentService
- * 
+ * @author Kuali Financial Transactions Team ()
  */
 public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCardCreateDocumentService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProcurementCardCreateDocumentServiceImpl.class);
@@ -154,12 +137,12 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
                 documentService.prepareWorkflowDocument(pcardDocument);
             
                 // calling workflow service to bypass business rule checks
-                if (!pcardDocument.getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
+              //  if (!pcardDocument.getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
                     workflowDocumentService.route(pcardDocument.getDocumentHeader().getWorkflowDocument(), "", null);
-                }
-                else {
-                    LOG.warn("Document " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + " is already ENROUTE. Route status out of sync with FP_DOC_HEADER_T");
-                }
+//                }
+//                else {
+//                    LOG.warn("Document " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + " is already ENROUTE. Route status out of sync with FP_DOC_HEADER_T");
+//                }
             }
             catch (WorkflowException e) {
                 LOG.error("Error routing document # " + pcardDocument.getDocumentHeader().getFinancialDocumentNumber() + " " + e.getMessage());
