@@ -242,7 +242,7 @@
                 <label>Acct Type Code</label>
                 <shortLabel>AcctType</shortLabel>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.AcctTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.AcctTypeValuesFinder" />
                 </control>
 
                 <summary>
@@ -253,7 +253,7 @@
 
             <attributeReference name="accountPhysicalCampusCode" sourceClassName="org.kuali.module.chart.bo.Campus" sourceAttributeName="campusCode">
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CampusValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.CampusValuesFinder" />
                 </control>
                 <description>The code for the physical campus of the institution on which the Account is located.</description>
 
@@ -353,7 +353,7 @@
                 <label>Account Restricted Status Code</label>
                 <shortLabel>RstrcStatCd</shortLabel>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.RestrictedStatusValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.RestrictedStatusValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -433,7 +433,7 @@
                 <description>The street address where the Account is managed. It is also the location to which standard financial reports are to be sent.</description>
             </attribute>
 
-            <attributeReference name="accountZipCode" sourceClassName="org.kuali.core.bo.PostalZipCode" sourceAttributeName="postalZipCode">
+            <attributeReference name="accountZipCode" sourceClassName="org.kuali.kfs.bo.PostalZipCode" sourceAttributeName="postalZipCode">
                 <label>Account Postal Code</label>
                 <shortLabel>ZipCode</shortLabel>
                 <required>true</required>
@@ -448,7 +448,7 @@
                 <shortLabel>FringeChart</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -499,7 +499,7 @@
                 <shortLabel>ContChartCd</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -598,7 +598,7 @@
                 <shortLabel>EndowChart</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -621,7 +621,7 @@
                 <shortLabel>CntrctChart</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -644,7 +644,7 @@
                 <shortLabel>IncStrChart</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -720,7 +720,7 @@
                 <shortLabel>IndCstChart</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -753,7 +753,7 @@
                 <shortLabel>BdgLevelCd</shortLabel>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.BudgetRecordingLevelCodeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.BudgetRecordingLevelCodeValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -766,7 +766,7 @@
                 <shortLabel>SuffFndsCd</shortLabel>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.SufficientFundsCodeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.SufficientFundsCodeValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
