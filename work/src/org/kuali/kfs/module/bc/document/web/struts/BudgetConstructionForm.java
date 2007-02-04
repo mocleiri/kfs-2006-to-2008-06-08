@@ -18,11 +18,11 @@ package org.kuali.module.budget.web.struts.form;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.budget.bo.BudgetConstructionHeader;
 import org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb;
 import org.kuali.module.budget.document.BudgetConstructionDocument;
-import org.kuali.core.util.SpringServiceLocator;
 
 
 public class BudgetConstructionForm extends KualiTransactionalDocumentFormBase {
