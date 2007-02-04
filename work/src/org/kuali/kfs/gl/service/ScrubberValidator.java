@@ -17,10 +17,10 @@ package org.kuali.module.gl.service;
 
 import java.util.List;
 
-import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.UniversityDate;
-import org.kuali.module.gl.util.Message;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 
 public interface ScrubberValidator {
     /**

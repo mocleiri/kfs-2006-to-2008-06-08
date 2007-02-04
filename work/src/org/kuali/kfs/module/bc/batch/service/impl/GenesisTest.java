@@ -16,10 +16,9 @@
 package org.kuali.module.budget.service.impl;
 
 import org.kuali.module.budget.service.*;
-import org.kuali.core.util.SpringServiceLocator.*;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.*;
 import org.kuali.core.util.*;
+import org.kuali.core.util.SpringServiceLocator.*;
 import org.kuali.core.bo.user.*;
 import org.kuali.module.budget.dao.ojb.*;
 
@@ -31,9 +30,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.workflow.*;
 //this is just for the logger, and could be taken out
-import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.*;
-import org.apache.log4j.Logger;
 import java.util.ResourceBundle;
 import org.kuali.Constants;
 
