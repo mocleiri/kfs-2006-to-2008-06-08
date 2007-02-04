@@ -25,7 +25,7 @@ import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.authorization.DocumentActionFlags;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
-import org.kuali.core.document.DocumentAuthorizerBase;
+import org.kuali.core.document.authorization.DocumentAuthorizerBase;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
