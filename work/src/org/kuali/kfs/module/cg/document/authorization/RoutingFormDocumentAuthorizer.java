@@ -21,7 +21,7 @@ import org.kuali.core.authorization.DocumentActionFlags;
 
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
-import org.kuali.core.document.DocumentAuthorizerBase;
+import org.kuali.core.document.authorization.DocumentAuthorizerBase;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 
 public class RoutingFormDocumentAuthorizer extends DocumentAuthorizerBase {

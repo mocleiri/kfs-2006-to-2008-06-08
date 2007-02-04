@@ -15,16 +15,17 @@
  */
 package org.kuali.module.cg.maintenance;
 
+import static org.kuali.PropertyConstants.PROPOSAL_SUBCONTRACTORS;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
-import static org.kuali.PropertyConstants.PROPOSAL_SUBCONTRACTORS;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.AssertionUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Proposal;
 import org.kuali.module.cg.bo.ProposalResearchRisk;
 import org.kuali.module.cg.bo.ProposalSubcontractor;
