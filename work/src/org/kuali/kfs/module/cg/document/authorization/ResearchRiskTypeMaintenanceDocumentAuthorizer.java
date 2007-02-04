@@ -18,7 +18,7 @@ package org.kuali.module.kra.routingform.document;
 import org.kuali.core.authorization.MaintenanceDocumentAuthorizations;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.document.MaintenanceDocumentAuthorizerBase;
+import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.kra.KraPropertyConstants;
 import org.kuali.module.kra.routingform.bo.ResearchRiskType;

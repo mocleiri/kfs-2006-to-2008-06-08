@@ -20,6 +20,7 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.core.datadictionary.validation.fieldlevel.PhoneNumberValidationPattern;
+import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
@@ -139,8 +140,8 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
     boolean validateTotDollarAmtIsLessThanPOTotLimit(PurchasingDocument document) {
         boolean valid = true;
         if (ObjectUtils.isNotNull(document.getPurchaseOrderTotalLimit()) &&
-              ObjectUtils.isNotNull(document.getTotalDollarAmount())) {
-            if (document.getTotalDollarAmount().isGreaterThan(document.getPurchaseOrderTotalLimit())) {
+              ObjectUtils.isNotNull(((AmountTotaling) document).getTotalDollarAmount())) {
+            if (((AmountTotaling) document).getTotalDollarAmount().isGreaterThan(document.getPurchaseOrderTotalLimit())) {
                 GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_TOTAL_LIMIT, 
                   PurapKeyConstants.REQ_TOTAL_GREATER_THAN_PO_TOTAL_LIMIT);
                 valid &= false;

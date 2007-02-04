@@ -338,7 +338,7 @@
                                 <campusPlantAccount class="org.kuali.module.chart.bo.Account--EnhancerByCGLIB--d41c531c" />
                                 <organizationPlantChart reference="../../../chartOfAccounts" />
                                 <campusPlantChart reference="../../../chartOfAccounts" />
-                                <postalZip class="org.kuali.core.bo.PostalZipCode--EnhancerByCGLIB--386998e7" />
+                                <postalZip class="org.kuali.kfs.bo.PostalZipCode--EnhancerByCGLIB--386998e7" />
                                 <organizationDefaultAccountNumber>1919330</organizationDefaultAccountNumber>
                                 <chartOfAccountsCode>UA</chartOfAccountsCode>
                                 <objectId>014F3DAF7F85A448E043814FD28EA448</objectId>
@@ -350,7 +350,7 @@
                             <campusPlantAccount class="org.kuali.module.chart.bo.Account--EnhancerByCGLIB--d41c531c" />
                             <organizationPlantChart reference="../../chartOfAccounts" />
                             <campusPlantChart reference="../../chartOfAccounts" />
-                            <postalZip class="org.kuali.core.bo.PostalZipCode--EnhancerByCGLIB--386998e7">
+                            <postalZip class="org.kuali.kfs.bo.PostalZipCode--EnhancerByCGLIB--386998e7">
                                 <postalZipCode>47405</postalZipCode>
                                 <postalStateCode>IN</postalStateCode>
                                 <postalCityName>BLOOMINGTON</postalCityName>
@@ -370,7 +370,7 @@
                             <extendedAttributeValues />
                             <versionNumber>1</versionNumber>
                         </organization>
-                        <personOrigination class="org.kuali.core.bo.OriginationCode--EnhancerByCGLIB--fcc8c248">
+                        <personOrigination class="org.kuali.kfs.bo.OriginationCode--EnhancerByCGLIB--fcc8c248">
                             <financialSystemOriginationCode>01</financialSystemOriginationCode>
                             <nextFinancialDocumentNumber>80342</nextFinancialDocumentNumber>
                             <financialSystemServerName>KULDBA</financialSystemServerName>
@@ -650,7 +650,7 @@
                     <universityFiscalPeriodStatusCode>O</universityFiscalPeriodStatusCode>
                     <budgetRolloverIndicator>false</budgetRolloverIndicator>
                     <universityFiscalPeriodEndDate>2006-06-30</universityFiscalPeriodEndDate>
-                    <options class="org.kuali.core.bo.Options--EnhancerByCGLIB--24f9e54b">
+                    <options class="org.kuali.kfs.bo.Options--EnhancerByCGLIB--24f9e54b">
                         <universityFiscalYear>2006</universityFiscalYear>
                         <actualFinancialBalanceTypeCd>AC</actualFinancialBalanceTypeCd>
                         <budgetCheckingBalanceTypeCd>CB</budgetCheckingBalanceTypeCd>
@@ -846,7 +846,7 @@
                     <universityFiscalPeriodStatusCode>O</universityFiscalPeriodStatusCode>
                     <budgetRolloverIndicator>false</budgetRolloverIndicator>
                     <universityFiscalPeriodEndDate>2004-07-06</universityFiscalPeriodEndDate>
-                    <options class="org.kuali.core.bo.Options--EnhancerByCGLIB--24f9e54b">
+                    <options class="org.kuali.kfs.bo.Options--EnhancerByCGLIB--24f9e54b">
                         <universityFiscalYear>2004</universityFiscalYear>
                         <actualFinancialBalanceTypeCd>AC</actualFinancialBalanceTypeCd>
                         <budgetCheckingBalanceTypeCd>CB</budgetCheckingBalanceTypeCd>
@@ -1094,7 +1094,7 @@
                     </org.kuali.core.bo.TargetAccountingLine>
                 </targetAccountingLines>
                 <generalLedgerPendingEntries class="org.apache.ojb.broker.core.proxy.ListProxyDefaultImpl">
-                    <org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
+                    <org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
                         <financialSystemOriginationCode>01</financialSystemOriginationCode>
                         <documentNumber>162838</documentNumber>
                         <transactionLedgerEntrySequenceNumber>1</transactionLedgerEntrySequenceNumber>
@@ -1122,8 +1122,8 @@
                         <acctSufficientFundsFinObjCd>N/A</acctSufficientFundsFinObjCd>
                         <transactionEntryOffsetIndicator>false</transactionEntryOffsetIndicator>
                         <transactionEntryProcessedTs>2006-06-13</transactionEntryProcessedTs>
-                        <documentType class="org.kuali.core.document.DocumentType--EnhancerByCGLIB--b97b4f17" />
-                        <documentHeader class="org.kuali.core.document.DocumentHeader--EnhancerByCGLIB--28833962" />
+                        <documentType class="org.kuali.core.bo.DocumentType--EnhancerByCGLIB--b97b4f17" />
+                        <documentHeader class="org.kuali.core.bo.DocumentHeader--EnhancerByCGLIB--28833962" />
                         <option reference="../../../accountingPeriod/options" />
                         <chart reference="../../../../kualiTransactionalDocumentInformation/documentInitiator/kualiUser/chartResponsibilities/entry/org.kuali.module.chart.bo.Chart/reportsToChartOfAccounts" />
                         <account reference="../../../sourceAccountingLines/org.kuali.core.bo.SourceAccountingLine/account" />
@@ -1142,8 +1142,8 @@
                         </dummyBusinessObject>
                         <objectId>9EAE5A75-F00E-D5F8-04F2-BBA9348E8FBC</objectId>
                         <versionNumber>2</versionNumber>
-                    </org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
-                    <org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
+                    </org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
+                    <org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
                         <financialSystemOriginationCode>01</financialSystemOriginationCode>
                         <documentNumber>162838</documentNumber>
                         <transactionLedgerEntrySequenceNumber>2</transactionLedgerEntrySequenceNumber>
@@ -1171,8 +1171,8 @@
                         <acctSufficientFundsFinObjCd>N/A</acctSufficientFundsFinObjCd>
                         <transactionEntryOffsetIndicator>true</transactionEntryOffsetIndicator>
                         <transactionEntryProcessedTs>2006-06-13</transactionEntryProcessedTs>
-                        <documentType class="org.kuali.core.document.DocumentType--EnhancerByCGLIB--b97b4f17" />
-                        <documentHeader class="org.kuali.core.document.DocumentHeader--EnhancerByCGLIB--28833962" />
+                        <documentType class="org.kuali.core.bo.DocumentType--EnhancerByCGLIB--b97b4f17" />
+                        <documentHeader class="org.kuali.core.bo.DocumentHeader--EnhancerByCGLIB--28833962" />
                         <option reference="../../../accountingPeriod/options" />
                         <chart reference="../../../../kualiTransactionalDocumentInformation/documentInitiator/kualiUser/chartResponsibilities/entry/org.kuali.module.chart.bo.Chart/reportsToChartOfAccounts" />
                         <account reference="../../../sourceAccountingLines/org.kuali.core.bo.SourceAccountingLine/account" />
@@ -1185,12 +1185,12 @@
                         <dummyBusinessObject>
                             <pendingEntryOption />
                             <consolidationOption />
-                            <genericAmount reference="../../../org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8/dummyBusinessObject/genericAmount" />
+                            <genericAmount reference="../../../org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8/dummyBusinessObject/genericAmount" />
                         </dummyBusinessObject>
                         <objectId>CA65C50D-DCBB-BF6F-54C2-9EDE9648D91A</objectId>
                         <versionNumber>1</versionNumber>
-                    </org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
-                    <org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
+                    </org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
+                    <org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
                         <financialSystemOriginationCode>01</financialSystemOriginationCode>
                         <documentNumber>162838</documentNumber>
                         <transactionLedgerEntrySequenceNumber>3</transactionLedgerEntrySequenceNumber>
@@ -1218,8 +1218,8 @@
                         <acctSufficientFundsFinObjCd>N/A</acctSufficientFundsFinObjCd>
                         <transactionEntryOffsetIndicator>false</transactionEntryOffsetIndicator>
                         <transactionEntryProcessedTs>2006-06-13</transactionEntryProcessedTs>
-                        <documentType class="org.kuali.core.document.DocumentType--EnhancerByCGLIB--b97b4f17" />
-                        <documentHeader class="org.kuali.core.document.DocumentHeader--EnhancerByCGLIB--28833962" />
+                        <documentType class="org.kuali.core.bo.DocumentType--EnhancerByCGLIB--b97b4f17" />
+                        <documentHeader class="org.kuali.core.bo.DocumentHeader--EnhancerByCGLIB--28833962" />
                         <option reference="../../../accountingPeriod/options" />
                         <chart reference="../../../../kualiTransactionalDocumentInformation/documentInitiator/kualiUser/chartResponsibilities/entry/org.kuali.module.chart.bo.Chart/reportsToChartOfAccounts" />
                         <account reference="../../../targetAccountingLines/org.kuali.core.bo.TargetAccountingLine/account" />
@@ -1232,12 +1232,12 @@
                         <dummyBusinessObject>
                             <pendingEntryOption />
                             <consolidationOption />
-                            <genericAmount reference="../../../org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8/dummyBusinessObject/genericAmount" />
+                            <genericAmount reference="../../../org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8/dummyBusinessObject/genericAmount" />
                         </dummyBusinessObject>
                         <objectId>9881EE70-0C0A-5087-3694-222D060F98CA</objectId>
                         <versionNumber>2</versionNumber>
-                    </org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
-                    <org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
+                    </org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
+                    <org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
                         <financialSystemOriginationCode>01</financialSystemOriginationCode>
                         <documentNumber>162838</documentNumber>
                         <transactionLedgerEntrySequenceNumber>4</transactionLedgerEntrySequenceNumber>
@@ -1265,8 +1265,8 @@
                         <acctSufficientFundsFinObjCd>N/A</acctSufficientFundsFinObjCd>
                         <transactionEntryOffsetIndicator>true</transactionEntryOffsetIndicator>
                         <transactionEntryProcessedTs>2006-06-13</transactionEntryProcessedTs>
-                        <documentType class="org.kuali.core.document.DocumentType--EnhancerByCGLIB--b97b4f17" />
-                        <documentHeader class="org.kuali.core.document.DocumentHeader--EnhancerByCGLIB--28833962" />
+                        <documentType class="org.kuali.core.bo.DocumentType--EnhancerByCGLIB--b97b4f17" />
+                        <documentHeader class="org.kuali.core.bo.DocumentHeader--EnhancerByCGLIB--28833962" />
                         <option reference="../../../accountingPeriod/options" />
                         <chart reference="../../../../kualiTransactionalDocumentInformation/documentInitiator/kualiUser/chartResponsibilities/entry/org.kuali.module.chart.bo.Chart/reportsToChartOfAccounts" />
                         <account reference="../../../targetAccountingLines/org.kuali.core.bo.TargetAccountingLine/account" />
@@ -1279,11 +1279,11 @@
                         <dummyBusinessObject>
                             <pendingEntryOption />
                             <consolidationOption />
-                            <genericAmount reference="../../../org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8/dummyBusinessObject/genericAmount" />
+                            <genericAmount reference="../../../org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8/dummyBusinessObject/genericAmount" />
                         </dummyBusinessObject>
                         <objectId>07B5F8E9-336C-AF51-C809-B1BE6A0BF578</objectId>
                         <versionNumber>1</versionNumber>
-                    </org.kuali.module.gl.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
+                    </org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
                 </generalLedgerPendingEntries>
                 <documentNumber>162838</documentNumber>
                 <documentHeader>
