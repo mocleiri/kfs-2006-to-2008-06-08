@@ -23,29 +23,29 @@ import java.util.List;
 
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.AccountingLineParser;
-import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.core.document.Copyable;
+import org.kuali.core.document.Correctable;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
+import org.kuali.kfs.bo.AccountingLineParser;
+import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
+import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLineParser;
 import org.kuali.module.financial.bo.FiscalYearFunctionControl;
 import org.kuali.module.financial.rules.BudgetAdjustmentDocumentRule;
-import org.kuali.module.financial.rules.TransactionalDocumentRuleUtil;
-import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * This is the business object that represents the BudgetAdjustment document in Kuali.
- * 
- * 
  */
-public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
+public class BudgetAdjustmentDocument extends AccountingDocumentBase implements Copyable, Correctable {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetAdjustmentDocument.class);
 
     private Integer nextPositionSourceLineNumber;
@@ -172,7 +172,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (TransactionalDocumentRuleUtil.isIncome(line)) {
+            if (AccountingDocumentRuleUtil.isIncome(line)) {
                 total = total.add(line.getCurrentBudgetAdjustmentAmount());
             }
         }
@@ -190,7 +190,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (TransactionalDocumentRuleUtil.isExpense(line)) {
+            if (AccountingDocumentRuleUtil.isExpense(line)) {
                 total = total.add(line.getCurrentBudgetAdjustmentAmount());
             }
         }
@@ -233,7 +233,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (TransactionalDocumentRuleUtil.isIncome(line)) {
+            if (AccountingDocumentRuleUtil.isIncome(line)) {
                 total = total.add(line.getCurrentBudgetAdjustmentAmount());
             }
         }
@@ -251,7 +251,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (TransactionalDocumentRuleUtil.isExpense(line)) {
+            if (AccountingDocumentRuleUtil.isExpense(line)) {
                 total = total.add(line.getCurrentBudgetAdjustmentAmount());
             }
         }
@@ -295,7 +295,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (TransactionalDocumentRuleUtil.isIncome(line)) {
+            if (AccountingDocumentRuleUtil.isIncome(line)) {
                 total = total.add(line.getBaseBudgetAdjustmentAmount());
             }
         }
@@ -313,7 +313,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (TransactionalDocumentRuleUtil.isExpense(line)) {
+            if (AccountingDocumentRuleUtil.isExpense(line)) {
                 total = total.add(line.getBaseBudgetAdjustmentAmount());
             }
         }
@@ -356,7 +356,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (TransactionalDocumentRuleUtil.isIncome(line)) {
+            if (AccountingDocumentRuleUtil.isIncome(line)) {
                 total = total.add(line.getBaseBudgetAdjustmentAmount());
             }
         }
@@ -374,7 +374,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (TransactionalDocumentRuleUtil.isExpense(line)) {
+            if (AccountingDocumentRuleUtil.isExpense(line)) {
                 total = total.add(line.getBaseBudgetAdjustmentAmount());
             }
         }
@@ -396,8 +396,8 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
      * @see org.kuali.core.document.TransactionalDocumentBase#convertIntoErrorCorrection()
      */
     @Override
-    public void convertIntoErrorCorrection() throws WorkflowException {
-        super.convertIntoErrorCorrection();
+    public void toErrorCorrection() throws WorkflowException {
+        super.toErrorCorrection();
 
         if (this.getSourceAccountingLines() != null) {
             for (Iterator iter = this.getSourceAccountingLines().iterator(); iter.hasNext();) {
@@ -478,23 +478,7 @@ public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     public boolean getAllowsErrorCorrection() {
         return true;
     }
-
-    /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getNullOrReasonNotToCopy(java.lang.String, boolean)
-     */
-    @Override
-    protected String getNullOrReasonNotToCopy(String actionGerund, boolean ddAllows) {
-        return null;
-    }
-
-    /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getNullOrReasonNotToErrorCorrect()
-     */
-    @Override
-    protected String getNullOrReasonNotToErrorCorrect() {
-        return null;
-    }
-    
+  
     /**
      * @see org.kuali.core.document.TransactionalDocumentBase#getSourceAccountingLinesSectionTitle()
      */
