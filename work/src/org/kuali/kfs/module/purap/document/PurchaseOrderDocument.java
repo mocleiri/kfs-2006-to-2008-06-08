@@ -148,7 +148,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         this.setVendorStateCode(requisitionDocument.getVendorStateCode());
         this.setExternalOrganizationB2bSupplierIdentifier(requisitionDocument.getExternalOrganizationB2bSupplierIdentifier());
         this.setRequisitionSourceCode(requisitionDocument.getRequisitionSourceCode());
-        
+
         this.setStatusCode(PurapConstants.PurchaseOrderStatuses.IN_PROCESS);
         //copy items from req to pending (which will copy the item's accounts and assets)
 //        List items = new ArrayList();
@@ -463,7 +463,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         String vendorNumber = "";
         if( this.alternateVendorHeaderGeneratedIdentifier != null ) {
             hdrGenId = this.alternateVendorHeaderGeneratedIdentifier.toString();
-        }
+}
         if( this.alternateVendorDetailAssignedIdentifier != null ) {
             detAssgndId = this.alternateVendorDetailAssignedIdentifier.toString();
         }
@@ -472,7 +472,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         }
         return vendorNumber;
     }
-
+    
     /**
      * Sets the alternateVendorNumber attribute value.
      * @param alternateVendorNumber The vendorNumber to set.
