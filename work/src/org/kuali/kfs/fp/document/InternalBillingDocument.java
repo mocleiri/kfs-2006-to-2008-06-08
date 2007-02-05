@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.Constants;
+import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.core.util.KualiDecimal;
@@ -34,7 +35,7 @@ import org.kuali.module.financial.bo.InternalBillingItem;
  * eventually post transactions to the G/L. It integrates with workflow and also contains two groupings of accounting lines: Expense
  * and Income.
  */
-public class InternalBillingDocument extends AccountingDocumentBase implements Copyable, Correctable{
+public class InternalBillingDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling{
 
     private List items;
     private Integer nextItemLineNumber;
