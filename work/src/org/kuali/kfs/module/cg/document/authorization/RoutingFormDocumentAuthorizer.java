@@ -17,10 +17,10 @@ package org.kuali.module.kra.routingform.document;
 
 import java.util.Map;
 
-import org.kuali.core.authorization.DocumentActionFlags;
 
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.document.authorization.DocumentAuthorizerBase;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 
