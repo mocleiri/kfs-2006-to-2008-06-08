@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
+import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
@@ -45,7 +46,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 /**
  * This is the business object that represents the BudgetAdjustment document in Kuali.
  */
-public class BudgetAdjustmentDocument extends AccountingDocumentBase implements Copyable, Correctable {
+public class BudgetAdjustmentDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetAdjustmentDocument.class);
 
     private Integer nextPositionSourceLineNumber;
