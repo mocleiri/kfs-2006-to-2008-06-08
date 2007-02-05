@@ -16,6 +16,7 @@
 package org.kuali.module.financial.document;
 
 import org.kuali.Constants;
+import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.core.exceptions.InfrastructureException;
@@ -27,7 +28,7 @@ import org.kuali.kfs.document.AccountingDocumentBase;
 import org.kuali.module.financial.bo.IndirectCostAdjustmentDocumentAccountingLineParser;
 import org.kuali.module.financial.rules.IndirectCostAdjustmentDocumentRuleConstants;
 
-public class IndirectCostAdjustmentDocument extends AccountingDocumentBase implements Copyable, Correctable{
+public class IndirectCostAdjustmentDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling{
 
     /**
      * 
