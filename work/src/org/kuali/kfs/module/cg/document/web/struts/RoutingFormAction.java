@@ -28,6 +28,7 @@ import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.web.struts.form.BudgetOverviewFormHelper;
 import org.kuali.module.kra.routingform.bo.RoutingFormBudget;
+import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
 import org.kuali.module.kra.routingform.rules.event.RunRoutingFormAuditEvent;
 import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
 import org.kuali.module.kra.web.struts.action.ResearchDocumentActionBase;
@@ -49,14 +50,22 @@ public class RoutingFormAction extends ResearchDocumentActionBase {
     public ActionForward mainpage(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         RoutingForm routingForm = (RoutingForm) form;
         routingForm.setTabStates(new ArrayList());
-        routingForm.setProjectTypes(SpringServiceLocator.getProjectTypeService().getProjectTypes());
-        routingForm.setSubmissionTypes(SpringServiceLocator.getSubmissionTypeService().getSubmissionTypes());
-        routingForm.setPurposes(SpringServiceLocator.getPurposeService().getPurposes());
+        
+        SpringServiceLocator.getRoutingFormMainPageService().initializeRoutingFormMainPage(routingForm);
         
         return mapping.findForward("mainpage");
     }
     
     public ActionForward personnel(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        RoutingForm routingForm = (RoutingForm) form;
+        
+        routingForm.setTabStates(new ArrayList());
+        
+        // Make sure all the reference objects fields are filled. Since most pages don't care about them this is important.
+        for(RoutingFormPersonnel routingFormPerson : routingForm.getRoutingFormDocument().getRoutingFormPersonnel()) {
+            routingFormPerson.refresh();
+        }
+        
         return mapping.findForward("personnel");
     }
     
