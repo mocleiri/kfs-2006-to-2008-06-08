@@ -155,7 +155,7 @@
         <foreignkey field-ref="accountPhysicalCampusCode" />
     </reference-descriptor>
 
-    <reference-descriptor name="accountState" class-ref="org.kuali.core.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+    <reference-descriptor name="accountState" class-ref="org.kuali.kfs.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="accountStateCode" />
     </reference-descriptor>
 
@@ -1080,7 +1080,7 @@
         <foreignkey field-ref="accountPhysicalCampusCode" />
     </reference-descriptor>
 
-    <reference-descriptor name="accountState" class-ref="org.kuali.core.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+    <reference-descriptor name="accountState" class-ref="org.kuali.kfs.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="accountStateCode" />
     </reference-descriptor>
 
@@ -1446,7 +1446,7 @@
         <foreignkey field-ref="financialHigherEdFunctionCd" />
     </reference-descriptor>
 
-    <reference-descriptor name="accountState" class-ref="org.kuali.core.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+    <reference-descriptor name="accountState" class-ref="org.kuali.kfs.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="accountStateCode" />
     </reference-descriptor>
 
