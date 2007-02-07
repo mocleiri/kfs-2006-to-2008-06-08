@@ -1,7 +1,5 @@
 <%--
- Copyright 2005-2006 The Kuali Foundation.
- 
- $Source$
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -62,8 +60,6 @@ Copyright 2005-2007  The Kuali Foundation.  All rights reserved.  Kuali is licen
 <p>This product includes software developed by the JA-SIG Collaborative (<span class="nobr"><a href="http://www.ja-sig.org/" title="ja-sig" rel="nofollow">http://www.ja-sig.org/</a></span>).</p>
 
 <p>This product includes Cross-Browser XMLHttpRequest v1.1 by Andrew Gregory (<span class="nobr"><a href="http://www.scss.com.au/family/andrew/webdesign/xmlhttprequest/" title="xmlhttprequest" rel="nofollow">http://www.scss.com.au/family/andrew/webdesign/xmlhttprequest/</a></span>).</p>
-
-<p>This product includes Random GUID v1.2.1 by Marc A. Mnich.  Licensed under GNU Lesser General Public License (<span class="nobr"><a href="http://www.opensource.org/licenses/lgpl-license.php" title="LGPL" rel="nofollow">http://www.opensource.org/licenses/lgpl-license.php</a></span>).</p>
 
 <p>This product includes software copyrighted under the Lesser General Public License (<span class="nobr"><a href="http://www.opensource.org/licenses/lgpl-license.php" title="LGPL" rel="nofollow">http://www.opensource.org/licenses/lgpl-license.php</a></span>).</p>
 
