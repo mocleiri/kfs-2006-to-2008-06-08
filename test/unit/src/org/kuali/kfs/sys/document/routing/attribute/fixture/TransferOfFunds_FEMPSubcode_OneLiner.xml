@@ -896,7 +896,7 @@
                 <nextSourceLineNumber>2</nextSourceLineNumber>
                 <nextTargetLineNumber>2</nextTargetLineNumber>
                 <sourceAccountingLines class="org.apache.ojb.broker.core.proxy.ListProxyDefaultImpl">
-                    <org.kuali.core.bo.SourceAccountingLine>
+                    <org.kuali.kfs.bo.SourceAccountingLine>
                         <documentNumber>162838</documentNumber>
                         <sequenceNumber>1</sequenceNumber>
                         <postingYear>2004</postingYear>
@@ -908,7 +908,7 @@
                         <accountExpiredOverrideNeeded>false</accountExpiredOverrideNeeded>
                         <objectBudgetOverride>false</objectBudgetOverride>
                         <objectBudgetOverrideNeeded>false</objectBudgetOverrideNeeded>
-                        <ojbConcreteClass>org.kuali.core.bo.SourceAccountingLine</ojbConcreteClass>
+                        <ojbConcreteClass>org.kuali.kfs.bo.SourceAccountingLine</ojbConcreteClass>
                         <chartOfAccountsCode>BL</chartOfAccountsCode>
                         <accountNumber>2823205</accountNumber>
                         <financialObjectCode>9900</financialObjectCode>
@@ -991,10 +991,10 @@
                         <subObjectCode class="org.kuali.module.chart.bo.SubObjCd--EnhancerByCGLIB--bd1d55b5" />
                         <objectId>45ED80A3-939E-09B9-E41E-9579F2722C5C</objectId>
                         <versionNumber>2</versionNumber>
-                    </org.kuali.core.bo.SourceAccountingLine>
+                    </org.kuali.kfs.bo.SourceAccountingLine>
                 </sourceAccountingLines>
                 <targetAccountingLines class="org.apache.ojb.broker.core.proxy.ListProxyDefaultImpl">
-                    <org.kuali.core.bo.TargetAccountingLine>
+                    <org.kuali.kfs.bo.TargetAccountingLine>
                         <documentNumber>162838</documentNumber>
                         <sequenceNumber>1</sequenceNumber>
                         <postingYear>2004</postingYear>
@@ -1006,7 +1006,7 @@
                         <accountExpiredOverrideNeeded>false</accountExpiredOverrideNeeded>
                         <objectBudgetOverride>false</objectBudgetOverride>
                         <objectBudgetOverrideNeeded>false</objectBudgetOverrideNeeded>
-                        <ojbConcreteClass>org.kuali.core.bo.TargetAccountingLine</ojbConcreteClass>
+                        <ojbConcreteClass>org.kuali.kfs.bo.TargetAccountingLine</ojbConcreteClass>
                         <chartOfAccountsCode>BL</chartOfAccountsCode>
                         <accountNumber>2831410</accountNumber>
                         <financialObjectCode>9915</financialObjectCode>
@@ -1091,7 +1091,7 @@
                         <subObjectCode class="org.kuali.module.chart.bo.SubObjCd--EnhancerByCGLIB--bd1d55b5" />
                         <objectId>F79F0D97-A0E1-4191-0CD7-3F5DF9651F9E</objectId>
                         <versionNumber>2</versionNumber>
-                    </org.kuali.core.bo.TargetAccountingLine>
+                    </org.kuali.kfs.bo.TargetAccountingLine>
                 </targetAccountingLines>
                 <generalLedgerPendingEntries class="org.apache.ojb.broker.core.proxy.ListProxyDefaultImpl">
                     <org.kuali.kfs.bo.GeneralLedgerPendingEntry--EnhancerByCGLIB--bb96c9d8>
@@ -1126,9 +1126,9 @@
                         <documentHeader class="org.kuali.core.bo.DocumentHeader--EnhancerByCGLIB--28833962" />
                         <option reference="../../../accountingPeriod/options" />
                         <chart reference="../../../../kualiTransactionalDocumentInformation/documentInitiator/kualiUser/chartResponsibilities/entry/org.kuali.module.chart.bo.Chart/reportsToChartOfAccounts" />
-                        <account reference="../../../sourceAccountingLines/org.kuali.core.bo.SourceAccountingLine/account" />
+                        <account reference="../../../sourceAccountingLines/org.kuali.kfs.bo.SourceAccountingLine/account" />
                         <subAccount class="org.kuali.module.chart.bo.SubAccount--EnhancerByCGLIB--c8c24cf2" />
-                        <financialObject reference="../../../sourceAccountingLines/org.kuali.core.bo.SourceAccountingLine/objectCode" />
+                        <financialObject reference="../../../sourceAccountingLines/org.kuali.kfs.bo.SourceAccountingLine/objectCode" />
                         <subObjectCode class="org.kuali.module.chart.bo.SubObjCd--EnhancerByCGLIB--bd1d55b5" />
                         <balanceType reference="../../../accountingPeriodKey/options/balanceTyp" />
                         <objectType class="org.kuali.module.chart.bo.ObjectType--EnhancerByCGLIB--e280771e" />
@@ -1175,7 +1175,7 @@
                         <documentHeader class="org.kuali.core.bo.DocumentHeader--EnhancerByCGLIB--28833962" />
                         <option reference="../../../accountingPeriod/options" />
                         <chart reference="../../../../kualiTransactionalDocumentInformation/documentInitiator/kualiUser/chartResponsibilities/entry/org.kuali.module.chart.bo.Chart/reportsToChartOfAccounts" />
-                        <account reference="../../../sourceAccountingLines/org.kuali.core.bo.SourceAccountingLine/account" />
+                        <account reference="../../../sourceAccountingLines/org.kuali.kfs.bo.SourceAccountingLine/account" />
                         <subAccount class="org.kuali.module.chart.bo.SubAccount--EnhancerByCGLIB--c8c24cf2" />
                         <financialObject class="org.kuali.module.chart.bo.ObjectCode--EnhancerByCGLIB--7a1de89" />
                         <subObjectCode class="org.kuali.module.chart.bo.SubObjCd--EnhancerByCGLIB--bd1d55b5" />
@@ -1222,9 +1222,9 @@
                         <documentHeader class="org.kuali.core.bo.DocumentHeader--EnhancerByCGLIB--28833962" />
                         <option reference="../../../accountingPeriod/options" />
                         <chart reference="../../../../kualiTransactionalDocumentInformation/documentInitiator/kualiUser/chartResponsibilities/entry/org.kuali.module.chart.bo.Chart/reportsToChartOfAccounts" />
-                        <account reference="../../../targetAccountingLines/org.kuali.core.bo.TargetAccountingLine/account" />
+                        <account reference="../../../targetAccountingLines/org.kuali.kfs.bo.TargetAccountingLine/account" />
                         <subAccount class="org.kuali.module.chart.bo.SubAccount--EnhancerByCGLIB--c8c24cf2" />
-                        <financialObject reference="../../../targetAccountingLines/org.kuali.core.bo.TargetAccountingLine/objectCode" />
+                        <financialObject reference="../../../targetAccountingLines/org.kuali.kfs.bo.TargetAccountingLine/objectCode" />
                         <subObjectCode class="org.kuali.module.chart.bo.SubObjCd--EnhancerByCGLIB--bd1d55b5" />
                         <balanceType reference="../../../accountingPeriodKey/options/balanceTyp" />
                         <objectType class="org.kuali.module.chart.bo.ObjectType--EnhancerByCGLIB--e280771e" />
@@ -1269,7 +1269,7 @@
                         <documentHeader class="org.kuali.core.bo.DocumentHeader--EnhancerByCGLIB--28833962" />
                         <option reference="../../../accountingPeriod/options" />
                         <chart reference="../../../../kualiTransactionalDocumentInformation/documentInitiator/kualiUser/chartResponsibilities/entry/org.kuali.module.chart.bo.Chart/reportsToChartOfAccounts" />
-                        <account reference="../../../targetAccountingLines/org.kuali.core.bo.TargetAccountingLine/account" />
+                        <account reference="../../../targetAccountingLines/org.kuali.kfs.bo.TargetAccountingLine/account" />
                         <subAccount class="org.kuali.module.chart.bo.SubAccount--EnhancerByCGLIB--c8c24cf2" />
                         <financialObject class="org.kuali.module.chart.bo.ObjectCode--EnhancerByCGLIB--7a1de89" />
                         <subObjectCode class="org.kuali.module.chart.bo.SubObjCd--EnhancerByCGLIB--bd1d55b5" />

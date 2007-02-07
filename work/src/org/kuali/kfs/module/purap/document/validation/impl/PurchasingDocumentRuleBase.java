@@ -29,8 +29,10 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
+import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
+import org.kuali.module.purap.util.PhoneNumberUtils;
 
 public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumentRuleBase {
 
@@ -40,6 +42,12 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
         return valid;
     }
     
+    boolean processAdditionalValidation(PurchasingDocument document) {
+        boolean valid = true;
+        valid = validateTotDollarAmtIsLessThanPOTotLimit(document);
+        return valid;
+    }
+
     boolean processVendorValidation(PurchasingDocument document) {
         boolean valid = true;
         ErrorMap errorMap = GlobalVariables.getErrorMap();
@@ -99,12 +107,6 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
         return valid;
     }
 
-    boolean processAdditionalValidation(PurchasingDocument document) {
-        boolean valid = true;
-        // TODO code validation
-        return valid;
-    }
-
     /**
      * This method is the implementation of the rule that if a document has a recurring payment
      * begin date and end date, the begin date should come before the end date.  In EPIC, we needed
@@ -142,10 +144,15 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
         if (ObjectUtils.isNotNull(document.getPurchaseOrderTotalLimit()) &&
               ObjectUtils.isNotNull(((AmountTotaling) document).getTotalDollarAmount())) {
             if (((AmountTotaling) document).getTotalDollarAmount().isGreaterThan(document.getPurchaseOrderTotalLimit())) {
+                if (document instanceof PurchaseOrderDocument) {
+                    // TODO: issue a warning here.
+                }
+                if (document instanceof RequisitionDocument) {
                 GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_TOTAL_LIMIT, 
                   PurapKeyConstants.REQ_TOTAL_GREATER_THAN_PO_TOTAL_LIMIT);
                 valid &= false;
             }
+        } 
         } 
         return valid;
     }
