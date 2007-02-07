@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ import org.kuali.module.kra.budget.bo.BudgetIndirectCostLookup;
 import org.kuali.module.kra.budget.bo.BudgetModularPeriod;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
-import org.kuali.module.kra.budget.bo.BudgetPurposeCode;
 import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost;
 import org.kuali.module.kra.budget.bo.IndirectCostLookup;
@@ -541,16 +540,6 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
         fieldValues.put(PropertyConstants.ACTIVE, Constants.ACTIVE_INDICATOR);
         
         return new ArrayList(businessObjectService.findMatching(BudgetBaseCode.class, fieldValues));
-    }
-    
-    /**
-     * @see org.kuali.module.kra.budget.service.BudgetIndirectCostService#getDefaultBudgetPurposeCodeValues()
-     */
-    public List<BudgetPurposeCode> getDefaultBudgetPurposeCodeValues() {
-        Map fieldValues = new HashMap();
-        fieldValues.put(PropertyConstants.ACTIVE, Constants.ACTIVE_INDICATOR);
-        
-        return new ArrayList(businessObjectService.findMatching(BudgetPurposeCode.class, fieldValues));
     }
 
     /**
