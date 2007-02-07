@@ -20,8 +20,9 @@
 <c:set var="routingFormProjectTypeAttributes" value="${DataDictionary.RoutingFormProjectType.attributes}" />
 <c:set var="routingFormKeywordAttributes" value="${DataDictionary.RoutingFormKeyword.attributes}" />
 <c:set var="contractGrantProposalAttributes" value="${DataDictionary.ContractGrantProposal.attributes}" />
+<c:set var="viewOnly" value="${KualiForm.editingMode['viewOnly']}"/>
 
-<kul:tab tabTitle="Submission Details" defaultOpen="true" tabErrorKey="newRoutingFormKeyword*,document.contractGrantProposal*,document.projectAbstract,document.routingFormProjectTitle,document.routingFormBudget*" auditCluster="mainPageAuditErrors" tabAuditKey="document.routingFormBudget*,document.submissionTypeCode,document.previousFederalIdentifier,document.routingFormPurposeCode,document.routingFormOtherPurposeDescription,document.routingFormProjectTitle,document.projectAbstract">
+<kul:tab tabTitle="Submission Details" defaultOpen="true" tabErrorKey="newRoutingFormKeyword*,document.contractGrantProposal*,document.projectAbstract,document.routingFormProjectTitle,document.routingFormBudget*" auditCluster="mainPageAuditErrors" tabAuditKey="document.routingFormBudget*,document.submissionTypeCode,document.previousFederalIdentifier,document.routingFormPurposeCode,document.researchTypeCode,document.routingFormOtherPurposeDescription,document.routingFormProjectTitle,document.projectAbstract,document.routingFormProjectTypes*,document.projectTypeOtherDescription,document.routingFormPriorGrantNumber,document.grantNumber">
 
           <div class="tab-container" align="center">
             <div class="h2-container">
@@ -36,11 +37,20 @@
                 <th align=right valign=middle>Type:</th>
                 <td colspan="3" align=left valign=middle nowrap >
                   <c:forEach items="${KualiForm.submissionTypes}" var="submissionType" varStatus="status">
-                  <label>
-		            <html:radio property="document.submissionTypeCode" value="${submissionType.submissionTypeCode}"/>
-		            ${submissionType.submissionTypeDescription}</label>
+                    <html:hidden property="submissionType[${status.index}].submissionTypeCode" />
+                    <html:hidden property="submissionType[${status.index}].submissionTypeDescription" />
+                    <label>
+                      <c:choose>
+                        <c:when test="${!viewOnly}">
+                          <html:radio property="document.submissionTypeCode" value="${submissionType.submissionTypeCode}" disabled="${viewOnly}"/>
+                        </c:when>
+                        <c:when test="${KualiForm.document.submissionTypeCode eq submissionType.submissionTypeCode}"> Yes </c:when>
+    				    <c:otherwise> No </c:otherwise>
+                      </c:choose>
+		              ${submissionType.submissionTypeDescription}
+		            </label>
 		            <c:if test="${submissionType.submissionTypeCode eq KraConstants.SUBMISSION_TYPE_CHANGE}">
-		              &nbsp;<kul:htmlControlAttribute property="document.previousFederalIdentifier" attributeEntry="${routingFormAttributes.previousFederalIdentifier}"  />
+		              &nbsp;<kul:htmlControlAttribute property="document.previousFederalIdentifier" attributeEntry="${routingFormAttributes.previousFederalIdentifier}" readOnly="${viewOnly}"/>
 		            </c:if>
                   <br>
 	              </c:forEach>
@@ -53,6 +63,10 @@
               <tr>
                 <th align=right valign=middle>Type:</th>
                 <td colspan="3" align=left valign=middle >
+                  <c:forEach items="${KualiForm.projectTypes}" varStatus="status">
+                    <html:hidden property="projectType[${status.index}].projectTypeCode" />
+                    <html:hidden property="projectType[${status.index}].projectTypeDescription" />
+                  </c:forEach>
                   <c:forEach items="${KualiForm.document.routingFormProjectTypes}" varStatus="status">
                     <html:hidden property="document.routingFormProjectType[${status.index}].projectTypeCode" />
                     <html:hidden property="document.routingFormProjectType[${status.index}].documentNumber" />
@@ -79,33 +93,33 @@
               <tr>
                 <th align=right valign=middle><kul:htmlAttributeLabel attributeEntry="${routingFormAttributes.routingFormPriorGrantNumber}" skipHelpUrl="true" /></th>
                 <td align=left valign=middle >
-                	<kul:htmlControlAttribute property="document.routingFormPriorGrantNumber" attributeEntry="${routingFormAttributes.routingFormPriorGrantNumber}"  />
+                	<kul:htmlControlAttribute property="document.routingFormPriorGrantNumber" attributeEntry="${routingFormAttributes.routingFormPriorGrantNumber}" readOnly="${viewOnly}"/>
                	</td>
                 <th align=right valign=middle><kul:htmlAttributeLabel attributeEntry="${routingFormAttributes.institutionAccountNumber}" skipHelpUrl="true" /></th>
                 <td align=left valign=middle >
-                	<kul:htmlControlAttribute property="document.institutionAccountNumber" attributeEntry="${routingFormAttributes.institutionAccountNumber}"  />
+                	<kul:htmlControlAttribute property="document.institutionAccountNumber" attributeEntry="${routingFormAttributes.institutionAccountNumber}" readOnly="${viewOnly}"/>
                 </td>
               </tr>
               <tr>
 
                 <th align=right valign=middle><kul:htmlAttributeLabel attributeEntry="${routingFormAttributes.federalIdentifier}" skipHelpUrl="true" /></th>
                 <td align=left valign=middle >
-                	<kul:htmlControlAttribute property="document.federalIdentifier" attributeEntry="${routingFormAttributes.federalIdentifier}"  />
+                	<kul:htmlControlAttribute property="document.federalIdentifier" attributeEntry="${routingFormAttributes.federalIdentifier}" readOnly="${viewOnly}"/>
                 </td>
                 <th align=right valign=middle><kul:htmlAttributeLabel attributeEntry="${routingFormAttributes.grantsGovernmentConfirmationNumber}" skipHelpUrl="true" /></th>
                 <td align=left valign=middle >
-                	<kul:htmlControlAttribute property="document.grantsGovernmentConfirmationNumber" attributeEntry="${routingFormAttributes.grantsGovernmentConfirmationNumber}"  />
+                	<kul:htmlControlAttribute property="document.grantsGovernmentConfirmationNumber" attributeEntry="${routingFormAttributes.grantsGovernmentConfirmationNumber}" readOnly="${viewOnly}"/>
                 </td>
               </tr>
               <tr>
 
                 <th align=right valign=middle><kul:htmlAttributeLabel attributeEntry="${routingFormAttributes.grantNumber}" skipHelpUrl="true" /></th>
                 <td align=left valign=middle >
-                	<kul:htmlControlAttribute property="document.grantNumber" attributeEntry="${routingFormAttributes.grantNumber}"  />
+                	<kul:htmlControlAttribute property="document.grantNumber" attributeEntry="${routingFormAttributes.grantNumber}" readOnly="${viewOnly}"/>
                 </td>
                 <th align=right valign=middle><kul:htmlAttributeLabel attributeEntry="${contractGrantProposalAttributes.proposalNumber}" skipHelpUrl="true" /></th>
                 <td align=left valign=middle >
-                	<kul:htmlControlAttribute property="document.contractGrantProposal.proposalNumber" attributeEntry="${contractGrantProposalAttributes.proposalNumber}"  />
+                	<kul:htmlControlAttribute property="document.contractGrantProposal.proposalNumber" attributeEntry="${contractGrantProposalAttributes.proposalNumber}" readOnly="${viewOnly}"/>
                 </td>
               </tr>
               <tr>
@@ -115,15 +129,24 @@
                 <th align=right valign=middle>Type:</th>
                 <td colspan="3" align=left valign=middle nowrap >
                   <c:forEach items="${KualiForm.purposes}" var="purpose" varStatus="status">
-                  <label>
-		            <html:radio property="document.routingFormPurposeCode" value="${purpose.purposeCode}"/>
-		            ${purpose.purposeDescription}</label>
+                    <html:hidden property="purpose[${status.index}].purposeCode" />
+                    <html:hidden property="purpose[${status.index}].purposeDescription" />
+                    <label>
+                      <c:choose>
+                        <c:when test="${!viewOnly}">
+                          <html:radio property="document.routingFormPurposeCode" value="${purpose.purposeCode}" disabled="${viewOnly}"/>
+                        </c:when>
+                        <c:when test="${KualiForm.document.routingFormPurposeCode eq purpose.purposeCode}"> Yes </c:when>
+    				    <c:otherwise> No </c:otherwise>
+                      </c:choose>
+		              ${purpose.purposeDescription}
+		            </label>
 		            <c:choose>
 		              <c:when test="${purpose.purposeCode eq KraConstants.PURPOSE_RESEARCH}">
-		                <kul:htmlControlAttribute property="document.researchTypeCode" attributeEntry="${routingFormAttributes.researchTypeCode}"  />
+		                <kul:htmlControlAttribute property="document.researchTypeCode" attributeEntry="${routingFormAttributes.researchTypeCode}" readOnly="${viewOnly}"/>
 		              </c:when>
 		              <c:when test="${purpose.purposeCode eq KraConstants.PURPOSE_OTHER}">
-		                &nbsp;<kul:htmlControlAttribute property="document.routingFormOtherPurposeDescription" attributeEntry="${routingFormAttributes.routingFormOtherPurposeDescription}"  />
+		                &nbsp;<kul:htmlControlAttribute property="document.routingFormOtherPurposeDescription" attributeEntry="${routingFormAttributes.routingFormOtherPurposeDescription}" readOnly="${viewOnly}"/>
 		              </c:when>
 		            </c:choose>
                   <br>
@@ -137,7 +160,7 @@
                 <th align=right valign=middle><kul:htmlAttributeLabel attributeEntry="${routingFormAttributes.routingFormProjectTitle}" skipHelpUrl="true" useShortLabel="true" /></th>
 
                 <td colspan="3" align=left valign=middle nowrap >
-                	<kul:htmlControlAttribute property="document.routingFormProjectTitle" attributeEntry="${routingFormAttributes.routingFormProjectTitle}" />
+                	<kul:htmlControlAttribute property="document.routingFormProjectTitle" attributeEntry="${routingFormAttributes.routingFormProjectTitle}" readOnly="${viewOnly}"/>
                 </td>
               </tr>
               <tr>
@@ -149,10 +172,14 @@
 		                <td class="neutral"> <div align="left">
 					    	<c:if test="${!viewOnly}">
 						    	<html:hidden write="true" property="newRoutingFormKeyword.routingFormKeywordDescription" /> 
-					    		<kul:lookup boClassName="org.kuali.module.kra.routingform.bo.Keyword" lookupParameters="newRoutingFormKeyword.routingFormKeywordDescription:routingFormKeywordDescription" fieldConversions="routingFormKeywordDescription:newRoutingFormKeyword.routingFormKeywordDescription" tabindexOverride="5100" anchor="${currentTabIndex}" />
+					    		<kul:lookup boClassName="org.kuali.module.kra.routingform.bo.Keyword" lookupParameters="newRoutingFormKeyword.routingFormKeywordDescription:routingFormKeywordDescription" fieldConversions="routingFormKeywordDescription:newRoutingFormKeyword.routingFormKeywordDescription" anchor="${currentTabIndex}" />
 		                	</c:if>
 		                </div></td>
-		                <td class="neutral"><div align="center"><html:image property="methodToCall.insertRoutingFormKeyword.anchor${currentTabIndex}" styleClass="tinybutton" src="images/tinybutton-add1.gif" alt="add keyword"/></div></td>
+		                <td class="neutral"><div align="center">
+		                  <c:if test="${!viewOnly}">
+		                    <html:image property="methodToCall.insertRoutingFormKeyword.anchor${currentTabIndex}" styleClass="tinybutton" src="images/tinybutton-add1.gif" alt="add keyword"/>
+		                  </c:if>
+		                </div></td>
 		              </tr>   
 		              
 		              <c:forEach items = "${KualiForm.document.routingFormKeywords}" var="routingFormKeyword" varStatus="status"  >
@@ -160,7 +187,11 @@
 		                <td class="neutral"> <div align="left">
 				    		<html:hidden write="true" property="document.routingFormKeyword[${status.index}].routingFormKeywordDescription" /> 
 		                </div></td>
-		                <td class="neutral"><div align="center"><html:image property="methodToCall.deleteRoutingFormKeyword.line${status.index}.anchor${currentTabIndex}" styleClass="tinybutton" src="images/tinybutton-delete1.gif" alt="delete research risk"/></div></td>
+		                <td class="neutral"><div align="center">
+		                  <c:if test="${!viewOnly}">
+		                    <html:image property="methodToCall.deleteRoutingFormKeyword.line${status.index}.anchor${currentTabIndex}" styleClass="tinybutton" src="images/tinybutton-delete1.gif" alt="delete research risk"/>
+		                  </c:if>
+		                </div></td>
 		              </tr>   
 		              </c:forEach>
 		            </table>
@@ -168,7 +199,7 @@
               </tr>
               <tr>
                 <th align=right valign=middle><kul:htmlAttributeLabel attributeEntry="${routingFormAttributes.projectAbstract}" skipHelpUrl="true" useShortLabel="true" /></th>
-                <td colspan="3" align=left valign=middle nowrap ><kul:htmlControlAttribute property="document.projectAbstract" attributeEntry="${routingFormAttributes.projectAbstract}" /></td>
+                <td colspan="3" align=left valign=middle nowrap ><kul:htmlControlAttribute property="document.projectAbstract" attributeEntry="${routingFormAttributes.projectAbstract}" readOnly="${viewOnly}"/></td>
               </tr>
             </table>
 
@@ -186,22 +217,22 @@
               </tr>
               <tr>
                 <th scope="row"><div align="right">Current Period:</div></th>
-                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetDirectAmount" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetDirectAmount}"  /></div></td>
-                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetIndirectCostAmount" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetIndirectCostAmount}"  /></div></td>
+                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetDirectAmount" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetDirectAmount}" readOnly="${viewOnly}"/></div></td>
+                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetIndirectCostAmount" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetIndirectCostAmount}" readOnly="${viewOnly}"/></div></td>
                 <td><div align="right">$ ${KualiForm.document.routingFormBudget.routingFormBudgetDirectAmount + KualiForm.document.routingFormBudget.routingFormBudgetIndirectCostAmount} </div></td>
-                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetStartDate" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetStartDate}" datePicker="true" /></div></td>
-                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetEndDate" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetEndDate}" datePicker="true" /></div>
+                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetStartDate" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetStartDate}" datePicker="true" readOnly="${viewOnly}"/></div></td>
+                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetEndDate" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetEndDate}" datePicker="true" readOnly="${viewOnly}"/></div>
                   <kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetMinimumPeriodNumber" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetMinimumPeriodNumber}" />
                   <kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetMaximumPeriodNumber" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetMaximumPeriodNumber}" />
                 </td>
               </tr>
               <tr>
                 <th scope="row"><div align="right">Total Periods:</div></th>
-                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetTotalDirectAmount" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetTotalDirectAmount}"  /></div></td>
-                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetTotalIndirectCostAmount" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetTotalIndirectCostAmount}"  /></div></td>
+                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetTotalDirectAmount" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetTotalDirectAmount}" readOnly="${viewOnly}"/></div></td>
+                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetTotalIndirectCostAmount" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetTotalIndirectCostAmount}" readOnly="${viewOnly}"/></div></td>
                 <td><div align="right">$ ${KualiForm.document.routingFormBudget.routingFormBudgetTotalDirectAmount + KualiForm.document.routingFormBudget.routingFormBudgetTotalIndirectCostAmount} </div></td>
-                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetTotalStartDate" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetTotalStartDate}" datePicker="true" /></div></td>
-                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetTotalEndDate" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetTotalEndDate}" datePicker="true" /></div></td>
+                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetTotalStartDate" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetTotalStartDate}" datePicker="true" readOnly="${viewOnly}"/></div></td>
+                <td><div align="center"><kul:htmlControlAttribute property="document.routingFormBudget.routingFormBudgetTotalEndDate" attributeEntry="${routingFormBudgetAttributes.routingFormBudgetTotalEndDate}" datePicker="true" readOnly="${viewOnly}"/></div></td>
               </tr>
             </table>
 
