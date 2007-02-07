@@ -20,7 +20,8 @@ import java.util.List;
 
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.inquiry.KualiInquirableImpl;
-import org.kuali.core.web.ui.Column;
+import org.kuali.core.web.ui.Field;
+import org.kuali.core.web.ui.Row;
 import org.kuali.core.web.ui.Section;
 import org.kuali.module.chart.bo.Org;
 
@@ -32,16 +33,19 @@ public class OrgInquirable extends KualiInquirableImpl {
             Org org = (Org) bo;
             
             List rows = new ArrayList();
-            Column c = new Column();
-            c.setColumnTitle("Organization Hierarchy");
-            c.setPropertyValue(org.getOrganizationHierarchy());
-            rows.add(c);
 
-            c = new Column();
-            c.setColumnTitle("Organization Review Hierarchy");
-            c.setPropertyValue("run search");
-            c.setPropertyURL(org.getOrganizationReviewHierarchy());
-            rows.add(c);
+            Field f = new Field();
+            f.setPropertyName("Organization Hierarchy");
+            f.setPropertyValue(org.getOrganizationHierarchy());
+            rows.add(new Row(f));
+            
+            f = new Field();
+            f.setPropertyName("Organization Review Hierarchy");
+            f.setPropertyValue("run search");
+            // FIXME (laran) Need to figure out how to set 
+            // f.set???(org.getOrganizationReviewHierarchy());
+            // c.setPropertyURL(org.getOrganizationReviewHierarchy());
+            rows.add(new Row(f));
             
             Section section = new Section();
             section.setRows(rows);
