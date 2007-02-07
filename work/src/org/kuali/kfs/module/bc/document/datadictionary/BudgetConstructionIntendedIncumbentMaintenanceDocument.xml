@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 -->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd" >
 
 <dictionaryEntry>
     <maintenanceDocument>
-        <businessObjectClass>org.kuali.kfs.bo.State</businessObjectClass>
+        <businessObjectClass>org.kuali.module.budget.bo.BudgetConstructionIntendedIncumbent</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
         <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
@@ -32,27 +32,30 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiStateMaintenanceDocument</documentTypeName>
-        <documentTypeCode>STAT</documentTypeCode>
+        <documentTypeName>KualiBudgetConstructionIntendedIncumbentMaintenanceDocument</documentTypeName>
+        <documentTypeCode>IINC</documentTypeCode>
 
-        <label>State Maintenance Document</label>
-        <shortLabel>StateMaintDoc</shortLabel>
+        <label>Budget Construction Intended Incumbent Maintenance Document</label>
+        <shortLabel>BC - BC Intended Incumbent Code Maint Doc</shortLabel>
 
-        <summary>State maintenance document</summary>
-        <description>Document used to create or update State objects</description>
-        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_STATE" />
+        <summary>Budget Construction Intended Incumbent Maintenance Document</summary>
+        <description>Document used to create or update Budget Construction Intended Incumbent Maintenance Document objects</description>
 
         <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
-            <field attributeName="postalStateCode" />
+            <field attributeName="emplid" />
         </lockingKeys>
 
         <maintainableSections>
-            <maintainableSection title="Edit States">
+            <maintainableSection title="Edit BC Intended Incumbent">
                 <maintainableItems>
-                    <maintainableField name="postalStateCode" required="true" />
-                    <maintainableField name="postalStateName" required="true" />
+                    <maintainableField name="emplid" required="true" />
+                    <maintainableField name="personName" required="true" />
+                    <maintainableField name="setidSalary" required="false" />
+                    <maintainableField name="salaryAdministrationPlan" required="false" />
+                    <maintainableField name="grade" required="false" />
+                    <maintainableField name="iuClassificationLevel" required="false" />                   
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
