@@ -81,7 +81,7 @@
                 <description>Postal Code either in 5-4 format or just 5 digits</description>
             </attribute>
 
-            <attributeReference name="postalStateCode" sourceClassName="org.kuali.core.bo.State" sourceAttributeName="postalStateCode">
+            <attributeReference name="postalStateCode" sourceClassName="org.kuali.kfs.bo.State" sourceAttributeName="postalStateCode">
                 <label>State</label>
                 <shortLabel>State</shortLabel>
                 <required>true</required>

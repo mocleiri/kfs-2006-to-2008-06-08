@@ -17,7 +17,7 @@
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd" [
-<!ENTITY accountingLineBaseAttributes SYSTEM "../entity/AccountingLineBaseAttributes.xml">
+<!ENTITY accountingLineBaseAttributes SYSTEM "../entities/AccountingLineBaseAttributes.xml">
 ]>
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.kfs.bo.SourceAccountingLine">

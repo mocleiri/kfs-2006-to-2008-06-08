@@ -188,7 +188,6 @@
     <field-descriptor name="financialSystemDatabaseDesc" column="FS_DATABASE_DESC" jdbc-type="VARCHAR" />
     <field-descriptor name="nextCapitalAssetNumber" column="NEXT_CPTLAST_NBR" jdbc-type="BIGINT" />
     <field-descriptor name="nextNonCapitalAssetNumber" column="NEXT_NONCA_NBR" jdbc-type="BIGINT" />
-    <field-descriptor name="nextCgProposalNumber" column="NEXT_CGPRPSL_NBR" jdbc-type="BIGINT" />
     <field-descriptor name="nextContractsAndGrantsAgencyNumber" column="NEXT_CG_AGENCY_NBR" jdbc-type="VARCHAR" />
     <field-descriptor name="nextContractsAndGrantsSubcontractorNumber" column="NEXT_CG_SUBCNR_NBR" jdbc-type="VARCHAR" />
     <field-descriptor name="nextDisbVchrPayeeIdNbr" column="NXT_DV_PAYEEID_NBR" jdbc-type="BIGINT" />
@@ -214,6 +213,20 @@
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <reference-descriptor name="state" class-ref="org.kuali.kfs.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="postalStateCode" />
+    </reference-descriptor>
+</class-descriptor>
+
+<class-descriptor class="org.kuali.kfs.bo.Room" table="SH_ROOM_T">
+    <field-descriptor name="campusCode" column="CAMPUS_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="buildingCode" column="BLDG_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="buildingRoomNumber" column="BLDG_ROOM_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
+    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
+    <field-descriptor name="buildingRoomType" column="BLDG_ROOM_TYPE" jdbc-type="VARCHAR" />
+    <field-descriptor name="buildingRoomDepartment" column="BLDG_ROOM_DEPT" jdbc-type="VARCHAR" />
+    <field-descriptor name="buildingRoomDescription" column="BLDG_ROOM_DESC" jdbc-type="VARCHAR" />
+    <reference-descriptor name="campus" class-ref="org.kuali.module.chart.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="campusCode" />
     </reference-descriptor>
 </class-descriptor>
 
