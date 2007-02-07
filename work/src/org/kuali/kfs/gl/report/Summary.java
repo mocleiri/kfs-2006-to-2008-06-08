@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package org.kuali.module.gl.util;
+
 
 public class Summary implements Comparable {
     /**
@@ -40,7 +41,6 @@ public class Summary implements Comparable {
     }
 
     /**
-     * 
      * @param sortOrder
      * @param description
      * @param count
@@ -78,6 +78,20 @@ public class Summary implements Comparable {
             return 0;
         }
     }
+    
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object)
+            return true;
+        if (!(object instanceof Summary))
+            return false;
+
+        Summary that = (Summary) object;
+        return this.description.equals(that.getDescription());
+    }
 
     public long getCount() {
         return count;
@@ -102,5 +116,4 @@ public class Summary implements Comparable {
     public void setSortOrder(int sortOrder) {
         this.sortOrder = sortOrder;
     }
-
 }
