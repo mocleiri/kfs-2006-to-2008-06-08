@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 The Kuali Foundation.
- * 
+ *
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.opensource.org/licenses/ecl1.php
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,12 +28,14 @@ import org.kuali.module.labor.dao.LaborOriginEntryDao;
 import org.kuali.module.labor.service.LaborOriginEntryService;
 import org.kuali.module.labor.util.LaborLedgerUnitOfWork;
 import org.kuali.module.labor.util.ObjectUtil;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class...
  */
+@Transactional
 public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
-    
+
     private LaborOriginEntryDao laborOriginEntryDao;
     private OriginEntryGroupService originEntryGroupService;
     private DateTimeService dateTimeService;
@@ -60,30 +62,30 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
         if(!isConsolidated){
             return this.getEntriesByGroup(group);
         }
-        
-        Collection<LaborOriginEntry> entryCollection = new ArrayList<LaborOriginEntry>(); 
+
+        Collection<LaborOriginEntry> entryCollection = new ArrayList<LaborOriginEntry>();
         LaborLedgerUnitOfWork laborLedgerUnitOfWork = new LaborLedgerUnitOfWork();
-        
+
         Iterator<Object[]> consolidatedEntries = laborOriginEntryDao.getConsolidatedEntriesByGroup(group);
         while(consolidatedEntries.hasNext()){
             LaborOriginEntry laborOriginEntry = new LaborOriginEntry();
             Object[] oneEntry = consolidatedEntries.next();
             ObjectUtil.buildObject(laborOriginEntry, oneEntry, LaborConstants.consolidationAttributesOfOriginEntry());
-            
+
             if(laborLedgerUnitOfWork.canContain(laborOriginEntry)){
                 laborLedgerUnitOfWork.addEntryIntoUnit(laborOriginEntry);
             }
             else{
                 entryCollection.add(laborLedgerUnitOfWork.getWorkingEntry());
                 laborLedgerUnitOfWork.resetLaborLedgerUnitOfWork(laborOriginEntry);
-            }           
+            }
         }
         return entryCollection.iterator();
     }
 
     /**
      * Sets the laborOriginEntryDao attribute value.
-     * 
+     *
      * @param laborOriginEntryDao The laborOriginEntryDao to set.
      */
     public void setlaborOriginEntryDao(LaborOriginEntryDao laborOriginEntryDao) {
