@@ -23,9 +23,6 @@
 				<equals arg1="${use.p6spy}" arg2="true" />
 			</and>
 		</condition>
-		<condition property="dist.workflow.local">
-			<equals arg1="${is.local.workflow.build}" arg2="true" />
-		</condition>
 		<echo message="Loaded properties in ${user.home}/${ant.project.name}-build.properties" />
 	</target>
 
@@ -276,7 +273,7 @@
 		</delete>
 		<delete file="${workflow.usr.directory}/workflow.xml" />
 		<delete dir="${plugin.deploy.directory}" failonerror="false" />
-		<delete dir="work/web-root/en" failonerror="false"/>
+		<delete dir="${workflow.embedded.webapp.directory}" failonerror="false"/>
 	</target>
 
 	<!-- wrapper based on naming convention required by workflow build script -->
@@ -331,7 +328,7 @@
 		</copy>
 	</target>
 
-	<target name="filter-workflow-local" if="dist.workflow.local" depends="init-filter-sets">
+	<target name="filter-workflow-local" depends="init-filter-sets">
 		<copy todir="${appserver.classes.dir}" overwrite="true">
 			<fileset dir="${build.workflow.appserver.directory}" includes="${workflow.appserver.classes.list}" />
 		</copy>
@@ -465,7 +462,7 @@
 	</target>
 
 	<target name="dist" depends="make-source">
-		<unzip dest="${war.directory}" src="build/configurationFiles/workflow/appserver/workflow-embedded-content.zip"/>
+		<unzip dest="${war.directory}" src="${build.workflow.appserver.directory}/workflow-embedded-content.zip"/>
 		<copy todir="${war.directory}">
 			<fileset dir="${webroot.directory}" excludes="WEB-INF/classes/**/**" />
 		</copy>
@@ -476,13 +473,13 @@
 		<zip destfile="en-plugins.zip" basedir="${plugin.directory}" />
 	</target>
 
-	<target name="dist-workflow-local" if="dist.workflow.local" depends="filter-workflow-local,make-plugin,make-plugin-local">
+	<target name="dist-workflow-local" depends="filter-workflow-local,make-plugin,make-plugin-local">
 		<!-- no longer copy the WAR -->
 		<!--<ant target="update-war">
 			<property name="source.war.directory" value="${build.workflow.appserver.directory}" />
 			<property name="application" value="${workflow.application}" />
 		</ant>-->
-		<unzip dest="work/web-root" src="build/configurationFiles/workflow/appserver/workflow-embedded-content.zip"/>
+		<unzip dest="${webroot.directory}" src="${build.workflow.appserver.directory}/workflow-embedded-content.zip"/>
 		<copy todir="${plugin.deploy.directory}">
 			<fileset dir="${plugin.directory}" excludes="**/*.jar"/>
 		</copy>
