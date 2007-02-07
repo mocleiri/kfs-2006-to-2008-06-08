@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetBaseCode;
-import org.kuali.module.kra.budget.bo.BudgetPurposeCode;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 
 public interface BudgetIndirectCostService {
@@ -38,10 +37,4 @@ public interface BudgetIndirectCostService {
      * @return active BudgetBaseCode objects
      */
     public List<BudgetBaseCode> getDefaultBudgetBaseCodeValues();
-    
-    /**
-     * Returns active BudgetPurposeCodes.
-     * @return active BudgetPurposeCode objects
-     */
-    public List<BudgetPurposeCode> getDefaultBudgetPurposeCodeValues();
 }
