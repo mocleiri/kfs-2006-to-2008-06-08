@@ -41,6 +41,9 @@
     <collection-descriptor name="vendorSupplierDiversities" element-class-ref="org.kuali.module.purap.bo.VendorSupplierDiversity" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="none">
         <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
     </collection-descriptor>
+   	<collection-descriptor name="vendorTaxChanges" element-class-ref="org.kuali.module.purap.bo.VendorTaxChange" auto-retrieve="false" auto-update="object" auto-delete="false" proxy="false">
+		<inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
+	</collection-descriptor>    
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.VendorDetail" table="PUR_VNDR_DTL_T">
@@ -124,9 +127,6 @@
         <inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
         <inverse-foreignkey field-ref="vendorDetailAssignedIdentifier" />
     </collection-descriptor>
-   	<collection-descriptor name="vendorTaxChanges" element-class-ref="org.kuali.module.purap.bo.VendorTaxChange" auto-retrieve="false" auto-update="object" auto-delete="false" proxy="false">
-		<inverse-foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
-	</collection-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.purap.bo.VendorAddress" table="PUR_VNDR_ADDR_T">
@@ -155,7 +155,7 @@
 	<reference-descriptor name="vendorAddressType" class-ref="org.kuali.module.purap.bo.AddressType" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorAddressTypeCode" />
 	</reference-descriptor>
-	<reference-descriptor name="vendorState" class-ref="org.kuali.core.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="vendorState" class-ref="org.kuali.kfs.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorStateCode" />
 	</reference-descriptor>
 	<reference-descriptor name="vendorCountry" class-ref="org.kuali.kfs.bo.Country" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -192,7 +192,7 @@
 	<reference-descriptor name="vendorContactType" class-ref="org.kuali.module.purap.bo.ContactType" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorContactTypeCode" />
 	</reference-descriptor>
-	<reference-descriptor name="vendorState" class-ref="org.kuali.core.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="vendorState" class-ref="org.kuali.kfs.bo.State" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="vendorStateCode" />
 	</reference-descriptor>
 	<reference-descriptor name="vendorCountry" class-ref="org.kuali.kfs.bo.Country" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -593,7 +593,7 @@
 	<field-descriptor name="externalOrganizationB2bProductTypeName" column="EXT_ORG_B2B_PROD_TYP_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemAssignedToTradeInIndicator" column="ITM_ASND_TO_TRADE_IN_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<reference-descriptor name="requisition" class-ref="org.kuali.module.purap.document.RequisitionDocument" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="requisitionIdentifier" />
+		<foreignkey field-ref="purapDocumentIdentifier" />
 	</reference-descriptor>
 	<reference-descriptor name="capitalAssetTransactionType" class-ref="org.kuali.module.purap.bo.CapitalAssetTransactionType" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="capitalAssetTransactionTypeCode" />
@@ -692,8 +692,8 @@
         <foreignkey field-ref="statusCode" />
     </reference-descriptor>
     <reference-descriptor name="vendorDetail" class-ref="org.kuali.module.purap.bo.VendorDetail" auto-retrieve="true" auto-update="none" auto-delete="none">
+    	<foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
         <foreignkey field-ref="vendorDetailAssignedIdentifier" />
-        <foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
     </reference-descriptor>
     <!--  collection-descriptor name="statusHistories" element-class-ref="org.kuali.module.purap.bo.RequisitionStatusHistory" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
         <orderby name="statusHistoryIdentifier" sort="ASC" />
@@ -943,13 +943,13 @@
         <foreignkey field-ref="statusCode" />
     </reference-descriptor>
     <reference-descriptor name="vendorDetail" class-ref="org.kuali.module.purap.bo.VendorDetail" auto-retrieve="true" auto-update="none" auto-delete="none">
+    	<foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
         <foreignkey field-ref="vendorDetailAssignedIdentifier" />
-        <foreignkey field-ref="vendorHeaderGeneratedIdentifier" />
     </reference-descriptor>
-    <collection-descriptor name="statusHistories" element-class-ref="org.kuali.module.purap.bo.PurchaseOrderStatusHistory" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
+    <!-- collection-descriptor name="statusHistories" element-class-ref="org.kuali.module.purap.bo.PurchaseOrderStatusHistory" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="true" auto-delete="true">
         <orderby name="statusHistoryIdentifier" sort="ASC" />
         <inverse-foreignkey field-ref="purapDocumentIdentifier" />
-    </collection-descriptor>
+    </collection-descriptor -->
 
     <!-- COMMON TO REQ AND PO DOCUMENTS -->
     <reference-descriptor name="fundingSource" class-ref="org.kuali.module.purap.bo.FundingSource" auto-retrieve="true" auto-update="none" auto-delete="none">
