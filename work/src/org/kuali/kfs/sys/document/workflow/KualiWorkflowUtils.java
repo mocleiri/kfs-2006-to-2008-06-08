@@ -43,9 +43,9 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import edu.iu.uis.eden.doctype.DocumentType;
+import edu.iu.uis.eden.engine.RouteContext;
 import edu.iu.uis.eden.lookupable.Field;
 import edu.iu.uis.eden.lookupable.Row;
-import edu.iu.uis.eden.routetemplate.RouteContext;
 import edu.iu.uis.eden.routetemplate.xmlrouting.WorkflowFunctionResolver;
 import edu.iu.uis.eden.routetemplate.xmlrouting.WorkflowNamespaceContext;
 
