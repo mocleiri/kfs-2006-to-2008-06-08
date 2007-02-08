@@ -32,14 +32,6 @@ public interface OriginEntryGroupDao {
     public Collection<OriginEntryGroup> getGroupsFromSourceForDate(String sourceCode, Date date);
     
     /**
-     * Copy all the entries from the from group to the to group
-     * 
-     * @param fromGroup
-     * @param toGroup
-     */
-    public void copyGroup(OriginEntryGroup fromGroup, OriginEntryGroup toGroup);
-
-    /**
      * Get all the groups that are older than a date
      * 
      * @param day
