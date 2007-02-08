@@ -25,7 +25,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.user.AuthenticationUserId;
-
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.IllegalObjectStateException;
@@ -409,7 +408,7 @@ public class BudgetDocument extends ResearchDocumentBase {
         KualiDocumentXmlMaterializer xmlWrapper = new KualiDocumentXmlMaterializer();
         xmlWrapper.setDocument(this);
         xmlWrapper.setKualiTransactionalDocumentInformation(transInfo);
-        documentHeader.getWorkflowDocument().getRouteHeader().getDocumentContent().setApplicationContent(generateDocumentContent());
+        documentHeader.getWorkflowDocument().setApplicationContent(generateDocumentContent());
     }
     
     public String generateDocumentContent() {
