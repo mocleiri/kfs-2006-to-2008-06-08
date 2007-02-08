@@ -45,6 +45,7 @@
 	<classpathentry kind="lib" path="build/configurationFiles/workflow/appserver/howl.jar"/>
 	<classpathentry kind="lib" path="build/configurationFiles/workflow/appserver/connector-1_5.jar"/>
 	<classpathentry kind="lib" path="build/configurationFiles/workflow/appserver/commons-cli-1.0.jar"/>
+	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-fileupload-1.1.1.jar"/>
 	<classpathentry kind="var" path="TOMCAT_LIB_HOME/servlet-api.jar"/>
 	<classpathentry kind="lib" path="test/lib/Tidy-httpunit-1.6.jar"/>
 	<classpathentry kind="lib" path="test/lib/httpunit-1.6.jar"/>
