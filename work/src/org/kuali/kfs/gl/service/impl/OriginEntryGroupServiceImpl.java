@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.util.Guid;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.dao.OriginEntryDao;
@@ -36,7 +38,7 @@ import org.kuali.module.gl.web.struts.action.CorrectionAction;
 
 /**
  *  
- * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.6 2006-10-14 02:29:37 jbmorris Exp $
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.7 2007-02-08 19:03:41 aapotts Exp $
  */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
@@ -121,11 +123,18 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
         // Create the new group
         OriginEntryGroup backupGroup = this.createGroup(today, OriginEntrySource.BACKUP, true, true, true);
 
-        for (Iterator iter = groups.iterator(); iter.hasNext();) {
-            OriginEntryGroup group = (OriginEntryGroup) iter.next();
+        for (Iterator<OriginEntryGroup> iter = groups.iterator(); iter.hasNext();) {
+            OriginEntryGroup group = iter.next();
 
-            originEntryGroupDao.copyGroup(group, backupGroup);
-
+            for (Iterator<OriginEntry> entry_iter = originEntryDao.getEntriesByGroup(group, 0); entry_iter.hasNext();) {
+                OriginEntry entry = entry_iter.next();
+                
+                entry.setEntryId(null);
+                entry.setObjectId(new Guid().toString());
+                entry.setGroup(backupGroup);
+                originEntryDao.saveOriginEntry(entry);
+            }
+            
             group.setProcess(false);
             group.setScrub(false);
             originEntryGroupDao.save(group);
