@@ -22,6 +22,8 @@ import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.module.financial.bo.GECSourceAccountingLine;
+import org.kuali.module.financial.bo.GECTargetAccountingLine;
 import org.kuali.module.financial.bo.GeneralErrorCorrectionDocumentAccountingLineParser;
 
 
@@ -65,4 +67,22 @@ public class GeneralErrorCorrectionDocument extends AccountingDocumentBase imple
     public AccountingLineParser getAccountingLineParser() {
         return new GeneralErrorCorrectionDocumentAccountingLineParser();
     }
+
+    /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLineClass()
+     */
+    @Override
+    public Class getSourceAccountingLineClass() {
+        return GECSourceAccountingLine.class;
+    }
+
+    /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getTargetAccountingLineClass()
+     */
+    @Override
+    public Class getTargetAccountingLineClass() {
+        return GECTargetAccountingLine.class;
+    }
+    
+    
 }
