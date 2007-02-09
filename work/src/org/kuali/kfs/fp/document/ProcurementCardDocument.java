@@ -183,6 +183,22 @@ public class ProcurementCardDocument extends AccountingDocumentBase implements A
     }
 
     /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLineClass()
+     */
+    @Override
+    public Class getSourceAccountingLineClass() {
+        return ProcurementCardSourceAccountingLine.class;
+    }
+
+    /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getTargetAccountingLineClass()
+     */
+    @Override
+    public Class getTargetAccountingLineClass() {
+        return ProcurementCardTargetAccountingLine.class;
+    }
+
+    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     @Override
