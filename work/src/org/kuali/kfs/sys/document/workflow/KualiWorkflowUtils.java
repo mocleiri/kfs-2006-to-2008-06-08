@@ -38,6 +38,7 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
+import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.workflow.attribute.WorkflowLookupableImpl;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -194,14 +195,14 @@ public class KualiWorkflowUtils {
     }
 
     /**
-     * This method uses the TransactionalDocumentDataDictionaryService to get the name of the source accounting line class for a
+     * This method uses the AccountingDocument to get the name of the source accounting line class for a
      * given workflow documentTypeName. It is intended for use by our workflow attributes when building xpath expressions
      * 
      * @param documentTypeName the document type name to use when querying the TransactionalDocumentDataDictionaryService
      * @return the name of the source accounting line class associated with the specified workflow document type name
      */
-    public static final String getSourceAccountingLineClassName(String documentTypeName) {
-        Class sourceAccountingLineClass = SpringServiceLocator.getTransactionalDocumentDictionaryService().getSourceAccountingLineClass(documentTypeName);
+    public static final String getSourceAccountingLineClassName(AccountingDocument document) {
+        Class sourceAccountingLineClass = document.getSourceAccountingLineClass();
         String sourceAccountingLineClassName = null;
         if (sourceAccountingLineClass != null) {
             sourceAccountingLineClassName = sourceAccountingLineClass.getName();
@@ -213,14 +214,14 @@ public class KualiWorkflowUtils {
     }
 
     /**
-     * This method uses the TransactionalDocumentDataDictionaryService to get the name of the target accounting line class for a
+     * This method uses the AccountingDocument to get the name of the target accounting line class for a
      * given workflow documentTypeName. It is intended for use by our workflow attributes when building xpath expressions
      * 
      * @param documentTypeName the document type name to use when querying the TransactionalDocumentDataDictionaryService
      * @return the name of the target accounting line class associated with the specified workflow document type name
      */
-    public static final String getTargetAccountingLineClassName(String documentTypeName) {
-        Class targetAccountingLineClass = SpringServiceLocator.getTransactionalDocumentDictionaryService().getTargetAccountingLineClass(documentTypeName);
+    public static final String getTargetAccountingLineClassName(AccountingDocument document) {
+        Class targetAccountingLineClass = document.getTargetAccountingLineClass();
         String targetAccountingLineClassName = null;
         if (targetAccountingLineClass != null) {
             targetAccountingLineClassName = targetAccountingLineClass.getName();
