@@ -20,14 +20,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.Constants;
-import org.kuali.core.document.DocumentBase;
-import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.bo.AccountingLineParserBase;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
 
@@ -247,21 +244,21 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     }
 
     /**
-     * Looks up and returns the SourceAccountingLineClass as defined in the document type's DataDictionary XML file
+     * Returns the default Source accounting line class.
      * 
      * @see org.kuali.core.document.FinancialDocument#getSourceAccountingLineClass()
      */
-    final public Class getSourceAccountingLineClass() {
-        return SpringServiceLocator.getTransactionalDocumentDictionaryService().getSourceAccountingLineClass(this);
+    public Class getSourceAccountingLineClass() {
+        return SourceAccountingLine.class;
     }
 
     /**
-     * Looks up and returns the TargetAccountingLineClass as defined in the document type's DataDictionary XML file
+     * Returns the default Target accounting line class.
      * 
      * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLineClass()
      */
-    final public Class getTargetAccountingLineClass() {
-        return SpringServiceLocator.getTransactionalDocumentDictionaryService().getTargetAccountingLineClass(this);
+    public Class getTargetAccountingLineClass() {
+        return TargetAccountingLine.class;
     }
 
     /**
