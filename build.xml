@@ -450,18 +450,6 @@
 		<copy file="${workflow.project.directory}/dist/workflow-client-${workflow.version}.jar" todir="${lib.directory}" overwrite="true" />
 	</target>
 
-	<target name="update-war">
-		<property name="temp.directory" value="temp" />
-		<mkdir dir="${temp.directory}"/>
-		<unjar src="${source.war.directory}/${application}-dev.war" dest="${temp.directory}" />
-		<copy file="${source.war.directory}/${tomcat.context.file}" todir="${temp.directory}/META-INF" overwrite="true">
-			<filterset refid="general.filterset" />
-		</copy>
-		<replaceregexp file="${temp.directory}/WEB-INF/classes/SpringWebBeans.xml" match="\bdev\b" replace="${build.environment}" byline="true" flags="g" />
-		<jar jarfile="${appserver.deploy.dir}/${application}-${build.environment}.war" basedir="${temp.directory}"  />
-		<delete dir="${temp.directory}" />
-	</target>
-
 	<target name="help" description="Describe public targets">
 		<echo>--- OVERVIEW ---
 
