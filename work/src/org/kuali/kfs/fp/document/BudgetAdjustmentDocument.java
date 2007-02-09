@@ -38,6 +38,8 @@ import org.kuali.kfs.document.AccountingDocumentBase;
 import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLineParser;
+import org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine;
+import org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine;
 import org.kuali.module.financial.bo.FiscalYearFunctionControl;
 import org.kuali.module.financial.rules.BudgetAdjustmentDocumentRule;
 
@@ -87,6 +89,23 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
         return pendingLedgerEntries;
     }
 
+
+    /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLineClass()
+     */
+    @Override
+    public Class getSourceAccountingLineClass() {
+        return BudgetAdjustmentSourceAccountingLine.class;
+    }
+
+
+    /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getTargetAccountingLineClass()
+     */
+    @Override
+    public Class getTargetAccountingLineClass() {
+        return BudgetAdjustmentTargetAccountingLine.class;
+    }
 
 
     /**
@@ -514,6 +533,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
             line.setAmount(line.getCurrentBudgetAdjustmentAmount());
         }
     }
+    
     
     
 }
