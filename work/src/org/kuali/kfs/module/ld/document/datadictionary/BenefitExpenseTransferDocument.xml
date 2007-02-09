@@ -45,9 +45,5 @@
         <help securityGroupName="Kuali.FinancialTransactionProcessing.TransferOfFundsDocument" parameterName="FINANCIAL_HELP_TRANSFER_OF_FUNDS_DOCUMENT" />
         <allowsCopy>true</allowsCopy>
         <allowsErrorCorrection>true</allowsErrorCorrection>
-        
-        <sourceAccountingLineClass>org.kuali.module.labor.bo.ExpenseTransferSourceAccountingLine</sourceAccountingLineClass>        
-        <targetAccountingLineClass>org.kuali.module.labor.bo.ExpenseTransferTargetAccountingLine</targetAccountingLineClass>        
-        
     </transactionalDocument>
 </dictionaryEntry>
