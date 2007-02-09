@@ -20,6 +20,8 @@ import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.module.labor.bo.LaborLedgerAccountingLineParser;
+import org.kuali.module.labor.bo.SalaryExpenseTransferSourceAccountingLine;
+import org.kuali.module.labor.bo.SalaryExpenseTransferTargetAccountingLine;
 
 /**
  * Class representing the Salary Expense Transfer Document.
@@ -67,6 +69,24 @@ public class SalaryExpenseTransferDocument extends LaborDocument implements Copy
     @Override
     public AccountingLineParser getAccountingLineParser() {
         return new LaborLedgerAccountingLineParser();        
-    }    
+    }
+
+    /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLineClass()
+     */
+    @Override
+    public Class getSourceAccountingLineClass() {
+        return SalaryExpenseTransferSourceAccountingLine.class;
+    }
+
+    /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getTargetAccountingLineClass()
+     */
+    @Override
+    public Class getTargetAccountingLineClass() {
+        return SalaryExpenseTransferTargetAccountingLine.class;
+    } 
+    
+    
 }
 
