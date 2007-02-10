@@ -1,8 +1,6 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/batch/service/impl/PosterServiceImpl.java,v $
- * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -66,7 +64,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * 
- * @version $Id: PosterServiceImpl.java,v 1.42.2.6 2006-10-14 02:29:37 jbmorris Exp $
+ * @version $Id: PosterServiceImpl.java,v 1.42.2.7 2007-02-10 11:37:34 j2eemgr Exp $
  */
 public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
