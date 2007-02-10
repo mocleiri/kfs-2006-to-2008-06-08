@@ -1,8 +1,6 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/web/struts/PreEncumbranceAction.java,v $
- * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,7 +21,7 @@ import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
  * This class piggy backs on all of the functionality in the KualiTransactionalDocumentActionBase.
  * 
  * 
- * @version $Id: PreEncumbranceAction.java,v 1.2.8.3 2006-10-14 02:29:28 jbmorris Exp $
+ * @version $Id: PreEncumbranceAction.java,v 1.2.8.4 2007-02-10 11:37:30 j2eemgr Exp $
  */
 public class PreEncumbranceAction extends KualiTransactionalDocumentActionBase {
 }
