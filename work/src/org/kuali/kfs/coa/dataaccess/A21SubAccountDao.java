@@ -1,7 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
- * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/dataaccess/A21SubAccountDao.java,v $
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +19,7 @@ import org.kuali.module.chart.bo.A21SubAccount;
 
 /**
  * 
- * @version $Id: A21SubAccountDao.java,v 1.3.8.2 2006-10-14 02:29:08 jbmorris Exp $
+ * @version $Id: A21SubAccountDao.java,v 1.3.8.3 2007-02-10 11:37:21 j2eemgr Exp $
  */
 public interface A21SubAccountDao {
     public A21SubAccount getByPrimaryKey(String chartOfAccountsCode, String accountNumber, String subAccountNumber);

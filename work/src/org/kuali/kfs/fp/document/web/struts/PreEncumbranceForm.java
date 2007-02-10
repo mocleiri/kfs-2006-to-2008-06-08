@@ -1,8 +1,6 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/web/struts/PreEncumbranceForm.java,v $
- * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -24,7 +22,7 @@ import org.kuali.module.financial.document.PreEncumbranceDocument;
  * This class is the Struts specific form object that works in conjunction with the pojo utilities to build the UI.
  * 
  * 
- * @version $Id: PreEncumbranceForm.java,v 1.3.8.3 2006-10-14 02:29:29 jbmorris Exp $
+ * @version $Id: PreEncumbranceForm.java,v 1.3.8.4 2007-02-10 11:37:30 j2eemgr Exp $
  */
 public class PreEncumbranceForm extends KualiTransactionalDocumentFormBase {
     private static final long serialVersionUID = 1L;
