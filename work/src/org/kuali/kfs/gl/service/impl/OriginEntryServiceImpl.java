@@ -1,8 +1,6 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/service/impl/OriginEntryServiceImpl.java,v $
- * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -45,7 +43,7 @@ import org.kuali.module.gl.util.PosterOutputSummaryEntry;
 
 /**
  *  
- * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.13 2006-10-14 02:29:37 jbmorris Exp $
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.14 2007-02-10 11:37:34 j2eemgr Exp $
  */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);

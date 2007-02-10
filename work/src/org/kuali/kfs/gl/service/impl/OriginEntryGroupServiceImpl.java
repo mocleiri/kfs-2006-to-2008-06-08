@@ -1,7 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
- * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/service/impl/OriginEntryGroupServiceImpl.java,v $
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +36,7 @@ import org.kuali.module.gl.web.struts.action.CorrectionAction;
 
 /**
  *  
- * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.7 2007-02-08 19:03:41 aapotts Exp $
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.8 2007-02-10 11:37:34 j2eemgr Exp $
  */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
