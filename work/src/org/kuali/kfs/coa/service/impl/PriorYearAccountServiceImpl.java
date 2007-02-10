@@ -1,7 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
- * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/service/impl/PriorYearAccountServiceImpl.java,v $
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +21,7 @@ import org.kuali.module.chart.dao.PriorYearAccountDao;
 import org.kuali.module.chart.service.PriorYearAccountService;
 
 /**
- * @version $Id: PriorYearAccountServiceImpl.java,v 1.1.4.4 2006-10-14 02:29:15 jbmorris Exp $
+ * @version $Id: PriorYearAccountServiceImpl.java,v 1.1.4.5 2007-02-10 11:37:24 j2eemgr Exp $
  */
 public class PriorYearAccountServiceImpl implements PriorYearAccountService {
 
