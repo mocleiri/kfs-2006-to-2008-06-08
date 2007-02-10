@@ -1,7 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
- * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/service/impl/DisbursementVoucherCoverSheetServiceImpl.java,v $
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +52,7 @@ import com.lowagie.text.pdf.PdfStamper;
  * Service used for manipulating disbursement voucher cover sheets.
  * 
  * 
- * @version $Id: DisbursementVoucherCoverSheetServiceImpl.java,v 1.8.2.3 2006-10-14 02:29:27 jbmorris Exp $
+ * @version $Id: DisbursementVoucherCoverSheetServiceImpl.java,v 1.8.2.4 2007-02-10 11:37:30 j2eemgr Exp $
  */
 public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVoucherCoverSheetService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherCoverSheetServiceImpl.class);
