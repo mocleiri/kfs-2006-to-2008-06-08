@@ -1,8 +1,6 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
- * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/OriginEntrySource.java,v $
- * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,7 +19,7 @@ import org.kuali.core.bo.KualiCodeBase;
 
 /**
  * 
- * @version $Id: OriginEntrySource.java,v 1.8.4.2 2006-10-14 02:29:32 jbmorris Exp $
+ * @version $Id: OriginEntrySource.java,v 1.8.4.3 2007-02-10 11:37:32 j2eemgr Exp $
  * 
  */
 
