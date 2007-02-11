@@ -142,7 +142,7 @@
 			<filter token="scheduler-spring-beans-import" value="${scheduler.spring.beans.import}" />
 			<filter token="scheduler-spring-jobstore-properties" value="${scheduler.spring.jobstore.properties}" />
 			<filter token="variable-ojb-properties" value="${application.ojb.properties}" />
-			<filter token="use-auto-commit" value="1" />
+			<filter token="use-auto-commit" value="0" />
 		</filterset>
 	</target>
 
