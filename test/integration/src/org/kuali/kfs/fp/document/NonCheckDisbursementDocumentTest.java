@@ -22,7 +22,6 @@ import static org.kuali.core.util.SpringServiceLocator.getTransactionalDocumentD
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testAddAccountingLine;
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testConvertIntoCopy;
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed;
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testConvertIntoCopy_invalidYear;
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected;
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear;
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
@@ -79,9 +78,7 @@ public class NonCheckDisbursementDocumentTest extends KualiTestBase {
     public final void testGetNewDocument() throws Exception {
         testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
     }
-    public void testConvertIntoCopy_invalidYear() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_invalidYear(buildDocument(), getAccountingPeriodService());
-    }
+
     public final void testConvertIntoCopy_copyDisallowed() throws Exception {
         AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
        
