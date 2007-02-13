@@ -92,11 +92,6 @@ public class AuxiliaryVoucherDocumentTest extends KualiTestBase {
         testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
     }
 
-    public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
-
-    }
-
     public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
         AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
     }
