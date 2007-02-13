@@ -101,7 +101,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
                 ((Copyable) document).toCopy();
             }
             catch (IllegalStateException e) {
-                failedAsExpected = (e.getMessage().indexOf("not support") != -1);
+                failedAsExpected = true;
             }
 
             assertTrue(failedAsExpected);
@@ -162,13 +162,15 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
             assertEquals("accounting period invalid. period codes must remain the same", document.getAccountingPeriod().getUniversityFiscalPeriodCode(), accountingPeriod.getUniversityFiscalPeriodCode());
             document.setAccountingPeriod(accountingPeriod);
 
+            boolean failedAsExpected = false;
             try {
                 ((Correctable) document).toErrorCorrection();
                 fail("converted into error correction for an invalid year");
             }
             catch (IllegalStateException e) {
-                fail(e.getMessage());
+                failedAsExpected = true;
             }
+            assertTrue(failedAsExpected);
         }
     }
 
