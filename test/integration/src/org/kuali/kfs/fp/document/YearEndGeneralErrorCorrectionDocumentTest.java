@@ -92,9 +92,7 @@ public class YearEndGeneralErrorCorrectionDocumentTest extends KualiTestBase {
     public final void testGetNewDocument() throws Exception {
         testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
     }
-    public final void testConvertIntoCopy_invalidYear() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_invalidYear(buildDocument(), getAccountingPeriodService());
-    }
+
     public final void testConvertIntoCopy_copyDisallowed() throws Exception {
         AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
        
