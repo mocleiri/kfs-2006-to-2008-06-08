@@ -123,8 +123,7 @@
 			<filter token="htdocs-logs-url" value="${htdocs.url}logs/" />
 			<filter token="htdocs-staging-url" value="${htdocs.url}staging/" />
 			<filter token="cas-url" value="${base.cas.url}${ant.project.name}-${build.environment}/cas" />
-			<!--<filter token="base-workflow-url" value="${base.workflow.url}" />
-			<filter token="workflow-url" value="${base.workflow.url}${workflow.application}-${build.environment}" />-->
+			<filter token="workflow-url" value="${base.application.url}${ant.project.name}-${build.environment}/${workflow.application}" />
 			<filter token="externalizable-static-content-url" value="${externalizable.static.content.url}" />
 			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
 			<filter token="web-authentication-service" value="${web.authentication.service}" />
@@ -146,6 +145,7 @@
 			<filter token="scheduler-spring-jobstore-properties" value="${scheduler.spring.jobstore.properties}" />
 			<filter token="variable-ojb-properties" value="${application.ojb.properties}" />
 			<filter token="use-auto-commit" value="0" />
+			<filter token="transaction-timeout" value="${transaction.timeout}"/>
 		</filterset>
 	</target>
 
