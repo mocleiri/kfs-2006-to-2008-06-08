@@ -90,7 +90,7 @@ public class ServiceBillingDocumentAuthorizer extends AccountingDocumentAuthoriz
      * cannot be changed, so if this user isn't authorized for all those income accounts then he won't be able to save or submit the
      * error correction. We avoid this frustration by hiding that button in the first place.
      * 
-     * @see org.kuali.core.document.TransactionalDocumentAuthorizerBase#getDocumentActionFlags(org.kuali.core.document.Document,
+     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase#getDocumentActionFlags(org.kuali.core.document.Document,
      *      org.kuali.core.bo.user.KualiUser)
      */
     @Override
