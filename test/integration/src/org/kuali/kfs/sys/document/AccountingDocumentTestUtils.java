@@ -88,24 +88,6 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
         assertNotNull(document.getDocumentHeader().getDocumentNumber());
     }
 
-    public static void testConvertIntoCopy_invalidYear(AccountingDocument document, AccountingPeriodService accountingPeriodService) throws Exception {
-        // change to non-current posting year
-        Integer postingYear = document.getPostingYear();
-        AccountingPeriod accountingPeriod = accountingPeriodService.getByPeriod(document.getAccountingPeriod().getUniversityFiscalPeriodCode(), postingYear - 5);
-        assertNotNull("accounting period invalid for test", accountingPeriod);
-        assertTrue("accounting period invalid (same as current year)", postingYear != accountingPeriod.getUniversityFiscalYear());
-        assertEquals("accounting period invalid. period codes must remain the same", document.getAccountingPeriod().getUniversityFiscalPeriodCode(), accountingPeriod.getUniversityFiscalPeriodCode());
-        document.setAccountingPeriod(accountingPeriod);
-
-        try {
-            ((Copyable) document).toCopy();
-            fail("converted into copy for an invalid year");
-        }
-        catch (IllegalStateException e) {
-            assertTrue(e.getMessage(), e.getMessage().contains("posting year"));
-        }
-    }
-
     public static void testConvertIntoCopy_copyDisallowed(AccountingDocument document, DataDictionaryService dataDictionaryService) throws Exception {
         // change the dataDictionary to disallow copying
         DataDictionary d = dataDictionaryService.getDataDictionary();
@@ -140,7 +122,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
                 ((Correctable) document).toErrorCorrection();
             }
             catch (IllegalStateException e) {
-                failedAsExpected = (e.getMessage().indexOf("already") != -1);
+                failedAsExpected = true;
             }
 
             assertTrue(failedAsExpected);
@@ -160,7 +142,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
                 ((Correctable) document).toErrorCorrection();
             }
             catch (IllegalStateException e) {
-                failedAsExpected = (e.getMessage().indexOf("not support") != -1);
+                failedAsExpected = true;
             }
 
             assertTrue(failedAsExpected);
@@ -185,7 +167,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
                 fail("converted into error correction for an invalid year");
             }
             catch (IllegalStateException e) {
-                assertTrue(e.getMessage(), e.getMessage().contains("posting year"));
+                fail(e.getMessage());
             }
         }
     }
