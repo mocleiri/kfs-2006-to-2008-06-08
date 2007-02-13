@@ -241,30 +241,9 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
         testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
     }
 
-    public final void testConvertIntoCopy_invalidYear() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_invalidYear(buildDocument(), getAccountingPeriodService());
-    }
-
     public final void testConvertIntoCopy_copyDisallowed() throws Exception {
         AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
 
-    }
-
-    public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
-    }
-
-    public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
-    }
-
-    public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), getTransactionalDocumentDictionaryService(), getAccountingPeriodService());
-    }
-
-    @TestsWorkflowViaDatabase
-    public final void testConvertIntoErrorCorrection() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), getDocumentService(), getTransactionalDocumentDictionaryService());
     }
 
     @TestsWorkflowViaDatabase
