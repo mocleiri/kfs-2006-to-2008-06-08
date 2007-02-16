@@ -28,18 +28,18 @@ import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
+import org.kuali.core.rule.event.AddCheckEvent;
+import org.kuali.core.rule.event.DeleteCheckEvent;
+import org.kuali.core.rule.event.UpdateCheckEvent;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.Timer;
 import org.kuali.core.util.WebUtils;
+import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
-import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CheckBase;
 import org.kuali.module.financial.document.CashReceiptDocument;
-import org.kuali.module.financial.rule.event.AddCheckEvent;
-import org.kuali.module.financial.rule.event.DeleteCheckEvent;
-import org.kuali.module.financial.rule.event.UpdateCheckEvent;
 import org.kuali.module.financial.rules.CashReceiptDocumentRuleUtil;
 import org.kuali.module.financial.service.CashReceiptCoverSheetService;
 import org.kuali.module.financial.service.CashReceiptService;
@@ -51,7 +51,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 /**
  * 
  */
-public class CashReceiptAction extends KualiAccountingDocumentActionBase {
+public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
     /**
      * Adds handling for check updates
      * 
@@ -102,9 +102,9 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
         String directory = getServlet().getServletConfig().getServletContext().getRealPath(CashReceiptCoverSheetServiceImpl.CR_COVERSHEET_TEMPLATE_RELATIVE_DIR);
 
         // retrieve document
-        String documentNumber = request.getParameter(PropertyConstants.DOCUMENT_NUMBER);
+        String financialDocumentNumber = request.getParameter(PropertyConstants.FINANCIAL_DOCUMENT_NUMBER);
 
-        CashReceiptDocument document = (CashReceiptDocument) SpringServiceLocator.getDocumentService().getByDocumentHeaderId(documentNumber);
+        CashReceiptDocument document = (CashReceiptDocument) SpringServiceLocator.getDocumentService().getByDocumentHeaderId(financialDocumentNumber);
 
         // since this action isn't triggered by a post, we don't have the normal document data
         // so we have to set the document into the form manually so that later authz processing
@@ -115,7 +115,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         CashReceiptCoverSheetService coverSheetService = SpringServiceLocator.getCashReceiptCoverSheetService();
         coverSheetService.generateCoverSheet(document, directory, baos);
-        String fileName = documentNumber + "_cover_sheet.pdf";
+        String fileName = financialDocumentNumber + "_cover_sheet.pdf";
         WebUtils.saveMimeOutputStreamAsFile(response, "application/pdf", baos, fileName);
 
         return null;
@@ -197,7 +197,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
         CashReceiptDocument crDoc = crForm.getCashReceiptDocument();
 
         Check newCheck = crForm.getNewCheck();
-        newCheck.setDocumentNumber(crDoc.getDocumentNumber());
+        newCheck.setFinancialDocumentNumber(crDoc.getFinancialDocumentNumber());
 
         // check business rules
         boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddCheckEvent(Constants.NEW_CHECK_PROPERTY_NAME, crDoc, newCheck));
@@ -309,7 +309,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
         CashReceiptDocument crDoc = crForm.getCashReceiptDocument();
 
         CashReceiptService crs = SpringServiceLocator.getCashReceiptService();
-        String verificationUnit = crs.getCashReceiptVerificationUnitForUser(GlobalVariables.getUserSession().getUniversalUser());
+        String verificationUnit = crs.getCashReceiptVerificationUnitForUser(GlobalVariables.getUserSession().getKualiUser());
         String campusCode = crs.getCampusCodeForCashReceiptVerificationUnit(verificationUnit);
         crDoc.setCampusLocationCode(campusCode);
 
