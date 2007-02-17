@@ -148,11 +148,11 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
                     // TODO: issue a warning here.
                 }
                 if (document instanceof RequisitionDocument) {
-                    GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_TOTAL_LIMIT, 
-                            PurapKeyConstants.REQ_TOTAL_GREATER_THAN_PO_TOTAL_LIMIT);
-                          valid &= false;
-                }
+                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_TOTAL_LIMIT, 
+                  PurapKeyConstants.REQ_TOTAL_GREATER_THAN_PO_TOTAL_LIMIT);
+                valid &= false;
             }
+        } 
         } 
         return valid;
     }

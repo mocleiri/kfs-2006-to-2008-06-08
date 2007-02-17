@@ -1,17 +1,26 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
@@ -20,16 +29,15 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 
-import org.kuali.Constants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.kfs.bo.Options;
 
 /**
- * 
+ * @author Kuali Nervous System Team ()
  */
-public class AccountingPeriod extends PersistableBusinessObjectBase {
+public class AccountingPeriod extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String universityFiscalPeriodCode;
@@ -50,7 +58,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -71,7 +79,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodCode attribute.
      * 
-     * @return Returns the universityFiscalPeriodCode
+     * @return - Returns the universityFiscalPeriodCode
      * 
      */
     public String getUniversityFiscalPeriodCode() {
@@ -92,7 +100,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodName attribute.
      * 
-     * @return Returns the universityFiscalPeriodName
+     * @return - Returns the universityFiscalPeriodName
      * 
      */
     public String getUniversityFiscalPeriodName() {
@@ -113,7 +121,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodStatusCode attribute.
      * 
-     * @return Returns the universityFiscalPeriodStatusCode
+     * @return - Returns the universityFiscalPeriodStatusCode
      * 
      */
     public String getUniversityFiscalPeriodStatusCode() {
@@ -134,7 +142,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetRolloverIndicator attribute.
      * 
-     * @return Returns the budgetRolloverIndicator
+     * @return - Returns the budgetRolloverIndicator
      * 
      */
     public boolean isBudgetRolloverIndicator() {
@@ -156,7 +164,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodEndDate attribute.
      * 
-     * @return Returns the universityFiscalPeriodEndDate
+     * @return - Returns the universityFiscalPeriodEndDate
      * 
      */
     public Date getUniversityFiscalPeriodEndDate() {
@@ -171,14 +179,6 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
      */
     public void setUniversityFiscalPeriodEndDate(Date universityFiscalPeriodEndDate) {
         this.universityFiscalPeriodEndDate = universityFiscalPeriodEndDate;
-    }
-    
-    /**
-     * Determine if the current account period is open
-     * @return true if the accounting period is open; otherwise, false
-     */
-    public boolean isOpen(){       
-        return Constants.ACCOUNTING_PERIOD_STATUS_OPEN.equals(this.getUniversityFiscalPeriodStatusCode());
     }
 
     /**
