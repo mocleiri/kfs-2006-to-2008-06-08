@@ -184,8 +184,10 @@
 			<filter token="batch-logger" value="" />
 			<filter token="variable-ojb-properties" value="${application.ojb.properties}" />
 			<filter token="use-auto-commit" value="1" />
-			<filter token="local-ddl-file" value="${local.ddl.file}" />
+			<filter token="database-load-properties-file" value="${database.load.properties.file}" />
 			<filter token="database-load-step-bean" value="${database.load.step.bean}" />
+			<filter token="database-encrypt-properties-file" value="${database.encrypt.properties.file}" />
+			<filter token="database-encrypt-step-bean" value="${database.encrypt.step.bean}" />
 		</filterset>
 		<condition property="batch.program.directory" value="/home/kultstb/batch/${build.environment}">
 			<or>
