@@ -218,7 +218,7 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
      * 
      */
     void deleteCostSharePendingEntries() {
-        sqlCommand("DELETE gl_pending_entry_mt WHERE OBJ_ID IN (SELECT g.OBJ_ID FROM gl_pending_entry_mt g,ca_a21_sub_acct_t a WHERE (a.fin_coa_cd = g.fin_coa_cd " + "AND a.account_nbr = g.account_nbr AND a.sub_acct_nbr = g.sub_acct_nbr AND a.sub_acct_typ_cd = 'CS') AND g.person_unvl_id = " + Thread.currentThread().getId() + ")");
+        sqlCommand("DELETE FROM gl_pending_entry_mt WHERE OBJ_ID IN (SELECT g.OBJ_ID FROM gl_pending_entry_mt g,ca_a21_sub_acct_t a WHERE (a.fin_coa_cd = g.fin_coa_cd " + "AND a.account_nbr = g.account_nbr AND a.sub_acct_nbr = g.sub_acct_nbr AND a.sub_acct_typ_cd = 'CS') AND g.person_unvl_id = " + Thread.currentThread().getId() + ")");
     }
 
     /**
