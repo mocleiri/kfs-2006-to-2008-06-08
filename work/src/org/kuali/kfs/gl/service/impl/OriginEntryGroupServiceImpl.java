@@ -36,7 +36,7 @@ import org.kuali.module.gl.web.struts.action.CorrectionAction;
 
 /**
  *  
- * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.8 2007-02-10 11:37:34 j2eemgr Exp $
+ * @version $Id: OriginEntryGroupServiceImpl.java,v 1.26.2.9 2007-02-26 01:33:02 aapotts Exp $
  */
 public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupServiceImpl.class);
@@ -186,7 +186,7 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
         while (i.hasNext()) {
             Object[] rowCount = (Object[]) i.next();
             int id = ((BigDecimal) rowCount[0]).intValue();
-            int count = ((BigDecimal) rowCount[1]).intValue();
+            int count = ((Long) rowCount[1]).intValue();
 
             // Find the correct group to add the count
             for (Iterator iter = c.iterator(); iter.hasNext();) {
