@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import static org.kuali.KeyConstants.NonCheckDisbursement.ERROR_DOCUMENT_NON_CHE
 import static org.kuali.KeyConstants.NonCheckDisbursement.ERROR_DOCUMENT_NON_CHECK_DISBURSEMENT_INVALID_SUB_FUND_GROUP;
 import static org.kuali.PropertyConstants.FINANCIAL_OBJECT_CODE;
 import static org.kuali.PropertyConstants.REFERENCE_NUMBER;
-import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
 import static org.kuali.module.financial.rules.NonCheckDisbursementDocumentRuleConstants.NON_CHECK_DISBURSEMENT_SECURITY_GROUPING;
 import static org.kuali.module.financial.rules.NonCheckDisbursementDocumentRuleConstants.RESTRICTED_CONSOLIDATION_CODES;
 import static org.kuali.module.financial.rules.NonCheckDisbursementDocumentRuleConstants.RESTRICTED_OBJECT_SUB_TYPE_CODES;
@@ -30,22 +29,21 @@ import static org.kuali.module.financial.rules.NonCheckDisbursementDocumentRuleC
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
-import org.kuali.KeyConstants;
-import org.kuali.PropertyConstants;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.rules.AccountingDocumentRuleBase;
 import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
  * Business rule(s) applicable to NonCheckDisbursement documents.
+ * 
+ * 
  */
-public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase {
+public class NonCheckDisbursementDocumentRule extends TransactionalDocumentRuleBase {
 
     /**
      * Convenience method for accessing the most-likely requested security grouping
@@ -64,21 +62,21 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
      * Note: This <code>{@link org.kuali.core.document.Document} is always balanced because it only
      * has From: lines.
      *
-     * @see FinancialDocumentRuleBase#isDocumentBalanceValid(FinancialDocument)
+     * @see TransactionalDocumentRuleBase#isDocumentBalanceValid(TransactionalDocument)
      */
     @Override
-    protected boolean isDocumentBalanceValid(AccountingDocument financialDocument) {
+    protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
         return true;
     }
 
     /**
      * Overrides to call super and then NCD specific accounting line rules.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean processCustomAddAccountingLineBusinessRules(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean processCustomAddAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine) {
         boolean retval = true;
         retval = super.processCustomAddAccountingLineBusinessRules(document, accountingLine);
         if (retval) {
@@ -88,48 +86,34 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
     }
 
     /**
-     * @see IsDebitUtils#isDebitConsideringNothingPositiveOnly(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringNothingPositiveOnly(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(AccountingDocument financialDocument, AccountingLine accountingLine) throws IllegalStateException {
-        return IsDebitUtils.isDebitConsideringNothingPositiveOnly(this, financialDocument, accountingLine);
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) throws IllegalStateException {
+        return IsDebitUtils.isDebitConsideringNothingPositiveOnly(this, transactionalDocument, accountingLine);
     }
-    
-    /**
-     * overrides the parent to display correct error message for a single sided document
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isSourceAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.FinancialDocument)
-     */
-    @Override
-    protected boolean isSourceAccountingLinesRequiredNumberForRoutingMet(AccountingDocument financialDocument) {
-        if (0 == financialDocument.getSourceAccountingLines().size()) {
-            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + PropertyConstants.SOURCE_ACCOUNTING_LINES, KeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES);
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-    
+
     /**
      * Overrides the parent to return true, because NonCheckDisbursement documents only use the SourceAccountingLines data
      * structures. The list that holds TargetAccountingLines should be empty. This will be checked when the document is "routed" or
      * submitted to post - it's called automatically by the parent's processRouteDocument method.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.FinancialDocument)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.TransactionalDocument)
      */
     @Override
-    protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(AccountingDocument financialDocument) {
+    protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
         return true;
     }
 
     /**
-     * @see FinancialDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(FinancialDocument, AccountingLine,
+     * @see TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument, AccountingLine,
      *      GeneralLedgerPendingEntry)
      */
-    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument financialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        explicitEntry.setTransactionLedgerEntryDescription(buildTransactionLedgerEntryDescriptionUsingRefOriginAndRefDocNumber(financialDocument, accountingLine));
+    @Override
+    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+        explicitEntry.setTransactionLedgerEntryDescription(buildTransactionLedgerEntryDescriptionUsingRefOriginAndRefDocNumber(transactionalDocument, accountingLine));
 
         // Clearing fields that are already handled by the parent algorithm - we don't actually want
         // these to copy over from the accounting lines b/c they don't belond in the GLPEs
@@ -144,22 +128,22 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
      * using information from the <code>{@link AccountingLine}</code>. Format is "01-12345: blah blah blah".
      * 
      * @param line
-     * @param financialDocument
+     * @param transactionalDocument
      * @return String
      */
-    private String buildTransactionLedgerEntryDescriptionUsingRefOriginAndRefDocNumber(AccountingDocument financialDocument, AccountingLine line) {
+    private String buildTransactionLedgerEntryDescriptionUsingRefOriginAndRefDocNumber(TransactionalDocument transactionalDocument, AccountingLine line) {
         String description = "";
         if (StringUtils.isBlank(line.getReferenceNumber())) {
             throw new IllegalStateException("Reference Document Number is required and should be validated before this point.");
         }
 
-        description = Constants.ORIGIN_CODE_KUALI + "-" + line.getReferenceNumber();
+        description = Constants.ORIGIN_CODE_KUALI + line.getReferenceNumber();
 
         if (StringUtils.isNotBlank(line.getFinancialDocumentLineDescription())) {
             description += ": " + line.getFinancialDocumentLineDescription();
         }
         else {
-            description += ": " + financialDocument.getDocumentHeader().getFinancialDocumentDescription();
+            description += ": " + transactionalDocument.getDocumentHeader().getFinancialDocumentDescription();
         }
 
         if (description.length() > GENERAL_LEDGER_PENDING_ENTRY_CODE.GLPE_DESCRIPTION_MAX_LENGTH) {
@@ -218,7 +202,7 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
     }
 
     /**
-     * @see FinancialDocumentRuleBase#isSubFundGroupAllowed(AccountingLine accountingLine)
+     * @see TransactionalDocumentRuleBase#isSubFundGroupAllowed(AccountingLine accountingLine)
      */
     @Override
     public boolean isSubFundGroupAllowed(AccountingLine accountingLine) {
@@ -240,7 +224,7 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
     }
 
     /**
-     * @see FinancialDocumentRuleBase#isObjectConsolidationAllowed(AccountingLine accountingLine)
+     * @see TransactionalDocumentRuleBase#isObjectConsolidationAllowed(AccountingLine accountingLine)
      */
     @Override
     public boolean isObjectConsolidationAllowed(AccountingLine accountingLine) {

@@ -1,21 +1,27 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.core.util.SpringServiceLocator.getDictionaryValidationService;
 import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.CAPITAL_OBJECT_SUB_TYPE_CODES;
 import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING;
 import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.RESTRICTED_FUND_GROUP_CODES;
@@ -27,42 +33,47 @@ import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConsta
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
+import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.ExceptionUtils;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.rules.AttributeReference;
+import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.financial.document.InternalBillingDocument;
+import org.kuali.module.gl.util.SufficientFundsItemHelper;
 
 /**
  * Business rule(s) applicable to InternalBilling document.
+ * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
+public class InternalBillingDocumentRule extends TransactionalDocumentRuleBase {
 
     /**
-     * @see IsDebitUtils#isDebitConsideringSection(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringSection(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(AccountingDocument transactionalDocument, AccountingLine accountingLine) {
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         return IsDebitUtils.isDebitConsideringSection(this, transactionalDocument, accountingLine);
     }
 
     /**
      * Overrides to only disallow zero, allowing negative amounts.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isAmountValid(FinancialDocument, AccountingLine)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isAmountValid(TransactionalDocument, AccountingLine)
      */
     @Override
-    public boolean isAmountValid(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
         if (accountingLine.getAmount().equals(Constants.ZERO)) {
             GlobalVariables.getErrorMap().putError(Constants.AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
             LOG.info("failing isAmountValid - zero check");
@@ -72,29 +83,29 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomAddAccountingLineBusinessRules(FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomAddAccountingLineBusinessRules(TransactionalDocument,
      *      AccountingLine)
      */
     @Override
-    public boolean processCustomAddAccountingLineBusinessRules(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean processCustomAddAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine) {
         return processCommonCustomAccountingLineRules(accountingLine);
     }
 
     /**
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(TransactionalDocument,
      *      AccountingLine)
      */
     @Override
-    public boolean processCustomReviewAccountingLineBusinessRules(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean processCustomReviewAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine) {
         return processCommonCustomAccountingLineRules(accountingLine);
     }
 
     /**
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(TransactionalDocument,
      *      AccountingLine, AccountingLine)
      */
     @Override
-    public boolean processCustomUpdateAccountingLineBusinessRules(AccountingDocument document, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
+    public boolean processCustomUpdateAccountingLineBusinessRules(TransactionalDocument document, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
         return processCommonCustomAccountingLineRules(updatedAccountingLine);
     }
 
@@ -126,9 +137,9 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
         String actualSubFundGroupCode = accountingLine.getAccount().getSubFundGroupCode();
         String requiredSubFundGroupCode = SUB_FUND_GROUP_CODE.CONTINUE_EDUC;
 
-        if (accountingLine.isSourceAccountingLine() && OBJECT_SUB_TYPE_CODE.STUDENT_FEES.equals(objectSubTypeCode) && !requiredSubFundGroupCode.equals(actualSubFundGroupCode)) {
+        if (isSourceAccountingLine(accountingLine) && OBJECT_SUB_TYPE_CODE.STUDENT_FEES.equals(objectSubTypeCode) && !requiredSubFundGroupCode.equals(actualSubFundGroupCode)) {
             // The user could fix this via either ObjectCode or Account, but we arbitrarily choose the ObjectCode to highlight.
-            reportError(PropertyConstants.OBJECT_CODE, KeyConstants.ERROR_DOCUMENT_INCORRECT_OBJ_CODE_WITH_SUB_FUND_GROUP, accountingLine.getFinancialObjectCode(), objectSubTypeCode, requiredSubFundGroupCode, actualSubFundGroupCode);
+            reportError(PropertyConstants.OBJECT_CODE, KeyConstants.ERROR_DOCUMENT_INCORRECT_OBJ_CODE_WITH_SUB_FUND_GROUP, new String[] { accountingLine.getFinancialObjectCode(), objectSubTypeCode, requiredSubFundGroupCode, actualSubFundGroupCode });
             return false;
         }
         return true;
@@ -143,7 +154,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
      * @return whether the given line is valid with respect to capital object codes
      */
     private boolean validateCapitalObjectCodes(AccountingLine accountingLine) {
-        if (accountingLine.isSourceAccountingLine() && isCapitalObject(accountingLine)) {
+        if (isSourceAccountingLine(accountingLine) && isCapitalObject(accountingLine)) {
             GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.ERROR_DOCUMENT_IB_CAPITAL_OBJECT_IN_INCOME_SECTION);
             LOG.debug("APC rule failure " + ExceptionUtils.describeStackLevel(0));
             return false;
@@ -168,7 +179,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * @see FinancialDocumentRuleBase#processCustomRouteDocumentBusinessRules(Document)
+     * @see TransactionalDocumentRuleBase#processCustomRouteDocumentBusinessRules(Document)
      */
     @Override
     public boolean processCustomRouteDocumentBusinessRules(Document document) {
@@ -192,12 +203,20 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
      * @return whether any items were invalid
      */
     private static boolean validateItems(InternalBillingDocument internalBillingDocument) {
-        boolean retval = true;
+        final ErrorMap errorMap = GlobalVariables.getErrorMap();
+        errorMap.addToErrorPath(Constants.DOCUMENT_PROPERTY_NAME);
+        int originalErrorCount = errorMap.getErrorCount();
         for (int i = 0; i < internalBillingDocument.getItems().size(); i++) {
-            String propertyName = Constants.DOCUMENT_PROPERTY_NAME + "." + PropertyConstants.ITEM + "[" + i + "]";
-            retval &= getDictionaryValidationService().isBusinessObjectValid(internalBillingDocument.getItem(i), propertyName);
+            // todo: expose and use a method for this List handling in DictionaryValidationService
+            String propertyName = PropertyConstants.ITEM + "[" + i + "]";
+            GlobalVariables.getErrorMap().addToErrorPath(propertyName);
+            SpringServiceLocator.getDictionaryValidationService().validateBusinessObject(internalBillingDocument.getItem(i));
+            GlobalVariables.getErrorMap().removeFromErrorPath(propertyName);
         }
-        return retval;
+        // todo: return a boolean from DictionaryValidationService instead of checking errorMap. KULNRVSYS-1093
+        int currentErrorCount = errorMap.getErrorCount();
+        errorMap.removeFromErrorPath(Constants.DOCUMENT_PROPERTY_NAME);
+        return currentErrorCount == originalErrorCount;
     }
 
     /**
@@ -243,7 +262,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
      * Overrides the parent's implementation to check to make sure that the provided object code's level isn't a contract and grants
      * level.
      * 
-     * @see FinancialDocumentRuleBase#isObjectLevelAllowed(AccountingLine)
+     * @see TransactionalDocumentRuleBase#isObjectLevelAllowed(AccountingLine)
      */
     @Override
     public boolean isObjectLevelAllowed(AccountingLine accountingLine) {
@@ -260,7 +279,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     /**
      * This implementation overrides the parent to check and make sure that the fund group is not a Loan fund group.
      * 
-     * @see FinancialDocumentRuleBase#isFundGroupAllowed(AccountingLine)
+     * @see TransactionalDocumentRuleBase#isFundGroupAllowed(AccountingLine)
      */
     @Override
     public boolean isFundGroupAllowed(AccountingLine accountingLine) {
@@ -289,7 +308,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
      * Overrides the parent's implementation to check and make sure that the sub fund group is not the Retire Indebt or the
      * Investment Plant sub fund group.
      * 
-     * @see FinancialDocumentRuleBase#isSubFundGroupAllowed(AccountingLine)
+     * @see TransactionalDocumentRuleBase#isSubFundGroupAllowed(AccountingLine)
      */
     @Override
     public boolean isSubFundGroupAllowed(AccountingLine accountingLine) {
@@ -301,5 +320,45 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
             allowed &= indirectRuleSucceeds(parameterRule, direct, indirect);
         }
         return allowed;
+    }
+
+    /**
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument,
+     *      org.kuali.core.bo.SourceAccountingLine)
+     */
+    @Override
+    protected SufficientFundsItemHelper.SufficientFundsItem processSourceAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, SourceAccountingLine sourceAccountingLine) {
+        return processAccountingLineSufficientFundsCheckingPreparation(sourceAccountingLine, transactionalDocument);
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument,
+     *      org.kuali.core.bo.TargetAccountingLine)
+     */
+    @Override
+    protected SufficientFundsItemHelper.SufficientFundsItem processTargetAccountingLineSufficientFundsCheckingPreparation(TransactionalDocument transactionalDocument, TargetAccountingLine targetAccountingLine) {
+        return processAccountingLineSufficientFundsCheckingPreparation(targetAccountingLine, transactionalDocument);
+    }
+
+    /**
+     * Prepares to process sufficient funds checking for the given AccountingLine.
+     * 
+     * @param accountingLine
+     * @param transactionalDocument TODO
+     * @return the item to help check sufficient funds for the given AccountingLine
+     */
+    private SufficientFundsItemHelper.SufficientFundsItem processAccountingLineSufficientFundsCheckingPreparation(AccountingLine accountingLine, TransactionalDocument transactionalDocument) {
+        String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
+        String accountNumber = accountingLine.getAccountNumber();
+        String accountSufficientFundsCode = accountingLine.getAccount().getAccountSufficientFundsCode();
+        String financialObjectCode = accountingLine.getFinancialObjectCode();
+        String financialObjectLevelCode = accountingLine.getObjectCode().getFinancialObjectLevelCode();
+        KualiDecimal lineAmount = getGeneralLedgerPendingEntryAmountForAccountingLine(accountingLine);
+        Integer fiscalYear = accountingLine.getPostingYear();
+        String financialObjectTypeCode = accountingLine.getObjectTypeCode();
+        String offsetDebitCreditCode = isDebit(transactionalDocument, accountingLine) ? Constants.GL_CREDIT_CODE : Constants.GL_DEBIT_CODE;
+        String sufficientFundsObjectCode = SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(chartOfAccountsCode, financialObjectCode, accountSufficientFundsCode, financialObjectLevelCode);
+        return buildSufficentFundsItem(accountNumber, accountSufficientFundsCode, lineAmount, chartOfAccountsCode, sufficientFundsObjectCode, offsetDebitCreditCode, financialObjectCode, financialObjectLevelCode, fiscalYear, financialObjectTypeCode);
     }
 }

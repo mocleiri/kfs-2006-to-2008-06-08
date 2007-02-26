@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,10 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.action.KualiAction;
 import org.kuali.core.web.struts.form.LookupForm;
-import org.kuali.core.web.ui.Field;
-import org.kuali.core.web.ui.Row;
+import org.kuali.core.web.uidraw.Field;
+import org.kuali.core.web.uidraw.Row;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.util.ObjectHelper;
-import org.kuali.module.gl.web.lookupable.AccountBalanceByConsolidationLookupableHelperServiceImpl;
 import org.kuali.module.gl.web.struts.form.BalanceInquiryForm;
 
 /**
@@ -112,7 +111,7 @@ public class BalanceInquiryAction extends KualiAction {
         kualiLookupable.validateSearchParameters(lookupForm.getFields());
 
         try {
-            displayList = kualiLookupable.performLookup(lookupForm, resultTable, true);
+            displayList = SpringServiceLocator.getLookupService().performLookup(lookupForm, kualiLookupable, resultTable, true);
 
             Object[] resultTableAsArray = resultTable.toArray();
 
@@ -121,8 +120,9 @@ public class BalanceInquiryAction extends KualiAction {
 
             request.setAttribute(Constants.REQUEST_SEARCH_RESULTS_SIZE, totalSize);
 
-            // TODO: use inheritance instead of this if statement
-            if (kualiLookupable.getLookupableHelperService() instanceof AccountBalanceByConsolidationLookupableHelperServiceImpl) {
+            String lookupableName = kualiLookupable.getClass().getName().substring(kualiLookupable.getClass().getName().lastIndexOf('.') + 1);
+
+            if (lookupableName.startsWith("AccountBalanceByConsolidation")) {
 
 
                 Collection totalsTable = new ArrayList();
@@ -280,8 +280,10 @@ public class BalanceInquiryAction extends KualiAction {
         request.setAttribute(Constants.REQUEST_SEARCH_RESULTS, GlobalVariables.getUserSession().retrieveObject(request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY)));
         request.setAttribute(Constants.REQUEST_SEARCH_RESULTS_SIZE, request.getParameter(Constants.REQUEST_SEARCH_RESULTS_SIZE));
 
-        // TODO: use inheritance instead of this if statement
-        if (((BalanceInquiryForm) form).getLookupable().getLookupableHelperService() instanceof AccountBalanceByConsolidationLookupableHelperServiceImpl) {
+        String boClassName = ((BalanceInquiryForm) form).getBusinessObjectClassName();
+        String lookupableName = boClassName.substring(boClassName.lastIndexOf('.') + 1);
+
+        if (lookupableName.startsWith("AccountBalanceByConsolidation")) {
             Object totalsTable = GlobalVariables.getUserSession().retrieveObject(TOTALS_TABLE_KEY);
             request.setAttribute(TOTALS_TABLE_KEY, totalsTable);
         }
