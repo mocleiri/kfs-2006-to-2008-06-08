@@ -157,6 +157,7 @@ public class OriginEntryTestBase extends KualiTestBase {
         assertEquals("Number of groups is wrong", groupCount, groups.size());
 
         Collection c = originEntryDao.testingGetAllEntries();
+        
 
         // This is for debugging purposes - change to true for output
         if (true) {
