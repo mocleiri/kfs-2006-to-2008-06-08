@@ -69,8 +69,10 @@ public class ProcurementCardDocumentRule extends TransactionalDocumentRuleBase {
      */
     @Override
     public boolean processUpdateAccountingLineBusinessRules(TransactionalDocument transactionalDocument, AccountingLine accountingLine, AccountingLine updatedAccountingLine) {
-        fixErrorPath(transactionalDocument, accountingLine);
-
+        if (accountingLine instanceof ProcurementCardTargetAccountingLine) {
+            fixErrorPath(transactionalDocument, accountingLine);
+        }
+        
         return super.processUpdateAccountingLineBusinessRules(transactionalDocument, accountingLine, updatedAccountingLine);
     }
 
