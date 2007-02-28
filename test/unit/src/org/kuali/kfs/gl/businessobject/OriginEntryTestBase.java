@@ -199,7 +199,7 @@ public class OriginEntryTestBase extends KualiTestBase {
         }
     }
 
-    protected int getGroup(List groups, String groupCode) {
+     protected int getGroup(List groups, String groupCode) {
         for (Iterator iter = groups.iterator(); iter.hasNext();) {
             Map element = (Map) iter.next();
 
