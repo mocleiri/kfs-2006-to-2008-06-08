@@ -1,5 +1,7 @@
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/PurchasingDocumentBaseAttributes.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -18,6 +20,12 @@
     <control>
         <select valuesFinderClass="org.kuali.module.purap.lookup.keyvalues.FiscalYearValuesFinder" />
     </control>
+</attributeReference>
+
+<attributeReference name="vendorName" sourceClassName="org.kuali.module.purap.bo.VendorDetail" sourceAttributeName="vendorName">
+    <label>Suggested Vendor</label>
+    <shortLabel>Vendor</shortLabel>
+    <required>false</required>
 </attributeReference>
 
 <attributeReference name="vendorNumber" sourceClassName="org.kuali.module.purap.bo.VendorDetail" sourceAttributeName="vendorNumber">
@@ -144,66 +152,23 @@
     <label>Contract Manager</label>
     <shortLabel>Contract Manager</shortLabel>
     
-    <summary>contractManagerCode</summary>
+     <summary>contractManagerCode</summary>
     <description>contractManagerCode description...</description>
 </attributeReference>
 
-<attributeReference name="contractManagerName" sourceClassName="org.kuali.module.purap.bo.ContractManager" sourceAttributeName="contractManagerName">
-    <label>Contract Manager</label>
-    <shortLabel>Contract Manager</shortLabel>
+<attributeReference name="deliveryBuildingCode" sourceClassName="org.kuali.core.bo.Building" sourceAttributeName="buildingCode">
+    <label>Building Code</label>
+    <shortLabel>Bldg. Code</shortLabel>
+	
+	<required>false</required>
     
-    <summary>contractManagerName</summary>
-    <description>contractManagerName description...</description>
+    <summary>deliveryBuildingCode</summary>
+    <description>deliveryBuildingCode description...</description>
 </attributeReference>
-
-<attribute name="deliveryBuildingName">
-    <label>Building</label>
-    <shortLabel>Building</shortLabel>
-
-    <maxLength>45</maxLength>
-    <validationPattern>
-        <anyCharacter allowWhitespace="true"/>
-    </validationPattern>
-    <required>true</required>
-
-    <control>
-        <select valuesFinderClass="org.kuali.kfs.lookup.keyvalues.BuildingValuesFinder"/>
-    </control>
-
-    <summary>deliveryBuildingName</summary>
-    <description>deliveryBuildingName description...</description>
-</attribute>
-
-<attributeReference name="deliveryCampusCode" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="campusCode">
-    <label>Delivery Campus</label>
-    <shortLabel>Del. Campus</shortLabel>
-    
-    <required>true</required>
-    
-    <summary>deliveryCampusCode</summary>
-    <description>deliveryCampusCode description...</description>
-</attributeReference>
-
-<attribute name="deliveryBuildingOther">
-	<label>Other Building</label>
-	<shortLabel>Other Bldg.</shortLabel>
-	
-	<maxLength>4</maxLength>
-	
-	<control>
-		<checkbox />
-	</control>
-	
-	<summary>deliveryBuildingOther</summary>
-	<description>deliveryBuildingOther description...</description>
-</attribute>
 
 <attributeReference name="deliveryBuildingLine1Address" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="line1Address">
     <label>Address 1</label>
     <shortLabel>Addr. 1</shortLabel>
-       
-    <required>true</required>
-    
     <summary>deliveryBuildingLine1Address</summary>
     <description>deliveryBuildingLine1Address description...</description>
 </attributeReference>
@@ -214,6 +179,24 @@
     <summary>deliveryBuildingLine2Address</summary>
     <description>deliveryBuildingLine2Address description...</description>
 </attributeReference>
+
+<attribute name="deliveryBuildingName" forceUppercase="true">
+    <label>Building</label>
+    <shortLabel>Building</shortLabel>
+
+    <maxLength>45</maxLength>
+    <validationPattern>
+        <anyCharacter />
+    </validationPattern>
+    <required>true</required>
+
+    <control>
+        <select valuesFinderClass="org.kuali.core.lookup.keyvalues.BuildingValuesFinder"/>
+    </control>
+
+    <summary>deliveryBuildingName</summary>
+    <description>deliveryBuildingName description...</description>
+</attribute>
 
 <attribute name="deliveryBuildingRoomNumber" forceUppercase="true">
     <label>Room</label>
@@ -232,6 +215,14 @@
     <summary>deliveryBuildingRoomNumber</summary>
     <description>deliveryBuildingRoomNumber description...</description>
 </attribute>
+
+<attributeReference name="deliveryCampusCode" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="campusCode">
+    <label>Delivery Campus</label>
+    <shortLabel>Del. Campus</shortLabel>
+    
+    <summary>deliveryCampusCode</summary>
+    <description>deliveryCampusCode description...</description>
+</attributeReference>
 
 <attributeReference name="deliveryCityName" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="cityName">
     <label>City</label>
@@ -445,11 +436,6 @@
 <attributeReference name="purchaseOrderCostSourceCode" sourceClassName="org.kuali.module.purap.bo.PurchaseOrderCostSource" sourceAttributeName="purchaseOrderCostSourceCode">
     <label>Cost Source</label>
     <shortLabel>Code</shortLabel>
-    <required>true</required>
-    <control>
-        <select valuesFinderClass="org.kuali.module.purap.lookup.keyvalues.PurchaseOrderCostSourceValuesFinder" />
-    </control>
-    
     <summary>purchaseOrderCostSourceCode</summary>
     <description>purchaseOrderCostSourceCode description...</description>
 </attributeReference>
@@ -481,9 +467,6 @@
 <attributeReference name="purchaseOrderTransmissionMethodCode" sourceClassName="org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod" sourceAttributeName="purchaseOrderTransmissionMethodCode">
     <label>Method of PO Transmission</label>
     <shortLabel>Code</shortLabel>
-    <control>
-        <select valuesFinderClass="org.kuali.module.purap.lookup.keyvalues.PurchaseOrderTransmissionMethodValuesFinder" />
-    </control>
     <summary>purchaseOrderTransmissionMethodCode</summary>
     <description>purchaseOrderTransmissionMethodCode description...</description>
 </attributeReference>
@@ -491,12 +474,6 @@
 <attributeReference name="recurringPaymentTypeCode" sourceClassName="org.kuali.module.purap.bo.RecurringPaymentType" sourceAttributeName="recurringPaymentTypeCode">
     <label>Type of Recurring Payment</label>
     <shortLabel>Code</shortLabel>
-    
-    <control>
-        <select valuesFinderClass="org.kuali.module.purap.lookup.keyvalues.RecurringPaymentTypeValuesFinder" />
-    </control>
- 
-    
     <summary>recurringPaymentTypeCode</summary>
     <description>recurringPaymentTypeCode description...</description>
 </attributeReference>
@@ -531,8 +508,6 @@
     <label>Requestor Phone</label>
     <shortLabel>Phone Number</shortLabel>
 
-    <required>true</required>
-
     <summary>requestorPersonPhoneNumber</summary>
     <description>requestorPersonPhoneNumber description...</description>
 </attributeReference>
@@ -544,6 +519,14 @@
     <description>requisitionSourceCode description...</description>
 </attributeReference>
 
+<attributeReference name="vendorCityName" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="cityName">
+    <label>City</label>
+    <shortLabel>Name</shortLabel>
+
+    <summary>vendorCityName</summary>
+    <description>vendorCityName description...</description>
+</attributeReference>
+
 <attributeReference name="vendorContractGeneratedIdentifier" sourceClassName="org.kuali.module.purap.bo.VendorContract" sourceAttributeName="vendorContractGeneratedIdentifier">
     <label>Contract ID</label>
     <shortLabel>Identifier</shortLabel>
@@ -552,12 +535,28 @@
     <description>vendorContractGeneratedIdentifier description...</description>
 </attributeReference>
 
+<attributeReference name="vendorCountryCode" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="countryCode">
+    <label>Country</label>
+    <shortLabel>Code</shortLabel>
+   
+    <summary>vendorCountryCode</summary>
+    <description>vendorCountryCode description...</description>
+</attributeReference>
+
 <attributeReference name="vendorFaxNumber" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="phoneNumberNoValidation">
     <label>Fax Number</label>
     <shortLabel>Number</shortLabel>
 
     <summary>vendorFaxNumber</summary>
     <description>vendorFaxNumber description...</description>
+</attributeReference>
+
+<attributeReference name="vendorLine1Address" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="line1Address">
+    <label>Address 1</label>
+    <shortLabel>Address</shortLabel>
+    
+    <summary>vendorLine1Address</summary>
+    <description>vendorLine1Address description...</description>
 </attributeReference>
 
 <attributeReference name="vendorLine2Address" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="line2Address">
@@ -602,8 +601,8 @@
 </attributeReference>
 
 <attributeReference name="vendorRestrictedIndicator" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="hiddenIndicator">
-    <label>Restricted Indicator</label>
-    <shortLabel>Restricted</shortLabel>
+    <label>Vendor Restricted Indicator</label>
+    <shortLabel>Indicator</shortLabel>
   	
     <summary>vendorRestrictedIndicator</summary>
     <description>vendorRestrictedIndicator description...</description>

@@ -23,9 +23,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.service.ConfigurableDateService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
+import org.kuali.core.util.Guid;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -36,24 +36,30 @@ import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.test.KualiTestBase;
 import org.springframework.beans.factory.BeanFactory;
 
+/**
+ */
 public class OriginEntryTestBase extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryTestBase.class);
 
     protected BeanFactory beanFactory;
-    protected ConfigurableDateService dateTimeService;
+    protected TestDateTimeService dateTimeService;
     protected PersistenceService persistenceService;
     protected UnitTestSqlDao unitTestSqlDao = null;
     protected OriginEntryGroupService originEntryGroupService = null;
     protected OriginEntryService originEntryService = null;
     protected OriginEntryDao originEntryDao = null;
     protected KualiConfigurationService kualiConfigurationService = null;
-    protected Date date;
+    protected Date date = new Date();
 
     public OriginEntryTestBase() {
         super();
     }
 
-    @Override
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.test.AbstractTransactionalSpringContextTests#onSetUpInTransaction()
+     */
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -61,9 +67,8 @@ public class OriginEntryTestBase extends KualiTestBase {
 
         beanFactory = SpringServiceLocator.getBeanFactory();
 
-        dateTimeService = (ConfigurableDateService) beanFactory.getBean("testDateTimeService");
-        date = dateTimeService.getCurrentDate();
-        
+        dateTimeService = (TestDateTimeService) beanFactory.getBean("testDateTimeService");
+
         // Other objects needed for the tests
         persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
         unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("glUnitTestSqlDao");
@@ -93,7 +98,7 @@ public class OriginEntryTestBase extends KualiTestBase {
     }
 
     protected void loadInputTransactions(String groupCode, String[] transactions) {
-        OriginEntryGroup group = originEntryGroupService.createGroup(new java.sql.Date(dateTimeService.getCurrentDate().getTime()), groupCode, true, true, true);
+        OriginEntryGroup group = originEntryGroupService.createGroup(new java.sql.Date(new java.util.Date().getTime()), groupCode, true, true, true);
         loadTransactions(transactions, group);
     }
 
@@ -152,6 +157,7 @@ public class OriginEntryTestBase extends KualiTestBase {
         assertEquals("Number of groups is wrong", groupCount, groups.size());
 
         Collection c = originEntryDao.testingGetAllEntries();
+        
 
         // This is for debugging purposes - change to true for output
         if (true) {
@@ -224,7 +230,7 @@ public class OriginEntryTestBase extends KualiTestBase {
 
     protected void setApplicationConfigurationFlag(String name, boolean value) {
         unitTestSqlDao.sqlCommand("delete from fs_parm_t where fs_scr_nm = 'SYSTEM' and fs_parm_nm = '" + name + "'");
-        unitTestSqlDao.sqlCommand("insert into fs_parm_t (fs_scr_nm,fs_parm_nm,obj_id,ver_nbr,fs_parm_txt,fs_parm_desc,fs_mult_val_ind" + ") values ('SYSTEM','" + name + "',SYS_GUID(),1,'" + (value ? "Y" : "N") + "','Y','N')");
+        unitTestSqlDao.sqlCommand("insert into fs_parm_t (fs_scr_nm,fs_parm_nm,obj_id,ver_nbr,fs_parm_txt,fs_parm_desc,fs_mult_val_ind" + ") values ('SYSTEM','" + name + "', '" + new Guid().toString() + "',1,'" + (value ? "Y" : "N") + "','Y','N')");
     }
 
 

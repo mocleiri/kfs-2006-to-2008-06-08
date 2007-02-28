@@ -44,6 +44,9 @@
 	</bean>
 
 	<bean id="purapUserService" class="org.kuali.module.purap.service.impl.PurapUserServiceImpl" parent="kualiModuleUserServiceBase">
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
 	</bean>
 
 	<bean id="vendorService" class="org.kuali.module.purap.service.impl.VendorServiceImpl">
@@ -52,9 +55,6 @@
 		</property>
 		<property name="businessObjectService">
 			<ref bean="businessObjectService" />
-		</property>
-		<property name="documentService">
-			<ref bean="documentService" />
 		</property>
 	</bean>
 
@@ -109,12 +109,6 @@
 	<bean id="requisitionDao" class="org.kuali.module.purap.dao.ojb.RequisitionDaoOjb">
 		<property name="jcdAlias">
 			<value>dataSource</value>
-		</property>
-	</bean>
-	
-	<bean id="phoneNumberService" class="org.kuali.module.purap.service.impl.PhoneNumberServiceImpl">
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService"/>
 		</property>
 	</bean>
 
