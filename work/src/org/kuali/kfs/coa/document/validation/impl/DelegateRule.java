@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,15 +25,15 @@ import java.util.Map;
 import org.apache.commons.lang.time.DateUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
-import org.kuali.core.bo.DocumentType;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
-import org.kuali.module.chart.bo.ChartUser;
 
 /**
  * Validates content of a <code>{@link AccountDelegate}</code> maintenance document upon triggering of a 
@@ -383,7 +383,7 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
         UniversalUser user = newDelegate.getAccountDelegate();
 
         // user must be an active kuali user
-        if (!user.isActiveForModule( ChartUser.MODULE_ID ) ) {
+        if (!user.isActiveKualiUser()) {
             success = false;
             putFieldError("accountDelegate.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE_KUALI_USER);
         }

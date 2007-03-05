@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/Entry.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +19,13 @@
 package org.kuali.module.gl.bo;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
+import org.kuali.core.bo.OriginationCode;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.bo.OriginationCode;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.Chart;
@@ -40,7 +40,7 @@ import org.kuali.PropertyConstants;
 /**
  * 
  */
-public class Entry extends PersistableBusinessObjectBase implements Transaction {
+public class Entry extends BusinessObjectBase implements Transaction {
     static final long serialVersionUID = -24983129882357448L;
 
     private Integer universityFiscalYear;
@@ -69,7 +69,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
     private Date financialDocumentReversalDate;
     private String transactionEncumbranceUpdateCode;
     private Date transactionPostingDate;
-    private Timestamp transactionDateTimeStamp;
+    private Date transactionDateTimeStamp;
     private String budgetYear;
 
     // bo references
@@ -90,7 +90,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
     private OriginationCode originationCode;
     private OriginationCode referenceOriginationCode;
 
-    private TransientBalanceInquiryAttributes dummyBusinessObject;
+    private DummyBusinessObject dummyBusinessObject;
 
     /**
      * Default constructor.
@@ -100,7 +100,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
 
     public Entry(Transaction t, java.util.Date postDate) {
         super();
-        this.dummyBusinessObject = new TransientBalanceInquiryAttributes();
+        this.dummyBusinessObject = new DummyBusinessObject();
 
         setUniversityFiscalYear(t.getUniversityFiscalYear());
         setChartOfAccountsCode(t.getChartOfAccountsCode());
@@ -131,8 +131,8 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
             setTransactionPostingDate(new Date(postDate.getTime()));
         }
 
-        Timestamp now = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
-        setTransactionDateTimeStamp(now);
+        java.util.Date now = new java.util.Date();
+        setTransactionDateTimeStamp(new Date(now.getTime()));
     }
 
     public OriginationCode getOriginationCode() {
@@ -624,7 +624,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      * 
      * @return Returns the transactionDateTimeStamp
      */
-    public Timestamp getTransactionDateTimeStamp() {
+    public Date getTransactionDateTimeStamp() {
         return transactionDateTimeStamp;
     }
 
@@ -633,7 +633,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      * 
      * @param transactionDateTimeStamp The transactionDateTimeStamp to set.
      */
-    public void setTransactionDateTimeStamp(Timestamp transactionDateTimeStamp) {
+    public void setTransactionDateTimeStamp(Date transactionDateTimeStamp) {
         this.transactionDateTimeStamp = transactionDateTimeStamp;
     }
 
@@ -785,7 +785,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      * 
      * @return Returns the dummyBusinessObject.
      */
-    public TransientBalanceInquiryAttributes getDummyBusinessObject() {
+    public DummyBusinessObject getDummyBusinessObject() {
         return dummyBusinessObject;
     }
 
@@ -794,7 +794,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      * 
      * @param dummyBusinessObject The dummyBusinessObject to set.
      */
-    public void setDummyBusinessObject(TransientBalanceInquiryAttributes dummyBusinessObject) {
+    public void setDummyBusinessObject(DummyBusinessObject dummyBusinessObject) {
         this.dummyBusinessObject = dummyBusinessObject;
     }
 

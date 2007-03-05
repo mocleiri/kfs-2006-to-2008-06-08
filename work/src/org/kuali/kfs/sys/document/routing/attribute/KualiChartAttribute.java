@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,13 +36,13 @@ import org.kuali.module.chart.bo.Chart;
 import org.kuali.workflow.KualiWorkflowUtils;
 
 import edu.iu.uis.eden.WorkflowServiceErrorImpl;
-import edu.iu.uis.eden.engine.RouteContext;
 import edu.iu.uis.eden.exception.EdenUserNotFoundException;
 import edu.iu.uis.eden.plugin.attributes.RoleAttribute;
 import edu.iu.uis.eden.plugin.attributes.WorkflowAttribute;
 import edu.iu.uis.eden.routeheader.DocumentContent;
 import edu.iu.uis.eden.routetemplate.ResolvedQualifiedRole;
 import edu.iu.uis.eden.routetemplate.Role;
+import edu.iu.uis.eden.routetemplate.RouteContext;
 import edu.iu.uis.eden.user.AuthenticationUserId;
 import edu.iu.uis.eden.util.KeyLabelPair;
 import edu.iu.uis.eden.util.Utilities;

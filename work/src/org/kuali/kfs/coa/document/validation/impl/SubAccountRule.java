@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,13 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiGroup;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.IcrAutomatedEntry;
 import org.kuali.module.chart.bo.SubAccount;
@@ -44,6 +44,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SubAccountRule.class);
 
     public static final String CG_WORKGROUP_PARM_NAME = "SubAccount.CGWorkgroup";
+    public static final String CG_FUND_GROUP_CODE = "SubAccount.CG.FundGroupCode";
     public static final String CG_ALLOWED_SUBACCOUNT_TYPE_CODES = "SubAccount.ValidSubAccountTypeCodes";
     public static final String CG_A21_TYPE_COST_SHARING = "CS";
     public static final String CG_A21_TYPE_ICR = "EX";
@@ -69,7 +70,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
         LOG.info("Entering processCustomApproveDocumentBusinessRules()");
 
         // set whether the user is authorized to modify the CG fields
-        setCgAuthorized(isCgAuthorized(GlobalVariables.getUserSession().getUniversalUser()));
+        setCgAuthorized(isCgAuthorized(GlobalVariables.getUserSession().getKualiUser()));
 
         // check that all sub-objects whose keys are specified have matching objects in the db
         checkForPartiallyEnteredReportingFields();
@@ -90,7 +91,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
         LOG.info("Entering processCustomRouteDocumentBusinessRules()");
 
         // set whether the user is authorized to modify the CG fields
-        setCgAuthorized(isCgAuthorized(GlobalVariables.getUserSession().getUniversalUser()));
+        setCgAuthorized(isCgAuthorized(GlobalVariables.getUserSession().getKualiUser()));
 
         // check that all sub-objects whose keys are specified have matching objects in the db
         success &= checkForPartiallyEnteredReportingFields();
@@ -111,7 +112,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
         LOG.info("Entering processCustomSaveDocumentBusinessRules()");
 
         // set whether the user is authorized to modify the CG fields
-        setCgAuthorized(isCgAuthorized(GlobalVariables.getUserSession().getUniversalUser()));
+        setCgAuthorized(isCgAuthorized(GlobalVariables.getUserSession().getKualiUser()));
 
         // check that all sub-objects whose keys are specified have matching objects in the db
         success &= checkForPartiallyEnteredReportingFields();
@@ -178,7 +179,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * If unauthorized changes have been made, then fail and log errors.
      * 
      * @param document - document to test
-     * @return false if any unauthorized changes are made, true otherwise
+     * @return - false if any unauthorized changes are made, true otherwise
      * 
      */
     protected boolean checkCgFieldsNotAuthorized(MaintenanceDocument document) {
@@ -255,8 +256,12 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
         if (ObjectUtils.isNotNull(newSubAccount.getAccount())) {
             if (ObjectUtils.isNotNull(newSubAccount.getAccount().getSubFundGroup())) {
 
-                // compare them, exit if the account isn't for contracts and grants
-                if (!SpringServiceLocator.getSubFundGroupService().isForContractsAndGrants(newSubAccount.getAccount().getSubFundGroup())) {
+                // get the fundgroupcode for this SubAccount, and the CG FundGroupcode
+                String thisFundGroupCode = newSubAccount.getAccount().getSubFundGroup().getFundGroupCode();
+                String cgFundGroupCode = getConfigService().getApplicationParameterValue(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, CG_FUND_GROUP_CODE);
+
+                // compare them, exit if this isnt a CG subaccount
+                if (!thisFundGroupCode.trim().equalsIgnoreCase(cgFundGroupCode.trim())) {
 
                     // KULCOA-1116 - Check if CG CS and CG ICR are empty, if not throw an error
                     if (checkCgCostSharingIsEmpty() == false) {
@@ -346,10 +351,16 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
             }
         }
 
-        // Cost Sharing Account may not be for contracts and grants
+        // Cost Sharing Account may not be a CG fund group
         if (ObjectUtils.isNotNull(a21.getCostShareAccount())) {
             if (ObjectUtils.isNotNull(a21.getCostShareAccount().getSubFundGroup())) {
-                if (a21.getCostShareAccount().isForContractsAndGrants()) {
+
+                // get the cost sharing account's fund group code, and the forbidden fund group code
+                String costSharingAccountFundGroupCode = a21.getCostShareAccount().getSubFundGroup().getFundGroupCode();
+                String cgFundGroupCode = getConfigService().getApplicationParameterValue(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, CG_FUND_GROUP_CODE);
+
+                // disallow them being the same
+                if (costSharingAccountFundGroupCode.trim().equalsIgnoreCase(cgFundGroupCode.trim())) {
                     putFieldError("a21SubAccount.costShareSourceAccountNumber", KeyConstants.ERROR_DOCUMENT_SUBACCTMAINT_COST_SHARE_ACCOUNT_MAY_NOT_BE_CG_FUNDGROUP);
                     success &= false;
                 }
@@ -442,7 +453,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * 
      * This method tests if all fields in the Cost Sharing section are empty.
      * 
-     * @return true if the cost sharing values passed in are empty, otherwise false.
+     * @return - true if the cost sharing values passed in are empty, otherwise false.
      * 
      */
     protected boolean checkCgCostSharingIsEmpty() {
@@ -462,7 +473,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * 
      * This method tests if all fields in the ICR section are empty.
      * 
-     * @return true if the ICR values passed in are empty, otherwise false.
+     * @return - true if the ICR values passed in are empty, otherwise false.
      * 
      */
     protected boolean checkCgIcrIsEmpty() {
@@ -486,20 +497,20 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * This method tests whether the specified user is part of the group that grants authorization to the CG fields.
      * 
      * @param user - the user to test
-     * @return true if user is part of the group, false otherwise
+     * @return - true if user is part of the group, false otherwise
      * 
      */
-    protected boolean isCgAuthorized(UniversalUser user) {
+    protected boolean isCgAuthorized(KualiUser user) {
 
         // attempt to get the group name that grants access to the CG fields
         String allowedCgWorkgroup = getConfigService().getApplicationParameterValue(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, CG_WORKGROUP_PARM_NAME);
 
-        if (user.isMember( allowedCgWorkgroup )) {
-            LOG.info("User '" + user.getPersonUserIdentifier() + "' is a member of the group '" + allowedCgWorkgroup + "', which gives them access to the CG fields.");
+        if (user.isMember(new KualiGroup(allowedCgWorkgroup))) {
+            LOG.info("User '" + user.getUniversalUser().getPersonUserIdentifier() + "' is a member of the group '" + allowedCgWorkgroup + "', which gives them access to the CG fields.");
             return true;
         }
         else {
-            LOG.info("User '" + user.getPersonUserIdentifier() + "' is not a member of the group '" + allowedCgWorkgroup + "', so they have no access to the CG fields.");
+            LOG.info("User '" + user.getUniversalUser().getPersonUserIdentifier() + "' is not a member of the group '" + allowedCgWorkgroup + "', so they have no access to the CG fields.");
             return false;
         }
     }
@@ -510,7 +521,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * 
      * @param value - String value to be tested
      * @param fieldName - name of the field being tested
-     * @return false if there is any value in value, otherwise true
+     * @return - false if there is any value in value, otherwise true
      * 
      */
     protected boolean disallowAnyValues(String value, String fieldName) {
@@ -531,7 +542,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
      * @param oldValue - the original String value of the field
      * @param newValue - the new String value of the field
      * @param fieldName - name of the field being tested
-     * @return false if there is any difference between the old and new, true otherwise
+     * @return - false if there is any difference between the old and new, true otherwise
      * 
      */
     protected boolean disallowChangedValues(String oldValue, String newValue, String fieldName) {

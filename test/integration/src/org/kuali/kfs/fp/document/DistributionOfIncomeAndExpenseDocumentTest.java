@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/integration/src/org/kuali/kfs/fp/document/DistributionOfIncomeAndExpenseDocumentTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +22,13 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-
 import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
 import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import static org.kuali.core.util.SpringServiceLocator.getTransactionalDocumentDictionaryService;
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
-
+import static org.kuali.module.financial.document.TransactionalDocumentTestUtils.testGetNewDocument_byDocumentClass;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.TestsWorkflowViaDatabase;
@@ -85,12 +85,12 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends KualiTestBase {
 
                 // populate and save it
                 createdDoc.getDocumentHeader().setFinancialDocumentDescription("created by testKULEDOCS_1401");
-                createdDoc.getDocumentHeader().setExplanation("reproducing KULEDOCS_1401");
+                createdDoc.setExplanation("reproducing KULEDOCS_1401");
 
                 createdDoc.addSourceAccountingLine(getSourceAccountingLineAccessibleAccount());
                 createdDoc.addTargetAccountingLine(getTargetAccountingLineAccessibleAccount());
 
-                getDocumentService().saveDocument(createdDoc);
+                getDocumentService().saveDocument(createdDoc, null, null);
             }
 
             {
@@ -125,7 +125,7 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends KualiTestBase {
         List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
         int expectedSourceTotal = sourceLines.size();
         int expectedTargetTotal = targetLines.size();
-        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
+        TransactionalDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
     }
 
     public final void testGetNewDocument() throws Exception {
@@ -133,36 +133,36 @@ public class DistributionOfIncomeAndExpenseDocumentTest extends KualiTestBase {
     }
 
     public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
 
     }
 
     public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
     }
 
     public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testConvertIntoErrorCorrection() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), getDocumentService(), getTransactionalDocumentDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), getDocumentService(), getTransactionalDocumentDictionaryService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testRouteDocument() throws Exception {
-        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), getDocumentService());
+        TransactionalDocumentTestUtils.testRouteDocument(buildDocument(), getDocumentService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testSaveDocument() throws Exception {
-        AccountingDocumentTestUtils.testSaveDocument(buildDocument(), getDocumentService());
+        TransactionalDocumentTestUtils.testSaveDocument(buildDocument(), getDocumentService());
     }
 
     @TestsWorkflowViaDatabase
     public void testConvertIntoCopy() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), getDocumentService(), getExpectedPrePeCount());
+        TransactionalDocumentTestUtils.testConvertIntoCopy(buildDocument(), getDocumentService(), getExpectedPrePeCount());
     }
 
     // test util methods
