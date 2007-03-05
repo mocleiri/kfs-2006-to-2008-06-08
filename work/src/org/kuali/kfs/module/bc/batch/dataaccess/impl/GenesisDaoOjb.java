@@ -17,7 +17,6 @@ package org.kuali.module.budget.dao.ojb;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,19 +36,15 @@ import org.kuali.core.dao.DocumentDao;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.module.budget.bo.BudgetConstructionAccountOrganizationHierarchy;
 import org.kuali.module.budget.bo.BudgetConstructionAccountReports;
 import org.kuali.module.budget.bo.BudgetConstructionHeader;
 import org.kuali.module.budget.bo.BudgetConstructionOrganizationReports;
-import org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker;
-import org.kuali.module.budget.bo.CalculatedSalaryFoundationTrackerOverride;
 import org.kuali.module.budget.bo.PendingBudgetConstructionGeneralLedger;
 import org.kuali.module.budget.dao.GenesisDao;
 import org.kuali.module.budget.document.BudgetConstructionDocument;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.financial.bo.FiscalYearFunctionControl;
 import org.kuali.module.financial.bo.FunctionControlCode;
@@ -135,7 +130,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
     public final static String FISCAL_OFFICER_ID_PROPERTY = "accountFiscalOfficerSystemIdentifier";
     public final static String ACCOUNT_CLOSED_INDICATOR_PROPERTY = "accountClosedIndicator";
 
-    private DocumentService documentService;
+    private DocumentService documentService; 
     private WorkflowDocumentService workflowDocumentService;
     private DateTimeService dateTimeService; 
     private DocumentDao documentDao;
@@ -169,7 +164,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
     public boolean getBudgetConstructionControlFlag(Integer universityFiscalYear, String FlagID)
     {
         /*  return true if a flag is on, false if it is not */
-        Boolean Result;
+        String Result;
         Criteria criteriaID = new Criteria();
         criteriaID.addEqualTo(Constants.UNIVERSITY_FISCAL_YEAR_PROPERTY_NAME,
                                          universityFiscalYear);
@@ -180,8 +175,8 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
         Iterator Results = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(
                              queryID);
         // TODO@ we need to create an exception, put a try around this block, and log errors
-        Result = (Boolean) ((Object[]) Results.next()) [0];
-        return Result.booleanValue();
+        Result = (String) ((Object[]) Results.next()) [0];
+        return (Result == Constants.ParameterValues.YES);
             
     }
     
@@ -321,8 +316,6 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
      */
     public void clearDBForGenesis(Integer BaseYear)
     {
-        //  the calling order is important because of referential integrity in the 
-        //  data base
         clearBothYearsPBGL(BaseYear);
         clearBothYearsHeaders(BaseYear);
     }
@@ -347,14 +340,14 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
                                                       criteriaId);
         getPersistenceBrokerTemplate().deleteByQuery(queryId);
     }
-    
+
     private void clearHeaders()
     {
         QueryByCriteria queryId = new QueryByCriteria(BudgetConstructionHeader.class,
                                                      QueryByCriteria.CRITERIA_SELECT_ALL);
         getPersistenceBrokerTemplate().deleteByQuery(queryId);
     }
-
+    
     private void clearBaseYearPBGL(Integer BaseYear)
     {
         // remove rows from the base year
@@ -394,10 +387,10 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
         QueryByCriteria queryID = 
             new QueryByCriteria(PendingBudgetConstructionGeneralLedger.class,
                     criteriaID);
-        LOG.debug(String.format("\ndelete PBGL started at %tT for %d",dateTimeService.getCurrentDate(),
+        LOG.info(String.format("\ndelete PBGL started at %tT for %d",dateTimeService.getCurrentDate(),
                 RequestYear));
         getPersistenceBrokerTemplate().deleteByQuery(queryID);
-        LOG.debug(String.format("\ndelete PBGL ended at %tT",dateTimeService.getCurrentDate()));
+        LOG.info(String.format("\ndelete PBGL ended at %tT",dateTimeService.getCurrentDate()));
     }
     
     /* 
@@ -442,8 +435,6 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
         new HashMap<String,BudgetConstructionHeader>(
                 Constants.BudgetConstructionConstants.ESTIMATED_BUDGET_CONSTRUCTION_DOCUMENT_COUNT);
     private Collection<BudgetConstructionHeader> newBCDocumentSource;
-    // these routines are used to merge CSF and CSF Override
-    private HashMap<String,String[]> CSFTrackerKeys = new HashMap<String,String[]>();
     // this saves our document numbers so we can update the status codes at the end
     // of the route process--we want this to be FIFO, so workflow flows undisturbed
     // (ulitmately, as will everything else, to the sea)
@@ -454,344 +445,12 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
     Long documentsToCreateinNTS    = new Long(0);
     Long documentsSkippedinNTS     = new Long(0);
     Long documentsCreatedinNTS     = new Long(0);
-    Long documentsCSFCreatedinNTS  = new Long(0);
-    Long documentsGLCreatedinNTS   = new Long(0);
     
     Long proxyCandidatesReadinTS   = new Long(0);
     Long proxyBCHeadersCreatedinTS = new Long(0);
     
     private String proxyDocumentNumber = new String("-");
  
- //
- // this is the new document creation mechanism that works with embedded workflow
-    public void createNewBCDocumentsFromGLCSF (Integer BaseYear,
-                                               boolean GLUpdatesAllowed,
-                                               boolean CSFUpdatesAllowed)
-    {
-        if ((!GLUpdatesAllowed)&&(!CSFUpdatesAllowed))
-        {
-            // no new documents need to be created
-            return;
-        }
-        Integer RequestYear = BaseYear+1;
-        // fetch the keys currently in budget construction header
-        getCurrentBCHeaderKeys(BaseYear);
-        //
-        //  we have to read the GL BALANCE (which is not proxy=true) to create
-        //  new BC header objects.  we use a report query to avoid triggering
-        //  nine separate reads for each row, and to avoid returning the entire
-        //  field list when we only need a few fields.
-        if (GLUpdatesAllowed)
-        {
-        getAndStoreCurrentGLBCHeaderCandidates(BaseYear);
-        //@@TODO:  added this in hopes of solving the memory problem
-        //         (we probably can't clear the cache if we have an iterator in a loop)
-        // (02/23/2007)  this failed--the workflow thread is way behind ours, and we
-        //               killed it after it had only processed 16 of 73 documents.
-        // getPersistenceBrokerTemplate().clearCache();
-        }
-        //  we also have to read CSF for any accounts with no base budget in GL BALANCE
-        //  but which pay people in budgeted positions
-        if (CSFUpdatesAllowed)
-        {
-          getCSFCandidateDocumentKeys(BaseYear);
-          getCSFOverrideDeletedKeys(BaseYear);
-          getCSFOverrideCandidateDocumentKeys(BaseYear);
-        getAndStoreCurrentCSFBCHeaderCandidates(BaseYear);
-        //@@TODO:  added this in hopes of solving the memory problem
-        //         (we probably can't clear the cache if we have an iterator in a loop)
-        // getPersistenceBrokerTemplate().clearCache();
-    }
-        //  now we have to read the newly created documents (after workflow is
-        //  finished with them, and change the status flag to correspond to the
-        //  budget construction "untouched" status
-        //@@TODO:  we need a delay here--we cannot do this until workflow is finished
-        storeBudgetConstructionDocumentsInitialStatus();
-    }
-
-    //  here are the private methods that go with it      
-    private void getAndStoreCurrentCSFBCHeaderCandidates(Integer BaseYear)
-    {
-        Integer RequestYear = BaseYear+1;
-        for (Map.Entry<String, String[]> newCSFDocs: CSFTrackerKeys.entrySet())
-        {
-            // all the CSF keys in the map require new documents
-            proxyCandidatesReadinTS = proxyCandidatesReadinTS+1;
-            String[] Results = newCSFDocs.getValue();
-            // set up the Budget Construction Header
-            BudgetConstructionDocument newBCHdr;
-            try
-            {
-            newBCHdr = (BudgetConstructionDocument)
-            documentService.getNewDocument(
-                    BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_NAME);
-            }
-            catch (WorkflowException wex)
-            {
-                LOG.warn(String.format(
-                        "\nskipping creation of document for CSF key: %s %s %s \n(%s)\n",
-                        Results[0], Results[1], Results[2], wex.getMessage()));
-                documentsSkippedinNTS = documentsSkippedinNTS+1;
-                continue;
-            }
-            newBCHdr.setUniversityFiscalYear(RequestYear);
-            newBCHdr.setChartOfAccountsCode(Results[0]);
-            newBCHdr.setAccountNumber(Results[1]);
-            newBCHdr.setSubAccountNumber(Results[2]);
-            //  store the document
-            try
-            {
-            storeANewBCDocument(newBCHdr);
-            }
-            catch (WorkflowException wex)
-            {
-                LOG.warn(String.format(
-                        "\nskipping creation of document for CSF key: %s %s %s \n(%s)\n",
-                        newBCHdr.getChartOfAccounts(),
-                        newBCHdr.getAccountNumber(),
-                        newBCHdr.getSubAccountNumber(),
-                        wex.getMessage()));
-                documentsSkippedinNTS = documentsSkippedinNTS+1;
-                continue;
-
-            }
-            documentsCSFCreatedinNTS = documentsCSFCreatedinNTS+1;
-            documentsCreatedinNTS = documentsCreatedinNTS+1;
-            //  add this header to the current BC Header map
-            // String testKey = Results[0]+Results[1]+Results[2];
-            // currentBCHeaderKeys.add(testKey);
-        }
-    }
-    
-    private void getAndStoreCurrentGLBCHeaderCandidates(Integer BaseYear)
-    {
-        Integer RequestYear = BaseYear+1;
-        // first build a document set from GL BALANCE
-        Criteria criteriaId = new Criteria();
-        criteriaId.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR,BaseYear);
-        criteriaId.addEqualTo(PropertyConstants.BALANCE_TYPE_CODE,
-                              Constants.BALANCE_TYPE_BASE_BUDGET);
-        String newAttr = ColumnNames.BEGINNING_BALANCE+"-"+
-                         ColumnNames.ANNUAL_BALANCE;
-        criteriaId.addNotEqualTo(newAttr,0);
-        String[] queryAttr = {PropertyConstants.CHART_OF_ACCOUNTS_CODE,
-                              PropertyConstants.ACCOUNT_NUMBER,
-                              PropertyConstants.SUB_ACCOUNT_NUMBER};
-        ReportQueryByCriteria queryId = new ReportQueryByCriteria(Balance.class,
-                                                                  queryAttr,
-                                                                  criteriaId,
-                                                                  true);
-        Iterator RowsReturned = 
-            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryId);
-        while (RowsReturned.hasNext())
-        {
-            proxyCandidatesReadinTS = proxyCandidatesReadinTS+1;
-            Object[] Results = (Object[]) RowsReturned.next();
-            String testKey = ((String) Results[0])+
-                             ((String) Results[1])+
-                             ((String) Results[2]);
-            if (currentBCHeaderKeys.contains(testKey))
-            {
-                // don't create a new row for anything with a current header
-                continue;
-            }
-            // set up the Budget Construction Header
-            BudgetConstructionDocument newBCHdr;
-            try
-            {
-            newBCHdr = (BudgetConstructionDocument)
-            documentService.getNewDocument(
-                    BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_NAME);
-            }
-            catch (WorkflowException wex)
-            {
-                LOG.warn(String.format(
-                        "\nskipping creation of document for GL key: %s %s %s \n(%s)\n",
-                        (String) Results[0],
-                        (String) Results[1],
-                        (String) Results[2],
-                        wex.getMessage()));
-                documentsSkippedinNTS = documentsSkippedinNTS+1;
-                continue;
-            }
-            newBCHdr.setUniversityFiscalYear(RequestYear);
-            newBCHdr.setChartOfAccountsCode((String) Results[0]);
-            newBCHdr.setAccountNumber((String) Results[1]);
-            newBCHdr.setSubAccountNumber((String) Results[2]);
-            //  store the document
-            try
-            {
-            storeANewBCDocument(newBCHdr);
-            }
-            catch (WorkflowException wex)
-            {
-                LOG.warn(String.format(
-                        "\nskipping creation of document for GL key: %s %s %s \n(%s)\n",
-                        newBCHdr.getChartOfAccounts(),
-                        newBCHdr.getAccountNumber(),
-                        newBCHdr.getSubAccountNumber(),
-                        wex.getMessage()));
-                documentsSkippedinNTS = documentsSkippedinNTS+1;
-                continue;
-
-            }
-            documentsGLCreatedinNTS = documentsGLCreatedinNTS+1;
-            documentsCreatedinNTS = documentsCreatedinNTS+1;
-            //  add this header to the current BC Header map
-            currentBCHeaderKeys.add(testKey);
-        }
-    }
-    
-    public void getCSFCandidateDocumentKeys(Integer BaseYear)
-    {
-        Criteria criteriaId = new Criteria();
-        criteriaId.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR,BaseYear);
-        criteriaId.addEqualTo(PropertyConstants.CSF_DELETE_CODE,
-                              BudgetConstructionConstants.ACTIVE_CSF_DELETE_CODE);
-        String[] queryAttr = {PropertyConstants.CHART_OF_ACCOUNTS_CODE,
-                              PropertyConstants.ACCOUNT_NUMBER,
-                              PropertyConstants.SUB_ACCOUNT_NUMBER};
-        ReportQueryByCriteria queryId = 
-            new ReportQueryByCriteria(CalculatedSalaryFoundationTracker.class,
-                                      queryAttr, criteriaId, true);
-        Iterator rowsReturned = 
-            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryId);
-        // decide which keys from CSF need to create new documents
-        // we have already created new documents for all the GL keys
-        while (rowsReturned.hasNext())
-        {
-            Object [] returnedRow = (Object []) rowsReturned.next();
-            String testKey = ((String) returnedRow[0])+
-                             ((String) returnedRow[1])+
-                             ((String) returnedRow[2]);
-            if (currentBCHeaderKeys.contains(testKey))
-            {
-                //  there is no need to create a row for this key
-                continue;
-            }
-            String[] valueCSF = {(String) returnedRow[0],
-                                 (String) returnedRow[1],
-                                 (String) returnedRow[2]};
-            CSFTrackerKeys.put(testKey, valueCSF);
-        }
-    }
-    
-    public void getCSFOverrideCandidateDocumentKeys(Integer BaseYear)
-    {
-        Criteria criteriaId = new Criteria();
-        criteriaId.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR,BaseYear);
-        criteriaId.addEqualTo(PropertyConstants.CSF_DELETE_CODE,
-                              BudgetConstructionConstants.ACTIVE_CSF_DELETE_CODE);
-        String[] queryAttr = {PropertyConstants.CHART_OF_ACCOUNTS_CODE,
-                              PropertyConstants.ACCOUNT_NUMBER,
-                              PropertyConstants.SUB_ACCOUNT_NUMBER};
-        ReportQueryByCriteria queryId = 
-            new ReportQueryByCriteria(CalculatedSalaryFoundationTrackerOverride.class,
-                                      queryAttr, criteriaId, true);
-        Iterator rowsReturned = 
-            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryId);
-        // decide which keys from CSF override need to create new documents
-        // we have already read in the CSF keys--existing keys need not be replaced
-        // new active keys from CSF override should be added
-        while (rowsReturned.hasNext())
-        {
-            Object [] returnedRow = (Object []) rowsReturned.next();
-            String testKey = ((String) returnedRow[0])+
-                             ((String) returnedRow[1])+
-                             ((String) returnedRow[2]);
-            if (currentBCHeaderKeys.contains(testKey))
-            {
-                //  there is no need to create a row for this key
-                //  it is already in the base budget in the GL
-                continue;
-            }
-            String[] valueCSF = {(String) returnedRow[0],
-                                 (String) returnedRow[1],
-                                 (String) returnedRow[2]};
-            CSFTrackerKeys.put(testKey, valueCSF);
-        }
-    }
-    
-    public void getCSFOverrideDeletedKeys(Integer BaseYear)
-    {
-        Criteria criteriaId = new Criteria();
-        criteriaId.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR,BaseYear);
-        criteriaId.addNotEqualTo(PropertyConstants.CSF_DELETE_CODE,
-                              BudgetConstructionConstants.ACTIVE_CSF_DELETE_CODE);
-        String[] queryAttr = {PropertyConstants.CHART_OF_ACCOUNTS_CODE,
-                              PropertyConstants.ACCOUNT_NUMBER,
-                              PropertyConstants.SUB_ACCOUNT_NUMBER};
-        ReportQueryByCriteria queryId = 
-            new ReportQueryByCriteria(CalculatedSalaryFoundationTrackerOverride.class,
-                                      queryAttr, criteriaId, true);
-        Iterator rowsReturned = 
-            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryId);
-        // decide which keys from CSF override need to create new documents
-        // we have already read in the CSF keys--any overrides of existing CSF
-        // which carry a delete code should be tentatively removed CSF key table
-        while (rowsReturned.hasNext())
-        {
-            Object [] returnedRow = (Object []) rowsReturned.next();
-            String testKey = ((String) returnedRow[0])+
-                             ((String) returnedRow[1])+
-                             ((String) returnedRow[2]);
-            if (currentBCHeaderKeys.contains(testKey))
-            {
-                //  this key is in the GL base budget
-                //  it should create a document whether anyone is paid from it
-                //  or not
-                continue;
-            }
-            if (CSFTrackerKeys.containsKey(testKey))
-            {
-                // an override row deletes a key in CSF
-                // we tentatively remove this key from the map
-                // if there is an active override row for this key as well, it 
-                // will be restored when we read the active override keys
-                CSFTrackerKeys.remove(testKey);
-            }
-        }
-    }
-
-    public void storeANewBCDocument(BudgetConstructionDocument newBCHdr)
-    throws WorkflowException
-    {
-        newBCHdr.setOrganizationLevelChartOfAccountsCode(
-                BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_CHART_OF_ACCOUNTS_CODE);
-        newBCHdr.setOrganizationLevelOrganizationCode(
-                BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_ORGANIZATION_CODE);
-        newBCHdr.setOrganizationLevelCode(
-                BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_CODE);
-        newBCHdr.setBudgetTransactionLockUserIdentifier(
-                BudgetConstructionConstants.DEFAULT_BUDGET_HEADER_LOCK_IDS);
-        newBCHdr.setBudgetLockUserIdentifier(
-                BudgetConstructionConstants.DEFAULT_BUDGET_HEADER_LOCK_IDS);
-        newBCHdr.setVersionNumber(DEFAULT_VERSION_NUMBER);
-        DocumentHeader kualiDocumentHeader = newBCHdr.getDocumentHeader();
-        newBCHdr.setDocumentNumber(newBCHdr.getDocumentHeader().getDocumentNumber());
-        kualiDocumentHeader.setOrganizationDocumentNumber(
-                            newBCHdr.getUniversityFiscalYear().toString());
-        kualiDocumentHeader.setFinancialDocumentStatusCode(
-                Constants.INITIAL_KUALI_DOCUMENT_STATUS_CD);
-        kualiDocumentHeader.setFinancialDocumentTotalAmount(KualiDecimal.ZERO);
-        kualiDocumentHeader.setFinancialDocumentDescription(String.format("%s %d %s %s",
-                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION,
-                       newBCHdr.getUniversityFiscalYear(),
-                       newBCHdr.getChartOfAccountsCode(),newBCHdr.getAccountNumber()));
-        kualiDocumentHeader.setExplanation(
-                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION);
-        getPersistenceBrokerTemplate().store(newBCHdr);
-        documentService.prepareWorkflowDocument(newBCHdr);
-        workflowDocumentService.route(newBCHdr.getDocumentHeader().getWorkflowDocument(),
-                                      "created by Genesis",null);
-        // save the document number
-        // after all the documents are created, we will read each one in turn
-        // (in order of creation) and change the status.
-        // there needs to be a lag in doing this, to allow workflow to route the
-        // document (which apparently takes three separate read/save sequences).
-        newBCDocumentNumbers.add(newBCHdr.getDocumentNumber());
-   }
-    
  // this is the non-transactional public method
  // called in GenesisRouteService
     
@@ -902,7 +561,6 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
     
     private void stepToStoreNewDocuments(Integer BaseYear) 
     {
-        LOG.info("\nInteraction with workflow started: "+String.format("%tT",new GregorianCalendar().getTime()));
         Iterator bCHeaderRows = newBCDocumentSource.iterator();
         documentsToCreateinNTS =  ((Integer) (newBCDocumentSource.size())).longValue();
         while (bCHeaderRows.hasNext())
@@ -916,19 +574,16 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
             catch (WorkflowException wex)
             {
                 LOG.warn(String.format(
-                        "\nskipping creation of document for: %s %s %s \n(%s)\n",
+                        "\nskipping creation of document \n(%s)\n for: %s %s %s",
                         bCTemplate.getChartOfAccounts(),
                         bCTemplate.getAccountNumber(),
-                        bCTemplate.getSubAccountNumber(),
-                        wex.getMessage()));
+                        bCTemplate.getSubAccountNumber()));
                 documentsSkippedinNTS = documentsSkippedinNTS+1;
                 continue;
             }
             documentsCreatedinNTS = documentsCreatedinNTS+1;
         }
-        LOG.info("\nInteraction with workflow ended: "+String.format("%tT",new GregorianCalendar().getTime()));
         storeBudgetConstructionDocumentsInitialStatus();
-        LOG.info("\nStatus changes completed: "+String.format("%tT",new GregorianCalendar().getTime()));
 
     }
     
@@ -1043,7 +698,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
             proxyBCHeadersCreatedinTS = proxyBCHeadersCreatedinTS+1;
         }
     }
-        
+    
     /*
      *  ****************************************************************************
      *   (4) here are the routines which freeze accounting at the beginning of     *
@@ -1087,25 +742,21 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
         
         Integer sqlChartOfAccountsCode = 0;
         Integer sqlAccountNumber = 1;
-        Integer sqlReportsToChartofAccountsCode = 0;
-        Integer sqlOrganizationCode = 2;
+        Integer sqlReportsToChartofAccountsCode = 2;
+        Integer sqlOrganizationCode = 3;
         
         Long accountsAdded = new Long(0);
         
         Criteria criteriaID = new Criteria();
-        /*  current IU genesis does NOT check for closed accounts--it loads all accounts
-         *  it is possible that an account which has been closed still has base budget 
         criteriaID.addNotEqualTo(PropertyConstants.ACCOUNT_CLOSED_INDICATOR,
                               Constants.ParameterValues.YES);
-         */
-        criteriaID = QueryByCriteria.CRITERIA_SELECT_ALL;
         String[] queryAttr = {PropertyConstants.CHART_OF_ACCOUNTS_CODE,
                               PropertyConstants.ACCOUNT_NUMBER,
+                              PropertyConstants.CHART_OF_ACCOUNTS_CODE,
                               PropertyConstants.ORGANIZATION_CODE};
        ReportQueryByCriteria queryID = 
        new ReportQueryByCriteria(Account.class, queryAttr, criteriaID, true);
-       Iterator Results = 
-           getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+       Iterator Results = getPersistenceBrokerTemplate().getIteratorByQuery(queryID);
        while (Results.hasNext())
        {
            Object[] ReturnList = (Object[]) Results.next();
@@ -1123,7 +774,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
            getPersistenceBrokerTemplate().store(acctRpts);
            accountsAdded = accountsAdded + 1;
        }
-       LOG.info(String.format("\nAccount reporting lines added to budget construction %d",
+       LOG.info(String.format("Account reporting lines added to budget construction %d",
                 accountsAdded));
     }
     
@@ -1142,14 +793,8 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
         Long organizationsAdded = new Long(0);
         
         Criteria criteriaID = new Criteria();
-        /*
-         *  IU genesis takes all organizations, not just active ones
-         *  the reason is that a closed account which still has a base budget
-         *  might report to one of these organizations 
         criteriaID.addEqualTo(PropertyConstants.ORGANIZATION_ACTIVE_INDICATOR,
                               Constants.ParameterValues.YES);
-         */
-        criteriaID = QueryByCriteria.CRITERIA_SELECT_ALL;
         String[] queryAttr = {PropertyConstants.CHART_OF_ACCOUNTS_CODE,
                               PropertyConstants.ORGANIZATION_CODE,
                               PropertyConstants.REPORTS_TO_CHART_OF_ACCOUNTS_CODE,
@@ -1157,8 +802,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
                               PropertyConstants.RESPONSIBILITY_CENTER_CODE};
        ReportQueryByCriteria queryID = 
        new ReportQueryByCriteria(Org.class, queryAttr, criteriaID, true);
-       Iterator Results = 
-           getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+       Iterator Results = getPersistenceBrokerTemplate().getIteratorByQuery(queryID);
        while (Results.hasNext())
        {
            Object[] ReturnList = (Object[]) Results.next();
@@ -1178,7 +822,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
            getPersistenceBrokerTemplate().store(orgRpts);
            organizationsAdded = organizationsAdded + 1;
        }
-       LOG.info(String.format("\nOrganization reporting lines added to budget construction %d",
+       LOG.info(String.format("Organization reporting lines added to budget construction %d",
                 organizationsAdded));
     }
     
@@ -1206,11 +850,6 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
     private HashMap<String,BudgetConstructionAccountOrganizationHierarchy> acctOrgHierMap =
         new HashMap(BudgetConstructionConstants.BUDGETED_ACCOUNTS_TIMES_AVERAGE_REPORTING_TREE_SIZE);
     private BudgetConstructionHeader budgetConstructionHeader; 
-    //  these are the values at the root of the organization tree
-    //  they report to themselves, and they are at the highest level of every 
-    //  organization's reporting chain
-    private String rootChart;
-    private String rootOrganization;
     
     private Integer nHeadersBackToZero      = 0;
     private Integer nHeadersSwitchingLevels = 0;
@@ -1239,12 +878,6 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
         killOrgHierQuery.setCriteria(criteriaID);
         getPersistenceBrokerTemplate().deleteByQuery(killOrgHierQuery);
         getPersistenceBrokerTemplate().clearCache();
-        //
-        // now we fetch the root of the organization tree
-        String[] rootNode = 
-            SpringServiceLocator.getOrganizationService().getRootOrganizationCode();
-        rootChart = rootNode[0];
-        rootOrganization = rootNode[1];
         //
         // read the entire account reports to table, and build a hash map for the
         // join with the PBGL accounts
@@ -1283,9 +916,8 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
         {
             return;
         }
-        Integer orgLevel = 1;
-        // the organization the account directly reports to is at level 1
-        // (the account starts out at the account fiscal office level--level 0) 
+        Integer orgLevel = 0;
+        // the organization the account directly reports to is at level 0
         BudgetConstructionAccountOrganizationHierarchy acctOrgHier;
         acctOrgHier =
             new BudgetConstructionAccountOrganizationHierarchy();
@@ -1336,7 +968,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
         }
         if (orgLevel >= MAXIMUM_ORGANIZATION_TREE_DEPTH)
         {
-            LOG.warn(String.format("\n%s/%s reports to more than %d organizations",
+            LOG.warn(String.format("%s/%s reports to more than %d organizations",
                      acctRpts.getChartOfAccountsCode(),
                      acctRpts.getAccountNumber(),
                      MAXIMUM_ORGANIZATION_TREE_DEPTH));
@@ -1414,39 +1046,22 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
     
     private boolean noNewMapEntryNeeded(BudgetConstructionOrganizationReports orgRpts)
     {
-        // no new entry is needed we are at the root of the organization tree
-        String thisChart = orgRpts.getChartOfAccountsCode();
-        String thisOrg   = orgRpts.getOrganizationCode();
-        if ((thisChart.compareTo(rootChart) == 0)&&
-             (thisOrg.compareTo(rootOrganization) == 0))
-             {
-                 return true;
-             }
         // no new entry is needed if either the chart or the organization 
         // which this organization reports to is null
         // or if the organization reports to itself
         String rptsToChart = orgRpts.getReportsToChartOfAccountsCode();
-        if (rptsToChart.length() == 0)
+        if (rptsToChart == null)
         {
-            LOG.warn(String.format("\n(%s, %s) reports to a null chart",
-                    thisChart, thisOrg));
             return true;
         }
         String rptsToOrg = orgRpts.getReportsToOrganizationCode();
-        if (rptsToOrg.length() == 0) 
+        if (rptsToOrg == null) 
         {
-            LOG.warn(String.format("\n(%s, %s) reports to a null organization",
-                    thisChart, thisOrg));
             return true;
         }
-        if ((thisChart.compareTo(rptsToChart) == 0)
-           &&(thisOrg.compareTo(rptsToOrg) == 0))
-        {
-            LOG.warn(String.format("\n(%s,%s) reports to itself and is not the root",
-                     thisChart, thisOrg));
-            return true;
-        }
-        return false;
+        String thisChart = orgRpts.getChartOfAccountsCode();
+        String thisOrg   = orgRpts.getOrganizationCode();
+        return ((thisChart == rptsToChart)&&(thisOrg == rptsToOrg));
     }
     
     private void readAcctReportsTo()
@@ -1526,37 +1141,30 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
    private void updateBudgetConstructionHeaderAsNeeded(
                 BudgetConstructionHeader bCHdr)
    {
-      // header rows at the lowest (initial) level should be left alone
-      if (bCHdr.getOrganizationLevelCode().equals( 
-          BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_CODE))
-      {
-          return;
-      }
-      // we will only update if the level of the organization has changed 
-      // or if the organization has disappeared completely 
+      // we will only update if the level has changed or if the organization at 
+      // at the level indicated has disappeared
       String mapKey = getOrgHierarchyKeyFromBCHeader(bCHdr);
       BudgetConstructionAccountOrganizationHierarchy acctOrgHier =
           acctOrgHierMap.get(mapKey);
       if (acctOrgHier == null)
-      {   
-          // the account no longer reports to this organization
-          // we have to return to the lowest level and the default the
-          // organization reported to
+      {
+          // we have to return to the zero level and the organization to which
+          // the account directly reports
           nHeadersBackToZero = nHeadersBackToZero+1;
+          String acctKey = getAcctRptsToKeyFromBCHdr(bCHdr);
+          BudgetConstructionAccountReports acctRpts = acctRptsToMap.get(acctKey);
           bCHdr.setOrganizationLevelChartOfAccountsCode(
-                  BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_CHART_OF_ACCOUNTS_CODE);
+                  acctRpts.getReportsToChartOfAccountsCode());
           bCHdr.setOrganizationLevelOrganizationCode(
-                  BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_ORGANIZATION_CODE);
-          bCHdr.setOrganizationLevelCode(
-                  BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_CODE);
+                  acctRpts.getReportsToOrganizationCode());
+          bCHdr.setOrganizationLevelCode(new Integer(0));
           getPersistenceBrokerTemplate().store(bCHdr);
           return;
       }
      Integer levelFromHierarchy = acctOrgHier.getOrganizationLevelCode();
      Integer levelFromHeader    = bCHdr.getOrganizationLevelCode();
-     if (!levelFromHierarchy.equals(levelFromHeader))
+     if (levelFromHierarchy != levelFromHeader)
      {
-         // the organization reported to has changed its location in the hierarchy
          bCHdr.setOrganizationLevelCode(levelFromHierarchy);
          getPersistenceBrokerTemplate().store(bCHdr);
          nHeadersSwitchingLevels = nHeadersSwitchingLevels+1;
@@ -1692,7 +1300,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
            String toPrint = bcHeaderRows.getValue();
            LOG.info(String.format("\n\nA sample document number %s\n",toPrint));
            break;
-       }
+           }
        // print one PBGL row
        for (Map.Entry<String,PendingBudgetConstructionGeneralLedger> pBGLRows : 
            pBGLFromGL.entrySet())
@@ -1787,7 +1395,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
              pBGLFromGL.entrySet())
         {
              PendingBudgetConstructionGeneralLedger rowToAdd = newPBGLRows.getValue();
-             nGLRowsAdded = nGLRowsAdded+1;
+             nGLHeadersAdded = nGLHeadersAdded+1;
              getPersistenceBrokerTemplate().store(rowToAdd);
         }
     }
@@ -1976,15 +1584,13 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
             }
             else
             { 
-               pBGLFromGL.get(GLTestKey).setDocumentNumber(
+               pBGLFromGL.get(HeaderTestKey).setDocumentNumber(
                        documentNumberFromBCHdr.get(HeaderTestKey)); 
-            }
+        }
         }
         LOG.info("\nHash maps built: "+
                 String.format("%tT",dateTimeService.getCurrentDate()));
         info();
-        nGLBBKeysRead = documentNumberFromBCHdr.size();
-        nGLBBRowsRead = pBGLFromGL.size()+ nGLBBRowsRead;
     }
     
     private void recordSkippedKeys(String badGLKey)
@@ -1993,13 +1599,13 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
         if (skippedPBGLKeys.get(badGLKey) == null)
         {
             skippedPBGLKeys.put(badGLKey,new Integer(1));
-        }
+    }
         else
-        {
+    {
             Integer rowCount = skippedPBGLKeys.get(badGLKey) + 1;
             skippedPBGLKeys.put(badGLKey,rowCount);
-        }
-    }
+       }
+    }    
     
     private void updateBaseBudgetAmount(PendingBudgetConstructionGeneralLedger currentPBGLInstance)
     {
@@ -2017,7 +1623,7 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
        // it won't match with anything else
        // it should NOT be inserted into the PBGL table
        pBGLFromGL.remove(TestKey);
-       if (baseFromCurrentGL.equals(baseFromPBGL))
+       if (baseFromCurrentGL == baseFromPBGL)
        {
            // no need to update--false alarm
            return;
@@ -2039,10 +1645,10 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
        // replace the amount on each current PBGL row which matches from
        // the GL row, and remove the GL row 
        //
-       // we will compare the GL Key row with the the current PBGL row,
+       // we will compare the GL Key row with the the current PBLG row,
        // and if the keys are the same, we will eliminate the GL key row
        //
-       //  fetch the current PBGL rows
+       //  fetch the current BC header rows
        Criteria criteriaID = new Criteria();
        criteriaID.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR,RequestYear);
        QueryByCriteria queryID = 
@@ -2074,183 +1680,28 @@ public class GenesisDaoOjb extends PersistenceBrokerDaoSupport
                  nGLRowsAdded));
         LOG.info(String.format("\ncurrent PBGL amounts updated: %d",
                  nGLRowsUpdated));
-        LOG.info(String.format("\nGL rows with zero net amounts (skipped) %d\n",nGLBBRowsZeroNet));
-        LOG.info(String.format("\nGL account/subaccount keys skipped: %d",nGLBBRowsSkipped));
+        LOG.info(String.format("\nGL rows skipped %d\n",nGLBBRowsSkipped));
         if (!skippedPBGLKeys.isEmpty())
         {
             for (Map.Entry<String,Integer> skippedRows : skippedPBGLKeys.entrySet())
             {
              LOG.info(String.format("\nGL key %s with %d rows skipped--no document header",
                      skippedRows.getKey(),skippedRows.getValue()));
-                
-            }
-        }
-    }
- 
-    /*
-     * ******************************************************************************
-     * (7)  there could be an object class in the object code table that was marked
-     *      as inactive during the current fiscal year.  there could also be GL rows
-     *      with base budget which refer to this object code.  the fiscal year makers
-     *      routine would NOT copy a deleted object code into the new fiscal year.
-     *      to maintain referential integrity, we will copy such an object code (but
-     *      mark it as deleted) into the new fiscal year if it will occur in budget
-     *      construction.
-     */
-    
-    private HashMap<String,String[]> baseYearInactiveObjects;
-    private HashMap<String,String[]> gLBBObjects;
-    private Integer nInactiveBBObjectCodes = new Integer(0);
-    
-    public void ensureObjectClassRIForBudget(Integer BaseYear)
-    {
-        readBaseYearInactiveObjects(BaseYear);
-        if (baseYearInactiveObjects.isEmpty())
-        {
-            // no problems
-            LOG.info(String.format("\nInactive Object Codes in BC GL: %d",
-                     nInactiveBBObjectCodes));
-            return;
-        }
-        readAndFilterGLBBObjects(BaseYear);
-        if (gLBBObjects.isEmpty())
-        {
-            // no problems
-            LOG.info(String.format("\nInactive Object Codes in BC GL: %d",
-                    nInactiveBBObjectCodes));
-            return;
-        }
-        // we have to create an object row for the request year
-        addRIObjectClassesForBB(BaseYear);
-        LOG.info(String.format("\nInactive Object Codes in BC GL: %d",
-                nInactiveBBObjectCodes));
-    }
-    
-    public void addRIObjectClassesForBB(Integer BaseYear)
-    {
-        //  we will read the object table for the request year first
-        //  if the row is there (someone could have added it, or updated it),
-        //  we will not change it at all.
-        //  this is an extra read, but overall looking just for problems
-        //  will require many fewer reads than comparing all object codes in the
-        //  request year to all object codes in the GL BB base.
-        Integer RequestYear = BaseYear + 1;
-        for(Map.Entry<String,String[]> problemObjectCodes: gLBBObjects.entrySet())
-        {
-          String problemChart =  problemObjectCodes.getValue()[0];
-          String problemObject =  problemObjectCodes.getValue()[1];   
-          if (isObjectInRequestYear(BaseYear,problemChart,problemObject))
-          {
-              // everything is fine
-              continue;
-          }
-          //  now we have to add the object to the request year as an inactive object
-          Criteria criteriaID = new Criteria();
-          criteriaID.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR,BaseYear);
-          criteriaID.addColumnEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE,
-                                      problemChart);
-          criteriaID.addEqualTo(PropertyConstants.OBJECT_CODE,problemObject);
-          ReportQueryByCriteria queryID = 
-              new ReportQueryByCriteria(ObjectCode.class,criteriaID);
-          Iterator Results = 
-              getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-          if (!Results.hasNext())
-          {
-              // this should never happen
-              // if it does, it will cause an RI exception in the GL load to BC
-              // at least this message will give some clue
-              LOG.warn(String.format("could not find BB object (%s, %s) in %d",
-                       problemChart,problemObject,BaseYear));
-              continue;
-          }
-          ObjectCode baseYearObject = (ObjectCode) Results.next();
-          baseYearObject.setUniversityFiscalYear(RequestYear);
-          baseYearObject.setActive(false);
-          getPersistenceBrokerTemplate().store(baseYearObject);
-        }
-    }
-
-    private boolean isObjectInRequestYear(Integer BaseYear,
-                                          String Chart, String ObjectCode)
-    {
-        Integer RequestYear = BaseYear + 1;
-        Criteria criteriaID = new Criteria();
-        criteriaID.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR,RequestYear);
-        criteriaID.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE,Chart);
-        criteriaID.addEqualTo(PropertyConstants.ACCOUNT_NUMBER,ObjectCode);
-        QueryByCriteria queryID = 
-            new QueryByCriteria(ObjectCode.class,criteriaID);
-        Integer Result = 
-            getPersistenceBrokerTemplate().getCount(queryID);
-        return (!Result.equals(0));
-    }
-    
-    public void readBaseYearInactiveObjects(Integer BaseYear)
-    {
-        baseYearInactiveObjects = new HashMap<String,String[]>();
-        Criteria criteriaID = new Criteria();
-        criteriaID.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR,BaseYear);
-        criteriaID.addEqualTo(PropertyConstants.FINANCIAL_OBJECT_ACTIVE_CODE,
-                              Constants.ParameterValues.NO);
-        String[] queryAttr  = {PropertyConstants.CHART_OF_ACCOUNTS_CODE,
-                               PropertyConstants.OBJECT_CODE};
-        ReportQueryByCriteria queryID = new ReportQueryByCriteria(ObjectCode.class,
-                                                                  queryAttr,
-                                                                  criteriaID);
-        Iterator Result = 
-            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-        while (Result.hasNext())
-        {
-          Object[] resultRow = (Object[]) Result.next();
-          String[] hashMapValue = new String[2];
-          hashMapValue[0] = (String) resultRow[0];
-          hashMapValue[1] = (String) resultRow[1];
-          String hashMapKey = hashMapValue[0]+hashMapValue[1];
-          baseYearInactiveObjects.put(hashMapKey,hashMapValue);
-        }
-    }
         
-        private void readAndFilterGLBBObjects(Integer BaseYear)
-        {
-            // this must be done before we read GL for PBGL
-            // otherwise, we will get an RI violation when we try to add a PBGL
-            // row with an object inactive in the current year
-            gLBBObjects = new HashMap<String,String[]>();
-            Criteria criteriaID = new Criteria();
-            criteriaID.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, BaseYear);
-            criteriaID.addEqualTo(PropertyConstants.BALANCE_TYPE_CODE,
-                                  Constants.BALANCE_TYPE_BASE_BUDGET);
-            String[] queryAttr = {PropertyConstants.CHART_OF_ACCOUNTS_CODE,           
-                                  PropertyConstants.OBJECT_CODE};
-            ReportQueryByCriteria queryID = 
-                new ReportQueryByCriteria(Balance.class,
-                                          queryAttr,criteriaID,true);
-            Iterator Result = 
-                getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-            while (Result.hasNext())
-            {
-              Object[] resultRow = (Object[]) Result.next();
-              String[] hashMapValue = new String[2];
-              hashMapValue[0] = (String) resultRow[0];
-              hashMapValue[1] = (String) resultRow[1];
-              String hashMapKey = hashMapValue[0]+hashMapValue[1];
-              if (baseYearInactiveObjects.get(hashMapKey)!= null)
-              {
-                  gLBBObjects.put(hashMapKey,hashMapValue);
-                  nInactiveBBObjectCodes = nInactiveBBObjectCodes + 1;
-              }
-            }
+    }
         }
-
+    }
+    
+    
     public void setDocumentService(DocumentService documentService)
     {
         this.documentService = documentService;
     }
-     public void setDateTimeService(DateTimeService dateTimeService) {
+    public void setDateTimeService(DateTimeService dateTimeService) {
         this.dateTimeService = dateTimeService;
     }
-     public void setWorkflowDocumentService (WorkflowDocumentService workflowDocumentService)
-     {
-         this.workflowDocumentService = workflowDocumentService;
-     }
+    public void setWorkflowDocumentService(WorkflowDocumentService workflowDocumentService)
+    {
+        this.workflowDocumentService = workflowDocumentService;
+    }
 }
