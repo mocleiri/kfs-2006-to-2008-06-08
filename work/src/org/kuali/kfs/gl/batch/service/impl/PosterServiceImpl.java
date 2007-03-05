@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,9 +61,11 @@ import org.kuali.module.gl.service.ReportService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ * 
+ * @version $Id: PosterServiceImpl.java,v 1.42.2.7 2007-02-10 11:37:34 j2eemgr Exp $
+ */
 public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
 
@@ -73,7 +75,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     public static final String SELECT_CODE = "S";
 
     public static final KualiDecimal warningMaxDifference = new KualiDecimal("0.05");
-    public static final String DATE_FORMAT_STRING = "yyyyMMdd";
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
     private BeanFactory beanFactory;
     private List transactionPosters;
@@ -90,6 +92,13 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private ReportService reportService;
     private KualiConfigurationService kualiConfigurationService;
     private FlexibleOffsetAccountService flexibleOffsetAccountService;
+
+    /**
+     * 
+     */
+    public PosterServiceImpl() {
+        super();
+    }
 
     /**
      * Post scrubbed GL entries to GL tables.
@@ -197,7 +206,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
                 addReporting(reportSummary, "GL_REVERSAL_T", PosterServiceImpl.SELECT_CODE);
 
                 postTransaction(tran, mode, reportSummary, reportError, invalidGroup, validGroup, runUniversityDate);
-
+                
                 // Report Reversal poster valid transactions
                 reportService.generatePosterReversalTransactionsListing(runDate, validGroup);
 
@@ -455,8 +464,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
 
         e.setFinancialDocumentTypeCode(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
         e.setFinancialSystemOriginationCode(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_ORIGINATION_CODE));
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
-        e.setDocumentNumber(sdf.format(runDate));
+        e.setFinancialDocumentNumber(sdf.format(runDate));
         if (Constants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator())) {
             e.setTransactionLedgerEntryDescription(getChargeDescription(pct, et.getObjectCode(), et.getAccount().getAcctIndirectCostRcvyTypeCd(), et.getAccountObjectDirectCostAmount().abs()));
         }
@@ -490,7 +498,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
         }
 
         if (et.getBalanceTypeCode().equals(et.getOption().getExtrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getIntrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getPreencumbranceFinBalTypeCd()) || et.getBalanceTypeCode().equals(et.getOption().getCostShareEncumbranceBalanceTypeCode())) {
-            e.setDocumentNumber(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
+            e.setFinancialDocumentNumber(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
         }
         e.setProjectCode(et.getProjectCode());
         if (GLConstants.DASH_ORGANIZATION_REFERENCE_ID.equals(et.getOrganizationReferenceId())) {
@@ -602,6 +610,15 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
         }
         else {
             reporting.put(key, new Integer(1));
+        }
+    }
+
+    public void init() {
+        LOG.debug("init() started");
+
+        // If we are in test mode
+        if (beanFactory.containsBean("testDateTimeService")) {
+            dateTimeService = (DateTimeService) beanFactory.getBean("testDateTimeService");
         }
     }
 
