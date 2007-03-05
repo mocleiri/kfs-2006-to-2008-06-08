@@ -24,15 +24,17 @@
         <inquiry>
             <title>Labor Benefits Type Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="positionBenefitTypeCode" />
                 <field attributeName="positionBenefitTypeDescription" />
                 <field attributeName="positionBenefitRetirementIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Labor Benefits Type Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.BenefitsType">Create New</a>]]></menubar>
 
             <instructions>Lookup an Benefits Type</instructions>
 
