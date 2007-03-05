@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/SubFundGroup.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -128,7 +130,7 @@
                 <maxLength>1</maxLength>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.SubFundGroupTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.SubFundGroupTypeValuesFinder" />
                 </control>
 
                 <summary>The associated Type Code</summary>
@@ -157,7 +159,7 @@
                  <label>Default Account Restricted Status Code</label>
                  <shortLabel>DefaultRstrcStatCd</shortLabel>
                  <control>
-                     <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.RestrictedStatusValuesFinder" />
+                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.RestrictedStatusValuesFinder" />
                  </control>
                  <summary>
                      <![CDATA[&nbsp;]]>
@@ -188,7 +190,7 @@
                                 sourceClassName="org.kuali.module.chart.bo.FundGroup" 
                                 sourceAttributeName="fundGroupBudgetAdjustmentRestrictionLevelCode" >
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.BudgetAdjustmentSubFundRestrictionsValuesFinder"/>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.BudgetAdjustmentSubFundRestrictionsValuesFinder"/>
                 </control>
             </attributeReference>    
 

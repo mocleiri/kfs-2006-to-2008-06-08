@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/inquiry/AbstractGeneralLedgerInquirableImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +26,7 @@ import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.bo.KualiSystemCode;
 import org.kuali.core.datadictionary.AttributeDefinition;
 import org.kuali.core.datadictionary.AttributeReferenceDefinition;
@@ -56,7 +58,7 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
      * @param attributeName the attribute name which links to an inquirable
      * @return String url to inquiry
      */
-    public String getInquiryUrl(PersistableBusinessObject businessObject, String attributeName) {
+    public String getInquiryUrl(BusinessObject businessObject, String attributeName) {
         BusinessObjectDictionaryService businessDictionary = SpringServiceLocator.getBusinessObjectDictionaryService();
         PersistenceStructureService persistenceStructureService = SpringServiceLocator.getPersistenceStructureService();
 
@@ -156,7 +158,6 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
                         keyConversion = persistenceStructureService.getForeignKeyFieldName(businessObject.getClass(), attributeRefName, keyName);
                     }
                 }
-
                 Object keyValue = ObjectUtils.getPropertyValue(businessObject, keyConversion);
                 keyValue = (keyValue == null) ? "" : keyValue.toString();
 
@@ -334,7 +335,7 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
     }
 
     // TODO: not finished
-    public Class getNestedInquiryBusinessObjectClass(PersistableBusinessObject businessObject, String attributeName) {
+    public Class getNestedInquiryBusinessObjectClass(BusinessObject businessObject, String attributeName) {
         Class inquiryBusinessObjectClass = null;
         String entryName = businessObject.getClass().getName();
         System.out.println("businessObject: " + entryName);

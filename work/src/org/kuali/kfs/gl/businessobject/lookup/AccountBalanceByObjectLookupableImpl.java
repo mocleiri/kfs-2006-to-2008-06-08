@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ import java.util.Map;
 
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.lookup.KualiLookupableImpl;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.AccountBalance;
-import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
+import org.kuali.module.gl.bo.DummyBusinessObject;
 import org.kuali.module.gl.service.AccountBalanceService;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
@@ -49,7 +49,7 @@ public class AccountBalanceByObjectLookupableImpl extends KualiLookupableImpl {
      * @param propertyName the property which links to an inquirable
      * @return String url to inquiry
      */
-    public String getInquiryUrl(PersistableBusinessObject bo, String propertyName) {
+    public String getInquiryUrl(BusinessObject bo, String propertyName) {
         if (GLConstants.DummyBusinessObject.LINK_BUTTON_OPTION.equals(propertyName)) {
             return (new AccountBalanceByObjectInquirableImpl()).getInquiryUrl(bo, propertyName);
         }
@@ -105,7 +105,7 @@ public class AccountBalanceByObjectLookupableImpl extends KualiLookupableImpl {
         for (Iterator iter = results.iterator(); iter.hasNext();) {
             AccountBalance ab = (AccountBalance) iter.next();
 
-            TransientBalanceInquiryAttributes dbo = ab.getDummyBusinessObject();
+            DummyBusinessObject dbo = ab.getDummyBusinessObject();
             dbo.setConsolidationOption(consolidationOption);
             dbo.setCostShareOption(costShareOption);
             dbo.setPendingEntryOption(pendingEntryOption);

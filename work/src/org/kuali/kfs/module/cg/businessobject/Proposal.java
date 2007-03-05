@@ -23,19 +23,14 @@ import java.util.List;
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.module.cg.lookup.valuefinder.NextProposalNumberFinder;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.module.cg.lookup.valueFinder.NextProposalNumberFinder;
 import org.kuali.module.kra.routingform.bo.RoutingFormBudget;
 import org.kuali.module.kra.routingform.bo.RoutingFormOrganization;
-import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
-import org.kuali.module.kra.routingform.bo.RoutingFormProjectType;
-import org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk;
 import org.kuali.module.kra.routingform.bo.RoutingFormSubcontractor;
 import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 
@@ -109,23 +104,14 @@ public class Proposal extends PersistableBusinessObjectBase {
         this.setProposalStatusCode(PROPOSAL_CODE);
 
         //Values coming from RoutingFormDocument (ER_RF_DOC_T)
-        this.setProposalProjectTitle(routingFormDocument.getRoutingFormProjectTitle().length() > 250 ? routingFormDocument.getRoutingFormProjectTitle().substring(0, 250) : routingFormDocument.getRoutingFormProjectTitle());
+        this.setProposalProjectTitle(routingFormDocument.getRoutingFormProjectTitle().substring(0, 250));
         this.setProposalPurposeCode(routingFormDocument.getRoutingFormPurposeCode());
+        this.setProposalAwardTypeCode("N");
         this.setGrantNumber(routingFormDocument.getGrantNumber());
         this.setCfdaNumber(routingFormDocument.getRoutingFormCatalogOfFederalDomesticAssistanceNumber());
         this.setProposalFellowName(routingFormDocument.getRoutingFormFellowFullName());
         this.setProposalFederalPassThroughIndicator(routingFormDocument.getRoutingFormFederalPassThroughIndicator());
         this.setFederalPassThroughAgencyNumber(routingFormDocument.getAgencyFederalPassThroughNumber());
-
-        //There could be multiple types on the RF, but only one of them will pass this rule, and that's the one that should be used to populate the Proposal field.
-        KualiParameterRule proposalCreateRule = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterRule(KraConstants.KRA_ADMIN_GROUP_NAME, "KraRoutingFormCreateProposalProjectTypes");
-        for (RoutingFormProjectType routingFormProjectType : routingFormDocument.getRoutingFormProjectTypes()) {
-            if (proposalCreateRule.succeedsRule(routingFormProjectType.getProjectTypeCode())) {
-                this.setProposalAwardTypeCode(routingFormProjectType.getProjectTypeCode());
-                break;
-            }
-        }
-        
         
         //Values coming from Routing Form Budget BO (ER_RF_BDGT_T)
         RoutingFormBudget routingFormBudget = routingFormDocument.getRoutingFormBudget();
@@ -144,40 +130,24 @@ public class Proposal extends PersistableBusinessObjectBase {
             this.getProposalSubcontractors().add(new ProposalSubcontractor(newProposalNumber, routingFormSubcontractor));
         }
 
-        //Get the RF Primary Project Director
-        for (RoutingFormPersonnel routingFormPerson : routingFormDocument.getRoutingFormPersonnel()) {
-            if (routingFormPerson.isProjectDirector()) {
-                RoutingFormPersonnel projectDirector = routingFormPerson;
-
-                this.getProposalProjectDirectors().add(new ProposalProjectDirector(projectDirector, newProposalNumber, true));
-                
-                ProposalOrganization projectDirectorOrganization = new ProposalOrganization();
-                projectDirectorOrganization.setProposalNumber(newProposalNumber);
-                projectDirectorOrganization.setChartOfAccountsCode(projectDirector.getChartOfAccountsCode());
-                projectDirectorOrganization.setOrganizationCode(projectDirector.getOrganizationCode());
-                projectDirectorOrganization.setProposalPrimaryOrganizationIndicator(true);
-                
-                this.getProposalOrganizations().add(projectDirectorOrganization);
-                break;
-            }
-        }
-
         for (RoutingFormOrganization routingFormOrganization : routingFormDocument.getRoutingFormOrganizations()) {
             //construct a new ProposalOrganization using the current RoutingFormOrganization as a template.
             ProposalOrganization proposalOrganization = new ProposalOrganization(newProposalNumber, routingFormOrganization);
-
+            
             //check to see if the list or ProposalOrganizations already contains an entry with this key; add it to the list if it does not.
             if (!ObjectUtils.collectionContainsObjectWithIdentitcalKey(this.getProposalOrganizations(), proposalOrganization)) {
                 this.getProposalOrganizations().add(proposalOrganization);
             }
         }
-
-        for (RoutingFormResearchRisk routingFormResearchRisk : routingFormDocument.getRoutingFormResearchRisks()) {
-            this.getProposalResearchRisks().add(new ProposalResearchRisk(newProposalNumber, routingFormResearchRisk));
-        }
         
+        //Can't do yet?
         this.setProposalSubmissionDate(SpringServiceLocator.getDateTimeService().getCurrentSqlDate());
-
+        //can't do Project Director until RoutingFormPersonnel is done.
+        /**
+          - er.er_rf_prjdr_t.person_unvl_id - person_unvl_id
+          - er.er_rf_prjdr_t.prpsl_prm_pjd_ind - prpsl_prmprjdr_ind
+        */
+        
     }
     
     /**

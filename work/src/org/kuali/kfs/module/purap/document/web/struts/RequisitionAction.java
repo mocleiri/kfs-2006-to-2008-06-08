@@ -32,7 +32,7 @@ import org.kuali.module.purap.bo.VendorAddress;
 import org.kuali.module.purap.bo.VendorContract;
 import org.kuali.module.purap.bo.VendorDetail;
 import org.kuali.module.purap.document.RequisitionDocument;
-import org.kuali.module.purap.service.PhoneNumberService;
+import org.kuali.module.purap.util.PhoneNumberUtils;
 import org.kuali.module.purap.web.struts.form.RequisitionForm;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -64,13 +64,16 @@ public class RequisitionAction extends PurchasingActionBase {
      */
     @Override
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ActionForward forward = super.refresh(mapping, form, request, response);
-    	RequisitionForm rqForm = (RequisitionForm) form;
+        RequisitionForm rqForm = (RequisitionForm) form;
         RequisitionDocument document = (RequisitionDocument) rqForm.getDocument();
-    	
-        // super.refresh() must occur before this line to get the correct APO limit
-        document.setOrganizationAutomaticPurchaseOrderLimit(SpringServiceLocator.getRequisitionService().getApoLimit(document.getVendorContractGeneratedIdentifier(), document.getChartOfAccountsCode(), document.getOrganizationCode()));
-        return forward;
+        BusinessObjectService businessObjectService = SpringServiceLocator.getBusinessObjectService();
+
+        // Format phone numbers
+        document.setInstitutionContactPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(document.getInstitutionContactPhoneNumber()));    
+        document.setRequestorPersonPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(document.getRequestorPersonPhoneNumber()));    
+        document.setDeliveryToPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(document.getDeliveryToPhoneNumber()));    
+
+        return super.refresh(mapping, form, request, response);
     }
 
     public ActionForward viewRelatedDocuments(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {

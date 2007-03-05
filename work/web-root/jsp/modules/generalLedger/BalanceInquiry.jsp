@@ -1,5 +1,5 @@
 <%--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 --%>
 <%@ include file="/jsp/core/tldHeader.jsp"%>
 
-<kul:page lookup="true" showDocumentInfo="false"
+<kul:pageLookup showDocumentInfo="false"
 	htmlFormAction="glBalanceInquiry"
 	headerMenuBar="${KualiForm.lookupable.htmlMenuBar}"
 	headerTitle="Lookup" docTitle="" transactionalDocument="false">
@@ -52,7 +52,7 @@
 					<c:set var="ActionName" value="glBalanceInquiry.do" scope="request" />
 					<c:set var="IsLookupDisplay" value="true" scope="request" />
 
-					<kul:rowDisplay rows="${FieldRows}" />
+					<%@ include file="/jsp/core/RowDisplay.jsp"%>
 
 					<tr align=center>
 						<td height="30" colspan=2 class="infoline"><html:image
@@ -143,7 +143,7 @@
 								<c:when test="${column.formatter.implementationClass == 'org.kuali.core.web.format.CurrencyFormatter'}">
 		
 									<display:column class="numbercell" sortable="true" media="${(status.index < 11) ? 'all' : 'csv excel xml'}"
-										decorator="org.kuali.core.web.ui.FormatAwareDecorator"
+										decorator="org.kuali.core.web.uidraw.FormatAwareDecorator"
 										title="${column.columnTitle}" comparator="${column.comparator}">
 										
 										<c:choose>
@@ -168,7 +168,7 @@
 										<c:when test="${column.propertyURL != \"\"}">
 		
 											<display:column class="infocell" sortable="${column.sortable}"
-												decorator="org.kuali.core.web.ui.FormatAwareDecorator"
+												decorator="org.kuali.core.web.uidraw.FormatAwareDecorator"
 												title="${column.columnTitle}" media="${(status.index < 11) ? 'all' : 'csv excel xml'}"
 												comparator="${column.comparator}">
 		
@@ -182,7 +182,7 @@
 										<c:otherwise>
 											
 											<display:column class="infocell" sortable="${column.sortable}"
-												decorator="org.kuali.core.web.ui.FormatAwareDecorator"
+												decorator="org.kuali.core.web.uidraw.FormatAwareDecorator"
 												title="${column.columnTitle}" media="${(status.index < 11) ? 'all' : 'csv excel xml'}"
 												comparator="${column.comparator}">
 												
@@ -218,4 +218,4 @@
 		</tr>
 	</table>
 
-</kul:page>
+</kul:pageLookup>
