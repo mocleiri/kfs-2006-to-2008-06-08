@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.purap.bo;
@@ -19,16 +28,15 @@ package org.kuali.module.purap.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.module.purap.document.PurchaseOrderDocument;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
+public class PurchaseOrderVendorQuote extends BusinessObjectBase {
 
-    private String documentNumber;
-    private Integer purchaseOrderVendorQuoteIdentifier;
+	private Integer purchaseOrderVendorQuoteIdentifier;
+	private Integer purchaseOrderIdentifier;
 	private Integer vendorHeaderGeneratedIdentifier;
 	private Integer vendorDetailAssignedIdentifier;
 	private String vendorName;
@@ -47,9 +55,8 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	private String purchaseOrderQuoteStatusCode;
 	private Date purchaseOrderQuoteAwardDate;
 	private String purchaseOrderQuoteRankNumber;
-    private String vendorCountryCode;
-    
-    private PurchaseOrderDocument purchaseOrder;
+
+    private PurchaseOrder purchaseOrder;
 	private PurchaseOrderQuoteStatus purchaseOrderQuoteStatus;
 
 	/**
@@ -60,25 +67,9 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	}
 
 	/**
-     * Gets the documentNumber attribute. 
-     * @return Returns the documentNumber.
-     */
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
-
-    /**
-     * Sets the documentNumber attribute value.
-     * @param documentNumber The documentNumber to set.
-     */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
-
-    /**
 	 * Gets the purchaseOrderVendorQuoteIdentifier attribute.
 	 * 
-	 * @return Returns the purchaseOrderVendorQuoteIdentifier
+	 * @return - Returns the purchaseOrderVendorQuoteIdentifier
 	 * 
 	 */
 	public Integer getPurchaseOrderVendorQuoteIdentifier() { 
@@ -88,17 +79,39 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderVendorQuoteIdentifier attribute.
 	 * 
-	 * @param purchaseOrderVendorQuoteIdentifier The purchaseOrderVendorQuoteIdentifier to set.
+	 * @param - purchaseOrderVendorQuoteIdentifier The purchaseOrderVendorQuoteIdentifier to set.
 	 * 
 	 */
 	public void setPurchaseOrderVendorQuoteIdentifier(Integer purchaseOrderVendorQuoteIdentifier) {
 		this.purchaseOrderVendorQuoteIdentifier = purchaseOrderVendorQuoteIdentifier;
 	}
 
+
+	/**
+	 * Gets the purchaseOrderIdentifier attribute.
+	 * 
+	 * @return - Returns the purchaseOrderIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderIdentifier() { 
+		return purchaseOrderIdentifier;
+	}
+
+	/**
+	 * Sets the purchaseOrderIdentifier attribute.
+	 * 
+	 * @param - purchaseOrderIdentifier The purchaseOrderIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderIdentifier(Integer purchaseOrderIdentifier) {
+		this.purchaseOrderIdentifier = purchaseOrderIdentifier;
+	}
+
+
 	/**
 	 * Gets the vendorHeaderGeneratedIdentifier attribute.
 	 * 
-	 * @return Returns the vendorHeaderGeneratedIdentifier
+	 * @return - Returns the vendorHeaderGeneratedIdentifier
 	 * 
 	 */
 	public Integer getVendorHeaderGeneratedIdentifier() { 
@@ -108,7 +121,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorHeaderGeneratedIdentifier attribute.
 	 * 
-	 * @param vendorHeaderGeneratedIdentifier The vendorHeaderGeneratedIdentifier to set.
+	 * @param - vendorHeaderGeneratedIdentifier The vendorHeaderGeneratedIdentifier to set.
 	 * 
 	 */
 	public void setVendorHeaderGeneratedIdentifier(Integer vendorHeaderGeneratedIdentifier) {
@@ -119,7 +132,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorDetailAssignedIdentifier attribute.
 	 * 
-	 * @return Returns the vendorDetailAssignedIdentifier
+	 * @return - Returns the vendorDetailAssignedIdentifier
 	 * 
 	 */
 	public Integer getVendorDetailAssignedIdentifier() { 
@@ -129,7 +142,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorDetailAssignedIdentifier attribute.
 	 * 
-	 * @param vendorDetailAssignedIdentifier The vendorDetailAssignedIdentifier to set.
+	 * @param - vendorDetailAssignedIdentifier The vendorDetailAssignedIdentifier to set.
 	 * 
 	 */
 	public void setVendorDetailAssignedIdentifier(Integer vendorDetailAssignedIdentifier) {
@@ -140,7 +153,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorName attribute.
 	 * 
-	 * @return Returns the vendorName
+	 * @return - Returns the vendorName
 	 * 
 	 */
 	public String getVendorName() { 
@@ -150,7 +163,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorName attribute.
 	 * 
-	 * @param vendorName The vendorName to set.
+	 * @param - vendorName The vendorName to set.
 	 * 
 	 */
 	public void setVendorName(String vendorName) {
@@ -161,7 +174,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorLine1Address attribute.
 	 * 
-	 * @return Returns the vendorLine1Address
+	 * @return - Returns the vendorLine1Address
 	 * 
 	 */
 	public String getVendorLine1Address() { 
@@ -171,7 +184,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorLine1Address attribute.
 	 * 
-	 * @param vendorLine1Address The vendorLine1Address to set.
+	 * @param - vendorLine1Address The vendorLine1Address to set.
 	 * 
 	 */
 	public void setVendorLine1Address(String vendorLine1Address) {
@@ -182,7 +195,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorLine2Address attribute.
 	 * 
-	 * @return Returns the vendorLine2Address
+	 * @return - Returns the vendorLine2Address
 	 * 
 	 */
 	public String getVendorLine2Address() { 
@@ -192,7 +205,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorLine2Address attribute.
 	 * 
-	 * @param vendorLine2Address The vendorLine2Address to set.
+	 * @param - vendorLine2Address The vendorLine2Address to set.
 	 * 
 	 */
 	public void setVendorLine2Address(String vendorLine2Address) {
@@ -203,7 +216,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorCityName attribute.
 	 * 
-	 * @return Returns the vendorCityName
+	 * @return - Returns the vendorCityName
 	 * 
 	 */
 	public String getVendorCityName() { 
@@ -213,7 +226,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorCityName attribute.
 	 * 
-	 * @param vendorCityName The vendorCityName to set.
+	 * @param - vendorCityName The vendorCityName to set.
 	 * 
 	 */
 	public void setVendorCityName(String vendorCityName) {
@@ -224,7 +237,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorStateCode attribute.
 	 * 
-	 * @return Returns the vendorStateCode
+	 * @return - Returns the vendorStateCode
 	 * 
 	 */
 	public String getVendorStateCode() { 
@@ -234,7 +247,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorStateCode attribute.
 	 * 
-	 * @param vendorStateCode The vendorStateCode to set.
+	 * @param - vendorStateCode The vendorStateCode to set.
 	 * 
 	 */
 	public void setVendorStateCode(String vendorStateCode) {
@@ -245,7 +258,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorPostalCode attribute.
 	 * 
-	 * @return Returns the vendorPostalCode
+	 * @return - Returns the vendorPostalCode
 	 * 
 	 */
 	public String getVendorPostalCode() { 
@@ -255,7 +268,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorPostalCode attribute.
 	 * 
-	 * @param vendorPostalCode The vendorPostalCode to set.
+	 * @param - vendorPostalCode The vendorPostalCode to set.
 	 * 
 	 */
 	public void setVendorPostalCode(String vendorPostalCode) {
@@ -266,7 +279,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorPhoneNumber attribute.
 	 * 
-	 * @return Returns the vendorPhoneNumber
+	 * @return - Returns the vendorPhoneNumber
 	 * 
 	 */
 	public String getVendorPhoneNumber() { 
@@ -276,7 +289,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorPhoneNumber attribute.
 	 * 
-	 * @param vendorPhoneNumber The vendorPhoneNumber to set.
+	 * @param - vendorPhoneNumber The vendorPhoneNumber to set.
 	 * 
 	 */
 	public void setVendorPhoneNumber(String vendorPhoneNumber) {
@@ -287,7 +300,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorFaxNumber attribute.
 	 * 
-	 * @return Returns the vendorFaxNumber
+	 * @return - Returns the vendorFaxNumber
 	 * 
 	 */
 	public String getVendorFaxNumber() { 
@@ -297,7 +310,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorFaxNumber attribute.
 	 * 
-	 * @param vendorFaxNumber The vendorFaxNumber to set.
+	 * @param - vendorFaxNumber The vendorFaxNumber to set.
 	 * 
 	 */
 	public void setVendorFaxNumber(String vendorFaxNumber) {
@@ -308,7 +321,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorEmailAddress attribute.
 	 * 
-	 * @return Returns the vendorEmailAddress
+	 * @return - Returns the vendorEmailAddress
 	 * 
 	 */
 	public String getVendorEmailAddress() { 
@@ -318,7 +331,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorEmailAddress attribute.
 	 * 
-	 * @param vendorEmailAddress The vendorEmailAddress to set.
+	 * @param - vendorEmailAddress The vendorEmailAddress to set.
 	 * 
 	 */
 	public void setVendorEmailAddress(String vendorEmailAddress) {
@@ -329,7 +342,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the vendorAttentionName attribute.
 	 * 
-	 * @return Returns the vendorAttentionName
+	 * @return - Returns the vendorAttentionName
 	 * 
 	 */
 	public String getVendorAttentionName() { 
@@ -339,7 +352,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the vendorAttentionName attribute.
 	 * 
-	 * @param vendorAttentionName The vendorAttentionName to set.
+	 * @param - vendorAttentionName The vendorAttentionName to set.
 	 * 
 	 */
 	public void setVendorAttentionName(String vendorAttentionName) {
@@ -350,7 +363,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the purchaseOrderQuoteTransactionTypeCode attribute.
 	 * 
-	 * @return Returns the purchaseOrderQuoteTransactionTypeCode
+	 * @return - Returns the purchaseOrderQuoteTransactionTypeCode
 	 * 
 	 */
 	public String getPurchaseOrderQuoteTransactionTypeCode() { 
@@ -360,7 +373,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderQuoteTransactionTypeCode attribute.
 	 * 
-	 * @param purchaseOrderQuoteTransactionTypeCode The purchaseOrderQuoteTransactionTypeCode to set.
+	 * @param - purchaseOrderQuoteTransactionTypeCode The purchaseOrderQuoteTransactionTypeCode to set.
 	 * 
 	 */
 	public void setPurchaseOrderQuoteTransactionTypeCode(String purchaseOrderQuoteTransactionTypeCode) {
@@ -371,7 +384,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the purchaseOrderQuoteTransactionDate attribute.
 	 * 
-	 * @return Returns the purchaseOrderQuoteTransactionDate
+	 * @return - Returns the purchaseOrderQuoteTransactionDate
 	 * 
 	 */
 	public Date getPurchaseOrderQuoteTransactionDate() { 
@@ -381,7 +394,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderQuoteTransactionDate attribute.
 	 * 
-	 * @param purchaseOrderQuoteTransactionDate The purchaseOrderQuoteTransactionDate to set.
+	 * @param - purchaseOrderQuoteTransactionDate The purchaseOrderQuoteTransactionDate to set.
 	 * 
 	 */
 	public void setPurchaseOrderQuoteTransactionDate(Date purchaseOrderQuoteTransactionDate) {
@@ -392,7 +405,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the purchaseOrderQuotePriceExpirationDate attribute.
 	 * 
-	 * @return Returns the purchaseOrderQuotePriceExpirationDate
+	 * @return - Returns the purchaseOrderQuotePriceExpirationDate
 	 * 
 	 */
 	public Date getPurchaseOrderQuotePriceExpirationDate() { 
@@ -402,7 +415,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderQuotePriceExpirationDate attribute.
 	 * 
-	 * @param purchaseOrderQuotePriceExpirationDate The purchaseOrderQuotePriceExpirationDate to set.
+	 * @param - purchaseOrderQuotePriceExpirationDate The purchaseOrderQuotePriceExpirationDate to set.
 	 * 
 	 */
 	public void setPurchaseOrderQuotePriceExpirationDate(Date purchaseOrderQuotePriceExpirationDate) {
@@ -413,7 +426,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the purchaseOrderQuoteStatusCode attribute.
 	 * 
-	 * @return Returns the purchaseOrderQuoteStatusCode
+	 * @return - Returns the purchaseOrderQuoteStatusCode
 	 * 
 	 */
 	public String getPurchaseOrderQuoteStatusCode() { 
@@ -423,7 +436,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderQuoteStatusCode attribute.
 	 * 
-	 * @param purchaseOrderQuoteStatusCode The purchaseOrderQuoteStatusCode to set.
+	 * @param - purchaseOrderQuoteStatusCode The purchaseOrderQuoteStatusCode to set.
 	 * 
 	 */
 	public void setPurchaseOrderQuoteStatusCode(String purchaseOrderQuoteStatusCode) {
@@ -434,7 +447,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the purchaseOrderQuoteAwardDate attribute.
 	 * 
-	 * @return Returns the purchaseOrderQuoteAwardDate
+	 * @return - Returns the purchaseOrderQuoteAwardDate
 	 * 
 	 */
 	public Date getPurchaseOrderQuoteAwardDate() { 
@@ -444,7 +457,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderQuoteAwardDate attribute.
 	 * 
-	 * @param purchaseOrderQuoteAwardDate The purchaseOrderQuoteAwardDate to set.
+	 * @param - purchaseOrderQuoteAwardDate The purchaseOrderQuoteAwardDate to set.
 	 * 
 	 */
 	public void setPurchaseOrderQuoteAwardDate(Date purchaseOrderQuoteAwardDate) {
@@ -455,7 +468,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the purchaseOrderQuoteRankNumber attribute.
 	 * 
-	 * @return Returns the purchaseOrderQuoteRankNumber
+	 * @return - Returns the purchaseOrderQuoteRankNumber
 	 * 
 	 */
 	public String getPurchaseOrderQuoteRankNumber() { 
@@ -465,7 +478,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderQuoteRankNumber attribute.
 	 * 
-	 * @param purchaseOrderQuoteRankNumber The purchaseOrderQuoteRankNumber to set.
+	 * @param - purchaseOrderQuoteRankNumber The purchaseOrderQuoteRankNumber to set.
 	 * 
 	 */
 	public void setPurchaseOrderQuoteRankNumber(String purchaseOrderQuoteRankNumber) {
@@ -476,27 +489,27 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the purchaseOrder attribute.
 	 * 
-	 * @return Returns the purchaseOrder
+	 * @return - Returns the purchaseOrder
 	 * 
 	 */
-	public PurchaseOrderDocument getPurchaseOrder() { 
+	public PurchaseOrder getPurchaseOrder() { 
 		return purchaseOrder;
 	}
 
 	/**
 	 * Sets the purchaseOrder attribute.
 	 * 
-	 * @param purchaseOrder The purchaseOrder to set.
+	 * @param - purchaseOrder The purchaseOrder to set.
 	 * @deprecated
 	 */
-	public void setPurchaseOrder(PurchaseOrderDocument purchaseOrder) {
+	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
 		this.purchaseOrder = purchaseOrder;
 	}
 
 	/**
 	 * Gets the purchaseOrderQuoteStatus attribute.
 	 * 
-	 * @return Returns the purchaseOrderQuoteStatus
+	 * @return - Returns the purchaseOrderQuoteStatus
 	 * 
 	 */
 	public PurchaseOrderQuoteStatus getPurchaseOrderQuoteStatus() { 
@@ -506,39 +519,21 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the purchaseOrderQuoteStatus attribute.
 	 * 
-	 * @param purchaseOrderQuoteStatus The purchaseOrderQuoteStatus to set.
+	 * @param - purchaseOrderQuoteStatus The purchaseOrderQuoteStatus to set.
 	 * @deprecated
 	 */
 	public void setPurchaseOrderQuoteStatus(PurchaseOrderQuoteStatus purchaseOrderQuoteStatus) {
 		this.purchaseOrderQuoteStatus = purchaseOrderQuoteStatus;
 	}
 
-    /**
-     * Gets the vendorCountryCode attribute. 
-     * @return Returns the vendorCountryCode.
-     */
-    public String getVendorCountryCode() {
-        return vendorCountryCode;
-    }
-
-    /**
-     * Sets the vendorCountryCode attribute value.
-     * @param vendorCountryCode The vendorCountryCode to set.
-     */
-    public void setVendorCountryCode(String vendorCountryCode) {
-        this.vendorCountryCode = vendorCountryCode;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
-        m.put("documentNumber", this.documentNumber);
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.purchaseOrderVendorQuoteIdentifier != null) {
             m.put("purchaseOrderVendorQuoteIdentifier", this.purchaseOrderVendorQuoteIdentifier.toString());
         }
-        return m;
+	    return m;
     }
-
 }

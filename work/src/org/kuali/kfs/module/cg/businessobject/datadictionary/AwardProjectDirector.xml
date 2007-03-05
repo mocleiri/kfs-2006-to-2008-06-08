@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -24,16 +9,21 @@
         <inquiry>
             <title>Award Project Director Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="awardPrimaryProjectDirectorIndicator" />
+                <field attributeName="awardProjectDirectorNote1Text" />
+                <field attributeName="awardProjectDirectorNote2Text" />
+                <field attributeName="awardProjectDirectorNote3Text" />
                 <field attributeName="awardProjectDirectorProjectTitle" />
                 <field attributeName="personUniversalIdentifier" />
                 <field attributeName="proposalNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Award Project Director Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.cg.bo.AwardProjectDirector">Create New</a>]]></menubar>
 
             <instructions>Look up an Award Project Director</instructions>
 
@@ -45,6 +35,9 @@
 
             <lookupFields>
                 <lookupField attributeName="awardPrimaryProjectDirectorIndicator" required="false" />
+                <lookupField attributeName="awardProjectDirectorNote1Text" required="false" />
+                <lookupField attributeName="awardProjectDirectorNote2Text" required="false" />
+                <lookupField attributeName="awardProjectDirectorNote3Text" required="false" />
                 <lookupField attributeName="awardProjectDirectorProjectTitle" required="false" />
                 <lookupField attributeName="personUniversalIdentifier" required="false" />
                 <lookupField attributeName="proposalNumber" required="false" />
@@ -52,6 +45,9 @@
 
             <resultFields>
                 <field attributeName="awardPrimaryProjectDirectorIndicator" />
+                <field attributeName="awardProjectDirectorNote1Text" />
+                <field attributeName="awardProjectDirectorNote2Text" />
+                <field attributeName="awardProjectDirectorNote3Text" />
                 <field attributeName="awardProjectDirectorProjectTitle" />
                 <field attributeName="personUniversalIdentifier" />
                 <field attributeName="proposalNumber" />
@@ -74,6 +70,51 @@
                 <description>awardPrimaryProjectDirectorIndicator description...</description>
 			</attribute>
 
+            <attribute name="awardProjectDirectorNote1Text" forceUppercase="true">
+                <label>Award Project Director Note1 Text</label>
+                <shortLabel>Text</shortLabel>
+
+                <maxLength>50</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="52" />
+                </control>
+
+                <summary>awardProjectDirectorNote1Text</summary>
+                <description>awardProjectDirectorNote1Text description...</description>
+			</attribute>
+
+            <attribute name="awardProjectDirectorNote2Text" forceUppercase="true">
+                <label>Award Project Director Note2 Text</label>
+                <shortLabel>Text</shortLabel>
+
+                <maxLength>50</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="52" />
+                </control>
+
+                <summary>awardProjectDirectorNote2Text</summary>
+                <description>awardProjectDirectorNote2Text description...</description>
+			</attribute>
+
+            <attribute name="awardProjectDirectorNote3Text" forceUppercase="true">
+                <label>Award Project Director Note3 Text</label>
+                <shortLabel>Text</shortLabel>
+
+                <maxLength>50</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="52" />
+                </control>
+
+                <summary>awardProjectDirectorNote3Text</summary>
+                <description>awardProjectDirectorNote3Text description...</description>
+			</attribute>
+
             <attribute name="awardProjectDirectorProjectTitle" forceUppercase="true">
                 <label>Award Project Director Project Title</label>
                 <shortLabel>Title</shortLabel>
@@ -90,8 +131,8 @@
 			</attribute>
 
             <attribute name="personUniversalIdentifier" forceUppercase="true">
-                <label>Project Director ID</label>
-                <shortLabel>Proj Dir ID</shortLabel>
+                <label>Person Universal Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
                 <maxLength>10</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>

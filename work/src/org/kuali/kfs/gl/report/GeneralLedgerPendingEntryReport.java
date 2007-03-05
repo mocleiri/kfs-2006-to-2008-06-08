@@ -118,7 +118,7 @@ public class GeneralLedgerPendingEntryReport {
             while ( entries.hasNext() ) {
                 OriginEntry entry = (OriginEntry) entries.next();
 
-                String docNumber = entry.getFinancialSystemOriginationCode() + "-" + entry.getDocumentNumber();
+                String docNumber = entry.getFinancialSystemOriginationCode() + "-" + entry.getFinancialDocumentNumber();
 
                 if ( ! docNumber.equals(previousDocumentNumber) && ! "-1".equals(previousDocumentNumber) ) {
                     printTotal("Totals:",totalDocumentCredit,totalDocumentDebit,totalDocumentBlank);

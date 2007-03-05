@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -24,7 +9,8 @@
         <inquiry>
             <title>Purchase Order Vendor Quote Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
+                <field attributeName="purchaseOrderIdentifier" />
                 <field attributeName="purchaseOrderQuoteAwardDate" />
                 <field attributeName="purchaseOrderQuotePriceExpirationDate" />
                 <field attributeName="purchaseOrderQuoteRankNumber" />
@@ -44,21 +30,24 @@
                 <field attributeName="vendorPhoneNumber" />
                 <field attributeName="vendorPostalCode" />
                 <field attributeName="vendorStateCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Purchase Order Vendor Quote Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PurchaseOrderVendorQuote">Create New</a>]]></menubar>
+
             <instructions>Lookup an Purchase Order Vendor Quote</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="purchaseOrderVendorQuoteIdentifier" />
+                    <sortAttribute attributeName="purchaseOrderIdentifier" />
                 </sortAttributes>
             </defaultSort>
 
             <lookupFields>
+                <lookupField attributeName="purchaseOrderIdentifier" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteAwardDate" required="false" />
                 <lookupField attributeName="purchaseOrderQuotePriceExpirationDate" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteRankNumber" required="false" />
@@ -81,6 +70,7 @@
             </lookupFields>
 
             <resultFields>
+                <field attributeName="purchaseOrderIdentifier" />
                 <field attributeName="purchaseOrderQuoteAwardDate" />
                 <field attributeName="purchaseOrderQuotePriceExpirationDate" />
                 <field attributeName="purchaseOrderQuoteRankNumber" />
@@ -105,7 +95,22 @@
 
         <attributes>
 
-             <attribute name="purchaseOrderQuoteAwardDate" forceUppercase="true">
+            <attribute name="purchaseOrderIdentifier" forceUppercase="true">
+                <label>Purchase Order Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>purchaseOrderIdentifier</summary>
+                <description>purchaseOrderIdentifier description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderQuoteAwardDate" forceUppercase="true">
                 <label>Purchase Order Quote Award Date</label>
                 <shortLabel>Date</shortLabel>
 
