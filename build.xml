@@ -184,10 +184,10 @@
 			<filter token="batch-logger" value="" />
 			<filter token="variable-ojb-properties" value="${application.ojb.properties}" />
 			<filter token="use-auto-commit" value="1" />
-			<filter token="database-load-properties-file" value="${database.load.properties.file}" />
-			<filter token="database-load-step-bean" value="${database.load.step.bean}" />
-			<filter token="database-encrypt-properties-file" value="${database.encrypt.properties.file}" />
-			<filter token="database-encrypt-step-bean" value="${database.encrypt.step.bean}" />
+			<filter token="database-file-directory" value="${database.file.directory}" />
+			<filter token="database-update-file-list" value="${database.update.file.list}" />
+			<filter token="encrypt-fields-properties-file" value="${encrypt.fields.properties.file}" />
+			<filter token="data-export-zip-file" value="${data.export.zip.file}" />
 		</filterset>
 		<condition property="batch.program.directory" value="/home/kultstb/batch/${build.environment}">
 			<or>
@@ -528,6 +528,15 @@
 		<ant target="gl-batch-job"><property name="job.name" value="GeneralLedger" /></ant>
 		<ant target="core-batch-job"><property name="job.name" value="Core" /></ant>
 	</target>
+
+    <target name="dataload" depends="init-make-references">
+            <delete file="${batch.results.file}" failonerror="false" />
+            <path id="batch.classpath">
+                    <path refid="compile.source.classpath" />
+                    <pathelement location="${classes.directory}" />
+            </path>
+            <ant target="database-batch-job"><property name="job.name" value="Core" /></ant>
+    </target>
 		
 	<target name="dist" depends="make-source">
 		<copy todir="${war.directory}">
@@ -674,7 +683,19 @@
 	<target name="core-batch-job" depends="batch-step-init">
 		<ant target="batch-step"><property name="step.name" value="corePurgeDocumentContentsStep" /></ant>
 	</target>
+
+    <target name="database-import-batch-job" depends="batch-step-init">
+        <ant target="batch-step"><property name="step.name" value="databaseImportStep" /></ant>
+    </target>
 	
+    <target name="data-export-batch-job" depends="batch-step-init">
+        <ant target="batch-step"><property name="step.name" value="dataExportStep" /></ant>
+    </target>
+	
+    <target name="post-data-load-encryption-batch-job" depends="batch-step-init">
+        <ant target="batch-step"><property name="step.name" value="postDataLoadEncryptionStep" /></ant>
+    </target>
+		
 	<target name="batch-step" depends="batch-job-failed" />
 
 	<target name="batch-step-init">
