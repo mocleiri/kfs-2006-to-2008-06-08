@@ -1,32 +1,41 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetConstructionAccountReports extends PersistableBusinessObjectBase {
+public class BudgetConstructionAccountReports extends BusinessObjectBase {
 
 	private String chartOfAccountsCode;
 	private String accountNumber;
@@ -37,7 +46,6 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
     private Chart chartOfAccounts;
 	private Org reportsToOrganization;
 	private Chart reportsToChartOfAccounts;
-    private BudgetConstructionOrganizationReports budgetConstructionOrganizationReports;
 
 	/**
 	 * Default constructor.
@@ -49,7 +57,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the chartOfAccountsCode
+	 * @return - Returns the chartOfAccountsCode
 	 * 
 	 */
 	public String getChartOfAccountsCode() { 
@@ -59,7 +67,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Sets the chartOfAccountsCode attribute.
 	 * 
-	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
+	 * @param - chartOfAccountsCode The chartOfAccountsCode to set.
 	 * 
 	 */
 	public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -70,7 +78,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Gets the accountNumber attribute.
 	 * 
-	 * @return Returns the accountNumber
+	 * @return - Returns the accountNumber
 	 * 
 	 */
 	public String getAccountNumber() { 
@@ -80,7 +88,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Sets the accountNumber attribute.
 	 * 
-	 * @param accountNumber The accountNumber to set.
+	 * @param - accountNumber The accountNumber to set.
 	 * 
 	 */
 	public void setAccountNumber(String accountNumber) {
@@ -91,7 +99,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Gets the reportsToChartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the reportsToChartOfAccountsCode
+	 * @return - Returns the reportsToChartOfAccountsCode
 	 * 
 	 */
 	public String getReportsToChartOfAccountsCode() { 
@@ -101,7 +109,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Sets the reportsToChartOfAccountsCode attribute.
 	 * 
-	 * @param reportsToChartOfAccountsCode The reportsToChartOfAccountsCode to set.
+	 * @param - reportsToChartOfAccountsCode The reportsToChartOfAccountsCode to set.
 	 * 
 	 */
 	public void setReportsToChartOfAccountsCode(String reportsToChartOfAccountsCode) {
@@ -112,7 +120,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Gets the reportsToOrganizationCode attribute.
 	 * 
-	 * @return Returns the reportsToOrganizationCode
+	 * @return - Returns the reportsToOrganizationCode
 	 * 
 	 */
 	public String getReportsToOrganizationCode() { 
@@ -122,7 +130,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Sets the reportsToOrganizationCode attribute.
 	 * 
-	 * @param reportsToOrganizationCode The reportsToOrganizationCode to set.
+	 * @param - reportsToOrganizationCode The reportsToOrganizationCode to set.
 	 * 
 	 */
 	public void setReportsToOrganizationCode(String reportsToOrganizationCode) {
@@ -133,7 +141,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Gets the account attribute.
 	 * 
-	 * @return Returns the account
+	 * @return - Returns the account
 	 * 
 	 */
 	public Account getAccount() { 
@@ -143,7 +151,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Sets the account attribute.
 	 * 
-	 * @param account The account to set.
+	 * @param - account The account to set.
 	 * @deprecated
 	 */
 	public void setAccount(Account account) {
@@ -153,7 +161,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
-	 * @return Returns the chartOfAccounts
+	 * @return - Returns the chartOfAccounts
 	 * 
 	 */
 	public Chart getChartOfAccounts() { 
@@ -163,7 +171,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Sets the chartOfAccounts attribute.
 	 * 
-	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @param - chartOfAccounts The chartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -173,7 +181,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Gets the reportsToOrganization attribute.
 	 * 
-	 * @return Returns the reportsToOrganization
+	 * @return - Returns the reportsToOrganization
 	 * 
 	 */
 	public Org getReportsToOrganization() { 
@@ -183,7 +191,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Sets the reportsToOrganization attribute.
 	 * 
-	 * @param reportsToOrganization The reportsToOrganization to set.
+	 * @param - reportsToOrganization The reportsToOrganization to set.
 	 * @deprecated
 	 */
 	public void setReportsToOrganization(Org reportsToOrganization) {
@@ -193,7 +201,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Gets the reportsToChartOfAccounts attribute.
 	 * 
-	 * @return Returns the reportsToChartOfAccounts
+	 * @return - Returns the reportsToChartOfAccounts
 	 * 
 	 */
 	public Chart getReportsToChartOfAccounts() { 
@@ -203,7 +211,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	/**
 	 * Sets the reportsToChartOfAccounts attribute.
 	 * 
-	 * @param reportsToChartOfAccounts The reportsToChartOfAccounts to set.
+	 * @param - reportsToChartOfAccounts The reportsToChartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setReportsToChartOfAccounts(Chart reportsToChartOfAccounts) {
@@ -211,24 +219,7 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	}
 
 	/**
-     * Gets the budgetConstructionOrganizationReports attribute. 
-     * @return Returns the budgetConstructionOrganizationReports.
-     */
-    public BudgetConstructionOrganizationReports getBudgetConstructionOrganizationReports() {
-        return budgetConstructionOrganizationReports;
-    }
-
-    /**
-     * Sets the budgetConstructionOrganizationReports attribute value.
-     * @param budgetConstructionOrganizationReports The budgetConstructionOrganizationReports to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionOrganizationReports(BudgetConstructionOrganizationReports budgetConstructionOrganizationReports) {
-        this.budgetConstructionOrganizationReports = budgetConstructionOrganizationReports;
-    }
-
-    /**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    

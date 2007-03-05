@@ -1,5 +1,5 @@
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
 	<field-descriptor name="buildingAddressZipCode" column="BLDG_ADDR_ZIP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="alternateBuildingCode" column="ALTRNT_BLDG_CD" jdbc-type="VARCHAR"/>
 
-    <reference-descriptor name="campus" class-ref="org.kuali.core.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+    <reference-descriptor name="campus" class-ref="org.kuali.module.chart.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="campusCode" />
     </reference-descriptor>
 
@@ -225,7 +225,7 @@
     <field-descriptor name="buildingRoomType" column="BLDG_ROOM_TYPE" jdbc-type="VARCHAR" />
     <field-descriptor name="buildingRoomDepartment" column="BLDG_ROOM_DEPT" jdbc-type="VARCHAR" />
     <field-descriptor name="buildingRoomDescription" column="BLDG_ROOM_DESC" jdbc-type="VARCHAR" />
-    <reference-descriptor name="campus" class-ref="org.kuali.core.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
+    <reference-descriptor name="campus" class-ref="org.kuali.module.chart.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="campusCode" />
     </reference-descriptor>
 </class-descriptor>
@@ -456,8 +456,8 @@
         <foreignkey field-ref="chartOfAccountsCode" />
         <foreignkey field-ref="financialObjectCode" />
     </reference-descriptor>
-    
-    <reference-descriptor name="financialSubObject" class-ref="org.kuali.module.chart.bo.SubObjCd" auto-retrieve="true" auto-update="none" auto-delete="none">
+
+    <reference-descriptor name="subObjectCode" class-ref="org.kuali.module.chart.bo.SubObjCd" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="universityFiscalYear" />
         <foreignkey field-ref="chartOfAccountsCode" />
         <foreignkey field-ref="accountNumber" />
@@ -498,5 +498,4 @@
     <reference-descriptor name="referenceDocumentType" class-ref="org.kuali.core.bo.DocumentType" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="referenceFinancialDocumentTypeCode" />
     </reference-descriptor>
-	
 </class-descriptor>

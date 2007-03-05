@@ -16,9 +16,10 @@
 package org.kuali.test.fixtures;
 
 import org.kuali.core.bo.user.AuthenticationUserId;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.SpringServiceLocator;
+import junit.framework.Assert;
 
 public enum UserNameFixture {
 
@@ -42,14 +43,16 @@ public enum UserNameFixture {
     ;
 
     static {
-        //Assert.assertEquals(KualiUser.SYSTEM_USER, KULUSER.toString());
+        Assert.assertEquals(KualiUser.SYSTEM_USER, KULUSER.toString());
     }
 
     public AuthenticationUserId getAuthenticationUserId() {
         return new AuthenticationUserId(toString());
     }
 
-    public UniversalUser getUniversalUser() throws UserNotFoundException {
-        return SpringServiceLocator.getUniversalUserService().getUniversalUser(getAuthenticationUserId());
+    public KualiUser getKualiUser()
+        throws UserNotFoundException
+    {
+        return SpringServiceLocator.getKualiUserService().getKualiUser(getAuthenticationUserId());
     }
 }

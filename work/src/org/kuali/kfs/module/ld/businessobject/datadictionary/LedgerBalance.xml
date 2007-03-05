@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -24,14 +9,14 @@
         <inquiry>
             <title>Ledger Balance Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountLineAnnualBalanceAmount" />
                 <field attributeName="accountNumber" />
-                <field attributeName="financialBeginningBalanceLineAmount" />
+                <field attributeName="beginningBalanceAccountAmount" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="emplid" />
                 <field attributeName="financialBalanceTypeCode" />
-                <field attributeName="contractsGrantsBeginningBalanceAmount" />
+                <field attributeName="financialBeginningBalanceLineAmount" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialSubObjectCode" />
@@ -52,11 +37,13 @@
                 <field attributeName="subAccountNumber" />
                 <field attributeName="transactionDateTimeStamp" />
                 <field attributeName="universityFiscalYear" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Ledger Balance Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.LedgerBalance">Create New</a>]]></menubar>
 
             <instructions>Look up a Ledger Balance</instructions>
 
@@ -71,11 +58,11 @@
             <lookupFields>
                 <lookupField attributeName="accountLineAnnualBalanceAmount" required="false" />
                 <lookupField attributeName="accountNumber" required="false" />
-                <lookupField attributeName="financialBeginningBalanceLineAmount" required="false" />
+                <lookupField attributeName="beginningBalanceAccountAmount" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="emplid" required="false" />
                 <lookupField attributeName="financialBalanceTypeCode" required="false" />
-                <lookupField attributeName="contractsGrantsBeginningBalanceAmount" required="false" />
+                <lookupField attributeName="financialBeginningBalanceLineAmount" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialObjectTypeCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
@@ -101,11 +88,11 @@
             <resultFields>
                 <field attributeName="accountLineAnnualBalanceAmount" />
                 <field attributeName="accountNumber" />
-                <field attributeName="financialBeginningBalanceLineAmount" />
+                <field attributeName="beginningBalanceAccountAmount" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="emplid" />
                 <field attributeName="financialBalanceTypeCode" />
-                <field attributeName="contractsGrantsBeginningBalanceAmount" />
+                <field attributeName="financialBeginningBalanceLineAmount" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialSubObjectCode" />
@@ -161,7 +148,7 @@
                 <description>accountNumber description...</description>
 			</attribute>
 
-            <attribute name="contractsGrantsBeginningBalanceAmount" forceUppercase="true">
+            <attribute name="beginningBalanceAccountAmount" forceUppercase="true">
                 <label>Beginning Balance Account Amount</label>
                 <shortLabel>Amount</shortLabel>
 

@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -24,7 +9,7 @@
         <inquiry>
             <title>Purchase Order Item Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="capitalAssetTransactionTypeCode" />
                 <field attributeName="externalOrganizationB2bProductReferenceNumber" />
                 <field attributeName="externalOrganizationB2bProductTypeName" />
@@ -46,19 +31,22 @@
                 <field attributeName="itemUnitOfMeasureCode" />
                 <field attributeName="itemUnitPrice" />
                 <field attributeName="purchaseOrderCommodityCd" />
-                 <field attributeName="itemIdentifier" />
+                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="purchaseOrderItemIdentifier" />
                 <field attributeName="requisitionLineIdentifier" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Purchase Order Item Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PurchaseOrderItem">Create New</a>]]></menubar>
+
             <instructions>Lookup an Purchase Order Item</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="itemDescription" />
+                    <sortAttribute attributeName="capitalAssetTransactionTypeCode" />
                 </sortAttributes>
             </defaultSort>
 
@@ -84,7 +72,8 @@
                 <lookupField attributeName="itemUnitOfMeasureCode" required="false" />
                 <lookupField attributeName="itemUnitPrice" required="false" />
                 <lookupField attributeName="purchaseOrderCommodityCd" required="false" />
-                <lookupField attributeName="itemIdentifier" required="false" />
+                <lookupField attributeName="purchaseOrderIdentifier" required="false" />
+                <lookupField attributeName="purchaseOrderItemIdentifier" required="false" />
                 <lookupField attributeName="requisitionLineIdentifier" required="false" />
             </lookupFields>
 
@@ -110,7 +99,8 @@
                 <field attributeName="itemUnitOfMeasureCode" />
                 <field attributeName="itemUnitPrice" />
                 <field attributeName="purchaseOrderCommodityCd" />
-                <field attributeName="itemIdentifier" />
+                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="purchaseOrderItemIdentifier" />
                 <field attributeName="requisitionLineIdentifier" />
             </resultFields>
         </lookup>
@@ -430,7 +420,22 @@
                 <description>purchaseOrderCommodityCd description...</description>
 			</attribute>
 
-            <attribute name="itemIdentifier" forceUppercase="true">
+            <attribute name="purchaseOrderIdentifier" forceUppercase="true">
+                <label>Purchase Order Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>purchaseOrderIdentifier</summary>
+                <description>purchaseOrderIdentifier description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderItemIdentifier" forceUppercase="true">
                 <label>Purchase Order Item Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
@@ -441,8 +446,8 @@
                     <text size="12" />
                 </control>
 
-                <summary>itemIdentifier</summary>
-                <description>itemIdentifier description...</description>
+                <summary>purchaseOrderItemIdentifier</summary>
+                <description>purchaseOrderItemIdentifier description...</description>
 			</attribute>
 
             <attribute name="requisitionLineIdentifier" forceUppercase="true">

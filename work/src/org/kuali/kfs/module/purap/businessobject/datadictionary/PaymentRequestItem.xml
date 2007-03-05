@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
@@ -24,7 +9,7 @@
         <inquiry>
             <title>Payment Request Item Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="capitalAssetTransactionTypeCode" />
                 <field attributeName="itemAssignedToTradeInIndicator" />
                 <field attributeName="itemAuxiliaryPartIdentifier" />
@@ -41,19 +26,19 @@
                 <field attributeName="paymentRequestItemIdentifier" />
                 <field attributeName="purchaseOrderCommodityCode" />
                 <field attributeName="purchaseOrderItemUnitPrice" />
-                <field attributeName="itemOutstandingInvoiceQuantity" />
-                <field attributeName="itemOutstandingInvoiceAmount" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Payment Request Item Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PaymentRequestItem">Create New</a>]]></menubar>
+
             <instructions>Lookup a Payment Request Item</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="itemDescription" />
+                    <sortAttribute attributeName="capitalAssetTransactionTypeCode" />
                 </sortAttributes>
             </defaultSort>
 
@@ -74,8 +59,6 @@
                 <lookupField attributeName="paymentRequestItemIdentifier" required="false" />
                 <lookupField attributeName="purchaseOrderCommodityCode" required="false" />
                 <lookupField attributeName="purchaseOrderItemUnitPrice" required="false" />
-                <lookupField attributeName="itemOutstandingInvoiceQuantity" required="false" />
-                <lookupField attributeName="itemOutstandingInvoiceAmount" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -95,8 +78,6 @@
                 <field attributeName="paymentRequestItemIdentifier" />
                 <field attributeName="purchaseOrderCommodityCode" />
                 <field attributeName="purchaseOrderItemUnitPrice" />
-                <field attributeName="itemOutstandingInvoiceQuantity" />
-                <field attributeName="itemOutstandingInvoiceAmount" />
             </resultFields>
         </lookup>
 
@@ -180,7 +161,7 @@
                 <label>Item Description</label>
                 <shortLabel>Description</shortLabel>
 
-                <maxLength>4000</maxLength>
+                <maxLength>500</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
@@ -354,36 +335,6 @@
 
                 <summary>versionNumber</summary>
                 <description>versionNumber description...</description>
-			</attribute>
-
-            <attribute name="itemOutstandingInvoiceQuantity" forceUppercase="true">
-                <label>Item Outstanding Invoice Quantity</label>
-                <shortLabel>Quantity</shortLabel>
-
-                <maxLength>11</maxLength>
-                <validationPattern><floatingPoint /></validationPattern>
-
-                <control>
-                    <text size="13" />
-                </control>
-
-                <summary>itemOutstandingInvoiceQuantity</summary>
-                <description>itemOutstandingInvoiceQuantity description...</description>
-			</attribute>
-
-            <attribute name="itemOutstandingInvoiceAmount" forceUppercase="true">
-                <label>Item Outstanding Invoice Amount</label>
-                <shortLabel>Amount</shortLabel>
-
-                <maxLength>19</maxLength>
-                <validationPattern><floatingPoint /></validationPattern>
-
-                <control>
-                    <text size="21" />
-                </control>
-
-                <summary>itemOutstandingInvoiceAmount</summary>
-                <description>itemOutstandingInvoiceAmount description...</description>
 			</attribute>
 
         </attributes>
