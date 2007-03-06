@@ -157,7 +157,7 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
             populateExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, sequenceHelper, explicitEntry);
 
             /* D/C code is empty for BA, set correct balance type, correct amount */
-            explicitEntry.setTransactionDebitCreditCode("");
+            explicitEntry.setTransactionDebitCreditCode(Constants.BLANK_SPACE);
             explicitEntry.setFinancialBalanceTypeCode(Constants.BALANCE_TYPE_BASE_BUDGET);
             explicitEntry.setTransactionLedgerEntryAmount(budgetAccountingLine.getBaseBudgetAdjustmentAmount().multiply(amountSign).kualiDecimalValue());
             // set fiscal period, if next fiscal year set to 01, else leave to current period
@@ -180,7 +180,7 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
             populateExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, sequenceHelper, explicitEntry);
 
             /* D/C code is empty for BA, set correct balance type, correct amount */
-            explicitEntry.setTransactionDebitCreditCode("");
+            explicitEntry.setTransactionDebitCreditCode(Constants.BLANK_SPACE);
             explicitEntry.setFinancialBalanceTypeCode(Constants.BALANCE_TYPE_CURRENT_BUDGET);
             explicitEntry.setTransactionLedgerEntryAmount(budgetAccountingLine.getCurrentBudgetAdjustmentAmount().multiply(amountSign));
             // set fiscal period, if next fiscal year set to 01, else leave to current period
@@ -261,7 +261,7 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
         populateExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, sequenceHelper, explicitEntry);
 
         /* D/C code is empty for BA, set correct balance type, correct amount */
-        explicitEntry.setTransactionDebitCreditCode("");
+        explicitEntry.setTransactionDebitCreditCode(Constants.BLANK_SPACE);
         explicitEntry.setFinancialBalanceTypeCode(Constants.BALANCE_TYPE_MONTHLY_BUDGET);
         explicitEntry.setTransactionLedgerEntryAmount(monthAmount);
         explicitEntry.setUniversityFiscalPeriodCode(fiscalPeriod);
@@ -324,7 +324,7 @@ public class BudgetAdjustmentDocumentRule extends TransactionalDocumentRuleBase 
                     explicitEntry.setFinancialObjectTypeCode(INCOME_CASH);
 
                     /* D/C code is empty for BA, set correct balance type, correct amount */
-                    explicitEntry.setTransactionDebitCreditCode("");
+                    explicitEntry.setTransactionDebitCreditCode(Constants.BLANK_SPACE);
                     explicitEntry.setFinancialBalanceTypeCode(Constants.BALANCE_TYPE_CURRENT_BUDGET);
                     explicitEntry.setTransactionLedgerEntryAmount(streamAmount);
 
