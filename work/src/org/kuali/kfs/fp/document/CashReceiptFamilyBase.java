@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,21 @@ import java.sql.Timestamp;
 import java.util.Iterator;
 
 import org.kuali.Constants;
+import org.kuali.core.bo.AccountingLineBase;
+import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.core.rule.AccountingLineRule;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.rule.AccountingLineRule;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.rules.CashReceiptFamilyRule;
 
 /**
  * Abstract class which defines behavior common to CashReceipt-like documents.
+ * 
+ * 
  */
-abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
+abstract public class CashReceiptFamilyBase extends TransactionalDocumentBase {
     private String campusLocationCode; // TODO Needs to be an actual object - also need to clarify this
     private Timestamp depositDate;
 
@@ -108,7 +109,7 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
             al = (AccountingLineBase) iter.next();
 
             KualiDecimal amount = al.getAmount().abs();
-            if (amount != null && amount.isNonZero()) {
+            if (amount != null) {
                 if (crFamilyRule.isDebit(this, al)) {
                     total = total.subtract(amount);
                 }
@@ -161,4 +162,12 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
     public AccountingLineParser getAccountingLineParser() {
         return new BasicFormatWithLineDescriptionAccountingLineParser();
     }
+
+
+    /**
+     * Returns the sum total of the document's contents
+     * 
+     * @return
+     */
+    abstract public KualiDecimal getSumTotalAmount();
 }
