@@ -39,18 +39,8 @@
 		</condition>
 		<echo message="Loaded properties in ./build.properties and set dependent properties" />
 	</target>
-
-	<target name="init-institution-override-properties" if="load.institution.override.properties" depends="init-project-properties">
-		<property file="${build.institution.overrides.file}" />
-		<echo message="Loaded properties in ${build.institution.overrides.file}" />
-	</target>
-
-	<target name="init-institution-default-properties" depends="init-institution-override-properties">
-		<property file="${build.institution.defaults.file}" />
-		<echo message="Loaded properties in ${build.institution.defaults.file}" />
-	</target>
-
-	<target name="init-filter-sets" depends="init-institution-default-properties">
+	
+	<target name="init-logic-based-properties" depends="init-project-properties">
 		<tstamp>
 			<format property="project.cvs.tag" pattern="MM/dd/yyyy hh:mm aa" />
 		</tstamp>
@@ -88,6 +78,7 @@
 		<property name="base.application.url" value="${test.environment.url}" />
 		<property name="base.cas.url" value="${test.environment.url}" />
 		<property name="base.workflow.url" value="${test.environment.url}" />
+		<property name="cas.url" value="${base.cas.url}${cas.application}-${build.environment}" />
         <condition property="staging.root.directory" value="${external.config.directory}">
                 <equals arg1="${is.local.build}" arg2="true"/>
         </condition>
@@ -135,7 +126,20 @@
 		<condition property="institution.spring.beans.import" value="${institution.spring.beans.import.value}">
 			<available file="${institution.spring.beans.file}" />
 		</condition>
-		<property name="institution.spring.beans.import" value="" />
+		<property name="institution.spring.beans.import" value="" />		
+	</target>
+
+	<target name="init-institution-override-properties" if="load.institution.override.properties" depends="init-logic-based-properties">
+		<property file="${build.institution.overrides.file}" />
+		<echo message="Loaded properties in ${build.institution.overrides.file}" />
+	</target>
+
+	<target name="init-institution-default-properties" depends="init-institution-override-properties">
+		<property file="${build.institution.defaults.file}" />
+		<echo message="Loaded properties in ${build.institution.defaults.file}" />
+	</target>
+
+	<target name="init-filter-sets" depends="init-institution-default-properties">
 		<filterset id="external.config.filterset">
 			<filter token="settings-root-directory" value="${settings.root.directory}" />
 			<filter token="security-root-directory" value="${security.root.directory}" />			
@@ -162,7 +166,7 @@
 			<filter token="environment" value="${build.environment}" />
 			<filter token="version" value="${project.cvs.tag}" />
 			<filter token="application-url" value="${base.application.url}${ant.project.name}-${build.environment}" />
-			<filter token="cas-url" value="${base.cas.url}${cas.application}-${build.environment}" />
+			<filter token="cas-url" value="${cas.url}" />
 			<filter token="base-workflow-url" value="${base.workflow.url}" />
 			<filter token="workflow-url" value="${base.workflow.url}${workflow.application}-${build.environment}" />
 			<filter token="context-docbase" value="${context.docbase}" />
