@@ -34,7 +34,7 @@
         <documentTypeName>KualiSalaryExpenseTransferDocument</documentTypeName>
         <documentTypeCode>ST</documentTypeCode>
         <label>Salary Expense Transfer Document</label>
-        <shortLabel>STDoc</shortLabel>
+        <shortLabel>STDoc</shortLabel>     
         
         <summary>
             <![CDATA[&nbsp;]]>

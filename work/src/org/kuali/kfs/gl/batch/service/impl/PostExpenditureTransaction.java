@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.batch.poster.impl;
 
@@ -27,16 +34,17 @@ import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.chart.dao.A21SubAccountDao;
 import org.kuali.module.chart.dao.IndirectCostRecoveryExclusionAccountDao;
 import org.kuali.module.chart.dao.IndirectCostRecoveryExclusionTypeDao;
-import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.ExpenditureTransaction;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.ExpenditureTransactionDao;
 import org.kuali.module.gl.service.IcrTransaction;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-@Transactional
+/**
+ * @author jsissom
+ * 
+ */
 public class PostExpenditureTransaction implements IcrTransaction, PostTransaction {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PostExpenditureTransaction.class);
 
@@ -78,12 +86,13 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
 
         // Is the ICR indicator set and the ICR Series identifier set?
         // Is the period code a non-balance period? If so, continue, if not, we aren't posting this transaction
-        if (objectType.isFinObjectTypeIcrSelectionIndicator() && StringUtils.hasText(account.getFinancialIcrSeriesIdentifier()) && (!Constants.PERIOD_CODE_ANNUAL_BALNCE.equals(universityFiscalPeriodCode)) && (!Constants.PERIOD_CODE_BEGINNING_BALNCE.equals(universityFiscalPeriodCode)) && (!Constants.PERIOD_CODE_CG_BEGINNING_BALNCE.equals(universityFiscalPeriodCode))) {
+        if ( objectType.isFinObjectTypeIcrSelectionIndicator() && StringUtils.hasText(account.getFinancialIcrSeriesIdentifier()) && 
+                (!"AB".equals(universityFiscalPeriodCode)) && (!"BB".equals(universityFiscalPeriodCode)) && (!"CB".equals(universityFiscalPeriodCode)) ) {
             // Continue on the posting process
 
             // Check the sub account type code. A21 subaccounts with the type of CS don't get posted
             A21SubAccount a21SubAccount = a21SubAccountDao.getByPrimaryKey(account.getChartOfAccountsCode(), account.getAccountNumber(), subAccountNumber);
-            if ((a21SubAccount != null) && Constants.COST_SHARE.equals(a21SubAccount.getSubAccountTypeCode())) {
+            if ((a21SubAccount != null) && "CS".equals(a21SubAccount.getSubAccountTypeCode())) {
                 // No need to post this
                 LOG.debug("isIcrTransaction() A21 subaccounts with type of CS - not posted");
                 return false;
@@ -103,14 +112,14 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
             }
             else {
                 // If the ICR type code is empty or 10, don't post
-                if ((!StringUtils.hasText(account.getAcctIndirectCostRcvyTypeCd())) || Constants.MONTH10.equals(account.getAcctIndirectCostRcvyTypeCd())) {
+                if ( (! StringUtils.hasText(account.getAcctIndirectCostRcvyTypeCd())) || "10".equals(account.getAcctIndirectCostRcvyTypeCd()) ) {
                     // No need to post this
                     LOG.debug("isIcrTransaction() ICR type is null or 10 - not posted");
                     return false;
                 }
 
                 // If the type is excluded, don't post
-                IndirectCostRecoveryExclusionType excType = indirectCostRecoveryExclusionTypeDao.getByPrimaryKey(account.getAcctIndirectCostRcvyTypeCd(), objectCode.getReportsToChartOfAccountsCode(), objectCode.getReportsToFinancialObjectCode());
+                IndirectCostRecoveryExclusionType excType = indirectCostRecoveryExclusionTypeDao.getByPrimaryKey(account.getAcctIndirectCostRcvyTypeCd(), account.getChartOfAccountsCode(), objectCode.getFinancialObjectCode());
                 if (excType != null) {
                     // No need to post this
                     LOG.debug("isIcrTransaction() ICR Excluded type - not posted");
@@ -152,7 +161,7 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
         }
 
         if (t.getOrganizationReferenceId() == null) {
-            et.setOrganizationReferenceId(GLConstants.DASH_ORGANIZATION_REFERENCE_ID);
+            et.setOrganizationReferenceId("--------");
         }
 
         if (Constants.GL_DEBIT_CODE.equals(t.getTransactionDebitCreditCode()) || Constants.GL_BUDGET_CODE.equals(t.getTransactionDebitCreditCode())) {

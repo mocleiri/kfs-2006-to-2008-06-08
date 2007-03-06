@@ -1,6 +1,8 @@
 /*
  * Copyright 2006 The Kuali Foundation.
  * 
+ * $Source$
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,7 +30,7 @@ import java.util.Locale;
 import org.apache.commons.lang.ObjectUtils;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetModular;
 import org.kuali.module.kra.budget.bo.BudgetModularPeriod;

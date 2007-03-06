@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,16 +121,12 @@ public class EncumbranceClosingRuleHelper {
 
             // the sub fund group must exist for the prior year account and the
             // encumbrance must not be closed.
-            if (priorYearAccount.isForContractsAndGrants()) {
+            if (priorYearAccount.isInCg()) {
                 return isEncumbranceClosed(encumbrance);
-
             }
             else {
-
                 return false;
-
             }
-
         }
 
         return false;
@@ -188,7 +184,7 @@ public class EncumbranceClosingRuleHelper {
 
         if (null != subFundGroup) {
 
-            if (!priorYearAccount.isForContractsAndGrants()) {
+            if (!priorYearAccount.isInCg()) {
 
                 return false;
 
@@ -203,7 +199,7 @@ public class EncumbranceClosingRuleHelper {
 
         // I think this is redundant to the statement a few lines above here.
         // In any case, the sub fund group must not be contracts and grants.
-        if (!priorYearAccount.isForContractsAndGrants()) {
+        if (!priorYearAccount.isInCg()) {
 
             return false;
 

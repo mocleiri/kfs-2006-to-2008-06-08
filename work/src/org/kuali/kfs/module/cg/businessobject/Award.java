@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/Award.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +23,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
  * 
  */
-public class Award extends PersistableBusinessObjectBase {
+public class Award extends BusinessObjectBase {
 
     private Long proposalNumber;
     private Timestamp awardBeginningDate;
@@ -62,10 +64,11 @@ public class Award extends PersistableBusinessObjectBase {
     private String awardProjectTitle;
     private String awardCommentText;
     private String awardPurposeCode;
-    private List<ProjectDirector> awardProjectDirectors;
-    private List<AwardAccount> awardAccounts;
-    private List<AwardSubcontractor> awardSubcontractors;
-    private List<AwardOrganization> awardOrganizations;
+    private List awardProjectDirector;
+    private List<AwardAccount> awardAccount;
+    private List awardSubcontractor;
+    private List awardOrganization;
+    private List awardDiary;
 
     private Proposal proposal;
     private ProposalAwardType proposalAwardType;
@@ -80,10 +83,11 @@ public class Award extends PersistableBusinessObjectBase {
      * Default constructor.
      */
     public Award() {
-        awardProjectDirectors = new ArrayList<ProjectDirector>();
-        awardAccounts = new ArrayList<AwardAccount>();
-        awardSubcontractors = new ArrayList<AwardSubcontractor>();
-        awardOrganizations = new ArrayList<AwardOrganization>();
+        awardProjectDirector = new ArrayList();
+        awardAccount = new ArrayList<AwardAccount>();
+        awardSubcontractor = new ArrayList();
+        awardOrganization = new ArrayList();
+        awardDiary = new ArrayList();
     }
 
     /**
@@ -940,72 +944,86 @@ public class Award extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the awardProjectDirectors list.
+     * Gets the awardProjectDirector list.
      * 
-     * @return Returns the awardProjectDirectors list
-     * 
-     */
-    public List<ProjectDirector> getAwardProjectDirectors() {
-        return awardProjectDirectors;
-    }
-
-    /**
-     * Sets the awardProjectDirectors list.
-     * 
-     * @param awardProjectDirectors The awardProjectDirectors list to set.
+     * @return Returns the awardProjectDirector list
      * 
      */
-    public void setAwardProjectDirectors(List<ProjectDirector> awardProjectDirectors) {
-        this.awardProjectDirectors = awardProjectDirectors;
+    public List getAwardProjectDirector() {
+        return awardProjectDirector;
     }
 
     /**
-     * @return Returns the awardAccounts.
+     * Sets the awardProjectDirector list.
+     * 
+     * @param awardProjectDirector The awardProjectDirector list to set.
+     * 
      */
-    public List<AwardAccount> getAwardAccounts() {
-        return awardAccounts;
+    public void setAwardProjectDirector(List awardProjectDirector) {
+        this.awardProjectDirector = awardProjectDirector;
     }
 
     /**
-     * @param awardAccounts The awardAccounts to set.
+     * @return Returns the awardAccount.
      */
-    public void setAwardAccounts(List<AwardAccount> awardAccounts) {
-        this.awardAccounts = awardAccounts;
+    public List<AwardAccount> getAwardAccount() {
+        return awardAccount;
     }
 
     /**
-     * @return Returns the awardOrganizations.
+     * @param awardAccount The awardAccount to set.
      */
-    public List<AwardOrganization> getAwardOrganizations() {
-        return awardOrganizations;
+    public void setAwardAccount(List<AwardAccount> awardAccount) {
+        this.awardAccount = awardAccount;
     }
 
     /**
-     * @param awardOrganizations The awardOrganizations to set.
+     * @return Returns the awardDiary.
      */
-    public void setAwardOrganizations(List<AwardOrganization> awardOrganizations) {
-        this.awardOrganizations = awardOrganizations;
+    public List getAwardDiary() {
+        return awardDiary;
     }
 
     /**
-     * @return Returns the awardSubcontractors.
+     * @param awardDiary The awardDiary to set.
      */
-    public List<AwardSubcontractor> getAwardSubcontractors() {
-        return awardSubcontractors;
+    public void setAwardDiary(List awardDiary) {
+        this.awardDiary = awardDiary;
     }
 
     /**
-     * @param awardSubcontractors The awardSubcontractors to set.
+     * @return Returns the awardOrganization.
      */
-    public void setAwardSubcontractors(List<AwardSubcontractor> awardSubcontractors) {
-        this.awardSubcontractors = awardSubcontractors;
+    public List getAwardOrganization() {
+        return awardOrganization;
+    }
+
+    /**
+     * @param awardOrganization The awardOrganization to set.
+     */
+    public void setAwardOrganization(List awardOrganization) {
+        this.awardOrganization = awardOrganization;
+    }
+
+    /**
+     * @return Returns the awardSubcontractor.
+     */
+    public List getAwardSubcontractor() {
+        return awardSubcontractor;
+    }
+
+    /**
+     * @param awardSubcontractor The awardSubcontractor to set.
+     */
+    public void setAwardSubcontractor(List awardSubcontractor) {
+        this.awardSubcontractor = awardSubcontractor;
     }
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap<String, String> m = new LinkedHashMap<String, String>();
+        LinkedHashMap m = new LinkedHashMap();
         if (this.proposalNumber != null) {
             m.put("proposalNumber", this.proposalNumber.toString());
         }

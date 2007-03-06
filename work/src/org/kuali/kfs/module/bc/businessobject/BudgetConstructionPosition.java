@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionPosition.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,24 +24,23 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.ResponsibilityCenter;
 
 /**
  * 
  */
-public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
+public class BudgetConstructionPosition extends BusinessObjectBase {
 
 	private String positionNumber;
 	private Integer universityFiscalYear;
 	private Date positionEffectiveDate;
 	private String positionEffectiveStatus;
 	private String positionStatus;
-	private boolean budgetedPosition;
-	private boolean confidentialPosition;
+	private String budgetedPosition;
+	private String confidentialPosition;
 	private BigDecimal positionStandardHoursDefault;
 	private String positionRegularTemporary;
 	private BigDecimal positionFullTimeEquivalency;
@@ -60,7 +61,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 	private String iuPositionType;
 	private String positionLockUserIdentifier;
 
-    private Options universityFiscal;
     private List pendingBudgetConstructionAppointmentFunding;
     private List budgetConstructionPositionSelect;
     private ResponsibilityCenter responsibilityCenter;
@@ -75,26 +75,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 
 	}
 
-    /**
-     * Computes the positionFullTimeEquivalency attribute.
-     * 
-     * @return Returns the compute positionFullTimeEquivalency
-     * 
-     */
-    public static BigDecimal getCalculatedBCPositionFTE(BigDecimal positionStandardHoursDefault, Integer iuNormalWorkMonths, Integer iuPayMonths ) { 
-        if (iuPayMonths > 0){
-            BigDecimal temp1 = positionStandardHoursDefault.divide(new BigDecimal(40),4, BigDecimal.ROUND_DOWN );
-            BigDecimal temp2 = new BigDecimal(iuNormalWorkMonths).divide(new BigDecimal(iuPayMonths), 4, BigDecimal.ROUND_DOWN );
-            BigDecimal result = temp1.multiply(temp2) ;
-            result = result.setScale(2, BigDecimal.ROUND_DOWN);
-            return result;
-        }else{
-            return BigDecimal.valueOf(0.0);
-        }
-    }
-
- 
-    
 	/**
 	 * Gets the positionNumber attribute.
 	 * 
@@ -157,72 +137,92 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 		this.positionEffectiveDate = positionEffectiveDate;
 	}
 
-   
-    /**
-     * Gets the positionEffectiveStatus attribute. 
-     * @return Returns the positionEffectiveStatus.
-     */
-    public String getPositionEffectiveStatus() {
-        return positionEffectiveStatus;
-    }
 
-    /**
-     * Sets the positionEffectiveStatus attribute value.
-     * @param positionEffectiveStatus The positionEffectiveStatus to set.
-     */
-    public void setPositionEffectiveStatus(String positionEffectiveStatus) {
-        this.positionEffectiveStatus = positionEffectiveStatus;
-    }
+	/**
+	 * Gets the positionEffectiveStatus attribute.
+	 * 
+	 * @return Returns the positionEffectiveStatus
+	 * 
+	 */
+	public String getPositionEffectiveStatus() { 
+		return positionEffectiveStatus;
+	}
 
-    /**
-     * Gets the positionStatus attribute. 
-     * @return Returns the positionStatus.
-     */
-    public String getPositionStatus() {
-        return positionStatus;
-    }
+	/**
+	 * Sets the positionEffectiveStatus attribute.
+	 * 
+	 * @param positionEffectiveStatus The positionEffectiveStatus to set.
+	 * 
+	 */
+	public void setPositionEffectiveStatus(String positionEffectiveStatus) {
+		this.positionEffectiveStatus = positionEffectiveStatus;
+	}
 
-    /**
-     * Sets the positionStatus attribute value.
-     * @param positionStatus The positionStatus to set.
-     */
-    public void setPositionStatus(String positionStatus) {
-        this.positionStatus = positionStatus;
-    }
 
-    /**
-     * Gets the budgetedPosition attribute. 
-     * @return Returns the budgetedPosition.
-     */
-    public boolean isBudgetedPosition() {
-        return budgetedPosition;
-    }
+	/**
+	 * Gets the positionStatus attribute.
+	 * 
+	 * @return Returns the positionStatus
+	 * 
+	 */
+	public String getPositionStatus() { 
+		return positionStatus;
+	}
 
-    /**
-     * Sets the budgetedPosition attribute value.
-     * @param budgetedPosition The budgetedPosition to set.
-     */
-    public void setBudgetedPosition(boolean budgetedPosition) {
-        this.budgetedPosition = budgetedPosition;
-    }
+	/**
+	 * Sets the positionStatus attribute.
+	 * 
+	 * @param positionStatus The positionStatus to set.
+	 * 
+	 */
+	public void setPositionStatus(String positionStatus) {
+		this.positionStatus = positionStatus;
+	}
 
-    /**
-     * Gets the confidentialPosition attribute. 
-     * @return Returns the confidentialPosition.
-     */
-    public boolean isConfidentialPosition() {
-        return confidentialPosition;
-    }
 
-    /**
-     * Sets the confidentialPosition attribute value.
-     * @param confidentialPosition The confidentialPosition to set.
-     */
-    public void setConfidentialPosition(boolean confidentialPosition) {
-        this.confidentialPosition = confidentialPosition;
-    }
+	/**
+	 * Gets the budgetedPosition attribute.
+	 * 
+	 * @return Returns the budgetedPosition
+	 * 
+	 */
+	public String getBudgetedPosition() { 
+		return budgetedPosition;
+	}
 
-    /**
+	/**
+	 * Sets the budgetedPosition attribute.
+	 * 
+	 * @param budgetedPosition The budgetedPosition to set.
+	 * 
+	 */
+	public void setBudgetedPosition(String budgetedPosition) {
+		this.budgetedPosition = budgetedPosition;
+	}
+
+
+	/**
+	 * Gets the confidentialPosition attribute.
+	 * 
+	 * @return Returns the confidentialPosition
+	 * 
+	 */
+	public String getConfidentialPosition() { 
+		return confidentialPosition;
+	}
+
+	/**
+	 * Sets the confidentialPosition attribute.
+	 * 
+	 * @param confidentialPosition The confidentialPosition to set.
+	 * 
+	 */
+	public void setConfidentialPosition(String confidentialPosition) {
+		this.confidentialPosition = confidentialPosition;
+	}
+
+
+	/**
 	 * Gets the positionStandardHoursDefault attribute.
 	 * 
 	 * @return Returns the positionStandardHoursDefault
@@ -697,22 +697,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
         this.positionLockUser = positionLockUser;
     }
 
-    /**
-     * Gets the universityFiscal attribute. 
-     * @return Returns the universityFiscal.
-     */
-    public Options getUniversityFiscal() {
-        return universityFiscal;
-    }
-
-    /**
-     * Sets the universityFiscal attribute value.
-     * @param universityFiscal The universityFiscal to set.
-     */
-    public void setUniversityFiscal(Options universityFiscal) {
-        this.universityFiscal = universityFiscal;
-    }
-    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */

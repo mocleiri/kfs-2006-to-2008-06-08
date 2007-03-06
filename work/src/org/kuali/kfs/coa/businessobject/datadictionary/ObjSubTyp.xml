@@ -19,18 +19,22 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.ObjSubTyp">
-        <customAttributeEnabled>true</customAttributeEnabled>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Object Sub-Type Inquiry</title>
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Object Sub-Type Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjSubTyp"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup an Object Sub-Type</instructions>
 
@@ -87,8 +91,6 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        
-        <objectLabel>Object Sub-Type</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

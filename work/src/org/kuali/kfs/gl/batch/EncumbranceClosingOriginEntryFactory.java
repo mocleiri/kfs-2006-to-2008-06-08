@@ -240,7 +240,7 @@ public class EncumbranceClosingOriginEntryFactory {
         entry.setUniversityFiscalPeriodCode("BB");
         entry.setFinancialDocumentTypeCode(encumbrance.getDocumentTypeCode());
         entry.setFinancialSystemOriginationCode(encumbrance.getOriginCode());
-        entry.setDocumentNumber(encumbrance.getDocumentNumber());
+        entry.setFinancialDocumentNumber(encumbrance.getDocumentNumber());
         entry.setTransactionLedgerEntrySequenceNumber(new Integer(1));
         entry.setTransactionLedgerEntryDescription(encumbrance.getTransactionEncumbranceDescription());
         entry.setTransactionLedgerEntryAmount(encumbrance.getAccountLineEncumbranceAmount().subtract(encumbrance.getAccountLineEncumbranceClosedAmount()));
@@ -270,6 +270,7 @@ public class EncumbranceClosingOriginEntryFactory {
         pair.setEntry(entry);
 
         // And now build the offset.
+
         OriginEntry offset = new OriginEntry(entry);
         offset.setTransactionLedgerEntryAmount(entry.getTransactionLedgerEntryAmount());
         offset.setFinancialObjectCode("9891");
@@ -285,7 +286,7 @@ public class EncumbranceClosingOriginEntryFactory {
 
         }
 
-        offset.setFinancialObjectTypeCode(SpringServiceLocator.getOptionsService().getCurrentYearOptions().getFinObjectTypeFundBalanceCd());
+        offset.setFinancialObjectTypeCode("FB");
         offset.setTransactionLedgerEntryDescription("BEGINNING FUND BALANCE OFFSET");
 
         if (Constants.GL_DEBIT_CODE.equals(entry.getTransactionDebitCreditCode())) {

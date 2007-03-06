@@ -24,16 +24,20 @@
         <inquiry>
             <title>Bank Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="financialDocumentBankCode" />
                 <field attributeName="financialDocumentBankName" />
                 <field attributeName="financialDocumentBankShortNm" />
                 <field attributeName="bankRoutingNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Bank Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.Bank">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Bank Account</instructions>
 

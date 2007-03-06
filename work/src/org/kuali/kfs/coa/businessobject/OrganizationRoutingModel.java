@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@ package org.kuali.module.chart.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
  * 
  */
-public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
+public class OrganizationRoutingModel extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String organizationCode;
@@ -57,7 +57,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -78,7 +78,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationCode attribute.
      * 
-     * @return Returns the organizationCode
+     * @return - Returns the organizationCode
      * 
      */
     public String getOrganizationCode() {
@@ -99,7 +99,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationRoutingModelName attribute.
      * 
-     * @return Returns the organizationRoutingModelName
+     * @return - Returns the organizationRoutingModelName
      * 
      */
     public String getOrganizationRoutingModelName() {
@@ -120,7 +120,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the accountDelegateUniversalId attribute.
      * 
-     * @return Returns the accountDelegateUniversalId
+     * @return - Returns the accountDelegateUniversalId
      * 
      */
     public String getAccountDelegateUniversalId() {
@@ -141,7 +141,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
      * 
      */
     public String getFinancialDocumentTypeCode() {
@@ -162,7 +162,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the approvalFromThisAmount attribute.
      * 
-     * @return Returns the approvalFromThisAmount
+     * @return - Returns the approvalFromThisAmount
      * 
      */
     public KualiDecimal getApprovalFromThisAmount() {
@@ -183,7 +183,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the approvalToThisAmount attribute.
      * 
-     * @return Returns the approvalToThisAmount
+     * @return - Returns the approvalToThisAmount
      * 
      */
     public KualiDecimal getApprovalToThisAmount() {
@@ -204,7 +204,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the accountDelegatePrimaryRoutingIndicator attribute.
      * 
-     * @return Returns the accountDelegatePrimaryRoutingIndicator
+     * @return - Returns the accountDelegatePrimaryRoutingIndicator
      * 
      */
     public boolean getAccountDelegatePrimaryRoutingIndicator() {
@@ -225,7 +225,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the accountDelegateStartDate attribute.
      * 
-     * @return Returns the accountDelegateStartDate
+     * @return - Returns the accountDelegateStartDate
      * 
      */
     public Date getAccountDelegateStartDate() {
@@ -246,7 +246,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {

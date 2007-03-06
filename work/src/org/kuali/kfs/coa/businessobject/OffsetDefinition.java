@@ -17,15 +17,15 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
+import org.kuali.core.document.DocumentType;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 /**
  * 
  */
-public class OffsetDefinition extends PersistableBusinessObjectBase {
+public class OffsetDefinition extends BusinessObjectBase {
 
     private static final long serialVersionUID = -6150010338773403021L;
 
@@ -51,7 +51,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -71,7 +71,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscal attribute.
      * 
-     * @return Returns the universityFiscal
+     * @return - Returns the universityFiscal
      * 
      */
     public Options getUniversityFiscal() {
@@ -91,7 +91,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
      * 
      */
 
@@ -112,7 +112,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialBalanceTypeCode attribute.
      * 
-     * @return Returns the financialBalanceTypeCode
+     * @return - Returns the financialBalanceTypeCode
      * 
      */
     public String getFinancialBalanceTypeCode() {
@@ -151,7 +151,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return Returns the financialObjectCode
+     * @return - Returns the financialObjectCode
      * 
      */
 
@@ -171,7 +171,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObject attribute.
      * 
-     * @return Returns the financialObject
+     * @return - Returns the financialObject
      * 
      */
 
@@ -192,7 +192,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
 
@@ -214,7 +214,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * 
      * Gets the chartOfAccounts object
      * 
-     * @return a Chart object
+     * @return - a Chart object
      * 
      */
     public Chart getChartOfAccounts() {

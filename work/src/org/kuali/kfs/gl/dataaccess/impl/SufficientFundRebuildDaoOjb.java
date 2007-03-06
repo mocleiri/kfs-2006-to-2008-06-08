@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.PropertyConstants;
+import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
 import org.kuali.module.gl.dao.SufficientFundRebuildDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-public class SufficientFundRebuildDaoOjb extends PersistenceBrokerDaoSupport implements SufficientFundRebuildDao {
+public class SufficientFundRebuildDaoOjb extends PlatformAwareDaoBaseOjb implements SufficientFundRebuildDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundRebuildDaoOjb.class);
 
     public SufficientFundRebuildDaoOjb() {
