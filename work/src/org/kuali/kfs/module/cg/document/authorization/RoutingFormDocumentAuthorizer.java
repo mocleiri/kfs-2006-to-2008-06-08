@@ -17,50 +17,19 @@ package org.kuali.module.kra.routingform.document;
 
 import java.util.Map;
 
-import org.kuali.core.authorization.AuthorizationConstants;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.authorization.DocumentActionFlags;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.SpringServiceLocator;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.module.kra.KraConstants;
-import org.kuali.module.kra.KraKeyConstants;
+import org.kuali.core.document.authorization.DocumentAuthorizerBase;
 import org.kuali.module.kra.budget.document.BudgetDocument;
-import org.kuali.module.kra.document.ResearchDocumentAuthorizer;
-import org.kuali.module.kra.service.ResearchDocumentPermissionsService;
 
-public class RoutingFormDocumentAuthorizer extends ResearchDocumentAuthorizer {
+public class RoutingFormDocumentAuthorizer extends DocumentAuthorizerBase {
 
     @Override
     public Map getEditMode(Document d, UniversalUser u) {
-        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
-        ResearchDocumentPermissionsService permissionsService = SpringServiceLocator.getResearchDocumentPermissionsService();
-        RoutingFormDocument routingFormDocument = (RoutingFormDocument) d;
-        String permissionCode = AuthorizationConstants.EditMode.UNVIEWABLE;
-        KualiWorkflowDocument workflowDocument = routingFormDocument.getDocumentHeader().getWorkflowDocument();
-        
-        // Check initiator
-        if (workflowDocument.getInitiatorNetworkId().equalsIgnoreCase(u.getPersonUserIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
-            return finalizeEditMode(routingFormDocument, permissionCode);
-        }
-        
-        // Check project director/orgs
-        // Check contact person
-        
-        permissionCode = getPermissionCodeByPrecedence(permissionCode, getAdHocEditMode(routingFormDocument, u));
-        Map editModes = finalizeEditMode(routingFormDocument, permissionCode);
-        
-        RoutingFormDocument rfd = (RoutingFormDocument) d;
-        if (rfd.getRoutingFormBudgetNumber() != null) {
-            editModes.put(KraConstants.AuthorizationConstants.BUDGET_LINKED, "TRUE");
-            if (!GlobalVariables.getMessageList().contains(KraKeyConstants.BUDGET_OVERRIDE))
-                GlobalVariables.getMessageList().add(0, KraKeyConstants.BUDGET_OVERRIDE);
-        }
-        
-        return editModes;
+        // TODO Auto-generated method stub
+        return super.getEditMode(d, u);
     }
 
     public DocumentActionFlags getDocumentActionFlags(Document document, UniversalUser user) {
@@ -78,4 +47,5 @@ public class RoutingFormDocumentAuthorizer extends ResearchDocumentAuthorizer {
 
         return flags;
     }
+    
 }
