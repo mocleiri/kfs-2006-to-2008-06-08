@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.Constants;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.module.gl.batch.poster.EncumbranceCalculator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.batch.poster.VerifyTransaction;
@@ -31,14 +30,15 @@ import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.EncumbranceDao;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ * 
+ * 
+ */
 public class PostEncumbrance implements PostTransaction, VerifyTransaction, EncumbranceCalculator {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PostEncumbrance.class);
 
     private EncumbranceDao encumbranceDao;
-    private DateTimeService dateTimeService;
 
     public void setEncumbranceDao(EncumbranceDao ed) {
         encumbranceDao = ed;
@@ -83,7 +83,7 @@ public class PostEncumbrance implements PostTransaction, VerifyTransaction, Encu
         // Get the current encumbrance record if there is one
         Entry e = new Entry(t, null);
         if (Constants.ENCUMB_UPDT_REFERENCE_DOCUMENT_CD.equals(t.getTransactionEncumbranceUpdateCode())) {
-            e.setDocumentNumber(t.getReferenceFinancialDocumentNumber());
+            e.setFinancialDocumentNumber(t.getReferenceFinancialDocumentNumber());
             e.setFinancialSystemOriginationCode(t.getReferenceFinancialSystemOriginationCode());
             e.setFinancialDocumentTypeCode(t.getReferenceFinancialDocumentTypeCode());
         }
@@ -124,7 +124,7 @@ public class PostEncumbrance implements PostTransaction, VerifyTransaction, Encu
         for (Iterator iter = encumbranceList.iterator(); iter.hasNext();) {
             Encumbrance e = (Encumbrance) iter.next();
 
-            if (Constants.ENCUMB_UPDT_DOCUMENT_CD.equals(t.getTransactionEncumbranceUpdateCode()) && e.getUniversityFiscalYear().equals(t.getUniversityFiscalYear()) && e.getChartOfAccountsCode().equals(t.getChartOfAccountsCode()) && e.getAccountNumber().equals(t.getAccountNumber()) && e.getSubAccountNumber().equals(t.getSubAccountNumber()) && e.getObjectCode().equals(t.getFinancialObjectCode()) && e.getSubObjectCode().equals(t.getFinancialSubObjectCode()) && e.getBalanceTypeCode().equals(t.getFinancialBalanceTypeCode()) && e.getDocumentTypeCode().equals(t.getFinancialDocumentTypeCode()) && e.getOriginCode().equals(t.getFinancialSystemOriginationCode()) && e.getDocumentNumber().equals(t.getDocumentNumber())) {
+            if (Constants.ENCUMB_UPDT_DOCUMENT_CD.equals(t.getTransactionEncumbranceUpdateCode()) && e.getUniversityFiscalYear().equals(t.getUniversityFiscalYear()) && e.getChartOfAccountsCode().equals(t.getChartOfAccountsCode()) && e.getAccountNumber().equals(t.getAccountNumber()) && e.getSubAccountNumber().equals(t.getSubAccountNumber()) && e.getObjectCode().equals(t.getFinancialObjectCode()) && e.getSubObjectCode().equals(t.getFinancialSubObjectCode()) && e.getBalanceTypeCode().equals(t.getFinancialBalanceTypeCode()) && e.getDocumentTypeCode().equals(t.getFinancialDocumentTypeCode()) && e.getOriginCode().equals(t.getFinancialSystemOriginationCode()) && e.getDocumentNumber().equals(t.getFinancialDocumentNumber())) {
                 return e;
             }
 
@@ -136,10 +136,9 @@ public class PostEncumbrance implements PostTransaction, VerifyTransaction, Encu
         // If we couldn't find one that exists, create a new one
 
         // NOTE: the date doesn't matter so there is no need to call the date service
-        // Changed to use the datetime service because of KULRNE-4183
-        Entry e = new Entry(t, dateTimeService.getCurrentDate());
+        Entry e = new Entry(t, new Date());
         if (Constants.ENCUMB_UPDT_REFERENCE_DOCUMENT_CD.equals(t.getTransactionEncumbranceUpdateCode())) {
-            e.setDocumentNumber(t.getReferenceFinancialDocumentNumber());
+            e.setFinancialDocumentNumber(t.getReferenceFinancialDocumentNumber());
             e.setFinancialSystemOriginationCode(t.getReferenceFinancialSystemOriginationCode());
             e.setFinancialDocumentTypeCode(t.getReferenceFinancialDocumentTypeCode());
         }
@@ -179,10 +178,5 @@ public class PostEncumbrance implements PostTransaction, VerifyTransaction, Encu
 
     public String getDestinationName() {
         return "GL_ENCUMBRANCE_T";
-    }
-    
-
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
     }
 }
