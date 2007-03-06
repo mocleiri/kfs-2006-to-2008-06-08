@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/integration/src/org/kuali/kfs/fp/document/JournalVoucherDocumentTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@ import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodServic
 import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
 import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import static org.kuali.core.util.SpringServiceLocator.getTransactionalDocumentDictionaryService;
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
+import static org.kuali.module.financial.document.TransactionalDocumentTestUtils.testGetNewDocument_byDocumentClass;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE5;
 import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
 import static org.kuali.test.util.KualiTestAssertionUtils.assertEquality;
@@ -29,15 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.Constants;
-import org.kuali.core.bo.DocumentNote;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.DocumentNote;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.TestsWorkflowViaDatabase;
@@ -80,12 +80,12 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
      * Had to override b/c there are too many differences between the JV and the standard document structure (i.e. GLPEs generate
      * differently, routing isn't standard, etc).
      * 
-     * @see org.kuali.core.document.AccountingDocumentTestBase#testConvertIntoCopy()
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#testConvertIntoCopy()
      */
     @TestsWorkflowViaDatabase
     public void testConvertIntoCopy() throws Exception {
         // save the original doc, wait for status change
-        AccountingDocument document = buildDocument();
+        TransactionalDocument document = buildDocument();
         getDocumentService().routeDocument(document, "saving copy source document", null);
         // collect some preCopy data
         String preCopyId = document.getDocumentNumber();
@@ -104,7 +104,7 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
         assertEquals(0, preCopyNoteCount);
 
         // do the copy
-        ((Copyable) document).toCopy();
+        document.convertIntoCopy();
         // compare to preCopy state
 
         String postCopyId = document.getDocumentNumber();
@@ -147,11 +147,11 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
      * Had to override b/c there are too many differences between the JV and the standard document structure (i.e. GLPEs generate
      * differently, routing isn't standard, etc).
      * 
-     * @see org.kuali.core.document.AccountingDocumentTestBase#testConvertIntoErrorCorrection()
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#testConvertIntoErrorCorrection()
      */
     @TestsWorkflowViaDatabase
     public void testConvertIntoErrorCorrection() throws Exception {
-        AccountingDocument document = buildDocument();
+        TransactionalDocument document = buildDocument();
 
         // replace the broken sourceLines with one that lets the test succeed
         KualiDecimal balance = new KualiDecimal("21.12");
@@ -178,7 +178,7 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
         // jv docs go straight to final
         DocumentWorkflowStatusMonitor routeMonitor = new DocumentWorkflowStatusMonitor(getDocumentService(), documentHeaderId, "F");
         assertTrue(ChangeMonitor.waitUntilChange(routeMonitor, 240, 5));
-        document = (AccountingDocument) getDocumentService().getByDocumentHeaderId(documentHeaderId);
+        document = (TransactionalDocument) getDocumentService().getByDocumentHeaderId(documentHeaderId);
         // collect some preCorrect data
         String preCorrectId = document.getDocumentNumber();
         String preCorrectCorrectsId = document.getDocumentHeader().getFinancialDocumentInErrorNumber();
@@ -197,7 +197,7 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
         assertEquals(0, preCorrectNoteCount);
         assertEquals("F", preCorrectStatus);
         // do the copy
-        ((Correctable) document).toErrorCorrection();
+        document.convertIntoErrorCorrection();
         // compare to preCorrect state
 
         String postCorrectId = document.getDocumentNumber();
@@ -277,33 +277,37 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
         JournalVoucherDocument document = DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS);
         document.setBalanceTypeCode(Constants.BALANCE_TYPE_ACTUAL);
 
-        AccountingDocumentTestUtils.testAddAccountingLine(document, sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
+        TransactionalDocumentTestUtils.testAddAccountingLine(document, sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
     }
 
     public final void testGetNewDocument() throws Exception {
         testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
     }
 
+    public final void testConvertIntoCopy_invalidYear() throws Exception {
+        TransactionalDocumentTestUtils.testConvertIntoCopy_invalidYear(buildDocument(), getAccountingPeriodService());
+    }
+
     public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
 
     }
 
     public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
     }
 
     public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
     }
 
     public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), getTransactionalDocumentDictionaryService(), getAccountingPeriodService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), getTransactionalDocumentDictionaryService(), getAccountingPeriodService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testSaveDocument() throws Exception {
-        AccountingDocumentTestUtils.testSaveDocument(buildDocument(), getDocumentService());
+        TransactionalDocumentTestUtils.testSaveDocument(buildDocument(), getDocumentService());
     }
 
 
