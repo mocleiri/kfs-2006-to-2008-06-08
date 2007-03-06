@@ -190,7 +190,7 @@
 			<filter token="use-auto-commit" value="1" />
 			<filter token="database-file-directory" value="${database.file.directory}" />
 			<filter token="database-update-file-list" value="${database.update.file.list}" />
-			<filter token="encrypt-fields-properties-file" value="${encrypt.fields.properties.file}" />
+			<filter token="encrypt-attributes-properties-file" value="${encrypt.attributes.properties.file}" />
 			<filter token="data-export-zip-file" value="${data.export.zip.file}" />
 		</filterset>
 		<condition property="batch.program.directory" value="/home/kultstb/batch/${build.environment}">
