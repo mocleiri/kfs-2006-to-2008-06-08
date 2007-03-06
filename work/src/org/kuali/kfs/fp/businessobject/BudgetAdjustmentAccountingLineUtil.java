@@ -17,6 +17,7 @@ package org.kuali.module.financial.bo;
 
 import java.util.Map;
 
+import org.kuali.Constants;
 import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
@@ -50,6 +51,7 @@ public class BudgetAdjustmentAccountingLineUtil {
         accountingLine.setFinancialDocumentMonth11LineAmount(KualiDecimal.ZERO);
         accountingLine.setFinancialDocumentMonth12LineAmount(KualiDecimal.ZERO);
         accountingLine.setFringeBenefitIndicator(false);
+        accountingLine.setDebitCreditCode(Constants.BLANK_SPACE);
     }
 
     /**
