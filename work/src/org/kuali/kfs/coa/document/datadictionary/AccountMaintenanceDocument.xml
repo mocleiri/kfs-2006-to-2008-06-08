@@ -36,7 +36,8 @@
         <documentTypeName>KualiAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>ACCT</documentTypeCode>
 
-		<webScriptFile>chart/accountDocument.js</webScriptFile>
+		<webScriptFile>dwr/interface/SubFundGroupService.js</webScriptFile>
+		<webScriptFile>scripts/chart/accountDocument.js</webScriptFile>
 
         <label>Account Maintenance Document</label>
         <shortLabel>AcctMaintDoc</shortLabel>
@@ -146,7 +147,10 @@
                     <maintainableField name="contractControlFinCoaCode" required="false" />
                     <maintainableField name="contractControlAccountNumber" required="false" />
                     <maintainableField name="acctIndirectCostRcvyTypeCd" required="false" />
-                    <maintainableField name="financialIcrSeriesIdentifier" required="false" />
+                    <maintainableField name="financialIcrSeriesIdentifier" required="false" >
+                         <overrideLookupClass>org.kuali.module.chart.bo.IcrAutomatedEntry</overrideLookupClass>
+                         <overrideFieldConversions>financialIcrSeriesIdentifier:financialIcrSeriesIdentifier</overrideFieldConversions>
+                    </maintainableField>  
                     <maintainableField name="indirectCostRcvyFinCoaCode" required="false" />
                     <maintainableField name="indirectCostRecoveryAcctNbr" required="false" />
                     <maintainableField name="accountCfdaNumber" required="false" />
