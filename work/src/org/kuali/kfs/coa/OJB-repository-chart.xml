@@ -213,11 +213,11 @@
 
 <class-descriptor class="org.kuali.module.chart.bo.FundGroup" table="CA_FUND_GRP_T">
     <field-descriptor name="code" column="FUND_GRP_CD" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="active" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="name" column="FUND_GRP_NM" jdbc-type="VARCHAR" />
     <field-descriptor name="financialReportingSortCode" column="FIN_REPORT_SORT_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="fundGroupBudgetAdjustmentRestrictionLevelCode" column="FND_GRP_BA_RSTR_LVL_CD" jdbc-type="VARCHAR" />
 </class-descriptor>
 
@@ -711,16 +711,17 @@
 
 <class-descriptor class="org.kuali.module.chart.bo.codes.BalanceTyp" table="CA_BALANCE_TYPE_T">
     <field-descriptor name="code" column="FIN_BALANCE_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="name" column="FIN_BALANCE_TYP_NM" jdbc-type="VARCHAR" />
     <field-descriptor name="financialBalanceTypeShortNm" column="FIN_BALTYP_SHRT_NM" jdbc-type="VARCHAR" />
     <field-descriptor name="financialOffsetGenerationIndicator" column="FIN_OFFST_GNRTN_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="finBalanceTypeEncumIndicator" column="FIN_BALTYP_ENC_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
-    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode" table="CA_MNXFR_ELIM_T">
     <field-descriptor name="code" column="FOBJ_MNXFR_ELIM_CD" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="active" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="name" column="FOBJ_MNXFR_ELIM_NM" jdbc-type="VARCHAR" />
@@ -728,6 +729,7 @@
 
 <class-descriptor class="org.kuali.module.chart.bo.codes.FederalFundedCode" table="CA_FED_FND_T">
     <field-descriptor name="code" column="FIN_FED_FUNDED_CD" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="active" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="name" column="FIN_FED_FND_NM" jdbc-type="VARCHAR" />
@@ -910,6 +912,7 @@
     <field-descriptor name="financialReportingCodeDescription" column="FIN_RPT_CD_DESC" jdbc-type="VARCHAR" />
     <field-descriptor name="financialReportingCodeMgrId" column="FIN_REP_CD_MGR_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="financialReportsToReportingCode" column="FIN_RPTS_TO_RPT_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
 
     <reference-descriptor name="chart" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -1233,8 +1236,8 @@
 <class-descriptor class="org.kuali.module.chart.bo.codes.ICRTypeCode" table="CA_ICR_TYPE_T">
     <field-descriptor name="code" column="ACCT_ICR_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="name" column="ACCT_ICR_TYP_DESC" jdbc-type="VARCHAR" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.chart.bo.AccountDescription" table="CA_ACCT_DESC_T">
