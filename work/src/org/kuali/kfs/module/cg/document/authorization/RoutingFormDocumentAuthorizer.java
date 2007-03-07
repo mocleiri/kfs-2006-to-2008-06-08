@@ -27,8 +27,8 @@ import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.KraKeyConstants;
-import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.document.ResearchDocumentAuthorizer;
+import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
 import org.kuali.module.kra.service.ResearchDocumentPermissionsService;
 
 public class RoutingFormDocumentAuthorizer extends ResearchDocumentAuthorizer {
@@ -47,8 +47,24 @@ public class RoutingFormDocumentAuthorizer extends ResearchDocumentAuthorizer {
             return finalizeEditMode(routingFormDocument, permissionCode);
         }
         
-        // Check project director/orgs
-        // Check contact person
+        // Check personnel
+        for (RoutingFormPersonnel person : routingFormDocument.getRoutingFormPersonnel()) {
+            if (u.getPersonUniversalIdentifier().equals(person.getPersonSystemIdentifier())) {
+                person.refresh();
+                String role = person.getPersonRole().getPersonRoleCode();
+                if (KraConstants.PROJECT_DIRECTOR_CODE.equals(role)
+                        || KraConstants.CO_PROJECT_DIRECTOR_CODE.equals(role)) {
+                    permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
+                    return finalizeEditMode(routingFormDocument, permissionCode);
+                }
+                if (KraConstants.CONTACT_PERSON_ADMINISTRATIVE_CODE.equals(role)
+                        || KraConstants.CONTACT_PERSON_PROPOSAL_CODE.equals(role)) {
+                    permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.VIEW_ONLY);
+                }
+            }
+        }
+        
+        // TODO Check default org permissions - project director, cost sharing orgs.  Need to set up routing first.
         
         permissionCode = getPermissionCodeByPrecedence(permissionCode, getAdHocEditMode(routingFormDocument, u));
         Map editModes = finalizeEditMode(routingFormDocument, permissionCode);
