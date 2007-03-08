@@ -92,8 +92,11 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
         accountingLines.addAll(benefitDoc.getTargetAccountingLines());        
         
         for (AccountingLine lines : accountingLines){
-            if (accountingLine.getFinancialObjectCode() != null) {
-                if (accountingLine.getFinancialObjectCode() != lines.getFinancialObjectCode()) {
+            LOG.info("1:" + accountingLine.getFinancialObjectCode());
+            LOG.info("2:" + lines.getFinancialObjectCode());
+            if ((accountingLine.getFinancialObjectCode() != null)  && (lines.getFinancialObjectCode() != null)) {
+                
+                if (!accountingLine.getFinancialObjectCode().equals(lines.getFinancialObjectCode())) {
                     reportError(PropertyConstants.ACCOUNT, KeyConstants.Labor.DISTINCT_OBJECT_CODE_ERROR, accountingLine.getAccountNumber());
                     return false;
                 }
