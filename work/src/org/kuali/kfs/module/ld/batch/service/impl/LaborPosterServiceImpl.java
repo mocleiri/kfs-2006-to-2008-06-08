@@ -131,6 +131,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
             entryGroup.setProcess(Boolean.FALSE);
             originEntryGroupService.save(entryGroup);
         }
+       
         updateReportSummary(reportSummary, ORIGN_ENTRY, OperationType.SELECT, numberOfOriginEntry, 0);
         reportService.generatePosterStatisticsReport(reportSummary, errorMap, ReportRegistry.LABOR_POSTER_STATISTICS, reportsDirectory, runDate);
         
@@ -181,7 +182,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
         int numberOfOriginEntry = 0;
         Collection<LaborOriginEntry> entries = laborOriginEntryService.getConsolidatedEntryCollectionByGroup(validGroup);
         for (LaborOriginEntry originEntry : entries) {
-
+            
             List<Message> errors = this.isPostableForLaborGLEntry(originEntry);
             if (!errors.isEmpty()) {
                 errorMap.put(originEntry, errors);
