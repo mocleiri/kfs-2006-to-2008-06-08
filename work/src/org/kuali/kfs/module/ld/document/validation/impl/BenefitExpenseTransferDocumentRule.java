@@ -102,7 +102,7 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
                 }
             }            
         }
-
+                        
         // Retrieve the labor object code to make sure it is fringe. 
         // It must have a value of "F".
         
