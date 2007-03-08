@@ -15,7 +15,9 @@
  */
 package org.kuali.module.purap;
 
-import org.kuali.core.util.KualiDecimal;
+import java.util.HashMap;
+
+import org.kuali.Constants.ParameterValues;
 
 /**
  * Holds constants for PURAP.
@@ -103,4 +105,14 @@ public class PurapConstants {
         public static String WAITING_FOR_DEPARTMENT = "WDPT";
         //TODO: Do we need the rest of these in here?  They're in a table (PUR_PO_STAT_T).
     }
+    
+    private static HashMap<String, String> purchaseOrderDocTypes()
+    {
+        HashMap<String,String> mapSLF; 
+        mapSLF =  new HashMap<String,String>();
+        mapSLF.put("KualiPurchaseOrderCloseDocument", "CloseServiceImpl");
+        mapSLF.put("KualiPurchaseOrderDocument", "");
+        return mapSLF;
+}    public final static HashMap<String,String> PURCHASE_ORDER_DOC_TYPE_MAP =
+                        purchaseOrderDocTypes();
 }
