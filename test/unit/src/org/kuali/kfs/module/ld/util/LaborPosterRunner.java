@@ -31,28 +31,28 @@ public class LaborPosterRunner {
         SpringServiceLocator.initializeDDGeneratorApplicationContext();
         laborPosterService = (LaborPosterService) SpringServiceLocator.getBeanFactory().getBean("laborPosterService");
     }
-    
-    public void runPoster(){
+
+    public void runPoster() {
         laborPosterService.postMainEntries();
     }
 
-    public static void main(String[] args) {              
+    public static void main(String[] args) {
         try {
-        LaborPosterRunner laborPosterRunner = new LaborPosterRunner();
-        
-        System.out.println("Labor Poster started");
-        long start = System.currentTimeMillis();
+            LaborPosterRunner laborPosterRunner = new LaborPosterRunner();
+
+            System.out.println("Labor Poster started");
+            long start = System.currentTimeMillis();
             System.out.println("Labor Poster is running ...");
-        laborPosterRunner.runPoster();
-        long elapsedTime = System.currentTimeMillis() - start;
-        System.out.printf("Execution Time = %d (ms)\n", elapsedTime);
+            laborPosterRunner.runPoster();
+            long elapsedTime = System.currentTimeMillis() - start;
+            System.out.printf("Execution Time = %d (ms)\n", elapsedTime);
             System.out.println("Labor Poster stopped");
         }
         catch (Exception e) {
             e.printStackTrace();
         }
         finally {
-        System.exit(0);
+            System.exit(0);
+        }
     }
-}
 }
