@@ -251,7 +251,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         //null if defined as empty string in map
         if(popp!=null){
             popp.handleRouteStatusChange(this);
-    }
+        }
     }
 
     @Override
