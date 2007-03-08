@@ -113,6 +113,7 @@ public class PurapConstants {
         mapSLF.put("KualiPurchaseOrderCloseDocument", "CloseServiceImpl");
         mapSLF.put("KualiPurchaseOrderDocument", "");
         return mapSLF;
-}    public final static HashMap<String,String> PURCHASE_ORDER_DOC_TYPE_MAP =
+    }
+    public final static HashMap<String,String> PURCHASE_ORDER_DOC_TYPE_MAP =
                         purchaseOrderDocTypes();
 }
