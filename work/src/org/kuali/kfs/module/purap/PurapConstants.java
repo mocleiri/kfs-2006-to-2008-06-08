@@ -17,8 +17,6 @@ package org.kuali.module.purap;
 
 import java.util.HashMap;
 
-import org.kuali.Constants.ParameterValues;
-
 /**
  * Holds constants for PURAP.
  * 
@@ -103,17 +101,56 @@ public class PurapConstants {
         public static String IN_PROCESS = "INPR";
         public static String WAITING_FOR_VENDOR = "WVEN";
         public static String WAITING_FOR_DEPARTMENT = "WDPT";
-        //TODO: Do we need the rest of these in here?  They're in a table (PUR_PO_STAT_T).
+        public static String OPEN = "OPEN";
+        public static String CLOSED = "CLOS";
+        public static String CANCELLED = "CANC";
+        public static String PAYMENT_HOLD = "PHOL";
+        public static String AWAIT_TAX_APRVL = "WTAX";
+        public static String AWAIT_BUDGET_APRVL = "WBUD";
+        public static String AWAIT_CONTRACTS_GRANTS_APRVL = "WCG";
+        public static String AWAIT_PURCHASING_APRVL = "WPUR";
+        public static String AWAIT_SPECIAL_APRVL = "WSPC";
+        public static String DAPRVD_TAX = "DTAX";
+        public static String DAPRVD_BUDGET = "DBUD";
+        public static String DAPRVD_CONTRACTS_GRANTS = "DCG";
+        public static String DAPRVD_PURCHASING = "DPUR";
+        public static String DAPRVD_SPECIAL = "DSPC";
+        public static String CXML_ERROR = "CXER";
+        public static String PENDING_CXML = "CXPE";
+        public static String PENDING_FAX = "FXPE";
+        public static String PENDING_PRINT = "PRPE";
+        public static String QUOTE = "QUOT";
+        public static String VOID = "VOID";
+        public static String AMENDMENT = "AMND";
     }
     
+	
+    public static class ItemTypeCodes {
+        // ITEM TYPES
+        public static String ITEM_TYPE_ITEM_CODE = "ITEM";
+        public static String ITEM_TYPE_FREIGHT_CODE = "FRHT";
+        public static String ITEM_TYPE_SHIP_AND_HAND_CODE = "SPHD";
+        public static String ITEM_TYPE_TRADE_IN_CODE = "TRDI";
+        public static String ITEM_TYPE_ORDER_DISCOUNT_CODE = "ORDS";        
+    }
+    
+    public static class PurchaseOrderDocTypes {
+        public static String PURCHASE_ORDER_REOPEN_DOCUMENT  = "KualiPurchaseOrderReopenDocument";
+        public static String PURCHASE_ORDER_CLOSE_DOCUMENT  = "KualiPurchaseOrderCloseDocument";
+        public static String PURCHASE_ORDER_DOCUMENT  = "KualiPurchaseOrderDocument";
+    }
+
     private static HashMap<String, String> purchaseOrderDocTypes()
     {
         HashMap<String,String> mapSLF; 
         mapSLF =  new HashMap<String,String>();
-        mapSLF.put("KualiPurchaseOrderCloseDocument", "CloseServiceImpl");
-        mapSLF.put("KualiPurchaseOrderDocument", "");
+        mapSLF.put(PurchaseOrderDocTypes.PURCHASE_ORDER_CLOSE_DOCUMENT, "purchaseOrderPostProcessorCloseService");
+        mapSLF.put(PurchaseOrderDocTypes.PURCHASE_ORDER_REOPEN_DOCUMENT, "purchaseOrderPostProcessorReopenService");
+        mapSLF.put(PurchaseOrderDocTypes.PURCHASE_ORDER_DOCUMENT, "");
         return mapSLF;
     }
     public final static HashMap<String,String> PURCHASE_ORDER_DOC_TYPE_MAP =
                         purchaseOrderDocTypes();
+
+    public static final String REOPEN_PO_QUESTION = "ReOpenPO";
 }
