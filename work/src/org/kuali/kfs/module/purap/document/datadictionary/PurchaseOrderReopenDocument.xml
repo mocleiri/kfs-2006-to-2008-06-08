@@ -20,8 +20,8 @@
 <dictionaryEntry>
     <transactionalDocument>
         <documentClass>org.kuali.module.purap.document.PurchaseOrderDocument</documentClass>
-        <businessRulesClass>org.kuali.module.purap.rules.PurchaseOrderCloseDocumentRule</businessRulesClass>
-        <documentAuthorizerClass>org.kuali.module.purap.document.PurchaseOrderCloseDocumentAuthorizer</documentAuthorizerClass>
+        <businessRulesClass>org.kuali.module.purap.rules.PurchaseOrderReopenDocumentRule</businessRulesClass>
+        <documentAuthorizerClass>org.kuali.module.purap.document.PurchaseOrderReopenDocumentAuthorizer</documentAuthorizerClass>
         
         <authorizations>
             <authorization action="initiate">
@@ -31,16 +31,14 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiPurchaseOrderCloseDocument</documentTypeName>
-        <documentTypeCode>POC</documentTypeCode>
+        <documentTypeName>KualiPurchaseOrderReopenDocument</documentTypeName>
+        <documentTypeCode>POR</documentTypeCode>
 
-        <label>Close a Purchase Order</label>
-        <shortLabel>PurchaseOrderClose</shortLabel>
-               
-        <summary>Document used to Close a Purchase Order.</summary>
-        <description>The Purchase Order Close document, as distinct from the ordinary document close action,
-        	is used to do the additional things that need to be done to a Purchase Order to move it into
-        	a Final status of Closed.</description>
+        <label>Purchase Order Reopen</label>
+        <shortLabel>PurchaseOrderReopen</shortLabel>
+   
+        <summary>Document used for Purchase Order Reopen.</summary>
+        <description>The Purchase Order Reopen document is a...</description>
 
         <allowsCopy>false</allowsCopy>
         <allowsErrorCorrection>false</allowsErrorCorrection>
