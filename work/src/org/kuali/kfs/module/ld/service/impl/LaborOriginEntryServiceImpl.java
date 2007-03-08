@@ -333,7 +333,7 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
         }
         return this.getConsolidatedEntryCollectionByGroup(group).iterator();
     }
-
+    
     /**
      * @see org.kuali.module.labor.service.LaborOriginEntryService#getConsolidatedEntryCollectionByGroup(org.kuali.module.gl.bo.OriginEntryGroup, boolean)
      */
