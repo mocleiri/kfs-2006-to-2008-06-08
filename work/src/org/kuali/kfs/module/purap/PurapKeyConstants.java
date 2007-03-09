@@ -92,7 +92,7 @@ public class PurapKeyConstants {
     public static final String ERROR_REQ_COPY_EXPIRED_CONTRACT = "error.requisition.copy.expired.contract";
     public static final String ERROR_REQ_COPY_INACTIVE_VENDOR = "error.requisition.copy.inactive.vendor";
     public static final String ERROR_STIPULATION_DESCRIPTION = "error.purchaseOrder.stipulationDescriptionEmpty";
-    
+
 
     public static final String QUESTION_REOPEN_PO_DOCUMENT ="document.question.reopen.po.text";
     public static final String MESSAGE_ROUTE_REOPENED="message.route.reopened";
@@ -103,4 +103,5 @@ public class PurapKeyConstants {
     public static final String PURCHASE_ORDER_QUESTION_CLOSE_DOCUMENT = "purchaseOrder.question.close.text";
     public static final String PURCHASE_ORDER_CLOSE_NOTE_TEXT_INTRO = "purchaseOrder.message.close.noteTextIntro";
     public static final String ERROR_PURCHASE_ORDER_CLOSE_REASON_REQUIRED = "error.close.purchaseOrder.reasonRequired";
+
 }
