@@ -76,7 +76,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         }    
         return super.refresh(mapping, form, request, response);
     }
-    
+
     public ActionForward viewRelatedDocuments(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOG.debug("viewRelatedDocuments() enter action");
 
@@ -106,7 +106,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         if (question == null) {
             // ask question if not already asked
             return this.performQuestionWithInput(mapping, form, request, response, PurapConstants.REOPEN_PO_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.QUESTION_REOPEN_PO_DOCUMENT), Constants.CONFIRMATION_QUESTION, "CreatePOReopenDocument", "");
-        }
+        } 
         else {
             Object buttonClicked = request.getParameter(Constants.QUESTION_CLICKED_BUTTON);
             if ((PurapConstants.REOPEN_PO_QUESTION.equals(question)) && ConfirmationQuestion.NO.equals(buttonClicked)) {
@@ -131,7 +131,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
                         reason = "";
                     }
                     return this.performQuestionWithInputAgainBecauseOfErrors(mapping, form, request, response, PurapConstants.REOPEN_PO_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.QUESTION_REOPEN_PO_DOCUMENT), Constants.CONFIRMATION_QUESTION, "CreatePOReopenDocument", "", reason, KeyConstants.ERROR_DOCUMENT_DISAPPROVE_REASON_REQUIRED, Constants.QUESTION_REASON_ATTRIBUTE_NAME, new Integer(reasonLimit).toString());
-                }
+                } 
             }
         }
 
@@ -142,7 +142,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         kualiDocumentFormBase.setAnnotation("");
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
-
+    
     /**
      * Add a stipulation to the document.
      * 
