@@ -194,7 +194,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         if (sourceDocumentReferences.size()>= 1){
             Integer sourceDocumentReferenceGeneratedId = sourceDocumentReferences.get(0).getSourceDocumentReferenceGeneratedIdentifier();
             sourceDocumentReference.setSourceDocumentReferenceGeneratedIdentifier(sourceDocumentReferences.get(0).getSourceDocumentReferenceGeneratedIdentifier());
-        }
+    }
         String documentTypeName = SpringServiceLocator.getDataDictionaryService().getDocumentTypeNameByClass(this.getClass());
         String documentTypeCode = SpringServiceLocator.getDataDictionaryService().getDocumentTypeCodeByTypeName(documentTypeName);
         sourceDocumentReference.setSourceFinancialDocumentTypeCode(documentTypeCode);
@@ -643,13 +643,12 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
             if (sourceDocumentReferences.size()>= 1){
                 Integer sourceDocumentReferenceGeneratedId = sourceDocumentReferences.get(0).getSourceDocumentReferenceGeneratedIdentifier();
                 sourceDocumentReference.setSourceDocumentReferenceGeneratedIdentifier(sourceDocumentReferences.get(0).getSourceDocumentReferenceGeneratedIdentifier());
-            }
+}
             String documentTypeName = SpringServiceLocator.getDataDictionaryService().getDocumentTypeNameByClass(this.getClass());
             String documentTypeCode = SpringServiceLocator.getDataDictionaryService().getDocumentTypeCodeByTypeName(documentTypeName);
             sourceDocumentReference.setSourceFinancialDocumentTypeCode(documentTypeCode);
            // sourceDocumentReference.setSourceFinancialDocumentTypeCode("PO");
             // This line is giving this error:
-            
             //javax.servlet.ServletException: OJB operation; SQL []; ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
             // ; nested exception is java.sql.SQLException: ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
             String objID = this.getObjectId();
@@ -659,8 +658,8 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
             //sourceDocumentReferences = new TypedArrayList(SourceDocumentReference.class);
             sourceDocumentReferences.add(sourceDocumentReference);
             this.setSourceDocumentReferences(sourceDocumentReferences);
-    }        
-            
+    }
+
     public void toCopy(String docType) throws WorkflowException {
         TransactionalDocument newDoc = (TransactionalDocument) SpringServiceLocator.getDocumentService().getNewDocument(docType);
         newDoc.getDocumentHeader().setFinancialDocumentDescription(getDocumentHeader().getFinancialDocumentDescription());
@@ -668,11 +667,12 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
 
         try {
             ObjectUtils.setObjectPropertyDeep(this, PropertyConstants.DOCUMENT_NUMBER, documentNumber.getClass(), newDoc.getDocumentNumber());
-}
+        }
         catch (Exception e) {
             LOG.error("Unable to set document number property in copied document " + e.getMessage());
             throw new RuntimeException("Unable to set document number property in copied document " + e.getMessage());
         }
+        
         // replace current documentHeader with new documentHeader
         setDocumentHeader(newDoc.getDocumentHeader());
         
