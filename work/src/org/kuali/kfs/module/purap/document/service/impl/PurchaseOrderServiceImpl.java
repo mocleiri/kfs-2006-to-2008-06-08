@@ -177,7 +177,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         UniversalUser currentUser = GlobalVariables.getUserSession().getUniversalUser();
 
         return new DocumentAuthorizationException(currentUser.getPersonUserIdentifier(), action, document.getDocumentNumber());
-    }
+    } 
     /**
      * @see org.kuali.module.purap.service.PurchaseOrderService#convertDocTypeToService()
      */
@@ -188,7 +188,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         if(StringUtils.isNotEmpty(docType)) {
             popp=(PurchaseOrderPostProcessorService)SpringServiceLocator.getBeanFactory().getBean(docType);
         }
-        
+    
         return popp;
     }
 }
