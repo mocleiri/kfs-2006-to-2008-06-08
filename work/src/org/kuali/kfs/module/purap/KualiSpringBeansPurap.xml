@@ -108,7 +108,7 @@
             <ref bean="workflowDocumentService" />
         </property>
 	</bean>
-	
+
 	<!-- parent class, this is so we can override attributes if we add any later -->
 	<bean id="purchaseOrderPostProcessServiceBase" class="org.kuali.module.purap.service.impl.PurchaseOrderPostProcessorServiceBase" abstract="true">
 	</bean>
