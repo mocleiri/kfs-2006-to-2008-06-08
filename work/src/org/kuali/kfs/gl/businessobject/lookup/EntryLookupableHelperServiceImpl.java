@@ -25,10 +25,11 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.UniversityDate;
@@ -42,7 +43,6 @@ import org.kuali.module.gl.web.inquirable.InquirableFinancialDocument;
 public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EntryLookupableHelperServiceImpl.class);
 
-    private DateTimeService dateTimeService;
     private ScrubberValidator scrubberValidator;
     private EntryService entryService;
 
@@ -66,7 +66,7 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
     @Override
-    public String getInquiryUrl(PersistableBusinessObject businessObject, String propertyName) {
+    public String getInquiryUrl(BusinessObject businessObject, String propertyName) {
         if (PropertyConstants.DOCUMENT_NUMBER.equals(propertyName)) {
             if (businessObject instanceof Entry) {
                 Entry entry = (Entry) businessObject;
@@ -114,10 +114,10 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
         Iterator pendingEntryIterator = getGeneralLedgerPendingEntryService().findPendingLedgerEntriesForEntry(pendingEntryFieldValues, isApproved);
 
         String pendingOption = isApproved ? Constant.APPROVED_PENDING_ENTRY : Constant.ALL_PENDING_ENTRY;
-        UniversityDate today = dateTimeService.getCurrentUniversityDate();
+        UniversityDate today = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
         String currentFiscalPeriodCode = today.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = today.getUniversityFiscalYear();
-        Date postDate = dateTimeService.getCurrentSqlDate();
+        Date postDate = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
 
         while (pendingEntryIterator.hasNext()) {
             GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) pendingEntryIterator.next();
@@ -135,16 +135,7 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
             entryCollection.add(new Entry(pendingEntry, postDate));
         }
     }
-
-    /**
-     * Sets the dateTimeService attribute value.
-     * 
-     * @param dateTimeService The dateTimeService to set.
-     */
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
-    }
-
+    
     /**
      * Sets the scrubberValidator attribute value.
      * 

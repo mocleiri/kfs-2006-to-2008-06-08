@@ -22,9 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.Constants;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.batch.poster.BalanceCalculator;
 import org.kuali.module.gl.bo.Balance;
@@ -39,13 +40,12 @@ import org.kuali.module.gl.web.inquirable.CashBalanceInquirableImpl;
 public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
     private BalanceCalculator postBalance;
     private BalanceService balanceService;
-    private DateTimeService dateTimeService;
 
     /**
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
     @Override
-    public String getInquiryUrl(PersistableBusinessObject bo, String propertyName) {
+    public String getInquiryUrl(BusinessObject bo, String propertyName) {
         return (new CashBalanceInquirableImpl()).getInquiryUrl(bo, propertyName);
     }
 
@@ -138,7 +138,7 @@ public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupable
         // convert the field names of balance object into corresponding ones of pending entry object
         Map pendingEntryFieldValues = BusinessObjectFieldConverter.convertToTransactionFieldValues(fieldValues);
 
-        UniversityDate today = dateTimeService.getCurrentUniversityDate();
+        UniversityDate today = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
         String currentFiscalPeriodCode = today.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = today.getUniversityFiscalYear();
 
@@ -203,12 +203,4 @@ public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupable
         this.balanceService = balanceService;
     }
 
-    /**
-     * Sets the dateTimeService attribute value
-     * 
-     * @param dateTimeService The dateTimeService to set
-     */
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
-    }
 }
