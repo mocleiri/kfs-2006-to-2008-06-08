@@ -32,7 +32,6 @@ import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
-import org.kuali.module.purap.service.impl.PhoneNumberServiceImpl;
 
 public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumentRuleBase {
 

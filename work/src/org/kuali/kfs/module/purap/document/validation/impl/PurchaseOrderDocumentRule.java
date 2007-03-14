@@ -34,7 +34,6 @@ import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
-import org.kuali.module.purap.service.PhoneNumberService;
 
 public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
     
