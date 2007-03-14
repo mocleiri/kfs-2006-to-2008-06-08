@@ -150,11 +150,15 @@ public class PurapConstants {
         mapSLF =  new HashMap<String,String>();
         mapSLF.put(PurchaseOrderDocTypes.PURCHASE_ORDER_CLOSE_DOCUMENT, "purchaseOrderPostProcessorCloseService");
         mapSLF.put(PurchaseOrderDocTypes.PURCHASE_ORDER_REOPEN_DOCUMENT, "purchaseOrderPostProcessorReopenService");
-        mapSLF.put(PurchaseOrderDocTypes.PURCHASE_ORDER_DOCUMENT, "");
+        mapSLF.put(PurchaseOrderDocTypes.PURCHASE_ORDER_DOCUMENT, "purchaseOrderPostProcessorService");
         return mapSLF;
     }
     public final static HashMap<String,String> PURCHASE_ORDER_DOC_TYPE_MAP =
                         purchaseOrderDocTypes();
 
-    public static final String REOPEN_PO_QUESTION = "ReOpenPO";
+    public static class PODocumentsStrings {
+        public static String REOPEN_PO_QUESTION = "ReopenPO";
+        public static String CONFIRM_REOPEN_QUESTION = "ConfirmReopen";
+        public static String SINGLE_CONFIRMATION_QUESTION = "singleConfirmationQuestion";
+    }
 }
