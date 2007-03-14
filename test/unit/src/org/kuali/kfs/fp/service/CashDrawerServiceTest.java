@@ -15,10 +15,9 @@
  */
 package org.kuali.module.financial.service;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getBusinessObjectService;
 import static org.kuali.kfs.util.SpringServiceLocator.getCashDrawerService;
+import static org.kuali.rice.KNSServiceLocator.getBusinessObjectService;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
