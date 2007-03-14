@@ -28,7 +28,6 @@ import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.SpringServiceLocator;
@@ -38,6 +37,7 @@ import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.bo.BillingAddress;
+import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.bo.SourceDocumentReference;
 import org.kuali.module.purap.bo.VendorContract;
 import org.kuali.module.purap.bo.VendorDetail;
@@ -203,7 +203,6 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
         ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
 
         this.setPurapDocumentIdentifier(null);
-        //TODO what about id in items?
 
         // Set req status to INPR.
         this.setStatusCode(PurapConstants.RequisitionStatuses.IN_PROCESS);
@@ -249,9 +248,9 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
             this.setVendorDetailAssignedIdentifier(null);
             this.setVendorContractGeneratedIdentifier(null);
         }
-            if (!activeContract) {
+        if (!activeContract) {
             this.setVendorContractGeneratedIdentifier(null);
-            }
+        }
 
         // These fields should not be set in this method; force to be null
         this.setVendorNoteText(null);
@@ -308,7 +307,6 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
             if (SpringServiceLocator.getRequisitionService().isAutomaticPurchaseOrderAllowed(this)) {
                 newRequisitionStatus = PurapConstants.RequisitionStatuses.CLOSED;
                 PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(this);
-                //TODO how do we override the doc initiator?
                 try {
                     poDocument = (PurchaseOrderDocument)SpringServiceLocator.getDocumentService().routeDocument(poDocument, null, null);
                 }
@@ -593,6 +591,15 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
             sourceDocumentReferences.add(sourceDocumentReference);
            // String ObjID = this.getObjectId();
             
-     }   
+     }
+
+    /**
+     * @see org.kuali.module.purap.document.PurchasingDocumentBase#getItemClass()
+     */
+    @Override
+    public Class getItemClass() {
+        return RequisitionItem.class;
+    }   
+    
 }
 
