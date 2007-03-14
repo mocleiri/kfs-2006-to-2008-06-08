@@ -27,7 +27,6 @@ import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.util.SpringServiceLocator;
