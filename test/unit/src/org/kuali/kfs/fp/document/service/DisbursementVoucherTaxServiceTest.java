@@ -20,7 +20,7 @@ import java.util.List;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
+import static org.kuali.kfs.util.SpringServiceLocator.*;
 
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.SourceAccountingLine;

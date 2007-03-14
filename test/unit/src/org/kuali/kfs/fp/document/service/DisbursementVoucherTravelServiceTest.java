@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 
 import org.kuali.core.util.KualiDecimal;
 
-import static org.kuali.core.util.SpringServiceLocator.*;
+import static org.kuali.kfs.util.SpringServiceLocator.*;
 
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
 import org.kuali.test.KualiTestBase;
