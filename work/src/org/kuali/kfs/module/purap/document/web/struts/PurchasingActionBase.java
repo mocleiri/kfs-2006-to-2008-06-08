@@ -32,7 +32,6 @@ import org.kuali.module.purap.bo.VendorContract;
 import org.kuali.module.purap.bo.VendorDetail;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.purap.document.PurchasingDocumentBase;
-import org.kuali.module.purap.document.RequisitionDocument;
 import org.kuali.module.purap.service.PhoneNumberService;
 import org.kuali.module.purap.web.struts.form.PurchasingFormBase;
 
