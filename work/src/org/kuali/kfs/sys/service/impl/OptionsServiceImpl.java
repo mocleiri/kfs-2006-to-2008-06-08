@@ -15,7 +15,6 @@
  */
 package org.kuali.kfs.service.impl;
 
-import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.bo.Options;
 import org.kuali.kfs.dao.OptionsDao;
 import org.kuali.kfs.service.OptionsService;
