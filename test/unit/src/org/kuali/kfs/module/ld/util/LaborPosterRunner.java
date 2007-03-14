@@ -19,7 +19,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.labor.service.LaborPosterService;
 import org.springframework.beans.factory.BeanFactory;
