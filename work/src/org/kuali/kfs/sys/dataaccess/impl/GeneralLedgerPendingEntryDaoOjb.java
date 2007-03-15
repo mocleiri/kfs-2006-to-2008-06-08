@@ -32,7 +32,6 @@ import org.kuali.Constants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.lookup.LookupUtils;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
