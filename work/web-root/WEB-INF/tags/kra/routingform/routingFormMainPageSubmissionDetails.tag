@@ -195,7 +195,7 @@
 		              
 		              <c:forEach items = "${KualiForm.document.routingFormKeywords}" var="routingFormKeyword" varStatus="status"  >
 					  <tr>
-		                <td class="neutral"> <div align="left">
+		                <td class="nobord"> <div align="left">
 				    		<html:hidden property="document.routingFormKeywords[${status.index}].documentNumber" />
 				    		<html:hidden write="true" property="document.routingFormKeywords[${status.index}].routingFormKeywordDescription" />
 				    		<html:hidden property="document.routingFormKeywords[${status.index}].versionNumber" />
