@@ -15,6 +15,7 @@
  */
 package org.kuali.module.purap.web.struts.form;
 
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.purap.bo.PurchasingApItem;
 
