@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<project name="KualiLookupableImplDocumentation" 
+      basedir="." default="usage">
+    <property file="build.properties"/>
+
+    <property name="name" value="KualiLookupableImpleDoc"/>
+    <property name="build.dir" value="${kuali.doc.path}/${name}/build/"/>
+    <property name="dist.dir" value="${kuali.doc.path}/${name}/dist/"/>
+
+    <path id="master-classpath">
+        <fileset dir="${appserver.home}/common/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${kuali.lib.path}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${classpath}"/>
+    </path>
+
+    <target name="usage">
+        <echo message=""/>
+        <echo message="${name} build file"/>
+        <echo message="-----------------------------------"/>
+        <echo message=""/>
+        <echo message="Available targets are:"/>
+        <echo message=""/>
+        <echo message="build        --> Build the KualiLookupableImpl"/>
+        <echo message="                 Documentation"/>
+        <echo message=""/>
+    </target>
+
+    <target name="build">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/Diagrams"/>
+        <copy todir="${build.dir}/Diagrams" overwrite="true">
+            <fileset dir="Diagrams">
+                <filename name="**/*.eps"/>
+            </fileset>
+        </copy>
+        <exec executable="latex" dir="${build.dir}">
+            <arg line="../KualiLookupableImplProposal.tex"/>
+        </exec>
+
+        <exec executable="dvipdfm" dir="${build.dir}">
+            <arg line="KualiLookupableImplProposal"/>
+        </exec>
+
+        <copy todir="${dist.dir}/resources"
+               file="${build.dir}/KualiLookupableImplProposal.pdf" 
+          overwrite="true"/>
+
+        <!--
+        <exec executable="hyperlatex" dir="${build.dir}">
+            <arg line="../KualiLookupableImplProposal.tex"/>
+        </exec>
+        -->
+    </target>
+</project>

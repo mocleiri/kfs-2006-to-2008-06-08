@@ -1,0 +1,328 @@
+\documentclass[12pt]{article}
+\usepackage{hyperlatex}
+\usepackage[dvips]{graphicx}
+
+\htmltitle{Business Rules Validation for TransactionalDocuments}
+\htmladdress{przybylskil@arizona.edu}
+\htmldirectory{TransactionalDocumentBusinessRules}
+\htmlname{index}
+\htmlcss{../css/hlatex.css}
+
+\newcommand{\sourcehead}[1]
+ {\texorhtml{\sf}{\xml*{span class='cembedhead'}}#1\texorhtml{\rm}{\xml*{span class='cembedhead'}}}
+\newcommand{\source}[1]
+ {\texorhtml{\sf}{\xml*{span class='cembed'}}#1\texorhtml{\rm}{\xml*{span class='cembedhead'}}}
+\newcommand{\sourcefrag}[1]
+{\texorhtml{\sf}{\xml*{div class='source'}}#1\texorhtml{\rm}{\xml*{/div}}}
+
+\title{Business Rules Validation for \sourcehead{TransactionalDocument}s}
+\author{Leo Przybylski}
+
+\begin{document}
+  \maketitle
+  \tableofcontents
+  \listoffigures
+  
+  \section{Business Rules Validation Framework}
+  \texonly{\indent} If you are already relatively familiary with the validation
+  framework, then you might as well just skip this section. You only need to 
+  read this if you need a brief refresher or just skim over it for a basic
+  understanding.
+
+  Whenever an action is taken on a \source{TransactionalDocument}, an event
+  is created and handled by the \source{KualiRulesService}.
+  
+  \subsection{\sourcehead{AddAccountingLineEvent}}
+  This event occurs when an \source{AccountingLine} is added.
+
+  \subsection{\sourcehead{GeneratePendingEntriesEvent}}
+  This event occurs when pending entries are generated for the general ledger.
+  
+  \subsection{\sourcehead{RouteDocumentEvent}}
+  This event occurs when a \source{TransactionalDocument} is submitted for 
+  routing. Other events are really implicit to this one.
+  
+  \subsection{\sourcehead{SaveDocumentEvent}}
+  This event occurs when a \source{TransactionalDocument} is saved. To my
+  knowledge, only the \source{BursarControlScreen} is really going to use this
+  because it is never routed, so rules must be handled during save. Usually,
+  \source{TransactionalDocument} instances should be saved without any kind
+  of validation.
+
+  \subsection{\sourcehead{KualiRulesService}}
+    \texorhtml{\includegraphics[scale=0.60]{Diagrams/KualiRuleService_class.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }
+    
+  This is just an aggregation class for validating business rules against
+  business objects. \source{KualiRulesService} is notified when an
+  \source{Event} is to be handled. The \source{applyRules()} method does
+  all the work dealing with aggregation.
+
+  \subsection{\sourcehead{KualiRulesService}}
+  \texorhtml{\includegraphics[scale=0.60]{Diagrams/KualiRuleService_Relationships.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }  
+
+  \subsubsection{\source{applyRules()}}
+  There is an \source{applyRules()} method for every valid \source{Event}. For
+  example,
+  
+\sourcefrag{\begin{quote}public boolean applyRules(AddAccountingLineEvent event)\end{quote}}
+  
+  The above method describes an \source{applyRules()} definition that handles
+  an \source{AddAccountingLineEvent}. It returns a \source{boolean} primitive
+  type. This type refers to whether the rule passed when it was applied to the
+  \source{Document}.
+
+  \source{GeneratePendingEntriesRule} is the only rule that requires a
+  \source{TransactionalDocument} making it specifically a
+  \source{TransactionalDocument} rule. The other rules reference a
+  \source{Document}, so they are not.
+  
+  \subsection{\sourcehead{AddAccountingLineRule}}
+  \texorhtml{\includegraphics[scale=0.60]{Diagrams/AddAccountingLineRule_Class.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }  
+
+  This rule is used for \source{AddAccountingLineEvent} occurrences.
+  
+  \subsubsection{\source{processAddAccountingLine()}}
+  \sourcefrag{\begin{quote}public boolean processAddAccountingLine(Document document, AccountingLine accountingLine)\end{quote}}
+
+  \subsection{\sourcehead{GeneratePendingEntriesRule}}
+  \texorhtml{\includegraphics[scale=0.45]{Diagrams/GeneratePendingEntriesRule_Class.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }  
+
+  This rule is used for \source{GeneratePendingEntriesEvent} occurrences.
+
+  \subsubsection{\source{processGeneratePendingEntries()}}
+  \sourcefrag{\begin{quote}public boolean processGeneratePendingEntries(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntrySequenceHelper sequenceHelper)\end{quote}}
+
+  \subsection{\sourcehead{RouteDocumentRule}}
+  \texorhtml{\includegraphics[scale=0.60]{Diagrams/RouteDocumentRule_Class.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }  
+
+  This rule is used for \source{RouteDocumentEvent} occurrences.
+
+  \subsubsection{\source{processRouteDocument()}}
+  \sourcefrag{\begin{quote}public boolean processRouteDocument(Document document)\end{quote}}
+
+  \subsection{\sourcehead{SaveDocumentRule}}
+  \texorhtml{\includegraphics[scale=0.60]{Diagrams/SaveDocumentRule_Class.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }  
+
+  This rule is used for \source{SaveDocumentEvent} occurrences.
+
+  \subsubsection{\source{processSaveDocument()}}
+  \sourcefrag{\begin{quote}public boolean processSaveDocument(Document document)\end{quote}}
+
+  \section{\sourcehead{TransactionalDocument } \emph{Business Objects}}
+  To reduce code duplication and add orthogonality to the framework, the
+  \source{TransactionalDocumentRuleBase} was created. It is most likely that
+  this class will be used when creating \emph{business rules} because most of
+  the \emph{business rules} interfaces promote use of 
+  \source{TransactionalDocument} which is what 
+  \source{TransactionalDocumentRuleBase} is intended to supply base rules 
+  functionality for.
+
+  Simply put, if you're reading this, you want to use the 
+  \source{TransactionalDocumentRuleBase}.
+
+  This section is about how to use \source{TransactionalDoucmentRuleBase} 
+  effectively. \source{TransactionalDocumentRuleBase} covers most of what 
+  one would ever need to do as far as \emph{Kuali Business Rules}, but not all 
+  \source{TransactionalDocument} definitions are the same. Many, of course,
+  have their own special needs. Ways to fulfill the rules for those special
+  needs as well as making the most out of 
+  \source{TransactionalDocumentRuleBase} is what this section is all about.
+
+  There are examples of simple implementations of 
+  \source{TransactionalDocumentRuleBase}, and also some examples
+  of how to properly override methods of \source{TransactionalDocumentRuleBase}
+  for special needs.
+  
+
+  \subsection{\sourcehead{TransactionalDocumentRuleBase} Abstraction}
+  \texorhtml{\includegraphics[scale=0.50]{Diagrams/TransactionalDocumentRuleBase_Relationships.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }  
+
+  \source{TransactionalDocumentRuleBase} is a base implementation of
+  the \emph{Business Rules Validation Framework} interfaces
+  \source{AddAccountingLineRule}, \source{GeneratePendingEntriesRule},
+  \source{RouteDocumentRule}, and \source{SaveDocumentRule}.
+
+  \subsubsection{Under the Hood}
+  \texorhtml{\includegraphics[scale=0.50]{Diagrams/KualiTransactionalDocumentActionBase_Sequence.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }
+
+  The above shows how an \source{AddAccountingLineEvent} is handled using
+  an \source{AddAccountingLineRule}. Notice \source{AccountingLine} instances
+  are created and handled throught the \emph{Struts} Framework.
+  \newpage
+
+  \texorhtml{\includegraphics[scale=0.50]{Diagrams/KualiRuleServiceRouteDocument_Sequence.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }
+  
+  This model shows how \source{RouteDocumentEvent} instances are handled. 
+  \source{SaveDocumentEvent} instances are handled almost exactlyt the same,
+  just with a different rule.
+  \newpage
+
+  \texorhtml{\includegraphics[scale=0.40]{Diagrams/KualiRuleServiceGLPE_Sequence.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }
+
+  As illustrated above, the \source{DocumentService} triggers 
+  \source{GeneralLedgerPendingEntry} instances to be generated upon routing.
+  The called \source{GeneralLedgerPendingEntryService} handles the 
+  \source{GeneratePendingEntriesEvent} by passing it to the 
+  \source{KualiRuleService}. You may recognize the \source{validateDocument()}
+  method that is called early on. This is the same one as illustrated before
+  that handles the \source{RouteDocumentEvent}.
+
+
+  \subsection{Getting Started with \sourcehead{TransactionalDocumentRuleBase}}
+  \subsubsection{Embedded Codes}
+  \texorhtml{\includegraphics[scale=0.35]{Diagrams/TransactionalDocumentRuleBase_Inner.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }  
+
+  A lot of work is already done. Code definitions are embedded into the
+  \source{TransactionalDocumentRuleBase} as inner classes.
+  \begin{itemize}
+    \item \source{TransactionalDocumentRuleBase.CONSOLIDATED\_OBJECT\_CODE}
+    \item \source{TransactionalDocumentRuleBase.FUND\_GROUP\_CODE}
+    \item \source{TransactionalDocumentRuleBase.GENERAL\_LEDGER\_PENDING\_ENTRY\_CODE}
+    \item \source{TransactionalDocumentRuleBase.OBJECT\_CODE}
+    \item \source{TransactionalDocumentRuleBase.OBJECT\_LEVEL\_CODE}
+    \item \source{TransactionalDocumentRuleBase.OBJECT\_SUB\_TYPE\_CODE}
+    \item \source{TransactionalDocumentRuleBase.OBJECT\_TYPE\_CODE}
+    \item \source{TransactionalDocumentRuleBase.SUB\_FUND\_GROUP\_CODE}
+  \end{itemize}
+
+  \subsubsection{Methods to Override}
+  \texorhtml{\includegraphics[scale=0.55]{Diagrams/TransactionalDocumentRuleBase_Overrides.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }
+  The above is a class model view of \source{TransactionalDocumentRuleBase}
+  illustrating which methods are suggested to be overidden for customization
+  of \source{TransactionalDocumentRuleBase}.
+
+  \subsubsection{Helper Methods}
+  \texorhtml{\includegraphics[scale=0.65]{Diagrams/TransactionalDocumentRuleBase_Helpers.eps}}{
+    \htmlimg{../Diagrams/InternalBillingDocument_class.png}
+  }  
+
+  Helper methods exist to easily analyzing the state of
+  \source{TransactionalDocument} and \source{AccountingLine} instances. There
+  are factory methods for generating \source{GeneralLedgerPendingEntry} 
+  instances, and there are also embedded default rule definitions for handling
+  each of the business rule classifications (\source{AddAccountingLineRule}, 
+  \source{GeneratePendingEntriesRule}, \source{RouteDocumentRule}, or 
+  \source{SaveDocumentRule})
+  
+  \subsubsection{Implicit Rules}
+  It's important to know what the implicit rules are because these define the
+  default behavior of the \source{TransactionalDocumentRuleBase}.
+
+  \subsection{\sourcehead{NonCheckDisbursementDocumentRule}: Case Study of a Basic Implementation}
+  This is a good example of how \source{TransactionalDocumentRuleBase} covers
+  a majority of the rules for a \source{TransactionalDocument}. The only 
+  method that required overriding was:
+
+  \sourcefrag{\begin{quote}protected boolean processCustomAddAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine )\end{quote}}
+
+  The overridden method simply validates the \source{AccountingLine} by
+  comparing characteristics with contents of statically defined 
+  \source{TreeSet} instances.
+\begin{verbatim}
+private static final Set _invalidObjectTypes = new TreeSet();
+private static final Set _invalidSubTypes = new TreeSet();
+private static final Set _invalidSubFundGroupTypes = new TreeSet();
+...
+...
+static {
+    _invalidObjectTypes.add(OBJECT_TYPE_CODE.INCOME_NOT_CASH);
+    _invalidObjectTypes.add(OBJECT_TYPE_CODE.EXPENSE_NOT_EXPENDITURE);
+
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.BUDGET_ONLY);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.CASH);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.SUBTYPE_FUND_BALANCE);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.HOURLY_WAGES);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.PLANT);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.SALARIES);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.VALUATIONS_AND_ADJUSTMENTS);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.RESERVES);
+    _invalidSubTypes.add(OBJECT_TYPE_CODE.MANDATORY_TRANSFERS);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.FRINGE_BEN);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.COST_RECOVERY_EXPENSE);
+    _invalidSubFundGroupTypes.add(SUB_FUND_GROUP_CODE.RENEWAL_AND_REPLACEMENT);
+}
+...
+...
+    retval &= !getInvalidObjectTypes()
+        .contains( getObjectType() );
+    retval &= !getInvalidSubTypes()
+        .contains( getObjectSubType() );
+    retval &= !getInvalidSubFundGroupTypes()
+        .contains( getSubFundGroupCode() );
+...
+...
+\end{verbatim}
+The method implementation is generic. What sets it apart from other rules are
+the static definitions.
+\begin{verbatim}
+...
+...
+static {
+    _invalidObjectTypes.add(OBJECT_TYPE_CODE.INCOME_NOT_CASH);
+    _invalidObjectTypes.add(OBJECT_TYPE_CODE.EXPENSE_NOT_EXPENDITURE);
+
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.BUDGET_ONLY);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.CASH);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.SUBTYPE_FUND_BALANCE);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.HOURLY_WAGES);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.PLANT);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.SALARIES);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.VALUATIONS_AND_ADJUSTMENTS);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.RESERVES);
+    _invalidSubTypes.add(OBJECT_TYPE_CODE.MANDATORY_TRANSFERS);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.FRINGE_BEN);
+    _invalidSubTypes.add(OBJECT_SUB_TYPE_CODE.COST_RECOVERY_EXPENSE);
+    _invalidSubFundGroupTypes.add(SUB_FUND_GROUP_CODE.RENEWAL_AND_REPLACEMENT);
+}
+...
+...
+\end{verbatim}
+
+The static definitions vary based-on the rules. Also, you can easily see the 
+value of the embedded codes.
+
+  \subsection{\sourcehead{AuxillaryVoucherDocumentRule}: Case Study of a Customized Implementation}
+  Sometimes, a \source{TransactionalDocument} is just too different from other
+  \source{Document} definitions and so are the rules. In order to get the 
+  desired rules functionality, \source{AuxilaryVoucherDocumentRule} needed to
+  override a number of methods.
+
+  I won't go into detail the source code, but I will briefly describe why
+  each was overridden.
+
+  \subsubsection{\sourcehead{getPendingEntryAmountFor()}}
+  \subsubsection{\sourcehead{customizeExplicitPendingEntry()}}
+  \subsubsection{\sourcehead{customizeOffsetPendingEntry()}}
+  \subsubsection{\sourcehead{processCustomGeneratePendingEntriesBusinessRules()}}
+  \subsubsection{\sourcehead{isDebit()}}
+  \subsubsection{\sourcehead{processCustomAddAccountingLineBusinessRules()}}
+  \subsubsection{\sourcehead{processCustomRouteDocumentBusinessRules()}}
+
+  In short, \source{AuxillaryVoucherDocumentRule} disagreed with the implicitly
+  defined rules of \source{TransactionalDocumentRuleBase}.
+
+\end{document}

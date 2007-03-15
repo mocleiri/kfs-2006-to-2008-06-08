@@ -1,0 +1,92 @@
+\documentclass[12pt,notitlepage]{article}
+\author{Leo Przybylski \\
+\texttt{przybylskil@arizona.edu}}
+\title{Inheritance vs. Encapsulation}
+
+\begin{document}
+  \maketitle
+  \begin{abstract}
+    There are some instances in \emph{Kuali Financial System} where Inheritance is possibly misused where Encapsulation may have not
+    only been a better fit, but may have also lessened or even eliminated the need for refactoring. This document explains how Encapsulation
+    can mitigate the need for future refactorings. Inheritance as it is now in Java limits modularity and orthogonal design.
+  \end{abstract}
+  
+  \section{\hfill Introduction}
+  \hrulefill
+  \\
+  \begin{quote}
+  For all things object-oriented, the conceptual framework is the \emph{object model}. --Grady Booch ~\cite{gbone}
+  \end{quote}
+  
+  The object model Grady Booch refers to is made up of \emph{Abstraction}, \emph{Encapsulation}, \emph{Modularity}, and \emph{Hierarchy}.
+  People have different ideas about what inheritance is. It is important to establish such definitions to have a clear understanding
+  of what is being discussed. For this document, I use the following definitions:
+  \begin{description}
+    \item[Inheritance] is if and only if the \texttt{extends} directive is used with the \texttt{class} or \texttt{interface} clause. 
+      It is important to understand that Java does not support multiple-inheritance even though it does support polymorphism. Implementing 
+      an interface does not constitute inheritance. 
+
+      See the following example:
+      \begin{verbatim}
+public abstract class AbstractGLLookupableHelperServiceImpl 
+                extends AbstractLookupableHelperServiceImpl {
+    // ...
+}
+      \end{verbatim}
+
+      \begin{quote}
+        Semantically, inheritance denotes an ``is-a'' relationship. \ldots 
+        Inheritance thus implies a genralization/specialization hierarchy, 
+        wherein a subclass specializes the more general structure or behavior of its superclasses. --Grady Booch ~\cite{gbtwo}
+      \end{quote}
+      
+      Based on the above quote from Grady Booch, we can assume that inheritance forms a kind of hierarchy which is an element in the 
+      \emph{object model}.
+
+      Java does not support multiple-inheritance. The only hierarchy choice is for single-inheritance through the \texttt{extends} clause as
+      described above. Simply put:
+      \begin{description}
+      \item[Single-Inheritance] is when one class inherits from a single superclass. The visual representation of such a hierarchy always looks
+        like a tree.
+      \end{description}
+
+    \item[Encapsulation] is a technique of enclosing class functionality through object instances within another class. Many 
+      design patterns employ encapsulation. Among these patterns are Delegate/Aggregate, Composite, Decorator, and Adapter. Some may know these
+      patterns by other names. Encapsulation can be by implementation (as in implementing and abstraction,) or aggregation.  Grady Booch 
+      calls aggregation a ``part of'' relationship.
+  \end{description}
+
+  In simple terms, inheritance and encapsulation are both intended for implementation. Inheritance can be called an ``is a'' relationship, and
+  encapsulation can be called a ``part of'' relationship type. Inheritance and encapsulation are both complementary to abstraction.
+
+  \subsection{What is the Problem?}
+  The problem is that Java supports polymorphism, but not multiple-inheritance. As a result due to the lack of multiple-inheritance, Java 
+  developers have designed object-oriented patterns to sidestep single-polymorphism. Single-inheritance creates a single hierarchy that 
+  resembles a tree where there is only one class at the very top. Eg., for \sf Java\rm, the \texttt{Object} class is the top-most class in the hierarchy.
+  
+  My Points:
+  \begin{itemize}
+    \item Java only has single-inheritance
+    \item In order to achieve polymorphism and somewhat multi-inheritance, Java uses \texttt{interfaces}.
+    \item Interfaces are abstractions
+    \item Java has a confusing \texttt{abstract} class
+  \end{itemize}
+  \subsection{Topics}
+  \begin{itemize}
+    \item When to use Inheritance?
+    \item When to use Encapsulation?
+    \item What are examples of Encapsulation in Kuali
+    \item What are patterns of bad uses of Inheritance?
+    \item Why?
+  \end{itemize}
+
+  \section{\hfill Inheritance is Part of OOP. Doesn't that Make it a Good Thing?}
+  \hrulefill
+
+  \section{\hfill Encapsulation is Also Part of OOP, but Why is it Better than Inheritance?}
+  \hrulefill
+  \begin{thebibliography}{20}
+    \bibitem{gbone} ~Object-Oriented Analysis and Design, Grady Booch, (2000) 
+    \bibitem{gbtwo} ~Object-Oriented Analysis and Design, Grady Booch, (2000) 
+  \end{thebibliography}
+\end{document}
