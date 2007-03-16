@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service.impl;
 
@@ -24,27 +31,28 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.IteratorUtils;
+import org.kuali.core.bo.user.Options;
+import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.OptionsService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.TransactionalServiceUtils;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.service.OptionsService;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.GlSummary;
 import org.kuali.module.gl.dao.BalanceDao;
 import org.kuali.module.gl.service.BalanceService;
 import org.kuali.module.gl.util.OJBUtility;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * 
  * This class is the OJB implementation of the Balance Service
+ * 
+ * @author Randall P. Embry (rpembry@indiana.edu)
  */
-@Transactional
 public class BalanceServiceImpl implements BalanceService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceServiceImpl.class);
 
     protected BalanceDao balanceDao;
+    protected DateTimeService dateTimeService;
     protected OptionsService optionsService;
 
     // must have no asset, liability or fund balance balances other than object code 9899
@@ -104,7 +112,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public Iterator<Balance> findBalancesForFiscalYear(Integer fiscalYear) {
 
-        return (Iterator<Balance>) TransactionalServiceUtils.copyToExternallyUsuableIterator(balanceDao.findBalancesForFiscalYear(fiscalYear));
+        return (Iterator<Balance>) balanceDao.findBalancesForFiscalYear(fiscalYear);
     }
 
     /**
@@ -112,7 +120,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public boolean hasAssetLiabilityFundBalanceBalances(Account account) {
 
-        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
+        Integer fiscalYear = dateTimeService.getCurrentFiscalYear();
         ArrayList fundBalanceObjectCodes = new ArrayList();
         fundBalanceObjectCodes.add(null == account.getChartOfAccounts() ? null : account.getChartOfAccounts().getFundBalanceObjectCode());
         Iterator balances = balanceDao.findBalances(account, fiscalYear, null, fundBalanceObjectCodes, wrap(getAssetLiabilityFundBalanceBalanceTypeCodes()), wrap(getActualBalanceCodes()));
@@ -192,7 +200,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     protected KualiDecimal incomeBalances(Account account) {
 
-        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
+        Integer fiscalYear = dateTimeService.getCurrentFiscalYear();
 
         ArrayList fundBalanceObjectCodes = new ArrayList();
         fundBalanceObjectCodes.add(account.getChartOfAccounts().getFundBalanceObjectCode());
@@ -216,7 +224,7 @@ public class BalanceServiceImpl implements BalanceService {
 
     protected KualiDecimal expenseBalances(Account account) {
 
-        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
+        Integer fiscalYear = dateTimeService.getCurrentFiscalYear();
         Iterator balances = balanceDao.findBalances(account, fiscalYear, null, null, wrap(getExpenseObjectTypeCodes()), wrap(getActualBalanceCodes()));
 
         return sumBalances(balances);
@@ -249,7 +257,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public boolean hasEncumbrancesOrBaseBudgets(Account account) {
 
-        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
+        Integer fiscalYear = dateTimeService.getCurrentFiscalYear();
         Iterator balances = balanceDao.findBalances(account, fiscalYear, null, null, null, wrap(getEncumbranceBaseBudgetBalanceTypeCodes()));
 
         return sumBalances(balances).isNonZero();
@@ -280,6 +288,10 @@ public class BalanceServiceImpl implements BalanceService {
         this.balanceDao = balanceDao;
     }
 
+    public void setDateTimeService(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;
+    }
+
     public void setOptionsService(OptionsService optionsService) {
         this.optionsService = optionsService;
     }
@@ -289,8 +301,8 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public Iterator findCashBalance(Map fieldValues, boolean isConsolidated) {
         LOG.debug("findCashBalance() started");
-        
-        return TransactionalServiceUtils.copyToExternallyUsuableIterator(balanceDao.findCashBalance(fieldValues, isConsolidated));
+
+        return balanceDao.findCashBalance(fieldValues, isConsolidated);
     }
 
     /**
@@ -316,7 +328,8 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public Iterator findBalance(Map fieldValues, boolean isConsolidated) {
         LOG.debug("findBalance() started");
-        return TransactionalServiceUtils.copyToExternallyUsuableIterator(balanceDao.findBalance(fieldValues, isConsolidated));
+
+        return balanceDao.findBalance(fieldValues, isConsolidated);
     }
 
     /**
@@ -352,7 +365,7 @@ public class BalanceServiceImpl implements BalanceService {
     /**
      * Private method to load the values from the system options service and store them locally for later use.
      * 
-     * 
+     * @author jkeller
      */
     private void loadConstantsFromOptions() {
         LOG.debug("loadConstantsFromOptions() started");
