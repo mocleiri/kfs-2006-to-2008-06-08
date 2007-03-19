@@ -64,23 +64,23 @@
         </property>
     </bean>
 
-    <bean id="organizationReversionDao" class="org.kuali.module.chart.dao.ojb.OrganizationReversionDaoOjb" parent="platformAwareDao" />
+    <bean id="organizationReversionDao" class="org.kuali.module.chart.dao.ojb.OrganizationReversionDaoOjb" parent="platformAwareDaoOjb" />
 
-    <bean id="balanceTypeDao" class="org.kuali.module.chart.dao.ojb.BalanceTypeDaoOjb" parent="platformAwareDao" />
+    <bean id="balanceTypeDao" class="org.kuali.module.chart.dao.ojb.BalanceTypeDaoOjb" parent="platformAwareDaoOjb" />
 
-    <bean id="priorYearAccountDao" class="org.kuali.module.chart.dao.ojb.PriorYearAccountDaoOjb" parent="platformAwareDao" />
+    <bean id="priorYearAccountDao" class="org.kuali.module.chart.dao.ojb.PriorYearAccountDaoOjb" parent="platformAwareDaoOjb" />
 
-    <bean id="subFundGroupDao" class="org.kuali.module.chart.dao.ojb.SubFundGroupDaoOjb" parent="platformAwareDao" />
+    <bean id="subFundGroupDao" class="org.kuali.module.chart.dao.ojb.SubFundGroupDaoOjb" parent="platformAwareDaoOjb" />
 
-    <bean id="objectTypeDao" class="org.kuali.module.chart.dao.ojb.ObjectTypeDaoOjb" parent="platformAwareDao" />
+    <bean id="objectTypeDao" class="org.kuali.module.chart.dao.ojb.ObjectTypeDaoOjb" parent="platformAwareDaoOjb" />
 
-    <bean id="icrAutomatedEntryDao" class="org.kuali.module.chart.dao.ojb.IcrAutomatedEntryDaoOjb" parent="platformAwareDao" />
+    <bean id="icrAutomatedEntryDao" class="org.kuali.module.chart.dao.ojb.IcrAutomatedEntryDaoOjb" parent="platformAwareDaoOjb" />
 
-    <bean id="indirectCostRecoveryExclusionAccountDao" class="org.kuali.module.chart.dao.ojb.IndirectCostRecoveryExclusionAccountDaoOjb" parent="platformAwareDao" />
+    <bean id="indirectCostRecoveryExclusionAccountDao" class="org.kuali.module.chart.dao.ojb.IndirectCostRecoveryExclusionAccountDaoOjb" parent="platformAwareDaoOjb" />
 
-    <bean id="indirectCostRecoveryExclusionTypeDao" class="org.kuali.module.chart.dao.ojb.IndirectCostRecoveryExclusionTypeDaoOjb" parent="platformAwareDao" />
+    <bean id="indirectCostRecoveryExclusionTypeDao" class="org.kuali.module.chart.dao.ojb.IndirectCostRecoveryExclusionTypeDaoOjb" parent="platformAwareDaoOjb" />
 
-    <bean id="a21SubAccountDao" class="org.kuali.module.chart.dao.ojb.A21SubAccountDaoOjb" parent="platformAwareDao" />
+    <bean id="a21SubAccountDao" class="org.kuali.module.chart.dao.ojb.A21SubAccountDaoOjb" parent="platformAwareDaoOjb" />
 
     <bean id="workflow-org.kuali.module.chart.bo.Chart-Lookupable" parent="workflowLookupable" singleton="false">
         <property name="businessObjectClassName">
