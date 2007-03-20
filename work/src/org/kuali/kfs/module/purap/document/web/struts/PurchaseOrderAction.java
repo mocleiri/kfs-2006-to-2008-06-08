@@ -127,7 +127,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
 
                     // get note text max length from DD
                     int noteTextMaxLength = SpringServiceLocator.getDataDictionaryService().getAttributeMaxLength(Note.class, 
-                        Constants.DOCUMENT_NOTE_TEXT_PROPERTY_NAME).intValue();
+                        Constants.NOTE_TEXT_PROPERTY_NAME).intValue();
 
                     if (StringUtils.isBlank(reason) || (closingNoteTextLength > noteTextMaxLength)) {
                         // figure out exact number of characters that the user can enter
@@ -189,7 +189,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
                 int introNoteMessageLength = introNoteMessage.length();
 
                 // get note text max length from DD
-                int noteTextMaxLength = SpringServiceLocator.getDataDictionaryService().getAttributeMaxLength(Note.class, Constants.DOCUMENT_NOTE_TEXT_PROPERTY_NAME).intValue();
+                int noteTextMaxLength = SpringServiceLocator.getDataDictionaryService().getAttributeMaxLength(Note.class, Constants.NOTE_TEXT_PROPERTY_NAME).intValue();
 
                 if (StringUtils.isBlank(reason) || (introNoteMessageLength > noteTextMaxLength)) {
                     // figure out exact number of characters that the user can enter
@@ -205,9 +205,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         }
 
         PurchaseOrderDocument po = (PurchaseOrderDocument)kualiDocumentFormBase.getDocument();
-        //SpringServiceLocator.getPurchaseOrderService().updateFlagsAndRoute(po, "KualiPurchaseOrderReopenDocument", kualiDocumentFormBase.getAnnotation(), combineAdHocRecipients(kualiDocumentFormBase));
-        String documentTypeName = po.getDocumentHeader().getWorkflowDocument().getDocumentType();
-        SpringServiceLocator.getPurchaseOrderService().updateFlagsAndRoute(po, documentTypeName, kualiDocumentFormBase.getAnnotation(), combineAdHocRecipients(kualiDocumentFormBase));
+        SpringServiceLocator.getPurchaseOrderService().updateFlagsAndRoute(po, PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_REOPEN_DOCUMENT, kualiDocumentFormBase.getAnnotation(), combineAdHocRecipients(kualiDocumentFormBase));
         GlobalVariables.getMessageList().add(PurapKeyConstants.MESSAGE_ROUTE_REOPENED);
         kualiDocumentFormBase.setAnnotation("");
         return this.performQuestionWithoutInput(mapping, form, request, response, PurapConstants.PODocumentsStrings.CONFIRM_REOPEN_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_ROUTE_REOPENED), PurapConstants.PODocumentsStrings.SINGLE_CONFIRMATION_QUESTION, Constants.ROUTE_METHOD, "");
