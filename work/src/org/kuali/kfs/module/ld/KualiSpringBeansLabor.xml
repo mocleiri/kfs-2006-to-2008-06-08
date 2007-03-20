@@ -266,8 +266,8 @@
 			<ref bean="laborPosterService" />
 		</property>
 	</bean>    
-	
-	 <bean id="CSFTrackerBalanceLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
+		
+	<bean id="CSFTrackerBalanceLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
 		<property name="lookupableHelperService">
 			<ref bean="CSFTrackerBalanceLookupableHelperService" />
 		</property>
@@ -293,4 +293,17 @@
 			<ref bean="dataDictionaryService" />
 		</property>
 	</bean>    	
+
+	<bean id="laborDao" class="org.kuali.module.labor.dao.ojb.LaborDaoOjb">
+		<property name="jcdAlias">
+			<value>dataSource</value>
+		</property>
+	</bean>
+	
+	<bean id="laborBalanceInquiryService" class="org.kuali.module.labor.service.impl.LaborBalanceInquiryServiceImpl" singleton="false">
+	<property name="laborDao">
+			<ref bean="laborDao" />
+		</property>
+	</bean>    	
+	
 </beans>
