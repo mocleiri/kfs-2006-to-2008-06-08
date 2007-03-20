@@ -632,15 +632,10 @@
 		<copy todir="${licenses.directory}/kew">
 			<fileset dir="${workflow.project.directory}/${licenses.directory}" />
 		</copy>
-		<!--<ant dir="${workflow.project.directory}" target="bundle-workflow" inheritall="false">
-			<propertyset refid="${workflow.application}-properties" />
-		</ant>
-		<copy file="${workflow.project.directory}/dist/workflow_${workflow.version}.zip" tofile="${dependencies.project.directory}/workflow-${workflow.version}-src.zip" overwrite="true"/>
-		<ant dir="${workflow.project.directory}" target="clean" inheritall="false"/>
-		<ant dir="${workflow.project.directory}" target="javadoc" inheritall="false">
-			<propertyset refid="${workflow.application}-properties" />
-		</ant>
-		<zip destfile="${dependencies.project.directory}/workflow-${workflow.version}-doc.zip" basedir="${workflow.project.directory}/dist/api" />-->
+		<delete dir="${database.workflow.file.directory}" failonerror="false" />
+		<copy todir="${database.workflow.file.directory}">
+			<fileset dir="${workflow.project.directory}/conf" includes="ddl/**/**" />
+		</copy>
 	</target>
 	
 	<target name="update-cas" depends="init-project-properties">
