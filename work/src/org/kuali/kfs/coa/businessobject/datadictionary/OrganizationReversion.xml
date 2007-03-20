@@ -19,12 +19,14 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.OrganizationReversion">
-        <customAttributeEnabled>true</customAttributeEnabled>
+
 
         <inquiry>
             <title>Organization Reversion Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquirySections>
+            	<inquirySection title="Header Text">
+            		<inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="organizationCode" />
@@ -33,10 +35,19 @@
                 <field attributeName="cashReversionFinancialChartOfAccountsCode" />
                 <field attributeName="cashReversionAccountNumber" />
                 <field attributeName="carryForwardByObjectCodeIndicator" />
-
-
-
-            </inquiryFields></inquirySection></inquirySections>
+            		</inquiryFields>
+            	</inquirySection>
+            	<inquirySection title="Organization Reversion Details">
+            		<inquiryFields>
+            			<inquiryCollection name="organizationReversionDetail" businessObjectClass="org.kuali.module.chart.bo.OrganizationReversionDetail">
+            				<field attributeName="organizationReversionCategoryCode" />
+                			<field attributeName="organizationReversionObjectCode" />
+                			<field attributeName="organizationReversionObject.financialObjectCodeName" />
+                			<field attributeName="organizationReversionCode" />
+            			</inquiryCollection>
+            		</inquiryFields>
+            	</inquirySection>
+            </inquirySections>
         </inquiry>
 
         <lookup>
