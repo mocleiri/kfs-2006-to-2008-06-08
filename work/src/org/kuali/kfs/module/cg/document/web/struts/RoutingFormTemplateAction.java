@@ -25,7 +25,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
 import org.kuali.core.document.Copyable;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk;
 import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
@@ -59,6 +61,8 @@ public class RoutingFormTemplateAction extends RoutingFormAction {
         // Clear Research Risks
         routingFormDoc.setRoutingFormResearchRisks(new ArrayList<RoutingFormResearchRisk>());
         
+        ObjectUtils.materializeSubObjectsToDepth(routingFormDoc, 2);
+        
         // Clear Link to Budget if it exists.
         routingForm.getRoutingFormDocument().setRoutingFormBudgetNumber(null);
         routingForm.getRoutingFormDocument().getRoutingFormBudget().setRoutingFormBudgetMinimumPeriodNumber(null);
@@ -73,12 +77,12 @@ public class RoutingFormTemplateAction extends RoutingFormAction {
         
 //      Check if ad-hoc permissions to be copied over
         if (!routingForm.isTemplateAdHocPermissions()) {
-            // Clear permissions
+            routingFormDoc.clearAdhocType(KraConstants.AD_HOC_PERMISSION);
         }
         
-//      Check if budget fringe rates to be copied over
+//      Check if ad-hoc approvers to be copied over
         if (!routingForm.isTemplateAdHocApprovers()) {
-            // Clear approvers
+            routingFormDoc.clearAdhocType(KraConstants.AD_HOC_APPROVER);
         }
         
        ((Copyable) routingFormDoc).toCopy();
