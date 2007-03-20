@@ -13,33 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.cg.lookup.keyvalues;
+package org.kuali.module.kra.lookup.keyvalues;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.cg.bo.GrantDescription;
+import org.kuali.module.kra.bo.ResearchAdhocPermissionType;
+import org.kuali.module.kra.budget.bo.BudgetBaseCode;
 
-public class GrantDescriptionValuesFinder extends KeyValuesBase {
+public class ResearchAdhocPermissionTypeValuesFinder extends KeyValuesBase {
+    
+    public ResearchAdhocPermissionTypeValuesFinder() {
+        super();
+    }
 
-    /**
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
-     */
     public List getKeyValues() {
-
-        Collection<GrantDescription> codes = SpringServiceLocator.getKeyValuesService().findAll(GrantDescription.class);
-
-        List<KeyLabelPair> labels = new ArrayList<KeyLabelPair>();
-        labels.add(new KeyLabelPair("", ""));
-
-        for (GrantDescription code : codes) {
-            labels.add(new KeyLabelPair(code.getGrantDescriptionCode(), code.getGrantDescriptionCode() + " - " + code.getGrantDescription()));
+        
+        List<ResearchAdhocPermissionType> permissionTypeCodes = new ArrayList(SpringServiceLocator.getResearchDocumentPermissionsService().getPermissionTypes());
+        List permissionTypeKeyLabelPairList = new ArrayList();
+        for (ResearchAdhocPermissionType element: permissionTypeCodes) {
+            permissionTypeKeyLabelPairList.add(new KeyLabelPair(element.getPermissionTypeCode(), element.getPermissionTypeDescription()));
         }
 
-        return labels;
+        return permissionTypeKeyLabelPairList;
     }
 }
