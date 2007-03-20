@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +68,7 @@ public class BudgetXml {
      * 
      * @param budgetDoc data representation of a budget
      * @param xmlDoc target xml representation for the budget. This field will be side effected.
+     * @param baseUrl ensures that stylesheet may be path idependent
      * @param param a parameter that is to be added to the XML as PARAMETER1. Useful for custom functions of a style sheet.
      * @throws Exception
      */
