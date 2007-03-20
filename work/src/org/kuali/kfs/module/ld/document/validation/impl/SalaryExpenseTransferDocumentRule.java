@@ -55,11 +55,13 @@ import org.kuali.module.labor.document.SalaryExpenseTransferDocument;
 import org.kuali.module.labor.rule.GenerateLaborLedgerBenefitClearingPendingEntriesRule;
 import org.kuali.module.labor.rule.GenerateLaborLedgerPendingEntriesRule;
 
+
 /**
  * Business rule(s) applicable to Salary Expense Transfer documents.
  * 
  * 
  */
+
 public class SalaryExpenseTransferDocumentRule extends AccountingDocumentRuleBase implements GenerateLaborLedgerPendingEntriesRule<AccountingDocument>, GenerateLaborLedgerBenefitClearingPendingEntriesRule<AccountingDocument>{
 
     // LLPE Constants
@@ -79,6 +81,7 @@ public class SalaryExpenseTransferDocumentRule extends AccountingDocumentRuleBas
 
     public static final String LABOR_LEDGER_CHART_OF_ACCOUNT_CODE = "UA";
     public static final String LABOR_LEDGER_ACCOUNT_NUMBER = "9712700";
+   
         
     public SalaryExpenseTransferDocumentRule() {
         super();        
@@ -1071,15 +1074,14 @@ public class SalaryExpenseTransferDocumentRule extends AccountingDocumentRuleBas
         //special handling
         benefitClearingEntry.setChartOfAccountsCode( "UA" );
         benefitClearingEntry.setAccountNumber( "9712700" );
-        
                 
-       benefitClearingEntry.setSubAccountNumber(LABOR_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_ACCOUNT_NUMBER);        
+        benefitClearingEntry.setSubAccountNumber(LABOR_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_ACCOUNT_NUMBER);        
 
         //special handling
         AccountingPeriod ap = accountingDocument.getAccountingPeriod();
         BenefitsCalculation bc = SpringServiceLocator.getLaborBenefitsCalculationService().getBenefitsCalculation(ap.getUniversityFiscalYear(), "UA", benefitTypeCode);
         benefitClearingEntry.setFinancialObjectCode(bc.getPositionFringeBenefitObjectCode());        
-         
+        
         benefitClearingEntry.setFinancialSubObjectCode(LABOR_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_OBJECT_CODE);
         benefitClearingEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_ACTUAL);
         benefitClearingEntry.setTransactionLedgerEntrySequenceNumber(getNextSequenceNumber(sequenceHelper));            
