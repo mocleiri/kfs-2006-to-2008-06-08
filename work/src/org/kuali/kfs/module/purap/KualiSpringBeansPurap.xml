@@ -117,6 +117,15 @@
 
 	<!-- parent class, this is so we can override attributes if we add any later -->
 	<bean id="purchaseOrderPostProcessServiceBase" class="org.kuali.module.purap.service.impl.PurchaseOrderPostProcessorServiceBase" abstract="true">
+        <property name="purchaseOrderService">
+            <ref bean="purchaseOrderService" />
+        </property>	
+        <property name="generalLedgerService">
+            <ref bean="generalLedgerService" />
+        </property>	
+        <property name="purapService">
+            <ref bean="purapService" />
+        </property>	
 	</bean>
 	
     <bean id="purchaseOrderPostProcessorService" class="org.kuali.module.purap.service.impl.PurchaseOrderPostProcessorServiceImpl" parent="purchaseOrderPostProcessServiceBase">
@@ -124,9 +133,6 @@
 	<bean id="purchaseOrderPostProcessorCloseService" class="org.kuali.module.purap.service.impl.PurchaseOrderPostProcessorCloseServiceImpl" parent="purchaseOrderPostProcessServiceBase">
 	</bean>
 	<bean id="purchaseOrderPostProcessorReopenService" class="org.kuali.module.purap.service.impl.PurchaseOrderPostProcessorReopenServiceImpl" parent="purchaseOrderPostProcessServiceBase">
-		<property name="purchaseOrderDao">
-			<ref bean="purchaseOrderDao" />
-		</property>	
 	</bean>
 	<bean id="purchaseOrderPostProcessorRetransmitService" class="org.kuali.module.purap.service.impl.PurchaseOrderPostProcessorRetransmitServiceImpl" parent="purchaseOrderPostProcessServiceBase">
 	</bean>
