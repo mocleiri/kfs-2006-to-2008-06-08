@@ -126,8 +126,6 @@ public class KraConstants extends JstlConstants {
     public static final String DELETE_TASK_QUESTION_ID = "DeleteTaskQuestion";
     public static final String DELETE_COST_SHARE_QUESTION_ID = "DeleteCostShareQuestion";
     
-    public static final String DELETE_GRANTS_GOV_QUESTION_ID = "DeleteGrantsGovQuestion";
-    
     // Research Risk Types
     public static final String RESEARCH_RISK_TYPE_ALL_COLUMNS = "A";
     public static final String RESEARCH_RISK_TYPE_SOME_COLUMNS = "S";
@@ -151,6 +149,10 @@ public class KraConstants extends JstlConstants {
     public static final String CO_PROJECT_DIRECTOR_CODE = "C";
     public static final String CONTACT_PERSON_ADMINISTRATIVE_CODE = "M";
     public static final String CONTACT_PERSON_PROPOSAL_CODE = "N";
+    
+    // Ad hoc types
+    public static final String AD_HOC_PERMISSION = "P";
+    public static final String AD_HOC_APPROVER = "A";
 
     public static class AuthorizationConstants extends org.kuali.core.authorization.AuthorizationConstants.EditMode {
         public static final String BUDGET_LINKED = "budgetLinked";
