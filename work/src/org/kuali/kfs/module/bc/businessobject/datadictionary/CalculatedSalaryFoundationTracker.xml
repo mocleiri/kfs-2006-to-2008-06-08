@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker">
-        <customAttributeEnabled>false</customAttributeEnabled>
+
 
         <inquiry>
             <title>Calculated Salary Foundation Tracker Inquiry</title>
@@ -48,6 +48,7 @@
         </inquiry>
 
         <lookup>
+        <lookupableID>CSFTrackerBalanceLookupable</lookupableID>
             <title>Calculated Salary Foundation Tracker Lookup</title>
 
             <instructions>Look up a Calculated Salary Foundation Tracker</instructions>
@@ -57,29 +58,16 @@
                     <sortAttribute attributeName="universityFiscalYear" />
                     <sortAttribute attributeName="chartOfAccountsCode" />
                     <sortAttribute attributeName="accountNumber" />
+                    <sortAttribute attributeName="positionNumber" />
                 </sortAttributes>
             </defaultSort>
 
-            <lookupFields>
-                <lookupField attributeName="accountNumber" required="false" />
-                <lookupField attributeName="additionalSequence" required="false" />
+			<lookupFields>
+ 				<lookupField attributeName="universityFiscalYear" required="true" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
-                <lookupField attributeName="csfAmount" required="false" />
-                <lookupField attributeName="csfCreateTimestamp" required="false" />
-                <lookupField attributeName="csfDeleteCode" required="false" />
-                <lookupField attributeName="csfFullTimeEmploymentQuantity" required="false" />
-                <lookupField attributeName="csfFundingStatusCode" required="false" />
-                <lookupField attributeName="csfTimePercent" required="false" />
-                <lookupField attributeName="earnCode" required="false" />
-                <lookupField attributeName="effectiveDate" required="false" />
-                <lookupField attributeName="effectiveSequence" required="false" />
-                <lookupField attributeName="emplid" required="false" />
-                <lookupField attributeName="employeeRecord" required="false" />
-                <lookupField attributeName="financialObjectCode" required="false" />
-                <lookupField attributeName="financialSubObjectCode" required="false" />
-                <lookupField attributeName="positionNumber" required="false" />
+                <lookupField attributeName="accountNumber" required="true" />
                 <lookupField attributeName="subAccountNumber" required="false" />
-                <lookupField attributeName="universityFiscalYear" required="false" />
+                <lookupField attributeName="financialObjectCode" required="false" />
             </lookupFields>
 
             <resultFields>
