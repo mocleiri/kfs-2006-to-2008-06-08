@@ -1,5 +1,5 @@
 <%--
- Copyright 2005-2006 The Kuali Foundation.
+ Copyright 2005-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -316,7 +316,7 @@
 						test="${fn:contains(delimitedExtraRowFields, ',referenceOriginCode,')}">
 						<fin:accountingLineDataCell field="referenceOriginCode"
 							lookup="true" inquiry="true" boClassSimpleName="OriginationCode"
-							boPackageName="org.kuali.core.bo"
+							boPackageName="org.kuali.kfs.bo"
 							conversionField="financialSystemOriginationCode"
 							detailFunction="loadOriginationInfo"
 							detailField="referenceOrigin.financialSystemServerName"
@@ -332,7 +332,7 @@
 						test="${fn:contains(delimitedExtraRowFields, ',referenceTypeCode,')}">
 						<fin:accountingLineDataCell field="referenceTypeCode"
 							lookup="true" inquiry="true" boClassSimpleName="DocumentType"
-							boPackageName="org.kuali.core.document"
+							boPackageName="org.kuali.core.bo"
 							conversionField="financialDocumentTypeCode"
 							detailFunction="loadDocumentTypeInfo"
 							detailField="referenceType.financialDocumentName"
