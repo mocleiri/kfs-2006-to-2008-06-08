@@ -13,20 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.kra.routingform.service;
+package org.kuali.module.labor.dao;
 
+import java.util.Collection;
 import java.util.List;
-
-import org.kuali.module.kra.routingform.bo.Purpose;
+import java.util.Map;
 
 /**
- * Purpose Service
- * 
+ * This class is an interface for all new labor data access objects
  */
-public interface PurposeService {
-    /**
-     * Returns the complete list of Purposes except for the inactive ones.
-     * @return typed list of Purposes
-     */
-    public List<Purpose> getPurposes();
+public interface LaborDao {
+ 
+    Collection getCSFTrackerData(Map fieldValues);
+
 }
