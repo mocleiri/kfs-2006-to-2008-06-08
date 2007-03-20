@@ -48,13 +48,12 @@ public @interface RelatesTo {
      * Using this enumeration makes it easy for the IDE to show which tests relate to which issues.
      */
     public enum JiraIssue {
-        KULRNE4213,
         KULRNE1612,
-        KULRNE4303,
-        KULRNE4307,
-        KULRNE4308, KULLAB54,
-        KULRNE4462,
-        KULLAB96
+        KULRNE4308, 
+        KULLAB54,
+        KULLAB96,
+        KULUT10,
+        KULRNE4511
         ;
         
         private final static Pattern PATTERN = Pattern.compile("(\\p{Alpha}+)(\\p{Digit}+)");
