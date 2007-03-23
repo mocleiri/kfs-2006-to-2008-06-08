@@ -126,7 +126,18 @@
 		<condition property="institution.spring.beans.import" value="${institution.spring.beans.import.value}">
 			<available file="${institution.spring.beans.file}" />
 		</condition>
-		<property name="institution.spring.beans.import" value="" />		
+		<property name="institution.spring.beans.import" value="" />
+		<condition property="batch.program.directory" value="/home/kultstb/batch/${build.environment}">
+			<or>
+				<equals arg1="${build.environment}" arg2="ptd" />
+				<equals arg1="${build.environment}" arg2="gl" />
+			</or>
+		</condition>
+		<property name="batch.program.directory" value="/home/kuldevb/batch/${build.environment}" />
+		<condition property="database.file.directory" value="${batch.program.directory}/db">
+			<equals arg1="${is.batch.dist}" arg2="true" />
+		</condition>
+		<property name="database.file.directory" value="${basedir}/${database.directory}" />
 	</target>
 
 	<target name="init-institution-override-properties" if="load.institution.override.properties" depends="init-logic-based-properties">
@@ -193,13 +204,6 @@
 			<filter token="encrypt-attributes-properties-file" value="${encrypt.attributes.properties.file}" />
 			<filter token="data-export-zip-file" value="${data.export.zip.file}" />
 		</filterset>
-		<condition property="batch.program.directory" value="/home/kultstb/batch/${build.environment}">
-			<or>
-				<equals arg1="${build.environment}" arg2="ptd" />
-				<equals arg1="${build.environment}" arg2="gl" />
-			</or>
-		</condition>
-		<property name="batch.program.directory" value="/home/kuldevb/batch/${build.environment}" />
 		<filterset id="batch.filterset">
 			<filter token="appenders" value="INFO, StdOut" />
 			<filter token="batch-program-directory" value="${batch.program.directory}" />
@@ -552,8 +556,12 @@
 	<target name="dist-plugin" depends="make-source,make-plugin-remote,make-plugin">
 		<zip destfile="en-plugins.zip" basedir="${plugin.directory}" />
 	</target>
+	
+	<target name="init-dist-batch">
+		<property name="is.batch.dist" value="true" />
+	</target>
 
-	<target name="dist-batch" depends="make-source">
+	<target name="dist-batch" depends="init-dist-batch,clean,make-source">
 		<copy todir="${batch.directory}">
 			<fileset dir="${batch.script.directory}" />
 			<filterset refid="batch.filterset" />
@@ -566,6 +574,9 @@
 			<fileset dir="${lib.directory}" />
 			<fileset dir="${build.appserver.directory}" />
 			<fileset file="${appserver.lib.dir}/servlet-api.jar" />
+		</copy>
+		<copy todir="${batch.db.directory}">
+			<fileset dir="${database.directory}" />
 		</copy>
 		<zip basedir="${batch.directory}" destfile="${ant.project.name}-${build.environment}.zip" />
 	</target>
@@ -632,8 +643,8 @@
 		<copy todir="${licenses.directory}/kew">
 			<fileset dir="${workflow.project.directory}/${licenses.directory}" />
 		</copy>
-		<delete dir="${database.workflow.file.directory}" failonerror="false" />
-		<copy todir="${database.workflow.file.directory}">
+		<delete dir="${database.workflow.directory}" failonerror="false" />
+		<copy todir="${database.workflow.directory}">
 			<fileset dir="${workflow.project.directory}/conf" includes="ddl/**/**" />
 		</copy>
 	</target>
