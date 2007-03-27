@@ -2,14 +2,14 @@
 \author{Leo Przybylski \\
 \texttt{przybyls@u.arizona.edu}}
 
-\input{../LatexCode.tex}
+\input{../S5.tex}
 \fulltitle{Inheritance vs. Encapsulation}
 
 \newcommand{\Encapsulation}{\sf{\href{http://en.wikipedia.org/wiki/Information_hiding}{Encapsulation}}}
 \newcommand{\Abstraction}{\sf{\href{http://en.wikipedia.org/wiki/Abstraction}{Abstraction}}}
-\newcommand{\Inheritance}{\sf{\href{http://en.wikipedia.org/wiki/Inheritance\_\%28computer_science\%29}{Inheritance}}}
+\newcommand{\Inheritance}{\sf{\href{http://en.wikipedia.org/wiki/Inheritance_(computer_science)}{Inheritance}}}
 \newcommand{\ObjectModel}{\sf{\href{http://en.wikipedia.org/wiki/Object_model}{Object Model}}}
-\newcommand{\Modularity}{\sf{\href{http://en.wikipedia.org/wiki/Modularity_\%28programming\%29}{Modularity}}}
+\newcommand{\Modularity}{\sf{\href{http://en.wikipedia.org/wiki/Modularity_(programming)}{Modularity}}}
 \newcommand{\Polymorphism}{\sf{\href{http://en.wikipedia.org/wiki/Type_polymorphism}{Polymorphism}}}
 \newcommand{\MultiInheritance}{\sf{\href{http://en.wikipedia.org/wiki/Multiple_inheritance}{Multiple-Inheritance}}}
 \newcommand{\Kuali}{\emph{\href{http://www.kuali.org}{Kuali}}}
@@ -36,18 +36,29 @@
   \W \end{s5slide}
   \W \begin{s5slide}
     \begin{abstract}
-      There are some instances in \KualiFinancialSystem\ where \Inheritance\ is possibly misused where \Encapsulation\ may have not
-      only been a better fit, but may have also lessened or even eliminated the need for refactoring. This document explains how 
-      \Encapsulation\ can mitigate the need for future refactorings. \Inheritance\ as it is now in Java limits modularity and orthogonal design.
+      \begin{itemize}
+        \item Some may already know a lot of this (it's for context.)
+        \item Try to quickly move passed boring material, but without ignoring context.
+        \item Do not be distracted by the fancy drawings.
+        \item Leo's $10^{th}$ anniversary is March 27, 2007
+        \item \href{http://en.wikipedia.org/wiki/Education_and_Sharing_day}{March 27 is...}
+      \end{itemize}
     \end{abstract}
     \W \end{s5slide}
   
   \W \begin{s5slide}
     \section{\hfill Introduction}
     \T \hrulefill
-    \T \\
+    \T \
+
+    There are some instances in \KualiFinancialSystem\ where \Inheritance\ is possibly misused where \Encapsulation\ may have not
+    only been a better fit, but may have also lessened or even eliminated the need for refactoring. This document explains how 
+    \Encapsulation\ can mitigate the need for future refactorings. \Inheritance\ as it is now in Java limits modularity and orthogonal design.
+    \W \end{s5slide}
 
     \begin{ifhtml}
+      \begin{s5slide}
+        \section{\hfill Introduction}
       \begin{itemize}
       \item The \ObjectModel
         \begin{itemize}
@@ -57,13 +68,15 @@
       \item What is the Problem?
       \item Comparing \Inheritance\ and \Encapsulation\
         \begin{itemize}
+          \item How do They Differ?
           \item Labor Distribution Scenario
           \item General Ledger Scenario
+          \item Struts/Spring Scenario (aka. Encapsulating Actions or Does Spring + Struts = String?)
           \item Solving Parallel Hierarchies
         \end{itemize}
       \end{itemize}
+      \end{s5slide}
     \end{ifhtml}
-    \W \end{s5slide}
 
     \W \begin{s5slide}
       \W \section{The Object Model}
@@ -111,14 +124,14 @@ public abstract class AbstractGLLookupableImpl
 }        
         \end{verbatim}
         
-        \center{\htmlimg{InheritanceExample_class.png}{Inheritance Example}}
+        \center{\htmlimg{Diagrams/InheritanceExample_class.png}{Inheritance Example}}
         \end{figure}
       \end{s5slide}
     \end{ifhtml}
       
     \begin{tex}
       \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd,
-                        caption={\Inheritance\ Definition Example}]{AbstractGLLookupableImpl.java}
+                        caption={\Inheritance\ Definition Example}]{src/AbstractGLLookupableImpl.java}
       \begin{lstlisting}
     ...
     ...
@@ -174,6 +187,7 @@ public abstract class AbstractGLLookupableImpl
     Resulting from the lack of \MultiInheritance, Java developers have designed object-oriented 
     patterns to sidestep single-\Polymorphism\ using \Encapsulation\ rather than \Inheritance.
     \W \end{s5slide}
+
   \begin{tex}
   My Points:
   \begin{itemize}
@@ -217,6 +231,21 @@ public abstract class AbstractGLLookupableImpl
     \end{s5slide}
   \end{ifhtml}
   
+  \begin{ifhtml}
+    \begin{s5slide}
+      \section{Labor Distribution Scenario}
+    \end{s5slide}
+  \end{ifhtml}
+
+  \begin{ifhtml}
+    \begin{s5slide}
+      \section{General Ledger Scenario}
+      \begin{figure}
+        \center{\htmlimg{Diagrams/GlLookupableImpl_class.png}{General Ledger Account Balance Lookupable}}
+      \end{figure}
+    \end{s5slide}
+  \end{ifhtml}
+
   \W \end{s5presentation}
   \begin{tex}
     \begin{thebibliography}{20}
