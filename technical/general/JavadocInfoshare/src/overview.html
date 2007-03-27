@@ -28,15 +28,15 @@ business objects; likewise, business rules may be required to handle
 additional business objects.<br/>
 <br/>
 The role of a business object deterimines the rule(s) that are to be
-applied. The TransactionalDocument is the most interesting business
+applied. The <code>{@link org.kuali.bo.TransactionalDocument}</code> is the most interesting business
 object in the scope of this document.<br/>
 <br/>
-A set of business rules are defined for a TransactionalDocument.
+A set of business rules are defined for a <code>{@link org.kuali.bo.TransactionalDocument}</code>.
 Base rules packaged with the Kuali Project API may fulfill the needs
 of some institutions; however, it is not expected that the base rules
 are adequate for every institution or for all requirements of the application.
 Some institutions may have a proprietary set of rules to
-be applied to existing TransactionalDocument business objects to
+be applied to existing <code>{@link org.kuali.bo.TransactionalDocument}</code> business objects to
 support new or existing business rules.<br/>
 <br/>
 It has been decided that a framework to support creation of or
@@ -47,16 +47,17 @@ of Kuali project source code is necessary.<br/>
 When an institution desires to create third-party business rules for any reason,
 the available framework is expected to support the creation regardless of
 the complexity. This flexibility comes from isolating the business rules from
-the Kuali API save two interfaces (PolicyFactory and Policy.)<br/>
+the Kuali API save two interfaces (<code>{@link org.kuali.service.PolicyFactory}</code> and 
+<code>{@link org.kuali.service.Policy}</code>.)<br/>
 <br/>
 The aforementioned flexibility allows arbitrary business rule definitions
 to be implemented without the need for proprietary code modifications. To
 summarize, the beneficial characteristics of the framework are:
 <ul>
-  <li/>Allow arbitrary class definitions implementing the Policy interface.
+  <li/>Allow arbitrary class definitions implementing the <code>{@link org.kuali.service.Policy}</code> interface.
   <li/>Delegate constructor and method calls, so the framework will automatically
-instantiate Policy implementations.
-  <li/>Allow Policy implementations proper access to TransactionalDocument
+instantiate <code>{@link org.kuali.service.Policy}</code> implementations.
+  <li/>Allow Policy implementations proper access to <code>{@link org.kuali.bo.TransactionalDocument}</code>
 instances.
   <li/>Policy implementations can be maintained independently of Kuali API.
 </ul>
