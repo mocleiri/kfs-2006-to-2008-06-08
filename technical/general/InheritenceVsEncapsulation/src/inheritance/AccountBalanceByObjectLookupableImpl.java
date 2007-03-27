@@ -1,7 +1,7 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
- * $Source: /opt/cvs/kfs-documentation/technical/general/InheritenceVsEncapsulation/src/AccountBalanceByLevelLookupableImpl.java,v $
+ * $Source: /opt/cvs/kfs-documentation/technical/general/InheritenceVsEncapsulation/src/inheritance/AccountBalanceByObjectLookupableImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,10 +32,11 @@ import org.kuali.module.gl.bo.DummyBusinessObject;
 import org.kuali.module.gl.service.AccountBalanceService;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.module.gl.web.inquirable.AccountBalanceByLevelInquirableImpl;
+import org.kuali.module.gl.web.inquirable.AccountBalanceByObjectInquirableImpl;
+import org.kuali.module.gl.web.inquirable.AccountBalanceInquirableImpl;
 
-public class AccountBalanceByLevelLookupableImpl extends KualiLookupableImpl {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceByLevelLookupableImpl.class);
+public class AccountBalanceByObjectLookupableImpl extends KualiLookupableImpl {
+    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceByObjectLookupableImpl.class);
 
     private AccountBalanceService accountBalanceService;
 
@@ -44,14 +45,17 @@ public class AccountBalanceByLevelLookupableImpl extends KualiLookupableImpl {
     }
 
     /**
-     * Returns the inquiry url for a field if one exist.
+     * Returns the inquiry url for a result field.
      * 
      * @param bo the business object instance to build the urls for
      * @param propertyName the property which links to an inquirable
      * @return String url to inquiry
      */
     public String getInquiryUrl(BusinessObject bo, String propertyName) {
-        return (new AccountBalanceByLevelInquirableImpl()).getInquiryUrl(bo, propertyName);
+        if (GLConstants.DummyBusinessObject.LINK_BUTTON_OPTION.equals(propertyName)) {
+            return (new AccountBalanceByObjectInquirableImpl()).getInquiryUrl(bo, propertyName);
+        }
+        return (new AccountBalanceInquirableImpl()).getInquiryUrl(bo, propertyName);
     }
 
     /**
@@ -84,7 +88,8 @@ public class AccountBalanceByLevelLookupableImpl extends KualiLookupableImpl {
         String chartOfAccountsCode = (String) fieldValues.get(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
         String accountNumber = (String) fieldValues.get(PropertyConstants.ACCOUNT_NUMBER);
         String subAccountNumber = (String) fieldValues.get(PropertyConstants.SUB_ACCOUNT_NUMBER);
-        String financialConsolidationObjectCode = (String) fieldValues.get(GLConstants.BalanceInquiryDrillDowns.CONSOLIDATION_OBJECT_CODE);
+        String financialObjectLevelCode = (String) fieldValues.get(GLConstants.BalanceInquiryDrillDowns.OBJECT_LEVEL_CODE);
+        String financialReportingSortCode = (String) fieldValues.get(GLConstants.BalanceInquiryDrillDowns.REPORTING_SORT_CODE);
 
         // Dashes means no sub account number
         if (Constants.DASHES_SUB_ACCOUNT_NUMBER.equals(subAccountNumber)) {
@@ -96,7 +101,7 @@ public class AccountBalanceByLevelLookupableImpl extends KualiLookupableImpl {
         // TODO Deal with invalid numbers
         Integer universityFiscalYear = new Integer(Integer.parseInt(ufy));
 
-        List results = accountBalanceService.findAccountBalanceByLevel(universityFiscalYear, chartOfAccountsCode, accountNumber, subAccountNumber, financialConsolidationObjectCode, isCostShareExcluded, isConsolidated, pendingEntryCode);
+        List results = accountBalanceService.findAccountBalanceByObject(universityFiscalYear, chartOfAccountsCode, accountNumber, subAccountNumber, financialObjectLevelCode, financialReportingSortCode, isCostShareExcluded, isConsolidated, pendingEntryCode);
 
         // Put the search related stuff in the objects
         for (Iterator iter = results.iterator(); iter.hasNext();) {

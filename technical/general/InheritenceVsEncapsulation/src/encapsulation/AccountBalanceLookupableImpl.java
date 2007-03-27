@@ -1,7 +1,7 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
- * $Source: /opt/cvs/kfs-documentation/technical/general/InheritenceVsEncapsulation/src/AccountBalanceLookupableImpl.java,v $
+ * $Source: /opt/cvs/kfs-documentation/technical/general/InheritenceVsEncapsulation/src/encapsulation/AccountBalanceLookupableImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,20 @@ import org.kuali.module.gl.web.inquirable.AccountBalanceInquirableImpl;
  * 
  * 
  */
-public class AccountBalanceLookupableImpl extends AbstractGLLookupableImpl {
+public class AccountBalanceLookupableImpl implements Lookupable, EntryCollectionUpdatable, SearchableBy {
 
     private AccountBalanceCalculator postAccountBalance;
     private AccountBalanceService accountBalanceService;
     private OptionsService optionsService;
+    private Lookupable baseLookupable;
+
+    public void setBaseLookupable(Lookupable l) {
+        baseLookupable = l;
+    }
+    
+    public Lookupable getBaseLookupable() {
+        return baseLookupable;
+    }
 
     /**
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
@@ -59,6 +68,10 @@ public class AccountBalanceLookupableImpl extends AbstractGLLookupableImpl {
     @Override
     public String getInquiryUrl(BusinessObject bo, String propertyName) {
         return (new AccountBalanceInquirableImpl()).getInquiryUrl(bo, propertyName);
+    }
+    
+    public List getSearchResultsBy(Method meth, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, boolean isCostShareExcluded, boolean isConsolidated, int pendingEntryCode) {
+        return (List) meth.invoke(universityFiscalYear, chartOfAccounts, accountNumber, subAccountNumber, isCostShareExclude, isConsolidated, pendingEntryCode);
     }
 
     /**
