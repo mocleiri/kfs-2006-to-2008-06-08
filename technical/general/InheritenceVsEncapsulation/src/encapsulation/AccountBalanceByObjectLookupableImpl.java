@@ -35,7 +35,10 @@ import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.AccountBalanceByObjectInquirableImpl;
 import org.kuali.module.gl.web.inquirable.AccountBalanceInquirableImpl;
 
-public class AccountBalanceByObjectLookupableImpl extends KualiLookupableImpl {
+// ClassSignatureStart
+public class AccountBalanceByObjectLookupableImpl implements Lookupable, SearchableBy {
+    private Lookupable baseLookupable;
+// ClassSignatureEnd
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceByObjectLookupableImpl.class);
 
     private AccountBalanceService accountBalanceService;

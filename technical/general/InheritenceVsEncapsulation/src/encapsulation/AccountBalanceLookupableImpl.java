@@ -47,7 +47,9 @@ import org.kuali.module.gl.web.inquirable.AccountBalanceInquirableImpl;
  * 
  * 
  */
+// ClassSignatureStart
 public class AccountBalanceLookupableImpl implements Lookupable, EntryCollectionUpdatable, SearchableBy {
+// ClassSignatureEnd
 
     private AccountBalanceCalculator postAccountBalance;
     private AccountBalanceService accountBalanceService;

@@ -1,8 +1,5 @@
-
 /*
- * Copyright 2005-2006 The Kuali Foundation.
- * 
- * $Source: /opt/cvs/kfs-documentation/technical/general/InheritenceVsEncapsulation/src/encapsulation/SearchableBy.java,v $
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.gl.web.lookupable;
-
+package org.kuali.core.service;
 
 // ClassSignatureStart
-public interface SearchableBy {
-    /**
-     * Adapter method for locating the correct Search method for a balance inquiry
-     * using the <code>{@link AccountBalanceService}</code>
-     * 
-     * @return Method
-     */
-    public Method getSearchMethod();
-}
+public class KualiStrutsDocumentServiceImpl implements KualiForm, KualiAction, KualiStrutsService {
 // ClassSignatureEnd
+
+    public void populate(HttpServletRequest request) {
+        // Blah
+    }
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return mapping.findForward(Constants.MAPPING_BASIC);
+    }
+}

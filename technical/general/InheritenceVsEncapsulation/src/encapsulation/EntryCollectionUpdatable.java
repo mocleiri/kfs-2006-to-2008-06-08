@@ -18,6 +18,7 @@ package org.kuali.module.gl.web.lookupable;
 import java.util.Collection;
 import java.util.Map;
 
+// ClassSignatureStart
 public interface EntryCollectionUpdatable {
     /**
      * This method is an abstract method and implemented to update the given entry collection by the children classes. It is called
@@ -31,3 +32,4 @@ public interface EntryCollectionUpdatable {
      */
     public void updateEntryCollection(Collection entryCollection, Map fieldValues, boolean isApproved, boolean isConsolidated, boolean isCostShareInclusive);
 }
+// ClassSignatureEnd

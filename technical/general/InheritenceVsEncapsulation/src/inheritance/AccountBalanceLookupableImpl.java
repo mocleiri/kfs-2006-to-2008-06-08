@@ -41,6 +41,7 @@ import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.AccountBalanceInquirableImpl;
 
+// ClassSignatureStart
 /**
  * This class extends the KualiLookupableImpl and overrides getSearchResults method so that the customized results can be displayed
  * to user interface.
@@ -48,6 +49,7 @@ import org.kuali.module.gl.web.inquirable.AccountBalanceInquirableImpl;
  * 
  */
 public class AccountBalanceLookupableImpl extends AbstractGLLookupableImpl {
+// ClassSignatureEnd
 
     private AccountBalanceCalculator postAccountBalance;
     private AccountBalanceService accountBalanceService;

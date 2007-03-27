@@ -35,7 +35,9 @@ import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.AccountBalanceByObjectInquirableImpl;
 import org.kuali.module.gl.web.inquirable.AccountBalanceInquirableImpl;
 
+// ClassSignatureStart
 public class AccountBalanceByObjectLookupableImpl extends KualiLookupableImpl {
+// ClassSignatureEnd
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceByObjectLookupableImpl.class);
 
     private AccountBalanceService accountBalanceService;

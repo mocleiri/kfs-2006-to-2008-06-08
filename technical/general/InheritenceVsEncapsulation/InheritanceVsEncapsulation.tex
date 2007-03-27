@@ -1,19 +1,19 @@
 \documentclass[12pt,notitlepage]{article}
 \author{Leo Przybylski \\
 \texttt{przybyls@u.arizona.edu}}
-
+\usepackage{graphicx}
 \input{../S5.tex}
 \fulltitle{Inheritance vs. Encapsulation}
 
-\newcommand{\Encapsulation}{\sf{\href{http://en.wikipedia.org/wiki/Information_hiding}{Encapsulation}}}
-\newcommand{\Abstraction}{\sf{\href{http://en.wikipedia.org/wiki/Abstraction}{Abstraction}}}
-\newcommand{\Inheritance}{\sf{\href{http://en.wikipedia.org/wiki/Inheritance_(computer_science)}{Inheritance}}}
-\newcommand{\ObjectModel}{\sf{\href{http://en.wikipedia.org/wiki/Object_model}{Object Model}}}
-\newcommand{\Modularity}{\sf{\href{http://en.wikipedia.org/wiki/Modularity_(programming)}{Modularity}}}
-\newcommand{\Polymorphism}{\sf{\href{http://en.wikipedia.org/wiki/Type_polymorphism}{Polymorphism}}}
-\newcommand{\MultiInheritance}{\sf{\href{http://en.wikipedia.org/wiki/Multiple_inheritance}{Multiple-Inheritance}}}
-\newcommand{\Kuali}{\emph{\href{http://www.kuali.org}{Kuali}}}
-\newcommand{\KualiFinancialSystem}{\emph{\href{http://www.kuali.org}{Kuali Financial System}}}
+\newcommand{\Encapsulation}{\sf{\href{http://en.wikipedia.org/wiki/Information_hiding}{Encapsulation}}\rm{}}
+\newcommand{\Abstraction}{\sf{\href{http://en.wikipedia.org/wiki/Abstraction}{Abstraction}}\rm{}}
+\newcommand{\Inheritance}{\sf{\href{http://en.wikipedia.org/wiki/Inheritance_(computer_science)}{Inheritance}}\rm{}}
+\newcommand{\ObjectModel}{\sf{\href{http://en.wikipedia.org/wiki/Object_model}{Object Model}}\rm{}}
+\newcommand{\Modularity}{\sf{\href{http://en.wikipedia.org/wiki/Modularity_(programming)}{Modularity}}\rm{}}
+\newcommand{\Polymorphism}{\sf{\href{http://en.wikipedia.org/wiki/Type_polymorphism}{Polymorphism}}\rm{}}
+\newcommand{\MultiInheritance}{\sf{\href{http://en.wikipedia.org/wiki/Multiple_inheritance}{Multiple-Inheritance}}\rm{}}
+\newcommand{\Kuali}{\emph{\href{http://www.kuali.org}{Kuali}}\rm{}}
+\newcommand{\KualiFinancialSystem}{\emph{\href{http://www.kuali.org}{Kuali Financial System}}\rm{}}
 \newcommand{\KFS}{\emph{\href{http://www.kuali.org}{KFS}}}
 
 \begin{document}
@@ -31,11 +31,10 @@
   }
   \W \begin{s5presentation}
   \maketitle
-  \W \begin{s5slide}
-    \texonly{\tableofcontents}
-  \W \end{s5slide}
+  \texonly{\tableofcontents}
   \W \begin{s5slide}
     \begin{abstract}
+      \begin{ifhtml}
       \begin{itemize}
         \item Some may already know a lot of this (it's for context.)
         \item Try to quickly move passed boring material, but without ignoring context.
@@ -43,13 +42,21 @@
         \item Leo's $10^{th}$ anniversary is March 27, 2007
         \item \href{http://en.wikipedia.org/wiki/Education_and_Sharing_day}{March 27 is...}
       \end{itemize}
+      \end{ifhtml}
+      \begin{tex}
+      Some may already know a lot of this material, and that's fine. It's mostly there for context.
+      If you feel the need to move passed the boring stuff, be careful not to ignore the context. Also,
+      try not to be too distracted by the pretty drawings.
+      
+      March 27, 2007 is Leo's $10^{\mbox{th}}$ anniversary. \href{http://en.wikipedia.org/wiki/Education_and_Sharing_day}{March 27 is also...}
+      \end{tex}
     \end{abstract}
     \W \end{s5slide}
   
   \W \begin{s5slide}
     \section{\hfill Introduction}
     \T \hrulefill
-    \T \
+    \T \\
 
     There are some instances in \KualiFinancialSystem\ where \Inheritance\ is possibly misused where \Encapsulation\ may have not
     only been a better fit, but may have also lessened or even eliminated the need for refactoring. This document explains how 
@@ -72,8 +79,10 @@
           \item Labor Distribution Scenario
           \item General Ledger Scenario
           \item Struts/Spring Scenario (aka. Encapsulating Actions or Does Spring + Struts = String?)
+          \item Banana Splits
           \item Solving Parallel Hierarchies
         \end{itemize}
+      \item What about \texttt{abstract} Classes?
       \end{itemize}
       \end{s5slide}
     \end{ifhtml}
@@ -89,7 +98,7 @@
     \W \end{s5slide}
   
   \W \begin{s5slide}
-    \texorhtml{\subsection{\Inheritance\ and \Encapsulation Defined}}
+    \texorhtml{\subsection{\Inheritance\ and \Encapsulation\ Defined}}
     {\section{Inheritance and\\ Encapsulation Defined}}
     It is important to establish such definitions to have a clear understanding
     of what is being discussed. For this document, I use the following definitions:
@@ -111,12 +120,13 @@
       See the following example:
       \W \end{s5slide}
     
-    \begin{ifhtml}
-      \begin{s5slide}
+    \T \newpage
+      \W \begin{s5slide}
         \section{An Inheritance Example}
-        \begin{figure}
+        \begin{figure}[!h]
           \caption{An Inheritance Example in UML}
-        \begin{verbatim}
+          \begin{ifhtml}
+            \begin{verbatim}
 public abstract class AbstractGLLookupableImpl 
     extends KualiLookupableImpl {
     ...
@@ -125,13 +135,14 @@ public abstract class AbstractGLLookupableImpl
         \end{verbatim}
         
         \center{\htmlimg{Diagrams/InheritanceExample_class.png}{Inheritance Example}}
+          \end{ifhtml}
+          \T \includegraphics[bb=90 20 350 350]{Diagrams/InheritanceExample_class.png}
         \end{figure}
-      \end{s5slide}
-    \end{ifhtml}
-      
+      \W \end{s5slide}
+      \T \newpage
     \begin{tex}
       \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd,
-                        caption={\Inheritance\ Definition Example}]{src/AbstractGLLookupableImpl.java}
+                        caption={\Inheritance\ Definition Example}]{src/inheritance/AbstractGLLookupableImpl.java}
       \begin{lstlisting}
     ...
     ...
@@ -172,15 +183,14 @@ public abstract class AbstractGLLookupableImpl
       \end{ifhtml}
   \end{description}
 
-  
   \begin{tex}
   In simple terms, inheritance and encapsulation are both intended for implementation. Inheritance can be called an ``is a'' relationship, and
   encapsulation can be called a ``part of'' relationship type. Inheritance and encapsulation are both complementary to abstraction.
   \end{tex}
 
-  \T \subsection{What is the Problem?}
   \W \begin{s5slide}
     \W \section{What is the Problem?}
+    \T \subsection{What is the Problem?}
     The problem is that Java supports \Polymorphism, but not \MultiInheritance. 
     Single-\Inheritance\ creates a single hierarchy that resembles a tree where there 
     is only one class at the very top (eg., for \sf{Java}, the \texttt{Object} class is the top-most class in the hierarchy.)
@@ -189,60 +199,227 @@ public abstract class AbstractGLLookupableImpl
     \W \end{s5slide}
 
   \begin{tex}
-  My Points:
-  \begin{itemize}
+    \begin{itemize}
     \item Java only has single-inheritance
     \item In order to achieve \Polymorphism\ and somewhat \MultiInheritance, Java uses \texttt{interfaces}.
     \item Interfaces are abstractions
     \item Java has a confusing \texttt{abstract} class
-  \end{itemize}
-  \subsection{Topics}
-  \begin{itemize}
+    \end{itemize}
+    
+    \subsection{What to Look Out For}
+    These are concerns that will be addressed later in the document.
+    \begin{itemize}
     \item When to use \Inheritance?
     \item When to use \Encapsulation?
     \item What are examples of \Encapsulation\ in Kuali
     \item What are patterns of bad uses of \Inheritance?
-    \item Why?
-  \end{itemize}
+    \item When is the \texttt{abstract} class necessary?
+    \end{itemize}
 
-  \section{\hfill Inheritance is Part of OOP. Doesn't that Make it a Good Thing?}
-  \texorhtml{\hrulefill}{\htmlrule}
-
-  \section{\hfill Encapsulation is Also Part of OOP, but Why is it Better than Inheritance?}
   \end{tex}
-  \T \hrulefill
 
-  \begin{ifhtml}
-    \begin{s5slide}
-      \section{How Do They Differ?}
+  \section{\hfill Comparing \Inheritance\ and \Encapsulation: How do They Differ?}
+  \T \hrulefill
+  \T \\
+  \texonly{This has already been discussed in gross detail. Now we are going to show more examples
+  of the differences and explain them. In this section, we will go through different scenarios
+  to explore the differences. Here are some basic bullet points.}
+    \W \begin{s5slide}
+      \W \section{How Do They Differ?}
       \begin{itemize}
-        \item They are different kinds of relationships
-          \begin{itemize}
+      \item They are different kinds of relationships
+        \begin{itemize}
           \item \Inheritance\ is an "is a" relationship type
           \item \Encapsulation\ is a "part of" relationship type
           \end{itemize}
         \item \Modularity\ and Coupling
           \begin{itemize}
-            \item \Inheritance\ leads to tight coupling
-            \item \Encapsulation\ leads to loose coupling
+          \item \Inheritance\ leads to tight coupling
+          \item \Encapsulation\ leads to loose coupling
+          \end{itemize}
+        \item In the \ObjectModel
+          \begin{itemize}
+          \item \Inheritance\ builds hierarchy
+          \item \Encapsulation\ is the implementation of an \Abstraction\ which are
+            combined for \Modularity
           \end{itemize}
         \item \Polymorphism
       \end{itemize}
-    \end{s5slide}
-  \end{ifhtml}
-  
-  \begin{ifhtml}
-    \begin{s5slide}
-      \section{Labor Distribution Scenario}
-    \end{s5slide}
-  \end{ifhtml}
+    \W \end{s5slide}
+
+    \begin{tex}
+      \subsection{Isn't \Inheritance\ a Good Thing?}
+      Not always. As it has been mentioned before, \Inheritance\ is used to build up the Hierarchy.
+      Basically, that means it adds structure to whatever your Model is. Since it is an ``is a'' relationship,
+      the structure is intended to be pretty concrete.
+      
+      \subsection{Why is \Encapsulation\ Better than \Inheritance?}
+      \Encapsulation\ is the implementation to your \Abstraction. Some may be thinking now, 
+      ``Isn't \Inheritance\ also implementation?'' It is, but not for an \Abstraction. Since \Inheritance\ 
+      is building concrete structure to your Model, it is constricting with \Abstraction. If you 
+      consider that Implementation and \Abstraction\ are what make your application Modular, then
+      \Inheritance\ is actually taking away the \Modularity.
+      
+      Simply put, ``If you want your application to be more Modular, use \Encapsulation\ and \Abstraction\ 
+      more liberally.'' If you want to rely on a more strict Model (say for strict typing) use \Inheritance.
+      
+      In most cases, you will want to use \Encapsulation\ and \Abstraction\ because in most cases
+      you are trying to develop Orthogonal and Modular code.
+      
+      \subsection{Scenarios}
+    \end{tex}
+    
+      \W \begin{s5slide}
+        \T \subsubsection{Labor Distribution Scenario}
+        \W \section{Labor Distribution Scenario}
+        In Labor we were faced with the problem of reusing the General Ledger without refactoring it ... a lot, and 
+        without introducing weird design quirks into Labor Distribution. In simple terms, ``Reuse GL, but don't 
+        mess it up, don't reuse anything unnecessary, and don't be lame.''
+
+        This is where our \Encapsulation\ is \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection}.
+        With \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection}, we were able to reuse 
+        all the interfaces within Labor and by \Encapsulation\ of functionality from the General Ledger, we were able to 
+        pick and choose what was important for us to reuse and what we didn't care about. True \Modularity.
+        \W \end{s5slide}
+
+      \W \begin{s5slide}
+        \W \section{How we Did it}
+        \begin{figure}[!h]
+            \W \center{\htmlimg{Diagrams/ScrubberValidator_validateTransactions_class.png}{Encapsulation Solution}}
+          \T \includegraphics[bb=75 100 550 400]{Diagrams/ScrubberValidator_validateTransactions_class.png}
+        \end{figure}
+      \W \end{s5slide}
+
+
+    \W \begin{s5slide}
+      \W \section{General Ledger Scenario}
+      \begin{figure}[!h]
+        \caption{The Old General Ledger Account Balance Lookup Hierarchy}
+        \W \center{\htmlimg{Diagrams/GlLookupableImpl_class.png}{General Ledger Account Balance Lookupable}}
+        \T \includegraphics[bb=100 100 500 300]{Diagrams/GlLookupableImpl_class.png}
+      \end{figure}
+    \W \end{s5slide}
 
   \begin{ifhtml}
     \begin{s5slide}
-      \section{General Ledger Scenario}
-      \begin{figure}
-        \center{\htmlimg{Diagrams/GlLookupableImpl_class.png}{General Ledger Account Balance Lookupable}}
-      \end{figure}
+      \W \section{General Ledger Scenario}
+      \W \subsubsection{Further Explanation in the Handout}
+    \end{s5slide}
+  \end{ifhtml}
+
+  \begin{tex}
+    \subsubsection{General Ledger \Inheritance\ Scenario}
+
+      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/inheritance/AccountBalanceByConsolidationLookupableImpl.java}
+      \begin{lstlisting}
+    ...
+    ...
+}
+      \end{lstlisting}
+      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/inheritance/AccountBalanceByLevelLookupableImpl.java}
+      \begin{lstlisting}
+    ...
+    ...
+}
+      \end{lstlisting}
+      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/inheritance/AccountBalanceByObjectLookupableImpl.java}
+      \begin{lstlisting}
+    ...
+    ...
+}
+      \end{lstlisting}
+      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/inheritance/AccountBalanceLookupableImpl.java}
+      \begin{lstlisting}
+    ...
+    ...
+}
+      \end{lstlisting}
+      
+      Between \sf AccountBalanceByConsolidationLookupableImpl, AccountBalanceByLevelLookupableImpl, \rm and \sf 
+      AccountBalanceByObjectLookupableImpl, \rm there isn't any \Modularity.  \Inheritance\ killed the \Modularity\ 
+      with \sf KualiLookupableImpl \rm and \sf AbstractGLLookupableImpl.
+
+      \subsubsection{General Ledger \Encapsulation\ Scenario}
+      How does \Encapsulation\ fix this?
+  \end{tex}
+
+      \W \begin{s5slide}
+        \W \section{How does Encapsulation Fix This?}
+        \begin{figure}[!h]
+          \begin{ifhtml}
+            \center{\htmlimg{Diagrams/GlLookupableImplEncapsulated_class.png}{Encapsulation Solution}}
+          \end{ifhtml}
+          \T \includegraphics[bb=75 100 550 400]{Diagrams/InheritanceExample_class.png}
+        \end{figure}
+      \W \end{s5slide}
+      
+      \begin{tex}
+      \begin{enumerate}
+        \item Eliminate the \texttt{abstract} class
+          \sf AbstractGLLookupableImpl \rm becomes \sf GlLookupableImpl\rm.
+          \begin{enumerate}
+            \item Rename the class and remove \texttt{abstract}
+              \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/GlLookupableImpl.java}
+              \begin{lstlisting}
+    ...
+    ...
+}
+              \end{lstlisting}
+            \item Create new interfaces for any/all \texttt{abstract} methods
+              \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/EntryCollectionUpdatable.java}
+              \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/SearchableBy.java}
+            \item Make \sf AccountLookupableImpl\rm implement interfaces for \texttt{abstract} method declarations
+              \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceLookupableImpl.java}
+          \end{enumerate}
+          \item Make \sf AccountBalanceByConsolidationLookupableImpl, AccountBalanceByLevelLookupableImpl, \rm and \sf 
+      AccountBalanceByObjectLookupableImpl\rm implement \sf Lookupable. \rm
+      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceByConsolidationLookupableImpl.java}
+      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceByLevelLookupableImpl.java}
+      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceByObjectLookupableImpl.java}
+      
+      \item Override all \sf Lookupable \rm methods to delegate to \sf baseLookupable\rm.
+      \end{enumerate}
+  \end{tex}
+  
+  \W \begin{s5slide}
+    \W \section{Now What?} 
+    \W \subsubsection{Now that the classes are encapsulated, how does this help anything?}
+    \T Now that the classes are encapsulated, how does this help anything? Well, classes like \sf AccountBalanceByConsolidationLookupableImpl,
+    AccountBalanceByLevelLookupableImpl, \rm and \sf AccountBalanceByObjectLookupableImpl are basically screaming for the \emph{Adapter}
+    pattern. 
+    \W \end{s5slide}
+  
+  \W \begin{s5slide}
+    \W \section{Struts/Spring Scenario}
+    \T \subsubsection{Struts/Spring Scenario (aka. Encapsulating Actions or Does Spring + Struts = String?)}
+    What can end up happening as a result of using Interfaces (not always a result of \Encapsulation,) is parallel hierarchies. Parallel
+    hierarchies are generally a good thing. They make the code self-documenting. When parallel hierarchies get to be 4 or even 5 wide, then
+    it's just a bit too much.
+
+    Sometimes these can result from \Encapsulation, but the inverse is also true. \Encapsulation\ can be used to solve parallel hierarchies. Take
+    \emph{Struts} for example. A mapping of a \sf StrutsForm \rm and a \sf StrutsAction \rm are always required. Because \emph{Struts} uses
+    \Inheritance\ to create this structure, it is difficult to reduce it. Here is an example of how \emph{Spring} services can be used with
+    \Encapsulation\ to reduce a parallel hierarchy.\
+    \begin{tex}
+    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiForm.java}
+    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiAction.java}
+    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiStrutsDocumentServiceImpl.java}
+    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiActionHandler.java}
+    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiFormHandler.java}
+    \end{tex}
+    \W \end{s5slide}
+  
+  \begin{ifhtml}
+    \begin{s5slide}
+      \section{What About \texttt{abstract} Classes?}
+      \subsection{Uses of \texttt{abstract} Classes}
+      \begin{itemize}
+        \item A compiler restriction prevents instantiating \texttt{abstract} classes. This
+          is inherited implementation with deferred construction. You can achieve the same 
+          effect in a concrete class using \texttt{private} or \texttt{protected} constructors.
+        \item Can mix abstraction and implementation for small/simple frameworks/hierarchies.
+          This is good if you don't expect to scale.         
+      \end{itemize}
     \end{s5slide}
   \end{ifhtml}
 

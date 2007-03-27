@@ -40,7 +40,7 @@ import org.kuali.module.gl.web.Constant;
  * 
  * 
  */
-public class GlLookupableImpl extends Lookupable, EntryCollectionUpdatable  {
+public class GlLookupableImpl implements Lookupable, EntryCollectionUpdatable  {
 // ClassSignatureEnd
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AbstractGLLookupableImpl.class);
 
