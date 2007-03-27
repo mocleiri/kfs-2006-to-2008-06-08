@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+
+  @(#)package.html	1.60 98/01/27
+
+  Copyright 1998 Sun Microsystems, Inc. 901 San Antonio Road, 
+  Palo Alto, California, 94303, U.S.A.  All Rights Reserved.
+
+  This software is the confidential and proprietary information of Sun
+  Microsystems, Inc. ("Confidential Information").  You shall not
+  disclose such Confidential Information and shall use it only in
+  accordance with the terms of the license agreement you entered into
+  with Sun.
+
+  CopyrightVersion 1.2
+
+-->
+</head>
+<body bgcolor="white">
+<center><h3>Abstract</h3></center>
+To manage business objects appropriately, a set of business rules are applied. 
+A business rule is an acceptable use case scenario
+that describes the intended behavior of a business object. One goal
+of the Kuali API is to offer, extension of it through the creation of
+business objects; likewise, business rules may be required to handle
+additional business objects.<br/>
+<br/>
+The role of a business object deterimines the rule(s) that are to be
+applied. The TransactionalDocument is the most interesting business
+object in the scope of this document.<br/>
+<br/>
+A set of business rules are defined for a TransactionalDocument.
+Base rules packaged with the Kuali Project API may fulfill the needs
+of some institutions; however, it is not expected that the base rules
+are adequate for every institution or for all requirements of the application.
+Some institutions may have a proprietary set of rules to
+be applied to existing TransactionalDocument business objects to
+support new or existing business rules.<br/>
+<br/>
+It has been decided that a framework to support creation of or
+modification of arbitrary business rules without require special maintenance
+of Kuali project source code is necessary.<br/>
+<br/>
+<h2>Introduction</h2>
+When an institution desires to create third-party business rules for any reason,
+the available framework is expected to support the creation regardless of
+the complexity. This flexibility comes from isolating the business rules from
+the Kuali API save two interfaces (PolicyFactory and Policy.)<br/>
+<br/>
+The aforementioned flexibility allows arbitrary business rule definitions
+to be implemented without the need for proprietary code modifications. To
+summarize, the beneficial characteristics of the framework are:
+<ul>
+  <li/>Allow arbitrary class definitions implementing the Policy interface.
+  <li/>Delegate constructor and method calls, so the framework will automatically
+instantiate Policy implementations.
+  <li/>Allow Policy implementations proper access to TransactionalDocument
+instances.
+  <li/>Policy implementations can be maintained independently of Kuali API.
+</ul>
+<h2>Use Cases</h2>
+<img src="resources/images/UseCases.png"/>
+</body>
+</html>

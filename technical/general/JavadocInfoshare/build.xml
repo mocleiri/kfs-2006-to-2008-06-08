@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<project name="csc227 tests" default="usage" basedir=".">
+    <description>Builds commands to execute other commands</description>
+
+    <!-- set global properties for this build -->
+    <target name="init">
+        <property name="res.directory" value="resources"/>
+        <property name="source.directory" value="src"/>
+        <property name="dist.directory" value="dist/BusinessRules"/>
+    </target>
+
+    <target name="init-make-references" depends="init">
+		<patternset id="non.java.resources">
+            <exclude name="*.java"/>
+            <exclude name="*.class"/>
+		</patternset>
+    </target>
+
+    <target name="usage">
+        <echo message="Build Instructions for ${project}"/>
+        <echo message="======================================================="/>
+        <echo message=""                                                       />
+        <echo message="build        -> Builds project"                         />
+        <echo message="javadoc      -> Creates javadoc file hierarchy"         />
+        <echo message="clean        -> Cleans project"                         />
+        <echo message="usage        -> This help"                              />
+        <echo message=""                                                       />
+        <echo message="======================================================="/>
+    </target>
+
+    <target name="javadoc" depends="init-make-references" 
+                       description="Builds javadocs for project">
+        <javadoc sourcepath="${source.directory}"
+                    destdir="${dist.directory}" 
+                     author="true"
+                    private="true"
+                   overview="${source.directory}/overview.html"
+                windowtitle="Leo's Kuali Business Rule Proposal">
+            <packageset dir="${source.directory}" defaultexcludes="yes">
+                <include name="org/kuali"/>
+                <include name="org/kuali/bo"/>
+                <include name="org/kuali/event"/>
+                <include name="org/kuali/service"/>
+                <include name="org/kuali/toolkit"/>
+            </packageset>
+
+            <doctitle><![CDATA[<h1>Leo's Kuali Business Rule Proposal</h1>]]></doctitle>
+            <bottom><![CDATA[<i>Copyright &#169; 2005 University of Arizona. All Rights Reserved.</i>]]></bottom>
+            <!--
+            <tag name="todo" scope="all" description="To do:"/>
+            -->
+            <group title="Business Objects" packages="org.kuali.bo*"/>
+            <group title="Event SubSystem" packages="org.kuali.event*"/>
+            <group title="Services" packages="org.kuali.service*"/>
+            <group title="Utility Package" packages="org.kuali.toolkit*"/>
+            <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+        </javadoc>
+    </target>
+
+
+    <target name="build" depends="javadoc"
+          description="">
+        <mkdir dir="${dist.directory}"/>
+        <copy todir="${dist.directory}/resources">
+            <fileset dir="${res.directory}">
+            	<patternset refid="non.java.resources"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean" description="Cleans up from previous build" depends="init">
+        <delete>
+            <fileset dir="${dist.directory}">
+                <include name="**/*"/>
+            </fileset>
+        </delete>
+    </target>
+</project>

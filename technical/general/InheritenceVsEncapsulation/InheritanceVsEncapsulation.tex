@@ -1,92 +1,227 @@
 \documentclass[12pt,notitlepage]{article}
 \author{Leo Przybylski \\
-\texttt{przybylskil@arizona.edu}}
-\title{Inheritance vs. Encapsulation}
+\texttt{przybyls@u.arizona.edu}}
+
+\input{../LatexCode.tex}
+\fulltitle{Inheritance vs. Encapsulation}
+
+\newcommand{\Encapsulation}{\sf{\href{http://en.wikipedia.org/wiki/Information_hiding}{Encapsulation}}}
+\newcommand{\Abstraction}{\sf{\href{http://en.wikipedia.org/wiki/Abstraction}{Abstraction}}}
+\newcommand{\Inheritance}{\sf{\href{http://en.wikipedia.org/wiki/Inheritance\_\%28computer_science\%29}{Inheritance}}}
+\newcommand{\ObjectModel}{\sf{\href{http://en.wikipedia.org/wiki/Object_model}{Object Model}}}
+\newcommand{\Modularity}{\sf{\href{http://en.wikipedia.org/wiki/Modularity_\%28programming\%29}{Modularity}}}
+\newcommand{\Polymorphism}{\sf{\href{http://en.wikipedia.org/wiki/Type_polymorphism}{Polymorphism}}}
+\newcommand{\MultiInheritance}{\sf{\href{http://en.wikipedia.org/wiki/Multiple_inheritance}{Multiple-Inheritance}}}
+\newcommand{\Kuali}{\emph{\href{http://www.kuali.org}{Kuali}}}
+\newcommand{\KualiFinancialSystem}{\emph{\href{http://www.kuali.org}{Kuali Financial System}}}
+\newcommand{\KFS}{\emph{\href{http://www.kuali.org}{KFS}}}
 
 \begin{document}
+  \texonly{
+    \lstset{language=Java,
+      basicstyle=\small,
+      keywordstyle=\color{Purple}\bfseries,
+      commentstyle=\color{DarkGreen},
+      identifierstyle=\color{DarkBlue},
+      rangeprefix=\/\/\ ,
+      rangesuffix=,
+      breaklines=true,
+      breakatwhitespace=true,
+      includerangemarker=false}
+  }
+  \W \begin{s5presentation}
   \maketitle
-  \begin{abstract}
-    There are some instances in \emph{Kuali Financial System} where Inheritance is possibly misused where Encapsulation may have not
-    only been a better fit, but may have also lessened or even eliminated the need for refactoring. This document explains how Encapsulation
-    can mitigate the need for future refactorings. Inheritance as it is now in Java limits modularity and orthogonal design.
-  \end{abstract}
+  \W \begin{s5slide}
+    \texonly{\tableofcontents}
+  \W \end{s5slide}
+  \W \begin{s5slide}
+    \begin{abstract}
+      There are some instances in \KualiFinancialSystem\ where \Inheritance\ is possibly misused where \Encapsulation\ may have not
+      only been a better fit, but may have also lessened or even eliminated the need for refactoring. This document explains how 
+      \Encapsulation\ can mitigate the need for future refactorings. \Inheritance\ as it is now in Java limits modularity and orthogonal design.
+    \end{abstract}
+    \W \end{s5slide}
   
-  \section{\hfill Introduction}
-  \hrulefill
-  \\
-  \begin{quote}
-  For all things object-oriented, the conceptual framework is the \emph{object model}. --Grady Booch ~\cite{gbone}
-  \end{quote}
-  
-  The object model Grady Booch refers to is made up of \emph{Abstraction}, \emph{Encapsulation}, \emph{Modularity}, and \emph{Hierarchy}.
-  People have different ideas about what inheritance is. It is important to establish such definitions to have a clear understanding
-  of what is being discussed. For this document, I use the following definitions:
-  \begin{description}
-    \item[Inheritance] is if and only if the \texttt{extends} directive is used with the \texttt{class} or \texttt{interface} clause. 
-      It is important to understand that Java does not support multiple-inheritance even though it does support polymorphism. Implementing 
-      an interface does not constitute inheritance. 
+  \W \begin{s5slide}
+    \section{\hfill Introduction}
+    \T \hrulefill
+    \T \\
 
-      See the following example:
-      \begin{verbatim}
-public abstract class AbstractGLLookupableHelperServiceImpl 
-                extends AbstractLookupableHelperServiceImpl {
-    // ...
-}
-      \end{verbatim}
+    \begin{ifhtml}
+      \begin{itemize}
+      \item The \ObjectModel
+        \begin{itemize}
+          \item Origins of \Inheritance\ and \Encapsulation
+          \item \Inheritance\ and \Encapsulation\ Defined
+        \end{itemize}
+      \item What is the Problem?
+      \item Comparing \Inheritance\ and \Encapsulation\
+        \begin{itemize}
+          \item Labor Distribution Scenario
+          \item General Ledger Scenario
+          \item Solving Parallel Hierarchies
+        \end{itemize}
+      \end{itemize}
+    \end{ifhtml}
+    \W \end{s5slide}
 
+    \W \begin{s5slide}
+      \W \section{The Object Model}
       \begin{quote}
-        Semantically, inheritance denotes an ``is-a'' relationship. \ldots 
-        Inheritance thus implies a genralization/specialization hierarchy, 
-        wherein a subclass specializes the more general structure or behavior of its superclasses. --Grady Booch ~\cite{gbtwo}
+        For all things object-oriented, the conceptual framework is the \ObjectModel. --Grady Booch ~\cite{gbone}
       \end{quote}
       
-      Based on the above quote from Grady Booch, we can assume that inheritance forms a kind of hierarchy which is an element in the 
-      \emph{object model}.
+    The object model Grady Booch refers to is made up of \Abstraction, \Encapsulation, \Modularity\, and \emph{Hierarchy}.
+    People have different ideas about what \Inheritance\ is. 
+    \W \end{s5slide}
+  
+  \W \begin{s5slide}
+    \texorhtml{\subsection{\Inheritance\ and \Encapsulation Defined}}
+    {\section{Inheritance and\\ Encapsulation Defined}}
+    It is important to establish such definitions to have a clear understanding
+    of what is being discussed. For this document, I use the following definitions:
+    \begin{ifhtml}
+    \begin{itemize}
+    \item What Does "\Inheritance" Mean for this Presentation?
+    \item What Does "\Encapsulation" Mean for this Presentation?
+    \end{itemize}
+    \end{ifhtml}
+  \W \end{s5slide}
+  
+  \begin{description}
+    \W \begin{s5slide}
+      \W \section{Inheritance is\ldots}
+    \item[\Inheritance] is if and only if the \texttt{extends} directive is used with the \texttt{class} or \texttt{interface} clause. 
+      It is important to understand that Java does not support \MultiInheritance. Java can achieve \Polymorphism by a \texttt{class} 
+      implementing an \texttt{interface}.
+      
+      See the following example:
+      \W \end{s5slide}
+    
+    \begin{ifhtml}
+      \begin{s5slide}
+        \section{An Inheritance Example}
+        \begin{figure}
+          \caption{An Inheritance Example in UML}
+        \begin{verbatim}
+public abstract class AbstractGLLookupableImpl 
+    extends KualiLookupableImpl {
+    ...
+    ...
+}        
+        \end{verbatim}
+        
+        \center{\htmlimg{InheritanceExample_class.png}{Inheritance Example}}
+        \end{figure}
+      \end{s5slide}
+    \end{ifhtml}
+      
+    \begin{tex}
+      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd,
+                        caption={\Inheritance\ Definition Example}]{AbstractGLLookupableImpl.java}
+      \begin{lstlisting}
+    ...
+    ...
+}
+      \end{lstlisting}
 
-      Java does not support multiple-inheritance. The only hierarchy choice is for single-inheritance through the \texttt{extends} clause as
+      \begin{quote}
+        Semantically, \Inheritance\ denotes an ``is-a'' relationship. \ldots 
+        \Inheritance\ thus implies a genralization/specialization hierarchy, 
+        wherein a subclass specializes the more general structure or behavior of its superclasses. --Grady Booch ~\cite{gbtwo}
+      \end{quote}
+      Based on the above quote from Grady Booch, we can assume that \Inheritance\ forms a kind of hierarchy which is an element in the 
+      \ObjectModel.
+
+      Java does not support \MultiInheritance. The only hierarchy choice is for single-inheritance through the \texttt{extends} clause as
       described above. Simply put:
       \begin{description}
-      \item[Single-Inheritance] is when one class inherits from a single superclass. The visual representation of such a hierarchy always looks
+      \item[Single-\Inheritance] is when one class inherits from a single superclass. The visual representation of such a hierarchy always looks
         like a tree.
       \end{description}
+      \end{tex}
 
-    \item[Encapsulation] is a technique of enclosing class functionality through object instances within another class. Many 
-      design patterns employ encapsulation. Among these patterns are Delegate/Aggregate, Composite, Decorator, and Adapter. Some may know these
-      patterns by other names. Encapsulation can be by implementation (as in implementing and abstraction,) or aggregation.  Grady Booch 
-      calls aggregation a ``part of'' relationship.
+      \W \begin{s5slide}
+        \W \section{Encapsulation is...}
+        \item[\Encapsulation] is a technique of enclosing class functionality through object instances within another class. Many 
+          design patterns employ \Encapsulation. Among these patterns are Delegate/Aggregate, Composite, Decorator, and Adapter (some may know these
+          patterns by other names.) \Encapsulation\ can be by implementation (as in implementing and abstraction,) or aggregation.  Grady Booch 
+          calls aggregation a ``part of'' relationship. See the following example:
+          \W \end{s5slide}
+      
+      \begin{ifhtml}
+        \begin{s5slide}
+          \section{An Encapsulation Example}
+          \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection} is a very widely-used example of \Encapsulation\
+          throughout \KFS. Basically, \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection} achieves \emph{Loose Coupling}
+          or \Modularity\ by  encapsulating functionality from other classes through delegating the implementations.
+        \end{s5slide}
+      \end{ifhtml}
   \end{description}
 
+  
+  \begin{tex}
   In simple terms, inheritance and encapsulation are both intended for implementation. Inheritance can be called an ``is a'' relationship, and
   encapsulation can be called a ``part of'' relationship type. Inheritance and encapsulation are both complementary to abstraction.
+  \end{tex}
 
-  \subsection{What is the Problem?}
-  The problem is that Java supports polymorphism, but not multiple-inheritance. As a result due to the lack of multiple-inheritance, Java 
-  developers have designed object-oriented patterns to sidestep single-polymorphism. Single-inheritance creates a single hierarchy that 
-  resembles a tree where there is only one class at the very top. Eg., for \sf Java\rm, the \texttt{Object} class is the top-most class in the hierarchy.
-  
+  \T \subsection{What is the Problem?}
+  \W \begin{s5slide}
+    \W \section{What is the Problem?}
+    The problem is that Java supports \Polymorphism, but not \MultiInheritance. 
+    Single-\Inheritance\ creates a single hierarchy that resembles a tree where there 
+    is only one class at the very top (eg., for \sf{Java}, the \texttt{Object} class is the top-most class in the hierarchy.)
+    Resulting from the lack of \MultiInheritance, Java developers have designed object-oriented 
+    patterns to sidestep single-\Polymorphism\ using \Encapsulation\ rather than \Inheritance.
+    \W \end{s5slide}
+  \begin{tex}
   My Points:
   \begin{itemize}
     \item Java only has single-inheritance
-    \item In order to achieve polymorphism and somewhat multi-inheritance, Java uses \texttt{interfaces}.
+    \item In order to achieve \Polymorphism\ and somewhat \MultiInheritance, Java uses \texttt{interfaces}.
     \item Interfaces are abstractions
     \item Java has a confusing \texttt{abstract} class
   \end{itemize}
   \subsection{Topics}
   \begin{itemize}
-    \item When to use Inheritance?
-    \item When to use Encapsulation?
-    \item What are examples of Encapsulation in Kuali
-    \item What are patterns of bad uses of Inheritance?
+    \item When to use \Inheritance?
+    \item When to use \Encapsulation?
+    \item What are examples of \Encapsulation\ in Kuali
+    \item What are patterns of bad uses of \Inheritance?
     \item Why?
   \end{itemize}
 
   \section{\hfill Inheritance is Part of OOP. Doesn't that Make it a Good Thing?}
-  \hrulefill
+  \texorhtml{\hrulefill}{\htmlrule}
 
   \section{\hfill Encapsulation is Also Part of OOP, but Why is it Better than Inheritance?}
-  \hrulefill
-  \begin{thebibliography}{20}
+  \end{tex}
+  \T \hrulefill
+
+  \begin{ifhtml}
+    \begin{s5slide}
+      \section{How Do They Differ?}
+      \begin{itemize}
+        \item They are different kinds of relationships
+          \begin{itemize}
+          \item \Inheritance\ is an "is a" relationship type
+          \item \Encapsulation\ is a "part of" relationship type
+          \end{itemize}
+        \item \Modularity\ and Coupling
+          \begin{itemize}
+            \item \Inheritance\ leads to tight coupling
+            \item \Encapsulation\ leads to loose coupling
+          \end{itemize}
+        \item \Polymorphism
+      \end{itemize}
+    \end{s5slide}
+  \end{ifhtml}
+  
+  \W \end{s5presentation}
+  \begin{tex}
+    \begin{thebibliography}{20}
     \bibitem{gbone} ~Object-Oriented Analysis and Design, Grady Booch, (2000) 
     \bibitem{gbtwo} ~Object-Oriented Analysis and Design, Grady Booch, (2000) 
-  \end{thebibliography}
+    \end{thebibliography}
+  \end{tex}
 \end{document}
