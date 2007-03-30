@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,20 +26,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.FinancialSystemParameter;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentTypeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.service.ObjectCodeService;
@@ -56,8 +56,8 @@ import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.service.ScrubberValidator;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
-import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.ObjectHelper;
 import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.gl.util.StringHelper;
@@ -101,13 +101,6 @@ public class ScrubberProcess {
     private UniversityDate universityRunDate;
     private String offsetString;
 
-    /* These fields are used to control whether the job was run before some set time,
-     * if so, the rundate of the job will be set to 11:59 PM of the previous day
-     */
-    private Integer cutoffHour;
-    private Integer cutoffMinute;
-    private Integer cutoffSecond;
-    
     /* These are the output groups */
     private OriginEntryGroup validGroup;
     private OriginEntryGroup errorGroup;
@@ -153,12 +146,6 @@ public class ScrubberProcess {
 
         parameters = kualiConfigurationService.getParametersByGroup(GLConstants.GL_SCRUBBER_GROUP);
         rules = kualiConfigurationService.getRulesByGroup(GLConstants.GL_SCRUBBER_GROUP);
-        
-        cutoffHour = null;
-        cutoffMinute = null;
-        cutoffSecond = null;
-        
-        initCutoffTime();
     }
 
     /**
@@ -190,7 +177,7 @@ public class ScrubberProcess {
         scrubberReportErrors = new HashMap<Transaction, List<Message>>();
 
         // setup an object to hold the "default" date information
-        runDate = calculateRunDate(dateTimeService.getCurrentDate());
+        runDate = new Date(dateTimeService.getCurrentDate().getTime());
         runCal = Calendar.getInstance();
         runCal.setTime(runDate);
 
@@ -247,7 +234,7 @@ public class ScrubberProcess {
 
         // generate the scrubber status summary report
         if (reportOnlyMode) {
-            reportService.generateOnlineScrubberStatisticsReport( group.getId(), runDate, scrubberReport, scrubberReportErrors,documentNumber);
+            reportService.generateOnlineScrubberStatisticsReport(group.getId(), runDate, scrubberReport, scrubberReportErrors,documentNumber);
         }
         else {
             reportService.generateBatchScrubberStatisticsReport(runDate, scrubberReport, scrubberReportErrors);
@@ -531,7 +518,7 @@ public class ScrubberProcess {
 
                 if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && 
                         costShareEncBalanceTypeCodes.succeedsRule(scrubbedEntry.getFinancialBalanceTypeCode()) && 
-                        scrubbedEntry.getAccount().isForContractsAndGrants() && Constants.COST_SHARE.equals(subAccountTypeCode) && 
+                        scrubbedEntry.getAccount().isInCg() && Constants.COST_SHARE.equals(subAccountTypeCode) && 
                         costShareEncFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && 
                         costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim())) {
                     TransactionError te1 = generateCostShareEncumbranceEntries(scrubbedEntry);
@@ -547,7 +534,7 @@ public class ScrubberProcess {
 
                 if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && 
                         scrubbedEntry.getOption().getActualFinancialBalanceTypeCd().equals(scrubbedEntry.getFinancialBalanceTypeCode()) && 
-                        scrubbedEntry.getAccount().isForContractsAndGrants() && 
+                        scrubbedEntry.getAccount().isInCg() && 
                         Constants.COST_SHARE.equals(subAccountTypeCode) && 
                         costShareFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && 
                         costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim())) {
@@ -678,7 +665,7 @@ public class ScrubberProcess {
 
         costShareEntry.setFinancialObjectCode((getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_OBJECT_CODE)).getFinancialSystemParameterText());
         costShareEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
-        costShareEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinancialObjectTypeTransferExpenseCd());
+        costShareEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinancialObjectTypeTransferExpenseCode());
         costShareEntry.setTransactionLedgerEntrySequenceNumber(new Integer(0));
 
         StringBuffer description = new StringBuffer();
@@ -786,7 +773,7 @@ public class ScrubberProcess {
         }
 
         costShareSourceAccountEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
-        costShareSourceAccountEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinancialObjectTypeTransferExpenseCd());
+        costShareSourceAccountEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinancialObjectTypeTransferExpenseCode());
         costShareSourceAccountEntry.setTransactionLedgerEntrySequenceNumber(new Integer(0));
 
         costShareSourceAccountEntry.setTransactionLedgerEntryAmount(scrubCostShareAmount);
@@ -1244,7 +1231,7 @@ public class ScrubberProcess {
             costShareEncumbranceEntry.setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
         }
 
-        costShareEncumbranceEntry.setFinancialBalanceTypeCode(scrubbedEntry.getOption().getCostShareEncumbranceBalanceTypeCd());
+        costShareEncumbranceEntry.setFinancialBalanceTypeCode(scrubbedEntry.getOption().getCostShareEncumbranceBalanceTypeCode());
         setCostShareObjectCode(costShareEncumbranceEntry, scrubbedEntry);
         costShareEncumbranceEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
         costShareEncumbranceEntry.setTransactionLedgerEntrySequenceNumber(new Integer(0));
@@ -1586,7 +1573,7 @@ public class ScrubberProcess {
         public String fdocTypCd = "";
         public String fsOriginCd = "";
         public String fdocNbr = "";
-        public Date fdocReversalDt = new Date(dateTimeService.getCurrentDate().getTime());
+        public Date fdocReversalDt = new Date(new java.util.Date().getTime());
         public String univFiscalPrdCd = "";
 
         // Data about unit of work
@@ -1644,112 +1631,5 @@ public class ScrubberProcess {
             transaction = t;
             message = m;
         }
-    }
-    
-    protected void setCutoffTimeForPreviousDay(int hourOfDay, int minuteOfDay, int secondOfDay) {
-        this.cutoffHour = hourOfDay;
-        this.cutoffMinute = minuteOfDay;
-        this.cutoffSecond = secondOfDay;
-        
-        LOG.info("Setting cutoff time to hour: " + hourOfDay + ", minute: " + minuteOfDay + ", second: " + secondOfDay);
-    }
-    
-    protected void setCutoffTime(String cutoffTime) {
-        if (!StringUtils.hasText(cutoffTime)) {
-            LOG.debug("Cutoff time is blank");
-            unsetCutoffTimeForPreviousDay();
-        }
-        else {
-            cutoffTime = cutoffTime.trim();
-            LOG.debug("Cutoff time value found: " + cutoffTime);
-            StringTokenizer st = new StringTokenizer(cutoffTime, ":", false);
-            
-            try {
-                String hourStr = st.nextToken();
-                String minuteStr = st.nextToken();
-                String secondStr = st.nextToken();
-                
-                int hourInt = Integer.parseInt(hourStr, 10);
-                int minuteInt = Integer.parseInt(minuteStr, 10);
-                int secondInt = Integer.parseInt(secondStr, 10);
-                
-                if (hourInt < 0 || hourInt > 23 || minuteInt < 0 || minuteInt > 59 || secondInt < 0 || secondInt > 59) {
-                    throw new IllegalArgumentException("Cutoff time must be in the format \"HH:mm:ss\", where HH, mm, ss are defined in the java.text.SimpleDateFormat class.  In particular, 0 <= hour <= 23, 0 <= minute <= 59, and 0 <= second <= 59");
-                }
-                setCutoffTimeForPreviousDay(hourInt, minuteInt, secondInt);
-            }
-            catch (Exception e) {
-                throw new IllegalArgumentException("Cutoff time should either be null, or in the format \"HH:mm:ss\", where HH, mm, ss are defined in the java.text.SimpleDateFormat class.");
-            }
-        }
-    }
-    
-    
-    public void unsetCutoffTimeForPreviousDay() {
-        this.cutoffHour = null;
-        this.cutoffMinute = null;
-        this.cutoffSecond = null;
-    }
-    
-    /**
-     * This method modifies the run date if it is before the cutoff time specified by calling
-     * the setCutoffTimeForPreviousDay method.
-     * 
-     * See https://test.kuali.org/jira/browse/KULRNE-70
-     * 
-     * This method is public to facilitate unit testing
-     * 
-     * @param currentDate
-     * @return
-     */
-    public java.sql.Date calculateRunDate(java.util.Date currentDate) {
-        Calendar currentCal = Calendar.getInstance();
-        currentCal.setTime(currentDate);
-        
-        if (isCurrentDateBeforeCutoff(currentCal)) {
-            // time to set the date to the previous day's last minute/second
-            currentCal.add(Calendar.DAY_OF_MONTH, -1);
-            // per old COBOL code (see https://test.kuali.org/jira/browse/KULRNE-70),
-            // the time is set to 23:59:59 (assuming 0 ms)
-            currentCal.set(Calendar.HOUR_OF_DAY, 23);
-            currentCal.set(Calendar.MINUTE, 59);
-            currentCal.set(Calendar.SECOND, 59);
-            currentCal.set(Calendar.MILLISECOND, 0);
-            return new java.sql.Date(currentCal.getTimeInMillis());
-        }
-        return new java.sql.Date(currentDate.getTime());
-    }
-    
-    protected boolean isCurrentDateBeforeCutoff(Calendar currentCal) {
-        if (cutoffHour != null && cutoffMinute != null && cutoffSecond != null) {
-            // if cutoff date is not properly defined
-            // 24 hour clock (i.e. hour is 0 - 23)
-            
-            // clone the calendar so we get the same month, day, year
-            // then change the hour, minute, second fields
-            // then see if the cutoff is before or after
-            Calendar cutoffTime = (Calendar) currentCal.clone();
-            cutoffTime.setLenient(false);
-            cutoffTime.set(Calendar.HOUR_OF_DAY, cutoffHour);
-            cutoffTime.set(Calendar.MINUTE, cutoffMinute);
-            cutoffTime.set(Calendar.SECOND, cutoffSecond);
-            cutoffTime.set(Calendar.MILLISECOND, 0);
-            
-            return currentCal.before(cutoffTime);
-        }
-        // if cutoff date is not properly defined, then it is considered to be after the cutoff
-        return false;
-    }
-    
-    protected void initCutoffTime() {
-        FinancialSystemParameter cutoffParam = parameters.get(GLConstants.GlScrubberGroupParameters.SCRUBBER_CUTOFF_TIME);
-        String cutoffTime = null;
-        if (cutoffParam == null) {
-            LOG.debug("Cutoff time system parameter not found");
-            unsetCutoffTimeForPreviousDay();
-            return;
-        }
-        cutoffTime = cutoffParam.getFinancialSystemParameterText();
-        setCutoffTime(cutoffTime);
     }
 }

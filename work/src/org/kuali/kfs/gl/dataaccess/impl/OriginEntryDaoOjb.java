@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/impl/OriginEntryDaoOjb.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +34,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.OriginEntryDao;
-import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntryDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryDaoOjb.class);
@@ -55,20 +57,6 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
     private static final String TRANSACTION_LEDGER_ENTRY_DESCRIPTION = "transactionLedgerEntryDescription";
     private static final String TRANSACTION_LEDGER_ENTRY_AMOUNT = "transactionLedgerEntryAmount";
     private static final String TRANSACTION_DEBIT_CREDIT_CODE = "transactionDebitCreditCode";
-    
-    private Class entryClass;
-
-    public void setEntryClass(Class entryClass) {
-        this.entryClass = entryClass;
-    }
-
-    /**
-     * Gets the entryClass attribute. 
-     * @return Returns the entryClass.
-     */
-    public Class getEntryClass() {
-        return entryClass;
-    }
 
     public OriginEntryDaoOjb() {
         super();
@@ -85,7 +73,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
             crit.addNotEqualTo(OriginEntryDaoOjb.TRANSACTION_DEBIT_CREDIT_CODE, Constants.GL_CREDIT_CODE);
         }
 
-        ReportQueryByCriteria q = QueryFactory.newReportQuery(entryClass, crit);
+        ReportQueryByCriteria q = QueryFactory.newReportQuery(OriginEntry.class, crit);
         q.setAttributes(new String[] { "SUM(" + OriginEntryDaoOjb.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")" });
 
         Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
@@ -103,7 +91,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         Criteria crit = new Criteria();
         crit.addEqualTo(OriginEntryDaoOjb.ENTRY_GROUP_ID, groupId);
 
-        ReportQueryByCriteria q = QueryFactory.newReportQuery(entryClass, crit);
+        ReportQueryByCriteria q = QueryFactory.newReportQuery(OriginEntry.class, crit);
         q.setAttributes(new String[] { "count(*)" });
 
         Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
@@ -125,7 +113,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
 
         Criteria crit = new Criteria();
 
-        ReportQueryByCriteria q = QueryFactory.newReportQuery(entryClass, crit);
+        ReportQueryByCriteria q = QueryFactory.newReportQuery(OriginEntry.class, crit);
         q.setAttributes(new String[] { ENTRY_GROUP_ID, "count(*)" });
         q.addGroupBy(ENTRY_GROUP_ID);
 
@@ -152,7 +140,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         Criteria criteria = new Criteria();
         criteria.addEqualTo(ENTRY_GROUP_ID, oeg.getId());
 
-        ReportQueryByCriteria q = QueryFactory.newReportQuery(entryClass, criteria);
+        ReportQueryByCriteria q = QueryFactory.newReportQuery(OriginEntry.class, criteria);
         q.setAttributes(new String[] { PropertyConstants.DOCUMENT_NUMBER,"financialDocumentTypeCode","financialSystemOriginationCode" });
 
         q.setDistinct(true);
@@ -173,7 +161,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
             criteria.addEqualTo(element, searchCriteria.get(element));
         }
 
-        QueryByCriteria qbc = QueryFactory.newQuery(entryClass, criteria);
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, criteria);
         qbc.addOrderByAscending(ENTRY_GROUP_ID);
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
     }
@@ -204,7 +192,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
 
         crit1.addAndCriteria(crit2);
 
-        QueryByCriteria qbc = QueryFactory.newQuery(entryClass, crit1);
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, crit1);
         qbc.addOrderByAscending(UNIVERSITY_FISCAL_YEAR);
         qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
         qbc.addOrderByAscending(ACCOUNT_NUMBER);
@@ -230,7 +218,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         Criteria criteria = new Criteria();
         criteria.addEqualTo(ENTRY_GROUP_ID, oeg.getId());
 
-        QueryByCriteria qbc = QueryFactory.newQuery(entryClass, criteria);
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, criteria);
 
         if (sort == OriginEntryDao.SORT_DOCUMENT) {
             qbc.addOrderByAscending(FINANCIAL_DOCUMENT_TYPE_CODE);
@@ -304,7 +292,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         LOG.debug("testingGetAllEntries() started");
 
         Criteria criteria = new Criteria();
-        QueryByCriteria qbc = QueryFactory.newQuery(entryClass, criteria);
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, criteria);
         qbc.addOrderByAscending(ENTRY_GROUP_ID);
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
     }
@@ -335,7 +323,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
             criteria.addEqualTo(element, searchCriteria.get(element));
         }
 
-        QueryByCriteria qbc = QueryFactory.newQuery(entryClass, criteria);
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, criteria);
         getPersistenceBrokerTemplate().deleteByQuery(qbc);
 
         // This is required because deleteByQuery leaves the cache alone so future queries
@@ -364,7 +352,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         Criteria criteria = new Criteria();
         criteria.addIn(ENTRY_GROUP_ID, ids);
 
-        QueryByCriteria qbc = QueryFactory.newQuery(entryClass, criteria);
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, criteria);
         getPersistenceBrokerTemplate().deleteByQuery(qbc);
 
         // This is required because deleteByQuery leaves the cache alone so future queries
@@ -386,7 +374,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
             criteria.addEqualTo(element, searchCriteria.get(element));
         }
 
-        QueryByCriteria qbc = QueryFactory.newQuery(entryClass, criteria);
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntry.class, criteria);
         qbc.addOrderByAscending(ENTRY_GROUP_ID);
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
     }
@@ -410,7 +398,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         Criteria criteria = new Criteria();
         criteria.addIn(PropertyConstants.ENTRY_GROUP_ID, ids);
 
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(entryClass, criteria);
+        ReportQueryByCriteria query = QueryFactory.newReportQuery(OriginEntry.class, criteria);
 
         String attributeList[] = { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")", "count(*)" };
 
@@ -432,7 +420,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         OriginEntry oe = new OriginEntry();
         // in case of no matching entry
         try {
-            oe = (OriginEntry) getPersistenceBrokerTemplate().getObjectById(entryClass, entryId);
+            oe = (OriginEntry) getPersistenceBrokerTemplate().getObjectById(OriginEntry.class, entryId);
 
         }
         catch (Exception e) {
@@ -461,7 +449,7 @@ public class OriginEntryDaoOjb extends PersistenceBrokerDaoSupport implements Or
         criteria.addIn(PropertyConstants.ENTRY_GROUP_ID, ids);
         String fundGroupCode = PropertyConstants.ACCOUNT + "." + PropertyConstants.SUB_FUND_GROUP + "." + PropertyConstants.FUND_GROUP_CODE;
 
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(entryClass, criteria);
+        ReportQueryByCriteria query = QueryFactory.newReportQuery(OriginEntry.class, criteria);
 
         String attributeList[] = {
                 PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE,

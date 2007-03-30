@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +26,16 @@ import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConsta
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
+import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.ExceptionUtils;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.rules.AttributeReference;
+import org.kuali.core.util.SpringServiceLocator;
+import static org.kuali.core.util.SpringServiceLocator.getDictionaryValidationService;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.SubFundGroup;
@@ -42,26 +43,28 @@ import org.kuali.module.financial.document.InternalBillingDocument;
 
 /**
  * Business rule(s) applicable to InternalBilling document.
+ * 
+ * 
  */
-public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
+public class InternalBillingDocumentRule extends TransactionalDocumentRuleBase {
 
     /**
-     * @see IsDebitUtils#isDebitConsideringSection(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringSection(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(AccountingDocument transactionalDocument, AccountingLine accountingLine) {
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         return IsDebitUtils.isDebitConsideringSection(this, transactionalDocument, accountingLine);
     }
 
     /**
      * Overrides to only disallow zero, allowing negative amounts.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isAmountValid(FinancialDocument, AccountingLine)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isAmountValid(TransactionalDocument, AccountingLine)
      */
     @Override
-    public boolean isAmountValid(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
         if (accountingLine.getAmount().equals(Constants.ZERO)) {
             GlobalVariables.getErrorMap().putError(Constants.AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
             LOG.info("failing isAmountValid - zero check");
@@ -71,29 +74,29 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomAddAccountingLineBusinessRules(FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomAddAccountingLineBusinessRules(TransactionalDocument,
      *      AccountingLine)
      */
     @Override
-    public boolean processCustomAddAccountingLineBusinessRules(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean processCustomAddAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine) {
         return processCommonCustomAccountingLineRules(accountingLine);
     }
 
     /**
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(TransactionalDocument,
      *      AccountingLine)
      */
     @Override
-    public boolean processCustomReviewAccountingLineBusinessRules(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean processCustomReviewAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine) {
         return processCommonCustomAccountingLineRules(accountingLine);
     }
 
     /**
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(TransactionalDocument,
      *      AccountingLine, AccountingLine)
      */
     @Override
-    public boolean processCustomUpdateAccountingLineBusinessRules(AccountingDocument document, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
+    public boolean processCustomUpdateAccountingLineBusinessRules(TransactionalDocument document, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
         return processCommonCustomAccountingLineRules(updatedAccountingLine);
     }
 
@@ -167,7 +170,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * @see FinancialDocumentRuleBase#processCustomRouteDocumentBusinessRules(Document)
+     * @see TransactionalDocumentRuleBase#processCustomRouteDocumentBusinessRules(Document)
      */
     @Override
     public boolean processCustomRouteDocumentBusinessRules(Document document) {
@@ -190,7 +193,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
      * @param internalBillingDocument
      * @return whether any items were invalid
      */
-    private boolean validateItems(InternalBillingDocument internalBillingDocument) {
+    private static boolean validateItems(InternalBillingDocument internalBillingDocument) {
         boolean retval = true;
         for (int i = 0; i < internalBillingDocument.getItems().size(); i++) {
             String propertyName = Constants.DOCUMENT_PROPERTY_NAME + "." + PropertyConstants.ITEM + "[" + i + "]";
@@ -242,7 +245,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
      * Overrides the parent's implementation to check to make sure that the provided object code's level isn't a contract and grants
      * level.
      * 
-     * @see FinancialDocumentRuleBase#isObjectLevelAllowed(AccountingLine)
+     * @see TransactionalDocumentRuleBase#isObjectLevelAllowed(AccountingLine)
      */
     @Override
     public boolean isObjectLevelAllowed(AccountingLine accountingLine) {
@@ -259,7 +262,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     /**
      * This implementation overrides the parent to check and make sure that the fund group is not a Loan fund group.
      * 
-     * @see FinancialDocumentRuleBase#isFundGroupAllowed(AccountingLine)
+     * @see TransactionalDocumentRuleBase#isFundGroupAllowed(AccountingLine)
      */
     @Override
     public boolean isFundGroupAllowed(AccountingLine accountingLine) {
@@ -288,7 +291,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
      * Overrides the parent's implementation to check and make sure that the sub fund group is not the Retire Indebt or the
      * Investment Plant sub fund group.
      * 
-     * @see FinancialDocumentRuleBase#isSubFundGroupAllowed(AccountingLine)
+     * @see TransactionalDocumentRuleBase#isSubFundGroupAllowed(AccountingLine)
      */
     @Override
     public boolean isSubFundGroupAllowed(AccountingLine accountingLine) {
