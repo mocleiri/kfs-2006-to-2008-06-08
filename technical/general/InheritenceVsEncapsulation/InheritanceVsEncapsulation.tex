@@ -122,7 +122,8 @@
     
     \T \newpage
       \W \begin{s5slide}
-        \section{An Inheritance Example}
+        \W \section{An Inheritance Example}
+        \T \subsubsection{An \Inheritance\ Example}
         \begin{figure}[!h]
           \caption{An Inheritance Example in UML}
           \begin{ifhtml}
@@ -166,26 +167,30 @@ public abstract class AbstractGLLookupableImpl
       \end{tex}
 
       \W \begin{s5slide}
-        \W \section{Encapsulation is...}
+        \W \section{Encapsulation is\ldots}
         \item[\Encapsulation] is a technique of enclosing class functionality through object instances within another class. Many 
           design patterns employ \Encapsulation. Among these patterns are Delegate/Aggregate, Composite, Decorator, and Adapter (some may know these
           patterns by other names.) \Encapsulation\ can be by implementation (as in implementing and abstraction,) or aggregation.  Grady Booch 
           calls aggregation a ``part of'' relationship. See the following example:
           \W \end{s5slide}
+
+      I cite the ``Gang of Four'' in this paper, and they refer to \Encapsulation\ as ``Object Composition.''
       
-      \begin{ifhtml}
-        \begin{s5slide}
-          \section{An Encapsulation Example}
-          \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection} is a very widely-used example of \Encapsulation\
+      \W \begin{s5slide}
+        \W \section{An Encapsulation Example}
+        \T \subsubsection{An \Encapsulation\ Example}
+        \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection} is a very widely-used example of \Encapsulation\
           throughout \KFS. Basically, \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection} achieves \emph{Loose Coupling}
           or \Modularity\ by  encapsulating functionality from other classes through delegating the implementations.
-        \end{s5slide}
-      \end{ifhtml}
+      \W \end{s5slide}
   \end{description}
 
   \begin{tex}
   In simple terms, inheritance and encapsulation are both intended for implementation. Inheritance can be called an ``is a'' relationship, and
   encapsulation can be called a ``part of'' relationship type. Inheritance and encapsulation are both complementary to abstraction.
+
+  The ``Gang of Four'' compares them as source reuse paradigms where \Inheritance\ represents ``white-box'' reuse and \Encapsulation\ represents
+  ``black-box'' reuse.
   \end{tex}
 
   \W \begin{s5slide}
@@ -193,14 +198,14 @@ public abstract class AbstractGLLookupableImpl
     \T \subsection{What is the Problem?}
     The problem is that Java supports \Polymorphism, but not \MultiInheritance. 
     Single-\Inheritance\ creates a single hierarchy that resembles a tree where there 
-    is only one class at the very top (eg., for \sf{Java}, the \texttt{Object} class is the top-most class in the hierarchy.)
+    is only one class at the very top (eg., for \sf{Java}\rm{}, the \texttt{Object} class is the top-most class in the hierarchy.)
     Resulting from the lack of \MultiInheritance, Java developers have designed object-oriented 
     patterns to sidestep single-\Polymorphism\ using \Encapsulation\ rather than \Inheritance.
     \W \end{s5slide}
 
   \begin{tex}
     \begin{itemize}
-    \item Java only has single-inheritance
+    \item Java only has single-\Inheritance
     \item In order to achieve \Polymorphism\ and somewhat \MultiInheritance, Java uses \texttt{interfaces}.
     \item Interfaces are abstractions
     \item Java has a confusing \texttt{abstract} class
@@ -214,8 +219,19 @@ public abstract class AbstractGLLookupableImpl
     \item What are examples of \Encapsulation\ in Kuali
     \item What are patterns of bad uses of \Inheritance?
     \item When is the \texttt{abstract} class necessary?
+    \item Parallel hierarchies
     \end{itemize}
+    
+    \subsection{What are Bad Smells?}
+    A ``bad smell'' is a term from Martin Fowler's, \\ \underline{Refactoring: Improving the Design of Existing Code.} They are pretty much hints
+    given from the software system during development of areas that need or will need refactoring in the future.
 
+    Below are some bad smells and examples of where some exist in \KFS.
+    \begin{description}
+      \item[Shotgun Surgery] occurs when a small change to a software system requires many requisite and dependency changes to be properly 
+        implemented (eg., the DataDictionary.)
+      \item[Parallel Hierarchies] are\ldots well, just see the section on Parallel Hierarchies.
+    \end{description}
   \end{tex}
 
   \section{\hfill Comparing \Inheritance\ and \Encapsulation: How do They Differ?}
@@ -253,6 +269,16 @@ public abstract class AbstractGLLookupableImpl
       Basically, that means it adds structure to whatever your Model is. Since it is an ``is a'' relationship,
       the structure is intended to be pretty concrete.
       
+      The ``Gang of Four'' calls this kind of paradigm ``white-box'' reuse where 
+      ``the internals of parent classes are often visible to subclasses.''
+
+      They have also made it a point that \Inheritance\ can be pretty dangerous if abused.
+      \begin{quote}
+        Nevertheless, our experience is that designers overuse \Inheritance\ as a reuse technique and designs 
+        are often made more reusable (and simpler) by depending more on object composition. You'll see object 
+        composition applied again and again in design-patterns.
+      \end{quote}
+
       \subsection{Why is \Encapsulation\ Better than \Inheritance?}
       \Encapsulation\ is the implementation to your \Abstraction. Some may be thinking now, 
       ``Isn't \Inheritance\ also implementation?'' It is, but not for an \Abstraction. Since \Inheritance\ 
@@ -262,6 +288,21 @@ public abstract class AbstractGLLookupableImpl
       
       Simply put, ``If you want your application to be more Modular, use \Encapsulation\ and \Abstraction\ 
       more liberally.'' If you want to rely on a more strict Model (say for strict typing) use \Inheritance.
+
+      The ``Gang of Four'' has a different idea on this. They believe that \Inheritance\ and \Encapsulation\
+      work together.
+      \begin{quote}
+        \dots the set of available components is never quite rich enough in practice. Reuse by inheritance 
+        makes it easier to make new components that can be composed with old ones. Inheritance and object
+        composition thus work together.
+      \end{quote}
+
+      This may be the case, but they also suggest that \Inheritance\ is still pretty dangerous.
+      
+      The ``Gang of Four'' suggested a common principle to abide by in order to overcome these troubles.      
+      \begin{quote}
+        Favor object composition over class \Inheritance.
+      \end{quote}      
       
       In most cases, you will want to use \Encapsulation\ and \Abstraction\ because in most cases
       you are trying to develop Orthogonal and Modular code.
@@ -409,8 +450,7 @@ public abstract class AbstractGLLookupableImpl
     \end{tex}
     \W \end{s5slide}
   
-  \begin{ifhtml}
-    \begin{s5slide}
+  \W \begin{s5slide}
       \section{What About \texttt{abstract} Classes?}
       \subsection{Uses of \texttt{abstract} Classes}
       \begin{itemize}
@@ -420,8 +460,47 @@ public abstract class AbstractGLLookupableImpl
         \item Can mix abstraction and implementation for small/simple frameworks/hierarchies.
           This is good if you don't expect to scale.         
       \end{itemize}
-    \end{s5slide}
-  \end{ifhtml}
+  \W \end{s5slide}
+
+  \W \begin{s5slide}
+      \section{Parallel Hierarchies}
+      Fowler refers to Parallel Hierarchies as a ``special case of shotgun surgery'' because one minor change requires modification of 
+      one ore more classes. 
+      \begin{quote}
+        In this case, every time you make a subclass of one class, you also have to make a subclass of another\dots the prefixes of 
+        the class names in one hierarchy are the same as the prefixes in another hierarchy.
+      \end{quote}
+
+      Some software engineers see this isn't actually a bad thing, but rather a blessing. It forces tight coupling and strict typing
+      in a sense. I think Fowler explained it best.
+      \begin{quote}
+        Often you start inheriting from a class but then find that many of the superclass operations aren't really true of the subclass
+        \dots you have an interface that is not a true reflection of what the class does.
+      \end{quote}
+      
+      The above is actually true of \Inheritance\ in general, but one is certain to encounter such a scenario when a 
+      Parallel Hierarchy is created.
+      
+      \subsection{Examples of Parallel Hierarchies}
+      The above should sound pretty familiar. This is one of the fundamental flaws in Struts. Whenever one creates a mapping, an
+      \sf{ActionForm}\rm{} and a \sf{Action}\rm{} both need to be created. In an earlier section I describe how to merge the
+        hierarchies using Fowler's ``Replace \Inheritance\ with Delegation'' refactoring and 
+        \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection}.
+      \subsection{Examples that Exist in \KFS}
+      I've already mentioned Struts Parallel Hierarchies which exist in \KFS, but there are others. 
+
+      \begin{description}
+        \item[\sf{SourceAccountingLine}\rm{} and \sf{TargetAccountingLine}\rm{}]
+          This has recently been refactored, but the problem still remains because 
+          \sf{SourceAccountingLine}\rm{} and \sf{TargetAccountingLine}\rm{} instances are required in tandem for most financial documents. 
+          If ever a specialized version is required, one needs create both a \sf{SourceAccountingLine}\rm{} and a \sf{TargetAccountingLine}\rm{}
+          class.
+        \item[\sf{AccountingDocument}\rm{} and \sf{AccountingDocumentRule}\rm{}]
+          This actually includes the Struts parallel hierarchy. The problem is the same though. Whenver a \sf{AccountingDocument}\rm{} subclass 
+          is created, then a \sf{AccountingDocumentRule}\rm{} is also required.
+      \end{description}
+
+  \W \end{s5slide}
 
   \W \end{s5presentation}
   \begin{tex}
