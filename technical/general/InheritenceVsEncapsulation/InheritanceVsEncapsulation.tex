@@ -31,7 +31,7 @@
   }
   \W \begin{s5presentation}
   \maketitle
-  \texonly{\tableofcontents}
+  \texonly{\tableofcontents \listoffigures}
   \W \begin{s5slide}
     \begin{abstract}
       \begin{ifhtml}
@@ -90,7 +90,7 @@
     \W \begin{s5slide}
       \W \section{The Object Model}
       \begin{quote}
-        For all things object-oriented, the conceptual framework is the \ObjectModel. --Grady Booch ~\cite{gbone}
+        For all things object-oriented, the conceptual framework is the \ObjectModel. Booch ~\cite{booch}
       \end{quote}
       
     The object model Grady Booch refers to is made up of \Abstraction, \Encapsulation, \Modularity\, and \emph{Hierarchy}.
@@ -153,7 +153,7 @@ public abstract class AbstractGLLookupableImpl
       \begin{quote}
         Semantically, \Inheritance\ denotes an ``is-a'' relationship. \ldots 
         \Inheritance\ thus implies a genralization/specialization hierarchy, 
-        wherein a subclass specializes the more general structure or behavior of its superclasses. --Grady Booch ~\cite{gbtwo}
+        wherein a subclass specializes the more general structure or behavior of its superclasses. Booch \cite{booch}
       \end{quote}
       Based on the above quote from Grady Booch, we can assume that \Inheritance\ forms a kind of hierarchy which is an element in the 
       \ObjectModel.
@@ -174,7 +174,14 @@ public abstract class AbstractGLLookupableImpl
           calls aggregation a ``part of'' relationship. See the following example:
           \W \end{s5slide}
 
-      I cite the ``Gang of Four'' in this paper, and they refer to \Encapsulation\ as ``Object Composition.''
+      \begin{tex}
+        I cite the ``Gang of Four'' in this paper, and they refer to \Encapsulation\ as ``Object Composition.''
+        \begin{quote}
+          Object composition is an alternative to class inheritance. Here, new functionality is obtained by assembling or composing objects to get more complex
+          functionality. Object composition requires that the objects being composed have well-defined interfaces. This style of reuse is called "black-box reuse," 
+          because no internal details of objects are visible. Objects appear only as "black boxes." ``Gang of Four'' Page 19\cite{gangoffour}
+        \end{quote}
+      \end{tex}
       
       \W \begin{s5slide}
         \W \section{An Encapsulation Example}
@@ -190,7 +197,7 @@ public abstract class AbstractGLLookupableImpl
   encapsulation can be called a ``part of'' relationship type. Inheritance and encapsulation are both complementary to abstraction.
 
   The ``Gang of Four'' compares them as source reuse paradigms where \Inheritance\ represents ``white-box'' reuse and \Encapsulation\ represents
-  ``black-box'' reuse.
+  ``black-box'' reuse. (Gang of Four, 19)\cite{gangoffour}
   \end{tex}
 
   \W \begin{s5slide}
@@ -270,13 +277,13 @@ public abstract class AbstractGLLookupableImpl
       the structure is intended to be pretty concrete.
       
       The ``Gang of Four'' calls this kind of paradigm ``white-box'' reuse where 
-      ``the internals of parent classes are often visible to subclasses.''
+      ``the internals of parent classes are often visible to subclasses.'' (Gang of Four, 18)\cite{gangoffour}
 
       They have also made it a point that \Inheritance\ can be pretty dangerous if abused.
       \begin{quote}
         Nevertheless, our experience is that designers overuse \Inheritance\ as a reuse technique and designs 
         are often made more reusable (and simpler) by depending more on object composition. You'll see object 
-        composition applied again and again in design-patterns.
+        composition applied again and again in design-patterns. ``Gang of Four'' Page 20\cite{gangoffour}
       \end{quote}
 
       \subsection{Why is \Encapsulation\ Better than \Inheritance?}
@@ -294,7 +301,7 @@ public abstract class AbstractGLLookupableImpl
       \begin{quote}
         \ldots the set of available components is never quite rich enough in practice. Reuse by inheritance 
         makes it easier to make new components that can be composed with old ones. Inheritance and object
-        composition thus work together.
+        composition thus work together. ``Gang of Four'' Page 20\cite{gangoffour}
       \end{quote}
 
       This may be the case, but they also suggest that \Inheritance\ is still pretty dangerous.
@@ -414,9 +421,11 @@ public abstract class AbstractGLLookupableImpl
           \end{enumerate}
           \item Make \sf AccountBalanceByConsolidationLookupableImpl, AccountBalanceByLevelLookupableImpl, \rm and \sf 
       AccountBalanceByObjectLookupableImpl\rm implement \sf Lookupable. \rm
-      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceByConsolidationLookupableImpl.java}
-      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceByLevelLookupableImpl.java}
-      \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceByObjectLookupableImpl.java}
+      \begin{figure}
+        \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceByConsolidationLookupableImpl.java}
+        \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceByLevelLookupableImpl.java}
+        \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/AccountBalanceByObjectLookupableImpl.java}
+      \end{figure}
       
       \item Override all \sf Lookupable \rm methods to delegate to \sf baseLookupable\rm.
       \end{enumerate}
@@ -442,16 +451,23 @@ public abstract class AbstractGLLookupableImpl
     \Inheritance\ to create this structure, it is difficult to reduce it. Here is an example of how \emph{Spring} services can be used with
     \Encapsulation\ to reduce a parallel hierarchy.\
     \begin{tex}
-    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiForm.java}
-    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiAction.java}
-    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiStrutsDocumentServiceImpl.java}
-    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiActionHandler.java}
-    \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiFormHandler.java}
+      \begin{figure}
+        \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiForm.java}
+        \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiAction.java}
+        \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiStrutsDocumentServiceImpl.java}
+        \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiActionHandler.java}
+        \lstinputlisting[linerange=ClassSignatureStart-ClassSignatureEnd]{src/encapsulation/KualiFormHandler.java}
+      \end{figure}
     \end{tex}
     \W \end{s5slide}
   
   \W \begin{s5slide}
       \section{What About \texttt{abstract} Classes?}
+      
+      \texonly{\texttt{abstract} classes have a foundation in \Inheritance, so what about them? Should they just not be used? Should we treat 
+      them like some mistake in the Java language?}
+
+      \T Well, \texttt{abstract} classes do have their uses.
       \subsection{Uses of \texttt{abstract} Classes}
       \begin{itemize}
         \item A compiler restriction prevents instantiating \texttt{abstract} classes. This
@@ -469,7 +485,7 @@ public abstract class AbstractGLLookupableImpl
       one ore more classes. 
       \begin{quote}
         In this case, every time you make a subclass of one class, you also have to make a subclass of another\ldots the prefixes of 
-        the class names in one hierarchy are the same as the prefixes in another hierarchy.
+        the class names in one hierarchy are the same as the prefixes in another hierarchy. Fowler, Page 81 \cite{fowler}
       \end{quote}
       
       Some software engineers see this isn't actually a bad thing, but rather a blessing. It forces tight coupling and strict typing
@@ -477,7 +493,7 @@ public abstract class AbstractGLLookupableImpl
       \end{tex}
       \begin{quote}
         Often you start inheriting from a class but then find that many of the superclass operations aren't really true of the subclass
-        \ldots you have an interface that is not a true reflection of what the class does.
+        \ldots you have an interface that is not a true reflection of what the class does. Fowler, Page 352 \cite{fowler}
       \end{quote}
       \begin{tex}
       The above is actually true of \Inheritance\ in general, but one is certain to encounter such a scenario when a 
@@ -497,7 +513,7 @@ public abstract class AbstractGLLookupableImpl
         \W \section{Examples of Parallel Hierarchies}
         The above should sound pretty familiar. This is one of the fundamental flaws in Struts. Whenever one creates a mapping, an
       \sf{ActionForm}\rm{} and a \sf{Action}\rm{} both need to be created. In an earlier section I describe how to merge the
-        hierarchies using Fowler's ``Replace \Inheritance\ with Delegation'' refactoring and 
+        hierarchies using Fowler's ``Replace \Inheritance\ with Delegation'' (Fowler, 352)\cite refactoring and 
         \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection}.
       \W \end{s5slide}
 
@@ -525,8 +541,9 @@ public abstract class AbstractGLLookupableImpl
   \W \end{s5presentation}
   \begin{tex}
     \begin{thebibliography}{20}
-    \bibitem{gbone} ~Object-Oriented Analysis and Design, Grady Booch, (2000) 
-    \bibitem{gbtwo} ~Object-Oriented Analysis and Design, Grady Booch, (2000) 
+    \bibitem{booch} Grady Booch. Object-Oriented Analysis and Design. Addison-Wesley, 2000.
+    \bibitem{fowler} Martin Fowler, Kent Beck, John Brant, William Opdyke, Don Roberts. Refactoring: Improving the Design of Existing Code. Addison-Wesley, 2002.
+    \bibitem{gangoffour} Eric Gamma, Richard Helm, Ralph Johnson, John Vlissides. Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley, 2002
     \end{thebibliography}
   \end{tex}
 \end{document}
