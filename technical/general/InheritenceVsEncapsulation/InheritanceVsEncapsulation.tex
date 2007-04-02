@@ -292,7 +292,7 @@ public abstract class AbstractGLLookupableImpl
       The ``Gang of Four'' has a different idea on this. They believe that \Inheritance\ and \Encapsulation\
       work together.
       \begin{quote}
-        \dots the set of available components is never quite rich enough in practice. Reuse by inheritance 
+        \ldots the set of available components is never quite rich enough in practice. Reuse by inheritance 
         makes it easier to make new components that can be composed with old ones. Inheritance and object
         composition thus work together.
       \end{quote}
@@ -460,48 +460,68 @@ public abstract class AbstractGLLookupableImpl
         \item Can mix abstraction and implementation for small/simple frameworks/hierarchies.
           This is good if you don't expect to scale.         
       \end{itemize}
-  \W \end{s5slide}
-
+      \W \end{s5slide}
+  
   \W \begin{s5slide}
-      \section{Parallel Hierarchies}
+    \section{Parallel Hierarchies}
+    \begin{tex}
       Fowler refers to Parallel Hierarchies as a ``special case of shotgun surgery'' because one minor change requires modification of 
       one ore more classes. 
       \begin{quote}
-        In this case, every time you make a subclass of one class, you also have to make a subclass of another\dots the prefixes of 
+        In this case, every time you make a subclass of one class, you also have to make a subclass of another\ldots the prefixes of 
         the class names in one hierarchy are the same as the prefixes in another hierarchy.
       \end{quote}
-
+      
       Some software engineers see this isn't actually a bad thing, but rather a blessing. It forces tight coupling and strict typing
       in a sense. I think Fowler explained it best.
+      \end{tex}
       \begin{quote}
         Often you start inheriting from a class but then find that many of the superclass operations aren't really true of the subclass
-        \dots you have an interface that is not a true reflection of what the class does.
+        \ldots you have an interface that is not a true reflection of what the class does.
       \end{quote}
-      
+      \begin{tex}
       The above is actually true of \Inheritance\ in general, but one is certain to encounter such a scenario when a 
       Parallel Hierarchy is created.
-      
-      \subsection{Examples of Parallel Hierarchies}
-      The above should sound pretty familiar. This is one of the fundamental flaws in Struts. Whenever one creates a mapping, an
+    \end{tex}
+    \begin{ifhtml}
+      \begin{itemize}
+        \item Causes confusion in class hierarchies
+        \item Forces inconsistency in classes. Some classes don't do what they should and do other things they shouldn't.
+        \item Forces developers to change numerous classes for a minor alteration in the software system.
+      \end{itemize}
+    \end{ifhtml}
+    \W \end{s5slide}
+  
+  \subsection{Examples of Parallel Hierarchies}
+      \W \begin{s5slide}
+        \W \section{Examples of Parallel Hierarchies}
+        The above should sound pretty familiar. This is one of the fundamental flaws in Struts. Whenever one creates a mapping, an
       \sf{ActionForm}\rm{} and a \sf{Action}\rm{} both need to be created. In an earlier section I describe how to merge the
         hierarchies using Fowler's ``Replace \Inheritance\ with Delegation'' refactoring and 
         \href{http://en.wikipedia.org/wiki/Dependency_Injection}{Dependency Injection}.
+      \W \end{s5slide}
+
       \subsection{Examples that Exist in \KFS}
       I've already mentioned Struts Parallel Hierarchies which exist in \KFS, but there are others. 
 
       \begin{description}
+        \W \begin{s5slide}
+        \W \section{Examples that Exist in KFS}
         \item[\sf{SourceAccountingLine}\rm{} and \sf{TargetAccountingLine}\rm{}]
           This has recently been refactored, but the problem still remains because 
           \sf{SourceAccountingLine}\rm{} and \sf{TargetAccountingLine}\rm{} instances are required in tandem for most financial documents. 
           If ever a specialized version is required, one needs create both a \sf{SourceAccountingLine}\rm{} and a \sf{TargetAccountingLine}\rm{}
           class.
-        \item[\sf{AccountingDocument}\rm{} and \sf{AccountingDocumentRule}\rm{}]
+          \W \end{s5slide}
+        
+        \W \begin{s5slide}
+          \W \section{Examples that Exist in KFS}
+      \item[\sf{AccountingDocument}\rm{} and \sf{AccountingDocumentRule}\rm{}]
           This actually includes the Struts parallel hierarchy. The problem is the same though. Whenver a \sf{AccountingDocument}\rm{} subclass 
           is created, then a \sf{AccountingDocumentRule}\rm{} is also required.
+          \W \end{s5slide}
       \end{description}
-
-  \W \end{s5slide}
-
+      
   \W \end{s5presentation}
   \begin{tex}
     \begin{thebibliography}{20}
