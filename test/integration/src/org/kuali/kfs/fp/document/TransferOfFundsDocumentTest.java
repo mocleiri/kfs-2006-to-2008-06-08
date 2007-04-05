@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
- * 
+ *
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.opensource.org/licenses/ecl1.php
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,8 +41,8 @@ import org.kuali.workflow.WorkflowTestUtils;
 import edu.iu.uis.eden.EdenConstants;
 /**
  * This class is used to test TransferOfFundsDocument.
- * 
- * 
+ *
+ *
  */
 @WithTestSpringContext(session = KHUNTLEY)
 public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
@@ -59,7 +59,7 @@ public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * 
+     *
      * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
      */
     public Document getDocumentParameterFixture() throws Exception{
@@ -67,7 +67,7 @@ public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
     }
 
     /**
-     * 
+     *
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
      */
     @Override
@@ -80,7 +80,7 @@ public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
     }
 
     /**
-     * 
+     *
      * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
      */
     @Override
@@ -118,10 +118,10 @@ public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
 
         // now doc should be in Org Review routing to CSWINSON, RRUFFNER, SEASON, and DFOGLE
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ORG_REVIEW);
-        approve(docHeaderId, CSWINSON, ORG_REVIEW);
-        approve(docHeaderId, RRUFFNER, ORG_REVIEW);
-        approve(docHeaderId, SEASON, ORG_REVIEW);
         approve(docHeaderId, DFOGLE, ORG_REVIEW);
+        approve(docHeaderId, CSWINSON, ORG_REVIEW);
+        approve(docHeaderId, SEASON, ORG_REVIEW);
+        approve(docHeaderId, RRUFFNER, ORG_REVIEW);
 
         // TODO once the sub fund node has been added, add code here to test it...
 
@@ -151,5 +151,5 @@ public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
         AccountingLineFixture.LINE2_TOF.addAsSourceTo(document);
         AccountingLineFixture.LINE2_TOF.addAsTargetTo(document);
         return document;
-    } 
+    }
 }
