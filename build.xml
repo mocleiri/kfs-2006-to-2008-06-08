@@ -276,14 +276,15 @@
 
 	<target name="clean-local" if="is.local.build" depends="init-project-properties">
 		<delete failonerror="false">
-			<fileset dir="${appserver.lib.dir}" includes="${appserver.library.list}" />
+			<fileset dir="${appserver.lib.dir}">
+				<present targetdir="${build.appserver.directory}" />
+			</fileset>
 		</delete>
 		<delete failonerror="false">
 			<fileset dir="${appserver.lib.dir}">
-				<present targetdir="${local.build.appserver.directory}" />
+				<present targetdir="${drivers.directory}" />
 			</fileset>
 		</delete>
-		<delete file="${appserver.lib.dir}/${log4j.library}"/>
 		<delete failonerror="false">
 			<fileset dir="${appserver.localhost.dir}" includes="${ant.project.name}-*.xml" />
 		</delete>
@@ -360,11 +361,9 @@
 	</target>
 
 	<target name="filter-local" if="is.local.build" depends="init-filter-sets">
+		<copy file="${build.appserver.directory}/${p6spy.library}" todir="${appserver.lib.dir}" overwrite="true" />
 		<copy todir="${appserver.lib.dir}" overwrite="true">
-			<fileset dir="${build.appserver.directory}" includes="${appserver.library.list}" />
-		</copy>
-		<copy todir="${appserver.lib.dir}" overwrite="true">
-			<fileset dir="${local.build.appserver.directory}" />
+			<fileset dir="${drivers.directory}" />
 		</copy>
 		<copy todir="${settings.directory}" overwrite="true">
 			<fileset dir="${build.settings.directory}" />
