@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.AccountDescription">
 
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <attributes>
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode" />
@@ -88,7 +88,7 @@
                 </validationPattern>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CampusValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.CampusValuesFinder" />
                 </control>
 
                 <summary>Campus Code that the Building belongs to.</summary>

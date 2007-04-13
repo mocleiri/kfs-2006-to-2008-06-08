@@ -19,7 +19,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.routingform.bo.RoutingFormAgency">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Routing Form Agency Inquiry</title>
@@ -411,8 +411,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <!-- valuesFinderClass not used because this refers to RoutingFormDueDateType -->
-                    <text size="2" />
+                    <select valuesFinderClass="org.kuali.module.kra.routingform.lookup.keyvalues.RoutingFormDueDateTypeValuesFinder" />
                 </control>
 
                 <summary>routingFormDueDateTypeCode</summary>
