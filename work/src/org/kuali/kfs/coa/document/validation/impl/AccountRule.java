@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.rules;
 
@@ -24,30 +31,25 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
+import org.kuali.core.bo.Building;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.bo.Building;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.ChartUser;
-import org.kuali.module.chart.bo.IcrAutomatedEntry;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.chart.service.AccountService;
-import org.kuali.module.chart.service.SubFundGroupService;
 import org.kuali.module.gl.service.BalanceService;
-import org.kuali.module.kra.KraKeyConstants;
-import org.kuali.module.labor.service.LaborLedgerPendingEntryService;
+import org.kuali.module.gl.service.GeneralLedgerPendingEntryService;
 
 /**
  * Business rule(s) applicable to AccountMaintenance documents.
  * 
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class AccountRule extends MaintenanceDocumentRuleBase {
 
@@ -56,6 +58,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     private static final String ACCT_PREFIX_RESTRICTION = "Account.PrefixRestriction";
     private static final String ACCT_CAPITAL_SUBFUNDGROUP = "Account.CapitalSubFundGroup";
 
+    private static final String CONTRACTS_GRANTS_CD = "CG";
     private static final String GENERAL_FUND_CD = "GF";
     private static final String RESTRICTED_FUND_CD = "RF";
     private static final String ENDOWMENT_FUND_CD = "EN";
@@ -68,10 +71,9 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     private static final String BUDGET_RECORDING_LEVEL_MIXED = "M";
 
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
-    private LaborLedgerPendingEntryService laborLedgerPendingEntryService;
     private BalanceService balanceService;
     private AccountService accountService;
-
+    
     private Account oldAccount;
     private Account newAccount;
 
@@ -86,7 +88,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         this.setGeneralLedgerPendingEntryService(SpringServiceLocator.getGeneralLedgerPendingEntryService());
         this.setBalanceService(SpringServiceLocator.getBalanceService());
         this.setAccountService(SpringServiceLocator.getAccountService());
-        this.setLaborLedgerPendingEntryService(SpringServiceLocator.getLaborLedgerPendingEntryService());
     }
 
     /**
@@ -116,8 +117,15 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
 
         LOG.info("processCustomSaveDocumentBusinessRules called");
-        // call the route rules to report all of the messages, but ignore the result
-        processCustomRouteDocumentBusinessRules(document);
+        setupConvenienceObjects();
+
+        checkEmptyValues(document);
+        checkGeneralRules(document);
+        checkCloseAccount(document);
+        checkContractsAndGrants(document);
+        checkExpirationDate(document);
+        checkFundGroup(document);
+        checkSubFundGroup(document);
 
         // Save always succeeds, even if there are business rule failures
         return true;
@@ -138,7 +146,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         success &= checkExpirationDate(document);
         success &= checkFundGroup(document);
         success &= checkSubFundGroup(document);
-        success &= checkFiscalOfficerIsValidKualiUser(newAccount.getAccountFiscalOfficerSystemIdentifier());
 
         return success;
     }
@@ -184,7 +191,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
      * This method determines whether the guidelines are required, based on business rules.
      * 
      * @param account - the populated Account bo to be evaluated
-     * @return true if guidelines are required, false otherwise
+     * @return - true if guidelines are required, false otherwise
      * 
      */
     protected boolean areGuidelinesRequired(Account account) {
@@ -209,7 +216,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
      * 
      * @param accountNumber - The Account Number to be tested.
      * @param illegalValues - An Array of Strings of the unallowable prefixes.
-     * @return false if the accountNumber starts with any of the illegalPrefixes, true otherwise
+     * @return - false if the accountNumber starts with any of the illegalPrefixes, true otherwise
      * 
      */
     protected boolean accountNumberStartsWithAllowedPrefix(String accountNumber, String[] illegalValues) {
@@ -234,11 +241,11 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
      * 
      * @param document - populated document containing the old and new accounts
      * @param user - the user who is trying to possibly reopen the account
-     * @return true if: document is an edit document, old was closed and new is open, and the user is not one of the System
+     * @return - true if: document is an edit document, old was closed and new is open, and the user is not one of the System
      *         Supervisors
      * 
      */
-    protected boolean isNonSystemSupervisorEditingAClosedAccount(MaintenanceDocument document, UniversalUser user) {
+    protected boolean isNonSystemSupervisorReopeningAClosedAccount(MaintenanceDocument document, KualiUser user) {
 
         boolean result = false;
 
@@ -249,8 +256,12 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             Account newAccount = (Account) document.getNewMaintainableObject().getBusinessObject();
 
             // do the test
-            if (oldAccount.isAccountClosedIndicator() && !user.isSupervisorUser()) {
-                result = true;
+            if (oldAccount.isAccountClosedIndicator()) {
+                if (!newAccount.isAccountClosedIndicator()) {
+                    if (!user.isSupervisorUser()) {
+                        result = true;
+                    }
+                }
             }
         }
         return result;
@@ -275,22 +286,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
                 }
             }
         }
-        return result;
-    }
-
-    /**
-     * Checks whether the account restricted status code is the default from the sub fund group.
-     * 
-     * @param account
-     * @return
-     */
-    protected boolean hasDefaultRestrictedStatusCode(Account account) {
-        boolean result = false;
-
-        if (StringUtils.isNotBlank(account.getAccountRestrictedStatusCode())) {
-            result = account.getAccountRestrictedStatusCode().equals(account.getSubFundGroup().getAccountRestrictedStatusCode());
-        }
-
         return result;
     }
 
@@ -321,9 +316,9 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
         // only a FIS supervisor can reopen a closed account. (This is the central super user, not an account supervisor).
         // we need to get the old maintanable doc here
-        if (isNonSystemSupervisorEditingAClosedAccount(maintenanceDocument, GlobalVariables.getUserSession().getUniversalUser())) {
+        if (isNonSystemSupervisorReopeningAClosedAccount(maintenanceDocument, GlobalVariables.getUserSession().getKualiUser())) {
             success &= false;
-            putFieldError("accountClosedIndicator", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ONLY_SUPERVISORS_CAN_EDIT);
+            putFieldError("accountClosedIndicator", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ONLY_SUPERVISORS_CAN_REOPEN);
         }
 
         // when a restricted status code of 'T' (temporarily restricted) is selected, a restricted status
@@ -427,32 +422,33 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             result &= false;
         }
 
-        // if either of the fringe benefit account fields are not present, then we're done
+        //  if either of the fringe benefit account fields are not present, then we're done
         if (result == false) {
             return result;
         }
-
-        // attempt to load the fringe benefit account
+        
+        //  attempt to load the fringe benefit account
         Account fringeBenefitAccount = accountService.getByPrimaryId(newAccount.getReportsToChartOfAccountsCode(), newAccount.getReportsToAccountNumber());
-
-        // fringe benefit account must exist
+        
+        //  fringe benefit account must exist
         if (fringeBenefitAccount == null) {
             putFieldError("reportsToAccountNumber", KeyConstants.ERROR_EXISTENCE, getFieldLabel(Account.class, "reportsToAccountNumber"));
             return false;
         }
-
-        // fringe benefit account must be active
+        
+        //  fringe benefit account must be active
         if (fringeBenefitAccount.isAccountClosedIndicator()) {
             putFieldError("reportsToAccountNumber", KeyConstants.ERROR_INACTIVE, getFieldLabel(Account.class, "reportsToAccountNumber"));
             result &= false;
         }
-
-        // make sure the fringe benefit account specified is set to fringe benefits = Y
+        
+        //  make sure the fringe benefit account specified is set to fringe benefits = Y
         if (!fringeBenefitAccount.isAccountsFringesBnftIndicator()) {
-            putFieldError("reportsToAccountNumber", KeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_MUST_BE_FLAGGED_FRINGEBENEFIT, fringeBenefitAccount.getChartOfAccountsCode() + "-" + fringeBenefitAccount.getAccountNumber());
+            putFieldError("reportsToAccountNumber", KeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_MUST_BE_FLAGGED_FRINGEBENEFIT, 
+                    fringeBenefitAccount.getChartOfAccountsCode() + "-" + fringeBenefitAccount.getAccountNumber());
             result &= false;
         }
-
+        
         return result;
     }
 
@@ -489,7 +485,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
      * @param employeeType - String value expected for Employee Type
      * @param userRoleDescription - User Role being tested, to be passed into an error message
      * 
-     * @return true if user is of the requested employee type, false if not, true if the user object is null
+     * @return - true if user is of the requested employee type, false if not, true if the user object is null
      * 
      */
     protected boolean checkUserStatusAndType(String propertyName, UniversalUser user) {
@@ -559,7 +555,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCOUNT_CLOSED_PENDING_LEDGER_ENTRIES);
             success &= false;
         }
-        
+
         // beginning balance must be loaded in order to close account
         if (!balanceService.beginningBalanceLoaded(newAccount)) {
             putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCOUNT_CLOSED_NO_LOADED_BEGINNING_BALANCE);
@@ -575,11 +571,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             success &= false;
         }
 
-        // We must not have any pending labor ledger entries
-        if (laborLedgerPendingEntryService.hasPendingLaborLedgerEntry(newAccount)) {
-        putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCOUNT_CLOSED_PENDING_LABOR_LEDGER_ENTRIES);
-        success &= false;
-        }
+        // TODO: must have no pending labor ledger entries (depends on labor: KULLAB-1)
 
         return success;
     }
@@ -646,7 +638,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         String fundGroupCode = newAccount.getSubFundGroup().getFundGroupCode().trim();
 
         // if this is a CG fund group, then its required
-        if (SpringServiceLocator.getSubFundGroupService().isForContractsAndGrants(newAccount.getSubFundGroup())) {
+        if (CONTRACTS_GRANTS_CD.equalsIgnoreCase(fundGroupCode)) {
             required = true;
         }
 
@@ -664,8 +656,8 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         }
 
         // make sure both coaCode and accountNumber are filled out
-        result &= checkEmptyBOField("incomeStreamAccountNumber", newAccount.getIncomeStreamAccountNumber(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_NBR_CANNOT_BE_EMPTY));
-        result &= checkEmptyBOField("incomeStreamFinancialCoaCode", newAccount.getIncomeStreamFinancialCoaCode(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_COA_CANNOT_BE_EMPTY));
+        result &= checkEmptyBOField("incomeStreamAccountNumber", newAccount.getIncomeStreamAccountNumber(), "When Fund Group is CG or GF, Income Stream Account Number");
+        result &= checkEmptyBOField("incomeStreamFinancialCoaCode", newAccount.getIncomeStreamFinancialCoaCode(), "When Fund Group is CG or GF, Income Stream Chart Of Accounts Code");
 
         // if both fields arent present, then we're done
         if (result == false) {
@@ -676,7 +668,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         DictionaryValidationService dvService = super.getDictionaryValidationService();
         boolean referenceExists = dvService.validateReferenceExists(newAccount, "incomeStreamAccount");
         if (!referenceExists) {
-            putFieldError("incomeStreamAccountNumber", KeyConstants.ERROR_EXISTENCE, "Income Stream Account: " + newAccount.getIncomeStreamFinancialCoaCode() + "-" + newAccount.getIncomeStreamAccountNumber());
+            putFieldError("incomeStreamAccount", KeyConstants.ERROR_EXISTENCE, "Income Stream Account: " + newAccount.getIncomeStreamFinancialCoaCode() + "-" + newAccount.getIncomeStreamAccountNumber());
             result &= false;
         }
 
@@ -689,64 +681,16 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
         // Certain C&G fields are required if the Account belongs to the CG Fund Group
         if (ObjectUtils.isNotNull(newAccount.getSubFundGroup())) {
-            if (SpringServiceLocator.getSubFundGroupService().isForContractsAndGrants(newAccount.getSubFundGroup())) {
-                result &= checkEmptyBOField("contractControlFinCoaCode", newAccount.getContractControlFinCoaCode(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_CONTRACT_CONTROL_COA_CANNOT_BE_EMPTY));
-                result &= checkEmptyBOField("contractControlAccountNumber", newAccount.getContractControlAccountNumber(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_CONTRACT_CONTROL_ACCT_CANNOT_BE_EMPTY));
-                result &= checkEmptyBOField("acctIndirectCostRcvyTypeCd", newAccount.getAcctIndirectCostRcvyTypeCd(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_TYPE_CODE_CANNOT_BE_EMPTY));
-                result &= checkEmptyBOField("financialIcrSeriesIdentifier", newAccount.getFinancialIcrSeriesIdentifier(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_SERIES_IDENTIFIER_CANNOT_BE_EMPTY));
-                
-                // Validation for financialIcrSeriesIdentifier
-                if (checkEmptyBOField("financialIcrSeriesIdentifier", newAccount.getFinancialIcrSeriesIdentifier(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_SERIES_IDENTIFIER_CANNOT_BE_EMPTY))){
-                    Map pkMap = new HashMap();
-                    pkMap.put("financialIcrSeriesIdentifier", newAccount.getFinancialIcrSeriesIdentifier());
-                    if (getBoService().countMatching(IcrAutomatedEntry.class, pkMap) == 0){
-                        putFieldError("financialIcrSeriesIdentifier", KeyConstants.ERROR_EXISTENCE, "financialIcrSeriesIdentifier");
-                        result &= false;
-                    }
-                }
-                
-                result &= checkEmptyBOField("indirectCostRcvyFinCoaCode", newAccount.getIndirectCostRcvyFinCoaCode(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_CHART_CODE_CANNOT_BE_EMPTY));
-                result &= checkEmptyBOField("indirectCostRecoveryAcctNbr", newAccount.getIndirectCostRecoveryAcctNbr(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_ACCOUNT_CANNOT_BE_EMPTY));
-                result &= checkEmptyBOField("accountCfdaNumber", newAccount.getAccountCfdaNumber(), replaceTokens(KeyConstants.ERROR_DOCUMENT_ACCMAINT_CG_FEDERAL_ASSISTANCE_NUMBER_CANNOT_BE_EMPTY));
-                result &= checkContractControlAccountNumberRequired(newAccount);
+            if (newAccount.getSubFundGroup().getFundGroupCode().equalsIgnoreCase(CONTRACTS_GRANTS_CD)) {
+                result &= checkEmptyBOField("contractControlFinCoaCode", newAccount.getContractControlFinCoaCode(), "When Fund Group is CG, Contract Control Chart of Accounts Code");
+                result &= checkEmptyBOField("contractControlAccountNumber", newAccount.getContractControlAccountNumber(), "When Fund Group is CG, Contract Control Account Number");
+                result &= checkEmptyBOField("acctIndirectCostRcvyTypeCd", newAccount.getAcctIndirectCostRcvyTypeCd(), "When Fund Group is CG, ICR Type Code");
+                result &= checkEmptyBOField("financialIcrSeriesIdentifier", newAccount.getFinancialIcrSeriesIdentifier(), "When Fund Group is CG, ICR Series Identifier");
+                result &= checkEmptyBOField("indirectCostRcvyFinCoaCode", newAccount.getIndirectCostRcvyFinCoaCode(), "When Fund Group is CG, ICR Cost Recovery Chart of Accounts Code");
+                result &= checkEmptyBOField("indirectCostRecoveryAcctNbr", newAccount.getIndirectCostRecoveryAcctNbr(), "When Fund Group is CG, ICR Cost Recovery Account");
+                result &= checkEmptyBOField("cgCatlfFedDomestcAssistNbr", newAccount.getCgCatlfFedDomestcAssistNbr(), "When Fund Group is CG, C&G Domestic Assistance Number");
             }
         }
-        return result;
-    }
-
-    private String replaceTokens(String errorConstant){
-        String cngLabel = SpringServiceLocator.getSubFundGroupService().getContractsAndGrantsDenotingAttributeLabel();
-        String cngValue = SpringServiceLocator.getSubFundGroupService().getContractsAndGrantsDenotingValue();
-        String result = SpringServiceLocator.getKualiConfigurationService().getPropertyString(errorConstant);
-        result = StringUtils.replace(result, "{0}", cngLabel);
-        result = StringUtils.replace(result, "{1}", cngValue);
-        return result;
-    }
-
-    protected boolean checkContractControlAccountNumberRequired(Account newAccount) {
-
-        boolean result = true;
-
-        // Contract Control account must either exist or be the same as account being maintained
-
-        if (ObjectUtils.isNull(newAccount.getContractControlFinCoaCode())) {
-            return result;
-        }
-        if (ObjectUtils.isNull(newAccount.getContractControlAccountNumber())) {
-            return result;
-        }
-        if ((newAccount.getContractControlFinCoaCode().equals(newAccount.getChartOfAccountsCode())) && (newAccount.getContractControlAccountNumber().equals(newAccount.getAccountNumber()))) {
-            return result;
-        }
-
-        // do an existence/active test
-        DictionaryValidationService dvService = super.getDictionaryValidationService();
-        boolean referenceExists = dvService.validateReferenceExists(newAccount, "contractControlAccount");
-        if (!referenceExists) {
-            putFieldError("contractControlAccountNumber", KeyConstants.ERROR_EXISTENCE, "Contract Control Account: " + newAccount.getContractControlFinCoaCode() + "-" + newAccount.getContractControlAccountNumber());
-            result &= false;
-        }
-
         return result;
     }
 
@@ -769,10 +713,10 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         today.setTime(DateUtils.truncate(today, Calendar.DAY_OF_MONTH).getTime()); // remove any time components
 
         // When updating an account expiration date, the date must be today or later
-        // Only run this test if this maint doc
+        // (except for C&G accounts). Only run this test if this maint doc
         // is an edit doc
         if (isUpdatedExpirationDateInvalid(maintenanceDocument)) {
-            putFieldError("accountExpirationDate", KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER);
+            putFieldError("accountExpirationDate", KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER_EXCEPT_CANDG_ACCT);
             success &= false;
         }
 
@@ -788,13 +732,16 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             }
         }
 
-        // If creating a new account if acct_expiration_dt is set then
+        // If creating a new account if acct_expiration_dt is set and the fund_group is not "CG" then
         // the acct_expiration_dt must be changed to a date that is today or later
         if (maintenanceDocument.isNew() && ObjectUtils.isNotNull(newExpDate)) {
-            if (!newExpDate.after(today) && !newExpDate.equals(today)) {
-                putFieldError("accountExpirationDate", KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER);
-                // putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER);
-                success &= false;
+            if (ObjectUtils.isNotNull(newAccount.getSubFundGroup())) {
+                if (!newAccount.getSubFundGroup().getFundGroupCode().equalsIgnoreCase(CONTRACTS_GRANTS_CD)) {
+                    if (!newExpDate.after(today) && !newExpDate.equals(today)) {
+                        putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_TODAY_LATER_EXCEPT_CANDG_ACCT);
+                        success &= false;
+                    }
+                }
             }
         }
 
@@ -802,8 +749,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         Timestamp effectiveDate = newAccount.getAccountEffectiveDate();
         if (ObjectUtils.isNotNull(effectiveDate) && ObjectUtils.isNotNull(newExpDate)) {
             if (newExpDate.before(effectiveDate)) {
-                putFieldError("accountExpirationDate", KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_CANNOT_BE_BEFORE_EFFECTIVE_DATE);
-                // putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_CANNOT_BE_BEFORE_EFFECTIVE_DATE);
+                putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCMAINT_EXP_DATE_CANNOT_BE_BEFORE_EFFECTIVE_DATE);
                 success &= false;
             }
         }
@@ -824,7 +770,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         today.setTime(DateUtils.truncate(today, Calendar.DAY_OF_MONTH).getTime()); // remove any time components
 
         // When updating an account expiration date, the date must be today or later
-        // Only run this test if this maint doc
+        // (except for C&G accounts). Only run this test if this maint doc
         // is an edit doc
         boolean expDateHasChanged = false;
 
@@ -848,6 +794,23 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
         // make a shortcut to the newAccount
         Account newAccount = (Account) maintDoc.getNewMaintainableObject().getBusinessObject();
+
+        // if a subFundGroup isnt present, we cannot continue the testing
+        SubFundGroup subFundGroup = newAccount.getSubFundGroup();
+        if (ObjectUtils.isNull(subFundGroup)) {
+            return false;
+        }
+
+        // get the fundGroup code
+        String fundGroupCode = newAccount.getSubFundGroup().getFundGroupCode().trim();
+
+        // if the account is part of the CG fund group, then this rule doenst
+        // apply, so we're done
+        if (CONTRACTS_GRANTS_CD.equalsIgnoreCase(fundGroupCode)) {
+            return false;
+        }
+
+        // at this point, we know its not a CG fund group, so we must apply the rule
 
         // expirationDate must be today or later than today (cannot be before today)
         if (newExpDate.equals(today) || newExpDate.after(today)) {
@@ -884,6 +847,35 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
                 restrictedStatusCode = newAccount.getAccountRestrictedStatusCode().trim();
             }
 
+            if (ObjectUtils.isNotNull(restrictedStatusCode)) {
+                // on the account screen, if the fund group of the account is CG (contracts & grants) or
+                // RF (restricted funds), the restricted status code must be 'R'.
+                if (fundGroupCode.equalsIgnoreCase(CONTRACTS_GRANTS_CD) || fundGroupCode.equalsIgnoreCase(RESTRICTED_FUND_CD)) {
+                    if (!restrictedStatusCode.equalsIgnoreCase(RESTRICTED_CD_RESTRICTED)) {
+                        putFieldError("accountRestrictedStatusCode", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_RESTRICTED_STATUS_CD_MUST_BE_R);
+                        success &= false;
+                    }
+                }
+
+                // If the fund group is EN (endowment) or PF (plant fund) the value is not set by the system and
+                // must be set by the user
+                else if (fundGroupCode.equalsIgnoreCase(ENDOWMENT_FUND_CD) || fundGroupCode.equalsIgnoreCase(PLANT_FUND_CD)) {
+                    if (StringUtils.isBlank(restrictedStatusCode) || (!restrictedStatusCode.equalsIgnoreCase(RESTRICTED_CD_RESTRICTED) && !restrictedStatusCode.equalsIgnoreCase(RESTRICTED_CD_UNRESTRICTED))) {
+
+                        putFieldError("accountRestrictedStatusCode", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_RESTRICTED_STATUS_CD_MUST_BE_U_OR_R);
+                        success &= false;
+                    }
+                }
+
+                // for all other fund groups the value is set to 'U'. R being restricted,U being unrestricted.
+                else {
+                    if (!restrictedStatusCode.equalsIgnoreCase(RESTRICTED_CD_UNRESTRICTED)) {
+                        putFieldError("accountRestrictedStatusCode", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_RESTRICTED_STATUS_CD_MUST_BE_U);
+                        success &= false;
+                    }
+                }
+            }
+
             // an account in the general fund fund group cannot have a budget recording level of mixed.
             if (fundGroupCode.equalsIgnoreCase(GENERAL_FUND_CD)) {
                 String budgetRecordingLevelCode = newAccount.getBudgetRecordingLevelCode();
@@ -899,28 +891,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return success;
     }
 
-    /**
-     * 
-     * This method insures the fiscal officer is a valid Kuali User
-     * @param fiscalOfficerUserId
-     * @return
-     */
-    protected boolean checkFiscalOfficerIsValidKualiUser(String fiscalOfficerUserId) {
-        boolean result = true;
-        try {
-            UniversalUser fiscalOfficer = getUniversalUserService().getUniversalUser(fiscalOfficerUserId);
-            if (fiscalOfficer != null && !fiscalOfficer.isActiveForModule(ChartUser.MODULE_ID)) {
-                result = false;
-                putFieldError("accountFiscalOfficerUser.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCOUNT_FISCAL_OFFICER_MUST_BE_KUALI_USER);
-            }
-        }
-        catch (UserNotFoundException e) {
-            result = false;
-        }
-
-        return result;        
-    }
-    
     /**
      * 
      * This method checks to see if any SubFund Group rules were violated
@@ -986,17 +956,12 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         this.generalLedgerPendingEntryService = generalLedgerPendingEntryService;
     }
 
-    public void setLaborLedgerPendingEntryService(LaborLedgerPendingEntryService laborLedgerPendingEntryService) {
-        this.laborLedgerPendingEntryService = laborLedgerPendingEntryService;
-    }
-
     public void setBalanceService(BalanceService balanceService) {
         this.balanceService = balanceService;
     }
 
     /**
      * Sets the accountService attribute value.
-     * 
      * @param accountService The accountService to set.
      */
     public final void setAccountService(AccountService accountService) {
