@@ -41,6 +41,8 @@
         <summary>Requisition Source Maintenance Document</summary>
         <description>Document used to create or update Requisition Source objects</description>
 
+        <allowsCopy>true</allowsCopy>
+
         <lockingKeys>
             <field attributeName="requisitionSourceCode" />
         </lockingKeys>
@@ -50,7 +52,7 @@
                 <maintainableItems>
                     <maintainableField name="requisitionSourceCode" required="true" />
                     <maintainableField name="requisitionSourceDescription" required="true" />
-                    <maintainableField name="active" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

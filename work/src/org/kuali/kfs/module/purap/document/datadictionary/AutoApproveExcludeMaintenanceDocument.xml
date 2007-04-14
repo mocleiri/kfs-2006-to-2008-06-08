@@ -41,6 +41,8 @@
         <summary>Auto Approve Exclude Maintenance Document</summary>
         <description>Document used to create or update Auto Approve Exclude objects</description>
 
+        <allowsCopy>true</allowsCopy>
+
         <lockingKeys>
             <field attributeName="accountNumber" />
         </lockingKeys>
@@ -50,7 +52,7 @@
                 <maintainableItems>
                     <maintainableField name="chartOfAccountsCode" required="true" />
                     <maintainableField name="accountNumber" required="true" />
-                    <maintainableField name="active" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

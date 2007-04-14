@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import java.util.Iterator;
 import org.kuali.Constants;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.document.AccountingDocumentBase;
 import org.kuali.kfs.rule.AccountingLineRule;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.rules.CashReceiptFamilyRule;
 
@@ -33,7 +33,6 @@ import org.kuali.module.financial.rules.CashReceiptFamilyRule;
  * Abstract class which defines behavior common to CashReceipt-like documents.
  */
 abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CashReceiptFamilyBase.class);
     private String campusLocationCode; // TODO Needs to be an actual object - also need to clarify this
     private Timestamp depositDate;
 
@@ -107,25 +106,18 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
-            try {
-                KualiDecimal amount = al.getAmount().abs();
-                if (amount != null && amount.isNonZero()) {
-                    if (crFamilyRule.isDebit(this, al)) {
-                        total = total.subtract(amount);
-                    }
-                    else if (crFamilyRule.isCredit(al, this)) {
-                        total = total.add(amount);
-                    }
-                    else {
-                        LOG.error("could not determine credit/debit for accounting line");
-                        return KualiDecimal.ZERO;
-                    }
+
+            KualiDecimal amount = al.getAmount().abs();
+            if (amount != null && amount.isNonZero()) {
+                if (crFamilyRule.isDebit(this, al)) {
+                    total = total.subtract(amount);
                 }
-            }
-            catch (Exception e) {
-                // Possibly caused by accounting lines w/ bad data
-                LOG.error("Error occured trying to compute Cash receipt total, returning 0", e);
-                return KualiDecimal.ZERO;
+                else if (crFamilyRule.isCredit(al, this)) {
+                    total = total.add(amount);
+                }
+                else {
+                    throw new IllegalStateException("could not determine credit/debit for accounting line");
+                }
             }
         }
         return total;

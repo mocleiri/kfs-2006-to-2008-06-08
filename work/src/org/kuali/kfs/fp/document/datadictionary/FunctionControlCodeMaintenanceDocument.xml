@@ -42,6 +42,8 @@
         <description>Document used to create or update Function Control Code objects</description>
         <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_FUNCTION_CONTROL_CODE" />
 
+        <allowsCopy>true</allowsCopy>
+
         <lockingKeys>
             <field attributeName="financialSystemFunctionControlCode" />
         </lockingKeys>
@@ -52,7 +54,7 @@
                     <maintainableField name="financialSystemFunctionControlCode" required="true" />
                     <maintainableField name="financialSystemFunctionDefaultIndicator" required="false" />
                     <maintainableField name="financialSystemFunctionDescription" required="false" />
-                    <maintainableField name="versionNumber" />
+                    <maintainableField name="versionNumber" required="false" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>
