@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,10 @@ import org.kuali.module.gl.util.OJBUtility;
 public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceDaoOjb.class);
     private KualiConfigurationService kualiConfigurationService;
+
+    public BalanceDaoOjb() {
+        super();
+    }
 
     /**
      * @see org.kuali.module.gl.dao.BalanceDao#getGlSummary(int, java.util.List)

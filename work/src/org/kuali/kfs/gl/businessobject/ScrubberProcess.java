@@ -37,7 +37,7 @@ import org.kuali.core.service.DocumentTypeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.service.ObjectCodeService;
@@ -56,8 +56,8 @@ import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.service.ScrubberValidator;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
-import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.ObjectHelper;
 import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.gl.util.StringHelper;
@@ -247,7 +247,7 @@ public class ScrubberProcess {
 
         // generate the scrubber status summary report
         if (reportOnlyMode) {
-            reportService.generateOnlineScrubberStatisticsReport( group.getId(), runDate, scrubberReport, scrubberReportErrors,documentNumber);
+            reportService.generateOnlineScrubberStatisticsReport(group.getId(), runDate, scrubberReport, scrubberReportErrors,documentNumber);
         }
         else {
             reportService.generateBatchScrubberStatisticsReport(runDate, scrubberReport, scrubberReportErrors);
@@ -282,7 +282,7 @@ public class ScrubberProcess {
         LOG.debug("performDemerger() started");
 
         // Without this step, the job fails with Optimistic Lock Exceptions
-        persistenceService.clearCache();
+        persistenceService.getPersistenceBroker().clearCache();
 
         DemergerReportData demergerReport = new DemergerReportData();
 
@@ -678,7 +678,7 @@ public class ScrubberProcess {
 
         costShareEntry.setFinancialObjectCode((getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_OBJECT_CODE)).getFinancialSystemParameterText());
         costShareEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
-        costShareEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinancialObjectTypeTransferExpenseCd());
+        costShareEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinancialObjectTypeTransferExpenseCode());
         costShareEntry.setTransactionLedgerEntrySequenceNumber(new Integer(0));
 
         StringBuffer description = new StringBuffer();
@@ -786,7 +786,7 @@ public class ScrubberProcess {
         }
 
         costShareSourceAccountEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
-        costShareSourceAccountEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinancialObjectTypeTransferExpenseCd());
+        costShareSourceAccountEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinancialObjectTypeTransferExpenseCode());
         costShareSourceAccountEntry.setTransactionLedgerEntrySequenceNumber(new Integer(0));
 
         costShareSourceAccountEntry.setTransactionLedgerEntryAmount(scrubCostShareAmount);
@@ -1244,7 +1244,7 @@ public class ScrubberProcess {
             costShareEncumbranceEntry.setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
         }
 
-        costShareEncumbranceEntry.setFinancialBalanceTypeCode(scrubbedEntry.getOption().getCostShareEncumbranceBalanceTypeCd());
+        costShareEncumbranceEntry.setFinancialBalanceTypeCode(scrubbedEntry.getOption().getCostShareEncumbranceBalanceTypeCode());
         setCostShareObjectCode(costShareEncumbranceEntry, scrubbedEntry);
         costShareEncumbranceEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
         costShareEncumbranceEntry.setTransactionLedgerEntrySequenceNumber(new Integer(0));
