@@ -31,17 +31,24 @@ import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.PropertyConstants;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.service.OptionsService;
+import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.OptionsService;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.AccountBalanceDao;
 import org.kuali.module.gl.util.OJBUtility;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements AccountBalanceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceDaoOjb.class);
 
+    private DateTimeService dateTimeService;
     private OptionsService optionsService;
     static final private String OBJ_TYP_CD = "financialObject.financialObjectTypeCode";
+
+    public AccountBalanceDaoOjb() {
+        super();
+    }
 
     /**
      * 
@@ -133,7 +140,7 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
         // This is in a new object just to make each class smaller and easier to read
         try {
             Connection c = getPersistenceBroker(true).serviceConnectionManager().getConnection();
-            AccountBalanceConsolidation abc = new AccountBalanceConsolidation(this, optionsService, c);
+            AccountBalanceConsolidation abc = new AccountBalanceConsolidation(this, optionsService, dateTimeService, c);
 
             return abc.findAccountBalanceByConsolidationObjectTypes(objectTypes, universityFiscalYear, chartOfAccountsCode, accountNumber, isExcludeCostShare, isConsolidated, pendingEntriesCode);
         }
@@ -154,7 +161,7 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
         // This is in a new object just to make each class smaller and easier to read
         try {
             Connection c = getPersistenceBroker(true).serviceConnectionManager().getConnection();
-            AccountBalanceLevel abl = new AccountBalanceLevel(this, optionsService, c);
+            AccountBalanceLevel abl = new AccountBalanceLevel(this, optionsService, dateTimeService, c);
 
             return abl.findAccountBalanceByLevel(universityFiscalYear, chartOfAccountsCode, accountNumber, financialConsolidationObjectCode, isCostShareExcluded, isConsolidated, pendingEntriesCode);
         }
@@ -175,7 +182,7 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
         // This is in a new object just to make each class smaller and easier to read
         try {
             Connection c = getPersistenceBroker(true).serviceConnectionManager().getConnection();
-            AccountBalanceObject abo = new AccountBalanceObject(this, optionsService, c);
+            AccountBalanceObject abo = new AccountBalanceObject(this, optionsService, dateTimeService, c);
 
             return abo.findAccountBalanceByObject(universityFiscalYear, chartOfAccountsCode, accountNumber, financialObjectLevelCode, financialReportingSortCode, isCostShareExcluded, isConsolidated, pendingEntriesCode);
         }
@@ -317,6 +324,10 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
                 throw new RuntimeException("Unable to close connection: " + e.getMessage());
             }
         }
+    }
+
+    public void setDateTimeService(DateTimeService dts) {
+        dateTimeService = dts;
     }
 
     public void setOptionsService(OptionsService os) {

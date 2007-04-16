@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/validation/impl/ObjectCodeRule.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +33,7 @@ import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjLevel;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectCons;
@@ -282,7 +284,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
     public boolean isValidYear(Integer year) {
         if (year==null) return false;
         int enteredYear = year.intValue();
-        int currentYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear().intValue();
+        int currentYear = dateTimeService.getCurrentFiscalYear().intValue();
         if ((enteredYear-currentYear) == 0 || (enteredYear-currentYear) == 1)
             return true;
         return false;
