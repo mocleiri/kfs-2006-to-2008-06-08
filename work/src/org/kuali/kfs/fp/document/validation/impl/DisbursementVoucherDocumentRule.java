@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/validation/impl/DisbursementVoucherDocumentRule.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,13 +29,17 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.KualiGroup;
 
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.FinancialDocument;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.rules.RulesUtils;
@@ -43,13 +49,8 @@ import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
-import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
@@ -58,18 +59,21 @@ import org.kuali.module.financial.bo.Payee;
 import org.kuali.module.financial.bo.PaymentReasonCode;
 import org.kuali.module.financial.bo.WireCharge;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.module.financial.document.authorization.DisbursementVoucherDocumentAuthorizer;
+import org.kuali.module.financial.document.DisbursementVoucherDocumentAuthorizer;
 import org.kuali.module.financial.util.CodeDescriptionFormatter;
 import org.kuali.module.financial.util.DocumentationLocationCodeDescriptionFormatter;
 import org.kuali.module.financial.util.ObjectCodeDescriptionFormatter;
 import org.kuali.module.financial.util.ObjectLevelCodeDescriptionFormatter;
 import org.kuali.module.financial.util.SubFundGroupCodeDescriptionFormatter;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 
 /**
  * Business rule(s) applicable to Disbursement Voucher documents.
+ * 
+ * 
  */
-public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase implements DisbursementVoucherRuleConstants, GenerateGeneralLedgerDocumentPendingEntriesRule<AccountingDocument> {
+public class DisbursementVoucherDocumentRule extends TransactionalDocumentRuleBase implements DisbursementVoucherRuleConstants, GenerateGeneralLedgerDocumentPendingEntriesRule {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherDocumentRule.class);
 
     private static String taxGroupName;
@@ -88,22 +92,22 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      * Overrides to call super. If super fails, then we invoke some DV specific rules about FO routing to double check if the
      * individual has special conditions that they can alter accounting lines by.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#checkAccountingLineAccountAccessibility(org.kuali.core.document.FinancialDocument,
-     *      org.kuali.core.bo.AccountingLine, org.kuali.module.financial.rules.FinancialDocumentRuleBase.AccountingLineAction)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#checkAccountingLineAccountAccessibility(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine, org.kuali.module.financial.rules.TransactionalDocumentRuleBase.AccountingLineAction)
      */
     @Override
-    protected boolean checkAccountingLineAccountAccessibility(AccountingDocument FinancialDocument, AccountingLine accountingLine, AccountingLineAction action) {
+    protected boolean checkAccountingLineAccountAccessibility(TransactionalDocument transactionalDocument, AccountingLine accountingLine, AccountingLineAction action) {
         // first check parent's isAccessible method for basic FO authz checking
-        boolean isAccessible = accountIsAccessible(FinancialDocument, accountingLine);
+        boolean isAccessible = accountIsAccessible(transactionalDocument, accountingLine);
 
         // get the authorizer class to check for special conditions routing and if the user is part of a particular workgroup
         // but only if the document is enroute
-        if (!isAccessible && FinancialDocument.getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
-            DisbursementVoucherDocumentAuthorizer dvAuthorizer = (DisbursementVoucherDocumentAuthorizer) SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(FinancialDocument);
+        if (!isAccessible && transactionalDocument.getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
+            DisbursementVoucherDocumentAuthorizer dvAuthorizer = (DisbursementVoucherDocumentAuthorizer) SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(transactionalDocument);
             // if approval is requested and it is special conditions routing and the user is in a special conditions routing
             // workgroup then
             // the line is accessible
-            if (FinancialDocument.getDocumentHeader().getWorkflowDocument().isApprovalRequested() && dvAuthorizer.isSpecialRouting(FinancialDocument, GlobalVariables.getUserSession().getUniversalUser()) && (isUserInTaxGroup() || isUserInTravelGroup() || isUserInFRNGroup() || isUserInWireGroup() || isUserInDvAdminGroup())) {
+            if (transactionalDocument.getDocumentHeader().getWorkflowDocument().isApprovalRequested() && dvAuthorizer.isSpecialRouting(transactionalDocument, GlobalVariables.getUserSession().getUniversalUser()) && (isUserInTaxGroup() || isUserInTravelGroup() || isUserInFRNGroup() || isUserInWireGroup() || isUserInDvAdminGroup())) {
                 isAccessible = true;
             }
         }
@@ -118,12 +122,12 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
     }
 
     /**
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.core.bo.AccountingLine)
      */
     @Override
-    protected boolean processCustomUpdateAccountingLineBusinessRules(AccountingDocument FinancialDocument, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
-        return processCustomAddAccountingLineBusinessRules(FinancialDocument, updatedAccountingLine);
+    protected boolean processCustomUpdateAccountingLineBusinessRules(TransactionalDocument transactionalDocument, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
+        return processCustomAddAccountingLineBusinessRules(transactionalDocument, updatedAccountingLine);
     }
 
     /**
@@ -167,24 +171,24 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
 
     /**
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean processCustomAddAccountingLineBusinessRules(AccountingDocument FinancialDocument, AccountingLine accountingLine) {
+    public boolean processCustomAddAccountingLineBusinessRules(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         boolean allow = true;
 
         LOG.debug("validating accounting line # " + accountingLine.getSequenceNumber());
 
         // don't validate generated tax lines
-        if (((DisbursementVoucherDocument) FinancialDocument).getDvNonResidentAlienTax() != null) {
-            List taxLineNumbers = SpringServiceLocator.getDisbursementVoucherTaxService().getNRATaxLineNumbers(((DisbursementVoucherDocument) FinancialDocument).getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        if (((DisbursementVoucherDocument) transactionalDocument).getDvNonResidentAlienTax() != null) {
+            List taxLineNumbers = SpringServiceLocator.getDisbursementVoucherTaxService().getNRATaxLineNumbers(((DisbursementVoucherDocument) transactionalDocument).getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
             if (taxLineNumbers.contains(accountingLine.getSequenceNumber())) {
                 return true;
             }
         }
 
-        DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) FinancialDocument;
+        DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) transactionalDocument;
         ErrorMap errors = GlobalVariables.getErrorMap();
 
         /* payment reason must be selected before an accounting line can be entered */
@@ -205,10 +209,10 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
 
         if (allow) {
             LOG.debug("beginning object code validation ");
-            allow = validateObjectCode(FinancialDocument, accountingLine);
+            allow = validateObjectCode(transactionalDocument, accountingLine);
 
             LOG.debug("beginning account number validation ");
-            allow = allow & validateAccountNumber(FinancialDocument, accountingLine);
+            allow = allow & validateAccountNumber(transactionalDocument, accountingLine);
         }
 
         LOG.debug("end validating accounting line, has errors: " + allow);
@@ -219,7 +223,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
     /**
      * Final business rule edits on routing of disbursement voucher document.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.FinancialDocument)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.TransactionalDocument)
      */
     @Override
     protected boolean processCustomRouteDocumentBusinessRules(Document document) {
@@ -301,11 +305,12 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
     /**
      * Override to change the doc type based on payment method. This is needed to pick up different offset definitions.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
-    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument FinancialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) FinancialDocument;
+    @Override
+    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+        DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) transactionalDocument;
 
         /* change document type based on payment method to pick up different offsets */
         if (PAYMENT_METHOD_CHECK.equals(dvDocument.getDisbVchrPaymentMethodCode())) {
@@ -322,7 +327,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
     /**
      * @see org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule#processGenerateDocumentGeneralLedgerPendingEntries(org.kuali.core.document.FinancialDocument,org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
      */
-    public boolean processGenerateDocumentGeneralLedgerPendingEntries(AccountingDocument financialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
+    public boolean processGenerateDocumentGeneralLedgerPendingEntries(FinancialDocument financialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
         DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) financialDocument;
         if (dvDocument.getGeneralLedgerPendingEntries() == null || dvDocument.getGeneralLedgerPendingEntries().size() < 2) {
             LOG.warn("No gl entries for accounting lines.");
@@ -507,8 +512,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      * @return whether the given document has no notes
      */
     private static boolean hasNoNotes(DisbursementVoucherDocument document) {
-        //TODO: this is not optimal it shouldn't get it directly from DocHeader revisit later
-        return (document.getDocumentHeader().getBoNotes() == null || document.getDocumentHeader().getBoNotes().size() == 0);
+        return (document.getDocumentHeader().getNotes() == null || document.getDocumentHeader().getNotes().size() == 0);
     }
 
     /**
@@ -605,7 +609,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
                     taxPercent.setIncomeTaxTypeCode(FEDERAL_TAX_TYPE_CODE);
                     taxPercent.setIncomeTaxPercent(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent());
 
-                    PersistableBusinessObject retrievedPercent = SpringServiceLocator.getBusinessObjectService().retrieve(taxPercent);
+                    BusinessObject retrievedPercent = SpringServiceLocator.getBusinessObjectService().retrieve(taxPercent);
                     if (retrievedPercent == null) {
                         errors.putError(PropertyConstants.FEDERAL_INCOME_TAX_PERCENT, KeyConstants.ERROR_DV_INVALID_FED_TAX_PERCENT, new String[] { document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent().toString(), document.getDvNonResidentAlienTax().getIncomeClassCode() });
                     }
@@ -620,7 +624,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
                     taxPercent.setIncomeTaxTypeCode(STATE_TAX_TYPE_CODE);
                     taxPercent.setIncomeTaxPercent(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent());
 
-                    PersistableBusinessObject retrievedPercent = SpringServiceLocator.getBusinessObjectService().retrieve(taxPercent);
+                    BusinessObject retrievedPercent = SpringServiceLocator.getBusinessObjectService().retrieve(taxPercent);
                     if (retrievedPercent == null) {
                         errors.putError(PropertyConstants.STATE_INCOME_TAX_PERCENT, KeyConstants.ERROR_DV_INVALID_STATE_TAX_PERCENT, new String[] { document.getDvNonResidentAlienTax().getStateIncomeTaxPercent().toString(), document.getDvNonResidentAlienTax().getIncomeClassCode() });
                     }
@@ -875,7 +879,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
                 Map<String, String> paymentReasonParams = new HashMap<String, String>();
                 paymentReasonParams.put("code", paymentReasonCode);
                 // TODO: should we not ignore active flag?
-                Collection<PaymentReasonCode> paymentReasons = SpringServiceLocator.getKeyValuesService().findMatching(PaymentReasonCode.class, paymentReasonParams);
+                Collection<PaymentReasonCode> paymentReasons = SpringServiceLocator.getKeyValuesNonCachedService().findMatching(PaymentReasonCode.class, paymentReasonParams);
 
                 String prName = "(Description unavailable)";
 
@@ -997,7 +1001,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
             if (dvPayee != null && TAX_TYPE_SSN.equals(dvPayee.getTaxpayerTypeCode())) {
                 // check ssn against employee table
                 UniversalUser user = new UniversalUser();
-                user.setPersonTaxIdentifier(dvPayee.getTaxIdNumber());
+                user.setPersonSocialSecurityNbrId(dvPayee.getTaxIdNumber());
                 user = (UniversalUser) SpringServiceLocator.getBusinessObjectService().retrieve(user);
                 if (user != null) {
                     uuid = user.getPersonUniversalIdentifier();
@@ -1154,12 +1158,12 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
     /**
      * Checks object codes restrictions, including restrictions in parameters table.
      * 
-     * @param FinancialDocument
+     * @param transactionalDocument
      * @param accountingLine
      * @return boolean
      */
-    public boolean validateObjectCode(AccountingDocument FinancialDocument, AccountingLine accountingLine) {
-        DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) FinancialDocument;
+    public boolean validateObjectCode(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
+        DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) transactionalDocument;
         ErrorMap errors = GlobalVariables.getErrorMap();
 
         String errorKey = PropertyConstants.FINANCIAL_OBJECT_CODE;
@@ -1208,12 +1212,12 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
     /**
      * Checks account number restrictions, including restrictions in parameters table.
      * 
-     * @param FinancialDocument
+     * @param transactionalDocument
      * @param accountingLine
      * @return boolean
      */
-    public boolean validateAccountNumber(AccountingDocument FinancialDocument, AccountingLine accountingLine) {
-        DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) FinancialDocument;
+    public boolean validateAccountNumber(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
+        DisbursementVoucherDocument dvDocument = (DisbursementVoucherDocument) transactionalDocument;
         ErrorMap errors = GlobalVariables.getErrorMap();
 
         String errorKey = PropertyConstants.ACCOUNT_NUMBER;
@@ -1249,10 +1253,10 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      * structures. The list that holds TargetAccountingLines should be empty. This will be checked when the document is "routed" or
      * submitted to post - it's called automatically by the parent's processRouteDocument method.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.FinancialDocument)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.TransactionalDocument)
      */
     @Override
-    protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(AccountingDocument FinancialDocument) {
+    protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
         return true;
     }
 
@@ -1260,22 +1264,22 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      * Overrides the parent to return true, because Disbursement Voucher documents do not have to balance in order to be submitted
      * for routing.
      * 
-     * @param FinancialDocument
+     * @param transactionalDocument
      * @return boolean True if the balance of the document is valid, false other wise.
      */
     @Override
-    protected boolean isDocumentBalanceValid(AccountingDocument FinancialDocument) {
+    protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
         return true;
     }
 
     /**
      * Override to check for tax accounting lines. These lines can have negative amounts which the super will reject.
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isAmountValid(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isAmountValid(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean isAmountValid(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
         if (((DisbursementVoucherDocument) document).getDvNonResidentAlienTax() != null) {
             List taxLineNumbers = SpringServiceLocator.getDisbursementVoucherTaxService().getNRATaxLineNumbers(((DisbursementVoucherDocument) document).getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
             if (taxLineNumbers.contains(accountingLine.getSequenceNumber())) {
@@ -1352,7 +1356,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      * @param document
      * @return <code>KualiUser</code>
      */
-    private UniversalUser getInitiator(AccountingDocument document) {
+    private UniversalUser getInitiator(TransactionalDocument document) {
         UniversalUser initUser = null;
         try {
 
@@ -1372,7 +1376,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      */
     private WireCharge retrieveWireCharge() {
         WireCharge wireCharge = new WireCharge();
-        wireCharge.setUniversityFiscalYear(SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear());
+        wireCharge.setUniversityFiscalYear(SpringServiceLocator.getDateTimeService().getCurrentFiscalYear());
 
         wireCharge = (WireCharge) SpringServiceLocator.getBusinessObjectService().retrieve(wireCharge);
         if (wireCharge == null) {
@@ -1417,7 +1421,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         boolean isEmployee = false;
 
         UniversalUser employee = new UniversalUser();
-        employee.setPersonTaxIdentifier(ssnNumber);
+        employee.setPersonSocialSecurityNbrId(ssnNumber);
         UniversalUser foundEmployee = (UniversalUser) SpringServiceLocator.getBusinessObjectService().retrieve(employee);
 
         if (foundEmployee != null) {
@@ -1437,7 +1441,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         boolean isActiveEmployee = false;
 
         UniversalUser employee = new UniversalUser();
-        employee.setPersonTaxIdentifier(ssnNumber);
+        employee.setPersonSocialSecurityNbrId(ssnNumber);
         UniversalUser foundEmployee = (UniversalUser) SpringServiceLocator.getBusinessObjectService().retrieve(employee);
 
         if (foundEmployee != null && Constants.EMPLOYEE_ACTIVE_STATUS.equals(foundEmployee.getEmployeeStatusCode())) {
@@ -1465,24 +1469,24 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
     /**
      * error corrections are not allowed
      * 
-     * @see IsDebitUtils#isDebitConsideringNothingPositiveOnly(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringNothingPositiveOnly(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(AccountingDocument FinancialDocument, AccountingLine accountingLine) {
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         // disallow error corrections
-        IsDebitUtils.disallowErrorCorrectionDocumentCheck(this, FinancialDocument);
-        if (FinancialDocument instanceof DisbursementVoucherDocument) {
+        IsDebitUtils.disallowErrorCorrectionDocumentCheck(this, transactionalDocument);
+        if (transactionalDocument instanceof DisbursementVoucherDocument) {
             // special case - dv NRA tax accounts can be negative, and are debits if positive
-            DisbursementVoucherDocument dvDoc = (DisbursementVoucherDocument) FinancialDocument;
+            DisbursementVoucherDocument dvDoc = (DisbursementVoucherDocument) transactionalDocument;
 
             if (dvDoc.getDvNonResidentAlienTax() != null && dvDoc.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText() != null && dvDoc.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText().contains(accountingLine.getSequenceNumber().toString())) {
                 return accountingLine.getAmount().isPositive();
             }
         }
 
-        return IsDebitUtils.isDebitConsideringNothingPositiveOnly(this, FinancialDocument, accountingLine);
+        return IsDebitUtils.isDebitConsideringNothingPositiveOnly(this, transactionalDocument, accountingLine);
     }
 
 }
