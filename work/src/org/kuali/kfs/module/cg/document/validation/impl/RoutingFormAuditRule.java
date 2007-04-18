@@ -344,15 +344,10 @@ public class RoutingFormAuditRule {
             auditErrors.add(new AuditError("document.routingFormOtherPurposeDescription", KraKeyConstants.AUDIT_MAIN_PAGE_PURPOSE_OTHER_REQUIRED, "mainpage.anchor3"));
         }
         
-        // Title, Lay Description, & Abstract
+        // Title & Abstract
         if (ObjectUtils.isNull(routingFormDocument.getRoutingFormProjectTitle())) {
             valid = false;
             auditErrors.add(new AuditError("document.routingFormProjectTitle", KraKeyConstants.AUDIT_MAIN_PAGE_TITLE_REQUIRED, "mainpage.anchor3"));
-        }
-        
-        if (ObjectUtils.isNull(routingFormDocument.getRoutingFormLayDescription())) {
-            valid = false;
-            auditErrors.add(new AuditError("document.routingFormLayDescription", KraKeyConstants.AUDIT_MAIN_PAGE_LAY_DESCRIPTION_REQUIRED, "mainpage.anchor3"));
         }
         
         if (ObjectUtils.isNull(routingFormDocument.getProjectAbstract())) {

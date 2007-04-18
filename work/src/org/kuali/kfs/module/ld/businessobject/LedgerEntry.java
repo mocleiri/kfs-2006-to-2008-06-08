@@ -115,7 +115,6 @@ public class LedgerEntry extends Entry {
     private DocumentHeader documentHeader;
     private OriginationCode financialSystemOrigination;
     private LedgerBalance ledgerBalance;
-    private LaborObject laborObject;
     
 	/**
 	 * Default constructor.
@@ -1516,21 +1515,5 @@ public class LedgerEntry extends Entry {
             m.put("transactionLedgerEntrySequenceNumber", this.transactionLedgerEntrySequenceNumber.toString());
         }
         return m;
-    }
-
-    /**
-     * Gets the laborObject attribute. 
-     * @return Returns the laborObject.
-     */
-    public LaborObject getLaborObject() {
-        return laborObject;
-    }
-
-    /**
-     * Sets the laborObject attribute value.
-     * @param laborObject The laborObject to set.
-     */
-    public void setLaborObject(LaborObject laborObject) {
-        this.laborObject = laborObject;
     }
 }

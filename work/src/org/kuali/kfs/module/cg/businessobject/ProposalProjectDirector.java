@@ -19,13 +19,12 @@ package org.kuali.module.cg.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
 
 /**
  * 
  */
-public class ProposalProjectDirector extends PersistableBusinessObjectBase implements Primaryable {
+public class ProposalProjectDirector extends PersistableBusinessObjectBase {
 
     private String personUniversalIdentifier;
     private Long proposalNumber;
@@ -38,9 +37,20 @@ public class ProposalProjectDirector extends PersistableBusinessObjectBase imple
      * Default constructor.
      */
     public ProposalProjectDirector() {
-        projectDirector = new ProjectDirector();
+
     }
 
+    /**
+     * Constructor from RoutingFormDocument.
+     */
+    public ProposalProjectDirector(RoutingFormPersonnel routingFormProjectDirector, Long proposalNumber, boolean primaryProjectDirector) {
+        // todo: not set proposalNumber?  Doesn't OJB do this automatically?
+        this.setProposalNumber(proposalNumber);
+        this.setPersonUniversalIdentifier(routingFormProjectDirector.getPersonUniversalIdentifier());
+        this.setProposalPrimaryProjectDirectorIndicator(primaryProjectDirector);
+    }
+
+    
     /**
      * Gets the personUniversalIdentifier attribute.
      * 
@@ -59,9 +69,6 @@ public class ProposalProjectDirector extends PersistableBusinessObjectBase imple
      */
     public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
         this.personUniversalIdentifier = personUniversalIdentifier;
-        if ( projectDirector != null ) {
-            projectDirector.setPersonUniversalIdentifier( personUniversalIdentifier );
-        }
     }
 
 
@@ -96,12 +103,6 @@ public class ProposalProjectDirector extends PersistableBusinessObjectBase imple
         return proposalPrimaryProjectDirectorIndicator;
     }
 
-    /**
-     * @see Primaryable#isPrimary()
-     */
-    public boolean isPrimary() {
-        return isProposalPrimaryProjectDirectorIndicator();
-    }
 
     /**
      * Sets the proposalPrimaryProjectDirectorIndicator attribute.
@@ -160,17 +161,5 @@ public class ProposalProjectDirector extends PersistableBusinessObjectBase imple
             m.put("proposalNumber", this.proposalNumber.toString());
         }
         return m;
-    }
-
-    /**
-     * This can be displayed by Proposal.xml lookup results.
-     * @see Object#toString()
-     */
-    @Override
-    public String toString() {
-        // todo: get "nonexistent", "primary", and "secondary" from ApplicationResources.properties via KeyConstants?
-        String name = ObjectUtils.isNull(getProjectDirector()) ? "nonexistent" : getProjectDirector().getPersonName();
-        String title = getProposalProjectDirectorProjectTitle() == null ? "" : " " + getProposalProjectDirectorProjectTitle();
-        return name + " " + (isProposalPrimaryProjectDirectorIndicator() ? "primary" : "secondary") + title;
     }
 }

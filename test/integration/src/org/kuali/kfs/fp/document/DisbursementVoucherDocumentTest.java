@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/integration/src/org/kuali/kfs/fp/document/DisbursementVoucherDocumentTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +17,12 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getDataDictionaryService;
-import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
-import static org.kuali.kfs.util.SpringServiceLocator.getTransactionalDocumentDictionaryService;
-import static org.kuali.kfs.util.SpringServiceLocator.getAccountingPeriodService;
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.saveDocument;
+import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodService;
+import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getTransactionalDocumentDictionaryService;
+import static org.kuali.module.financial.document.TransactionalDocumentTestUtils.saveDocument;
+import static org.kuali.module.financial.document.TransactionalDocumentTestUtils.testGetNewDocument_byDocumentClass;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE7;
 import static org.kuali.test.fixtures.UserNameFixture.CSWINSON;
 import static org.kuali.test.fixtures.UserNameFixture.HSCHREIN;
@@ -34,14 +36,12 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
 import org.kuali.test.DocumentTestUtils;
@@ -49,7 +49,6 @@ import org.kuali.test.KualiTestBase;
 import org.kuali.test.TestsWorkflowViaDatabase;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
-import org.kuali.test.suite.RelatesTo;
 import org.kuali.workflow.WorkflowTestUtils;
 
 import edu.iu.uis.eden.EdenConstants;
@@ -74,7 +73,7 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
         DisbursementVoucherDocument dvParameter = (DisbursementVoucherDocument) getDocumentParameterFixture();
         DisbursementVoucherDocument document = (DisbursementVoucherDocument) getDocumentParameterFixture();
         document.getDvPayeeDetail().setDisbVchrPayeeIdNumber("1234");
-        document.toCopy();
+        document.convertIntoCopy();
 
         // the dvParameter doc number needs to be resynced
         dvParameter.setDocumentNumber(document.getDocumentNumber());
@@ -94,7 +93,7 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
 
         dvParameter.setDisbVchrContactPersonName(GlobalVariables.getUserSession().getUniversalUser().getPersonName());
         // set to tomorrow
-        Calendar calendar = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
+        Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.clear(Calendar.MILLISECOND);
         calendar.clear(Calendar.SECOND);
@@ -116,7 +115,6 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
     }
 
     @TestsWorkflowViaDatabase
-    @RelatesTo(RelatesTo.JiraIssue.KULUT10)
     public final void testWorkflowRouting() throws Exception {
         // save and route the document
         Document document = buildDocument();
@@ -131,7 +129,7 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ACCOUNT_REVIEW));
         assertTrue("Document should be enroute.", document.getDocumentHeader().getWorkflowDocument().stateIsEnroute());
         assertTrue("VPUTMAN should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        getDocumentService().approveDocument(document, "Test approving as VPUTMAN", null); 
+        getDocumentService().approveDocument(document, "Test approving as VPUTMAN", null);
 
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ORG_REVIEW);
         // now doc should be in Org Review routing to CSWINSON
@@ -206,7 +204,7 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
     }
 
     private <T extends Document> void assertMatch(T document1, T document2) {
-        AccountingDocumentTestUtils.assertMatch(document1, document2);
+        TransactionalDocumentTestUtils.assertMatch(document1, document2);
         DisbursementVoucherDocument d1 = (DisbursementVoucherDocument) document1;
         DisbursementVoucherDocument d2 = (DisbursementVoucherDocument) document2;
 
@@ -236,34 +234,55 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
         List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
         int expectedSourceTotal = sourceLines.size();
         int expectedTargetTotal = targetLines.size();
-        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
+        TransactionalDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
     }
 
     public final void testGetNewDocument() throws Exception {
         testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
     }
 
-    public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
+    public final void testConvertIntoCopy_invalidYear() throws Exception {
+        TransactionalDocumentTestUtils.testConvertIntoCopy_invalidYear(buildDocument(), getAccountingPeriodService());
+    }
 
+    public final void testConvertIntoCopy_copyDisallowed() throws Exception {
+        TransactionalDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
+
+    }
+
+    public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
+    }
+
+    public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
+    }
+
+    public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), getTransactionalDocumentDictionaryService(), getAccountingPeriodService());
+    }
+
+    @TestsWorkflowViaDatabase
+    public final void testConvertIntoErrorCorrection() throws Exception {
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), getDocumentService(), getTransactionalDocumentDictionaryService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testRouteDocument() throws Exception {
-        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), getDocumentService());
+        TransactionalDocumentTestUtils.testRouteDocument(buildDocument(), getDocumentService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testSaveDocument() throws Exception {
         // get document parameter
-        AccountingDocument document = buildDocument();
+        TransactionalDocument document = buildDocument();
         document.prepareForSave();
 
         // save
         saveDocument(document, getDocumentService());
 
         // retrieve
-        AccountingDocument result = (AccountingDocument) getDocumentService().getByDocumentHeaderId(document.getDocumentNumber());
+        TransactionalDocument result = (TransactionalDocument) getDocumentService().getByDocumentHeaderId(document.getDocumentNumber());
         // verify
         assertMatch(document, result);
 
@@ -271,7 +290,7 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
 
     @TestsWorkflowViaDatabase
     public final void testConvertIntoCopy() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), getDocumentService(), getExpectedPrePeCount());
+        TransactionalDocumentTestUtils.testConvertIntoCopy(buildDocument(), getDocumentService(), getExpectedPrePeCount());
     }
 
     // test util methods

@@ -31,7 +31,6 @@
                 <field attributeName="finObjectTypeIcrSelectionIndicator" />
                 <field attributeName="fundBalanceIndicator" />
                 <field attributeName="financialReportingSortCode" />
-                <field attributeName="accountCategory.codeAndDescription" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
@@ -45,7 +44,6 @@
             <lookupFields>
                 <lookupField attributeName="code" required="false" />
                 <lookupField attributeName="name" required="false" />
-                <lookupField attributeName="accountCategoryCode" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -55,7 +53,7 @@
                 <field attributeName="finObjectTypeIcrSelectionIndicator" />
                 <field attributeName="fundBalanceIndicator" />
                 <field attributeName="financialReportingSortCode" />
-				<field attributeName="accountCategoryCode" />
+
             </resultFields>
         </lookup>
 
@@ -142,18 +140,7 @@
                 <description>Fund Balance Indicator</description>
             </attributeReference>
 
-			<attributeReference name="accountCategoryCode" sourceClassName="org.kuali.module.chart.bo.AccountCategory" sourceAttributeName="accountCategoryCode">
-				<label>Account Category</label>
-				<shortLabel>AccountCategory</shortLabel>
-				
-				<required>true</required>
-                <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.AccountCategoryValuesFinder" />
-                </control>
-				
-				<summary>Account Category</summary>
-				<description>Account Category</description>
-			</attributeReference>
+
 
             <attributeReference name="objectId" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="objectId" />
 

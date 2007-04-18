@@ -27,12 +27,12 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.bo.OrganizationParameter;
+import org.kuali.module.purap.bo.VendorContract;
+import org.kuali.module.purap.bo.VendorDetail;
 import org.kuali.module.purap.dao.RequisitionDao;
 import org.kuali.module.purap.document.RequisitionDocument;
 import org.kuali.module.purap.service.RequisitionService;
-import org.kuali.module.vendor.bo.VendorContract;
-import org.kuali.module.vendor.bo.VendorDetail;
-import org.kuali.module.vendor.service.VendorService;
+import org.kuali.module.purap.service.VendorService;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -143,8 +143,7 @@ public class RequisitionServiceImpl implements RequisitionService {
         KualiDecimal reqTotal = requisition.getTotalDollarAmount();
         KualiDecimal apoLimit = getApoLimit(requisition.getVendorContractGeneratedIdentifier(),
           requisition.getChartOfAccountsCode(), requisition.getOrganizationCode());
-        requisition.setOrganizationAutomaticPurchaseOrderLimit(apoLimit);
-        
+
         LOG.debug("isAPO() reqId = " + requisition.getPurapDocumentIdentifier() + "; apoLimit = " + apoLimit + "; reqTotal = " + reqTotal);
         if (apoLimit == null) {
             return "APO limit is empty.";
@@ -200,14 +199,12 @@ public class RequisitionServiceImpl implements RequisitionService {
             if (vendorDetail == null) {
                 return "Error retrieving vendor from the database.";
             }
-
-//TODO fix this
-//            Boolean vendorRestricted = vendorDetail.getVendorRestrictedIndicator();
-//            if (vendorRestricted != requisition.getVendorRestrictedIndicator()) {
-//                // restricted status of vendor has changed; save new status to requisition 
-//                requisition.setVendorRestrictedIndicator(vendorDetail.getVendorRestrictedIndicator());
-//                save(requisition);
-//            }
+            Boolean vendorRestricted = vendorDetail.getVendorRestrictedIndicator();
+            if (vendorRestricted != requisition.getVendorRestrictedIndicator()) {
+                // restricted status of vendor has changed; save new status to requisition 
+                requisition.setVendorRestrictedIndicator(vendorDetail.getVendorRestrictedIndicator());
+                save(requisition);
+            }
             if (requisition.getVendorRestrictedIndicator()) {
                 return "Selected vendor is marked as restricted.";
             }

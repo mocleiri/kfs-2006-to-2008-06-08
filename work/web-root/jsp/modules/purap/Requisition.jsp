@@ -1,5 +1,7 @@
 <%--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/purap/Requisition.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,10 +23,6 @@
 	htmlFormAction="purapRequisition" renderMultipart="true"
 	showTabButtons="true">
 
-    <c:if test="${!empty KualiForm.editingMode['fullEntry']}">
-        <c:set var="fullEntryMode" value="true" scope="request" />
-    </c:if>
-
 	<kul:hiddenDocumentFields excludePostingYear="true" />
 
     <purap:hiddenPurapFields />
@@ -37,7 +35,7 @@
 	    	documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"
 	    	detailSectionLabel="Requisition Detail" />
     </kul:documentOverview>
-	
+
     <purap:vendor
         documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"
         displayRequisitionFields="true" />
@@ -48,22 +46,16 @@
         documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
 
     <purap:delivery
-        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" 
-        displayRequisitionFields="true"
-        />
+        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
 
     <purap:additional
         documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"
         displayRequisitionFields="true" />
 
-    <!-- purap:viewRelatedDocuments
-            documentAttributes="${DataDictionary.SourceDocumentReference.attributes}"
-            / -->
-    
 	<purap:statushistory 
 		documentAttributes="${DataDictionary.RequisitionStatusHistory.attributes}" />
 
-	<kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}" /> 
+	<kul:notes />
 
 	<kul:adHocRecipients />
 

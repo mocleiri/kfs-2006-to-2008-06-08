@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.OriginEntryTestBase;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -36,9 +38,6 @@ import org.kuali.module.gl.util.GeneralLedgerTestHelper;
 import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.suite.RelatesTo;
 
-/**
- * IF THIS TEST FAILS, READ https://test.kuali.org/jira/browse/KULRNE-34 regarding reference numbers
- */
 @WithTestSpringContext
 public class BalanceForwardStepTest extends OriginEntryTestBase {
 
@@ -55,17 +54,16 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
         super.setUp();
 
         DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateTimeService.setCurrentDate(new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "TRANSACTION_DT")).getTime()));
+        dateTimeService.currentDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "TRANSACTION_DT")).getTime());
     }
 
     /**
      * Test the encumbrance forwarding process in one fell swoop.
      * 
-     * IF THIS TEST FAILS, READ https://test.kuali.org/jira/browse/KULRNE-34 regarding reference numbers
-     * 
      * @throws Exception ## WARNING: DO NOT run this test or rename this method. WARNING ## ## WARNING: This one test takes just
      *         under 3 hours to run WARNING ## ## WARNING: over the vpn. WARNING ##
      */
+    @RelatesTo(RelatesTo.JiraIssue.KULRNE34)
     public void testAll() throws Exception {
 
         clearOriginEntryTables();
@@ -73,14 +71,14 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
 
         // Execute the step ...
         BalanceForwardStep step = (BalanceForwardStep) beanFactory.getBean("glBalanceForwardStep");
-        step.execute();
+        step.performStep();
 
         // load our services.
         OriginEntryService entryService = SpringServiceLocator.getOriginEntryService();
         OriginEntryGroupService groupService = SpringServiceLocator.getOriginEntryGroupService();
 
         // and verify the output.
-        List fisGenerated = GeneralLedgerTestHelper.loadOutputOriginEntriesFromClasspath("org/kuali/module/gl/batch/gl_gleacbfb.data.txt", dateTimeService.getCurrentDate());
+        List fisGenerated = GeneralLedgerTestHelper.loadOutputOriginEntriesFromClasspath("org/kuali/module/gl/batch/gl_gleacbfb.data.txt", dateTimeService.currentDate);
 
         // load our groups.
         Map criteria = new HashMap();
@@ -144,8 +142,8 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
 
         // At this point extraEntriesGenerated and shouldBe should both be empty.
         // If they're not then something went wrong.
-        assertTrue("Kuali generated entries that FIS did not generate (see https://test.kuali.org/jira/browse/KULRNE-34 for possible cause):", kualiGeneratedEntriesNotGeneratedByFis.isEmpty());
-        assertTrue("FIS generated entries that Kuali did not generate (see https://test.kuali.org/jira/browse/KULRNE-34 for possible cause):", fisGenerated.isEmpty());
+        assertTrue("Kuali generated entries that FIS did not generate:", kualiGeneratedEntriesNotGeneratedByFis.isEmpty());
+        assertTrue("FIS generated entries that Kuali did not generate:", fisGenerated.isEmpty());
 
     }
 
