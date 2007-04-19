@@ -36,8 +36,7 @@
         <documentTypeName>KualiAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>ACCT</documentTypeCode>
 
-		<webScriptFile>dwr/interface/SubFundGroupService.js</webScriptFile>
-		<webScriptFile>scripts/chart/accountDocument.js</webScriptFile>
+		<webScriptFile>chart/accountDocument.js</webScriptFile>
 
         <label>Account Maintenance Document</label>
         <shortLabel>AcctMaintDoc</shortLabel>
@@ -45,6 +44,8 @@
         <summary>Account maintenance document</summary>
         <description>Document used to create or update Account objects</description>
 		<help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ACCOUNT" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
@@ -95,9 +96,7 @@
                     <maintainableField name="accountStreetAddress" required="true" />
                     <maintainableField name="accountOffCampusIndicator" required="false" />
                     <maintainableField name="accountClosedIndicator" required="false" />
-                    <maintainableField name="accountTypeCode" required="true">
-                    	<defaultValue>NA</defaultValue>
-                    </maintainableField>
+                    <maintainableField name="accountTypeCode" required="true" />
                     <maintainableField name="subFundGroupCode" required="true" webUILeaveFieldFunction="onblur_subFundGroup" webUILeaveFieldCallbackFunction="checkRestrictedStatusCode_Callback" />
                     <!--  comment programCode out if not in use at your institution -->
                     <maintainableField name="programCode" required="false" />
@@ -145,10 +144,7 @@
                     <maintainableField name="contractControlFinCoaCode" required="false" />
                     <maintainableField name="contractControlAccountNumber" required="false" />
                     <maintainableField name="acctIndirectCostRcvyTypeCd" required="false" />
-                    <maintainableField name="financialIcrSeriesIdentifier" required="false" >
-                         <overrideLookupClass>org.kuali.module.chart.bo.IcrAutomatedEntry</overrideLookupClass>
-                         <overrideFieldConversions>financialIcrSeriesIdentifier:financialIcrSeriesIdentifier</overrideFieldConversions>
-                    </maintainableField>  
+                    <maintainableField name="financialIcrSeriesIdentifier" required="false" />
                     <maintainableField name="indirectCostRcvyFinCoaCode" required="false" />
                     <maintainableField name="indirectCostRecoveryAcctNbr" required="false" />
                     <maintainableField name="accountCfdaNumber" required="false" />
