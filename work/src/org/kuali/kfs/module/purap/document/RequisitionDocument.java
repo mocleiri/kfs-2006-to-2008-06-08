@@ -17,17 +17,18 @@
 package org.kuali.module.purap.document;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.Note;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ChartUser;
@@ -35,10 +36,10 @@ import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.bo.BillingAddress;
 import org.kuali.module.purap.bo.RequisitionItem;
-import org.kuali.module.purap.bo.RequisitionStatusHistory;
-import org.kuali.module.vendor.bo.VendorContract;
-import org.kuali.module.vendor.bo.VendorDetail;
-import org.kuali.module.vendor.service.PhoneNumberService;
+import org.kuali.module.purap.bo.SourceDocumentReference;
+import org.kuali.module.purap.bo.VendorContract;
+import org.kuali.module.purap.bo.VendorDetail;
+import org.kuali.module.purap.service.PhoneNumberService;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -57,8 +58,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 	private String alternate4VendorName;
 	private String alternate5VendorName;
 	private KualiDecimal organizationAutomaticPurchaseOrderLimit;
-    private Integer accountsPayablePurchasingDocumentLinkIdentifier;
-    
+
     private PhoneNumberService phoneNumberService;
 
 	/**
@@ -66,14 +66,28 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 	 */
 	public RequisitionDocument() {
         super();
-    }
+        /*
+        SourceDocumentReference sourceDocumentReference = new SourceDocumentReference();
+        
+        sourceDocumentReference.setSourceDocumentIdentifier(this.getIdentifier());
+        String documentTypeName = SpringServiceLocator.getDataDictionaryService().getDocumentTypeNameByClass(this.getClass());
+        String documentTypeCode = SpringServiceLocator.getDataDictionaryService().getDocumentTypeCodeByTypeName(documentTypeName);
+        sourceDocumentReference.setSourceFinancialDocumentTypeCode(documentTypeCode);
+        */
+        // This line is giving this error:
+        /*
+        javax.servlet.ServletException: OJB operation; SQL []; ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
+        ; nested exception is java.sql.SQLException: ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
+        */
+        //sourceDocumentReference.setSourceDocumentObjectIdentifier(this.getObjectId());
+        /*
+        String ObjID = this.getObjectId();
+        sourceDocumentReference.setSourceDocumentObjectIdentifier("objectID");
+        sourceDocumentReferences = new TypedArrayList(SourceDocumentReference.class);
+        sourceDocumentReferences.add(sourceDocumentReference);
 
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#isBoNotesSupport()
-     */
-    @Override
-    public boolean isBoNotesSupport() {
-        return true;
+      */
+        
     }
 
     public void refreshAllReferences() {
@@ -245,9 +259,6 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
         this.setOrganizationAutomaticPurchaseOrderLimit(null);
         this.setPurchaseOrderAutomaticIndicator(false);
         this.setStatusHistories(null);
-        
-        // Fill the BO Notes with an empty List.
-        this.setBoNotes(new ArrayList());
       
         //TODO WAIT ON ITEM LOGIC (CHRIS AND DAVID SHOULD FIX THIS HERE)
         //TODO what about id in items?  do we need to null them out?
@@ -293,9 +304,8 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
             String newRequisitionStatus = PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN;
             if (SpringServiceLocator.getRequisitionService().isAutomaticPurchaseOrderAllowed(this)) {
                 newRequisitionStatus = PurapConstants.RequisitionStatuses.CLOSED;
-                PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createAutomaticPurchaseOrderDocument(this);
+                PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(this);
                 try {
-                    GlobalVariables.clear();
                     poDocument = (PurchaseOrderDocument)SpringServiceLocator.getDocumentService().routeDocument(poDocument, null, null);
                 }
                 catch (WorkflowException e) {
@@ -366,29 +376,8 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 //        }
 
     }
-    
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#addToStatusHistories(java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void addToStatusHistories( String oldStatus, String newStatus, Note statusHistoryNote ) {
-        RequisitionStatusHistory rsh = new RequisitionStatusHistory( oldStatus, newStatus );
-        this.addStatusHistoryNote( rsh, statusHistoryNote );
-        this.getStatusHistories().add( rsh );
-    }
 
     // SETTERS AND GETTERS
-    public String getVendorPaymentTermsCode() {
-        return getVendorDetail().getVendorPaymentTerms().getVendorPaymentTermsDescription();
-    }
-
-    public String getVendorShippingPaymentTermsCode() {
-        return getVendorDetail().getVendorShippingPaymentTerms().getVendorShippingPaymentTermsDescription();
-    }
-
-    public String getVendorShippingTitleCode() {
-        return getVendorDetail().getVendorShippingTitle().getVendorShippingTitleDescription();
-    }
-
 	/**
 	 * Gets the requisitionOrganizationReference1Text attribute.
 	 * 
@@ -578,21 +567,29 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 		this.organizationAutomaticPurchaseOrderLimit = organizationAutomaticPurchaseOrderLimit;
 	}
 	
-    /**
-     * Gets the accountsPayablePurchasingDocumentLinkIdentifier attribute. 
-     * @return Returns the accountsPayablePurchasingDocumentLinkIdentifier.
-     */
-    public Integer getAccountsPayablePurchasingDocumentLinkIdentifier() {
-        return accountsPayablePurchasingDocumentLinkIdentifier;
-    }
-
-    /**
-     * Sets the accountsPayablePurchasingDocumentLinkIdentifier attribute value.
-     * @param accountsPayablePurchasingDocumentLinkIdentifier The accountsPayablePurchasingDocumentLinkIdentifier to set.
-     */
-    public void setAccountsPayablePurchasingDocumentLinkIdentifier(Integer accountsPayablePurchasingDocumentLinkIdentifier) {
-        this.accountsPayablePurchasingDocumentLinkIdentifier = accountsPayablePurchasingDocumentLinkIdentifier;
-    }
+    @Override
+    public void afterInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+            super.afterInsert(persistenceBroker);
+            SourceDocumentReference sourceDocumentReference = new SourceDocumentReference();
+            
+            sourceDocumentReference.setSourceDocumentIdentifier(this.getPurapDocumentIdentifier());
+            String documentTypeName = SpringServiceLocator.getDataDictionaryService().getDocumentTypeNameByClass(this.getClass());
+            String documentTypeCode = SpringServiceLocator.getDataDictionaryService().getDocumentTypeCodeByTypeName(documentTypeName);
+            sourceDocumentReference.setSourceFinancialDocumentTypeCode(documentTypeCode);
+            // This line is giving this error:
+            /*
+            javax.servlet.ServletException: OJB operation; SQL []; ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
+            ; nested exception is java.sql.SQLException: ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
+            */
+            String ObjID = this.getObjectId();
+            sourceDocumentReference.setSourceDocumentObjectIdentifier(this.getObjectId());
+            //String ObjID = this.getObjectId();
+           // sourceDocumentReference.setSourceDocumentObjectIdentifier("objectID");
+            sourceDocumentReferences = new TypedArrayList(SourceDocumentReference.class);
+            sourceDocumentReferences.add(sourceDocumentReference);
+           // String ObjID = this.getObjectId();
+            
+     }
 
     /**
      * @see org.kuali.module.purap.document.PurchasingDocumentBase#getItemClass()
