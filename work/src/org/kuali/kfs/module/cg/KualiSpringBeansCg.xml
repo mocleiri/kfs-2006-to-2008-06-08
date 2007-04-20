@@ -22,7 +22,7 @@
 		<property name="moduleCode" value="CG" />
 		<property name="moduleUserService" ref="cgUserService" />
 		<property name="moduleAuthorizer">
-			<bean class="org.kuali.kfs.authorization.KfsModuleAuthorizerBase">
+			<bean class="org.kuali.core.authorization.KualiModuleAuthorizerBase">
 				<property name="packagePrefixes">
 					<list>
 						<value>org.kuali.module.cg.</value>
@@ -41,43 +41,14 @@
 				<value>org.kuali.module.cg.datadictionary</value>
 			</list>
 		</property>
-		<property name="databaseRepositoryFilePaths">
-			<list>
-				<value>org/kuali/module/cg/OJB-repository-cg.xml</value>
-			</list>
-		</property>
-		<property name="scriptConfigurationFilePaths">
-			<list>
-				<value>org/kuali/module/cg/dwr-cg.xml</value>
-			</list>
-		</property>
-		<property name="jobNames">
-			<list>
-				<value>proposalCloseJob</value>
-			</list>
-		</property>
-	</bean>
-	
-	<!-- DAOs -->
-	<bean id="awardDao" parent="platformAwareDao" class="org.kuali.module.cg.dao.ojb.AwardDaoOjb" />
-
-	<bean id="proposalDao" parent="platformAwareDao" class="org.kuali.module.cg.dao.ojb.ProposalDaoOjb" />
-	
-	<bean id="proposalCloseDao" parent="platformAwareDao" class="org.kuali.module.cg.dao.ojb.ProposalCloseDaoOjb" />
-	
-	<!-- Services -->
-	<bean id="proposalCloseService" class="org.kuali.module.cg.service.impl.ProposalCloseServiceImpl">
-		<property name="awardDao">
-			<ref bean="awardDao" />
-		</property>
-		<property name="proposalDao">
-			<ref bean="proposalDao" />
-		</property>
-		<property name="proposalCloseDao">
-			<ref bean="proposalCloseDao" />
-		</property>
-		<property name="dateTimeService">
-			<ref bean="dateTimeService" />
+		<property name="ojbMetadataLoader">
+			<bean class="org.kuali.rice.OjbMetadataLoader">
+				<property name="repositoryDescriptors">
+					<list>
+						<value>classpath:org/kuali/module/cg/OJB-repository-cg.xml</value>
+					</list>
+				</property>
+			</bean>
 		</property>
 	</bean>
 
@@ -85,50 +56,18 @@
 	</bean>
 
 	<bean id="awardService" class="org.kuali.module.cg.service.impl.AwardServiceImpl">
-		<property name="awardDao">
-			<ref bean="awardDao" />
-		</property>
         <property name="kualiGroupService">
             <ref bean="kualiGroupService" />
         </property>
-        
 	</bean>
 	
 	<bean id="proposalService" class="org.kuali.module.cg.service.impl.ProposalServiceImpl">
-    	<property name="proposalDao">
-      		<ref bean="proposalDao" />
+    	<property name="documentService">
+      		<ref bean="documentService" />
+    	</property>
+    	<property name="maintenanceDocumentDictionaryService">
+      		<ref bean="maintenanceDocumentDictionaryService" />
     	</property>
 	</bean>
 
-	<bean id="proposalLookupableHelperService" class="org.kuali.module.cg.lookup.ProposalLookupableHelperServiceImpl" singleton="false" parent="kualiLookupableHelperService" />
-
-	<bean id="proposalLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
-		<property name="lookupableHelperService">
-			<ref bean="proposalLookupableHelperService" />
-		</property>
-	</bean>
-
-    <bean id="projectDirectorService" class="org.kuali.module.cg.service.impl.ProjectDirectorServiceImpl">
-        <property name="universalUserService">
-            <ref bean="universalUserService" />
-        </property>
-        <property name="businessObjectService">
-            <ref bean="businessObjectService" />
-        </property>
-    </bean>
-
-    <!-- Batch Steps -->
-    <bean id="proposalCloseBatchStep" class="org.kuali.module.cg.batch.ProposalCloseBatchStep">
-        <property name="proposalCloseService">
-            <ref bean="proposalCloseService" />
-        </property>
-    </bean>
-
-    <bean id="proposalCloseJob" parent="scheduledJobDescriptor">
-		<property name="steps">
-			<list>
-				<ref bean="proposalCloseBatchStep" />
-			</list>
-		</property>
-	</bean>
 </beans>

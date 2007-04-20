@@ -66,7 +66,6 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
     public void createPersonnelDetail(BudgetUser budgetUser, BudgetDocument budgetDocument) {
         BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
         budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-        budgetUser.setAppointmentTypeDescription(budgetFringeRate.getAppointmentType().getAppointmentTypeDescription());
 
         BudgetFringeRate secondaryBudgetFringeRate = null;
         if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
@@ -451,7 +450,6 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
             // Update the Fringes for this person to ensure that we're getting the most recent amounts
             BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
             budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-            budgetUser.setAppointmentTypeDescription(budgetFringeRate.getAppointmentType().getAppointmentTypeDescription());
 
             BudgetFringeRate secondaryBudgetFringeRate = null;
             if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
@@ -560,7 +558,6 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
     public void reconcilePersonTaskPeriod(BudgetUser budgetUser, BudgetDocument budgetDocument) {
         BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
         budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-        budgetUser.setAppointmentTypeDescription(budgetFringeRate.getAppointmentType().getAppointmentTypeDescription());
         if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
             budgetUser.setSecondaryAppointmentTypeCode(budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode());
         }
