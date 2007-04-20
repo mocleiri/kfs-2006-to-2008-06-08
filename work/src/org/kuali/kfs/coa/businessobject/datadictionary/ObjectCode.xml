@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
@@ -24,12 +9,12 @@
 -->
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.ObjectCode">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Object Code Inquiry</title>
 
-            <inquirySections><inquirySection title="Object Code Detail"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialObjectCode" />
@@ -46,7 +31,7 @@
                 <field attributeName="finObjMandatoryTrnfrelimCd" />
                 <field attributeName="financialFederalFundedCode" />
                 <field attributeName="nextYearFinancialObjectCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
         <!-- 
             NOTE!!!
@@ -57,7 +42,8 @@
             <title>Object Code Lookup</title>
 
             <menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCodeChangeDocument"><img src="images/tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCode">Create New</a>
+                <a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCodeChangeDocument">Create New Global</a>]]>
             </menubar>
 
             <instructions>Lookup an Object Code</instructions>
@@ -66,7 +52,7 @@
 
             <lookupFields>
                 <lookupField attributeName="universityFiscalYear" required="true">
-                    <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
+                    <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.FiscalYearFinder</defaultValueFinderClass>
                 </lookupField>
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
@@ -91,9 +77,10 @@
                 <field attributeName="financialObjectLevelCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialObjectSubTypeCode" />
+                <field attributeName="financialObjectActiveCode" />
                 <field attributeName="historicalFinancialObjectCode" />
                 <field attributeName="financialBudgetAggregationCd" />
-                <field attributeName="financialObjectActiveCode" />
+
             </resultFields>
         </lookup>
 
@@ -124,8 +111,9 @@
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
                 <control>
-				    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartCode();" /> 
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartCode();" />
                 </control>
+
             </attributeReference>
 
             <attribute name="financialObjectCode" forceUppercase="true">
@@ -190,8 +178,8 @@
                 they need to be made to both documents
             -->
             <attribute name="financialObjectLevelCode" forceUppercase="true">
-                <label>Level Code</label>
-                <shortLabel>Level Code</shortLabel>
+                <label>Object Level Code</label>
+                <shortLabel>ObjLevlCde</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern>
@@ -218,8 +206,9 @@
                 </validationPattern>
                 <required>true</required>
                 <control>
-					<text size="2" />
-				</control>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartCode();" />
+                </control>
+
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
@@ -273,8 +262,8 @@
             </attribute>
 
             <attribute name="financialObjectSubTypeCode" forceUppercase="true">
-                <label>Object Sub-Type Code</label>
-                <shortLabel>Object Sub-Type Code</shortLabel>
+                <label>Object Sub Type Code</label>
+                <shortLabel>ObjSubTypCode</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern>
@@ -336,11 +325,9 @@
 
                 <maxLength>1</maxLength>
                 <required>true</required>
-                <control><text size="1"/>
-                <!-- 
-                        <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.BudgetAggregationCodeValuesFinder" />
-                -->
-				</control>
+                <control>
+                    <apcSelect group="ChartMaintenanceEDoc" parameterName="ObjectCodeValidBudgetAggregationCodes" />
+                </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
@@ -354,7 +341,7 @@
                 <maxLength>1</maxLength>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.MandatoryTransferEliminationCodeValuesFinder" />
+                    <text size="1" />
                 </control>
 
                 <summary>
@@ -370,14 +357,12 @@
                 they need to be made to both documents
             -->
             <attribute name="financialFederalFundedCode" forceUppercase="true">
-                <label>Federal Funded Code</label>
+                <label>Federally Funded Code</label>
                 <shortLabel>FedFundCd</shortLabel>
 
                 <maxLength>1</maxLength>
-                <required>true</required>
-                
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.FederalFundedCodeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.FederalFundedCodeValuesFinder" />
                 </control>
 
                 <summary>
@@ -412,7 +397,5 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        
-        <objectLabel>Object Code</objectLabel>
     </businessObject>
 </dictionaryEntry>

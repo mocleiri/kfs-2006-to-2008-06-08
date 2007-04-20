@@ -22,7 +22,7 @@
 		<property name="moduleCode" value="BC" />
 		<property name="moduleUserService" ref="budgetUserService" />
 		<property name="moduleAuthorizer">
-			<bean class="org.kuali.kfs.authorization.KfsModuleAuthorizerBase">
+			<bean class="org.kuali.core.authorization.KualiModuleAuthorizerBase">
 				<property name="packagePrefixes">
 					<list>
 						<value>org.kuali.module.budget.</value>
@@ -41,19 +41,12 @@
 				<value>org.kuali.module.budget.datadictionary</value>
 			</list>
 		</property>
-		<property name="databaseRepositoryFilePaths">
-			<list>
-				<value>org/kuali/module/budget/OJB-repository-budget.xml</value>
-			</list>
-		</property>
-		<property name="scriptConfigurationFilePaths">
-			<list>
-				<value>org/kuali/module/budget/dwr-budget.xml</value>
-			</list>
-		</property>
 	</bean>
 
 	<bean id="budgetUserService" class="org.kuali.module.budget.service.impl.BudgetUserServiceImpl" parent="kualiModuleUserServiceBase">
+		<property name="chartUserService">
+			<ref bean="chartUserService" />
+		</property>
 	</bean>
 
 	<bean id="lockService" class="org.kuali.module.budget.service.impl.LockServiceImpl">
@@ -62,7 +55,11 @@
 		</property>
 	</bean>
 
-	<bean id="budgetConstructionDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb" />
+	<bean id="budgetConstructionDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb">
+		<property name="jcdAlias">
+			<value>dataSource</value>
+		</property>
+	</bean>
 	
 	<bean id="budgetConstructionOrganizationReportsService" class="org.kuali.module.budget.service.impl.BudgetConstructionOrganizationReportsServiceImpl">
 		<property name="budgetConstructionOrganizationReportsDao">
@@ -70,7 +67,11 @@
 		</property>
 	</bean>
 
-	<bean id="budgetConstructionOrganizationReportsDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionOrganizationReportsDaoOjb" />
+	<bean id="budgetConstructionOrganizationReportsDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionOrganizationReportsDaoOjb">
+		<property name="jcdAlias">
+			<value>dataSource</value>
+		</property>
+	</bean>
 		
     <bean id="genesisService" class="org.kuali.module.budget.service.impl.GenesisServiceImpl">
         <property name="genesisDao">
@@ -78,7 +79,10 @@
         </property>
     </bean>
 
-    <bean id="genesisDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.GenesisDaoOjb">
+    <bean id="genesisDao" class="org.kuali.module.budget.dao.ojb.GenesisDaoOjb">
+        <property name="jcdAlias">
+            <value>dataSource</value>
+        </property>
         <property name="dateTimeService">
         	<ref bean="dateTimeService"/>
         </property>
@@ -97,7 +101,11 @@
         </property>
     </bean>
 
-    <bean id="fiscalYearMakersDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.FiscalYearMakersDaoOjb" />
+    <bean id="fiscalYearMakersDao" class="org.kuali.module.budget.dao.ojb.FiscalYearMakersDaoOjb">
+        <property name="jcdAlias">
+            <value>dataSource</value>
+        </property>
+    </bean>
     
 
     <bean id="calculatedSalaryFoundationTrackerOverrideService" class="org.kuali.module.budget.service.impl.CalculatedSalaryFoundationTrackerOverrideServiceImpl">

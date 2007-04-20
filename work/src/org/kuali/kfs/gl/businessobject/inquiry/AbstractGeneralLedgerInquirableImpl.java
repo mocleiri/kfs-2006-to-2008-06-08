@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@ import org.kuali.core.datadictionary.AttributeDefinition;
 import org.kuali.core.datadictionary.AttributeReferenceDefinition;
 import org.kuali.core.datadictionary.DataDictionaryEntryBase;
 import org.kuali.core.inquiry.KualiInquirableImpl;
-import org.kuali.core.lookup.LookupUtils;
+import org.kuali.core.lookup.KualiLookupableImpl;
 import org.kuali.core.service.BusinessObjectDictionaryService;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.PersistenceStructureService;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
@@ -84,14 +84,14 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
         }
         else if (ObjectUtils.isNestedAttribute(attributeName)) {
             if (!"financialObject.financialObjectType.financialReportingSortCode".equals(attributeName)) {
-                inquiryBusinessObjectClass = LookupUtils.getNestedReferenceClass(businessObject, attributeName);
+                inquiryBusinessObjectClass = KualiLookupableImpl.getNestedReferenceClassGl(businessObject, attributeName);
             }
             else {
                 return "";
             }
         }
         else {
-            Map primitiveReference = LookupUtils.getPrimitiveReference(businessObject, attributeName);
+            Map primitiveReference = KualiLookupableImpl.getPrimitiveReference(businessObject, attributeName);
             if (primitiveReference != null && !primitiveReference.isEmpty()) {
                 attributeRefName = (String) primitiveReference.keySet().iterator().next();
                 inquiryBusinessObjectClass = (Class) primitiveReference.get(attributeRefName);
@@ -156,7 +156,6 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
                         keyConversion = persistenceStructureService.getForeignKeyFieldName(businessObject.getClass(), attributeRefName, keyName);
                     }
                 }
-
                 Object keyValue = ObjectUtils.getPropertyValue(businessObject, keyConversion);
                 keyValue = (keyValue == null) ? "" : keyValue.toString();
 
@@ -350,7 +349,7 @@ public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
         DataDictionaryEntryBase entry = (DataDictionaryEntryBase) dataDictionary.getDataDictionary().getDictionaryObjectEntry(entryName);
         if (entry != null) {
             attributeDefinition = entry.getAttributeDefinition(attributeName);
-            inquiryBusinessObjectClass = LookupUtils.getNestedReferenceClass(businessObject, attributeName);
+            inquiryBusinessObjectClass = KualiLookupableImpl.getNestedReferenceClass(businessObject, attributeName);
         }
 
         if (attributeDefinition instanceof AttributeReferenceDefinition) {
