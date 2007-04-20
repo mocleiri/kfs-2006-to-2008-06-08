@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,15 @@ import java.util.Map;
 import org.apache.commons.collections.IteratorUtils;
 import org.kuali.KeyConstants;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.TransactionalServiceUtils;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.dao.AccountBalanceDao;
 import org.kuali.module.gl.service.AccountBalanceService;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ */
 public class AccountBalanceServiceImpl implements AccountBalanceService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceServiceImpl.class);
 
@@ -45,7 +44,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     public Iterator findConsolidatedAvailableAccountBalance(Map fieldValues) {
         LOG.debug("findConsolidatedAvailableAccountBalance() started");
 
-        return TransactionalServiceUtils.copyToExternallyUsuableIterator(accountBalanceDao.findConsolidatedAvailableAccountBalance(fieldValues));
+        return accountBalanceDao.findConsolidatedAvailableAccountBalance(fieldValues);
     }
 
     /**
@@ -54,7 +53,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     public Iterator findAvailableAccountBalance(Map fieldValues) {
         LOG.debug("findAvailableAccountBalance() started");
 
-        return TransactionalServiceUtils.copyToExternallyUsuableIterator(accountBalanceDao.findAvailableAccountBalance(fieldValues));
+        return accountBalanceDao.findAvailableAccountBalance(fieldValues);
     }
 
     /**

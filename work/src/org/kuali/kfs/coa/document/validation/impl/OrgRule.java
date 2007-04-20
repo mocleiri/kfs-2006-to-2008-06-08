@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/validation/impl/OrgRule.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +35,7 @@ import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.Org;
@@ -449,13 +451,10 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                 String topLevelOrgTypeCode = rule.getParameterText();
                 List<Org> topLevelOrgs = orgService.getActiveOrgsByType( topLevelOrgTypeCode );
                 if ( !topLevelOrgs.isEmpty() ) {
-                    // is the new org in the topLevelOrgs list?  If not, then there's an error; if so, we're editing the top level org
-                    if (!topLevelOrgs.contains(newOrg)) {
-                        putFieldError( "organizationTypeCode", 
-                                KeyConstants.ERROR_DOCUMENT_ORGMAINT_ONLY_ONE_TOP_LEVEL_ORG,
-                                topLevelOrgs.get(0).getChartOfAccountsCode()+"-"+topLevelOrgs.get(0).getOrganizationCode() );
-                        success = false;
-                    }
+                    putFieldError( "organizationTypeCode", 
+                            KeyConstants.ERROR_DOCUMENT_ORGMAINT_ONLY_ONE_TOP_LEVEL_ORG,
+                            topLevelOrgs.get(0).getChartOfAccountsCode()+"-"+topLevelOrgs.get(0).getOrganizationCode() );
+                    success = false;
                 }
             }
         }
@@ -465,7 +464,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     }
 
     // check that defaultAccount is present unless
-    // ( (orgType = U or C) and ( document is a "create new" or "edit" ))
+    // ( (orgType = U or C) and ( document is a "create new" ))
 
     protected boolean checkDefaultAccountNumber(MaintenanceDocument document) {
 
@@ -482,7 +481,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                 exemptOrganizationTypeCode = true;
             }
         }
-        if (missingDefaultAccountNumber && (!exemptOrganizationTypeCode || (!document.isNew() && !document.isEdit()))) {
+        if (missingDefaultAccountNumber && (!exemptOrganizationTypeCode || !document.isNew())) {
             putFieldError("organizationDefaultAccountNumber", KeyConstants.ERROR_DOCUMENT_ORGMAINT_DEFAULT_ACCOUNT_NUMBER_REQUIRED);
             success &= false;
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,19 +24,18 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.Constants.DepositConstants;
+import org.kuali.core.document.FinancialDocumentBase;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.bo.Deposit;
-import org.kuali.PropertyConstants;
 
 /**
  * This class represents the CashManagementDocument.
  * 
  * 
  */
-public class CashManagementDocument extends AccountingDocumentBase {
+public class CashManagementDocument extends FinancialDocumentBase {
     private static final long serialVersionUID = 7475843770851900297L;
     private static Logger LOG = Logger.getLogger(CashManagementDocument.class);
 
@@ -261,7 +260,7 @@ public class CashManagementDocument extends AccountingDocumentBase {
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        m.put("financialDocumentNumber", getFinancialDocumentNumber());
         m.put("workgroupName", getWorkgroupName());
         return m;
     }

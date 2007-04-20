@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.Constants;
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
+import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.bo.CreditCardDetail;
 
@@ -33,8 +31,10 @@ import org.kuali.module.financial.bo.CreditCardDetail;
  * eventually post transactions to the G/L. It integrates with workflow. Since a Credit Card Receipt is a one sided transactional
  * document, only accepting funds into the university, the accounting line data will be held in the source accounting line data
  * structure only.
+ * 
+ * 
  */
-public class CreditCardReceiptDocument extends CashReceiptFamilyBase implements Copyable, AmountTotaling {
+public class CreditCardReceiptDocument extends CashReceiptFamilyBase {
     // holds details about each credit card receipt
     private List<CreditCardDetail> creditCardReceipts = new ArrayList<CreditCardDetail>();
 
@@ -130,7 +130,7 @@ public class CreditCardReceiptDocument extends CashReceiptFamilyBase implements 
     public final void prepareNewCreditCardReceipt(CreditCardDetail creditCardReceiptDetail) {
         creditCardReceiptDetail.setFinancialDocumentLineNumber(this.nextCcCrLineNumber);
         creditCardReceiptDetail.setFinancialDocumentColumnTypeCode(Constants.CreditCardReceiptConstants.CASH_RECEIPT_CREDIT_CARD_RECEIPT_COLUMN_TYPE_CODE);
-        creditCardReceiptDetail.setDocumentNumber(this.getDocumentNumber());
+        creditCardReceiptDetail.setFinancialDocumentNumber(this.getFinancialDocumentNumber());
         creditCardReceiptDetail.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(this.getClass()));
     }
 
@@ -177,7 +177,7 @@ public class CreditCardReceiptDocument extends CashReceiptFamilyBase implements 
      * @return KualiDecimal
      */
     @Override
-    public KualiDecimal getTotalDollarAmount() {
+    public KualiDecimal getSumTotalAmount() {
         return this.totalCreditCardAmount;
     }
 
