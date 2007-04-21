@@ -53,7 +53,7 @@
 						scope="request" />
 					<c:set var="IsLookupDisplay" value="true" scope="request" />
 
-					<kul:rowDisplay rows="${KualiForm.lookupable.rows}"/>
+					<%@ include file="/jsp/core/RowDisplay.jsp"%>
 
 					<tr align=center>
 						<td height="30" colspan=2 class="infoline"><html:image

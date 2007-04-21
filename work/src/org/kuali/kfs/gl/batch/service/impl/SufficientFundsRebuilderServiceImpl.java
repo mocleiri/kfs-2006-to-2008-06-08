@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,11 @@ import java.util.Map;
 
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
+import org.kuali.core.bo.user.Options;
+import org.kuali.core.dao.OptionsDao;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.dao.OptionsDao;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.gl.GLConstants;
@@ -43,9 +43,7 @@ import org.kuali.module.gl.service.SufficientFundRebuildService;
 import org.kuali.module.gl.service.SufficientFundsRebuilderService;
 import org.kuali.module.gl.service.SufficientFundsService;
 import org.kuali.module.gl.util.Summary;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebuilderService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundsRebuilderServiceImpl.class);
 
@@ -244,7 +242,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
                     currentSfbl.setCurrentBudgetBalanceAmount(KualiDecimal.ZERO);
                 }
 
-                if (sfrbAccount.isForContractsAndGrants()) {
+                if (sfrbAccount.isInCg()) {
                     balance.setAccountLineAnnualBalanceAmount(balance.getAccountLineAnnualBalanceAmount().add(balance.getContractsGrantsBeginningBalanceAmount()));
                 }
 
@@ -282,14 +280,14 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
         if ( options.getFinObjTypeExpenditureexpCd().equals(balance.getObjectTypeCode()) || 
                 options.getFinObjTypeExpendNotExp().equals(balance.getObjectTypeCode()) || 
                 options.getFinObjTypeExpNotExpendCode().equals(balance.getObjectTypeCode()) ||
-                options.getFinancialObjectTypeTransferExpenseCd().equals(balance.getObjectTypeCode()) ) {
+                options.getFinancialObjectTypeTransferExpenseCode().equals(balance.getObjectTypeCode()) ) {
             if (options.getActualFinancialBalanceTypeCd().equals(balance.getBalanceTypeCode())) {
                 processObjtAcctActual(balance);
             }
             else if ( options.getExtrnlEncumFinBalanceTypCd().equals(balance.getBalanceTypeCode()) || 
                     options.getIntrnlEncumFinBalanceTypCd().equals(balance.getBalanceTypeCode()) || 
                     options.getPreencumbranceFinBalTypeCd().equals(balance.getBalanceTypeCode()) || 
-                    options.getCostShareEncumbranceBalanceTypeCd().equals(balance.getBalanceTypeCode()) ) {
+                    options.getCostShareEncumbranceBalanceTypeCode().equals(balance.getBalanceTypeCode()) ) {
                 processObjtAcctEncmbrnc(balance);
             }
             else if (options.getBudgetCheckingBalanceTypeCd().equals(balance.getBalanceTypeCode())) {
@@ -318,8 +316,8 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
                 processCashActual(sfrbAccount, balance);
             }
         }
-        else if (balance.getBalanceTypeCode().equals(options.getExtrnlEncumFinBalanceTypCd()) || balance.getBalanceTypeCode().equals(options.getIntrnlEncumFinBalanceTypCd()) || balance.getBalanceTypeCode().equals(options.getPreencumbranceFinBalTypeCd()) || options.getCostShareEncumbranceBalanceTypeCd().equals(balance.getBalanceTypeCode())) {
-            if (balance.getObjectTypeCode().equals(options.getFinObjTypeExpenditureexpCd()) || balance.getObjectTypeCode().equals(options.getFinObjTypeExpendNotExpCode()) || options.getFinancialObjectTypeTransferExpenseCd().equals(balance.getObjectTypeCode()) || options.getFinObjTypeExpNotExpendCode().equals(balance.getObjectTypeCode())) {
+        else if (balance.getBalanceTypeCode().equals(options.getExtrnlEncumFinBalanceTypCd()) || balance.getBalanceTypeCode().equals(options.getIntrnlEncumFinBalanceTypCd()) || balance.getBalanceTypeCode().equals(options.getPreencumbranceFinBalTypeCd()) || options.getCostShareEncumbranceBalanceTypeCode().equals(balance.getBalanceTypeCode())) {
+            if (balance.getObjectTypeCode().equals(options.getFinObjTypeExpenditureexpCd()) || balance.getObjectTypeCode().equals(options.getFinObjTypeExpendNotExpCode()) || options.getFinancialObjectTypeTransferExpenseCode().equals(balance.getObjectTypeCode()) || options.getFinObjTypeExpNotExpendCode().equals(balance.getObjectTypeCode())) {
                 processCashEncumbrance(balance);
             }
         }

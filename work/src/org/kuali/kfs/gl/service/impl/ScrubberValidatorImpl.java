@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,27 +27,28 @@ import java.util.List;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
+import org.kuali.core.bo.OriginationCode;
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.service.OriginationCodeService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.OriginationCode;
-import org.kuali.kfs.service.OriginationCodeService;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.UniversityDateDao;
 import org.kuali.module.gl.service.ScrubberValidator;
-import org.kuali.module.gl.util.Message;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.util.ObjectHelper;
 import org.kuali.module.gl.util.StringHelper;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 
-@Transactional
+/**
+ */
+
 public class ScrubberValidatorImpl implements ScrubberValidator {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ScrubberValidatorImpl.class);
 
@@ -54,8 +57,9 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     private UniversityDateDao universityDateDao;
     private AccountService accountService;
     private OriginationCodeService originationCodeService;
+    private DateTimeService dateTimeService;
 
-    public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
+    public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     private static String[] debitOrCredit = new String[] { Constants.GL_DEBIT_CODE, Constants.GL_CREDIT_CODE };
     private static String[] continuationAccountBypassOriginationCodes = new String[] { "EU", "PL" };
@@ -73,13 +77,13 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         UniversityDate today = null;
 
         if (entry.getUniversityFiscalYear() == null) {
-            today = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
+            today = dateTimeService.getCurrentUniversityDate();
             entry.setUniversityFiscalYear(today.getUniversityFiscalYear());
         }
 
         if (entry.getUniversityFiscalPeriodCode() == null) {
             if (today == null) {
-                today = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
+                today = dateTimeService.getCurrentUniversityDate();
             }
             entry.setUniversityFiscalPeriodCode(today.getUniversityFiscalAccountingPeriod());
         }
@@ -364,19 +368,10 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     }
 
     private void adjustAccountIfContractsAndGrants(Account account) {
-        if (account.isForContractsAndGrants() && (!account.isAccountClosedIndicator())) {
-            
-            String daysOffset = kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_SCRUBBER_VALIDATION_DAYS_OFFSET);
-            int daysOffsetInt = 3 * 30; //default to 90 days (approximately 3 months)
-            
-            if(daysOffset.trim().length()>0){
-               
-                    daysOffsetInt = new Integer(daysOffset).intValue();
-            }
-            
+        if (account.isInCg() && (!account.isAccountClosedIndicator())) {
             Calendar tempCal = Calendar.getInstance();
             tempCal.setTimeInMillis(account.getAccountExpirationDate().getTime());
-            tempCal.add(Calendar.DAY_OF_MONTH, daysOffsetInt);
+            tempCal.add(Calendar.MONTH, 3); // TODO: make this configurable
             account.setAccountExpirationDate(new Timestamp(tempCal.getTimeInMillis()));
         }
         return;
@@ -389,7 +384,6 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
             UniversityDate universityDate = universityDateDao.getByPrimaryKey(originEntry.getFinancialDocumentReversalDate());
             if (universityDate == null) {
                 Date reversalDate = originEntry.getFinancialDocumentReversalDate();
-                SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_STRING);
                 return new Message(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_REVERSAL_DATE_NOT_FOUND) + "(" + format.format(reversalDate) + ")", Message.TYPE_FATAL);
             }
             else {
@@ -890,4 +884,10 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     public void setOriginationCodeService(OriginationCodeService ocs) {
         originationCodeService = ocs;
     }
+
+    public void setDateTimeService(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;
+    }
+
+
 }

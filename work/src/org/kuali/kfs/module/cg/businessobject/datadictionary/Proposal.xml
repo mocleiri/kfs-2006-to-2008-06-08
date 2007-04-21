@@ -16,7 +16,7 @@
 -->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.Proposal">
 
@@ -66,40 +66,10 @@
                         </inquiryCollection>
                     </inquiryFields>
                 </inquirySection>
-                <inquirySection title="Project Directors">
-                    <inquiryFields>
-                        <inquiryCollection name="proposalProjectDirectors" businessObjectClass="org.kuali.module.cg.bo.ProposalProjectDirector">
-                            <field attributeName="projectDirector.personUserIdentifier"/>
-                            <field attributeName="projectDirector.personName"/>
-                            <field attributeName="proposalPrimaryProjectDirectorIndicator"/>
-                            <field attributeName="proposalProjectDirectorProjectTitle"/>
-                            <inquirySummaryFields>
-                                <inquirySummaryField attributeName="projectDirector.personName" />
-                                <inquirySummaryField attributeName="proposalPrimaryProjectDirectorIndicator" />
-                                <inquirySummaryField attributeName="proposalProjectDirectorProjectTitle" />
-                            </inquirySummaryFields>
-                        </inquiryCollection>
-                    </inquiryFields>
-                </inquirySection>
-                <inquirySection title="Subcontractors">
-                    <inquiryFields>
-                        <inquiryCollection name="proposalSubcontractors" businessObjectClass="org.kuali.module.cg.bo.ProposalSubcontractor">
-                            <field attributeName="subcontractorNumber" />
-                            <field attributeName="subcontractor.subcontractorName" />
-                            <field attributeName="proposalSubcontractorDescription" />
-                            <field attributeName="proposalSubcontractorAmount"/>
-                            <inquirySummaryFields>
-                                <inquirySummaryField attributeName="subcontractor.subcontractorName" />
-                                <inquirySummaryField attributeName="proposalSubcontractorAmount" />
-                            </inquirySummaryFields>
-                        </inquiryCollection>
-                    </inquiryFields>
-                </inquirySection>
             </inquirySections>
         </inquiry>
 
         <lookup>
-        	<lookupableID>proposalLookupable</lookupableID>
             <title>Proposal Lookup</title>
 
             <instructions>Look up a Proposal</instructions>
@@ -122,11 +92,13 @@
                 <lookupField attributeName="federalPassThroughAgencyNumber" required="false" />
                 <lookupField attributeName="proposalPurposeCode" required="false" />
                 <lookupField attributeName="proposalFellowName" required="false" />
+                <lookupField attributeName="proposalOrganizations.organizationCode" required="false" />
                 <lookupField attributeName="proposalOrganizations.organization.organizationCode" required="false" />
+                <lookupField attributeName="proposalSubcontractors.subcontractorNumber" required="false" />
                 <lookupField attributeName="proposalSubcontractors.subcontractor.subcontractorNumber" required="false" />
-                <lookupField attributeName="lookupPersonUniversalIdentifier" required="false" />
-                <lookupField attributeName="lookupUniversalUser.personUserIdentifier" required="false" />
-                <lookupField attributeName="lookupUniversalUser.personName" required="false" />
+                <lookupField attributeName="proposalProjectDirectors.personUniversalIdentifier" required="false" />
+                <lookupField attributeName="proposalProjectDirectors.projectDirector.personUniversalIdentifier" required="false" />
+				
             </lookupFields>
 
             <resultFields>
@@ -137,8 +109,7 @@
                 <field attributeName="proposalEndingDate" />
 				<field attributeName="grantNumber" />
                 <field attributeName="proposalStatusCode" />
-                <field attributeName="proposalOrganizations" />
-                <field attributeName="proposalProjectDirectors" />
+
             </resultFields>
 
         </lookup>
@@ -147,63 +118,34 @@
 
         <attributes>
 
-            <attributeReference name="proposalOrganizations.organization.organizationCode" sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="organizationCode">
-				<label>Organization Code</label>
-				<shortLabel>Org Cd</shortLabel>
+            <attributeReference name="proposalOrganizations.organizationCode" sourceClassName="org.kuali.module.cg.bo.ProposalOrganization" sourceAttributeName="organizationCode">
 				<summary>Proposal Organization Code</summary>
    				<description>Insert desc here...</description>
             </attributeReference>
+            
+            <attributeReference name="proposalOrganizations.organization.organizationCode" sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="organizationCode">
+				<summary>Proposal Organization Organization Code</summary>
+   				<description>Insert desc here...</description>
+            </attributeReference>
 
-            <attributeReference name="proposalSubcontractors.subcontractor.subcontractorNumber" sourceClassName="org.kuali.module.cg.bo.Subcontractor" sourceAttributeName="subcontractorNumber">
-				<label>Subcontractor Number</label>
-				<shortLabel>Subcontr Num</shortLabel>
+            <attributeReference name="proposalSubcontractors.subcontractorNumber" sourceClassName="org.kuali.module.cg.bo.ProposalSubcontractor" sourceAttributeName="proposalSubcontractorNumber">
 				<summary>Proposal Subcontractor Number</summary>
-                <description>
-					The number which corresponds to the Subcontractor Name.  It is expressed as 5-digit numeric text, including leading zeros.
-					When creating a new Subcontractor in the database, this number is automatically assigned by the system.  When adding an existing
-					Subcontractor to a Proposal or Award, the user may search for the subcontractor using the search icon, or may manually enter the
-					Subcontractor Number into the field.
-				</description>
+   				<description>Insert desc here...</description>
             </attributeReference>
 			
-            <attributeReference name="proposalProjectDirectors.projectDirector.personUniversalIdentifier" sourceClassName="org.kuali.module.cg.bo.ProjectDirector" sourceAttributeName="personUniversalIdentifier">
-				<label>Project Director ID</label>
-				<shortLabel>Proj Dir ID</shortLabel>
+            <attributeReference name="proposalSubcontractors.subcontractor.subcontractorNumber" sourceClassName="org.kuali.module.cg.bo.Subcontractor" sourceAttributeName="subcontractorNumber">
+				<summary>Proposal Subcontractor Number</summary>
+   				<description>Insert desc here...</description>
+            </attributeReference>
+			
+            <attributeReference name="proposalProjectDirectors.personUniversalIdentifier" sourceClassName="org.kuali.module.cg.bo.ProposalProjectDirector" sourceAttributeName="personUniversalIdentifier">
 				<summary>Proposal Project Director ID</summary>
    				<description>Insert desc here...</description>
             </attributeReference>
-
-            <attributeReference name="lookupPersonUniversalIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUniversalIdentifier">
-                <label>Project Director Unvl ID</label>
-                <shortLabel>ProjDirUnvlId</shortLabel>
-                <displayLabelAttribute>lookupUniversalUser.personUserIdentifier</displayLabelAttribute>
-                <required>true</required>
-                <control>
-                    <hidden />
-                </control>
-            </attributeReference>
-
-            <attributeReference name="lookupUniversalUser.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
-				<label>Project Director User ID</label>
-				<shortLabel>Proj Dir User ID</shortLabel>
-                <control>
-                    <kualiUser universalIdAttributeName="lookupPersonUniversalIdentifier" userIdAttributeName="lookupUniversalUser.personUserIdentifier" personNameAttributeName="lookupUniversalUser.personName" />
-                </control>
-				<summary>Project Director User ID</summary>
+			
+            <attributeReference name="proposalProjectDirectors.projectDirector.personUniversalIdentifier" sourceClassName="org.kuali.module.cg.bo.ProjectDirector" sourceAttributeName="personUniversalIdentifier">
+				<summary>Proposal Project Director ID</summary>
    				<description>Insert desc here...</description>
-            </attributeReference>
-
-            <attributeReference name="lookupUniversalUser.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
-                <label>Project Director User Name</label>
-                <shortLabel>Name</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The Name of the Project Director.</description>
             </attributeReference>
 
             <attributeReference name="proposal.grantNumber" sourceClassName="org.kuali.module.cg.bo.Proposal" sourceAttributeName="grantNumber">
@@ -250,11 +192,6 @@
                 <summary>Federal Pass Through Agency Number</summary>
                 <description>federalPassThroughAgencyNumber description...</description>
 			</attribute>
-
-            <attributeReference name="federalPassThroughAgency.fullName" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="fullName">
-                <label>Federal Pass Through Agency Full Name</label>
-                <shortLabel>FPT Agency Name</shortLabel>
-            </attributeReference>
 
             <attribute name="grantNumber" forceUppercase="true">
                 <label>Grant Number</label>
@@ -535,19 +472,23 @@
         </collections>
         
         <relationships>
+            <relationship objectAttributeName="proposalOrganizations" >
+                <primitiveAttribute sourceName="proposalOrganizations.organizationCode" targetName="organizationCode" />
+            </relationship>
             <relationship objectAttributeName="proposalOrganizations.organization" >
                 <primitiveAttribute sourceName="proposalOrganizations.organization.organizationCode" targetName="organizationCode" />
+            </relationship>
+            <relationship objectAttributeName="proposalSubcontractors" >
+                <primitiveAttribute sourceName="proposalSubcontractors.subcontractorNumber" targetName="subcontractorNumber" />
             </relationship>
             <relationship objectAttributeName="proposalSubcontractors.subcontractor" >
                 <primitiveAttribute sourceName="proposalSubcontractors.subcontractor.subcontractorNumber" targetName="subcontractorNumber" />
             </relationship>
+            <relationship objectAttributeName="proposalProjectDirectors" >
+                <primitiveAttribute sourceName="proposalProjectDirectors.personUniversalIdentifier" targetName="personUniversalIdentifier" />
+            </relationship>
             <relationship objectAttributeName="proposalProjectDirectors.projectDirector" >
                 <primitiveAttribute sourceName="proposalProjectDirectors.projectDirector.personUniversalIdentifier" targetName="personUniversalIdentifier" />
-            </relationship>
-            <relationship objectAttributeName="lookupUniversalUser" >
-                <primitiveAttribute sourceName="lookupPersonUniversalIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="lookupUniversalUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="lookupUniversalUser.personName" targetName="personName" />
             </relationship>
         </relationships>
         

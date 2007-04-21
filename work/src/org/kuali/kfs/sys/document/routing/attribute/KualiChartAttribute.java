@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.Constants;
 import org.kuali.core.lookup.LookupUtils;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.workflow.KualiWorkflowUtils;
 
@@ -263,9 +263,6 @@ public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
                 boolean isReport = ((Boolean) xpath.evaluate("wf:xstreamsafe('//report')", docContent.getDocument(), XPathConstants.BOOLEAN)).booleanValue();
                 if (isReport) {
                     chartXPath = "wf:xstreamsafe('//report/chart')";
-                }
-                else if (KualiWorkflowUtils.ACCOUNT_DELEGATE_GLOBAL_DOC_TYPE.equals(docContent.getRouteContext().getDocument().getDocumentType().getName())) {
-                    chartXPath = "wf:xstreamsafe('" + MAINTAINABLE_PREFIX + "accountChangeDetails/list/org.kuali.module.chart.bo.AccountChangeDetail/chartOfAccountsCode')";
                 }
                 //  this is the typical path during normal workflow operation
                 else { 

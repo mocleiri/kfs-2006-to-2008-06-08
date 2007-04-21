@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.kuali.Constants;
-import org.kuali.PropertyConstants;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -42,20 +40,21 @@ import org.kuali.module.gl.util.LedgerEntry;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.gl.util.PosterOutputSummaryEntry;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ *  
+ * @version $Id: OriginEntryServiceImpl.java,v 1.26.2.14 2007-02-10 11:37:34 j2eemgr Exp $
+ */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
 
     private static final String ENTRY_GROUP_ID = "entryGroupId";
+    private static final String FINANCIAL_DOCUMENT_NUMBER = "financialDocumentNumber";
     private static final String FINANCIAL_DOCUMENT_TYPE_CODE = "financialDocumentTypeCode";
     private static final String FINANCIAL_SYSTEM_ORIGINATION_CODE = "financialSystemOriginationCode";
 
     private OriginEntryDao originEntryDao;
     private OriginEntryGroupService originEntryGroupService;
-    
-    private DateTimeService dateTimeService;
 
     /**
      * 
@@ -132,7 +131,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         while ( i.hasNext() ) {
             Object[] data = (Object[])i.next();
             OriginEntry oe = new OriginEntry();
-            oe.setDocumentNumber((String)data[0]);
+            oe.setFinancialDocumentNumber((String)data[0]);
             oe.setFinancialDocumentTypeCode((String)data[1]);
             oe.setFinancialSystemOriginationCode((String)data[2]);
             results.add(oe);
@@ -185,7 +184,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         Map criteria = new HashMap();
         criteria.put(ENTRY_GROUP_ID, originEntryGroup.getId());
-        criteria.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.put(FINANCIAL_DOCUMENT_NUMBER, documentNumber);
         criteria.put(FINANCIAL_DOCUMENT_TYPE_CODE, documentTypeCode);
         criteria.put(FINANCIAL_SYSTEM_ORIGINATION_CODE, originCode);
 
@@ -258,7 +257,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public void loadFlatFile(String filename, String groupSourceCode, boolean isValid, boolean isProcessed, boolean isScrub) {
         LOG.debug("loadFlatFile() started");
 
-        java.sql.Date groupDate = new java.sql.Date(dateTimeService.getCurrentDate().getTime());
+        java.sql.Date groupDate = new java.sql.Date(System.currentTimeMillis());
         OriginEntryGroup newGroup = originEntryGroupService.createGroup(groupDate, groupSourceCode, isValid, isProcessed, isScrub);
 
         BufferedReader input = null;
@@ -372,7 +371,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      * 
      * @see org.kuali.module.gl.service.OriginEntryService#getMatchingEntriesByCollection(java.util.Map)
      */
-    public Collection<OriginEntry> getMatchingEntriesByCollection(Map searchCriteria) {
+    public Collection getMatchingEntriesByCollection(Map searchCriteria) {
         LOG.debug("getMatchingEntriesByCollection() started");
 
         return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
@@ -444,17 +443,5 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             }
         }
         return output;
-    }
-    
-
-    /**
-     * @see org.kuali.module.gl.service.OriginEntryService#getGroupCount(java.lang.Integer)
-     */
-    public Integer getGroupCount(Integer groupId) {
-        return originEntryDao.getGroupCount(groupId);
-    }
-
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
     }
 }
