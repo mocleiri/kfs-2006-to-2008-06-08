@@ -24,7 +24,7 @@
         <inquiry>
             <title>Agency Inquiry</title>
 
-            <inquirySections><inquirySection title="Agency Details"><inquiryFields>
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="agencyNumber" />
                 <field attributeName="reportingName" />
                 <field attributeName="fullName" />

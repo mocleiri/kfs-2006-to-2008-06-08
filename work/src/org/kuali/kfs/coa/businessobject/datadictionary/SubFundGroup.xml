@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.SubFundGroup">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Sub-Fund Group Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="subFundGroupCode" />
                 <field attributeName="subFundGroupDescription" />
                 <field attributeName="subFundGroupTypeCode" />
@@ -34,11 +34,15 @@
                 <field attributeName="subfundgrpActivityIndicator" />
                 <field attributeName="fundGroupBudgetAdjustmentRestrictionLevelCode" />
                 <field attributeName="accountRestrictedStatusCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Sub-Fund Group Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.SubFundGroup"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup an Sub-Fund Group</instructions>
 
@@ -128,7 +132,7 @@
                 <maxLength>1</maxLength>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.SubFundGroupTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.SubFundGroupTypeValuesFinder" />
                 </control>
 
                 <summary>The associated Type Code</summary>
@@ -157,7 +161,7 @@
                  <label>Default Account Restricted Status Code</label>
                  <shortLabel>DefaultRstrcStatCd</shortLabel>
                  <control>
-                     <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.RestrictedStatusValuesFinder" />
+                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.RestrictedStatusValuesFinder" />
                  </control>
                  <summary>
                      <![CDATA[&nbsp;]]>
@@ -188,14 +192,21 @@
                                 sourceClassName="org.kuali.module.chart.bo.FundGroup" 
                                 sourceAttributeName="fundGroupBudgetAdjustmentRestrictionLevelCode" >
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.BudgetAdjustmentSubFundRestrictionsValuesFinder"/>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.BudgetAdjustmentSubFundRestrictionsValuesFinder"/>
                 </control>
             </attributeReference>    
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        
-        <objectLabel>Sub-Fund Group</objectLabel>
+
+        <collections>
+            <collection name="extendedAttributeValues">
+                <label>Extended Attribute Values</label>
+                <shortLabel>Values</shortLabel>
+                <summary>extendedAttributeValues</summary>
+                <description>extendedAttributeValues description...</description>
+            </collection>
+        </collections>
     </businessObject>
 </dictionaryEntry>

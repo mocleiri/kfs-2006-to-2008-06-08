@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/coa/document/validation/impl/AccountRuleTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +26,12 @@ import java.util.Calendar;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.kuali.KeyConstants;
+import org.kuali.core.bo.Options;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.test.WithTestSpringContext;
@@ -112,7 +114,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
                 private static final String UNIVERSAL_ID = "1509103107";
                 private static final String USER_ID = "AEMCAFEE";
                 private static final String EMP_ID = "0000000013";
-                private static final String NAME = "Mcafee,Alan";
+                private static final String NAME = "Mcafee, Alan";
                 private static final String EMP_STATUS = "A";
                 private static final String EMP_TYPE = "P";
             }
@@ -121,7 +123,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
                 private static final String UNIVERSAL_ID = "1195901455";
                 private static final String USER_ID = "AAPHAM";
                 private static final String EMP_ID = "0000004686";
-                private static final String NAME = "Pham,Anibal";
+                private static final String NAME = "Pham, Anibal";
                 private static final String EMP_STATUS = "A";
                 private static final String EMP_TYPE = "P";
             }
@@ -130,7 +132,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
                 private static final String UNIVERSAL_ID = "1959008511";
                 private static final String USER_ID = "AHLERS";
                 private static final String EMP_ID = "0000002820";
-                private static final String NAME = "Ahlers,Esteban";
+                private static final String NAME = "Ahlers, Esteban";
                 private static final String EMP_STATUS = "A";
                 private static final String EMP_TYPE = "P";
             }
@@ -697,11 +699,11 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // both users non-null, both populated with same UniversalID
         user1.setPersonUniversalIdentifier(Accounts.User.AhlersEsteban.UNIVERSAL_ID);
         user1.setPersonUserIdentifier(Accounts.User.AhlersEsteban.USER_ID);
-        user1.setPersonPayrollIdentifier(Accounts.User.AhlersEsteban.EMP_ID);
+        user1.setEmplid(Accounts.User.AhlersEsteban.EMP_ID);
         user1.setPersonName(Accounts.User.AhlersEsteban.NAME);
         user2.setPersonUniversalIdentifier(Accounts.User.AhlersEsteban.UNIVERSAL_ID);
         user2.setPersonUserIdentifier(Accounts.User.AhlersEsteban.USER_ID);
-        user2.setPersonPayrollIdentifier(Accounts.User.AhlersEsteban.EMP_ID);
+        user2.setEmplid(Accounts.User.AhlersEsteban.EMP_ID);
         user2.setPersonName(Accounts.User.AhlersEsteban.NAME);
         result = rule.areTwoUsersTheSame(user1, user2);
         assertEquals("User1 and User2 are same person, diff objects, result true", true, result);
@@ -721,11 +723,11 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // both users non-null, each different people
         user1.setPersonUniversalIdentifier(Accounts.User.AhlersEsteban.UNIVERSAL_ID);
         user1.setPersonUserIdentifier(Accounts.User.AhlersEsteban.USER_ID);
-        user1.setPersonPayrollIdentifier(Accounts.User.AhlersEsteban.EMP_ID);
+        user1.setEmplid(Accounts.User.AhlersEsteban.EMP_ID);
         user1.setPersonName(Accounts.User.AhlersEsteban.NAME);
         user2.setPersonUniversalIdentifier(Accounts.User.PhamAnibal.UNIVERSAL_ID);
         user2.setPersonUserIdentifier(Accounts.User.PhamAnibal.USER_ID);
-        user2.setPersonPayrollIdentifier(Accounts.User.PhamAnibal.EMP_ID);
+        user2.setEmplid(Accounts.User.PhamAnibal.EMP_ID);
         user2.setPersonName(Accounts.User.PhamAnibal.NAME);
         result = rule.areTwoUsersTheSame(user1, user2);
         assertEquals("User1 and User2 are different persons, result should be false", false, result);
@@ -958,9 +960,8 @@ public class AccountRuleTest extends ChartRuleTestBase {
         Calendar testCalendar;
         Timestamp testTimestamp;
 
-        // get today's date (or whatever's provided by the DateTimeService)
+        // get today's date
         testCalendar = Calendar.getInstance();
-        testCalendar.setTime(SpringServiceLocator.getDateTimeService().getCurrentDate());
         testCalendar = DateUtils.truncate(testCalendar, Calendar.DAY_OF_MONTH);
         testTimestamp = new Timestamp(testCalendar.getTimeInMillis());
 
@@ -1101,7 +1102,7 @@ private void disableBeginBalanceLoadInd(){
         newAccount.setFinancialIcrSeriesIdentifier(null);
         newAccount.setIndirectCostRcvyFinCoaCode(null);
         newAccount.setIndirectCostRecoveryAcctNbr(null);
-        newAccount.setAccountCfdaNumber(null);
+        newAccount.setCgCatlfFedDomestcAssistNbr(null);
 
         // run the rule
         result = rule.checkCgRequiredFields(newAccount);
@@ -1113,7 +1114,7 @@ private void disableBeginBalanceLoadInd(){
         assertFieldErrorExists("financialIcrSeriesIdentifier", KeyConstants.ERROR_REQUIRED);
         assertFieldErrorExists("indirectCostRcvyFinCoaCode", KeyConstants.ERROR_REQUIRED);
         assertFieldErrorExists("indirectCostRecoveryAcctNbr", KeyConstants.ERROR_REQUIRED);
-        assertFieldErrorExists("accountCfdaNumber", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("cgCatlfFedDomestcAssistNbr", KeyConstants.ERROR_REQUIRED);
 
     }
 
@@ -1142,7 +1143,7 @@ private void disableBeginBalanceLoadInd(){
         newAccount.setFinancialIcrSeriesIdentifier("001");
         newAccount.setIndirectCostRcvyFinCoaCode(Accounts.ChartCode.GOOD1);
         newAccount.setIndirectCostRecoveryAcctNbr(Accounts.AccountNumber.GOOD1);
-        newAccount.setAccountCfdaNumber("001");
+        newAccount.setCgCatlfFedDomestcAssistNbr("001");
 
         // run the rule
         result = rule.checkCgRequiredFields(newAccount);
