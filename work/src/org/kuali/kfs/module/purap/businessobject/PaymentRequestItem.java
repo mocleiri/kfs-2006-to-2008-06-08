@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PaymentRequestItem.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,24 +20,33 @@ package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
-import java.util.List;
 
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.module.purap.document.PaymentRequestDocument;
 
 /**
  * 
  */
-public class PaymentRequestItem extends AccountsPayableItemBase {
-    
+public class PaymentRequestItem extends BusinessObjectBase {
+
+	private Integer paymentRequestItemIdentifier;
+	private Integer paymentRequestIdentifier;
+	private Integer itemLineNumber;
+	private String itemTypeCode;
+	private String itemDescription;
+	private String itemCatalogNumber;
+	private String itemAuxiliaryPartIdentifier;
+	private String itemUnitOfMeasureCode;
 	private KualiDecimal itemInvoicedQuantity;
+	private BigDecimal itemUnitPrice;
 	private BigDecimal purchaseOrderItemUnitPrice;
 	private KualiDecimal itemExtendedPrice;
+	private String capitalAssetTransactionTypeCode;
+	private String itemCapitalAssetNoteText;
 	private String purchaseOrderCommodityCode;
-    private KualiDecimal itemOutstandingInvoiceQuantity;
-    private KualiDecimal itemOutstandingInvoiceAmount;
-    
-    private PaymentRequestDocument paymentRequest;
+	private boolean itemAssignedToTradeInIndicator;
+
+    private PaymentRequest paymentRequest;
 
 	/**
 	 * Default constructor.
@@ -44,6 +55,172 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
 
 	}
 
+	/**
+	 * Gets the paymentRequestItemIdentifier attribute.
+	 * 
+	 * @return Returns the paymentRequestItemIdentifier
+	 * 
+	 */
+	public Integer getPaymentRequestItemIdentifier() { 
+		return paymentRequestItemIdentifier;
+	}
+
+	/**
+	 * Sets the paymentRequestItemIdentifier attribute.
+	 * 
+	 * @param paymentRequestItemIdentifier The paymentRequestItemIdentifier to set.
+	 * 
+	 */
+	public void setPaymentRequestItemIdentifier(Integer paymentRequestItemIdentifier) {
+		this.paymentRequestItemIdentifier = paymentRequestItemIdentifier;
+	}
+
+
+	/**
+	 * Gets the paymentRequestIdentifier attribute.
+	 * 
+	 * @return Returns the paymentRequestIdentifier
+	 * 
+	 */
+	public Integer getPaymentRequestIdentifier() { 
+		return paymentRequestIdentifier;
+	}
+
+	/**
+	 * Sets the paymentRequestIdentifier attribute.
+	 * 
+	 * @param paymentRequestIdentifier The paymentRequestIdentifier to set.
+	 * 
+	 */
+	public void setPaymentRequestIdentifier(Integer paymentRequestIdentifier) {
+		this.paymentRequestIdentifier = paymentRequestIdentifier;
+	}
+
+
+	/**
+	 * Gets the itemLineNumber attribute.
+	 * 
+	 * @return Returns the itemLineNumber
+	 * 
+	 */
+	public Integer getItemLineNumber() { 
+		return itemLineNumber;
+	}
+
+	/**
+	 * Sets the itemLineNumber attribute.
+	 * 
+	 * @param itemLineNumber The itemLineNumber to set.
+	 * 
+	 */
+	public void setItemLineNumber(Integer itemLineNumber) {
+		this.itemLineNumber = itemLineNumber;
+	}
+
+
+	/**
+	 * Gets the itemTypeCode attribute.
+	 * 
+	 * @return Returns the itemTypeCode
+	 * 
+	 */
+	public String getItemTypeCode() { 
+		return itemTypeCode;
+	}
+
+	/**
+	 * Sets the itemTypeCode attribute.
+	 * 
+	 * @param itemTypeCode The itemTypeCode to set.
+	 * 
+	 */
+	public void setItemTypeCode(String itemTypeCode) {
+		this.itemTypeCode = itemTypeCode;
+	}
+
+
+	/**
+	 * Gets the itemDescription attribute.
+	 * 
+	 * @return Returns the itemDescription
+	 * 
+	 */
+	public String getItemDescription() { 
+		return itemDescription;
+	}
+
+	/**
+	 * Sets the itemDescription attribute.
+	 * 
+	 * @param itemDescription The itemDescription to set.
+	 * 
+	 */
+	public void setItemDescription(String itemDescription) {
+		this.itemDescription = itemDescription;
+	}
+
+
+	/**
+	 * Gets the itemCatalogNumber attribute.
+	 * 
+	 * @return Returns the itemCatalogNumber
+	 * 
+	 */
+	public String getItemCatalogNumber() { 
+		return itemCatalogNumber;
+	}
+
+	/**
+	 * Sets the itemCatalogNumber attribute.
+	 * 
+	 * @param itemCatalogNumber The itemCatalogNumber to set.
+	 * 
+	 */
+	public void setItemCatalogNumber(String itemCatalogNumber) {
+		this.itemCatalogNumber = itemCatalogNumber;
+	}
+
+
+	/**
+	 * Gets the itemAuxiliaryPartIdentifier attribute.
+	 * 
+	 * @return Returns the itemAuxiliaryPartIdentifier
+	 * 
+	 */
+	public String getItemAuxiliaryPartIdentifier() { 
+		return itemAuxiliaryPartIdentifier;
+	}
+
+	/**
+	 * Sets the itemAuxiliaryPartIdentifier attribute.
+	 * 
+	 * @param itemAuxiliaryPartIdentifier The itemAuxiliaryPartIdentifier to set.
+	 * 
+	 */
+	public void setItemAuxiliaryPartIdentifier(String itemAuxiliaryPartIdentifier) {
+		this.itemAuxiliaryPartIdentifier = itemAuxiliaryPartIdentifier;
+	}
+
+
+	/**
+	 * Gets the itemUnitOfMeasureCode attribute.
+	 * 
+	 * @return Returns the itemUnitOfMeasureCode
+	 * 
+	 */
+	public String getItemUnitOfMeasureCode() { 
+		return itemUnitOfMeasureCode;
+	}
+
+	/**
+	 * Sets the itemUnitOfMeasureCode attribute.
+	 * 
+	 * @param itemUnitOfMeasureCode The itemUnitOfMeasureCode to set.
+	 * 
+	 */
+	public void setItemUnitOfMeasureCode(String itemUnitOfMeasureCode) {
+		this.itemUnitOfMeasureCode = itemUnitOfMeasureCode;
+	}
 
 
 	/**
@@ -64,6 +241,27 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
 	 */
 	public void setItemInvoicedQuantity(KualiDecimal itemInvoicedQuantity) {
 		this.itemInvoicedQuantity = itemInvoicedQuantity;
+	}
+
+
+	/**
+	 * Gets the itemUnitPrice attribute.
+	 * 
+	 * @return Returns the itemUnitPrice
+	 * 
+	 */
+	public BigDecimal getItemUnitPrice() { 
+		return itemUnitPrice;
+	}
+
+	/**
+	 * Sets the itemUnitPrice attribute.
+	 * 
+	 * @param itemUnitPrice The itemUnitPrice to set.
+	 * 
+	 */
+	public void setItemUnitPrice(BigDecimal itemUnitPrice) {
+		this.itemUnitPrice = itemUnitPrice;
 	}
 
 
@@ -108,6 +306,49 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
 		this.itemExtendedPrice = itemExtendedPrice;
 	}
 
+
+	/**
+	 * Gets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @return Returns the capitalAssetTransactionTypeCode
+	 * 
+	 */
+	public String getCapitalAssetTransactionTypeCode() { 
+		return capitalAssetTransactionTypeCode;
+	}
+
+	/**
+	 * Sets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @param capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
+	 * 
+	 */
+	public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
+		this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
+	}
+
+
+	/**
+	 * Gets the itemCapitalAssetNoteText attribute.
+	 * 
+	 * @return Returns the itemCapitalAssetNoteText
+	 * 
+	 */
+	public String getItemCapitalAssetNoteText() { 
+		return itemCapitalAssetNoteText;
+	}
+
+	/**
+	 * Sets the itemCapitalAssetNoteText attribute.
+	 * 
+	 * @param itemCapitalAssetNoteText The itemCapitalAssetNoteText to set.
+	 * 
+	 */
+	public void setItemCapitalAssetNoteText(String itemCapitalAssetNoteText) {
+		this.itemCapitalAssetNoteText = itemCapitalAssetNoteText;
+	}
+
+
 	/**
 	 * Gets the purchaseOrderCommodityCode attribute.
 	 * 
@@ -128,45 +369,35 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
 		this.purchaseOrderCommodityCode = purchaseOrderCommodityCode;
 	}
 
-    /**
-     * Gets the itemOutstandingInvoiceAmount attribute. 
-     * @return Returns the itemOutstandingInvoiceAmount.
-     */
-    public KualiDecimal getItemOutstandingInvoiceAmount() {
-        return itemOutstandingInvoiceAmount;
-    }
 
-    /**
-     * Sets the itemOutstandingInvoiceAmount attribute value.
-     * @param itemOutstandingInvoiceAmount The itemOutstandingInvoiceAmount to set.
-     */
-    public void setItemOutstandingInvoiceAmount(KualiDecimal itemOutstandingInvoiceAmount) {
-        this.itemOutstandingInvoiceAmount = itemOutstandingInvoiceAmount;
-    }
+	/**
+	 * Gets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @return Returns the itemAssignedToTradeInIndicator
+	 * 
+	 */
+	public boolean getItemAssignedToTradeInIndicator() { 
+		return itemAssignedToTradeInIndicator;
+	}
 
-    /**
-     * Gets the itemOutstandingInvoiceQuantity attribute. 
-     * @return Returns the itemOutstandingInvoiceQuantity.
-     */
-    public KualiDecimal getItemOutstandingInvoiceQuantity() {
-        return itemOutstandingInvoiceQuantity;
-    }
+	/**
+	 * Sets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @param itemAssignedToTradeInIndicator The itemAssignedToTradeInIndicator to set.
+	 * 
+	 */
+	public void setItemAssignedToTradeInIndicator(boolean itemAssignedToTradeInIndicator) {
+		this.itemAssignedToTradeInIndicator = itemAssignedToTradeInIndicator;
+	}
 
-    /**
-     * Sets the itemOutstandingInvoiceQuantity attribute value.
-     * @param itemOutstandingInvoiceQuantity The itemOutstandingInvoiceQuantity to set.
-     */
-    public void setItemOutstandingInvoiceQuantity(KualiDecimal itemOutstandingInvoiceQuantity) {
-        this.itemOutstandingInvoiceQuantity = itemOutstandingInvoiceQuantity;
-    }
-    
+
 	/**
 	 * Gets the paymentRequest attribute.
 	 * 
 	 * @return Returns the paymentRequest
 	 * 
 	 */
-	public PaymentRequestDocument getPaymentRequest() { 
+	public PaymentRequest getPaymentRequest() { 
 		return paymentRequest;
 	}
 
@@ -176,18 +407,18 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
 	 * @param paymentRequest The paymentRequest to set.
 	 * @deprecated
 	 */
-	public void setPaymentRequest(PaymentRequestDocument paymentRequest) {
+	public void setPaymentRequest(PaymentRequest paymentRequest) {
 		this.paymentRequest = paymentRequest;
 	}
 
-    
-     /**
-     * @see org.kuali.module.purap.bo.PurchasingItemBase#getAccountingLineClass()
-     */
-    @Override
-    public Class getAccountingLineClass() {
-        // TODO Auto-generated method stub
-        return RequisitionAccount.class;
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        if (this.paymentRequestItemIdentifier != null) {
+            m.put("paymentRequestItemIdentifier", this.paymentRequestItemIdentifier.toString());
+        }
+	    return m;
     }
-
 }

@@ -15,8 +15,6 @@
  */
 package org.kuali.module.kra.web.struts.action;
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,16 +33,13 @@ import org.kuali.core.rule.event.AddAdHocRouteWorkgroupEvent;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.struts.action.KualiDocumentActionBase;
-import org.kuali.core.web.struts.form.KualiForm;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.KraKeyConstants;
 import org.kuali.module.kra.bo.AdhocOrg;
 import org.kuali.module.kra.bo.AdhocPerson;
 import org.kuali.module.kra.bo.AdhocWorkgroup;
-import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.module.kra.document.ResearchDocument;
-import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
 import org.kuali.module.kra.web.struts.form.ResearchDocumentFormBase;
 
 import edu.iu.uis.eden.clientapp.IDocHandler;
@@ -74,18 +69,6 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
-    @Override
-    /**
-     * Overriding headerTab to customize how clearing tab state works on Budget.  Specifically, additional attributes (selected task and period) should be cleared any time header navigation occurs.
-     */
-    public ActionForward headerTab(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-        ((KualiForm)form).setTabStates(new ArrayList());
-        
-        return super.headerTab(mapping, form, request, response);
-    }
-
-    
     public ActionForward docHandler(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         ActionForward forward = super.docHandler(mapping, form, request, response);
@@ -96,22 +79,6 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
             researchForm.getResearchDocument().initialize();
         }
         return forward;
-    }
-    
-
-    public ActionForward notes(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        this.load(mapping, form, request, response);
-
-        ResearchDocumentFormBase researchDocumentForm = (ResearchDocumentFormBase)form;
-        
-        if (researchDocumentForm.getDocument().getDocumentHeader().isBoNotesSupport() && (researchDocumentForm.getDocument().getDocumentHeader().getBoNotes() == null || researchDocumentForm.getDocument().getDocumentHeader().getBoNotes().isEmpty())) {
-            researchDocumentForm.getDocument().refreshReferenceObject("documentHeader");
-        }
-
-        researchDocumentForm.setTabStates(new ArrayList());
-        
-        return mapping.findForward("notes");
     }
     
     @Override
@@ -197,7 +164,7 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
      * @return ActionForward
      * @throws Exception
      */
-    public ActionForward delete(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward delete(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         
         ResearchDocumentFormBase researchForm = (ResearchDocumentFormBase) form;
         ResearchDocument researchDocument = (ResearchDocument) researchForm.getDocument();
@@ -216,7 +183,7 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
      * @return ActionForward
      * @throws Exception
      */
-    public ActionForward deleteWorkgroup(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward deleteWorkgroup(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         
         ResearchDocumentFormBase researchForm = (ResearchDocumentFormBase) form;
         ResearchDocument researchDocument = (ResearchDocument) researchForm.getDocument();
@@ -235,7 +202,7 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
      * @return ActionForward
      * @throws Exception
      */
-    public ActionForward addOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward addOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
         ResearchDocumentFormBase researchForm = (ResearchDocumentFormBase) form;
         ResearchDocument researchDocument = (ResearchDocument) researchForm.getDocument();
@@ -270,7 +237,7 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
      * @return ActionForward
      * @throws Exception
      */
-    public ActionForward deleteOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward deleteOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
         ResearchDocumentFormBase researchForm = (ResearchDocumentFormBase) form;
         ResearchDocument researchDocument = (ResearchDocument) researchForm.getDocument();

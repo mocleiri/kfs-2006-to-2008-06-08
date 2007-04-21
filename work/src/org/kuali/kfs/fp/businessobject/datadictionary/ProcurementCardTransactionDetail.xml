@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.ProcurementCardTransactionDetail">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Procurement Card Transaction Detail Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="documentNumber" />
+            <inquiryFields>
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialDocumentTransactionLineNumber" />
                 <field attributeName="transactionReferenceNumber" />
                 <field attributeName="transactionBillingCurrencyCode" />
@@ -45,12 +30,12 @@
                 <field attributeName="transactionCycleEndDate" />
                 <field attributeName="transactionCycleStartDate" />
                 <field attributeName="transactionTotalAmount" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <attributes>
 
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber" />
+            <attributeReference name="financialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber" />
 
             <attribute name="financialDocumentTransactionLineNumber" forceUppercase="true">
                 <label>Financial Document Transaction Line Number</label>
@@ -65,8 +50,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The line number for the transaction in grouping lines for the same transaction.</description>
+                <summary>financialDocumentTransactionLineNumber</summary>
+                <description>financialDocumentTransactionLineNumber description...</description>
             </attribute>
 
             <attribute name="transactionBillingCurrencyCode" forceUppercase="true">
@@ -79,8 +64,8 @@
                     <text size="5" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The system code for the billing currency in the transaction.</description>
+                <summary>transactionBillingCurrencyCode</summary>
+                <description>transactionBillingCurrencyCode description...</description>
             </attribute>
 
             <attribute name="transactionCurrencyExchangeRate" forceUppercase="true">
@@ -96,8 +81,8 @@
                     <text size="12" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The exchange rate for the billing currency in the transaction.</description>
+                <summary>transactionCurrencyExchangeRate</summary>
+                <description>transactionCurrencyExchangeRate description...</description>
             </attribute>
 
             <attribute name="transactionDate" forceUppercase="true">
@@ -113,8 +98,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The date of the transaction, entered directly or selected in the calendar.</description>
+                <summary>transactionDate</summary>
+                <description>transactionDate description...</description>
             </attribute>
 
             <attribute name="transactionOriginalCurrencyAmount" forceUppercase="true">
@@ -130,8 +115,8 @@
                     <text size="21" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The amount of the transaction in the original currency.</description>
+                <summary>transactionOriginalCurrencyAmount</summary>
+                <description>transactionOriginalCurrencyAmount description...</description>
             </attribute>
 
             <attribute name="transactionOriginalCurrencyCode" forceUppercase="true">
@@ -144,8 +129,8 @@
                     <text size="5" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The system code for the original currency in the transaction.</description>
+                <summary>transactionOriginalCurrencyCode</summary>
+                <description>transactionOriginalCurrencyCode description...</description>
             </attribute>
 
             <attribute name="transactionPointOfSaleCode" forceUppercase="true">
@@ -158,8 +143,8 @@
                     <text size="27" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The system code for the point of sale in the transaction.</description>
+                <summary>transactionPointOfSaleCode</summary>
+                <description>transactionPointOfSaleCode description...</description>
             </attribute>
 
             <attribute name="transactionPostingDate" forceUppercase="true">
@@ -175,8 +160,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The posting date for the transaction, entered directly or selected in the calendar.</description>
+                <summary>transactionPostingDate</summary>
+                <description>transactionPostingDate description...</description>
             </attribute>
 
             <attribute name="transactionPurchaseIdentifierDescription" forceUppercase="true">
@@ -189,8 +174,8 @@
                     <text size="27" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Yes/No indicator of an entry for the Purchase Identifier Description</description>
+                <summary>transactionPurchaseIdentifierDescription</summary>
+                <description>transactionPurchaseIdentifierDescription description...</description>
             </attribute>
 
             <attribute name="transactionPurchaseIdentifierIndicator" forceUppercase="true">
@@ -203,8 +188,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Yes/No indicator of an entry for the Purchase Identifier Description</description>
+                <summary>transactionPurchaseIdentifierIndicator</summary>
+                <description>transactionPurchaseIdentifierIndicator description...</description>
             </attribute>
 
             <attribute name="transactionReferenceNumber" forceUppercase="true">
@@ -217,8 +202,8 @@
                     <text size="25" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The reference number for the transaction assigned by the bank.</description>
+                <summary>transactionReferenceNumber</summary>
+                <description>transactionReferenceNumber description...</description>
             </attribute>
 
             <attribute name="transactionSalesTaxAmount" forceUppercase="true">
@@ -234,8 +219,8 @@
                     <text size="21" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The amount of sales tax assessed on the transaction.</description>
+                <summary>transactionSalesTaxAmount</summary>
+                <description>transactionSalesTaxAmount description...</description>
             </attribute>
 
             <attribute name="transactionSettlementAmount" forceUppercase="true">
@@ -251,8 +236,8 @@
                     <text size="21" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The final amount payable for a disputed transaction.</description>
+                <summary>transactionSettlementAmount</summary>
+                <description>transactionSettlementAmount description...</description>
             </attribute>
 
             <attribute name="transactionTaxExemptIndicator" forceUppercase="true">
@@ -265,8 +250,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Yes/No indicator of tax exemption.</description>
+                <summary>transactionTaxExemptIndicator</summary>
+                <description>transactionTaxExemptIndicator description...</description>
             </attribute>
 
             <attribute name="transactionTravelAuthorizationCode" forceUppercase="true">
@@ -279,8 +264,8 @@
                     <text size="52" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The system code for authorization of travel for the transaction.</description>
+                <summary>transactionTravelAuthorizationCode</summary>
+                <description>transactionTravelAuthorizationCode description...</description>
             </attribute>
 
             <attribute name="transactionUnitContactName" forceUppercase="true">
@@ -293,8 +278,8 @@
                     <text size="37" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The name of the contact unit for the transaction.</description>
+                <summary>transactionUnitContactName</summary>
+                <description>transactionUnitContactName description...</description>
             </attribute>
 
             <attribute name="transactionCycleEndDate" forceUppercase="true">
@@ -310,8 +295,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The end date of the transaction cycle, entered directly or selected in the calendar.</description>
+                <summary>transactionCycleEndDate</summary>
+                <description>transactionCycleEndDate description...</description>
             </attribute>
 
             <attribute name="transactionCycleStartDate" forceUppercase="true">
@@ -327,8 +312,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The start date of the transaction cycle, entered directly or selected in the calendar.</description>
+                <summary>transactionCycleStartDate</summary>
+                <description>transactionCycleStartDate description...</description>
             </attribute>
 
             <attribute name="transactionTotalAmount" forceUppercase="true">
@@ -344,8 +329,8 @@
                     <text size="21" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The total amount of the transaction.</description>
+                <summary>transactionTotalAmount</summary>
+                <description>transactionTotalAmount description...</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />

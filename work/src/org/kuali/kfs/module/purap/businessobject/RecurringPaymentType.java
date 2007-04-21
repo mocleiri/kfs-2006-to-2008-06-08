@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/RecurringPaymentType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +20,16 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class RecurringPaymentType extends PersistableBusinessObjectBase {
+public class RecurringPaymentType extends BusinessObjectBase {
 
 	private String recurringPaymentTypeCode;
 	private String recurringPaymentTypeDescription;
-    private boolean active;
+    private boolean dataObjectMaintenanceCodeActiveIndicator;
     
 	/**
 	 * Default constructor.
@@ -77,21 +79,20 @@ public class RecurringPaymentType extends PersistableBusinessObjectBase {
 		this.recurringPaymentTypeDescription = recurringPaymentTypeDescription;
 	}
 
-
     /**
-     * Gets the active attribute. 
-     * @return Returns the active.
+     * Gets the dataObjectMaintenanceCodeActiveIndicator attribute. 
+     * @return Returns the dataObjectMaintenanceCodeActiveIndicator.
      */
-    public boolean isActive() {
-        return active;
+    public boolean isDataObjectMaintenanceCodeActiveIndicator() {
+        return dataObjectMaintenanceCodeActiveIndicator;
     }
 
     /**
-     * Sets the active attribute value.
-     * @param active The active to set.
+     * Sets the dataObjectMaintenanceCodeActiveIndicator attribute value.
+     * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
      */
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+        this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
     }
 
     /**

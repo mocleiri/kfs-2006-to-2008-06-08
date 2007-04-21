@@ -1,53 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.AgencyType">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Agency Type Inquiry</title>
+            <title>Contracts and Grants Agency Type Inquiry</title>
 
-            <inquirySections><inquirySection title="Agency Type Details"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
-                <field attributeName="rowActiveIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Agency Type Lookup</title>
+            <title>Contracts and Grants Agency Type Lookup</title>
 
-            <instructions>Lookup an Agency Type</instructions>
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.cg.bo.AgencyType">Create New</a>]]>
+            </menubar>
+
+            <instructions>Lookup a Contracts and Grants Agency Type</instructions>
 
             <defaultSort attributeName="code" sortAscending="false" />
 
             <lookupFields>
                 <lookupField attributeName="code" required="false" />
                 <lookupField attributeName="name" required="false" />
-                <lookupField attributeName="rowActiveIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="code" noInquiry="true" />
                 <field attributeName="name" />
-                <field attributeName="rowActiveIndicator" />
             </resultFields>
         </lookup>
 
@@ -55,8 +41,8 @@
 
         <attributes>
             <attribute name="code" forceUppercase="true">
-                <label>Agency Type Code</label>
-                <shortLabel>Agncy Typ Cd</shortLabel>
+                <label>Type Code</label>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>1</maxLength>
 
@@ -70,17 +56,13 @@
                     <text size="1" />
                 </control>
 
-                <summary>Agency Type Code</summary>
-                <description>
-					This is a one-letter designation that corresponds to the 
-					Type Description.  Examples include F=Federal, S=State of 
-					Indiana, and I=Commercial/Industrial.
-				</description>
+                <summary>Contracts and Grants Agency Type Code</summary>
+                <description>Contracts and Grants Agency Type Code</description>
             </attribute>
 
             <attribute name="name" forceUppercase="false">
-                <label>Agency Type Description</label>
-                <shortLabel>Type Desc</shortLabel>
+                <label>Type Description</label>
+                <shortLabel>description</shortLabel>
 
                 <maxLength>30</maxLength>
 
@@ -94,31 +76,8 @@
                     <text size="32" />
                 </control>
 
-                <summary>Agency Type Description</summary>
-                <description>
-					This is a description of the Agency type, or the category of 
-					business that the Agency falls into.  Examples include Federal, 
-					Commercial/Industrial, Non-Profit, or Other Government.
-				</description>
-            </attribute>
-
-            <attribute name="rowActiveIndicator" forceUppercase="false">
-                <label>Active Indicator</label>
-                <shortLabel>Active Indicator</shortLabel>
-
-                <maxLength>1</maxLength>
-
-                <control>
-                    <checkbox />
-                </control>
-
-                <summary>Active Indicator</summary>
-                <description>
-                	This field identifies whether the Agency Type is active in the 
-                	system or not.  Agency Types are typically marked as Active.  
-                	This allows historical records to reference inactive Agency Types 
-                	while restricting new Agencies from referencing them.
-                </description>
+                <summary>Contracts and Grants Agency Type Description</summary>
+                <description>The description of the Contracts and Grants Agency Type.</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />

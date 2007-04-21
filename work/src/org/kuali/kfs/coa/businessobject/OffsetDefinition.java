@@ -1,31 +1,41 @@
-/*
- * Copyright 2005-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.chart.bo;
+
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ */
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
+import org.kuali.core.document.DocumentType;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class OffsetDefinition extends PersistableBusinessObjectBase {
+public class OffsetDefinition extends BusinessObjectBase {
 
     private static final long serialVersionUID = -6150010338773403021L;
 
@@ -34,9 +44,11 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     private String financialBalanceTypeCode;
     private String chartOfAccountsCode;
     private String financialObjectCode;
+    private String financialSubObjectCode;
 
     private Options universityFiscal;
     private ObjectCode financialObject;
+    private SubObjCd financialSubObject;
     private Chart chartOfAccounts;
     private BalanceTyp financialBalanceType;
     private DocumentType financialDocumentType;
@@ -51,7 +63,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -71,7 +83,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscal attribute.
      * 
-     * @return Returns the universityFiscal
+     * @return - Returns the universityFiscal
      * 
      */
     public Options getUniversityFiscal() {
@@ -91,7 +103,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
      * 
      */
 
@@ -112,7 +124,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialBalanceTypeCode attribute.
      * 
-     * @return Returns the financialBalanceTypeCode
+     * @return - Returns the financialBalanceTypeCode
      * 
      */
     public String getFinancialBalanceTypeCode() {
@@ -151,7 +163,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return Returns the financialObjectCode
+     * @return - Returns the financialObjectCode
      * 
      */
 
@@ -171,7 +183,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObject attribute.
      * 
-     * @return Returns the financialObject
+     * @return - Returns the financialObject
      * 
      */
 
@@ -192,7 +204,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
 
@@ -214,7 +226,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * 
      * Gets the chartOfAccounts object
      * 
-     * @return a Chart object
+     * @return - a Chart object
      * 
      */
     public Chart getChartOfAccounts() {
@@ -229,6 +241,23 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
         this.chartOfAccounts = chartOfAccounts;
+    }
+
+
+    public SubObjCd getFinancialSubObject() {
+        return financialSubObject;
+    }
+
+    public void setFinancialSubObject(SubObjCd financialSubObject) {
+        this.financialSubObject = financialSubObject;
+    }
+
+    public String getFinancialSubObjectCode() {
+        return financialSubObjectCode;
+    }
+
+    public void setFinancialSubObjectCode(String financialSubObjectCode) {
+        this.financialSubObjectCode = financialSubObjectCode;
     }
 
     /**

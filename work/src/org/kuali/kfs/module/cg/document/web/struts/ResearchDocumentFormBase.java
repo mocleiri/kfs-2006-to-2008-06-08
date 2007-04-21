@@ -28,7 +28,6 @@ public abstract class ResearchDocumentFormBase extends KualiDocumentFormBase {
     private String newAdHocWorkgroupPermissionCode;
 
     public ResearchDocumentFormBase() {
-        super();
         newAdHocPerson = new AdhocPerson();
         newAdHocOrg = new AdhocOrg();
     }
