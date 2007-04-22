@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package org.kuali.module.budget.service;
+import java.util.*;
 /*
  *   this service intializes/updates the budget construction data used by the
  *   budget module to build a new budget for the coming fiscal year
@@ -34,14 +35,16 @@ public interface GenesisService {
     // this step clears out the database for genesis
     public void clearDBForGenesis(Integer BaseYear);   
     
+    // this step creates "placeholder" budget construction headers (no document numbers)
+    // in a transactional step, so we can minimize database calls
+    public void createProxyBCHeadersTransactional(Integer BaseYear);
     
-    // this step runs genesis
+    // once all needed BC documents have been created, this step runs the rest of genesis
     public void genesisStep(Integer BaseYear);
     
     //  February, 2007
     //  these are the two transactional steps
     //  when workflow is "embedded", this will all change.
-    //  these are no longer needed now that workflow is in the same transaction
     public void genesisDocumentStep(Integer BaseYear);
     public void genesisFinalStep(Integer BaseYear);
     

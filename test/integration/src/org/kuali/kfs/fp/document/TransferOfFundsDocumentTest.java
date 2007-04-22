@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/integration/src/org/kuali/kfs/fp/document/TransferOfFundsDocumentTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +17,12 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getDataDictionaryService;
-import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
-import static org.kuali.kfs.util.SpringServiceLocator.getTransactionalDocumentDictionaryService;
-import static org.kuali.kfs.util.SpringServiceLocator.getAccountingPeriodService;
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.routeDocument;
+import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodService;
+import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getTransactionalDocumentDictionaryService;
+import static org.kuali.module.financial.document.TransactionalDocumentTestUtils.routeDocument;
+import static org.kuali.module.financial.document.TransactionalDocumentTestUtils.testGetNewDocument_byDocumentClass;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE1;
 import static org.kuali.test.fixtures.UserNameFixture.CSWINSON;
 import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
@@ -33,11 +35,10 @@ import static org.kuali.test.fixtures.UserNameFixture.VPUTMAN;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.TestsWorkflowViaDatabase;
@@ -45,7 +46,6 @@ import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
 import org.kuali.test.fixtures.UserNameFixture;
 import org.kuali.workflow.WorkflowTestUtils;
-import org.kuali.test.suite.RelatesTo;
 
 import edu.iu.uis.eden.EdenConstants;
 
@@ -85,10 +85,9 @@ public class TransferOfFundsDocumentTest extends KualiTestBase {
 
 
     @TestsWorkflowViaDatabase
-    @RelatesTo(RelatesTo.JiraIssue.KULUT10)
     public void testWorkflowRouting() throws Exception {
         // save and route the document
-        AccountingDocument document = (AccountingDocument) buildDocumentForWorkflowRoutingTest();
+        TransactionalDocument document = (TransactionalDocument) buildDocumentForWorkflowRoutingTest();
         final String docHeaderId = document.getDocumentNumber();
         routeDocument(document, getDocumentService());
 
@@ -109,17 +108,17 @@ public class TransferOfFundsDocumentTest extends KualiTestBase {
         WorkflowTestUtils.waitForStatusChange(document.getDocumentHeader().getWorkflowDocument(), EdenConstants.ROUTE_HEADER_FINAL_CD);
 
         changeCurrentUser(VPUTMAN);
-        document = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docHeaderId);
+        document = (TransactionalDocument) getDocumentService().getByDocumentHeaderId(docHeaderId);
         assertTrue("Document should now be final.", document.getDocumentHeader().getWorkflowDocument().stateIsFinal());
     }
 
     private void approve(String docHeaderId, UserNameFixture user, String expectedNode) throws Exception {
         changeCurrentUser(user);
-        AccountingDocumentTestUtils.approve(docHeaderId, user, expectedNode, getDocumentService());
+        TransactionalDocumentTestUtils.approve(docHeaderId, user, expectedNode, getDocumentService());
     }
 
     private Document buildDocumentForWorkflowRoutingTest() throws Exception {
-        AccountingDocument document = buildDocument();
+        TransactionalDocument document = buildDocument();
         AccountingLineFixture.LINE2_TOF.addAsSourceTo(document);
         AccountingLineFixture.LINE2_TOF.addAsTargetTo(document);
         return document;
@@ -131,48 +130,52 @@ public class TransferOfFundsDocumentTest extends KualiTestBase {
         List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
         int expectedSourceTotal = sourceLines.size();
         int expectedTargetTotal = targetLines.size();
-        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
+        TransactionalDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
     }
 
     public final void testGetNewDocument() throws Exception {
         testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
     }
 
+    public final void testConvertIntoCopy_invalidYear() throws Exception {
+        TransactionalDocumentTestUtils.testConvertIntoCopy_invalidYear(buildDocument(), getAccountingPeriodService());
+    }
+
     public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
 
     }
 
     public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
     }
 
     public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
     }
 
     public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), getTransactionalDocumentDictionaryService(), getAccountingPeriodService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), getTransactionalDocumentDictionaryService(), getAccountingPeriodService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testConvertIntoErrorCorrection() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), getDocumentService(), getTransactionalDocumentDictionaryService());
+        TransactionalDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), getDocumentService(), getTransactionalDocumentDictionaryService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testRouteDocument() throws Exception {
-        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), getDocumentService());
+        TransactionalDocumentTestUtils.testRouteDocument(buildDocument(), getDocumentService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testSaveDocument() throws Exception {
-        AccountingDocumentTestUtils.testSaveDocument(buildDocument(), getDocumentService());
+        TransactionalDocumentTestUtils.testSaveDocument(buildDocument(), getDocumentService());
     }
 
     @TestsWorkflowViaDatabase
     public final void testConvertIntoCopy() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), getDocumentService(), getExpectedPrePeCount());
+        TransactionalDocumentTestUtils.testConvertIntoCopy(buildDocument(), getDocumentService(), getExpectedPrePeCount());
     }
 
     // test util methods

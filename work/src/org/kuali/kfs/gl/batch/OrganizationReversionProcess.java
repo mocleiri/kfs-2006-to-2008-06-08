@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,7 +145,7 @@ public class OrganizationReversionProcess {
                                 unitOfWork.addActualAmount(cat.getOrganizationReversionCategoryCode(), bal.getBeginningBalanceLineAmount());
                                 unitOfWork.addActualAmount(cat.getOrganizationReversionCategoryCode(), bal.getAccountLineAnnualBalanceAmount());
                             }
-                            else if (bal.getOption().getFinObjTypeExpenditureexpCd().equals(bal.getBalanceTypeCode()) || bal.getOption().getCostShareEncumbranceBalanceTypeCd().equals(bal.getBalanceTypeCode()) || bal.getOption().getIntrnlEncumFinBalanceTypCd().equals(bal.getBalanceTypeCode())) {
+                            else if (bal.getOption().getFinObjTypeExpenditureexpCd().equals(bal.getBalanceTypeCode()) || bal.getOption().getCostShareEncumbranceBalanceTypeCode().equals(bal.getBalanceTypeCode()) || bal.getOption().getIntrnlEncumFinBalanceTypCd().equals(bal.getBalanceTypeCode())) {
                                 // Encumbrance
                                 KualiDecimal amount = bal.getBeginningBalanceLineAmount().add(bal.getAccountLineAnnualBalanceAmount());
                                 if (amount.isPositive()) {
@@ -200,7 +202,7 @@ public class OrganizationReversionProcess {
         entry.setSubAccountNumber(unitOfWork.subAccountNbr);
         entry.setFinancialObjectCode(organizationReversion.getChartOfAccounts().getFinancialCashObjectCode());
         entry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
-        entry.setFinancialBalanceTypeCode(entry.getOption().getNominalFinancialBalanceTypeCd());
+        entry.setFinancialBalanceTypeCode(entry.getOption().getNominalFinancialBalanceTypeCode());
 
         persistenceService.retrieveReferenceObject(entry, FINANCIAL_OBJECT);
         if (entry.getFinancialObject() == null) {

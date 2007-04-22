@@ -19,16 +19,13 @@ package org.kuali.module.budget.bo;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.util.TypedArrayList;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ResponsibilityCenter;
 
 /**
@@ -74,7 +71,7 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 	 */
 	public BudgetConstructionPosition() {
         budgetConstructionPositionSelect = new ArrayList();
-        setPendingBudgetConstructionAppointmentFunding(new TypedArrayList(PendingBudgetConstructionAppointmentFunding.class));
+        pendingBudgetConstructionAppointmentFunding = new ArrayList();;
 
 	}
 
@@ -716,31 +713,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
         this.universityFiscal = universityFiscal;
     }
     
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @Override
-    public List buildListOfDeletionAwareLists() {
-
-        List managedLists =  super.buildListOfDeletionAwareLists();
-        managedLists.add(getPendingBudgetConstructionAppointmentFunding());
-        return managedLists; 
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("positionNumber", getPositionNumber());
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-
-        return simpleValues;
-    }
-  
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
