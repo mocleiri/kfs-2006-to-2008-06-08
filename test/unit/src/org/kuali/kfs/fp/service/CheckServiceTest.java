@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +17,9 @@
  */
 package org.kuali.module.financial.service;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getCheckService;
-import static org.kuali.rice.KNSServiceLocator.getDateTimeService;
-import static org.kuali.rice.KNSServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getCheckService;
+import static org.kuali.core.util.SpringServiceLocator.getDateTimeService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE18;
 import static org.kuali.test.fixtures.UserNameFixture.MHKOZLOW;
 
@@ -105,7 +107,7 @@ public class CheckServiceTest extends KualiTestBase {
     private String createDocument() throws Exception{
         CashReceiptDocument document = DocumentTestUtils.createDocument(getDocumentService(), CashReceiptDocument.class);
         LINE18.addAsSourceTo(document);
-        getDocumentService().saveDocument(document);
+        getDocumentService().saveDocument(document, null, null);
         return document.getDocumentNumber();
     }
 }

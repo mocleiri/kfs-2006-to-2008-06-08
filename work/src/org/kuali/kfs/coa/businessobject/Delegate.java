@@ -19,18 +19,18 @@ import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * 
  */
-public class Delegate extends PersistableBusinessObjectBase {
+public class Delegate extends BusinessObjectBase {
 
     private static final long serialVersionUID = 6883162275377881235L;
 
@@ -96,7 +96,7 @@ public class Delegate extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
      * 
      */
     public String getFinancialDocumentTypeCode() {
@@ -134,7 +134,7 @@ public class Delegate extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocApprovalFromThisAmt attribute.
      * 
-     * @return Returns the finDocApprovalFromThisAmt
+     * @return - Returns the finDocApprovalFromThisAmt
      * 
      */
     public KualiDecimal getFinDocApprovalFromThisAmt() {
@@ -154,7 +154,7 @@ public class Delegate extends PersistableBusinessObjectBase {
     /**
      * Gets the accountsDelegatePrmrtIndicator attribute.
      * 
-     * @return Returns the accountsDelegatePrmrtIndicator
+     * @return - Returns the accountsDelegatePrmrtIndicator
      * 
      */
     public boolean isAccountsDelegatePrmrtIndicator() {
@@ -174,7 +174,7 @@ public class Delegate extends PersistableBusinessObjectBase {
     /**
      * Gets the accountDelegateActiveIndicator attribute.
      * 
-     * @return Returns the accountDelegateActiveIndicator
+     * @return - Returns the accountDelegateActiveIndicator
      * 
      */
     public boolean isAccountDelegateActiveIndicator() {
@@ -194,7 +194,7 @@ public class Delegate extends PersistableBusinessObjectBase {
     /**
      * Gets the accountDelegateStartDate attribute.
      * 
-     * @return Returns the accountDelegateStartDate
+     * @return - Returns the accountDelegateStartDate
      * 
      */
     public Timestamp getAccountDelegateStartDate() {
@@ -214,7 +214,7 @@ public class Delegate extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocApprovalToThisAmount attribute.
      * 
-     * @return Returns the finDocApprovalToThisAmount
+     * @return - Returns the finDocApprovalToThisAmount
      * 
      */
     public KualiDecimal getFinDocApprovalToThisAmount() {
@@ -234,7 +234,7 @@ public class Delegate extends PersistableBusinessObjectBase {
     /**
      * Gets the account attribute.
      * 
-     * @return Returns the account
+     * @return - Returns the account
      * 
      */
     public Account getAccount() {
@@ -270,7 +270,7 @@ public class Delegate extends PersistableBusinessObjectBase {
     }
 
     public UniversalUser getAccountDelegate() {
-        accountDelegate = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountDelegateSystemId, accountDelegate);
+        accountDelegate = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(accountDelegateSystemId, accountDelegate);
         return accountDelegate;
     }
 

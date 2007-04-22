@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.kuali.core.bo.user.AuthenticationUserId;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.service.KualiGroupService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.rice.KNSServiceLocator;
 
 import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
 import edu.iu.uis.eden.clientapp.vo.UserVO;
@@ -44,8 +45,8 @@ public class UserSession implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(UserSession.class);
 
-    private UniversalUser universalUser;
-    private UniversalUser backdoorUser;
+    private KualiUser kualiUser;
+    private KualiUser backdoorUser;
     private UserVO workflowUser;
     private UserVO backdoorWorkflowUser;
     private int nextObjectKey;
@@ -62,8 +63,8 @@ public class UserSession implements Serializable {
      * @throws ResourceUnavailableException
      */
     public UserSession(String networkId) throws UserNotFoundException, WorkflowException {
-        this.universalUser = KNSServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(networkId));
-        this.workflowUser = KNSServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
+        this.kualiUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(networkId));
+        this.workflowUser = SpringServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
         this.nextObjectKey = 0;
         this.objectMap = new HashMap();
     }
@@ -73,10 +74,10 @@ public class UserSession implements Serializable {
      */
     public String getNetworkId() {
         if (backdoorUser != null) {
-            return backdoorUser.getPersonUserIdentifier();
+            return backdoorUser.getUniversalUser().getPersonUserIdentifier();
         }
         else {
-            return universalUser.getPersonUserIdentifier();
+            return kualiUser.getUniversalUser().getPersonUserIdentifier();
         }
     }
 
@@ -87,18 +88,18 @@ public class UserSession implements Serializable {
      * @return String
      */
     public String getLoggedInUserNetworkId() {
-        return universalUser.getPersonUserIdentifier();
+        return kualiUser.getUniversalUser().getPersonUserIdentifier();
     }
 
     /**
      * @return the KualiUser which is the current user in the system, backdoor if backdoor is set
      */
-    public UniversalUser getUniversalUser() {
+    public KualiUser getKualiUser() {
         if (backdoorUser != null) {
             return backdoorUser;
         }
         else {
-            return universalUser;
+            return kualiUser;
         }
     }
 
@@ -124,12 +125,11 @@ public class UserSession implements Serializable {
      * @throws EdenUserNotFoundException
      */
     public void setBackdoorUser(String networkId) throws UserNotFoundException, WorkflowException {
-       // only allow backdoor in non-production environments
-       if ( !KNSServiceLocator.getKualiConfigurationService().isProductionEnvironment() ) {
-        this.backdoorUser = KNSServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(networkId));
-        this.backdoorWorkflowUser = KNSServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
-        this.workflowDocMap = new HashMap();
-       }
+        if (!"prd".equals(SpringServiceLocator.getKualiConfigurationService().getPropertyString("environment"))) {
+          this.backdoorUser = SpringServiceLocator.getKualiUserService().getKualiUser(new AuthenticationUserId(networkId));
+          this.backdoorWorkflowUser = SpringServiceLocator.getWorkflowInfoService().getWorkflowUser(new NetworkIdVO(networkId));
+          this.workflowDocMap = new HashMap();
+        }
     }
 
     /**
@@ -266,7 +266,8 @@ public class UserSession implements Serializable {
         }
     }
 
-    private void refreshUserGroups(UniversalUser universalUser) {
-        universalUser.refreshUserGroups();
+    private void refreshUserGroups(KualiUser user) {
+        KualiGroupService kualiGroupService = SpringServiceLocator.getKualiGroupService();
+        user.setGroups(kualiGroupService.getUsersGroups(kualiUser));
     }
 }

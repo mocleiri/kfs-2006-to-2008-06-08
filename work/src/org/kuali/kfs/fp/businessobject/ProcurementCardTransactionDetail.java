@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +22,17 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.AccountingLineBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class ProcurementCardTransactionDetail extends PersistableBusinessObjectBase {
+public class ProcurementCardTransactionDetail extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private Integer financialDocumentTransactionLineNumber;
     private Date transactionDate;
     private String transactionReferenceNumber;
@@ -86,30 +85,30 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
     /**
      * Gets the financialDocumentTransactionLineNumber attribute.
      * 
-     * @return Returns the financialDocumentTransactionLineNumber
+     * @return - Returns the financialDocumentTransactionLineNumber
      * 
      */
     public Integer getFinancialDocumentTransactionLineNumber() {
@@ -130,7 +129,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionDate attribute.
      * 
-     * @return Returns the transactionDate
+     * @return - Returns the transactionDate
      * 
      */
     public Date getTransactionDate() {
@@ -151,7 +150,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionReferenceNumber attribute.
      * 
-     * @return Returns the transactionReferenceNumber
+     * @return - Returns the transactionReferenceNumber
      * 
      */
     public String getTransactionReferenceNumber() {
@@ -172,7 +171,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionPostingDate attribute.
      * 
-     * @return Returns the transactionPostingDate
+     * @return - Returns the transactionPostingDate
      * 
      */
     public Date getTransactionPostingDate() {
@@ -193,7 +192,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionOriginalCurrencyCode attribute.
      * 
-     * @return Returns the transactionOriginalCurrencyCode
+     * @return - Returns the transactionOriginalCurrencyCode
      * 
      */
     public String getTransactionOriginalCurrencyCode() {
@@ -214,7 +213,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionBillingCurrencyCode attribute.
      * 
-     * @return Returns the transactionBillingCurrencyCode
+     * @return - Returns the transactionBillingCurrencyCode
      * 
      */
     public String getTransactionBillingCurrencyCode() {
@@ -235,7 +234,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionOriginalCurrencyAmount attribute.
      * 
-     * @return Returns the transactionOriginalCurrencyAmount
+     * @return - Returns the transactionOriginalCurrencyAmount
      * 
      */
     public KualiDecimal getTransactionOriginalCurrencyAmount() {
@@ -256,7 +255,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionCurrencyExchangeRate attribute.
      * 
-     * @return Returns the transactionCurrencyExchangeRate
+     * @return - Returns the transactionCurrencyExchangeRate
      * 
      */
     public BigDecimal getTransactionCurrencyExchangeRate() {
@@ -277,7 +276,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionSettlementAmount attribute.
      * 
-     * @return Returns the transactionSettlementAmount
+     * @return - Returns the transactionSettlementAmount
      * 
      */
     public KualiDecimal getTransactionSettlementAmount() {
@@ -298,7 +297,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionSalesTaxAmount attribute.
      * 
-     * @return Returns the transactionSalesTaxAmount
+     * @return - Returns the transactionSalesTaxAmount
      * 
      */
     public KualiDecimal getTransactionSalesTaxAmount() {
@@ -319,7 +318,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionTaxExemptIndicator attribute.
      * 
-     * @return Returns the transactionTaxExemptIndicator
+     * @return - Returns the transactionTaxExemptIndicator
      * 
      */
     public boolean getTransactionTaxExemptIndicator() {
@@ -340,7 +339,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionPurchaseIdentifierIndicator attribute.
      * 
-     * @return Returns the transactionPurchaseIdentifierIndicator
+     * @return - Returns the transactionPurchaseIdentifierIndicator
      * 
      */
     public boolean getTransactionPurchaseIdentifierIndicator() {
@@ -361,7 +360,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionPurchaseIdentifierDescription attribute.
      * 
-     * @return Returns the transactionPurchaseIdentifierDescription
+     * @return - Returns the transactionPurchaseIdentifierDescription
      * 
      */
     public String getTransactionPurchaseIdentifierDescription() {
@@ -382,7 +381,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionUnitContactName attribute.
      * 
-     * @return Returns the transactionUnitContactName
+     * @return - Returns the transactionUnitContactName
      * 
      */
     public String getTransactionUnitContactName() {
@@ -403,7 +402,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionTravelAuthorizationCode attribute.
      * 
-     * @return Returns the transactionTravelAuthorizationCode
+     * @return - Returns the transactionTravelAuthorizationCode
      * 
      */
     public String getTransactionTravelAuthorizationCode() {
@@ -424,7 +423,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
     /**
      * Gets the transactionPointOfSaleCode attribute.
      * 
-     * @return Returns the transactionPointOfSaleCode
+     * @return - Returns the transactionPointOfSaleCode
      * 
      */
     public String getTransactionPointOfSaleCode() {
@@ -559,7 +558,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         if (this.financialDocumentTransactionLineNumber != null) {
             m.put("financialDocumentTransactionLineNumber", this.financialDocumentTransactionLineNumber.toString());
         }

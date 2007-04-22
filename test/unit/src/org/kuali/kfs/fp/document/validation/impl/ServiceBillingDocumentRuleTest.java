@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/fp/document/validation/impl/ServiceBillingDocumentRuleTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +17,28 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getDataDictionaryService;
-import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
-import static org.kuali.kfs.util.SpringServiceLocator.getDocumentTypeService;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
+import org.kuali.core.document.TransactionalDocument;
+import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
+import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentTypeService;
+import org.kuali.module.financial.document.ServiceBillingDocument;
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.NEGATIVE;
 import static org.kuali.module.financial.rules.IsDebitTestUtils.Amount.POSITIVE;
-import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
-
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.financial.document.ServiceBillingDocument;
-import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.KualiTestBase;
+import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
 
 /**
  * 
  * This class tests the business rules of the service billing document. This is not implemented yet and needs to extend
- * AccountingDocumentRuleTestBase.
+ * TransactionalDocumentRuleTestBase.
+ * 
+ * 
  */
 @WithTestSpringContext(session = DFOGLE)
 public class ServiceBillingDocumentRuleTest extends KualiTestBase {
@@ -49,7 +52,7 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
         boolean failedAsExpected = false;
 
         try {
-            SpringServiceLocator.getDocumentService().saveDocument(null);
+            SpringServiceLocator.getDocumentService().saveDocument(null, null, null);
         }
         catch (IllegalArgumentException e) {
             failedAsExpected = true;
@@ -64,10 +67,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_income_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, SourceAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, SourceAccountingLine.class, POSITIVE);
 
-        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -76,10 +79,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_income_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, SourceAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, SourceAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -89,10 +92,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      */
     public void testIsDebit_source_income_zeroAmount() throws Exception {
 
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -101,9 +104,9 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_expense_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, SourceAccountingLine.class, POSITIVE);
-        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, SourceAccountingLine.class, POSITIVE);
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -112,10 +115,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_expense_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, SourceAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, SourceAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -124,10 +127,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_expense_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -136,10 +139,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_asset_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, SourceAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, SourceAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -148,10 +151,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_asset_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, SourceAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, SourceAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -160,10 +163,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_asset_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -172,10 +175,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_liability_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, SourceAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, SourceAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -184,10 +187,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_liability_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, SourceAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, SourceAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -196,10 +199,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_source_liability_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -208,10 +211,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_income_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, TargetAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, TargetAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -220,10 +223,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_income_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, TargetAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, TargetAccountingLine.class, NEGATIVE);
 
-        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -233,10 +236,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      */
     public void testIsDebit_target_income_zeroAmount() throws Exception {
 
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -245,10 +248,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_expense_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, TargetAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, TargetAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -257,10 +260,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_expense_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, TargetAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, TargetAccountingLine.class, NEGATIVE);
 
-        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -269,10 +272,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_expense_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -281,10 +284,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_asset_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, TargetAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, TargetAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -293,10 +296,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_asset_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, TargetAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, TargetAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -305,10 +308,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_asset_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -317,10 +320,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_liability_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, TargetAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, TargetAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -329,10 +332,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_liability_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, TargetAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, TargetAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -341,10 +344,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_target_liability_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -353,10 +356,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_income_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, SourceAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, SourceAccountingLine.class, POSITIVE);
 
-        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -365,10 +368,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_income_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, SourceAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, SourceAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -378,10 +381,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      */
     public void testIsDebit_errorCorrection_source_income_zeroAmount() throws Exception {
 
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -390,10 +393,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_expense_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, SourceAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, SourceAccountingLine.class, POSITIVE);
 
-        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -402,10 +405,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_expense_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, SourceAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, SourceAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -414,10 +417,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_expense_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -426,10 +429,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_asset_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, SourceAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, SourceAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -438,10 +441,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_asset_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, SourceAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, SourceAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -450,10 +453,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_asset_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -462,10 +465,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_liability_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, SourceAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, SourceAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -474,10 +477,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_liability_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, SourceAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, SourceAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -486,10 +489,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_source_liability_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, SourceAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -498,10 +501,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_income_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, TargetAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, TargetAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -510,10 +513,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_income_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, TargetAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, TargetAccountingLine.class, NEGATIVE);
 
-        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
 
     }
 
@@ -524,10 +527,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      */
     public void testIsDebit_errorCorrection_target_income_zeroAmount() throws Exception {
 
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(accountingDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getIncomeLine(transactionalDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -536,10 +539,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_expense_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, TargetAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, TargetAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -548,10 +551,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_expense_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, TargetAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, TargetAccountingLine.class, NEGATIVE);
 
-        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -560,10 +563,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_expense_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(accountingDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getExpenseLine(transactionalDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -572,10 +575,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_asset_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, TargetAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, TargetAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -584,10 +587,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_asset_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, TargetAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, TargetAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -596,10 +599,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_asset_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(accountingDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getAssetLine(transactionalDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -608,10 +611,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_liability_positveAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, TargetAccountingLine.class, POSITIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, TargetAccountingLine.class, POSITIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -620,10 +623,10 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_liability_negativeAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, TargetAccountingLine.class, NEGATIVE);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, TargetAccountingLine.class, NEGATIVE);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
     /**
@@ -632,23 +635,23 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * @throws Exception
      */
     public void testIsDebit_errorCorrection_target_liability_zeroAmount() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
-        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(accountingDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
+        TransactionalDocument transactionalDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), ServiceBillingDocument.class);
+        AccountingLine accountingLine = IsDebitTestUtils.getLiabilityLine(transactionalDocument, TargetAccountingLine.class, KualiDecimal.ZERO);
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), transactionalDocument, accountingLine));
     }
 
 
     /*
-     * protected AccountingDocument createDocumentWithInvalidObjectSubType() throws Exception { // TODO Auto-generated method
+     * protected TransactionalDocument createDocumentWithInvalidObjectSubType() throws Exception { // TODO Auto-generated method
      * stub return null; }
      * 
-     * protected AccountingDocument createDocumentWithValidObjectSubType() throws Exception { // TODO Auto-generated method stub
+     * protected TransactionalDocument createDocumentWithValidObjectSubType() throws Exception { // TODO Auto-generated method stub
      * return null; }
      * 
-     * protected AccountingDocument createDocument5() throws Exception { // TODO Auto-generated method stub return null; }
+     * protected TransactionalDocument createDocument5() throws Exception { // TODO Auto-generated method stub return null; }
      * 
-     * protected AccountingDocument createDocumentUnbalanced() throws Exception { // TODO Auto-generated method stub return null; }
+     * protected TransactionalDocument createDocumentUnbalanced() throws Exception { // TODO Auto-generated method stub return null; }
      * 
      * protected List getValidObjectSubTypeSourceLines() throws Exception { // TODO Auto-generated method stub return null; }
      * 
@@ -709,68 +712,68 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * Commented out until we get data in the db that matches what we need, or we can modify the objects directly (mock-testing)
      * 
      * public final void testApplyAddAccountingLineBusinessRulesInvalidStudentFeeContinueEduc() throws Exception {
-     * triggerInvalidAddAccountingLineEvents ( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents ( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerInvalidAddAccountingLineEvents ( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents ( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesValidStudentFeeContinueEduc() throws Exception {
-     * triggerValidAddAccountingLineEvents ( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents ( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents ( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents ( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesInvalidCapObjCodes() throws Exception {
-     * triggerValidAddAccountingLineEvents ( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents ( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents ( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents ( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesValidCapObjCodes() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesInvalidObjCodeSubTypes() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesValidObjCodeSubTypes() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesInvalidObjLevelCode() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesValidObjLevelCode() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesInvalidObjType() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesValidObjType() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesInvalidObjSubTypeAssessOrTransOfFunds() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesValidObjSubTypeAssessOrTransOfFunds() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesInvalidFundGroup() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesValidFundGroup() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesInvalidSubFundGroup() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      * 
      * public final void testApplyAddAccountingLineBusinessRulesValidSubFundGroup() throws Exception {
-     * triggerValidAddAccountingLineEvents( getAccountingDocument().getSourceAccountingLines() );
-     * triggerInvalidAddAccountingLineEvents( getAccountingDocument().getTargetAccountingLines() ); }
+     * triggerValidAddAccountingLineEvents( getTransactionalDocument().getSourceAccountingLines() );
+     * triggerInvalidAddAccountingLineEvents( getTransactionalDocument().getTargetAccountingLines() ); }
      */
 
     /*
@@ -780,8 +783,8 @@ public class ServiceBillingDocumentRuleTest extends KualiTestBase {
      * public void fixturesDefault() {
      * 
      * addFixture( KualiRuleTestCase.ACCOUNT, "1912610" ); addFixture( KualiRuleTestCase.BALANCE_TYPE,
-     * AccountingDocumentRuleBase.BALANCE_TYPE_CODE.ACTUAL ); addFixture( KualiRuleTestCase.CHART, "UA" ); addFixture(
-     * KualiRuleTestCase.OBJECT_TYPE_CODE, AccountingDocumentRuleBase.OBJECT_TYPE_CODE.CASH_NOT_INCOME ); addFixture(
+     * TransactionalDocumentRuleBase.BALANCE_TYPE_CODE.ACTUAL ); addFixture( KualiRuleTestCase.CHART, "UA" ); addFixture(
+     * KualiRuleTestCase.OBJECT_TYPE_CODE, TransactionalDocumentRuleBase.OBJECT_TYPE_CODE.CASH_NOT_INCOME ); addFixture(
      * KualiRuleTestCase.POSTING_YEAR, new Integer( 2005 ) ); addFixture( KualiRuleTestCase.PROJECT, "BOB" ); addFixture(
      * KualiRuleTestCase.SUBACCOUNT, "BEER" ); }
      * 

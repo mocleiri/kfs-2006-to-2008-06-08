@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,10 @@ import java.util.LinkedHashMap;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.KualiCode;
-import org.kuali.core.bo.Summarizable;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.impl.PersistenceStructureServiceImpl;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetAggregationCode;
 import org.kuali.module.chart.bo.codes.FederalFundedCode;
 import org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode;
@@ -34,13 +31,7 @@ import org.kuali.module.gl.bo.SufficientFundRebuild;
 /**
  * 
  */
-public class ObjectCode extends PersistableBusinessObjectBase implements Summarizable {
-    
-    
-    static {
-        PersistenceStructureServiceImpl.referenceConversionMap.put(ObjectCode.class, ObjectCodeCurrent.class);
-    }
-    
+public class ObjectCode extends BusinessObjectBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjectCode.class);
 
     private static final long serialVersionUID = -965833141452795485L;
@@ -60,6 +51,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     private String nextYearFinancialObjectCode;
     private String finObjMandatoryTrnfrelimCd;
     private String financialFederalFundedCode;
+
 
     private transient BudgetAggregationCode financialBudgetAggregation;
     private transient MandatoryTransferEliminationCode finObjMandatoryTrnfrelim;
@@ -150,7 +142,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return Returns the financialObjectCode
+     * @return - Returns the financialObjectCode
      * 
      */
     public String getFinancialObjectCode() {
@@ -170,7 +162,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the financialObjectCodeName attribute.
      * 
-     * @return Returns the financialObjectCodeName
+     * @return - Returns the financialObjectCodeName
      * 
      */
     public String getFinancialObjectCodeName() {
@@ -190,7 +182,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the financialObjectCodeShortName attribute.
      * 
-     * @return Returns the financialObjectCodeShortName
+     * @return - Returns the financialObjectCodeShortName
      * 
      */
     public String getFinancialObjectCodeShortName() {
@@ -210,7 +202,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the historicalFinancialObjectCode attribute.
      * 
-     * @return Returns the historicalFinancialObjectCode
+     * @return - Returns the historicalFinancialObjectCode
      * 
      */
     public String getHistoricalFinancialObjectCode() {
@@ -230,7 +222,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the financialObjectActiveCode attribute.
      * 
-     * @return Returns the financialObjectActiveCode
+     * @return - Returns the financialObjectActiveCode
      * 
      */
     public boolean isFinancialObjectActiveCode() {
@@ -250,12 +242,12 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the financialBudgetAggregationCd attribute.
      * 
-     * @return Returns the financialBudgetAggregationCd
+     * @return - Returns the financialBudgetAggregationCd
      * 
      */
-    /*public BudgetAggregationCode getFinancialBudgetAggregation() {
+    public BudgetAggregationCode getFinancialBudgetAggregation() {
         return financialBudgetAggregation;
-    }*/
+    }
 
     /**
      * Sets the financialBudgetAggregationCd attribute.
@@ -263,14 +255,14 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
      * @param financialBudgetAggregationCd The financialBudgetAggregationCd to set.
      * @deprecated
      */
-    /*public void setFinancialBudgetAggregation(BudgetAggregationCode financialBudgetAggregationCd) {
+    public void setFinancialBudgetAggregation(BudgetAggregationCode financialBudgetAggregationCd) {
         this.financialBudgetAggregation = financialBudgetAggregationCd;
-    }*/
+    }
 
     /**
      * Gets the universityFiscal attribute.
      * 
-     * @return Returns the universityFiscal
+     * @return - Returns the universityFiscal
      * 
      */
     public Options getUniversityFiscal() {
@@ -290,7 +282,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the nextYearFinancialObject attribute.
      * 
-     * @return Returns the nextYearFinancialObject
+     * @return - Returns the nextYearFinancialObject
      * 
      */
     public ObjectCode getNextYearFinancialObject() {
@@ -310,7 +302,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the financialObjectLevel attribute.
      * 
-     * @return Returns the financialObjectLevel
+     * @return - Returns the financialObjectLevel
      * 
      */
     public ObjLevel getFinancialObjectLevel() {
@@ -330,7 +322,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -350,7 +342,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the reportsToChartOfAccounts attribute.
      * 
-     * @return Returns the reportsToChartOfAccounts
+     * @return - Returns the reportsToChartOfAccounts
      * 
      */
     public Chart getReportsToChartOfAccounts() {
@@ -370,7 +362,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the reportsToFinancialObject attribute.
      * 
-     * @return Returns the reportsToFinancialObject
+     * @return - Returns the reportsToFinancialObject
      * 
      */
     public ObjectCode getReportsToFinancialObject() {
@@ -390,7 +382,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the financialObjectType attribute.
      * 
-     * @return Returns the financialObjectType
+     * @return - Returns the financialObjectType
      * 
      */
     public ObjectType getFinancialObjectType() {
@@ -410,7 +402,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     /**
      * Gets the financialObjectSubType attribute.
      * 
-     * @return Returns the financialObjectSubType
+     * @return - Returns the financialObjectSubType
      * 
      */
     public ObjSubTyp getFinancialObjectSubType() {
@@ -588,10 +580,6 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
         this.objectCode = objectCode;
     }
 
-    public BudgetAggregationCode getFinancialBudgetAggregation() {
-        return financialBudgetAggregation;
-    }
-
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -635,30 +623,6 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
         catch (Exception ex) {
             LOG.error("Problem updating sufficient funds rebuild table: ", ex);
         }
-    }
-
-    public boolean isActive() {
-        return this.financialObjectActiveCode;
-    }
-
-    public void setActive(boolean a) {
-        this.financialObjectActiveCode=a;
-    }
-
-    public void setCode(String code) {
-        this.chartOfAccountsCode=code;
-    }
-
-    public void setName(String name) {
-        this.financialObjectCodeName=name;
-    }
-
-    public String getCode() {
-        return this.financialObjectCode;
-    }
-
-    public String getName() {
-        return this.financialObjectCodeName;
     }
 
 }

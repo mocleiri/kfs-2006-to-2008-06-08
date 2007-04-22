@@ -30,14 +30,14 @@ import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.bo.AssignContractManagerDetail;
+import org.kuali.module.purap.bo.ContractManager;
 import org.kuali.module.purap.document.AssignContractManagerDocument;
-import org.kuali.module.vendor.bo.ContractManager;
 
 public class AssignContractManagerDocumentRule extends TransactionalDocumentRuleBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AssignContractManagerDocumentRule.class);
 
     /**
-     * @see org.kuali.core.rules.TransactionalDocumentRuleBase#processCustomRouteDocumentBusinessRules(Document)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
      */
     @Override
     protected boolean processCustomRouteDocumentBusinessRules(Document document) {
@@ -78,7 +78,7 @@ public class AssignContractManagerDocumentRule extends TransactionalDocumentRule
      * This method takes the list of AssignContractManagerDetails where the user has
      * entered ContractManagerCodes and validates that each code is valid.
      * 
-     * @param assignContractManagerDetails A Map containing the code to be validated.
+     * @param fieldValues   A Map containing the code to be validated.
      */
     public boolean validateContractManagerCodes(List assignContractManagerDetails){
         LOG.debug("validateContractManagerCodes(): entered method.");

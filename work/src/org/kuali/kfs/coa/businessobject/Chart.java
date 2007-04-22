@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,15 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.Summarizable;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * 
  */
-public class Chart extends PersistableBusinessObjectBase implements Summarizable {
+public class Chart extends BusinessObjectBase {
 
     private static final long serialVersionUID = 4129020803214027609L;
 
@@ -71,7 +70,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finChartOfAccountDescription attribute.
      * 
-     * @return Returns the finChartOfAccountDescription
+     * @return - Returns the finChartOfAccountDescription
      * 
      */
     public String getFinChartOfAccountDescription() {
@@ -91,7 +90,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finChartOfAccountActiveIndicator attribute.
      * 
-     * @return Returns the finChartOfAccountActiveIndicator
+     * @return - Returns the finChartOfAccountActiveIndicator
      * 
      */
     public boolean isFinChartOfAccountActiveIndicator() {
@@ -112,7 +111,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finAccountsPayableObject attribute.
      * 
-     * @return Returns the finAccountsPayableObject
+     * @return - Returns the finAccountsPayableObject
      * 
      */
     public ObjectCode getFinAccountsPayableObject() {
@@ -152,7 +151,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finPreEncumbranceObject attribute.
      * 
-     * @return Returns the finPreEncumbranceObject
+     * @return - Returns the finPreEncumbranceObject
      * 
      */
     public ObjectCode getFinPreEncumbranceObject() {
@@ -172,7 +171,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the financialCashObject attribute.
      * 
-     * @return Returns the financialCashObject
+     * @return - Returns the financialCashObject
      * 
      */
     public ObjectCode getFinancialCashObject() {
@@ -192,7 +191,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the icrIncomeFinancialObject attribute.
      * 
-     * @return Returns the icrIncomeFinancialObject
+     * @return - Returns the icrIncomeFinancialObject
      * 
      */
     public ObjectCode getIcrIncomeFinancialObject() {
@@ -212,7 +211,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finAccountsReceivableObj attribute.
      * 
-     * @return Returns the finAccountsReceivableObj
+     * @return - Returns the finAccountsReceivableObj
      * 
      */
     public ObjectCode getFinAccountsReceivableObj() {
@@ -230,7 +229,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     }
 
     public UniversalUser getFinCoaManagerUniversal() {
-        finCoaManagerUniversal = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(finCoaManagerUniversalId, finCoaManagerUniversal);
+        finCoaManagerUniversal = SpringServiceLocator.getKualiUserService().updateUniversalUserIfNecessary(finCoaManagerUniversalId, finCoaManagerUniversal);
         return finCoaManagerUniversal;
     }
 
@@ -247,7 +246,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the reportsToChartOfAccounts attribute.
      * 
-     * @return Returns the reportsToChartOfAccounts
+     * @return - Returns the reportsToChartOfAccounts
      * 
      */
     public Chart getReportsToChartOfAccounts() {
@@ -517,7 +516,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the expBdgtEliminationsFinObjCd attribute.
      * 
-     * @return Returns the expBdgtEliminationsFinObjCd
+     * @return - Returns the expBdgtEliminationsFinObjCd
      */
     public String getExpBdgtEliminationsFinObjCd() {
         return expBdgtEliminationsFinObjCd;
@@ -535,7 +534,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the incBdgtEliminationsFinObjCd attribute.
      * 
-     * @return Returns the incBdgtEliminationsFinObjCd
+     * @return - Returns the incBdgtEliminationsFinObjCd
      */
     public String getIncBdgtEliminationsFinObjCd() {
         return incBdgtEliminationsFinObjCd;
@@ -622,14 +621,6 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     public String getCodeAndDescription() {
         String theString = getChartOfAccountsCode() + " - " + getFinChartOfAccountDescription();
         return theString;
-    }
-
-    public String getCode() {
-        return this.chartOfAccountsCode;
-    }
-
-    public String getName() {
-        return this.finChartOfAccountDescription;
     }
 
 }

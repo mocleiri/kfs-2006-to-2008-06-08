@@ -16,7 +16,7 @@
 -->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.ProposalAwardType">
 
@@ -24,7 +24,7 @@
         <inquiry>
             <title>Proposal Award Type Inquiry</title>
 
-            <inquirySections><inquirySection title="Proposal Award Type Details"><inquiryFields>
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="proposalAwardTypeCode" />
                 <field attributeName="proposalAwardTypeDescription" />
                 <field attributeName="rowActiveIndicator" />

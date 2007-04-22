@@ -17,7 +17,7 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -27,7 +27,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 /**
  * 
  */
-public class BankAccount extends PersistableBusinessObjectBase {
+public class BankAccount extends BusinessObjectBase {
     private String finDocumentBankAccountDesc;
     private String finDocumentBankAccountNumber;
     private String financialDocumentBankCode;
@@ -54,7 +54,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the bank attribute.
      * 
-     * @return Returns the financialDocumentBankCode
+     * @return - Returns the financialDocumentBankCode
      * 
      */
     public Bank getBank() {
@@ -74,7 +74,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentBankCode attribute.
      * 
-     * @return Returns the financialDocumentBankCode
+     * @return - Returns the financialDocumentBankCode
      * 
      */
     public String getFinancialDocumentBankCode() {
@@ -94,7 +94,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocumentBankAccountDesc attribute.
      * 
-     * @return Returns the finDocumentBankAccountDesc
+     * @return - Returns the finDocumentBankAccountDesc
      * 
      */
     public String getFinDocumentBankAccountDesc() {
@@ -114,7 +114,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocumentBankAccount attribute.
      * 
-     * @return Returns the finDocumentBankAccountNumber
+     * @return - Returns the finDocumentBankAccountNumber
      * 
      */
     public String getFinDocumentBankAccountNumber() {
@@ -190,7 +190,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the cashOffsetAccount attribute.
      * 
-     * @return Returns the cashOffsetAccount
+     * @return - Returns the cashOffsetAccount
      * 
      */
     public Account getCashOffsetAccount() {
@@ -210,7 +210,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the cashOffsetFinancialChartOfAccount attribute.
      * 
-     * @return Returns the cashOffsetFinancialChartOfAccount
+     * @return - Returns the cashOffsetFinancialChartOfAccount
      * 
      */
     public Chart getCashOffsetFinancialChartOfAccount() {

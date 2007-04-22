@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/SubObjCd.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,44 +19,21 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.service.impl.PersistenceStructureServiceImpl;
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
 
 /**
  * 
  */
-public class SubObjCd extends PersistableBusinessObjectBase {
+public class SubObjCd extends BusinessObjectBase {
 
     private static final long serialVersionUID = -5292158248714650271L;
 
-    static {
-        PersistenceStructureServiceImpl.referenceConversionMap.put(SubObjCd.class, SubObjCdCurrent.class);
-    }
-    
     /**
      * Default no-arg constructor.
      */
     public SubObjCd() {
 
-    }
-    /**
-     * 
-     * Constructs an active SubObjCd.java with the given primary key.
-     * 
-     * @param universityFiscalYear
-     * @param chartOfAccountsCode
-     * @param accountNumber
-     * @param financialObjectCode
-     * @param financialSubObjectCode
-     */
-    public SubObjCd(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialObjectCode, String financialSubObjectCode) {
-        this.universityFiscalYear = universityFiscalYear;
-        this.chartOfAccountsCode = chartOfAccountsCode;
-        this.accountNumber = accountNumber;
-        this.financialObjectCode = financialObjectCode;
-        this.financialSubObjectCode = financialSubObjectCode;
-        this.financialSubObjectActiveIndicator = true;
     }
 
     private String chartOfAccountsCode;

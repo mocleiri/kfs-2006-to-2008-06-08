@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,18 +31,17 @@ import org.kuali.Constants.CashDrawerConstants;
 import org.kuali.Constants.DepositConstants;
 import org.kuali.KeyConstants.CashManagement;
 import org.kuali.core.authorization.AuthorizationConstants;
-
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.authorization.DocumentAuthorizer;
+import org.kuali.core.authorization.DocumentAuthorizer;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.action.KualiDocumentActionBase;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Deposit;
 import org.kuali.module.financial.document.CashManagementDocument;
-import org.kuali.module.financial.document.authorization.CashManagementDocumentAuthorizer;
+import org.kuali.module.financial.document.CashManagementDocumentAuthorizer;
 import org.kuali.module.financial.service.CashDrawerService;
 import org.kuali.module.financial.web.struts.form.CashManagementForm;
 import org.kuali.module.financial.web.struts.form.CashManagementForm.CashDrawerSummary;
@@ -103,7 +102,7 @@ public class CashManagementAction extends KualiDocumentActionBase {
      */
     @Override
     protected void createDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
-        UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
+        KualiUser user = GlobalVariables.getUserSession().getKualiUser();
         String workgroupName = SpringServiceLocator.getCashReceiptService().getCashReceiptVerificationUnitForUser(user);
 
         String defaultDescription = SpringServiceLocator.getKualiConfigurationService().getPropertyString(CashManagement.DEFAULT_DOCUMENT_DESCRIPTION);
@@ -178,7 +177,7 @@ public class CashManagementAction extends KualiDocumentActionBase {
         }
 
         // verify user's ability to add a deposit
-        UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
+        KualiUser user = GlobalVariables.getUserSession().getKualiUser();
         Map editModes = getDocumentAuthorizer().getEditMode(cmDoc, user);
         if (!editModes.containsKey(AuthorizationConstants.CashManagementEditMode.ALLOW_ADDITIONAL_DEPOSITS)) {
             throw buildAuthorizationException("add a deposit", cmDoc);
@@ -193,7 +192,7 @@ public class CashManagementAction extends KualiDocumentActionBase {
     private String buildDepositWizardUrl(CashManagementDocument cmDoc, String depositTypeCode) {
         Properties params = new Properties();
         params.setProperty("methodToCall", "startWizard");
-        params.setProperty("cmDocId", cmDoc.getDocumentNumber());
+        params.setProperty("cmDocId", cmDoc.getFinancialDocumentNumber());
         params.setProperty("depositTypeCode", depositTypeCode);
 
         String wizardActionUrl = UrlFactory.parameterizeUrl("depositWizard.do", params);
@@ -295,7 +294,7 @@ public class CashManagementAction extends KualiDocumentActionBase {
 
         // open the CashDrawer
         CashDrawerService cds = SpringServiceLocator.getCashDrawerService();
-        cds.openCashDrawer(cmDoc.getWorkgroupName(), cmDoc.getDocumentNumber());
+        cds.openCashDrawer(cmDoc.getWorkgroupName(), cmDoc.getFinancialDocumentNumber());
         try {
             SpringServiceLocator.getDocumentService().saveDocument(cmDoc);
         }

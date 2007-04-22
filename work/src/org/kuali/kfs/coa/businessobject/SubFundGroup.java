@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class SubFundGroup extends PersistableBusinessObjectBase {
+public class SubFundGroup extends BusinessObjectBase {
 
     /**
      * Default no-arg constructor.
@@ -51,7 +51,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupCode attribute.
      * 
-     * @return Returns the subFundGroupCode
+     * @return - Returns the subFundGroupCode
      * 
      */
     public String getSubFundGroupCode() {
@@ -70,7 +70,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupDescription attribute.
      * 
-     * @return Returns the subFundGroupDescription
+     * @return - Returns the subFundGroupDescription
      * 
      */
     public String getSubFundGroupDescription() {
@@ -90,7 +90,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the _SubfundgrpActivityIndicator_ attribute.
      * 
-     * @return Returns the _SubfundgrpActivityIndicator_
+     * @return - Returns the _SubfundgrpActivityIndicator_
      * 
      */
     public boolean getSubfundgrpActivityIndicator() {
@@ -110,7 +110,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupTypeCode attribute.
      * 
-     * @return Returns the subFundGroupTypeCode
+     * @return - Returns the subFundGroupTypeCode
      * 
      */
     public String getSubFundGroupTypeCode() {
@@ -130,7 +130,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the financialReportingSortCode attribute.
      * 
-     * @return Returns the financialReportingSortCode
+     * @return - Returns the financialReportingSortCode
      * 
      */
     public String getFinancialReportingSortCode() {
@@ -150,7 +150,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupWagesIndicator attribute.
      * 
-     * @return Returns the subFundGroupWagesIndicator
+     * @return - Returns the subFundGroupWagesIndicator
      * 
      */
     public boolean isSubFundGroupWagesIndicator() {

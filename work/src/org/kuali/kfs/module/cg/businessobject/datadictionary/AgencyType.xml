@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/AgencyType.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,15 +21,15 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.AgencyType">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Agency Type Inquiry</title>
 
-            <inquirySections><inquirySection title="Agency Type Details"><inquiryFields>
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
-                <field attributeName="rowActiveIndicator" />
+                <field attributeName="active" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
@@ -41,13 +43,13 @@
             <lookupFields>
                 <lookupField attributeName="code" required="false" />
                 <lookupField attributeName="name" required="false" />
-                <lookupField attributeName="rowActiveIndicator" required="false" />
+                <lookupField attributeName="active" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="code" noInquiry="true" />
                 <field attributeName="name" />
-                <field attributeName="rowActiveIndicator" />
+                <field attributeName="active" />
             </resultFields>
         </lookup>
 
@@ -55,8 +57,8 @@
 
         <attributes>
             <attribute name="code" forceUppercase="true">
-                <label>Agency Type Code</label>
-                <shortLabel>Agncy Typ Cd</shortLabel>
+                <label>Type Code</label>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>1</maxLength>
 
@@ -71,16 +73,12 @@
                 </control>
 
                 <summary>Agency Type Code</summary>
-                <description>
-					This is a one-letter designation that corresponds to the 
-					Type Description.  Examples include F=Federal, S=State of 
-					Indiana, and I=Commercial/Industrial.
-				</description>
+                <description>Agency Type Code</description>
             </attribute>
 
             <attribute name="name" forceUppercase="false">
-                <label>Agency Type Description</label>
-                <shortLabel>Type Desc</shortLabel>
+                <label>Type Description</label>
+                <shortLabel>description</shortLabel>
 
                 <maxLength>30</maxLength>
 
@@ -95,14 +93,10 @@
                 </control>
 
                 <summary>Agency Type Description</summary>
-                <description>
-					This is a description of the Agency type, or the category of 
-					business that the Agency falls into.  Examples include Federal, 
-					Commercial/Industrial, Non-Profit, or Other Government.
-				</description>
+                <description>The description of the Agency Type.</description>
             </attribute>
 
-            <attribute name="rowActiveIndicator" forceUppercase="false">
+            <attribute name="active" forceUppercase="false">
                 <label>Active Indicator</label>
                 <shortLabel>Active Indicator</shortLabel>
 
@@ -113,12 +107,7 @@
                 </control>
 
                 <summary>Active Indicator</summary>
-                <description>
-                	This field identifies whether the Agency Type is active in the 
-                	system or not.  Agency Types are typically marked as Active.  
-                	This allows historical records to reference inactive Agency Types 
-                	while restricting new Agencies from referencing them.
-                </description>
+                <description>Agency Type Active Indicator</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
