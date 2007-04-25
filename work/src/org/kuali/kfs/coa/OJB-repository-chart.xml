@@ -671,7 +671,7 @@
     <field-descriptor name="finObjectTypeIcrSelectionIndicator" column="FIN_OBJ_TYP_ICR_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="fundBalanceIndicator" column="FUND_BALANCE_CD" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="financialReportingSortCode" column="FIN_REPORT_SORT_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="accountCategoryCode" column="ACCT_CTGRY_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="accountCategoryCode" column="ACCTG_CTGRY_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <reference-descriptor name="accountCategory" class-ref="org.kuali.module.chart.bo.AccountCategory" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
@@ -1898,11 +1898,11 @@
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.chart.bo.AccountCategory" table="CA_ACCT_CTGRY_T">
-	<field-descriptor name="accountCategoryCode" column="ACCT_CTGRY_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+	<field-descriptor name="accountCategoryCode" column="ACCTG_CTGRY_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="accountCategoryDescription" column="ACCT_CTGRY_DESC" jdbc-type="VARCHAR"/>
-	<field-descriptor name="accountCategoryShortName" column="ACCT_CTGRY_SHRT_NM" jdbc-type="VARCHAR"/>
+	<field-descriptor name="accountCategoryDescription" column="ACCTG_CTGRY_DESC" jdbc-type="VARCHAR"/>
+	<field-descriptor name="accountCategoryShortName" column="ACCTG_CTGRY_SHRT_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="financialReportingSortCode" column="FIN_REPORT_SORT_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="active" column="ROW_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
