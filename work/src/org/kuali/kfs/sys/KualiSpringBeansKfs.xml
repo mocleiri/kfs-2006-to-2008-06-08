@@ -144,7 +144,7 @@
 		<property name="listItem" value="scheduleJobTrigger" />
 	</bean>
 	
-	<bean id="scheduler" class="org.kuali.core.util.spring.SchedulerFactoryBean">
+	<bean id="scheduler" class="org.kuali.core.batch.SchedulerFactoryBean">
 		<property name="useQuartzScheduling" value="${use.quartz.scheduling}" />
 		<property name="useJdbcJobstore" value="${use.quartz.jdbc.jobstore}" />
 		<property name="dataSourceReference" ref="dataSource" />
@@ -160,7 +160,7 @@
 		</property>
 	</bean>
 	
-	<bean id="schedulerService" class="org.kuali.core.service.impl.SchedulerServiceImpl">
+	<bean id="schedulerService" class="org.kuali.core.batch.SchedulerServiceImpl">
 		<property name="scheduler" ref="scheduler" />
 		<property name="jobListener" ref="jobListener" />
 		<property name="moduleService" ref="kualiModuleService" />
