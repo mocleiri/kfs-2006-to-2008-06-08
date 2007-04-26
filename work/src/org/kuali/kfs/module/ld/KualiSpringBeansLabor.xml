@@ -38,7 +38,7 @@
 		</property>
 		<property name="dataDictionaryPackages">
 			<list>
-				<value>org.kuali.module.labor.datadictionary</value>
+				<value>org/kuali/module/labor/datadictionary</value>
 			</list>
 		</property>
 		<property name="databaseRepositoryFilePaths">
@@ -79,8 +79,7 @@
 		<property name="kualiRuleService">
 			<ref bean="kualiRuleService" />
 		</property>	
-	</bean>
-	
+	</bean>	
     <bean id="laborGeneralLedgerEntryService" class="org.kuali.module.labor.service.impl.LaborGeneralLedgerEntryServiceImpl">
         <property name="businessObjectService">
             <ref bean="businessObjectService" />
