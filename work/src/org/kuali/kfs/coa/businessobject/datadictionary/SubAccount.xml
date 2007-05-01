@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/SubAccount.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.SubAccount">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Sub-Account Code Inquiry</title>
@@ -226,7 +228,7 @@
                 <shortLabel>CostShareCOACode</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -261,8 +263,8 @@
             </attributeReference>
 
             <attributeReference name="a21SubAccount.financialIcrSeriesIdentifier" sourceClassName="org.kuali.module.chart.bo.A21SubAccount" sourceAttributeName="financialIcrSeriesIdentifier">
-                <label>Indirect Cost Rate</label>
-                <shortLabel>Indr Cost Rate</shortLabel>
+                <label>Financial ICR Series Identifier</label>
+                <shortLabel>FinICRSerID</shortLabel>
                 <required>false</required>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -277,7 +279,7 @@
                 <shortLabel>IcrCoaCd</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -304,7 +306,7 @@
                 <shortLabel>ICRTypeCd</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ICRTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ICRTypeValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
