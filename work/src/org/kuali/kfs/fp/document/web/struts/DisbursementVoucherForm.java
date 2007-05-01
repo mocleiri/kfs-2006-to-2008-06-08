@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.SimpleBooleanFormatter;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeExpense;
 import org.kuali.module.financial.bo.DisbursementVoucherPreConferenceRegistrant;
 import org.kuali.module.financial.bo.TravelPerDiem;
@@ -31,8 +31,10 @@ import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 
 /**
  * This class is the action form for the Disbursement Voucher.
+ * 
+ * 
  */
-public class DisbursementVoucherForm extends KualiAccountingDocumentFormBase {
+public class DisbursementVoucherForm extends KualiTransactionalDocumentFormBase {
     private static final long serialVersionUID = 1L;
 
     private DisbursementVoucherNonEmployeeExpense newNonEmployeeExpenseLine;
@@ -122,7 +124,7 @@ public class DisbursementVoucherForm extends KualiAccountingDocumentFormBase {
      */
     public List getTravelPerDiemCategoryCodes() {
         Map criteria = new HashMap();
-        criteria.put("fiscalYear", SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear());
+        criteria.put("fiscalYear", SpringServiceLocator.getDateTimeService().getCurrentFiscalYear());
 
         return (List) SpringServiceLocator.getKeyValuesService().findMatching(TravelPerDiem.class, criteria);
     }
