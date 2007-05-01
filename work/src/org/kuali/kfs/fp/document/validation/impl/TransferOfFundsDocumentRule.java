@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,31 +23,31 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.KeyConstants;
+import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.TransferOfFundsDocument;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
  * Business rule(s) applicable to Transfer of Funds documents.
+ * 
+ * 
  */
-public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase implements TransferOfFundsDocumentRuleConstants {
+public class TransferOfFundsDocumentRule extends TransactionalDocumentRuleBase implements TransferOfFundsDocumentRuleConstants {
 
     /**
      * Set attributes of an offset pending entry according to rules specific to TransferOfFundsDocument.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#customizeOffsetGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#customizeOffsetGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry,
      *      org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
-    protected boolean customizeOffsetGeneralLedgerPendingEntry(AccountingDocument financialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+    @Override
+    protected boolean customizeOffsetGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
         offsetEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_ACTUAL);
         return true;
     }
@@ -55,22 +55,21 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
     /**
      * Set attributes of an explicit pending entry according to rules specific to TransferOfFundsDocument.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
-    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument financialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        Options options = SpringServiceLocator.getOptionsService().getCurrentYearOptions();
-
+    @Override
+    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
         explicitEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_ACTUAL);
         if (isExpense(accountingLine)) {
-            explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferExpenseCd());
+            explicitEntry.setFinancialObjectTypeCode(OBJECT_TYPE_CODE.TRANSFER_EXPENSE);
         }
         else {
             if (isIncome(accountingLine)) {
-                explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferIncomeCd());
+                explicitEntry.setFinancialObjectTypeCode(OBJECT_TYPE_CODE.TRANSFER_INCOME);
             }
             else {
-                explicitEntry.setFinancialObjectTypeCode(AccountingDocumentRuleUtil.getObjectCodeTypeCodeWithoutSideEffects(accountingLine));
+                explicitEntry.setFinancialObjectTypeCode(TransactionalDocumentRuleUtil.getObjectCodeTypeCodeWithoutSideEffects(accountingLine));
             }
         }
     }
@@ -83,22 +82,22 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
      * <li> target lines have the oposite debit/credit codes as the source lines
      * </ol>
      * 
-     * @see IsDebitUtils#isDebitConsideringNothingPositiveOnly(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringNothingPositiveOnly(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(AccountingDocument financialDocument, AccountingLine accountingLine) {
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         // only allow income or expense
         if (!isIncome(accountingLine) && !isExpense(accountingLine)) {
             throw new IllegalStateException(IsDebitUtils.isDebitCalculationIllegalStateExceptionMessage);
         }
         boolean isDebit = false;
         if (accountingLine.isSourceAccountingLine()) {
-            isDebit = IsDebitUtils.isDebitConsideringNothingPositiveOnly(this, financialDocument, accountingLine);
+            isDebit = IsDebitUtils.isDebitConsideringNothingPositiveOnly(this, transactionalDocument, accountingLine);
         }
         else if (accountingLine.isTargetAccountingLine()) {
-            isDebit = !IsDebitUtils.isDebitConsideringNothingPositiveOnly(this, financialDocument, accountingLine);
+            isDebit = !IsDebitUtils.isDebitConsideringNothingPositiveOnly(this, transactionalDocument, accountingLine);
         }
         else {
             throw new IllegalStateException(IsDebitUtils.isInvalidLineTypeIllegalArgumentExceptionMessage);
@@ -110,13 +109,13 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
     /**
      * Overrides to check balances across mandator transfers and non-mandatory transfers. Also checks balances across fund groups.
      * 
-     * @see FinancialDocumentRuleBase#isDocumentBalanceValid(FinancialDocument)
+     * @see TransactionalDocumentRuleBase#isDocumentBalanceValid(TransactionalDocument)
      */
     @Override
-    protected boolean isDocumentBalanceValid(AccountingDocument financialDocument) {
-        boolean isValid = super.isDocumentBalanceValid(financialDocument);
+    protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
+        boolean isValid = super.isDocumentBalanceValid(transactionalDocument);
 
-        TransferOfFundsDocument tofDoc = (TransferOfFundsDocument) financialDocument;
+        TransferOfFundsDocument tofDoc = (TransferOfFundsDocument) transactionalDocument;
         // make sure accounting lines balance across mandatory and non-mandatory transfers
         if (isValid) {
             isValid = isMandatoryTransferTotalAndNonMandatoryTransferTotalBalanceValid(tofDoc);

@@ -348,7 +348,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
                     populateExplicitGeneralLedgerPendingEntry(FinancialDocument, accountingLine, sequenceHelper, explicitEntry);
 
                     /* override and set object type to transfer */
-                    explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferIncomeCd());
+                    explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferIncomeCode());
 
                     /* set document type to tof */
                     explicitEntry.setFinancialDocumentTypeCode(getTransferDocumentType());
