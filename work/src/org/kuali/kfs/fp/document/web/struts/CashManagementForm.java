@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.kuali.Constants.DocumentStatusCodes.CashReceipt;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.core.web.format.TimestampFullPrecisionFormatter;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
-import org.kuali.kfs.KFSConstants.DocumentStatusCodes.CashReceipt;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.bo.Deposit;
 import org.kuali.module.financial.document.CashManagementDocument;
@@ -241,7 +243,7 @@ public class CashManagementForm extends KualiDocumentFormBase {
             documentNumber = crd.getDocumentNumber();
             description = crd.getDocumentHeader().getFinancialDocumentDescription();
             createDate = crd.getDocumentHeader().getWorkflowDocument().getCreateDate();
-            totalAmount = crd.getTotalDollarAmount();
+            totalAmount = crd.getSumTotalAmount();
         }
 
         /**

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/coa/document/validation/impl/ChartRuleTestBase.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +17,15 @@
  */
 package org.kuali.module.chart.rules;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getDictionaryValidationService;
-import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getDictionaryValidationService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 
 import java.util.Iterator;
 import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.document.MaintenanceDocumentBase;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
@@ -30,8 +34,6 @@ import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.util.ErrorMessage;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.test.KualiTestBase;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -47,7 +49,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * @return a populated MaintenanceDocument instance
      * 
      */
-    protected MaintenanceDocument newMaintDoc(PersistableBusinessObject newBo) {
+    protected MaintenanceDocument newMaintDoc(BusinessObject newBo) {
         return newMaintDoc(null, newBo);
     }
 
@@ -61,7 +63,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * @return a populated MaintenanceDocument instance
      * 
      */
-    protected MaintenanceDocument newMaintDoc(PersistableBusinessObject oldBo, PersistableBusinessObject newBo) {
+    protected MaintenanceDocument newMaintDoc(BusinessObject oldBo, BusinessObject newBo) {
 
         // disallow null value for newBo
         if (null == newBo) {
@@ -102,7 +104,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * @return a populated and ready-to-test rule, of the specified class
      * 
      */
-    protected MaintenanceDocumentRule setupMaintDocRule(PersistableBusinessObject newBo, Class ruleClass) {
+    protected MaintenanceDocumentRule setupMaintDocRule(BusinessObject newBo, Class ruleClass) {
         MaintenanceDocument maintDoc = newMaintDoc(newBo);
         return setupMaintDocRule(maintDoc, ruleClass);
     }
@@ -120,7 +122,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * @return a populated and ready-to-test rule, of the specified class
      * 
      */
-    protected MaintenanceDocumentRule setupMaintDocRule(PersistableBusinessObject oldBo, PersistableBusinessObject newBo, Class ruleClass) {
+    protected MaintenanceDocumentRule setupMaintDocRule(BusinessObject oldBo, BusinessObject newBo, Class ruleClass) {
 
         MaintenanceDocument maintDoc = newMaintDoc(oldBo, newBo);
 
@@ -157,7 +159,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
         return rule;
     }
 
-    protected void testDefaultExistenceCheck(PersistableBusinessObject bo, String fieldName, boolean shouldFail) {
+    protected void testDefaultExistenceCheck(BusinessObject bo, String fieldName, boolean shouldFail) {
 
         // init the error path
         GlobalVariables.getErrorMap().addToErrorPath("document.newMaintainableObject");
@@ -169,7 +171,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
         GlobalVariables.getErrorMap().removeFromErrorPath("document.newMaintainableObject");
 
         // assert that the existence of the error is what is expected
-        assertFieldErrorExistence(fieldName, KFSKeyConstants.ERROR_EXISTENCE, shouldFail);
+        assertFieldErrorExistence(fieldName, KeyConstants.ERROR_EXISTENCE, shouldFail);
 
     }
     
@@ -246,7 +248,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * 
      */
     protected void assertGlobalErrorExists(String errorKey) {
-        boolean result = GlobalVariables.getErrorMap().fieldHasMessage(KFSConstants.DOCUMENT_ERRORS, errorKey);
+        boolean result = GlobalVariables.getErrorMap().fieldHasMessage(Constants.DOCUMENT_ERRORS, errorKey);
         assertTrue("Document should contain errorKey: " + errorKey, result);
     }
 }

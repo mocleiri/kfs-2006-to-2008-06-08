@@ -18,11 +18,11 @@ package org.kuali.module.kra.budget.rules.budget;
 import java.sql.Date;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.rules.PreRulesContinuationBase;
 import org.kuali.core.service.DataDictionaryService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.KraKeyConstants;
@@ -105,7 +105,7 @@ public class BudgetDocumentPreRules extends PreRulesContinuationBase {
                     ((BudgetForm) form).getNewPeriod().setBudgetPeriodBeginDate(defaultNextBeginDate);
                 }
 
-                event.setActionForwardName(KFSConstants.MAPPING_BASIC);
+                event.setActionForwardName(Constants.MAPPING_BASIC);
                 return false;
             }
         }
@@ -136,7 +136,7 @@ public class BudgetDocumentPreRules extends PreRulesContinuationBase {
 
             if (deleteTask) {
                 budgetDocument.getBudget().getTasks().remove(taskToDelete);
-                event.setActionForwardName(KFSConstants.MAPPING_BASIC);
+                event.setActionForwardName(Constants.MAPPING_BASIC);
                 return false;
             }
         }
@@ -179,7 +179,7 @@ public class BudgetDocumentPreRules extends PreRulesContinuationBase {
             boolean deleteCostShare = super.askOrAnalyzeYesNoQuestion(KraConstants.DELETE_COST_SHARE_QUESTION_ID, questionText);
 
             if (!deleteCostShare) {
-                event.setActionForwardName(KFSConstants.MAPPING_BASIC);
+                event.setActionForwardName(Constants.MAPPING_BASIC);
                 return false;
             }
         }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +29,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.bo.AdHocRoutePerson;
 import org.kuali.core.bo.AdHocRouteWorkgroup;
@@ -34,12 +38,11 @@ import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.question.ConfirmationQuestion;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.kra.KraConstants;
-import org.kuali.module.kra.KraKeyConstants;
-import org.kuali.module.kra.bo.AdhocPerson;
-import org.kuali.module.kra.bo.AdhocWorkgroup;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.struts.action.KualiDocumentActionBase;
+import org.kuali.module.kra.budget.KraConstants;
+import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
+import org.kuali.module.kra.budget.bo.BudgetAdHocWorkgroup;
 import org.kuali.module.kra.budget.rules.event.EnterModularEvent;
 import org.kuali.module.kra.budget.rules.event.RunAuditEvent;
 import org.kuali.module.kra.budget.web.struts.form.BudgetCostShareFormHelper;
@@ -47,13 +50,14 @@ import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.module.kra.budget.web.struts.form.BudgetIndirectCostFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetNonpersonnelFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetOverviewFormHelper;
-import org.kuali.module.kra.web.struts.action.ResearchDocumentActionBase;
+
+import edu.iu.uis.eden.clientapp.IDocHandler;
 
 /**
  * This class handles Actions for Research Administration.
  */
 
-public class BudgetAction extends ResearchDocumentActionBase {
+public class BudgetAction extends KualiDocumentActionBase {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetAction.class);
 
@@ -68,7 +72,7 @@ public class BudgetAction extends ResearchDocumentActionBase {
         }
 
         if (!GlobalVariables.getErrorMap().isEmpty() && !allowsNavigate(GlobalVariables.getErrorMap())) {
-            return mapping.findForward(KFSConstants.MAPPING_BASIC);
+            return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
         budgetForm.sortCollections();
@@ -76,47 +80,28 @@ public class BudgetAction extends ResearchDocumentActionBase {
         return forward;
     }
     
-
-    
-    @Override
-    /**
-     * Overriding headerTab to customize how clearing tab state works on Budget.  Specifically, additional attributes (selected task and period) should be cleared any time header navigation occurs.
-     */
-    public ActionForward headerTab(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-        BudgetForm budgetForm = (BudgetForm)form;
-
-        // This is so that tab states are not shared between pages.
-        budgetForm.newTabState(true, true);
-
-        
-        return super.headerTab(mapping, form, request, response);
-    }
-
-
-
     public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         
         BudgetForm budgetForm = (BudgetForm) form;
 
-        Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
+        Object question = request.getParameter(Constants.QUESTION_INST_ATTRIBUTE_NAME);
         KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
         // Logic for DocCancelQuestion.
         if (question == null) {
             // Ask for confirmation.
-            return this.performQuestionWithoutInput(mapping, form, request, response, KFSConstants.DOCUMENT_DELETE_QUESTION, KraConstants.QUESTION_ROUTE_DOCUMENT_TO_COMPLETE, KFSConstants.CONFIRMATION_QUESTION, "route", "0");
+            return this.performQuestionWithoutInput(mapping, form, request, response, Constants.DOCUMENT_DELETE_QUESTION, KraConstants.QUESTION_ROUTE_DOCUMENT_TO_COMPLETE, Constants.CONFIRMATION_QUESTION, "route", "0");
         }
 
-        Object buttonClicked = request.getParameter(KFSConstants.QUESTION_CLICKED_BUTTON);
+        Object buttonClicked = request.getParameter(Constants.QUESTION_CLICKED_BUTTON);
 
-        if ((KFSConstants.DOCUMENT_DELETE_QUESTION.equals(question)) && ConfirmationQuestion.YES.equals(buttonClicked)) {
-            budgetForm.setAdHocRoutePersons(convertToAdHocRoutePersons(budgetForm.getBudgetDocument().getAdhocPersons()));
-            budgetForm.setAdHocRouteWorkgroups(convertToAdHocRouteWorkgroups(budgetForm.getBudgetDocument().getAdhocWorkgroups()));
+        if ((Constants.DOCUMENT_DELETE_QUESTION.equals(question)) && ConfirmationQuestion.YES.equals(buttonClicked)) {
+            budgetForm.setAdHocRoutePersons(convertToAdHocRoutePersons(budgetForm.getBudgetDocument().getBudget().getAdHocPermissions()));
+            budgetForm.setAdHocRouteWorkgroups(convertToAdHocRouteWorkgroups(budgetForm.getBudgetDocument().getBudget().getAdHocWorkgroups()));
             return super.route(mapping, form, request, response);
         }
         
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
 
     }
 
@@ -131,7 +116,7 @@ public class BudgetAction extends ResearchDocumentActionBase {
      */
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         BudgetForm budgetForm = (BudgetForm) form;
-        budgetForm.setMethodToCall(KFSConstants.SAVE_METHOD);
+        budgetForm.setMethodToCall(Constants.SAVE_METHOD);
 
         // Check if user has permission to save
         budgetForm.populateAuthorizationFields(SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(budgetForm.getBudgetDocument()));
@@ -143,7 +128,7 @@ public class BudgetAction extends ResearchDocumentActionBase {
             budgetForm.newTabState(true, true);
             return mapping.findForward("auditmode");
         }
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -162,11 +147,23 @@ public class BudgetAction extends ResearchDocumentActionBase {
         budgetForm.setDocId(budgetForm.getBudgetDocument().getDocumentNumber());
         this.loadDocument(budgetForm);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
+    }
+
+    public ActionForward docHandler(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        ActionForward forward = super.docHandler(mapping, form, request, response);
+        BudgetForm budgetForm = (BudgetForm) form;
+
+        if (IDocHandler.INITIATE_COMMAND.equals(budgetForm.getCommand())) {
+            budgetForm.getBudgetDocument().getBudget().setDocumentNumber(budgetForm.getBudgetDocument().getDocumentNumber());
+            SpringServiceLocator.getBudgetService().initializeBudget(budgetForm.getBudgetDocument());
+        }
+        return forward;
     }
 
     public ActionForward update(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward overview(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -174,6 +171,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
         this.load(mapping, form, request, response);
 
         BudgetForm budgetForm = (BudgetForm) form;
+
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
 
         budgetForm.setBudgetOverviewFormHelper(new BudgetOverviewFormHelper(budgetForm));
 
@@ -185,6 +185,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
         this.load(mapping, form, request, response);
 
         BudgetForm budgetForm = (BudgetForm) form;
+
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
 
         // Set default task name
         String DEFAULT_BUDGET_TASK_NAME = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "defaultBudgetTaskName");
@@ -208,9 +211,24 @@ public class BudgetAction extends ResearchDocumentActionBase {
 
         BudgetForm budgetForm = (BudgetForm) form;
 
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
+
         return mapping.findForward("template");
     }
 
+    public ActionForward notes(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        this.load(mapping, form, request, response);
+
+        BudgetForm budgetForm = (BudgetForm) form;
+
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
+
+        return mapping.findForward("notes");
+    }
+    
     public ActionForward personnel(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         this.load(mapping, form, request, response);
@@ -231,6 +249,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
         this.load(mapping, form, request, response);
         BudgetForm budgetForm = (BudgetForm) form;
 
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
+
         setupNonpersonnelCategories(budgetForm);
         budgetForm.setBudgetNonpersonnelFormHelper(new BudgetNonpersonnelFormHelper(budgetForm));
 
@@ -241,6 +262,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
 
         this.load(mapping, form, request, response);
         BudgetForm budgetForm = (BudgetForm) form;
+
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
 
         SpringServiceLocator.getBudgetModularService().generateModularBudget(budgetForm.getBudgetDocument().getBudget(), budgetForm.getNonpersonnelCategories());
 
@@ -254,6 +278,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
         this.load(mapping, form, request, response);
 
         BudgetForm budgetForm = (BudgetForm) form;
+
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
 
         // Make sure our IDC object is properly formed. This will also perform initial calculations for BudgetTaskPeriodIndirectCost
         // objects.
@@ -270,6 +297,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
         this.load(mapping, form, request, response);
 
         BudgetForm budgetForm = (BudgetForm) form;
+
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
         
         setupBudgetCostSharePermissionDisplay(budgetForm);
 
@@ -287,6 +317,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
 
         BudgetForm budgetForm = (BudgetForm) form;
 
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
+
         return mapping.findForward("output");
     }
 
@@ -295,6 +328,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
         this.load(mapping, form, request, response);
 
         BudgetForm budgetForm = (BudgetForm) form;
+
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
 
         return mapping.findForward("auditmode");
     }
@@ -312,6 +348,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
         budgetForm.getBudgetDocument().populateDocumentForRouting();
         budgetForm.getBudgetDocument().getDocumentHeader().getWorkflowDocument().saveRoutingData();
 
+        // This is so that tab states are not shared between pages.
+        budgetForm.newTabState(true, true);
+
         return mapping.findForward("permissions");
     }
 
@@ -324,7 +363,7 @@ public class BudgetAction extends ResearchDocumentActionBase {
      * @throws Exception
      */
     protected String buildBudgetConfirmationQuestion(String confirmationContext, KualiConfigurationService kualiConfiguration) throws Exception {
-        return StringUtils.replace(kualiConfiguration.getPropertyString(KraKeyConstants.QUESTION_KRA_DELETE_CONFIRMATION), "{0}", confirmationContext);
+        return StringUtils.replace(kualiConfiguration.getPropertyString(KeyConstants.QUESTION_BUDGET_DELETE_CONFIRMATION), "{0}", confirmationContext);
     }
 
     /**
@@ -365,9 +404,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
         budgetForm.setNumberOfAcademicYearSubdivisions(Integer.parseInt(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS)));
     }
     
-    private static List<AdHocRoutePerson> convertToAdHocRoutePersons(List<AdhocPerson> adHocPermissions) {
+    private static List<AdHocRoutePerson> convertToAdHocRoutePersons(List<BudgetAdHocPermission> adHocPermissions) {
         List<AdHocRoutePerson> adHocRoutePersons = new ArrayList<AdHocRoutePerson>();
-        for (AdhocPerson adHocPermission: adHocPermissions) {
+        for (BudgetAdHocPermission adHocPermission: adHocPermissions) {
             SpringServiceLocator.getPersistenceService().refreshAllNonUpdatingReferences(adHocPermission);
             AdHocRoutePerson adHocRoutePerson = new AdHocRoutePerson();
             adHocRoutePerson.setId(adHocPermission.getUser().getPersonUserIdentifier());
@@ -377,9 +416,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
         return adHocRoutePersons;
     }
     
-    private static List<AdHocRouteWorkgroup> convertToAdHocRouteWorkgroups(List<AdhocWorkgroup> adHocWorkgroups) {
+    private static List<AdHocRouteWorkgroup> convertToAdHocRouteWorkgroups(List<BudgetAdHocWorkgroup> adHocWorkgroups) {
         List<AdHocRouteWorkgroup> adHocRouteWorkgroups = new ArrayList<AdHocRouteWorkgroup>();
-        for (AdhocWorkgroup adHocWorkgroup: adHocWorkgroups) {
+        for (BudgetAdHocWorkgroup adHocWorkgroup: adHocWorkgroups) {
             SpringServiceLocator.getPersistenceService().refreshAllNonUpdatingReferences(adHocWorkgroup);
             AdHocRouteWorkgroup adHocRouteWorkgroup = new AdHocRouteWorkgroup();
             adHocRouteWorkgroup.setId(adHocWorkgroup.getWorkgroupName());

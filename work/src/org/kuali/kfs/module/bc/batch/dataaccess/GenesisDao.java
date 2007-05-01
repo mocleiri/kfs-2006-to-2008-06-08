@@ -18,7 +18,7 @@ import java.util.*;
 import org.kuali.module.budget.bo.*;
 
 public interface GenesisDao {
-    
+
     /*
      * return a map of values for the budget construction control flags
      * for the fiscal year (flag name, flag value)
@@ -49,32 +49,12 @@ public interface GenesisDao {
    
    // intialization for genesis
    public void clearDBForGenesis(Integer BaseYear);
-    
+   
    // pending budget construction general ledger
-   public void ensureObjectClassRIForBudget(Integer BaseYear);
    public void initialLoadToPBGL(Integer currentFiscalYear);
    public void updateToPBGL(Integer currentFiscalYear);
    
    // document creation
-   // create document with embedded workflow
-   public void createNewBCDocumentsFromGLCSF(Integer BaseYear,
-                                             boolean GLUpdatesAllowed,
-                                             boolean CSFUpdatesAllowed);
-   
-   // budget construction position
-   // (this table depends on an institution's payroll, but it must be consstructed
-   //  before budget construction appointment funding because the latter has a 
-   //  referential integrity constraint on it.  so, we provide a method here that
-   //  each institution can implement in their genesisDao.)
-   public void createNewBCPosition(Integer BaseYear,
-                                   boolean PosSyncAllowed,
-                                   boolean CSFUpdatesAllowed);
-
-   // budget construction CSF and budget construction appointment funding
-   public void buildAppointmentFundingAndBCSF(Integer BaseYear);
-   
-   // this is a junk method in genesis that was used to unit test various SQL
-   public void genesisUnitTest(Integer BaseYear);
+   public void createNewBCDocuments(Integer currentFiscalYear);
+   public void primeNewBCHeadersDocumentCreation(Integer currentFiscalYear);
 }
-
-

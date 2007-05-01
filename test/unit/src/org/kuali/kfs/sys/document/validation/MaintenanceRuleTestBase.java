@@ -18,6 +18,8 @@ package org.kuali.core.maintenance;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.document.MaintenanceDocumentBase;
@@ -30,8 +32,6 @@ import static org.kuali.kfs.util.SpringServiceLocator.getDictionaryValidationSer
 import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
 
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
@@ -170,7 +170,7 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
             GlobalVariables.getErrorMap().removeFromErrorPath("document.newMaintainableObject");
 
             // assert that the existence of the error is what is expected
-            assertFieldErrorExistence(fieldName, KFSKeyConstants.ERROR_EXISTENCE, shouldFail);
+            assertFieldErrorExistence(fieldName, KeyConstants.ERROR_EXISTENCE, shouldFail);
 
         }
 
@@ -260,7 +260,7 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
          * 
          */
         protected void assertGlobalErrorExists(String errorKey) {
-            boolean result = GlobalVariables.getErrorMap().fieldHasMessage(KFSConstants.DOCUMENT_ERRORS, errorKey);
+            boolean result = GlobalVariables.getErrorMap().fieldHasMessage(Constants.DOCUMENT_ERRORS, errorKey);
             assertTrue("Document should contain errorKey: " + errorKey, result);
         }
 

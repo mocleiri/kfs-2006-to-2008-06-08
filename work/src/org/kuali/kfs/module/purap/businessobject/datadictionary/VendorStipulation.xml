@@ -25,6 +25,7 @@
             <title>Vendor Stipulation Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            	<field attributeName="vendorStipulationIdentifier" />
             	<field attributeName="vendorStipulationName" />
             	<field attributeName="vendorStipulationDescription" />
                 <field attributeName="active" />        
@@ -43,12 +44,14 @@
             </defaultSort>
 
             <lookupFields>
+            	<lookupField attributeName="vendorStipulationIdentifier" required="false"/>
             	<lookupField attributeName="vendorStipulationName" required="false" />
             	<lookupField attributeName="vendorStipulationDescription" required="false" />
                 <lookupField attributeName="active" required="false" />      
             </lookupFields>
 
             <resultFields>
+            	<field attributeName="vendorStipulationIdentifier" />
             	<field attributeName="vendorStipulationName" />          	
             	<field attributeName="vendorStipulationDescription" />
                 <field attributeName="active" />        
@@ -67,7 +70,7 @@
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="12" />
                 </control>
 
                 <summary>vendorStipulationIdentifier</summary>

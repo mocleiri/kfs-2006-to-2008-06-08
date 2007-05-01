@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +17,20 @@
  */
 package org.kuali.module.kra.budget.service.impl;
 
-import java.util.Date;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.document.Document;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
-import org.kuali.core.util.DateUtils;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetFringeRate;
-import org.kuali.module.kra.budget.bo.BudgetGraduateAssistantRate;
 import org.kuali.module.kra.budget.bo.BudgetModular;
 import org.kuali.module.kra.budget.bo.BudgetModularPeriod;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
@@ -51,11 +48,14 @@ import org.kuali.module.kra.budget.service.BudgetModularService;
 import org.kuali.module.kra.budget.service.BudgetPersonnelService;
 import org.kuali.module.kra.budget.service.BudgetService;
 import org.kuali.module.kra.budget.web.struts.form.BudgetNonpersonnelCopyOverBoHelper;
-import org.springframework.transaction.annotation.Transactional;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
-@Transactional
+/**
+ * This class...
+ * 
+ * 
+ */
 public class BudgetServiceImpl implements BudgetService {
 
     private BudgetFringeRateService budgetFringeRateService;
@@ -66,14 +66,12 @@ public class BudgetServiceImpl implements BudgetService {
     private BudgetModularService budgetModularService;
     private BudgetIndirectCostService budgetIndirectCostService;
     private BusinessObjectService businessObjectService;
-    private DateTimeService dateTimeService;
-    
+
     /**
      * @see org.kuali.module.kra.budget.service.BudgetService#initializeBudget(org.kuali.module.kra.budget.bo.Budget)
      */
     public void initializeBudget(BudgetDocument budgetDocument) {
         Budget budget = budgetDocument.getBudget();
-        budget.setDocumentNumber(budgetDocument.getDocumentNumber());
         budgetFringeRateService.setupDefaultFringeRates(budget);
         budgetGraduateAssistantRateService.setupDefaultGradAssistantRates(budget);
         budgetIndirectCostService.setupIndirectCostRates(budget);
@@ -107,8 +105,7 @@ public class BudgetServiceImpl implements BudgetService {
 
                 // Find what's changed that has a down-stream effect on other parts of the Budget, if anything, since the last save
                 List modifiedPeriods = findModifiedPeriods(budgetDocument, databaseBudgetDocument);
-                List<BudgetFringeRate> modifiedFringeRates = findModifiedFringeRates(budgetDocument, databaseBudgetDocument);
-                List<BudgetGraduateAssistantRate> modifiedGraduateAssistantRates = findModifiedGraduateAssistantRates(budgetDocument, databaseBudgetDocument);
+                List modifiedFringeRates = findModifiedFringeRates(budgetDocument, databaseBudgetDocument);
                 // List modifiedPersonnel = findModifiedPersonnel(budgetDocument, databaseBudgetDocument);
 
                 boolean isPersonnelInflationRateModified = isPersonnelInflationRateModified(budgetDocument, databaseBudgetDocument);
@@ -134,37 +131,12 @@ public class BudgetServiceImpl implements BudgetService {
                 List modifiedUserAppointmentTaskPeriods = findModifiedUserAppointmentTaskPeriods(budgetDocument, databaseBudgetDocument);
                 List modifiedNonpersonnel = findModifiedNonpersonnel(budgetDocument, databaseBudgetDocument);
 
-                if (budget.isAgencyModularIndicator() && ((modifiedPeriods.size() > 0 || modifiedUserAppointmentTaskPeriods.size() > 0) || modifiedNonpersonnel.size() > 0)) {
+                if (budgetDocument.getBudget().isAgencyModularIndicator() && ((modifiedPeriods.size() > 0 || modifiedUserAppointmentTaskPeriods.size() > 0) || modifiedNonpersonnel.size() > 0)) {
                     updateModular(budgetDocument);
-                }
-
-                budget.setFringeRates(databaseBudgetDocument.getBudget().getFringeRates());
-                //Update timestamp of modified Fringe Rates
-                for (BudgetFringeRate modifiedBudgetFringeRate : modifiedFringeRates) {
-                    ObjectUtils.removeObjectWithIdentitcalKey(budget.getFringeRates(), modifiedBudgetFringeRate);
-                    modifiedBudgetFringeRate.setBudgetLastUpdateTimestamp(dateTimeService.getCurrentTimestamp());
-                }
-                
-                //Replace all of the fringe rates with what's in the database.  remove all of the modified ones (the .equals() method does not check timestamp) and re-add them.
-                budget.getFringeRates().addAll(modifiedFringeRates);
-                
-                budget.setGraduateAssistantRates(databaseBudgetDocument.getBudget().getGraduateAssistantRates());
-                //Update timestamp of modified Fringe Rates
-                for (BudgetGraduateAssistantRate modifiedBudgetGraduateRate : modifiedGraduateAssistantRates) {
-                    ObjectUtils.removeObjectWithIdentitcalKey(budget.getGraduateAssistantRates(), modifiedBudgetGraduateRate);
-                    modifiedBudgetGraduateRate.setLastUpdateTimestamp(dateTimeService.getCurrentTimestamp());
-                }
-                 
-                //Replace all of the fringe rates with what's in the database.  remove all of the modified ones (the .equals() method does not check timestamp) and re-add them.
-                budget.getGraduateAssistantRates().addAll(modifiedGraduateAssistantRates);
-                
-            } else {
-                for (BudgetFringeRate budgetFringeRate : budgetDocument.getBudget().getFringeRates()) {
-                    budgetFringeRate.setBudgetLastUpdateTimestamp(dateTimeService.getCurrentTimestamp());
                 }
             }
             
-            // Add new data, based on changes that may have occurred prior to the save (e.g., Project Director from Parameters)
+//          Add new data, based on changes that may have occurred prior to the save (e.g., Project Director from Parameters)
             budgetPersonnelService.reconcileProjectDirector(budgetDocument);
 
             // Add new Cost Share data based on personnel
@@ -337,9 +309,12 @@ public class BudgetServiceImpl implements BudgetService {
 
     private void updatePersonnelCostShare(BudgetDocument budgetDocument) {
         // if Institution Cost Share check box check box is un-checked, set the corresponding amounts to zero.
-        for (BudgetUser budgetUser : budgetDocument.getBudget().getPersonnel()) {
-            for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
-                for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
+        for (Iterator budgetUserIter = budgetDocument.getBudget().getPersonnel().iterator(); budgetUserIter.hasNext();) {
+            BudgetUser budgetUser = (BudgetUser) budgetUserIter.next();
+            for (Iterator userAppointmentTaskIter = budgetUser.getUserAppointmentTasks().iterator(); userAppointmentTaskIter.hasNext();) {
+                UserAppointmentTask userAppointmentTask = (UserAppointmentTask) userAppointmentTaskIter.next();
+                for (Iterator userAppointmentTaskPeriodIter = userAppointmentTask.getUserAppointmentTaskPeriods().iterator(); userAppointmentTaskPeriodIter.hasNext();) {
+                    UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
                     userAppointmentTaskPeriod.setInstitutionCostSharePercentEffortAmount(new KualiInteger(0));
                     userAppointmentTaskPeriod.setUserInstitutionHours(new KualiInteger(0));
                     userAppointmentTaskPeriod.setInstitutionFullTimeEquivalentPercent(new KualiInteger(0));
@@ -489,26 +464,6 @@ public class BudgetServiceImpl implements BudgetService {
         }
         return modifiedFringeRates;
     }
-    
-    /**
-     * This method will find and report any Appointment Types that have had changes to the associated Fringe Rates since the last
-     * save.
-     * 
-     * @param budgetDocument
-     * @return List a list of appointments whose fringe rates have been modified
-     */
-    private List findModifiedGraduateAssistantRates(BudgetDocument budgetDocument, BudgetDocument databaseBudgetDocument) {
-        List modifiedGradAsstRates = new ArrayList();
-
-        List<BudgetGraduateAssistantRate> budgetGradAsstRates = budgetDocument.getBudget().getGraduateAssistantRates();
-
-        for (BudgetGraduateAssistantRate budgetGradAsstRate : budgetGradAsstRates) {
-            if (!databaseBudgetDocument.getBudget().getGraduateAssistantRates().contains(budgetGradAsstRate)) {
-                modifiedGradAsstRates.add(budgetGradAsstRate);
-            }
-        }
-        return modifiedGradAsstRates;
-    }
 
     private List findModifiedUserAppointmentTaskPeriods(BudgetDocument budgetDocument, BudgetDocument databaseBudgetDocument) {
         List modifiedList = new ArrayList();
@@ -613,9 +568,5 @@ public class BudgetServiceImpl implements BudgetService {
 
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
-    }
-
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
     }
 }

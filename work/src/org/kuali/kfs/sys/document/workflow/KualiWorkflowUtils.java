@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,25 +27,27 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.util.FieldUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
-import org.kuali.core.workflow.WorkflowUtils;
-import org.kuali.core.workflow.attribute.WorkflowLookupableImpl;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.workflow.attribute.WorkflowLookupableImpl;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import edu.iu.uis.eden.doctype.DocumentType;
 import edu.iu.uis.eden.lookupable.Field;
 import edu.iu.uis.eden.lookupable.Row;
+import edu.iu.uis.eden.routetemplate.RouteContext;
+import edu.iu.uis.eden.routetemplate.xmlrouting.WorkflowFunctionResolver;
+import edu.iu.uis.eden.routetemplate.xmlrouting.WorkflowNamespaceContext;
 
 /**
  * This class contains static utility methods used by the Kuali Workflow Attribute Classes.
@@ -53,13 +55,17 @@ import edu.iu.uis.eden.lookupable.Row;
  * 
  * 
  */
-public class KualiWorkflowUtils extends WorkflowUtils {
+public class KualiWorkflowUtils {
     private static final Logger LOG = Logger.getLogger(KualiWorkflowUtils.class);
+    private static final String XPATH_ROUTE_CONTEXT_KEY = "_xpathKey";
+    public static final String XSTREAM_SAFE_PREFIX = "wf:xstreamsafe('";
+    public static final String XSTREAM_SAFE_SUFFIX = "')";
+    public static final String XSTREAM_MATCH_ANYWHERE_PREFIX = "//";
+    public static final String XSTREAM_MATCH_RELATIVE_PREFIX = "./";
     public static final String NEW_MAINTAINABLE_PREFIX = KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + "newMaintainableObject/businessObject/";
     public static final String OLD_MAINTAINABLE_PREFIX = KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + "oldMaintainableObject/businessObject/";
     public static final String ACCOUNT_DOC_TYPE = "KualiAccountMaintenanceDocument";
     public static final String ACCOUNT_DEL_DOC_TYPE = "KualiAccountDelegateMaintenanceDocument";
-    public static final String ACCOUNT_DELEGATE_GLOBAL_DOC_TYPE = "KualiDelegateChangeDocument";
     public static final String SUB_ACCOUNT_DOC_TYPE = "KualiSubAccountMaintenanceDocument";
     public static final String SUB_OBJECT_DOC_TYPE = "KualiSubObjectMaintenanceDocument";
     public static final String INTERNAL_BILLING_DOC_TYPE = "KualiInternalBillingDocument";
@@ -76,34 +82,7 @@ public class KualiWorkflowUtils extends WorkflowUtils {
     public static final String FIS_USER_DOC_TYPE = "KualiUserMaintenanceDocument";
     public static final String ORGANIZATION_DOC_TYPE = "KualiOrganizationMaintenanceDocument";
     public static final String PROJECT_CODE_DOC_TYPE = "KualiProjectCodeMaintenanceDocument";
-    public static final String KRA_BUDGET_DOC_TYPE = "KualiBudgetDocument";
-    public static final String KRA_ROUTING_FORM_DOC_TYPE = "KualiRoutingFormDocument";
     public static final String SIMPLE_MAINTENANCE_DOC_TYPE = "KualiSimpleMaintenanceDocument";
-    
-    public class RouteLevels {
-
-        public static final int ADHOC = 0;
-        public static final int EXCEPTION = -1;
-        public static final int ORG_REVIEW = 1;
-        
-    }
-    
-    public class RouteLevelNames {
-
-        public static final String ACCOUNT_REVIEW = "Account Review";
-        public static final String ORG_REVIEW = "Org Review";
-        public static final String EMPLOYEE_INDICATOR = "Employee Indicator";
-        public static final String TAX_CONTROL_CODE = "Tax Control Code";
-        public static final String ALIEN_INDICATOR = "Alien Indicator";
-        public static final String PAYMENT_REASON = "Payment Reason";
-        public static final String PAYMENT_REASON_CAMPUS = "Payment Reason+Campus Code";
-        public static final String CAMPUS_CODE = "Campus Code";
-        public static final String ALIEN_INDICATOR_PAYMENT_REASON = "Alien Indicator+Payment Reason";
-        public static final String PAYMENT_METHOD = "Payment Method";
-        public static final String ACCOUNT_REVIEW_FULL_EDIT = "Account Review Full Edit";
-        public static final String REQUISITION_CONTENT_REVIEW = "Content Review";
-        
-    }
 
     public static final Set SOURCE_LINE_ONLY_DOCUMENT_TYPES = new HashSet();
     static {
@@ -140,7 +119,34 @@ public class KualiWorkflowUtils extends WorkflowUtils {
         return isMaintenanceDocument;
     }
 
+    /**
+     * 
+     * This method sets up the XPath with the correct workflow namespace and resolver initialized. This ensures that the XPath
+     * statements can use required workflow functions as part of the XPath statements.
+     * 
+     * @param document - document
+     * @return - a fully initialized XPath instance that has access to the workflow resolver and namespace.
+     * 
+     */
+    public final static XPath getXPath(Document document) {
+        XPath xpath = getXPath(RouteContext.getCurrentRouteContext());
+        xpath.setNamespaceContext(new WorkflowNamespaceContext());
+        WorkflowFunctionResolver resolver = new WorkflowFunctionResolver();
+        resolver.setXpath(xpath);
+        resolver.setRootNode(document);
+        xpath.setXPathFunctionResolver(resolver);
+        return xpath;
+    }
 
+    public final static XPath getXPath(RouteContext routeContext) {
+        if (routeContext == null) {
+            return XPathFactory.newInstance().newXPath();
+        }
+        if (!routeContext.getParameters().containsKey(XPATH_ROUTE_CONTEXT_KEY)) {
+            routeContext.getParameters().put(XPATH_ROUTE_CONTEXT_KEY, XPathFactory.newInstance().newXPath());
+        }
+        return (XPath) routeContext.getParameters().get(XPATH_ROUTE_CONTEXT_KEY);
+    }
 
     /**
      * TODO: remove this method when we upgrade to workflow 2.2 - the problem that this helps with is as follows:
@@ -163,67 +169,41 @@ public class KualiWorkflowUtils extends WorkflowUtils {
     }
 
     /**
-     * This method uses the document type name to get the AccountingDocument implementation class from the data dictionary,
-     * creates a new instance and uses the getSourceAccountingLine method to get the name of the source accounting line class.
-     * It is intended for use by our workflow attributes when building xpath expressions
+     * This method uses the TransactionalDocumentDataDictionaryService to get the name of the source accounting line class for a
+     * given workflow documentTypeName. It is intended for use by our workflow attributes when building xpath expressions
      * 
      * @param documentTypeName the document type name to use when querying the TransactionalDocumentDataDictionaryService
      * @return the name of the source accounting line class associated with the specified workflow document type name
      */
     public static final String getSourceAccountingLineClassName(String documentTypeName) {
-        Class documentClass = SpringServiceLocator.getDataDictionaryService().getDocumentClassByTypeName(documentTypeName);
-        if (!AccountingDocument.class.isAssignableFrom(documentClass)) {
-            throw new IllegalArgumentException("getSourceAccountingLineClassName method of KualiWorkflowUtils requires a documentTypeName String that corresponds to a class that implments AccountingDocument");
+        Class sourceAccountingLineClass = SpringServiceLocator.getTransactionalDocumentDictionaryService().getSourceAccountingLineClass(documentTypeName);
+        String sourceAccountingLineClassName = null;
+        if (sourceAccountingLineClass != null) {
+            sourceAccountingLineClassName = sourceAccountingLineClass.getName();
         }
-        try {
-            Class sourceAccountingLineClass = ((AccountingDocument)documentClass.newInstance()).getSourceAccountingLineClass();
-            String sourceAccountingLineClassName = null;
-            if (sourceAccountingLineClass != null) {
-                sourceAccountingLineClassName = sourceAccountingLineClass.getName();
-            }
-            else {
-                sourceAccountingLineClassName = SourceAccountingLine.class.getName();
-            }
-            return sourceAccountingLineClassName;
+        else {
+            sourceAccountingLineClassName = SourceAccountingLine.class.getName();
         }
-        catch (InstantiationException e) {
-            throw new RuntimeException("getSourceAccountingLineClassName method of KualiWorkflowUtils caught InstantiationException while try to create instance of class: " + documentClass);
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException("getSourceAccountingLineClassName method of KualiWorkflowUtils caught IllegalAccessException while try to create instance of class: " + documentClass);
-        }
+        return sourceAccountingLineClassName;
     }
 
     /**
-     * This method uses the document type name to get the AccountingDocument implementation class from the data dictionary,
-     * creates a new instance and uses the getTargetAccountingLine method to get the name of the target accounting line class.
-     * It is intended for use by our workflow attributes when building xpath expressions
+     * This method uses the TransactionalDocumentDataDictionaryService to get the name of the target accounting line class for a
+     * given workflow documentTypeName. It is intended for use by our workflow attributes when building xpath expressions
      * 
      * @param documentTypeName the document type name to use when querying the TransactionalDocumentDataDictionaryService
      * @return the name of the target accounting line class associated with the specified workflow document type name
      */
     public static final String getTargetAccountingLineClassName(String documentTypeName) {
-        Class documentClass = SpringServiceLocator.getDataDictionaryService().getDocumentClassByTypeName(documentTypeName);
-        if (!AccountingDocument.class.isAssignableFrom(documentClass)) {
-            throw new IllegalArgumentException("getTargetAccountingLineClassName method of KualiWorkflowUtils requires a documentTypeName String that corresponds to a class that implments AccountingDocument");
+        Class targetAccountingLineClass = SpringServiceLocator.getTransactionalDocumentDictionaryService().getTargetAccountingLineClass(documentTypeName);
+        String targetAccountingLineClassName = null;
+        if (targetAccountingLineClass != null) {
+            targetAccountingLineClassName = targetAccountingLineClass.getName();
         }
-        try {
-            Class targetAccountingLineClass = ((AccountingDocument)documentClass.newInstance()).getTargetAccountingLineClass();
-            String targetAccountingLineClassName = null;
-            if (targetAccountingLineClass != null) {
-                targetAccountingLineClassName = targetAccountingLineClass.getName();
-            }
-            else {
-                targetAccountingLineClassName = TargetAccountingLine.class.getName();
-            }
-            return targetAccountingLineClassName;
+        else {
+            targetAccountingLineClassName = TargetAccountingLine.class.getName();
         }
-        catch (InstantiationException e) {
-            throw new RuntimeException("getTargetAccountingLineClassName method of KualiWorkflowUtils caught InstantiationException while try to create instance of class: " + documentClass);
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException("getTargetAccountingLineClassName method of KualiWorkflowUtils caught IllegalAccessException while try to create instance of class: " + documentClass);
-        }
+        return targetAccountingLineClassName;
     }
 
     /**
@@ -263,6 +243,19 @@ public class KualiWorkflowUtils extends WorkflowUtils {
         return new StringBuilder(XSTREAM_SAFE_PREFIX).append(xpathExpression).append(XSTREAM_SAFE_SUFFIX).toString();
     }
 
+    /**
+     * This method is for use by WorkflowLookupableImpl and WorkflowAttribute implementations to derive the fieldHelpUrl for use on
+     * edu.iu.uis.eden.lookupable.Fields.
+     * 
+     * @param field The kuali field that we need to derive a help url for. @ return Returns the help url for the field.
+     */
+    public static String getHelpUrl(org.kuali.core.web.uidraw.Field field) {
+        Properties params = new Properties();
+        params.put(Constants.DISPATCH_REQUEST_PARAMETER, "getAttributeHelpText");
+        params.put(Constants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, field.getBusinessObjectClassName());
+        params.put(PropertyConstants.ATTRIBUTE_NAME, field.getPropertyName());
+        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString(Constants.APPLICATION_BASE_URL_KEY) + "/help.do", params);
+    }
 
     /**
      * This is for use by xml WorkflowAttribute implementations. It overrides the label and help url of the test fields on the
@@ -282,7 +275,7 @@ public class KualiWorkflowUtils extends WorkflowUtils {
                 edu.iu.uis.eden.lookupable.Field field = row.getField(0);
                 if (edu.iu.uis.eden.lookupable.Field.TEXT.equals(field.getFieldType())) {
                     try {
-                        org.kuali.core.web.ui.Field kualiField = FieldUtils.getPropertyField(Class.forName(businessObjectClassName), field.getPropertyName(), false);
+                        org.kuali.core.web.uidraw.Field kualiField = FieldUtils.getPropertyField(Class.forName(businessObjectClassName), field.getPropertyName(), false);
                         field.setFieldLabel(kualiField.getFieldLabel());
                         field.setFieldHelpUrl(KualiWorkflowUtils.getHelpUrl(kualiField));
                     }
@@ -318,7 +311,7 @@ public class KualiWorkflowUtils extends WorkflowUtils {
             throw new IllegalArgumentException("Method parameter 'workflowPropertyKey' was passed a NULL or blank value.");
         }
         List chartFields = new ArrayList();
-        org.kuali.core.web.ui.Field field;
+        org.kuali.core.web.uidraw.Field field;
         field = FieldUtils.getPropertyField(propertyClass, boPropertyName, false);
         chartFields.add(new Field(field.getFieldLabel(), KualiWorkflowUtils.getHelpUrl(field), Field.TEXT, false, workflowPropertyKey, 
                         field.getPropertyValue(), field.getFieldValidValues(), null, workflowPropertyKey));
@@ -347,7 +340,7 @@ public class KualiWorkflowUtils extends WorkflowUtils {
         if (StringUtils.isBlank(workflowPropertyKey)) {
             throw new IllegalArgumentException("Method parameter 'workflowPropertyKey' was passed a NULL or blank value.");
         }
-        org.kuali.core.web.ui.Field field;
+        org.kuali.core.web.uidraw.Field field;
         field = FieldUtils.getPropertyField(propertyClass, boPropertyName, false);
         
         //  build the quickFinder/lookupableName info
