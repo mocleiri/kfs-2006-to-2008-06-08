@@ -24,8 +24,8 @@ import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.kra.budget.service.impl.BudgetPersonnelServiceImpl.PeriodSalary;
+import org.kuali.PropertyConstants;
 
 /**
  * 
@@ -761,7 +761,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
         m.put("budgetUserSequenceNumber", this.getBudgetUserSequenceNumber());
         m.put("institutionAppointmentTypeCode", this.getInstitutionAppointmentTypeCode());
         m.put("budgetTaskSequenceNumber", this.getBudgetTaskSequenceNumber());

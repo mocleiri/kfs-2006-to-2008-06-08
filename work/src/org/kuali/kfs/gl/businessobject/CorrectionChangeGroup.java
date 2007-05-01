@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 
 /**
  * 
@@ -35,8 +35,8 @@ public class CorrectionChangeGroup extends PersistableBusinessObjectBase impleme
     private Integer correctionChangeGroupLineNumber;
     private Integer correctionCriteriaNextLineNumber;
     private Integer correctionChangeNextLineNumber;
-    private List<CorrectionCriteria> correctionCriteria;
-    private List<CorrectionChange> correctionChange;
+    private List correctionCriteria;
+    private List correctionChange;
 
     public CorrectionChangeGroup(String documentNumber,Integer correctionChangeGroupLineNumber) {
         setCorrectionChangeGroupLineNumber(correctionChangeGroupLineNumber);
@@ -159,21 +159,21 @@ public class CorrectionChangeGroup extends PersistableBusinessObjectBase impleme
         this.correctionChangeNextLineNumber = correctionChangeNextLineNumber;
     }
 
-    public List<CorrectionCriteria> getCorrectionCriteria() {
+    public List getCorrectionCriteria() {
         Collections.sort(correctionCriteria);
         return correctionCriteria;
     }
 
-    public void setCorrectionCriteria(List<CorrectionCriteria> correctionCriteria) {
+    public void setCorrectionCriteria(List correctionCriteria) {
         this.correctionCriteria = correctionCriteria;
     }
 
-    public List<CorrectionChange> getCorrectionChange() {
+    public List getCorrectionChange() {
         Collections.sort(correctionChange);
         return correctionChange;
     }
 
-    public void setCorrectionChange(List<CorrectionChange> correctionChange) {
+    public void setCorrectionChange(List correctionChange) {
         this.correctionChange = correctionChange;
     }
 
@@ -198,7 +198,7 @@ public class CorrectionChangeGroup extends PersistableBusinessObjectBase impleme
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.correctionChangeGroupLineNumber != null) {
             m.put("correctionChangeGroupLineNumber", this.correctionChangeGroupLineNumber.toString());
         }
