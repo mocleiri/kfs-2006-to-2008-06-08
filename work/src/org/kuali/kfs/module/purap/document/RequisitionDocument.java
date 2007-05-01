@@ -16,37 +16,38 @@
 
 package org.kuali.module.purap.document;
 
+import static org.kuali.core.util.SpringServiceLocator.getKualiConfigurationService;
+
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.Note;
-import org.kuali.core.document.Copyable;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.ValidationException;
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.bo.BillingAddress;
-import org.kuali.module.purap.bo.RequisitionItem;
-import org.kuali.module.purap.bo.RequisitionStatusHistory;
-import org.kuali.module.purap.bo.RequisitionView;
-import org.kuali.module.vendor.bo.VendorContract;
-import org.kuali.module.vendor.bo.VendorDetail;
+import org.kuali.module.purap.bo.SourceDocumentReference;
+import org.kuali.module.purap.bo.VendorContract;
+import org.kuali.module.purap.bo.VendorDetail;
+import org.kuali.module.purap.util.PhoneNumberUtils;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * Requisition Document
  */
-public class RequisitionDocument extends PurchasingDocumentBase implements Copyable {
+public class RequisitionDocument extends PurchasingDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(RequisitionDocument.class);
 
 	private String requisitionOrganizationReference1Text;
@@ -59,19 +60,30 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 	private String alternate5VendorName;
 	private KualiDecimal organizationAutomaticPurchaseOrderLimit;
 
+    private DateTimeService dateTimeService;
+
 	/**
 	 * Default constructor.
 	 */
 	public RequisitionDocument() {
         super();
-    }
+        
+        SourceDocumentReference sourceDocumentReference = new SourceDocumentReference();
+        
+        sourceDocumentReference.setSourceDocumentIdentifier(this.getIdentifier());
+        sourceDocumentReference.setSourceFinancialDocumentTypeCode("REQ");
+        // This line is giving this error:
+        /*
+        javax.servlet.ServletException: OJB operation; SQL []; ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
+        ; nested exception is java.sql.SQLException: ORA-01400: cannot insert NULL into ("KULDEV"."PUR_SRC_DOC_REF_T"."SRC_DOC_OBJ_ID")
+        */
+        //sourceDocumentReference.setSourceDocumentObjectIdentifier(this.getObjectId());
+        sourceDocumentReference.setSourceDocumentObjectIdentifier("objectID");
+        sourceDocumentReferences = new TypedArrayList(SourceDocumentReference.class);
+        sourceDocumentReferences.add(sourceDocumentReference);
 
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#isBoNotesSupport()
-     */
-    @Override
-    public boolean isBoNotesSupport() {
-        return true;
+      
+        
     }
 
     public void refreshAllReferences() {
@@ -82,24 +94,30 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
      * Perform logic needed to initiate Requisition Document
      */
     public void initiateDocument() {
+
         this.setRequisitionSourceCode( PurapConstants.RequisitionSources.STANDARD_ORDER );
         this.setStatusCode( PurapConstants.RequisitionStatuses.IN_PROCESS );
         this.setPurchaseOrderCostSourceCode( PurapConstants.POCostSources.ESTIMATE );
         this.setPurchaseOrderTransmissionMethodCode( PurapConstants.POTransmissionMethods.FAX );
-
-        // set the default funding source
-        this.setFundingSourceCode(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("PurapAdminGroup","PURAP.REQUISITION_DEFAULT_FUNDING_SOURCE"));
+        
+        this.setFundingSourceCode(getKualiConfigurationService().getApplicationParameterValue("PurapAdminGroup","PURAP.REQUISITION_DEFAULT_FUNDING_SOURCE"));
 
         ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
         this.setChartOfAccountsCode(currentUser.getChartOfAccountsCode());
-        this.setOrganizationCode(currentUser.getOrganizationCode());
+        this.setOrganizationCode(currentUser.getOrganization().getOrganizationCode());
         this.setDeliveryCampusCode(currentUser.getUniversalUser().getCampusCode());
         this.setRequestorPersonName(currentUser.getUniversalUser().getPersonName());
         this.setRequestorPersonEmailAddress(currentUser.getUniversalUser().getPersonEmailAddress());
-        this.setRequestorPersonPhoneNumber(SpringServiceLocator.getPhoneNumberService().formatNumberIfPossible(currentUser.getUniversalUser().getPersonLocalPhoneNumber()));
+        this.setRequestorPersonPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(currentUser.getUniversalUser().getPersonLocalPhoneNumber()));
         
-        // set the APO limit
-        this.setOrganizationAutomaticPurchaseOrderLimit(SpringServiceLocator.getRequisitionService().getApoLimit(this.getVendorContractGeneratedIdentifier(), this.getChartOfAccountsCode(), this.getOrganizationCode()));
+        // Set the purchaseOrderTotalLimit
+        if (ObjectUtils.isNull(getPurchaseOrderTotalLimit())) {
+            KualiDecimal purchaseOrderTotalLimit = SpringServiceLocator.getRequisitionService().getApoLimit(
+              this.getVendorContractGeneratedIdentifier(), this.getChartOfAccountsCode(), this.getOrganizationCode());
+            if (ObjectUtils.isNotNull(purchaseOrderTotalLimit)) {
+                this.setPurchaseOrderTotalLimit(purchaseOrderTotalLimit);
+            }
+        }
 
         BillingAddress billingAddress = new BillingAddress();
         billingAddress.setBillingCampusCode(this.getDeliveryCampusCode());
@@ -182,33 +200,36 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 
         ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
 
-        this.setPurapDocumentIdentifier(null);
+        this.setIdentifier(null);
+        //TODO what about id in items?
 
         // Set req status to INPR.
         this.setStatusCode(PurapConstants.RequisitionStatuses.IN_PROCESS);
 
         // Set fields from the user.
-        this.setChartOfAccountsCode(currentUser.getChartOfAccountsCode());
+        this.setChartOfAccountsCode(currentUser.getOrganization().getChartOfAccountsCode());
         this.setOrganizationCode(currentUser.getOrganizationCode());
 
-        this.setPostingYear(SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear());
+        this.dateTimeService = SpringServiceLocator.getDateTimeService();
+        this.setPostingYear(dateTimeService.getCurrentFiscalYear());
 
         boolean activeVendor = true;
         boolean activeContract = true;
 
-        Date today = SpringServiceLocator.getDateTimeService().getCurrentDate();
+        Date today = dateTimeService.getCurrentDate();
 
         VendorContract vendorContract = new VendorContract();
         vendorContract.setVendorContractGeneratedIdentifier(this.getVendorContractGeneratedIdentifier());
         Map keys = SpringServiceLocator.getPersistenceService().getPrimaryKeyFieldValues(vendorContract);
         vendorContract = (VendorContract) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(VendorContract.class, keys);
-        if (!(vendorContract != null && 
-                today.after(vendorContract.getVendorContractBeginningDate()) && 
-                today.before(vendorContract.getVendorContractEndDate()))) {
+      if (!(vendorContract != null && 
+          today.after(vendorContract.getVendorContractBeginningDate()) && 
+          today.before(vendorContract.getVendorContractEndDate()))) {
             activeContract = false;
         }
 
-        VendorDetail vendorDetail = SpringServiceLocator.getVendorService().getVendorDetail(this.getVendorHeaderGeneratedIdentifier(), this.getVendorDetailAssignedIdentifier());
+      VendorDetail vendorDetail = SpringServiceLocator.getVendorService().getVendorDetail(this.getVendorHeaderGeneratedIdentifier(), 
+          this.getVendorDetailAssignedIdentifier());
         if (!(vendorDetail != null && vendorDetail.isActiveIndicator())) {
             activeVendor = false;
         }
@@ -223,13 +244,32 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
             }
         }
 
+//    TODO  WAIT ON ITEM LOGIC  (CHRIS AND DAVID SHOULD FIX THIS HERE)
+//      if (EpicConstants.REQ_SOURCE_B2B.equals(req.getSource().getCode())) {
+//        if (!activeContract) {
+//          LOG.debug("copy() B2B contract has expired; don't allow copy.");
+//          throw new PurError("Requisition # " + req.getId() + " uses an expired contract and cannot be copied.");
+//        }
+//        if (!activeVendor) {
+//          LOG.debug("copy() B2B vendor is inactive; don't allow copy.");
+//          throw new PurError("Requisition # " + req.getId() + " uses an inactive vendor and cannot be copied.");
+//        }
+//      }
+//DO THIS OPPOSITE...IF INACTIVE, CLEAR OUT IDS
+//      if (activeVendor) {
+//        newReq.setVendorHeaderGeneratedId(req.getVendorHeaderGeneratedId());
+//        newReq.setVendorDetailAssignedId(req.getVendorDetailAssignedId());
+//        if (activeContract) {
+//          newReq.setVendorContract(req.getVendorContract());
+//        }
+//      }
+      
         if (!activeVendor) {
             this.setVendorHeaderGeneratedIdentifier(null);
             this.setVendorDetailAssignedIdentifier(null);
-            this.setVendorContractGeneratedIdentifier(null);
-        }
-        if (!activeContract) {
-            this.setVendorContractGeneratedIdentifier(null);
+            if (!activeContract) {
+                this.setVendorContract(null);
+            }
         }
 
         // These fields should not be set in this method; force to be null
@@ -241,14 +281,8 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
         this.setOrganizationAutomaticPurchaseOrderLimit(null);
         this.setPurchaseOrderAutomaticIndicator(false);
         this.setStatusHistories(null);
-        this.setAccountsPayablePurchasingDocumentLinkIdentifier(null);
-        
-        // Fill the BO Notes with an empty List.
-        this.setBoNotes(new ArrayList());
       
-        //TODO WAIT ON ITEM LOGIC (CHRIS AND DAVID SHOULD FIX THIS HERE)
-        //TODO what about id in items?  do we need to null them out?
-
+//TODO DAVID AND CHRIS SHOULD FIX THIS
       //Trade In and Discount Items are only available for B2B. If the Requisition
       //doesn't currently contain trade in and discount, we should add them in 
       //here (KULAPP 1715)
@@ -272,9 +306,10 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 //        }
 //      }
 
-        this.setOrganizationAutomaticPurchaseOrderLimit(SpringServiceLocator.getRequisitionService().getApoLimit(this.getVendorContractGeneratedIdentifier(), this.getChartOfAccountsCode(), this.getOrganizationCode()));
+      // get the contacts, supplier diversity list and APO limit 
+//      setupRequisition(newReq);
       
-        this.refreshAllReferences();
+    
 	}
 
 	/**
@@ -287,34 +322,50 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 
         // DOCUMENT PROCESSED
         if (this.getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            String newRequisitionStatus = PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN;
+            
             if (SpringServiceLocator.getRequisitionService().isAutomaticPurchaseOrderAllowed(this)) {
-                newRequisitionStatus = PurapConstants.RequisitionStatuses.CLOSED;
-                PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createAutomaticPurchaseOrderDocument(this);
+            PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(this);
+                //TODO how do we override the doc initiator?
                 try {
-                    GlobalVariables.clear();
                     poDocument = (PurchaseOrderDocument)SpringServiceLocator.getDocumentService().routeDocument(poDocument, null, null);
-                }
+        }
                 catch (WorkflowException e) {
                     LOG.error("Error routing PO document: " + e.getMessage());
                     throw new RuntimeException("Error routing PO document: " + e.getMessage());
                 }
             }
-            SpringServiceLocator.getPurapService().updateStatusAndStatusHistory(this, newRequisitionStatus);
-            SpringServiceLocator.getRequisitionService().save(this);
+            else {
+                // TODO else set REQ status to "AWAITING_CONTRACT_MANAGER_ASSIGNMENT"
+                SpringServiceLocator.getPurapService().updateStatusAndStatusHistory(this, PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN);
+                SpringServiceLocator.getRequisitionService().save(this);
+            }
         }
         // DOCUMENT DISAPPROVED
         else if (this.getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
             // TODO set REQ status to disapproved - based on route level
-//            SpringServiceLocator.getPurapService().updateStatusAndStatusHistory(this, ??);
-//            SpringServiceLocator.getRequisitionService().save(this);
         }
         // DOCUMENT CANCELED
         else if (this.getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
-            SpringServiceLocator.getPurapService().updateStatusAndStatusHistory(this, PurapConstants.RequisitionStatuses.CANCELLED);
-            SpringServiceLocator.getRequisitionService().save(this);
+            // TODO EPIC did nothing; is that right?
         }
 
+//        if (EdenConstants.ROUTE_HEADER_PROCESSED_CD.equals(routeHeader.getDocRouteStatus())) {
+//            if (getRequisitionPostProcessorService().isAPO(routeHeader.getRouteHeaderId(), getLastUserId(routeHeader))) {
+//                PurchaseOrder po = getRequisitionPostProcessorService().createAPO(routeHeader.getRouteHeaderId(), getLastUserId(routeHeader));
+//                //getRequisitionPostProcessorService().routeAPO(po, getLastUserId(routeHeader));
+//            } else {
+//                //set req to buyer assign
+//                getRequisitionPostProcessorService().changeRequisitionStatus(routeHeader.getRouteHeaderId(), EpicConstants.REQ_STAT_AWAIT_CONTRACT_MANAGER_ASSGN, getLastUserId(routeHeader));
+//            }
+//        } else if (EdenConstants.ROUTE_HEADER_DISAPPROVED_CD.equals(routeHeader.getDocRouteStatus())) {
+//            //set EPIC status to disapproved - based on route level
+//            LOG.info("doRouteStatusChange() Route Status is " + EdenConstants.ROUTE_HEADER_DISAPPROVED_LABEL + " - Epic document with doc ID " + 
+//              routeHeader.getRouteHeaderId() + " has had workflow document disapproved by " + getLastUserId(routeHeader));
+//            getRequisitionPostProcessorService().disapproveRequisition(routeHeader.getRouteHeaderId(), routeHeader.getCurrentRouteLevelName(),getLastUserId(routeHeader));
+//        } else if (EdenConstants.ROUTE_HEADER_CANCEL_CD.equals(routeHeader.getDocRouteStatus())) {
+//          LOG.info("doRouteStatusChange() Route Status is " + EdenConstants.ROUTE_HEADER_CANCEL_LABEL + " - Epic document with doc ID " + 
+//              routeHeader.getRouteHeaderId() + " has had workflow document cancelled by " + getLastUserId(routeHeader));
+//        }
 
     }
 
@@ -363,29 +414,8 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 //        }
 
     }
-    
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#addToStatusHistories(java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void addToStatusHistories( String oldStatus, String newStatus, Note statusHistoryNote ) {
-        RequisitionStatusHistory rsh = new RequisitionStatusHistory( oldStatus, newStatus );
-        this.addStatusHistoryNote( rsh, statusHistoryNote );
-        this.getStatusHistories().add( rsh );
-    }
 
     // SETTERS AND GETTERS
-    public String getVendorPaymentTermsCode() {
-        return getVendorDetail().getVendorPaymentTerms().getVendorPaymentTermsDescription();
-    }
-
-    public String getVendorShippingPaymentTermsCode() {
-        return getVendorDetail().getVendorShippingPaymentTerms().getVendorShippingPaymentTermsDescription();
-    }
-
-    public String getVendorShippingTitleCode() {
-        return getVendorDetail().getVendorShippingTitle().getVendorShippingTitleDescription();
-    }
-
 	/**
 	 * Gets the requisitionOrganizationReference1Text attribute.
 	 * 
@@ -574,19 +604,6 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 	public void setOrganizationAutomaticPurchaseOrderLimit(KualiDecimal organizationAutomaticPurchaseOrderLimit) {
 		this.organizationAutomaticPurchaseOrderLimit = organizationAutomaticPurchaseOrderLimit;
 	}
-	
-    @Override
-    public List<RequisitionView> getRelatedRequisitionViews() {
-        return null;
-    }
 
-    /**
-     * @see org.kuali.module.purap.document.PurchasingDocumentBase#getItemClass()
-     */
-    @Override
-    public Class getItemClass() {
-        return RequisitionItem.class;
-    }   
-    
-}
+	}
 
