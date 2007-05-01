@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,6 +21,7 @@
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost">
+        <customAttributeEnabled>customAttributeEnabled</customAttributeEnabled>
         <attributes>
 
             <attribute name="documentNumber" forceUppercase="true">
@@ -121,7 +124,7 @@
 
             <attribute name="budgetManualMtdcAmount">
                 <label>Manual MTDC Amount</label>
-                <maxLength>12</maxLength>
+                <maxLength>9</maxLength>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
@@ -132,6 +135,17 @@
                 <summary>Manual MTDC Amount</summary>
                 <description>Manual MTDC Amount</description>
             </attribute>
+
+            <attribute name="budgetPurposeCode">
+                <label>Purpose Code</label>
+                <maxLength>255</maxLength>
+                <control>
+                    <text size="10" />
+                </control>
+                <summary>Purpose Code</summary>
+                <description>Purpose Code</description>
+            </attribute>
+
 
         </attributes>
     </businessObject>

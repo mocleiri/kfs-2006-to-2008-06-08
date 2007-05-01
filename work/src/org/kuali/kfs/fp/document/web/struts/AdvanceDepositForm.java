@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,17 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.financial.bo.AdvanceDepositDetail;
 import org.kuali.module.financial.document.AdvanceDepositDocument;
 
 /**
  * This class is the struts form for Advance Deposit document.
+ * 
+ * 
  */
-public class AdvanceDepositForm extends KualiAccountingDocumentFormBase {
+public class AdvanceDepositForm extends KualiTransactionalDocumentFormBase {
     private AdvanceDepositDetail newAdvanceDeposit;
 
     /**

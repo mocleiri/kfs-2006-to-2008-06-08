@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public interface OrganizationService {
      * 
      * @param chartOfAccountsCode - chartCode for the Org you want Accounts for
      * @param organizationCode - orgCode for the Org you want Accounts for
-     * @return A List of Accounts that are active, and tied to this Org
+     * @return - A List of Accounts that are active, and tied to this Org
      * 
      */
     public List getActiveAccountsByOrg(String chartOfAccountsCode, String organizationCode);
@@ -70,23 +70,9 @@ public interface OrganizationService {
      * 
      * @param chartOfAccountsCode - chartCode for the Org you want Child Orgs for
      * @param organizationCode - orgCode for the Org you want Child Orgs for
-     * @return A List of Orgs that are active, and report to this Org
+     * @return - A List of Orgs that are active, and report to this Org
      * 
      */
     public List getActiveChildOrgs(String chartOfAccountsCode, String organizationCode);
 
-    /**
-     * 
-     * Returns a list of active organizations with the given organization type code.
-     * 
-     * @param organizationTypeCode
-     * @return
-     */
-    public List<Org> getActiveOrgsByType( String organizationTypeCode );
- 
-    /**
-     * 
-     * returns the chart and organization of the ACTIVE root-level organization
-     */
-    public String[] getRootOrganizationCode();
 }

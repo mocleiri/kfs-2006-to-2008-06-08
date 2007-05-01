@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kuali.module.gl.web.optionfinder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.lookup.valueFinder.ValueFinder;
-import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.service.OptionsService;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.service.OptionsService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.uidraw.KeyLabelPair;
 
 /**
  * This class...

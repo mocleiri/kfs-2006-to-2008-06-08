@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.BusinessObject;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
@@ -31,9 +33,6 @@ import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
 import org.kuali.kfs.util.SpringServiceLocator;
@@ -53,9 +52,8 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
     /**
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
-    @Override
-    public String getInquiryUrl(BusinessObject businessObject, String propertyName) {
-        if (KFSPropertyConstants.DOCUMENT_NUMBER.equals(propertyName) && businessObject instanceof GeneralLedgerPendingEntry) {
+    public String getInquiryUrl(PersistableBusinessObject businessObject, String propertyName) {
+        if (PropertyConstants.DOCUMENT_NUMBER.equals(propertyName) && businessObject instanceof GeneralLedgerPendingEntry) {
             GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) businessObject;
             return new InquirableFinancialDocument().getInquirableDocumentUrl(pendingEntry);
         }
@@ -73,7 +71,7 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
                 int year = Integer.parseInt(valueFiscalYear);
             }
             catch (NumberFormatException e) {
-                GlobalVariables.getErrorMap().putError(UNIVERSITY_FISCAL_YEAR, KFSKeyConstants.ERROR_CUSTOM, new String[] { KFSKeyConstants.PendingEntryLookupableImpl.FISCAL_YEAR_FOUR_DIGIT });
+                GlobalVariables.getErrorMap().putError(UNIVERSITY_FISCAL_YEAR, KeyConstants.ERROR_CUSTOM, new String[] { KeyConstants.PendingEntryLookupableImpl.FISCAL_YEAR_FOUR_DIGIT });
                 throw new ValidationException("errors in search criteria");
             }
         }
@@ -84,8 +82,8 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     public List getSearchResults(Map fieldValues) {
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         boolean isApproved = fieldValues.containsKey(Constant.PENDING_ENTRY_OPTION) && Constant.APPROVED_PENDING_ENTRY.equals(fieldValues.get(Constant.PENDING_ENTRY_OPTION));
         Collection searchResultsCollection = generalLedgerPendingEntryService.findPendingEntries(fieldValues, isApproved);
@@ -98,7 +96,7 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
         }
 
         // get the result limit number from configuration
-        String limitConfig = kualiConfigurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.LOOKUP_RESULTS_LIMIT_URL_KEY);
+        String limitConfig = kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.LOOKUP_RESULTS_LIMIT_URL_KEY);
         Integer limit = null;
         if (limitConfig != null) {
             limit = Integer.valueOf(limitConfig);

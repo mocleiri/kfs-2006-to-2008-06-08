@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.cg.lookup.valuefinder;
+package org.kuali.module.cg.lookup.valueFinder;
 
 import org.kuali.core.lookup.valueFinder.ValueFinder;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.OriginationCode;
-import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * Returns the next Proposal number available.

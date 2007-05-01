@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,12 +36,16 @@ import edu.iu.uis.eden.routeheader.DocumentContent;
 @WithTestSpringContext
 public class KualiAttributeXPathTest extends KualiTestBase {
 
-    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_SOURCE = "//org.kuali.kfs.bo.SourceAccountingLine/account/subFundGroupCode";
-    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_TARGET = "//org.kuali.kfs.bo.TargetAccountingLine/account/subFundGroupCode";
-    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE = KUALI_SUBFUND_GROUP_ATTRIBUTE_SOURCE + " or " + KUALI_SUBFUND_GROUP_ATTRIBUTE_TARGET;
-    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_XSTREAMSAFE = "wf:xstreamsafe('" + KUALI_SUBFUND_GROUP_ATTRIBUTE_SOURCE + "') or wf:xstreamsafe('" + KUALI_SUBFUND_GROUP_ATTRIBUTE_TARGET +"')";
-    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_SOURCE_XSTREAMSAFE = "wf:xstreamsafe('//org.kuali.kfs.bo.SourceAccountingLine/account/subFundGroupCode')";
-    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_TARGET_XSTREAMSAFE = "wf:xstreamsafe('//org.kuali.kfs.bo.TargetAccountingLine/account/subFundGroupCode')";
+    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE = "//org.kuali.core.bo.SourceAccountingLine/account/subFundGroupCode or //org.kuali.core.bo.TargetAccountingLine/account/subFundGroupCode";
+    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_SOURCE = "//org.kuali.core.bo.SourceAccountingLine/account/subFundGroupCode";
+    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_TARGET = "//org.kuali.core.bo.TargetAccountingLine/account/subFundGroupCode";
+    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_XSTREAMSAFE = "wf:xstreamsafe('//org.kuali.core.bo.SourceAccountingLine/account/subFundGroupCode') or wf:xstreamsafe('//org.kuali.core.bo.TargetAccountingLine/account/subFundGroupCode')";
+    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_SOURCE_XSTREAMSAFE = "wf:xstreamsafe('//org.kuali.core.bo.SourceAccountingLine/account/subFundGroupCode')";
+    private static final String KUALI_SUBFUND_GROUP_ATTRIBUTE_TARGET_XSTREAMSAFE = "wf:xstreamsafe('//org.kuali.core.bo.TargetAccountingLine/account/subFundGroupCode')";
+
+    public void setUp() throws Exception {
+        super.setUp();
+    }
 
     public void testKualiSubFundGroupAttribute_TransferOfFunds1() throws IOException, InvalidXmlException, XPathExpressionException {
 

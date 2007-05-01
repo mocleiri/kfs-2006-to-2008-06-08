@@ -18,13 +18,13 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
 
-public class Bank extends PersistableBusinessObjectBase {
+public class Bank extends BusinessObjectBase {
 
     private static final long serialVersionUID = 6091563911993138998L;
     private String financialDocumentBankCode;
@@ -44,7 +44,7 @@ public class Bank extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentBankCode attribute.
      * 
-     * @return Returns the financialDocumentBankCode
+     * @return - Returns the financialDocumentBankCode
      * 
      */
     public String getFinancialDocumentBankCode() {
@@ -64,7 +64,7 @@ public class Bank extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentBankName attribute.
      * 
-     * @return Returns the financialDocumentBankName
+     * @return - Returns the financialDocumentBankName
      * 
      */
     public String getFinancialDocumentBankName() {
@@ -84,7 +84,7 @@ public class Bank extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentBankShortNm attribute.
      * 
-     * @return Returns the financialDocumentBankShortNm
+     * @return - Returns the financialDocumentBankShortNm
      * 
      */
     public String getFinancialDocumentBankShortNm() {
@@ -104,7 +104,7 @@ public class Bank extends PersistableBusinessObjectBase {
     /**
      * Gets the bankAccounts attribute.
      * 
-     * @return Returns the bankAccounts
+     * @return - Returns the bankAccounts
      * 
      */
     public List getBankAccounts() {

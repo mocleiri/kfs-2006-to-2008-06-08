@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +20,8 @@ package org.kuali.module.kra.budget.bo;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 
 /**
@@ -27,7 +29,7 @@ import org.kuali.kfs.KFSPropertyConstants;
  * 
  * 
  */
-public class BudgetTask extends PersistableBusinessObjectBase implements Comparable {
+public class BudgetTask extends BusinessObjectBase implements Comparable {
 
     private static final long serialVersionUID = 2905826718156063909L;
     private String documentNumber;
@@ -115,7 +117,7 @@ public class BudgetTask extends PersistableBusinessObjectBase implements Compara
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("budgetTaskSequenceNumber", this.budgetTaskSequenceNumber);
         return m;
 

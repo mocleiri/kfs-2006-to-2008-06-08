@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/RoutingFormResearchRisk.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,12 +21,13 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Routing Form Research Risk Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
+                <field attributeName="dataPresentIndicator" />
                 <field attributeName="researchRiskDescription" />
                 <field attributeName="documentNumber" />
                 <field attributeName="researchRiskTypeCode" />
@@ -44,12 +47,14 @@
             </defaultSort>
 
             <lookupFields>
+                <lookupField attributeName="dataPresentIndicator" required="false" />
                 <lookupField attributeName="researchRiskDescription" required="false" />
                 <lookupField attributeName="documentNumber" required="false" />
                 <lookupField attributeName="researchRiskTypeCode" required="false" />
             </lookupFields>
 
             <resultFields>
+                <field attributeName="dataPresentIndicator" />
                 <field attributeName="researchRiskDescription" />
                 <field attributeName="documentNumber" />
                 <field attributeName="researchRiskTypeCode" />
@@ -58,12 +63,26 @@
 
         <attributes>
 
+            <attribute name="dataPresentIndicator" forceUppercase="true">
+                <label>Data Present Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <radio valuesFinderClass="org.kuali.core.lookup.keyvalues.IndicatorYNOnlyValuesFinder" />
+                </control>
+
+                <summary>dataPresentIndicator</summary>
+                <description>dataPresentIndicator description...</description>
+			</attribute>
+
             <attribute name="researchRiskDescription" forceUppercase="true">
                 <label>Research Risk Description</label>
                 <shortLabel>Describe</shortLabel>
 
                 <maxLength>500</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <textarea rows="5" cols="80"/>

@@ -22,28 +22,29 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
+import org.kuali.PropertyConstants;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.core.util.spring.Cached;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.UniversityDateDao;
 
 public class UniversityDateDaoOjb extends PlatformAwareDaoBaseOjb implements UniversityDateDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(UniversityDateDaoOjb.class);
 
-    @Cached
+    public UniversityDateDaoOjb() {
+        super();
+    }
+
     public UniversityDate getByPrimaryKey(Date date) {
         LOG.debug("getByPrimaryKey() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_DATE, date);
+        crit.addEqualTo(PropertyConstants.UNIVERSITY_DATE, date);
 
         QueryByCriteria qbc = QueryFactory.newQuery(UniversityDate.class, crit);
 
         return (UniversityDate) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
     }
 
-    @Cached
     public UniversityDate getByPrimaryKey(java.util.Date date) {
         return getByPrimaryKey(convertDate(date));
     }
@@ -57,11 +58,11 @@ public class UniversityDateDaoOjb extends PlatformAwareDaoBaseOjb implements Uni
         Criteria subCrit = new Criteria();
         Criteria crit = new Criteria();
 
-        subCrit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
+        subCrit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
         subQuery = QueryFactory.newReportQuery(UniversityDate.class, subCrit);
         subQuery.setAttributes(new String[] { "max(univ_dt)" });
 
-        crit.addGreaterOrEqualThan(KFSPropertyConstants.UNIVERSITY_DATE, subQuery);
+        crit.addGreaterOrEqualThan(PropertyConstants.UNIVERSITY_DATE, subQuery);
 
         QueryByCriteria qbc = QueryFactory.newQuery(UniversityDate.class, crit);
 
@@ -73,11 +74,11 @@ public class UniversityDateDaoOjb extends PlatformAwareDaoBaseOjb implements Uni
         Criteria subCrit = new Criteria();
         Criteria crit = new Criteria();
 
-        subCrit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
+        subCrit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
         subQuery = QueryFactory.newReportQuery(UniversityDate.class, subCrit);
         subQuery.setAttributes(new String[] { "min(univ_dt)" });
 
-        crit.addGreaterOrEqualThan(KFSPropertyConstants.UNIVERSITY_DATE, subQuery);
+        crit.addGreaterOrEqualThan(PropertyConstants.UNIVERSITY_DATE, subQuery);
 
         QueryByCriteria qbc = QueryFactory.newQuery(UniversityDate.class, crit);
 
@@ -91,8 +92,8 @@ public class UniversityDateDaoOjb extends PlatformAwareDaoBaseOjb implements Uni
         Criteria criteria = new Criteria();
 
         ReportQueryByCriteria query = QueryFactory.newReportQuery(UniversityDate.class, criteria);
-        query.setAttributes(new String[] { "distinct " + KFSPropertyConstants.UNIVERSITY_FISCAL_ACCOUNTING_PERIOD });
-        query.addOrderByAscending(KFSPropertyConstants.UNIVERSITY_FISCAL_ACCOUNTING_PERIOD);
+        query.setAttributes(new String[] { "distict " + PropertyConstants.UNIVERSITY_FISCAL_ACCOUNTING_PERIOD });
+        query.addOrderByAscending(PropertyConstants.UNIVERSITY_FISCAL_ACCOUNTING_PERIOD);
 
         return getPersistenceBrokerTemplate().getCollectionByQuery(query);
     }

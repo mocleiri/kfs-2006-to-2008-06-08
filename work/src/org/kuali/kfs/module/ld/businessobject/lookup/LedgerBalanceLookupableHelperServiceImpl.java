@@ -17,17 +17,13 @@ package org.kuali.module.labor.web.lookupable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObject;
-import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
-import org.kuali.core.lookup.CollectionIncomplete;
-import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
@@ -37,7 +33,7 @@ import org.kuali.module.labor.web.inquirable.LedgerBalanceInquirableImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
+public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLaborLedgerLookupableHelperServiceImpl {
     private LaborLedgerBalanceService balanceService;
     private Map fieldValues;
 
@@ -54,8 +50,8 @@ public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLookupable
      */
     @Override
     public List getSearchResults(Map fieldValues) {
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         // get the pending entry option. This method must be prior to the get search results
         //String pendingEntryOption = this.getSelectedPendingEntryOption(fieldValues);
@@ -290,24 +286,35 @@ public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLookupable
         return augend;
     }
 
-
     /**
-     * build the serach result list from the given collection and the number of all qualified search results
-     * 
-     * @param searchResultsCollection the given search results, which may be a subset of the qualified search results
-     * @param actualSize the number of all qualified search results
-     * @return the serach result list with the given results and actual size
+     * @see org.kuali.module.gl.web.lookupable.AbstractGLLookupableImpl#updateEntryCollection(java.util.Collection, java.util.Map,
+     *      boolean, boolean, boolean)
      */
-    protected List buildSearchResultList(Collection searchResultsCollection, Long actualSize) {
-        CollectionIncomplete results = new CollectionIncomplete(searchResultsCollection, actualSize);
+    public void updateEntryCollection(Collection entryCollection, Map fieldValues, boolean isApproved, boolean isConsolidated, boolean isCostShareInclusive) {
 
-        // sort list if default sort column given
-        List searchResults = (List) results;
-        List defaultSortColumns = getDefaultSortColumns();
-        if (defaultSortColumns.size() > 0) {
-            Collections.sort(results, new BeanPropertyComparator(defaultSortColumns, true));
-        }
-        return searchResults;
+//        // convert the field names of balance object into corresponding ones of pending entry object
+//        Map pendingEntryFieldValues = BusinessObjectFieldConverter.convertToTransactionFieldValues(fieldValues);
+//
+//        // go through the pending entries to update the balance collection
+//        Iterator pendingEntryIterator = getGeneralLedgerPendingEntryService().findPendingLedgerEntriesForBalance(pendingEntryFieldValues, isApproved);
+//        while (pendingEntryIterator.hasNext()) {
+//            GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) pendingEntryIterator.next();
+//
+//            // if consolidated, change the following fields into the default values for consolidation
+//            if (isConsolidated) {
+//                pendingEntry.setSubAccountNumber(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER);
+//                pendingEntry.setFinancialSubObjectCode(Constant.CONSOLIDATED_SUB_OBJECT_CODE);
+//                pendingEntry.setFinancialObjectTypeCode(Constant.CONSOLIDATED_OBJECT_TYPE_CODE);
+//            }
+//
+//            Balance balance = postBalance.findBalance(entryCollection, pendingEntry);
+//
+//            String pendingEntryOption = isApproved ? Constant.APPROVED_PENDING_ENTRY : Constant.ALL_PENDING_ENTRY;
+//            balance.setDummyBusinessObject(new TransientBalanceInquiryAttributes());
+//            balance.getDummyBusinessObject().setPendingEntryOption(pendingEntryOption);
+//
+//            postBalance.updateBalance(pendingEntry, balance);
+//        }
     }
 
     /**

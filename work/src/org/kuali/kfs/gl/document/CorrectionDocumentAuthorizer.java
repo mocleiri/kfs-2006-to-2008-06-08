@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/document/CorrectionDocumentAuthorizer.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +27,8 @@ import org.kuali.core.authorization.AuthorizationConstants;
 
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.DocumentAuthorizerBase;
 import org.kuali.core.document.TransactionalDocument;
-import org.kuali.core.document.authorization.DocumentAuthorizerBase;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 
 public class CorrectionDocumentAuthorizer extends DocumentAuthorizerBase {

@@ -25,7 +25,7 @@
 	
 	<kra-rf:routingFormHiddenDocumentFields />
 	
-	<kra:kraAdHocRecipients adhocType="P" adhocLabel="Permissions" excludeActionRequested="true" disableActionRequested="true" actionRequestedDefault="" editingMode="${KualiForm.editingMode}"/>
+	<kra-rf:routingFormAdHocPermissions />
 	
 	<kra-rf:routingFormDefaultPermissions />
 	

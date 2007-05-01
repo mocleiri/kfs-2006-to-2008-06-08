@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormOrganization.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +20,15 @@ package org.kuali.module.kra.routingform.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class RoutingFormOrganization extends PersistableBusinessObjectBase {
+public class RoutingFormOrganization extends BusinessObjectBase {
 
 	private String chartOfAccountsCode;
 	private String organizationCode;
@@ -34,6 +36,7 @@ public class RoutingFormOrganization extends PersistableBusinessObjectBase {
 	private boolean budgetIndicator;
 	private boolean routingFormPrimaryOrganizationIndicator;
 
+    private Chart chartOfAccounts;
 	private Org organization;
 
 	/**
@@ -146,6 +149,27 @@ public class RoutingFormOrganization extends PersistableBusinessObjectBase {
 		this.routingFormPrimaryOrganizationIndicator = routingFormPrimaryOrganizationIndicator;
 	}
 
+
+	/**
+	 * Gets the chartOfAccounts attribute.
+	 * 
+	 * @return Returns the chartOfAccounts
+	 * 
+	 */
+	public Chart getChartOfAccounts() { 
+		return chartOfAccounts;
+	}
+
+	/**
+	 * Sets the chartOfAccounts attribute.
+	 * 
+	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @deprecated
+	 */
+	public void setChartOfAccounts(Chart chartOfAccounts) {
+		this.chartOfAccounts = chartOfAccounts;
+	}
+
 	/**
 	 * Gets the organization attribute.
 	 * 
@@ -173,7 +197,7 @@ public class RoutingFormOrganization extends PersistableBusinessObjectBase {
 	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("chartOfAccountsCode", this.chartOfAccountsCode);
         m.put("organizationCode", this.organizationCode);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
 	    return m;
     }
 }
