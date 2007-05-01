@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@
 
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.gl.bo.Balance">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
             <title>General Ledger Balance</title>
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" forceInquiry="true" />
                 <field attributeName="chartOfAccountsCode" forceInquiry="true" />
                 <field attributeName="accountNumber" forceInquiry="true" />
@@ -33,7 +33,7 @@
                 <field attributeName="balanceTypeCode" forceInquiry="true" />
                 <field attributeName="dummyBusinessObject.consolidationOption" forceInquiry="true" />
                 <field attributeName="dummyBusinessObject.amountViewOption" forceInquiry="true" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
@@ -45,7 +45,7 @@
 
             <lookupFields>
                 <lookupField attributeName="universityFiscalYear" required="true">
-                    <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
+                    <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.FiscalYearFinder</defaultValueFinderClass>
                 </lookupField>
 
                 <lookupField attributeName="chartOfAccountsCode" required="true" />
@@ -236,13 +236,13 @@
                 <description>transactionEntryProcessed description...</description>
             </attributeReference>
 
-            <attributeReference name="dummyBusinessObject.consolidationOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="consolidationOption">
+            <attributeReference name="dummyBusinessObject.consolidationOption" sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" sourceAttributeName="consolidationOption">
                 <description>Radioboxes that specify either Consolidation or Detail balances. If Detail is selected, balances are displayed by Chart, Account Number, Sub-Account Number, Object Code, and Sub-Object Code. If Consolidation is selected, the amounts are aggregated by Chart, Account Number, and Object Code.</description>
             </attributeReference>
 
-            <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="pendingEntryOption" />
+            <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" sourceAttributeName="pendingEntryOption" />
 
-            <attributeReference name="dummyBusinessObject.amountViewOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="amountViewOption">
+            <attributeReference name="dummyBusinessObject.amountViewOption" sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" sourceAttributeName="amountViewOption">
                 <description>Radioboxes that specify either Monthy or Accumulated amount views. The Monthly view summarizes amounts by Accounting Period. The Accumulate view provides year-to-date balances as you progress through the Accounting Periods.</description>
             </attributeReference>
 

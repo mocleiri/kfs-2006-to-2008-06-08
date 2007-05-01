@@ -128,22 +128,35 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
     }
 
     /**
-     * All keywords are deleted from the routing form list.
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#route(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
-    public ActionForward deleteAllRoutingFormKeyword(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @Override
+    public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         RoutingForm routingForm = (RoutingForm) form;
-
-        routingForm.getRoutingFormDocument().getRoutingFormKeywords().clear();
         
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        retrieveMainPageReferenceObjects(routingForm.getRoutingFormDocument());
+
+        boolean auditErrorsPassed = SpringServiceLocator.getKualiRuleService().applyRules(new RunRoutingFormAuditEvent(routingForm.getRoutingFormDocument()));
+        if (!auditErrorsPassed) {
+            routingForm.setAuditActivated(true);
+            return mapping.findForward(Constants.MAPPING_BASIC);
+        }
+        
+        return super.route(mapping, form, request, response);
     }
     
+    /**
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#approve(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
+    @Override
+    public ActionForward approve(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        RoutingForm routingForm = (RoutingForm) form;
+        
+        retrieveMainPageReferenceObjects(routingForm.getRoutingFormDocument());
+
+        return super.approve(mapping, form, request, response);
+    }
+
     /**
      * @see org.kuali.module.kra.routingform.web.struts.action.RoutingFormAction#save(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */

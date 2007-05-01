@@ -363,13 +363,13 @@ public class BalanceServiceImpl implements BalanceService {
         incomeObjectTypeCodes = new String[] { options.getFinObjTypeIncomeNotCashCd(), // IC
                 options.getFinObjectTypeIncomecashCode(), // IN
                 options.getFinObjTypeCshNotIncomeCd(), // CH
-                options.getFinancialObjectTypeTransferIncomeCd() // TI
+                options.getFinancialObjectTypeTransferIncomeCode() // TI
         };
         // String[] expenseObjectTypeCodes = new String[] { "EE", "ES", "EX", "TE" };
         expenseObjectTypeCodes = new String[] { options.getFinObjTypeExpendNotExpCode(), // EE?
                 options.getFinObjTypeExpenditureexpCd(), // ES
                 options.getFinObjTypeExpNotExpendCode(), // EX?
-                options.getFinancialObjectTypeTransferExpenseCd() // TE
+                options.getFinancialObjectTypeTransferExpenseCode() // TE
         };
         // String[] assetLiabilityFundBalanceBalanceTypeCodes = new String[] { "AS", "LI", "FB" };
         assetLiabilityFundBalanceObjectTypeCodes = new String[] { options.getFinancialObjectTypeAssetsCd(), // AS
@@ -380,7 +380,7 @@ public class BalanceServiceImpl implements BalanceService {
         encumbranceBaseBudgetBalanceTypeCodes = new String[] { options.getExtrnlEncumFinBalanceTypCd(), // EX
                 options.getIntrnlEncumFinBalanceTypCd(), // IE
                 options.getPreencumbranceFinBalTypeCd(), // PE
-                options.getBaseBudgetFinancialBalanceTypeCd() // BB
+                options.getBaseBudgetFinancialBalanceTypeCode() // BB
         };
     }
 
