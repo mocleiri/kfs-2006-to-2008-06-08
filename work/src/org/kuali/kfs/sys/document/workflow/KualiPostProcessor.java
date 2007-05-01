@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.kuali.workflow.postprocessor;
 import java.rmi.RemoteException;
 
 import org.apache.log4j.Logger;
-import org.kuali.rice.KNSServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 
 import edu.iu.uis.eden.clientapp.PostProcessorRemote;
 import edu.iu.uis.eden.clientapp.vo.ActionTakenEventVO;
@@ -51,7 +51,7 @@ public class KualiPostProcessor implements PostProcessorRemote {
      * @see edu.iu.uis.eden.clientapp.PostProcessorRemote#doRouteStatusChange(edu.iu.uis.eden.clientapp.vo.DocumentRouteStatusChangeVO)
      */
     public boolean doRouteStatusChange(DocumentRouteStatusChangeVO statusChangeEvent) throws RemoteException {
-        return KNSServiceLocator.getPostProcessorService().doRouteStatusChange(statusChangeEvent);
+        return SpringServiceLocator.getPostProcessorService().doRouteStatusChange(statusChangeEvent);
     }
 
     /**
@@ -59,7 +59,7 @@ public class KualiPostProcessor implements PostProcessorRemote {
      * @see edu.iu.uis.eden.clientapp.PostProcessorRemote#doActionTaken(edu.iu.uis.eden.clientapp.vo.ActionTakenEventVO)
      */
     public boolean doActionTaken(ActionTakenEventVO event) throws RemoteException {
-        return KNSServiceLocator.getPostProcessorService().doActionTaken(event);
+        return SpringServiceLocator.getPostProcessorService().doActionTaken(event);
     }
 
     /**
@@ -67,7 +67,7 @@ public class KualiPostProcessor implements PostProcessorRemote {
      * @see edu.iu.uis.eden.clientapp.PostProcessorRemote#doDeleteRouteHeader(edu.iu.uis.eden.clientapp.vo.DeleteEventVO)
      */
     public boolean doDeleteRouteHeader(DeleteEventVO event) throws RemoteException {
-        return KNSServiceLocator.getPostProcessorService().doDeleteRouteHeader(event);
+        return SpringServiceLocator.getPostProcessorService().doDeleteRouteHeader(event);
     }
 
     /**
@@ -75,7 +75,7 @@ public class KualiPostProcessor implements PostProcessorRemote {
      * @see edu.iu.uis.eden.clientapp.PostProcessorRemote#doRouteLevelChange(edu.iu.uis.eden.clientapp.vo.DocumentRouteLevelChangeVO)
      */
     public boolean doRouteLevelChange(DocumentRouteLevelChangeVO levelChangeEvent) throws RemoteException {
-        return KNSServiceLocator.getPostProcessorService().doRouteLevelChange(levelChangeEvent);
+        return SpringServiceLocator.getPostProcessorService().doRouteLevelChange(levelChangeEvent);
     }
 
  }

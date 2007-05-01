@@ -16,10 +16,8 @@
 package org.kuali.module.purap.service;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.core.bo.Note;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
 
@@ -46,7 +44,6 @@ public interface PurchaseOrderService {
 
     public PurchaseOrderDocument getOldestPurchaseOrder(Integer id);
     public PurchaseOrderDocument getPurchaseOrderInPendingPrintStatus(Integer id);
-    public ArrayList<Note> getPurchaseOrderNotes(Integer id);
-    //public void sendFYItoWorkgroup(PurchaseOrderDocument po, String annotation, Long workgroupId);
+    public void sendFYItoWorkgroup(PurchaseOrderDocument po, String annotation, Long workgroupId);
     
 }

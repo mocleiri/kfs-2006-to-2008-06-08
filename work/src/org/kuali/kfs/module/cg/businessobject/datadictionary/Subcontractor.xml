@@ -20,10 +20,11 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.Subcontractor">
 
+
         <inquiry>
             <title>Subcontractor Inquiry</title>
 
-            <inquirySections><inquirySection title="Subcontractor Details"><inquiryFields>
+            <inquirySections><inquirySection title="Subcontractor Inquiry"><inquiryFields>
                 <field attributeName="subcontractorNumber" />
                 <field attributeName="subcontractorName" />
                 <field attributeName="subcontractorAddressLine1" />
@@ -80,20 +81,15 @@
                 <validationPattern>
                     <alphaNumeric />
                 </validationPattern>
-
+                <required>true</required>
                 <control>
-                    <text size="7" />
+                    <text size="5" />
                 </control>
 
                 <summary>Subcontractor Number</summary>
                 <description>
-					The number which corresponds to the Subcontractor Name.  
-					It is expressed as 5-digit numeric text, including leading zeros.  
-					When creating a new Subcontractor in the database, this number is 
-					automatically assigned by the system.  When adding an existing 
-					Subcontractor to a Proposal or Award, the user may search for the 
-					subcontractor using the search icon, or may manually enter the 
-					Subcontractor Number into the field.
+					This is a 5-digit number which corresponds to the Subcontractor Name.  
+					If you know the number of the subcontractor you wish to add, you can enter the number.
 				</description>
             </attribute>
 

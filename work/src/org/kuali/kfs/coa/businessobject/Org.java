@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/Org.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,19 +25,18 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.kuali.Constants;
-import org.kuali.core.bo.Campus;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Country;
+import org.kuali.core.bo.PostalZipCode;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
-import org.kuali.kfs.bo.Country;
-import org.kuali.kfs.bo.PostalZipCode;
-import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * 
  */
-public class Org extends PersistableBusinessObjectBase {
+public class Org extends BusinessObjectBase {
     private static final Logger LOG = Logger.getLogger(Org.class);
 
     private static final long serialVersionUID = 121873645110037203L;
@@ -905,7 +906,7 @@ public class Org extends PersistableBusinessObjectBase {
         params.put("conversionFields", "");
         params.put("returnLocation", "");
 
-        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString(Constants.WORKFLOW_URL_KEY) + "/Lookup.do", params);
+        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString("workflow.base.url") + "/Lookup.do", params);
     }
 
     /**

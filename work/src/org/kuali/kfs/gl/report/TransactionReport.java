@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.module.gl.bo.Transaction;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -97,9 +98,8 @@ public class TransactionReport {
         LOG.debug("generateReport() started");
 
         List transactions = new ArrayList();
-        if(reportErrors != null){
-            transactions.addAll(reportErrors.keySet());
-        }
+        transactions.addAll(reportErrors.keySet());
+
         generateReport(transactions, reportErrors, reportSummary, runDate, title, fileprefix, destinationDirectory);
     }
 
@@ -263,7 +263,7 @@ public class TransactionReport {
                             warnings.addCell(cell);
                             cell = new PdfPCell(new Phrase(tran.getFinancialSystemOriginationCode(), textFont));
                             warnings.addCell(cell);
-                            cell = new PdfPCell(new Phrase(tran.getDocumentNumber(), textFont));
+                            cell = new PdfPCell(new Phrase(tran.getFinancialDocumentNumber(), textFont));
                             warnings.addCell(cell);
                             if (tran.getTransactionLedgerEntrySequenceNumber() == null) {
                                 cell = new PdfPCell(new Phrase("NULL", textFont));

@@ -27,6 +27,7 @@ public class KraKeyConstants {
 
     // KRA confirmation messages
     public static final String QUESTION_KRA_DELETE_CONFIRMATION = "document.question.deleteContext.text";
+    public static final String ROUTING_FORM_GRANTS_GOV = "document.routingForm.grants.gov";
     
     // KRA specific Error Codes
     public static final String ERROR_INVALID_PERIOD_LENGTH = "error.invalidPeriodLength";
@@ -64,7 +65,6 @@ public class KraKeyConstants {
     public static final String AUDIT_PERSONNEL_STATUS = "audit.personnel.status";
     public static final String AUDIT_NONPERSONNEL_SUBCONTRACTOR_EXCESS_AMOUNT = "audit.nonpersonnel.subcontractorExceesAmount";
     public static final String AUDIT_PARAMETERS_NEGATIVE_IDC = "audit.parameters.negativeIdc";
-    public static final String AUDIT_OTHER_PROJECT_DETAILS_NOT_SELECTED = "audit.other.project.details.not.selected";
 
     // Agency/Delivery Info
     public static final String AUDIT_MAIN_PAGE_AGENCY_REQUIRED = "audit.mainPage.agency.required";
@@ -98,7 +98,6 @@ public class KraKeyConstants {
     public static final String AUDIT_MAIN_PAGE_PURPOSE_RESEARCH_TYPE_REQUIRED = "audit.mainPage.purpose.research.type.required";
     public static final String AUDIT_MAIN_PAGE_PURPOSE_OTHER_REQUIRED = "audit.mainPage.purpose.other.required";
     public static final String AUDIT_MAIN_PAGE_TITLE_REQUIRED = "audit.mainPage.title.required";
-    public static final String AUDIT_MAIN_PAGE_LAY_DESCRIPTION_REQUIRED = "audit.mainPage.lay.description.required";
     public static final String AUDIT_MAIN_PAGE_ABSTRACT_REQUIRED = "audit.mainPage.abstract.required";
     
     // Amounts & Dates
@@ -125,9 +124,9 @@ public class KraKeyConstants {
     public static final String ERROR_ACCOUNT_ALREADY_EXISTS_ON_RF = "error.account.already.exists.on.rf";
     public static final String ERROR_ORG_NOT_FOUND = "error.org.not.found";
     public static final String ERROR_SUBCONTRACTOR_NOT_FOUND = "error.subcontractor.not.found";
-    public static final String ERROR_SUBCONTRACTOR_NOT_SELECTED = "error.subcontractor.not.selected";
     public static final String ERROR_SUBCONTRACTOR_ALREADY_EXISTS_ON_RF = "error.subcontractor.already.exists.on.rf";
     public static final String ERROR_FRINGE_RATE_TOO_LARGE = "error.fringeRate.tooLarge";
+    public static final String ERROR_KEYWORD_MISSING = "error.keyword.missing";
     public static final String ERROR_PERSON_NOT_NAMED = "error.person.not.named";
     
     // Routing Form Research Risks page errors
@@ -144,10 +143,5 @@ public class KraKeyConstants {
     public static final String ERROR_BUDGET_ALREADY_LINKED = "error.budget.already.linked";
     public static final String ERROR_DOCUMENT_NUMBER_NOT_BUDGET_DOCUMENT = "error.document.number.not.budget";
     public static final String ERROR_DOCUMENT_NUMBER_NOT_EXIST = "error.document.number.not.exist";
-    public static final String ERROR_SELECTED_PERIODS_CONSECUTIVE = "error.selected.periods.consecutive";
-    public static final String ERROR_AT_LEAST_ONE_PERIOD = "error.at.least.one.period";
-    
-    //Global Messages
-    public static final Object BUDGET_OVERRIDE = "document.budget.override";
     
 }

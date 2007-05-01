@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -24,7 +26,7 @@
 -->
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.ObjectCodeCurrent">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Object Code Inquiry</title>
@@ -62,7 +64,7 @@
 
             <lookupFields>
                 <lookupField attributeName="universityFiscalYear" required="true">
-                    <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
+                    <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.FiscalYearFinder</defaultValueFinderClass>
                 </lookupField>
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
@@ -121,8 +123,9 @@
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
                 <control>
-		 	       <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartCode();" /> 
+                   <text size="2" />
                 </control>
+
             </attributeReference>
 
             <attribute name="financialObjectCode" forceUppercase="true">
@@ -215,9 +218,9 @@
                     <alpha exactLength="2" />
                 </validationPattern>
                 <required>true</required>
-				<control>
-					<text size="2" />
-				</control>
+                <control>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartOfAccpimtsCode();" />
+                </control>
 
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -334,7 +337,7 @@
                 <required>true</required>
                 <control><text size="1"/>
                 <!-- 
-                        <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.BudgetAggregationCodeValuesFinder" />
+                        <select valuesFinderClass="org.kuali.core.lookup.keyvalues.BudgetAggregationCodeValuesFinder" />
                 -->
 				</control>                <summary>
                     <![CDATA[&nbsp;]]>
@@ -362,13 +365,11 @@
             <attribute name="financialFederalFundedCode" forceUppercase="true">
                 <label>Federal Funded Code</label>
                 <shortLabel>FedFundCd</shortLabel>
-				
+
                 <maxLength>1</maxLength>
 
-				<required>true</required>
-
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.FederalFundedCodeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.FederalFundedCodeValuesFinder" />
                 </control>
 
                 <summary>
