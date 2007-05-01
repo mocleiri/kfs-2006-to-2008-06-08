@@ -1,17 +1,26 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
@@ -20,14 +29,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.bo.Options;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class OrganizationReversion extends PersistableBusinessObjectBase {
+public class OrganizationReversion extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
@@ -52,7 +61,6 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      */
     public OrganizationReversion() {
         organizations = new TypedArrayList(Org.class);
-        organizationReversionDetail = new TypedArrayList(OrganizationReversionDetail.class);
     }
 
     public List<OrganizationReversionDetail> getOrganizationReversionDetail() {
@@ -80,7 +88,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -101,7 +109,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -122,7 +130,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationCode attribute.
      * 
-     * @return Returns the organizationCode
+     * @return - Returns the organizationCode
      * 
      */
     public String getOrganizationCode() {
@@ -143,7 +151,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetReversionChartOfAccountsCode attribute.
      * 
-     * @return Returns the budgetReversionChartOfAccountsCode
+     * @return - Returns the budgetReversionChartOfAccountsCode
      * 
      */
     public String getBudgetReversionChartOfAccountsCode() {
@@ -164,7 +172,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetReversionAccountNumber attribute.
      * 
-     * @return Returns the budgetReversionAccountNumber
+     * @return - Returns the budgetReversionAccountNumber
      * 
      */
     public String getBudgetReversionAccountNumber() {
@@ -185,7 +193,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the carryForwardByObjectCodeIndicator attribute.
      * 
-     * @return Returns the carryForwardByObjectCodeIndicator
+     * @return - Returns the carryForwardByObjectCodeIndicator
      * 
      */
     public boolean isCarryForwardByObjectCodeIndicator() {
@@ -207,7 +215,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the cashReversionFinancialChartOfAccountsCode attribute.
      * 
-     * @return Returns the cashReversionFinancialChartOfAccountsCode
+     * @return - Returns the cashReversionFinancialChartOfAccountsCode
      * 
      */
     public String getCashReversionFinancialChartOfAccountsCode() {
@@ -228,7 +236,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the cashReversionAccountNumber attribute.
      * 
-     * @return Returns the cashReversionAccountNumber
+     * @return - Returns the cashReversionAccountNumber
      * 
      */
     public String getCashReversionAccountNumber() {
@@ -249,7 +257,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -269,7 +277,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the organization attribute.
      * 
-     * @return Returns the organization
+     * @return - Returns the organization
      * 
      */
     public List<Org> getOrganizations() {
@@ -289,7 +297,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the cashReversionAccount attribute.
      * 
-     * @return Returns the cashReversionAccount
+     * @return - Returns the cashReversionAccount
      * 
      */
     public Account getCashReversionAccount() {
@@ -309,7 +317,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetReversionAccount attribute.
      * 
-     * @return Returns the budgetReversionAccount
+     * @return - Returns the budgetReversionAccount
      * 
      */
     public Account getBudgetReversionAccount() {
@@ -329,7 +337,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetReversionChartOfAccounts attribute.
      * 
-     * @return Returns the budgetReversionChartOfAccounts
+     * @return - Returns the budgetReversionChartOfAccounts
      * 
      */
     public Chart getBudgetReversionChartOfAccounts() {
@@ -349,7 +357,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     /**
      * Gets the cashReversionFinancialChartOfAccounts attribute.
      * 
-     * @return Returns the cashReversionFinancialChartOfAccounts
+     * @return - Returns the cashReversionFinancialChartOfAccounts
      * 
      */
     public Chart getCashReversionFinancialChartOfAccounts() {
@@ -404,16 +412,5 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
 
     public void setOrganization(Org organization) {
         this.organization = organization;
-    }
-    
-    /**
-     * 
-     * This method (a hack by any other name...) returns a string so that an
-     * organization reversion can have a link to view its own inquiry page
-     * after a look up
-     * @return the String "View Organization Reversion"
-     */
-    public String getOrganizationReversionViewer() {
-        return "View Organization Reversion";
     }
 }

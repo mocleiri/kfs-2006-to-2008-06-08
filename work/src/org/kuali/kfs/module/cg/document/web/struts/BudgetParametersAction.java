@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +32,8 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.AgencyExtension;
 import org.kuali.module.kra.budget.bo.AppointmentType;
 import org.kuali.module.kra.budget.bo.Budget;
@@ -107,15 +109,11 @@ public class BudgetParametersAction extends BudgetAction {
         referenceObjects.add("thirdPartyCostShareItems");
         referenceObjects.add("institutionCostShareItems");
         referenceObjects.add("institutionCostSharePersonnelItems");
-        
-        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(budgetForm.getBudgetDocument().getBudget(), referenceObjects);
-        
-        List docReferenceObjects = new ArrayList();
-        docReferenceObjects.add("adhocPersons");
-        docReferenceObjects.add("adhocOrgs");
-        docReferenceObjects.add("adhocWorkgroups");
+        referenceObjects.add("adHocPermissions");
+        referenceObjects.add("adHocOrgs");
+        referenceObjects.add("adHocWorkgroups");
 
-        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(budgetForm.getBudgetDocument(), docReferenceObjects);
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(budgetForm.getBudgetDocument().getBudget(), referenceObjects);
 
         if (budgetForm.getBudgetDocument().getBudget().isAgencyModularIndicator()) {
             if (ObjectUtils.isNull(budgetForm.getBudgetDocument().getBudget().getModularBudget())) {
@@ -140,10 +138,6 @@ public class BudgetParametersAction extends BudgetAction {
             if (budgetForm.isAuditActivated()) {
                 return mapping.findForward("auditmode");
             }
-            
-            // This is so that tab states are not shared between parameters and overview. 
-            budgetForm.newTabState(true, true); 
-            
             return super.overview(mapping, budgetForm, request, response);
         }
 
@@ -153,24 +147,38 @@ public class BudgetParametersAction extends BudgetAction {
     public ActionForward copyFringeRateLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // get the form
         BudgetForm budgetForm = (BudgetForm) form;
-
+        // get the fringe rate list
+        List budgetFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRates();
+        int i = 0;
         BudgetFringeRateService bfrService = SpringServiceLocator.getBudgetFringeRateService();
-        for (BudgetFringeRate budgetFringeRate : budgetForm.getBudgetDocument().getBudget().getFringeRates()) {
-            budgetFringeRate.setContractsAndGrantsFringeRateAmount(budgetFringeRate.getAppointmentTypeFringeRateAmount());
-        }
+        for (Iterator iter = bfrService.getDefaultFringeRates().iterator(); iter.hasNext();) {
+            AppointmentType appType = (AppointmentType) iter.next();
 
+            BudgetFringeRate currentFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRate(i);
+            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getDocumentNumber(), appType.getAppointmentTypeCode(), appType.getFringeRateAmount(), currentFringeRate.getInstitutionCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
+
+            budgetFringeRate.set(i, bfr);
+            i++;
+        }
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward copyInstitutionCostShareLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // get the form
         BudgetForm budgetForm = (BudgetForm) form;
-        
+        // get the fringe rate list
+        List budgetFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRates();
+        int i = 0;
         BudgetFringeRateService bfrService = SpringServiceLocator.getBudgetFringeRateService();
-        for (BudgetFringeRate budgetFringeRate : budgetForm.getBudgetDocument().getBudget().getFringeRates()) {
-            budgetFringeRate.setInstitutionCostShareFringeRateAmount(budgetFringeRate.getAppointmentTypeCostShareFringeRateAmount());
-        }
+        for (Iterator iter = bfrService.getDefaultFringeRates().iterator(); iter.hasNext();) {
+            AppointmentType appType = (AppointmentType) iter.next();
 
+            BudgetFringeRate currentFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRate(i);
+            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getDocumentNumber(), appType.getAppointmentTypeCode(), currentFringeRate.getContractsAndGrantsFringeRateAmount(), appType.getCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
+
+            budgetFringeRate.set(i, bfr);
+            i++;
+        }
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
@@ -330,15 +338,14 @@ public class BudgetParametersAction extends BudgetAction {
                     }
                     budget.setModularBudget(modularBudget);
                 }
-                else if (request.getParameter("document.budget.budgetProjectDirectorUniversalIdentifier") != null) {
+                else if (request.getParameter("document.budget.budgetProjectDirectorSystemId") != null) {
                     // Coming back from project director lookup - project director selected
                     budgetForm.getBudgetDocument().getBudget().setProjectDirectorToBeNamedIndicator(false);
-                    budgetForm.getBudgetDocument().getBudget().refreshReferenceObject("projectDirector");
                 }
                 else if ("true".equals(request.getParameter("document.budget.projectDirectorToBeNamedIndicator"))) {
                     // Coming back from project director lookup - Name Later selected
                     budgetForm.getBudgetDocument().getBudget().setProjectDirector(null);
-                    budgetForm.getBudgetDocument().getBudget().setBudgetProjectDirectorUniversalIdentifier(null);
+                    budgetForm.getBudgetDocument().getBudget().setBudgetProjectDirectorSystemId(null);
                 }
             }
         }
