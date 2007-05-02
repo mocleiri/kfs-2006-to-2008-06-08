@@ -16,90 +16,42 @@
 -->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.Proposal">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Proposal Inquiry</title>
 
-            <inquirySections>
-                <inquirySection title="Proposal Details">
-                    <inquiryFields>
-                        <field attributeName="agencyNumber" />
-                        <field attributeName="cfdaNumber" />
-                        <field attributeName="federalPassThroughAgencyNumber" />
-                        <field attributeName="grantNumber" />
-                        <field attributeName="oldProposalNumber" />
-                        <field attributeName="proposalAwardTypeCode" />
-                        <field attributeName="proposalBeginningDate" />
-                        <field attributeName="proposalClosingDate" />
-                        <field attributeName="proposalDirectCostAmount" />
-                        <field attributeName="proposalDueDate" />
-                        <field attributeName="proposalEndingDate" />
-                        <field attributeName="proposalFederalPassThroughIndicator" />
-                        <field attributeName="proposalFellowName" />
-                        <field attributeName="proposalIndirectCostAmount" />
-                        <field attributeName="proposalLastUpdateDate" />
-                        <field attributeName="proposalNumber" />
-                        <field attributeName="proposalProjectTitle" />
-                        <field attributeName="proposalPurposeCode" />
-                        <field attributeName="proposalRejectedDate" />
-                        <field attributeName="proposalStatusCode" />
-                        <field attributeName="proposalSubmissionDate" />
-                        <field attributeName="proposalTotalAmount" />
-                        <field attributeName="proposalTotalProjectAmount" />
-                    </inquiryFields>
-                </inquirySection>
-                <inquirySection title="Organizations">
-                    <inquiryFields>
-                        <inquiryCollection name="proposalOrganizations" businessObjectClass="org.kuali.module.cg.bo.ProposalOrganization">
-                            <field attributeName="chartOfAccountsCode" />
-                            <field attributeName="organizationCode" />
-                            <field attributeName="proposalPrimaryOrganizationIndicator" />
-                            <inquirySummaryFields>
-                              <inquirySummaryField attributeName="chartOfAccountsCode" />
-                              <inquirySummaryField attributeName="organizationCode" />
-                              <inquirySummaryField attributeName="proposalPrimaryOrganizationIndicator" />
-                            </inquirySummaryFields>
-                        </inquiryCollection>
-                    </inquiryFields>
-                </inquirySection>
-                <inquirySection title="Project Directors">
-                    <inquiryFields>
-                        <inquiryCollection name="proposalProjectDirectors" businessObjectClass="org.kuali.module.cg.bo.ProposalProjectDirector">
-                            <field attributeName="projectDirector.personUserIdentifier"/>
-                            <field attributeName="projectDirector.personName"/>
-                            <field attributeName="proposalPrimaryProjectDirectorIndicator"/>
-                            <field attributeName="proposalProjectDirectorProjectTitle"/>
-                            <inquirySummaryFields>
-                                <inquirySummaryField attributeName="projectDirector.personName" />
-                                <inquirySummaryField attributeName="proposalPrimaryProjectDirectorIndicator" />
-                                <inquirySummaryField attributeName="proposalProjectDirectorProjectTitle" />
-                            </inquirySummaryFields>
-                        </inquiryCollection>
-                    </inquiryFields>
-                </inquirySection>
-                <inquirySection title="Subcontractors">
-                    <inquiryFields>
-                        <inquiryCollection name="proposalSubcontractors" businessObjectClass="org.kuali.module.cg.bo.ProposalSubcontractor">
-                            <field attributeName="subcontractorNumber" />
-                            <field attributeName="subcontractor.subcontractorName" />
-                            <field attributeName="proposalSubcontractorDescription" />
-                            <field attributeName="proposalSubcontractorAmount"/>
-                            <inquirySummaryFields>
-                                <inquirySummaryField attributeName="subcontractor.subcontractorName" />
-                                <inquirySummaryField attributeName="proposalSubcontractorAmount" />
-                            </inquirySummaryFields>
-                        </inquiryCollection>
-                    </inquiryFields>
-                </inquirySection>
-            </inquirySections>
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+                <field attributeName="agencyNumber" />
+                <field attributeName="cfdaNumber" />
+                <field attributeName="federalPassThroughAgencyNumber" />
+                <field attributeName="grantNumber" />
+                <field attributeName="oldProposalNumber" />
+                <field attributeName="proposalAwardTypeCode" />
+                <field attributeName="proposalBeginningDate" />
+                <field attributeName="proposalClosingDate" />
+                <field attributeName="proposalDirectCostAmount" />
+                <field attributeName="proposalDueDate" />
+                <field attributeName="proposalEndingDate" />
+                <field attributeName="proposalFederalPassThroughIndicator" />
+                <field attributeName="proposalFellowName" />
+                <field attributeName="proposalIndirectCostAmount" />
+                <field attributeName="proposalLastUpdateDate" />
+                <field attributeName="proposalNumber" />
+                <field attributeName="proposalProjectTitle" />
+                <field attributeName="proposalPurposeCode" />
+                <field attributeName="proposalRejectedDate" />
+                <field attributeName="proposalStatusCode" />
+                <field attributeName="proposalSubmissionDate" />
+                <field attributeName="proposalTotalAmount" />
+                <field attributeName="proposalTotalProjectAmount" />
+            </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
         <lookup>
-        	<lookupableID>proposalLookupable</lookupableID>
             <title>Proposal Lookup</title>
 
             <instructions>Look up a Proposal</instructions>
@@ -122,11 +74,7 @@
                 <lookupField attributeName="federalPassThroughAgencyNumber" required="false" />
                 <lookupField attributeName="proposalPurposeCode" required="false" />
                 <lookupField attributeName="proposalFellowName" required="false" />
-                <lookupField attributeName="proposalOrganizations.organization.organizationCode" required="false" />
-                <lookupField attributeName="proposalSubcontractors.subcontractor.subcontractorNumber" required="false" />
-                <lookupField attributeName="lookupPersonUniversalIdentifier" required="false" />
-                <lookupField attributeName="lookupUniversalUser.personUserIdentifier" required="false" />
-                <lookupField attributeName="lookupUniversalUser.personName" required="false" />
+				
             </lookupFields>
 
             <resultFields>
@@ -137,89 +85,22 @@
                 <field attributeName="proposalEndingDate" />
 				<field attributeName="grantNumber" />
                 <field attributeName="proposalStatusCode" />
-                <field attributeName="proposalOrganizations" />
-                <field attributeName="proposalProjectDirectors" />
+
             </resultFields>
 
         </lookup>
 
-        <titleAttribute>proposalNumber</titleAttribute>
-
         <attributes>
 
-            <attributeReference name="proposalOrganizations.organization.organizationCode" sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="organizationCode">
-				<label>Organization Code</label>
-				<shortLabel>Org Cd</shortLabel>
-				<summary>Proposal Organization Code</summary>
-   				<description>Insert desc here...</description>
-            </attributeReference>
-
-            <attributeReference name="proposalSubcontractors.subcontractor.subcontractorNumber" sourceClassName="org.kuali.module.cg.bo.Subcontractor" sourceAttributeName="subcontractorNumber">
-				<label>Subcontractor Number</label>
-				<shortLabel>Subcontr Num</shortLabel>
-				<summary>Proposal Subcontractor Number</summary>
-                <description>
-					The number which corresponds to the Subcontractor Name.  It is expressed as 5-digit numeric text, including leading zeros.
-					When creating a new Subcontractor in the database, this number is automatically assigned by the system.  When adding an existing
-					Subcontractor to a Proposal or Award, the user may search for the subcontractor using the search icon, or may manually enter the
-					Subcontractor Number into the field.
-				</description>
-            </attributeReference>
-			
-            <attributeReference name="proposalProjectDirectors.projectDirector.personUniversalIdentifier" sourceClassName="org.kuali.module.cg.bo.ProjectDirector" sourceAttributeName="personUniversalIdentifier">
-				<label>Project Director ID</label>
-				<shortLabel>Proj Dir ID</shortLabel>
-				<summary>Proposal Project Director ID</summary>
-   				<description>Insert desc here...</description>
-            </attributeReference>
-
-            <attributeReference name="lookupPersonUniversalIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUniversalIdentifier">
-                <label>Project Director Unvl ID</label>
-                <shortLabel>ProjDirUnvlId</shortLabel>
-                <displayLabelAttribute>lookupUniversalUser.personUserIdentifier</displayLabelAttribute>
-                <required>true</required>
-                <control>
-                    <hidden />
-                </control>
-            </attributeReference>
-
-            <attributeReference name="lookupUniversalUser.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
-				<label>Project Director User ID</label>
-				<shortLabel>Proj Dir User ID</shortLabel>
-                <control>
-                    <kualiUser universalIdAttributeName="lookupPersonUniversalIdentifier" userIdAttributeName="lookupUniversalUser.personUserIdentifier" personNameAttributeName="lookupUniversalUser.personName" />
-                </control>
-				<summary>Project Director User ID</summary>
-   				<description>Insert desc here...</description>
-            </attributeReference>
-
-            <attributeReference name="lookupUniversalUser.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
-                <label>Project Director User Name</label>
-                <shortLabel>Name</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The Name of the Project Director.</description>
-            </attributeReference>
-
             <attributeReference name="proposal.grantNumber" sourceClassName="org.kuali.module.cg.bo.Proposal" sourceAttributeName="grantNumber">
-				<summary>Proposal Grant Number</summary>
 				<description>Insert desc here...</description>
             </attributeReference>
 
             <attributeReference name="agency.fullName" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="fullName">
-				<summary>Agency Name</summary>
 				<description>Insert desc here...</description>
             </attributeReference>
 
-            <attributeReference name="agencyNumber" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
-				<summary>Agency Number</summary>
-				<description>Insert desc here...</description>
-            </attributeReference>
+            <attributeReference name="agencyNumber" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber"/>
 
             <attribute name="cfdaNumber" forceUppercase="true">
                 <label>CFDA Number</label>
@@ -247,7 +128,7 @@
                     <text size="7" />
                 </control>
 
-                <summary>Federal Pass Through Agency Number</summary>
+                <summary>federalPassThroughAgencyNumber</summary>
                 <description>federalPassThroughAgencyNumber description...</description>
 			</attribute>
 
@@ -256,13 +137,13 @@
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>27</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="29" />
                 </control>
 
-                <summary>Grant Number</summary>
+                <summary>grantNumber</summary>
                 <description>grantNumber description...</description>
 			</attribute>
 
@@ -277,7 +158,7 @@
                     <text size="10" />
                 </control>
 
-                <summary>Old Proposal Number</summary>
+                <summary>oldProposalNumber</summary>
                 <description>oldProposalNumber description...</description>
 			</attribute>
 
@@ -289,7 +170,7 @@
                     <select valuesFinderClass="org.kuali.module.cg.lookup.keyvalues.ProposalAwardTypeValuesFinder" />
                 </control>
 
-                <summary>Proposal Award Type Code</summary>
+                <summary>proposalAwardTypeCode</summary>
                 <description>proposalAwardTypeCode description...</description>
 			</attributeReference>
 
@@ -298,7 +179,7 @@
                 <shortLabel>Date</shortLabel>
 
                 <summary>
-                    Proposal Beginning Date
+                    <![CDATA[&nbsp;]]>
                 </summary>
                 <description>proposalBeginningDate description...</description>
 			</attributeReference>
@@ -307,7 +188,7 @@
                 <label>Proposal Closing Date</label>
                 <shortLabel>Date</shortLabel>
 
-                <summary>Proposal Closing Date</summary>
+                <summary>proposalClosingDate</summary>
                 <description>proposalClosingDate description...</description>
 			</attributeReference>
 
@@ -317,7 +198,7 @@
 
                 <exclusiveMin>-0.001</exclusiveMin>
 
-                <summary>Proposal Direct Cost Amount</summary>
+                <summary>proposalDirectCostAmount</summary>
                 <description>proposalDirectCostAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attributeReference>
@@ -326,7 +207,7 @@
                 <label>Proposal Due Date</label>
                 <shortLabel>Date</shortLabel>
 
-                <summary>Proposal Due Date</summary>
+                <summary>proposalDueDate</summary>
                 <description>proposalDueDate description...</description>
 			</attributeReference>
 
@@ -334,7 +215,7 @@
                 <label>Proposal Ending Date</label>
                 <shortLabel>Date</shortLabel>
 
-                <summary>Proposal Ending Date</summary>
+                <summary>proposalEndingDate</summary>
                 <description>proposalEndingDate description...</description>
 			</attributeReference>
 
@@ -348,7 +229,7 @@
                     <checkbox />
                 </control>
 
-                <summary>Proposal Federal Pass Through Indicator</summary>
+                <summary>proposalFederalPassThroughIndicator</summary>
                 <description>proposalFederalPassThroughIndicator description...</description>
 			</attribute>
 
@@ -363,7 +244,7 @@
                     <text size="32" />
                 </control>
 
-                <summary>Proposal Fellow Name</summary>
+                <summary>proposalFellowName</summary>
                 <description>proposalFellowName description...</description>
 			</attribute>
 
@@ -373,7 +254,7 @@
 
                 <exclusiveMin>-0.001</exclusiveMin>
 
-                <summary>Proposal Indirect Cost Amount</summary>
+                <summary>proposalIndirectCostAmount</summary>
                 <description>proposalIndirectCostAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
@@ -382,7 +263,7 @@
                 <label>Proposal Last Update Date</label>
                 <shortLabel>Date</shortLabel>
 
-                <summary>Proposal Last Update Date</summary>
+                <summary>proposalLastUpdateDate</summary>
                 <description>proposalLastUpdateDate description...</description>
 			</attributeReference>
 
@@ -397,7 +278,7 @@
                     <text size="14" />
                 </control>
 
-                <summary>Proposal Number</summary>
+                <summary>proposalNumber</summary>
                 <description>proposalNumber description...</description>
 			</attribute>
 
@@ -409,10 +290,10 @@
                 <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
 
                 <control>
-                    <textarea rows="3" cols="40"/>
+                    <textarea rows="5" cols="80"/>
                 </control>
 
-                <summary>Proposal Project Title</summary>
+                <summary>proposalProjectTitle</summary>
                 <description>proposalProjectTitle description...</description>
 			</attribute>
 
@@ -425,7 +306,7 @@
                 </control>
 
                 <summary>
-                    Proposal Purpose Code
+                    <![CDATA[&nbsp;]]>
                 </summary>
                 <description>A proposal purpose code</description>
             </attributeReference>
@@ -434,7 +315,7 @@
                 <label>Proposal Rejected Date</label>
                 <shortLabel>Date</shortLabel>
 
-                <summary>Proposal Rejected Date</summary>
+                <summary>proposalRejectedDate</summary>
                 <description>proposalRejectedDate description...</description>
 			</attributeReference>
 
@@ -447,7 +328,7 @@
                 </control>
 
                 <summary>
-                    Proposal Status Code
+                    <![CDATA[&nbsp;]]>
                 </summary>
                 <description>A proposal status code</description>
             </attributeReference>
@@ -456,7 +337,7 @@
                 <label>Proposal Submission Date</label>
                 <shortLabel>Date</shortLabel>
 
-                <summary>Proposal Submission Date</summary>
+                <summary>proposalSubmissionDate</summary>
                 <description>proposalSubmissionDate description...</description>
 			</attributeReference>
 
@@ -466,7 +347,7 @@
 
                 <exclusiveMin>-0.001</exclusiveMin>
 
-                <summary>Proposal Total Amount</summary>
+                <summary>proposalTotalAmount</summary>
                 <description>proposalTotalAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
@@ -477,7 +358,7 @@
 
                 <exclusiveMin>-0.001</exclusiveMin>
                 
-                <summary>Proposal Total Project Amount</summary>
+                <summary>proposalTotalProjectAmount</summary>
                 <description>proposalTotalProjectAmount description...</description>
                 <!--formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass-->
 			</attributeReference>
@@ -492,7 +373,7 @@
                 <shortLabel>Organizations</shortLabel>
                 <elementLabel>Organization</elementLabel>
                 <summary>
-                    Proposal Organizations
+                    <![CDATA[&nbsp;]]>
                 </summary>
                 <description>Proposal Organizations</description>
             </collection>
@@ -502,7 +383,7 @@
                 <shortLabel>Project Directors</shortLabel>
                 <elementLabel>Project Director</elementLabel>
                 <summary>
-                    Proposal Project Directors
+                    <![CDATA[&nbsp;]]>
                 </summary>
                 <description>Proposal Project Directors</description>
             </collection>
@@ -512,7 +393,7 @@
                 <shortLabel>Subcontractors</shortLabel>
                 <elementLabel>Subcontractor</elementLabel>
                 <summary>
-                    Proposal Subcontractors
+                    <![CDATA[&nbsp;]]>
                 </summary>
                 <description>Proposal Subcontractors</description>
             </collection>
@@ -522,29 +403,11 @@
                 <shortLabel>Research Risks</shortLabel>
                 <elementLabel>Research Risk</elementLabel>
                 <summary>
-                    Proposal Research Risks
+                    <![CDATA[&nbsp;]]>
                 </summary>
                 <description>Proposal Research Risks</description>
             </collection>
             
         </collections>
-        
-        <relationships>
-            <relationship objectAttributeName="proposalOrganizations.organization" >
-                <primitiveAttribute sourceName="proposalOrganizations.organization.organizationCode" targetName="organizationCode" />
-            </relationship>
-            <relationship objectAttributeName="proposalSubcontractors.subcontractor" >
-                <primitiveAttribute sourceName="proposalSubcontractors.subcontractor.subcontractorNumber" targetName="subcontractorNumber" />
-            </relationship>
-            <relationship objectAttributeName="proposalProjectDirectors.projectDirector" >
-                <primitiveAttribute sourceName="proposalProjectDirectors.projectDirector.personUniversalIdentifier" targetName="personUniversalIdentifier" />
-            </relationship>
-            <relationship objectAttributeName="lookupUniversalUser" >
-                <primitiveAttribute sourceName="lookupPersonUniversalIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="lookupUniversalUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="lookupUniversalUser.personName" targetName="personName" />
-            </relationship>
-        </relationships>
-        
     </businessObject>
 </dictionaryEntry>

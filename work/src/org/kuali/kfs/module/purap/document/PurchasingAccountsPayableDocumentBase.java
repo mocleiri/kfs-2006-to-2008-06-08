@@ -15,23 +15,19 @@
  */
 package org.kuali.module.purap.document;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.ojb.broker.util.collections.ManageableArrayList;
-import org.kuali.core.bo.Note;
 import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.service.NoteService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.purap.bo.PurApItemBase;
 import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.SourceDocumentReference;
 import org.kuali.module.purap.bo.Status;
 import org.kuali.module.purap.bo.StatusHistory;
-import org.kuali.module.vendor.bo.VendorDetail;
+import org.kuali.module.purap.bo.VendorDetail;
 
 /**
  * Purchasing-Accounts Payable Document Base
@@ -47,8 +43,8 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     private String vendorCustomerNumber;
 
     // COMMON ELEMENTS
-    protected List statusHistories;
-
+    protected List<StatusHistory> statusHistories;
+    protected List<SourceDocumentReference> sourceDocumentReferences;
     // COLLECTIONS
     private List<PurchasingApItem> items;
     
@@ -58,8 +54,8 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
 
     // CONSTRUCTORS
     public PurchasingAccountsPayableDocumentBase() {
-        items = new TypedArrayList(getItemClass());
-        this.statusHistories = new ManageableArrayList();
+        items = new TypedArrayList(PurApItemBase.class);
+        this.statusHistories = new TypedArrayList( StatusHistory.class );
     }
     
     public KualiDecimal getTotalDollarAmount() {
@@ -83,25 +79,6 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
         LinkedHashMap m = new LinkedHashMap();      
         m.put("purapDocumentIdentifier", this.purapDocumentIdentifier);
         return m;
-    }
-    
-    /**
-     * This method is used to add a note to a Status History.
-     * 
-     * @param statusHistory
-     * @param statusHistoryNote
-     */
-    protected void addStatusHistoryNote( StatusHistory statusHistory, Note note ) {
-        if( ObjectUtils.isNotNull( null ) ) {
-            NoteService noteService = SpringServiceLocator.getNoteService();
-            try {
-                note = noteService.createNote( note, statusHistory );
-                noteService.save( note );
-            } catch( Exception e ) {
-                LOG.error("Unable to create or save status history note " + e.getMessage());
-                throw new RuntimeException("Unable to create or save status history note " + e.getMessage());
-            }
-        }
     }
 
     // GETTERS AND SETTERS
@@ -190,11 +167,11 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
         this.statusCode = statusCode;
     }
 
-    public List getStatusHistories() {
+    public List<StatusHistory> getStatusHistories() {
         return statusHistories;
     }
 
-    public void setStatusHistories(List statusHistories) {
+    public void setStatusHistories(List<StatusHistory> statusHistories) {
         this.statusHistories = statusHistories;
     }
 
@@ -205,6 +182,13 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
         this.vendorDetail = vendorDetail;
     }
 
+    public List<SourceDocumentReference> getSourceDocumentReferences() {
+        return sourceDocumentReferences;
+}
+    public void setSourceDocumentReferences(List<SourceDocumentReference> sourceDocumentReferences) {
+        this.sourceDocumentReferences = sourceDocumentReferences;
+    }
+    
     /**
      * Gets the items attribute. 
      * @return Returns the items.
@@ -224,15 +208,12 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     public void addItem(PurchasingApItem item) {
         int itemLinePosition = items.size();
         if(item.getItemLineNumber()!=null) {
-            itemLinePosition = item.getItemLineNumber().intValue()-1;
+            itemLinePosition = item.getItemLineNumber().intValue();
         }
        
         //if the user entered something set line number to that
-//        if(itemLinePosition>0&&itemLinePosition<items.size()) {
-//            itemLinePosition = itemLinePosition - 1;
-//        }
-        else if(itemLinePosition>items.size()) {
-            itemLinePosition=items.size();
+        if(itemLinePosition>0&&itemLinePosition<items.size()) {
+            itemLinePosition = item.getItemLineNumber() - 1;
         }
         
         items.add(itemLinePosition,item);
@@ -254,7 +235,6 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     }
     
     public PurchasingApItem getItem(int pos) {
-        //TODO: we probably don't need this because of the TypedArrayList
         while (getItems().size() <= pos) {
             
             try {
@@ -280,23 +260,8 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
        return total;
     }
 
-    public abstract Class getItemClass();
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLines()
-     */
-    @Override
-    public List getSourceAccountingLines() {
-        //TODO: Chris loop through items and get accounts
-        TypedArrayList accounts = null;
-        if(items.size()>=1) {
-            accounts = new TypedArrayList(getItem(0).getAccountingLineClass());
-        }
-        for (PurchasingApItem item : items) {
-            accounts.addAll(item.getSourceAccountingLines());
-        }
-        return (accounts==null)?new ArrayList():accounts;
+    public Class getItemClass() {
+        //should we throw unimplemented method here
+        return null;
     }
-    
-    
 }
