@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/SufficientFundBalances.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -32,7 +34,7 @@ import org.kuali.module.chart.bo.ObjectCode;
 /**
  * 
  */
-public class SufficientFundBalances extends PersistableBusinessObjectBase {
+public class SufficientFundBalances extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
@@ -48,7 +50,7 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
     private Account account;
 
     public static final String BLANKS = "                 ";
-    public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Default constructor.
@@ -148,7 +150,6 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
             return null;
         }
         else {
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
             sdf.setLenient(beLenientWithDates);
 
             try {
@@ -166,7 +167,6 @@ public class SufficientFundBalances extends PersistableBusinessObjectBase {
             return "          ";
         }
         else {
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
             return sdf.format(date);
         }
     }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/DisbursementVoucherNonEmployeeExpense.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,14 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessObjectBase {
+public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
 
     private String documentNumber;
     private Integer financialDocumentLineNumber;
@@ -34,9 +36,7 @@ public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessOb
     private KualiDecimal disbVchrExpenseAmount;
 
     private TravelExpenseTypeCode disbVchrExpense;
-    private TravelCompanyCode disbVchrExpenseCompany;
-    private DisbursementVoucherNonEmployeeTravel disbursementVoucherNonEmployeeTravel;
-    
+
     private boolean isPrepaid;
 
     /**
@@ -209,40 +209,6 @@ public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessOb
      */
     public void setDisbVchrExpense(TravelExpenseTypeCode disbVchrExpense) {
         this.disbVchrExpense = disbVchrExpense;
-    }
-
-    /**
-     * Gets the disbVchrExpenseCompany attribute. 
-     * @return Returns the disbVchrExpenseCompany.
-     */
-    public TravelCompanyCode getDisbVchrExpenseCompany() {
-        return disbVchrExpenseCompany;
-    }
-
-    /**
-     * Sets the disbVchrExpenseCompany attribute value.
-     * @param disbVchrExpenseCompany The disbVchrExpenseCompany to set.
-     * @deprecated
-     */
-    public void setDisbVchrExpenseCompany(TravelCompanyCode disbVchrExpenseCompany) {
-        this.disbVchrExpenseCompany = disbVchrExpenseCompany;
-    }
-
-    /**
-     * Gets the disbursementVoucherNonEmployeeTravel attribute. 
-     * @return Returns the disbursementVoucherNonEmployeeTravel.
-     */
-    public DisbursementVoucherNonEmployeeTravel getDisbursementVoucherNonEmployeeTravel() {
-        return disbursementVoucherNonEmployeeTravel;
-    }
-
-    /**
-     * Sets the disbursementVoucherNonEmployeeTravel attribute value.
-     * @param disbursementVoucherNonEmployeeTravel The disbursementVoucherNonEmployeeTravel to set.
-     * @deprecated
-     */
-    public void setDisbursementVoucherNonEmployeeTravel(DisbursementVoucherNonEmployeeTravel disbursementVoucherNonEmployeeTravel) {
-        this.disbursementVoucherNonEmployeeTravel = disbursementVoucherNonEmployeeTravel;
     }
 
     /**

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/ObjLevel.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +21,15 @@ import java.util.LinkedHashMap;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
 
 /**
  * 
  */
-public class ObjLevel extends PersistableBusinessObjectBase {
+public class ObjLevel extends BusinessObjectBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjLevel.class);
 
     private String chartOfAccountsCode;

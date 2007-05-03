@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,13 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.Constants;
 import org.kuali.KeyConstants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.document.AmountTotaling;
+import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.SubObjCd;
@@ -50,8 +49,10 @@ import org.kuali.module.financial.document.VoucherDocument;
  * a debit and credit column for amount entry. New accounting lines use specific credit and debit amount fields b/c the new line is
  * explicitly known; however, already existing accounting lines need to exist within a list with ordering that matches the
  * accounting lines source list.
+ * 
+ * 
  */
-public class VoucherForm extends KualiAccountingDocumentFormBase {
+public class VoucherForm extends KualiTransactionalDocumentFormBase {
     private List accountingPeriods;
     private KualiDecimal newSourceLineDebit;
     private KualiDecimal newSourceLineCredit;
@@ -328,7 +329,7 @@ public class VoucherForm extends KualiAccountingDocumentFormBase {
      * @return String
      */
     public String getCurrencyFormattedTotal() {
-        return (String) new CurrencyFormatter().format(((AmountTotaling) getVoucherDocument()).getTotalDollarAmount());
+        return (String) new CurrencyFormatter().format(getVoucherDocument().getTotal());
     }
 
     /**
@@ -354,7 +355,7 @@ public class VoucherForm extends KualiAccountingDocumentFormBase {
             AccountingPeriod ap = new AccountingPeriod();
             ap.setUniversityFiscalPeriodCode(getSelectedPostingPeriodCode());
             ap.setUniversityFiscalYear(getSelectedPostingYear());
-            getFinancialDocument().setAccountingPeriod(ap);
+            getTransactionalDocument().setAccountingPeriod(ap);
         }
     }
 

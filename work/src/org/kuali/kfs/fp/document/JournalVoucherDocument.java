@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
+import org.kuali.core.bo.AccountingLineBase;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.document.AccountingDocumentBase;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.financial.bo.JournalVoucherAccountingLineParser;
 import org.kuali.module.gl.util.SufficientFundsItem;
@@ -44,8 +41,10 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * eventually post transactions to the G/L. It integrates with workflow and contains a single group of accounting lines. The Journal
  * Voucher is unique in that we only make use of one accounting line list: the source accounting lines seeing as a JV only records
  * accounting lines as debits or credits.
+ * 
+ * 
  */
-public class JournalVoucherDocument extends AccountingDocumentBase implements VoucherDocument, Copyable, Correctable, AmountTotaling {
+public class JournalVoucherDocument extends TransactionalDocumentBase implements VoucherDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(JournalVoucherDocument.class);
 
     // document specific attributes
@@ -195,7 +194,7 @@ public class JournalVoucherDocument extends AccountingDocumentBase implements Vo
      * 
      * @return KualiDecimal the total of the JV document.
      */
-    public KualiDecimal getTotalDollarAmount() {
+    public KualiDecimal getTotal() {
 
         KualiDecimal total = new KualiDecimal(0);
         AccountingLineBase al = null;
@@ -226,12 +225,19 @@ public class JournalVoucherDocument extends AccountingDocumentBase implements Vo
     }
 
     /**
-     * @see org.kuali.module.financial.document.FinancialDocumentBase#toErrorCorrection()
+     * Overrides to call super, and then makes sure this is an error correction. If it is an error correction, it calls the JV
+     * specific error correction helper method.
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentBase#performConversion(int)
      */
     @Override
-    public void toErrorCorrection() throws WorkflowException {
-        super.toErrorCorrection();
-        processJournalVoucherErrorCorrections();
+    protected void performConversion(int operation) throws WorkflowException {
+        super.performConversion(operation);
+
+        // process special for error corrections
+        if (ERROR_CORRECTING == operation) {
+            processJournalVoucherErrorCorrections();
+        }
     }
 
     /**

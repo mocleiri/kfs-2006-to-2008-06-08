@@ -59,12 +59,12 @@ public class OptionsServiceTest extends KualiTestBase {
         LOG.debug("getFinObjTypeCshNotIncomeCd = " + options.getFinObjTypeCshNotIncomeCd());
         LOG.debug("getUniversityFiscalYearName = " + options.getUniversityFiscalYearName());
         LOG.debug("getUniversityFinChartOfAcctCd = " + options.getUniversityFinChartOfAcctCd());
-        LOG.debug("getCostShareEncumbranceBalanceTypeCd = " + options.getCostShareEncumbranceBalanceTypeCd());
-        LOG.debug("getBaseBudgetFinancialBalanceTypeCd = " + options.getBaseBudgetFinancialBalanceTypeCd());
-        LOG.debug("getMonthlyBudgetFinancialBalanceTypeCd = " + options.getMonthlyBudgetFinancialBalanceTypeCd());
-        LOG.debug("getFinancialObjectTypeTransferIncomeCd = " + options.getFinancialObjectTypeTransferIncomeCd());
-        LOG.debug("getFinancialObjectTypeTransferExpenseCd = " + options.getFinancialObjectTypeTransferExpenseCd());
-        LOG.debug("getNominalFinancialBalanceTypeCd = " + options.getNominalFinancialBalanceTypeCd());
+        LOG.debug("getCostShareEncumbranceBalanceTypeCode = " + options.getCostShareEncumbranceBalanceTypeCode());
+        LOG.debug("getBaseBudgetFinancialBalanceTypeCode = " + options.getBaseBudgetFinancialBalanceTypeCode());
+        LOG.debug("getMonthlyBudgetFinancialBalanceTypeCode = " + options.getMonthlyBudgetFinancialBalanceTypeCode());
+        LOG.debug("getFinancialObjectTypeTransferIncomeCode = " + options.getFinancialObjectTypeTransferIncomeCode());
+        LOG.debug("getFinancialObjectTypeTransferExpenseCode = " + options.getFinancialObjectTypeTransferExpenseCode());
+        LOG.debug("getNominalFinancialBalanceTypeCode = " + options.getNominalFinancialBalanceTypeCode());
     }
 
     public boolean doRollback() {

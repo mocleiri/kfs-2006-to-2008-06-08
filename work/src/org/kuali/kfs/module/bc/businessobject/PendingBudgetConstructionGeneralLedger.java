@@ -19,14 +19,11 @@ package org.kuali.module.budget.bo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.TypedArrayList;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -36,8 +33,6 @@ import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.labor.bo.LaborObject;
-import org.kuali.module.labor.bo.PositionObjectBenefit;
-import org.kuali.rice.KNSServiceLocator;
 import org.kuali.PropertyConstants;
 
 /**
@@ -58,6 +53,7 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
 	private KualiDecimal financialBeginningBalanceLineAmount;
 
     private BudgetConstructionHeader budgetConstructionHeader;
+//    private BudgetConstructionMonthly budgetConstructionMonthly;
 	private ObjectCode financialObject;
 	private Chart chartOfAccounts;
 	private Account account;
@@ -65,24 +61,18 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
     private SubObjCd financialSubObject;
     private BalanceTyp balanceType;
     private ObjectType objectType;
+    private LaborObject laborObject;
 
     private List budgetConstructionMonthly;
-    private List pendingBudgetConstructionAppointmentFunding;
     
-    //TODO These are only used by PBGLExpenditureLines so should probably put these in an extension class
-    // These are not defined under ojb since not all expenditure line objects have these
-    private LaborObject laborObject;
-    private List<PositionObjectBenefit> positionObjectBenefit;
-
     private KualiDecimal percentChange;
     
 	/**
 	 * Default constructor.
 	 */
 	public PendingBudgetConstructionGeneralLedger() {
-        setBudgetConstructionMonthly(new TypedArrayList(BudgetConstructionMonthly.class));
-        setPendingBudgetConstructionAppointmentFunding(new TypedArrayList(PendingBudgetConstructionAppointmentFunding.class));
-        setPercentChange(null);
+        budgetConstructionMonthly = new ArrayList();
+        percentChange = null;
 
 	}
 
@@ -94,11 +84,11 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
     public KualiDecimal getPercentChange() {
 
         if (financialBeginningBalanceLineAmount == null || financialBeginningBalanceLineAmount.isZero()){
-            setPercentChange(null);
+            percentChange = null;
         } else {
             BigDecimal diffRslt = (accountLineAnnualBalanceAmount.bigDecimalValue().setScale(4)).subtract(financialBeginningBalanceLineAmount.bigDecimalValue().setScale(4));
             BigDecimal divRslt = diffRslt.divide((financialBeginningBalanceLineAmount.bigDecimalValue().setScale(4)),BigDecimal.ROUND_HALF_UP);
-            setPercentChange(new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2))); 
+            percentChange = new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2)); 
         }
         return percentChange;
     }
@@ -364,23 +354,6 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
 	}
 
 	/**
-     * Gets the pendingBudgetConstructionAppointmentFunding attribute. 
-     * @return Returns the pendingBudgetConstructionAppointmentFunding.
-     */
-    public List<PendingBudgetConstructionAppointmentFunding> getPendingBudgetConstructionAppointmentFunding() {
-        return pendingBudgetConstructionAppointmentFunding;
-    }
-
-    /**
-     * Sets the pendingBudgetConstructionAppointmentFunding attribute value.
-     * @param pendingBudgetConstructionAppointmentFunding The pendingBudgetConstructionAppointmentFunding to set.
-     * @deprecated
-     */
-    public void setPendingBudgetConstructionAppointmentFunding(List<PendingBudgetConstructionAppointmentFunding> pendingBudgetConstructionAppointmentFunding) {
-        this.pendingBudgetConstructionAppointmentFunding = pendingBudgetConstructionAppointmentFunding;
-    }
-
-    /**
 	 * Gets the financialObject attribute.
 	 * 
 	 * @return Returns the financialObject
@@ -530,62 +503,18 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
      * @return Returns the laborObject.
      */
     public LaborObject getLaborObject() {
-        if (laborObject == null){
-            Map pkeys = new HashMap();
-            pkeys.put("universityFiscalYear", getUniversityFiscalYear());
-            pkeys.put("chartOfAccountsCode", getChartOfAccountsCode());
-            pkeys.put("financialObjectCode", getFinancialObjectCode());
-            
-            setLaborObject((LaborObject) KNSServiceLocator.getBusinessObjectService().findByPrimaryKey(LaborObject.class,pkeys));
-            
-        }
         return laborObject;
     }
 
     /**
      * Sets the laborObject attribute value.
      * @param laborObject The laborObject to set.
+     * @deprecated
      */
     public void setLaborObject(LaborObject laborObject) {
         this.laborObject = laborObject;
     }        
     
-    /**
-     * Gets the positionObjectBenefit attribute. 
-     * @return Returns the positionObjectBenefit.
-     */
-    public List<PositionObjectBenefit> getPositionObjectBenefit() {
-        if (positionObjectBenefit == null){
-            Map fieldValues = new HashMap();
-            fieldValues.put("universityFiscalYear", getUniversityFiscalYear());
-            fieldValues.put("chartOfAccountsCode", getChartOfAccountsCode());
-            fieldValues.put("financialObjectCode", getFinancialObjectCode());
-            
-            setPositionObjectBenefit((List<PositionObjectBenefit>) KNSServiceLocator.getBusinessObjectService().findMatching(PositionObjectBenefit.class,fieldValues));
-            
-        }
-        return positionObjectBenefit;
-    }
-
-    /**
-     * Sets the positionObjectBenefit attribute value.
-     * @param positionObjectBenefit The positionObjectBenefit to set.
-     */
-    public void setPositionObjectBenefit(List<PositionObjectBenefit> positionObjectBenefit) {
-        this.positionObjectBenefit = positionObjectBenefit;
-    }
-
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @Override
-    public List buildListOfDeletionAwareLists() {
-//        return super.buildListOfDeletionAwareLists();
-        List managedLists = super.buildListOfDeletionAwareLists();
-        managedLists.add(this.getPendingBudgetConstructionAppointmentFunding());
-        return managedLists;
-    }
-
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -605,25 +534,5 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
         return m;
     }
 
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-        simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());
-        simpleValues.put("accountNumber", getAccountNumber());
-        simpleValues.put("subAccountNumber", getSubAccountNumber());
-        simpleValues.put("financialObjectCode", getFinancialObjectCode());
-        simpleValues.put("financialSubObjectCode", getFinancialSubObjectCode());
-        simpleValues.put("financialBalanceTypeCode", getFinancialBalanceTypeCode());
-        simpleValues.put("financialObjectTypeCode", getFinancialObjectTypeCode());
-
-        return simpleValues;
-    }
   
 }

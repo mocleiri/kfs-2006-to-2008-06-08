@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import java.util.LinkedHashMap;
 
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -35,7 +35,7 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
  * 
  * 
  */
-public class Balance extends PersistableBusinessObjectBase {
+public class Balance extends BusinessObjectBase {
     static final long serialVersionUID = 6581797610149985575L;
 
     private Integer universityFiscalYear;
@@ -72,7 +72,7 @@ public class Balance extends PersistableBusinessObjectBase {
     private BalanceTyp balanceType;
     private ObjectType objectType;
 
-    private TransientBalanceInquiryAttributes dummyBusinessObject;
+    private DummyBusinessObject dummyBusinessObject;
     private Options option;
 
     /**
@@ -106,7 +106,7 @@ public class Balance extends PersistableBusinessObjectBase {
         month11Amount = new KualiDecimal(0);
         month12Amount = new KualiDecimal(0);
         month13Amount = new KualiDecimal(0);
-        this.dummyBusinessObject = new TransientBalanceInquiryAttributes();
+        this.dummyBusinessObject = new DummyBusinessObject();
     }
 
     public Balance(Transaction t) {
@@ -644,7 +644,7 @@ public class Balance extends PersistableBusinessObjectBase {
      * 
      * @return Returns the dummyBusinessObject.
      */
-    public TransientBalanceInquiryAttributes getDummyBusinessObject() {
+    public DummyBusinessObject getDummyBusinessObject() {
         return dummyBusinessObject;
     }
 
@@ -653,7 +653,7 @@ public class Balance extends PersistableBusinessObjectBase {
      * 
      * @param dummyBusinessObject The dummyBusinessObject to set.
      */
-    public void setDummyBusinessObject(TransientBalanceInquiryAttributes dummyBusinessObject) {
+    public void setDummyBusinessObject(DummyBusinessObject dummyBusinessObject) {
         this.dummyBusinessObject = dummyBusinessObject;
     }
 

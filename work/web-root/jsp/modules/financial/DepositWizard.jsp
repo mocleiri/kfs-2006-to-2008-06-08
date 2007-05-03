@@ -1,5 +1,7 @@
 <%--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/financial/DepositWizard.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -42,9 +44,6 @@ function checkAllOrNone() {
   }
 }
 </script>
-	<script type='text/javascript' src="dwr/interface/BankService.js"></script>
-	<script type='text/javascript' src="dwr/interface/BankAccountService.js"></script>
-	<script type='text/javascript' src="scripts/financial/objectInfo.js"></script>
 
 	<html:hidden property="cashDrawerVerificationUnit" />
 	<html:hidden property="cashManagementDocId" />

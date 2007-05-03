@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,15 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBase {
+public class DisbursementVoucherWireTransfer extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private String disbursementVoucherBankName;
     private String disbVchrBankRoutingNumber;
     private String disbVchrBankCityName;
@@ -45,6 +44,8 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     private String disbursementVoucherForeignCurrencyTypeName;
     private String disbursementVoucherForeignCurrencyTypeCode;
 
+    private DisbursementVoucherDocument disbursementVoucherDocument;
+
 
     /**
      * Default no-arg constructor.
@@ -54,30 +55,30 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     /**
      * Gets the disbursementVoucherBankName attribute.
      * 
-     * @return Returns the disbursementVoucherBankName
+     * @return - Returns the disbursementVoucherBankName
      * 
      */
     public String getDisbursementVoucherBankName() {
@@ -98,7 +99,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbVchrBankRoutingNumber attribute.
      * 
-     * @return Returns the disbVchrBankRoutingNumber
+     * @return - Returns the disbVchrBankRoutingNumber
      * 
      */
     public String getDisbVchrBankRoutingNumber() {
@@ -119,7 +120,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbVchrBankCityName attribute.
      * 
-     * @return Returns the disbVchrBankCityName
+     * @return - Returns the disbVchrBankCityName
      * 
      */
     public String getDisbVchrBankCityName() {
@@ -140,7 +141,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbVchrBankStateCode attribute.
      * 
-     * @return Returns the disbVchrBankStateCode
+     * @return - Returns the disbVchrBankStateCode
      * 
      */
     public String getDisbVchrBankStateCode() {
@@ -161,7 +162,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbVchrBankCountryCode attribute.
      * 
-     * @return Returns the disbVchrBankCountryCode
+     * @return - Returns the disbVchrBankCountryCode
      * 
      */
     public String getDisbVchrBankCountryCode() {
@@ -182,7 +183,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbVchrAttentionLineText attribute.
      * 
-     * @return Returns the disbVchrAttentionLineText
+     * @return - Returns the disbVchrAttentionLineText
      * 
      */
     public String getDisbVchrAttentionLineText() {
@@ -203,7 +204,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbVchrAdditionalWireText attribute.
      * 
-     * @return Returns the disbVchrAdditionalWireText
+     * @return - Returns the disbVchrAdditionalWireText
      * 
      */
     public String getDisbVchrAdditionalWireText() {
@@ -224,7 +225,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbVchrPayeeAccountNumber attribute.
      * 
-     * @return Returns the disbVchrPayeeAccountNumber
+     * @return - Returns the disbVchrPayeeAccountNumber
      * 
      */
     public String getDisbVchrPayeeAccountNumber() {
@@ -245,7 +246,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbVchrCurrencyTypeName attribute.
      * 
-     * @return Returns the disbVchrCurrencyTypeName
+     * @return - Returns the disbVchrCurrencyTypeName
      * 
      */
     public String getDisbVchrCurrencyTypeName() {
@@ -267,7 +268,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
      * Gets the disbursementVoucherForeignCurrencyTypeName attribute. This field is here because the currency type field is
      * presented in different places on screen, and value conflicts occur unless we have an alias.
      * 
-     * @return Returns the disbursementVoucherForeignCurrencyTypeName
+     * @return - Returns the disbursementVoucherForeignCurrencyTypeName
      * 
      */
     public String getDisbursementVoucherForeignCurrencyTypeName() {
@@ -289,7 +290,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbVchrCurrencyTypeCode attribute.
      * 
-     * @return Returns the disbVchrCurrencyTypeCode
+     * @return - Returns the disbVchrCurrencyTypeCode
      * 
      */
     public String getDisbVchrCurrencyTypeCode() {
@@ -311,7 +312,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
      * Gets the disbursementVoucherForeignCurrencyTypeCode attribute. This field is here because the currency type field is
      * presented in different places on screen, and value conflicts occur unless we have an alias.
      * 
-     * @return Returns the disbursementVoucherForeignCurrencyTypeCode
+     * @return - Returns the disbursementVoucherForeignCurrencyTypeCode
      * 
      */
     public String getDisbursementVoucherForeignCurrencyTypeCode() {
@@ -332,7 +333,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbursementVoucherWireTransferFeeWaiverIndicator attribute.
      * 
-     * @return Returns the disbursementVoucherWireTransferFeeWaiverIndicator
+     * @return - Returns the disbursementVoucherWireTransferFeeWaiverIndicator
      * 
      */
     public boolean isDisbursementVoucherWireTransferFeeWaiverIndicator() {
@@ -353,7 +354,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbursementVoucherPayeeAccountName attribute.
      * 
-     * @return Returns the disbursementVoucherPayeeAccountName
+     * @return - Returns the disbursementVoucherPayeeAccountName
      * 
      */
     public String getDisbursementVoucherPayeeAccountName() {
@@ -374,7 +375,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbursementVoucherPayeeAccountTypeCode attribute.
      * 
-     * @return Returns the disbursementVoucherPayeeAccountTypeCode
+     * @return - Returns the disbursementVoucherPayeeAccountTypeCode
      * 
      */
     public String getDisbursementVoucherPayeeAccountTypeCode() {
@@ -395,7 +396,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     /**
      * Gets the disbursementVoucherAutomatedClearingHouseProfileNumber attribute.
      * 
-     * @return Returns the disbursementVoucherAutomatedClearingHouseProfileNumber
+     * @return - Returns the disbursementVoucherAutomatedClearingHouseProfileNumber
      * 
      */
     public String getDisbursementVoucherAutomatedClearingHouseProfileNumber() {
@@ -414,6 +415,21 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
         this.disbursementVoucherAutomatedClearingHouseProfileNumber = disbursementVoucherAutomatedClearingHouseProfileNumber;
     }
 
+    /**
+     * @return Returns the disbursementVoucherDocument.
+     */
+    public DisbursementVoucherDocument getDisbursementVoucherDocument() {
+        return disbursementVoucherDocument;
+    }
+
+    /**
+     * @param disbursementVoucherDocument The disbursementVoucherDocument to set.
+     * @deprecated
+     */
+    public void setDisbursementVoucherDocument(DisbursementVoucherDocument disbursementVoucherDocument) {
+        this.disbursementVoucherDocument = disbursementVoucherDocument;
+    }
+
     public void setDisbVchrForeignBankIndicatorName(String name) {
     }
 
@@ -422,7 +438,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 

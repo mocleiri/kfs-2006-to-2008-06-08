@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ public interface OriginEntryGroupDao {
      * @return
      */
     public Collection<OriginEntryGroup> getGroupsFromSourceForDate(String sourceCode, Date date);
-
+    
     /**
      * Get all the groups that are older than a date
      * 
@@ -69,30 +69,13 @@ public interface OriginEntryGroupDao {
     public Collection getBackupGroups(Date groupDate);
 
     /**
-     * Get all the Labor backup groups to scrub 
-     * 
-     * @param groupDate
-     * @return
-     */
-    public Collection getLaborBackupGroups(Date groupDate); 
-    
-    
-    /**
      * Get all the groups to be copied into the backup group
      * 
      * @param groupDate
      * @return
      */
     public Collection getGroupsToBackup(Date groupDate);
-    
-    /**
-     * Get all the groups to be copied into the backup group
-     * 
-     * @param groupDate
-     * @return
-     */
-    public Collection getLaborGroupsToBackup(Date groupDate);
-    
+
     /**
      * Save a group
      * 

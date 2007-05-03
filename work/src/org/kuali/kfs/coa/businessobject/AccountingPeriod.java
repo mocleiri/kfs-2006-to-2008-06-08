@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/AccountingPeriod.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +23,15 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 
 import org.kuali.Constants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
 import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * 
  */
-public class AccountingPeriod extends PersistableBusinessObjectBase {
+public class AccountingPeriod extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String universityFiscalPeriodCode;

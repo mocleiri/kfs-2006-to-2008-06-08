@@ -17,11 +17,10 @@ package org.kuali.module.purap.document;
 
 import java.util.List;
 
-import org.kuali.core.bo.Note;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.SourceDocumentReference;
 import org.kuali.module.purap.bo.Status;
+import org.kuali.module.purap.bo.StatusHistory;
 
 
 /**
@@ -72,32 +71,12 @@ public interface PurchasingAccountsPayableDocument extends AccountingDocument {
 
     public void setStatusCode(String statusCode);
 
-    public List getStatusHistories();
-    
-    /**
-     * This method adds to the document's status history collection an object of the
-     * appropriate child of StatusHistory.
-     * 
-     * @param oldStatus             A code for the old status in String form
-     * @param newStatus             A code for the new status in String form
-     * @param statusHistoryNote     An optional BO Note for the StatusHistory (can be null)
-     */
-    public void addToStatusHistories(String oldStatus, String newStatus, Note statusHistoryNote);
+    public List<StatusHistory> getStatusHistories();
 
-    public void setStatusHistories(List statusHistories);
+    public void setStatusHistories(List<StatusHistory> statusHistories);
+    
+    public List<SourceDocumentReference> getSourceDocumentReferences();
+    
+    public void setSourceDocumentReferences(List<SourceDocumentReference> sourceDocumentReferences);
 
-    public List getItems();
-    
-    public void addItem(PurchasingApItem item);
-    
-    public void setItems(List items);
-    
-    public void deleteItem(int lineNum);
-    
-    public PurchasingApItem getItem(int pos);
-    
-    public KualiDecimal getTotal();
-    
-    public abstract Class getItemClass();
-    
 }

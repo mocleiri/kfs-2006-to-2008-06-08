@@ -15,89 +15,81 @@
  */
 package org.kuali.module.labor.web.struts.form;
 
+import static org.kuali.core.util.SpringServiceLocator.getUniversalUserService;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.labor.bo.LaborUser;
 import org.kuali.module.labor.document.SalaryExpenseTransferDocument;
-import org.kuali.module.labor.service.LaborUserService;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * This class is the form class for the Salary Expense Transfer document. This method extends the parent
  * KualiTransactionalDocumentFormBase class which contains all of the common form methods and form attributes needed by the
  * Salary Expense Transfer document. It adds a new method which is a convenience method for getting at the Salary Expense Transfer document easier.
- * 
- * 
  */
 public class SalaryExpenseTransferForm extends LaborDocumentFormBase {
-    private static Log LOG = LogFactory.getLog(SalaryExpenseTransferForm.class);
-    private LaborUser user;
+    private UniversalUser user;
+    private String userId;
 
     /**
      * Constructs a SalaryExpenseTransferForm instance and sets up the appropriately casted document.
      */
     public SalaryExpenseTransferForm() {
         super();
-        setUser(new LaborUser(new UniversalUser()));
         setDocument(new SalaryExpenseTransferDocument());
     }
 
     /**
-     * 
-     * This method returns a refernce to the Salary Expense Transfer Document
-     * @return SalaryExpenseTransferDocument
-     */    
+     * @return Returns the salaryExpenseTransferDocument.
+     */
     public SalaryExpenseTransferDocument getSalaryExpenseTransferDocument() {
         return (SalaryExpenseTransferDocument) getDocument();
     }
     
     /**
-     * Assign <code>{@link LaborUser}</code> instance to the struts form.
+     * Sets the <code>{@link UniversalUser}</code> through the <code>personUserIdentifier</code> attribute value
      *
-     * @param user
+     * @param uid <code>personUserIdentifier</code>
      */
-    public void setUser(LaborUser user) {
-        this.user = user;
+    public void setUserId(String uid) throws UserNotFoundException {
+        if (uid != null) {
+            //  This may happen during populate when there is no initial user
+            user = getUniversalUserService().getUniversalUser(uid);
+        }
     }
     
     /**
-     * Retrieve <code>{@link LaborUser}</code> instance from the struts from.
+     * Gets the <code>personUserIdentifier</code> attribute value from the <code>{@link UniversalUser}</code> instance
      *
-     * @return LaborUser
+     * @return String <code>personUserIdentifier</code>
      */
-    public LaborUser getUser() {
-        return user;
-    }
-    
-   /**
-    * 
-    * This method sets the employee ID retrieved from the universal user service
-    * @param emplid
-    * @throws UserNotFoundException because a lookup at the database discovers user data from the personPayrollIdentifier
-    */
-    public void setPersonPayrollIdentifier(String id) throws UserNotFoundException {
-        getSalaryExpenseTransferDocument().setEmplid(id);
-        
-        if (id != null) {
-            setUser(((LaborUserService) SpringServiceLocator.getService("laborUserService")).getLaborUserByPersonPayrollIdentifier(id));
+    public String getUserId() {
+        String retval = null;
+        if (user != null) {
+            retval = user.getPersonUniversalIdentifier();
         }
+        return retval;
     }
 
     /**
-     * 
-     * This method returns the employee ID from the UniversalUser table.
+     * Sets the <code>{@link UniversalUser}</code> through the <code>personUserIdentifier</code> attribute value
      *
-     * @return String of the personPayrollIdentifier
-     * @throws UserNotFoundException because a lookup at the database discovers user data from the personPayrollIdentifier
+     * @param uid <code>personUserIdentifier</code>
      */
-    public String getPersonPayrollIdentifier() throws UserNotFoundException {
-        if (user == null) {
-            setUser(((LaborUserService) SpringServiceLocator.getService("laborUserService"))
-                    .getLaborUserByPersonPayrollIdentifier(getSalaryExpenseTransferDocument().getEmplid()));
+    public void setPersonName(String personName) throws UserNotFoundException {
+        if (personName != null) {
+            //  This may happen during populate when there is no initial user
+            user = getUniversalUserService().getUniversalUser(personName);
         }
-        return getSalaryExpenseTransferDocument().getEmplid();
     }
-}
+    /**
+     * Gets the <code>personName</code> attribute value from the <code>{@link UniversalUser}</code> instance
+     *
+     * @return String <code>personName</code>
+     */
+    public String getPersonName() {
+        String retval = null;
+        if (user != null) {
+            retval = user.getPersonName();
+        }
+        return retval;
+    }
+    }
