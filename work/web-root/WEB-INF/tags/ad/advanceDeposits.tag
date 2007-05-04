@@ -16,7 +16,7 @@
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul" %>
+<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
 
 <%@ attribute name="editingMode" required="true" description="used to decide if items may be edited" type="java.util.Map"%>
 <c:set var="readOnly" value="${not empty editingMode['viewOnly']}" />

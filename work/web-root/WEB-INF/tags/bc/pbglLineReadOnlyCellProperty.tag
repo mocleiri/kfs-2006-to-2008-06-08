@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ taglib prefix="kul" tagdir="/WEB-INF/tags" %>
+<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib prefix="html" uri="/tlds/struts-html.tld" %>
 <%@ taglib uri="/tlds/fmt.tld" prefix="fmt" %>

@@ -15,7 +15,7 @@
 --%>
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul" %>
+<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
 <%@ taglib uri="/tlds/fmt.tld" prefix="fmt" %>
 <%@ taglib tagdir="/WEB-INF/tags/bc" prefix="bc"%>
 

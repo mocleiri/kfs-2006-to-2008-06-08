@@ -14,7 +14,7 @@
  limitations under the License.
 --%>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul" %>
+<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
 
 <div align="right">
 	<kul:help documentTypeName="${DataDictionary.KualiBudgetDocument.documentTypeName}" pageName="${KraConstants.TEMPLATE_HEADER_TAB}" altText="page help"/>

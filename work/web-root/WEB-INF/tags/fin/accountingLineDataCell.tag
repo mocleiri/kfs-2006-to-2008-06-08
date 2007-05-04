@@ -16,7 +16,7 @@
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib prefix="fn" uri="/tlds/fn.tld" %>
 <%@ taglib prefix="html" uri="/tlds/struts-html.tld" %>
-<%@ taglib prefix="kul" tagdir="/WEB-INF/tags" %>
+<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
 <%@ taglib prefix="fin" tagdir="/WEB-INF/tags/fin" %>
 <%@ taglib prefix="bean" uri="/tlds/struts-bean.tld" %>
 

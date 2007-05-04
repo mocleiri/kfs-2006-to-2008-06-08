@@ -17,7 +17,7 @@
 <%@ taglib prefix="fn" uri="/tlds/fn.tld"%>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
 <%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd"%>
 
 <%@ attribute name="documentAttributes" required="true" type="java.util.Map"

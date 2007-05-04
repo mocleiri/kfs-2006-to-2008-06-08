@@ -14,7 +14,7 @@
  limitations under the License.
 --%>
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
-<%@ taglib prefix="kul" tagdir="/WEB-INF/tags" %>
+<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
 <%@ taglib prefix="bc" tagdir="/WEB-INF/tags/bc" %>
 <%@ taglib prefix="bean" uri="/tlds/struts-bean.tld" %>
 
