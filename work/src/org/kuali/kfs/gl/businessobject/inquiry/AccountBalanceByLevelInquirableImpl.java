@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectDictionaryService;
 import org.kuali.core.service.LookupService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.AccountBalanceByLevel;
@@ -50,10 +50,10 @@ public class AccountBalanceByLevelInquirableImpl extends AbstractGLInquirableImp
     protected List buildUserDefinedAttributeKeyList() {
         List keys = new ArrayList();
 
-        keys.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        keys.add(KFSPropertyConstants.ACCOUNT_NUMBER);
-        keys.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        keys.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
+        keys.add(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
+        keys.add(PropertyConstants.ACCOUNT_NUMBER);
+        keys.add(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
+        keys.add(PropertyConstants.SUB_ACCOUNT_NUMBER);
         keys.add(GLConstants.BalanceInquiryDrillDowns.OBJECT_LEVEL_CODE);
         keys.add(GLConstants.BalanceInquiryDrillDowns.REPORTING_SORT_CODE);
         keys.add(Constant.COST_SHARE_OPTION);
@@ -77,7 +77,7 @@ public class AccountBalanceByLevelInquirableImpl extends AbstractGLInquirableImp
      */
     protected String getAttributeName(String attributeName) {
         if (attributeName.equals(GLConstants.DummyBusinessObject.LINK_BUTTON_OPTION)) {
-            attributeName = KFSPropertyConstants.OBJECT_CODE;
+            attributeName = PropertyConstants.OBJECT_CODE;
         }
         return attributeName;
     }
@@ -110,7 +110,7 @@ public class AccountBalanceByLevelInquirableImpl extends AbstractGLInquirableImp
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getBaseUrl()
      */
     protected String getBaseUrl() {
-        return KFSConstants.GL_MODIFIED_INQUIRY_ACTION;
+        return Constants.GL_MODIFIED_INQUIRY_ACTION;
     }
 
     /**
@@ -124,7 +124,7 @@ public class AccountBalanceByLevelInquirableImpl extends AbstractGLInquirableImp
          */if (GLConstants.BalanceInquiryDrillDowns.OBJECT_LEVEL_CODE.equals(attributeName)) {
             c = AccountBalance.class;
         }
-        else if (KFSPropertyConstants.OBJECT_CODE.equals(attributeName)) {
+        else if (PropertyConstants.OBJECT_CODE.equals(attributeName)) {
             c = AccountBalanceByObject.class;
         }
         else {
@@ -138,6 +138,6 @@ public class AccountBalanceByLevelInquirableImpl extends AbstractGLInquirableImp
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
      */
     protected void addMoreParameters(Properties parameter, String attributeName) {
-        parameter.put(KFSConstants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME, getLookupableImplAttributeName());
+        parameter.put(Constants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME, getLookupableImplAttributeName());
     }
 }

@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.service.CashDrawerService;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,7 @@ public class CashDrawerServiceImpl implements CashDrawerService {
      */
     public void closeCashDrawer(String workgroupName) {
         CashDrawer drawer = getByWorkgroupName(workgroupName, true);
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_CLOSED);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_CLOSED);
         drawer.setReferenceFinancialDocumentNumber(null);
 
         save(drawer);
@@ -54,7 +54,7 @@ public class CashDrawerServiceImpl implements CashDrawerService {
         }
 
         CashDrawer drawer = getByWorkgroupName(workgroupName, true);
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_OPEN);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_OPEN);
         drawer.setReferenceFinancialDocumentNumber(documentId);
 
         save(drawer);
@@ -69,14 +69,14 @@ public class CashDrawerServiceImpl implements CashDrawerService {
         }
 
         CashDrawer drawer = getByWorkgroupName(workgroupName, true);
-        if (!StringUtils.equals(KFSConstants.CashDrawerConstants.STATUS_OPEN, drawer.getStatusCode())) {
+        if (!StringUtils.equals(Constants.CashDrawerConstants.STATUS_OPEN, drawer.getStatusCode())) {
             throw new IllegalStateException("CashDrawer '" + workgroupName + "' cannot be locked because it is not open");
         }
         if (!StringUtils.equals(documentId, drawer.getReferenceFinancialDocumentNumber())) {
             throw new IllegalStateException("CashDrawer '" + workgroupName + "' cannot be locked because it was opened by document " + drawer.getReferenceFinancialDocumentNumber());
         }
 
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_LOCKED);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_LOCKED);
         drawer.setReferenceFinancialDocumentNumber(documentId);
 
         save(drawer);
@@ -91,14 +91,14 @@ public class CashDrawerServiceImpl implements CashDrawerService {
         }
 
         CashDrawer drawer = getByWorkgroupName(workgroupName, true);
-        if (!StringUtils.equals(KFSConstants.CashDrawerConstants.STATUS_LOCKED, drawer.getStatusCode())) {
+        if (!StringUtils.equals(Constants.CashDrawerConstants.STATUS_LOCKED, drawer.getStatusCode())) {
             throw new IllegalStateException("CashDrawer '" + workgroupName + "' cannot be unlocked because it is not locked");
         }
         if (!StringUtils.equals(documentId, drawer.getReferenceFinancialDocumentNumber())) {
             throw new IllegalStateException("CashDrawer '" + workgroupName + "' cannot be unlocked because it was locked by document " + drawer.getReferenceFinancialDocumentNumber());
         }
 
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_OPEN);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_OPEN);
         drawer.setReferenceFinancialDocumentNumber(documentId);
 
         save(drawer);
@@ -141,7 +141,7 @@ public class CashDrawerServiceImpl implements CashDrawerService {
     private CashDrawer newCashDrawer(String workgroupName) {
         CashDrawer drawer = new CashDrawer();
         drawer.setWorkgroupName(workgroupName);
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_CLOSED);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_CLOSED);
 
         return drawer;
     }
