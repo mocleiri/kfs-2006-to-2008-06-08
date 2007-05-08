@@ -23,19 +23,19 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.Constants;
 import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.AccountsPayableDocumentBase;
 import org.kuali.module.purap.document.PurchasingDocument;
+import org.kuali.module.purap.service.PhoneNumberService;
 import org.kuali.module.purap.web.struts.form.AccountsPayableFormBase;
 import org.kuali.module.purap.web.struts.form.PurchasingFormBase;
-import org.kuali.module.vendor.service.PhoneNumberService;
 
 /**
- * This class handles specific Actions requests for the AP.
+ * This class handles specific Actions requests for the Purchasing Ap.
  */
-public class AccountsPayableActionBase extends KualiAccountingDocumentActionBase {
+public class AccountsPayableActionBase extends KualiTransactionalDocumentActionBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountsPayableActionBase.class);
 
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -59,12 +59,12 @@ public class AccountsPayableActionBase extends KualiAccountingDocumentActionBase
             if (document.isDeliveryBuildingOther()) {
                 document.setDeliveryBuildingName("Other");
                 document.setDeliveryBuildingCode("OTH");
-                baseForm.setNotOtherDeliveryBuilding(false);
+                baseForm.setNotOtherDelBldg(false);
             }
             else {
                 document.setDeliveryBuildingName(null);
                 document.setDeliveryBuildingCode(null);
-                baseForm.setNotOtherDeliveryBuilding(true);
+                baseForm.setNotOtherDelBldg(true);
             }
         }
         

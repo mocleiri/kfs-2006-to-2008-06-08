@@ -28,7 +28,7 @@ import org.kuali.module.purap.PurapConstants;
 /**
  * 
  */
-public abstract class PurApItemBase extends PersistableBusinessObjectBase implements PurchasingApItem {
+public class PurApItemBase extends PersistableBusinessObjectBase implements PurchasingApItem {
 
 	private Integer itemIdentifier;
 	private Integer itemLineNumber;
@@ -46,12 +46,10 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	private boolean itemAssignedToTradeInIndicator;
     private KualiDecimal extendedPrice; //not currently in DB
     
-    private List<PurApAccountingLine> sourceAccountingLines;
-    private transient PurApAccountingLine newSourceLine;
+    private List<PurApAccountingLine> accountingLines;
     
 	private CapitalAssetTransactionType capitalAssetTransactionType;
 	private ItemType itemType;
-    private Integer purapDocumentIdentifier;
 
 	/**
 	 * Default constructor.
@@ -59,8 +57,7 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	public PurApItemBase() {
 	    //TODO: Chris - default itemType (should probably get this from spring or Constants file)
         itemTypeCode = "ITEM";
-        sourceAccountingLines = new TypedArrayList(getAccountingLineClass());
-        resetAccount();
+        accountingLines = new TypedArrayList(PurApAccountingLineBase.class);
 	}
 
 	/**
@@ -421,16 +418,16 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
      * Gets the accountingLines attribute. 
      * @return Returns the accountingLines.
      */
-    public List<PurApAccountingLine> getSourceAccountingLines() {
-        return sourceAccountingLines;
+    public List<PurApAccountingLine> getAccountingLines() {
+        return accountingLines;
     }
 
     /**
      * Sets the accountingLines attribute value.
      * @param accountingLines The accountingLines to set.
      */
-    public void setSourceAccountingLines(List<PurApAccountingLine> accountingLines) {
-        this.sourceAccountingLines = accountingLines;
+    public void setAccountingLines(List<PurApAccountingLine> accountingLines) {
+        this.accountingLines = accountingLines;
     }
 
     /**
@@ -442,49 +439,27 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
      * 
      * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLine(int)
      */
-    public PurApAccountingLine getSourceAccountingLine(int index) {
-        //TODO: we probably don't need this because of the TypedArrayList
-//        while (getAccountingLines().size() <= index) {
-//            PurApAccountingLine newAccount = getNewAccount();
-//            getAccountingLines().add(newAccount);
-//        }
-        
-        return (PurApAccountingLine) getSourceAccountingLines().get(index);
+    public PurApAccountingLine getAccountingLine(int index) {
+        while (getAccountingLines().size() <= index) {
+            try {
+                getAccountingLines().add((PurApAccountingLine)getAccountingLineClass().newInstance());
+            }
+            catch (InstantiationException e) {
+                throw new RuntimeException("Unable to get class");
+            }
+            catch (IllegalAccessException e) {
+                throw new RuntimeException("Unable to get class");
+            }
+            catch (NullPointerException e) {
+                throw new RuntimeException("Can't instantiate Purchasing Account from base");
+            }
+        }
+        return (PurApAccountingLine) getAccountingLines().get(index);
     }
 
-    /**
-     * This method...
-     * @param newAccount
-     * @return
-     * @throws RuntimeException
-     */
-    private PurApAccountingLine getNewAccount() throws RuntimeException {
-        
-        PurApAccountingLine newAccount=null;
-        try {
-            newAccount = (PurApAccountingLine)getAccountingLineClass().newInstance();
-        }
-        catch (InstantiationException e) {
-            throw new RuntimeException("Unable to get class");
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException("Unable to get class");
-        }
-        catch (NullPointerException e) {
-            throw new RuntimeException("Can't instantiate Purchasing Account from base");
-        }
-        return newAccount;
-    }
-
-    public abstract Class getAccountingLineClass();
-    
-    /**
-     * 
-     * @see org.kuali.module.purap.bo.PurchasingApItem#resetAccount()
-     */
-    public void resetAccount() {
-        //add a blank accounting line
-        setNewSourceLine(getNewAccount());
+    public Class getAccountingLineClass() {
+        //TODO: throw uninstantiated error here?
+        return null;
     }
     
     /**
@@ -494,7 +469,7 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
     public List buildListOfDeletionAwareLists() {
         List managedLists = super.buildListOfDeletionAwareLists();
 
-        managedLists.add(getSourceAccountingLines());
+        managedLists.add(getAccountingLines());
 
         return managedLists;
     }
@@ -508,29 +483,5 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
             m.put("requisitionItemIdentifier", this.itemIdentifier.toString());
         }
 	    return m;
-    }
-
-    /**
-     * Gets the newSourceLine attribute. 
-     * @return Returns the newSourceLine.
-     */
-    public PurApAccountingLine getNewSourceLine() {
-        return newSourceLine;
-    }
-
-    /**
-     * Sets the newSourceLine attribute value.
-     * @param newSourceLine The newSourceLine to set.
-     */
-    public void setNewSourceLine(PurApAccountingLine newAccountingLine) {
-        this.newSourceLine = newAccountingLine;
-    }
-
-    public Integer getPurapDocumentIdentifier() {
-        return purapDocumentIdentifier;
-    }
-
-    public void setPurapDocumentIdentifier(Integer purapDocumentIdentifier) {
-        this.purapDocumentIdentifier = purapDocumentIdentifier;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ import org.apache.log4j.Logger;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.kfs.bo.OriginationCode;
 import org.kuali.kfs.dao.OriginationCodeDao;
+import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-public class OriginationCodeDaoOjb extends PlatformAwareDaoBaseOjb implements OriginationCodeDao {
+public class OriginationCodeDaoOjb extends PersistenceBrokerDaoSupport implements OriginationCodeDao {
     private static Logger LOG = Logger.getLogger(OriginationCodeDaoOjb.class);
 
     public OriginationCodeDaoOjb() {

@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.PurchaseOrderItem">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Purchase Order Item Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="capitalAssetTransactionTypeCode" />
                 <field attributeName="externalOrganizationB2bProductReferenceNumber" />
                 <field attributeName="externalOrganizationB2bProductTypeName" />
@@ -46,19 +31,22 @@
                 <field attributeName="itemUnitOfMeasureCode" />
                 <field attributeName="itemUnitPrice" />
                 <field attributeName="purchaseOrderCommodityCd" />
-                 <field attributeName="itemIdentifier" />
+                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="purchaseOrderItemIdentifier" />
                 <field attributeName="requisitionLineIdentifier" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Purchase Order Item Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PurchaseOrderItem">Create New</a>]]></menubar>
+
             <instructions>Lookup an Purchase Order Item</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="itemDescription" />
+                    <sortAttribute attributeName="capitalAssetTransactionTypeCode" />
                 </sortAttributes>
             </defaultSort>
 
@@ -84,7 +72,8 @@
                 <lookupField attributeName="itemUnitOfMeasureCode" required="false" />
                 <lookupField attributeName="itemUnitPrice" required="false" />
                 <lookupField attributeName="purchaseOrderCommodityCd" required="false" />
-                <lookupField attributeName="itemIdentifier" required="false" />
+                <lookupField attributeName="purchaseOrderIdentifier" required="false" />
+                <lookupField attributeName="purchaseOrderItemIdentifier" required="false" />
                 <lookupField attributeName="requisitionLineIdentifier" required="false" />
             </lookupFields>
 
@@ -110,7 +99,8 @@
                 <field attributeName="itemUnitOfMeasureCode" />
                 <field attributeName="itemUnitPrice" />
                 <field attributeName="purchaseOrderCommodityCd" />
-                <field attributeName="itemIdentifier" />
+                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="purchaseOrderItemIdentifier" />
                 <field attributeName="requisitionLineIdentifier" />
             </resultFields>
         </lookup>
@@ -178,7 +168,7 @@
 
             <attribute name="itemAssignedToTradeInIndicator" forceUppercase="true">
                 <label>Item Assigned To Trade In Indicator</label>
-                <shortLabel>Trade In</shortLabel>
+                <shortLabel>Indicator</shortLabel>
 
                 <maxLength>1</maxLength>
 
@@ -222,7 +212,7 @@
 
             <attribute name="itemCatalogNumber" forceUppercase="true">
                 <label>Item Catalog Number</label>
-                <shortLabel>Catalog Number</shortLabel>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>30</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -282,7 +272,7 @@
 
             <attribute name="itemLineNumber" forceUppercase="true">
                 <label>Item Line Number</label>
-                <shortLabel>#</shortLabel>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>3</maxLength>
                 <validationPattern><numeric /></validationPattern>
@@ -295,24 +285,9 @@
                 <description>itemLineNumber description...</description>
 			</attribute>
 
-            <attribute name="itemQuantity" forceUppercase="true">
-                <label>Item Quantity</label>
-                <shortLabel>Quantity</shortLabel>
-
-                <maxLength>11</maxLength>
-                <validationPattern><fixedPoint allowNegative="false" precision="11" scale="2" /></validationPattern>
-
-                <control>
-                    <text size="13" />
-                </control>
-
-                <summary>itemQuantity</summary>
-                <description>itemQuantity description...</description>
-			</attribute>
-			
             <attribute name="itemOrderedQuantity" forceUppercase="true">
                 <label>Item Ordered Quantity</label>
-                <shortLabel>Ordered Quantity</shortLabel>
+                <shortLabel>Quantity</shortLabel>
 
                 <maxLength>11</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
@@ -327,7 +302,7 @@
 
             <attribute name="itemOutstandingEncumberedQuantity" forceUppercase="true">
                 <label>Item Outstanding Encumbered Quantity</label>
-                <shortLabel>Outstanding Encumbered Quantity</shortLabel>
+                <shortLabel>Quantity</shortLabel>
 
                 <maxLength>11</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
@@ -342,7 +317,7 @@
 
             <attribute name="itemOutstandingEncumbranceAmount" forceUppercase="true">
                 <label>Item Outstanding Encumbrance Amount</label>
-                <shortLabel>Outstanding Encumbrance Amount</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
@@ -357,7 +332,7 @@
 
             <attribute name="itemReceivedTotalQuantity" forceUppercase="true">
                 <label>Item Received Total Quantity</label>
-                <shortLabel>Received Total Quantity</shortLabel>
+                <shortLabel>Quantity</shortLabel>
 
                 <maxLength>11</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
@@ -372,7 +347,7 @@
 
             <attribute name="itemReturnedTotalQuantity" forceUppercase="true">
                 <label>Item Returned Total Quantity</label>
-                <shortLabel>Returned Total Quantity</shortLabel>
+                <shortLabel>Quantity</shortLabel>
 
                 <maxLength>11</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
@@ -387,7 +362,7 @@
 
             <attribute name="itemTypeCode" forceUppercase="true">
                 <label>Item Type Code</label>
-                <shortLabel>Type Code</shortLabel>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -402,7 +377,7 @@
 
             <attribute name="itemUnitOfMeasureCode" forceUppercase="true">
                 <label>Item Unit Of Measure Code</label>
-                <shortLabel>UOM</shortLabel>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -430,24 +405,9 @@
                 <description>itemUnitPrice description...</description>
 			</attribute>
 
-            <attribute name="extendedPrice" forceUppercase="true">
-                <label>Extended Price</label>
-                <shortLabel>Extended Price</shortLabel>
-
-                <maxLength>19</maxLength>
-                <validationPattern><floatingPoint /></validationPattern>
-
-                <control>
-                    <text size="21" />
-                </control>
-
-                <summary>extendedPrice</summary>
-                <description>extendedPrice description...</description>
-			</attribute>
-			
             <attribute name="purchaseOrderCommodityCd" forceUppercase="true">
                 <label>Purchase Order Commodity Cd</label>
-                <shortLabel>Purchase Order Commodity Cd</shortLabel>
+                <shortLabel>Cd</shortLabel>
 
                 <maxLength>11</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -460,7 +420,22 @@
                 <description>purchaseOrderCommodityCd description...</description>
 			</attribute>
 
-            <attribute name="itemIdentifier" forceUppercase="true">
+            <attribute name="purchaseOrderIdentifier" forceUppercase="true">
+                <label>Purchase Order Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>purchaseOrderIdentifier</summary>
+                <description>purchaseOrderIdentifier description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderItemIdentifier" forceUppercase="true">
                 <label>Purchase Order Item Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
@@ -471,8 +446,8 @@
                     <text size="12" />
                 </control>
 
-                <summary>itemIdentifier</summary>
-                <description>itemIdentifier description...</description>
+                <summary>purchaseOrderItemIdentifier</summary>
+                <description>purchaseOrderItemIdentifier description...</description>
 			</attribute>
 
             <attribute name="requisitionLineIdentifier" forceUppercase="true">

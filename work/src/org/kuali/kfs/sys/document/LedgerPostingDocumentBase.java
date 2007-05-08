@@ -21,7 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.NumberUtils;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 
 /**
@@ -141,7 +141,7 @@ public class LedgerPostingDocumentBase extends TransactionalDocumentBase impleme
     public boolean getAllowsErrorCorrection() {
         boolean allowsCorrection = super.getAllowsErrorCorrection();
         
-        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
+        Integer fiscalYear = SpringServiceLocator.getDateTimeService().getCurrentFiscalYear();
         if (!NumberUtils.equals(fiscalYear, getPostingYear())) {
             allowsCorrection = false;
         }

@@ -1,38 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionDuration">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Construction Duration Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="appointmentDurationCode" />
                 <field attributeName="appointmentDurationDescription" />
                 <field attributeName="rowActiveIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Budget Construction Duration Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionDuration">Create New</a>]]></menubar>
 
             <instructions>Look up a Budget Construction Duration</instructions>
 
@@ -49,20 +36,17 @@
             </lookupFields>
 
             <resultFields>
-                <field attributeName="appointmentDurationCode" forceInquiry="true"  />
+                <field attributeName="appointmentDurationCode" />
                 <field attributeName="appointmentDurationDescription" />
                 <field attributeName="rowActiveIndicator" />
             </resultFields>
         </lookup>
 
-
-        <titleAttribute>appointmentDurationCode</titleAttribute>
-  
         <attributes>
 
             <attribute name="appointmentDurationCode" forceUppercase="true">
                 <label>Appointment Duration Code</label>
-                <shortLabel>Duration Code</shortLabel>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -71,37 +55,38 @@
                     <text size="6" />
                 </control>
 
-                <summary>Appointment Duration Code</summary>
-                <description>Leave of absence duration code for an appointment.</description>
+                <summary>appointmentDurationCode</summary>
+                <description>appointmentDurationCode description...</description>
 			</attribute>
 
             <attribute name="appointmentDurationDescription" forceUppercase="true">
                 <label>Appointment Duration Description</label>
-                <shortLabel>Duration Desc</shortLabel>
+                <shortLabel>Description</shortLabel>
 
                 <maxLength>40</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="42" />
                 </control>
 
-                <summary>Appointment Duration Description</summary>
-                <description>Appointment Duration Description</description>
+                <summary>appointmentDurationDescription</summary>
+                <description>appointmentDurationDescription description...</description>
 			</attribute>
 
             <attribute name="rowActiveIndicator" forceUppercase="true">
-                <label>Duration Code active indicator</label>
-                <shortLabel>Active Indicator</shortLabel>
+                <label>Row Active Indicator</label>
+                <shortLabel>Indicator</shortLabel>
 
                 <maxLength>1</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <checkbox />
+                    <text size="3" />
                 </control>
 
-                <summary>Duration Code active indicator</summary>
-                <description>Appointment Duration Code active indicator.</description>
+                <summary>rowActiveIndicator</summary>
+                <description>rowActiveIndicator description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />

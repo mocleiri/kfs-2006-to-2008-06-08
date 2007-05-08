@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/document/web/struts/SalaryExpenseTransferForm.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +17,8 @@
  */
 package org.kuali.module.labor.web.struts.form;
 
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.labor.bo.LaborUser;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.labor.document.SalaryExpenseTransferDocument;
-import org.kuali.module.labor.service.LaborUserService;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * This class is the form class for the Salary Expense Transfer document. This method extends the parent
@@ -32,72 +27,20 @@ import org.apache.commons.logging.LogFactory;
  * 
  * 
  */
-public class SalaryExpenseTransferForm extends LaborDocumentFormBase {
-    private static Log LOG = LogFactory.getLog(SalaryExpenseTransferForm.class);
-    private LaborUser user;
+public class SalaryExpenseTransferForm extends KualiTransactionalDocumentFormBase {
 
     /**
      * Constructs a SalaryExpenseTransferForm instance and sets up the appropriately casted document.
      */
     public SalaryExpenseTransferForm() {
         super();
-        setUser(new LaborUser(new UniversalUser()));
         setDocument(new SalaryExpenseTransferDocument());
     }
 
     /**
-     * 
-     * This method returns a refernce to the Salary Expense Transfer Document
-     * @return SalaryExpenseTransferDocument
-     */    
+     * @return Returns the salaryExpenseTransferDocument.
+     */
     public SalaryExpenseTransferDocument getSalaryExpenseTransferDocument() {
         return (SalaryExpenseTransferDocument) getDocument();
-    }
-    
-    /**
-     * Assign <code>{@link LaborUser}</code> instance to the struts form.
-     *
-     * @param user
-     */
-    public void setUser(LaborUser user) {
-        this.user = user;
-    }
-    
-    /**
-     * Retrieve <code>{@link LaborUser}</code> instance from the struts from.
-     *
-     * @return LaborUser
-     */
-    public LaborUser getUser() {
-        return user;
-    }
-    
-   /**
-    * 
-    * This method sets the employee ID retrieved from the universal user service
-    * @param emplid
-    * @throws UserNotFoundException because a lookup at the database discovers user data from the personPayrollIdentifier
-    */
-    public void setPersonPayrollIdentifier(String id) throws UserNotFoundException {
-        getSalaryExpenseTransferDocument().setEmplid(id);
-        
-        if (id != null) {
-            setUser(((LaborUserService) SpringServiceLocator.getService("laborUserService")).getLaborUserByPersonPayrollIdentifier(id));
-        }
-    }
-
-    /**
-     * 
-     * This method returns the employee ID from the UniversalUser table.
-     *
-     * @return String of the personPayrollIdentifier
-     * @throws UserNotFoundException because a lookup at the database discovers user data from the personPayrollIdentifier
-     */
-    public String getPersonPayrollIdentifier() throws UserNotFoundException {
-        if (user == null) {
-            setUser(((LaborUserService) SpringServiceLocator.getService("laborUserService"))
-                    .getLaborUserByPersonPayrollIdentifier(getSalaryExpenseTransferDocument().getEmplid()));
-        }
-        return getSalaryExpenseTransferDocument().getEmplid();
     }
 }

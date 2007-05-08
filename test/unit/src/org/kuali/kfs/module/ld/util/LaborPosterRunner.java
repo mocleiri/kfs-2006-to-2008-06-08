@@ -20,12 +20,9 @@ import org.kuali.module.labor.service.LaborPosterService;
 
 public class LaborPosterRunner {
     private LaborPosterService laborPosterService;
-    
-    static{
-        SpringServiceLocator.initializeApplicationContext();
-    }
 
     public LaborPosterRunner() {
+        SpringServiceLocator.initializeApplicationContext();
         laborPosterService = (LaborPosterService) SpringServiceLocator.getBeanFactory().getBean("laborPosterService");
     }
 
@@ -40,10 +37,7 @@ public class LaborPosterRunner {
             System.out.println("Labor Poster started");
             long start = System.currentTimeMillis();
             System.out.println("Labor Poster is running ...");
-            System.out.printf("Starting Time = %d (ms)\n", start);
-            
             laborPosterRunner.runPoster();
-            
             long elapsedTime = System.currentTimeMillis() - start;
             System.out.printf("Execution Time = %d (ms)\n", elapsedTime);
             System.out.println("Labor Poster stopped");
@@ -52,7 +46,6 @@ public class LaborPosterRunner {
             e.printStackTrace();
         }
         finally {
-            System.out.println("Labor Poster stopped");
             System.exit(0);
         }
     }

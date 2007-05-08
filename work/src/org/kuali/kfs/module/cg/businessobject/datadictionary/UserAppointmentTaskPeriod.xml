@@ -1,27 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
         <attributes>
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.module.kra.budget.bo.Budget" sourceAttributeName="documentNumber" />
+            <attributeReference name="documentHeaderId" sourceClassName="org.kuali.module.kra.budget.bo.Budget" sourceAttributeName="documentHeaderId" />
 
             <attributeReference name="budgetUserSequenceNumber" sourceClassName="org.kuali.module.kra.budget.bo.BudgetUser" sourceAttributeName="budgetUserSequenceNumber" />
 
@@ -29,16 +14,13 @@
 
             <attributeReference name="budgetPeriodSequenceNumber" sourceClassName="org.kuali.module.kra.budget.bo.BudgetPeriod" sourceAttributeName="budgetPeriodSequenceNumber" />
 
-            <attributeReference name="institutionAppointmentTypeCode" sourceClassName="org.kuali.module.kra.budget.bo.BudgetUser" sourceAttributeName="appointmentTypeCode">
+            <attributeReference name="universityAppointmentTypeCode" sourceClassName="org.kuali.module.kra.budget.bo.BudgetUser" sourceAttributeName="appointmentTypeCode">
                 <control>
                     <hidden />
                 </control>
             </attributeReference>
 
             <attributeReference name="userBudgetPeriodSalaryAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Period Salary</label>
-                <shortLabel>Amount</shortLabel>
-            
                 <control>
                     <hidden />
                 </control>
@@ -51,30 +33,26 @@
             </attributeReference>
 
             <attributeReference name="agencyFringeBenefitTotalAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <shortLabel>Fringe Benefits</shortLabel>
-
                 <control>
                     <hidden />
                 </control>
             </attributeReference>
 
-            <attributeReference name="institutionCostShareRequestTotalAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
+            <attributeReference name="universityCostShareRequestTotalAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <control>
                     <hidden />
                 </control>
             </attributeReference>
 
-            <attributeReference name="institutionCostShareFringeBenefitTotalAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <shortLabel>Fringe Benefits</shortLabel>
-
+            <attributeReference name="universityCostShareFringeBenefitTotalAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <control>
                     <hidden />
                 </control>
             </attributeReference>
 
             <attribute name="agencyPercentEffortAmount">
-                <label>Agency Percent Effort Amount</label>
-                <shortLabel>Effort</shortLabel>
+                <label>Agency Percent Effort</label>
+                <shortLabel>Agency % Effort</shortLabel>
 
                 <maxLength>3</maxLength>
                 <validationPattern>
@@ -89,9 +67,9 @@
                 <description>The percent of effort that will determine the salary amount being requested of the Agency.</description>
             </attribute>
 
-            <attribute name="institutionCostSharePercentEffortAmount">
-                <label>Institution Percent Effort</label>
-                <shortLabel>Effort</shortLabel>
+            <attribute name="universityCostSharePercentEffortAmount">
+                <label>University Cost Share Percent Effort</label>
+                <shortLabel>Univ Cost Share % Effort</shortLabel>
 
                 <maxLength>3</maxLength>
                 <validationPattern>
@@ -102,13 +80,13 @@
                     <text size="2" />
                 </control>
 
-                <summary>Institution Percent Effort</summary>
+                <summary>University Cost Share Percent Effort</summary>
                 <description>The percent of effort that will determine the salary amount being Cost Shared.</description>
             </attribute>
 
             <attribute name="personWeeksAmount">
-                <label># of Weeks</label>
-                <shortLabel>Amount</shortLabel>
+                <label>Number of Weeks</label>
+                <shortLabel># of Weeks</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern>
@@ -125,7 +103,7 @@
 
             <attribute name="userAgencyHours">
                 <label>Hours Per Period</label>
-                <shortLabel>Rate</shortLabel>
+                <shortLabel>Hours/Period</shortLabel>
 
                 <maxLength>5</maxLength>
                 <validationPattern>
@@ -140,9 +118,9 @@
                 <description>The number of hours in the period that will be paid for by the agency.</description>
             </attribute>
 
-            <attribute name="userInstitutionHours">
+            <attribute name="userUniversityHours">
                 <label>Hours Per Period</label>
-                <shortLabel>Hours</shortLabel>
+                <shortLabel>Hours/Period</shortLabel>
 
                 <maxLength>5</maxLength>
                 <validationPattern>
@@ -158,12 +136,12 @@
             </attribute>
 
             <attribute name="userHourlyRate">
-                <label>Hourly Rate ($)</label>
-                <shortLabel>Hours</shortLabel>
+                <label>Hourly Rate</label>
+                <shortLabel>Hrly. Rt.</shortLabel>
 
                 <maxLength>6</maxLength>
                 <validationPattern>
-                    <floatingPoint />
+                    <numeric />
                 </validationPattern>
 
                 <control>
@@ -176,99 +154,51 @@
 
 
             <attributeReference name="agencyHealthInsuranceAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Agency Health Insurance Amount</label>
-                <shortLabel>Health Insurance</shortLabel>
-            
                 <control>
                     <text size="8" />
                 </control>
-
-                <summary>Agency Health Insurance Amount</summary>
-                <description>Agency Health Insurance Amount...</description>
             </attributeReference>
 
             <attributeReference name="agencyRequestedFeesAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Agency Amount Requested</label>
-                <shortLabel>Amount</shortLabel>
-            
                 <control>
                     <text size="8" />
                 </control>
-                
-                <summary>Agency Requested Fees</summary>
-                <description>Agency Requested Fees...</description>
             </attributeReference>
 
             <attributeReference name="agencySalaryAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Agency Salary Amount</label>
-                <shortLabel>Salary</shortLabel>
-            
                 <control>
                     <text size="8" />
                 </control>
-                
-                <summary>Agency Salary Amount</summary>
-                <description>Agency Salary Amount...</description>
             </attributeReference>
 
-            <attributeReference name="institutionHealthInsuranceAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Institution Health Insurance Amount</label>
-                <shortLabel>Health Insurance</shortLabel>
-            
+            <attributeReference name="universityHealthInsuranceAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <control>
                     <text size="8" />
                 </control>
-
-                <summary>Institution Health Insurance Amount</summary>
-                <description>Institution Health Insurance Amount...</description>
             </attributeReference>
 
-            <attributeReference name="institutionRequestedFeesAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Institution Cost Share</label>
-                <shortLabel>Amount</shortLabel>
-            
+            <attributeReference name="universityRequestedFeesAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <control>
                     <text size="8" />
                 </control>
-                
-                <summary>Institution Requested Fees</summary>
-                <description>Institution Requested Fees...</description>
             </attributeReference>
 
-            <attributeReference name="institutionSalaryAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Institution Salary Amount</label>
-                <shortLabel>Salary</shortLabel>
-            
+            <attributeReference name="universitySalaryAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <control>
                     <text size="8" />
                 </control>
-                
-                <summary>Institution Salary Amount</summary>
-                <description>Institution Salary Amount...</description>
             </attributeReference>
 
             <attributeReference name="userCreditHourAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>$ Per Credit Hour</label>
-                <shortLabel>Amount</shortLabel>
-            
                 <control>
                     <text size="8" />
                 </control>
-
-                <summary>Amount Per Credit Hour</summary>
-                <description>Amount Per Credit Hour...</description>
             </attributeReference>
 
             <attributeReference name="userMiscellaneousFeeAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Miscellaneous Fees</label>
-                <shortLabel>Amount</shortLabel>
-            
                 <control>
                     <text size="8" />
                 </control>
-
-                <summary>Miscellaneous Fees Amount</summary>
-                <description>Miscellaneous Fees Amount...</description>
             </attributeReference>
 
 
@@ -289,7 +219,7 @@
                 <description>The percent of FTE.</description>
             </attribute>
 
-            <attribute name="institutionFullTimeEquivalentPercent">
+            <attribute name="universityFullTimeEquivalentPercent">
                 <label>FTE</label>
                 <shortLabel>FTE</shortLabel>
 
@@ -302,13 +232,13 @@
                     <text size="4" />
                 </control>
 
-                <summary>Institution Cost Share FTE</summary>
+                <summary>University Cost Share FTE</summary>
                 <description>The percent of FTE.</description>
             </attribute>
 
             <attribute name="userCreditHoursNumber">
                 <label>Credit Hours</label>
-                <shortLabel>Number</shortLabel>
+                <shortLabel>Credit Hours</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern>
@@ -319,8 +249,8 @@
                     <text size="8" />
                 </control>
 
-                <summary>>Number of Credit Hours</summary>
-                <description>>Number of Credit Hours...</description>
+                <summary>Number of credit hours</summary>
+                <description>The number of credit hours.</description>
             </attribute>
 
         </attributes>

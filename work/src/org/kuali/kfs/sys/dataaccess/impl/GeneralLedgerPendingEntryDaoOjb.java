@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,24 +31,24 @@ import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.Constants;
 import org.kuali.PropertyConstants;
 import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.lookup.LookupUtils;
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.dao.GeneralLedgerPendingEntryDao;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.util.OJBUtility;
+import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * 
  * 
  */
-public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb implements GeneralLedgerPendingEntryDao {
+public class GeneralLedgerPendingEntryDaoOjb extends PersistenceBrokerDaoSupport implements GeneralLedgerPendingEntryDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GeneralLedgerPendingEntryDaoOjb.class);
 
     private final static String TRANSACTION_LEDGER_ENTRY_SEQUENCE_NUMBER = "transactionLedgerEntrySequenceNumber";
@@ -58,7 +58,15 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
     private final static String CHART_FINANCIAL_CASH_OBJECT_CODE = "chart.financialCashObjectCode";
     private final static String OBJECT_TYPE_FIN_OBJECT_TYPE_DEBITCREDIT_CD = "objectType.finObjectTypeDebitcreditCd";
 
+    private DateTimeService dateTimeService;
     private KualiConfigurationService kualiConfigurationService;
+
+    /**
+     * 
+     */
+    public void setDateTimeService(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;
+    }
 
     /**
      * 
@@ -89,7 +97,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
 
         criteria.addNotIn(Constants.DOCUMENT_HEADER_PROPERTY_NAME + "." + Constants.DOCUMENT_HEADER_DOCUMENT_STATUS_CODE_PROPERTY_NAME, status);
 
-        ReportQueryByCriteria reportQuery = QueryFactory.newReportQuery(this.getEntryClass(), criteria);
+        ReportQueryByCriteria reportQuery = QueryFactory.newReportQuery(GeneralLedgerPendingEntry.class, criteria);
         reportQuery.setAttributes(new String[] { "sum(" + Constants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")" });
 
         KualiDecimal rv = null;
@@ -136,7 +144,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
 
         criteria.addNotIn(Constants.DOCUMENT_HEADER_PROPERTY_NAME + "." + Constants.DOCUMENT_HEADER_DOCUMENT_STATUS_CODE_PROPERTY_NAME, status);
 
-        ReportQueryByCriteria reportQuery = QueryFactory.newReportQuery(this.getEntryClass(), criteria);
+        ReportQueryByCriteria reportQuery = QueryFactory.newReportQuery(GeneralLedgerPendingEntry.class, criteria);
         reportQuery.setAttributes(new String[] { "sum(" + Constants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")" });
 
         KualiDecimal rv = null;
@@ -175,7 +183,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
 
         criteria.addNotIn(Constants.DOCUMENT_HEADER_PROPERTY_NAME + "." + Constants.DOCUMENT_HEADER_DOCUMENT_STATUS_CODE_PROPERTY_NAME, status);
 
-        ReportQueryByCriteria reportQuery = QueryFactory.newReportQuery(this.getEntryClass(), criteria);
+        ReportQueryByCriteria reportQuery = QueryFactory.newReportQuery(GeneralLedgerPendingEntry.class, criteria);
         reportQuery.setAttributes(new String[] { "sum(" + Constants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")" });
 
         KualiDecimal rv = null;
@@ -208,7 +216,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
 
         criteria.addIn(PropertyConstants.DOCUMENT_NUMBER, subQuery);
 
-        getPersistenceBrokerTemplate().deleteByQuery(QueryFactory.newQuery(this.getEntryClass(), criteria));
+        getPersistenceBrokerTemplate().deleteByQuery(QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria));
     }
 
     /*
@@ -223,7 +231,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         criteria.addEqualTo(PropertyConstants.DOCUMENT_NUMBER, documentHeaderId);
         criteria.addEqualTo(TRANSACTION_LEDGER_ENTRY_SEQUENCE_NUMBER, transactionLedgerEntrySequenceNumber);
 
-        return (GeneralLedgerPendingEntry) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(this.getEntryClass(), criteria));
+        return (GeneralLedgerPendingEntry) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria));
     }
 
     /*
@@ -249,7 +257,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
             Criteria criteria = new Criteria();
             criteria.addEqualTo(PropertyConstants.DOCUMENT_NUMBER, documentHeaderId);
 
-            getPersistenceBrokerTemplate().deleteByQuery(QueryFactory.newQuery(this.getEntryClass(), criteria));
+            getPersistenceBrokerTemplate().deleteByQuery(QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria));
             getPersistenceBrokerTemplate().clearCache();
         }
     }
@@ -260,7 +268,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         Criteria criteria = new Criteria();
         criteria.addEqualTo(FINANCIAL_DOCUMENT_APPROVED_CODE, financialDocumentApprovedCode);
 
-        QueryByCriteria qbc = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria qbc = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         getPersistenceBrokerTemplate().deleteByQuery(qbc);
         getPersistenceBrokerTemplate().clearCache();
     }
@@ -275,7 +283,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         Criteria criteria = new Criteria();
         this.addStatusCode(criteria, true);
 
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria query = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
@@ -290,16 +298,13 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         criteria.addEqualTo(ACCOUNT_NUMBER, account.getAccountNumber());
         criteria.addEqualTo(CHART_OF_ACCOUNTS_CODE, account.getChartOfAccountsCode());
 
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(this.getEntryClass(), criteria);
+        ReportQueryByCriteria query = QueryFactory.newReportQuery(GeneralLedgerPendingEntry.class, criteria);
         query.setAttributes(new String[] { "count(*)" });
         Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
         if (i.hasNext()) {
             Object[] values = (Object[]) i.next();
-            if (values[0] instanceof BigDecimal) {
-                return ((BigDecimal)values[0]).intValue();
-            } else {
-                return ((Long)values[0]).intValue();
-            }
+            BigDecimal count = (BigDecimal) values[0];
+            return count.intValue();
         }
         else {
             return 0;
@@ -338,7 +343,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         // combine all criteria together
         criteria.addAndCriteria(criteria1);
 
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria query = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
@@ -364,7 +369,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         // add the status codes into the criteria
         this.addStatusCode(criteria, isApproved);
 
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria query = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
@@ -379,9 +384,9 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         // add the status codes into the criteria
         this.addStatusCode(criteria, isApproved);
 
-        LookupUtils.applySearchResultsLimit(criteria, getDbPlatform());
+        LookupUtils.applySearchResultsLimit(criteria);
 
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria query = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
@@ -396,7 +401,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         // add the status codes into the criteria
         this.addStatusCode(criteria, isApproved);
 
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria query = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
@@ -413,7 +418,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         // add the status codes into the criteria
         this.addStatusCode(criteria, isApproved);
 
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria query = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
@@ -434,7 +439,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         // add the status codes into the criteria
         this.addStatusCode(criteria, isApproved);
 
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria query = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
@@ -450,7 +455,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         // add the status codes into the criteria
         this.addStatusCode(criteria, isApproved);
 
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria query = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
@@ -466,7 +471,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         // add the status codes into the criteria
         this.addStatusCode(criteria, isApproved);
 
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(this.getEntryClass(), criteria);
+        ReportQueryByCriteria query = QueryFactory.newReportQuery(GeneralLedgerPendingEntry.class, criteria);
 
         List attributeList = buildAttributeList();
         List groupByList = buildGroupList();
@@ -512,11 +517,11 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
      * add the status code into the given criteria. The status code can be categorized into approved and all.
      * 
      * @param criteria the given criteria
-     * @param isApproved the flag that indictates if only approved status code can be added into the given searach criteria 
+     * @param isApproved the indicator of approval status
      */
-    private void addStatusCode(Criteria criteria, boolean isOnlyApproved) {
+    private void addStatusCode(Criteria criteria, boolean isApproved) {
         // add criteria for the approved pending entries
-        if (isOnlyApproved) {
+        if (isApproved) {
             criteria.addIn("documentHeader.financialDocumentStatusCode", this.buildApprovalCodeList());
         }
         criteria.addNotIn("documentHeader.financialDocumentStatusCode", this.buildExcludedStatusCodeList());
@@ -558,7 +563,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
     public Criteria buildCriteriaFromMap(Map fieldValues, Object businessObject) {
         Criteria criteria = new Criteria();
 
-        UniversityDate currentUniversityDate = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
+        UniversityDate currentUniversityDate = dateTimeService.getCurrentUniversityDate();
         String currentFiscalPeriodCode = currentUniversityDate.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = currentUniversityDate.getUniversityFiscalYear();
 
@@ -632,21 +637,13 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         // add the status codes into the criteria
         this.addStatusCode(criteria, isApproved);
 
-        LookupUtils.applySearchResultsLimit(criteria, getDbPlatform());
+        LookupUtils.applySearchResultsLimit(criteria);
 
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        QueryByCriteria query = QueryFactory.newQuery(GeneralLedgerPendingEntry.class, criteria);
         return getPersistenceBrokerTemplate().getCollectionByQuery(query);
     }
 
     public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
         this.kualiConfigurationService = kualiConfigurationService;
-    }
-
-    /**
-     * Gets the entryClass attribute. 
-     * @return Returns the entryClass.
-     */
-    public Class getEntryClass() {
-        return GeneralLedgerPendingEntry.class;
     }
 }

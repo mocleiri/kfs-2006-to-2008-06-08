@@ -1,302 +1,38 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.purap.document;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import org.apache.ojb.broker.util.collections.ManageableArrayList;
-import org.kuali.core.bo.Note;
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.service.NoteService;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.purap.bo.PurchasingApItem;
-import org.kuali.module.purap.bo.Status;
-import org.kuali.module.purap.bo.StatusHistory;
-import org.kuali.module.vendor.bo.VendorDetail;
+import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * Purchasing-Accounts Payable Document Base
+ * 
+ * @author PURAP (kualidev@oncourse.iu.edu)
  */
-public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDocumentBase implements PurchasingAccountsPayableDocument, AmountTotaling {
+public abstract class PurchasingAccountsPayableDocumentBase extends TransactionalDocumentBase implements PurchasingAccountsPayableDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchasingAccountsPayableDocumentBase.class);
 
-    // SHARED FIELDS BETWEEN REQUISITION, PURCHASE ORDER, PAYMENT REQUEST, AND CREDIT MEMO
-    private Integer purapDocumentIdentifier;
-    private String statusCode;
-    private Integer vendorHeaderGeneratedIdentifier;
-    private Integer vendorDetailAssignedIdentifier;
-    private String vendorCustomerNumber;
-
-    // COMMON ELEMENTS
-    protected List statusHistories;
-
-    // COLLECTIONS
-    private List<PurchasingApItem> items;
-    
-    // REFERENCE OBJECTS
-    private Status status;
-    private VendorDetail vendorDetail;
-
-    // CONSTRUCTORS
-    public PurchasingAccountsPayableDocumentBase() {
-        items = new TypedArrayList(getItemClass());
-        this.statusHistories = new ManageableArrayList();
-    }
-    
-    public KualiDecimal getTotalDollarAmount() {
-        //FIXME get real total
-//        return Constants.ZERO;
-        return new KualiDecimal(100);
-    }
-
-    /**
-     * Retrieve all references common to purchasing and ap
-     */
-    public void refreshAllReferences() {
-        this.refreshReferenceObject("status");
-        this.refreshReferenceObject("vendorDetail");
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
-        m.put("purapDocumentIdentifier", this.purapDocumentIdentifier);
-        return m;
-    }
-    
-    /**
-     * This method is used to add a note to a Status History.
-     * 
-     * @param statusHistory
-     * @param statusHistoryNote
-     */
-    protected void addStatusHistoryNote( StatusHistory statusHistory, Note note ) {
-        if( ObjectUtils.isNotNull( null ) ) {
-            NoteService noteService = SpringServiceLocator.getNoteService();
-            try {
-                note = noteService.createNote( note, statusHistory );
-                noteService.save( note );
-            } catch( Exception e ) {
-                LOG.error("Unable to create or save status history note " + e.getMessage());
-                throw new RuntimeException("Unable to create or save status history note " + e.getMessage());
-            }
-        }
-    }
-
-    // GETTERS AND SETTERS
-    /**
-     * Gets the vendorHeaderGeneratedIdentifier attribute.
-     * 
-     * @return Returns the vendorHeaderGeneratedIdentifier
-     * 
-     */
-    public Integer getVendorHeaderGeneratedIdentifier() { 
-        return vendorHeaderGeneratedIdentifier;
-    }
-
-    /**
-     * Sets the vendorHeaderGeneratedIdentifier attribute.
-     * 
-     * @param vendorHeaderGeneratedIdentifier The vendorHeaderGeneratedIdentifier to set.
-     * 
-     */
-    public void setVendorHeaderGeneratedIdentifier(Integer vendorHeaderGeneratedIdentifier) {
-        this.vendorHeaderGeneratedIdentifier = vendorHeaderGeneratedIdentifier;
-    }
-
-
-    /**
-     * Gets the vendorDetailAssignedIdentifier attribute.
-     * 
-     * @return Returns the vendorDetailAssignedIdentifier
-     * 
-     */
-    public Integer getVendorDetailAssignedIdentifier() { 
-        return vendorDetailAssignedIdentifier;
-    }
-
-    /**
-     * Sets the vendorDetailAssignedIdentifier attribute.
-     * 
-     * @param vendorDetailAssignedIdentifier The vendorDetailAssignedIdentifier to set.
-     * 
-     */
-    public void setVendorDetailAssignedIdentifier(Integer vendorDetailAssignedIdentifier) {
-        this.vendorDetailAssignedIdentifier = vendorDetailAssignedIdentifier;
-    }
-
-    /**
-     * Gets the vendorCustomerNumber attribute.
-     * 
-     * @return Returns the vendorCustomerNumber
-     * 
-     */
-    public String getVendorCustomerNumber() { 
-        return vendorCustomerNumber;
-    }
-
-    /**
-     * Sets the vendorCustomerNumber attribute.
-     * 
-     * @param vendorCustomerNumber The vendorCustomerNumber to set.
-     * 
-     */
-    public void setVendorCustomerNumber(String vendorCustomerNumber) {
-        this.vendorCustomerNumber = vendorCustomerNumber;
-    }
-
-    public Integer getPurapDocumentIdentifier() {
-        return purapDocumentIdentifier;
-    }
-
-    public void setPurapDocumentIdentifier(Integer identifier) {
-        this.purapDocumentIdentifier = identifier;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(String statusCode) {
-        this.statusCode = statusCode;
-    }
-
-    public List getStatusHistories() {
-        return statusHistories;
-    }
-
-    public void setStatusHistories(List statusHistories) {
-        this.statusHistories = statusHistories;
-    }
-
-    public VendorDetail getVendorDetail() {
-        return vendorDetail;
-}
-    public void setVendorDetail(VendorDetail vendorDetail) {
-        this.vendorDetail = vendorDetail;
-    }
-
-    /**
-     * Gets the items attribute. 
-     * @return Returns the items.
-     */
-    public List getItems() {
-        return items;
-    }
-
-    /**
-     * Sets the items attribute value.
-     * @param items The items to set.
-     */
-    public void setItems(List items) {
-        this.items = items;
-    }
-
-    public void addItem(PurchasingApItem item) {
-        int itemLinePosition = items.size();
-        if(item.getItemLineNumber()!=null) {
-            itemLinePosition = item.getItemLineNumber().intValue()-1;
-        }
-       
-        //if the user entered something set line number to that
-//        if(itemLinePosition>0&&itemLinePosition<items.size()) {
-//            itemLinePosition = itemLinePosition - 1;
-//        }
-        else if(itemLinePosition>items.size()) {
-            itemLinePosition=items.size();
-        }
-        
-        items.add(itemLinePosition,item);
-        renumberItems(itemLinePosition);
-    }
-    
-    public void deleteItem(int lineNum) {
-        if(items.remove(lineNum)==null) {
-            //throw error here
-        }
-        renumberItems(lineNum);
-    }
-    
-    public void renumberItems(int start) {
-        for (int i = start; i<items.size(); i++) {
-            PurchasingApItem item = (PurchasingApItem)items.get(i);
-            item.setItemLineNumber(new Integer(i+1));
-        }
-    }
-    
-    public PurchasingApItem getItem(int pos) {
-        //TODO: we probably don't need this because of the TypedArrayList
-        while (getItems().size() <= pos) {
-            
-            try {
-                getItems().add(getItemClass().newInstance());
-            }
-            catch (InstantiationException e) {
-                throw new RuntimeException("Unable to get class");
-            }
-            catch (IllegalAccessException e) {
-                throw new RuntimeException("Unable to get class");
-            }
-            catch (NullPointerException e) {
-                throw new RuntimeException("Can't instantiate Purchasing Item from base");
-            }
-        }
-        return (PurchasingApItem)items.get(pos);
-    }
-    public KualiDecimal getTotal() {
-        KualiDecimal total = new KualiDecimal("0");
-        for (PurchasingApItem item : items) {
-           total = total.add(item.getExtendedPrice());
-       }
-       return total;
-    }
-
-    public abstract Class getItemClass();
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLines()
-     */
-    @Override
-    public List getSourceAccountingLines() {
-        //TODO: Chris loop through items and get accounts
-        TypedArrayList accounts = null;
-        if(items.size()>=1) {
-            accounts = new TypedArrayList(getItem(0).getAccountingLineClass());
-        }
-        for (PurchasingApItem item : items) {
-            accounts.addAll(item.getSourceAccountingLines());
-        }
-        return (accounts==null)?new ArrayList():accounts;
-    }
-    
-    
 }
