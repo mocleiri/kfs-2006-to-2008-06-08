@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 
 
         <inquiry>
-            <title>Labor Object Benefits Inquiry</title>
+            <title>Position Object Benefit Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="universityFiscalYear" />
@@ -33,9 +33,9 @@
         </inquiry>
 
         <lookup>
-            <title>Labor Position Object Benefits Lookup</title>
+            <title>Position Object Benefits Lookup</title>
 
-            <instructions>Lookup a Labor Position Object Benefit</instructions>
+            <instructions>Lookup a Position Object Benefit</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>

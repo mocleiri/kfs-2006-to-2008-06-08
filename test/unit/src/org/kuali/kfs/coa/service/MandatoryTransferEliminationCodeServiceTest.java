@@ -1,87 +1,85 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.service;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getKualiCodeService;
-
+import org.kuali.core.service.KualiCodeService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode;
-import org.kuali.test.KualiTestBase;
+import org.kuali.test.KualiTestBaseWithSpring;
 import org.kuali.test.WithTestSpringContext;
-import org.kuali.test.suite.AnnotationTestSuite;
-import org.kuali.test.suite.CrossSectionSuite;
 
 /**
  * This class tests the MandatoryTransferEliminationCode service.
  * 
- * 
+ * @author Kuali Nervous System Team ()
  */
-@AnnotationTestSuite(CrossSectionSuite.class)
 @WithTestSpringContext
-public class MandatoryTransferEliminationCodeServiceTest extends KualiTestBase {
+public class MandatoryTransferEliminationCodeServiceTest extends KualiTestBaseWithSpring {
 
-    private static final String GOOD_CODE="N";
-    private static final String GOOD_NAME="NEITHER";
-    private static final String NONEXISTENT_CODE = "A";  // This code is not in the database.  Please do not add it, or you will break this test.
-    private static final String NONEXISTENT_NAME = "BAD";
+    MandatoryTransferEliminationCode mtec;
+    KualiCodeService kualiCodeService;
+    private static final String N_CODE_DESCR = "None";
 
     /**
-     * @see org.kuali.test.KualiTestBase#setUp()
+     * Performs setup operations before tests are executed.
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
-        validateTestFixtures();
+        kualiCodeService = SpringServiceLocator.getKualiCodeService();
     }
 
     /**
      * Performs miscellaneous tests for this service.
      */
-    public void testByCode_valid_name() {
+    public void testMiscellaneous() {
         // test known-good byCode
-        MandatoryTransferEliminationCode mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, GOOD_CODE);
-        assertEquals("Known-good code results in expected returned Name.", GOOD_NAME, mtec.getName());
-    }
+        mtec = null;
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByCode(MandatoryTransferEliminationCode.class, "N");
+        assertEquals("Known-good code results in expected returned Name.", N_CODE_DESCR, mtec.getName());
 
-    public void testByName_valid_name() {
         // test known-good byName
-        MandatoryTransferEliminationCode mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByName(MandatoryTransferEliminationCode.class, GOOD_NAME);
-        assertEquals("Known-good name results in expected returned code.", GOOD_CODE, mtec.getCode());
-    }
+        mtec = null;
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByName(MandatoryTransferEliminationCode.class, N_CODE_DESCR);
+        assertEquals("Known-good name results in expected returned code.", "N", mtec.getCode());
 
-    public void stestByCode_invalid_name() {
         // test known-bad byCode
-        MandatoryTransferEliminationCode mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, NONEXISTENT_CODE);
+        mtec = null;
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByCode(MandatoryTransferEliminationCode.class, "A");
         assertNull("Known-bad code returns null object.", mtec);
-    }
 
-    public void testByName_invalid_name() {
         // test known-bad byName
-        MandatoryTransferEliminationCode mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByName(MandatoryTransferEliminationCode.class, NONEXISTENT_NAME);
+        mtec = null;
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByName(MandatoryTransferEliminationCode.class, "This is not a valid code description in this table.");
         assertNull("Known-bad code returns null object.", mtec);
-    }
 
-    public void testByCode_empty() {
         // test known-bad byCode
-        MandatoryTransferEliminationCode mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, "");
+        mtec = null;
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByCode(MandatoryTransferEliminationCode.class, "");
         assertNull("Known-empty code returns null object.", mtec);
-    }
 
-    public void testByCode_null() {
         // test known-bad byCode
-        MandatoryTransferEliminationCode mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, null);
+        mtec = null;
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByCode(MandatoryTransferEliminationCode.class, null);
         assertNull("Known-null code returns null object.", mtec);
     }
 
@@ -90,7 +88,8 @@ public class MandatoryTransferEliminationCodeServiceTest extends KualiTestBase {
         String newName;
 
         // get the existing value
-        MandatoryTransferEliminationCode mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, GOOD_CODE);
+        mtec = null;
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByCode(MandatoryTransferEliminationCode.class, "N");
 
         // cache the old value, create a new value, and modify the object
         oldName = mtec.getName();
@@ -98,43 +97,29 @@ public class MandatoryTransferEliminationCodeServiceTest extends KualiTestBase {
         mtec.setName(newName);
 
         // attempt to save the modified object
-        getKualiCodeService().save(mtec);
+        kualiCodeService.save(mtec);
 
         // open the object byCode() and confirm that the changes were saved
         mtec = null;
-        mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, GOOD_CODE);
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByCode(MandatoryTransferEliminationCode.class, "N");
         assertEquals("Changes to the document were not persisted to the database.", newName, mtec.getName());
 
         // revert back to the old name if it worked
         mtec.setName(oldName);
-        getKualiCodeService().save(mtec);
+        kualiCodeService.save(mtec);
 
 
         mtec = null;
-        mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, GOOD_CODE);
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByCode(MandatoryTransferEliminationCode.class, "N");
         assertEquals("Changes to the document were not persisted to the database.", oldName, mtec.getName());
     }
 
     public void testActive() {
 
         // test known-good active code
-        MandatoryTransferEliminationCode mtec = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, GOOD_CODE);
+        mtec = null;
+        mtec = (MandatoryTransferEliminationCode) kualiCodeService.getByCode(MandatoryTransferEliminationCode.class, "N");
         assertEquals("The active code associated with this field is incorrect", true, mtec.isActive());
 
-    }
-
-    private void validateTestFixtures() {
-        MandatoryTransferEliminationCode code = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, GOOD_CODE);
-        assertEquals(GOOD_CODE,code.getCode());
-        assertEquals(GOOD_NAME,code.getName());
-
-        code = (MandatoryTransferEliminationCode) getKualiCodeService().getByName(MandatoryTransferEliminationCode.class, GOOD_NAME);
-        assertEquals(GOOD_CODE,code.getCode());
-        assertEquals(GOOD_NAME,code.getName());
-        
-        code = (MandatoryTransferEliminationCode) getKualiCodeService().getByCode(MandatoryTransferEliminationCode.class, NONEXISTENT_CODE);
-        assertNull(code);
-        code = (MandatoryTransferEliminationCode) getKualiCodeService().getByName(MandatoryTransferEliminationCode.class, NONEXISTENT_CODE);
-        assertNull(code);
     }
 }

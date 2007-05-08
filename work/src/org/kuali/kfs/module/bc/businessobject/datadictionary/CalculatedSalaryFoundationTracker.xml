@@ -63,26 +63,33 @@
             </defaultSort>
 
 			<lookupFields>
-			    <lookupField attributeName="universityFiscalYear" required="true">
-                   <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
-                </lookupField>
-				<lookupField attributeName="chartOfAccountsCode" required="false" />
+ 				<lookupField attributeName="universityFiscalYear" required="true" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="accountNumber" required="true" />
                 <lookupField attributeName="subAccountNumber" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
             </lookupFields>
 
             <resultFields>
-                <field attributeName="personName" />
-                <field attributeName="financialObjectCode" />
-                <field attributeName="financialSubObjectCode" />
-                <field attributeName="positionNumber" />
+                <field attributeName="accountNumber" />
+                <field attributeName="additionalSequence" />
+                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="csfAmount" />
-                <field attributeName="csfFundingStatusCode" />
+                <field attributeName="csfCreateTimestamp" />
                 <field attributeName="csfDeleteCode" />
+                <field attributeName="csfFullTimeEmploymentQuantity" />
+                <field attributeName="csfFundingStatusCode" />
                 <field attributeName="csfTimePercent" />
                 <field attributeName="earnCode" />
                 <field attributeName="effectiveDate" />
+                <field attributeName="effectiveSequence" />
+                <field attributeName="emplid" />
+                <field attributeName="employeeRecord" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="positionNumber" />
+                <field attributeName="subAccountNumber" />
+                <field attributeName="universityFiscalYear" />
             </resultFields>
         </lookup>
 
@@ -374,23 +381,6 @@
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
-			<attribute name="personName" forceUppercase="true">
-				<label>Display Name</label>
-				<shortLabel>Name</shortLabel>
-
-				<maxLength>80</maxLength>
-
-				<control>
-					<hidden/>
-					<!-- enable if you want to be able to set the display name separate from the individual name fields
-					<text size="40" />
-					-->
-				</control>
-
-				<summary>Display Name</summary>
-				<description>Name</description>
-
-			</attribute>
 
         </attributes>
     </businessObject>
