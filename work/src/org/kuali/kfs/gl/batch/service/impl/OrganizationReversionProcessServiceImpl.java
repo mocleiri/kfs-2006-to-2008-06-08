@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,7 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.impl.orgreversion.OrganizationReversionProcess;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class OrganizationReversionProcessServiceImpl implements OrganizationReversionProcessService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrganizationReversionProcessServiceImpl.class);
 

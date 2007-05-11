@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package org.kuali.module.financial.rules;
 
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.AdvanceDepositDetail;
 
 /**
@@ -48,23 +48,23 @@ public class AdvanceDepositDocumentRuleUtil {
         if (isValid) {
             isValid = !advanceDeposit.getFinancialDocumentAdvanceDepositAmount().isZero();
             if (!isValid) {
-                String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(AdvanceDepositDetail.class, KFSPropertyConstants.ADVANCE_DEPOSIT_AMOUNT);
-                errorMap.putError(KFSPropertyConstants.ADVANCE_DEPOSIT_AMOUNT, KFSKeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_ZERO_AMOUNT, label);
+                String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(AdvanceDepositDetail.class, PropertyConstants.ADVANCE_DEPOSIT_AMOUNT);
+                errorMap.putError(PropertyConstants.ADVANCE_DEPOSIT_AMOUNT, KeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_ZERO_AMOUNT, label);
             }
         }
 
         if (isValid) {
-            isValid = SpringServiceLocator.getDictionaryValidationService().validateReferenceExists(advanceDeposit, KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK);
+            isValid = SpringServiceLocator.getDictionaryValidationService().validateReferenceExists(advanceDeposit, PropertyConstants.FINANCIAL_DOCUMENT_BANK);
             if (!isValid) {
-                String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(AdvanceDepositDetail.class, KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_CODE);
-                errorMap.putError(KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_CODE, KFSKeyConstants.ERROR_EXISTENCE, label);
+                String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(AdvanceDepositDetail.class, PropertyConstants.FINANCIAL_DOCUMENT_BANK_CODE);
+                errorMap.putError(PropertyConstants.FINANCIAL_DOCUMENT_BANK_CODE, KeyConstants.ERROR_EXISTENCE, label);
             }
         }
         if (isValid) {
-            isValid = SpringServiceLocator.getDictionaryValidationService().validateReferenceExists(advanceDeposit, KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT);
+            isValid = SpringServiceLocator.getDictionaryValidationService().validateReferenceExists(advanceDeposit, PropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT);
             if (!isValid) {
-                String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(AdvanceDepositDetail.class, KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT_NUMBER);
-                errorMap.putError(KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT_NUMBER, KFSKeyConstants.ERROR_EXISTENCE, label);
+                String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(AdvanceDepositDetail.class, PropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT_NUMBER);
+                errorMap.putError(PropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT_NUMBER, KeyConstants.ERROR_EXISTENCE, label);
             }
         }
 

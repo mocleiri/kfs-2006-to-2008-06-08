@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormAgency.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +20,15 @@ package org.kuali.module.kra.routingform.bo;
 
 import java.sql.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.cg.bo.Agency;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class RoutingFormAgency extends PersistableBusinessObjectBase {
+public class RoutingFormAgency extends BusinessObjectBase {
 
 	private String documentNumber;
 	private String agencyAddressDescription;
@@ -52,18 +52,18 @@ public class RoutingFormAgency extends PersistableBusinessObjectBase {
 	private String routingFormDueDateTypeCode;
 	private Date routingFormDueDate;
 	private String routingFormDueTime;
+	private Integer routingFormRequiredCopyNumber;
 	private String routingFormRequiredCopyText;
 	private Date routingFormSubmitDate;
 
-    private List<RoutingFormDueDateType> routingFormDueDateTypes;
-    private Agency agency;
-    private DueDateType dueDateType;
+    private RoutingFormDueDateType routingFormDueDateType;
+    private Agency routingFormAgency;
     
 	/**
 	 * Default constructor.
 	 */
 	public RoutingFormAgency() {
-        routingFormDueDateTypes = new TypedArrayList(RoutingFormDueDateType.class);
+
 	}
 
 	/**
@@ -395,6 +395,7 @@ public class RoutingFormAgency extends PersistableBusinessObjectBase {
 	 * Sets the agencyNumber attribute.
 	 * 
 	 * @param agencyNumber The agencyNumber to set.
+	 * 
 	 */
 	public void setAgencyNumber(String agencyNumber) {
 		this.agencyNumber = agencyNumber;
@@ -526,6 +527,28 @@ public class RoutingFormAgency extends PersistableBusinessObjectBase {
 		this.routingFormDueTime = routingFormDueTime;
 	}
 
+
+	/**
+	 * Gets the routingFormRequiredCopyNumber attribute.
+	 * 
+	 * @return Returns the routingFormRequiredCopyNumber
+	 * 
+	 */
+	public Integer getRoutingFormRequiredCopyNumber() { 
+		return routingFormRequiredCopyNumber;
+	}
+
+	/**
+	 * Sets the routingFormRequiredCopyNumber attribute.
+	 * 
+	 * @param routingFormRequiredCopyNumber The routingFormRequiredCopyNumber to set.
+	 * 
+	 */
+	public void setRoutingFormRequiredCopyNumber(Integer routingFormRequiredCopyNumber) {
+		this.routingFormRequiredCopyNumber = routingFormRequiredCopyNumber;
+	}
+
+
 	/**
 	 * Gets the routingFormRequiredCopyText attribute.
 	 * 
@@ -567,12 +590,21 @@ public class RoutingFormAgency extends PersistableBusinessObjectBase {
 		this.routingFormSubmitDate = routingFormSubmitDate;
 	}
 
-    public List<RoutingFormDueDateType> getRoutingFormDueDateTypes() {
-        return routingFormDueDateTypes;
+    /**
+     * Gets the routingFormDueDateType attribute. 
+     * @return Returns the routingFormDueDateType.
+     */
+    public RoutingFormDueDateType getRoutingFormDueDateType() {
+        return routingFormDueDateType;
     }
 
-    public void setRoutingFormDueDateTypes(List<RoutingFormDueDateType> routingFormDueDateTypes) {
-        this.routingFormDueDateTypes = routingFormDueDateTypes;
+    /**
+     * Sets the routingFormDueDateType attribute value.
+     * @param routingFormDueDateType The routingFormDueDateType to set.
+     * @deprecated
+     */
+    public void setRoutingFormDueDateType(RoutingFormDueDateType routingFormDueDateType) {
+        this.routingFormDueDateType = routingFormDueDateType;
     }
 
     /**
@@ -580,34 +612,16 @@ public class RoutingFormAgency extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 
-    public Agency getAgency() {
-        return agency;
-    }
-    
-    /**
-     * @param agency
-     * @deprecated
-     */
-    public void setAgency(Agency routingFormAgency) {
-        this.agency = routingFormAgency;
+    public Agency getRoutingFormAgency() {
+        return routingFormAgency;
     }
 
-    public DueDateType getDueDateType() {
-        return dueDateType;
+    public void setRoutingFormAgency(Agency routingFormAgency) {
+        this.routingFormAgency = routingFormAgency;
     }
-
-    /**
-     * @param dueDateType
-     * @deprecated
-     */
-    public void setDueDateType(DueDateType dueDateType) {
-        this.dueDateType = dueDateType;
-    }
-    
-    
 
 }

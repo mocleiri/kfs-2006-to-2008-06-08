@@ -15,13 +15,13 @@
  */
 package org.kuali.module.labor.document;
 
+import org.kuali.Constants;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.module.labor.bo.ExpenseTransferSourceAccountingLine;
-import org.kuali.module.labor.bo.ExpenseTransferTargetAccountingLine;
 import org.kuali.module.labor.bo.LaborLedgerAccountingLineParser;
+import org.kuali.module.labor.bo.SalaryExpenseTransferSourceAccountingLine;
+import org.kuali.module.labor.bo.SalaryExpenseTransferTargetAccountingLine;
 
 /**
  * Class representing the Salary Expense Transfer Document.
@@ -48,19 +48,19 @@ public class SalaryExpenseTransferDocument extends LaborDocument implements Copy
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.core.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.FinancialDocument#getSourceAccountingLinesSectionTitle()
      */
     public String getSourceAccountingLinesSectionTitle() {
-        return KFSConstants.FROM;
+        return Constants.FROM;
     }
 
     /**
      * Overrides the base implementation to return "To".
      * 
-     * @see org.kuali.core.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLinesSectionTitle()
      */
     public String getTargetAccountingLinesSectionTitle() {
-        return KFSConstants.TO;
+        return Constants.TO;
     }
     
     /**
@@ -70,13 +70,13 @@ public class SalaryExpenseTransferDocument extends LaborDocument implements Copy
     public AccountingLineParser getAccountingLineParser() {
         return new LaborLedgerAccountingLineParser();        
     }
-    
+
     /**
      * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLineClass()
      */
     @Override
     public Class getSourceAccountingLineClass() {
-        return ExpenseTransferSourceAccountingLine.class;
+        return SalaryExpenseTransferSourceAccountingLine.class;
     }
 
     /**
@@ -84,7 +84,9 @@ public class SalaryExpenseTransferDocument extends LaborDocument implements Copy
      */
     @Override
     public Class getTargetAccountingLineClass() {
-        return ExpenseTransferTargetAccountingLine.class;
-    }
+        return SalaryExpenseTransferTargetAccountingLine.class;
+    } 
+    
+    
 }
 

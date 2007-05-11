@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kuali.module.labor.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class BenefitsType extends PersistableBusinessObjectBase {
+public class BenefitsType extends BusinessObjectBase {
 
     private String positionBenefitTypeCode;
     private String positionBenefitTypeDescription;
@@ -39,7 +39,7 @@ public class BenefitsType extends PersistableBusinessObjectBase {
     /**
      * Gets the positionBenefitTypeCode attribute.
      * 
-     * @return Returns the positionBenefitTypeCode
+     * @return - Returns the positionBenefitTypeCode
      * 
      */
     public String getPositionBenefitTypeCode() {
@@ -49,7 +49,7 @@ public class BenefitsType extends PersistableBusinessObjectBase {
     /**
      * Sets the positionBenefitTypeCode attribute.
      * 
-     * @param positionBenefitTypeCode The positionBenefitTypeCode to set.
+     * @param - positionBenefitTypeCode The positionBenefitTypeCode to set.
      * 
      */
     public void setPositionBenefitTypeCode(String positionBenefitTypeCode) {
@@ -60,7 +60,7 @@ public class BenefitsType extends PersistableBusinessObjectBase {
     /**
      * Gets the positionBenefitTypeDescription attribute.
      * 
-     * @return Returns the positionBenefitTypeDescription
+     * @return - Returns the positionBenefitTypeDescription
      * 
      */
     public String getPositionBenefitTypeDescription() {
@@ -70,7 +70,7 @@ public class BenefitsType extends PersistableBusinessObjectBase {
     /**
      * Sets the positionBenefitTypeDescription attribute.
      * 
-     * @param positionBenefitTypeDescription The positionBenefitTypeDescription to set.
+     * @param - positionBenefitTypeDescription The positionBenefitTypeDescription to set.
      * 
      */
     public void setPositionBenefitTypeDescription(String positionBenefitTypeDescription) {
@@ -81,7 +81,7 @@ public class BenefitsType extends PersistableBusinessObjectBase {
     /**
      * Gets the positionBenefitRetirementIndicator attribute.
      * 
-     * @return Returns the positionBenefitRetirementIndicator
+     * @return - Returns the positionBenefitRetirementIndicator
      * 
      */
     public boolean isPositionBenefitRetirementIndicator() {
@@ -92,7 +92,7 @@ public class BenefitsType extends PersistableBusinessObjectBase {
     /**
      * Sets the positionBenefitRetirementIndicator attribute.
      * 
-     * @param positionBenefitRetirementIndicator The positionBenefitRetirementIndicator to set.
+     * @param - positionBenefitRetirementIndicator The positionBenefitRetirementIndicator to set.
      * 
      */
     public void setPositionBenefitRetirementIndicator(boolean positionBenefitRetirementIndicator) {
@@ -101,7 +101,7 @@ public class BenefitsType extends PersistableBusinessObjectBase {
 
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
