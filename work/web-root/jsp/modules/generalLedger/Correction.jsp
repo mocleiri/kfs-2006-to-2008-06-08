@@ -63,7 +63,7 @@
     </kul:tab>
   </c:if>
   <kul:tab tabTitle="Summary" defaultOpen="true" tabErrorKey="summary">
-    <c:if test="${KualiForm.document.correctionRowCount != null}" >
+    <c:if test="${KualiForm.dataLoadedFlag}" >
       <html:hidden property="document.correctionDebitTotalAmount"/>
       <html:hidden property="document.correctionCreditTotalAmount"/>
       <html:hidden property="document.correctionRowCount"/>
@@ -73,7 +73,7 @@
             <c:if test="${KualiForm.showOutputFlag == true or KualiForm.showSummaryOutputFlag == true}">
               <td align="left" valign="middle" class="subhead"><span class="subhead-left">Summary of Output Group</span></td>
             </c:if>
-            <c:if test="${KualiForm.showOutputFlag == false or KualiForm.showSummaryOutputFlag == true}">
+            <c:if test="${KualiForm.showOutputFlag == false}">
               <td align="left" valign="middle" class="subhead"><span class="subhead-left">Summary of Input Group</span></td>
             </c:if>
           </tr>
@@ -90,6 +90,25 @@
           <tr>
             <td width="20%" align="left" valign="middle" > Rows output: </td> 
             <td align="right" valign="middle"> <fmt:formatNumber value="${KualiForm.document.correctionRowCount}" groupingUsed="true"/></td>
+          </tr>
+        </table>
+      </div>
+    </c:if>
+    <c:if test="${KualiForm.restrictedFunctionalityMode}" >
+      <div class="tab-container" align="center"> 
+	    <table cellpadding="0" class="datatable" summary=""> 
+          <tr>
+            <c:if test="${KualiForm.showOutputFlag == true or KualiForm.showSummaryOutputFlag == true}">
+              <td align="left" valign="middle" class="subhead"><span class="subhead-left">Summary of Output Group</span></td>
+            </c:if>
+            <c:if test="${KualiForm.showOutputFlag == false or KualiForm.showSummaryOutputFlag == true}">
+              <td align="left" valign="middle" class="subhead"><span class="subhead-left">Summary of Input Group</span></td>
+            </c:if>
+          </tr>
+        </table>
+        <table cellpadding="0" class="datatable">
+          <tr>
+            <td>The summary is unavailable because the selected origin entry group is too large.</td> 
           </tr>
         </table>
       </div>
@@ -136,6 +155,7 @@
                   <html:select property="inputGroupId" size="10" >
                     <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|CorrectionGroupEntriesFinder" label="label" value="key" />
                   </html:select>
+                  <html:hidden property="previousInputGroupId"/>
                   <br/><br/>  
                   <html:image property="methodToCall.loadGroup.anchor${currentTabIndex}" src="images/tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntries" title="Show All Entries"/>
                   <html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}" src="images/tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="saveToDeskTop" title="Save To Desktop" onclick="excludeSubmitRestriction=true" />
@@ -178,7 +198,7 @@
           </table>
         </div>
       </c:if>
-      <c:if test="${KualiForm.chooseSystem != null and KualiForm.editMethod != null and KualiForm.dataLoadedFlag == true}" >
+      <c:if test="${KualiForm.chooseSystem != null and KualiForm.editMethod != null and KualiForm.dataLoadedFlag == true and !KualiForm.restrictedFunctionalityMode}" >
         <div class="tab-container" align="left" style="overflow: scroll; width: 100% ;"> 
           <table cellpadding=0 class="datatable" summary=""> 
             <tr>
@@ -202,7 +222,7 @@
                 <glcp:displayOriginEntrySearchResults originEntries="${KualiForm.displayEntries}"/>
               </td>
             </tr>
-            <c:if test="${KualiForm.editMethod == 'M' and KualiForm.editableFlag == true and KualiForm.showOutputFlag == false}">
+            <c:if test="${KualiForm.editMethod == 'M' and KualiForm.editableFlag == true}">
               <tr>
                 <td align="left" valign="middle" class="subhead"><span class="subhead-left">Manual Editing</span></td>
               </tr>
@@ -284,6 +304,10 @@
       </c:if>
     </kul:tab>
     <kul:tab tabTitle="Edit Options and Action" defaultOpen="true" tabErrorKey="Edit Options and Action">
+      <c:if test="${KualiForm.deleteFileFlag == true or (KualiForm.dataLoadedFlag == false && !KualiForm.restrictedFunctionalityMode) or ((KualiForm.editMethod != 'C') and (KualiForm.editMethod != 'M' or KualiForm.editableFlag == false))}">
+        <%-- this is the negation of the next if statement, since the form defaults to true for processInBatch, we need to pass along the real value for this attribute --%>
+        <html:hidden property="processInBatch"/>
+      </c:if>
       <c:if test="${KualiForm.deleteFileFlag == false and (KualiForm.dataLoadedFlag == true || KualiForm.restrictedFunctionalityMode) and ((KualiForm.editMethod == 'C') or (KualiForm.editMethod == 'M' and KualiForm.editableFlag == true))}">
         <div class="tab-container" align="center">
           <table cellpadding=0 class="datatable" summary="">
@@ -295,9 +319,8 @@
                 <td>
                   <center>
                     <html:checkbox property="processInBatch" title="processInBatch" /> <STRONG> Process In Batch </STRONG> &nbsp; &nbsp; &nbsp; &nbsp;  
-                    <c:if test="${KualiForm.restrictedFunctionalityMode == false}">
-                      <html:checkbox property="matchCriteriaOnly" title="matchCriteriaOnly"/> <STRONG> Output only records which match criteria? </STRONG>
-                    </c:if>
+                    <input type="hidden" name="processInBatch${Constants.CHECKBOX_PRESENT_ON_FORM_ANNOTATION}" value="checkboxOnScreen"/>
+                    <html:checkbox property="matchCriteriaOnly" title="matchCriteriaOnly"/> <STRONG> Output only records which match criteria? </STRONG>
                   </center>
                 </td>
               </tr>
@@ -326,6 +349,7 @@
                 <td>
                   <center>
                     <html:checkbox property="processInBatch" title="processInBatch" /> <STRONG> Process In Batch </STRONG>
+                    <input type="hidden" name="processInBatch${Constants.CHECKBOX_PRESENT_ON_FORM_ANNOTATION}" value="checkboxOnScreen"/>
                   </center>
                 </td>
               </tr>
@@ -358,6 +382,7 @@
                 <td class="bord-l-b" style="padding: 4px; vertical-align: top;">
                   Field:
                   <html:select property="groupsItem[${group.correctionChangeGroupLineNumber}].correctionCriteria.correctionFieldName">
+                    <option value=""></option>
                     <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                   </html:select>
                   Operator:
@@ -388,6 +413,7 @@
                 <td class="bord-l-b" style="padding: 4px; vertical-align: top;">
                   Field:
                   <html:select property="groupsItem[${group.correctionChangeGroupLineNumber}].correctionChange.correctionFieldName">
+                    <option value=""></option>
                     <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                   </html:select>
                   Replacement Value:
@@ -456,6 +482,7 @@
                   </c:forEach>
                   Field:
                   <html:select property="groupsItem[${group.correctionChangeGroupLineNumber}].correctionCriteria.correctionFieldName">
+                    <option value=""></option>
                     <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                   </html:select>
                   Operator:
@@ -531,7 +558,7 @@
           <td align="left" valign="middle" ><c:out value="${KualiForm.document.system}" /></td>
         </tr>
         <tr>
-          <td width="20%" align="left" valign="middle"> System: </td>
+          <td width="20%" align="left" valign="middle"> Edit Method: </td>
           <td align="left" valign="middle" ><c:out value="${KualiForm.document.method}" /></td>
         </tr>
       </table>
@@ -549,12 +576,15 @@
             <td align="left" valign="middle" > <c:out value="${KualiForm.document.correctionInputGroupId}" /></td>
           </tr>
         </c:if>
-        <c:if test="${KualiForm.document.correctionOutputGroupId != null}">
-          <tr>
-            <td width="20%" align="left" valign="middle" > Output Group ID: </td> 
+        <tr>
+          <td width="20%" align="left" valign="middle" > Output Group ID: </td> 
+          <c:if test="${KualiForm.document.correctionOutputGroupId != null}">
             <td align="left" valign="middle" > <c:out value="${KualiForm.document.correctionOutputGroupId}" /></td>
-          </tr>
-        </c:if>
+          </c:if>
+          <c:if test="${KualiForm.document.correctionOutputGroupId == null}">
+            <td align="left" valign="middle" > The output group ID is unavailable until the document has a status of FINAL.</td>
+          </c:if>
+        </tr>
         <c:if test="${KualiForm.document.correctionInputFileName != null}">
           <tr>
             <td width="20%" align="left" valign="middle" > Input File Name: </td> 
@@ -564,16 +594,30 @@
       </table>
     </div>
     <div class="tab-container" align="left" style="overflow: scroll; max-width: 100%;">
-      <table cellpadding=0 class="datatable" summary=""> 
-        <tr>
-          <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results - Output Group</span></td>
-        </tr>
-        <tr>
-          <td>
-            <glcp:displayOriginEntrySearchResults originEntries="${KualiForm.displayEntries}"/>
-          </td>
-        </tr>
-      </table>
+      <c:if test="${KualiForm.restrictedFunctionalityMode}">
+        <div class="tab-container" align="center">
+          <table cellpadding=0 class="datatable" summary=""> 
+            <tr>
+              <td align="left" valign="middle" class="subhead">Search Results</td>
+            </tr>
+            <tr>
+              <td><bean:message key="gl.correction.restricted.functionality.search.results.label" /></td>
+            </tr>
+          </table>
+        </div>
+      </c:if>
+      <c:if test="${!KualiForm.restrictedFunctionalityMode}">
+        <table cellpadding=0 class="datatable" summary=""> 
+          <tr>
+            <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results - Output Group</span></td>
+          </tr>
+          <tr>
+            <td>
+              <glcp:displayOriginEntrySearchResults originEntries="${KualiForm.displayEntries}"/>
+            </td>
+          </tr>
+        </table>
+      </c:if>
     </div>
     <div class="tab-container" align="center"> 
       <table cellpadding=0 class="datatable" summary="">
