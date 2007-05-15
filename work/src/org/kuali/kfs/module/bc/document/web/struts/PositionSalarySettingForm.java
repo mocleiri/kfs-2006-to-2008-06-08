@@ -15,8 +15,10 @@
  */
 package org.kuali.module.budget.web.struts.form;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +29,9 @@ import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.AuthorizationException;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.web.struts.form.KualiForm;
+import org.kuali.module.budget.BCConstants;
 import org.kuali.module.budget.bo.BudgetConstructionPosition;
 import org.kuali.module.budget.bo.PendingBudgetConstructionAppointmentFunding;
 import org.kuali.module.budget.document.authorization.BudgetConstructionDocumentAuthorizer;
@@ -35,6 +39,9 @@ import org.kuali.rice.KNSServiceLocator;
 
 /**
  * This class...
+ * TODO May want to refactor PositionSalarySettingForm and IncumbentSalarySettingForm to extend
+ * from new class DetailSalarySettingForm and put common code there. Or use something like
+ * DetailSalarySettingFormHelper?
  */
 public class PositionSalarySettingForm extends KualiForm {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PositionSalarySettingForm.class);
@@ -57,6 +64,7 @@ public class PositionSalarySettingForm extends KualiForm {
     private String positionNumber;
 
     //set and pass these when budgetByAccountMode to prefill the add line
+    private boolean addLine;
     private String chartOfAccountsCode;
     private String accountNumber;
     private String subAccountNumber;
@@ -65,7 +73,18 @@ public class PositionSalarySettingForm extends KualiForm {
 
     //pass the value of this as a url parm, false setting means budget by organization
     //this also controls where we return the user when done
-    private Boolean budgetByAccountMode;
+    private boolean budgetByAccountMode;
+    
+    //totals
+    private KualiDecimal csfAmountTotal = new KualiDecimal(0.00);
+    private BigDecimal csfFullTimeEmploymentQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
+    private BigDecimal csfStandardHoursTotal = new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN);
+    private KualiDecimal appointmentRequestedAmountTotal = new KualiDecimal(0.00);
+    private BigDecimal appointmentRequestedFteQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
+    private BigDecimal appointmentRequestedStandardHoursTotal = new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN);
+    private KualiDecimal appointmentRequestedCsfAmountTotal = new KualiDecimal(0.00);
+    private BigDecimal appointmentRequestedCsfFteQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
+    private BigDecimal appointmentRequestedCsfStandardHoursTotal = new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN);
 
     /**
      * Constructs a PositionSalarySettingForm.java.
@@ -73,6 +92,7 @@ public class PositionSalarySettingForm extends KualiForm {
     public PositionSalarySettingForm() {
         super();
         setBudgetConstructionPosition(new BudgetConstructionPosition());
+        this.editingMode = new HashMap();
     }
 
     /**
@@ -93,7 +113,7 @@ public class PositionSalarySettingForm extends KualiForm {
      * TODO verify this - and calls prepareAccountingLineForValidationAndPersistence on each one.
      * This is called to refresh ref objects for use by validation
      */
-    protected void populateBCAFLines(){
+    public void populateBCAFLines(){
 
         //TODO add bcaf totaling here??
 
@@ -111,12 +131,19 @@ public class PositionSalarySettingForm extends KualiForm {
      */
     private void populateBCAFLine(PendingBudgetConstructionAppointmentFunding line){
 
-//        final List REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] { "financialObject", "financialSubObject", "laborObject", "budgetConstructionMonthly"}));
-      final List REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] {"chartOfAccounts", "account", "subAccount", "financialObject", "financialSubObject", "bcnCalculatedSalaryFoundationTracker", "budgetConstructionDuration"}));
+        final List REFRESH_FIELDS;
+        if (line.getEmplid().equalsIgnoreCase("VACANT")){
+            REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] {"chartOfAccounts", "account", "subAccount", "financialObject", "financialSubObject", "bcnCalculatedSalaryFoundationTracker", "budgetConstructionDuration"}));
+            
+        } else {
+            REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] {"chartOfAccounts", "account", "subAccount", "financialObject", "financialSubObject", "bcnCalculatedSalaryFoundationTracker", "budgetConstructionDuration", "budgetConstructionIntendedIncumbent"}));
+            
+        }
 //        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(line, REFRESH_FIELDS);
         KNSServiceLocator.getPersistenceService().retrieveReferenceObjects(line, REFRESH_FIELDS);
 
     }
+
     /**
      * Gets the budgetConstructionPosition attribute. 
      * @return Returns the budgetConstructionPosition.
@@ -195,6 +222,38 @@ public class PositionSalarySettingForm extends KualiForm {
      */
     public void setReturnFormKey(String returnFormKey) {
         this.returnFormKey = returnFormKey;
+    }
+
+    /**
+     * Gets the addLine attribute. 
+     * @return Returns the addLine.
+     */
+    public boolean isAddLine() {
+        return addLine;
+    }
+
+    /**
+     * Sets the addLine attribute value.
+     * @param addLine The addLine to set.
+     */
+    public void setAddLine(boolean addLine) {
+        this.addLine = addLine;
+    }
+
+    /**
+     * Gets the budgetByAccountMode attribute. 
+     * @return Returns the budgetByAccountMode.
+     */
+    public boolean isBudgetByAccountMode() {
+        return budgetByAccountMode;
+    }
+
+    /**
+     * Sets the budgetByAccountMode attribute value.
+     * @param budgetByAccountMode The budgetByAccountMode to set.
+     */
+    public void setBudgetByAccountMode(boolean budgetByAccountMode) {
+        this.budgetByAccountMode = budgetByAccountMode;
     }
 
     /**
@@ -294,6 +353,150 @@ public class PositionSalarySettingForm extends KualiForm {
     }
 
     /**
+     * Gets the appointmentRequestedAmountTotal attribute. 
+     * @return Returns the appointmentRequestedAmountTotal.
+     */
+    public KualiDecimal getAppointmentRequestedAmountTotal() {
+        return appointmentRequestedAmountTotal;
+    }
+
+    /**
+     * Sets the appointmentRequestedAmountTotal attribute value.
+     * @param appointmentRequestedAmountTotal The appointmentRequestedAmountTotal to set.
+     */
+    public void setAppointmentRequestedAmountTotal(KualiDecimal appointmentRequestedAmountTotal) {
+        this.appointmentRequestedAmountTotal = appointmentRequestedAmountTotal;
+    }
+
+    /**
+     * Gets the appointmentRequestedCsfAmountTotal attribute. 
+     * @return Returns the appointmentRequestedCsfAmountTotal.
+     */
+    public KualiDecimal getAppointmentRequestedCsfAmountTotal() {
+        return appointmentRequestedCsfAmountTotal;
+    }
+
+    /**
+     * Sets the appointmentRequestedCsfAmountTotal attribute value.
+     * @param appointmentRequestedCsfAmountTotal The appointmentRequestedCsfAmountTotal to set.
+     */
+    public void setAppointmentRequestedCsfAmountTotal(KualiDecimal appointmentRequestedCsfAmountTotal) {
+        this.appointmentRequestedCsfAmountTotal = appointmentRequestedCsfAmountTotal;
+    }
+
+    /**
+     * Gets the appointmentRequestedCsfFteQuantityTotal attribute. 
+     * @return Returns the appointmentRequestedCsfFteQuantityTotal.
+     */
+    public BigDecimal getAppointmentRequestedCsfFteQuantityTotal() {
+        return appointmentRequestedCsfFteQuantityTotal;
+    }
+
+    /**
+     * Sets the appointmentRequestedCsfFteQuantityTotal attribute value.
+     * @param appointmentRequestedCsfFteQuantityTotal The appointmentRequestedCsfFteQuantityTotal to set.
+     */
+    public void setAppointmentRequestedCsfFteQuantityTotal(BigDecimal appointmentRequestedCsfFteQuantityTotal) {
+        this.appointmentRequestedCsfFteQuantityTotal = appointmentRequestedCsfFteQuantityTotal;
+    }
+
+    /**
+     * Gets the appointmentRequestedCsfStandardHoursTotal attribute. 
+     * @return Returns the appointmentRequestedCsfStandardHoursTotal.
+     */
+    public BigDecimal getAppointmentRequestedCsfStandardHoursTotal() {
+        return appointmentRequestedCsfStandardHoursTotal;
+    }
+
+    /**
+     * Sets the appointmentRequestedCsfStandardHoursTotal attribute value.
+     * @param appointmentRequestedCsfStandardHoursTotal The appointmentRequestedCsfStandardHoursTotal to set.
+     */
+    public void setAppointmentRequestedCsfStandardHoursTotal(BigDecimal appointmentRequestedCsfStandardHoursTotal) {
+        this.appointmentRequestedCsfStandardHoursTotal = appointmentRequestedCsfStandardHoursTotal;
+    }
+
+    /**
+     * Gets the appointmentRequestedFteQuantityTotal attribute. 
+     * @return Returns the appointmentRequestedFteQuantityTotal.
+     */
+    public BigDecimal getAppointmentRequestedFteQuantityTotal() {
+        return appointmentRequestedFteQuantityTotal;
+    }
+
+    /**
+     * Sets the appointmentRequestedFteQuantityTotal attribute value.
+     * @param appointmentRequestedFteQuantityTotal The appointmentRequestedFteQuantityTotal to set.
+     */
+    public void setAppointmentRequestedFteQuantityTotal(BigDecimal appointmentRequestedFteQuantityTotal) {
+        this.appointmentRequestedFteQuantityTotal = appointmentRequestedFteQuantityTotal;
+    }
+
+    /**
+     * Gets the appointmentRequestedStandardHoursTotal attribute. 
+     * @return Returns the appointmentRequestedStandardHoursTotal.
+     */
+    public BigDecimal getAppointmentRequestedStandardHoursTotal() {
+        return appointmentRequestedStandardHoursTotal;
+    }
+
+    /**
+     * Sets the appointmentRequestedStandardHoursTotal attribute value.
+     * @param appointmentRequestedStandardHoursTotal The appointmentRequestedStandardHoursTotal to set.
+     */
+    public void setAppointmentRequestedStandardHoursTotal(BigDecimal appointmentRequestedStandardHoursTotal) {
+        this.appointmentRequestedStandardHoursTotal = appointmentRequestedStandardHoursTotal;
+    }
+
+    /**
+     * Gets the csfAmountTotal attribute. 
+     * @return Returns the csfAmountTotal.
+     */
+    public KualiDecimal getCsfAmountTotal() {
+        return csfAmountTotal;
+    }
+
+    /**
+     * Sets the csfAmountTotal attribute value.
+     * @param csfAmountTotal The csfAmountTotal to set.
+     */
+    public void setCsfAmountTotal(KualiDecimal csfAmountTotal) {
+        this.csfAmountTotal = csfAmountTotal;
+    }
+
+    /**
+     * Gets the csfFullTimeEmploymentQuantityTotal attribute. 
+     * @return Returns the csfFullTimeEmploymentQuantityTotal.
+     */
+    public BigDecimal getCsfFullTimeEmploymentQuantityTotal() {
+        return csfFullTimeEmploymentQuantityTotal;
+    }
+
+    /**
+     * Sets the csfFullTimeEmploymentQuantityTotal attribute value.
+     * @param csfFullTimeEmploymentQuantityTotal The csfFullTimeEmploymentQuantityTotal to set.
+     */
+    public void setCsfFullTimeEmploymentQuantityTotal(BigDecimal csfFullTimeEmploymentQuantityTotal) {
+        this.csfFullTimeEmploymentQuantityTotal = csfFullTimeEmploymentQuantityTotal;
+    }
+
+    /**
+     * Gets the csfStandardHoursTotal attribute. 
+     * @return Returns the csfStandardHoursTotal.
+     */
+    public BigDecimal getCsfStandardHoursTotal() {
+        return csfStandardHoursTotal;
+    }
+
+    /**
+     * Sets the csfStandardHoursTotal attribute value.
+     * @param csfStandardHoursTotal The csfStandardHoursTotal to set.
+     */
+    public void setCsfStandardHoursTotal(BigDecimal csfStandardHoursTotal) {
+        this.csfStandardHoursTotal = csfStandardHoursTotal;
+    }
+
+    /**
      * Updates authorization-related form fields based on the current form contents
      * TODO should probably move this to extension class
      */
@@ -367,10 +570,23 @@ public class PositionSalarySettingForm extends KualiForm {
      */
     private void initNewLine(PendingBudgetConstructionAppointmentFunding line){
 
+//TODO part of this will need to be moved to a form helper setting attributes common to posn and incmbnt salsetting
         BudgetConstructionPosition bcPosn = this.getBudgetConstructionPosition();
         line.setUniversityFiscalYear(bcPosn.getUniversityFiscalYear());
         line.setPositionNumber(bcPosn.getPositionNumber());
         line.setAppointmentFundingDeleteIndicator(false);
+        line.setAppointmentFundingMonth(bcPosn.getIuNormalWorkMonths());
+        line.setAppointmentRequestedAmount(new KualiDecimal(0));
+        line.setAppointmentRequestedFteQuantity(new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN));
+        line.setAppointmentRequestedTimePercent(new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN));
+        line.setAppointmentRequestedPayRate(new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN));
+        line.setAppointmentFundingDurationCode(BCConstants.APPOINTMENT_FUNDING_DURATION_DEFAULT);
+        line.setAppointmentRequestedCsfAmount(new KualiDecimal(0));
+        line.setAppointmentRequestedCsfFteQuantity(new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN));
+        line.setAppointmentRequestedCsfTimePercent(new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN));
+        line.setAppointmentTotalIntendedAmount(new KualiDecimal(0));
+        line.setAppointmentTotalIntendedFteQuantity(new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN));
+        
         
     }
 

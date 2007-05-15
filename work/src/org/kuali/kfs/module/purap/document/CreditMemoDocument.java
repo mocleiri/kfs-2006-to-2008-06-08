@@ -17,6 +17,7 @@
 package org.kuali.module.purap.document;
 
 import org.kuali.core.bo.Note;
+import org.kuali.module.purap.bo.CreditMemoAccount;
 import org.kuali.module.purap.bo.CreditMemoItem;
 import org.kuali.module.purap.bo.CreditMemoStatusHistory;
 
@@ -86,5 +87,12 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
     public Class getItemClass() {
         return CreditMemoItem.class;
     }
-
+    
+    /**
+     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getSourceAccountingLineClass()
+     */
+//    @Override
+//    public Class getSourceAccountingLineClass() {
+//        return CreditMemoAccount.class;
+//    }
 }

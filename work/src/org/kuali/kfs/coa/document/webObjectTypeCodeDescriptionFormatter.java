@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.kuali.Constants;
 import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectType;
 
@@ -38,7 +38,7 @@ public class ObjectTypeCodeDescriptionFormatter extends CodeDescriptionFormatter
     @Override
     protected Map<String, PersistableBusinessObject> getValuesToBusinessObjectsMap(Set values) {
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put(Constants.GENERIC_CODE_PROPERTY_NAME, values);
+        criteria.put(KFSConstants.GENERIC_CODE_PROPERTY_NAME, values);
 
         Map<String, PersistableBusinessObject> results = new HashMap<String, PersistableBusinessObject>();
         Collection<ObjectType> coll = SpringServiceLocator.getBusinessObjectService().findMatchingOrderBy(ObjectType.class, criteria, "versionNumber", true);
