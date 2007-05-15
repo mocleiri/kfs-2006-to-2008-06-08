@@ -20,7 +20,8 @@ import java.sql.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.PropertyConstants;
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.Note;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.document.Copyable;
@@ -28,12 +29,15 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
+import org.kuali.module.purap.bo.PurchaseOrderAccount;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderStatusHistory;
 import org.kuali.module.purap.bo.PurchaseOrderVendorChoice;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
+import org.kuali.module.purap.bo.PurchaseOrderView;
 import org.kuali.module.purap.bo.RecurringPaymentFrequency;
 import org.kuali.module.purap.service.PurchaseOrderPostProcessorService;
 import org.kuali.module.vendor.VendorConstants;
@@ -77,7 +81,6 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
     private boolean purchaseOrderCurrentIndicator;
     private boolean pendingActionIndicator;
     private Date purchaseOrderFirstTransmissionDate;
-    private Integer accountsPayablePurchasingDocumentLinkIdentifier;
     
     private PurchaseOrderVendorChoice purchaseOrderVendorChoice;
     private PaymentTermType vendorPaymentTerms;
@@ -87,6 +90,10 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
     
     //COLLECTIONS
     private List<PurchaseOrderVendorStipulation> purchaseOrderVendorStipulations;
+    
+    //Not persisted in db
+    private String purchaseOrderRetransmissionMethodCode;
+    private String retransmitHeader;
     
     /**
 	 * Default constructor.
@@ -465,6 +472,23 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         this.statusChangeNote = statusChangeNote;
     }
 
+    
+    public String getPurchaseOrderRetransmissionMethodCode() {
+        return purchaseOrderRetransmissionMethodCode;
+    }
+
+    public void setPurchaseOrderRetransmissionMethodCode(String purchaseOrderRetransmissionMethodCode) {
+        this.purchaseOrderRetransmissionMethodCode = purchaseOrderRetransmissionMethodCode;
+    }
+
+    public String getRetransmitHeader() {
+        return retransmitHeader;
+    }
+
+    public void setRetransmitHeader(String retransmitHeader) {
+        this.retransmitHeader = retransmitHeader;
+    }
+
     /**
      * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#addToStatusHistories(java.lang.String, java.lang.String)
      */
@@ -524,22 +548,6 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
     }    
     
     /**
-     * Gets the accountsPayablePurchasingDocumentLinkIdentifier attribute. 
-     * @return Returns the accountsPayablePurchasingDocumentLinkIdentifier.
-     */
-    public Integer getAccountsPayablePurchasingDocumentLinkIdentifier() {
-        return accountsPayablePurchasingDocumentLinkIdentifier;
-    }
-
-    /**
-     * Sets the accountsPayablePurchasingDocumentLinkIdentifier attribute value.
-     * @param accountsPayablePurchasingDocumentLinkIdentifier The accountsPayablePurchasingDocumentLinkIdentifier to set.
-     */
-    public void setAccountsPayablePurchasingDocumentLinkIdentifier(Integer accountsPayablePurchasingDocumentLinkIdentifier) {
-        this.accountsPayablePurchasingDocumentLinkIdentifier = accountsPayablePurchasingDocumentLinkIdentifier;
-    }
-
-    /**
      * Gets the alternateVendorNumber attribute. 
      * @return Returns the alternateVendorNumber.
      */
@@ -596,14 +604,19 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         TransactionalDocument newDoc = (TransactionalDocument) SpringServiceLocator.getDocumentService().getNewDocument(docType);
         newDoc.getDocumentHeader().setFinancialDocumentDescription(getDocumentHeader().getFinancialDocumentDescription());
         newDoc.getDocumentHeader().setOrganizationDocumentNumber(getDocumentHeader().getOrganizationDocumentNumber());
-
+        //setting it to new to avoid recursion problem (if deep copy checked for recursive objects or ignored transient we wouldn't need this)
+        documentBusinessObject = new PurchaseOrderDocument();
         try {
-            ObjectUtils.setObjectPropertyDeep(this, PropertyConstants.DOCUMENT_NUMBER, documentNumber.getClass(), newDoc.getDocumentNumber());
+            ObjectUtils.setObjectPropertyDeep(this, KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber.getClass(), newDoc.getDocumentNumber());
+        }
+        catch (IllegalAccessException e) {
+            //ignore for now, we need a rice change to ignore these transient and self referential fields 
         }
         catch (Exception e) {
             LOG.error("Unable to set document number property in copied document " + e.getMessage());
             throw new RuntimeException("Unable to set document number property in copied document " + e.getMessage());
         }
+        refreshDocumentBusinessObject();
         
         // replace current documentHeader with new documentHeader
         setDocumentHeader(newDoc.getDocumentHeader());
@@ -618,13 +631,21 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
      */
     @Override
     public PersistableBusinessObject getDocumentBusinessObject() {
-        if (ObjectUtils.isNotNull(getPurapDocumentIdentifier()) &&
-            ObjectUtils.isNull(this.documentBusinessObject)) {
-                documentBusinessObject = SpringServiceLocator.getPurchaseOrderService().getOldestPurchaseOrder(getPurapDocumentIdentifier());
+        if (ObjectUtils.isNotNull(getPurapDocumentIdentifier()) && ObjectUtils.isNull(documentBusinessObject)) {
+                refreshDocumentBusinessObject();
         }
         return documentBusinessObject;
     }
 
+    public void refreshDocumentBusinessObject() {
+        documentBusinessObject = SpringServiceLocator.getPurchaseOrderService().getOldestPurchaseOrder(getPurapDocumentIdentifier(),this);
+    }
+
+    @Override
+    public List<PurchaseOrderView> getRelatedPurchaseOrderViews() {
+        return null;
+    }
+    
     /**
      * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getItemClass()
      */
@@ -633,4 +654,12 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         // TODO Auto-generated method stub
         return PurchaseOrderItem.class;
 }
+
+    /**
+     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getSourceAccountingLineClass()
+     */
+//    @Override
+//    public Class getSourceAccountingLineClass() {
+//        return PurchaseOrderAccount.class;
+//    }
 }
