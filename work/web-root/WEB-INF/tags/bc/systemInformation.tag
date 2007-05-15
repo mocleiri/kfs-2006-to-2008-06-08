@@ -16,7 +16,7 @@
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
 
 <c:set var="documentAttributes" value="${DataDictionary.KualiBudgetConstructionDocument.attributes}" />
 <c:set var="accountAttributes" value="${DataDictionary.Account.attributes}" />

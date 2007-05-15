@@ -15,7 +15,7 @@
 --%>
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib prefix="html" uri="/tlds/struts-html.tld" %>
-<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
 <%@ attribute name="columnCount" required="true"
     description="Total number of columns in the accounting lines table,
     to be spanned by this row." %>
