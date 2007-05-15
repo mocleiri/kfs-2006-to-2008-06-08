@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/AwardOrganization.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,14 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 
 /**
  * 
  */
-public class AwardOrganization extends PersistableBusinessObjectBase implements Primaryable {
+public class AwardOrganization extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String organizationCode;
@@ -46,6 +48,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -55,6 +58,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -65,6 +69,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Gets the organizationCode attribute.
      * 
      * @return Returns the organizationCode
+     * 
      */
     public String getOrganizationCode() {
         return organizationCode;
@@ -74,6 +79,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Sets the organizationCode attribute.
      * 
      * @param organizationCode The organizationCode to set.
+     * 
      */
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
@@ -84,6 +90,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Gets the proposalNumber attribute.
      * 
      * @return Returns the proposalNumber
+     * 
      */
     public Long getProposalNumber() {
         return proposalNumber;
@@ -93,6 +100,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Sets the proposalNumber attribute.
      * 
      * @param proposalNumber The proposalNumber to set.
+     * 
      */
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
@@ -103,6 +111,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Gets the awardPrimaryOrganizationIndicator attribute.
      * 
      * @return Returns the awardPrimaryOrganizationIndicator
+     * 
      */
     public boolean isAwardPrimaryOrganizationIndicator() {
         return awardPrimaryOrganizationIndicator;
@@ -113,6 +122,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Sets the awardPrimaryOrganizationIndicator attribute.
      * 
      * @param awardPrimaryOrganizationIndicator The awardPrimaryOrganizationIndicator to set.
+     * 
      */
     public void setAwardPrimaryOrganizationIndicator(boolean awardPrimaryOrganizationIndicator) {
         this.awardPrimaryOrganizationIndicator = awardPrimaryOrganizationIndicator;
@@ -123,6 +133,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -142,6 +153,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Gets the organization attribute.
      * 
      * @return Returns the organization
+     * 
      */
     public Org getOrganization() {
         return organization;
@@ -155,13 +167,6 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      */
     public void setOrganization(Org organization) {
         this.organization = organization;
-    }
-
-    /**
-     * @see Primaryable#isPrimary()
-     */
-    public boolean isPrimary() {
-        return isAwardPrimaryOrganizationIndicator();
     }
 
     /**

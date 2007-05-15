@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,13 @@ package org.kuali.module.chart.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * 
  */
-public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
+public class OrganizationRoutingModel extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String organizationCode;
@@ -41,8 +38,6 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     private Date accountDelegateStartDate;
 
     private Chart chartOfAccounts;
-    private DocumentType documentType;
-    private UniversalUser accountDelegate;
 
     /**
      * Default constructor.
@@ -62,7 +57,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -83,7 +78,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationCode attribute.
      * 
-     * @return Returns the organizationCode
+     * @return - Returns the organizationCode
      * 
      */
     public String getOrganizationCode() {
@@ -104,7 +99,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationRoutingModelName attribute.
      * 
-     * @return Returns the organizationRoutingModelName
+     * @return - Returns the organizationRoutingModelName
      * 
      */
     public String getOrganizationRoutingModelName() {
@@ -125,7 +120,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the accountDelegateUniversalId attribute.
      * 
-     * @return Returns the accountDelegateUniversalId
+     * @return - Returns the accountDelegateUniversalId
      * 
      */
     public String getAccountDelegateUniversalId() {
@@ -144,26 +139,9 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
 
 
     /**
-     * Gets the accountDelegate attribute. 
-     * @return Returns the accountDelegate.
-     */
-    public UniversalUser getAccountDelegate() {
-        accountDelegate = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountDelegateUniversalId, accountDelegate);
-        return accountDelegate;
-    }
-
-    /**
-     * Sets the accountDelegate attribute value.
-     * @param accountDelegate The accountDelegate to set.
-     */
-    public void setAccountDelegate(UniversalUser accountDelegate) {
-        this.accountDelegate = accountDelegate;
-    }
-
-    /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
      * 
      */
     public String getFinancialDocumentTypeCode() {
@@ -182,25 +160,9 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
 
 
     /**
-     * Gets the documentType attribute. 
-     * @return Returns the documentType.
-     */
-    public DocumentType getDocumentType() {
-        return documentType;
-    }
-
-    /**
-     * Sets the documentType attribute value.
-     * @param documentType The documentType to set.
-     */
-    public void setDocumentType(DocumentType documentType) {
-        this.documentType = documentType;
-    }
-
-    /**
      * Gets the approvalFromThisAmount attribute.
      * 
-     * @return Returns the approvalFromThisAmount
+     * @return - Returns the approvalFromThisAmount
      * 
      */
     public KualiDecimal getApprovalFromThisAmount() {
@@ -221,7 +183,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the approvalToThisAmount attribute.
      * 
-     * @return Returns the approvalToThisAmount
+     * @return - Returns the approvalToThisAmount
      * 
      */
     public KualiDecimal getApprovalToThisAmount() {
@@ -242,7 +204,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the accountDelegatePrimaryRoutingIndicator attribute.
      * 
-     * @return Returns the accountDelegatePrimaryRoutingIndicator
+     * @return - Returns the accountDelegatePrimaryRoutingIndicator
      * 
      */
     public boolean getAccountDelegatePrimaryRoutingIndicator() {
@@ -263,7 +225,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the accountDelegateStartDate attribute.
      * 
-     * @return Returns the accountDelegateStartDate
+     * @return - Returns the accountDelegateStartDate
      * 
      */
     public Date getAccountDelegateStartDate() {
@@ -284,7 +246,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -312,25 +274,5 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase {
         m.put("accountDelegateUniversalId", this.accountDelegateUniversalId);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
         return m;
-    }
-    
-    public boolean equals(Object o) {
-        if (o instanceof OrganizationRoutingModel) {
-            OrganizationRoutingModel orgRouteModel = (OrganizationRoutingModel)o;
-            // TODO a philosophical question - if it is indeterminate whether two objects are "equal" by tuple calculus rules
-            //      because they are missing some primary keys, should they be considered truly not equal?  For now, I'm answering
-            //      "yes"
-            if (this.getChartOfAccountsCode() == null || this.getOrganizationCode() == null || this.getAccountDelegateUniversalId() == null || this.getOrganizationRoutingModelName() == null || this.getFinancialDocumentTypeCode() == null || orgRouteModel.getAccountDelegateUniversalId() == null || orgRouteModel.getChartOfAccountsCode() == null || orgRouteModel.getFinancialDocumentTypeCode() == null || orgRouteModel.getOrganizationCode() == null || orgRouteModel.getOrganizationRoutingModelName() == null) {
-                return false;
-            } else {
-                return (this.getChartOfAccountsCode().equals(orgRouteModel.getChartOfAccountsCode()) && this.getOrganizationCode().equals(orgRouteModel.getOrganizationCode()) && this.getOrganizationRoutingModelName().equals(orgRouteModel.getOrganizationRoutingModelName()) && this.getAccountDelegateUniversalId().equals(orgRouteModel.getAccountDelegateUniversalId()) && this.getFinancialDocumentTypeCode().equals(orgRouteModel.getFinancialDocumentTypeCode()));
-            }
-        } else {
-            return false;
-        }
-    }
-    
-    public int hashCode() {
-        return ((((this.getChartOfAccountsCode().hashCode() * 29 + this.getOrganizationCode().hashCode())*29 + this.getOrganizationRoutingModelName().hashCode()) * 29 + this.getAccountDelegateUniversalId().hashCode()) * 29 + this.getFinancialDocumentTypeCode().hashCode()) * 29;
     }
 }

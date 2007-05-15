@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/AwardSubcontractor.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +20,13 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
  * 
  */
-public class AwardSubcontractor extends PersistableBusinessObjectBase {
+public class AwardSubcontractor extends BusinessObjectBase {
 
     private String awardSubcontractorAmendmentNumber;
     private String awardSubcontractorNumber;
@@ -34,8 +36,7 @@ public class AwardSubcontractor extends PersistableBusinessObjectBase {
     private String subcontractorContactFirstName;
     private String subcontractorContactLastName;
     private String subcontractorAuditHistoryText;
-    private String awardSubcontractorDescription;
-    
+
     private Subcontractor subcontractor;
 
     /**
@@ -212,22 +213,6 @@ public class AwardSubcontractor extends PersistableBusinessObjectBase {
         this.subcontractorAuditHistoryText = subcontractorAuditHistoryText;
     }
 
-    /**
-     * Gets the awardSubcontractorDescription attribute. 
-     * @return Returns the awardSubcontractorDescription.
-     */
-    public String getAwardSubcontractorDescription() {
-        return awardSubcontractorDescription;
-    }
-
-    /**
-     * Sets the awardSubcontractorDescription attribute value.
-     * @param awardSubcontractorDescription The awardSubcontractorDescription to set.
-     */
-    public void setAwardSubcontractorDescription(String awardSubcontractorDescription) {
-        this.awardSubcontractorDescription = awardSubcontractorDescription;
-    }    
-    
     /**
      * @return Returns the subcontractor.
      */

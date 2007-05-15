@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,28 +28,30 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.datadictionary.DataDictionary;
 import org.kuali.core.datadictionary.DocumentEntry;
-import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.struts.form.KualiDocumentFormBase;
+import org.kuali.core.datadictionary.HeaderNavigation;
+import org.kuali.core.web.uidraw.KeyLabelPair;
 import org.kuali.module.kra.budget.bo.Budget;
+import org.kuali.module.kra.budget.bo.BudgetAdHocOrg;
+import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
 import org.kuali.module.kra.budget.bo.BudgetFringeRate;
 import org.kuali.module.kra.budget.bo.BudgetGraduateAssistantRate;
-import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
 import org.kuali.module.kra.budget.bo.BudgetTypeCode;
+import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 import org.kuali.module.kra.budget.bo.NonpersonnelCategory;
 import org.kuali.module.kra.budget.document.BudgetDocument;
-import org.kuali.module.kra.document.ResearchDocument;
-import org.kuali.module.kra.web.struts.form.ResearchDocumentFormBase;
 
 
 /**
@@ -55,7 +59,7 @@ import org.kuali.module.kra.web.struts.form.ResearchDocumentFormBase;
  * 
  * 
  */
-public class BudgetForm extends ResearchDocumentFormBase {
+public class BudgetForm extends KualiDocumentFormBase {
 
     private static final long serialVersionUID = 1L;
 
@@ -71,6 +75,9 @@ public class BudgetForm extends ResearchDocumentFormBase {
     private BudgetFringeRate newFringeRate;
     private BudgetGraduateAssistantRate newGraduateAssistantRate;
     
+    private BudgetAdHocPermission newAdHocPermission;
+    private BudgetAdHocOrg newAdHocOrg;
+    private String newAdHocWorkgroupPermissionCode;
     private UniversalUser initiator;
 
     private String[] deleteValues = new String[50];
@@ -121,6 +128,8 @@ public class BudgetForm extends ResearchDocumentFormBase {
         newPersonnel = new BudgetUser();
         newFringeRate = new BudgetFringeRate();
         newGraduateAssistantRate = new BudgetGraduateAssistantRate();
+        newAdHocPermission = new BudgetAdHocPermission();
+        newAdHocOrg = new BudgetAdHocOrg();
         initiator = new UniversalUser();
         setDocument(new BudgetDocument());
         newInstitutionCostShare = new BudgetInstitutionCostShare();
@@ -135,11 +144,6 @@ public class BudgetForm extends ResearchDocumentFormBase {
         DataDictionary dataDictionary = SpringServiceLocator.getDataDictionaryService().getDataDictionary();
         DocumentEntry budgetDocumentEntry = dataDictionary.getDocumentEntry(org.kuali.module.kra.budget.document.BudgetDocument.class);
         this.setHeaderNavigationTabs(budgetDocumentEntry.getHeaderTabNavigation());
-    }
-
-    @Override
-    public ResearchDocument getResearchDocument() {
-        return this.getBudgetDocument();
     }
 
     /**
@@ -172,6 +176,26 @@ public class BudgetForm extends ResearchDocumentFormBase {
         }
         else {
             enableHeaderNavigation("modular");
+        }
+    }
+
+    public void disableHeaderNavigation(String headerTabNavigateTo) {
+        for (int i = 0; i < this.getHeaderNavigationTabs().length; i++) {
+            HeaderNavigation currentNav = (HeaderNavigation) this.getHeaderNavigationTabs()[i];
+            if (headerTabNavigateTo.equals(currentNav.getHeaderTabNavigateTo())) {
+                currentNav.setDisabled(true);
+                return;
+            }
+        }
+    }
+
+    public void enableHeaderNavigation(String headerTabNavigateTo) {
+        for (int i = 0; i < this.getHeaderNavigationTabs().length; i++) {
+            HeaderNavigation currentNav = (HeaderNavigation) this.getHeaderNavigationTabs()[i];
+            if (headerTabNavigateTo.equals(currentNav.getHeaderTabNavigateTo())) {
+                currentNav.setDisabled(false);
+                return;
+            }
         }
     }
 
@@ -347,6 +371,48 @@ public class BudgetForm extends ResearchDocumentFormBase {
     }
 
     /**
+     * Gets the newAdHocPermission attribute.
+     * 
+     * @return Returns the newAdHocPermission.
+     */
+    public BudgetAdHocPermission getNewAdHocPermission() {
+        return newAdHocPermission;
+    }
+
+    /**
+     * Sets the newAdHocPermission attribute value.
+     * 
+     * @param newAdHocPermission The newAdHocPermission to set.
+     */
+    public void setNewAdHocPermission(BudgetAdHocPermission newAdHocPermission) {
+        this.newAdHocPermission = newAdHocPermission;
+    }
+    
+    /**
+     * Gets the newAdHocOrg attribute. 
+     * @return Returns the newAdHocOrg.
+     */
+    public BudgetAdHocOrg getNewAdHocOrg() {
+        return newAdHocOrg;
+    }
+
+    /**
+     * Sets the newAdHocOrg attribute value.
+     * @param newAdHocOrg The newAdHocOrg to set.
+     */
+    public void setNewAdHocOrg(BudgetAdHocOrg newAdHocOrg) {
+        this.newAdHocOrg = newAdHocOrg;
+    }
+
+    public String getNewAdHocWorkgroupPermissionCode() {
+        return newAdHocWorkgroupPermissionCode;
+    }
+
+    public void setNewAdHocWorkgroupPermissionCode(String newAdHocWorkgroupPermissionCode) {
+        this.newAdHocWorkgroupPermissionCode = newAdHocWorkgroupPermissionCode;
+    }
+
+    /**
      * Gets the initiator attribute. 
      * @return Returns the initiator.
      */
@@ -369,11 +435,11 @@ public class BudgetForm extends ResearchDocumentFormBase {
      */
     public String getInitiatorOrgCode() {
         if (this.getInitiator() != null) {
-            if ( !StringUtils.isEmpty( this.getInitiator().getPrimaryDepartmentCode() ) ) {
-                return this.getInitiator().getPrimaryDepartmentCode();
-            } else {
-                return this.getInitiator().getCampusCode();
+            String[] departmentIdSplit = this.getInitiator().getDeptid().split("-");
+            if (departmentIdSplit.length > 1) {
+                return departmentIdSplit[1];
             }
+            return departmentIdSplit[0];
         }
         return "";
     }
@@ -604,10 +670,10 @@ public class BudgetForm extends ResearchDocumentFormBase {
      */
     public KeyLabelPair getAdditionalDocInfo1() {
         if (this.getBudgetDocument().getBudget().isProjectDirectorToBeNamedIndicator()) {
-            return new KeyLabelPair("DataDictionary.Budget.attributes.budgetProjectDirectorUniversalIdentifier", TO_BE_NAMED_LABEL);
+            return new KeyLabelPair("DataDictionary.Budget.attributes.budgetProjectDirectorSystemId", TO_BE_NAMED_LABEL);
         }
-        else if (this.getBudgetDocument().getBudget().getProjectDirector() != null && this.getBudgetDocument().getBudget().getProjectDirector().getUniversalUser() != null) {
-            return new KeyLabelPair("DataDictionary.Budget.attributes.budgetProjectDirectorUniversalIdentifier", this.getBudgetDocument().getBudget().getProjectDirector().getUniversalUser().getPersonName());
+        else if (this.getBudgetDocument().getBudget().getProjectDirector() != null) {
+            return new KeyLabelPair("DataDictionary.Budget.attributes.budgetProjectDirectorSystemId", this.getBudgetDocument().getBudget().getProjectDirector().getUniversalUser().getPersonName());
         }
         return null;
     }
@@ -892,32 +958,5 @@ public class BudgetForm extends ResearchDocumentFormBase {
 
     public void setDisplayCostSharePermission(boolean displayCostSharePermission) {
         this.displayCostSharePermission = displayCostSharePermission;
-    }
-    
-    /**
-     * This is a work around for a problem with html:multibox. See KULERA-835 for details. Essentially it appears that
-     * in Kuali html:multibox doesn't handle string arrays correctly. It only handles the first element of a string array.
-     * @param projectTypeCode
-     * @return
-     */
-    public String[] getSelectedBudgetTypesMultiboxFix(String budgetTypeCode) {
-        String[] budgetTypes = this.getBudgetDocument().getBudget().getBudgetTypeCodeArray();
-        
-        for(int i = 0; i < budgetTypes.length; i++) {
-            String budgetType = (String) budgetTypes[i];
-            if (budgetType.equals(budgetTypeCode)) {
-                return new String[] {budgetTypeCode};
-            }
-        }
-        
-        // don't pass String[0], JSPs don't like that (exception)
-        return new String[] {""};
-    }
-
-    /**
-     * @see org.kuali.module.kra.routingform.web.struts.form.RoutingForm#getSelectedBudgetTypesMultiboxFix(String)
-     */
-    public void setSelectedBudgetTypesMultiboxFix(String code, String[] something) {
-        this.getBudgetDocument().getBudget().addBudgetTypeCode(code);
     }
 }

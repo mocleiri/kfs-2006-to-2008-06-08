@@ -15,7 +15,6 @@
  */
 package org.kuali.module.purap.service;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import org.kuali.module.purap.document.PurchaseOrderDocument;
@@ -26,24 +25,13 @@ public interface PurchaseOrderService {
 
     public void save(PurchaseOrderDocument purchaseOrderDocument);
     
-    public PurchaseOrderDocument createAutomaticPurchaseOrderDocument(RequisitionDocument reqDocument);
     public PurchaseOrderDocument createPurchaseOrderDocument(RequisitionDocument reqDocument);   
     public PurchaseOrderPostProcessorService convertDocTypeToService(String documentTypeId);  
     
-    public boolean updateFlagsAndRoute(PurchaseOrderDocument po, String docType, String annotation, List adhocRoutingRecipients);
-    public boolean firstPurchaseOrderTransmitViaPrint (PurchaseOrderDocument po, String docType, String annotation, List adhocRoutingRecipients,
-        ByteArrayOutputStream baosPDF,  String environment);
-    public boolean printPurchaseOrderPDF (PurchaseOrderDocument po, String docType, String annotation, List adhocRoutingRecipients,
-            ByteArrayOutputStream baosPDF);
-    public boolean retransmitPurchaseOrderPDF (PurchaseOrderDocument po, String docType, String annotation, List adhocRoutingRecipients,
-            ByteArrayOutputStream baosPDF);
+    public void updateFlagsAndRoute(PurchaseOrderDocument po, String docType, String annotation, List adhocRoutingRecipients);
+    
     public void completePurchaseOrder(PurchaseOrderDocument po);
     public PurchaseOrderDocument getCurrentPurchaseOrder(Integer id);
-    public PurchaseOrderDocument getPurchaseOrderByDocumentNumber(String documentNumber);
     public void setCurrentAndPendingIndicatorsInPostProcessor(PurchaseOrderDocument newPO, String workflowState);
 
-    public PurchaseOrderDocument getOldestPurchaseOrder(Integer id);
-    public PurchaseOrderDocument getPurchaseOrderInPendingPrintStatus(Integer id);
-    public void sendFYItoWorkgroup(PurchaseOrderDocument po, String annotation, Long workgroupId);
-    
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/PurchasingAccountsPayableDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +19,16 @@ package org.kuali.module.purap.document;
 
 import java.util.List;
 
-import org.kuali.core.bo.Note;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.module.purap.bo.Status;
+import org.kuali.module.purap.bo.StatusHistory;
 
 
 /**
  * Purchasing-Accounts Payable Document Interface
+ * 
  */
-public interface PurchasingAccountsPayableDocument extends AccountingDocument {
+public interface PurchasingAccountsPayableDocument extends TransactionalDocument {
     
     public Integer getVendorHeaderGeneratedIdentifier();
 
@@ -60,9 +61,9 @@ public interface PurchasingAccountsPayableDocument extends AccountingDocument {
 
     public void setVendorCustomerNumber(String vendorCustomerNumber);
 
-    public Integer getPurapDocumentIdentifier();
+    public Integer getIdentifier();
 
-    public void setPurapDocumentIdentifier(Integer identifier);
+    public void setIdentifier(Integer identifier);
 
     public Status getStatus();
 
@@ -72,32 +73,8 @@ public interface PurchasingAccountsPayableDocument extends AccountingDocument {
 
     public void setStatusCode(String statusCode);
 
-    public List getStatusHistories();
-    
-    /**
-     * This method adds to the document's status history collection an object of the
-     * appropriate child of StatusHistory.
-     * 
-     * @param oldStatus             A code for the old status in String form
-     * @param newStatus             A code for the new status in String form
-     * @param statusHistoryNote     An optional BO Note for the StatusHistory (can be null)
-     */
-    public void addToStatusHistories(String oldStatus, String newStatus, Note statusHistoryNote);
+    public List<StatusHistory> getStatusHistories();
 
-    public void setStatusHistories(List statusHistories);
+    public void setStatusHistories(List<StatusHistory> statusHistories);
 
-    public List getItems();
-    
-    public void addItem(PurchasingApItem item);
-    
-    public void setItems(List items);
-    
-    public void deleteItem(int lineNum);
-    
-    public PurchasingApItem getItem(int pos);
-    
-    public KualiDecimal getTotal();
-    
-    public abstract Class getItemClass();
-    
 }

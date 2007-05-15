@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/impl/OriginEntrySourceDaoOjb.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,11 +22,11 @@ import java.util.Collection;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.dao.OriginEntrySourceDao;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-public class OriginEntrySourceDaoOjb extends PlatformAwareDaoBaseOjb implements OriginEntrySourceDao {
+public class OriginEntrySourceDaoOjb extends PersistenceBrokerDaoSupport implements OriginEntrySourceDao {
 
     private static final String FINANCIAL_DOCUMENT_REVERSAL_DATE = "financialDocumentReversalDate";
     private static final String UNIVERSITY_FISCAL_YEAR = "universityFiscalYear";

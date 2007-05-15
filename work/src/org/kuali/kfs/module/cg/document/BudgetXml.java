@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +29,8 @@ import java.util.Locale;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetModular;
 import org.kuali.module.kra.budget.bo.BudgetModularPeriod;
@@ -68,7 +70,6 @@ public class BudgetXml {
      * 
      * @param budgetDoc data representation of a budget
      * @param xmlDoc target xml representation for the budget. This field will be side effected.
-     * @param baseUrl ensures that stylesheet may be path idependent
      * @param param a parameter that is to be added to the XML as PARAMETER1. Useful for custom functions of a style sheet.
      * @throws Exception
      */

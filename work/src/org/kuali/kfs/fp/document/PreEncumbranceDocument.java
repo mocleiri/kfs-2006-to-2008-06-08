@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.Constants;
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.module.financial.bo.PreEncumbranceDocumentAccountingLineParser;
 import org.kuali.module.gl.util.SufficientFundsItem;
 
@@ -31,8 +28,11 @@ import org.kuali.module.gl.util.SufficientFundsItem;
  * The Pre-Encumbrance document provides the capability to record encumbrances independently of purchase orders, travel, or Physical
  * Plant work orders. These transactions are for the use of the account manager to earmark funds for which unofficial commitments
  * have already been made.
+ * 
+ * 
+ * @version $Id: PreEncumbranceDocument.java,v 1.7.2.4 2007-02-10 11:37:26 j2eemgr Exp $
  */
-public class PreEncumbranceDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling{
+public class PreEncumbranceDocument extends TransactionalDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PreEncumbranceDocument.class);
 
     private java.sql.Date reversalDate;

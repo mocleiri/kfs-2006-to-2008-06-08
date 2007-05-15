@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/AwardAccount.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +20,7 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -26,7 +28,7 @@ import org.kuali.module.chart.bo.Chart;
 /**
  * 
  */
-public class AwardAccount extends PersistableBusinessObjectBase {
+public class AwardAccount extends BusinessObjectBase {
 
     private Long proposalNumber;
     private String chartOfAccountsCode;
@@ -36,7 +38,6 @@ public class AwardAccount extends PersistableBusinessObjectBase {
     private Account account;
     private Chart chartOfAccounts;
     private ProjectDirector projectDirector;
-    private Award award;
 
     /**
      * Default constructor.
@@ -49,6 +50,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Gets the proposalNumber attribute.
      * 
      * @return Returns the proposalNumber
+     * 
      */
     public Long getProposalNumber() {
         return proposalNumber;
@@ -58,6 +60,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Sets the proposalNumber attribute.
      * 
      * @param proposalNumber The proposalNumber to set.
+     * 
      */
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
@@ -68,6 +71,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -77,6 +81,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -87,6 +92,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Gets the accountNumber attribute.
      * 
      * @return Returns the accountNumber
+     * 
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -96,6 +102,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Sets the accountNumber attribute.
      * 
      * @param accountNumber The accountNumber to set.
+     * 
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
@@ -106,6 +113,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Gets the personUniversalIdentifier attribute.
      * 
      * @return Returns the personUniversalIdentifier
+     * 
      */
     public String getPersonUniversalIdentifier() {
         return personUniversalIdentifier;
@@ -115,6 +123,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Sets the personUniversalIdentifier attribute.
      * 
      * @param personUniversalIdentifier The personUniversalIdentifier to set.
+     * 
      */
     public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
         this.personUniversalIdentifier = personUniversalIdentifier;
@@ -125,6 +134,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Gets the account attribute.
      * 
      * @return Returns the account
+     * 
      */
     public Account getAccount() {
         return account;
@@ -144,6 +154,7 @@ public class AwardAccount extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -160,22 +171,13 @@ public class AwardAccount extends PersistableBusinessObjectBase {
     }
 
     /**
-     * gets the project director attribute
+     * Gets the personUniversal attribute.
      * 
-     * @return the projectDirector
+     * @return Returns the personUniversal
+     * 
      */
-    public ProjectDirector getProjectDirector() {
+    public ProjectDirector getPersonUniversal() {
         return projectDirector;
-    }
-
-    /**
-     * sets the project director attribute
-     * 
-     * @param projectDirector the projectDirector to set
-     * @deprecated
-     */
-    public void setProjectDirector(ProjectDirector projectDirector) {
-        this.projectDirector = projectDirector;
     }
 
     /**
@@ -190,23 +192,4 @@ public class AwardAccount extends PersistableBusinessObjectBase {
         m.put("accountNumber", this.accountNumber);
         return m;
     }
-
-    /**
-     * 
-     * This method returns the Award object associated with this AwardAccount.
-     * @return The Award object associated with this AwardAccount.
-     */
-    public Award getAward() {
-        return award;
-    }
-
-    /**
-     * 
-     * This method sets the associated award to the value provided.
-     * @param award Value to be assigned to the associated Award object.
-     */
-    public void setAward(Award award) {
-        this.award = award;
-    }
-
 }

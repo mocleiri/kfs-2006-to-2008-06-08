@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/gl/web/TestDataGeneratorTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +24,8 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.kuali.PropertyConstants;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.bo.AccountBalance;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.test.KualiTestBase;
 
 /**

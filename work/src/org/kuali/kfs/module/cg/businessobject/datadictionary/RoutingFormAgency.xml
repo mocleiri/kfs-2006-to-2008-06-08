@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/RoutingFormAgency.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.routingform.bo.RoutingFormAgency">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Routing Form Agency Inquiry</title>
@@ -46,6 +48,7 @@
                 <field attributeName="routingFormDueDate" />
                 <field attributeName="routingFormDueDateTypeCode" />
                 <field attributeName="routingFormDueTime" />
+                <field attributeName="routingFormRequiredCopyNumber" />
                 <field attributeName="routingFormRequiredCopyText" />
                 <field attributeName="routingFormSubmitDate" />
                 <field attributeName="documentNumber" />
@@ -85,6 +88,7 @@
                 <lookupField attributeName="routingFormDueDate" required="false" />
                 <lookupField attributeName="routingFormDueDateTypeCode" required="false" />
                 <lookupField attributeName="routingFormDueTime" required="false" />
+                <lookupField attributeName="routingFormRequiredCopyNumber" required="false" />
                 <lookupField attributeName="routingFormRequiredCopyText" required="false" />
                 <lookupField attributeName="routingFormSubmitDate" required="false" />
                 <lookupField attributeName="documentNumber" required="false" />
@@ -112,6 +116,7 @@
                 <field attributeName="routingFormDueDate" />
                 <field attributeName="routingFormDueDateTypeCode" />
                 <field attributeName="routingFormDueTime" />
+                <field attributeName="routingFormRequiredCopyNumber" />
                 <field attributeName="routingFormRequiredCopyText" />
                 <field attributeName="routingFormSubmitDate" />
                 <field attributeName="documentNumber" />
@@ -121,8 +126,8 @@
         <attributes>
 
             <attribute name="agencyAddressDescription" forceUppercase="true">
-                <label>Primary Delivery Address</label>
-                <shortLabel>Description</shortLabel>
+                <label>Agency Address Description</label>
+                <shortLabel>Address Description</shortLabel>
 
                 <maxLength>500</maxLength>
                 <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
@@ -411,8 +416,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <!-- valuesFinderClass not used because this refers to RoutingFormDueDateType -->
-                    <text size="2" />
+                    <select valuesFinderClass="org.kuali.module.kra.routingform.lookup.keyvalues.RoutingFormDueDateTypeValuesFinder" />
                 </control>
 
                 <summary>routingFormDueDateTypeCode</summary>
@@ -434,12 +438,27 @@
                 <description>routingFormDueTime description...</description>
 			</attribute>
 
-            <attribute name="routingFormRequiredCopyText" forceUppercase="true">
-                <label>Routing Form Required Copy Text</label>
+            <attribute name="routingFormRequiredCopyNumber" forceUppercase="true">
+                <label>Routing Form Required Copy Number</label>
                 <shortLabel>Copies to Agency</shortLabel>
 
+                <maxLength>3</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>routingFormRequiredCopyNumber</summary>
+                <description>routingFormRequiredCopyNumber description...</description>
+			</attribute>
+
+            <attribute name="routingFormRequiredCopyText" forceUppercase="true">
+                <label>Routing Form Required Copy Text</label>
+                <shortLabel>Text</shortLabel>
+
                 <maxLength>20</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="22" />

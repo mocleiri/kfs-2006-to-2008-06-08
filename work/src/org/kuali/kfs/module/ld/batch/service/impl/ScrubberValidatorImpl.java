@@ -18,19 +18,15 @@ package org.kuali.module.labor.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.KeyConstants;
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.service.ScrubberValidator;
 import org.kuali.module.gl.util.Message;
 import org.kuali.module.labor.bo.LaborOriginEntry;
-import org.springframework.util.StringUtils;
 
 public class ScrubberValidatorImpl implements ScrubberValidator {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ScrubberValidatorImpl.class);
@@ -57,21 +53,10 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         List<Message> errors = new ArrayList<Message>();
         
         LaborOriginEntry laborOriginEntry = (LaborOriginEntry) originEntry;
-        LaborOriginEntry laborScrubbedEntry = (LaborOriginEntry) scrubbedEntry;
         
-        errors = scrubberValidator.validateTransaction(laborOriginEntry, laborScrubbedEntry, universityRunDate);
-
-        Message err = null;
-        
-        err = validatePayrollEndFiscalYear(laborOriginEntry, laborScrubbedEntry, universityRunDate);
-        if (err != null) {
-            errors.add(err);
-        }
-
-        err = validatePayrollEndFiscalPeriodCode(laborOriginEntry, laborScrubbedEntry, universityRunDate);
-        if (err != null) {
-            errors.add(err);
-        }
+        errors = scrubberValidator.validateTransaction(laborOriginEntry, scrubbedEntry, universityRunDate);
+                
+        Message err;
         
         
         return errors;
@@ -85,70 +70,5 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     public void setScrubberValidator(ScrubberValidator sv) {
         scrubberValidator = sv;
     }
-    
-    private Message validatePayrollEndFiscalYear(LaborOriginEntry laborOriginEntry, LaborOriginEntry laborWorkingEntry, UniversityDate universityRunDate) {
-        LOG.debug("validateFiscalYear() started");
-
-        if ((laborOriginEntry.getPayrollEndDateFiscalYear() == null) || (laborOriginEntry.getUniversityFiscalYear().intValue() == 0)) {
-            laborOriginEntry.setUniversityFiscalYear(universityRunDate.getUniversityFiscalYear());
-            laborWorkingEntry.setUniversityFiscalYear(universityRunDate.getUniversityFiscalYear());
-
-            // Retrieve these objects because the fiscal year is the primary key for them
-            
-            
-            persistenceService.retrieveReferenceObject(laborOriginEntry, PropertyConstants.FINANCIAL_SUB_OBJECT);
-            persistenceService.retrieveReferenceObject(laborOriginEntry, PropertyConstants.FINANCIAL_OBJECT);
-            persistenceService.retrieveReferenceObject(laborOriginEntry, PropertyConstants.ACCOUNTING_PERIOD);
-            persistenceService.retrieveReferenceObject(laborOriginEntry, PropertyConstants.OPTION);
-        }
-        else {
-            laborWorkingEntry.setUniversityFiscalYear(laborOriginEntry.getUniversityFiscalYear());
-            laborWorkingEntry.setOption(laborOriginEntry.getOption());
-        }
-
-        if (laborOriginEntry.getOption() == null) {
-            return new Message(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_UNIV_FISCAL_YR_NOT_FOUND) + " (" + laborOriginEntry.getUniversityFiscalYear() + ")", Message.TYPE_FATAL);
-        }
-        return null;
-    }
-    
-    private Message validatePayrollEndFiscalPeriodCode(LaborOriginEntry laborOriginEntry, LaborOriginEntry laborWorkingEntry, UniversityDate universityRunDate) {
-        LOG.debug("validateUniversityFiscalPeriodCode() started");
-
-        if (!StringUtils.hasText(laborOriginEntry.getUniversityFiscalPeriodCode())) {
-            laborWorkingEntry.setUniversityFiscalPeriodCode(universityRunDate.getUniversityFiscalAccountingPeriod());
-            laborWorkingEntry.setUniversityFiscalYear(universityRunDate.getUniversityFiscalYear());
-
-            // Retrieve these objects because the fiscal year is the primary key for them
-            persistenceService.retrieveReferenceObject(laborOriginEntry, "financialSubObject");
-            persistenceService.retrieveReferenceObject(laborOriginEntry, "financialObject");
-            persistenceService.retrieveReferenceObject(laborOriginEntry, "accountingPeriod");
-            persistenceService.retrieveReferenceObject(laborOriginEntry, "option");
-        }
-        else {
-            if (laborOriginEntry.getAccountingPeriod() == null) {
-                return new Message(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_ACCOUNTING_PERIOD_NOT_FOUND) + " (" + laborOriginEntry.getUniversityFiscalPeriodCode() + ")", Message.TYPE_FATAL);
-            }
-            //don't need to be open.
-            /*else if (Constants.ACCOUNTING_PERIOD_STATUS_CLOSED.equals(originEntry.getAccountingPeriod().getUniversityFiscalPeriodStatusCode())) {
-                return new Message(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_FISCAL_PERIOD_CLOSED) + " (" + originEntry.getUniversityFiscalPeriodCode() + ")", Message.TYPE_FATAL);
-            }
-            */
-            laborWorkingEntry.setUniversityFiscalPeriodCode(laborOriginEntry.getUniversityFiscalPeriodCode());
-        }
-
-        return null;
-    }
-    
-    public void setKualiConfigurationService(KualiConfigurationService service) {
-        kualiConfigurationService = service;
-    }
-    
-    public void setAccountService(AccountService as) {
-        accountService = as;
-    }
-    
-    
-    
     
 }
