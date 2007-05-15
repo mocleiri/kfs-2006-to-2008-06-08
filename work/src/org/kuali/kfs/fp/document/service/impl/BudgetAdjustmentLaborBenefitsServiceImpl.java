@@ -22,11 +22,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
@@ -142,9 +142,9 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
     private Collection retrieveLaborObjectBenefits(Integer fiscalYear, BudgetAdjustmentAccountingLine line) {
         Map searchCriteria = new HashMap();
 
-        searchCriteria.put(PropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
-        searchCriteria.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, line.getChartOfAccountsCode());
-        searchCriteria.put(PropertyConstants.FINANCIAL_OBJECT_CODE, line.getFinancialObjectCode());
+        searchCriteria.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
+        searchCriteria.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, line.getChartOfAccountsCode());
+        searchCriteria.put(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, line.getFinancialObjectCode());
 
         return getBusinessObjectService().findMatching(PositionObjectBenefit.class, searchCriteria);
     }
