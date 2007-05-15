@@ -18,10 +18,10 @@ package org.kuali.module.financial.document;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.Constants;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.document.AccountingDocumentBase;
 import org.kuali.module.financial.bo.PreEncumbranceDocumentAccountingLineParser;
@@ -46,7 +46,7 @@ public class PreEncumbranceDocument extends AccountingDocumentBase implements Co
 
     /**
      * 
-     * @see org.kuali.core.document.TransactionalDocumentBase#checkSufficientFunds()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#checkSufficientFunds()
      */
     @Override
     public List<SufficientFundsItem> checkSufficientFunds() {
@@ -76,25 +76,25 @@ public class PreEncumbranceDocument extends AccountingDocumentBase implements Co
     /**
      * Overrides the base implementation to return "Encumbrance".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return Constants.ENCUMBRANCE;
+        return KFSConstants.ENCUMBRANCE;
     }
 
     /**
      * Overrides the base implementation to return "Disencumbrance".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return Constants.DISENCUMBRANCE;
+        return KFSConstants.DISENCUMBRANCE;
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
