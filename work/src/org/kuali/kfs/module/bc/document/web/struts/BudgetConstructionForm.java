@@ -25,9 +25,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.Constants;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.BCConstants;
 import org.kuali.module.budget.bo.BudgetConstructionHeader;
@@ -50,6 +50,13 @@ public class BudgetConstructionForm extends KualiTransactionalDocumentFormBase {
 
     private boolean hideDetails = false;
 
+    //passed parms
+    private String returnAnchor;
+    private String returnFormKey;
+    private Integer universityFiscalYear;
+    private String chartOfAccountsCode;
+    private String accountNumber;
+    private String subAccountNumber;
 
     public BudgetConstructionForm() {
         super();
@@ -80,7 +87,7 @@ public class BudgetConstructionForm extends KualiTransactionalDocumentFormBase {
 
                 // null subobj must be set to dashes
                 if (StringUtils.isBlank(revLine.getFinancialSubObjectCode())){
-                    revLine.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
+                    revLine.setFinancialSubObjectCode(KFSConstants.DASHES_SUB_OBJECT_CODE);
                 }
                 populateRevenueLine(this.getNewRevenueLine());
 
@@ -96,7 +103,7 @@ public class BudgetConstructionForm extends KualiTransactionalDocumentFormBase {
 
                 // null subobj must be set to dashes
                 if (StringUtils.isBlank(expLine.getFinancialSubObjectCode())){
-                    expLine.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
+                    expLine.setFinancialSubObjectCode(KFSConstants.DASHES_SUB_OBJECT_CODE);
                 }
                 populateExpenditureLine(this.getNewExpenditureLine());
 
@@ -261,6 +268,102 @@ public class BudgetConstructionForm extends KualiTransactionalDocumentFormBase {
     public void setHideDetails(boolean hideDetails) {
         this.hideDetails = hideDetails;
     }
+
+/**
+ * Gets the accountNumber attribute. 
+ * @return Returns the accountNumber.
+ */
+public String getAccountNumber() {
+    return accountNumber;
+}
+
+/**
+ * Sets the accountNumber attribute value.
+ * @param accountNumber The accountNumber to set.
+ */
+public void setAccountNumber(String accountNumber) {
+    this.accountNumber = accountNumber;
+}
+
+/**
+ * Gets the chartOfAccountsCode attribute. 
+ * @return Returns the chartOfAccountsCode.
+ */
+public String getChartOfAccountsCode() {
+    return chartOfAccountsCode;
+}
+
+/**
+ * Sets the chartOfAccountsCode attribute value.
+ * @param chartOfAccountsCode The chartOfAccountsCode to set.
+ */
+public void setChartOfAccountsCode(String chartOfAccountsCode) {
+    this.chartOfAccountsCode = chartOfAccountsCode;
+}
+
+/**
+ * Gets the subAccountNumber attribute. 
+ * @return Returns the subAccountNumber.
+ */
+public String getSubAccountNumber() {
+    return subAccountNumber;
+}
+
+/**
+ * Sets the subAccountNumber attribute value.
+ * @param subAccountNumber The subAccountNumber to set.
+ */
+public void setSubAccountNumber(String subAccountNumber) {
+    this.subAccountNumber = subAccountNumber;
+}
+
+/**
+ * Gets the universityFiscalYear attribute. 
+ * @return Returns the universityFiscalYear.
+ */
+public Integer getUniversityFiscalYear() {
+    return universityFiscalYear;
+}
+
+/**
+ * Sets the universityFiscalYear attribute value.
+ * @param universityFiscalYear The universityFiscalYear to set.
+ */
+public void setUniversityFiscalYear(Integer universityFiscalYear) {
+    this.universityFiscalYear = universityFiscalYear;
+}
+
+/**
+ * Gets the returnAnchor attribute. 
+ * @return Returns the returnAnchor.
+ */
+public String getReturnAnchor() {
+    return returnAnchor;
+}
+
+/**
+ * Sets the returnAnchor attribute value.
+ * @param returnAnchor The returnAnchor to set.
+ */
+public void setReturnAnchor(String returnAnchor) {
+    this.returnAnchor = returnAnchor;
+}
+
+/**
+ * Gets the returnFormKey attribute. 
+ * @return Returns the returnFormKey.
+ */
+public String getReturnFormKey() {
+    return returnFormKey;
+}
+
+/**
+ * Sets the returnFormKey attribute value.
+ * @param returnFormKey The returnFormKey to set.
+ */
+public void setReturnFormKey(String returnFormKey) {
+    this.returnFormKey = returnFormKey;
+}
 
    
 }

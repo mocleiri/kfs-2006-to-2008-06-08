@@ -18,7 +18,8 @@ package org.kuali.module.labor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.PropertyConstants;
+import org.kuali.core.web.ui.KeyLabelPair;
+import org.kuali.kfs.KFSPropertyConstants;
 
 /**
  * This class contains the constants used by Labor Distribution.
@@ -63,29 +64,29 @@ public class LaborConstants {
     public static List<String> consolidationAttributesOfOriginEntry() {
         List<String> consolidationAttributes = new ArrayList<String>();
 
-        consolidationAttributes.add(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        consolidationAttributes.add(PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
+        consolidationAttributes.add(KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE);
 
-        consolidationAttributes.add(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        consolidationAttributes.add(PropertyConstants.ACCOUNT_NUMBER);
-        consolidationAttributes.add(PropertyConstants.SUB_ACCOUNT_NUMBER);
+        consolidationAttributes.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.ACCOUNT_NUMBER);
+        consolidationAttributes.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
 
-        consolidationAttributes.add(PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
-        consolidationAttributes.add(PropertyConstants.FINANCIAL_OBJECT_CODE);
-        consolidationAttributes.add(PropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
-        consolidationAttributes.add(PropertyConstants.FINANCIAL_OBJECT_TYPE_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE);
 
-        consolidationAttributes.add(PropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE);
-        consolidationAttributes.add(PropertyConstants.DOCUMENT_NUMBER);
-        consolidationAttributes.add(PropertyConstants.ORGANIZATION_DOCUMENT_NUMBER);
+        consolidationAttributes.add(KFSPropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.DOCUMENT_NUMBER);
+        consolidationAttributes.add(KFSPropertyConstants.ORGANIZATION_DOCUMENT_NUMBER);
 
-        consolidationAttributes.add(PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE);
-        consolidationAttributes.add(PropertyConstants.REFERENCE_FINANCIAL_SYSTEM_ORIGINATION_CODE);
-        consolidationAttributes.add(PropertyConstants.PROJECT_CODE);
-        consolidationAttributes.add(PropertyConstants.ORGANIZATION_REFERENCE_ID);
+        consolidationAttributes.add(KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.REFERENCE_FINANCIAL_SYSTEM_ORIGINATION_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.PROJECT_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.ORGANIZATION_REFERENCE_ID);
 
-        consolidationAttributes.add(PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE);
-        consolidationAttributes.add(PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT);
+        consolidationAttributes.add(KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE);
+        consolidationAttributes.add(KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT);
 
         return consolidationAttributes;
     }
@@ -107,13 +108,14 @@ public class LaborConstants {
         public static final String ENCUMBERENCE_CODE = "'IE'";
         public static final String ACTUALS_CODE = "'AC'";
         public static final String BALANCE_CODE = "'BB'";
+        public static final String PERSON_FUNDING_EXPENSE_OBJECT_TYPE_CODE = "ES";
+        public static final String PERSON_FUNDING_NORMAL_OP_EXPENSE_OBJECT_TYPE_CODE = "EX";
     }
 
     public static class ParameterGroups {
         public static final String PAYROLL_ACCRUAL = "Labor.PayrollAccrual";
         public static final String YEAR_END = "Labor.YearEnd";
         public static final String POSTER = "Labor.Poster";
-        public static final String SYSTEM = "SYSTEM"; // TODO: remove it
     }
     
     public static class PayrollAccrual {
@@ -128,21 +130,36 @@ public class LaborConstants {
         public static final String RUN_ID = "input.runId";
         public static final String EXCLUDED_SUB_FUND_GROUPS = "input.excludedSubFundGroups";
         
-        public static final String ORIGINATION_CODE = "Labor.payrollAccrual.originationCode"; //TODO; remove prefix: Labor.payrollAccrual.
+        public static final String ORIGINATION_CODE = "originationCode";
     }
     
-    //TODO: remove prefix: Labor.Poster. change the first letters
     public static class Poster {
-        public static final String PERIOD_CODES_NOT_PROCESSED = "Labor.Poster.PeriodCodesNotProcessed";
-        public static final String OBJECT_CODES_NOT_PROCESSED = "Labor.Poster.ObjectsNotProcessed";
-        public static final String BALANCE_TYPES_NOT_PROCESSED = "Labor.Poster.BalanceTypesNotProcessed";
+        public static final String PERIOD_CODES_NOT_PROCESSED = "periodCodesNotProcessed";
+        public static final String OBJECT_CODES_NOT_PROCESSED = "objectsNotProcessed";
+        public static final String BALANCE_TYPES_NOT_PROCESSED = "balanceTypesNotProcessed";
     }
     
-    //TODO: remove prefix: Labor.YearEnd.BalanceForward. change the first letters
     public static class YearEnd {
-        public static final String FUND_GROUP_PROCESSED = "Labor.YearEnd.BalanceForward.FundGroupProcessed";
-        public static final String DOCUMENT_TYPE_CODE = "Labor.YearEnd.BalanceForward.DocumentTypeCode";
-        public static final String ORIGINATION_CODE = "Labor.YearEnd.BalanceForward.OriginationCode";
+        public static final String FUND_GROUP_PROCESSED = "fundGroupProcessed";
+        public static final String DOCUMENT_TYPE_CODE = "documentTypeCode";
+        public static final String ORIGINATION_CODE = "originationCode";
         public static final String OLD_FISCAL_YEAR = "oldFiscalYear";
     }
+    
+    public enum JournalVoucherOffsetType {
+        NO_OFFSET("LLJV", "No Offset"),
+        ACCRUAL("LJVA", "Accrual"),
+        CASH("LJVC", "Cash"),
+        ENCUMBRANCE("LJVE", "Encumbrance");
+        
+        public String typeCode;
+        public String description;
+        
+        private JournalVoucherOffsetType(String typeCode, String description){
+            this.typeCode = typeCode;
+            this.description = description;
+        }        
+    }
+    
+    public static String LONG_ROW_TABLE_INRUIRY_ACTION = "laborLongRowTableInquiry.do";
 }
