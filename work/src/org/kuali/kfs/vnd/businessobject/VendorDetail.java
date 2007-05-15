@@ -75,7 +75,6 @@ public class VendorDetail extends PersistableBusinessObjectBase implements Vendo
     private List<VendorCustomerNumber> vendorCustomerNumbers;
     private List<VendorPhoneNumber> vendorPhoneNumbers;
     private List<VendorShippingSpecialCondition> vendorShippingSpecialConditions;
-    private List<VendorDetail> divisions;
 
     private VendorHeader vendorHeader;
 	private VendorInactiveReason vendorInactiveReason;
@@ -150,21 +149,22 @@ public class VendorDetail extends PersistableBusinessObjectBase implements Vendo
 	}
    
 	/**
-     * Gets the vendorNumber attribute. 
+     * A concatenation of the vendorHeaderGeneratedIdentifier, a dash, and the vendorDetailAssignedIdentifier
+     * 
      * @return Returns the vendorNumber.
      */
     public String getVendorNumber() {
-        String hdrGenId = "";
-        String detAssgndId = "";
+        String headerId = "";
+        String detailId = "";
         String vendorNumber = "";
-        if( this.vendorHeaderGeneratedIdentifier != null ) {
-            hdrGenId = this.vendorHeaderGeneratedIdentifier.toString();
+        if (ObjectUtils.isNotNull(this.vendorHeaderGeneratedIdentifier)) {
+            headerId = this.vendorHeaderGeneratedIdentifier.toString();
         }
-        if( this.vendorDetailAssignedIdentifier != null ) {
-            detAssgndId = this.vendorDetailAssignedIdentifier.toString();
+        if (ObjectUtils.isNotNull(this.vendorDetailAssignedIdentifier)) {
+            detailId = this.vendorDetailAssignedIdentifier.toString();
         }
-        if (!StringUtils.isEmpty(hdrGenId) && !StringUtils.isEmpty(detAssgndId)) {
-            vendorNumber = hdrGenId+"-"+detAssgndId;
+        if (!StringUtils.isEmpty(headerId) && !StringUtils.isEmpty(detailId)) {
+            vendorNumber = headerId + "-" + detailId;
         }
         return vendorNumber;
     }
@@ -983,17 +983,6 @@ public class VendorDetail extends PersistableBusinessObjectBase implements Vendo
                 .append( this.isVendorFirstLastNameIndicator(), detail.isVendorFirstLastNameIndicator() )
                 .isEquals();
         }
-    }
-    
-    public List<VendorDetail> getDivisions() {
-        return divisions;
-    }
-
-    public void setDivisions(List<VendorDetail> divisions) {
-        if (divisions == null) {
-            divisions = new TypedArrayList(VendorDetail.class);
-        }
-        this.divisions = divisions;
     }
     
     /**

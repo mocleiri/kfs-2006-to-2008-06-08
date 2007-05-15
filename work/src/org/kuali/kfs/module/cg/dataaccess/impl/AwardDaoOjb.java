@@ -21,7 +21,7 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.cg.bo.Award;
-import org.kuali.module.cg.bo.ProposalClose;
+import org.kuali.module.cg.bo.Close;
 import org.kuali.module.cg.dao.AwardDao;
 
 public class AwardDaoOjb extends PlatformAwareDaoBaseOjb implements AwardDao {
@@ -30,11 +30,11 @@ public class AwardDaoOjb extends PlatformAwareDaoBaseOjb implements AwardDao {
         getPersistenceBrokerTemplate().deleteByQuery(QueryFactory.newQuery(Award.class, new Criteria()));
     }
     
-    public Collection<Award> getAwardsToClose(ProposalClose close) {
+    public Collection<Award> getAwardsToClose(Close close) {
 
         Criteria criteria = new Criteria();
         criteria.addIsNull("awardClosingDate");
-        criteria.addLessOrEqualThan("awardEntryDate", close.getLastClosedDate());
+        criteria.addLessOrEqualThan("awardEntryDate", close.getCloseOnOrBeforeDate());
         criteria.addNotEqualTo("awardStatusCode", "U");
         
         return (Collection<Award>) getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Award.class, criteria));
