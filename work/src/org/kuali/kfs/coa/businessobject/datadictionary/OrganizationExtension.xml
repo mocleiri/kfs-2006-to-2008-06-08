@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
-	<businessObject businessObjectClass="org.kuali.module.chart.bo.OrganizationExtension">
+	<businessObject
+		businessObjectClass="org.kuali.module.chart.bo.OrganizationExtension">
+
+		<customAttributeEnabled>false</customAttributeEnabled>
 
 		<attributes>
 			<attributeReference name="chartOfAccountsCode" 
@@ -44,7 +32,7 @@
 		        </control>
 
 		        <summary><![CDATA[&nbsp;]]></summary>
-		        <description>The company in the HRMS system to which this organization belongs.</description>
+		        <description><![CDATA[&nbsp;]]></description>
 		      </attribute>
 
 								
@@ -60,7 +48,7 @@
 				</control>
 
         		<summary><![CDATA[&nbsp;]]></summary>
-        		<description>The first line of address where correspondence can be sent related to HRMS issues for this organization.</description>
+        		<description><![CDATA[&nbsp;]]></description>
 			</attribute>
 			
 			<attribute name="hrmsIuOrganizationAddress3" forceUppercase="false">
@@ -75,7 +63,7 @@
 				</control>
 
         		<summary><![CDATA[&nbsp;]]></summary>
-        		<description>The second line of address where correspondence can be sent related to HRMS issues for this organization.</description>
+        		<description><![CDATA[&nbsp;]]></description>
 			</attribute>
 
 			
@@ -91,7 +79,7 @@
 				</control>
 
         		<summary><![CDATA[&nbsp;]]></summary>
-        		<description>The campus where correspondence can be sent related to HRMS issues for this organization.</description>
+        		<description><![CDATA[&nbsp;]]></description>
 			</attribute>
 			
 			<attribute name="hrmsIuCampusBuilding" forceUppercase="false">
@@ -106,7 +94,7 @@
 				</control>
 
         		<summary><![CDATA[&nbsp;]]></summary>
-        		<description>The building where correspondence can be sent related to HRMS issues for this organization.</description>
+        		<description><![CDATA[&nbsp;]]></description>
 			</attribute>
 			
 			<attribute name="hrmsIuCampusRoom" forceUppercase="false">
@@ -121,7 +109,7 @@
 				</control>
 
         		<summary><![CDATA[&nbsp;]]></summary>
-        		<description>The room where correspondence can be sent related to HRMS issues for this organization.</description>
+        		<description><![CDATA[&nbsp;]]></description>
 			</attribute>
 			
       <attributeReference name="hrmsPersonnelApproverUniversalId"
@@ -136,7 +124,7 @@
       </attributeReference>
 
 	  <attributeReference name="hrmsPersonnelApproverUniversal.personUserIdentifier" 
-	  					  sourceClassName="org.kuali.core.bo.user.UniversalUser" 
+	  					  sourceClassName="org.kuali.core.bo.user.KualiUser" 
 	  					  sourceAttributeName="personUserIdentifier">
 			<label>Personnel Approver UserID</label>
 			<shortLabel>Personnel Approver</shortLabel>
@@ -177,7 +165,7 @@
       </attributeReference>
 
 	  <attributeReference name="fiscalApproverUniversal.personUserIdentifier" 
-	  					  sourceClassName="org.kuali.core.bo.user.UniversalUser" 
+	  					  sourceClassName="org.kuali.core.bo.user.KualiUser" 
 	  					  sourceAttributeName="personUserIdentifier">
 			<label>Fiscal Approver UserID</label>
 			<shortLabel>Fiscal Approver</shortLabel>
@@ -268,21 +256,6 @@
         					sourceAttributeName="versionNumber" />
 
 		</attributes>
-
-        <relationships>
-            <relationship objectAttributeName="hrmsPersonnelApproverUniversal" >
-                <primitiveAttribute sourceName="hrmsPersonnelApproverUniversalId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="hrmsPersonnelApproverUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="hrmsPersonnelApproverUniversal.personName" targetName="personName" />
-            </relationship>
-
-            <relationship objectAttributeName="fiscalApproverUniversal" >
-                <primitiveAttribute sourceName="fiscalApproverUniversalId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="fiscalApproverUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="fiscalApproverUniversal.personName" targetName="personName" />
-            </relationship>
-        </relationships>
-		<objectLabel>Organization Extension</objectLabel>
 	</businessObject>
 </dictionaryEntry>
 
