@@ -23,8 +23,8 @@ import java.util.List;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.financial.document.CashManagementDocument;
-import org.kuali.PropertyConstants;
 
 
 /**
@@ -255,7 +255,7 @@ public class Deposit extends PersistableBusinessObjectBase {
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
         m.put("financialDocumentDepositLineNumber", getFinancialDocumentDepositLineNumber());
         return m;
     }

@@ -24,10 +24,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.kuali.Constants;
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.spring.Cached;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.service.AccountingPeriodService;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,9 +66,9 @@ public class AccountingPeriodServiceImpl implements AccountingPeriodService {
     @Cached
     public Collection getOpenAccountingPeriods() {
         HashMap map = new HashMap();
-        map.put(Constants.ACCOUNTING_PERIOD_STATUS_CODE_FIELD, Constants.ACCOUNTING_PERIOD_STATUS_OPEN);
+        map.put(KFSConstants.ACCOUNTING_PERIOD_STATUS_CODE_FIELD, KFSConstants.ACCOUNTING_PERIOD_STATUS_OPEN);
 
-        return businessObjectService.findMatchingOrderBy(AccountingPeriod.class, map, PropertyConstants.ACCTING_PERIOD_UNIV_FISCAL_PERIOD_END_DATE, true);
+        return businessObjectService.findMatchingOrderBy(AccountingPeriod.class, map, KFSPropertyConstants.ACCTING_PERIOD_UNIV_FISCAL_PERIOD_END_DATE, true);
     }
 
     /**
@@ -131,6 +131,18 @@ public class AccountingPeriodServiceImpl implements AccountingPeriodService {
             throw new IllegalArgumentException("invalid (null) universityFiscalPeriodCode (" + periodCode + ")for" + period);
         }
         return _invalidPeriodCodes.contains(periodCode);
+    }
+
+    /**
+     * @see org.kuali.module.chart.service.AccountingPeriodService#compareAccountingPeriodsByDate(org.kuali.module.chart.bo.AccountingPeriod, org.kuali.module.chart.bo.AccountingPeriod)
+     */
+    public int compareAccountingPeriodsByDate(AccountingPeriod tweedleDee, AccountingPeriod tweedleDum) {
+        // note the lack of defensive programming here.  If you send a null accounting
+        // period...then chances are, you deserve the NPE that you receive
+        Date tweedleDeeClose = tweedleDee.getUniversityFiscalPeriodEndDate();
+        Date tweedleDumClose = tweedleDum.getUniversityFiscalPeriodEndDate();        
+        
+        return tweedleDeeClose.compareTo(tweedleDumClose);
     }
 
     /**
