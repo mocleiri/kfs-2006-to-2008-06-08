@@ -18,12 +18,12 @@ package org.kuali.module.chart.rules;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.kuali.KeyConstants;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.module.chart.bo.ObjLevel;
 import org.kuali.module.chart.bo.ObjectCons;
 import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 
 public class ObjectConsRule extends MaintenanceDocumentRuleBase {
@@ -72,7 +72,7 @@ public class ObjectConsRule extends MaintenanceDocumentRuleBase {
         ObjLevel objLevel = (ObjLevel) getBoService().findByPrimaryKey(ObjLevel.class, primaryKeys);
         if (objLevel != null) {
             success = false;
-            putFieldError("finConsolidationObjectCode", KeyConstants.ERROR_DOCUMENT_OBJCONSMAINT_ALREADY_EXISTS_AS_OBJLEVEL);
+            putFieldError("finConsolidationObjectCode", KFSKeyConstants.ERROR_DOCUMENT_OBJCONSMAINT_ALREADY_EXISTS_AS_OBJLEVEL);
         }
         return success;
     }
@@ -88,7 +88,7 @@ public class ObjectConsRule extends MaintenanceDocumentRuleBase {
         ObjectCode elimCode = SpringServiceLocator.getObjectCodeService().getByPrimaryId(currentUniversityFiscalYear, objConsolidation.getChartOfAccountsCode(), objConsolidation.getFinancialEliminationsObjectCode());
         if (elimCode == null) {
             success = false;
-            putFieldError("financialEliminationsObjectCode", KeyConstants.ERROR_DOCUMENT_OBJCONSMAINT_INVALID_ELIM_OBJCODE, new String[] { objConsolidation.getFinancialEliminationsObjectCode() });
+            putFieldError("financialEliminationsObjectCode", KFSKeyConstants.ERROR_DOCUMENT_OBJCONSMAINT_INVALID_ELIM_OBJCODE, new String[] { objConsolidation.getFinancialEliminationsObjectCode() });
         }
         return success;
     }

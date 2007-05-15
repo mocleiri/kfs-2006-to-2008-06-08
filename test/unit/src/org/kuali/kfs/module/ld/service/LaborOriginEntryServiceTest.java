@@ -26,10 +26,10 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
@@ -38,6 +38,7 @@ import org.kuali.module.gl.util.PosterOutputSummaryEntry;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.util.ObjectUtil;
+import org.kuali.module.labor.util.TestDataPreparator;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 import org.springframework.beans.factory.BeanFactory;
@@ -55,6 +56,7 @@ public class LaborOriginEntryServiceTest extends KualiTestBase {
     private OriginEntryGroupService originEntryGroupService;
     private BusinessObjectService businessObjectService;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         String messageFileName = "test/src/org/kuali/module/labor/testdata/message.properties";
@@ -76,9 +78,9 @@ public class LaborOriginEntryServiceTest extends KualiTestBase {
         LaborOriginEntry cleanup = new LaborOriginEntry();
         ObjectUtil.populateBusinessObject(cleanup, properties, "dataCleanup", fieldNames, deliminator);
         fieldValues = ObjectUtil.buildPropertyMap(cleanup, Arrays.asList(StringUtils.split(fieldNames, deliminator)));
-        fieldValues.remove(PropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER);
-        fieldValues.remove(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        fieldValues.remove(PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE);
+        fieldValues.remove(KFSPropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER);
+        fieldValues.remove(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
+        fieldValues.remove(KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE);
         businessObjectService.deleteMatching(LaborOriginEntry.class, fieldValues);
     }
 
@@ -188,16 +190,7 @@ public class LaborOriginEntryServiceTest extends KualiTestBase {
     }
 
     private List getInputDataList(String propertyKeyPrefix, int numberOfInputData, OriginEntryGroup group) {
-        List inputDataList = new ArrayList();
-        for (int i = 1; i <= numberOfInputData; i++) {
-            String propertyKey = propertyKeyPrefix + i;
-            LaborOriginEntry inputData = new LaborOriginEntry();
-            ObjectUtil.populateBusinessObject(inputData, properties, propertyKey, fieldNames, deliminator);
-            inputData.setEntryGroupId(group.getId());
-            inputData.setGroup(group);
-            inputDataList.add(inputData);
-        }
-        return inputDataList;
+        return TestDataPreparator.getLaborOriginEntryList(properties, propertyKeyPrefix, numberOfInputData, group);
     }
 
     private List<LaborOriginEntry> convertIteratorAsList(Iterator<LaborOriginEntry> entries) {

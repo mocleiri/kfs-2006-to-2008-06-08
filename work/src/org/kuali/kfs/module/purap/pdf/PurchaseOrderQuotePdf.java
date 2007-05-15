@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,8 +16,9 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kuali.Constants;
-import org.kuali.PropertyConstants;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.bo.CampusParameter;
@@ -212,10 +212,10 @@ public class PurchaseOrderQuotePdf extends PurapPdf {
             vendorInfo.append("\n");
         }
 
-        if (! Constants.COUNTRY_CODE_UNITED_STATES.equalsIgnoreCase(poqv.getVendorCountryCode())) {
-            vendorInfo.append("     "+poqv.getPurchaseOrder().getVendorCountry().getPostalCountryName()+"\n\n");
+        if (! KFSConstants.COUNTRY_CODE_UNITED_STATES.equalsIgnoreCase(poqv.getVendorCountryCode())) {
+            vendorInfo.append("     "+poqv.getVendorCountry().getPostalCountryName()+"\n\n");
         } else {
-            vendorInfo.append("\n\n");
+            vendorInfo.append("     \n\n");
         }
 
         p.add(new Chunk(vendorInfo.toString(), cour_10_normal));
@@ -351,7 +351,7 @@ public class PurchaseOrderQuotePdf extends PurapPdf {
                 }
                 tableCell = createCell(itemLineNumber, false, false, false, false, Element.ALIGN_CENTER, cour_10_normal);
                 itemsTable.addCell(tableCell);
-                String quantity = (poi.getItemOrderedQuantity() != null) ? poi.getItemOrderedQuantity().toString() : " ";
+                String quantity = (poi.getItemQuantity() != null) ? poi.getItemQuantity().toString() : " ";
                 tableCell = createCell(quantity, false, false, false, false, Element.ALIGN_CENTER, cour_10_normal);
                 itemsTable.addCell(tableCell);
                 tableCell = createCell(poi.getItemUnitOfMeasureCode(), false, false, false, false, Element.ALIGN_CENTER, cour_10_normal);
@@ -511,7 +511,7 @@ public class PurchaseOrderQuotePdf extends PurapPdf {
     
     private CampusParameter getCampusParameter(String contractManagerCampusCode) {
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put(PropertyConstants.CAMPUS_CODE, po.getDeliveryCampusCode());
+        criteria.put(KFSPropertyConstants.CAMPUS_CODE, po.getDeliveryCampusCode());
         CampusParameter campusParameter = (CampusParameter)((List) SpringServiceLocator.getBusinessObjectService().findMatching(CampusParameter.class, criteria)).get(0);
         
         return campusParameter;
@@ -527,7 +527,7 @@ public class PurchaseOrderQuotePdf extends PurapPdf {
         addressBuffer.append(indent + campusParameter.getPurchasingDepartmentCityName() + ", ");
         addressBuffer.append(indent + campusParameter.getPurchasingDepartmentStateCode() + " ");
         addressBuffer.append(indent + campusParameter.getPurchasingDepartmentZipCode() + " ");
-        addressBuffer.append(indent + campusParameter.getPurchasingDepartmentCountryCode());
+        addressBuffer.append(indent + (ObjectUtils.isNotNull(campusParameter.getPurchasingDepartmentCountryCode()) ? campusParameter.getPurchasingDepartmentCountryCode() : ""));
         
         return addressBuffer.toString();
     }

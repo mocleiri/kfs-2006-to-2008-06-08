@@ -20,11 +20,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObject;
+import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
 import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.BeanPropertyComparator;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.service.BalanceService;
 import org.kuali.module.labor.dao.LaborDao;
@@ -33,7 +34,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class BaseFundsLookupableHelperServiceImpl extends AbstractLaborLedgerLookupableHelperServiceImpl {
+public class BaseFundsLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
     private BalanceService balanceService;
     private Map fieldValues;
     private LaborDao laborDao;
@@ -56,8 +57,8 @@ public class BaseFundsLookupableHelperServiceImpl extends AbstractLaborLedgerLoo
 
         boolean unbounded = false;
 
-        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
                 
         // Parse the map and call the DAO to process the inquiry
         BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();
