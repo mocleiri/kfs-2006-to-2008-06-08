@@ -68,6 +68,7 @@
 
                 <maxLength>11</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
+                <required>true</required>
 
                 <control>
                     <text size="13" />
@@ -94,7 +95,7 @@
 
             <attribute name="iuClassificationLevel" forceUppercase="true">
                 <label>Iu Classification Level</label>
-                <shortLabel>Class Level</shortLabel>
+                <shortLabel>Cls</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>

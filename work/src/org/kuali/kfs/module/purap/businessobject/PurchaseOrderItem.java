@@ -16,9 +16,11 @@
 
 package org.kuali.module.purap.bo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 
 /**
@@ -27,27 +29,30 @@ import org.kuali.module.purap.document.PurchaseOrderDocument;
 public class PurchaseOrderItem extends PurchasingItemBase {
 
     private String documentNumber;
-	private KualiDecimal itemOrderedQuantity;
-	private KualiDecimal itemInvoicedTotalQuantity;
-	private KualiDecimal itemInvoicedTotalAmount;
-	private KualiDecimal itemReceivedTotalQuantity;
-	private KualiDecimal itemReturnedTotalQuantity;
-	private KualiDecimal itemOutstandingEncumberedQuantity;
-	private KualiDecimal itemOutstandingEncumbranceAmount;
-	private boolean itemActiveIndicator;
-	private String purchaseOrderCommodityCd;
+    private KualiDecimal itemInvoicedTotalQuantity;
+    private KualiDecimal itemInvoicedTotalAmount;
+    private KualiDecimal itemReceivedTotalQuantity;
+    private KualiDecimal itemReturnedTotalQuantity;
+    private KualiDecimal itemOutstandingEncumberedQuantity;
+    private KualiDecimal itemOutstandingEncumbranceAmount;
+    private boolean itemActiveIndicator;
+    private String purchaseOrderCommodityCd;
 
     private PurchaseOrderDocument purchaseOrder;
 
-	/**
-	 * Default constructor.
-	 */
-	public PurchaseOrderItem() {
-
-	}
+    // Not persisted to DB
+    private boolean itemSelectedForRetransmitIndicator;
 
     /**
-     * Gets the itemActiveIndicator attribute. 
+     * Default constructor.
+     */
+    public PurchaseOrderItem() {
+
+    }
+
+    /**
+     * Gets the itemActiveIndicator attribute.
+     * 
      * @return Returns the itemActiveIndicator.
      */
     public boolean isItemActiveIndicator() {
@@ -56,6 +61,7 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the itemActiveIndicator attribute value.
+     * 
      * @param itemActiveIndicator The itemActiveIndicator to set.
      */
     public void setItemActiveIndicator(boolean itemActiveIndicator) {
@@ -63,7 +69,8 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     }
 
     /**
-     * Gets the itemInvoicedTotalAmount attribute. 
+     * Gets the itemInvoicedTotalAmount attribute.
+     * 
      * @return Returns the itemInvoicedTotalAmount.
      */
     public KualiDecimal getItemInvoicedTotalAmount() {
@@ -72,6 +79,7 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the itemInvoicedTotalAmount attribute value.
+     * 
      * @param itemInvoicedTotalAmount The itemInvoicedTotalAmount to set.
      */
     public void setItemInvoicedTotalAmount(KualiDecimal itemInvoicedTotalAmount) {
@@ -79,7 +87,8 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     }
 
     /**
-     * Gets the itemInvoicedTotalQuantity attribute. 
+     * Gets the itemInvoicedTotalQuantity attribute.
+     * 
      * @return Returns the itemInvoicedTotalQuantity.
      */
     public KualiDecimal getItemInvoicedTotalQuantity() {
@@ -88,6 +97,7 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the itemInvoicedTotalQuantity attribute value.
+     * 
      * @param itemInvoicedTotalQuantity The itemInvoicedTotalQuantity to set.
      */
     public void setItemInvoicedTotalQuantity(KualiDecimal itemInvoicedTotalQuantity) {
@@ -95,23 +105,8 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     }
 
     /**
-     * Gets the itemOrderedQuantity attribute. 
-     * @return Returns the itemOrderedQuantity.
-     */
-    public KualiDecimal getItemOrderedQuantity() {
-        return itemOrderedQuantity;
-    }
-
-    /**
-     * Sets the itemOrderedQuantity attribute value.
-     * @param itemOrderedQuantity The itemOrderedQuantity to set.
-     */
-    public void setItemOrderedQuantity(KualiDecimal itemOrderedQuantity) {
-        this.itemOrderedQuantity = itemOrderedQuantity;
-    }
-
-    /**
-     * Gets the itemOutstandingEncumberedQuantity attribute. 
+     * Gets the itemOutstandingEncumberedQuantity attribute.
+     * 
      * @return Returns the itemOutstandingEncumberedQuantity.
      */
     public KualiDecimal getItemOutstandingEncumberedQuantity() {
@@ -120,6 +115,7 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the itemOutstandingEncumberedQuantity attribute value.
+     * 
      * @param itemOutstandingEncumberedQuantity The itemOutstandingEncumberedQuantity to set.
      */
     public void setItemOutstandingEncumberedQuantity(KualiDecimal itemOutstandingEncumberedQuantity) {
@@ -127,7 +123,8 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     }
 
     /**
-     * Gets the itemOutstandingEncumbranceAmount attribute. 
+     * Gets the itemOutstandingEncumbranceAmount attribute.
+     * 
      * @return Returns the itemOutstandingEncumbranceAmount.
      */
     public KualiDecimal getItemOutstandingEncumbranceAmount() {
@@ -136,6 +133,7 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the itemOutstandingEncumbranceAmount attribute value.
+     * 
      * @param itemOutstandingEncumbranceAmount The itemOutstandingEncumbranceAmount to set.
      */
     public void setItemOutstandingEncumbranceAmount(KualiDecimal itemOutstandingEncumbranceAmount) {
@@ -143,7 +141,8 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     }
 
     /**
-     * Gets the itemReceivedTotalQuantity attribute. 
+     * Gets the itemReceivedTotalQuantity attribute.
+     * 
      * @return Returns the itemReceivedTotalQuantity.
      */
     public KualiDecimal getItemReceivedTotalQuantity() {
@@ -152,6 +151,7 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the itemReceivedTotalQuantity attribute value.
+     * 
      * @param itemReceivedTotalQuantity The itemReceivedTotalQuantity to set.
      */
     public void setItemReceivedTotalQuantity(KualiDecimal itemReceivedTotalQuantity) {
@@ -159,7 +159,8 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     }
 
     /**
-     * Gets the itemReturnedTotalQuantity attribute. 
+     * Gets the itemReturnedTotalQuantity attribute.
+     * 
      * @return Returns the itemReturnedTotalQuantity.
      */
     public KualiDecimal getItemReturnedTotalQuantity() {
@@ -168,6 +169,7 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the itemReturnedTotalQuantity attribute value.
+     * 
      * @param itemReturnedTotalQuantity The itemReturnedTotalQuantity to set.
      */
     public void setItemReturnedTotalQuantity(KualiDecimal itemReturnedTotalQuantity) {
@@ -175,7 +177,8 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     }
 
     /**
-     * Gets the purchaseOrder attribute. 
+     * Gets the purchaseOrder attribute.
+     * 
      * @return Returns the purchaseOrder.
      */
     public PurchaseOrderDocument getPurchaseOrder() {
@@ -184,6 +187,7 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the purchaseOrder attribute value.
+     * 
      * @param purchaseOrder The purchaseOrder to set.
      */
     public void setPurchaseOrder(PurchaseOrderDocument purchaseOrder) {
@@ -191,7 +195,8 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     }
 
     /**
-     * Gets the purchaseOrderCommodityCd attribute. 
+     * Gets the purchaseOrderCommodityCd attribute.
+     * 
      * @return Returns the purchaseOrderCommodityCd.
      */
     public String getPurchaseOrderCommodityCd() {
@@ -200,6 +205,7 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the purchaseOrderCommodityCd attribute value.
+     * 
      * @param purchaseOrderCommodityCd The purchaseOrderCommodityCd to set.
      */
     public void setPurchaseOrderCommodityCd(String purchaseOrderCommodityCd) {
@@ -207,7 +213,8 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     }
 
     /**
-     * Gets the documentNumber attribute. 
+     * Gets the documentNumber attribute.
+     * 
      * @return Returns the documentNumber.
      */
     public String getDocumentNumber() {
@@ -216,17 +223,26 @@ public class PurchaseOrderItem extends PurchasingItemBase {
 
     /**
      * Sets the documentNumber attribute value.
+     * 
      * @param documentNumber The documentNumber to set.
      */
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
     }
 
+    public boolean isItemSelectedForRetransmitIndicator() {
+        return itemSelectedForRetransmitIndicator;
+    }
+
+    public void setItemSelectedForRetransmitIndicator(boolean itemSelectedForRetransmitIndicator) {
+        this.itemSelectedForRetransmitIndicator = itemSelectedForRetransmitIndicator;
+    }
+
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
+        LinkedHashMap m = new LinkedHashMap();
         m.put("documentNumber", this.documentNumber);
         if (this.getItemIdentifier() != null) {
             m.put("itemIdentifier", this.getItemIdentifier().toString());
@@ -240,15 +256,6 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     @Override
     public Class getAccountingLineClass() {
         return PurchaseOrderAccount.class;
-    }    
-    
-    @Override
-    public KualiDecimal getItemQuantity() {
-        return this.itemOrderedQuantity;
     }
-    
-    @Override
-    public void setItemQuantity(KualiDecimal quantity) {
-        this.itemOrderedQuantity = quantity;
-    }
+
 }
