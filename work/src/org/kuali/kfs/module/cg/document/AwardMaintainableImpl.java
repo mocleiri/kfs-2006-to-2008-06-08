@@ -15,35 +15,34 @@
  */
 package org.kuali.module.cg.maintenance;
 
-import static org.kuali.PropertyConstants.AWARD_ACCOUNTS;
-import static org.kuali.PropertyConstants.AWARD_PROJECT_DIRECTORS;
-import static org.kuali.PropertyConstants.AWARD_SUBCONTRACTORS;
-import static org.kuali.PropertyConstants.DOCUMENT;
-import static org.kuali.PropertyConstants.NEW_MAINTAINABLE_OBJECT;
+import static org.kuali.kfs.KFSPropertyConstants.AWARD_ACCOUNTS;
+import static org.kuali.kfs.KFSPropertyConstants.AWARD_PROJECT_DIRECTORS;
+import static org.kuali.kfs.KFSPropertyConstants.AWARD_SUBCONTRACTORS;
+import static org.kuali.kfs.KFSPropertyConstants.DOCUMENT;
+import static org.kuali.kfs.KFSPropertyConstants.NEW_MAINTAINABLE_OBJECT;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.Constants;
-import org.kuali.KeyConstants;
-import org.kuali.PropertyConstants;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Award;
+import org.kuali.module.cg.bo.AwardAccount;
 import org.kuali.module.cg.bo.AwardOrganization;
 import org.kuali.module.cg.bo.AwardProjectDirector;
-import org.kuali.module.cg.bo.AwardSubcontractor;
-import org.kuali.module.cg.bo.Proposal;
-import org.kuali.module.cg.bo.ProposalOrganization;
-import org.kuali.module.cg.bo.ProposalProjectDirector;
-import org.kuali.module.cg.bo.ProposalSubcontractor;
+import org.kuali.module.cg.bo.CGProjectDirector;
+import org.kuali.module.cg.bo.ProjectDirector;
 import org.kuali.module.cg.rules.AwardRuleUtil;
+import org.kuali.rice.KNSServiceLocator;
 
 /**
  * Methods for the Award maintenance document UI.
@@ -65,7 +64,7 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
      */
     @Override
     public void processAfterRetrieve() {
-        refreshAward();
+        refreshAward(false);
         super.processAfterRetrieve();
     }
 
@@ -75,7 +74,7 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
      */
     @Override
     public void prepareForSave() {
-        refreshAward();
+        refreshAward(false);
         List<AwardProjectDirector> directors = getAward().getAwardProjectDirectors();
         if (directors.size() == 1) {
             directors.get(0).setAwardPrimaryProjectDirectorIndicator(true);
@@ -91,26 +90,39 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
     /**
      * This method is called for refreshing the Agency after a lookup to display its full name without AJAX.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void refresh(String refreshCaller, Map fieldValues, MaintenanceDocument document) {
+        
+        if (StringUtils.equals(KFSPropertyConstants.PROPOSAL, (String) fieldValues.get(KFSConstants.REFERENCES_TO_REFRESH))) {
+            String pathToMaintainable = DOCUMENT + "." + NEW_MAINTAINABLE_OBJECT;
+            GlobalVariables.getErrorMap().addToErrorPath(pathToMaintainable);
 
-        refreshAward();
-        super.refresh(refreshCaller, fieldValues, document);
-        if (StringUtils.equals(PropertyConstants.PROPOSAL, (String) fieldValues.get(Constants.REFERENCES_TO_REFRESH))) {
-            if (AwardRuleUtil.isProposalAwarded(getAward())) {
-                String pathToMaintainable = DOCUMENT + "." + NEW_MAINTAINABLE_OBJECT;
-                GlobalVariables.getErrorMap().addToErrorPath(pathToMaintainable);
-                GlobalVariables.getErrorMap().putError(PropertyConstants.PROPOSAL_NUMBER, KeyConstants.ERROR_AWARD_PROPOSAL_AWARDED, new String[] { getAward().getProposalNumber().toString() });
-                GlobalVariables.getErrorMap().removeFromErrorPath(pathToMaintainable);
+            boolean awarded = AwardRuleUtil.isProposalAwarded(getAward());
+            if (awarded) {
+                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.PROPOSAL_NUMBER, KFSKeyConstants.ERROR_AWARD_PROPOSAL_AWARDED, new String[] { getAward().getProposalNumber().toString() });
             }
-            // copy over proposal values after refresh
-            Award award = getAward();
-            award.populateFromProposal(award.getProposal());
+            if (AwardRuleUtil.isProposalInactive(getAward())) {
+                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.PROPOSAL_NUMBER, KFSKeyConstants.ERROR_AWARD_PROPOSAL_INACTIVE, new String[] { getAward().getProposalNumber().toString() });
+            }
+            GlobalVariables.getErrorMap().removeFromErrorPath(pathToMaintainable);
 
+            // copy over proposal values after refresh
+            if (!awarded) {
+                refreshAward(KNSServiceLocator.KUALI_LOOKUPABLE.equals(fieldValues.get(KFSConstants.REFRESH_CALLER)));
+                super.refresh(refreshCaller, fieldValues, document);
+                Award award = getAward();
+                award.populateFromProposal(award.getProposal());
+                refreshAward(KNSServiceLocator.KUALI_LOOKUPABLE.equals(fieldValues.get(KFSConstants.REFRESH_CALLER)));
+            }
+        }else{
+            refreshAward(KNSServiceLocator.KUALI_LOOKUPABLE.equals(fieldValues.get(KFSConstants.REFRESH_CALLER)));
+            super.refresh(refreshCaller, fieldValues, document);
         }
+
     }
 
-    private void refreshAward() {
+    private void refreshAward(boolean refreshFromLookup) {
         Award award = getAward();
         award.refreshNonUpdateableReferences();
 
@@ -119,15 +131,65 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
         getNewCollectionLine(AWARD_ACCOUNTS).refreshNonUpdateableReferences();
 
         // the org list doesn't need any refresh
+        refreshNonUpdateableReferences(award.getAwardOrganizations());
         refreshNonUpdateableReferences(award.getAwardAccounts());
         refreshNonUpdateableReferences(award.getAwardSubcontractors());
-        refreshNonUpdateableReferences(award.getAwardProjectDirectors());
+        refreshAwardProjectDirectors(refreshFromLookup);
+    }
+
+    /**
+     * Refreshs this maintainable's AwardProjectDirectors.
+     * 
+     * @param refreshFromLookup a lookup returns only the primary key, so ignore the secondary key when true
+     */
+    private void refreshAwardProjectDirectors(boolean refreshFromLookup) {
+        if (refreshFromLookup) {
+            getNewCollectionLine(AWARD_PROJECT_DIRECTORS).refreshNonUpdateableReferences();
+            refreshNonUpdateableReferences(getAward().getAwardProjectDirectors());
+
+
+            getNewCollectionLine(AWARD_ACCOUNTS).refreshNonUpdateableReferences();
+            refreshNonUpdateableReferences(getAward().getAwardAccounts());
+        }
+        else {
+            refreshWithSecondaryKey((AwardProjectDirector) getNewCollectionLine(AWARD_PROJECT_DIRECTORS));
+            for (AwardProjectDirector projectDirector : getAward().getAwardProjectDirectors()) {
+                refreshWithSecondaryKey(projectDirector);
+            }
+
+            refreshWithSecondaryKey((AwardAccount) getNewCollectionLine(AWARD_ACCOUNTS));
+            for (AwardAccount account : getAward().getAwardAccounts()) {
+                refreshWithSecondaryKey(account);
+            }
+        }
     }
 
     // todo: move to ObjectUtils?
     private static void refreshNonUpdateableReferences(Collection<? extends PersistableBusinessObject> collection) {
         for (PersistableBusinessObject item : collection) {
             item.refreshNonUpdateableReferences();
+        }
+    }
+
+    /**
+     * Refreshes the reference to ProjectDirector, giving priority to its secondary key. Any secondary key that it has may be user
+     * input, so that overrides the primary key, setting the primary key. If its primary key is blank or nonexistent, then leave the
+     * current reference as it is, because it may be a nonexistent instance which is holding the secondary key (the username, i.e.,
+     * personUserIdentifier) so we can redisplay it to the user for correction. If it only has a primary key then use that, because
+     * it may be coming from the database, without any user input.
+     * 
+     * @param director the ProjectDirector to refresh
+     */
+    private static void refreshWithSecondaryKey(CGProjectDirector director) {
+        if (ObjectUtils.isNotNull(director.getProjectDirector())) {
+            String secondaryKey = director.getProjectDirector().getPersonUserIdentifier();
+            if (StringUtils.isNotBlank(secondaryKey)) {
+                ProjectDirector dir = SpringServiceLocator.getProjectDirectorService().getByPersonUserIdentifier(secondaryKey);
+                director.setPersonUniversalIdentifier(dir == null ? null : dir.getPersonUniversalIdentifier());
+            }
+            if (StringUtils.isNotBlank(director.getPersonUniversalIdentifier()) && SpringServiceLocator.getProjectDirectorService().primaryIdExists(director.getPersonUniversalIdentifier())) {
+                ((PersistableBusinessObject) director).refreshNonUpdateableReferences();
+            }
         }
     }
 
@@ -143,7 +205,7 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
      */
     @Override
     public void addNewLineToCollection(String collectionName) {
-        refreshAward();
+        refreshAward(false);
         super.addNewLineToCollection(collectionName);
     }
 }
