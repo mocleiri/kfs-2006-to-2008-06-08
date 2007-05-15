@@ -26,6 +26,7 @@ import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -35,7 +36,6 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.PropertyConstants;
 
 /**
  * This is the generic class which contains all the elements on a typical line of accounting elements. These are all the accounting
@@ -595,7 +595,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
 
         m.put("sequenceNumber", sequenceNumber);
         m.put("postingYear", postingYear);
@@ -803,7 +803,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         Map simpleValues = new HashMap();
 
         simpleValues.put("sequenceNumber", getSequenceNumber());
-        simpleValues.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        simpleValues.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
         simpleValues.put("postingYear", getPostingYear());
         simpleValues.put("amount", getAmount());
         simpleValues.put("referenceOriginCode", getReferenceOriginCode());
