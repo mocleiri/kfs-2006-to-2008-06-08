@@ -23,11 +23,11 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.kuali.Constants;
 import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.util.UrlFactory;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.Country;
 import org.kuali.kfs.bo.PostalZipCode;
 import org.kuali.kfs.util.SpringServiceLocator;
@@ -899,13 +899,16 @@ public class Org extends PersistableBusinessObjectBase {
         
         params.put("methodToCall", "start");
         params.put("docFormKey", "");
-        params.put("lookupableImplServiceName", "OrgReviewLookupable");
+        //params.put("lookupableImplServiceName", "OrgReviewLookupable");
+        params.put("lookupableImplServiceName", "RuleBaseValuesLookupableImplService");
         params.put("fin_coa_cd", this.chartOfAccountsCode);
         params.put("org_cd", this.organizationCode);
         params.put("conversionFields", "");
         params.put("returnLocation", "");
+        params.put("active_ind", "true");
+        params.put("ruleTemplateName", "KualiOrgReviewTemplate");
 
-        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString(Constants.WORKFLOW_URL_KEY) + "/Lookup.do", params);
+        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSConstants.WORKFLOW_URL_KEY) + "/Lookup.do", params);
     }
 
     /**
