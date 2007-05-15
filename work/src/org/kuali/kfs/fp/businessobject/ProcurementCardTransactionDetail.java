@@ -25,8 +25,8 @@ import java.util.List;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.PropertyConstants;
 
 /**
  * 
@@ -559,7 +559,7 @@ public class ProcurementCardTransactionDetail extends PersistableBusinessObjectB
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.financialDocumentTransactionLineNumber != null) {
             m.put("financialDocumentTransactionLineNumber", this.financialDocumentTransactionLineNumber.toString());
         }

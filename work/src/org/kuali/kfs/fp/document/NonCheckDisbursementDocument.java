@@ -15,7 +15,7 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.Constants.EMPTY_STRING;
+import static org.kuali.kfs.KFSConstants.EMPTY_STRING;
 
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
@@ -41,7 +41,7 @@ public class NonCheckDisbursementDocument extends AccountingDocumentBase impleme
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
@@ -49,7 +49,7 @@ public class NonCheckDisbursementDocument extends AccountingDocumentBase impleme
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {

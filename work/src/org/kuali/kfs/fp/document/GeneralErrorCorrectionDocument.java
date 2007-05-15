@@ -15,8 +15,8 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.Constants.FROM;
-import static org.kuali.Constants.TO;
+import static org.kuali.kfs.KFSConstants.FROM;
+import static org.kuali.kfs.KFSConstants.TO;
 
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
@@ -43,7 +43,7 @@ public class GeneralErrorCorrectionDocument extends AccountingDocumentBase imple
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
@@ -53,7 +53,7 @@ public class GeneralErrorCorrectionDocument extends AccountingDocumentBase imple
     /**
      * Overrides the base implementation to return "To".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
@@ -61,7 +61,7 @@ public class GeneralErrorCorrectionDocument extends AccountingDocumentBase imple
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
