@@ -65,22 +65,31 @@
             	<summary>Award Account Proposal Number</summary>
             	<description>The proposal number of the proposal associated with this award account.</description>
             </attributeReference>
+			
+			<attributeReference name="personUniversalIdentifier" sourceClassName="org.kuali.module.cg.bo.ProjectDirector" sourceAttributeName="personUniversalIdentifier">
+            	<label>Project Director ID</label>
+            	<shortLabel>Proj Dir ID</shortLabel>
+                <control>
+                    <hidden/>
+                </control>
 
-			<attributeReference name="projectDirector.universalUser.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
-                <label>Project Director Name</label>
-                <shortLabel>Proj Dir Name</shortLabel>
+                <summary>Project Director ID</summary>
+                <description>Universal identifier for the Project Director.</description>
+            </attributeReference>
+            
+            <attributeReference name="projectDirector.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
+            	<label>Project Director User ID</label>
+            	<required>false</required>
+            </attributeReference>
+
+            <attributeReference name="projectDirector.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
+                <label>Director Name</label>
+            	<required>false</required>
                 <control>
                     <text size="40" />
                 </control>
-			</attributeReference>
+            </attributeReference>
 
-			<attributeReference name="personUniversalIdentifier" sourceClassName="org.kuali.module.cg.bo.ProjectDirector" sourceAttributeName="personUniversalIdentifier">
-            	<label>Account Project Director ID</label>
-            	<shortLabel>Acct Proj Dir ID</shortLabel>
-
-                <summary>Account Director ID</summary>
-                <description>Universal identifier for the Account Director.</description>
-			</attributeReference>
 
             <attribute name="chartOfAccountsCode" forceUppercase="true">
                 <label>Chart Of Accounts Code</label>
@@ -96,14 +105,10 @@
                 <description>chartOfAccountsCode description...</description>
 			</attribute>
 
-			<attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber">
-                <label>Account Number</label>
-                <shortLabel>Number</shortLabel>
-
-                <summary>AccountNumber</summary>
-                <description>accountNumber description...</description>
-			</attributeReference>
+			<attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber"/>
 			
+			<attributeReference name="account.accountName" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountName"/>
+  
              
 			<attributeReference name="award.proposal.federalPassThroughAgencyNumber" sourceClassName="org.kuali.module.cg.bo.Proposal" sourceAttributeName="federalPassThroughAgencyNumber">
 				<label>Proposal Federal Pass Through Agency Number</label>

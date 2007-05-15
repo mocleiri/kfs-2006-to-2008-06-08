@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.PropertyConstants;
-import org.kuali.core.bo.AdHocRouteWorkgroup;
+import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.BusinessObjectService;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.kra.KraPropertyConstants;
 import org.kuali.module.kra.routingform.bo.ResearchRiskType;
 import org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk;
@@ -64,7 +64,7 @@ public class RoutingFormResearchRiskServiceImpl implements RoutingFormResearchRi
      */
     public List<ResearchRiskType> getResearchRiskTypes(String[] exceptCodes) {
         Map criteria = new HashMap();
-        criteria.put(PropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, true);
+        criteria.put(KFSPropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, true);
         List<ResearchRiskType> allActiveResearchRiskTypes = (List<ResearchRiskType>) this.businessObjectService.findMatchingOrderBy(
                 ResearchRiskType.class, criteria, KraPropertyConstants.RESEARCH_RISK_TYPE_SORT_NUMBER, true);
         
@@ -84,8 +84,10 @@ public class RoutingFormResearchRiskServiceImpl implements RoutingFormResearchRi
         List<RoutingFormResearchRisk> researchRisks = new ArrayList<RoutingFormResearchRisk>(businessObjectService.findMatching(RoutingFormResearchRisk.class, fieldValues));
         List<String> workgroups = new ArrayList<String>();
         for (RoutingFormResearchRisk researchRisk : researchRisks) {
-            if (researchRisk.getResearchRiskType().getResearchRiskTypeNotificationGroupText() != null) {
-                workgroups.add(researchRisk.getResearchRiskType().getResearchRiskTypeNotificationGroupText());
+            if (!StringUtils.isBlank(researchRisk.getResearchRiskDescription()) || !researchRisk.getResearchRiskStudies().isEmpty()) {
+                if (researchRisk.getResearchRiskType().getResearchRiskTypeNotificationGroupText() != null) {
+                    workgroups.add(researchRisk.getResearchRiskType().getResearchRiskTypeNotificationGroupText());
+                }
             }
         }
         return workgroups;
