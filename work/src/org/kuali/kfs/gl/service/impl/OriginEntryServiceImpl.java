@@ -28,10 +28,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.kuali.Constants;
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
@@ -185,7 +185,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         Map criteria = new HashMap();
         criteria.put(ENTRY_GROUP_ID, originEntryGroup.getId());
-        criteria.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
         criteria.put(FINANCIAL_DOCUMENT_TYPE_CODE, documentTypeCode);
         criteria.put(FINANCIAL_SYSTEM_ORIGINATION_CODE, originCode);
 
@@ -329,11 +329,11 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         // construct a ledger entry with the information fetched from the given array
         LedgerEntry ledgerEntry = new LedgerEntry(fiscalYear, periodCode, balanceType, originCode);
-        if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
+        if (KFSConstants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             ledgerEntry.setCreditAmount(amount);
             ledgerEntry.setCreditCount(count);
         }
-        else if (Constants.GL_DEBIT_CODE.equals(debitCreditCode)) {
+        else if (KFSConstants.GL_DEBIT_CODE.equals(debitCreditCode)) {
             ledgerEntry.setDebitAmount(amount);
             ledgerEntry.setDebitCount(count);
         }
@@ -352,13 +352,22 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      */
     public void flatFile(Integer groupId, BufferedOutputStream bw) {
         LOG.debug("flatFile() started");
-
+        OriginEntryGroup oeg = new OriginEntryGroup();
+        oeg.setId(groupId);
+        flatFile(getEntriesByGroup(oeg), bw);
+    }
+    
+    /**
+     * This method writes origin entries into a file format.  This particular implementation
+     * will use the OriginEntry.getLine method to generate the text for this file.
+     * 
+     * @param entries An iterator of OriginEntries
+     * @param bw an opened, ready-for-output bufferedOutputStream.
+     */
+    public void flatFile(Iterator<OriginEntry> entries, BufferedOutputStream bw) {
         try {
-            OriginEntryGroup oeg = new OriginEntryGroup();
-            oeg.setId(groupId);
-            Iterator i = getEntriesByGroup(oeg);
-            while (i.hasNext()) {
-                OriginEntry e = (OriginEntry) i.next();
+            while (entries.hasNext()) {
+                OriginEntry e = entries.next();
                 bw.write((e.getLine() + "\n").getBytes());
             }
         }
@@ -428,7 +437,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             posterOutputSummaryEntry.setObjectTypeCode(objectTypeCode);
 
             tempEntry = entrySummary[indexOfField++];
-            String debitCreditCode = (tempEntry == null) ? Constants.GL_BUDGET_CODE : tempEntry.toString();
+            String debitCreditCode = (tempEntry == null) ? KFSConstants.GL_BUDGET_CODE : tempEntry.toString();
 
             tempEntry = entrySummary[indexOfField];
             entry = (tempEntry == null) ? "0" : tempEntry.toString();            
