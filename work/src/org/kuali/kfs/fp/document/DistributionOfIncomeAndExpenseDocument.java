@@ -16,9 +16,9 @@
 
 package org.kuali.module.financial.document;
 
-import org.kuali.Constants;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.document.AccountingDocumentBase;
 
 
@@ -36,19 +36,19 @@ public class DistributionOfIncomeAndExpenseDocument extends AccountingDocumentBa
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return Constants.FROM;
+        return KFSConstants.FROM;
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return Constants.TO;
+        return KFSConstants.TO;
     }
 
 }
