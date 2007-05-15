@@ -27,16 +27,20 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.Constants;
+import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.authorization.AuthorizationType;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.authorization.DocumentAuthorizer;
 import org.kuali.core.exceptions.AuthorizationException;
 import org.kuali.core.exceptions.ModuleAuthorizationException;
+import org.kuali.core.question.ConfirmationQuestion;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.action.KualiAction;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.BCConstants;
 import org.kuali.module.budget.bo.BudgetConstructionMonthly;
@@ -145,23 +149,69 @@ public class MonthlyBudgetAction extends KualiAction {
         monthlyBudgetForm.setBudgetConstructionMonthly(budgetConstructionMonthly);
 
 
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
-    public ActionForward returnToCaller(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    /**
+     * This saves the data and redisplays
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         
         MonthlyBudgetForm monthlyBudgetForm = (MonthlyBudgetForm) form;
         BudgetConstructionMonthly budgetConstructionMonthly = monthlyBudgetForm.getBudgetConstructionMonthly();
         
         // TODO validate and store monthly changes, for now save using BOService
         getBusinessObjectService().save(budgetConstructionMonthly);
+        GlobalVariables.getMessageList().add(KFSKeyConstants.MESSAGE_SAVED);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
 
+    public ActionForward close(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        MonthlyBudgetForm monthlyBudgetForm = (MonthlyBudgetForm) form;
+        BudgetConstructionMonthly budgetConstructionMonthly = monthlyBudgetForm.getBudgetConstructionMonthly();
+        
+        if (!monthlyBudgetForm.getEditingMode().containsKey(AuthorizationConstants.BudgetConstructionEditMode.SYSTEM_VIEW_ONLY) &&
+             monthlyBudgetForm.getEditingMode().containsKey(AuthorizationConstants.EditMode.FULL_ENTRY)){
+            Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
+            KualiConfigurationService kualiConfiguration = KNSServiceLocator.getKualiConfigurationService();
+
+//TODO create generic question text without reference to saving a document 
+            // logic for close question
+            if (question == null) {
+                // ask question if not already asked
+                return this.performQuestionWithoutInput(mapping, form, request, response, KFSConstants.DOCUMENT_SAVE_BEFORE_CLOSE_QUESTION, kualiConfiguration.getPropertyString(KFSKeyConstants.QUESTION_SAVE_BEFORE_CLOSE), KFSConstants.CONFIRMATION_QUESTION, KFSConstants.MAPPING_CLOSE, "");
+            }
+            else {
+                Object buttonClicked = request.getParameter(KFSConstants.QUESTION_CLICKED_BUTTON);
+                if ((KFSConstants.DOCUMENT_SAVE_BEFORE_CLOSE_QUESTION.equals(question)) && ConfirmationQuestion.YES.equals(buttonClicked)) {
+                    // if yes button clicked - save the doc
+
+                    //KNSServiceLocator.getDocumentService().saveDocument(docForm.getDocument());
+                    // TODO for now just do trivial save eventually need to add validation, routelog stuff, etc
+                    getBusinessObjectService().save(budgetConstructionMonthly);
+                    
+                }
+                // else go to close logic below
+            }
+        }
+        return returnToCaller(monthlyBudgetForm);
+    }
+
+    public ActionForward returnToCaller(MonthlyBudgetForm monthlyBudgetForm) throws Exception {
+        
         // setup the return parms for the document and anchor
         Properties parameters = new Properties();
-        parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, BCConstants.BC_DOCUMENT_REFRESH_METHOD);
-        parameters.put(Constants.DOC_FORM_KEY, monthlyBudgetForm.getReturnFormKey());
-        parameters.put(Constants.ANCHOR, monthlyBudgetForm.getReturnAnchor());
-        parameters.put(Constants.REFRESH_CALLER, BCConstants.MONTHLY_BUDGET_REFRESH_CALLER);
+        parameters.put(KFSConstants.DISPATCH_REQUEST_PARAMETER, BCConstants.BC_DOCUMENT_REFRESH_METHOD);
+        parameters.put(KFSConstants.DOC_FORM_KEY, monthlyBudgetForm.getReturnFormKey());
+        parameters.put(KFSConstants.ANCHOR, monthlyBudgetForm.getReturnAnchor());
+        parameters.put(KFSConstants.REFRESH_CALLER, BCConstants.MONTHLY_BUDGET_REFRESH_CALLER);
         
         String lookupUrl = UrlFactory.parameterizeUrl("/" + BCConstants.BC_DOCUMENT_ACTION, parameters);
         return new ActionForward(lookupUrl, true);
@@ -181,7 +231,7 @@ public class MonthlyBudgetAction extends KualiAction {
     public ActionForward showDetails(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         MonthlyBudgetForm tForm = (MonthlyBudgetForm) form;
         tForm.setHideDetails(false);
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
     /**
@@ -198,6 +248,6 @@ public class MonthlyBudgetAction extends KualiAction {
     public ActionForward hideDetails(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         MonthlyBudgetForm tForm = (MonthlyBudgetForm) form;
         tForm.setHideDetails(true);
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 }

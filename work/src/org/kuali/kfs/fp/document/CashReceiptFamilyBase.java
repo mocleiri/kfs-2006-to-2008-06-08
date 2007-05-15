@@ -18,9 +18,9 @@ package org.kuali.module.financial.document;
 import java.sql.Timestamp;
 import java.util.Iterator;
 
-import org.kuali.Constants;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.document.AccountingDocumentBase;
@@ -41,13 +41,13 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
      * Constructs a CashReceiptFamilyBase
      */
     public CashReceiptFamilyBase() {
-        setCampusLocationCode(Constants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_CAMPUS_LOCATION_CODE);
+        setCampusLocationCode(KFSConstants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_CAMPUS_LOCATION_CODE);
     }
 
     /**
      * Documents in the CashReceiptFamily do not perform Sufficient Funds checking
      * 
-     * @see org.kuali.core.document.TransactionalDocumentBase#documentPerformsSufficientFundsCheck()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#documentPerformsSufficientFundsCheck()
      */
     @Override
     public boolean documentPerformsSufficientFundsCheck() {
@@ -97,7 +97,7 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
      * having the 'income' object type, less the sum of the amounts on accounting lines belonging to object codes having the
      * 'expense' object type.
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceTotal()
+     * @see org.kuali.kfs.document.AccountingDocument#getSourceTotal()
      */
     @Override
     public KualiDecimal getSourceTotal() {
@@ -134,7 +134,7 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
     /**
      * Cash Receipts only have source lines, so this should always return 0.
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getTargetTotal()
+     * @see org.kuali.kfs.document.AccountingDocument#getTargetTotal()
      */
     @Override
     public KualiDecimal getTargetTotal() {
@@ -144,26 +144,26 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
     /**
      * Overrides the base implementation to return an empty string.
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return Constants.EMPTY_STRING;
+        return KFSConstants.EMPTY_STRING;
     }
 
     /**
      * Overrides the base implementation to return an empty string.
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return Constants.EMPTY_STRING;
+        return KFSConstants.EMPTY_STRING;
     }
 
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
