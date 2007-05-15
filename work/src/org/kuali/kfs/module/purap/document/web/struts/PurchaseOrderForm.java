@@ -21,9 +21,11 @@ import org.kuali.core.web.ui.ExtraButton;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
+import org.kuali.module.purap.bo.PurchaseOrderAccount;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.RequisitionAccount;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 
 /**
@@ -33,6 +35,12 @@ public class PurchaseOrderForm extends PurchasingFormBase {
 
     private PurchaseOrderVendorStipulation newPurchaseOrderVendorStipulationLine;
 
+    // Retransmit.
+    private String[] retransmitItemsSelected = {};
+    private String retransmitTransmissionMethod;
+    private String retransmitFaxNumber;
+    private String retransmitHeader;
+    
     /**
      * Constructs a PurchaseOrderForm instance and sets up the appropriately casted document.
      */
@@ -90,6 +98,14 @@ public class PurchaseOrderForm extends PurchasingFormBase {
         return new PurchaseOrderItem();
     }
 
+    /**
+     * @see org.kuali.module.purap.web.struts.form.PurchasingFormBase#setupNewPurchasingAccountingLine()
+     */
+    @Override
+    public PurchaseOrderAccount setupNewPurchasingAccountingLine() {
+        return new PurchaseOrderAccount();
+    }
+
     public PurchaseOrderVendorStipulation getAndResetNewPurchaseOrderVendorStipulationLine() {
         PurchaseOrderVendorStipulation aPurchaseOrderVendorStipulationLine = getNewPurchaseOrderVendorStipulationLine();
         setNewPurchaseOrderVendorStipulationLine(new PurchaseOrderVendorStipulation());
@@ -118,9 +134,11 @@ public class PurchaseOrderForm extends PurchasingFormBase {
         String documentType = this.getDocument().getDocumentHeader().getWorkflowDocument().getDocumentType();
         PurchaseOrderDocument purchaseOrder = (PurchaseOrderDocument) this.getDocument();
 
+        
         if ((purchaseOrder.isPurchaseOrderCurrentIndicator() && purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.OPEN)) || 
-             (documentType.equals(PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_RETRANSMIT_DOCUMENT)) &&
-              (purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.OPEN) || purchaseOrder.getDocumentHeader().getWorkflowDocument().stateIsEnroute())) {
+             (documentType.equals(PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_RETRANSMIT_DOCUMENT) &&
+              (purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.OPEN) || purchaseOrder.getDocumentHeader().getWorkflowDocument().stateIsEnroute()))) {
+
             ExtraButton retransmitButton = new ExtraButton();
             retransmitButton.setExtraButtonProperty("methodToCall.retransmitPo");
             retransmitButton.setExtraButtonSource("images/buttonsmall_retransmit.gif");
@@ -171,4 +189,16 @@ public class PurchaseOrderForm extends PurchasingFormBase {
         }
     }
 
+    /**
+     * @return Returns the retransmitItemsSelected.
+     */
+    public String[] getRetransmitItemsSelected() {
+      return retransmitItemsSelected;
+    }
+    /**
+     * @param retransmitItemsSelected The retransmitItemsSelected to set.
+     */
+    public void setRetransmitItemsSelected(String[] retransmitItemsSelected) {
+      this.retransmitItemsSelected = retransmitItemsSelected;
+    }
 }
