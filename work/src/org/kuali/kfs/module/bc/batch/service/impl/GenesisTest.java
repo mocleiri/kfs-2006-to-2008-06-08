@@ -15,6 +15,10 @@
  */
 package org.kuali.module.budget.service.impl;
 
+import java.sql.SQLException;
+
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSConstants.*;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.kfs.util.SpringServiceLocator.*;
 import org.kuali.module.budget.service.*;
@@ -24,6 +28,8 @@ import org.kuali.core.util.*;
 import org.kuali.core.bo.user.*;
 import org.kuali.module.budget.dao.*;
 import org.kuali.module.budget.dao.ojb.*;
+
+import java.lang.reflect.*;
 
 // import these things to handle the configuration
 import org.kuali.core.service.KualiConfigurationService;
@@ -35,8 +41,6 @@ import org.kuali.workflow.*;
 //this is just for the logger, and could be taken out
 import org.apache.log4j.*;
 import java.util.ResourceBundle;
-import org.kuali.Constants;
-import org.kuali.Constants.*;
 
 public class GenesisTest {
     
@@ -51,7 +55,7 @@ public class GenesisTest {
   {
       //    this supposedly configures a logger that everybody can fetch and use
       PropertyConfigurator.configure(ResourceBundle.getBundle(
-        Constants.CONFIGURATION_FILE_NAME).getString(Constants.LOG4J_SETTINGS_FILE_KEY));
+        KFSConstants.CONFIGURATION_FILE_NAME).getString(KFSConstants.LOG4J_SETTINGS_FILE_KEY));
   //  get one for this routine
       LOG = org.apache.log4j.Logger.getLogger(GenesisTest.class);
      
@@ -85,7 +89,7 @@ public class GenesisTest {
       
   }
     
-  public static void main(String args[])
+  public static void main(String args[]) throws SQLException
   {
       configurationStep();
       //   these are the current run configurations (to change when workflow is embedded)
@@ -101,7 +105,36 @@ public class GenesisTest {
       // update current positions
       //  genesisTestService.testPositionBuild(2007);
       LOG.warn("\nstarting fiscalYearMakers\n");
-      dateMakerTestService.fiscalYearMakers(2042,true);
+      //dateMakerTestService.fiscalYearMakers(2008,true);
+      try
+      {
+      dateMakerTestService.fiscalYearMakers(2009,true);
+      // dateMakerTestService.testRoutine(); 
+      }
+      catch(NoSuchFieldException ex)
+      {
+        ex.printStackTrace();  
+        throw(new SQLException("unable to update base year",
+        "fiscal year makers rolled back"));
+      }
+      catch(IllegalAccessException ex)
+      {
+        ex.printStackTrace();  
+        throw(new SQLException("unable to update base year",
+        "fiscal year makers rolled back"));
+      }
+      catch (NoSuchMethodException ex)
+      {
+        ex.printStackTrace();
+        throw(new SQLException("unable to update base year",
+        "fiscal year makers rolled back"));
+      }
+      catch (InvocationTargetException ex)
+      {
+        ex.printStackTrace();
+        throw(new SQLException("unable to update base year",
+                               "fiscal year makers rolled back"));
+      }
       LOG.warn("\nfiscalYearMakers finished\n");
       // create the proxy BC headers
       /*
