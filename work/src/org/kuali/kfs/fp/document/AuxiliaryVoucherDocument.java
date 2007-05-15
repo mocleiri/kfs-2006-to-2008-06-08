@@ -15,22 +15,22 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.Constants.EMPTY_STRING;
-import static org.kuali.Constants.GL_CREDIT_CODE;
-import static org.kuali.Constants.GL_DEBIT_CODE;
-import static org.kuali.Constants.AuxiliaryVoucher.ACCRUAL_DOC_TYPE;
-import static org.kuali.Constants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE;
-import static org.kuali.Constants.AuxiliaryVoucher.RECODE_DOC_TYPE;
+import static org.kuali.kfs.KFSConstants.EMPTY_STRING;
+import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
+import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
+import static org.kuali.kfs.KFSConstants.AuxiliaryVoucher.ACCRUAL_DOC_TYPE;
+import static org.kuali.kfs.KFSConstants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE;
+import static org.kuali.kfs.KFSConstants.AuxiliaryVoucher.RECODE_DOC_TYPE;
 
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.Constants;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
@@ -54,7 +54,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
 
     /**
      * 
-     * @see org.kuali.core.document.TransactionalDocumentBase#documentPerformsSufficientFundsCheck()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#documentPerformsSufficientFundsCheck()
      */
     @Override
     public boolean documentPerformsSufficientFundsCheck() {
@@ -147,7 +147,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
-            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(Constants.GL_DEBIT_CODE)) {
+            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(KFSConstants.GL_DEBIT_CODE)) {
                 debitTotal = debitTotal.add(al.getAmount());
             }
         }
@@ -166,7 +166,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
-            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(Constants.GL_CREDIT_CODE)) {
+            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(KFSConstants.GL_CREDIT_CODE)) {
                 creditTotal = creditTotal.add(al.getAmount());
             }
         }
@@ -225,7 +225,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
@@ -233,7 +233,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
@@ -241,7 +241,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * @see org.kuali.module.financial.document.FinancialDocumentBase#toErrorCorrection()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#toErrorCorrection()
      */
     @Override
     public void toErrorCorrection() throws WorkflowException {
