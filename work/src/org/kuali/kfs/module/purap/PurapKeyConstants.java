@@ -22,6 +22,11 @@ package org.kuali.module.purap;
 public class PurapKeyConstants {
 
     public static final String PURAP_GENERAL_POTENTIAL_DUPLICATE = "error.document.purap.potentialDuplicate";
+    public static final String PURAP_GENERAL_NO_ACCOUNTS_TO_DISTRIBUTE = "error.document.purap.noAccountsToDistribute";
+    public static final String PURAP_GENERAL_NO_ITEMS_TO_DISTRIBUTE_TO = "error.document.purap.noItemsToDistributeTo";
+    public static final String PURAP_GENERAL_NO_ITEMS_TO_REMOVE_ACCOUNTS_FROM = "error.document.purap.noItemsToRemoveAccountsFrom";
+    public static final String PURAP_GENERAL_ACCOUNTS_DISTRIBUTED = "message.document.purap.accountsDistributed";
+    public static final String PURAP_GENERAL_ACCOUNTS_REMOVED = "message.document.purap.accountsRemoved";
     
     //Purchase Order & Requisition
     public static final String ERROR_PURCHASE_ORDER_BEGIN_DATE_AFTER_END = "error.purchaseOrder.beginDateAfterEnd";
@@ -75,4 +80,22 @@ public class PurapKeyConstants {
     public static final String MESSAGE_DUPLICATE_INVOICE_CANCELLEDORVOIDED ="errors.duplicate.vendor.invoice.cancelledOrVoided";
     public static final String MESSAGE_DUPLICATE_INVOICE_CANCELLED="errors.duplicate.vendor.invoice.cancelled";
     public static final String MESSAGE_DUPLICATE_INVOICE_VOIDED="errors.duplicate.vendor.invoice.voided";
+    
+    //Item
+    public static final String ERROR_ITEM_AMOUNT_BELOW_ZERO="errors.item.amount.belowZero";
+    public static final String ERROR_ITEM_AMOUNT_NOT_BELOW_ZERO="errors.item.amount.notBelowZero";
+    public static final String ERROR_ITEM_ACCOUNTING_NOT_UNIQUE="errors.item.accounting.notunique";
+    public static final String ERROR_ITEM_TOTAL_NEGATIVE="errors.item.total.negative";
+    public static final String ERROR_ITEM_QUANTITY_NOT_ZERO="errors.item.quantity.notZero";
+    public static final String ERROR_ITEM_QUANTITY="errors.item.quantity";
+    public static final String ERROR_ITEM_EMPTY="errors.item.empty";
+    public static final String ERROR_ITEM_DESCRIPTION_EMPTY="errors.item.description.empty";
+    public static final String ERROR_ITEM_UNIT_PRICE_EMPTY="errors.item.unitPrice.empty";
+    public static final String ERROR_ITEM_ACCOUNTING_NOT_ALLOWED="errors.item.accounting.notallowed";
+    public static final String ERROR_ITEM_ACCOUNTING_INCOMPLETE="errors.item.accounting.incomplete";
+    public static final String WARNING_PURCHASE_ORDER_EXCEEDING_TOTAL_LIMIT="warning.purchaseorder.exceedingTotalLimit";
+    public static final String ERROR_ITEM_REQUIRED="errors.item.required";
+    public static final String ERROR_ITEM_UNIT_OF_MEASURE_REQUIRED="errors.item.unitOfMeasure.required";
+    public static final String ERROR_ITEM_TRADEIN_DISCOUNT_COEXISTENCE="errors.purchaseOrderItems.TradeInAndDiscountCoexistence";
+    public static final String ERROR_ITEM_BELOW_THE_LINE="errors.item.belowTheLine";
 }
