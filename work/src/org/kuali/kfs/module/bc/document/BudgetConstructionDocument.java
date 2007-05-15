@@ -20,14 +20,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
-import org.kuali.Constants;
-import org.kuali.Constants.BudgetConstructionConstants;
-import org.kuali.PropertyConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.TypedArrayList;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.KFSConstants.BudgetConstructionConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.bo.BudgetConstructionAccountReports;
 import org.kuali.module.budget.bo.PendingBudgetConstructionGeneralLedger;
@@ -118,13 +119,32 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
 
     /**
      * This adds a revenue line to the revenue lines list
+     * It assumes a line with the object, subobject key does not already exist
      * 
      * @param line
      */
     public void addRevenueLine(PendingBudgetConstructionGeneralLedger line){
-        //TODO this needs to insert at the proper point based on object, subobject ordering
-        //need to check for unique key here? or during rules check?
-        this.pendingBudgetConstructionGeneralLedgerRevenueLines.add(line);
+        //TODO need to check for unique key here? or during rules check?
+        int insertPoint = 0;
+        ListIterator pbglLines = this.getPendingBudgetConstructionGeneralLedgerRevenueLines().listIterator();
+        while (pbglLines.hasNext()){
+            PendingBudgetConstructionGeneralLedger pbglLine = (PendingBudgetConstructionGeneralLedger) pbglLines.next();
+            if (pbglLine.getFinancialObjectCode().compareToIgnoreCase(line.getFinancialObjectCode()) < 0){
+                insertPoint++;
+            } else {
+                if (pbglLine.getFinancialObjectCode().compareToIgnoreCase(line.getFinancialObjectCode()) > 0){
+                    break;
+                } else {
+                    if ((pbglLine.getFinancialObjectCode().compareToIgnoreCase(line.getFinancialObjectCode()) == 0) &&
+                        (pbglLine.getFinancialSubObjectCode().compareToIgnoreCase(line.getFinancialSubObjectCode()) < 0)){
+                        insertPoint++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        this.pendingBudgetConstructionGeneralLedgerRevenueLines.add(insertPoint,line);
     }
     
     /**
@@ -516,12 +536,12 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
     @Override
     public void handleRouteStatusChange() {
         if (getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
-            getDocumentHeader().setFinancialDocumentStatusCode(Constants.DocumentStatusCodes.ENROUTE);
+            getDocumentHeader().setFinancialDocumentStatusCode(KFSConstants.DocumentStatusCodes.ENROUTE);
         }
         /*  the status below is comparable to "approved" status for other documents */
         if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
             getDocumentHeader().setFinancialDocumentStatusCode(
-                Constants.BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_INITIAL_STATUS);
+                KFSConstants.BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_INITIAL_STATUS);
         }
         LOG.info("Status is: " + getDocumentHeader().getFinancialDocumentStatusCode());
     }
@@ -532,7 +552,7 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }

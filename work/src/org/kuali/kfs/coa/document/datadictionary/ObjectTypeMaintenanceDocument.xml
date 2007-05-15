@@ -55,7 +55,7 @@
                     <maintainableField name="finObjectTypeIcrSelectionIndicator"  />
                     <maintainableField name="fundBalanceIndicator"  />
                     <maintainableField name="financialReportingSortCode" required="true" />
-                    <maintainableField name="accountCategoryCode" required="true" />
+                    <maintainableField name="basicAccountingCategoryCode" required="true" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
