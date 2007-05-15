@@ -26,13 +26,13 @@ import org.kuali.module.cg.service.ProjectDirectorService;
 import org.kuali.module.cg.service.AgencyService;
 import org.kuali.module.cg.bo.ProjectDirector;
 import org.kuali.module.cg.bo.Agency;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.spring.Cached;
-import org.kuali.PropertyConstants;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
@@ -56,7 +56,7 @@ public class AgencyServiceImpl implements AgencyService {
 
     private Map<String, Object> mapPrimaryKeys(String agencyNumber) {
         Map<String, Object> primaryKeys = new HashMap();
-        primaryKeys.put(PropertyConstants.AGENCY_NUMBER, agencyNumber.trim());
+        primaryKeys.put(KFSPropertyConstants.AGENCY_NUMBER, agencyNumber.trim());
         return primaryKeys;
     }
 

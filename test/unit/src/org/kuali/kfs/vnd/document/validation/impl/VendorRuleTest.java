@@ -20,10 +20,7 @@ import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 import java.util.List;
 
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.document.MaintenanceDocumentBase;
-import org.kuali.core.workflow.service.impl.KualiWorkflowDocumentImpl;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.purap.rules.PurapRuleTestBase;
+import org.kuali.core.maintenance.MaintenanceRuleTestBase;
 import org.kuali.module.vendor.bo.VendorAddress;
 import org.kuali.module.vendor.bo.VendorContract;
 import org.kuali.module.vendor.bo.VendorDetail;
@@ -32,14 +29,15 @@ import org.kuali.module.vendor.fixtures.VendorContractPurchaseOrderLimitAmountPr
 import org.kuali.module.vendor.fixtures.VendorRuleAddressStateZipFixture;
 import org.kuali.module.vendor.fixtures.VendorRuleAddressTypeFixture;
 import org.kuali.module.vendor.fixtures.VendorRuleFaxNumberFixture;
-import org.kuali.module.vendor.maintenance.VendorMaintainableImpl;
-import org.kuali.module.vendor.rules.VendorRule;
 import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.suite.RelatesTo;
 
-import edu.iu.uis.eden.exception.WorkflowException;
-
+/**
+ * This class should contain all tests of methods implementing Vendor rules.  For this
+ * purpose, we need to set up the parts of a MaintenanceDocument.
+ */
 @WithTestSpringContext(session = KHUNTLEY)
-public class VendorRuleTest extends PurapRuleTestBase {
+public class VendorRuleTest extends MaintenanceRuleTestBase {
 
     private VendorDetail oldVendor;
     private VendorDetail newVendor;
@@ -206,35 +204,37 @@ public class VendorRuleTest extends PurapRuleTestBase {
      */
     protected VendorRule validateAddressType_TestHelper( VendorRuleAddressTypeFixture vratf ) {
         newVendor = vratf.populateVendor( newVendor );
-        VendorRule rule = (VendorRule)setupMaintDocRule( newVendor, VendorRule.class );
+        maintDoc = newMaintDoc( oldVendor, newVendor );
+        VendorRule rule = (VendorRule)setupMaintDocRule( maintDoc, VendorRule.class );
         rule.refreshSubObjects( newVendor );
         return rule;
     } 
- 
-    /*   
+     
+    //@RelatesTo(RelatesTo.JiraIssue.KULPURAP609)
     public void testValidateAddressType_WithPOTypeAndPOAddrTypes() {
         rule = validateAddressType_TestHelper( VendorRuleAddressTypeFixture.WITH_PO_TYPE_AND_PO_ADDR_TYPES );
-        assertTrue(rule.validateAddressType( newVendor ));
-       
+        assertTrue(rule.processAddressValidation( maintDoc ));
     }
-    
+
+    //@RelatesTo(RelatesTo.JiraIssue.KULPURAP609)
     public void testValidateAddressType_WithDVTypeAndRMAddrTypes() {
         rule = validateAddressType_TestHelper( VendorRuleAddressTypeFixture.WITH_DV_TYPE_AND_RM_ADDR_TYPES );
-        assertTrue(rule.validateAddressType( newVendor ));
+        assertTrue(rule.processAddressValidation( maintDoc ));
     }
     
-    //@RelatesTo(KULPURAP283)
+    //@RelatesTo(RelatesTo.JiraIssue.KULPURAP609)
     public void testValidateAddressType_WithPOTypeAndRMAddrTypes() {
         rule = validateAddressType_TestHelper( VendorRuleAddressTypeFixture.WITH_PO_TYPE_AND_RM_ADDR_TYPES );
-        assertFalse(rule.validateAddressType( newVendor ));
+        assertFalse(rule.processAddressValidation( maintDoc ));
     }
     
+    /*
     public void testValidateAddressType_WithPOTypeAndOnePOAndOneRMAddrTypes() {
         rule  = validateAddressType_TestHelper( VendorRuleAddressTypeFixture.WITH_PO_TYPE_AND_ONE_PO_AND_ONE_RM_ADDR_TYPES );
-        assertTrue(rule.validateAddressType( newVendor ));
+        assertTrue(rule.processAddressValidation( maintDoc ));
     }
+    */
     
-*/
     
     /*
      * TESTS OF checkAddressCountryEmptyStateZip 

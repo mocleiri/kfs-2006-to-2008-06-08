@@ -15,7 +15,6 @@
  */
 package org.kuali.module.labor.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -28,8 +27,8 @@ import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.AccountStatusCurrentFunds;
 import org.kuali.module.labor.bo.LedgerBalance;
-import org.kuali.module.labor.bo.LedgerEntry;
 import org.kuali.module.labor.util.ObjectUtil;
+import org.kuali.module.labor.util.TestDataPreparator;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 import org.springframework.beans.factory.BeanFactory;
@@ -46,6 +45,7 @@ public class LaborLedgerBalanceServiceTest extends KualiTestBase {
     private LaborLedgerBalanceService laborLedgerBalanceService;
     private BusinessObjectService businessObjectService;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         String messageFileName = "test/src/org/kuali/module/labor/testdata/message.properties";
@@ -56,7 +56,6 @@ public class LaborLedgerBalanceServiceTest extends KualiTestBase {
         deliminator = properties.getProperty("deliminator");
         keyFieldList = Arrays.asList(StringUtils.split(fieldNames, deliminator));
  
-
         beanFactory = SpringServiceLocator.getBeanFactory();
         laborLedgerBalanceService = (LaborLedgerBalanceService) beanFactory.getBean("laborLedgerBalanceService");
         businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
@@ -71,7 +70,7 @@ public class LaborLedgerBalanceServiceTest extends KualiTestBase {
         String testTarget = "getAccountStatusCurrentFunds.";
         int numberOfTestData = Integer.valueOf(properties.getProperty(testTarget + "numOfData"));
         
-        List<LedgerBalance> inputDataList = getInputDataList(testTarget + "testData", numberOfTestData);
+        List inputDataList = TestDataPreparator.buildTestDataList(LedgerBalance.class, properties, testTarget + "testData", numberOfTestData);
         businessObjectService.save(inputDataList);
 
         Iterator<AccountStatusCurrentFunds> iterator = laborLedgerBalanceService.getAccountStatusCurrentFunds(fieldValues);        
@@ -79,16 +78,5 @@ public class LaborLedgerBalanceServiceTest extends KualiTestBase {
             AccountStatusCurrentFunds accountStatusCurrentFunds = iterator.next();
             System.out.println(accountStatusCurrentFunds.getEmplid() + " : " + accountStatusCurrentFunds.getPersonName());
         }
-    }
-    
-    private List<LedgerBalance> getInputDataList(String propertyKeyPrefix, int numberOfInputData) {
-        List<LedgerBalance> inputDataList = new ArrayList<LedgerBalance>();
-        for (int i = 1; i <= numberOfInputData; i++) {
-            String propertyKey = propertyKeyPrefix + i;
-            LedgerBalance inputData = new LedgerBalance();
-            ObjectUtil.populateBusinessObject(inputData, properties, propertyKey, fieldNames, deliminator);
-            inputDataList.add(inputData);
-        }
-        return inputDataList;
     }
 }

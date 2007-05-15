@@ -17,7 +17,6 @@ package org.kuali.module.labor.service;
 
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_YEAR_END_BALANCE_FORWARD;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -27,9 +26,9 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.PersistenceService;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
@@ -37,6 +36,7 @@ import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.util.ObjectUtil;
+import org.kuali.module.labor.util.TestDataPreparator;
 import org.kuali.module.labor.util.testobject.LaborOriginEntryForTesting;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
@@ -49,16 +49,14 @@ public class LaborYearEndBalanceForwardServiceTest extends KualiTestBase {
     private String deliminator;
     private Integer fiscalYear;
     
-    private OriginEntryGroup groupToPost;
     private Map fieldValues, groupFieldValues;
-    private Date today;
-
     private LaborOriginEntryService laborOriginEntryService;
     private OriginEntryGroupService originEntryGroupService;
     private BusinessObjectService businessObjectService;
     private LaborYearEndBalanceForwardService laborYearEndBalanceForwardService;
     private PersistenceService persistenceService;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         String messageFileName = "test/src/org/kuali/module/labor/testdata/message.properties";
@@ -78,7 +76,7 @@ public class LaborYearEndBalanceForwardServiceTest extends KualiTestBase {
         persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
 
         groupFieldValues = new HashMap();
-        groupFieldValues.put(PropertyConstants.SOURCE_CODE, LABOR_YEAR_END_BALANCE_FORWARD);
+        groupFieldValues.put(KFSPropertyConstants.SOURCE_CODE, LABOR_YEAR_END_BALANCE_FORWARD);
         originEntryGroupService.deleteOlderGroups(0);
         businessObjectService.deleteMatching(OriginEntryGroup.class, groupFieldValues);
 
@@ -94,16 +92,16 @@ public class LaborYearEndBalanceForwardServiceTest extends KualiTestBase {
         int numberOfTestData = Integer.valueOf(properties.getProperty(testTarget + "numOfData"));
         int expectedNumOfData = Integer.valueOf(properties.getProperty(testTarget + "expectedNumOfOriginEntry"));
 
-        List<LedgerBalance> inputDataList = getInputDataList(testTarget + "testData", numberOfTestData);
+        List inputDataList = TestDataPreparator.buildTestDataList(LedgerBalance.class, properties, testTarget + "testData", numberOfTestData);
         businessObjectService.save(inputDataList);
 
-        for (LedgerBalance entry : inputDataList) {
+        for (Object entry : inputDataList) {
             persistenceService.retrieveNonKeyFields(entry);
         }
 
         laborYearEndBalanceForwardService.forwardBalance(fiscalYear);
        
-        List<LaborOriginEntryForTesting> expectedDataList = getExpectedValues(LaborOriginEntryForTesting.class, testTarget + "expected", transactionFieldNames, expectedNumOfData);        
+        List expectedDataList = TestDataPreparator.buildExpectedValueList(LaborOriginEntryForTesting.class, properties, testTarget + "expected", transactionFieldNames, deliminator, expectedNumOfData);       
         Collection originEntries = businessObjectService.findMatching(LaborOriginEntry.class, fieldValues);       
         for (Object entry : originEntries) {
             LaborOriginEntryForTesting originEntryForTesting = new LaborOriginEntryForTesting();
@@ -118,45 +116,15 @@ public class LaborYearEndBalanceForwardServiceTest extends KualiTestBase {
         int numberOfTestData = Integer.valueOf(properties.getProperty(testTarget + "numOfData"));
         int expectedNumOfData = Integer.valueOf(properties.getProperty(testTarget + "expectedNumOfOriginEntry"));
 
-        List<LedgerBalance> inputDataList = getInputDataList(testTarget + "testData", numberOfTestData);
+        List inputDataList = TestDataPreparator.buildTestDataList(LedgerBalance.class, properties, testTarget + "testData", numberOfTestData);
         businessObjectService.save(inputDataList);
 
-        for (LedgerBalance entry : inputDataList) {
+        for (Object entry : inputDataList) {
             persistenceService.retrieveNonKeyFields(entry);
         }
 
         laborYearEndBalanceForwardService.forwardBalance(fiscalYear);
 
         assertEquals(expectedNumOfData, businessObjectService.countMatching(LaborOriginEntry.class, fieldValues));
-    }
-    
-    private List<LedgerBalance> getInputDataList(String propertyKeyPrefix, int numberOfInputData) {
-        List<LedgerBalance> inputDataList = new ArrayList<LedgerBalance>();
-        for (int i = 1; i <= numberOfInputData; i++) {
-            String propertyKey = propertyKeyPrefix + i;
-            LedgerBalance inputData = new LedgerBalance();
-            ObjectUtil.populateBusinessObject(inputData, properties, propertyKey, fieldNames, deliminator);
-            inputDataList.add(inputData);
-        }
-        return inputDataList;
-    }
-
-    private List getExpectedValues(Class clazz, String propertyKeyPrefix, String fieldNames, int numberOfInputData) {
-        List expectedDataList = new ArrayList();
-        for (int i = 1; i <= numberOfInputData; i++) {
-            String propertyKey = propertyKeyPrefix + i;
-            try {
-                Object expectedData = clazz.newInstance();
-                ObjectUtil.populateBusinessObject(expectedData, properties, propertyKey, fieldNames, deliminator);
-                
-                if (!expectedDataList.contains(expectedData)) {
-                    expectedDataList.add(expectedData);
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return expectedDataList;
     }
 }

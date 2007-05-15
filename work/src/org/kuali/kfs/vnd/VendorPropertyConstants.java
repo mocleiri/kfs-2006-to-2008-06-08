@@ -69,11 +69,16 @@ public class VendorPropertyConstants {
     public static final String VENDOR_CONTRACT_DEFAULT_APO_LIMIT = "organizationAutomaticPurchaseOrderLimit";
     public static final String VENDOR_CONTRACT_BEGIN_DATE = "vendorContractBeginningDate";
     public static final String VENDOR_CONTRACT_END_DATE = "vendorContractEndDate";
-
+    public static final String VENDOR_CONTRACT_NAME = "vendorContractName";
+    
     // Vendor contract organizations
     public static final String VENDOR_CONTRACT_ORGANIZATION = "vendorContractOrganizations";
     public static final String VENDOR_CONTRACT_ORGANIZATION_APO_LIMIT = "vendorContractPurchaseOrderLimitAmount";
     public static final String VENDOR_CONTRACT_CHART_OF_ACCOUNTS_CODE = "chartOfAccountsCode";
     public static final String VENDOR_CONTRACT_ORGANIZATION_CODE = "organizationCode";
+    
+    // Vendor customer number
+    public static final String VENDOR_CUSTOMER_NUMBER_CHART_OF_ACCOUNTS_CODE = "chartOfAccountsCode";
+    public static final String VENDOR_CUSTOMER_NUMBER_ORGANIZATION_CODE = "vendorOrganizationCode";
     
 }

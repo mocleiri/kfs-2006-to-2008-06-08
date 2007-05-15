@@ -27,6 +27,7 @@ import java.util.Map;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -38,9 +39,10 @@ import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.labor.bo.LaborObject;
 import org.kuali.module.labor.bo.PositionObjectBenefit;
 import org.kuali.rice.KNSServiceLocator;
-import org.kuali.PropertyConstants;
 
 /**
+ * TODO is this needed??? probably need to just point OJB repository to PBGL class or
+ * this should extend PBGL if something extra is needed
  * 
  */
 public class SalarySettingExpansion extends PersistableBusinessObjectBase {
@@ -56,7 +58,14 @@ public class SalarySettingExpansion extends PersistableBusinessObjectBase {
     private String financialObjectTypeCode;
     private KualiDecimal accountLineAnnualBalanceAmount;
     private KualiDecimal financialBeginningBalanceLineAmount;
-
+    
+    // Total Fields - First Total Line
+    private KualiDecimal csfAmountTotal;
+    private BigDecimal csfFullTimeEmploymentQuantityTotal;
+    private KualiDecimal appointmentRequestedAmountTotal;
+    private BigDecimal appointmentRequestedFteQuantityTotal;
+    private KualiDecimal percentChangeTotal;
+     
     private BudgetConstructionHeader budgetConstructionHeader;
     private ObjectCode financialObject;
     private Chart chartOfAccounts;
@@ -81,7 +90,21 @@ public class SalarySettingExpansion extends PersistableBusinessObjectBase {
     public SalarySettingExpansion() {
         setPendingBudgetConstructionAppointmentFunding(new TypedArrayList(PendingBudgetConstructionAppointmentFunding.class));
         setPercentChange(null);
+        zeroTotals();
 
+    }
+
+    /**
+     * 
+     * Zeros the totals appearing on the Salary Setting Screen
+     */
+    public void zeroTotals() {
+
+        csfAmountTotal = new KualiDecimal(0);
+        csfFullTimeEmploymentQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
+        appointmentRequestedAmountTotal = new KualiDecimal(0.00);
+        appointmentRequestedFteQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
+        percentChangeTotal = new KualiDecimal(0.00);
     }
 
     /**
@@ -486,6 +509,88 @@ public class SalarySettingExpansion extends PersistableBusinessObjectBase {
         this.objectType = objectType;
     }
 
+    
+    /**
+     * Gets the appointmentRequestedAmountTotal attribute. 
+     * @return Returns the appointmentRequestedAmountTotal.
+     */
+    public KualiDecimal getAppointmentRequestedAmountTotal() {
+        return appointmentRequestedAmountTotal;
+    }
+
+    /**
+     * Sets the appointmentRequestedAmountTotal attribute value.
+     * @param appointmentRequestedAmountTotal The appointmentRequestedAmountTotal to set.
+     */
+    public void setAppointmentRequestedAmountTotal(KualiDecimal appointmentRequestedAmountTotal) {
+        this.appointmentRequestedAmountTotal = appointmentRequestedAmountTotal;
+    }
+
+    /**
+     * Gets the appointmentRequestedFteQuantityTotal attribute. 
+     * @return Returns the appointmentRequestedFteQuantityTotal.
+     */
+    public BigDecimal getAppointmentRequestedFteQuantityTotal() {
+        return appointmentRequestedFteQuantityTotal;
+    }
+
+    /**
+     * Sets the appointmentRequestedFteQuantityTotal attribute value.
+     * @param appointmentRequestedFteQuantityTotal The appointmentRequestedFteQuantityTotal to set.
+     */
+    public void setAppointmentRequestedFteQuantityTotal(BigDecimal appointmentRequestedFteQuantityTotal) {
+        this.appointmentRequestedFteQuantityTotal = appointmentRequestedFteQuantityTotal;
+    }
+
+    /**
+     * Gets the csfAmountTotal attribute. 
+     * @return Returns the csfAmountTotal.
+     */
+    public KualiDecimal getCsfAmountTotal() {
+        return csfAmountTotal;
+    }
+
+    /**
+     * Sets the csfAmountTotal attribute value.
+     * @param csfAmountTotal The csfAmountTotal to set.
+     */
+    public void setCsfAmountTotal(KualiDecimal csfAmountTotal) {
+        this.csfAmountTotal = csfAmountTotal;
+    }
+
+    /**
+     * Gets the csfFullTimeEmploymentQuantityTotal attribute. 
+     * @return Returns the csfFullTimeEmploymentQuantityTotal.
+     */
+    public BigDecimal getCsfFullTimeEmploymentQuantityTotal() {
+        return csfFullTimeEmploymentQuantityTotal;
+    }
+
+    /**
+     * Sets the csfFullTimeEmploymentQuantityTotal attribute value.
+     * @param csfFullTimeEmploymentQuantityTotal The csfFullTimeEmploymentQuantityTotal to set.
+     */
+    public void setCsfFullTimeEmploymentQuantityTotal(BigDecimal csfFullTimeEmploymentQuantityTotal) {
+        this.csfFullTimeEmploymentQuantityTotal = csfFullTimeEmploymentQuantityTotal;
+    }
+
+
+    /**
+     * Gets the percentChangeTotal attribute. 
+     * @return Returns the percentChangeTotal.
+     */
+    public KualiDecimal getPercentChangeTotal() {
+        return percentChangeTotal;
+    }
+
+    /**
+     * Sets the percentChangeTotal attribute value.
+     * @param percentChangeTotal The percentChangeTotal to set.
+     */
+    public void setPercentChangeTotal(KualiDecimal percentChangeTotal) {
+        this.percentChangeTotal = percentChangeTotal;
+    }
+
     /**
      * Gets the budgetConstructionHeader attribute. 
      * @return Returns the budgetConstructionHeader.
@@ -553,6 +658,7 @@ public class SalarySettingExpansion extends PersistableBusinessObjectBase {
         this.positionObjectBenefit = positionObjectBenefit;
     }
 
+    
     /**
      * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
      */
@@ -569,7 +675,7 @@ public class SalarySettingExpansion extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }
@@ -591,7 +697,7 @@ public class SalarySettingExpansion extends PersistableBusinessObjectBase {
     public Map getValuesMap() {
         Map simpleValues = new HashMap();
 
-        simpleValues.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        simpleValues.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
         simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
         simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());
         simpleValues.put("accountNumber", getAccountNumber());

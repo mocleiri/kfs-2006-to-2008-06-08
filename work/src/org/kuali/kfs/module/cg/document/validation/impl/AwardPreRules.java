@@ -16,19 +16,15 @@
 package org.kuali.module.cg.rules;
 
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.KeyConstants;
-import org.kuali.PropertyConstants;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Award;
 import org.kuali.module.chart.rules.MaintenancePreRulesBase;
@@ -41,35 +37,28 @@ public class AwardPreRules extends MaintenancePreRulesBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AwardPreRules.class);
 
-    private static final String CHART_MAINTENANCE_EDOC = "ChartMaintenanceEDoc";
-    private static final String DEFAULT_STATE_CODE = "Account.Defaults.StateCode";
-    private static final String DEFAULT_ACCOUNT_TYPE_CODE = "Account.Defaults.AccountType";
-
-    private DateTimeService dateTimeService;
     private KualiConfigurationService configService;
     private DataDictionaryService dataDictionaryService;
-    private BusinessObjectService businessObjectService;
 
     private Award newAward;
 
 
     public AwardPreRules() {
-        dateTimeService = SpringServiceLocator.getDateTimeService();
         dataDictionaryService = SpringServiceLocator.getDataDictionaryService();
         configService = SpringServiceLocator.getKualiConfigurationService();
-        businessObjectService = SpringServiceLocator.getBusinessObjectService();
     }
 
+    @Override
     protected boolean doCustomPreRules(MaintenanceDocument document) {
         setupConvenienceObjects(document);
         boolean proceed = true;
         if (proceed) {
-            proceed = checkForEntryDateBeforeBeginDate();
+            proceed = continueIfEntryDateBeforeBeginDate();
         }
         if (proceed) {
-            proceed = checkSubcontractorTotalGreaterThanAwardTotal();
+            proceed = continueIfSubcontractorTotalGreaterThanAwardTotal();
         }
-        
+
         if (!proceed) {
             abortRulesCheck();
         }
@@ -78,35 +67,41 @@ public class AwardPreRules extends MaintenancePreRulesBase {
     }
 
     /**
-     * checks if the entry date is before the begin date
+     * checks if the entry date is before the begin date. if so asks the user if they want to continue validation. if no is selected
+     * further validation is aborted and the user is returned to the award document
+     * 
+     * @return true if the user selects yes, false otherwise
      */
-    private boolean checkForEntryDateBeforeBeginDate() {
+    private boolean continueIfEntryDateBeforeBeginDate() {
         boolean proceed = true;
         Date entryDate = newAward.getAwardEntryDate();
         Date beginDate = newAward.getAwardBeginningDate();
 
         if (ObjectUtils.isNotNull(entryDate) && ObjectUtils.isNotNull(beginDate) && entryDate.before(beginDate)) {
-            String entryDateLabel = dataDictionaryService.getAttributeErrorLabel(Award.class, PropertyConstants.AWARD_ENTRY_DATE);
-            String beginDateLabel = dataDictionaryService.getAttributeErrorLabel(Award.class, PropertyConstants.AWARD_BEGINNING_DATE);
-            proceed = askOrAnalyzeYesNoQuestion("entryDateBeforeStartDate", buildConfirmationQuestion(KeyConstants.WARNING_AWARD_ENTRY_BEFORE_START_DATE, entryDateLabel, beginDateLabel));
+            String entryDateLabel = dataDictionaryService.getAttributeErrorLabel(Award.class, KFSPropertyConstants.AWARD_ENTRY_DATE);
+            String beginDateLabel = dataDictionaryService.getAttributeErrorLabel(Award.class, KFSPropertyConstants.AWARD_BEGINNING_DATE);
+            proceed = askOrAnalyzeYesNoQuestion("entryDateBeforeStartDate", buildConfirmationQuestion(KFSKeyConstants.WARNING_AWARD_ENTRY_BEFORE_START_DATE, entryDateLabel, beginDateLabel));
         }
         return proceed;
     }
 
     /**
-     * checks if the subcontractor total amount is greater thant award total
+     * checks if the subcontractor total amount is greater thant award total. if so asks the user if they want to continue
+     * validation. if no is selected further validation is aborted and the user is returned to the award document
+     * 
+     * @return true if the user selects yes, false otherwise
      */
-    private boolean checkSubcontractorTotalGreaterThanAwardTotal() {
+    private boolean continueIfSubcontractorTotalGreaterThanAwardTotal() {
         boolean proceed = true;
 
         KualiDecimal awardTotal = newAward.getAwardTotalAmount();
         KualiDecimal subcontractorTotal = newAward.getAwardSubcontractorsTotalAmount();
         if ((ObjectUtils.isNotNull(awardTotal) && subcontractorTotal.isGreaterThan(awardTotal)) || (ObjectUtils.isNull(awardTotal) && subcontractorTotal.isPositive())) {
 
-            String subcontracorLabel = dataDictionaryService.getCollectionLabel(Award.class, PropertyConstants.AWARD_SUBCONTRACTORS);
-            String awardLabel = dataDictionaryService.getAttributeErrorLabel(Award.class, PropertyConstants.AWARD_TOTAL_AMOUNT);
+            String subcontracorLabel = dataDictionaryService.getCollectionLabel(Award.class, KFSPropertyConstants.AWARD_SUBCONTRACTORS);
+            String awardLabel = dataDictionaryService.getAttributeErrorLabel(Award.class, KFSPropertyConstants.AWARD_TOTAL_AMOUNT);
 
-            proceed = askOrAnalyzeYesNoQuestion("subcontractorTotalGreaterThanAwardTotal", buildConfirmationQuestion(KeyConstants.WARNING_AWARD_SUBCONTRACTOR_TOTAL_GREATER_THAN_AWARD_TOTAL, subcontracorLabel, awardLabel));
+            proceed = askOrAnalyzeYesNoQuestion("subcontractorTotalGreaterThanAwardTotal", buildConfirmationQuestion(KFSKeyConstants.WARNING_AWARD_SUBCONTRACTOR_TOTAL_GREATER_THAN_AWARD_TOTAL, subcontracorLabel, awardLabel));
         }
 
         return proceed;
@@ -122,13 +117,6 @@ public class AwardPreRules extends MaintenancePreRulesBase {
         return result;
     }
 
-    /**
-     * This method sets the convenience objects like newAccount and oldAccount, so you have short and easy handles to the new and
-     * old objects contained in the maintenance document. It also calls the BusinessObjectBase.refresh(), which will attempt to load
-     * all sub-objects from the DB by their primary keys, if available.
-     * 
-     * @param document - the maintenanceDocument being evaluated
-     */
     private void setupConvenienceObjects(MaintenanceDocument document) {
 
         // setup newAccount convenience objects, make sure all possible sub-objects are populated

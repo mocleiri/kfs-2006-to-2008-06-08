@@ -18,9 +18,9 @@ package org.kuali.module.vendor.lookup.keyvalues;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.Constants;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.module.vendor.VendorConstants;
 
 /**
@@ -37,7 +37,7 @@ public class TaxPayerTypeWithNoneValuesFinder extends KeyValuesBase {
         List keyValues = new ArrayList();
         keyValues.add(new KeyLabelPair(VendorConstants.TAX_TYPE_FEIN, VendorConstants.TAX_TYPE_FEIN));
         keyValues.add(new KeyLabelPair(VendorConstants.TAX_TYPE_SSN, VendorConstants.TAX_TYPE_SSN));
-        keyValues.add(new KeyLabelPair(Constants.EMPTY_STRING, VendorConstants.NONE));
+        keyValues.add(new KeyLabelPair(KFSConstants.EMPTY_STRING, VendorConstants.NONE));
         return keyValues;
     }
 

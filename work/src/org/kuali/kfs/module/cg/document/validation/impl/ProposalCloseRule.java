@@ -17,9 +17,9 @@ package org.kuali.module.cg.rules;
 
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.document.Document;
-import org.kuali.module.cg.bo.ProposalClose;
+import org.kuali.module.cg.bo.Close;
+import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.KeyConstants;
 
 import java.sql.Date;
 
@@ -42,12 +42,12 @@ public class ProposalCloseRule extends MaintenanceDocumentRuleBase {
         if(!isOk) {
             return isOk;
         }
-        ProposalClose close = (ProposalClose) document.getDocumentBusinessObject();
+        Close close = (Close) document.getDocumentBusinessObject();
         Date userDate = close.getUserInitiatedCloseDate();
         Date today = SpringServiceLocator.getDateTimeService().getCurrentSqlDateMidnight();
         isOk = today.getTime() <= userDate.getTime();
         if(!isOk) {
-            putFieldError("userInitiatedCloseDate", KeyConstants.ContractsAndGrants.USER_INITIATED_DATE_TOO_EARLY, userDate.toString());
+            putFieldError("userInitiatedCloseDate", KFSKeyConstants.ContractsAndGrants.USER_INITIATED_DATE_TOO_EARLY, userDate.toString());
         }
         return isOk;
     }

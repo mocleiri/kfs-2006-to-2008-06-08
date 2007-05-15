@@ -18,13 +18,14 @@ package org.kuali.module.chart.lookup;
 import java.util.Map;
 import java.util.Properties;
 
-import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.lookup.KualiLookupableHelperServiceImpl;
 import org.kuali.core.util.UrlFactory;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.module.chart.bo.DelegateChangeContainer;
 
 public class OrganizationRoutingModelNameLookupableHelperServiceImpl extends KualiLookupableHelperServiceImpl {
+    private boolean initializingDelegate = true;
 
     /**
      * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#getBackLocation()
@@ -33,7 +34,7 @@ public class OrganizationRoutingModelNameLookupableHelperServiceImpl extends Kua
     public String getBackLocation() {
         // it doesn't really matter what the backLocation is set to; we're
         // always going to return to the maintenance screen
-        return Constants.MAINTENANCE_ACTION;
+        return KFSConstants.MAINTENANCE_ACTION;
     }
 
     /**
@@ -42,12 +43,37 @@ public class OrganizationRoutingModelNameLookupableHelperServiceImpl extends Kua
     @Override
     public String getReturnUrl(BusinessObject businessObject, Map fieldConversions, String lookupImpl) {
         Properties parameters = getParameters(businessObject, fieldConversions, lookupImpl);
-        parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.MAINTENANCE_NEWWITHEXISTING_ACTION);
-        parameters.put(Constants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, DelegateChangeContainer.class.getName());
-        parameters.put(Constants.OVERRIDE_KEYS, "modelName"+Constants.FIELD_CONVERSIONS_SEPERATOR+"modelChartOfAccountsCode"+Constants.FIELD_CONVERSIONS_SEPERATOR+"modelOrganizationCode");
-        return UrlFactory.parameterizeUrl(getBackLocation(), parameters);
+        parameters.put(KFSConstants.DISPATCH_REQUEST_PARAMETER, KFSConstants.MAINTENANCE_NEWWITHEXISTING_ACTION);
+        parameters.put(KFSConstants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, DelegateChangeContainer.class.getName());
+        parameters.put(KFSConstants.OVERRIDE_KEYS, "modelName"+KFSConstants.FIELD_CONVERSIONS_SEPERATOR+"modelChartOfAccountsCode"+KFSConstants.FIELD_CONVERSIONS_SEPERATOR+"modelOrganizationCode");
+        return UrlFactory.parameterizeUrl(KFSConstants.MAINTENANCE_ACTION, parameters);
     }
-    
-    
 
+    /**
+     * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#setFieldConversions(java.util.Map)
+     */
+    @Override
+    public void setFieldConversions(Map fieldConversions) {
+        super.setFieldConversions(fieldConversions);
+        if (fieldConversions == null || fieldConversions.size() == 0) {
+            // if we don't have any field conversions, then we must be 
+            // actually dealing with the model, instead of looking up the model
+            // in order to initalize a new global account delegate
+            //
+            // yeah, it's a hack...but at least a semi-clever hack
+            initializingDelegate = false;
+        }
+    }
+
+    /**
+     * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#getActionUrls(org.kuali.core.bo.BusinessObject)
+     */
+    @Override
+    public String getActionUrls(BusinessObject businessObject) {
+        if (!initializingDelegate) {
+            return super.getActionUrls(businessObject);
+        } else {
+            return "";
+        }
+    }
 }
