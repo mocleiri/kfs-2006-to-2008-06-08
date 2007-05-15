@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.labor.bo.LaborTransaction;
 import org.kuali.module.gl.dao.OriginEntryDao;
@@ -154,10 +154,10 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
         LOG.debug("getEntriesByGroup() started");
 
         Map criteria = new HashMap();
-        criteria.put(PropertyConstants.ENTRY_GROUP_ID, originEntryGroup.getId());
-        criteria.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
-        criteria.put(PropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE, documentTypeCode);
-        criteria.put(PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, originCode);
+        criteria.put(KFSPropertyConstants.ENTRY_GROUP_ID, originEntryGroup.getId());
+        criteria.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.put(KFSPropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE, documentTypeCode);
+        criteria.put(KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, originCode);
 
         return originEntryDao.getMatchingEntries(criteria);
     }
@@ -342,7 +342,6 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
         Collection<LaborOriginEntry> entryCollection = new ArrayList<LaborOriginEntry>();
         LaborLedgerUnitOfWork laborLedgerUnitOfWork = new LaborLedgerUnitOfWork();
 
-        int count = 0;
         Iterator<Object[]> consolidatedEntries = laborOriginEntryDao.getConsolidatedEntriesByGroup(group);
         while (consolidatedEntries.hasNext()) {
             LaborOriginEntry laborOriginEntry = new LaborOriginEntry();

@@ -16,8 +16,11 @@
 package org.kuali.module.purap.service;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.core.bo.Note;
+import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
 
@@ -30,8 +33,8 @@ public interface PurchaseOrderService {
     public PurchaseOrderDocument createPurchaseOrderDocument(RequisitionDocument reqDocument);   
     public PurchaseOrderPostProcessorService convertDocTypeToService(String documentTypeId);  
     
-    public boolean updateFlagsAndRoute(PurchaseOrderDocument po, String docType, String annotation, List adhocRoutingRecipients);
-    public boolean firstPurchaseOrderTransmitViaPrint (PurchaseOrderDocument po, String docType, String annotation, List adhocRoutingRecipients,
+    public boolean updateFlagsAndRoute(KualiDocumentFormBase kualiDocumentFormBase, String docType, String annotation, List adhocRoutingRecipients);
+    public boolean firstPurchaseOrderTransmitViaPrint (KualiDocumentFormBase kualiDocumentFormBase, String docType, String annotation, List adhocRoutingRecipients,
         ByteArrayOutputStream baosPDF,  String environment);
     public boolean printPurchaseOrderPDF (PurchaseOrderDocument po, String docType, String annotation, List adhocRoutingRecipients,
             ByteArrayOutputStream baosPDF);
@@ -42,8 +45,9 @@ public interface PurchaseOrderService {
     public PurchaseOrderDocument getPurchaseOrderByDocumentNumber(String documentNumber);
     public void setCurrentAndPendingIndicatorsInPostProcessor(PurchaseOrderDocument newPO, String workflowState);
 
-    public PurchaseOrderDocument getOldestPurchaseOrder(Integer id);
+    public PurchaseOrderDocument getOldestPurchaseOrder(Integer id, PurchaseOrderDocument po);
     public PurchaseOrderDocument getPurchaseOrderInPendingPrintStatus(Integer id);
-    public void sendFYItoWorkgroup(PurchaseOrderDocument po, String annotation, Long workgroupId);
+    public ArrayList<Note> getPurchaseOrderNotes(Integer id);
+    //public void sendFYItoWorkgroup(PurchaseOrderDocument po, String annotation, Long workgroupId);
     
 }
