@@ -72,7 +72,6 @@
             <reference attributeName="program" activeIndicatorAttributeName="programActiveIndicator" attributeToHighlightOnFail="programCode" />
             <reference attributeName="budgetRecordingLevel" activeIndicatorAttributeName="active" attributeToHighlightOnFail="budgetRecordingLevelCode" />
             <reference attributeName="acctIndirectCostRcvyType" activeIndicatorAttributeName="active" attributeToHighlightOnFail="acctIndirectCostRcvyTypeCd" />
-            <reference attributeName="contractControlAccount" attributeToHighlightOnFail="contractControlAccountNumber" />
         </defaultExistenceChecks>
 
         <maintainableSections>
@@ -83,6 +82,7 @@
                     <maintainableField name="accountName" required="true" />
                     <maintainableField name="organizationCode" required="true" />
                     <maintainableField name="accountPhysicalCampusCode" required="true" />
+                    <maintainableField name="accountCreateDate" />
                     <maintainableField name="accountEffectiveDate" required="true">
                         <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.CurrentDateMMDDYYYYFinder</defaultValueFinderClass>
                     </maintainableField>
