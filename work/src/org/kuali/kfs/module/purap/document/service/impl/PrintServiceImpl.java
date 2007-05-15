@@ -9,11 +9,11 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kuali.PropertyConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.bo.CampusParameter;
@@ -173,12 +173,12 @@ public class PrintServiceImpl implements PrintService {
         logoImage = imageDao.getLogo(key, campusCode, imageTempLocation); 
         }
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put(PropertyConstants.CAMPUS_CODE, po.getDeliveryCampusCode());
+        criteria.put(KFSPropertyConstants.CAMPUS_CODE, po.getDeliveryCampusCode());
         CampusParameter campusParameter = (CampusParameter)((List) businessObjectService.findMatching(CampusParameter.class, criteria)).get(0);
 
         // Get the contract manager's campus
         criteria.clear();
-        ContractManager contractManager = po.getVendorContract().getContractManager();
+        ContractManager contractManager = po.getContractManager();
         criteria.put("personUserIdentifier", contractManager.getContractManagerUserIdentifier());
         UniversalUser contractManagerUser = (UniversalUser) ((List) businessObjectService.findMatching(UniversalUser.class, criteria)).get(0);
         String contractManagerCampusCode = contractManagerUser.getCampusCode();
@@ -314,13 +314,13 @@ public class PrintServiceImpl implements PrintService {
         if ((directorSignatureImage = imageDao.getPurchasingDirectorImage(key, campusCode, imageTempLocation)) == null ) {
             throw new PurapConfigurationException("directorSignatureImage is null.");
         }
-        if ( (contractManagerSignatureImage = imageDao.getContractManagerImage(key, po.getVendorContract().getContractManagerCode(), imageTempLocation)) == null ) {
+        if ( (contractManagerSignatureImage = imageDao.getContractManagerImage(key, po.getContractManagerCode(), imageTempLocation)) == null ) {
             throw new PurapConfigurationException("contractManagerSignatureImage is null.");
         }
         }
 
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put(PropertyConstants.CAMPUS_CODE, po.getDeliveryCampusCode());
+        criteria.put(KFSPropertyConstants.CAMPUS_CODE, po.getDeliveryCampusCode());
         CampusParameter campusParameter = (CampusParameter)((List) businessObjectService.findMatching(CampusParameter.class, criteria)).get(0);
 
         String statusInquiryUrl = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.STATUS_INQUIRY_URL);
@@ -330,7 +330,7 @@ public class PrintServiceImpl implements PrintService {
         }
          
         StringBuffer contractLanguage = new StringBuffer();
-        criteria.put(PropertyConstants.ACTIVE, true);
+        criteria.put(KFSPropertyConstants.ACTIVE, true);
         List<PurchaseOrderContractLanguage> contractLanguageList = (List<PurchaseOrderContractLanguage>) (businessObjectService.findMatching(PurchaseOrderContractLanguage.class, criteria));
         if (!contractLanguageList.isEmpty()) {
             int lineNumber = 1;

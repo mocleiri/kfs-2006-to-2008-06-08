@@ -19,8 +19,14 @@ import org.kuali.core.JstlConstants;
 
 public class BCConstants extends JstlConstants {
 
+    public static final String BC_SELECTION_ACTION="budgetBudgetConstructionSelection.do";
+    public static final String BC_SELECTION_REFRESH_METHOD="refresh";
+
+    public static final String BC_DOCUMENT_REFRESH_CALLER="BudgetConstruction";
     public static final String BC_DOCUMENT_ACTION="budgetBudgetConstruction.do";
     public static final String BC_DOCUMENT_REFRESH_METHOD="refresh";
+    public static final String BC_DOCUMENT_METHOD="docHandler";
+    
     public static final String MONTHLY_BUDGET_REFRESH_CALLER="MonthlyBudget";
     public static final String MONTHLY_BUDGET_ACTION="budgetMonthlyBudget.do";
     public static final String MONTHLY_BUDGET_METHOD="loadExpansionScreen";
@@ -45,5 +51,6 @@ public class BCConstants extends JstlConstants {
     public static final String FINANCIAL_BALANCE_TYPE_CODE_BB = "BB";
     public static final String FINANCIAL_OBJECT_TYPE_CODE_REV = "IN";
     public static final String FINANCIAL_OBJECT_TYPE_CODE_EXP = "EX";
+    public static final String APPOINTMENT_FUNDING_DURATION_DEFAULT = "NONE";
 
 }

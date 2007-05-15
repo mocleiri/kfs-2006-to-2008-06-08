@@ -17,12 +17,12 @@ package org.kuali.kfs.rule.event;
 
 import java.util.List;
 
-import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.BusinessRule;
 import org.kuali.core.rule.event.KualiDocumentEventBase;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.document.GeneralLedgerPostingDocument;
 import org.kuali.kfs.rule.SufficientFundsCheckingPreparationRule;
@@ -74,7 +74,7 @@ public final class SufficientFundsCheckingPreparationEvent extends KualiDocument
             // if ( items.size() > 0 ) {
             LOG.error("invokeRuleMethod() No sufficient funds");
 
-            GlobalVariables.getErrorMap().putError("chartOrg", KeyConstants.ERROR_MISSING, new String[] { "Sufficient Funds" });
+            GlobalVariables.getErrorMap().putError("chartOrg", KFSKeyConstants.ERROR_MISSING, new String[] { "Sufficient Funds" });
 
             return false;
             // }

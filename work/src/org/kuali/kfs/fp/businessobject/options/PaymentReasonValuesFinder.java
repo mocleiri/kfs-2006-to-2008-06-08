@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.PropertyConstants;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.PaymentReasonCode;
 
@@ -36,7 +36,7 @@ public class PaymentReasonValuesFinder extends KeyValuesBase {
      * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
-        List boList = (List) SpringServiceLocator.getKeyValuesService().findAllOrderBy(PaymentReasonCode.class, PropertyConstants.NAME, true);
+        List boList = (List) SpringServiceLocator.getKeyValuesService().findAllOrderBy(PaymentReasonCode.class, KFSPropertyConstants.NAME, true);
         List keyValues = new ArrayList();
         keyValues.add(new KeyLabelPair("", ""));
         for (Iterator iter = boList.iterator(); iter.hasNext();) {
