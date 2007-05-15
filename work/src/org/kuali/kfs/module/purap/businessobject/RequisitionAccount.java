@@ -18,11 +18,7 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.Chart;
-import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.chart.bo.SubAccount;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * 
@@ -42,7 +38,7 @@ public class RequisitionAccount extends PurApAccountingLineBase {
         //this field is not in the database for us because they are in different tables
         super.ojbConcreteClass = this.getClass().getName();
 	}
-
+    
 	/**
 	 * Gets the requisitionItem attribute.
 	 * 
@@ -68,9 +64,14 @@ public class RequisitionAccount extends PurApAccountingLineBase {
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
-        if (this.accountIdentifier != null) {
-            m.put("requisitionAccountIdentifier", this.accountIdentifier.toString());
-        }
+        
+        m.put("chartOfAccountsCode", this.getChartOfAccountsCode());
+        m.put("accountNumber", this.getAccountNumber());
+        m.put("subAccountNumber", this.getSubAccountNumber());
+        m.put("financialObjectCode", this.getFinancialObjectCode());
+        m.put("financialSubObjectCode", this.getFinancialSubObjectCode());
+        m.put("projectCode", this.getProjectCode());
+        m.put("organizationReferenceId", this.getOrganizationReferenceId());
 	    return m;
     }
 }

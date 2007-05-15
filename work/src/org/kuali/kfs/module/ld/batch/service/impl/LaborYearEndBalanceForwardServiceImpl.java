@@ -18,7 +18,6 @@ package org.kuali.module.labor.service.impl;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_YEAR_END_BALANCE_FORWARD;
 import static org.kuali.module.labor.LaborConstants.DestinationNames.LEDGER_BALANCE;
 import static org.kuali.module.labor.LaborConstants.DestinationNames.ORIGN_ENTRY;
-import static org.kuali.module.labor.LaborConstants.ParameterGroups.SYSTEM;
 import static org.kuali.module.labor.LaborConstants.ParameterGroups.YEAR_END;
 
 import java.math.BigDecimal;
@@ -30,13 +29,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.kuali.Constants;
-import org.kuali.KeyConstants;
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.Options;
 import org.kuali.kfs.service.OptionsService;
 import org.kuali.module.chart.bo.Account;
@@ -97,7 +96,9 @@ public class LaborYearEndBalanceForwardServiceImpl implements LaborYearEndBalanc
         forwardBalance(fiscalYear, fiscalYear + 1);
     }
 
-    // forward the labor balances in the given fiscal year to the new fiscal year
+    /**
+     * @see org.kuali.module.labor.service.LaborYearEndBalanceForwardService#forwardBalance(java.lang.Integer, java.lang.Integer)
+     */
     public void forwardBalance(Integer fiscalYear, Integer newFiscalYear) {
         String reportsDirectory = ReportRegistry.getReportsDirectory();
         Date runDate = dateTimeService.getCurrentSqlDate();
@@ -107,7 +108,7 @@ public class LaborYearEndBalanceForwardServiceImpl implements LaborYearEndBalanc
         OriginEntryGroup validGroup = originEntryGroupService.createGroup(runDate, LABOR_YEAR_END_BALANCE_FORWARD, true, true, true);
 
         Map fieldValues = new HashMap();
-        fieldValues.put(PropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
+        fieldValues.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
         int numberOfBalance = businessObjectService.countMatching(LedgerBalance.class, fieldValues);
         int numberOfSelectedBalance = 0;
 
@@ -128,17 +129,23 @@ public class LaborYearEndBalanceForwardServiceImpl implements LaborYearEndBalanc
             }
         }
 
-        Summary.updateReportSummary(reportSummary, LEDGER_BALANCE, Constants.OperationType.READ, numberOfBalance, 0);
-        Summary.updateReportSummary(reportSummary, LEDGER_BALANCE, Constants.OperationType.SELECT, numberOfSelectedBalance, 0);
-        Summary.updateReportSummary(reportSummary, LEDGER_BALANCE, Constants.OperationType.REPORT_ERROR, errorMap.size(), 0);
+        Summary.updateReportSummary(reportSummary, LEDGER_BALANCE, KFSConstants.OperationType.READ, numberOfBalance, 0);
+        Summary.updateReportSummary(reportSummary, LEDGER_BALANCE, KFSConstants.OperationType.SELECT, numberOfSelectedBalance, 0);
+        Summary.updateReportSummary(reportSummary, LEDGER_BALANCE, KFSConstants.OperationType.REPORT_ERROR, errorMap.size(), 0);
         reportSummary.add(new Summary(reportSummary.size() + LINE_INTERVAL, "", 0));
-        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, Constants.OperationType.INSERT, numberOfSelectedBalance, 0);
+        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.INSERT, numberOfSelectedBalance, 0);
 
         laborReportService.generateStatisticsReport(reportSummary, errorMap, ReportRegistry.LABOR_YEAR_END_STATISTICS, reportsDirectory, runDate);
         laborReportService.generateOutputSummaryReport(validGroup, ReportRegistry.LABOR_YEAR_END_OUTPUT, reportsDirectory, runDate);
     }
 
-    // determine if the given balance is qualified to be carried forward to new fiscal year
+    /**
+     * determine if the given balance is qualified to be carried forward to new fiscal year
+     * 
+     * @param balance the given ledger balance that could be carried forward
+     * @param errors the error list that is updated if the given balacne is not qualified for carry forward
+     * @return true if the balance is qualified; otherwise, false
+     */
     private boolean validateBalance(LedgerBalance balance, List<Message> errors) {
         Integer fiscalYear = balance.getUniversityFiscalYear();
         if (!ArrayUtils.contains(this.getProcessableBalanceTypeCode(fiscalYear), balance.getFinancialBalanceTypeCode())) {
@@ -159,7 +166,7 @@ public class LaborYearEndBalanceForwardServiceImpl implements LaborYearEndBalanc
             invalidAccountValue.append(chartOfAccountsCode).append("-").append(accountNumber);
 
             errors = new ArrayList<Message>();
-            errors.add(MessageBuilder.buildErrorMessage(KeyConstants.Labor.ERROR_ACCOUNT_NOT_FOUND, invalidAccountValue.toString(), Message.TYPE_FATAL));
+            errors.add(MessageBuilder.buildErrorMessage(KFSKeyConstants.Labor.ERROR_ACCOUNT_NOT_FOUND, invalidAccountValue.toString(), Message.TYPE_FATAL));
             return false;
         }
 
@@ -170,7 +177,7 @@ public class LaborYearEndBalanceForwardServiceImpl implements LaborYearEndBalanc
             invalidSubFundValue.append(chartOfAccountsCode).append("-").append(accountNumber).append("-").append(subFundGroupCode);
 
             errors = new ArrayList<Message>();
-            errors.add(MessageBuilder.buildErrorMessage(KeyConstants.Labor.ERROR_SUB_FUND_GROUP_NOT_FOUND, invalidSubFundValue.toString(), Message.TYPE_FATAL));
+            errors.add(MessageBuilder.buildErrorMessage(KFSKeyConstants.Labor.ERROR_SUB_FUND_GROUP_NOT_FOUND, invalidSubFundValue.toString(), Message.TYPE_FATAL));
             return false;
         }
 
@@ -181,7 +188,14 @@ public class LaborYearEndBalanceForwardServiceImpl implements LaborYearEndBalanc
         return true;
     }
 
-    // post the qualified balance into origin entry table for the further labor ledger processing
+    /**
+     * post the qualified balance into origin entry table for the further labor ledger processing
+     * 
+     * @param balance the given ledger balance that will be carried forward
+     * @param newFiscalYear the new fiscal year
+     * @param validGroup the group that the posted transaction belongs to
+     * @param postingDate the date the transaction is posted
+     */
     private void postAsOriginEntry(LedgerBalance balance, Integer newFiscalYear, OriginEntryGroup validGroup, Date postingDate) {
         try {
             LaborOriginEntry originEntry = new LaborOriginEntry();
@@ -201,8 +215,8 @@ public class LaborYearEndBalanceForwardServiceImpl implements LaborYearEndBalanc
             originEntry.setEmplid(balance.getEmplid());
             originEntry.setDocumentNumber(balance.getFinancialBalanceTypeCode() + balance.getAccountNumber());
 
-            originEntry.setProjectCode(Constants.DASHES_PROJECT_CODE);
-            originEntry.setUniversityFiscalPeriodCode(Constants.CG_BEGINNING_BALANCE);
+            originEntry.setProjectCode(KFSConstants.DASHES_PROJECT_CODE);
+            originEntry.setUniversityFiscalPeriodCode(KFSConstants.CG_BEGINNING_BALANCE);
 
             originEntry.setFinancialDocumentTypeCode(this.getDocumentTypeCode());
             originEntry.setFinancialSystemOriginationCode(this.getOriginationCode());
@@ -225,38 +239,63 @@ public class LaborYearEndBalanceForwardServiceImpl implements LaborYearEndBalanc
         }
     }
 
-    // get the fund group codes that are acceptable by year-end process
+    /**
+     * get the fund group codes that are acceptable by year-end process
+     * 
+     * @return the fund group codes that are acceptable by year-end process
+     */
     private String[] getFundGroupProcessed() {
-        return kualiConfigurationService.getApplicationParameterValues(SYSTEM, YearEnd.FUND_GROUP_PROCESSED);
+        return kualiConfigurationService.getApplicationParameterValues(YEAR_END, YearEnd.FUND_GROUP_PROCESSED);
     }
 
-    // get the balance type codes that are acceptable by year-end process
+    /**
+     * get the balance type codes that are acceptable by year-end process
+     * 
+     * @return the balance type codes that are acceptable by year-end process
+     */
     private String[] getProcessableBalanceTypeCode(Integer fiscalYear) {
         Options options = optionsService.getOptions(fiscalYear);
         String[] processableBalanceTypeCodes = { options.getActualFinancialBalanceTypeCd() };
         return processableBalanceTypeCodes;
     }
 
-    // get the object type codes that are acceptable by year-end process
+    /**
+     * get the object type codes that are acceptable by year-end process
+     * 
+     * @param fiscalYear the given fiscal year
+     * @return the object type codes that are acceptable by year-end process
+     */
     private String[] getProcessableObjectTypeCodes(Integer fiscalYear) {
         Options options = optionsService.getOptions(fiscalYear);
         String[] processableObjectTypeCodes = { options.getFinObjTypeExpenditureexpCd(), options.getFinObjTypeExpNotExpendCode() };
         return processableObjectTypeCodes;
     }
 
-    // get the document type code of the transaction posted by year-end process
+    /**
+     * get the document type code of the transaction posted by year-end process
+     * 
+     * @return the document type code of the transaction posted by year-end process
+     */
     private String getDocumentTypeCode() {
-        return kualiConfigurationService.getApplicationParameterValue(SYSTEM, YearEnd.DOCUMENT_TYPE_CODE);
+        return kualiConfigurationService.getApplicationParameterValue(YEAR_END, YearEnd.DOCUMENT_TYPE_CODE);
     }
 
-    // get the origination code of the transaction posted by year-end process
+    /**
+     * get the origination code of the transaction posted by year-end process
+     * 
+     * @return the origination code of the transaction posted by year-end process
+     */
     private String getOriginationCode() {
-        return kualiConfigurationService.getApplicationParameterValue(SYSTEM, YearEnd.ORIGINATION_CODE);
+        return kualiConfigurationService.getApplicationParameterValue(YEAR_END, YearEnd.ORIGINATION_CODE);
     }
 
-    // get the description of the transaction posted by year-end process
+    /**
+     * get the description of the transaction posted by year-end process
+     * 
+     * @return the description of the transaction posted by year-end process
+     */
     private String getDescription() {
-        return kualiConfigurationService.getPropertyString(KeyConstants.Labor.MESSAGE_YEAR_END_TRANSACTION_DESCRIPTON);
+        return kualiConfigurationService.getPropertyString(KFSKeyConstants.Labor.MESSAGE_YEAR_END_TRANSACTION_DESCRIPTON);
     }
 
     /**
