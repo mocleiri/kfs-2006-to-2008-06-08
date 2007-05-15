@@ -79,7 +79,8 @@
 		<property name="kualiRuleService">
 			<ref bean="kualiRuleService" />
 		</property>	
-	</bean>	
+	</bean>
+	
     <bean id="laborGeneralLedgerEntryService" class="org.kuali.module.labor.service.impl.LaborGeneralLedgerEntryServiceImpl">
         <property name="businessObjectService">
             <ref bean="businessObjectService" />
@@ -260,7 +261,9 @@
 		<property name="accountService">
 			<ref bean="accountService" />
 		</property>
-		
+		<property name="persistenceService">
+			<ref bean="persistenceService" />
+		</property>
     </bean>
 	
     <bean id="laborPosterService" class="org.kuali.module.labor.service.impl.LaborPosterServiceImpl">
@@ -360,7 +363,6 @@
 			<ref bean="laborScrubberService" />
 		</property>
 	</bean>
-
            
 	<bean id="laborPosterStep" class="org.kuali.module.labor.batch.LaborPosterStep">
 		<property name="laborPosterService">
@@ -368,7 +370,7 @@
 		</property>
 	</bean>
     
-    <bean id="laborYearEndBalanceForwardStep" class="org.kuali.module.labor.batch.LaborYearEndBalanceForwardStep" singleton="false">
+    <bean id="laborYearEndBalanceForwardStep" class="org.kuali.module.labor.batch.LaborYearEndBalanceForwardStep">
 		<property name="laborYearEndBalanceForwardService">
 			<ref bean="laborYearEndBalanceForwardService" />
 		</property>
@@ -377,6 +379,12 @@
 	<bean id="laborNightlyOutStep" class="org.kuali.module.labor.batch.LaborNightlyOutStep">
 		<property name="laborNightlyOutService">
 			<ref bean="laborNightlyOutService" />
+		</property>
+	</bean>
+	
+	<bean id="clearLaborPendingEntriesForCancelledOrDisapprovedDocumentStep" class="org.kuali.module.labor.batch.ClearLaborPendingEntriesForCancelledOrDisapprovedDocumentStep">
+		<property name="laborLedgerPendingEntryService">
+			<ref bean="laborLedgerPendingEntryService" />
 		</property>
 	</bean>
 
@@ -421,7 +429,7 @@
         </property>
     </bean> 
     
-    <bean id="payrollAccrualStep" class="org.kuali.module.labor.batch.PayrollAccrualStep" singleton="false">
+    <bean id="payrollAccrualStep" class="org.kuali.module.labor.batch.PayrollAccrualStep">
 		<property name="payrollAccrualService">
 			<ref bean="payrollAccrualService" />
 		</property>
@@ -469,8 +477,8 @@
 			<ref bean="dataDictionaryService" />
 		</property>
 	</bean>    	
-
-<bean id="CurrentFundsLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
+	
+	<bean id="CurrentFundsLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
 		<property name="lookupableHelperService">
 			<ref bean="CurrentFundsLookupableHelperService" />
 		</property>
@@ -501,6 +509,30 @@
 	</bean>
 	
 	<bean id="BaseFundsLookupableHelperService" class="org.kuali.module.labor.web.lookupable.BaseFundsLookupableHelperServiceImpl" singleton="false">
+		<property name="persistenceStructureService">
+			<ref bean="persistenceStructureService" />
+		</property>
+		<property name="lookupService">
+			<ref bean="lookupService" />
+		</property>
+		<property name="businessObjectDictionaryService">
+			<ref bean="businessObjectDictionaryService" />
+		</property>
+		<property name="businessObjectMetaDataService">
+			<ref bean="businessObjectMetaDataService" />
+		</property>
+		<property name="dataDictionaryService">
+			<ref bean="dataDictionaryService" />
+		</property>
+	</bean>    	
+
+	<bean id="PersonFundingLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
+		<property name="lookupableHelperService">
+			<ref bean="PersonFundingLookupableHelperService" />
+		</property>
+	</bean>
+	
+	<bean id="PersonFundingLookupableHelperService" class="org.kuali.module.labor.web.lookupable.PersonFundingLookupableHelperServiceImpl" singleton="false">
 		<property name="persistenceStructureService">
 			<ref bean="persistenceStructureService" />
 		</property>
