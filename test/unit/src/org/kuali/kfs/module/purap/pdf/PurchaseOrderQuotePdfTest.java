@@ -96,7 +96,7 @@ public class PurchaseOrderQuotePdfTest extends KualiTestBase {
         ArrayList itemList = new ArrayList();
         itemList.add(poi);
         po.setItems(itemList);
-        fo = new FileOutputStream("/POQuotePDF.pdf");
+        fo = new FileOutputStream("\\POQuotePDF.pdf");
     }
     
     @Override
@@ -104,7 +104,7 @@ public class PurchaseOrderQuotePdfTest extends KualiTestBase {
         super.tearDown();
         fo.close();
         bao.close();
-        poQuotePdf.deletePdf("", "/POQuotePDF.pdf");
+        poQuotePdf.deletePdf("", "\\POQuotePDF.pdf");
         
     }
     
