@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.Constants;
-import org.kuali.PropertyConstants;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
@@ -31,6 +29,8 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.format.CurrencyFormatter;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.document.AccountingDocumentBase;
@@ -66,7 +66,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      *BA Documents should only do SF checking on PLEs with a Balance Type of 'CB' - not 'BB' or 'MB'.
      *
      * @Override
-     * @see org.kuali.core.document.TransactionalDocumentBase#getPendingLedgetEntriesForSufficientFundsChecking()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getPendingLedgerEntriesForSufficientFundsChecking()
      */
     public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
         List <GeneralLedgerPendingEntry> pendingLedgerEntries = new ArrayList();
@@ -82,7 +82,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
         
         
         for (GeneralLedgerPendingEntry ple : copiedBa.getGeneralLedgerPendingEntries()) {
-            if (!Constants.BALANCE_TYPE_BASE_BUDGET.equals(ple.getFinancialBalanceTypeCode()) && !Constants.BALANCE_TYPE_MONTHLY_BUDGET.equals(ple.getFinancialBalanceTypeCode())) {
+            if (!KFSConstants.BALANCE_TYPE_BASE_BUDGET.equals(ple.getFinancialBalanceTypeCode()) && !KFSConstants.BALANCE_TYPE_MONTHLY_BUDGET.equals(ple.getFinancialBalanceTypeCode())) {
                 pendingLedgerEntries.add(ple);
             }
         }
@@ -403,7 +403,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getTotalDollarAmount()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getTotalDollarAmount()
      */
     @Override
     public KualiDecimal getTotalDollarAmount() {
@@ -413,7 +413,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     /**
      * Negate accounting line budget amounts.
      * 
-     * @see org.kuali.core.document.TransactionalDocumentBase#convertIntoErrorCorrection()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#toErrorCorrection()
      */
     @Override
     public void toErrorCorrection() throws WorkflowException {
@@ -467,12 +467,12 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
@@ -500,19 +500,19 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
   
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return Constants.BudgetAdjustmentDocumentConstants.SOURCE_BA;
+        return KFSConstants.BudgetAdjustmentDocumentConstants.SOURCE_BA;
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return Constants.BudgetAdjustmentDocumentConstants.TARGET_BA;
+        return KFSConstants.BudgetAdjustmentDocumentConstants.TARGET_BA;
     }
 
     /**
