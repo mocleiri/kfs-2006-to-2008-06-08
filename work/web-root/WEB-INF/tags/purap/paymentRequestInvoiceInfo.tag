@@ -26,6 +26,9 @@
 <%@ attribute name="displayPaymentRequestInvoiceInfoFields" required="false"
               description="Boolean to indicate if Invoice Info PREQ specific fields should be displayed" %>
 
+<c:set var="purchaseOrderAttributes" value="${DataDictionary.PurchaseOrderDocument.attributes}" />
+
+
 <kul:tab tabTitle="Invoice Info" defaultOpen="true">
     <div class="tab-container" align=center>
         <div class="h2-container">
@@ -85,17 +88,17 @@
             
             <tr>
                 <th align=right valign=middle class="bord-l-b">
-                   <div align="right"><kul:htmlAttributeLabel attributeEntry="${DataDictionary.KualiPurchaseOrderDocument.attributes.purchaseOrderEndDate}" /></div>
+                   <div align="right"><kul:htmlAttributeLabel attributeEntry="${documentAttributes.purchaseOrderEndDate}" /></div>
                 </th>
                 <td align=left valign=middle class="datacell">
-                   <kul:htmlControlAttribute property="document.purchaseOrderDocument.purchaseOrderEndDate" attributeEntry="${DataDictionary.KualiPurchaseOrderDocument.attributes.purchaseOrderEndDate}" 
+                   <kul:htmlControlAttribute  attributeEntry="${documentAttributes.purchaseOrderEndDate}" property="document.purchaseOrderDocument.purchaseOrderEndDate"
                    readOnly="true" />
                </td>
                 <th align=right valign=middle class="bord-l-b">
-                   <div align="right"><kul:htmlAttributeLabel attributeEntry="${documentAttributes.purchaseOrderClassificationTypeDescription}" /></div>
+                   <div align="right"><kul:htmlAttributeLabel attributeEntry="${documentAttributes.recurringPaymentTypeCode}" /></div>
                 </th>
                 <td align=left valign=middle class="datacell">
-                   <kul:htmlControlAttribute attributeEntry="${documentAttributes.purchaseOrderClassificationTypeDescription}" property="document.purchaseOrderClassificationTypeDescription" />
+                   <kul:htmlControlAttribute attributeEntry="${documentAttributes.recurringPaymentTypeCode}" property="document.recurringPaymentTypeCode"  readOnly="true"/>
                 </td>
             </tr>
             
