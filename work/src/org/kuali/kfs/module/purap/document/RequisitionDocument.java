@@ -16,16 +16,17 @@
 
 package org.kuali.module.purap.document;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.Note;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.exceptions.ValidationException;
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
@@ -33,12 +34,14 @@ import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
+import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.bo.BillingAddress;
+import org.kuali.module.purap.bo.RequisitionAccount;
 import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.bo.RequisitionStatusHistory;
+import org.kuali.module.purap.bo.RequisitionView;
 import org.kuali.module.vendor.bo.VendorContract;
 import org.kuali.module.vendor.bo.VendorDetail;
-import org.kuali.module.vendor.service.PhoneNumberService;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -57,9 +60,6 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 	private String alternate4VendorName;
 	private String alternate5VendorName;
 	private KualiDecimal organizationAutomaticPurchaseOrderLimit;
-    private Integer accountsPayablePurchasingDocumentLinkIdentifier;
-    
-    private PhoneNumberService phoneNumberService;
 
 	/**
 	 * Default constructor.
@@ -84,14 +84,13 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
      * Perform logic needed to initiate Requisition Document
      */
     public void initiateDocument() {
-
         this.setRequisitionSourceCode( PurapConstants.RequisitionSources.STANDARD_ORDER );
         this.setStatusCode( PurapConstants.RequisitionStatuses.IN_PROCESS );
         this.setPurchaseOrderCostSourceCode( PurapConstants.POCostSources.ESTIMATE );
         this.setPurchaseOrderTransmissionMethodCode( PurapConstants.POTransmissionMethods.FAX );
 
         // set the default funding source
-        this.setFundingSourceCode(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("PurapAdminGroup","PURAP.REQUISITION_DEFAULT_FUNDING_SOURCE"));
+        this.setFundingSourceCode(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP,"PURAP.REQUISITION_DEFAULT_FUNDING_SOURCE"));
 
         ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
         this.setChartOfAccountsCode(currentUser.getChartOfAccountsCode());
@@ -99,8 +98,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
         this.setDeliveryCampusCode(currentUser.getUniversalUser().getCampusCode());
         this.setRequestorPersonName(currentUser.getUniversalUser().getPersonName());
         this.setRequestorPersonEmailAddress(currentUser.getUniversalUser().getPersonEmailAddress());
-        this.phoneNumberService = SpringServiceLocator.getPhoneNumberService();
-        this.setRequestorPersonPhoneNumber(phoneNumberService.formatNumberIfPossible(currentUser.getUniversalUser().getPersonLocalPhoneNumber()));
+        this.setRequestorPersonPhoneNumber(SpringServiceLocator.getPhoneNumberService().formatNumberIfPossible(currentUser.getUniversalUser().getPersonLocalPhoneNumber()));
         
         // set the APO limit
         this.setOrganizationAutomaticPurchaseOrderLimit(SpringServiceLocator.getRequisitionService().getApoLimit(this.getVendorContractGeneratedIdentifier(), this.getChartOfAccountsCode(), this.getOrganizationCode()));
@@ -130,7 +128,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 //            ItemType iT = getItemType();
 //            addNewItem(r, iT, nextLineNum);
 //        }
-
+        SpringServiceLocator.getPurapService().addBelowLineItems(this);
         this.refreshAllReferences();
     }
 
@@ -146,33 +144,22 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
     public boolean getAllowsCopy() {
         boolean allowsCopy = super.getAllowsCopy();
         if (this.getRequisitionSourceCode().equals(PurapConstants.RequisitionSources.B2B)) {
-            String allowedCopyDays = (new Integer(PurapConstants.REQ_B2B_ALLOW_COPY_DAYS)).toString();
-
+            DateTimeService dateTimeService = SpringServiceLocator.getDateTimeService();            
             Calendar c = Calendar.getInstance();
             DocumentHeader dh = this.getDocumentHeader();
             KualiWorkflowDocument wd = dh.getWorkflowDocument();
-            Timestamp createDate = (Timestamp) wd.getCreateDate();
+                       
+            // The allowed copy date is the document creation date plus a set number of days.                      
+            Date createDate = wd.getCreateDate();
             c.setTime(createDate);
-            c.set(Calendar.HOUR, 12);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
-            c.set(Calendar.MILLISECOND, 0);
-            c.set(Calendar.AM_PM, Calendar.AM);
+            String allowedCopyDays = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP,"PURAP.REQ_B2B_ALLOW_COPY_DAYS");
             c.add(Calendar.DATE, Integer.parseInt(allowedCopyDays));
-            // The allowed copy date is the document creation date plus a set number of days.
-            Timestamp allowedCopyDate = new Timestamp(c.getTime().getTime());
+            Date allowedCopyDate = c.getTime();
 
-            Calendar c2 = Calendar.getInstance();
-            c2.setTime(SpringServiceLocator.getDateTimeService().getCurrentDate());
-            c2.set(Calendar.HOUR, 11);
-            c2.set(Calendar.MINUTE, 59);
-            c2.set(Calendar.SECOND, 59);
-            c2.set(Calendar.MILLISECOND, 59);
-            c2.set(Calendar.AM_PM, Calendar.PM);
-            Timestamp testTime = new Timestamp(c2.getTime().getTime());
-
+            Date currentDate = dateTimeService.getCurrentDate();
+                       
             // Return true if the current time is before the allowed copy date.
-            allowsCopy = (testTime.compareTo(allowedCopyDate) <= 0);
+            allowsCopy = (dateTimeService.dateDiff( currentDate, allowedCopyDate, false ) > 0);
         }
         return allowsCopy;
     }
@@ -245,6 +232,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
         this.setOrganizationAutomaticPurchaseOrderLimit(null);
         this.setPurchaseOrderAutomaticIndicator(false);
         this.setStatusHistories(null);
+        this.setAccountsPayablePurchasingDocumentLinkIdentifier(null);
         
         // Fill the BO Notes with an empty List.
         this.setBoNotes(new ArrayList());
@@ -578,20 +566,9 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
 		this.organizationAutomaticPurchaseOrderLimit = organizationAutomaticPurchaseOrderLimit;
 	}
 	
-    /**
-     * Gets the accountsPayablePurchasingDocumentLinkIdentifier attribute. 
-     * @return Returns the accountsPayablePurchasingDocumentLinkIdentifier.
-     */
-    public Integer getAccountsPayablePurchasingDocumentLinkIdentifier() {
-        return accountsPayablePurchasingDocumentLinkIdentifier;
-    }
-
-    /**
-     * Sets the accountsPayablePurchasingDocumentLinkIdentifier attribute value.
-     * @param accountsPayablePurchasingDocumentLinkIdentifier The accountsPayablePurchasingDocumentLinkIdentifier to set.
-     */
-    public void setAccountsPayablePurchasingDocumentLinkIdentifier(Integer accountsPayablePurchasingDocumentLinkIdentifier) {
-        this.accountsPayablePurchasingDocumentLinkIdentifier = accountsPayablePurchasingDocumentLinkIdentifier;
+    @Override
+    public List<RequisitionView> getRelatedRequisitionViews() {
+        return null;
     }
 
     /**
@@ -600,7 +577,16 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
     @Override
     public Class getItemClass() {
         return RequisitionItem.class;
-    }   
+    }
+
+    /**
+     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getSourceAccountingLineClass()
+     */
+//    @Override
+//    public Class getSourceAccountingLineClass() {
+//        // TODO Auto-generated method stub
+//        return RequisitionAccount.class;
+//    }   
     
 }
 
