@@ -17,7 +17,7 @@
 <%@ taglib prefix="c" uri="/tlds/c.tld"%>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="http://rice.kuali.org/tagfiles/core" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
 <%@ taglib tagdir="/WEB-INF/tags/ccr" prefix="ccr"%>
 <%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd"%>
 <c:set var="creditCardReceiptAttributes"
