@@ -18,9 +18,9 @@ package org.kuali.module.financial.lookup.keyvalues;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.Constants;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
+import org.kuali.kfs.KFSConstants;
 
 /**
  * <code>{@link KeyValuesBase}</code> class that handles
@@ -35,9 +35,9 @@ public class AuxiliaryVoucherTypeCodeValuesFinder extends KeyValuesBase {
      */
     public List getKeyValues() {
         List retval = new ArrayList();
-        retval.add(new KeyLabelPair(Constants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE, Constants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE_NAME));
-        retval.add(new KeyLabelPair(Constants.AuxiliaryVoucher.ACCRUAL_DOC_TYPE, Constants.AuxiliaryVoucher.ACCRUAL_DOC_TYPE_NAME));
-        retval.add(new KeyLabelPair(Constants.AuxiliaryVoucher.RECODE_DOC_TYPE, Constants.AuxiliaryVoucher.RECODE_DOC_TYPE_NAME));
+        retval.add(new KeyLabelPair(KFSConstants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE, KFSConstants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE_NAME));
+        retval.add(new KeyLabelPair(KFSConstants.AuxiliaryVoucher.ACCRUAL_DOC_TYPE, KFSConstants.AuxiliaryVoucher.ACCRUAL_DOC_TYPE_NAME));
+        retval.add(new KeyLabelPair(KFSConstants.AuxiliaryVoucher.RECODE_DOC_TYPE, KFSConstants.AuxiliaryVoucher.RECODE_DOC_TYPE_NAME));
         return retval;
     }
 }
