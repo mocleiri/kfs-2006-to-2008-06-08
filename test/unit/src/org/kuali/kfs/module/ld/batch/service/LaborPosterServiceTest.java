@@ -22,32 +22,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
-import org.kuali.module.gl.util.PosterOutputSummaryEntry;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LaborGeneralLedgerEntry;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.bo.LedgerEntry;
 import org.kuali.module.labor.util.ObjectUtil;
+import org.kuali.module.labor.util.TestDataPreparator;
 import org.kuali.module.labor.util.testobject.LaborGeneralLedgerEntryForTesting;
 import org.kuali.module.labor.util.testobject.LedgerBalanceForTesting;
 import org.kuali.module.labor.util.testobject.LedgerEntryForTesting;
 import org.kuali.module.labor.util.testobject.OriginEntryGroupForTesting;
-import org.kuali.module.labor.util.testobject.PendingLedgerEntryForTesting;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 import org.springframework.beans.factory.BeanFactory;
@@ -60,8 +58,6 @@ public class LaborPosterServiceTest extends KualiTestBase {
     private String deliminator;
     private OriginEntryGroup groupToPost;
     private Map fieldValues, groupFieldValues;
-    private String reportsDirectory;
-    private Date today;
 
     private LaborOriginEntryService laborOriginEntryService;
     private OriginEntryGroupService originEntryGroupService;
@@ -69,6 +65,7 @@ public class LaborPosterServiceTest extends KualiTestBase {
     private LaborPosterService laborPosterService;
     private PersistenceService persistenceService;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         String messageFileName = "test/src/org/kuali/module/labor/testdata/message.properties";
@@ -86,11 +83,11 @@ public class LaborPosterServiceTest extends KualiTestBase {
         persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
 
         groupFieldValues = new HashMap();
-        groupFieldValues.put(PropertyConstants.SOURCE_CODE, LABOR_SCRUBBER_VALID);
+        groupFieldValues.put(KFSPropertyConstants.SOURCE_CODE, LABOR_SCRUBBER_VALID);
         originEntryGroupService.deleteOlderGroups(0);
         businessObjectService.deleteMatching(OriginEntryGroup.class, groupFieldValues);
 
-        today = ((DateTimeService) beanFactory.getBean("dateTimeService")).getCurrentSqlDate();
+        Date today = ((DateTimeService) beanFactory.getBean("dateTimeService")).getCurrentSqlDate();
         groupToPost = originEntryGroupService.createGroup(today, LABOR_SCRUBBER_VALID, true, true, false);
 
         LaborOriginEntry cleanup = new LaborOriginEntry();
@@ -117,7 +114,7 @@ public class LaborPosterServiceTest extends KualiTestBase {
         laborPosterService.postMainEntries();
 
         Collection ledgerEntries = businessObjectService.findMatching(LedgerEntry.class, fieldValues);
-        List<LedgerEntryForTesting> expectedDataList = getExpectedValues(LedgerEntryForTesting.class, testTarget + "expected", fieldNames, expectedNumOfData);        
+        List expectedDataList = TestDataPreparator.buildExpectedValueList(LedgerEntryForTesting.class, properties, testTarget + "expected", fieldNames, deliminator, expectedNumOfData);
         for (Object entry : ledgerEntries) {
             LedgerEntryForTesting ledgerEntryForTesting = new LedgerEntryForTesting();
             ObjectUtil.buildObject(ledgerEntryForTesting, entry);
@@ -144,7 +141,7 @@ public class LaborPosterServiceTest extends KualiTestBase {
         laborPosterService.postMainEntries();
 
         Collection ledgerEntries = businessObjectService.findMatching(LedgerBalance.class, fieldValues);
-        List<LedgerBalanceForTesting> expectedDataList = getExpectedValues(LedgerBalanceForTesting.class, testTarget + "expected", fieldNames, expectedNumOfData);        
+        List expectedDataList = TestDataPreparator.buildExpectedValueList(LedgerBalanceForTesting.class, properties, testTarget + "expected", expectedNumOfData);        
         for (Object entry : ledgerEntries) {
             LedgerBalanceForTesting ledgerBalanceForTesting = new LedgerBalanceForTesting();
             ObjectUtil.buildObject(ledgerBalanceForTesting, entry);
@@ -172,7 +169,7 @@ public class LaborPosterServiceTest extends KualiTestBase {
         laborPosterService.postMainEntries();
 
         Collection GLEntry = businessObjectService.findMatching(LaborGeneralLedgerEntry.class, fieldValues);
-        List<LaborGeneralLedgerEntryForTesting> expectedDataList = getExpectedValues(LaborGeneralLedgerEntryForTesting.class, testTarget + "expected", fieldNames, expectedNumOfData);        
+        List expectedDataList = TestDataPreparator.buildExpectedValueList(LaborGeneralLedgerEntryForTesting.class, properties, testTarget + "expected", expectedNumOfData);        
         for (Object entry : GLEntry) {
             LaborGeneralLedgerEntryForTesting GLEntryForTesting = new LaborGeneralLedgerEntryForTesting();
             ObjectUtil.buildObject(GLEntryForTesting, entry);
@@ -198,7 +195,7 @@ public class LaborPosterServiceTest extends KualiTestBase {
         laborPosterService.postMainEntries();
 
         Collection originEntryGroups = businessObjectService.findAll(OriginEntryGroup.class);
-        List<OriginEntryGroupForTesting> expectedDataList = getExpectedValues(OriginEntryGroupForTesting.class, testTarget + "expected", groupFieldNames, expectedNumOfData);        
+        List expectedDataList = TestDataPreparator.buildExpectedValueList(OriginEntryGroupForTesting.class, properties, testTarget + "expected", groupFieldNames, deliminator, expectedNumOfData);        
         for (Object group : originEntryGroups) {
             OriginEntryGroupForTesting originEntryGroupForTesting = new OriginEntryGroupForTesting();
             ObjectUtil.buildObject(originEntryGroupForTesting, group);
@@ -290,34 +287,6 @@ public class LaborPosterServiceTest extends KualiTestBase {
     }
 
     private List<LaborOriginEntry> getInputDataList(String propertyKeyPrefix, int numberOfInputData, OriginEntryGroup group) {
-        List<LaborOriginEntry> inputDataList = new ArrayList<LaborOriginEntry>();
-        for (int i = 1; i <= numberOfInputData; i++) {
-            String propertyKey = propertyKeyPrefix + i;
-            LaborOriginEntry inputData = new LaborOriginEntry();
-            ObjectUtil.populateBusinessObject(inputData, properties, propertyKey, fieldNames, deliminator);
-            inputData.setEntryGroupId(group.getId());
-            inputData.setGroup(group);
-            inputDataList.add(inputData);
-        }
-        return inputDataList;
-    }
-
-    private List getExpectedValues(Class clazz, String propertyKeyPrefix, String fieldNames, int numberOfInputData) {
-        List expectedDataList = new ArrayList();
-        for (int i = 1; i <= numberOfInputData; i++) {
-            String propertyKey = propertyKeyPrefix + i;
-            try {
-                Object expectedData = clazz.newInstance();
-                ObjectUtil.populateBusinessObject(expectedData, properties, propertyKey, fieldNames, deliminator);
-
-                if (!expectedDataList.contains(expectedData)) {
-                    expectedDataList.add(expectedData);
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return expectedDataList;
+        return TestDataPreparator.getLaborOriginEntryList(properties, propertyKeyPrefix, numberOfInputData, group);
     }
 }

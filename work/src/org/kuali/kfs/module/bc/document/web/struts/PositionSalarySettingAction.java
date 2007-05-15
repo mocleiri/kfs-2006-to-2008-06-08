@@ -28,13 +28,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.Constants;
 import org.kuali.core.authorization.AuthorizationType;
 import org.kuali.core.exceptions.AuthorizationException;
 import org.kuali.core.exceptions.ModuleAuthorizationException;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.action.KualiAction;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.BCConstants;
 import org.kuali.module.budget.bo.BudgetConstructionPosition;
@@ -44,6 +45,8 @@ import org.kuali.rice.KNSServiceLocator;
 
 /**
  * This class...
+ * TODO May want to refactor PositionSalarySettingAction and IncumbentSalarySettingAction to extend
+ * from new class DetailSalarySettingAction and put common code there.
  */
 public class PositionSalarySettingAction extends KualiAction {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PositionSalarySettingAction.class);
@@ -99,8 +102,11 @@ public class PositionSalarySettingAction extends KualiAction {
             //TODO this is an RI error need to report it
         }
         positionSalarySettingForm.setBudgetConstructionPosition(budgetConstructionPosition);
+
+        // need to explicitly populate intended incumbent for non-vacant lines
+        positionSalarySettingForm.populateBCAFLines();
         
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
     public ActionForward returnToCaller(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -112,10 +118,10 @@ public class PositionSalarySettingAction extends KualiAction {
 
         // setup the return parms for the document and anchor
         Properties parameters = new Properties();
-        parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, BCConstants.BC_DOCUMENT_REFRESH_METHOD);
-        parameters.put(Constants.DOC_FORM_KEY, positionSalarySettingForm.getReturnFormKey());
-        parameters.put(Constants.ANCHOR, positionSalarySettingForm.getReturnAnchor());
-        parameters.put(Constants.REFRESH_CALLER, BCConstants.POSITION_SALARY_SETTING_REFRESH_CALLER);
+        parameters.put(KFSConstants.DISPATCH_REQUEST_PARAMETER, BCConstants.BC_DOCUMENT_REFRESH_METHOD);
+        parameters.put(KFSConstants.DOC_FORM_KEY, positionSalarySettingForm.getReturnFormKey());
+        parameters.put(KFSConstants.ANCHOR, positionSalarySettingForm.getReturnAnchor());
+        parameters.put(KFSConstants.REFRESH_CALLER, BCConstants.POSITION_SALARY_SETTING_REFRESH_CALLER);
         
         String lookupUrl = UrlFactory.parameterizeUrl("/" + BCConstants.SALARY_SETTING_ACTION, parameters);
         return new ActionForward(lookupUrl, true);
@@ -133,18 +139,21 @@ public class PositionSalarySettingAction extends KualiAction {
         // typical refresh callers would be kualiLookupable or reasoncode??
         // need to look at optmistic locking problems since we will be storing the values in the form before hand
         // this locking problem may workout if we store first then put the form in session
-        String refreshCaller = request.getParameter(Constants.REFRESH_CALLER);
+        String refreshCaller = request.getParameter(KFSConstants.REFRESH_CALLER);
 
         //TODO may need to check for reason code called refresh here
 
         //TODO this should figure out if user is returning to a rev or exp line and refresh just that
         //TODO this should also keep original values of obj, sobj to compare and null out dependencies when needed
-        if (refreshCaller != null && refreshCaller.equalsIgnoreCase(Constants.KUALI_LOOKUPABLE_IMPL)){
-            final List REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] {"chartOfAccounts", "account", "subAccount", "financialObject", "financialSubObject", "budgetConstructionDuration"}));
+//TODO need a better way to detect return from lookups
+//returning from account lookup sets refreshcaller to accountLookupable, due to setting in account.xml
+//        if (refreshCaller != null && refreshCaller.equalsIgnoreCase(KFSConstants.KUALI_LOOKUPABLE_IMPL)){
+        if (refreshCaller != null && (refreshCaller.endsWith("Lookupable") || (refreshCaller.endsWith("LOOKUPABLE")))){
+            final List REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] {"chartOfAccounts", "account", "subAccount", "financialObject", "financialSubObject", "budgetConstructionIntendedIncumbent", "budgetConstructionDuration"}));
             KNSServiceLocator.getPersistenceService().retrieveReferenceObjects(positionSalarySettingForm.getNewBCAFLine(), REFRESH_FIELDS);            
         }
 
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
     /**
@@ -161,7 +170,7 @@ public class PositionSalarySettingAction extends KualiAction {
     public ActionForward showDetails(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         PositionSalarySettingForm tForm = (PositionSalarySettingForm) form;
         tForm.setHideDetails(false);
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
     /**
@@ -178,7 +187,31 @@ public class PositionSalarySettingAction extends KualiAction {
     public ActionForward hideDetails(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         PositionSalarySettingForm tForm = (PositionSalarySettingForm) form;
         tForm.setHideDetails(true);
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
     
+    public ActionForward insertBCAFLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        PositionSalarySettingForm tForm = (PositionSalarySettingForm) form;
+        GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_MESSAGES,KFSKeyConstants.ERROR_UNIMPLEMENTED, "Add Salary Setting Line");
+
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+
+    public ActionForward performVacateSalarySettingLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        PositionSalarySettingForm tForm = (PositionSalarySettingForm) form;
+        GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_MESSAGES,KFSKeyConstants.ERROR_UNIMPLEMENTED, "Vacate Salary Setting Line");
+
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+
+    public ActionForward performPercentAdjustmentSalarySettingLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        PositionSalarySettingForm tForm = (PositionSalarySettingForm) form;
+        GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_MESSAGES,KFSKeyConstants.ERROR_UNIMPLEMENTED, "Percent Adjustment For Salary Setting Line");
+
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+
 }

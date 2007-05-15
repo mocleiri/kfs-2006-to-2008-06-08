@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LaborGeneralLedgerEntry;
@@ -43,6 +43,7 @@ public class LaborGeneralLedgerEntryServiceTest extends KualiTestBase {
     private LaborGeneralLedgerEntryService laborGeneralLedgerEntryService;
     private BusinessObjectService businessObjectService;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         String messageFileName = "test/src/org/kuali/module/labor/testdata/message.properties";
@@ -87,7 +88,7 @@ public class LaborGeneralLedgerEntryServiceTest extends KualiTestBase {
         ObjectUtil.populateBusinessObject(input1, properties, "maxSeqNumber.testData1", fieldNames, deliminator);
 
         Map fieldValues = ObjectUtil.buildPropertyMap(input1, keyFieldList);
-        fieldValues.remove(PropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER);
+        fieldValues.remove(KFSPropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER);
         businessObjectService.deleteMatching(LaborGeneralLedgerEntry.class, fieldValues);
 
         Integer maxSeqNumber = laborGeneralLedgerEntryService.getMaxSequenceNumber(input1);
