@@ -22,25 +22,24 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.Constants;
 import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rule.event.AddAccountingLineEvent;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
 import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
 import org.kuali.kfs.web.ui.AccountingLineDecorator;
-import org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine;
 import org.kuali.module.purap.PurapConstants;
+import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
-import org.kuali.module.purap.document.PurchasingDocumentBase;
+import org.kuali.module.purap.rule.event.AddPurchasingAccountsPayableItemEvent;
 import org.kuali.module.purap.web.struts.form.PurchasingFormBase;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.bo.VendorAddress;
@@ -79,7 +78,7 @@ public class PurchasingActionBase extends KualiAccountingDocumentActionBase {
             document.templateVendorDetail(refreshVendorDetail);
         }
 
-        if( StringUtils.equals( refreshCaller, Constants.KUALI_LOOKUPABLE_IMPL ) ) {
+        if( StringUtils.equals( refreshCaller, KFSConstants.KUALI_LOOKUPABLE_IMPL ) ) {
             
             if( StringUtils.isNotEmpty( request.getParameter( PurapPropertyConstants.VENDOR_CONTRACT_ID ) ) ) {
                 Integer vendorContractGeneratedId = document.getVendorContractGeneratedIdentifier();
@@ -173,8 +172,13 @@ public class PurchasingActionBase extends KualiAccountingDocumentActionBase {
         // TODO: should call add line event/rules here
         PurchasingApItem item = purchasingForm.getAndResetNewPurchasingItemLine();
         PurchasingDocument purDocument = (PurchasingDocument) purchasingForm.getDocument();
-        purDocument.addItem(item);
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddPurchasingAccountsPayableItemEvent("item",purDocument,item));
+//        AddAccountingLineEvent(KFSConstants.NEW_TARGET_ACCT_LINES_PROPERTY_NAME + "[" + Integer.toString(itemIndex) + "]", purchasingForm.getDocument(), (AccountingLine) line)
+        if (rulePassed) {
+
+            purDocument.addItem(item);
+        }
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
     /**
@@ -193,7 +197,7 @@ public class PurchasingActionBase extends KualiAccountingDocumentActionBase {
 
         PurchasingDocument purDocument = (PurchasingDocument) purchasingForm.getDocument();
         purDocument.deleteItem(getSelectedLine(request));
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
     
@@ -216,6 +220,18 @@ public class PurchasingActionBase extends KualiAccountingDocumentActionBase {
     }
 
     /**
+     * @see org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase#deleteSourceLine(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
+    @Override
+    public ActionForward deleteSourceLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        PurchasingFormBase purchasingForm = (PurchasingFormBase) form;
+
+        int deleteIndex = getLineToDelete(request);
+        purchasingForm.getAccountDistributionsourceAccountingLines().remove(deleteIndex);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+    
+    /**
      * @see org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase#insertSourceLine(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
@@ -227,26 +243,80 @@ public class PurchasingActionBase extends KualiAccountingDocumentActionBase {
         int itemIndex = getSelectedLine(request);
         PurchasingApItem item = null;
        
-        if(itemIndex!=-1) {
-            item = (PurchasingApItem)((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItem((itemIndex));
+        if (itemIndex == -2) {
+            PurApAccountingLine line = purchasingForm.getAccountDistributionnewSourceLine();
+            purchasingForm.addAccountDistributionsourceAccountingLine(line);
         } else {
-            item = purchasingForm.getNewPurchasingItemLine();
+            if(itemIndex!=-1) {
+                item = (PurchasingApItem)((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItem((itemIndex));
+            } else {
+                item = purchasingForm.getNewPurchasingItemLine();
+            }
+            
+            PurApAccountingLine line = item.getNewSourceLine();
+            
+            boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAccountingLineEvent(KFSConstants.NEW_TARGET_ACCT_LINES_PROPERTY_NAME + "[" + Integer.toString(itemIndex) + "]", purchasingForm.getDocument(), (AccountingLine) line));
+    
+            if (rulePassed) {
+                // add accountingLine
+                SpringServiceLocator.getPersistenceService().retrieveNonKeyFields(line);
+                insertAccountingLine(purchasingForm, item, line);
+    
+                //clear the temp account
+                item.resetAccount();
+            }
         }
         
-        PurApAccountingLine line = item.getNewSourceLine();
-        
-        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAccountingLineEvent(Constants.NEW_TARGET_ACCT_LINES_PROPERTY_NAME + "[" + Integer.toString(itemIndex) + "]", purchasingForm.getDocument(), (AccountingLine) line));
-
-        if (rulePassed) {
-            // add accountingLine
-            SpringServiceLocator.getPersistenceService().retrieveNonKeyFields(line);
-            insertAccountingLine(purchasingForm, item, line);
-
-            //clear the temp account
-            item.resetAccount();
-        }
-
-        return mapping.findForward(Constants.MAPPING_BASIC);
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
+    public ActionForward setupAccountDistribution(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        PurchasingFormBase purchasingForm = (PurchasingFormBase) form;
+
+        purchasingForm.setHideDistributeAccounts(false);
+        
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+       
+    public ActionForward removeAccounts(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        PurchasingFormBase purchasingForm = (PurchasingFormBase) form;
+        
+        for (PurchasingApItem item : ((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItems()) {
+            item.getSourceAccountingLines().clear();
+        }
+
+        GlobalVariables.getMessageList().add(PurapKeyConstants.PURAP_GENERAL_ACCOUNTS_REMOVED);
+
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+
+    public ActionForward doAccountDistribution(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        PurchasingFormBase purchasingForm = (PurchasingFormBase) form;
+
+        if (((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItems().size() > 0) {
+            if (purchasingForm.getAccountDistributionsourceAccountingLines().size() > 0) {
+                for (PurchasingApItem item : ((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItems()) {
+                    item.getSourceAccountingLines().addAll(purchasingForm.getAccountDistributionsourceAccountingLines());
+                }
+                purchasingForm.getAccountDistributionsourceAccountingLines().clear();
+                GlobalVariables.getMessageList().add(PurapKeyConstants.PURAP_GENERAL_ACCOUNTS_DISTRIBUTED);
+                purchasingForm.setHideDistributeAccounts(true);
+            } else {
+                GlobalVariables.getErrorMap().putError(PurapConstants.ACCOUNT_DISTRIBUTION_ERROR_KEY, PurapKeyConstants.PURAP_GENERAL_NO_ACCOUNTS_TO_DISTRIBUTE);
+            }
+        } else {
+            GlobalVariables.getErrorMap().putError(PurapConstants.ACCOUNT_DISTRIBUTION_ERROR_KEY, PurapKeyConstants.PURAP_GENERAL_NO_ITEMS_TO_DISTRIBUTE_TO);
+        }
+        
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+       
+    public ActionForward cancelAccountDistribution(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        PurchasingFormBase purchasingForm = (PurchasingFormBase) form;
+
+        purchasingForm.setHideDistributeAccounts(true);
+        
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+       
 }
