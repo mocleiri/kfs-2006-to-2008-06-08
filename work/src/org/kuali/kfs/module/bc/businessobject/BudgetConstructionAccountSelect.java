@@ -20,11 +20,11 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.SubAccount;
-import org.kuali.PropertyConstants;
 
 /**
  * 
@@ -439,7 +439,7 @@ public class BudgetConstructionAccountSelect extends PersistableBusinessObjectBa
         m.put("chartOfAccountsCode", this.chartOfAccountsCode);
         m.put("accountNumber", this.accountNumber);
         m.put("subAccountNumber", this.subAccountNumber);
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 
