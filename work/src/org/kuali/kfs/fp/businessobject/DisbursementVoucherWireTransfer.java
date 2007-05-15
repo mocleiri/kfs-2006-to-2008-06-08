@@ -19,8 +19,8 @@ package org.kuali.module.financial.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.PropertyConstants;
 
 /**
  * 
@@ -422,7 +422,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 
