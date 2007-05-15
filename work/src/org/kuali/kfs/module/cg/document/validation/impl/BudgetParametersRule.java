@@ -21,13 +21,13 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.KraKeyConstants;
@@ -449,7 +449,7 @@ public class BudgetParametersRule {
                     if (academicYearSubdivisionNames == null)
                         academicYearSubdivisionNames = kcs.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, "KraBudgetAcademicYearSubdivisionNames");
                     String[] graduateAssistantRateErrorMessage = { budgetGraduateAssistantRate.getCampusCode() + " " + academicYearSubdivisionNames[anAcademicYearSubdivisionIndex - 1] + " Current Rate" };
-                    GlobalVariables.getErrorMap().putError("budget.graduateAssistantRate[" + i + "].campusMaximumPeriod" + anAcademicYearSubdivisionIndex + "Rate", KeyConstants.ERROR_REQUIRED, graduateAssistantRateErrorMessage);
+                    GlobalVariables.getErrorMap().putError("budget.graduateAssistantRate[" + i + "].campusMaximumPeriod" + anAcademicYearSubdivisionIndex + "Rate", KFSKeyConstants.ERROR_REQUIRED, graduateAssistantRateErrorMessage);
                     valid = false;
                 }
             }

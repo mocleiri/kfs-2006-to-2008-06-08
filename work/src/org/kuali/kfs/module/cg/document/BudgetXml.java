@@ -422,7 +422,7 @@ public class BudgetXml {
 
                 Element thirdPartyCostSharePeriodAmount = xmlDoc.createElement("THIRD_PARTY_COST_SHARE_PERIOD_AMOUNT");
                 thirdPartyCostSharePeriodAmount.setAttribute("PERIOD_NUMBER", Integer.toString(j + 1));
-                thirdPartyCostSharePeriodAmount.appendChild(xmlDoc.createTextNode(periodThirdPartyCostShare.getBudgetCostShareAmount().toString()));
+                thirdPartyCostSharePeriodAmount.appendChild(xmlDoc.createTextNode(periodThirdPartyCostShare.getBudgetCostShareAmount() != null ? periodThirdPartyCostShare.getBudgetCostShareAmount().toString() : "0"));
 
                 thirdPartyCostShareSourcesElement.appendChild(thirdPartyCostSharePeriodAmount);
             }
@@ -585,7 +585,7 @@ public class BudgetXml {
             personElement.setAttribute("INSTITUTION_FRINGE_BENEFIT_AMOUNT", ObjectUtils.toString(budgetOverviewPersonnelHelper.getInstitutionCostShareFringeBenefitTotalAmount()));
 
             // Following calculation should probably be somewhere else.
-            /** TODO Create App Constants for the below or move into Personnel? Does it already exist there? */
+            /** TODO Create App KFSConstants for the below or move into Personnel? Does it already exist there? */
             KualiInteger agencyPercentEffortAmount = budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount() == null ? new KualiInteger(0) : budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount();
             KualiInteger institutionCostSharePercentEffortAmount = budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount() == null ? new KualiInteger(0) : budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount();
             BigDecimal combinedPercentEffort = agencyPercentEffortAmount.add(institutionCostSharePercentEffortAmount).divide(new KualiInteger(100));
