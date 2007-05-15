@@ -19,7 +19,7 @@ import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_MAIN_POSTER_ERROR;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_MAIN_POSTER_VALID;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_SCRUBBER_VALID;
 import static org.kuali.module.labor.LaborConstants.DestinationNames.ORIGN_ENTRY;
-import static org.kuali.module.labor.LaborConstants.ParameterGroups.SYSTEM;
+import static org.kuali.module.labor.LaborConstants.ParameterGroups.POSTER;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -29,9 +29,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.Constants;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.batch.poster.VerifyTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -116,9 +116,9 @@ public class LaborPosterServiceImpl implements LaborPosterService {
             entryGroup.setProcess(Boolean.FALSE);
             originEntryGroupService.save(entryGroup);
         }
-        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, Constants.OperationType.READ, numberOfOriginEntry, 0);
-        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, Constants.OperationType.SELECT, numberOfSelectedOriginEntry, 0);
-        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, Constants.OperationType.REPORT_ERROR, errorMap.size(), 0);
+        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.READ, numberOfOriginEntry, 0);
+        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.SELECT, numberOfSelectedOriginEntry, 0);
+        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.REPORT_ERROR, errorMap.size(), 0);
 
         laborReportService.generateStatisticsReport(reportSummary, errorMap, ReportRegistry.LABOR_POSTER_STATISTICS, reportsDirectory, runDate);
         laborReportService.generateInputSummaryReport(postingGroups, ReportRegistry.LABOR_POSTER_INPUT, reportsDirectory, runDate);
@@ -254,9 +254,9 @@ public class LaborPosterServiceImpl implements LaborPosterService {
 
             numberOfSelectedOriginEntry++;
         }
-        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, Constants.OperationType.READ, numberOfOriginEntry, 0);
-        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, Constants.OperationType.SELECT, numberOfSelectedOriginEntry, 0);
-        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, Constants.OperationType.REPORT_ERROR, errorMap.size(), 0);
+        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.READ, numberOfOriginEntry, 0);
+        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.SELECT, numberOfSelectedOriginEntry, 0);
+        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.REPORT_ERROR, errorMap.size(), 0);
         laborReportService.generateStatisticsReport(reportSummary, errorMap, ReportRegistry.LABOR_POSTER_GL_SUMMARY, reportsDirectory, runDate);
     }
 
@@ -315,7 +315,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @return a set of the balance type codes that are bypassed by Labor Poster
      */
     public String[] getBalanceTypesNotProcessed() {
-        return kualiConfigurationService.getApplicationParameterValues(SYSTEM, Poster.BALANCE_TYPES_NOT_PROCESSED);
+        return kualiConfigurationService.getApplicationParameterValues(POSTER, Poster.BALANCE_TYPES_NOT_PROCESSED);
     }
 
     /**
@@ -324,7 +324,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @return a set of the object codes that are bypassed by Labor Poster
      */
     public String[] getObjectsNotProcessed() {
-        return kualiConfigurationService.getApplicationParameterValues(SYSTEM, Poster.OBJECT_CODES_NOT_PROCESSED);
+        return kualiConfigurationService.getApplicationParameterValues(POSTER, Poster.OBJECT_CODES_NOT_PROCESSED);
     }
 
     /**
@@ -333,7 +333,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @return a set of the fiscal period codes that are bypassed by Labor Poster
      */
     public String[] getPeriodCodesNotProcessed() {
-        return kualiConfigurationService.getApplicationParameterValues(SYSTEM, Poster.PERIOD_CODES_NOT_PROCESSED);
+        return kualiConfigurationService.getApplicationParameterValues(POSTER, Poster.PERIOD_CODES_NOT_PROCESSED);
     }
 
     /**

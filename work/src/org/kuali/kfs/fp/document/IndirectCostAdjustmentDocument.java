@@ -15,11 +15,11 @@
  */
 package org.kuali.module.financial.document;
 
-import org.kuali.Constants;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.core.exceptions.InfrastructureException;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
@@ -40,20 +40,20 @@ public class IndirectCostAdjustmentDocument extends AccountingDocumentBase imple
 
     /**
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return Constants.GRANT;
+        return KFSConstants.GRANT;
     }
 
     /**
      * 
-     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return Constants.ICR;
+        return KFSConstants.ICR;
     }
 
     /**
@@ -68,7 +68,7 @@ public class IndirectCostAdjustmentDocument extends AccountingDocumentBase imple
      * 
      * </ol>
      * 
-     * @see org.kuali.core.document.TransactionalDocumentBase#addSourceAccountingLine(org.kuali.core.bo.SourceAccountingLine)
+     * @see org.kuali.kfs.document.AccountingDocumentBase#addSourceAccountingLine(SourceAccountingLine)
      */
     @Override
     public void addSourceAccountingLine(SourceAccountingLine line) {
@@ -98,7 +98,7 @@ public class IndirectCostAdjustmentDocument extends AccountingDocumentBase imple
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
