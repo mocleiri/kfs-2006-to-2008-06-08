@@ -20,6 +20,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
@@ -48,7 +49,7 @@ public class Award extends PersistableBusinessObjectBase {
      * @see #getAwardTotalAmount
      * @see #setAwardTotalAmount
      */
-    @SuppressWarnings( { "UnusedDeclaration" })
+    @SuppressWarnings("unused")
     private KualiDecimal awardTotalAmount;
 
     private String awardAddendumNumber;
@@ -101,7 +102,6 @@ public class Award extends PersistableBusinessObjectBase {
     /**
      * Default constructor.
      */
-    @SuppressWarnings( { "unchecked" })
     // todo: generify TypedArrayList and rename to something appropriate like AlwaysGettableArrayList
     public Award() {
         // Must use TypedArrayList because its get() method automatically grows the array for Struts.
@@ -111,7 +111,22 @@ public class Award extends PersistableBusinessObjectBase {
         awardOrganizations = new TypedArrayList(AwardOrganization.class);
     }
 
+    /**
+     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
+     */
+    @Override
+    public List buildListOfDeletionAwareLists() {
+        List<List> managedLists = super.buildListOfDeletionAwareLists();
+        managedLists.add(getAwardAccounts());
+        managedLists.add(getAwardOrganizations());
+        managedLists.add(getAwardProjectDirectors());
+        managedLists.add(getAwardSubcontractors());
+        return managedLists;
+    }
+
+    
     public Award(Proposal proposal) {
+        this();
         populateFromProposal(proposal);
     }
     
@@ -128,6 +143,7 @@ public class Award extends PersistableBusinessObjectBase {
             setAwardPurposeCode(proposal.getProposalPurposeCode());
 
             // copy proposal organizations to award organizations
+            getAwardOrganizations().clear();
             for (ProposalOrganization pOrg : proposal.getProposalOrganizations()) {
                 AwardOrganization awardOrg = new AwardOrganization();
                 //newCollectionRecord is set to true to allow deletion of this record after being populated from proposal
@@ -140,6 +156,7 @@ public class Award extends PersistableBusinessObjectBase {
             }
 
             // copy proposal subcontractors to award subcontractors
+            getAwardSubcontractors().clear();
             for (ProposalSubcontractor pSubcontractor : proposal.getProposalSubcontractors()) {
                 AwardSubcontractor awardSubcontractor = new AwardSubcontractor();
                 //newCollectionRecord is set to true to allow deletion of this record after being populated from proposal
@@ -148,10 +165,12 @@ public class Award extends PersistableBusinessObjectBase {
                 awardSubcontractor.setAwardSubcontractorNumber(pSubcontractor.getProposalSubcontractorNumber());
                 awardSubcontractor.setSubcontractorAmount(pSubcontractor.getProposalSubcontractorAmount());
                 awardSubcontractor.setAwardSubcontractorDescription(pSubcontractor.getProposalSubcontractorDescription());
+                awardSubcontractor.setSubcontractorNumber(pSubcontractor.getSubcontractorNumber());
                 getAwardSubcontractors().add(awardSubcontractor);
             }
             
             //copy proposal project directors to award propject directors
+            getAwardProjectDirectors().clear();
             for(ProposalProjectDirector pDirector:proposal.getProposalProjectDirectors()){
                 AwardProjectDirector awardDirector= new AwardProjectDirector();
                 //newCollectionRecord is set to true to allow deletion of this record after being populated from proposal
@@ -239,6 +258,7 @@ public class Award extends PersistableBusinessObjectBase {
      * 
      * @param awardTotalAmount The awardTotalAmount to set.
      */
+    @Deprecated
     public void setAwardTotalAmount(KualiDecimal awardTotalAmount) {
         // do nothing
     }
@@ -852,6 +872,7 @@ public class Award extends PersistableBusinessObjectBase {
      * @param proposal The proposal to set.
      * @deprecated
      */
+    @Deprecated
     public void setProposal(Proposal proposal) {
         this.proposal = proposal;
     }
@@ -871,6 +892,7 @@ public class Award extends PersistableBusinessObjectBase {
      * @param proposalAwardType The proposalAwardType to set.
      * @deprecated
      */
+    @Deprecated
     public void setProposalAwardType(ProposalAwardType proposalAwardType) {
         this.proposalAwardType = proposalAwardType;
     }
@@ -890,6 +912,7 @@ public class Award extends PersistableBusinessObjectBase {
      * @param awardStatus The awardStatus to set.
      * @deprecated
      */
+    @Deprecated
     public void setAwardStatus(AwardStatus awardStatus) {
         this.awardStatus = awardStatus;
     }
@@ -909,6 +932,7 @@ public class Award extends PersistableBusinessObjectBase {
      * @param letterOfCreditFundGroup The letterOfCreditFundGroup to set.
      * @deprecated
      */
+    @Deprecated
     public void setLetterOfCreditFundGroup(LetterOfCreditFundGroup letterOfCreditFundGroup) {
         this.letterOfCreditFundGroup = letterOfCreditFundGroup;
     }
@@ -928,6 +952,7 @@ public class Award extends PersistableBusinessObjectBase {
      * @param grantDescription The grantDescription to set.
      * @deprecated
      */
+    @Deprecated
     public void setGrantDescription(GrantDescription grantDescription) {
         this.grantDescription = grantDescription;
     }
@@ -947,6 +972,7 @@ public class Award extends PersistableBusinessObjectBase {
      * @param agency The agency to set.
      * @deprecated
      */
+    @Deprecated
     public void setAgency(Agency agency) {
         this.agency = agency;
     }
@@ -966,6 +992,7 @@ public class Award extends PersistableBusinessObjectBase {
      * @param federalPassThroughAgency The federalPassThroughAgency to set.
      * @deprecated
      */
+    @Deprecated
     public void setFederalPassThroughAgency(Agency federalPassThroughAgency) {
         this.federalPassThroughAgency = federalPassThroughAgency;
     }
@@ -985,6 +1012,7 @@ public class Award extends PersistableBusinessObjectBase {
      * @param awardPurpose The awardPurpose to set.
      * @deprecated
      */
+    @Deprecated
     public void setAwardPurpose(ProposalPurpose awardPurpose) {
         this.awardPurpose = awardPurpose;
     }
@@ -1146,6 +1174,8 @@ public class Award extends PersistableBusinessObjectBase {
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap<String, String> m = new LinkedHashMap<String, String>();
         if (this.proposalNumber != null) {
@@ -1156,7 +1186,7 @@ public class Award extends PersistableBusinessObjectBase {
 
 
     /**
-     * Gets the awardTotalAmount attribute.
+     * sums the total for all award subcontractors
      * 
      * @return Returns the awardTotalAmount
      */
