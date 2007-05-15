@@ -38,6 +38,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.core.web.struts.form.KualiTableRenderFormMetadata;
 import org.kuali.core.web.ui.Column;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
@@ -62,6 +63,8 @@ public class CorrectionForm extends KualiDocumentFormBase {
     private String previousEditMethod;
     
     private Integer inputGroupId;
+    private Integer previousInputGroupId;
+    
     private Integer outputGroupId;
     private String inputFileName;
     protected FormFile sourceFile;
@@ -120,12 +123,12 @@ public class CorrectionForm extends KualiDocumentFormBase {
     public void populate(HttpServletRequest request) {
         super.populate(request);
         
-        if (Constants.TableRenderConstants.SWITCH_TO_PAGE_METHOD.equals(getMethodToCall())) {
+        if (KFSConstants.TableRenderConstants.SWITCH_TO_PAGE_METHOD.equals(getMethodToCall())) {
             // look for the page number to switch to
             originEntrySearchResultTableMetadata.setSwitchToPageNumber(-1);
             
             // the param we're looking for looks like: methodToCall.switchToPage.1.x , where 1 is the page nbr
-            String paramPrefix = Constants.DISPATCH_REQUEST_PARAMETER + "." + Constants.TableRenderConstants.SWITCH_TO_PAGE_METHOD + ".";
+            String paramPrefix = KFSConstants.DISPATCH_REQUEST_PARAMETER + "." + KFSConstants.TableRenderConstants.SWITCH_TO_PAGE_METHOD + ".";
             for (Enumeration i = request.getParameterNames(); i.hasMoreElements();) {
                 String parameterName = (String) i.nextElement();
                 if (parameterName.startsWith(paramPrefix) && parameterName.endsWith(".x")) {
@@ -138,11 +141,11 @@ public class CorrectionForm extends KualiDocumentFormBase {
             }
         }
         
-        if (Constants.TableRenderConstants.SORT_METHOD.equals(getMethodToCall())) {
+        if (KFSConstants.TableRenderConstants.SORT_METHOD.equals(getMethodToCall())) {
             originEntrySearchResultTableMetadata.setColumnToSortIndex(-1);
             
             // the param we're looking for looks like: methodToCall.sort.1.x , where 1 is the column to sort on
-            String paramPrefix = Constants.DISPATCH_REQUEST_PARAMETER + "." + Constants.TableRenderConstants.SORT_METHOD + ".";
+            String paramPrefix = KFSConstants.DISPATCH_REQUEST_PARAMETER + "." + KFSConstants.TableRenderConstants.SORT_METHOD + ".";
             for (Enumeration i = request.getParameterNames(); i.hasMoreElements();) {
                 String parameterName = (String) i.nextElement();
                 if (parameterName.startsWith(paramPrefix) && parameterName.endsWith(".x")) {
@@ -154,11 +157,22 @@ public class CorrectionForm extends KualiDocumentFormBase {
                 throw new RuntimeException("Couldn't find column to sort");
             }
         }
+        
+        // since the processInBatch option defaults to true, there's no built in POJO way to detect whether it's been unchecked
+        // this code takes care of that
+        if (StringUtils.isNotBlank(request.getParameter("processInBatch" + Constants.CHECKBOX_PRESENT_ON_FORM_ANNOTATION)) && 
+                StringUtils.isBlank(request.getParameter("processInBatch"))) {
+            setProcessInBatch(false);
+        }
     }
 
     public void syncGroups() {
         int groupCount = getCorrectionDocument().getCorrectionChangeGroup().size();
         getGroupsItem(groupCount);
+    }
+    
+    public int getGroupsSize() {
+        return groups.size();
     }
 
     public GroupHolder getGroupsItem(int i) {
@@ -506,5 +520,21 @@ public class CorrectionForm extends KualiDocumentFormBase {
      */
     public void setPreviousEditMethod(String previousEditMethod) {
         this.previousEditMethod = previousEditMethod;
+    }
+
+    /**
+     * Gets the previousInputGroupId attribute. 
+     * @return Returns the previousInputGroupId.
+     */
+    public Integer getPreviousInputGroupId() {
+        return previousInputGroupId;
+    }
+
+    /**
+     * Sets the previousInputGroupId attribute value.
+     * @param previousInputGroupId The previousInputGroupId to set.
+     */
+    public void setPreviousInputGroupId(Integer previousInputGroupId) {
+        this.previousInputGroupId = previousInputGroupId;
     }
 }
