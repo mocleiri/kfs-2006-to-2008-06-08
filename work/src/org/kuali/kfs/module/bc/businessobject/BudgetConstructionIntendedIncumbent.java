@@ -17,10 +17,13 @@
 package org.kuali.module.budget.bo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.util.TypedArrayList;
 
 /**
  * 
@@ -42,7 +45,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	 */
 	public BudgetConstructionIntendedIncumbent() {
         budgetConstructionSalarySocialSecurity = new ArrayList();
-        pendingBudgetConstructionAppointmentFunding = new ArrayList();
+        setPendingBudgetConstructionAppointmentFunding(new TypedArrayList(PendingBudgetConstructionAppointmentFunding.class));
         
 	}
 
@@ -198,11 +201,36 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
     /**
      * Sets the pendingBudgetConstructionAppointmentFunding attribute value.
      * @param pendingBudgetConstructionAppointmentFunding The pendingBudgetConstructionAppointmentFunding to set.
+     * @deprecated
      */
     public void setPendingBudgetConstructionAppointmentFunding(List pendingBudgetConstructionAppointmentFunding) {
         this.pendingBudgetConstructionAppointmentFunding = pendingBudgetConstructionAppointmentFunding;
     }
 
+    /**
+     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
+     */
+    @Override
+    public List buildListOfDeletionAwareLists() {
+
+        List managedLists =  super.buildListOfDeletionAwareLists();
+        managedLists.add(getPendingBudgetConstructionAppointmentFunding());
+        return managedLists; 
+    }
+
+    /**
+     * Returns a map with the primitive field names as the key and the primitive values as the map value.
+     * 
+     * @return Map
+     */
+    public Map getValuesMap() {
+        Map simpleValues = new HashMap();
+
+        simpleValues.put("emplid", getEmplid());
+
+        return simpleValues;
+    }
+  
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
