@@ -15,10 +15,10 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.Constants.EMPTY_STRING;
-import static org.kuali.Constants.GL_CREDIT_CODE;
-import static org.kuali.Constants.GL_DEBIT_CODE;
-import static org.kuali.PropertyConstants.BALANCE_TYPE;
+import static org.kuali.kfs.KFSConstants.EMPTY_STRING;
+import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
+import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
+import static org.kuali.kfs.KFSPropertyConstants.BALANCE_TYPE;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -63,7 +63,7 @@ public class JournalVoucherDocument extends AccountingDocumentBase implements Vo
 
     /**
      * 
-     * @see org.kuali.core.document.TransactionalDocumentBase#checkSufficientFunds()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#checkSufficientFunds()
      */
     @Override
     public List<SufficientFundsItem> checkSufficientFunds() {
@@ -226,7 +226,7 @@ public class JournalVoucherDocument extends AccountingDocumentBase implements Vo
     }
 
     /**
-     * @see org.kuali.module.financial.document.FinancialDocumentBase#toErrorCorrection()
+     * @see org.kuali.kfs.document.AccountingDocumentBase#toErrorCorrection()
      */
     @Override
     public void toErrorCorrection() throws WorkflowException {
