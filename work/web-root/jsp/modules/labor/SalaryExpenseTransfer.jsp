@@ -14,7 +14,7 @@
  limitations under the License.
 --%>
 
-<%@ include file="/jsp/core/tldHeader.jsp"%>
+<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 <kul:documentPage showDocumentInfo="true"
     documentTypeName="KualiSalaryExpenseTransferDocument"
     htmlFormAction="laborSalaryExpenseTransfer" renderMultipart="true"
@@ -35,7 +35,7 @@
                     forceRequired="true"
                     />
                 <td>
-                        <kul:employee userIdFieldName="personPayrollIdentifier" 
+                        <ld:employee userIdFieldName="personPayrollIdentifier" 
                                   userNameFieldName="user.personName" 
                                   fieldConversions="personPayrollIdentifier:personPayrollIdentifier"
                                   lookupParameters="personPayrollIdentifier:personPayrollIdentifier"
@@ -48,7 +48,7 @@
                                     attributeName="${field.fieldHelpName}"
                                     altText="${field.fieldHelpSummary}" />      
                             </jsp:attribute>
-                        </kul:employee>
+                        </ld:employee>
                 </td>
             </table>
                 <p>
@@ -81,7 +81,7 @@
             accountingLineAttributes="${accountingLineAttributesMap}">
             <jsp:attribute name="importRowOverride">
                 Import from Labor Ledger
-                <kul:balanceInquiryLookup
+                <gl:balanceInquiryLookup
                     boClassName="org.kuali.module.labor.bo.LedgerBalance"
                     actionPath="${Constants.GL_BALANCE_INQUIRY_ACTION}"
                     lookupParameters="personPayrollIdentifier:personPayrollIdentifier"
@@ -111,7 +111,7 @@
       </jsp:attribute>
     </fin:accountingLines>
     <ld:laborLedgerPendingEntries />
-    <kul:generalLedgerPendingEntries />
+    <gl:generalLedgerPendingEntries />
     <kul:notes />
     <kul:adHocRecipients />
     <kul:routeLog />
