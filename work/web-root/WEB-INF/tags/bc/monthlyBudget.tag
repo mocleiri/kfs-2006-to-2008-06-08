@@ -13,10 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ taglib prefix="c" uri="/tlds/c.tld" %>
-<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
-<%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
-<%@ taglib tagdir="/WEB-INF/tags/bc" prefix="bc"%>
+<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
 <c:set var="monthlyBudgetAttributes" value="${DataDictionary['BudgetConstructionMonthly'].attributes}" />
 <c:set var="monthlyBudget" value="${KualiForm.budgetConstructionMonthly}" />

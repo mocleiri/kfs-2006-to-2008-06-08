@@ -13,13 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ taglib prefix="c" uri="/tlds/c.tld"%>
-<%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/tlds/fmt.tld" prefix="fmt"%>
-<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
-<%@ taglib tagdir="/WEB-INF/tags/kr/dd" prefix="dd"%>
-<%@ taglib tagdir="/WEB-INF/tags/kra" prefix="kra"%>
+<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
 <kul:tab tabTitle="Cost Share - Totals" defaultOpen="false" tabDescription="&nbsp;" transparentBackground="false">
 	<div class="tab-container" style="" align=center>

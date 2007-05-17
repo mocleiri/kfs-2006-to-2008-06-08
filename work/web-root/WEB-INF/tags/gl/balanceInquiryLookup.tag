@@ -13,7 +13,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ taglib prefix="c" uri="/tlds/c.tld"%>
+<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+
 <%@ attribute name="boClassName" required="true" %>
 <%@ attribute name="actionPath" required="true" %>
 <%@ attribute name="fieldConversions" required="false" %>

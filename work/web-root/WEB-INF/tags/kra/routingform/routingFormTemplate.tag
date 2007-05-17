@@ -13,8 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ taglib uri="/tlds/struts-html.tld" prefix="html" %>
-<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
+<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
 <div align="right">
 	<kul:help documentTypeName="${DataDictionary.KualiBudgetDocument.documentTypeName}" pageName="${KraConstants.TEMPLATE_HEADER_TAB}" altText="page help"/>

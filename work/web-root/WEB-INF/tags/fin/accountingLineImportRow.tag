@@ -13,8 +13,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ taglib prefix="c" uri="/tlds/c.tld" %>
-<%@ taglib prefix="html" uri="/tlds/struts-html.tld" %>
+<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+
 <%@ attribute name="columnCount" required="true"
     description="The total number of columns of this row." %>
 <%@ attribute name="isSource" required="true"

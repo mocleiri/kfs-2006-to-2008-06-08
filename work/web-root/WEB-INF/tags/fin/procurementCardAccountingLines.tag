@@ -13,13 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ taglib prefix="c" uri="/tlds/c.tld" %>
-<%@ taglib prefix="bean" uri="/tlds/struts-bean.tld" %>
-<%@ taglib prefix="fn" uri="/tlds/fn.tld" %>
-<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
-<%@ taglib prefix="fin" tagdir="/WEB-INF/tags/fin" %>
-<%@ taglib prefix="html" uri="/tlds/struts-html.tld"  %>
-<%@ taglib prefix="logic" uri="/tlds/struts-logic.tld" %>
+<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
 <%@ attribute name="editingMode" required="false" type="java.util.Map"%>
 <%@ attribute name="editableAccounts" required="true" type="java.util.Map"

@@ -1,12 +1,4 @@
-<%@ taglib prefix="c" uri="/tlds/c.tld"%>
-<%@ taglib prefix="fn" uri="/tlds/fn.tld"%>
-<%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
-<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
-<%@ taglib uri="/tlds/struts-html-el.tld" prefix="html-el"%>
-<%@ taglib uri="/tlds/displaytag.tld" prefix="display"%>
-<%@ taglib uri="/tlds/struts-bean-el.tld" prefix="bean-el"%>
-<%@ taglib tagdir="/WEB-INF/tags/gl/glcp" prefix="glcp"%>
+<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
 <%@ attribute name="originEntries" required="true" type="java.util.List" description="The list of OriginEntries that we'll iterate to display." %>
 

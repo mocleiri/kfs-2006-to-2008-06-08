@@ -13,11 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ taglib prefix="c" uri="/tlds/c.tld" %>
-<%@ taglib prefix="fn" uri="/tlds/fn.tld" %>
-<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
-<%@ taglib prefix="fin" tagdir="/WEB-INF/tags/fin" %>
-<%@ taglib uri="/tlds/struts-html.tld" prefix="html" %>
+<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
 <%@ attribute name="isSource" required="true"
               description="Boolean whether this group is of source or target lines." %>
