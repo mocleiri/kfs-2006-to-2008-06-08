@@ -19,6 +19,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/cm" prefix="cm"%>
 <%@ taglib tagdir="/WEB-INF/tags/fin" prefix="fin"%>
 <%@ taglib tagdir="/WEB-INF/tags/gl" prefix="gl"%>
+<%@ taglib tagdir="/WEB-INF/tags/gl/glcp" prefix="glcp"%>
 <%@ taglib tagdir="/WEB-INF/tags/kra" prefix="kra"%>
 <%@ taglib tagdir="/WEB-INF/tags/kra/budget" prefix="kra-b"%>
 <%@ taglib tagdir="/WEB-INF/tags/kra/routingform" prefix="kra-rf"%>
@@ -26,3 +27,4 @@
 <%@ taglib tagdir="/WEB-INF/tags/bc" prefix="bc"%>
 
 <%@ taglib tagdir="/WEB-INF/tags/portal" prefix="portal"%>
+<%@ taglib tagdir="/WEB-INF/tags/portal/channel" prefix="channel"%>
