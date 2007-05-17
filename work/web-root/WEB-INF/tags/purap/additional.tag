@@ -17,8 +17,8 @@
 <%@ taglib prefix="fn" uri="/tlds/fn.tld"%>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
-<%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr/dd" prefix="dd"%>
 
 <%@ attribute name="documentAttributes" required="true" type="java.util.Map"
               description="The DataDictionary entry containing attributes for this row's fields." %>

@@ -19,7 +19,7 @@
 <%@ taglib uri="/tlds/fmt.tld" prefix="fmt" %>
 <%@ taglib uri="/tlds/fn.tld" prefix="fn" %>
 
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 <%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd" %>
 <%@ taglib tagdir="/WEB-INF/tags/kra" prefix="kra" %>
 
@@ -59,7 +59,7 @@
                   <kul:htmlControlAttribute property="newRoutingFormOrganization.organizationCode" attributeEntry="${routingFormOrganizationAttributes.organizationCode}" />
                   <kul:lookup boClassName="org.kuali.module.chart.bo.Org" lookupParameters="newRoutingFormOrganization.organizationCode:organizationCode,newRoutingFormOrganization.chartOfAccountsCode:chartOfAccountsCode" fieldConversions="organizationCode:newRoutingFormOrganization.organizationCode,chartOfAccountsCode:newRoutingFormOrganization.chartOfAccountsCode" tabindexOverride="5100" anchor="${currentTabIndex}" />
                 </div></td>
-                <td class="infoline"><div align=center><html:image property="methodToCall.insertRoutingFormOrganization.anchor${currentTabIndex}" styleClass="tinybutton" src="images/tinybutton-add1.gif" alt="add other organization" /></div></td>
+                <td class="infoline"><div align=center><html:image property="methodToCall.insertRoutingFormOrganization.anchor${currentTabIndex}" styleClass="tinybutton" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-add1.gif" alt="add other organization" /></div></td>
               </tr>
               
               <c:forEach items="${KualiForm.document.routingFormOrganizations}" var="routingFormOrganization" varStatus="status">
@@ -83,7 +83,7 @@
                     </div>
                   </td>
                   <td class="neutral">
-                    <div align="center"><html:image property="methodToCall.deleteRoutingFormOrganization.line${status.index}.anchor${currentTabIndex}" styleClass="tinybutton" src="images/tinybutton-delete1.gif" alt="delete institution cost share" /></div>
+                    <div align="center"><html:image property="methodToCall.deleteRoutingFormOrganization.line${status.index}.anchor${currentTabIndex}" styleClass="tinybutton" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-delete1.gif" alt="delete institution cost share" /></div>
                   </td>
                 </tr>
               </c:forEach>

@@ -15,7 +15,7 @@
 --%>
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib prefix="fn" uri="/tlds/fn.tld" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 <%@ taglib prefix="fin" tagdir="/WEB-INF/tags/fin" %>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html" %>
 
@@ -55,10 +55,10 @@
             <tr>
                 <td colspan="4" class="tab-subhead" style="border-right: none;">Monthly Lines 
                   <c:if test="${isOpen == 'true' || isOpen == 'TRUE'}">
-                    <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-hide.gif" alt="hide" title="toggle" styleClass="tinybutton"  styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
+                    <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-hide.gif" alt="hide" title="toggle" styleClass="tinybutton"  styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
                  </c:if>
                  <c:if test="${isOpen != 'true' && isOpen != 'TRUE'}">
-                   <html:image  property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-show.gif" alt="show" title="toggle" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
+                   <html:image  property="methodToCall.toggleTab.tab${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-show.gif" alt="show" title="toggle" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
                  </c:if>
                 </td>
             </tr>

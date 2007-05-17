@@ -16,7 +16,7 @@
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="ld" %>
 <kul:tab tabTitle="Labor Ledger Pending Entries" defaultOpen="false" tabErrorKey="${Constants.LABOR_LEDGER_PENDING_ENTRIES_TAB_ERRORS}">
 <div class="tab-container" align=center>

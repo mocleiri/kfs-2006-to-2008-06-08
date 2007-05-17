@@ -17,8 +17,8 @@
 <%@ taglib prefix="fn" uri="/tlds/fn.tld"%>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
-<%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr/dd" prefix="dd"%>
 
 <%@ attribute name="documentAttributes" required="true" type="java.util.Map"
               description="The DataDictionary entry containing attributes for this row's fields." %>
@@ -237,7 +237,7 @@
                     <td align=left valign=middle class="datacell">
                         <kul:htmlControlAttribute attributeEntry="${documentAttributes.vendorContactsLabel}" property="document.vendorContactsLabel" readOnly="true"/>                    
                         <c:if test="${vendorReadOnly}">
-                            <kul:lookup  boClassName="org.kuali.module.vendor.bo.VendorContact" readOnlyFields="vendorHeaderGeneratedIdentifier,vendorDetailAssignedIdentifier" autoSearch="yes" lookupParameters="document.vendorHeaderGeneratedIdentifier:vendorHeaderGeneratedIdentifier,document.vendorDetailAssignedIdentifier:vendorDetailAssignedIdentifier" hideReturnLink="true" extraButtonSource="images/buttonsmall_return.gif" />                    
+                            <kul:lookup  boClassName="org.kuali.module.vendor.bo.VendorContact" readOnlyFields="vendorHeaderGeneratedIdentifier,vendorDetailAssignedIdentifier" autoSearch="yes" lookupParameters="document.vendorHeaderGeneratedIdentifier:vendorHeaderGeneratedIdentifier,document.vendorDetailAssignedIdentifier:vendorDetailAssignedIdentifier" hideReturnLink="true" extraButtonSource="${ConfigProperties.kr.externalizable.images.url}buttonsmall_return.gif" />                    
                         </c:if>
                     </td>
                 </tr>            

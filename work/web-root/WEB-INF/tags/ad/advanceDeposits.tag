@@ -16,7 +16,7 @@
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 
 <%@ attribute name="editingMode" required="true" description="used to decide if items may be edited" type="java.util.Map"%>
 <c:set var="readOnly" value="${not empty editingMode['viewOnly']}" />
@@ -67,7 +67,7 @@
                 </td>
                 <td class="infoline">
                 	<div align="center">
-                		<html:image property="methodToCall.addAdvanceDeposit" src="images/tinybutton-add1.gif" alt="Add an Advance Deposit" title="Add an Advance Deposit" styleClass="tinybutton"/>
+                		<html:image property="methodToCall.addAdvanceDeposit" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-add1.gif" alt="Add an Advance Deposit" title="Add an Advance Deposit" styleClass="tinybutton"/>
                 	</div>
                 </td>
             </tr>
@@ -119,7 +119,7 @@
                 <c:if test="${not readOnly}">
                     <td class="datacell">
                     	<div align="center">
-                    		<html:image property="methodToCall.deleteAdvanceDeposit.line${ctr}" src="images/tinybutton-delete1.gif" alt="Delete an Advance Deposit" title="Delete an Advance Deposit" styleClass="tinybutton"/>
+                    		<html:image property="methodToCall.deleteAdvanceDeposit.line${ctr}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-delete1.gif" alt="Delete an Advance Deposit" title="Delete an Advance Deposit" styleClass="tinybutton"/>
                     	</div>
                     </td>
                 </c:if>

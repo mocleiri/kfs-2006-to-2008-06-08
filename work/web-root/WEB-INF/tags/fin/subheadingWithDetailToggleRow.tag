@@ -15,7 +15,7 @@
 --%>
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib prefix="html" uri="/tlds/struts-html.tld" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 <%@ attribute name="columnCount" required="true"
     description="Total number of columns in the accounting lines table,
     to be spanned by this row." %>
@@ -28,7 +28,7 @@
       <html:hidden name="KualiForm" property="hideDetails"/>
       <c:if test="${!empty KualiForm.hideDetails}">
         <c:set var="toggle" value="${KualiForm.hideDetails ? 'show' : 'hide'}"/>
-        <html:image property="methodToCall.${toggle}Details" src="images/det-${toggle}.gif"
+        <html:image property="methodToCall.${toggle}Details" src="${ConfigProperties.kr.externalizable.images.url}det-${toggle}.gif"
                     alt="${toggle} transaction details" title="${toggle} transaction details" styleClass="tinybutton"/>
       </c:if>
     </span>

@@ -16,7 +16,7 @@
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 <%@ taglib tagdir="/WEB-INF/tags/kra" prefix="kra" %>
 
 <%@ attribute name="tabTitle" required="true" %>
@@ -43,10 +43,10 @@
     <tr>
 	    <td class="tab-subhead">
 	      	<c:if test="${isOpen == 'true' || isOpen == 'TRUE'}">
-	            <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-hide.gif" alt="hide" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
+	            <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-hide.gif" alt="hide" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
 	        </c:if>
 	        <c:if test="${isOpen != 'true' && isOpen != 'TRUE'}">
-	            <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-show.gif" alt="show" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
+	            <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-show.gif" alt="show" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle" onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
 	        </c:if>
 	    </td>
 	    <td colspan="3" class="tab-subhead" width="99%"><b>${tabTitle} (${totalErrors})</b></td>

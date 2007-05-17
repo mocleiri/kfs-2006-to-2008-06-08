@@ -16,7 +16,7 @@
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
 <%@ taglib prefix="bean" uri="/tlds/struts-bean.tld" %>
 <%@ taglib prefix="fn" uri="/tlds/fn.tld" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 <%@ taglib prefix="fin" tagdir="/WEB-INF/tags/fin" %>
 <%@ taglib prefix="html" uri="/tlds/struts-html.tld"  %>
 <%@ taglib prefix="logic" uri="/tlds/struts-logic.tld" %>
@@ -140,7 +140,7 @@
           </td>
           <th colspan="2"> <div align="left">
           <c:if test="${empty editingMode['viewOnly']}">
-            <a href="${KualiForm.disputeURL}" target="_blank"><img src="images/buttonsmall_dispute.gif"/></a>
+            <a href="${KualiForm.disputeURL}" target="_blank"><img src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_dispute.gif"/></a>
           </c:if>
           </div></th>
        </tr>   

@@ -17,8 +17,8 @@
 <%@ taglib prefix="fn" uri="/tlds/fn.tld"%>
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
-<%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr/dd" prefix="dd"%>
 <%@ taglib tagdir="/WEB-INF/tags/fin" prefix="fin"%>
 <%@ taglib tagdir="/WEB-INF/tags/purap" prefix="purap"%>
 
@@ -86,7 +86,7 @@
 					property="newPurchasingItemLine.itemAssignedToTradeInIndicator" /></div></td -->
                     <td class="infoline">
                         <div align="center">
-                            <html:image property="methodToCall.addItem" src="images/tinybutton-add1.gif" alt="Insert an Item" title="Add an Item" styleClass="tinybutton" />
+                            <html:image property="methodToCall.addItem" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-add1.gif" alt="Insert an Item" title="Add an Item" styleClass="tinybutton" />
                         </div>
                     </td>
 		</tr>
@@ -145,11 +145,11 @@
                         <td colspan="10" class="tab-subhead" style="border-right: none;">
                             Item ${ctr+1}
                             <c:if test="${isOpen == 'true' || isOpen == 'TRUE'}">
-                                <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-hide.gif" alt="hide" title="toggle" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle"
+                                <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-hide.gif" alt="hide" title="toggle" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle"
                                     onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
                             </c:if>
                             <c:if test="${isOpen != 'true' && isOpen != 'TRUE'}">
-                                <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="images/tinybutton-show.gif" alt="show" title="toggle" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle"
+                                <html:image property="methodToCall.toggleTab.tab${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-show.gif" alt="show" title="toggle" styleClass="tinybutton" styleId="tab-${currentTabIndex}-imageToggle"
                                     onclick="javascript: return toggleTab(document, ${currentTabIndex}); " />
                             </c:if>
                         </td>
@@ -175,8 +175,8 @@
                             <html:hidden property="document.item[${ctr}].itemType.itemTypeAboveTheLineIndicator" />
                             <html:hidden write="true" property="document.item[${ctr}].itemLineNumber" />
                             <c:if test="${fullEntryMode}">
-                                <html:image property="methodToCall.editItem" src="images/purap-up.gif" alt="Move Item Up" title="Move Item Up" styleClass="tinybutton" />
-                                <html:image property="methodToCall.editItem" src="images/purap-down.gif" alt="Move Item Down" title="Move Item Down" styleClass="tinybutton" />
+                                <html:image property="methodToCall.editItem" src="${ConfigProperties.kr.externalizable.images.url}purap-up.gif" alt="Move Item Up" title="Move Item Up" styleClass="tinybutton" />
+                                <html:image property="methodToCall.editItem" src="${ConfigProperties.kr.externalizable.images.url}purap-down.gif" alt="Move Item Down" title="Move Item Down" styleClass="tinybutton" />
                             </c:if>
                         </td>
                         <td class="infoline">
@@ -220,7 +220,7 @@
                         <c:if test="${fullEntryMode}">
                             <td class="infoline">
                                 <div align="center">
-                                    <html:image property="methodToCall.deleteItem.line${ctr}" src="images/tinybutton-delete1.gif" alt="Delete Item ${ctr+1}" title="Delete Item ${ctr+1}" styleClass="tinybutton" />
+                                    <html:image property="methodToCall.deleteItem.line${ctr}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-delete1.gif" alt="Delete Item ${ctr+1}" title="Delete Item ${ctr+1}" styleClass="tinybutton" />
                                 </div>
                             </td>
                         </c:if>

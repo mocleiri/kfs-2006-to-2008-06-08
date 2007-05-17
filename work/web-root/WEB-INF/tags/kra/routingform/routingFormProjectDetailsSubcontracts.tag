@@ -19,7 +19,7 @@
 <%@ taglib uri="/tlds/fmt.tld" prefix="fmt" %>
 <%@ taglib uri="/tlds/fn.tld" prefix="fn" %>
 
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 <%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd" %>
 <%@ taglib tagdir="/WEB-INF/tags/kra" prefix="kra" %>
 
@@ -64,7 +64,7 @@
         </td>
         <td class="infoline">
           <div align=center>
-            <html:image property="methodToCall.insertRoutingFormSubcontractor.anchor${currentTabIndex}" styleClass="tinybutton" src="images/tinybutton-add1.gif" alt="add subcontractor"/>
+            <html:image property="methodToCall.insertRoutingFormSubcontractor.anchor${currentTabIndex}" styleClass="tinybutton" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-add1.gif" alt="add subcontractor"/>
           </div>
         </td>
       </tr>
@@ -96,7 +96,7 @@
           <c:if test="${not readOnly and not budgetLinked}">
           <td>
             <div align=center>
-              <html:image property="methodToCall.deleteRoutingFormSubcontractor.line${status.index}.anchor${currentTabIndex}" styleClass="tinybutton" src="images/tinybutton-delete1.gif" alt="delete subcontractor"/>
+              <html:image property="methodToCall.deleteRoutingFormSubcontractor.line${status.index}.anchor${currentTabIndex}" styleClass="tinybutton" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-delete1.gif" alt="delete subcontractor"/>
             </div>
           </td>
           </c:if>

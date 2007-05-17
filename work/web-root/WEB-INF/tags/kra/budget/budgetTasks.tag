@@ -17,7 +17,7 @@
 <%@ taglib uri="/tlds/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/tlds/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/tlds/fmt.tld" prefix="fmt" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 <%@ taglib tagdir="/WEB-INF/tags/kra" prefix="kra" %>
 <%@ taglib tagdir="/WEB-INF/tags/kra/budget" prefix="kra-b" %>
 <%@ attribute name="supportsModular" required="true" %>
@@ -58,7 +58,7 @@
     <td class="infoline"><div align="center">
         <label><input type="radio" name="document.budget.modularBudget.budgetModularTaskNumber" disabled="true" value="-1" /></label>
       </div></td>
-    <td class="infoline"><div align="center"><html:image property="methodToCall.insertTaskLine.anchor${currentTabIndex}" styleClass="tinybutton" src="images/tinybutton-add1.gif" alt="add task line"/></div></td>
+    <td class="infoline"><div align="center"><html:image property="methodToCall.insertTaskLine.anchor${currentTabIndex}" styleClass="tinybutton" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-add1.gif" alt="add task line"/></div></td>
   </tr>
   </c:if>
   <!-- Iterate over currently attached tasks. -->
@@ -72,7 +72,7 @@
     <td><div align="center">
         <label> <html:radio property="document.budget.modularBudget.budgetModularTaskNumber" value="${taskLine.budgetTaskSequenceNumber}" disabled="${not(supportsModular and KualiForm.document.budget.agencyModularIndicator) || viewOnly}"/> </label>
       </div></td>
-    <c:if test="${not viewOnly}"><td><div align="center"> <html:image property="methodToCall.deleteTaskLine.line${ctr}.anchorTasks" styleClass="tinybutton" src="images/tinybutton-delete1.gif" alt="delete"/> </div></td></c:if>
+    <c:if test="${not viewOnly}"><td><div align="center"> <html:image property="methodToCall.deleteTaskLine.line${ctr}.anchorTasks" styleClass="tinybutton" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-delete1.gif" alt="delete"/> </div></td></c:if>
   </tr>
   </logic:iterate>
   <!-- End of tasks table. -->

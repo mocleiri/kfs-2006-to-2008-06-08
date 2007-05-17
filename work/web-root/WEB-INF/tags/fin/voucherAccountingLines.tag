@@ -14,7 +14,7 @@
  limitations under the License.
 --%>
 <%@ taglib prefix="c" uri="/tlds/c.tld" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/kr" prefix="kul"%>
 <%@ taglib prefix="fin" tagdir="/WEB-INF/tags/fin" %>
 
 <%@ attribute name="optionalFields" required="false"

@@ -23,7 +23,8 @@
 <%@ attribute name="channelUrl" required="true" %>
 <%@ attribute name="selectedTab" required="true" %>
 
-      <portal:immutableBar />
+
+ <portal:immutableBar />
 
  <table width="100%"  cellspacing="0" cellpadding="0" id="iframe_portlet_container_table">
     <tr valign="top" bgcolor="#FFFFFF">
