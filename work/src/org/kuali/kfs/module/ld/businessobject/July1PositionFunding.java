@@ -1,5 +1,8 @@
+
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/July1PositionFunding.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,24 +22,18 @@ package org.kuali.module.labor.bo;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.user.PersonPayrollId;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.bo.user.UserId;
-import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
-import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class July1PositionFunding extends PersistableBusinessObjectBase {
+public class July1PositionFunding extends BusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
@@ -56,9 +53,6 @@ public class July1PositionFunding extends PersistableBusinessObjectBase {
     private SubAccount subAccount;
     private SubObjCd financialSubObject;
     
-    private UniversalUser fundingPerson;
-    private TransientBalanceInquiryAttributes dummyBusinessObject;
-
 	/**
 	 * Default constructor.
 	 */
@@ -311,8 +305,8 @@ public class July1PositionFunding extends PersistableBusinessObjectBase {
 	 * Sets the financialObject attribute.
 	 * 
 	 * @param financialObject The financialObject to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setFinancialObject(ObjectCode financialObject) {
 		this.financialObject = financialObject;
 	}
@@ -331,8 +325,8 @@ public class July1PositionFunding extends PersistableBusinessObjectBase {
 	 * Sets the chartOfAccounts attribute.
 	 * 
 	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setChartOfAccounts(Chart chartOfAccounts) {
 		this.chartOfAccounts = chartOfAccounts;
 	}
@@ -351,8 +345,8 @@ public class July1PositionFunding extends PersistableBusinessObjectBase {
 	 * Sets the account attribute.
 	 * 
 	 * @param account The account to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setAccount(Account account) {
 		this.account = account;
 	}
@@ -368,8 +362,8 @@ public class July1PositionFunding extends PersistableBusinessObjectBase {
     /**
      * Sets the financialSubObject attribute value.
      * @param financialSubObject The financialSubObject to set.
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialSubObject(SubObjCd financialSubObject) {
         this.financialSubObject = financialSubObject;
     }
@@ -385,8 +379,8 @@ public class July1PositionFunding extends PersistableBusinessObjectBase {
     /**
      * Sets the subAccount attribute value.
      * @param subAccount The subAccount to set.
+     * @deprecated
      */
-    @Deprecated
     public void setSubAccount(SubAccount subAccount) {
         this.subAccount = subAccount;
     }
@@ -407,46 +401,6 @@ public class July1PositionFunding extends PersistableBusinessObjectBase {
         m.put("positionNumber", this.positionNumber);
         m.put("emplid", this.emplid);
         return m;
-    }
-
-    public UniversalUser getFundingPerson() {
-        UserId empl = new PersonPayrollId(getEmplid());
-        
-        try{
-            fundingPerson = SpringServiceLocator.getUniversalUserService().getUniversalUser(empl);
-        }catch(UserNotFoundException e){
-            fundingPerson = new UniversalUser();            
-        }
-        
-        return fundingPerson;
-    }
-
-    /**
-     * Sets the fundingPerson attribute.
-     * 
-     * @param fundingPerson The fundingPerson to set.
-     * @deprecated
-     */
-    public void setFundingPerson(UniversalUser fundingPerson) {
-        this.fundingPerson = fundingPerson;
-    }
-
-    /**
-     * Gets the dummyBusinessObject attribute.
-     * 
-     * @return Returns the dummyBusinessObject.
-     */
-    public TransientBalanceInquiryAttributes getDummyBusinessObject() {
-        return dummyBusinessObject;
-    }
-
-    /**
-     * Sets the dummyBusinessObject attribute value.
-     * 
-     * @param dummyBusinessObject The dummyBusinessObject to set.
-     */
-    public void setDummyBusinessObject(TransientBalanceInquiryAttributes dummyBusinessObject) {
-        this.dummyBusinessObject = dummyBusinessObject;
     }
 
 }

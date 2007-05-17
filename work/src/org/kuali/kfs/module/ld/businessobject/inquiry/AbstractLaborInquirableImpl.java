@@ -22,7 +22,10 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.BusinessObject;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.KualiSystemCode;
+import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.datadictionary.AttributeDefinition;
 import org.kuali.core.datadictionary.AttributeReferenceDefinition;
 import org.kuali.core.datadictionary.DataDictionaryEntryBase;
@@ -33,10 +36,7 @@ import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.PersistenceStructureService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.UrlFactory;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.chart.bo.KualiSystemCode;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
@@ -56,13 +56,13 @@ public abstract class AbstractLaborInquirableImpl extends KualiInquirableImpl {
      * @param attributeName the attribute name which links to an inquirable
      * @return String url to inquiry
      */
-    public String getInquiryUrl(BusinessObject businessObject, String attributeName) {
+    public String getInquiryUrl(PersistableBusinessObject businessObject, String attributeName) {
         BusinessObjectDictionaryService businessDictionary = SpringServiceLocator.getBusinessObjectDictionaryService();
         PersistenceStructureService persistenceStructureService = SpringServiceLocator.getPersistenceStructureService();
 
-        String baseUrl = KFSConstants.INQUIRY_ACTION;
+        String baseUrl = Constants.INQUIRY_ACTION;
         Properties parameters = new Properties();
-        parameters.put(KFSConstants.DISPATCH_REQUEST_PARAMETER, KFSConstants.START_METHOD);
+        parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.START_METHOD);
 
         Object attributeValue = null;
         Class inquiryBusinessObjectClass = null;
@@ -84,7 +84,7 @@ public abstract class AbstractLaborInquirableImpl extends KualiInquirableImpl {
         }
         else if (ObjectUtils.isNestedAttribute(attributeName)) {
             if (!"financialObject.financialObjectType.financialReportingSortCode".equals(attributeName)) {
-                inquiryBusinessObjectClass = LookupUtils.getNestedReferenceClass(businessObject, attributeName);
+                inquiryBusinessObjectClass = LookupUtils.getNestedReferenceClassGl(businessObject, attributeName);
             }
             else {
                 return "";
@@ -114,17 +114,17 @@ public abstract class AbstractLaborInquirableImpl extends KualiInquirableImpl {
                 inquiryBusinessObjectClass = KualiSystemCode.class;
             }
         }
-        parameters.put(KFSConstants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, inquiryBusinessObjectClass.getName());
+        parameters.put(Constants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, inquiryBusinessObjectClass.getName());
 
         List keys = new ArrayList();
         if (isUserDefinedAttribute) {
             baseUrl = getBaseUrl();
             keys = buildUserDefinedAttributeKeyList();
 
-            parameters.put(KFSConstants.RETURN_LOCATION_PARAMETER, Constant.RETURN_LOCATION_VALUE);
-            parameters.put(KFSConstants.GL_BALANCE_INQUIRY_FLAG, "true");
-            parameters.put(KFSConstants.DISPATCH_REQUEST_PARAMETER, KFSConstants.SEARCH_METHOD);
-            parameters.put(KFSConstants.DOC_FORM_KEY, "88888888");
+            parameters.put(Constants.RETURN_LOCATION_PARAMETER, Constant.RETURN_LOCATION_VALUE);
+            parameters.put(Constants.GL_BALANCE_INQUIRY_FLAG, "true");
+            parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.SEARCH_METHOD);
+            parameters.put(Constants.DOC_FORM_KEY, "88888888");
 
             // add more customized parameters into the current parameter map
             addMoreParameters(parameters, attributeName);
@@ -179,10 +179,10 @@ public abstract class AbstractLaborInquirableImpl extends KualiInquirableImpl {
         if (businessObject instanceof AccountBalance) {
             AccountBalance ab = (AccountBalance) businessObject;
             if ("financialObject.financialObjectLevel.financialConsolidationObject.finConsolidationObjectCode".equals(attributeName)) {
-                parameters.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, ab.getChartOfAccountsCode());
+                parameters.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, ab.getChartOfAccountsCode());
             }
             else if ("financialObject.financialObjectLevel.financialObjectLevelCode".equals(attributeName)) {
-                parameters.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, ab.getChartOfAccountsCode());
+                parameters.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, ab.getChartOfAccountsCode());
             }
         }
 
@@ -268,22 +268,22 @@ public abstract class AbstractLaborInquirableImpl extends KualiInquirableImpl {
         if (keyName != null && keyValue != null) {
             String convertedKeyName = BusinessObjectFieldConverter.convertFromTransactionPropertyName(keyName.toString());
 
-            if (convertedKeyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
+            if (convertedKeyName.equals(PropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
+            else if (convertedKeyName.equals(PropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
+            else if (convertedKeyName.equals(PropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
                 return true;
             }
-            if (convertedKeyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(KFSConstants.DASHES_SUB_ACCOUNT_NUMBER)) {
+            if (convertedKeyName.equals(PropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constants.DASHES_SUB_ACCOUNT_NUMBER)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(KFSConstants.DASHES_SUB_OBJECT_CODE)) {
+            else if (convertedKeyName.equals(PropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constants.DASHES_SUB_OBJECT_CODE)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.PROJECT_CODE) && keyValue.equals(KFSConstants.DASHES_PROJECT_CODE)) {
+            else if (convertedKeyName.equals(PropertyConstants.PROJECT_CODE) && keyValue.equals(Constants.DASHES_PROJECT_CODE)) {
                 return true;
             }
         }
@@ -306,13 +306,13 @@ public abstract class AbstractLaborInquirableImpl extends KualiInquirableImpl {
         Map convertedFieldValues = BusinessObjectFieldConverter.convertFromTransactionFieldValues(fieldValues);
         String convertedKeyName = BusinessObjectFieldConverter.convertFromTransactionPropertyName(keyName.toString());
 
-        if (convertedKeyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
+        if (convertedKeyName.equals(PropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
             return this.getValueFromFieldValues(convertedFieldValues, keyName);
         }
-        else if (convertedKeyName.equals(KFSPropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
+        else if (convertedKeyName.equals(PropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
             return this.getValueFromFieldValues(convertedFieldValues, keyName);
         }
-        else if (convertedKeyName.equals(KFSPropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
+        else if (convertedKeyName.equals(PropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
             return this.getValueFromFieldValues(convertedFieldValues, keyName);
         }
 
@@ -334,7 +334,7 @@ public abstract class AbstractLaborInquirableImpl extends KualiInquirableImpl {
     }
 
     // TODO: not finished
-    public Class getNestedInquiryBusinessObjectClass(BusinessObject businessObject, String attributeName) {
+    public Class getNestedInquiryBusinessObjectClass(PersistableBusinessObject businessObject, String attributeName) {
         Class inquiryBusinessObjectClass = null;
         String entryName = businessObject.getClass().getName();
         System.out.println("businessObject: " + entryName);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,7 @@ import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -36,13 +35,20 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.PropertyConstants;
 
 /**
  * This is the generic class which contains all the elements on a typical line of accounting elements. These are all the accounting
  * items necessary to create a pending entry to the G/L. All transaction documents will use this business object inherently.
+ * 
+ * 
  */
 public abstract class AccountingLineBase extends PersistableBusinessObjectBase implements Serializable, AccountingLine {
     private static Logger LOG = Logger.getLogger(AccountingLineBase.class);
+
+    //
+    // Note: if you add any new instance fields here, you must add handling for them in the copyFrom and isLike methods
+    //
 
     private String documentNumber;
     private Integer sequenceNumber; // relative to the grouping of acctng lines
@@ -95,7 +101,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         subAccount = new SubAccount();
         subObjectCode = new SubObjCd();
         project = new ProjectCode();
-        postingYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
+        postingYear = SpringServiceLocator.getDateTimeService().getCurrentFiscalYear();
         objectCode.setUniversityFiscalYear(postingYear);
         // all Financial Transaction Processing accounting lines (those extending from this) should use a balance type
         // of Actual, except for JV which allows a choice and PE which uses "PE"
@@ -595,7 +601,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
 
         m.put("sequenceNumber", sequenceNumber);
         m.put("postingYear", postingYear);
@@ -803,7 +809,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         Map simpleValues = new HashMap();
 
         simpleValues.put("sequenceNumber", getSequenceNumber());
-        simpleValues.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        simpleValues.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
         simpleValues.put("postingYear", getPostingYear());
         simpleValues.put("amount", getAmount());
         simpleValues.put("referenceOriginCode", getReferenceOriginCode());

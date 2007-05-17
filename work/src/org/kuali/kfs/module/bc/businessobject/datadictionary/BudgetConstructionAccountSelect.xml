@@ -1,35 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionAccountSelect">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Construction Account Select Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialDocumentCreateDate" />
                 <field attributeName="financialDocumentInitiatorIdentifier" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialDocumentStatusCode" />
                 <field attributeName="organizationChartOfAccountsCode" />
                 <field attributeName="organizationCode" />
@@ -37,11 +22,13 @@
                 <field attributeName="personUniversalIdentifier" />
                 <field attributeName="subAccountNumber" />
                 <field attributeName="universityFiscalYear" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Budget Construction Account Select Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionAccountSelect">Create New</a>]]></menubar>
 
             <instructions>Look up a Budget Construction Account Select</instructions>
 
@@ -58,7 +45,7 @@
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="financialDocumentCreateDate" required="false" />
                 <lookupField attributeName="financialDocumentInitiatorIdentifier" required="false" />
-                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="financialDocumentNumber" required="false" />
                 <lookupField attributeName="financialDocumentStatusCode" required="false" />
                 <lookupField attributeName="organizationChartOfAccountsCode" required="false" />
                 <lookupField attributeName="organizationCode" required="false" />
@@ -73,7 +60,7 @@
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialDocumentCreateDate" />
                 <field attributeName="financialDocumentInitiatorIdentifier" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialDocumentStatusCode" />
                 <field attributeName="organizationChartOfAccountsCode" />
                 <field attributeName="organizationCode" />
@@ -146,8 +133,8 @@
                 <description>financialDocumentInitiatorIdentifier description...</description>
 			</attribute>
 
-            <attribute name="documentNumber" forceUppercase="true">
-                <label>Document Number</label>
+            <attribute name="financialDocumentNumber" forceUppercase="true">
+                <label>Financial Document Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>14</maxLength>
@@ -157,8 +144,8 @@
                     <text size="16" />
                 </control>
 
-                <summary>documentNumber</summary>
-                <description>documentNumber description...</description>
+                <summary>financialDocumentNumber</summary>
+                <description>financialDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="financialDocumentStatusCode" forceUppercase="true">

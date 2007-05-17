@@ -1,19 +1,27 @@
-/*
- * Copyright 2006-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.kra.budget.web.struts.form;
+
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.NonpersonnelCategory;
 import org.kuali.module.kra.budget.document.BudgetDocument;
@@ -34,7 +42,7 @@ import org.kuali.module.kra.budget.service.BudgetPeriodService;
 /**
  * This is used by the UI to get totals, counts, and other things needed to render nonpersonnel copy over properly.
  * 
- * 
+ * @author KRA (era_team@indiana.edu)
  */
 public class BudgetNonpersonnelCopyOverFormHelper {
 
@@ -148,12 +156,12 @@ public class BudgetNonpersonnelCopyOverFormHelper {
      * Class that stores the nonpersonnel items. From the copy over page seen this is a category with each having the line items for
      * all tasks.
      * 
-     * 
+     * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
      */
     public class NonpersonnelCopyOverCategoryHelper {
         private String nonpersonnelCategoryCode; // this field isn't critical, but it is helpful
         private List agencyRequestAmountTotal;
-        private List budgetInstitutionCostShareAmountTotal;
+        private List budgetUniversityCostShareAmountTotal;
         private List budgetThirdPartyCostShareAmountTotal;
         private List nprsItems;
 
@@ -202,13 +210,13 @@ public class BudgetNonpersonnelCopyOverFormHelper {
          */
         public void refresh(int periodsSize) {
             KualiDecimal agencyRequestAmountTotalArr[] = new KualiDecimal[periodsSize];
-            KualiDecimal budgetInstitutionCostShareAmountTotalArr[] = new KualiDecimal[periodsSize];
+            KualiDecimal budgetUniversityCostShareAmountTotalArr[] = new KualiDecimal[periodsSize];
             KualiDecimal budgetThirdPartyCostShareAmountTotalArr[] = new KualiDecimal[periodsSize];
 
             // initialize the arrays with 0 values
             for (int i = 0; i < periodsSize; i++) {
                 agencyRequestAmountTotalArr[i] = new KualiDecimal(0);
-                budgetInstitutionCostShareAmountTotalArr[i] = new KualiDecimal(0);
+                budgetUniversityCostShareAmountTotalArr[i] = new KualiDecimal(0);
                 budgetThirdPartyCostShareAmountTotalArr[i] = new KualiDecimal(0);
             }
 
@@ -223,14 +231,14 @@ public class BudgetNonpersonnelCopyOverFormHelper {
                     // add value to the total
                     BudgetNonpersonnelCopyOverBoHelper periodAmount = nonpersonnelCopyOverLineItemHelper.getPeriodAmount(i);
                     agencyRequestAmountTotalArr[i] = agencyRequestAmountTotalArr[i].add(periodAmount.getDisplayAgencyRequestAmount());
-                    budgetInstitutionCostShareAmountTotalArr[i] = budgetInstitutionCostShareAmountTotalArr[i].add(periodAmount.getDisplayBudgetInstitutionCostShareAmount());
+                    budgetUniversityCostShareAmountTotalArr[i] = budgetUniversityCostShareAmountTotalArr[i].add(periodAmount.getDisplayBudgetUniversityCostShareAmount());
                     budgetThirdPartyCostShareAmountTotalArr[i] = budgetThirdPartyCostShareAmountTotalArr[i].add(periodAmount.getDisplayBudgetThirdPartyCostShareAmount());
                 }
             }
 
             // convert array to the list
             agencyRequestAmountTotal = Arrays.asList(agencyRequestAmountTotalArr);
-            budgetInstitutionCostShareAmountTotal = Arrays.asList(budgetInstitutionCostShareAmountTotalArr);
+            budgetUniversityCostShareAmountTotal = Arrays.asList(budgetUniversityCostShareAmountTotalArr);
             budgetThirdPartyCostShareAmountTotal = Arrays.asList(budgetThirdPartyCostShareAmountTotalArr);
         }
 
@@ -337,21 +345,21 @@ public class BudgetNonpersonnelCopyOverFormHelper {
         }
 
         /**
-         * Gets the budgetInstitutionCostShareAmountTotal attribute.
+         * Gets the budgetUniversityCostShareAmountTotal attribute.
          * 
-         * @return Returns the budgetInstitutionCostShareAmountTotal.
+         * @return Returns the budgetUniversityCostShareAmountTotal.
          */
-        public List getBudgetInstitutionCostShareAmountTotal() {
-            return budgetInstitutionCostShareAmountTotal;
+        public List getBudgetUniversityCostShareAmountTotal() {
+            return budgetUniversityCostShareAmountTotal;
         }
 
         /**
-         * Sets the budgetInstitutionCostShareAmountTotal attribute value.
+         * Sets the budgetUniversityCostShareAmountTotal attribute value.
          * 
-         * @param budgetInstitutionCostShareAmountTotal The budgetInstitutionCostShareAmountTotal to set.
+         * @param budgetUniversityCostShareAmountTotal The budgetUniversityCostShareAmountTotal to set.
          */
-        public void setBudgetInstitutionCostShareAmountTotal(List budgetInstitutionCostShareAmountTotal) {
-            this.budgetInstitutionCostShareAmountTotal = budgetInstitutionCostShareAmountTotal;
+        public void setBudgetUniversityCostShareAmountTotal(List budgetUniversityCostShareAmountTotal) {
+            this.budgetUniversityCostShareAmountTotal = budgetUniversityCostShareAmountTotal;
         }
 
         /**
@@ -389,7 +397,7 @@ public class BudgetNonpersonnelCopyOverFormHelper {
          * period (it helps to look at the nonpersonnel copy over page -- periods go out horizontally, that is what this object with
          * its list represents).
          * 
-         * 
+         * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
          */
         public class NonpersonnelCopyOverLineItemHelper {
             // these two are the same for each item in the periodAmounts list. It is in this object
@@ -470,7 +478,7 @@ public class BudgetNonpersonnelCopyOverFormHelper {
 
                             // update indicators
                             budgetNonpersonnel.setAgencyCopyIndicator(budgetNonpersonnelCopyOverBoHelper.getAgencyCopyIndicator());
-                            budgetNonpersonnel.setBudgetInstitutionCostShareCopyIndicator(budgetNonpersonnelCopyOverBoHelper.getBudgetInstitutionCostShareCopyIndicator());
+                            budgetNonpersonnel.setBudgetUniversityCostShareCopyIndicator(budgetNonpersonnelCopyOverBoHelper.getBudgetUniversityCostShareCopyIndicator());
                             budgetNonpersonnel.setBudgetThirdPartyCostShareCopyIndicator(budgetNonpersonnelCopyOverBoHelper.getBudgetThirdPartyCostShareCopyIndicator());
 
                             budgetNonpersonnel.setCopyToFuturePeriods(false); // nothing to do with copy over, just make sure the
@@ -485,11 +493,11 @@ public class BudgetNonpersonnelCopyOverFormHelper {
                             else {
                                 budgetNonpersonnel.setAgencyRequestAmount(budgetNonpersonnelCopyOverBoHelper.getAgencyRequestAmount());
                             }
-                            if (budgetNonpersonnelCopyOverBoHelper.getBudgetInstitutionCostShareCopyIndicator()) {
-                                budgetNonpersonnel.setBudgetInstitutionCostShareAmount(budgetNonpersonnelCopyOverBoHelper.getBudgetInflatedInstitutionCostShareAmount());
+                            if (budgetNonpersonnelCopyOverBoHelper.getBudgetUniversityCostShareCopyIndicator()) {
+                                budgetNonpersonnel.setBudgetUniversityCostShareAmount(budgetNonpersonnelCopyOverBoHelper.getBudgetInflatedUniversityCostShareAmount());
                             }
                             else {
-                                budgetNonpersonnel.setBudgetInstitutionCostShareAmount(budgetNonpersonnelCopyOverBoHelper.getBudgetInstitutionCostShareAmount());
+                                budgetNonpersonnel.setBudgetUniversityCostShareAmount(budgetNonpersonnelCopyOverBoHelper.getBudgetUniversityCostShareAmount());
                             }
                             if (budgetNonpersonnelCopyOverBoHelper.getBudgetThirdPartyCostShareCopyIndicator()) {
                                 budgetNonpersonnel.setBudgetThirdPartyCostShareAmount(budgetNonpersonnelCopyOverBoHelper.getBudgetInflatedThirdPartyCostShareAmount());
@@ -522,8 +530,8 @@ public class BudgetNonpersonnelCopyOverFormHelper {
                     if (budgetNonpersonnelCopyOverBoHelper.getAgencyCopyIndicator()) {
                         originItem.setAgencyCopyIndicator(true);
                     }
-                    if (budgetNonpersonnelCopyOverBoHelper.getBudgetInstitutionCostShareCopyIndicator()) {
-                        originItem.setBudgetInstitutionCostShareCopyIndicator(true);
+                    if (budgetNonpersonnelCopyOverBoHelper.getBudgetUniversityCostShareCopyIndicator()) {
+                        originItem.setBudgetUniversityCostShareCopyIndicator(true);
                     }
                     if (budgetNonpersonnelCopyOverBoHelper.getBudgetThirdPartyCostShareCopyIndicator()) {
                         originItem.setBudgetThirdPartyCostShareCopyIndicator(true);
@@ -605,7 +613,7 @@ public class BudgetNonpersonnelCopyOverFormHelper {
                 for (int i = 0; i < periodAmounts.size(); i++) {
                     BudgetNonpersonnelCopyOverBoHelper budgetNonpersonnelCopyOverBoHelper = (BudgetNonpersonnelCopyOverBoHelper) periodAmounts.get(i);
 
-                    if (budgetNonpersonnelCopyOverBoHelper.getAgencyCopyIndicator() || budgetNonpersonnelCopyOverBoHelper.getBudgetInstitutionCostShareCopyIndicator() || budgetNonpersonnelCopyOverBoHelper.getBudgetThirdPartyCostShareCopyIndicator()) {
+                    if (budgetNonpersonnelCopyOverBoHelper.getAgencyCopyIndicator() || budgetNonpersonnelCopyOverBoHelper.getBudgetUniversityCostShareCopyIndicator() || budgetNonpersonnelCopyOverBoHelper.getBudgetThirdPartyCostShareCopyIndicator()) {
                         return true;
                     }
                 }

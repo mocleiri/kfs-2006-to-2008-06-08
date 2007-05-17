@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
@@ -38,11 +37,10 @@ import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
+import org.kuali.PropertyConstants;
 
 /**
  * The general ledger pending entry structure holds financial transaction info that will post to the general ledger as an entry.
- * 
- * 
  */
 public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase implements Transaction, Serializable, Cloneable {
     private static final long serialVersionUID = 4041748389323105932L;
@@ -85,7 +83,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     private Account account;
     private SubAccount subAccount;
     private ObjectCode financialObject;
-    private SubObjCd financialSubObject;
+    private SubObjCd subObjectCode;
     private BalanceTyp balanceType;
     private ObjectType objectType;
     private A21SubAccount a21SubAccount;
@@ -732,7 +730,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         m.put("financialSystemOriginationCode", this.financialSystemOriginationCode);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (transactionLedgerEntrySequenceNumber == null) {
             m.put("transactionLedgerEntrySequenceNumber", null);
         }
@@ -912,12 +910,12 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
         this.subAccount = subAccount;
     }
 
-    public SubObjCd getFinancialSubObject() {
-        return financialSubObject;
+    public SubObjCd getSubObjectCode() {
+        return subObjectCode;
     }
 
-    public void setFinancialSubObject(SubObjCd financialSubObject) {
-        this.financialSubObject = financialSubObject;
+    public void setSubObjectCode(SubObjCd subObjectCode) {
+        this.subObjectCode = subObjectCode;
     }
 
     public void setAccountingPeriod(AccountingPeriod accountingPeriod) {

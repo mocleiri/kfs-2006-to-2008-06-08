@@ -1,36 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.PurchaseOrderVendorQuote">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Purchase Order Vendor Quote Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
+                <field attributeName="purchaseOrderIdentifier" />
                 <field attributeName="purchaseOrderQuoteAwardDate" />
                 <field attributeName="purchaseOrderQuotePriceExpirationDate" />
                 <field attributeName="purchaseOrderQuoteRankNumber" />
                 <field attributeName="purchaseOrderQuoteStatusCode" />
-                <field attributeName="purchaseOrderQuoteTransmitDate" />
-                <field attributeName="purchaseOrderQuoteTransmitTypeCode" />
+                <field attributeName="purchaseOrderQuoteTransactionDate" />
+                <field attributeName="purchaseOrderQuoteTransactionTypeCode" />
                 <field attributeName="purchaseOrderVendorQuoteIdentifier" />
                 <field attributeName="vendorAttentionName" />
                 <field attributeName="vendorCityName" />
@@ -44,27 +30,30 @@
                 <field attributeName="vendorPhoneNumber" />
                 <field attributeName="vendorPostalCode" />
                 <field attributeName="vendorStateCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Purchase Order Vendor Quote Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PurchaseOrderVendorQuote">Create New</a>]]></menubar>
+
             <instructions>Lookup an Purchase Order Vendor Quote</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="purchaseOrderVendorQuoteIdentifier" />
+                    <sortAttribute attributeName="purchaseOrderIdentifier" />
                 </sortAttributes>
             </defaultSort>
 
             <lookupFields>
+                <lookupField attributeName="purchaseOrderIdentifier" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteAwardDate" required="false" />
                 <lookupField attributeName="purchaseOrderQuotePriceExpirationDate" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteRankNumber" required="false" />
                 <lookupField attributeName="purchaseOrderQuoteStatusCode" required="false" />
-                <lookupField attributeName="purchaseOrderQuoteTransmitDate" required="false" />
-                <lookupField attributeName="purchaseOrderQuoteTransmitTypeCode" required="false" />
+                <lookupField attributeName="purchaseOrderQuoteTransactionDate" required="false" />
+                <lookupField attributeName="purchaseOrderQuoteTransactionTypeCode" required="false" />
                 <lookupField attributeName="purchaseOrderVendorQuoteIdentifier" required="false" />
                 <lookupField attributeName="vendorAttentionName" required="false" />
                 <lookupField attributeName="vendorCityName" required="false" />
@@ -81,12 +70,13 @@
             </lookupFields>
 
             <resultFields>
+                <field attributeName="purchaseOrderIdentifier" />
                 <field attributeName="purchaseOrderQuoteAwardDate" />
                 <field attributeName="purchaseOrderQuotePriceExpirationDate" />
                 <field attributeName="purchaseOrderQuoteRankNumber" />
                 <field attributeName="purchaseOrderQuoteStatusCode" />
-                <field attributeName="purchaseOrderQuoteTransmitDate" />
-                <field attributeName="purchaseOrderQuoteTransmitTypeCode" />
+                <field attributeName="purchaseOrderQuoteTransactionDate" />
+                <field attributeName="purchaseOrderQuoteTransactionTypeCode" />
                 <field attributeName="purchaseOrderVendorQuoteIdentifier" />
                 <field attributeName="vendorAttentionName" />
                 <field attributeName="vendorCityName" />
@@ -105,7 +95,22 @@
 
         <attributes>
 
-             <attribute name="purchaseOrderQuoteAwardDate" forceUppercase="true">
+            <attribute name="purchaseOrderIdentifier" forceUppercase="true">
+                <label>Purchase Order Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>purchaseOrderIdentifier</summary>
+                <description>purchaseOrderIdentifier description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderQuoteAwardDate" forceUppercase="true">
                 <label>Purchase Order Quote Award Date</label>
                 <shortLabel>Date</shortLabel>
 
@@ -165,8 +170,8 @@
                 <description>purchaseOrderQuoteStatusCode description...</description>
 			</attribute>
 
-            <attribute name="purchaseOrderQuoteTransmitDate" forceUppercase="true">
-                <label>Purchase Order Quote Transmit Date</label>
+            <attribute name="purchaseOrderQuoteTransactionDate" forceUppercase="true">
+                <label>Purchase Order Quote Transaction Date</label>
                 <shortLabel>Date</shortLabel>
 
                 <maxLength>7</maxLength>
@@ -176,12 +181,12 @@
                     <text size="9" />
                 </control>
 
-                <summary>purchaseOrderQuoteTransmitDate</summary>
-                <description>purchaseOrderQuoteTransmitDate description...</description>
+                <summary>purchaseOrderQuoteTransactionDate</summary>
+                <description>purchaseOrderQuoteTransactionDate description...</description>
 			</attribute>
 
-            <attribute name="purchaseOrderQuoteTransmitTypeCode" forceUppercase="true">
-                <label>Purchase Order Quote Transmit Type Code</label>
+            <attribute name="purchaseOrderQuoteTransactionTypeCode" forceUppercase="true">
+                <label>Purchase Order Quote Transaction Type Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>50</maxLength>
@@ -191,8 +196,8 @@
                     <text size="52" />
                 </control>
 
-                <summary>purchaseOrderQuoteTransmitTypeCode</summary>
-                <description>purchaseOrderQuoteTransmitTypeCode description...</description>
+                <summary>purchaseOrderQuoteTransactionTypeCode</summary>
+                <description>purchaseOrderQuoteTransactionTypeCode description...</description>
 			</attribute>
 
             <attribute name="purchaseOrderVendorQuoteIdentifier" forceUppercase="true">

@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
@@ -19,7 +28,7 @@ package org.kuali.module.budget.bo;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjLevel;
@@ -28,9 +37,9 @@ import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.SubFundGroup;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBase {
+public class BudgetConstructionObjectSummary extends BusinessObjectBase {
 
 	private String personUniversalIdentifier;
 	private String organizationChartOfAccountsCode;
@@ -67,7 +76,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the personUniversalIdentifier attribute.
 	 * 
-	 * @return Returns the personUniversalIdentifier
+	 * @return - Returns the personUniversalIdentifier
 	 * 
 	 */
 	public String getPersonUniversalIdentifier() { 
@@ -77,7 +86,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the personUniversalIdentifier attribute.
 	 * 
-	 * @param personUniversalIdentifier The personUniversalIdentifier to set.
+	 * @param - personUniversalIdentifier The personUniversalIdentifier to set.
 	 * 
 	 */
 	public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
@@ -88,7 +97,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the organizationChartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the organizationChartOfAccountsCode
+	 * @return - Returns the organizationChartOfAccountsCode
 	 * 
 	 */
 	public String getOrganizationChartOfAccountsCode() { 
@@ -98,7 +107,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the organizationChartOfAccountsCode attribute.
 	 * 
-	 * @param organizationChartOfAccountsCode The organizationChartOfAccountsCode to set.
+	 * @param - organizationChartOfAccountsCode The organizationChartOfAccountsCode to set.
 	 * 
 	 */
 	public void setOrganizationChartOfAccountsCode(String organizationChartOfAccountsCode) {
@@ -109,7 +118,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the organizationCode attribute.
 	 * 
-	 * @return Returns the organizationCode
+	 * @return - Returns the organizationCode
 	 * 
 	 */
 	public String getOrganizationCode() { 
@@ -119,7 +128,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the organizationCode attribute.
 	 * 
-	 * @param organizationCode The organizationCode to set.
+	 * @param - organizationCode The organizationCode to set.
 	 * 
 	 */
 	public void setOrganizationCode(String organizationCode) {
@@ -130,7 +139,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the subFundGroupCode attribute.
 	 * 
-	 * @return Returns the subFundGroupCode
+	 * @return - Returns the subFundGroupCode
 	 * 
 	 */
 	public String getSubFundGroupCode() { 
@@ -140,7 +149,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the subFundGroupCode attribute.
 	 * 
-	 * @param subFundGroupCode The subFundGroupCode to set.
+	 * @param - subFundGroupCode The subFundGroupCode to set.
 	 * 
 	 */
 	public void setSubFundGroupCode(String subFundGroupCode) {
@@ -151,7 +160,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the chartOfAccountsCode
+	 * @return - Returns the chartOfAccountsCode
 	 * 
 	 */
 	public String getChartOfAccountsCode() { 
@@ -161,7 +170,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the chartOfAccountsCode attribute.
 	 * 
-	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
+	 * @param - chartOfAccountsCode The chartOfAccountsCode to set.
 	 * 
 	 */
 	public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -172,7 +181,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the incomeExpenseCode attribute.
 	 * 
-	 * @return Returns the incomeExpenseCode
+	 * @return - Returns the incomeExpenseCode
 	 * 
 	 */
 	public String getIncomeExpenseCode() { 
@@ -182,7 +191,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the incomeExpenseCode attribute.
 	 * 
-	 * @param incomeExpenseCode The incomeExpenseCode to set.
+	 * @param - incomeExpenseCode The incomeExpenseCode to set.
 	 * 
 	 */
 	public void setIncomeExpenseCode(String incomeExpenseCode) {
@@ -193,7 +202,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the financialConsolidationSortCode attribute.
 	 * 
-	 * @return Returns the financialConsolidationSortCode
+	 * @return - Returns the financialConsolidationSortCode
 	 * 
 	 */
 	public String getFinancialConsolidationSortCode() { 
@@ -203,7 +212,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the financialConsolidationSortCode attribute.
 	 * 
-	 * @param financialConsolidationSortCode The financialConsolidationSortCode to set.
+	 * @param - financialConsolidationSortCode The financialConsolidationSortCode to set.
 	 * 
 	 */
 	public void setFinancialConsolidationSortCode(String financialConsolidationSortCode) {
@@ -214,7 +223,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the financialLevelSortCode attribute.
 	 * 
-	 * @return Returns the financialLevelSortCode
+	 * @return - Returns the financialLevelSortCode
 	 * 
 	 */
 	public String getFinancialLevelSortCode() { 
@@ -224,7 +233,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the financialLevelSortCode attribute.
 	 * 
-	 * @param financialLevelSortCode The financialLevelSortCode to set.
+	 * @param - financialLevelSortCode The financialLevelSortCode to set.
 	 * 
 	 */
 	public void setFinancialLevelSortCode(String financialLevelSortCode) {
@@ -235,7 +244,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the financialObjectCode attribute.
 	 * 
-	 * @return Returns the financialObjectCode
+	 * @return - Returns the financialObjectCode
 	 * 
 	 */
 	public String getFinancialObjectCode() { 
@@ -245,7 +254,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the financialObjectCode attribute.
 	 * 
-	 * @param financialObjectCode The financialObjectCode to set.
+	 * @param - financialObjectCode The financialObjectCode to set.
 	 * 
 	 */
 	public void setFinancialObjectCode(String financialObjectCode) {
@@ -256,7 +265,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the accountLineAnnualBalanceAmount attribute.
 	 * 
-	 * @return Returns the accountLineAnnualBalanceAmount
+	 * @return - Returns the accountLineAnnualBalanceAmount
 	 * 
 	 */
 	public KualiDecimal getAccountLineAnnualBalanceAmount() { 
@@ -266,7 +275,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the accountLineAnnualBalanceAmount attribute.
 	 * 
-	 * @param accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
+	 * @param - accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
 	 * 
 	 */
 	public void setAccountLineAnnualBalanceAmount(KualiDecimal accountLineAnnualBalanceAmount) {
@@ -277,7 +286,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the financialBeginningBalanceLineAmount attribute.
 	 * 
-	 * @return Returns the financialBeginningBalanceLineAmount
+	 * @return - Returns the financialBeginningBalanceLineAmount
 	 * 
 	 */
 	public KualiDecimal getFinancialBeginningBalanceLineAmount() { 
@@ -287,7 +296,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the financialBeginningBalanceLineAmount attribute.
 	 * 
-	 * @param financialBeginningBalanceLineAmount The financialBeginningBalanceLineAmount to set.
+	 * @param - financialBeginningBalanceLineAmount The financialBeginningBalanceLineAmount to set.
 	 * 
 	 */
 	public void setFinancialBeginningBalanceLineAmount(KualiDecimal financialBeginningBalanceLineAmount) {
@@ -298,7 +307,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the financialConsolidationObjectCode attribute.
 	 * 
-	 * @return Returns the financialConsolidationObjectCode
+	 * @return - Returns the financialConsolidationObjectCode
 	 * 
 	 */
 	public String getFinancialConsolidationObjectCode() { 
@@ -308,7 +317,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the financialConsolidationObjectCode attribute.
 	 * 
-	 * @param financialConsolidationObjectCode The financialConsolidationObjectCode to set.
+	 * @param - financialConsolidationObjectCode The financialConsolidationObjectCode to set.
 	 * 
 	 */
 	public void setFinancialConsolidationObjectCode(String financialConsolidationObjectCode) {
@@ -319,7 +328,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the financialObjectLevelCode attribute.
 	 * 
-	 * @return Returns the financialObjectLevelCode
+	 * @return - Returns the financialObjectLevelCode
 	 * 
 	 */
 	public String getFinancialObjectLevelCode() { 
@@ -329,7 +338,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the financialObjectLevelCode attribute.
 	 * 
-	 * @param financialObjectLevelCode The financialObjectLevelCode to set.
+	 * @param - financialObjectLevelCode The financialObjectLevelCode to set.
 	 * 
 	 */
 	public void setFinancialObjectLevelCode(String financialObjectLevelCode) {
@@ -340,7 +349,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the appointmentRequestedCsfFteQuantity attribute.
 	 * 
-	 * @return Returns the appointmentRequestedCsfFteQuantity
+	 * @return - Returns the appointmentRequestedCsfFteQuantity
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedCsfFteQuantity() { 
@@ -350,7 +359,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the appointmentRequestedCsfFteQuantity attribute.
 	 * 
-	 * @param appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
+	 * @param - appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
 	 * 
 	 */
 	public void setAppointmentRequestedCsfFteQuantity(BigDecimal appointmentRequestedCsfFteQuantity) {
@@ -361,7 +370,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the appointmentRequestedFteQuantity attribute.
 	 * 
-	 * @return Returns the appointmentRequestedFteQuantity
+	 * @return - Returns the appointmentRequestedFteQuantity
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedFteQuantity() { 
@@ -371,7 +380,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the appointmentRequestedFteQuantity attribute.
 	 * 
-	 * @param appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
+	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
 	 * 
 	 */
 	public void setAppointmentRequestedFteQuantity(BigDecimal appointmentRequestedFteQuantity) {
@@ -382,7 +391,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the csfFullTimeEmploymentQuantity attribute.
 	 * 
-	 * @return Returns the csfFullTimeEmploymentQuantity
+	 * @return - Returns the csfFullTimeEmploymentQuantity
 	 * 
 	 */
 	public BigDecimal getCsfFullTimeEmploymentQuantity() { 
@@ -392,7 +401,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the csfFullTimeEmploymentQuantity attribute.
 	 * 
-	 * @param csfFullTimeEmploymentQuantity The csfFullTimeEmploymentQuantity to set.
+	 * @param - csfFullTimeEmploymentQuantity The csfFullTimeEmploymentQuantity to set.
 	 * 
 	 */
 	public void setCsfFullTimeEmploymentQuantity(BigDecimal csfFullTimeEmploymentQuantity) {
@@ -403,7 +412,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the positionCsfLeaveFteQuantity attribute.
 	 * 
-	 * @return Returns the positionCsfLeaveFteQuantity
+	 * @return - Returns the positionCsfLeaveFteQuantity
 	 * 
 	 */
 	public BigDecimal getPositionCsfLeaveFteQuantity() { 
@@ -413,7 +422,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the positionCsfLeaveFteQuantity attribute.
 	 * 
-	 * @param positionCsfLeaveFteQuantity The positionCsfLeaveFteQuantity to set.
+	 * @param - positionCsfLeaveFteQuantity The positionCsfLeaveFteQuantity to set.
 	 * 
 	 */
 	public void setPositionCsfLeaveFteQuantity(BigDecimal positionCsfLeaveFteQuantity) {
@@ -424,7 +433,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the organizationChartOfAccounts attribute.
 	 * 
-	 * @return Returns the organizationChartOfAccounts
+	 * @return - Returns the organizationChartOfAccounts
 	 * 
 	 */
 	public Chart getOrganizationChartOfAccounts() { 
@@ -434,7 +443,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the organizationChartOfAccounts attribute.
 	 * 
-	 * @param organizationChartOfAccounts The organizationChartOfAccounts to set.
+	 * @param - organizationChartOfAccounts The organizationChartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setOrganizationChartOfAccounts(Chart organizationChartOfAccounts) {
@@ -444,7 +453,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the organization attribute.
 	 * 
-	 * @return Returns the organization
+	 * @return - Returns the organization
 	 * 
 	 */
 	public Org getOrganization() { 
@@ -454,7 +463,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the organization attribute.
 	 * 
-	 * @param organization The organization to set.
+	 * @param - organization The organization to set.
 	 * @deprecated
 	 */
 	public void setOrganization(Org organization) {
@@ -464,7 +473,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
-	 * @return Returns the chartOfAccounts
+	 * @return - Returns the chartOfAccounts
 	 * 
 	 */
 	public Chart getChartOfAccounts() { 
@@ -474,7 +483,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
 	/**
 	 * Sets the chartOfAccounts attribute.
 	 * 
-	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @param - chartOfAccounts The chartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -533,7 +542,7 @@ public class BudgetConstructionObjectSummary extends PersistableBusinessObjectBa
     }    
     
 	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    

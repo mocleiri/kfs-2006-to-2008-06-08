@@ -33,7 +33,7 @@ import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.service.LaborOriginEntryService;
-import org.kuali.module.labor.util.TestDataPreparator;
+import org.kuali.module.labor.util.ObjectUtil;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 import org.springframework.beans.factory.BeanFactory;
@@ -52,7 +52,6 @@ public class LaborPosterTransactionValidatorTest extends KualiTestBase {
     private VerifyTransaction laborPosterTransactionValidator;
     private PersistenceService persistenceService;
 
-    @Override
     public void setUp() throws Exception {
         super.setUp();
         String messageFileName = "test/src/org/kuali/module/labor/testdata/message.properties";
@@ -76,7 +75,7 @@ public class LaborPosterTransactionValidatorTest extends KualiTestBase {
     public void testVerifyTransactionWithForeignReference() throws Exception {
         int numberOfTestData = Integer.valueOf(properties.getProperty("verifyTransaction.numOfData"));
 
-        List<LaborOriginEntry> transactionList = TestDataPreparator.getLaborOriginEntryList(properties, "verifyTransaction.testData", numberOfTestData, group1);
+        List<LaborOriginEntry> transactionList = getInputDataList("verifyTransaction.testData", numberOfTestData, group1);
         List<Integer> expectedNumOfErrors = getExpectedDataList("verifyTransaction.expectedNumOfErrors", numberOfTestData);
         
         businessObjectService.save(transactionList);
@@ -91,7 +90,7 @@ public class LaborPosterTransactionValidatorTest extends KualiTestBase {
 
     public void testVerifyTransactionWithoutForeignReference() throws Exception {
         int numberOfTestData = Integer.valueOf(properties.getProperty("verifyTransaction.numOfData"));
-        List<LaborOriginEntry> transactionList = TestDataPreparator.getLaborOriginEntryList(properties, "verifyTransaction.testData", numberOfTestData, group1);
+        List<LaborOriginEntry> transactionList = getInputDataList("verifyTransaction.testData", numberOfTestData, group1);
 
         for (int i = 0; i < numberOfTestData-1; i++) {
             LaborOriginEntry transaction = transactionList.get(i);
@@ -102,6 +101,19 @@ public class LaborPosterTransactionValidatorTest extends KualiTestBase {
             assertTrue(isTrue);
         }
     }
+    
+    private List getInputDataList(String propertyKeyPrefix, int numberOfInputData, OriginEntryGroup group) {
+        List inputDataList = new ArrayList();
+        for (int i = 1; i <= numberOfInputData; i++) {
+            String propertyKey = propertyKeyPrefix + i;
+            LaborOriginEntry inputData = new LaborOriginEntry();
+            ObjectUtil.populateBusinessObject(inputData, properties, propertyKey, fieldNames, deliminator);
+            inputData.setEntryGroupId(group.getId());
+            inputData.setGroup(group);
+            inputDataList.add(inputData);
+        }
+        return inputDataList;
+    }
 
     private List<Integer> getExpectedDataList(String propertyKeyPrefix, int numberOfInputData) {
         List expectedDataList = new ArrayList();
@@ -110,5 +122,12 @@ public class LaborPosterTransactionValidatorTest extends KualiTestBase {
             expectedDataList.add(Integer.valueOf(properties.getProperty(propertyKey)));
         }
         return expectedDataList;
+    }
+    
+    private void printErrorMessage(List<Message> messageList){
+        System.out.println("-->" + messageList.size());
+        for(Message message : messageList){
+            System.out.println(message.getMessage());
+        }       
     }
 }

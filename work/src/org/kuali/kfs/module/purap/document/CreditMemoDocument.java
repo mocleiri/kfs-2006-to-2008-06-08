@@ -16,11 +16,6 @@
 
 package org.kuali.module.purap.document;
 
-import org.kuali.core.bo.Note;
-import org.kuali.module.purap.bo.CreditMemoAccount;
-import org.kuali.module.purap.bo.CreditMemoItem;
-import org.kuali.module.purap.bo.CreditMemoStatusHistory;
-
 
 /**
  * Credit Memo Document
@@ -34,14 +29,7 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
 	public CreditMemoDocument() {
         super();
     }
-    
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#isBoNotesSupport()
-     */
-    @Override
-    public boolean isBoNotesSupport() {
-        return true;
-    }
+
 
     public void refreshAllReferences() {
         super.refreshAllReferences();
@@ -68,31 +56,8 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
     public void handleRouteLevelChange() {
         LOG.debug("handleRouteLevelChange() started");
         super.handleRouteLevelChange();
-    }
-    
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#addToStatusHistories(java.lang.String, java.lang.String)
-     */
-    public void addToStatusHistories( String oldStatus, String newStatus, Note statusHistoryNote ) {
-        CreditMemoStatusHistory cmsh = new CreditMemoStatusHistory( oldStatus, newStatus );
-        this.addStatusHistoryNote( cmsh, statusHistoryNote );
-        this.getStatusHistories().add( cmsh );
+
+
     }
 
-    /**
-     * 
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getItemClass()
-     */
-    @Override
-    public Class getItemClass() {
-        return CreditMemoItem.class;
-    }
-    
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getSourceAccountingLineClass()
-     */
-//    @Override
-//    public Class getSourceAccountingLineClass() {
-//        return CreditMemoAccount.class;
-//    }
 }

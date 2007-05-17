@@ -15,27 +15,23 @@
  */
 package org.kuali.module.purap.web.struts.form;
 
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.web.ui.ExtraButton;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.bo.PaymentRequestAccount;
-import org.kuali.module.purap.bo.PurchaseOrderAccount;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 
 /**
- * This class is the form class for the PaymentRequest document.
+ * This class is the form class for the PaymentRequest document. This method extends the parent KualiTransactionalDocumentFormBase
+ * class which contains all of the common form methods and form attributes needed by the PaymentRequest document.
+ * 
  */
 public class PaymentRequestForm extends AccountsPayableFormBase {
 
     private PurchaseOrderVendorStipulation newPurchaseOrderVendorStipulationLine;
-   // private boolean initialized = false;
 
     /**
      * Constructs a PurchaseOrderForm instance and sets up the appropriately casted document. 
@@ -45,8 +41,6 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
         setDocument(new PaymentRequestDocument());
         this.setNewPurchasingItemLine(setupNewPurchasingItemLine());
         setNewPurchaseOrderVendorStipulationLine(new PurchaseOrderVendorStipulation());
-        showButtons();  
- 
     }
 
     /**
@@ -68,9 +62,9 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
      */
     public KeyLabelPair getAdditionalDocInfo1() {
         if (ObjectUtils.isNotNull(this.getPaymentRequestDocument().getPurapDocumentIdentifier())) {
-            return new KeyLabelPair("DataDictionary.KualiPaymentRequestDocument.attributes.purapDocumentIdentifier", ((PaymentRequestDocument)this.getDocument()).getPurapDocumentIdentifier().toString());
+            return new KeyLabelPair("DataDictionary.KualiPaymentRequestDocument.attributes.identifier", ((PaymentRequestDocument)this.getDocument()).getPurapDocumentIdentifier().toString());
         } else {
-            return new KeyLabelPair("DataDictionary.KualiPaymentRequestDocument.attributes.purapDocumentIdentifier", "Not Available");
+            return new KeyLabelPair("DataDictionary.KualiPaymentRequestDocument.attributes.identifier", "Not Available");
         }
     }
 
@@ -92,7 +86,7 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
     public PurchasingApItem setupNewPurchasingItemLine() {
         return new PurchaseOrderItem();
     }
-
+    
     public PurchaseOrderVendorStipulation getAndResetNewPurchaseOrderVendorStipulationLine() {
         PurchaseOrderVendorStipulation aPurchaseOrderVendorStipulationLine = getNewPurchaseOrderVendorStipulationLine();
         setNewPurchaseOrderVendorStipulationLine(new PurchaseOrderVendorStipulation());
@@ -112,43 +106,5 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
         this.newPurchaseOrderVendorStipulationLine = newPurchaseOrderVendorStipulationLine;
     }
     
-    /**
-     * Gets the initialized attribute. 
-     * @return Returns the initialized.
-     */
-   /*
-    public boolean isInitialized() {
-        return initialized;
-    }
-*/
-   
-    /**
-     * Gets the PaymentRequestInitiated attribute for JSP 
-     * @return Returns the DisplayInitiateTab.
-     */
-  
-    public boolean isPaymentRequestInitiated() { 
-        return StringUtils.equals(this.getPaymentRequestDocument().getStatusCode(),PurapConstants.PaymentRequestStatuses.INITIATE);
-      } 
-
     
-    private void showButtons() {
-        
-        
-        ExtraButton continueButton = new ExtraButton();
-        continueButton.setExtraButtonProperty("methodToCall.continuePREQ");
-        continueButton.setExtraButtonSource("images/buttonsmall_continue.gif");
-        
-        ExtraButton clearButton = new ExtraButton();
-        clearButton.setExtraButtonProperty("methodToCall.clearInitFields");
-        clearButton.setExtraButtonSource("images/buttonsmall_clear.gif");
-        
-        // Only for debuggin and test:
-        String stat = this.getPaymentRequestDocument().getStatusCode();
-        
-        this.getExtraButtons().add(continueButton);
-        this.getExtraButtons().add(clearButton);
-
-    }
- 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public interface AccountingDocumentRuleBaseConstants {
         public static final String DOCUMENT_ERROR_PREFIX = "document" + DELIMITER;
     }
 
-    // GLPE KFSConstants
+    // GLPE Constants
     public static final class GENERAL_LEDGER_PENDING_ENTRY_CODE {
         public static final String NO = "N";
         public static final String YES = "Y";
@@ -58,7 +58,7 @@ public interface AccountingDocumentRuleBaseConstants {
         public static final int GLPE_DESCRIPTION_MAX_LENGTH = 40;
     }
 
-    // Object Type Code KFSConstants
+    // Object Type Code Constants
     public static final class OBJECT_TYPE_CODE {
         public static final String DOCUMENT_TYPE_INTERNAL_BILLING = "IB";
         public static final String DOCUMENT_TYPE_DISTRIBUTION_OF_INCOME_AND_EXPENSE = "DI";
@@ -67,7 +67,7 @@ public interface AccountingDocumentRuleBaseConstants {
         public static final String DOCUMENT_TYPE_INDIRECT_COST_ADJUSTMENT = "ICA";
     }
 
-    // Object Sub-Type Code KFSConstants
+    // Object Sub-Type Code Constants
     public static final class OBJECT_SUB_TYPE_CODE {
         public static final String NON_MANDATORY_TRANSFER = "TN";
         public static final String MANDATORY_TRANSFER = "MT";
@@ -117,18 +117,18 @@ public interface AccountingDocumentRuleBaseConstants {
         public static final String STUDENT_FEES = "SF";
     }
 
-    // Object Level Code KFSConstants
+    // Object Level Code Constants
     public static final class OBJECT_LEVEL_CODE {
         public static final String VALUATIONS_ADJUSTMENTS = "VADJ";
         public static final String CONTRACT_GRANTS = "C&G";
     }
 
-    // Fund Group Code KFSConstants
+    // Fund Group Code Constants
     public static final class FUND_GROUP_CODE {
         public static final String LOAN_FUND = "LF";
     }
 
-    // Sub Fund Group Code KFSConstants
+    // Sub Fund Group Code Constants
     public static final class SUB_FUND_GROUP_CODE {
         public static final String CONTINUE_EDUC = "DCEDU";
         public static final String CODE_EXTAGY = "EXTAGY";
@@ -137,14 +137,14 @@ public interface AccountingDocumentRuleBaseConstants {
         public static final String CODE_INVESTMENT_PLANT = "PFIP";
     }
 
-    // Consolidated Object Code KFSConstants
+    // Consolidated Object Code Constants
     public static final class CONSOLIDATED_OBJECT_CODE {
         public static final String ASSETS = "ASST";
         public static final String LIABILITIES = "LIAB";
         public static final String FUND_BALANCE = "FDBL";
     }
 
-    // Object Code KFSConstants
+    // Object Code Constants
     public static final class OBJECT_CODE {
         public static final String BURSAR_ACCOUNTS_RECEIVABLES = "8160";
         public static final String PAYROLL_DEDUCTION_INTERNAL_BENEFITS_ACCOUNTS_RECEIVABLES = "8116";

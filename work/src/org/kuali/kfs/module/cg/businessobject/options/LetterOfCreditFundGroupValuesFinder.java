@@ -37,9 +37,7 @@ public class LetterOfCreditFundGroupValuesFinder extends KeyValuesBase {
         labels.add(new KeyLabelPair("", ""));
 
         for (LetterOfCreditFundGroup code : codes) {
-            if(code.isRowActiveIndicator()) {
-                labels.add(new KeyLabelPair(code.getLetterOfCreditFundGroupCode(), code.getLetterOfCreditFundGroupCode() + " - " + code.getLetterOfCreditFundGroupDescription()));
-            }
+            labels.add(new KeyLabelPair(code.getLetterOfCreditFundGroupCode(), code.getLetterOfCreditFundGroupCode() + " - " + code.getLetterOfCreditFundGroupDescription()));
         }
 
         return labels;

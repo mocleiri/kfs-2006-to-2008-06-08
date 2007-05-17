@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/PurapParameterConstants.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,4 +25,6 @@ public class PurapParameterConstants {
     // GROUP NAMES
     public static final String PURAP_ADMIN_GROUP = "PurapAdminGroup";
 
+    // PARAMETER NAMES
+    public static final String PAYMENT_TERMS_DUE_TYPE_DESC = "PAYMENT_TERMS_DUE_TYPE_DESC";
 }

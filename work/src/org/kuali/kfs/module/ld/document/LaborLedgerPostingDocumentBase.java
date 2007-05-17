@@ -15,29 +15,11 @@
  */
 package org.kuali.module.labor.document;
 
-import java.util.List;
-
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.module.labor.bo.PendingLedgerEntry;
+import org.kuali.kfs.document.LedgerPostingDocumentBase;
 
 /**
  * Base implementation for a labor ledger posting document.
  */
-public class LaborLedgerPostingDocumentBase extends AccountingDocumentBase implements LaborLedgerPostingDocument {
-
-    public List<PendingLedgerEntry> getLaborLedgerPendingEntries() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public PendingLedgerEntry getLaborLedgerPendingEntry(int index) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setLaborLedgerPendingEntries(List<PendingLedgerEntry> laborLedgerPendingEntries) {
-        // TODO Auto-generated method stub
-        
-    }
+public class LaborLedgerPostingDocumentBase extends LedgerPostingDocumentBase implements LaborLedgerPostingDocument {
 
 }

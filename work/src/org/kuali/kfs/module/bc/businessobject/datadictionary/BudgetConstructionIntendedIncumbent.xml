@@ -1,41 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionIntendedIncumbent">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Construction Intended Incumbent Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="emplid" />
                 <field attributeName="grade" />
                 <field attributeName="iuClassificationLevel" />
                 <field attributeName="personName" />
                 <field attributeName="salaryAdministrationPlan" />
                 <field attributeName="setidSalary" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Budget Construction Intended Incumbent Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionIntendedIncumbent">Create New</a>]]></menubar>
 
             <instructions>Look up a Budget Construction Intended Incumbent</instructions>
 
@@ -47,7 +34,11 @@
 
             <lookupFields>
                 <lookupField attributeName="emplid" required="false" />
+                <lookupField attributeName="grade" required="false" />
+                <lookupField attributeName="iuClassificationLevel" required="false" />
                 <lookupField attributeName="personName" required="false" />
+                <lookupField attributeName="salaryAdministrationPlan" required="false" />
+                <lookupField attributeName="setidSalary" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -63,24 +54,23 @@
         <attributes>
 
             <attribute name="emplid" forceUppercase="true">
-                <label>Employee Id</label>
+                <label>Emplid</label>
                 <shortLabel>Emplid</shortLabel>
 
                 <maxLength>11</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="13" />
                 </control>
 
-                <summary>Employee Id</summary>
-                <description>Identifies employee</description>
+                <summary>emplid</summary>
+                <description>emplid description...</description>
 			</attribute>
 
             <attribute name="grade" forceUppercase="true">
-                <label>Salary Grade</label>
-                <shortLabel>Sal Grade</shortLabel>
+                <label>Grade</label>
+                <shortLabel>Grade</shortLabel>
 
                 <maxLength>3</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -89,13 +79,13 @@
                     <text size="5" />
                 </control>
 
-                <summary>Salary Grade</summary>
-                <description>Salary Grade for the employee.</description>
+                <summary>grade</summary>
+                <description>grade description...</description>
 			</attribute>
 
             <attribute name="iuClassificationLevel" forceUppercase="true">
                 <label>Iu Classification Level</label>
-                <shortLabel>Cls</shortLabel>
+                <shortLabel>Level</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -104,8 +94,8 @@
                     <text size="4" />
                 </control>
 
-                <summary>Classification Level</summary>
-                <description>Classification Level of the employee.</description>
+                <summary>iuClassificationLevel</summary>
+                <description>iuClassificationLevel description...</description>
 			</attribute>
 
             <attribute name="personName" forceUppercase="true">
@@ -113,14 +103,14 @@
                 <shortLabel>Name</shortLabel>
 
                 <maxLength>50</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="52" />
                 </control>
 
-                <summary>Person Name</summary>
-                <description>Last and first name of the employee.</description>
+                <summary>personName</summary>
+                <description>personName description...</description>
 			</attribute>
 
             <attribute name="salaryAdministrationPlan" forceUppercase="true">
@@ -134,13 +124,13 @@
                     <text size="6" />
                 </control>
 
-                <summary>Salary Administration Plan</summary>
-                <description>Salary Administration Plan for the employee.</description>
+                <summary>salaryAdministrationPlan</summary>
+                <description>salaryAdministrationPlan description...</description>
 			</attribute>
 
             <attribute name="setidSalary" forceUppercase="true">
-                <label>Salary Setid</label>
-                <shortLabel>Sal Setid</shortLabel>
+                <label>Setid Salary</label>
+                <shortLabel>Salary</shortLabel>
 
                 <maxLength>5</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -149,8 +139,8 @@
                     <text size="7" />
                 </control>
 
-                <summary>Salary Setid</summary>
-                <description>Salary admin plan set identifier for the employee.</description>
+                <summary>setidSalary</summary>
+                <description>setidSalary description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,14 +34,16 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.Timer;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.core.web.ui.AccountingLineDecorator;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.AccountingLineOverride;
 import org.kuali.kfs.bo.AccountingLineParser;
@@ -52,9 +54,7 @@ import org.kuali.kfs.exceptions.AccountingLineParserException;
 import org.kuali.kfs.rule.event.AddAccountingLineEvent;
 import org.kuali.kfs.rule.event.DeleteAccountingLineEvent;
 import org.kuali.kfs.rule.event.UpdateAccountingLineEvent;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
-import org.kuali.kfs.web.ui.AccountingLineDecorator;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -80,8 +80,8 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         if (transForm.hasDocumentId()) {
             AccountingDocument financialDocument = (AccountingDocument) transForm.getDocument();
 
-            processAccountingLines(financialDocument, transForm, KFSConstants.SOURCE);
-            processAccountingLines(financialDocument, transForm, KFSConstants.TARGET);
+            processAccountingLines(financialDocument, transForm, Constants.SOURCE);
+            processAccountingLines(financialDocument, transForm, Constants.TARGET);
         }
 
         // This is after a potential handleUpdate(), to display automatically cleared overrides following a route or save.
@@ -149,7 +149,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     // Set of actions for which updateEvents should be generated
     protected static final Set UPDATE_EVENT_ACTIONS;
     static {
-        String[] updateEventActions = { KFSConstants.SAVE_METHOD, KFSConstants.ROUTE_METHOD, KFSConstants.APPROVE_METHOD, KFSConstants.BLANKET_APPROVE_METHOD };
+        String[] updateEventActions = { Constants.SAVE_METHOD, Constants.ROUTE_METHOD, Constants.APPROVE_METHOD, Constants.BLANKET_APPROVE_METHOD };
         UPDATE_EVENT_ACTIONS = new HashSet();
         for (int i = 0; i < updateEventActions.length; ++i) {
             UPDATE_EVENT_ACTIONS.add(updateEventActions[i]);
@@ -202,17 +202,17 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         List formLines;
         List<AccountingLineDecorator> decorators;
         String pathPrefix;
-        if (lineSet.equals(KFSConstants.SOURCE)) {
+        if (lineSet.equals(Constants.SOURCE)) {
             baseLines = transForm.getBaselineSourceAccountingLines();
             formLines = transDoc.getSourceAccountingLines();
             decorators = transForm.getSourceLineDecorators(formLines.size());
-            pathPrefix = KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME;
+            pathPrefix = Constants.DOCUMENT_PROPERTY_NAME + "." + Constants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME;
         }
         else {
             baseLines = transForm.getBaselineTargetAccountingLines();
             formLines = transDoc.getTargetAccountingLines();
             decorators = transForm.getTargetLineDecorators(formLines.size());
-            pathPrefix = KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME;
+            pathPrefix = Constants.DOCUMENT_PROPERTY_NAME + "." + Constants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME;
         }
 
         Map baseLineMap = new HashMap();
@@ -315,7 +315,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
 
         // no business rules to check, no events to create
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
@@ -346,7 +346,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
 
         // no business rules to check, no events to create
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -367,7 +367,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         // error message saying "couldn't revert")
         newerLine.copyFrom(originalLine);
         reverted = true;
-        GlobalVariables.getMessageList().add(KFSKeyConstants.MESSAGE_REVERT_SUCCESSFUL);
+        GlobalVariables.getMessageList().add(KeyConstants.MESSAGE_REVERT_SUCCESSFUL);
 
         return reverted;
     }
@@ -390,7 +390,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
 
         boolean rulePassed = false;
         int deleteIndex = getLineToDelete(request);
-        String errorPath = KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME + "[" + deleteIndex + "]";
+        String errorPath = Constants.DOCUMENT_PROPERTY_NAME + "." + Constants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME + "[" + deleteIndex + "]";
 
         // check business rule, if there is a baseline copy
         // (accountingLines without baselines haven't been persisted yet, so they can safely be deleted)
@@ -412,10 +412,10 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
             financialDocumentForm.getTargetLineDecorator(deleteIndex).setRevertible(true);
 
             String[] errorParams = new String[] { "target", Integer.toString(deleteIndex + 1) };
-            GlobalVariables.getErrorMap().putError(errorPath, KFSKeyConstants.ERROR_ACCOUNTINGLINE_DELETERULE_INVALIDACCOUNT, errorParams);
+            GlobalVariables.getErrorMap().putError(errorPath, KeyConstants.ERROR_ACCOUNTINGLINE_DELETERULE_INVALIDACCOUNT, errorParams);
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -435,7 +435,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
 
         boolean rulePassed = false;
         int deleteIndex = getLineToDelete(request);
-        String errorPath = KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME + "[" + deleteIndex + "]";
+        String errorPath = Constants.DOCUMENT_PROPERTY_NAME + "." + Constants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME + "[" + deleteIndex + "]";
 
         // check business rule, if there is a baseline copy
         // (accountingLines without baselines haven't been persisted yet, so they can safely be deleted)
@@ -457,10 +457,10 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
             financialDocumentForm.getSourceLineDecorator(deleteIndex).setRevertible(true);
 
             String[] errorParams = new String[] { "source", Integer.toString(deleteIndex + 1) };
-            GlobalVariables.getErrorMap().putError(errorPath, KFSKeyConstants.ERROR_ACCOUNTINGLINE_DELETERULE_INVALIDACCOUNT, errorParams);
+            GlobalVariables.getErrorMap().putError(errorPath, KeyConstants.ERROR_ACCOUNTINGLINE_DELETERULE_INVALIDACCOUNT, errorParams);
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
@@ -478,9 +478,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
             financialDocumentForm.getFinancialDocument().getSourceAccountingLines().remove(deleteIndex);
 
             // remove baseline duplicate and decorator
-            if (deleteIndex < financialDocumentForm.getBaselineSourceAccountingLines().size()) {
-                financialDocumentForm.getBaselineSourceAccountingLines().remove(deleteIndex);
-            }
+            financialDocumentForm.getBaselineSourceAccountingLines().remove(deleteIndex);
             financialDocumentForm.getSourceLineDecorators().remove(deleteIndex);
         }
         else {
@@ -488,9 +486,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
             financialDocumentForm.getFinancialDocument().getTargetAccountingLines().remove(deleteIndex);
 
             // remove baseline duplicate and decorator
-            if (deleteIndex < financialDocumentForm.getBaselineTargetAccountingLines().size()) {
-                financialDocumentForm.getBaselineTargetAccountingLines().remove(deleteIndex);
-            }
+            financialDocumentForm.getBaselineTargetAccountingLines().remove(deleteIndex);
             financialDocumentForm.getTargetLineDecorators().remove(deleteIndex);
         }
     }
@@ -512,7 +508,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         // call method that sourceform and destination list
         uploadAccountingLines(false, form);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
@@ -533,7 +529,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         // call method that sourceform and destination list
         uploadAccountingLines(true, form);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -557,13 +553,13 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         String errorPathPrefix = null;
         try {
             if (isSource) {
-                errorPathPrefix = KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.SOURCE_ACCOUNTING_LINE_ERRORS;
+                errorPathPrefix = Constants.DOCUMENT_PROPERTY_NAME + "." + Constants.SOURCE_ACCOUNTING_LINE_ERRORS;
                 FormFile sourceFile = tmpForm.getSourceFile();
                 checkUploadFile(sourceFile);
                 importedLines = accountingLineParser.importSourceAccountingLines(sourceFile.getFileName(), sourceFile.getInputStream(), financialDocument);
             }
             else {
-                errorPathPrefix = KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.TARGET_ACCOUNTING_LINE_ERRORS;
+                errorPathPrefix = Constants.DOCUMENT_PROPERTY_NAME + "." + Constants.TARGET_ACCOUNTING_LINE_ERRORS;
                 FormFile targetFile = tmpForm.getTargetFile();
                 checkUploadFile(targetFile);
                 importedLines = accountingLineParser.importTargetAccountingLines(targetFile.getFileName(), targetFile.getInputStream(), financialDocument);
@@ -584,7 +580,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
 
     private void checkUploadFile(FormFile file) {
         if (file == null) {
-            throw new AccountingLineParserException("invalid (null) upload file", KFSKeyConstants.ERROR_UPLOADFILE_NULL);
+            throw new AccountingLineParserException("invalid (null) upload file", KeyConstants.ERROR_UPLOADFILE_NULL);
         }
     }
 
@@ -606,7 +602,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         TargetAccountingLine line = financialDocumentForm.getNewTargetLine();
 
         // check any business rules
-        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAccountingLineEvent(KFSConstants.NEW_TARGET_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAccountingLineEvent(Constants.NEW_TARGET_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
 
         // if the rule evaluation passed, let's add it
         if (rulePassed) {
@@ -618,7 +614,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
             financialDocumentForm.setNewTargetLine(null);
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
@@ -639,7 +635,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         SourceAccountingLine line = financialDocumentForm.getNewSourceLine();
 
         // check any business rules
-        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAccountingLineEvent(KFSConstants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAccountingLineEvent(Constants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
 
         if (rulePassed) {
             // add accountingLine
@@ -650,7 +646,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
             financialDocumentForm.setNewSourceLine(null);
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -712,7 +708,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         tmpForm.getSourceLineDecorators().clear();
         tmpForm.getTargetLineDecorators().clear();
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -729,7 +725,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     public ActionForward showDetails(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         KualiAccountingDocumentFormBase tmpForm = (KualiAccountingDocumentFormBase) form;
         tmpForm.setHideDetails(false);
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -746,7 +742,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     public ActionForward hideDetails(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         KualiAccountingDocumentFormBase tmpForm = (KualiAccountingDocumentFormBase) form;
         tmpForm.setHideDetails(true);
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -806,12 +802,12 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
 
         // now add required parameters
         Properties parameters = new Properties();
-        parameters.put(KFSConstants.DISPATCH_REQUEST_PARAMETER, KFSConstants.START_METHOD);
+        parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.START_METHOD);
         // need this next param b/c the lookup's return back will overwrite
         // the original doc form key
-        parameters.put(KFSConstants.BALANCE_INQUIRY_REPORT_MENU_CALLER_DOC_FORM_KEY, callerDocFormKey);
-        parameters.put(KFSConstants.DOC_FORM_KEY, callerDocFormKey);
-        parameters.put(KFSConstants.BACK_LOCATION, basePath + mapping.getPath() + ".do");
+        parameters.put(Constants.BALANCE_INQUIRY_REPORT_MENU_CALLER_DOC_FORM_KEY, callerDocFormKey);
+        parameters.put(Constants.DOC_FORM_KEY, callerDocFormKey);
+        parameters.put(Constants.BACK_LOCATION, basePath + mapping.getPath() + ".do");
 
         if (StringUtils.isNotBlank(line.getBudgetYear())) {
             parameters.put("budgetYear", line.getBudgetYear());
@@ -850,7 +846,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
             parameters.put("objectTypeCode", line.getObjectTypeCode());
         }
 
-        String lookupUrl = UrlFactory.parameterizeUrl(basePath + "/" + KFSConstants.BALANCE_INQUIRY_REPORT_MENU_ACTION, parameters);
+        String lookupUrl = UrlFactory.parameterizeUrl(basePath + "/" + Constants.BALANCE_INQUIRY_REPORT_MENU_ACTION, parameters);
 
         return new ActionForward(lookupUrl, true);
     }

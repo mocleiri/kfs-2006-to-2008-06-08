@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,24 +26,24 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.upload.FormFile;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.authorization.DocumentAuthorizer;
 import org.kuali.core.exceptions.InfrastructureException;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.core.web.format.SimpleBooleanFormatter;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.core.web.ui.AccountingLineDecorator;
 import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineOverride;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizer;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.ui.AccountingLineDecorator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -65,6 +65,8 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
     protected FormFile sourceFile;
     protected FormFile targetFile;
     private boolean hideDetails = false;
+
+    private String accountingLineImportInstructionsUrl;
 
     private List<AccountingLineDecorator> sourceLineDecorators;
     private List<AccountingLineDecorator> targetLineDecorators;
@@ -92,6 +94,9 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
         // initialize accountingLine decoration lists
         sourceLineDecorators = new ArrayList<AccountingLineDecorator>();
         targetLineDecorators = new ArrayList<AccountingLineDecorator>();
+
+        // initialize accountingLine import instructions URL
+        accountingLineImportInstructionsUrl = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.ACCT_LINE_IMPORT_INSTRUCTIONS_URL);
     }
 
     /**
@@ -110,18 +115,18 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
         // handle new accountingLine, if one is being added
         String methodToCall = this.getMethodToCall();
         if (StringUtils.isNotBlank(methodToCall)) {
-            if (methodToCall.equals(KFSConstants.INSERT_SOURCE_LINE_METHOD)) {
+            if (methodToCall.equals(Constants.INSERT_SOURCE_LINE_METHOD)) {
                 populateSourceAccountingLine(getNewSourceLine());
             }
 
-            if (methodToCall.equals(KFSConstants.INSERT_TARGET_LINE_METHOD)) {
+            if (methodToCall.equals(Constants.INSERT_TARGET_LINE_METHOD)) {
                 populateTargetAccountingLine(getNewTargetLine());
             }
         }
 
         // don't call populateAccountingLines if you are copying or errorCorrecting a document,
         // since you want the accountingLines in the copy to be "identical" to those in the original
-        if (!StringUtils.equals(methodToCall, KFSConstants.COPY_METHOD) && !StringUtils.equals(methodToCall, KFSConstants.ERRORCORRECT_METHOD)) {
+        if (!StringUtils.equals(methodToCall, Constants.COPY_METHOD) && !StringUtils.equals(methodToCall, Constants.ERRORCORRECT_METHOD)) {
             populateAccountingLines();
         }
 
@@ -611,11 +616,17 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
     }
 
     /**
-     * TODO this has to be fixed for p2a: KULRNE-4552
      * @return String
      */
     public String getAccountingLineImportInstructionsUrl() {
-        return "https://test.kuali.org/confluence/display/KULRNE/Accounting+Line+Import+Instructions";
+        return accountingLineImportInstructionsUrl;
+    }
+
+    /**
+     * @param accountingLineImportInstructionsUrl
+     */
+    public void setAccountingLineImportInstructionsUrl(String accountingLineImportInstructionsUrl) {
+        this.accountingLineImportInstructionsUrl = accountingLineImportInstructionsUrl;
     }
 
     /**

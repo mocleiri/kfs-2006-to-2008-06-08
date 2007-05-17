@@ -1,25 +1,33 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
@@ -27,12 +35,12 @@ import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubFundGroup;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetConstructionControlList extends PersistableBusinessObjectBase {
+public class BudgetConstructionControlList extends BusinessObjectBase {
 
 	private String personUniversalIdentifier;
-	private String documentNumber;
+	private String financialDocumentNumber;
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
 	private String accountNumber;
@@ -42,7 +50,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	private String selectedOrganizationChartOfAccountsCode;
 	private String selectedOrganizationCode;
 	private Integer selectedPullFlag;
-	private String selectedSubFundGroupCode;
+	private String selectedSubFundGroup;
 
     private BudgetConstructionHeader budgetConstructionHeader;
     private Account account;
@@ -50,7 +58,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	private Org selectedOrganization;
 	private Chart selectedOrganizationChartOfAccounts;
     private SubAccount subAccount;
-    private SubFundGroup selectedSubFundGroup;
+    private SubFundGroup selectedSubFund;
     
 	/**
 	 * Default constructor.
@@ -62,7 +70,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the personUniversalIdentifier attribute.
 	 * 
-	 * @return Returns the personUniversalIdentifier
+	 * @return - Returns the personUniversalIdentifier
 	 * 
 	 */
 	public String getPersonUniversalIdentifier() { 
@@ -72,7 +80,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the personUniversalIdentifier attribute.
 	 * 
-	 * @param personUniversalIdentifier The personUniversalIdentifier to set.
+	 * @param - personUniversalIdentifier The personUniversalIdentifier to set.
 	 * 
 	 */
 	public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
@@ -81,30 +89,30 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 
 
 	/**
-	 * Gets the documentNumber attribute.
+	 * Gets the financialDocumentNumber attribute.
 	 * 
-	 * @return Returns the documentNumber
+	 * @return - Returns the financialDocumentNumber
 	 * 
 	 */
-	public String getDocumentNumber() { 
-		return documentNumber;
+	public String getFinancialDocumentNumber() { 
+		return financialDocumentNumber;
 	}
 
 	/**
-	 * Sets the documentNumber attribute.
+	 * Sets the financialDocumentNumber attribute.
 	 * 
-	 * @param documentNumber The documentNumber to set.
+	 * @param - financialDocumentNumber The financialDocumentNumber to set.
 	 * 
 	 */
-	public void setDocumentNumber(String documentNumber) {
-		this.documentNumber = documentNumber;
+	public void setFinancialDocumentNumber(String financialDocumentNumber) {
+		this.financialDocumentNumber = financialDocumentNumber;
 	}
 
 
 	/**
 	 * Gets the universityFiscalYear attribute.
 	 * 
-	 * @return Returns the universityFiscalYear
+	 * @return - Returns the universityFiscalYear
 	 * 
 	 */
 	public Integer getUniversityFiscalYear() { 
@@ -114,7 +122,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the universityFiscalYear attribute.
 	 * 
-	 * @param universityFiscalYear The universityFiscalYear to set.
+	 * @param - universityFiscalYear The universityFiscalYear to set.
 	 * 
 	 */
 	public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -125,7 +133,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the chartOfAccountsCode
+	 * @return - Returns the chartOfAccountsCode
 	 * 
 	 */
 	public String getChartOfAccountsCode() { 
@@ -135,7 +143,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the chartOfAccountsCode attribute.
 	 * 
-	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
+	 * @param - chartOfAccountsCode The chartOfAccountsCode to set.
 	 * 
 	 */
 	public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -146,7 +154,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the accountNumber attribute.
 	 * 
-	 * @return Returns the accountNumber
+	 * @return - Returns the accountNumber
 	 * 
 	 */
 	public String getAccountNumber() { 
@@ -156,7 +164,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the accountNumber attribute.
 	 * 
-	 * @param accountNumber The accountNumber to set.
+	 * @param - accountNumber The accountNumber to set.
 	 * 
 	 */
 	public void setAccountNumber(String accountNumber) {
@@ -167,7 +175,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the subAccountNumber attribute.
 	 * 
-	 * @return Returns the subAccountNumber
+	 * @return - Returns the subAccountNumber
 	 * 
 	 */
 	public String getSubAccountNumber() { 
@@ -177,7 +185,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the subAccountNumber attribute.
 	 * 
-	 * @param subAccountNumber The subAccountNumber to set.
+	 * @param - subAccountNumber The subAccountNumber to set.
 	 * 
 	 */
 	public void setSubAccountNumber(String subAccountNumber) {
@@ -188,7 +196,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the hierarchyOrganizationLevelCode attribute.
 	 * 
-	 * @return Returns the hierarchyOrganizationLevelCode
+	 * @return - Returns the hierarchyOrganizationLevelCode
 	 * 
 	 */
 	public Integer getHierarchyOrganizationLevelCode() { 
@@ -198,7 +206,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the hierarchyOrganizationLevelCode attribute.
 	 * 
-	 * @param hierarchyOrganizationLevelCode The hierarchyOrganizationLevelCode to set.
+	 * @param - hierarchyOrganizationLevelCode The hierarchyOrganizationLevelCode to set.
 	 * 
 	 */
 	public void setHierarchyOrganizationLevelCode(Integer hierarchyOrganizationLevelCode) {
@@ -209,7 +217,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the selectedOrganizationLevelCode attribute.
 	 * 
-	 * @return Returns the selectedOrganizationLevelCode
+	 * @return - Returns the selectedOrganizationLevelCode
 	 * 
 	 */
 	public Integer getSelectedOrganizationLevelCode() { 
@@ -219,7 +227,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the selectedOrganizationLevelCode attribute.
 	 * 
-	 * @param selectedOrganizationLevelCode The selectedOrganizationLevelCode to set.
+	 * @param - selectedOrganizationLevelCode The selectedOrganizationLevelCode to set.
 	 * 
 	 */
 	public void setSelectedOrganizationLevelCode(Integer selectedOrganizationLevelCode) {
@@ -230,7 +238,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the selectedOrganizationChartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the selectedOrganizationChartOfAccountsCode
+	 * @return - Returns the selectedOrganizationChartOfAccountsCode
 	 * 
 	 */
 	public String getSelectedOrganizationChartOfAccountsCode() { 
@@ -240,7 +248,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the selectedOrganizationChartOfAccountsCode attribute.
 	 * 
-	 * @param selectedOrganizationChartOfAccountsCode The selectedOrganizationChartOfAccountsCode to set.
+	 * @param - selectedOrganizationChartOfAccountsCode The selectedOrganizationChartOfAccountsCode to set.
 	 * 
 	 */
 	public void setSelectedOrganizationChartOfAccountsCode(String selectedOrganizationChartOfAccountsCode) {
@@ -251,7 +259,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the selectedOrganizationCode attribute.
 	 * 
-	 * @return Returns the selectedOrganizationCode
+	 * @return - Returns the selectedOrganizationCode
 	 * 
 	 */
 	public String getSelectedOrganizationCode() { 
@@ -261,7 +269,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the selectedOrganizationCode attribute.
 	 * 
-	 * @param selectedOrganizationCode The selectedOrganizationCode to set.
+	 * @param - selectedOrganizationCode The selectedOrganizationCode to set.
 	 * 
 	 */
 	public void setSelectedOrganizationCode(String selectedOrganizationCode) {
@@ -272,7 +280,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the selectedPullFlag attribute.
 	 * 
-	 * @return Returns the selectedPullFlag
+	 * @return - Returns the selectedPullFlag
 	 * 
 	 */
 	public Integer getSelectedPullFlag() { 
@@ -282,7 +290,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the selectedPullFlag attribute.
 	 * 
-	 * @param selectedPullFlag The selectedPullFlag to set.
+	 * @param - selectedPullFlag The selectedPullFlag to set.
 	 * 
 	 */
 	public void setSelectedPullFlag(Integer selectedPullFlag) {
@@ -291,30 +299,30 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 
 
 	/**
-	 * Gets the selectedSubFundGroupCode attribute.
+	 * Gets the selectedSubFundGroup attribute.
 	 * 
-	 * @return Returns the selectedSubFundGroupCode
+	 * @return - Returns the selectedSubFundGroup
 	 * 
 	 */
-	public String getSelectedSubFundGroupCode() { 
-		return selectedSubFundGroupCode;
+	public String getSelectedSubFundGroup() { 
+		return selectedSubFundGroup;
 	}
 
 	/**
-	 * Sets the selectedSubFundGroupCode attribute.
+	 * Sets the selectedSubFundGroup attribute.
 	 * 
-	 * @param selectedSubFundGroupCode The selectedSubFundGroupCode to set.
+	 * @param - selectedSubFundGroup The selectedSubFundGroup to set.
 	 * 
 	 */
-	public void setSelectedSubFundGroupCode(String selectedSubFundGroupCode) {
-		this.selectedSubFundGroupCode = selectedSubFundGroupCode;
+	public void setSelectedSubFundGroup(String selectedSubFundGroup) {
+		this.selectedSubFundGroup = selectedSubFundGroup;
 	}
 
 
 	/**
 	 * Gets the account attribute.
 	 * 
-	 * @return Returns the account
+	 * @return - Returns the account
 	 * 
 	 */
 	public Account getAccount() { 
@@ -324,7 +332,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the account attribute.
 	 * 
-	 * @param account The account to set.
+	 * @param - account The account to set.
 	 * @deprecated
 	 */
 	public void setAccount(Account account) {
@@ -334,7 +342,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
-	 * @return Returns the chartOfAccounts
+	 * @return - Returns the chartOfAccounts
 	 * 
 	 */
 	public Chart getChartOfAccounts() { 
@@ -344,7 +352,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the chartOfAccounts attribute.
 	 * 
-	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @param - chartOfAccounts The chartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -354,7 +362,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the selectedOrganization attribute.
 	 * 
-	 * @return Returns the selectedOrganization
+	 * @return - Returns the selectedOrganization
 	 * 
 	 */
 	public Org getSelectedOrganization() { 
@@ -364,7 +372,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the selectedOrganization attribute.
 	 * 
-	 * @param selectedOrganization The selectedOrganization to set.
+	 * @param - selectedOrganization The selectedOrganization to set.
 	 * @deprecated
 	 */
 	public void setSelectedOrganization(Org selectedOrganization) {
@@ -374,7 +382,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Gets the selectedOrganizationChartOfAccounts attribute.
 	 * 
-	 * @return Returns the selectedOrganizationChartOfAccounts
+	 * @return - Returns the selectedOrganizationChartOfAccounts
 	 * 
 	 */
 	public Chart getSelectedOrganizationChartOfAccounts() { 
@@ -384,7 +392,7 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
 	/**
 	 * Sets the selectedOrganizationChartOfAccounts attribute.
 	 * 
-	 * @param selectedOrganizationChartOfAccounts The selectedOrganizationChartOfAccounts to set.
+	 * @param - selectedOrganizationChartOfAccounts The selectedOrganizationChartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setSelectedOrganizationChartOfAccounts(Chart selectedOrganizationChartOfAccounts) {
@@ -409,20 +417,20 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
     }    
     
     /**
-     * Gets the selectedSubFundGroup attribute. 
-     * @return Returns the selectedSubFundGroup.
+     * Gets the selectedSubFund attribute. 
+     * @return Returns the selectedSubFund.
      */
-    public SubFundGroup getSelectedSubFundGroup() {
-        return selectedSubFundGroup;
+    public SubFundGroup getSelectedSubFund() {
+        return selectedSubFund;
     }
 
     /**
-     * Sets the selectedSubFundGroup attribute value.
-     * @param selectedSubFundGroup The selectedSubFundGroup to set.
+     * Sets the selectedSubFund attribute value.
+     * @param selectedSubFund The selectedSubFund to set.
      * @deprecated
      */
-    public void setSelectedSubFundGroup(SubFundGroup selectedSubFundGroup) {
-        this.selectedSubFundGroup = selectedSubFundGroup;
+    public void setSelectedSubFund(SubFundGroup selectedSubFund) {
+        this.selectedSubFund = selectedSubFund;
     }
 
     /**
@@ -443,12 +451,12 @@ public class BudgetConstructionControlList extends PersistableBusinessObjectBase
     }    
     
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
         m.put("personUniversalIdentifier", this.personUniversalIdentifier);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/PurapRuleConstants.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +26,11 @@ public class PurapRuleConstants {
     public static String PURAP_ADMIN_GROUP = "PurapAdminGroup";
 
     // RULE NAMES
-    public static final String PURAP_DOCUMENT_PO_ACTIONS = "PURAP.DOCUMENT.PO.ACTIONS";
-    public static final String PURAP_DOCUMENT_PREQ_ACTIONS = "PURAP.DOCUMENT.PO.ACTIONS";
-    public static final String PURAP_DOCUMENT_ASSIGN_CM_ACTIONS = "PURAP.DOCUMENT.ASSIGN.CM.ACTIONS";
+    public static String PURAP_VENDOR_MIN_ORDER_AMOUNT = "PURAP.VENDOR_MIN_ORDER_AMOUNT";
+    public static String PURAP_NOT_ALLOWED_TAX_NUMBERS = "PURAP.NOT_ALLOWED_TAX_NUMBERS";
+    public static String PURAP_VNDR_MIN_NUM_LOOKUP_CRITERIA = "PURAP.VNDR_MIN_NUM_LOOKUP_CRITERIA";
+    public static String PURAP_VNDR_LOOKUP_MIN_NAME_LENGTH = "PURAP.VNDR_LOOKUP_MIN_NAME_LENGTH";
+
+    public static final String ALLOWED_EMPLOYEE_TYPE_RULE = "AllowedEmployeeTypes";
 
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormResearchRiskStudy.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +21,25 @@ package org.kuali.module.kra.routingform.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 /**
- * Class representing a RoutingFormResearchRiskTypeStudy.
  * 
  */
-public class RoutingFormResearchRiskStudy extends PersistableBusinessObjectBase {
+public class RoutingFormResearchRiskStudy extends BusinessObjectBase {
 
 	private String documentNumber;
 	private Integer routingFormResearchRiskStudySequenceNumber;
-	private String researchRiskStudyApprovalStatusCode;
+	private String researchRiskApprovalPendingIndicator;
 	private String researchRiskExemptionNumber;
 	private Date researchRiskStudyApprovalDate;
 	private String researchRiskStudyNumber;
 	private String researchRiskStudyName;
 	private String researchRiskStudyReviewCode;
 	private String researchRiskTypeCode;
-    private Date researchRiskStudyExpirationDate;
+
+    private RoutingFormResearchRisk researchRiskType;
     
 	/**
 	 * Default constructor.
@@ -89,23 +91,23 @@ public class RoutingFormResearchRiskStudy extends PersistableBusinessObjectBase 
 
 
 	/**
-	 * Gets the researchRiskStudyApprovalStatusCode attribute.
+	 * Gets the researchRiskApprovalPendingIndicator attribute.
 	 * 
-	 * @return Returns the researchRiskStudyApprovalStatusCode
+	 * @return Returns the researchRiskApprovalPendingIndicator
 	 * 
 	 */
-	public String getResearchRiskStudyApprovalStatusCode() { 
-		return researchRiskStudyApprovalStatusCode;
+	public String getResearchRiskApprovalPendingIndicator() { 
+		return researchRiskApprovalPendingIndicator;
 	}
 
 	/**
-	 * Sets the researchRiskStudyApprovalStatusCode attribute.
+	 * Sets the researchRiskApprovalPendingIndicator attribute.
 	 * 
-	 * @param researchRiskStudyApprovalStatusCode The researchRiskStudyApprovalStatusCode to set.
+	 * @param researchRiskApprovalPendingIndicator The researchRiskApprovalPendingIndicator to set.
 	 * 
 	 */
-	public void setResearchRiskStudyApprovalStatusCode(String researchRiskStudyApprovalStatusCode) {
-		this.researchRiskStudyApprovalStatusCode = researchRiskStudyApprovalStatusCode;
+	public void setResearchRiskApprovalPendingIndicator(String researchRiskApprovalPendingIndicator) {
+		this.researchRiskApprovalPendingIndicator = researchRiskApprovalPendingIndicator;
 	}
 
 
@@ -235,32 +237,34 @@ public class RoutingFormResearchRiskStudy extends PersistableBusinessObjectBase 
 	}
 
     /**
-     * Gets the researchRiskStudyExpirationDate attribute. 
-     * @return Returns the researchRiskStudyExpirationDate.
+     * Gets the researchRiskType attribute. 
+     * @return Returns the researchRiskType.
      */
-    public Date getResearchRiskStudyExpirationDate() {
-        return researchRiskStudyExpirationDate;
+    public RoutingFormResearchRisk getResearchRiskType() {
+        return researchRiskType;
     }
 
     /**
-     * Sets the researchRiskStudyExpirationDate attribute value.
-     * @param researchRiskStudyExpirationDate The researchRiskStudyExpirationDate to set.
+     * Sets the researchRiskType attribute value.
+     * @param researchRiskType The researchRiskType to set.
+     * @deprecated
      */
-    public void setResearchRiskStudyExpirationDate(Date researchRiskStudyExpirationDate) {
-        this.researchRiskStudyExpirationDate = researchRiskStudyExpirationDate;
+    public void setResearchRiskType(RoutingFormResearchRisk researchRiskType) {
+        this.researchRiskType = researchRiskType;
     }
     
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.routingFormResearchRiskStudySequenceNumber != null) {
             m.put("routingFormResearchRiskStudySequenceNumber", this.routingFormResearchRiskStudySequenceNumber.toString());
         }
         m.put("researchRiskTypeCode", this.researchRiskTypeCode);
         return m;
-    }    
+    }
+
 
 }

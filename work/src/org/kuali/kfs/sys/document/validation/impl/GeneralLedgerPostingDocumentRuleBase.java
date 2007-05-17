@@ -20,14 +20,14 @@ import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.GENERAL_LE
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.exceptions.ReferentialIntegrityException;
 import org.kuali.core.rules.LedgerPostingDocumentRuleBase;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -63,7 +63,7 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
         OffsetDefinition offsetDefinition = SpringServiceLocator.getOffsetDefinitionService().getByPrimaryId(universityFiscalYear, explicitEntry.getChartOfAccountsCode(), explicitEntry.getFinancialDocumentTypeCode(), explicitEntry.getFinancialBalanceTypeCode());
         if (ObjectUtils.isNull(offsetDefinition)) {
             success = false;
-            GlobalVariables.getErrorMap().putError(KFSConstants.GENERAL_LEDGER_PENDING_ENTRIES_TAB_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_NO_OFFSET_DEFINITION, universityFiscalYear.toString(), explicitEntry.getChartOfAccountsCode(), explicitEntry.getFinancialDocumentTypeCode(), explicitEntry.getFinancialBalanceTypeCode());
+            GlobalVariables.getErrorMap().putError(Constants.GENERAL_LEDGER_PENDING_ENTRIES_TAB_ERRORS, KeyConstants.ERROR_DOCUMENT_NO_OFFSET_DEFINITION, universityFiscalYear.toString(), explicitEntry.getChartOfAccountsCode(), explicitEntry.getFinancialDocumentTypeCode(), explicitEntry.getFinancialBalanceTypeCode());
         }
         else {
             OffsetAccount flexibleOffsetAccount = SpringServiceLocator.getFlexibleOffsetAccountService().getByPrimaryIdIfEnabled(explicitEntry.getChartOfAccountsCode(), explicitEntry.getAccountNumber(), getOffsetFinancialObjectCode(offsetDefinition));
@@ -83,8 +83,8 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
         else {
             // Need current ObjectCode and Account BOs to get sufficient funds code. (Entries originally have no BOs.)
             // todo: private or other methods to get these BOs, instead of using the entry and leaving some BOs filled in?
-            offsetEntry.refreshReferenceObject(KFSPropertyConstants.FINANCIAL_OBJECT);
-            offsetEntry.refreshReferenceObject(KFSPropertyConstants.ACCOUNT);
+            offsetEntry.refreshReferenceObject(PropertyConstants.FINANCIAL_OBJECT);
+            offsetEntry.refreshReferenceObject(PropertyConstants.ACCOUNT);
             ObjectCode financialObject = offsetEntry.getFinancialObject();
             // The ObjectCode reference may be invalid because a flexible offset account changed its chart code.
             if (ObjectUtils.isNull(financialObject)) {
@@ -94,9 +94,9 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
         }
 
         offsetEntry.setFinancialObjectTypeCode(getOffsetFinancialObjectTypeCode(offsetDefinition));
-        offsetEntry.setFinancialSubObjectCode(KFSConstants.DASHES_SUB_OBJECT_CODE);
+        offsetEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
         offsetEntry.setTransactionEntryOffsetIndicator(true);
-        offsetEntry.setTransactionLedgerEntryDescription(KFSConstants.GL_PE_OFFSET_STRING);
+        offsetEntry.setTransactionLedgerEntryDescription(Constants.GL_PE_OFFSET_STRING);
 
         LOG.debug("populateOffsetGeneralLedgerPendingEntry(Integer, GeneralLedgerPendingEntry, GeneralLedgerPendingEntrySequenceHelper, GeneralLedgerPendingEntry) - end");
         return success;
@@ -128,7 +128,7 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
         offsetEntry.setChartOfAccountsCode(flexCoa);
         offsetEntry.setAccountNumber(flexAccountNumber);
         // COA and account number are part of the sub-account's key, so the original sub-account would be invalid.
-        offsetEntry.setSubAccountNumber(KFSConstants.DASHES_SUB_ACCOUNT_NUMBER);
+        offsetEntry.setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
 
         LOG.debug("flexOffsetAccountIfNecessary(OffsetAccount, GeneralLedgerPendingEntry) - end");
     }
@@ -185,12 +185,12 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
     protected String getOffsetEntryDebitCreditCode(GeneralLedgerPendingEntry explicitEntry) {
         LOG.debug("getOffsetEntryDebitCreditCode(GeneralLedgerPendingEntry) - start");
 
-        String offsetDebitCreditCode = KFSConstants.GL_BUDGET_CODE;
-        if (KFSConstants.GL_DEBIT_CODE.equals(explicitEntry.getTransactionDebitCreditCode())) {
-            offsetDebitCreditCode = KFSConstants.GL_CREDIT_CODE;
+        String offsetDebitCreditCode = Constants.GL_BUDGET_CODE;
+        if (Constants.GL_DEBIT_CODE.equals(explicitEntry.getTransactionDebitCreditCode())) {
+            offsetDebitCreditCode = Constants.GL_CREDIT_CODE;
         }
-        else if (KFSConstants.GL_CREDIT_CODE.equals(explicitEntry.getTransactionDebitCreditCode())) {
-            offsetDebitCreditCode = KFSConstants.GL_DEBIT_CODE;
+        else if (Constants.GL_CREDIT_CODE.equals(explicitEntry.getTransactionDebitCreditCode())) {
+            offsetDebitCreditCode = Constants.GL_DEBIT_CODE;
         }
 
         LOG.debug("getOffsetEntryDebitCreditCode(GeneralLedgerPendingEntry) - end");
