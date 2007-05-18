@@ -17,8 +17,7 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
     <form-beans>
-        <!--  Core Bean Definitions -->
-        <form-bean name="KualiMaintenanceForm" type="org.kuali.kfs.web.struts.form.KfsMaintenanceForm" />
+        <!--  Rice Bean Definitions : This is a bean declared in Rice, but is needed throughout this config -->
         <form-bean name="KualiForm" type="org.kuali.core.web.struts.form.KualiForm" />
 
         <!--  KFS Core Bean Definitions -->
@@ -103,6 +102,7 @@
 
     <action-mappings>       
 
+		<!-- Rice Pass-through Actions : These delegate to the Rice (kr) struts module -->
         <action path="/Exception" type="org.kuali.core.web.struts.action.KualiExceptionAction">
             <forward name="basic" path="/kr/Exception.do" />
         </action>
@@ -112,6 +112,7 @@
         <action path="/initiationAuthorizationException" type="org.kuali.core.web.struts.action.KualiDocumentInitiationAuthorizationExceptionAction">
             <forward name="basic" path="/kr/initiationAuthorizationException.do" />
         </action>
+		<!-- End Rice Pass-through Actions -->
                             
         <!--  Core Action Mappings -->
         <action path="/portal" name="KualiForm" type="org.kuali.core.web.struts.action.KualiSimpleAction">
@@ -120,14 +121,6 @@
 
         <action path="/index" name="KualiForm" type="org.kuali.core.web.struts.action.KualiSimpleAction">
             <forward name="basic" path="/portal.jsp" />
-        </action>
-
-
-        <action path="/maintenance" name="KualiMaintenanceForm" scope="request" attribute="KualiForm" 
-        parameter="methodToCall" type="org.kuali.core.web.struts.action.KualiMaintenanceDocumentAction" 
-        validate="false" input="/jsp/kfs/KfsMaintenanceDocument.jsp">
-            <set-property property="cancellable" value="true" />
-            <forward name="basic" path="/jsp/kfs/KfsMaintenanceDocument.jsp" />
         </action>
  
         <action path="/balanceInquiryReportMenu" name="KualiBalanceInquiryReportMenuForm" scope="request" attribute="KualiForm" parameter="methodToCall" type="org.kuali.kfs.web.struts.action.KualiBalanceInquiryReportMenuAction">
