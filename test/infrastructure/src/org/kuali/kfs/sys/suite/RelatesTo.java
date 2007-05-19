@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/infrastructure/src/org/kuali/kfs/sys/suite/RelatesTo.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,13 +50,10 @@ public @interface RelatesTo {
      * Using this enumeration makes it easy for the IDE to show which tests relate to which issues.
      */
     public enum JiraIssue {
+        KULRNE42,
+        KULRNE1847,
         KULRNE1612,
-        KULRNE4308, 
-        KULLAB54,
-        KULLAB96,
-        KULUT10,
         KULRNE34,
-        KULPURAP609
         ;
         
         private final static Pattern PATTERN = Pattern.compile("(\\p{Alpha}+)(\\p{Digit}+)");

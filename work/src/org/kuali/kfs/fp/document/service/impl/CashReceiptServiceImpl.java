@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +25,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.DocumentHeader;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.document.DocumentHeader;
 import org.kuali.core.exceptions.InfrastructureException;
+import org.kuali.core.exceptions.UnknownDocumentIdException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.financial.document.CashReceiptDocument;
 import org.kuali.module.financial.service.CashReceiptService;
-import org.springframework.transaction.annotation.Transactional;
 
+import edu.iu.uis.eden.exception.DocumentNotFoundException;
 import edu.iu.uis.eden.exception.WorkflowException;
 
-@Transactional
 public class CashReceiptServiceImpl implements CashReceiptService {
 
     private BusinessObjectService businessObjectService;
@@ -55,7 +58,7 @@ public class CashReceiptServiceImpl implements CashReceiptService {
             throw new IllegalArgumentException("invalid (blank) campusCode");
         }
 
-        vunit = KFSConstants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_VERIFICATION_UNIT;
+        vunit = Constants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_VERIFICATION_UNIT;
 
         return vunit;
     }
@@ -72,7 +75,7 @@ public class CashReceiptServiceImpl implements CashReceiptService {
         }
 
         // pretend that a lookup is actually happening
-        campusCode = KFSConstants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_CAMPUS_LOCATION_CODE;
+        campusCode = Constants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_CAMPUS_LOCATION_CODE;
 
         return campusCode;
     }
@@ -89,7 +92,7 @@ public class CashReceiptServiceImpl implements CashReceiptService {
         }
 
         // pretend that a lookup is actually happening
-        unitName = KFSConstants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_VERIFICATION_UNIT;
+        unitName = Constants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_VERIFICATION_UNIT;
 
         return unitName;
     }
@@ -141,7 +144,7 @@ public class CashReceiptServiceImpl implements CashReceiptService {
     public List getPopulatedCashReceipts(String verificationUnit, String[] statii) {
         Map queryCriteria = buildCashReceiptCriteriaMap(verificationUnit, statii);
 
-        List documents = new ArrayList(getBusinessObjectService().findMatchingOrderBy(CashReceiptDocument.class, queryCriteria, KFSPropertyConstants.DOCUMENT_NUMBER, true));
+        List documents = new ArrayList(getBusinessObjectService().findMatchingOrderBy(CashReceiptDocument.class, queryCriteria, PropertyConstants.DOCUMENT_NUMBER, true));
 
         populateWorkflowFields(documents);
 
@@ -158,15 +161,15 @@ public class CashReceiptServiceImpl implements CashReceiptService {
         Map queryCriteria = new HashMap();
 
         if (statii.length == 1) {
-            queryCriteria.put(KFSConstants.CashReceiptConstants.CASH_RECEIPT_DOC_HEADER_STATUS_CODE_PROPERTY_NAME, statii[0]);
+            queryCriteria.put(Constants.CashReceiptConstants.CASH_RECEIPT_DOC_HEADER_STATUS_CODE_PROPERTY_NAME, statii[0]);
         }
         else if (statii.length > 0) {
             List<String> statusList = Arrays.asList(statii);
-            queryCriteria.put(KFSConstants.CashReceiptConstants.CASH_RECEIPT_DOC_HEADER_STATUS_CODE_PROPERTY_NAME, statusList);
+            queryCriteria.put(Constants.CashReceiptConstants.CASH_RECEIPT_DOC_HEADER_STATUS_CODE_PROPERTY_NAME, statusList);
         }
 
         String campusLocationCode = getCampusCodeForCashReceiptVerificationUnit(workgroupName);
-        queryCriteria.put(KFSConstants.CashReceiptConstants.CASH_RECEIPT_CAMPUS_LOCATION_CODE_PROPERTY_NAME, campusLocationCode);
+        queryCriteria.put(Constants.CashReceiptConstants.CASH_RECEIPT_CAMPUS_LOCATION_CODE_PROPERTY_NAME, campusLocationCode);
 
         return queryCriteria;
     }
@@ -187,7 +190,11 @@ public class CashReceiptServiceImpl implements CashReceiptService {
                 UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
 
                 workflowDocument = getWorkflowDocumentService().createWorkflowDocument(documentHeaderId, user);
-            } catch (WorkflowException e) {
+            }
+            catch (DocumentNotFoundException e) {
+                throw new UnknownDocumentIdException("no document found for documentHeaderId '" + docHeader.getDocumentNumber() + "'", e);
+            }
+            catch (WorkflowException e) {
                 throw new InfrastructureException("unable to retrieve workflow document for documentHeaderId '" + docHeader.getDocumentNumber() + "'", e);
             }
 

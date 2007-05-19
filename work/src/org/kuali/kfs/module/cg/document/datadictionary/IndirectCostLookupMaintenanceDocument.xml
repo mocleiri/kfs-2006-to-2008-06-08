@@ -41,14 +41,12 @@
         <summary>Indirect Cost Lookup maintenance document</summary>
         <description>Document used to create or update Indirect Cost Lookup objects</description>
 
+        <allowsCopy>true</allowsCopy>
+
         <lockingKeys>
             <field attributeName="budgetOnCampusIndicator" />
             <field attributeName="budgetPurposeCode" />
         </lockingKeys>
-
-        <defaultExistenceChecks>
-            <reference attributeName="budgetPurpose" attributeToHighlightOnFail="budgetPurposeCode" />
-        </defaultExistenceChecks>
 
         <maintainableSections>
             <maintainableSection title="Edit Indirect Cost Lookup">

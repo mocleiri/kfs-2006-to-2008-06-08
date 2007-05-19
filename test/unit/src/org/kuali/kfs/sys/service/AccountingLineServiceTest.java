@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/sys/service/AccountingLineServiceTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +17,19 @@
  */
 package org.kuali.core.service;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
-import static org.kuali.kfs.util.SpringServiceLocator.getAccountingLineService;
+import static org.kuali.core.util.SpringServiceLocator.getAccountingLineService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE2_TOF;
 import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.AccountingLineBase;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.module.financial.document.TransferOfFundsDocument;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.KualiTestBase;
@@ -44,14 +46,14 @@ public class AccountingLineServiceTest extends KualiTestBase {
 
     private SourceAccountingLine sline;
     private TargetAccountingLine tline;
-    private AccountingDocument document;
+    private TransactionalDocument document;
 
     @TestsWorkflowViaDatabase
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         document = DocumentTestUtils.createDocument(getDocumentService(), TransferOfFundsDocument.class);
-        getDocumentService().saveDocument(document);
+        getDocumentService().saveDocument(document, null, null);
         LINE2_TOF.addAsSourceTo(document);
         LINE2_TOF.addAsTargetTo(document);
 

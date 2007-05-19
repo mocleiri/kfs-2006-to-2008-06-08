@@ -18,10 +18,9 @@ package org.kuali.module.purap.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.purap.document.AssignContractManagerDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
-import org.kuali.module.vendor.bo.ContractManager;
+import org.kuali.PropertyConstants;
 
 /**
  * 
@@ -151,7 +150,7 @@ public class AssignContractManagerDetail extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.requisitionIdentifier != null) {
             m.put("requisitionIdentifier", this.requisitionIdentifier.toString());
         }

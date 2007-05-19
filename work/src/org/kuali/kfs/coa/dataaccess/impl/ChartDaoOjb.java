@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.dao.ChartDao;
@@ -31,9 +31,12 @@ import org.kuali.module.chart.dao.ChartDao;
 /**
  * This class is the OJB implementation of the ChartDao interface.
  */
-
 public class ChartDaoOjb extends PlatformAwareDaoBaseOjb implements ChartDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ChartDaoOjb.class);
+
+    public ChartDaoOjb() {
+        super();
+    }
 
     /*
      * (non-Javadoc)
@@ -68,10 +71,10 @@ public class ChartDaoOjb extends PlatformAwareDaoBaseOjb implements ChartDao {
      * @param kualiUser
      * @return a list of Charts that the user has responsibility for
      */
-    public List getChartsThatUserIsResponsibleFor(UniversalUser universalUser) {
+    public List getChartsThatUserIsResponsibleFor(KualiUser kualiUser) {
         List chartResponsibilities = new ArrayList();
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("finCoaManagerUniversalId", universalUser.getPersonUniversalIdentifier());
+        criteria.addEqualTo("finCoaManagerUniversalId", kualiUser.getPersonUniversalIdentifier());
         Collection charts = getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Chart.class, criteria));
         for (Iterator iter = charts.iterator(); iter.hasNext();) {
             Chart chart = (Chart) iter.next();

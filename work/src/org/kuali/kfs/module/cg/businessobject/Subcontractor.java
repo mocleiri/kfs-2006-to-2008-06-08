@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/Subcontractor.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,12 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Country;
-import org.kuali.kfs.bo.State;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class Subcontractor extends PersistableBusinessObjectBase {
+public class Subcontractor extends BusinessObjectBase {
 
     private String subcontractorNumber;
     private String subcontractorName;
@@ -35,11 +35,7 @@ public class Subcontractor extends PersistableBusinessObjectBase {
     private String subcontractorStateCode;
     private String subcontractorZipCode;
     private String subcontractorCountryCode;
-    private boolean active;
-    
-    private State subcontractorState;
-    private Country subcontractorCountry;
-    
+
     /**
      * Default no-arg constructor.
      */
@@ -206,22 +202,6 @@ public class Subcontractor extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
@@ -229,41 +209,4 @@ public class Subcontractor extends PersistableBusinessObjectBase {
         m.put("subcontractorNumber", this.getSubcontractorNumber());
         return m;
     }
-
-    /**
-     * 
-     * This method...
-     * @return
-     */
-    public Country getSubcontractorCountry() {
-        return subcontractorCountry;
-    }
-
-    /**
-     * 
-     * This method...
-     * @param country
-     */
-    public void setSubcontractorCountry(Country country) {
-        this.subcontractorCountry = country;
-    }
-
-    /**
-     * 
-     * This method...
-     * @return
-     */
-    public State getSubcontractorState() {
-        return subcontractorState;
-    }
-
-    /**
-     * 
-     * This method...
-     * @param state
-     */
-    public void setSubcontractorState(State state) {
-        this.subcontractorState = state;
-    }
-
 }

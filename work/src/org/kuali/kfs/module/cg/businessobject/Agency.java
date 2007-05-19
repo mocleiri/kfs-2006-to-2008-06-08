@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/Agency.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,14 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.kra.budget.bo.AgencyExtension;
 
 /**
  * 
  */
-public class Agency extends PersistableBusinessObjectBase {
+public class Agency extends BusinessObjectBase {
 
     private String agencyNumber;
     private String reportingName;
@@ -215,7 +217,7 @@ public class Agency extends PersistableBusinessObjectBase {
     /**
      * Sets the reportsToAgency attribute.
      * 
-     * @param reportsToAgencyNumber The reportsToAgency to set.
+     * @param reportsToAgency The reportsToAgency to set.
      * @deprecated
      */
     public void setReportsToAgency(Agency reportsToAgencyNumber) {
@@ -269,9 +271,4 @@ public class Agency extends PersistableBusinessObjectBase {
     public void setAgencyExtension(AgencyExtension agencyExtension) {
         this.agencyExtension = agencyExtension;
     }
-    
-    public boolean equals(Agency agency) {
-        return this.agencyNumber.equals(agency.getAgencyNumber());
-    }
-    
 }
