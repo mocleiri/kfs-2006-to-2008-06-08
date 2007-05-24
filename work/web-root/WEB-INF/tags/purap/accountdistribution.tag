@@ -25,19 +25,19 @@
 <c:if test="${KualiForm.hideDistributeAccounts}">
 	<html:image
 	property="methodToCall.setupAccountDistribution"
-	src="${ConfigProperties.kr.externalizable.images.url}tinybutton-setaccdist.gif"
+	src="${ConfigProperties.externalizable.images.url}tinybutton-setaccdist.gif"
 	alt="setup account distribution" title="setup account distribution"
 	styleClass="tinybutton" />
 </c:if>
 <c:if test="${!KualiForm.hideDistributeAccounts}">
-	<img src="${ConfigProperties.kr.externalizable.images.url}tinybutton-setaccdist.gif"
+	<img src="${ConfigProperties.externalizable.images.url}tinybutton-setaccdist.gif"
 	alt="setup account distribution" border="0"
 	styleClass="tinybutton" />
 </c:if>
 
 <html:image
 property="methodToCall.removeAccounts"
-src="${ConfigProperties.kr.externalizable.images.url}tinybutton-remaccitems.gif"
+src="${ConfigProperties.externalizable.images.url}tinybutton-remaccitems.gif"
 alt="remove accounts from all items"
 title="remove accounts from all items" styleClass="tinybutton" />
 </div>
@@ -56,7 +56,7 @@ title="remove accounts from all items" styleClass="tinybutton" />
 	<div align="center">
 		<html:image
 		property="methodToCall.doAccountDistribution"
-		src="${ConfigProperties.kr.externalizable.images.url}tinybutton-disttoitems.gif"
+		src="${ConfigProperties.externalizable.images.url}tinybutton-disttoitems.gif"
 		alt="do account distribution"
 		title="do account distribution" styleClass="tinybutton" />
 		<html:image
