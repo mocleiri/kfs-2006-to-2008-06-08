@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package org.kuali.module.gl.dao.ojb;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.UniversityDateDao;
 import org.kuali.test.KualiTestBase;

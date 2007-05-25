@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.test.KualiTestBase;
 
@@ -33,7 +33,6 @@ public class TestUnitTestSqlDao extends KualiTestBase {
         super();
     }
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
