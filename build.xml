@@ -540,14 +540,17 @@
         </sequential>
     </macrodef>
 
-	<target name="update-rice-jar" depends="init-project-properties">
+	<target name="build-rice" depends="init-project-properties" description="Performs a Maven call to update the project JAR and WAR files">
 		<!-- build the rice jar and war files -->
 		<maven goals="package" mavenhome="${maven.home.directory}" />
+	</target>
+	
+	<target name="update-rice-jar" depends="init-project-properties,build-rice" description="updates the Rice JAR file in the WEB-INF/lib directory">
 		<!-- copy main JAR file to lib directory -->
 		<copy file="${rice.project.directory}/kns/target/kns-${rice.version}.jar" todir="${lib.directory}" overwrite="true" />
 	</target>
 
-	<target name="update-rice-web" depends="init-project-properties">
+	<target name="update-rice-web" depends="init-project-properties,build-rice" description="Replaces all rice-controlled web content in work/web-root">
 		<!-- copy the central web content from rice into KFS -->
 		<delete>
 			<fileset dir="${work.directory}/web-root/kr">
@@ -567,6 +570,7 @@
 		</unzip>
 	</target>
 
+	<!-- TODO: rice tables are still in KFS, so this is not necessary at this time -->
 	<target name="update-rice-misc" depends="init-project-properties">
 		<!-- copy licenses -->
 		<!--
@@ -596,7 +600,7 @@
 		</jar>
 	</target>
 
-	<target name="update-rice" depends="init-project-properties,update-rice-jar,update-rice-web,update-rice-misc" />		
+	<target name="update-rice" depends="init-project-properties,update-rice-jar,update-rice-web" description="Updates all rice content in the KFS project." />		
 	
 	<target name="help" description="Describe public targets">
 		<echo>--- OVERVIEW ---
