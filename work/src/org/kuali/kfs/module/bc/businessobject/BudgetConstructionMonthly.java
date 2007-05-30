@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionMonthly.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +20,20 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
-import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.bo.Balance;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class BudgetConstructionMonthly extends PersistableBusinessObjectBase {
+public class BudgetConstructionMonthly extends BusinessObjectBase {
 
     private String documentNumber;
     private Integer universityFiscalYear;
@@ -64,8 +64,6 @@ public class BudgetConstructionMonthly extends PersistableBusinessObjectBase {
     private Chart chartOfAccounts;
     private SubAccount subAccount;
     private SubObjCd financialSubObject;
-    private BalanceTyp balanceType;
-    private ObjectType objectType;
 
     /**
      * Default constructor.
@@ -654,43 +652,11 @@ public class BudgetConstructionMonthly extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the balanceType attribute. 
-     * @return Returns the balanceType.
-     */
-    public BalanceTyp getBalanceType() {
-        return balanceType;
-    }
-
-    /**
-     * Sets the balanceType attribute value.
-     * @param balanceType The balanceType to set.
-     */
-    public void setBalanceType(BalanceTyp balanceType) {
-        this.balanceType = balanceType;
-    }
-
-    /**
-     * Gets the objectType attribute. 
-     * @return Returns the objectType.
-     */
-    public ObjectType getObjectType() {
-        return objectType;
-    }
-
-    /**
-     * Sets the objectType attribute value.
-     * @param objectType The objectType to set.
-     */
-    public void setObjectType(ObjectType objectType) {
-        this.objectType = objectType;
-    }
-
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }

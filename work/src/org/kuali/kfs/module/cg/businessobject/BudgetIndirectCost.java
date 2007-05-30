@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +22,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.kra.KraConstants;
-import org.kuali.module.kra.routingform.bo.Purpose;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 
 /**
  * 
  */
-public class BudgetIndirectCost extends PersistableBusinessObjectBase {
+public class BudgetIndirectCost extends BusinessObjectBase {
 
     private String documentNumber;
 
@@ -53,9 +53,7 @@ public class BudgetIndirectCost extends PersistableBusinessObjectBase {
      */
     private boolean budgetManualMtdcIndicator; // BDGT_MAN_MTDC_IND
 
-    private String budgetManualRateIndicatorDescription;
-    private Purpose purpose;
-    private BudgetBaseCode baseCode;
+
     private List budgetTaskPeriodIndirectCostItems;
 
     /**
@@ -66,8 +64,6 @@ public class BudgetIndirectCost extends PersistableBusinessObjectBase {
 
         // Set up default values for the IDC object.
         // We do this in case we are entering a budget for the first time.
-        this.purpose = new Purpose();
-        this.baseCode = new BudgetBaseCode();
         this.setBudgetTaskPeriodIndirectCostItems(new ArrayList());
         this.setBudgetIndirectCostCostShareIndicator(false);
         this.setBudgetUnrecoveredIndirectCostIndicator(false);
@@ -112,9 +108,6 @@ public class BudgetIndirectCost extends PersistableBusinessObjectBase {
         this.setBudgetIndirectCostJustificationText(idc.getBudgetIndirectCostJustificationText());
         this.setBudgetManualMtdcIndicator(idc.getBudgetManualMtdcIndicator());
         this.setBudgetTaskPeriodIndirectCostItems(idc.getBudgetTaskPeriodIndirectCostItems());
-
-        this.purpose.setPurposeDescription(idc.getPurpose().getPurposeDescription());
-        this.baseCode.setBudgetBaseDescription(idc.getBaseCode().getBudgetBaseDescription());
     }
 
     /**
@@ -235,26 +228,6 @@ public class BudgetIndirectCost extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the budgetManualRateIndicatorDescription attribute.
-     * 
-     * @return Returns the budgetManualRateIndicatorDescription
-     * 
-     */
-    public String getBudgetManualRateIndicatorDescription() {
-        return budgetManualRateIndicatorDescription;
-    }
-
-    /**
-     * Sets the budgetManualRateIndicatorDescription attribute.
-     * 
-     * @param budgetManualRateIndicatorDescription The budgetManualRateIndicatorDescription to set.
-     * 
-     */
-    public void setBudgetManualRateIndicatorDescription(String budgetManualRateIndicatorDescription) {
-        this.budgetManualRateIndicatorDescription = budgetManualRateIndicatorDescription;
-    }
-
-    /**
      * Sets the budgetManualRateIndicator attribute.
      * 
      * @param budgetManualRateIndicator The budgetManualRateIndicator to set.
@@ -341,43 +314,6 @@ public class BudgetIndirectCost extends PersistableBusinessObjectBase {
         this.budgetTaskPeriodIndirectCostItems = budgetTaskPeriodIndirectCostItems;
     }
 
-    /**
-     * Gets baseCode.
-     * 
-     * @return 
-     */
-    public BudgetBaseCode getBaseCode() {
-        return baseCode;
-    }
-
-    /**
-     * Sets baseCode.
-     * 
-     * @param 
-     * @deprecated
-     */
-    public void setBaseCode(BudgetBaseCode baseCode) {
-        this.baseCode = baseCode;
-    }
-
-    /**
-     * Gets purpose.
-     * 
-     * @return 
-     */
-    public Purpose getPurpose() {
-        return purpose;
-    }
-
-    /**
-     * Sets purpose.
-     * 
-     * @param 
-     * @deprecated
-     */
-    public void setPurpose(Purpose purpose) {
-        this.purpose = purpose;
-    }
 
     /**
      * Retreive a particular taskPeriod.

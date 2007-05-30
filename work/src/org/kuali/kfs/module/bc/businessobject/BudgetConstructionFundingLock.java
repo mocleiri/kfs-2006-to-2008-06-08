@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionFundingLock.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +20,9 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.SubAccount;
@@ -28,7 +30,7 @@ import org.kuali.module.chart.bo.SubAccount;
 /**
  * 
  */
-public class BudgetConstructionFundingLock extends PersistableBusinessObjectBase {
+public class BudgetConstructionFundingLock extends BusinessObjectBase {
 
 	private String appointmentFundingLockUserId;
 	private String accountNumber;

@@ -44,7 +44,6 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.WebUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.web.struts.action.BudgetOutputAction;
 import org.kuali.module.kra.document.ResearchDocument;
 import org.kuali.module.kra.routingform.document.RoutingFormDocument;
@@ -184,7 +183,9 @@ public class RoutingFormOutputAction extends RoutingFormAction {
         String urlString = "";
         
         KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
-        String STYLESHEET_URL_OR_PATH = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "outputRoutingFormStylesheetUrlOrPath");
+        // TODO: Use Application Parameter
+        // String STYLESHEET_URL_OR_PATH = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "outputStylesheetUrlOrPath");
+        String STYLESHEET_URL_OR_PATH = "/xml/routingform/";
         
         // following checks if STYLESHEET_URL_OR_PATH is a URL already or path within the project
         if (STYLESHEET_URL_OR_PATH.contains("://")) {
@@ -195,7 +196,9 @@ public class RoutingFormOutputAction extends RoutingFormAction {
             urlString = APPLICATION_BASE_URL_KEY + STYLESHEET_URL_OR_PATH;
         }
 
-        urlString += kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "outputRoutingFormXslPath");
+        // TODO: Use Application Parameter
+        // urlString += kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "outputRoutingFormXslPath");
+        urlString += "RouteSheet.xsl";
 
         return new StreamSource(new URL(urlString).openConnection().getInputStream());
     }

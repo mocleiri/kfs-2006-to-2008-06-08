@@ -46,7 +46,6 @@ public class KFSKeyConstants extends KeyConstants {
     public static final String ERROR_INVALID_FORMAT = "error.invalidFormat";
     public static final String ERROR_EXCLUSIVE_MIN = "error.exclusiveMin";
     public static final String ERROR_INCLUSIVE_MAX = "error.inclusiveMax";
-    public static final String ERROR_INVALID_XML_FORMAT = "error.invalidXML.format";
 
     public static final String ERROR_INVALID_ADHOC_PERSON_ID = "error.adhoc.invalid.person";
     public static final String ERROR_UNAUTHORIZED_ADHOC_PERSON_ID = "error.adhoc.unauthorized.person";
@@ -567,7 +566,6 @@ public class KFSKeyConstants extends KeyConstants {
     public static final String ERROR_CONTINUATION_ACCOUNT_NOT_FOUND = "error.gl.ContinuationAccountNotFound";
     public static final String ERROR_CONTINUATION_CHART_NOT_FOUND = "error.gl.ContinuationChartNotFound";
     public static final String ERROR_UNIV_FISCAL_YR_NOT_FOUND = "error.gl.UniversityFiscalYearNotFound";
-    public static final String ERROR_ACCOUNTING_PERIOD_CLOSED = "error.gl.AccountingPeriodClosed";
     public static final String ERROR_INVALID_SF_OBJECT_TYPE_CODE = "error.gl.InvalidSufficentFundObjectTypeCode";
     public static final String ERROR_BALANCE_NOT_FOUND_FOR = "error.gl.BalanceNotFoundFor";
     public static final String ERROR_INVALID_ACCOUNT_SF_CODE_FOR = "error.gl.InvalidAccountSufficentFundsCodeFor";
@@ -597,7 +595,6 @@ public class KFSKeyConstants extends KeyConstants {
     public static final String MSG_CLOSE_ENTRY_TO_NOMINAL_BUDGET = "message.gl.ClosingEntryToNB";
     public static final String MSG_CLOSE_ENTRY_TO_NOMINAL_REVENUE = "message.gl.ClosingEntryToNR";
     public static final String MSG_CLOSE_ENTRY_TO_NOMINAL_EXPENSE = "message.gl.ClosingEntryToNE";
-    public static final String MSG_CLOSE_ENTRY_TO_FUND_BALANCE = "message.gl.ClosingEntryToFB";
     public static final String MSG_AUTO_FORWARD = "message.gl.AutoForward";
     public static final String MSG_ACCOUNT_CLOSED_TO = "message.gl.AccountClosedTo";
 
@@ -631,8 +628,6 @@ public class KFSKeyConstants extends KeyConstants {
     public static final String ERROR_GL_ERROR_CORRECTION_INVALID_INPUT_GROUP_CHANGE = "error.gl.correction.invalid.input.group.change";
     public static final String ERROR_GL_ERROR_CORRECTION_MUST_CHOOSE_FIELD_NAME_WHEN_ADDING_CRITERION = "error.gl.correction.must.choose.field.name.when.adding.criterion";
     public static final String ERROR_GL_ERROR_CORRECTION_CRITERIA_TO_ADD_MUST_BE_BLANK_FOR_SAVE = "error.gl.correction.criteria.to.add.must.be.blank.for.save";
-    public static final String ERROR_GL_ERROR_CORRECTION_PERSISTED_ORIGIN_ENTRIES_MISSING = "error.gl.correction.persisted.origin.entries.missing";
-    public static final String ERROR_GL_ERROR_CORRECTION_REMOVE_GROUP_REQUIRES_DATABASE = "error.gl.correction.remove.group.requires.database";
     public static final String GL_ERROR_CORRECTION_RESTRICTED_FUNCTIONALITY_SEARCH_RESULTS_LABEL = "gl.correction.restricted.functionality.search.results.label";
 
 
@@ -645,7 +640,6 @@ public class KFSKeyConstants extends KeyConstants {
 
     // Contracts and Grants Maintenance error messages
     public static final String ERROR_AGENCY_NOT_FOUND = "error.cg.agencyNotFound";
-    public static final String ERROR_AGENCY_TYPE_NOT_FOUND = "error.cg.agencyTypeNotFound";
     public static final String ERROR_AGENCY_INACTIVE = "error.cg.agenyInactive";
     public static final String ERROR_AGENCY_CIRCULAR_REPORTING = "error.cg.agencyCircularReporting";
     public static final String ERROR_AGENCY_REPORTS_TO_SELF = "error.cg.agencyReportsToSelf";
@@ -660,28 +654,14 @@ public class KFSKeyConstants extends KeyConstants {
     public static final String ERROR_AWARD_FEDERAL_PASS_THROUGH_INDICATOR_DEPENDENCY_REQUIRED = "error.cg.award.federalPassThroughIndicator.dependency.required";
     public static final String ERROR_AGENCY_EQUALS_FEDERAL_PASS_THROUGH_AGENCY = "error.cg.agencyEqualsFederalPassThroughAgency";
     public static final String ERROR_FEDERAL_PASS_THROUGH_AGENCY_EQUALS_AGENCY = "error.cg.federalPassThroughAgencyEqualsAgency";
-    public static final String ERROR_AGENCY_FEDERAL_AND_FEDERAL_PASS_THROUGH_INDICATOR_CHECKED = "error.cg.fedAgencyAndPassThroughChecked";
     public static final String ERROR_GRANT_DESCRIPTION_INVALID_WITH_FED_PASS_THROUGH_AGENCY_INDICATOR_SELECTED = "error.cg.invalidGrantDescription";
-    public static final String ERROR_INVALID_PROJECT_DIRECTOR_STATUS = "error.cg.invalidProjectDirectorStatus";
     
     public static final String WARNING_AWARD_ENTRY_BEFORE_START_DATE = "warning.cg.award.entryDateBeforeStartDate";
     public static final String WARNING_AWARD_SUBCONTRACTOR_TOTAL_GREATER_THAN_AWARD_TOTAL = "warning.cg.award.subcontractorAmountGreaterThanAwardAmount";
-
+    
     public static final Object WARNING_LINE_IMPORT_LENGTH_MISMATCH = "warning.core.bo.AccountImportLengthMismatch";
 
-    //  batch upload
-    public static final String MESSAGE_BATCH_UPLOAD_TITLE_PCDO = "message.batchUpload.title.procurementCard";
-    public static final String MESSAGE_BATCH_UPLOAD_TITLE_COLLECTOR = "message.batchUpload.title.collector";
-    public static final String MESSAGE_BATCH_UPLOAD_SAVE_SUCCESSFUL = "message.batchUpload.saveSuccessful";
-    public static final String MESSAGE_BATCH_UPLOAD_DELETE_SUCCESSFUL = "message.batchUpload.deleteSuccessful";
-    public static final String ERROR_BATCH_UPLOAD_PARSING_XML = "error.batchUpload.xmlParse";
-    public static final String ERROR_BATCH_UPLOAD_SAVE = "error.batchUpload.save";
-    public static final String ERROR_BATCH_UPLOAD_DELETE = "error.batchUpload.delete";
-    public static final String ERROR_BATCH_UPLOAD_DOWNLOAD = "error.batchUpload.download";
-    public static final String ERROR_BATCH_UPLOAD_NO_FILE_SELECTED_SAVE = "error.batchUpload.save.noFileSelected";
-    public static final String ERROR_BATCH_UPLOAD_NO_FILE_SELECTED_DELETE = "error.batchUpload.delete.noFileSelected";
-    public static final String ERROR_BATCH_UPLOAD_NO_FILE_SELECTED_DOWNLOAD = "error.batchUpload.download.noFileSelected";
-    
+
     public static final class AdvanceDeposit {
         public static final String ERROR_DOCUMENT_ADVANCE_DEPOSIT_TOTAL_INVALID = "error.document.advanceDeposit.depositTotalInvalid";
         public static final String ERROR_DOCUMENT_ADVANCE_DEPOSIT_REQ_NUMBER_DEPOSITS_NOT_MET = "error.document.advanceDeposit.requiredNumberOfAdvanceDepositsNotMet";
@@ -823,14 +803,12 @@ public class KFSKeyConstants extends KeyConstants {
         public static final String TOTAL = "account.balance.service.total";
     }
 
-    public static final class Collector {
-        public static final String TRAILER_ERROR_COUNTNOMATCH = "error.collector.countNoMatch";
-        public static final String TRAILER_ERROR_AMOUNTNOMATCH1 = "error.collector.amountNoMatch1";
-        public static final String TRAILER_ERROR_AMOUNTNOMATCH2 = "error.collector.amountNoMatch2";
-        public static final String MIXED_DOCUMENT_TYPES = "error.collector.mixedDocumentTypes";
-        public static final String MIXED_BALANCE_TYPES = "error.collector.mixedBalanceTypes";
-        public static final String DUPLICATE_BATCH_HEADER = "error.collector.duplicateHeader";
-        public static final String NONMATCHING_DETAIL_KEY = "error.collector.nonmatchingDetailKey";
+    public static final class HardEditHandler {
+        public static final String TRAILER_ERROR_COUNTNOMATCH1 = "trailer.error.countNoMatch1";
+        public static final String TRAILER_ERROR_COUNTNOMATCH2 = "trailer.error.countNoMatch2";
+        public static final String TRAILER_ERROR_ENDPAREN = "trailer.error.endParen";
+        public static final String TRAILER_ERROR_AMOUNTNOMATCH1 = "trailer.error.amountNoMatch1";
+        public static final String TRAILER_ERROR_AMOUNTNOMATCH2 = "trailer.error.amountNoMatch2";
     }
 
     public static final class OrganizationReversionProcess {

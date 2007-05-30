@@ -16,48 +16,39 @@
 package org.kuali.module.labor.web.struts.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-import static org.apache.commons.beanutils.PropertyUtils.getProperty;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.kuali.Constants;
-import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.document.TransactionalDocument;
-import org.kuali.core.rule.event.KualiDocumentEventBase;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.UrlFactory;
-import org.kuali.core.web.struts.form.KualiForm;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.rule.event.AddAccountingLineEvent;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
-import org.kuali.module.labor.bo.LedgerBalance;
+import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.module.labor.bo.SalaryExpenseTransferAccountingLine;
 import org.kuali.module.labor.document.SalaryExpenseTransferDocument;
-import org.kuali.module.labor.rules.event.EmployeeIdChangedEvent;
-import org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase;
-import org.kuali.module.labor.web.struts.form.SalaryExpenseTransferForm;
-import org.kuali.rice.KNSServiceLocator;
 
 /**
  * This class extends the parent KualiTransactionalDocumentActionBase class, which contains all common action methods. Since the SEP
  * follows the basic transactional document pattern, there are no specific actions that it has to implement; however, this empty
  * class is necessary for integrating into the framework.
+ * 
+ * 
  */
-public class SalaryExpenseTransferAction extends ExpenseTransferDocumentActionBase {
-    
+public class SalaryExpenseTransferAction extends LaborDocumentActionBase {
+
+    @Override
+    protected void processAccountingLineOverrides(KualiAccountingDocumentFormBase transForm) {
+        
+        if (transForm.hasDocumentId()) {
+
+            // Save the employee ID in all source and target accounting lines.
+            AccountingDocument transactionalDocument = (AccountingDocument) transForm.getDocument();
+            SalaryExpenseTransferDocument salaryExpenseTransferDocument = (SalaryExpenseTransferDocument) transactionalDocument;
+            List<SalaryExpenseTransferAccountingLine> accountingLines = new ArrayList();
+            accountingLines.addAll((List<SalaryExpenseTransferAccountingLine>) salaryExpenseTransferDocument.getSourceAccountingLines());
+            accountingLines.addAll((List<SalaryExpenseTransferAccountingLine>) salaryExpenseTransferDocument.getTargetAccountingLines());
+           
+            for (SalaryExpenseTransferAccountingLine line : accountingLines) {
+                line.setEmplid(salaryExpenseTransferDocument.getEmplid());
+            }
+            super.processAccountingLineOverrides(transForm);
+        }
+    }
 }

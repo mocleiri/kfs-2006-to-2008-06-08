@@ -18,8 +18,7 @@ package org.kuali.module.chart.service;
 import java.util.Iterator;
 import java.util.List;
 
-
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 
@@ -74,15 +73,7 @@ public interface AccountService {
      * @param kualiUser
      * @return a list of Accounts that the user has responsibility for
      */
-    public List getAccountsThatUserIsResponsibleFor(UniversalUser kualiUser);
-    
-    /**
-     * Does the given user have responsibilites on the given account?
-     * @param kualiUser the universal user to check responsibilities for
-     * @param account the account to check responsibilities on
-     * @return true if user does have responsibilities, false if otherwise
-     */
-    public boolean hasResponsibilityOnAccount(UniversalUser kualiUser, Account account);
+    public List getAccountsThatUserIsResponsibleFor(KualiUser kualiUser);
 
     /**
      * get all accounts in the system. This is needed by a sufficient funds rebuilder job

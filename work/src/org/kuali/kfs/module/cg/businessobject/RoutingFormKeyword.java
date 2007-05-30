@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormKeyword.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +21,13 @@ package org.kuali.module.kra.routingform.bo;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class RoutingFormKeyword extends PersistableBusinessObjectBase {
+public class RoutingFormKeyword extends BusinessObjectBase {
 
 	private String routingFormKeywordDescription;
 	private String documentNumber;
@@ -37,16 +38,6 @@ public class RoutingFormKeyword extends PersistableBusinessObjectBase {
 	public RoutingFormKeyword() {
 
 	}
-    
-    /**
-     * Constructs a RoutingFormKeyword.
-     * @param documentNumber
-     * @param keyword
-     */
-    public RoutingFormKeyword(String documentNumber, Keyword keyword) {
-        this.documentNumber = documentNumber;
-        this.routingFormKeywordDescription = keyword.getRoutingFormKeywordDescription();
-    }
 
 	/**
 	 * Gets the routingFormKeywordDescription attribute.
@@ -89,27 +80,14 @@ public class RoutingFormKeyword extends PersistableBusinessObjectBase {
 		this.documentNumber = documentNumber;
 	}
 
-	@Override
-    public boolean equals(Object obj) {
-        boolean equals = true;
 
-        if (ObjectUtils.isNotNull(obj) && obj instanceof RoutingFormKeyword) {
-            RoutingFormKeyword objCompare = (RoutingFormKeyword) obj;
-            
-            equals &= this.documentNumber.equals(objCompare.getDocumentNumber());
-            equals &= this.routingFormKeywordDescription.equals(objCompare.getRoutingFormKeywordDescription());
-        }
-        
-        return equals;
-    }
-
-    /**
+	/**
 	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("routingFormKeywordDescription", this.routingFormKeywordDescription);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
 	    return m;
     }
     

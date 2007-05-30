@@ -13,8 +13,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
-
+<%@ include file="/jsp/core/tldHeader.jsp"%>
+<%@ taglib prefix="c" uri="/tlds/c.tld"%>
+<%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/ad" prefix="ad"%>
+<%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd"%>
 <c:set var="advanceDepositAttributes"
 	value="${DataDictionary['KualiAdvanceDepositDocument'].attributes}" />
 <c:set var="readOnly"
@@ -39,7 +44,7 @@
 		editableAccounts="${KualiForm.editableAccounts}"
 		sourceAccountingLinesOnly="true"
 		extraSourceRowFields="financialDocumentLineDescription" />
-	<gl:generalLedgerPendingEntries />
+	<kul:generalLedgerPendingEntries />
 	<kul:notes />
 	<kul:adHocRecipients />
 	<kul:routeLog />

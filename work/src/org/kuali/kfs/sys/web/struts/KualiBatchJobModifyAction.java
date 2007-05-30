@@ -138,7 +138,7 @@ public class KualiBatchJobModifyAction extends KualiAction {
         job.runJob( startStep, endStep, startTime, emailAddress );
         
         // redirect to display form to prevent re-execution of the job by mistake
-        return getForward(job);
+        return new ActionForward( "/batchModify.do?methodToCall=start&name=" + UrlFactory.encode( job.getName() ) + "&group=" + UrlFactory.encode( job.getGroup() ), true );
     }
 
     public ActionForward stopJob(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -148,7 +148,7 @@ public class KualiBatchJobModifyAction extends KualiAction {
 
         job.interrupt();        
         
-        return getForward(job);
+        return new ActionForward( "/batchModify.do?methodToCall=start&name=" + UrlFactory.encode( job.getName() ) + "&group=" + UrlFactory.encode( job.getGroup() ), true );
     }
     
 
@@ -159,7 +159,7 @@ public class KualiBatchJobModifyAction extends KualiAction {
 
         job.schedule();
         
-        return getForward(job);
+        return new ActionForward( "/batchModify.do?methodToCall=start&name=" + UrlFactory.encode( job.getName() ) + "&group=" + UrlFactory.encode( job.getGroup() ), true );
     }
 
     public ActionForward unschedule(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -172,10 +172,6 @@ public class KualiBatchJobModifyAction extends KualiAction {
         // move to the unscheduled job object since the scheduled one has been removed
         job = getSchedulerService().getJob( SchedulerService.UNSCHEDULED_GROUP, job.getName() );
         
-        return getForward(job);
-    }
-    
-    private ActionForward getForward(BatchJobStatus job) {
-        return new ActionForward(SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSConstants.APPLICATION_URL_KEY) + "/batchModify.do?methodToCall=start&name=" + UrlFactory.encode( job.getName() ) + "&group=" + UrlFactory.encode( job.getGroup() ), true );
+        return new ActionForward( "/batchModify.do?methodToCall=start&name=" + UrlFactory.encode( job.getName() ) + "&group=" + UrlFactory.encode( job.getGroup() ), true );
     }
 }

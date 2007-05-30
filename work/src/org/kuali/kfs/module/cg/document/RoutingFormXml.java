@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.Note;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
@@ -36,21 +35,15 @@ import org.kuali.module.chart.service.ChartUserService;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.routingform.bo.RoutingFormAgency;
 import org.kuali.module.kra.routingform.bo.RoutingFormBudget;
-import org.kuali.module.kra.routingform.bo.RoutingFormInstitutionCostShare;
 import org.kuali.module.kra.routingform.bo.RoutingFormKeyword;
 import org.kuali.module.kra.routingform.bo.RoutingFormOrganization;
 import org.kuali.module.kra.routingform.bo.RoutingFormOrganizationCreditPercent;
-import org.kuali.module.kra.routingform.bo.RoutingFormOtherCostShare;
 import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
 import org.kuali.module.kra.routingform.bo.RoutingFormProjectType;
-import org.kuali.module.kra.routingform.bo.RoutingFormPurpose;
 import org.kuali.module.kra.routingform.bo.RoutingFormQuestion;
-import org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk;
-import org.kuali.module.kra.routingform.bo.RoutingFormResearchRiskStudy;
 import org.kuali.module.kra.routingform.bo.RoutingFormSubcontractor;
+import org.kuali.module.kra.routingform.bo.RoutingFormSubmissionType;
 import org.kuali.module.kra.routingform.document.RoutingFormDocument;
-import org.kuali.module.kra.routingform.lookup.keyvalues.RoutingFormApprovalStatusValuesFinder;
-import org.kuali.module.kra.routingform.lookup.keyvalues.RoutingFormStudyReviewCodeValuesFinder;
 import org.kuali.module.kra.routingform.service.RoutingFormMainPageService;
 import org.kuali.workflow.KualiWorkflowUtils;
 import org.w3c.dom.Document;
@@ -72,6 +65,10 @@ import edu.iu.uis.eden.exception.WorkflowException;
 public class RoutingFormXml {
     
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(RoutingFormXml.class);
+    
+    // TODO do these already exist somewhere?
+    private static final String SHORT_TIMESTAMP_FORMAT = "MM/dd/yyyy";
+    private static final String LONG_TIMESTAMP_FORMAT = "MM/dd/yyyy HH:mm:ss";
     
     /**
      * Driving method for this class. Functions as a hub calling helper methods.
@@ -111,7 +108,7 @@ public class RoutingFormXml {
         routingFormElement.appendChild(createProjectDetailElement(routingFormDocument, xmlDoc));
         routingFormElement.appendChild(createApprovalsElement(routingFormDocument, xmlDoc));
         routingFormElement.appendChild(createKeywordsElement(routingFormDocument.getRoutingFormKeywords(), xmlDoc));
-        // createSubmissionTypesElement would go here but is skipped because it's not needed at this time.
+        routingFormElement.appendChild(createSubmissionTypesElement(routingFormDocument.getRoutingFormSubmissionTypes(), routingFormDocument.getPreviousFederalIdentifier(), xmlDoc));
         routingFormElement.appendChild(createCommentsElement(routingFormDocument, xmlDoc));
     }
     
@@ -126,7 +123,7 @@ public class RoutingFormXml {
     private static Element createAgencyElement(RoutingFormAgency routingFormAgency, String routingFormAnnouncementNumber, Document xmlDoc) {
         Element agencyElement = xmlDoc.createElement("AGENCY");
 
-        DateFormat dateFormatter = new SimpleDateFormat(KraConstants.SHORT_TIMESTAMP_FORMAT);
+        DateFormat dateFormatterKra = new SimpleDateFormat(SHORT_TIMESTAMP_FORMAT);
         
         if (routingFormAgency.getAgency() != null) {
             Element agencyDataElement = xmlDoc.createElement("AGENCY_DATA");
@@ -143,7 +140,7 @@ public class RoutingFormXml {
         
         Element agencyDueDateElement = xmlDoc.createElement("DUE_DATE");
         agencyDueDateElement.setAttribute("DUE_DATE_TYPE", routingFormAgency.getDueDateType() == null ? "" : routingFormAgency.getDueDateType().getDueDateDescription());
-        agencyDueDateElement.setAttribute("DUE_DATE", routingFormAgency.getRoutingFormDueDate() == null ? "" : dateFormatter.format(routingFormAgency.getRoutingFormDueDate()));
+        agencyDueDateElement.setAttribute("DUE_DATE", routingFormAgency.getRoutingFormDueDate() == null ? "" : dateFormatterKra.format(routingFormAgency.getRoutingFormDueDate()));
         // following field is dropped in KRA but per request preserved for Indiana University ERA implementation.
         agencyDueDateElement.setAttribute("DUE_TIME", routingFormAgency.getRoutingFormDueTime());
         agencyElement.appendChild(agencyDueDateElement);
@@ -237,25 +234,19 @@ public class RoutingFormXml {
      * @return resulting node
      */
     private static Element createPurposeElement(RoutingFormDocument routingFormDocument, Document xmlDoc) {
-        Element purposesElement = xmlDoc.createElement("PURPOSES");
+        Element purposeElement = xmlDoc.createElement("PURPOSE");
 
-        for(RoutingFormPurpose routingFormPurpose : routingFormDocument.getRoutingFormPurposes()) {
-            Element purposeElement = xmlDoc.createElement("PURPOSE");
-            
-            purposeElement.setAttribute("SELECTED", formatBoolean(routingFormPurpose.getPurposeCode().equals(routingFormDocument.getRoutingFormPurposeCode())));
-            purposeElement.setAttribute("CODE", ObjectUtils.toString(routingFormPurpose.getPurposeCode()));
-            purposeElement.appendChild(xmlDoc.createTextNode(ObjectUtils.toString(routingFormPurpose.getPurpose().getPurposeDescription())));
-            
-            purposesElement.appendChild(purposeElement);
-        }
+        // TODO Research Type dropdown.
         
-        Element purposeDescriptionElement = xmlDoc.createElement("PURPOSE_OTHER_DESCRIPTION");
+        // TODO Purpose should be dynamic, not static as it is right now below.
+        
+        purposeElement.setAttribute("PURPOSE", routingFormDocument.getRoutingFormPurposeCode());
+        
+        Element purposeDescriptionElement = xmlDoc.createElement("PURPOSE_DESCRIPTION");
         purposeDescriptionElement.appendChild(xmlDoc.createTextNode(ObjectUtils.toString(routingFormDocument.getRoutingFormOtherPurposeDescription())));
-        purposesElement.appendChild(purposeDescriptionElement);
-
-        // Research Type dropdown omitted since it was not present in ERA.
+        purposeElement.appendChild(purposeDescriptionElement);
         
-        return purposesElement;
+        return purposeElement;
     }
     
     /**
@@ -295,7 +286,7 @@ public class RoutingFormXml {
     private static Element createAmountsDatesElement(RoutingFormBudget routingFormBudget, Document xmlDoc) {
         Element amountsDatesElement = xmlDoc.createElement("AMOUNTS_DATES");
 
-        DateFormat dateFormatter = new SimpleDateFormat(KraConstants.SHORT_TIMESTAMP_FORMAT);
+        DateFormat dateFormatterKra = new SimpleDateFormat(SHORT_TIMESTAMP_FORMAT);
         
         Element directCostsDescription = xmlDoc.createElement("DIRECT_COSTS");
         directCostsDescription.appendChild(xmlDoc.createTextNode(ObjectUtils.toString(routingFormBudget.getRoutingFormBudgetDirectAmount())));
@@ -311,13 +302,13 @@ public class RoutingFormXml {
         
         Element startDateDescription = xmlDoc.createElement("START_DATE");
         if (routingFormBudget.getRoutingFormBudgetStartDate() != null) {
-            startDateDescription.appendChild(xmlDoc.createTextNode(dateFormatter.format(routingFormBudget.getRoutingFormBudgetStartDate())));
+            startDateDescription.appendChild(xmlDoc.createTextNode(dateFormatterKra.format(routingFormBudget.getRoutingFormBudgetStartDate())));
         }
         amountsDatesElement.appendChild(startDateDescription);
         
         Element endDateDescription = xmlDoc.createElement("STOP_DATE");
         if (routingFormBudget.getRoutingFormBudgetEndDate() != null) {
-            endDateDescription.appendChild(xmlDoc.createTextNode(dateFormatter.format(routingFormBudget.getRoutingFormBudgetEndDate())));
+            endDateDescription.appendChild(xmlDoc.createTextNode(dateFormatterKra.format(routingFormBudget.getRoutingFormBudgetEndDate())));
         }
         amountsDatesElement.appendChild(endDateDescription);
         
@@ -375,78 +366,12 @@ public class RoutingFormXml {
      * @return resulting node
      */
     private static Element createResearchRiskElement(RoutingFormDocument routingFormDocument, Document xmlDoc) {
-        Element researchRisksElement = xmlDoc.createElement("RESEARCH_RISKS");
+        Element researchRiskElement = xmlDoc.createElement("RESEARCH_RISK");
 
-        boolean anyStudySelected = false;
-        DateFormat dateFormatter = new SimpleDateFormat(KraConstants.SHORT_TIMESTAMP_FORMAT);
-        RoutingFormApprovalStatusValuesFinder routingFormApprovalStatusValuesFinder = new RoutingFormApprovalStatusValuesFinder();
-        RoutingFormStudyReviewCodeValuesFinder routingFormStudyReviewCodeValuesFinder = new RoutingFormStudyReviewCodeValuesFinder();
+        // TODO: dynamic fields?
+        // routingFormDocument.getRoutingFormResearchRisks().get(0).getResearchRiskDescription();
         
-        for(RoutingFormResearchRisk routingFormResearchRisk : routingFormDocument.getRoutingFormResearchRisks()) {
-            if (KraConstants.RESEARCH_RISK_TYPE_DESCRIPTION.equals(routingFormResearchRisk.getResearchRiskType().getControlAttributeTypeCode())) {
-                Element researchRiskElement = xmlDoc.createElement("RESEARCH_RISK");
-                
-                researchRiskElement.setAttribute("SELECTED", formatBoolean(StringUtils.isNotEmpty(routingFormResearchRisk.getResearchRiskDescription())));
-                researchRiskElement.setAttribute("CTRL_ATTRIB_TYPE_CODE", routingFormResearchRisk.getResearchRiskType().getControlAttributeTypeCode());
-                researchRiskElement.setAttribute("TYPE_DESCRIPTION", ObjectUtils.toString(routingFormResearchRisk.getResearchRiskType().getResearchRiskTypeDescription()));
-                
-                Element textDescription = xmlDoc.createElement("TEXT");
-                textDescription.appendChild(xmlDoc.createTextNode(ObjectUtils.toString(routingFormResearchRisk.getResearchRiskDescription())));
-                researchRiskElement.appendChild(textDescription);
-                
-                researchRisksElement.appendChild(researchRiskElement);
-            } else if (KraConstants.RESEARCH_RISK_TYPE_ALL_COLUMNS.equals(routingFormResearchRisk.getResearchRiskType().getControlAttributeTypeCode()) ||
-                    KraConstants.RESEARCH_RISK_TYPE_SOME_COLUMNS.equals(routingFormResearchRisk.getResearchRiskType().getControlAttributeTypeCode())) {
-                Element researchRiskElement = xmlDoc.createElement("RESEARCH_RISK");
-                
-                boolean selected = routingFormResearchRisk.getResearchRiskStudies().size() > 0;
-                anyStudySelected |= selected;
-                
-                researchRiskElement.setAttribute("SELECTED", formatBoolean(selected));
-                researchRiskElement.setAttribute("CTRL_ATTRIB_TYPE_CODE", routingFormResearchRisk.getResearchRiskType().getControlAttributeTypeCode());
-                researchRiskElement.setAttribute("TYPE_DESCRIPTION", ObjectUtils.toString(routingFormResearchRisk.getResearchRiskType().getResearchRiskTypeDescription()));
-
-                for(RoutingFormResearchRiskStudy routingFormResearchRiskStudy : routingFormResearchRisk.getResearchRiskStudies()) {
-                    Element studyElement = xmlDoc.createElement("STUDY");
-                    
-                    Element studyNumber = xmlDoc.createElement("STUDY_NUMBER");
-                    studyNumber.appendChild(xmlDoc.createTextNode(ObjectUtils.toString(routingFormResearchRiskStudy.getResearchRiskStudyNumber())));
-                    studyElement.appendChild(studyNumber);
-                    
-                    String routingFormApprovalStatus = routingFormApprovalStatusValuesFinder.getKeyLabel(routingFormResearchRiskStudy.getResearchRiskStudyApprovalStatusCode());
-                    Element approvalStatus = xmlDoc.createElement("APPROVAL_STATUS");
-                    approvalStatus.appendChild(xmlDoc.createTextNode(routingFormApprovalStatus));
-                    studyElement.appendChild(approvalStatus);
-                    
-                    Element approvalDate = xmlDoc.createElement("APPROVAL_DATE");
-                    approvalDate.appendChild(xmlDoc.createTextNode(routingFormResearchRiskStudy.getResearchRiskStudyApprovalDate() == null ? "" : dateFormatter.format(routingFormResearchRiskStudy.getResearchRiskStudyApprovalDate())));
-                    studyElement.appendChild(approvalDate);
-                    
-                    Element expirationDate = xmlDoc.createElement("EXPIRATION_DATE");
-                    expirationDate.appendChild(xmlDoc.createTextNode(routingFormResearchRiskStudy.getResearchRiskStudyExpirationDate() == null ? "" : dateFormatter.format(routingFormResearchRiskStudy.getResearchRiskStudyExpirationDate())));
-                    studyElement.appendChild(expirationDate);
-    
-                    String routingFormStudyReviewCode = routingFormStudyReviewCodeValuesFinder.getKeyLabel(routingFormResearchRiskStudy.getResearchRiskStudyReviewCode());
-                    Element studyReviewStatus = xmlDoc.createElement("STUDY_REVIEW_STATUS");
-                    studyReviewStatus.appendChild(xmlDoc.createTextNode(ObjectUtils.toString(routingFormStudyReviewCode)));
-                    studyElement.appendChild(studyReviewStatus);
-                    
-                    Element exemptionNbr = xmlDoc.createElement("EXEMPTION_NBR");
-                    exemptionNbr.appendChild(xmlDoc.createTextNode(ObjectUtils.toString(routingFormResearchRiskStudy.getResearchRiskExemptionNumber())));
-                    studyElement.appendChild(exemptionNbr);
-                    
-                    researchRiskElement.appendChild(studyElement);
-                }
-                
-                researchRisksElement.appendChild(researchRiskElement);
-            } else {
-                LOG.warn("Found unknown controlAttributeTypeCode, ignoring: " + routingFormResearchRisk.getResearchRiskType().getControlAttributeTypeCode());
-            }
-        }
-        
-        researchRisksElement.setAttribute("ANY_STUDY_SELECTED", formatBoolean(anyStudySelected));
-        
-        return researchRisksElement;
+        return researchRiskElement;
     }
     
     /**
@@ -487,26 +412,6 @@ public class RoutingFormXml {
             projectDetailElement.appendChild(otherInstOrgElement);
         }
         
-        for (RoutingFormInstitutionCostShare routingFormInstitutionCostShare : routingFormDocument.getRoutingFormInstitutionCostShares()) {
-            Element instCostShareElement = xmlDoc.createElement("INST_COST_SHARE");
-            
-            instCostShareElement.setAttribute("CHART", ObjectUtils.toString(routingFormInstitutionCostShare.getChartOfAccountsCode()));
-            instCostShareElement.setAttribute("ORG", ObjectUtils.toString(routingFormInstitutionCostShare.getOrganizationCode()));
-            instCostShareElement.setAttribute("ACCOUNT", ObjectUtils.toString(routingFormInstitutionCostShare.getAccountNumber()));
-            instCostShareElement.setAttribute("AMOUNT", ObjectUtils.toString(routingFormInstitutionCostShare.getRoutingFormCostShareAmount()));
-            
-            projectDetailElement.appendChild(instCostShareElement);
-        }
-        
-        for (RoutingFormOtherCostShare routingFormOtherCostShare : routingFormDocument.getRoutingFormOtherCostShares()) {
-            Element otherCostShareElement = xmlDoc.createElement("OTHER_COST_SHARE");
-            
-            otherCostShareElement.setAttribute("SOURCE_NAME", ObjectUtils.toString(routingFormOtherCostShare.getRoutingFormCostShareSourceName()));
-            otherCostShareElement.setAttribute("AMOUNT", ObjectUtils.toString(routingFormOtherCostShare.getRoutingFormCostShareAmount()));
-            
-            projectDetailElement.appendChild(otherCostShareElement);
-        }
-        
         if (routingFormDocument.getRoutingFormPersonnel().size() > 0 || routingFormDocument.getRoutingFormOrganizationCreditPercents().size() > 0) {
             
             for(RoutingFormPersonnel routingFormPerson : routingFormDocument.getRoutingFormPersonnel()) {
@@ -545,12 +450,14 @@ public class RoutingFormXml {
     private static Element createApprovalsElement(RoutingFormDocument routingFormDocument, Document xmlDoc) {
         Element approvalsElement = xmlDoc.createElement("APPROVALS");
         
+        ReportCriteriaVO criteria = new ReportCriteriaVO();
+        criteria.setDocumentTypeName(KualiWorkflowUtils.KRA_ROUTING_FORM_DOC_TYPE);
+        criteria.setNodeNames(new String[] {KraConstants.PROJECT_DIRECTOR_REVIEW_NODE_NAME, KraConstants.ADHOC_REVIEW_NODE_NAME, KraConstants.ORG_REVIEW_NODE_NAME});
+        criteria.setRuleTemplateNames(new String[] {KraConstants.PROJECT_DIRECTOR_TEMPLATE_NAME, KraConstants.ADHOC_REVIEW_TEMPLATE_NAME, KraConstants.ORG_REVIEW_TEMPLATE_NAME});
+        criteria.setXmlContent(routingFormDocument.generateDocumentContent());
+        WorkflowInfo info = new WorkflowInfo();
         try {
-            ReportCriteriaVO criteria = new ReportCriteriaVO();
-            criteria.setRouteHeaderId(routingFormDocument.getDocumentHeader().getWorkflowDocument().getRouteHeaderId());
-            WorkflowInfo info = new WorkflowInfo();
-            
-            DateFormat dateFormat = new SimpleDateFormat(KraConstants.LONG_TIMESTAMP_FORMAT);
+            DateFormat dateFormat = new SimpleDateFormat(LONG_TIMESTAMP_FORMAT);
             DocumentDetailVO detail = info.routingReport(criteria);
             ActionTakenVO[] actionTakenVO = detail.getActionsTaken();
             ActionRequestVO[] actionRequestVO = detail.getActionRequests();
@@ -559,7 +466,10 @@ public class RoutingFormXml {
                 ActionTakenVO actionTaken = actionTakenVO[i];
                 UserVO user = actionTaken.getUserVO();
                 
-                createApproverElement(xmlDoc, approvalsElement, user, "TODO", actionTaken.getActionTaken(), dateFormat.format(actionTaken.getActionDate().getTime()));
+                // TODO PD and ADHOC user object is always null
+                if (user != null) {
+                    createApproverElement(xmlDoc, approvalsElement, user, "TODO", actionTaken.getActionTaken(), dateFormat.format(actionTaken.getActionDate()));
+                }
             }
             
             for(int i = 0 ; i < actionRequestVO.length; i++) {
@@ -634,6 +544,21 @@ public class RoutingFormXml {
         
         return keywordsElement;
     }
+    
+    /**
+     * Creates SUBMISSION_TYPES node.
+     * 
+     * @param routingFormDocument
+     * @param xmlDoc
+     * @return resulting node
+     */
+    private static Element createSubmissionTypesElement(List<RoutingFormSubmissionType> routingFormSubmissionTypes, String previousFederalIdentifier, Document xmlDoc) {
+        Element submissionTypesElement = xmlDoc.createElement("SUBMISSION_TYPES");
+
+        // TODO New section on KRA, create?
+        
+        return submissionTypesElement;
+    }
      
     /**
      * Creates COMMENTS node.
@@ -645,7 +570,7 @@ public class RoutingFormXml {
     private static Element createCommentsElement(RoutingFormDocument routingFormDocument, Document xmlDoc) {
         Element commentsElement = xmlDoc.createElement("COMMENTS");
         
-        DateFormat dateFormat = new SimpleDateFormat(KraConstants.LONG_TIMESTAMP_FORMAT);
+        DateFormat dateFormat = new SimpleDateFormat(LONG_TIMESTAMP_FORMAT);
         Iterator notes = routingFormDocument.getDocumentHeader().getBoNotes().iterator();
         
         while(notes.hasNext()) {

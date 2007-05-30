@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/validation/impl/ChartRule.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +17,12 @@
  */
 package org.kuali.module.chart.rules;
 
+import org.kuali.KeyConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.service.ChartService;
@@ -45,7 +47,7 @@ public class ChartRule extends MaintenanceDocumentRuleBase {
             Chart reportsToChart=chartService.getByPrimaryId(reportsToChartCode);
             if (reportsToChart==null) {
                 result = false;
-                putFieldError("reportsToChartOfAccountsCode", KFSKeyConstants.ERROR_DOCUMENT_CHART_REPORTS_TO_CHART_MUST_EXIST);
+                putFieldError("reportsToChartOfAccountsCode", KeyConstants.ERROR_DOCUMENT_CHART_REPORTS_TO_CHART_MUST_EXIST);
             }
         }
         
@@ -54,12 +56,12 @@ public class ChartRule extends MaintenanceDocumentRuleBase {
            chartManager = getUniversalUserService().getUniversalUser( chart.getFinCoaManagerUniversalId() );
          } catch (UserNotFoundException e) {
              result = false;
-             putFieldError("finCoaManagerUniversal.personUserIdentifier",KFSKeyConstants.ERROR_DOCUMENT_CHART_MANAGER_MUST_EXIST);
+             putFieldError("finCoaManagerUniversal.personUserIdentifier",KeyConstants.ERROR_DOCUMENT_CHART_MANAGER_MUST_EXIST);
          }
         
         if (chartManager!=null && !chartManager.isActiveForModule( ChartUser.MODULE_ID ) ) {
             result=false;
-            putFieldError("finCoaManagerUniversal.personUserIdentifier",KFSKeyConstants.ERROR_DOCUMENT_CHART_MANAGER_MUST_BE_KUALI_USER);
+            putFieldError("finCoaManagerUniversal.personUserIdentifier",KeyConstants.ERROR_DOCUMENT_CHART_MANAGER_MUST_BE_KUALI_USER);
         }
         
         

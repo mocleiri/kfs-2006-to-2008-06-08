@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +20,7 @@ package org.kuali.module.gl.util;
 import java.util.Arrays;
 
 import org.kuali.core.service.DocumentTypeService;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.service.BalanceTypService;
 import org.kuali.module.gl.bo.OriginEntry;
 

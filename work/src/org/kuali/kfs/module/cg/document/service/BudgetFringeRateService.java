@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +18,11 @@
 package org.kuali.module.kra.budget.service;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetFringeRate;
 import org.kuali.module.kra.budget.bo.BudgetUser;
-import org.kuali.module.kra.budget.document.BudgetDocument;
-
-import edu.iu.uis.eden.exception.WorkflowException;
 
 
 /**
@@ -33,10 +31,8 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * 
  */
 public interface BudgetFringeRateService {
-    /**
-     * Returns active AppointmentTypes.
-     * @return active AppointmentType objects
-     */
+    // public void setFringeRate(Long documentNumber, Collection accountNumber);
+
     public Collection getDefaultFringeRates();
 
     public boolean isValidFringeRate(KualiDecimal fringeRate);
@@ -50,5 +46,4 @@ public interface BudgetFringeRateService {
     public BudgetFringeRate getBudgetFringeRateForDefaultAppointmentType(String documentNumber);
 
     public BudgetFringeRate getBudgetFringeRate(String documentNumber, String institutionAppointmentTypeCode);
-
 }
