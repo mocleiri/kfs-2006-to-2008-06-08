@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/datadictionary/Entry.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.gl.bo.Entry">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
             <title>General Ledger Entry</title>
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
@@ -63,7 +65,7 @@
 
             <lookupFields>
                 <lookupField attributeName="universityFiscalYear" required="true">
-                    <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
+                    <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.FiscalYearFinder</defaultValueFinderClass>
                 </lookupField>
 
                 <lookupField attributeName="chartOfAccountsCode" required="true" />
@@ -211,7 +213,7 @@
                 <description>The code corresponding to the system which created the General Ledger entry, e.g., 01 = Kuali Financial System (KFS).</description>
             </attribute>
 
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber">
+            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="documentNumber">
                 <description>The system generated Document Number attached to the accounting transaction. Used for tracking purposes.</description>
             </attributeReference>
 
@@ -346,7 +348,7 @@
                 <description>This is the budget year associated with this pending ledger entry.</description>
             </attribute>
 
-            <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="pendingEntryOption" >
+            <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" sourceAttributeName="pendingEntryOption" >
             	<label>Pending Entry Approved Indicator</label>
                 <shortLabel>Pending Entry Approved Indicator</shortLabel>
             </attributeReference>

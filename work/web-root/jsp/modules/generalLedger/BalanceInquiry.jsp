@@ -134,7 +134,10 @@
 				
 				<c:set var="columnLength" value="${fn:length(row.columns)-13}" />
 				<c:forEach items="${row.columns}" var="column" begin="1" varStatus="status">
-   				    <c:if test="${status.index > 0}">
+									
+					<c:choose>
+					
+						<c:when test="${status.index > 0}">
 					
 							<c:choose>
 		
@@ -202,7 +205,11 @@
 								</c:otherwise>
 		
 							</c:choose>
-				    </c:if>	
+					
+						</c:when>
+						
+					</c:choose>
+					
 				</c:forEach>
 				
 			</display:table>

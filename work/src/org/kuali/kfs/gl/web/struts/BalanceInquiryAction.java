@@ -30,6 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.lookup.Lookupable;
 import org.kuali.core.service.KualiConfigurationService;
@@ -39,9 +42,6 @@ import org.kuali.core.web.struts.form.LookupForm;
 import org.kuali.core.web.ui.Field;
 import org.kuali.core.web.ui.ResultRow;
 import org.kuali.core.web.ui.Row;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.util.ObjectHelper;
@@ -70,13 +70,13 @@ public class BalanceInquiryAction extends KualiAction {
     private void setTotalTitles() {
         totalTitles = new String[7];
 
-        totalTitles[0] = kualiConfigurationService.getPropertyString(KFSKeyConstants.AccountBalanceService.INCOME);
-        totalTitles[1] = kualiConfigurationService.getPropertyString(KFSKeyConstants.AccountBalanceService.INCOME_FROM_TRANSFERS);
-        totalTitles[2] = kualiConfigurationService.getPropertyString(KFSKeyConstants.AccountBalanceService.INCOME_TOTAL);
-        totalTitles[3] = kualiConfigurationService.getPropertyString(KFSKeyConstants.AccountBalanceService.EXPENSE);
-        totalTitles[4] = kualiConfigurationService.getPropertyString(KFSKeyConstants.AccountBalanceService.EXPENSE_FROM_TRANSFERS);
-        totalTitles[5] = kualiConfigurationService.getPropertyString(KFSKeyConstants.AccountBalanceService.EXPENSE_TOTAL);
-        totalTitles[6] = kualiConfigurationService.getPropertyString(KFSKeyConstants.AccountBalanceService.TOTAL);
+        totalTitles[0] = kualiConfigurationService.getPropertyString(KeyConstants.AccountBalanceService.INCOME);
+        totalTitles[1] = kualiConfigurationService.getPropertyString(KeyConstants.AccountBalanceService.INCOME_FROM_TRANSFERS);
+        totalTitles[2] = kualiConfigurationService.getPropertyString(KeyConstants.AccountBalanceService.INCOME_TOTAL);
+        totalTitles[3] = kualiConfigurationService.getPropertyString(KeyConstants.AccountBalanceService.EXPENSE);
+        totalTitles[4] = kualiConfigurationService.getPropertyString(KeyConstants.AccountBalanceService.EXPENSE_FROM_TRANSFERS);
+        totalTitles[5] = kualiConfigurationService.getPropertyString(KeyConstants.AccountBalanceService.EXPENSE_TOTAL);
+        totalTitles[6] = kualiConfigurationService.getPropertyString(KeyConstants.AccountBalanceService.TOTAL);
 
     }
 
@@ -92,7 +92,7 @@ public class BalanceInquiryAction extends KualiAction {
      * Entry point to lookups, forwards to jsp for search render.
      */
     public ActionForward start(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -121,7 +121,7 @@ public class BalanceInquiryAction extends KualiAction {
             CollectionIncomplete incompleteDisplayList = (CollectionIncomplete) displayList;
             Long totalSize = ((CollectionIncomplete) displayList).getActualSizeIfTruncated();
 
-            request.setAttribute(KFSConstants.REQUEST_SEARCH_RESULTS_SIZE, totalSize);
+            request.setAttribute(Constants.REQUEST_SEARCH_RESULTS_SIZE, totalSize);
 
             // TODO: use inheritance instead of this if statement
             if (kualiLookupable.getLookupableHelperService() instanceof AccountBalanceByConsolidationLookupableHelperServiceImpl) {
@@ -157,7 +157,7 @@ public class BalanceInquiryAction extends KualiAction {
 
                 }
 
-                request.setAttribute(KFSConstants.REQUEST_SEARCH_RESULTS, resultTable);
+                request.setAttribute(Constants.REQUEST_SEARCH_RESULTS, resultTable);
 
                 request.setAttribute(TOTALS_TABLE_KEY, totalsTable);
                 GlobalVariables.getUserSession().addObject(TOTALS_TABLE_KEY, totalsTable);
@@ -165,25 +165,25 @@ public class BalanceInquiryAction extends KualiAction {
             }
             else {
 
-                request.setAttribute(KFSConstants.REQUEST_SEARCH_RESULTS, resultTable);
+                request.setAttribute(Constants.REQUEST_SEARCH_RESULTS, resultTable);
 
             }
 
-            if (request.getParameter(KFSConstants.SEARCH_LIST_REQUEST_KEY) != null) {
-                GlobalVariables.getUserSession().removeObject(request.getParameter(KFSConstants.SEARCH_LIST_REQUEST_KEY));
+            if (request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY) != null) {
+                GlobalVariables.getUserSession().removeObject(request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY));
             }
 
-            request.setAttribute(KFSConstants.SEARCH_LIST_REQUEST_KEY, GlobalVariables.getUserSession().addObject(resultTable));
+            request.setAttribute(Constants.SEARCH_LIST_REQUEST_KEY, GlobalVariables.getUserSession().addObject(resultTable));
 
         }
         catch (NumberFormatException e) {
-            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSKeyConstants.ERROR_CUSTOM, new String[] { "Fiscal Year must be a four-digit number" });
+            GlobalVariables.getErrorMap().putError(PropertyConstants.UNIVERSITY_FISCAL_YEAR, KeyConstants.ERROR_CUSTOM, new String[] { "Fiscal Year must be a four-digit number" });
         }
         catch (Exception e) {
-            GlobalVariables.getErrorMap().putError(KFSConstants.DOCUMENT_ERRORS, KFSKeyConstants.ERROR_CUSTOM, new String[] { "Please report the server error." });
+            GlobalVariables.getErrorMap().putError(Constants.DOCUMENT_ERRORS, KeyConstants.ERROR_CUSTOM, new String[] { "Please report the server error." });
             LOG.error("Application Errors", e);
         }
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -218,8 +218,8 @@ public class BalanceInquiryAction extends KualiAction {
                 fieldValues.put(field.getPropertyName(), field.getPropertyValue());
             }
         }
-        fieldValues.put(KFSConstants.DOC_FORM_KEY, lookupForm.getFormKey());
-        fieldValues.put(KFSConstants.BACK_LOCATION, lookupForm.getBackLocation());
+        fieldValues.put(Constants.DOC_FORM_KEY, lookupForm.getFormKey());
+        fieldValues.put(Constants.BACK_LOCATION, lookupForm.getBackLocation());
 
         if (kualiLookupable.checkForAdditionalFields(fieldValues)) {
             for (Iterator iter = kualiLookupable.getRows().iterator(); iter.hasNext();) {
@@ -239,7 +239,7 @@ public class BalanceInquiryAction extends KualiAction {
             }
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -274,13 +274,13 @@ public class BalanceInquiryAction extends KualiAction {
             }
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward viewResults(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        request.setAttribute(KFSConstants.SEARCH_LIST_REQUEST_KEY, request.getParameter(KFSConstants.SEARCH_LIST_REQUEST_KEY));
-        request.setAttribute(KFSConstants.REQUEST_SEARCH_RESULTS, GlobalVariables.getUserSession().retrieveObject(request.getParameter(KFSConstants.SEARCH_LIST_REQUEST_KEY)));
-        request.setAttribute(KFSConstants.REQUEST_SEARCH_RESULTS_SIZE, request.getParameter(KFSConstants.REQUEST_SEARCH_RESULTS_SIZE));
+        request.setAttribute(Constants.SEARCH_LIST_REQUEST_KEY, request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY));
+        request.setAttribute(Constants.REQUEST_SEARCH_RESULTS, GlobalVariables.getUserSession().retrieveObject(request.getParameter(Constants.SEARCH_LIST_REQUEST_KEY)));
+        request.setAttribute(Constants.REQUEST_SEARCH_RESULTS_SIZE, request.getParameter(Constants.REQUEST_SEARCH_RESULTS_SIZE));
 
         // TODO: use inheritance instead of this if statement
         if (((BalanceInquiryForm) form).getLookupable().getLookupableHelperService() instanceof AccountBalanceByConsolidationLookupableHelperServiceImpl) {
@@ -288,7 +288,7 @@ public class BalanceInquiryAction extends KualiAction {
             request.setAttribute(TOTALS_TABLE_KEY, totalsTable);
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public void setKualiConfigurationService(KualiConfigurationService kcs) {
