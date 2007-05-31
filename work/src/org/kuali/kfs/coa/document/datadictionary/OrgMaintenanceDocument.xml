@@ -37,8 +37,8 @@
         <documentTypeName>KualiOrganizationMaintenanceDocument</documentTypeName>
         <documentTypeCode>ORGN</documentTypeCode>
 
-		<webScriptFile>../dwr/interface/PostalZipCodeService.js</webScriptFile>
-		<webScriptFile>../scripts/chart/organizationDocument.js</webScriptFile>
+		<webScriptFile>dwr/interface/PostalZipCodeService.js</webScriptFile>
+		<webScriptFile>scripts/chart/organizationDocument.js</webScriptFile>
 		
         <label>Organization Maintenance Document</label>
         <shortLabel>OrgMainDoc</shortLabel>
@@ -46,6 +46,8 @@
         <summary>Organization maintenance document</summary>
         <description>Document used to create or update Organization objects</description>
         <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ORGANIZATION_CODE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />

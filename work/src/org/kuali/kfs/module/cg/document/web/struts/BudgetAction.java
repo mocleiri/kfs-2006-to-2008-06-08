@@ -40,8 +40,6 @@ import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.KraKeyConstants;
 import org.kuali.module.kra.bo.AdhocPerson;
 import org.kuali.module.kra.bo.AdhocWorkgroup;
-import org.kuali.module.kra.budget.bo.Budget;
-import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.rules.event.EnterModularEvent;
 import org.kuali.module.kra.budget.rules.event.RunAuditEvent;
 import org.kuali.module.kra.budget.web.struts.form.BudgetCostShareFormHelper;
@@ -243,14 +241,8 @@ public class BudgetAction extends ResearchDocumentActionBase {
 
         this.load(mapping, form, request, response);
         BudgetForm budgetForm = (BudgetForm) form;
-        Budget budget = budgetForm.getBudgetDocument().getBudget();
-        
-        // TODO Shouldn't be necessary but was added to fix KULERA-945: "Navigating from Nonpersonnel to Modular may cause exception"
-        for(BudgetNonpersonnel budgetNonpersonnel : budget.getNonpersonnelItems()) {
-            budgetNonpersonnel.refreshReferenceObject("nonpersonnelObjectCode");
-        }
-        
-        SpringServiceLocator.getBudgetModularService().generateModularBudget(budget, budgetForm.getNonpersonnelCategories());
+
+        SpringServiceLocator.getBudgetModularService().generateModularBudget(budgetForm.getBudgetDocument().getBudget(), budgetForm.getNonpersonnelCategories());
 
         SpringServiceLocator.getKualiRuleService().applyRules(new EnterModularEvent(budgetForm.getDocument()));
 

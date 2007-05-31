@@ -23,38 +23,43 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.service.ConfigurableDateService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.Guid;
-import org.kuali.core.util.UnitTestSqlDao;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.OriginEntryDao;
+import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.test.KualiTestBase;
 import org.springframework.beans.factory.BeanFactory;
 
+/**
+ */
 public class OriginEntryTestBase extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryTestBase.class);
 
     protected BeanFactory beanFactory;
-    protected ConfigurableDateService dateTimeService;
+    protected TestDateTimeService dateTimeService;
     protected PersistenceService persistenceService;
     protected UnitTestSqlDao unitTestSqlDao = null;
     protected OriginEntryGroupService originEntryGroupService = null;
     protected OriginEntryService originEntryService = null;
     protected OriginEntryDao originEntryDao = null;
     protected KualiConfigurationService kualiConfigurationService = null;
-    protected Date date;
+    protected Date date = new Date();
 
     public OriginEntryTestBase() {
         super();
     }
 
-    @Override
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.springframework.test.AbstractTransactionalSpringContextTests#onSetUpInTransaction()
+     */
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -62,12 +67,11 @@ public class OriginEntryTestBase extends KualiTestBase {
 
         beanFactory = SpringServiceLocator.getBeanFactory();
 
-        dateTimeService = (ConfigurableDateService) beanFactory.getBean("testDateTimeService");
-        date = dateTimeService.getCurrentDate();
-        
+        dateTimeService = (TestDateTimeService) beanFactory.getBean("testDateTimeService");
+
         // Other objects needed for the tests
         persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
-        unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("unitTestSqlDao");
+        unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("glUnitTestSqlDao");
         originEntryService = (OriginEntryService) beanFactory.getBean("glOriginEntryService");
         originEntryDao = (OriginEntryDao) beanFactory.getBean("glOriginEntryDao");
         originEntryGroupService = (OriginEntryGroupService) beanFactory.getBean("glOriginEntryGroupService");
@@ -94,7 +98,7 @@ public class OriginEntryTestBase extends KualiTestBase {
     }
 
     protected void loadInputTransactions(String groupCode, String[] transactions) {
-        OriginEntryGroup group = originEntryGroupService.createGroup(new java.sql.Date(dateTimeService.getCurrentDate().getTime()), groupCode, true, true, true);
+        OriginEntryGroup group = originEntryGroupService.createGroup(new java.sql.Date(new java.util.Date().getTime()), groupCode, true, true, true);
         loadTransactions(transactions, group);
     }
 
@@ -104,7 +108,7 @@ public class OriginEntryTestBase extends KualiTestBase {
             originEntryService.createEntry(e, group);
         }
 
-        persistenceService.clearCache();
+        persistenceService.getPersistenceBroker().clearCache();
     }
 
     protected void clearExpenditureTable() {
@@ -147,12 +151,13 @@ public class OriginEntryTestBase extends KualiTestBase {
      * @param requiredEntries
      */
     protected void assertOriginEntries(int groupCount, EntryHolder[] requiredEntries) {
-        persistenceService.clearCache();
+        persistenceService.getPersistenceBroker().clearCache();
 
         List groups = unitTestSqlDao.sqlSelect("select * from gl_origin_entry_grp_t order by origin_entry_grp_src_cd");
         assertEquals("Number of groups is wrong", groupCount, groups.size());
 
         Collection c = originEntryDao.testingGetAllEntries();
+        
 
         // This is for debugging purposes - change to true for output
         if (true) {
@@ -194,7 +199,7 @@ public class OriginEntryTestBase extends KualiTestBase {
         }
     }
 
-    protected int getGroup(List groups, String groupCode) {
+     protected int getGroup(List groups, String groupCode) {
         for (Iterator iter = groups.iterator(); iter.hasNext();) {
             Map element = (Map) iter.next();
 

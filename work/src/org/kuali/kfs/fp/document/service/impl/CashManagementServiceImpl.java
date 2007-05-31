@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,21 +24,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.DocumentHeader;
+import org.kuali.PropertyConstants;
+import org.kuali.Constants.CashDrawerConstants;
+import org.kuali.Constants.DepositConstants;
+import org.kuali.Constants.DocumentStatusCodes;
+import org.kuali.core.authorization.DocumentAuthorizer;
+
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.authorization.DocumentAuthorizer;
+import org.kuali.core.document.DocumentHeader;
 import org.kuali.core.exceptions.InfrastructureException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.KFSConstants.CashDrawerConstants;
-import org.kuali.kfs.KFSConstants.DepositConstants;
-import org.kuali.kfs.KFSConstants.DocumentStatusCodes;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Bank;
 import org.kuali.module.financial.bo.BankAccount;
 import org.kuali.module.financial.bo.CashDrawer;
@@ -50,11 +52,10 @@ import org.kuali.module.financial.exceptions.InvalidCashReceiptState;
 import org.kuali.module.financial.service.CashDrawerService;
 import org.kuali.module.financial.service.CashManagementService;
 import org.kuali.module.financial.web.struts.form.CashDrawerStatusCodeFormatter;
-import org.springframework.transaction.annotation.Transactional;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
-@Transactional
 public class CashManagementServiceImpl implements CashManagementService {
     private BusinessObjectService businessObjectService;
     private CashDrawerService cashDrawerService;
@@ -79,7 +80,7 @@ public class CashManagementServiceImpl implements CashManagementService {
 
         // get CashReceiptHeader for the CashReceipt, if any
         HashMap primaryKeys = new HashMap();
-        primaryKeys.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentId);
+        primaryKeys.put(PropertyConstants.DOCUMENT_NUMBER, documentId);
         CashReceiptHeader crh = (CashReceiptHeader) businessObjectService.findByPrimaryKey(CashReceiptHeader.class, primaryKeys);
 
         // get the DepositCashReceiptControl for the CashReceiptHeader
@@ -291,7 +292,7 @@ public class CashManagementServiceImpl implements CashManagementService {
         KualiDecimal total = KualiDecimal.ZERO;
         for (Iterator i = selectedCashReceipts.iterator(); i.hasNext();) {
             CashReceiptDocument crDoc = (CashReceiptDocument) i.next();
-            total = total.add(crDoc.getTotalDollarAmount());
+            total = total.add(crDoc.getSumTotalAmount());
         }
         deposit.setDepositAmount(total);
 
