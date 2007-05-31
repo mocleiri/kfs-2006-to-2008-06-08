@@ -67,7 +67,7 @@ public class OriginEntryTestBase extends KualiTestBase {
         
         // Other objects needed for the tests
         persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
-        unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("unitTestSqlDao");
+        unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("glUnitTestSqlDao");
         originEntryService = (OriginEntryService) beanFactory.getBean("glOriginEntryService");
         originEntryDao = (OriginEntryDao) beanFactory.getBean("glOriginEntryDao");
         originEntryGroupService = (OriginEntryGroupService) beanFactory.getBean("glOriginEntryGroupService");
