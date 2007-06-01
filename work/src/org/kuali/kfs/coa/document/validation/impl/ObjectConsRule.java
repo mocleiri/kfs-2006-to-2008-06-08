@@ -15,31 +15,16 @@
  */
 package org.kuali.module.chart.rules;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.kuali.KeyConstants;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjLevel;
-import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectCons;
-import org.kuali.module.chart.service.ChartService;
-import org.kuali.module.chart.service.ObjectCodeService;
-import org.kuali.module.chart.service.ObjectLevelService;
 
 public class ObjectConsRule extends MaintenanceDocumentRuleBase {
-	
-	private static ChartService chartService;
-	private static ObjectLevelService objectLevelService;
-	private static ObjectCodeService objectCodeService;
-	
-	public ObjectConsRule() {
-		if ( chartService == null  ) {
-			objectLevelService = SpringServiceLocator.getObjectLevelService();
-			objectCodeService = SpringServiceLocator.getObjectCodeService();
-			chartService = SpringServiceLocator.getChartService();
-		}
-	}
-	
     /**
      * This method should be overridden to provide custom rules for processing document saving
      * 
@@ -47,10 +32,7 @@ public class ObjectConsRule extends MaintenanceDocumentRuleBase {
      * @return boolean
      */
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
-        ObjectCons objConsolidation = (ObjectCons)getNewBo();
-        
-    	checkObjLevelCode( objConsolidation );
-        checkEliminationCode( objConsolidation );
+        checkObjLevelCode();
         return true;
     }
 
@@ -63,10 +45,7 @@ public class ObjectConsRule extends MaintenanceDocumentRuleBase {
      */
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
         boolean success = true;
-        ObjectCons objConsolidation = (ObjectCons)getNewBo();
-        
-        success &= checkObjLevelCode( objConsolidation );
-        success &= checkEliminationCode( objConsolidation );
+        success &= checkObjLevelCode();
         return success;
     }
 
@@ -78,34 +57,18 @@ public class ObjectConsRule extends MaintenanceDocumentRuleBase {
      * @param document
      * @return false if Object Level Code already exists
      */
-    private boolean checkObjLevelCode( ObjectCons objConsolidation ) {
+    private boolean checkObjLevelCode() {
         boolean success = true;
-        
-        ObjLevel objLevel = objectLevelService.getByPrimaryId( objConsolidation.getChartOfAccountsCode(), 
-        		objConsolidation.getFinConsolidationObjectCode() );
+        ObjectCons objConsolidation = (ObjectCons) super.getNewBo();
+        String chartOfAccountsCode = objConsolidation.getChartOfAccountsCode();
+        String financialObjectLevelCode = objConsolidation.getFinConsolidationObjectCode();
+        Map primaryKeys = new HashMap();
+        primaryKeys.put("chartOfAccountsCode", chartOfAccountsCode);
+        primaryKeys.put("financialObjectLevelCode", financialObjectLevelCode);
+        ObjLevel objLevel = (ObjLevel) getBoService().findByPrimaryKey(ObjLevel.class, primaryKeys);
         if (objLevel != null) {
             success = false;
-            putFieldError("finConsolidationObjectCode", KFSKeyConstants.ERROR_DOCUMENT_OBJCONSMAINT_ALREADY_EXISTS_AS_OBJLEVEL);
-        }
-        return success;
-    }
-    
-    /**
-     * This method checks that the eliminations object code is really a valid current object code.
-     * @return true if eliminations object code is a valid object code currently, false if otherwise
-     */
-    private boolean checkEliminationCode( ObjectCons objConsolidation ) {
-        boolean success = true;
-
-        ObjectCode elimCode = objectCodeService.getByPrimaryIdForCurrentYear( objConsolidation.getChartOfAccountsCode(), objConsolidation.getFinancialEliminationsObjectCode());
-        if (elimCode == null) {
-        	// KULRNE-61 - otherwise, allow the invalid value if the object is at the top of the hieratchy and the eliminiation object code
-        	// is itself
-        	if ( !objConsolidation.getFinConsolidationObjectCode().equals( objConsolidation.getFinancialEliminationsObjectCode() ) 
-        			|| !chartService.getReportsToHierarchy().get( objConsolidation.getChartOfAccountsCode() ).equals( objConsolidation.getChartOfAccountsCode() ) ) {
-        		success = false;
-        		putFieldError("financialEliminationsObjectCode", KFSKeyConstants.ERROR_DOCUMENT_OBJCONSMAINT_INVALID_ELIM_OBJCODE, new String[] { objConsolidation.getFinancialEliminationsObjectCode() });
-        	}
+            putFieldError("finConsolidationObjectCode", KeyConstants.ERROR_DOCUMENT_OBJCONSMAINT_ALREADY_EXISTS_AS_OBJLEVEL);
         }
         return success;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 package org.kuali.module.chart.service;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getObjectLevelService;
-
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjLevel;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
@@ -28,9 +27,16 @@ import org.kuali.test.WithTestSpringContext;
  */
 @WithTestSpringContext
 public class ObjectLevelServiceTest extends KualiTestBase {
+    private ObjectLevelService objectLevelService;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        objectLevelService = SpringServiceLocator.getObjectLevelService();
+    }
 
     public void testFindById() {
-        ObjLevel objectLevel = getObjectLevelService().getByPrimaryId("UA", "BASE");
+        ObjLevel objectLevel = objectLevelService.getByPrimaryId("UA", "BASE");
         assertEquals("Object Level Code should be BASE", objectLevel.getFinancialObjectLevelCode(), "BASE");
     }
 }

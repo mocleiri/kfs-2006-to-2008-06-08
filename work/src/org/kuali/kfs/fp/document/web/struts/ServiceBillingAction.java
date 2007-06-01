@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@ package org.kuali.module.financial.web.struts.action;
 
 /**
  * This class handles Actions for ServiceBilling.
+ * 
+ * 
  */
 public class ServiceBillingAction extends InternalBillingAction {
+    // no difference from superclass
 }

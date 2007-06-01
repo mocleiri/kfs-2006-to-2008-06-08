@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ public class OrganizationServiceTest extends KualiTestBase {
     private OrganizationServiceImpl organizationService;
     private FakeOrganizationDao organizationDao;
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -91,14 +90,6 @@ public class OrganizationServiceTest extends KualiTestBase {
         public List getActiveChildOrgs(String chartOfAccountsCode, String organizationCode) {
             return Collections.EMPTY_LIST;
         }
-        public List<Org> getActiveOrgsByType(String organizationTypeCode){
-            return Collections.EMPTY_LIST;
-        }
-        public String[] getRootOrganizationCode(String rootChart, String selfReportsORgType)
-        {
-            String[] returnValues = {null, null};
-            return returnValues;
-        }
-        
+
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 package org.kuali.module.chart.service;
 
-import static org.kuali.kfs.util.SpringServiceLocator.*;
-
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
@@ -28,15 +27,22 @@ import org.kuali.test.WithTestSpringContext;
  */
 @WithTestSpringContext
 public class OffsetDefinitionServiceTest extends KualiTestBase {
+    private OffsetDefinitionService offsetDefinitionService;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        offsetDefinitionService = SpringServiceLocator.getOffsetDefinitionService();
+    }
 
     public void testValidateAccount() {
         OffsetDefinition offsetDefinition = null;
-        offsetDefinition = getOffsetDefinitionService().getByPrimaryId(new Integer(2004), "BA", "IB", "AC");
+        offsetDefinition = offsetDefinitionService.getByPrimaryId(new Integer(2004), "BA", "IB", "AC");
         assertNotNull("offset object code not found", offsetDefinition.getFinancialObject());
         assertEquals("offset object code should have been 8000", "8000", offsetDefinition.getFinancialObject().getFinancialObjectCode());
 
         offsetDefinition = null;
-        offsetDefinition = getOffsetDefinitionService().getByPrimaryId(new Integer(2004), "XX", "XX", "XX");
+        offsetDefinition = offsetDefinitionService.getByPrimaryId(new Integer(2004), "XX", "XX", "XX");
         assertNull(offsetDefinition);
     }
 }

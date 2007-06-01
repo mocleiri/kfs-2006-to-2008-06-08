@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,17 +32,4 @@ public interface OrganizationDao {
     public List getActiveAccountsByOrg(String chartOfAccountsCode, String organizationCode);
 
     public List getActiveChildOrgs(String chartOfAccountsCode, String organizationCode);
-    
-    /**
-     * 
-     * Returns a list of active organizations with the given organization type code.
-     * 
-     * @param organizationType
-     * @return
-     */
-    public List<Org> getActiveOrgsByType( String organizationTypeCode );
-    
-    public String[] getRootOrganizationCode(String rootChart,
-            String selfReportsOrgTypeCode);
-
 }

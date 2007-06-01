@@ -18,6 +18,8 @@ package org.kuali.module.chart.dao;
 import org.kuali.module.chart.bo.A21SubAccount;
 
 /**
+ * 
+ * @version $Id: A21SubAccountDao.java,v 1.3.8.3 2007-02-10 11:37:21 j2eemgr Exp $
  */
 public interface A21SubAccountDao {
     public A21SubAccount getByPrimaryKey(String chartOfAccountsCode, String accountNumber, String subAccountNumber);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package org.kuali.module.chart.service;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getOrganizationService;
-
 import java.util.Collections;
 import java.util.List;
 
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
 
@@ -32,11 +31,18 @@ public class OrganizationService2Test extends KualiTestBase {
     private static final String BAD_ORG = "ZZZ";
     private static final String GOOD_ORG2 = "BUS";
 
+    private OrganizationService organizationService;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        organizationService = SpringServiceLocator.getOrganizationService();
+    }
+
     public void testGetActiveAccountsByOrg_good() {
 
         List accounts;
 
-        accounts = getOrganizationService().getActiveAccountsByOrg(GOOD_CHART, GOOD_ORG);
+        accounts = organizationService.getActiveAccountsByOrg(GOOD_CHART, GOOD_ORG);
 
         assertFalse("List of Accounts should not contain no elements.", accounts.size() == 0);
         assertFalse("List of Accounts should not be empty.", accounts.isEmpty());
@@ -47,7 +53,7 @@ public class OrganizationService2Test extends KualiTestBase {
 
         List accounts;
 
-        accounts = getOrganizationService().getActiveAccountsByOrg(BAD_CHART, BAD_ORG);
+        accounts = organizationService.getActiveAccountsByOrg(BAD_CHART, BAD_ORG);
 
         assertEquals(Collections.EMPTY_LIST, accounts);
         assertTrue("List of Accounts should contain no elements.", accounts.size() == 0);
@@ -59,7 +65,7 @@ public class OrganizationService2Test extends KualiTestBase {
 
         List orgs;
 
-        orgs = getOrganizationService().getActiveChildOrgs(GOOD_CHART, GOOD_ORG2);
+        orgs = organizationService.getActiveChildOrgs(GOOD_CHART, GOOD_ORG2);
 
         assertFalse("List of Orgs should not contain no elements.", orgs.size() == 0);
         assertFalse("List of Orgs should not be empty.", orgs.isEmpty());
@@ -70,7 +76,7 @@ public class OrganizationService2Test extends KualiTestBase {
 
         List orgs;
 
-        orgs = getOrganizationService().getActiveChildOrgs(BAD_CHART, BAD_ORG);
+        orgs = organizationService.getActiveChildOrgs(BAD_CHART, BAD_ORG);
 
         assertEquals(Collections.EMPTY_LIST, orgs);
         assertTrue("List of Orgs should contain no elements.", orgs.size() == 0);

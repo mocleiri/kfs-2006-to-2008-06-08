@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 package org.kuali.module.financial.web.struts.form;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.Formatter;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
 
 public class CashDrawerStatusCodeFormatter extends Formatter {
     private final String CLOSED_CD;
@@ -32,14 +32,14 @@ public class CashDrawerStatusCodeFormatter extends Formatter {
     private final String LOCKED_MSG;
 
     public CashDrawerStatusCodeFormatter() {
-        CLOSED_CD = KFSConstants.CashDrawerConstants.STATUS_CLOSED;
-        CLOSED_MSG = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.CashDrawer.CASH_DRAWER_STATUS_CLOSED);
+        CLOSED_CD = Constants.CashDrawerConstants.STATUS_CLOSED;
+        CLOSED_MSG = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashDrawer.CASH_DRAWER_STATUS_CLOSED);
 
-        OPEN_CD = KFSConstants.CashDrawerConstants.STATUS_OPEN;
-        OPEN_MSG = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.CashDrawer.CASH_DRAWER_STATUS_OPEN);
+        OPEN_CD = Constants.CashDrawerConstants.STATUS_OPEN;
+        OPEN_MSG = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashDrawer.CASH_DRAWER_STATUS_OPEN);
 
-        LOCKED_CD = KFSConstants.CashDrawerConstants.STATUS_LOCKED;
-        LOCKED_MSG = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.CashDrawer.CASH_DRAWER_STATUS_LOCKED);
+        LOCKED_CD = Constants.CashDrawerConstants.STATUS_LOCKED;
+        LOCKED_MSG = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashDrawer.CASH_DRAWER_STATUS_LOCKED);
     }
 
 
