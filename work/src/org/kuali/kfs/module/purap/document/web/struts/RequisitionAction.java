@@ -18,12 +18,21 @@ package org.kuali.module.purap.web.struts.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.kfs.bo.Building;
+import org.kuali.module.purap.bo.VendorAddress;
+import org.kuali.module.purap.bo.VendorContract;
+import org.kuali.module.purap.bo.VendorDetail;
 import org.kuali.module.purap.document.RequisitionDocument;
+import org.kuali.module.purap.util.PhoneNumberUtils;
 import org.kuali.module.purap.web.struts.form.RequisitionForm;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -46,6 +55,7 @@ public class RequisitionAction extends PurchasingActionBase {
         super.createDocument(kualiDocumentFormBase);
         
         ((RequisitionDocument) kualiDocumentFormBase.getDocument()).initiateDocument();
+        
     }
 
     /**
@@ -54,13 +64,16 @@ public class RequisitionAction extends PurchasingActionBase {
      */
     @Override
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ActionForward forward = super.refresh(mapping, form, request, response);
-    	RequisitionForm rqForm = (RequisitionForm) form;
+        RequisitionForm rqForm = (RequisitionForm) form;
         RequisitionDocument document = (RequisitionDocument) rqForm.getDocument();
-    	
-        // super.refresh() must occur before this line to get the correct APO limit
-        document.setOrganizationAutomaticPurchaseOrderLimit(SpringServiceLocator.getPurapService().getApoLimit(document.getVendorContractGeneratedIdentifier(), document.getChartOfAccountsCode(), document.getOrganizationCode()));
-        return forward;
+        BusinessObjectService businessObjectService = SpringServiceLocator.getBusinessObjectService();
+
+        // Format phone numbers
+        document.setInstitutionContactPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(document.getInstitutionContactPhoneNumber()));    
+        document.setRequestorPersonPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(document.getRequestorPersonPhoneNumber()));    
+        document.setDeliveryToPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(document.getDeliveryToPhoneNumber()));    
+
+        return super.refresh(mapping, form, request, response);
     }
 
     public ActionForward viewRelatedDocuments(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {

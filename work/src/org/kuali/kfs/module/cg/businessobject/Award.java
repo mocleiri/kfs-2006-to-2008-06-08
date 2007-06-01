@@ -20,6 +20,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
@@ -31,12 +32,11 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.workflow.attribute.AlternateOrgReviewRouting;
 
 /**
  * 
  */
-public class Award extends PersistableBusinessObjectBase implements AlternateOrgReviewRouting {
+public class Award extends PersistableBusinessObjectBase {
 
     private Long proposalNumber;
     private Date awardBeginningDate;
@@ -54,6 +54,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
 
     private String awardAddendumNumber;
     private KualiDecimal awardAllocatedUniversityComputingServicesAmount;
+    private String agencyAwardNumber;
     private KualiDecimal federalPassThroughFundedAmount;
     private Date awardEntryDate;
     private KualiDecimal agencyFuture1Amount;
@@ -86,6 +87,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     private List<AwardAccount> awardAccounts;
     private List<AwardSubcontractor> awardSubcontractors;
     private List<AwardOrganization> awardOrganizations;
+
     private Proposal proposal;
     private ProposalAwardType proposalAwardType;
     private AwardStatus awardStatus;
@@ -96,8 +98,6 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     private ProposalPurpose awardPurpose;
     private KualiGroup workgroup;
     private AwardOrganization primaryAwardOrganization;
-    private String routingOrg;
-    private String routingChart;
 
     /**
      * Default constructor.
@@ -124,6 +124,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         return managedLists;
     }
 
+    
     public Award(Proposal proposal) {
         this();
         populateFromProposal(proposal);
@@ -201,6 +202,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.proposalNumber = proposalNumber;
     }
 
+
     /**
      * Gets the awardBeginningDate attribute.
      * 
@@ -219,6 +221,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardBeginningDate = awardBeginningDate;
     }
 
+
     /**
      * Gets the awardEndingDate attribute.
      * 
@@ -236,6 +239,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardEndingDate(Date awardEndingDate) {
         this.awardEndingDate = awardEndingDate;
     }
+
 
     /**
      * Gets the awardTotalAmount attribute.
@@ -286,6 +290,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         awardTotalAmount = getAwardTotalAmount();
     }
 
+
     /**
      * Gets the awardAddendumNumber attribute.
      * 
@@ -303,6 +308,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardAddendumNumber(String awardAddendumNumber) {
         this.awardAddendumNumber = awardAddendumNumber;
     }
+
 
     /**
      * Gets the awardAllocatedUniversityComputingServicesAmount attribute.
@@ -322,6 +328,26 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardAllocatedUniversityComputingServicesAmount = awardAllocatedUniversityComputingServicesAmount;
     }
 
+
+    /**
+     * Gets the agencyAwardNumber attribute.
+     * 
+     * @return Returns the agencyAwardNumber
+     */
+    public String getAgencyAwardNumber() {
+        return agencyAwardNumber;
+    }
+
+    /**
+     * Sets the agencyAwardNumber attribute.
+     * 
+     * @param agencyAwardNumber The agencyAwardNumber to set.
+     */
+    public void setAgencyAwardNumber(String agencyAwardNumber) {
+        this.agencyAwardNumber = agencyAwardNumber;
+    }
+
+
     /**
      * Gets the federalPassThroughFundedAmount attribute.
      * 
@@ -340,6 +366,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.federalPassThroughFundedAmount = federalPassThroughFundedAmount;
     }
 
+
     /**
      * Gets the awardEntryDate attribute.
      * 
@@ -357,6 +384,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardEntryDate(Date awardEntryDate) {
         this.awardEntryDate = awardEntryDate;
     }
+
 
     /**
      * Gets the agencyFuture1Amount attribute.
@@ -395,6 +423,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.agencyFuture2Amount = agencyFuture2Amount;
     }
 
+
     /**
      * Gets the agencyFuture3Amount attribute.
      * 
@@ -412,6 +441,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAgencyFuture3Amount(KualiDecimal agencyFuture3Amount) {
         this.agencyFuture3Amount = agencyFuture3Amount;
     }
+
 
     /**
      * Gets the awardDocumentNumber attribute.
@@ -431,6 +461,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardDocumentNumber = awardDocumentNumber;
     }
 
+
     /**
      * Gets the awardLastUpdateDate attribute.
      * 
@@ -448,6 +479,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardLastUpdateDate(Date awardLastUpdateDate) {
         this.awardLastUpdateDate = awardLastUpdateDate;
     }
+
 
     /**
      * Gets the federalPassThroughIndicator attribute.
@@ -467,6 +499,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.federalPassThroughIndicator = federalPassThroughIndicator;
     }
 
+
     /**
      * Gets the oldProposalNumber attribute.
      * 
@@ -484,6 +517,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setOldProposalNumber(String oldProposalNumber) {
         this.oldProposalNumber = oldProposalNumber;
     }
+
 
     /**
      * Gets the awardDirectCostAmount attribute.
@@ -503,6 +537,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardDirectCostAmount = awardDirectCostAmount;
     }
 
+
     /**
      * Gets the awardIndirectCostAmount attribute.
      * 
@@ -520,6 +555,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardIndirectCostAmount(KualiDecimal awardIndirectCostAmount) {
         this.awardIndirectCostAmount = awardIndirectCostAmount;
     }
+
 
     /**
      * Gets the federalFundedAmount attribute.
@@ -539,6 +575,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.federalFundedAmount = federalFundedAmount;
     }
 
+
     /**
      * Gets the awardCreateTimestamp attribute.
      * 
@@ -556,6 +593,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardCreateTimestamp(Timestamp awardCreateTimestamp) {
         this.awardCreateTimestamp = awardCreateTimestamp;
     }
+
 
     /**
      * Gets the awardClosingDate attribute.
@@ -575,6 +613,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardClosingDate = awardClosingDate;
     }
 
+
     /**
      * Gets the proposalAwardTypeCode attribute.
      * 
@@ -592,6 +631,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setProposalAwardTypeCode(String proposalAwardTypeCode) {
         this.proposalAwardTypeCode = proposalAwardTypeCode;
     }
+
 
     /**
      * Gets the workgroupName attribute.
@@ -630,6 +670,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardStatusCode = awardStatusCode;
     }
 
+
     /**
      * Gets the letterOfCreditFundGroupCode attribute.
      * 
@@ -647,6 +688,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setLetterOfCreditFundGroupCode(String letterOfCreditFundGroupCode) {
         this.letterOfCreditFundGroupCode = letterOfCreditFundGroupCode;
     }
+
 
     /**
      * Gets the grantDescriptionCode attribute.
@@ -666,6 +708,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.grantDescriptionCode = grantDescriptionCode;
     }
 
+
     /**
      * Gets the agencyNumber attribute.
      * 
@@ -684,6 +727,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.agencyNumber = agencyNumber;
     }
 
+
     /**
      * Gets the federalPassThroughAgencyNumber attribute.
      * 
@@ -701,6 +745,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setFederalPassThroughAgencyNumber(String federalPassThroughAgencyNumber) {
         this.federalPassThroughAgencyNumber = federalPassThroughAgencyNumber;
     }
+
 
     /**
      * Gets the agencyAnalystName attribute.
@@ -758,6 +803,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardProjectTitle = awardProjectTitle;
     }
 
+
     /**
      * Gets the awardCommentText attribute.
      * 
@@ -775,6 +821,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardCommentText(String awardCommentText) {
         this.awardCommentText = awardCommentText;
     }
+
 
     /**
      * Gets the awardPurposeCode attribute.
@@ -1047,7 +1094,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.workgroupName = workgroup.getGroupName();
     }
     /**
-     * This method gets the primary award organization.
+     * This method...
      * 
      * @return
      */
@@ -1063,15 +1110,12 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * This method sets the primary award organization.
+     * This method...
      * 
      * @param primaryAwardOrganization
-     * @see org.kuali.workflow.attribute.KualiOrgReviewAttribute#populateFromDocContent
      */
     public void setPrimaryAwardOrganization(AwardOrganization primaryAwardOrganization) {
         this.primaryAwardOrganization = primaryAwardOrganization;
-        this.routingChart = primaryAwardOrganization.getChartOfAccountsCode();
-        this.routingOrg = primaryAwardOrganization.getOrganizationCode();
     }
 
     /**
@@ -1156,22 +1200,4 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         }
         return total;
     }
-
-    public String getRoutingChart() {
-        return routingChart;
-    }
-
-    public void setRoutingChart(String routingChart) {
-        this.routingChart = routingChart;
-    }
-
-    public String getRoutingOrg() {
-        return routingOrg;
-    }
-
-    public void setRoutingOrg(String routingOrg) {
-        this.routingOrg = routingOrg;
-    }
-
-
 }
