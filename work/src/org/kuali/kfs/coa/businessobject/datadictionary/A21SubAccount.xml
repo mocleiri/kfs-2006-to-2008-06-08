@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.A21SubAccount">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <!--
             This object has no Inquiry or Lookups intentionally.  It is never dealt with on its 
@@ -32,7 +32,7 @@
         <attributes>
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
             </attributeReference>
 
@@ -60,8 +60,8 @@
             <attributeReference name="indirectCostRecoveryTypeCode" sourceClassName="org.kuali.module.chart.bo.codes.ICRTypeCode" sourceAttributeName="code" />
 
             <attribute name="financialIcrSeriesIdentifier" forceUppercase="true">
-                <label>Indirect Cost Rate</label>
-                <shortLabel>Indr Cost Rate</shortLabel>
+                <label>Series Id</label>
+                <shortLabel>Series Id</shortLabel>
 
                 <maxLength>3</maxLength>
                 <validationPattern>
@@ -80,7 +80,7 @@
                 <label>ICR Chart</label>
                 <shortLabel>ICR Chart</shortLabel>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
 
                 <summary>ICR Chart</summary>
@@ -105,7 +105,7 @@
                 <label>Cost Sharing Chart of Accounts Code</label>
                 <shortLabel>Cost Sharting Chart Code</shortLabel>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>Cost Sharing Chart of Accounts Code</summary>
                 <description>Cost Sharing Chart of Accounts Code</description>
@@ -131,7 +131,5 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        
-        <objectLabel>A21 Sub-Account</objectLabel>
     </businessObject>
 </dictionaryEntry>

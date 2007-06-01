@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,43 @@
  */
 package org.kuali.module.gl.batch;
 
-import org.kuali.kfs.batch.AbstractStep;
+import org.kuali.core.batch.Step;
 import org.kuali.module.gl.batch.closing.year.service.YearEndService;
 
-public class BalanceForwardStep extends AbstractStep {
+/**
+ */
+public class BalanceForwardStep implements Step {
+
     private YearEndService yearEndService;
 
-    public boolean execute() {
+    public BalanceForwardStep() {
+        super();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.core.batch.Step#getName()
+     */
+    public String getName() {
+        return "General Ledger Balance Forward Step";
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.core.batch.Step#performStep()
+     */
+    public boolean performStep() {
         yearEndService.forwardBalances();
         return true;
     }
 
+    /**
+     * @param yearEndService The yearEndService to set.
+     */
     public void setYearEndService(YearEndService yearEndService) {
         this.yearEndService = yearEndService;
     }
+
 }
