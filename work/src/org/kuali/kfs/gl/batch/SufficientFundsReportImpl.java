@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.module.gl.batch.sufficientFunds.SufficientFundsReport;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
 import org.kuali.module.gl.util.Summary;
@@ -42,10 +42,13 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.lowagie.text.pdf.PdfWriter;
 
+/**
+ * 
+ * 
+ */
 public class SufficientFundsReportImpl extends PdfPageEventHelper implements SufficientFundsReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundsReportImpl.class);
-    private KualiConfigurationService configurationService;
-    
+
     public SufficientFundsReportImpl() {
         super();
     }
@@ -53,7 +56,8 @@ public class SufficientFundsReportImpl extends PdfPageEventHelper implements Suf
     public void generateReport(Map reportErrors, List reportSummary, Date runDate, int mode) {
         LOG.debug("generateReport() started");
 
-        String destinationDirectory = configurationService.getPropertyString(KFSConstants.REPORTS_DIRECTORY_KEY);
+        ResourceBundle rb = ResourceBundle.getBundle("configuration");
+        String destinationDirectory = rb.getString("htdocs.directory") + "/reports";
 
         String title = "Sufficient Funds Report ";
         String fileprefix = "sufficientFunds";
@@ -174,6 +178,10 @@ public class SufficientFundsReportImpl extends PdfPageEventHelper implements Suf
         document.close();
     }
 
+    public void setKualiConfigurationService(KualiConfigurationService kcs) {
+        // kualiConfigurationService = kcs;
+    }
+
     class PageHelper extends PdfPageEventHelper {
         public Date runDate;
         public Font headerFont;
@@ -205,13 +213,5 @@ public class SufficientFundsReportImpl extends PdfPageEventHelper implements Suf
                 throw new ExceptionConverter(e);
             }
         }
-    }
-
-    /**
-     * Sets the configurationService attribute value.
-     * @param configurationService The configurationService to set.
-     */
-    public void setConfigurationService(KualiConfigurationService configurationService) {
-        this.configurationService = configurationService;
     }
 }

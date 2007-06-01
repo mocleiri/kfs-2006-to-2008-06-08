@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ import org.kuali.module.gl.service.OrganizationReversionCategoryLogic;
 import org.kuali.module.gl.service.impl.orgreversion.GenericOrganizationReversionCategory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ */
 public class OrganizationReversionServiceImpl implements OrganizationReversionService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrganizationReversionServiceImpl.class);
 

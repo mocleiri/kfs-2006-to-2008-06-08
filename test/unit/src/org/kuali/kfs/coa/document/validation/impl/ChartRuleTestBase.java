@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,35 @@
  */
 package org.kuali.module.chart.rules;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getDictionaryValidationService;
-import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
-
 import java.util.Iterator;
 import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.document.MaintenanceDocumentBase;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRule;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
+import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.util.ErrorMessage;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.test.KualiTestBase;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 public abstract class ChartRuleTestBase extends KualiTestBase {
+
+    protected DictionaryValidationService dictionaryValidationService;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        clearErrors();
+        dictionaryValidationService = SpringServiceLocator.getDictionaryValidationService();
+    }
 
     /**
      * 
@@ -44,10 +51,10 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * newMaintainable, and null for the oldMaintainable.
      * 
      * @param newSubAccount - populated subAccount for the newMaintainable
-     * @return a populated MaintenanceDocument instance
+     * @return - a populated MaintenanceDocument instance
      * 
      */
-    protected MaintenanceDocument newMaintDoc(PersistableBusinessObject newBo) {
+    protected MaintenanceDocument newMaintDoc(BusinessObject newBo) {
         return newMaintDoc(null, newBo);
     }
 
@@ -58,10 +65,10 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * 
      * @param oldSubAccount - populated subAccount for the oldMaintainable
      * @param newSubAccount - populated subAccount for the newMaintainable
-     * @return a populated MaintenanceDocument instance
+     * @return - a populated MaintenanceDocument instance
      * 
      */
-    protected MaintenanceDocument newMaintDoc(PersistableBusinessObject oldBo, PersistableBusinessObject newBo) {
+    protected MaintenanceDocument newMaintDoc(BusinessObject oldBo, BusinessObject newBo) {
 
         // disallow null value for newBo
         if (null == newBo) {
@@ -71,7 +78,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
         // get a new MaintenanceDocument from Spring
         MaintenanceDocument document = null;
         try {
-            document = (MaintenanceDocument) getDocumentService().getNewDocument(MaintenanceDocumentBase.class);
+            document = (MaintenanceDocument) SpringServiceLocator.getDocumentService().getNewDocument(MaintenanceDocumentBase.class);
         }
         catch (WorkflowException e) {
             throw new RuntimeException(e);
@@ -99,10 +106,10 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * 
      * @param newBo - the populated businessObject for the newMaintainble
      * @param ruleClass - the class of rule to instantiate
-     * @return a populated and ready-to-test rule, of the specified class
+     * @return - a populated and ready-to-test rule, of the specified class
      * 
      */
-    protected MaintenanceDocumentRule setupMaintDocRule(PersistableBusinessObject newBo, Class ruleClass) {
+    protected MaintenanceDocumentRule setupMaintDocRule(BusinessObject newBo, Class ruleClass) {
         MaintenanceDocument maintDoc = newMaintDoc(newBo);
         return setupMaintDocRule(maintDoc, ruleClass);
     }
@@ -117,10 +124,10 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * @param oldBo - the populated businessObject for the oldMaintainable
      * @param newBo - the populated businessObject for the newMaintainable
      * @param ruleClass - the class of rule to instantiate
-     * @return a populated and ready-to-test rule, of the specified class
+     * @return - a populated and ready-to-test rule, of the specified class
      * 
      */
-    protected MaintenanceDocumentRule setupMaintDocRule(PersistableBusinessObject oldBo, PersistableBusinessObject newBo, Class ruleClass) {
+    protected MaintenanceDocumentRule setupMaintDocRule(BusinessObject oldBo, BusinessObject newBo, Class ruleClass) {
 
         MaintenanceDocument maintDoc = newMaintDoc(oldBo, newBo);
 
@@ -134,7 +141,7 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * 
      * @param maintDoc - the populated MaintenanceDocument instance
      * @param ruleClass - the class of rule to instantiate
-     * @return a populated and ready-to-test rule, of the specified class
+     * @return - a populated and ready-to-test rule, of the specified class
      */
     protected MaintenanceDocumentRule setupMaintDocRule(MaintenanceDocument maintDoc, Class ruleClass) {
 
@@ -157,29 +164,42 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
         return rule;
     }
 
-    protected void testDefaultExistenceCheck(PersistableBusinessObject bo, String fieldName, boolean shouldFail) {
+    protected void testDefaultExistenceCheck(BusinessObject bo, String fieldName, boolean shouldFail) {
 
         // init the error path
         GlobalVariables.getErrorMap().addToErrorPath("document.newMaintainableObject");
 
         // run the dataDictionary validation
-        getDictionaryValidationService().validateDefaultExistenceChecks(bo);
+        dictionaryValidationService.validateDefaultExistenceChecks(bo);
 
         // clear the error path
         GlobalVariables.getErrorMap().removeFromErrorPath("document.newMaintainableObject");
 
         // assert that the existence of the error is what is expected
-        assertFieldErrorExistence(fieldName, KFSKeyConstants.ERROR_EXISTENCE, shouldFail);
+        assertFieldErrorExistence(fieldName, KeyConstants.ERROR_EXISTENCE, shouldFail);
 
     }
-    
+
+    /**
+     * 
+     * This method tests whether the expected number of errors exists in the errorMap.
+     * 
+     * The assert will fail if this expected number isnt what is returned.
+     * 
+     * @param expectedErrorCount - the number of errors expected
+     * 
+     */
+    protected void assertErrorCount(int expectedErrorCount) {
+        assertEquals(expectedErrorCount, GlobalVariables.getErrorMap().getErrorCount());
+    }
+
     /**
      * 
      * This method tests whether the field error exists and returns the result of this test.
      * 
      * @param fieldName
      * @param errorKey
-     * @return True if the error exists in the GlobalErrors, false if not.
+     * @return - True if the error exists in the GlobalErrors, false if not.
      * 
      */
     protected boolean doesFieldErrorExist(String fieldName, String errorKey) {
@@ -246,7 +266,56 @@ public abstract class ChartRuleTestBase extends KualiTestBase {
      * 
      */
     protected void assertGlobalErrorExists(String errorKey) {
-        boolean result = GlobalVariables.getErrorMap().fieldHasMessage(KFSConstants.DOCUMENT_ERRORS, errorKey);
+        boolean result = GlobalVariables.getErrorMap().fieldHasMessage(Constants.DOCUMENT_ERRORS, errorKey);
         assertTrue("Document should contain errorKey: " + errorKey, result);
     }
+
+
+    /**
+     * 
+     * This method is used during debugging to dump the contents of the error map, including the key names. It is not used by the
+     * application in normal circumstances at all.
+     * 
+     */
+    protected void showErrorMap() {
+
+        if (GlobalVariables.getErrorMap().isEmpty()) {
+            return;
+        }
+
+        for (Iterator i = GlobalVariables.getErrorMap().entrySet().iterator(); i.hasNext();) {
+            Map.Entry e = (Map.Entry) i.next();
+
+            TypedArrayList errorList = (TypedArrayList) e.getValue();
+            for (Iterator j = errorList.iterator(); j.hasNext();) {
+                ErrorMessage em = (ErrorMessage) j.next();
+
+                if (em.getMessageParameters() == null) {
+                    System.err.println(e.getKey().toString() + " = " + em.getErrorKey());
+                }
+                else {
+                    StringBuffer messageParams = new StringBuffer();
+                    String delim = "";
+                    for (int k = 0; k < em.getMessageParameters().length; k++) {
+                        messageParams.append(delim + "'" + em.getMessageParameters()[k] + "'");
+                        if ("".equals(delim)) {
+                            delim = ", ";
+                        }
+                    }
+                    System.err.println(e.getKey().toString() + " = " + em.getErrorKey() + " : " + messageParams.toString());
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 
+     * This method clears all errors out of the GlobalVariables.getErrorMap();
+     * 
+     */
+    protected void clearErrors() {
+        GlobalVariables.getErrorMap().clear();
+    }
+
 }

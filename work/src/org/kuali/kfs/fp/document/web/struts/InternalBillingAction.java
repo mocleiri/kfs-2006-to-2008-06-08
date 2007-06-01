@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.util.ErrorMap;
+import org.kuali.core.util.GlobalVariables;
+import static org.kuali.core.util.SpringServiceLocator.getDictionaryValidationService;
+import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 import org.kuali.module.financial.bo.InternalBillingItem;
 import org.kuali.module.financial.web.struts.form.InternalBillingForm;
 
 /**
  * This class handles Actions for InternalBilling.
+ * 
+ * 
  */
-public class InternalBillingAction extends KualiAccountingDocumentActionBase {
+
+
+public class InternalBillingAction extends KualiTransactionalDocumentActionBase {
 
     /**
      * Adds a new InternalBillingItem from the Form to the Document if valid. This method is called reflectively from KualiAction.
@@ -49,7 +55,7 @@ public class InternalBillingAction extends KualiAccountingDocumentActionBase {
             internalBillingForm.getInternalBillingDocument().addItem(internalBillingForm.getNewItem());
             internalBillingForm.setNewItem(new InternalBillingItem());
         }
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -59,7 +65,7 @@ public class InternalBillingAction extends KualiAccountingDocumentActionBase {
      * @return whether the new item is valid
      */
     private static boolean validateNewItem(InternalBillingForm internalBillingForm) {
-        return SpringServiceLocator.getDictionaryValidationService().isBusinessObjectValid(internalBillingForm.getNewItem(), KFSPropertyConstants.NEW_ITEM);
+        return getDictionaryValidationService().isBusinessObjectValid(internalBillingForm.getNewItem(), PropertyConstants.NEW_ITEM);
     }
 
     /**
@@ -75,6 +81,6 @@ public class InternalBillingAction extends KualiAccountingDocumentActionBase {
     public ActionForward deleteItem(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         InternalBillingForm internalBillingForm = (InternalBillingForm) form;
         internalBillingForm.getInternalBillingDocument().getItems().remove(getLineToDelete(request));
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 }

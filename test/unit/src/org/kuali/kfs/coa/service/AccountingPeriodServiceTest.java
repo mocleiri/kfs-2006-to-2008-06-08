@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,14 @@
  */
 package org.kuali.module.chart.service;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getBusinessObjectService;
-import static org.kuali.kfs.util.SpringServiceLocator.getDateTimeService;
-import static org.kuali.kfs.util.SpringServiceLocator.getAccountingPeriodService;
-
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Iterator;
 
-import org.kuali.kfs.KFSConstants;
+import org.kuali.Constants;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
@@ -39,54 +37,79 @@ public class AccountingPeriodServiceTest extends KualiTestBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountingPeriodServiceTest.class);
 
-    public void testPersistence() {
-        Date date = getDateTimeService().getCurrentSqlDate();
-        AccountingPeriod period = getAccountingPeriodService().getByDate(date);
-        assertNotNull(period);
+    private BusinessObjectService bos = null;
+    private AccountingPeriodService aps = null;
+    public static final boolean BUDGET_ROLLOVER_IND = true;
+    public static final String GUID = "123456789012345678901234567890123456";
+    public static final String UNIV_FISC_PERD_CODE = "01";
+    public static final Date UNIV_FISC_PERD_END_DATE = new java.sql.Date(System.currentTimeMillis());
+    public static final Integer UNIV_FISC_YEAR = new Integer(1776);
+    public static final String UNIV_FISC_PRD_NAME = "JUL. 1776";
+    public static final String UNIV_FISC_PRD_STATUS_CODE = "C";
+    public static final Long VER_NBR = new Long(1);
 
-        Integer year = period.getUniversityFiscalYear();
-        String universityFiscalPeriodCode = "UT";
-        String periodName = "unitTest";
-
-        period.setUniversityFiscalPeriodCode(universityFiscalPeriodCode);
-        period.setUniversityFiscalPeriodName(periodName);
-
-        getBusinessObjectService().save(period);
-
-        AccountingPeriod result = getAccountingPeriodByPrimaryKeys(year, universityFiscalPeriodCode);
-        assertNotNull(result);
-        assertEquals(periodName, result.getUniversityFiscalPeriodName());
-
-        getBusinessObjectService().delete(result);
-
-        result = getAccountingPeriodByPrimaryKeys(year, universityFiscalPeriodCode);
-        assertNull(result);
+    /*
+     * @see TestCase#setUp()
+     */
+    protected void setUp() throws Exception {
+        super.setUp();
+        bos = SpringServiceLocator.getBusinessObjectService();
+        aps = SpringServiceLocator.getAccountingPeriodService();
     }
 
-    private AccountingPeriod getAccountingPeriodByPrimaryKeys(Integer fiscalYear, String fiscalPeriodcode) {
-        Map<String, Object> h = new HashMap<String, Object>();
-        h.put("universityFiscalYear", fiscalYear);
-        h.put("universityFiscalPeriodCode", fiscalPeriodcode);
-        AccountingPeriod ap2 = (AccountingPeriod) getBusinessObjectService().findByPrimaryKey(AccountingPeriod.class, h);
+    /*
+     * @see TestCase#tearDown()
+     */
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
+
+    public void testPersistence() {
+        AccountingPeriod ap = new AccountingPeriod();
+        ap.setBudgetRolloverIndicator(BUDGET_ROLLOVER_IND);
+        ap.setExtendedAttributeValues(new ArrayList());
+        ap.setObjectId(GUID);
+        ap.setUniversityFiscalPeriodCode(UNIV_FISC_PERD_CODE);
+        ap.setUniversityFiscalPeriodEndDate(UNIV_FISC_PERD_END_DATE);
+        ap.setUniversityFiscalPeriodName(UNIV_FISC_PRD_NAME);
+        ap.setUniversityFiscalPeriodStatusCode(UNIV_FISC_PRD_STATUS_CODE);
+        ap.setUniversityFiscalYear(UNIV_FISC_YEAR);
+        ap.setVersionNumber(VER_NBR);
+
+        bos.save(ap);
+        assertNotNull(getAccountingPeriodByPrimaryKeys());
+
+        AccountingPeriod ap2 = getAccountingPeriodByPrimaryKeys();
+        assertEquals(ap2.getUniversityFiscalPeriodName(), UNIV_FISC_PRD_NAME);
+
+        AccountingPeriod ap3 = getAccountingPeriodByPrimaryKeys();
+        bos.delete(ap3);
+        assertNull(getAccountingPeriodByPrimaryKeys());
+    }
+
+    private AccountingPeriod getAccountingPeriodByPrimaryKeys() {
+        HashMap h = new HashMap();
+        h.put("universityFiscalYear", UNIV_FISC_YEAR);
+        h.put("universityFiscalPeriodCode", UNIV_FISC_PERD_CODE);
+        AccountingPeriod ap2 = (AccountingPeriod) bos.findByPrimaryKey(AccountingPeriod.class, h);
         return ap2;
     }
 
     public void testGetAllAccountingPeriods() {
-        List<AccountingPeriod> accountingPeriods = (List<AccountingPeriod>) getAccountingPeriodService().getAllAccountingPeriods();
-        assertNotNull(accountingPeriods);
-        assertFalse(accountingPeriods.isEmpty());
+        ArrayList acctPers = new ArrayList(aps.getAllAccountingPeriods());
+        assertNotNull(acctPers);
+        assertTrue(acctPers.size() > 0);
     }
 
     public void testGetOpenAccountingPeriods() {
-        List<AccountingPeriod> accountingPeriods = (List<AccountingPeriod>) getAccountingPeriodService().getOpenAccountingPeriods();
-        LOG.info("Number of OpenAccountingPeriods found: " + accountingPeriods.size());
+        ArrayList acctPers = new ArrayList(aps.getOpenAccountingPeriods());
+        LOG.info("Number of OpenAccountingPeriods found: " + acctPers.size());
 
-        assertNotNull(accountingPeriods);
-        assertFalse(accountingPeriods.isEmpty());
         // all returned AccountingPeriod instances should be marked as OPEN
-        for (AccountingPeriod accountingPeriod : accountingPeriods) {
-            String statusCode = accountingPeriod.getUniversityFiscalPeriodStatusCode();
-            assertTrue(statusCode.equals(KFSConstants.ACCOUNTING_PERIOD_STATUS_OPEN));
+        for (Iterator iter = acctPers.iterator(); iter.hasNext();) {
+            AccountingPeriod ap = (AccountingPeriod) iter.next();
+            String statusCode = ap.getUniversityFiscalPeriodStatusCode();
+            assertTrue(statusCode.equals(Constants.ACCOUNTING_PERIOD_STATUS_OPEN));
         }
     }
 }
