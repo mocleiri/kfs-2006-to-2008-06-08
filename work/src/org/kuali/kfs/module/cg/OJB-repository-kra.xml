@@ -13,7 +13,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<descriptor-repository version="1.0">
 <class-descriptor class="org.kuali.module.kra.budget.bo.NonpersonnelCategory" table="ER_NPRS_CTGRY_CD_T">
     <field-descriptor name="code" column="BDGT_NPRS_CTGRY_CD" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="active" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
@@ -71,7 +70,7 @@
     <field-descriptor name="lastUpdateTimestamp" column="LST_UPDT_TS" jdbc-type="TIMESTAMP" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" locking="true" column="VER_NBR" jdbc-type="BIGINT" />
-    <reference-descriptor name="campus" class-ref="org.kuali.core.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
+    <reference-descriptor name="campus" class-ref="org.kuali.module.chart.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="campusCode" />
     </reference-descriptor>
 </class-descriptor>
@@ -100,7 +99,7 @@
     <field-descriptor name="institutionCostShareIndicator" column="BDGT_INST_CST_SHR_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="budgetProgramAnnouncementNumber" column="BDGT_PGM_ANNCMNT_NBR" jdbc-type="VARCHAR" />
     <field-descriptor name="budgetProgramAnnouncementName" column="BDGT_PGM_ANNCMNT_NM" jdbc-type="VARCHAR" />
-    <field-descriptor name="budgetProjectDirectorUniversalIdentifier" column="BDGT_PROJ_DRCTR_UNVL_ID" jdbc-type="VARCHAR" />
+    <field-descriptor name="budgetProjectDirectorSystemId" column="BDGT_PROJ_DRCTR_SYS_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="budgetThirdPartyCostShareIndicator" column="BDGT_3RD_PRTY_CST_SHR_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="budgetPersonnelInflationRate" column="BDGT_PSNL_INFLTN_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbDecimalPercentageFieldConversion" />
     <field-descriptor name="budgetNonpersonnelInflationRate" column="BDGT_NPRS_INFLTN_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbDecimalPercentageFieldConversion" />
@@ -114,7 +113,7 @@
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" locking="true" column="VER_NBR" jdbc-type="BIGINT" />
     <reference-descriptor name="projectDirector" class-ref="org.kuali.module.cg.bo.ProjectDirector" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="budgetProjectDirectorUniversalIdentifier" />
+        <foreignkey field-ref="budgetProjectDirectorSystemId" />
     </reference-descriptor>
 
     <reference-descriptor name="budgetAgency" class-ref="org.kuali.module.cg.bo.Agency" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -177,6 +176,18 @@
     </collection-descriptor>
 
     <collection-descriptor name="institutionCostSharePersonnelItems" proxy="true" element-class-ref="org.kuali.module.kra.budget.bo.InstitutionCostSharePersonnel" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
+        <inverse-foreignkey field-ref="documentNumber" />
+    </collection-descriptor>
+
+    <collection-descriptor name="adHocPermissions" proxy="true" element-class-ref="org.kuali.module.kra.budget.bo.BudgetAdHocPermission" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
+        <inverse-foreignkey field-ref="documentNumber" />
+    </collection-descriptor>
+    
+    <collection-descriptor name="adHocOrgs" proxy="true" element-class-ref="org.kuali.module.kra.budget.bo.BudgetAdHocOrg" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
+        <inverse-foreignkey field-ref="documentNumber" />
+    </collection-descriptor>
+    
+    <collection-descriptor name="adHocWorkgroups" proxy="true" element-class-ref="org.kuali.module.kra.budget.bo.BudgetAdHocWorkgroup" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <inverse-foreignkey field-ref="documentNumber" />
     </collection-descriptor>
 
@@ -248,18 +259,6 @@
     <reference-descriptor name="budget" class-ref="org.kuali.module.kra.budget.bo.Budget" auto-retrieve="true" auto-update="object" auto-delete="object">
         <foreignkey field-id-ref="1" />
     </reference-descriptor>
-    
-    <collection-descriptor name="adhocPersons" proxy="true" element-class-ref="org.kuali.module.kra.bo.AdhocPerson" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
-    
-    <collection-descriptor name="adhocOrgs" proxy="true" element-class-ref="org.kuali.module.kra.bo.AdhocOrg" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
-    
-    <collection-descriptor name="adhocWorkgroups" proxy="true" element-class-ref="org.kuali.module.kra.bo.AdhocWorkgroup" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
 
     <reference-descriptor name="documentHeader" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="object" auto-delete="object">
         <foreignkey field-ref="documentNumber" />
@@ -304,7 +303,7 @@
     <field-descriptor name="primaryDepartmentCode" column="EMP_PRM_DEPT_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="baseSalary" column="PRSN_BASE_SLRY" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="role" column="PRSN_ROLE_NM" jdbc-type="VARCHAR" />
-    <field-descriptor name="personUniversalIdentifier" column="PRSN_UNVL_ID" jdbc-type="VARCHAR" />
+    <field-descriptor name="personSystemIdentifier" column="PERSON_SYS_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="personSeniorKeyIndicator" column="PRSN_SNR_KEY_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="personSecretarialClericalIndicator" column="PRSN_SCRTRL_CLRCL_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
     <field-descriptor name="personPostDoctoralIndicator" column="PRSN_POST_DCTRL_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
@@ -315,7 +314,7 @@
     <field-descriptor name="personHourlyNumber" column="PRSN_HRLY_NBR" jdbc-type="INTEGER" />
     <field-descriptor name="budgetSalaryFiscalYear" column="BDGT_SLRY_FISCAL_YR" jdbc-type="INTEGER" />
     <reference-descriptor name="user" class-ref="org.kuali.core.bo.user.UniversalUser" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="personUniversalIdentifier" />
+        <foreignkey field-ref="personSystemIdentifier" />
     </reference-descriptor>
     <collection-descriptor name="userAppointmentTasks" proxy="true" element-class-ref="org.kuali.module.kra.budget.bo.UserAppointmentTask" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <inverse-foreignkey field-ref="documentNumber" />
@@ -323,43 +322,37 @@
     </collection-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.kra.bo.AdhocPerson" table="ER_ADHOC_PRSN_T">
+<class-descriptor class="org.kuali.module.kra.budget.bo.BudgetAdHocPermission" table="ER_BDGT_ADHOC_PRMSN_T">
     <field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="personUniversalIdentifier" column="PRSN_UNVL_ID" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="actionRequested" column="ACTN_RQST_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="adhocTypeCode" column="ADHOC_TYP_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="personSystemIdentifier" column="PERSON_SYS_ID" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="permissionCode" column="PRSN_PRMSN_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="addedByPerson" column="PRSN_ADD_BY_UNVL_ID" jdbc-type="VARCHAR" />
+    <field-descriptor name="budgetPermissionCode" column="BDGT_PRMSN_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="addedByPerson" column="PRSN_ADD_BY_SYS_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="personAddedTimestamp" column="PRSN_ADD_TS" jdbc-type="TIMESTAMP" />
     <reference-descriptor name="user" class-ref="org.kuali.core.bo.user.UniversalUser" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="personUniversalIdentifier" />
+        <foreignkey field-ref="personSystemIdentifier" />
     </reference-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.kra.bo.AdhocOrg" table="ER_ADHOC_ORG_T">
+<class-descriptor class="org.kuali.module.kra.budget.bo.BudgetAdHocOrg" table="ER_BDGT_ADHOC_ORG_T">
     <field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="actionRequested" column="ACTN_RQST_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="adhocTypeCode" column="ADHOC_TYP_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="fiscalCampusCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="primaryDepartmentCode" column="ORG_CD" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="permissionCode" column="ORG_PRMSN_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="addedByPerson" column="PRSN_ADD_BY_UNVL_ID" jdbc-type="VARCHAR" />
+    <field-descriptor name="budgetPermissionCode" column="BDGT_PRMSN_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="addedByPerson" column="PRSN_ADD_BY_SYS_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="personAddedTimestamp" column="PRSN_ADD_TS" jdbc-type="TIMESTAMP" />
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.kra.bo.AdhocWorkgroup" table="ER_ADHOC_WKGRP_T">
+<class-descriptor class="org.kuali.module.kra.budget.bo.BudgetAdHocWorkgroup" table="ER_BDGT_ADHOC_WKGRP_T">
     <field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="actionRequested" column="ACTN_RQST_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="adhocTypeCode" column="ADHOC_TYP_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="workgroupName" column="WKGRP_ID" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="permissionCode" column="WKGRP_PRMSN_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="addedByPerson" column="PRSN_ADD_BY_UNVL_ID" jdbc-type="VARCHAR" />
+    <field-descriptor name="budgetPermissionCode" column="BDGT_PRMSN_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="addedByPerson" column="PRSN_ADD_BY_SYS_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="personAddedTimestamp" column="PRSN_ADD_TS" jdbc-type="TIMESTAMP" />
 </class-descriptor>
 
@@ -435,6 +428,8 @@
     <field-descriptor name="budgetCostShareSequenceNumber" column="BDGT_INST_CST_SHR_SEQ_NBR" jdbc-type="INTEGER" primarykey="true" index="true" />
     <field-descriptor name="budgetPeriodSequenceNumber" column="BDGT_PRD_SEQ_NBR" jdbc-type="INTEGER" primarykey="true" index="true" />
     <field-descriptor name="budgetCostShareAmount" column="BDGT_INST_CST_SHR_AMT" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
+    <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
 </class-descriptor>
@@ -516,7 +511,7 @@
         <foreignkey field-ref="budgetTaskSequenceNumber" />
     </reference-descriptor>
 
-    <collection-descriptor name="userAppointmentTaskPeriods" element-class-ref="org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="none">
+    <collection-descriptor name="userAppointmentTaskPeriods" element-class-ref="org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <inverse-foreignkey field-ref="documentNumber" />
         <inverse-foreignkey field-ref="budgetUserSequenceNumber" />
         <inverse-foreignkey field-ref="budgetTaskSequenceNumber" />
@@ -576,12 +571,6 @@
     <field-descriptor name="budgetManualRateIndicator" column="BDGT_MAN_RT_IND" jdbc-type="VARCHAR" />
     <field-descriptor name="budgetPurposeCode" column="BDGT_PRPS_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="budgetUnrecoveredIndirectCostIndicator" column="BDGT_URCV_IDC_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
-    <reference-descriptor name="purpose" proxy="true" class-ref="org.kuali.module.kra.routingform.bo.Purpose" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="budgetPurposeCode" />
-    </reference-descriptor>
-    <reference-descriptor name="baseCode" proxy="true" class-ref="org.kuali.module.kra.budget.bo.BudgetBaseCode" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="budgetBaseCode" />
-    </reference-descriptor>
     <collection-descriptor name="budgetTaskPeriodIndirectCostItems" proxy="true" element-class-ref="org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <orderby name="budgetTaskSequenceNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
@@ -596,6 +585,7 @@
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="budgetManualIndirectCostRate" column="BDGT_MAN_IDC_RT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbDecimalPercentageFieldConversion" />
     <field-descriptor name="budgetManualMtdcAmount" column="BDGT_MAN_MTDC_AMT" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
+    <field-descriptor name="budgetPurposeCode" column="BDGT_PRPS_CD" jdbc-type="VARCHAR" />
     <reference-descriptor name="task" class-ref="org.kuali.module.kra.budget.bo.BudgetTask" auto-retrieve="true" auto-update="false" auto-delete="false">
         <foreignkey field-ref="documentNumber" />
         <foreignkey field-ref="budgetTaskSequenceNumber" />
@@ -647,7 +637,7 @@
 	<field-descriptor name="routingFormFellowLastName" column="RF_FLLW_LST_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="routingFormLayDescription" column="RF_LAY_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="routingFormLastUpdateDate" column="RF_LSTUPDT_DT" jdbc-type="DATE"/>
-	<field-descriptor name="routingFormLastUpdateUniversalIdentifier" column="RF_LST_UPDT_UNVL_ID" jdbc-type="BIGINT"/>
+	<field-descriptor name="routingFormLastUpdateSystemIdentifier" column="RF_LST_UPDT_SYS_ID" jdbc-type="BIGINT"/>
 	<field-descriptor name="routingFormOtherOrganizationIndicator" column="RF_OTHR_ORG_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="routingFormOtherPurposeDescription" column="RF_OTHR_PRPS_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="routingFormOtherTypeDescription" column="RF_OTH_TYP_DESC" jdbc-type="VARCHAR"/>
@@ -677,7 +667,7 @@
 	<field-descriptor name="routingFormAgencyToBeNamedIndicator" column="RF_AGNCY_TBN_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="routingFormCatalogOfFederalDomesticAssistanceNumber" column="RF_CFDA_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="personnelNextSequenceNumber" column="RF_PSNL_NXT_SEQ_NBR" jdbc-type="INTEGER"/>
-	<reference-descriptor name="routingFormPhysicalCampus" class-ref="org.kuali.core.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="routingFormPhysicalCampus" class-ref="org.kuali.module.chart.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="routingFormPhysicalCampusCode" />
 	</reference-descriptor>
 	<reference-descriptor name="routingFormStatus" class-ref="org.kuali.module.kra.routingform.bo.RoutingFormStatus" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -718,30 +708,10 @@
 	<collection-descriptor name="routingFormOrganizationCreditPercents" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormOrganizationCreditPercent" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <inverse-foreignkey field-ref="documentNumber" />
     </collection-descriptor>
-    <collection-descriptor name="routingFormOrganizations" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormOrganization" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
-    <collection-descriptor name="routingFormSubmissionTypes" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormSubmissionType" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <orderby name="submissionType.userSortNumber" sort="ASC" />
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
-    <collection-descriptor name="routingFormPurposes" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormPurpose" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <orderby name="purpose.userSortNumber" sort="ASC" />
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
-    <collection-descriptor name="routingFormResearchTypeCodes" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormResearchTypeCode" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
+  <collection-descriptor name="routingFormOrganizations" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormOrganization" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <inverse-foreignkey field-ref="documentNumber" />
     </collection-descriptor>
     <collection-descriptor name="routingFormProjectTypes" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormProjectType" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <orderby name="projectType.sortNumber" sort="ASC" />
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
-    <collection-descriptor name="routingFormPersonRoles" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormPersonRole" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <orderby name="personRole.personRoleSortNumber" sort="ASC" />
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
-    <collection-descriptor name="routingFormKeywords" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormKeyword" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <orderby name="routingFormKeywordDescription" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
     </collection-descriptor>
 
@@ -769,18 +739,6 @@
         <orderby name="question.questionTypeSortNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
     </collection-descriptor>
-    
-    <collection-descriptor name="adhocPersons" proxy="true" element-class-ref="org.kuali.module.kra.bo.AdhocPerson" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
-    
-    <collection-descriptor name="adhocOrgs" proxy="true" element-class-ref="org.kuali.module.kra.bo.AdhocOrg" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
-    
-    <collection-descriptor name="adhocWorkgroups" proxy="true" element-class-ref="org.kuali.module.kra.bo.AdhocWorkgroup" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormAgency" table="ER_RF_AGNCY_T">
@@ -805,21 +763,17 @@
 	<field-descriptor name="agencyShippingInstructionsDescription" column="AGNCY_SHIP_INSTRC_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="agencyStateCode" column="AGNCY_ST_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="agencyZipCode" column="AGNCY_ZIP_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="routingFormDueDateTypeCode" column="RF_DUE_DT_TYP_CD" jdbc-type="VARCHAR"/>
+	<field-descriptor name="routingFormDueDateTypeCode" column="RF_DUEDT_TYP_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="routingFormDueDate" column="RF_DUE_DT" jdbc-type="DATE"/>
 	<field-descriptor name="routingFormDueTime" column="RF_DUE_TM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="routingFormRequiredCopyText" column="RF_REQ_CPY_TXT" jdbc-type="VARCHAR"/>
 	<field-descriptor name="routingFormSubmitDate" column="RF_SUBMT_DT" jdbc-type="DATE"/>
-
-    <collection-descriptor name="routingFormDueDateTypes" proxy="true" element-class-ref="org.kuali.module.kra.routingform.bo.RoutingFormDueDateType" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <inverse-foreignkey field-ref="documentNumber" />
-    </collection-descriptor>
+	<reference-descriptor name="routingFormDueDateType" class-ref="org.kuali.module.kra.routingform.bo.RoutingFormDueDateType" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="routingFormDueDateTypeCode" />
+	</reference-descriptor>
     <reference-descriptor name="agency" class-ref="org.kuali.module.cg.bo.Agency" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="agencyNumber" />
     </reference-descriptor>
-    <reference-descriptor name="dueDateType" class-ref="org.kuali.module.kra.routingform.bo.DueDateType" proxy="true" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="routingFormDueDateTypeCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormBudget" table="ER_RF_BDGT_T">
@@ -872,13 +826,13 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.kra.routingform.bo.DueDateType" table="ER_DUE_DT_TYP_T">
-	<field-descriptor name="dueDateTypeCode" column="DUE_DT_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
+<class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormDueDateType" table="ER_RF_DDT_TYP_T">
+	<field-descriptor name="routingFormDueDateTypeCode" column="RF_DUEDT_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="dataObjectMaintenanceCodeActiveIndicator" column="DOBJ_MAINT_CD_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<field-descriptor name="approvalLeadTime" column="APRV_LEAD_TM" jdbc-type="INTEGER"/>
-	<field-descriptor name="dueDateDescription" column="DUE_DT_DESC" jdbc-type="VARCHAR"/>
+	<field-descriptor name="routingFormApprovalLeadTime" column="RF_APRV_LEAD_TM" jdbc-type="INTEGER"/>
+	<field-descriptor name="routingFormDueDateDescription" column="RF_DUEDT_DESC" jdbc-type="VARCHAR"/>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.kra.routingform.bo.Purpose" table="ER_PRPS_T">
@@ -898,7 +852,7 @@
 	<field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="routingFormCostShareAmount" column="RF_CST_SHR_AMT" jdbc-type="BIGINT" conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
+	<field-descriptor name="routingFormCostShareAmount" column="RF_CST_SHR_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
 	<field-descriptor name="routingFormCostShareDescription" column="RF_CST_SHR_DESC" jdbc-type="VARCHAR"/>
 	<reference-descriptor name="account" class-ref="org.kuali.module.chart.bo.Account" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="chartOfAccountsCode" />
@@ -919,7 +873,7 @@
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="routingFormCostShareSourceName" column="RF_CSHR_SRC_NM" jdbc-type="VARCHAR"/>
-	<field-descriptor name="routingFormCostShareAmount" column="RF_CST_SHR_AMT" jdbc-type="BIGINT"  conversion="org.kuali.core.util.OjbKualiIntegerFieldConversion" />
+	<field-descriptor name="routingFormCostShareAmount" column="RF_CST_SHR_AMT" jdbc-type="DECIMAL"  conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormConflictOfInterest" table="ER_RF_CI_T">
@@ -980,7 +934,6 @@
 	<field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="projectTypeSelectedIndicator" column="PROJ_TYP_SEL_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<reference-descriptor name="projectType" class-ref="org.kuali.module.kra.routingform.bo.ProjectType" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="projectTypeCode" />
 	</reference-descriptor>
@@ -1036,7 +989,7 @@
 	<field-descriptor name="requiredIndicator" column="REQD_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk" table="ER_RF_RSRCH_RSK_T">
+<class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk" table="ER_RF_RSRCH_RSK_T ">
 	<field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="researchRiskTypeCode" column="RSRCH_RSK_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
@@ -1059,7 +1012,7 @@
 	<field-descriptor name="routingFormPersonSequenceNumber" column="RF_PRSN_SEQ_NBR" jdbc-type="INTEGER" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="personUniversalIdentifier" column="PRSN_UNVL_ID" jdbc-type="VARCHAR"/>
+	<field-descriptor name="personSystemIdentifier" column="PRSN_SYS_ID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="chartOfAccountsCode" column="COA_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="personCreditPercent" column="PRSN_CRDT_PCT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiIntegerPercentageFieldConversion" />
@@ -1101,7 +1054,7 @@
         <foreignkey field-ref="personRoleCode" />
     </reference-descriptor>
     <reference-descriptor name="user" class-ref="org.kuali.core.bo.user.UniversalUser" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="personUniversalIdentifier" />
+        <foreignkey field-ref="personSystemIdentifier" />
     </reference-descriptor>
 </class-descriptor>
 
@@ -1153,54 +1106,3 @@
 		<foreignkey field-ref="questionTypeCode" />
 	</reference-descriptor>
 </class-descriptor>
-
-<class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormDueDateType" table="ER_RF_DUE_DT_TYP_T">
-	<field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="dueDateTypeCode" column="DUE_DT_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<reference-descriptor name="dueDateType" class-ref="org.kuali.module.kra.routingform.bo.DueDateType" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="dueDateTypeCode" />
-	</reference-descriptor>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormPurpose" table="ER_RF_PRPS_T">
-	<field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="purposeCode" column="PRPS_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<reference-descriptor name="purpose" class-ref="org.kuali.module.kra.routingform.bo.Purpose" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purposeCode" />
-	</reference-descriptor>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormResearchTypeCode" table="ER_RF_RSRCH_TYP_CD_T">
-	<field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="researchTypeCode" column="RSRCH_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<reference-descriptor name="researchType" class-ref="org.kuali.module.kra.routingform.bo.ResearchTypeCode" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="researchTypeCode" />
-	</reference-descriptor>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormSubmissionType" table="ER_RF_SUBM_TYP_T">
-	<field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="submissionTypeCode" column="SUBM_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<reference-descriptor name="submissionType" class-ref="org.kuali.module.kra.routingform.bo.SubmissionType" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="submissionTypeCode" />
-	</reference-descriptor>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.kra.routingform.bo.RoutingFormPersonRole" table="ER_RF_PRSN_ROLE_T">
-	<field-descriptor name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="personRoleCode" column="PRSN_ROLE_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<reference-descriptor name="personRole" class-ref="org.kuali.module.kra.routingform.bo.PersonRole" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="personRoleCode" />
-	</reference-descriptor>
-</class-descriptor>
-</descriptor-repository>
