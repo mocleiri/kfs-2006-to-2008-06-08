@@ -15,6 +15,7 @@
  */
 package org.kuali.module.kra.budget.document;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,22 +23,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.AccountingLineBase;
 import org.kuali.core.bo.user.AuthenticationUserId;
+
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.IllegalObjectStateException;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.DocumentInitiator;
 import org.kuali.core.workflow.KualiDocumentXmlMaterializer;
 import org.kuali.core.workflow.KualiTransactionalDocumentInformation;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.kra.KraConstants;
-import org.kuali.module.kra.bo.AdhocOrg;
 import org.kuali.module.kra.budget.bo.Budget;
+import org.kuali.module.kra.budget.bo.BudgetAdHocOrg;
 import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
@@ -46,13 +47,14 @@ import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 import org.kuali.module.kra.document.ResearchDocumentBase;
 
+import edu.iu.uis.eden.exception.WorkflowException;
+
 /**
  * Budget
  * 
  * 
  */
 public class BudgetDocument extends ResearchDocumentBase {
-    private static final Logger LOG = Logger.getLogger(BudgetDocument.class);
 
     private static final long serialVersionUID = -3561859858801995441L;
     private Integer budgetTaskNextSequenceNumber;
@@ -157,12 +159,20 @@ public class BudgetDocument extends ResearchDocumentBase {
     }
 
     /**
+     * @see org.kuali.core.document.Document#getDocumentTitle()
+     */
+    public String getDocumentTitle() {
+        // TODO Auto-generated method stub
+        return "BudgetDocument";
+    }
+
+    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
 
         return m;
     }
@@ -265,6 +275,17 @@ public class BudgetDocument extends ResearchDocumentBase {
     }
 
     /**
+     * TODO Well, since there isn't a common name for the primary id property accross objects, we have to do this clumsily.
+     * Eventually everything will be taken care of in the inherited class.
+     * 
+     */
+    public Document copy() throws WorkflowException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Document copyDoc = super.copy();
+        ObjectUtils.setObjectPropertyDeep(((BudgetDocument) copyDoc).getBudget(), PropertyConstants.DOCUMENT_NUMBER, String.class, copyDoc.getDocumentNumber());
+        return copyDoc;
+    }
+
+    /**
      * Gets the forceRefreshOfBOSubListsForSave attribute.
      * 
      * @return Returns the forceRefreshOfBOSubListsForSave.
@@ -337,42 +358,38 @@ public class BudgetDocument extends ResearchDocumentBase {
     @Override
     public List buildListOfDeletionAwareLists() {
         List list = new ArrayList();
-        
-        list.add(this.getAdhocPersons());
-        list.add(this.getAdhocOrgs()); 
-        list.add(this.getAdhocWorkgroups());
             
         Budget budget = this.getBudget();
-        list.add(budget.getNonpersonnelItems());
-        list.add(budget.getAllUserAppointmentTaskPeriods(this.isForceRefreshOfBOSubListsForSave()));
-        list.add(budget.getAllUserAppointmentTasks(this.isForceRefreshOfBOSubListsForSave()));
-        list.add(budget.getPersonnel());
+            list.add(budget.getTasks());
+            list.add(budget.getPeriods());
+            list.add(budget.getNonpersonnelItems());
+            list.add(budget.getAllUserAppointmentTaskPeriods(this.isForceRefreshOfBOSubListsForSave()));
+            list.add(budget.getAllUserAppointmentTasks(this.isForceRefreshOfBOSubListsForSave()));
+            list.add(budget.getPersonnel());
 
-        list.add(budget.getAllThirdPartyCostSharePeriods(this.isForceRefreshOfBOSubListsForSave()));
-        list.add(budget.getThirdPartyCostShareItems());
+            list.add(budget.getAllThirdPartyCostSharePeriods(this.isForceRefreshOfBOSubListsForSave()));
+            list.add(budget.getThirdPartyCostShareItems());
 
-        list.add(budget.getAllInstitutionCostSharePeriods(this.isForceRefreshOfBOSubListsForSave()));
-        list.add(budget.getInstitutionCostShareItems());
+            list.add(budget.getAllInstitutionCostSharePeriods(this.isForceRefreshOfBOSubListsForSave()));
+            list.add(budget.getInstitutionCostShareItems());
 
-        list.add(budget.getInstitutionCostSharePersonnelItems());
-        
-        if (budget.getIndirectCost() != null && budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems() != null) {
-            list.add(budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems());
-        } else {
-            list.add(new ArrayList());
-        }
-        
-        if (budget.getModularBudget() != null) {
-            list.add(budget.getModularBudget().getBudgetModularPeriods());
-        } else {
-            list.add(new ArrayList());
-        }
+            list.add(budget.getInstitutionCostSharePersonnelItems());
+            list.add(budget.getAdHocPermissions());
+            list.add(budget.getAdHocOrgs()); 
+            list.add(budget.getAdHocWorkgroups());
 
-        //Lots of FKs from previous collections point to these two, so they need to handled last
-        list.add(budget.getTasks());
-        list.add(budget.getPeriods());
-
-        
+            if (budget.getIndirectCost() != null && budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems() != null) {
+                list.add(budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems());
+            } else {
+                list.add(new ArrayList());
+            }
+            
+            if (budget.getModularBudget() != null) {
+                list.add(budget.getModularBudget().getBudgetModularPeriods());
+            } else {
+                list.add(new ArrayList());
+            }
+            
         return list;
     }
     
@@ -399,8 +416,8 @@ public class BudgetDocument extends ResearchDocumentBase {
         List referenceObjects = new ArrayList();
         referenceObjects.add("personnel");
         referenceObjects.add("institutionCostShareItems");
+        referenceObjects.add("adHocOrgs");
         SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(budget, referenceObjects);
-        this.refreshReferenceObject("adhocOrgs");
         
         StringBuffer xml = new StringBuffer("<documentContent>");
         xml.append(buildProjectDirectorReportXml(false));
@@ -423,16 +440,7 @@ public class BudgetDocument extends ResearchDocumentBase {
         if (encloseContent) {
             xml.append("<documentContent>");
         }
-        BudgetUser projectDirector = null;
-        
-        for (Iterator iter = this.getBudget().getPersonnel().iterator(); iter.hasNext();) {
-            BudgetUser person = (BudgetUser) iter.next();
-            if (person.isPersonProjectDirectorIndicator()) {
-                projectDirector = person;
-                break;
-            }
-        }
-        
+        BudgetUser projectDirector = this.getBudget().getProjectDirectorFromList();
         if (ObjectUtils.isNotNull(projectDirector) && ObjectUtils.isNotNull(projectDirector.getUser())) {
             if (!this.getBudget().isProjectDirectorToBeNamedIndicator()) {
                 xml.append("<projectDirector>");
@@ -443,11 +451,7 @@ public class BudgetDocument extends ResearchDocumentBase {
                 xml.append("<chartOrg><chartOfAccountsCode>");
                 xml.append(projectDirector.getFiscalCampusCode());
                 xml.append("</chartOfAccountsCode><organizationCode>");
-                if (StringUtils.isBlank(projectDirector.getPrimaryDepartmentCode())) {
-                    xml.append(SpringServiceLocator.getChartUserService().getDefaultOrganizationCode(new ChartUser(projectDirector.getUser())));
-                } else {
-                    xml.append(projectDirector.getPrimaryDepartmentCode());
-                }
+                xml.append(projectDirector.getPrimaryDepartmentCode());
                 xml.append("</organizationCode></chartOrg>");
             }
         }
@@ -460,7 +464,7 @@ public class BudgetDocument extends ResearchDocumentBase {
     /**
      * Build the xml to use when generating the workflow org routing report.
      * 
-     * @param List<BudgetAdhocOrg> orgs
+     * @param List<BudgetAdHocOrg> orgs
      * @param boolean encloseContent - whether the generated xml should be enclosed within a <documentContent> tag
      * @return String
      */
@@ -499,7 +503,7 @@ public class BudgetDocument extends ResearchDocumentBase {
     /**
      * Build the xml to use when generating the workflow org routing report.
      * 
-     * @param List<BudgetAdhocOrg> orgs
+     * @param List<BudgetAdHocOrg> orgs
      * @param boolean encloseContent - whether the generated xml should be enclosed within a <documentContent> tag
      * @return String
      */
@@ -508,8 +512,34 @@ public class BudgetDocument extends ResearchDocumentBase {
         if (encloseContent) {
             xml.append("<documentContent>");
         }
-        List<AdhocOrg> orgs = this.getAdhocOrgs();
-        for (AdhocOrg org: orgs) {
+        List<BudgetAdHocOrg> orgs = this.getBudget().getAdHocOrgs();
+        for (BudgetAdHocOrg org: orgs) {
+            xml.append("<chartOrg><chartOfAccountsCode>");
+            xml.append(org.getFiscalCampusCode());
+            xml.append("</chartOfAccountsCode><organizationCode>");
+            xml.append(org.getPrimaryDepartmentCode());
+            xml.append("</organizationCode></chartOrg>");
+        }
+        if (encloseContent) {
+            xml.append("</documentContent>");
+        }
+        return xml.toString();
+    }
+    
+    /**
+     * Build the xml to use when generating the workflow org routing report.
+     * 
+     * @param List<BudgetAdHocOrg> orgs
+     * @param boolean encloseContent - whether the generated xml should be enclosed within a <documentContent> tag
+     * @return String
+     */
+    public String buildAdhocOrgReportXml(String permissionTypeCode, boolean encloseContent) {
+        StringBuffer xml = new StringBuffer();
+        if (encloseContent) {
+            xml.append("<documentContent>");
+        }
+        List<BudgetAdHocOrg> orgs = SpringServiceLocator.getBudgetPermissionsService().getBudgetAdHocOrgs(this.getDocumentNumber(), permissionTypeCode);
+        for (BudgetAdHocOrg org: orgs) {
             xml.append("<chartOrg><chartOfAccountsCode>");
             xml.append(org.getFiscalCampusCode());
             xml.append("</chartOfAccountsCode><organizationCode>");

@@ -19,21 +19,16 @@ package org.kuali.module.cg.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.core.service.LookupService;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.workflow.attribute.AlternateOrgReviewRouting;
 import org.kuali.module.cg.lookup.valuefinder.NextProposalNumberFinder;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.routingform.bo.RoutingFormBudget;
@@ -47,9 +42,9 @@ import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 /**
  * 
  */
-public class Proposal extends PersistableBusinessObjectBase implements AlternateOrgReviewRouting{
+public class Proposal extends PersistableBusinessObjectBase {
 
-    public static final String PROPOSAL_CODE = "P";
+    private static final String PROPOSAL_CODE = "P";
     private Long proposalNumber;
     private Date proposalBeginningDate;
     private Date proposalEndingDate;
@@ -60,7 +55,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
      * @see #getProposalTotalAmount
      * @see #setProposalTotalAmount
      */
-    @SuppressWarnings({"unused"})
+    @SuppressWarnings({"UnusedDeclaration"})
     private KualiDecimal proposalTotalAmount;
     
     private KualiDecimal proposalDirectCostAmount;
@@ -82,7 +77,6 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     private String proposalFellowName;
     private String proposalPurposeCode;
     private String proposalProjectTitle;
-    private boolean active;
     private List<ProposalSubcontractor> proposalSubcontractors;
     private List<ProposalOrganization> proposalOrganizations;
     private List<ProposalProjectDirector> proposalProjectDirectors;
@@ -94,13 +88,8 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     private Agency federalPassThroughAgency;
     private ProposalPurpose proposalPurpose;
     private CatalogOfFederalDomesticAssistanceReference cfda;
-    private ProposalOrganization primaryProposalOrganization;
-    private String routingOrg;
-    private String routingChart;
-    private LookupService lookupService;
-    private Award award;
 
-	/**
+    /**
      * Default constructor.
      */
     @SuppressWarnings({"unchecked"})  // todo: generify TypedArrayList and rename to something appropriate like AlwaysGettableArrayList
@@ -112,26 +101,85 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         proposalResearchRisks = new TypedArrayList(ProposalResearchRisk.class);
     }
 
-        public Award getAward() {
-        return award;
-    }
+    public Proposal(RoutingFormDocument routingFormDocument) {
+        this();
+        
+        Long newProposalNumber = NextProposalNumberFinder.getLongValue();
+        this.setProposalNumber(newProposalNumber);
+        this.setProposalStatusCode(PROPOSAL_CODE);
 
-    public void setAward(Award award) {
-        this.award = award;
-    }
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @Override
-    public List buildListOfDeletionAwareLists() {
-        List<List> managedLists = super.buildListOfDeletionAwareLists();
-        managedLists.add(getProposalSubcontractors());
-        managedLists.add(getProposalOrganizations());
-        managedLists.add(getProposalProjectDirectors());
-        // research risks cannot be deleted (nor added)
-        return managedLists;
-    }
+        //Values coming from RoutingFormDocument (ER_RF_DOC_T)
+        this.setProposalProjectTitle(routingFormDocument.getRoutingFormProjectTitle().length() > 250 ? routingFormDocument.getRoutingFormProjectTitle().substring(0, 250) : routingFormDocument.getRoutingFormProjectTitle());
+        this.setProposalPurposeCode(routingFormDocument.getRoutingFormPurposeCode());
+        this.setGrantNumber(routingFormDocument.getGrantNumber());
+        this.setCfdaNumber(routingFormDocument.getRoutingFormCatalogOfFederalDomesticAssistanceNumber());
+        this.setProposalFellowName(routingFormDocument.getRoutingFormFellowFullName());
+        this.setProposalFederalPassThroughIndicator(routingFormDocument.getRoutingFormFederalPassThroughIndicator());
+        this.setFederalPassThroughAgencyNumber(routingFormDocument.getAgencyFederalPassThroughNumber());
 
+        //There could be multiple types on the RF, but only one of them will pass this rule, and that's the one that should be used to populate the Proposal field.
+        KualiParameterRule proposalCreateRule = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterRule(KraConstants.KRA_ADMIN_GROUP_NAME, "KraRoutingFormCreateProposalProjectTypes");
+        for (RoutingFormProjectType routingFormProjectType : routingFormDocument.getRoutingFormProjectTypes()) {
+            if (proposalCreateRule.succeedsRule(routingFormProjectType.getProjectTypeCode())) {
+                this.setProposalAwardTypeCode(routingFormProjectType.getProjectTypeCode());
+                break;
+            }
+        }
+        
+        
+        //Values coming from Routing Form Budget BO (ER_RF_BDGT_T)
+        RoutingFormBudget routingFormBudget = routingFormDocument.getRoutingFormBudget();
+        this.setProposalBeginningDate(routingFormBudget.getRoutingFormBudgetStartDate());
+        this.setProposalEndingDate(routingFormBudget.getRoutingFormBudgetEndDate());
+        this.setProposalTotalAmount((routingFormBudget.getRoutingFormBudgetDirectAmount() != null ? routingFormBudget.getRoutingFormBudgetDirectAmount() : new KualiInteger(0)).add(routingFormBudget.getRoutingFormBudgetIndirectCostAmount() != null ? routingFormBudget.getRoutingFormBudgetIndirectCostAmount() : new KualiInteger(0)).kualiDecimalValue());
+        this.setProposalDirectCostAmount((routingFormBudget.getRoutingFormBudgetDirectAmount() != null ? routingFormBudget.getRoutingFormBudgetDirectAmount() : new KualiInteger(0)).kualiDecimalValue());
+        this.setProposalIndirectCostAmount((routingFormBudget.getRoutingFormBudgetIndirectCostAmount() != null ? routingFormBudget.getRoutingFormBudgetIndirectCostAmount() : new KualiInteger(0)).kualiDecimalValue());
+        this.setProposalDueDate(routingFormDocument.getRoutingFormAgency().getRoutingFormDueDate());
+
+        //Values coming from RoutingFormAgency (ER_RF_AGNCY_T)
+        this.setAgencyNumber(routingFormDocument.getRoutingFormAgency().getAgencyNumber());
+
+        //Values coming from the list of Subcontractors (ER_RF_SUBCNR_T)
+        for (RoutingFormSubcontractor routingFormSubcontractor : routingFormDocument.getRoutingFormSubcontractors()) {
+            this.getProposalSubcontractors().add(new ProposalSubcontractor(newProposalNumber, routingFormSubcontractor));
+        }
+
+        //Get the RF Primary Project Director
+        for (RoutingFormPersonnel routingFormPerson : routingFormDocument.getRoutingFormPersonnel()) {
+            if (routingFormPerson.isProjectDirector()) {
+                RoutingFormPersonnel projectDirector = routingFormPerson;
+
+                this.getProposalProjectDirectors().add(new ProposalProjectDirector(projectDirector, newProposalNumber, true));
+                
+                ProposalOrganization projectDirectorOrganization = new ProposalOrganization();
+                projectDirectorOrganization.setProposalNumber(newProposalNumber);
+                projectDirectorOrganization.setChartOfAccountsCode(projectDirector.getChartOfAccountsCode());
+                projectDirectorOrganization.setOrganizationCode(projectDirector.getOrganizationCode());
+                projectDirectorOrganization.setProposalPrimaryOrganizationIndicator(true);
+                
+                this.getProposalOrganizations().add(projectDirectorOrganization);
+                break;
+            }
+        }
+
+        for (RoutingFormOrganization routingFormOrganization : routingFormDocument.getRoutingFormOrganizations()) {
+            //construct a new ProposalOrganization using the current RoutingFormOrganization as a template.
+            ProposalOrganization proposalOrganization = new ProposalOrganization(newProposalNumber, routingFormOrganization);
+
+            //check to see if the list or ProposalOrganizations already contains an entry with this key; add it to the list if it does not.
+            if (!ObjectUtils.collectionContainsObjectWithIdentitcalKey(this.getProposalOrganizations(), proposalOrganization)) {
+                this.getProposalOrganizations().add(proposalOrganization);
+            }
+        }
+
+        for (RoutingFormResearchRisk routingFormResearchRisk : routingFormDocument.getRoutingFormResearchRisks()) {
+            this.getProposalResearchRisks().add(new ProposalResearchRisk(newProposalNumber, routingFormResearchRisk));
+        }
+        
+        this.setProposalSubmissionDate(SpringServiceLocator.getDateTimeService().getCurrentSqlDate());
+
+    }
+    
     /**
      * Gets the proposalNumber attribute.
      * 
@@ -151,6 +199,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
     }
+
 
     /**
      * Gets the proposalBeginningDate attribute.
@@ -172,6 +221,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.proposalBeginningDate = proposalBeginningDate;
     }
 
+
     /**
      * Gets the proposalEndingDate attribute.
      * 
@@ -191,6 +241,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setProposalEndingDate(Date proposalEndingDate) {
         this.proposalEndingDate = proposalEndingDate;
     }
+
 
     /**
      * Gets the proposalTotalAmount attribute.
@@ -267,6 +318,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.proposalDirectCostAmount = proposalDirectCostAmount;
     }
 
+
     /**
      * Gets the proposalIndirectCostAmount attribute.
      * 
@@ -286,6 +338,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setProposalIndirectCostAmount(KualiDecimal proposalIndirectCostAmount) {
         this.proposalIndirectCostAmount = proposalIndirectCostAmount;
     }
+
 
     /**
      * Gets the proposalRejectedDate attribute.
@@ -307,6 +360,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.proposalRejectedDate = proposalRejectedDate;
     }
 
+
     /**
      * Gets the proposalLastUpdateDate attribute.
      * 
@@ -326,6 +380,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setProposalLastUpdateDate(Date proposalLastUpdateDate) {
         this.proposalLastUpdateDate = proposalLastUpdateDate;
     }
+
 
     /**
      * Gets the proposalDueDate attribute.
@@ -347,6 +402,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.proposalDueDate = proposalDueDate;
     }
 
+
     /**
      * Gets the proposalTotalProjectAmount attribute.
      * 
@@ -366,6 +422,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setProposalTotalProjectAmount(KualiDecimal proposalTotalProjectAmount) {
         this.proposalTotalProjectAmount = proposalTotalProjectAmount;
     }
+
 
     /**
      * Gets the proposalSubmissionDate attribute.
@@ -387,6 +444,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.proposalSubmissionDate = proposalSubmissionDate;
     }
 
+
     /**
      * Gets the proposalFederalPassThroughIndicator attribute.
      * 
@@ -406,6 +464,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setProposalFederalPassThroughIndicator(boolean proposalFederalPassThroughIndicator) {
         this.proposalFederalPassThroughIndicator = proposalFederalPassThroughIndicator;
     }
+
 
     /**
      * Gets the oldProposalNumber attribute.
@@ -427,6 +486,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.oldProposalNumber = oldProposalNumber;
     }
 
+
     /**
      * Gets the grantNumber attribute.
      * 
@@ -446,6 +506,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setGrantNumber(String grantNumber) {
         this.grantNumber = grantNumber;
     }
+
 
     /**
      * Gets the proposalClosingDate attribute.
@@ -467,6 +528,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.proposalClosingDate = proposalClosingDate;
     }
 
+
     /**
      * Gets the proposalAwardTypeCode attribute.
      * 
@@ -486,6 +548,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setProposalAwardTypeCode(String proposalAwardTypeCode) {
         this.proposalAwardTypeCode = proposalAwardTypeCode;
     }
+
 
     /**
      * Gets the agencyNumber attribute.
@@ -507,6 +570,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.agencyNumber = agencyNumber;
     }
 
+
     /**
      * Gets the proposalStatusCode attribute.
      * 
@@ -526,6 +590,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setProposalStatusCode(String proposalStatusCode) {
         this.proposalStatusCode = proposalStatusCode;
     }
+
 
     /**
      * Gets the federalPassThroughAgencyNumber attribute.
@@ -547,6 +612,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.federalPassThroughAgencyNumber = federalPassThroughAgencyNumber;
     }
 
+
     /**
      * Gets the cfdaNumber attribute.
      * 
@@ -566,6 +632,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
     public void setCfdaNumber(String cfdaNumber) {
         this.cfdaNumber = cfdaNumber;
     }
+
 
     /**
      * Gets the proposalFellowName attribute.
@@ -587,6 +654,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.proposalFellowName = proposalFellowName;
     }
 
+
     /**
      * Gets the proposalPurposeCode attribute.
      * 
@@ -607,6 +675,7 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         this.proposalPurposeCode = proposalPurposeCode;
     }
 
+
     /**
      * Gets the proposalProjectTitle attribute.
      * 
@@ -625,22 +694,6 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
      */
     public void setProposalProjectTitle(String proposalProjectTitle) {
         this.proposalProjectTitle = proposalProjectTitle;
-    }
-
-    /**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     /**
@@ -835,79 +888,4 @@ public class Proposal extends PersistableBusinessObjectBase implements Alternate
         }
         return m;
     }
-
-    /** Dummy value used to facilitate lookups */
-    private transient String lookupPersonUniversalIdentifier;
-    private transient UniversalUser lookupUniversalUser;
-
-	public UniversalUser getLookupUniversalUser() {
-		return lookupUniversalUser;
-	}
-
-	public void setLookupUniversalUser(UniversalUser lookupUniversalUser) {
-		this.lookupUniversalUser = lookupUniversalUser;
-	}
-
-	public String getLookupPersonUniversalIdentifier() {
-		lookupUniversalUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(lookupPersonUniversalIdentifier, lookupUniversalUser);
-		return lookupPersonUniversalIdentifier;
-	}
-
-	public void setLookupPersonUniversalIdentifier(String lookupUniversalUserId) {
-		this.lookupPersonUniversalIdentifier = lookupUniversalUserId;
-	}
-	
-	    /**
-     * 
-     * I added this getter to the BO to resolve KULCG-300.  I'm not sure if this is actually needed by the code,
-     * but the framework breaks all lookups on the proposal maintenance doc without this getter.
-     * @return
-     */
-    public LookupService getLookupService() {
-        return lookupService;
-    }
-    
-
-    public String getRoutingChart() {
-        return routingChart;
-    }
-
-    public void setRoutingChart(String routingChart) {
-        this.routingChart = routingChart;
-    }
-
-    public String getRoutingOrg() {
-        return routingOrg;
-    }
-
-    public void setRoutingOrg(String routingOrg) {
-        this.routingOrg = routingOrg;
-    }
-
-    public ProposalOrganization getPrimaryProposalOrganization() {
-        for (ProposalOrganization po : proposalOrganizations) {
-            if (po != null && po.isProposalPrimaryOrganizationIndicator()) {
-                setPrimaryProposalOrganization(po);
-                break;
-            }
-        }
-
-        return primaryProposalOrganization;
-    }
-    
-    public void setLookupService(LookupService lookupService) {
-        this.lookupService = lookupService;
-    }
-   
-
-    public void setPrimaryProposalOrganization(ProposalOrganization primaryProposalOrganization) {
-        this.primaryProposalOrganization = primaryProposalOrganization;
-        this.routingChart = primaryProposalOrganization.getChartOfAccountsCode();
-        this.routingOrg = primaryProposalOrganization.getOrganizationCode();
-    }
-
- 
-    
-
-
 }

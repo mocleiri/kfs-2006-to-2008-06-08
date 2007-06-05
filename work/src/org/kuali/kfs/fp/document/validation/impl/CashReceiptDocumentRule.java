@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,25 @@
  */
 package org.kuali.module.financial.rules;
 
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
+import org.kuali.core.rule.AddCheckRule;
+import org.kuali.core.rule.DeleteCheckRule;
+import org.kuali.core.rule.UpdateCheckRule;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.document.CashReceiptDocument;
 import org.kuali.module.financial.document.CashReceiptFamilyBase;
-import org.kuali.module.financial.rule.AddCheckRule;
-import org.kuali.module.financial.rule.DeleteCheckRule;
-import org.kuali.module.financial.rule.UpdateCheckRule;
 
 
 /**
  * Business rule(s) applicable to CashReceipt documents.
+ * 
+ * 
  */
 public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements AddCheckRule, DeleteCheckRule, UpdateCheckRule {
     /**
@@ -55,10 +57,10 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
     /**
      * Checks to make sure that the check passed in passes all data dictionary validation and that the amount is positive.
      * 
-     * @see org.kuali.core.rule.AddCheckRule#processAddCheckBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AddCheckRule#processAddCheckBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.module.financial.bo.Check)
      */
-    public boolean processAddCheckBusinessRules(AccountingDocument FinancialDocument, Check check) {
+    public boolean processAddCheckBusinessRules(TransactionalDocument transactionalDocument, Check check) {
         boolean isValid = validateCheck(check);
 
         return isValid;
@@ -67,10 +69,10 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
     /**
      * Default implementation does nothing now.
      * 
-     * @see org.kuali.core.rule.DeleteCheckRule#processDeleteCheckBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.DeleteCheckRule#processDeleteCheckBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.module.financial.bo.Check)
      */
-    public boolean processDeleteCheckBusinessRules(AccountingDocument FinancialDocument, Check check) {
+    public boolean processDeleteCheckBusinessRules(TransactionalDocument transactionalDocument, Check check) {
         boolean processed = true;
 
         return processed;
@@ -79,10 +81,10 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
     /**
      * Checks to make sure that the check passed in passes all data dictionary validation and that the amount is positive.
      * 
-     * @see org.kuali.core.rule.UpdateCheckRule#processUpdateCheckRule(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.UpdateCheckRule#processUpdateCheckRule(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.module.financial.bo.Check)
      */
-    public boolean processUpdateCheckRule(AccountingDocument FinancialDocument, Check check) {
+    public boolean processUpdateCheckRule(TransactionalDocument transactionalDocument, Check check) {
         boolean isValid = validateCheck(check);
 
         return isValid;
@@ -102,11 +104,11 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
 
         // check to make sure the amount is also valid
         if (check.getAmount().isZero()) {
-            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.CHECK_AMOUNT, KFSKeyConstants.CashReceipt.ERROR_ZERO_CHECK_AMOUNT, KFSPropertyConstants.CHECKS);
+            GlobalVariables.getErrorMap().putError(PropertyConstants.CHECK_AMOUNT, KeyConstants.CashReceipt.ERROR_ZERO_CHECK_AMOUNT, PropertyConstants.CHECKS);
             isValid = false;
         }
         else if (check.getAmount().isNegative()) {
-            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.CHECK_AMOUNT, KFSKeyConstants.CashReceipt.ERROR_NEGATIVE_CHECK_AMOUNT, KFSPropertyConstants.CHECKS);
+            GlobalVariables.getErrorMap().putError(PropertyConstants.CHECK_AMOUNT, KeyConstants.CashReceipt.ERROR_NEGATIVE_CHECK_AMOUNT, PropertyConstants.CHECKS);
             isValid = false;
         }
 

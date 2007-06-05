@@ -14,6 +14,7 @@
  limitations under the License.
 --%>
 <%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ taglib tagdir="/WEB-INF/tags/purap" prefix="purap"%>
 
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRequisitionDocument"
@@ -30,6 +31,7 @@
 
 	<kul:documentOverview editingMode="${KualiForm.editingMode}"
 		includePostingYear="true"
+		displayRequisitionFields="true"
         postingYearAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" >
 
     	<purap:purapDocumentDetail
@@ -43,27 +45,28 @@
 
     <purap:puritems itemAttributes="${DataDictionary.RequisitionItem.attributes}"
     	accountingLineAttributes="${DataDictionary.RequisitionAccount.attributes}" 
-        camsAttributes="${DataDictionary.RequisitionItemCapitalAsset.attributes}" 
     	displayRequisitionFields="true"/>
 
     <purap:paymentinfo
-        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
+        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" 
+        displayRequisitionFields="true"/>
 
     <purap:delivery
-        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
+        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" 
+        displayRequisitionFields="true"
+        />
 
     <purap:additional
         documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"
         displayRequisitionFields="true" />
-        
-    <purap:accountsummary
-    	documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" />
 
     <purap:relatedDocuments
-            documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
+            documentAttributes="${DataDictionary.RelatedDocuments.attributes}"
+            />
     
     <purap:paymentHistory
-            documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
+            documentAttributes="${DataDictionary.RelatedDocuments.attributes}"
+            />
 	            
 	<purap:statushistory 
 		documentAttributes="${DataDictionary.RequisitionStatusHistory.attributes}" />

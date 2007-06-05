@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/batch/service/impl/ProcurementCardCreateDocumentServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +17,7 @@
  */
 package org.kuali.module.financial.service.impl;
 
-import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_CREDIT_CODE;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.AUTO_APPROVE_DOCUMENTS_IND;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.AUTO_APPROVE_NUMBER_OF_DAYS;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.DEFAULT_TRANS_ACCOUNT_PARM_NM;
@@ -34,7 +36,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.DocumentHeader;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.AttributeReferenceDummy;
 import org.kuali.core.rule.event.SaveOnlyDocumentEvent;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DataDictionaryService;
@@ -47,9 +51,6 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.web.format.TimestampFormatter;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.rules.AccountingLineRuleUtil;
 import org.kuali.module.financial.bo.ProcurementCardHolder;
 import org.kuali.module.financial.bo.ProcurementCardSourceAccountingLine;
 import org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine;
@@ -57,6 +58,7 @@ import org.kuali.module.financial.bo.ProcurementCardTransaction;
 import org.kuali.module.financial.bo.ProcurementCardTransactionDetail;
 import org.kuali.module.financial.bo.ProcurementCardVendor;
 import org.kuali.module.financial.document.ProcurementCardDocument;
+import org.kuali.module.financial.rules.AccountingLineRuleUtil;
 import org.kuali.module.financial.service.ProcurementCardCreateDocumentService;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -114,7 +116,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
     public boolean routeProcurementCardDocuments() {
         List documentList = new ArrayList();
         try {
-            documentList = (List) documentService.findByDocumentHeaderStatusCode(ProcurementCardDocument.class, KFSConstants.DocumentStatusCodes.INITIATED);
+            documentList = (List) documentService.findByDocumentHeaderStatusCode(ProcurementCardDocument.class, Constants.DocumentStatusCodes.INITIATED);
         }
         catch (WorkflowException e1) {
             LOG.error("Error retrieving pcdo documents for routing: " + e1.getMessage());
@@ -127,7 +129,12 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
                 documentService.prepareWorkflowDocument(pcardDocument);
             
                 // calling workflow service to bypass business rule checks
-                workflowDocumentService.route(pcardDocument.getDocumentHeader().getWorkflowDocument(), "", null);
+                if (!pcardDocument.getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
+                    workflowDocumentService.route(pcardDocument.getDocumentHeader().getWorkflowDocument(), "", null);
+            }
+                else {
+                    LOG.warn("Document " + pcardDocument.getDocumentHeader().getDocumentNumber() + " is already ENROUTE. Route status out of sync with FP_DOC_HEADER_T");
+                }
             }
             catch (WorkflowException e) {
                 LOG.error("Error routing document # " + pcardDocument.getDocumentHeader().getDocumentNumber() + " " + e.getMessage());
@@ -152,7 +159,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         List documentList = new ArrayList();
 
         try {
-            documentList = (List) documentService.findByDocumentHeaderStatusCode(ProcurementCardDocument.class, KFSConstants.DocumentStatusCodes.ENROUTE);
+            documentList = (List) documentService.findByDocumentHeaderStatusCode(ProcurementCardDocument.class, Constants.DocumentStatusCodes.ENROUTE);
         }
         catch (WorkflowException e1) {
             throw new RuntimeException(e1.getMessage());
@@ -196,7 +203,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
         List groupedTransactions = new ArrayList();
 
         // retrieve records from transaction table order by card number
-        List transactions = (List) businessObjectService.findMatchingOrderBy(ProcurementCardTransaction.class, new HashMap(), KFSPropertyConstants.TRANSACTION_CREDIT_CARD_NUMBER, true);
+        List transactions = (List) businessObjectService.findMatchingOrderBy(ProcurementCardTransaction.class, new HashMap(), PropertyConstants.TRANSACTION_CREDIT_CARD_NUMBER, true);
 
         // check apc for single transaction documents or multple by card
         boolean singleTransaction = kualiConfigurationService.getApplicationParameterIndicator(PCARD_DOCUMENT_PARAMETERS_SEC_GROUP, SINGLE_TRANSACTION_IND_PARM_NM);
@@ -271,12 +278,12 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
                 errorText = StringUtils.replace(errorText, messages[i] + ".", "", countMatches);
             }
             // In case errorText is still too long, truncate it and indicate so.
-            Integer documentExplanationMaxLength = dataDictionaryService.getAttributeMaxLength(DocumentHeader.class.getName(), KFSPropertyConstants.EXPLANATION);
-            if (documentExplanationMaxLength != null && errorText.length() > documentExplanationMaxLength.intValue()) {
+            int documentExplanationMaxLength = dataDictionaryService.getAttributeMaxLength(AttributeReferenceDummy.class.getName(), PropertyConstants.DOCUMENT_EXPLANATION);
+            if (errorText.length() > documentExplanationMaxLength) {
                 String truncatedMessage = " ... TRUNCATED.";
                 errorText = errorText.substring(0, documentExplanationMaxLength - truncatedMessage.length()) + truncatedMessage;
             }
-            pcardDocument.getDocumentHeader().setExplanation(errorText);
+            pcardDocument.setExplanation(errorText);
         }
         catch (WorkflowException e) {
             LOG.error("Error creating pcdo documents: " + e.getMessage());
