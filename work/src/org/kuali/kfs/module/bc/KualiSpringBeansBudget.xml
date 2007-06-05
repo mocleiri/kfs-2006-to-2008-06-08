@@ -22,7 +22,7 @@
 		<property name="moduleCode" value="BC" />
 		<property name="moduleUserService" ref="budgetUserService" />
 		<property name="moduleAuthorizer">
-			<bean class="org.kuali.kfs.authorization.KfsModuleAuthorizerBase">
+			<bean class="org.kuali.core.authorization.KualiModuleAuthorizerBase">
 				<property name="packagePrefixes">
 					<list>
 						<value>org.kuali.module.budget.</value>
@@ -38,28 +38,21 @@
 		</property>
 		<property name="dataDictionaryPackages">
 			<list>
-				<value>org/kuali/module/budget/datadictionary</value>
+				<value>org.kuali.module.budget.datadictionary</value>
 			</list>
 		</property>
-		<property name="databaseRepositoryFilePaths">
-			<list>
-				<value>org/kuali/module/budget/OJB-repository-budget.xml</value>
-			</list>
-		</property>
-		<property name="scriptConfigurationFilePaths">
-			<list>
-				<value>org/kuali/module/budget/dwr-budget.xml</value>
-			</list>
+		<property name="ojbMetadataLoader">
+			<bean class="org.kuali.rice.OjbMetadataLoader">
+				<property name="repositoryDescriptors">
+					<list>
+						<value>classpath:org/kuali/module/budget/OJB-repository-budget.xml</value>
+					</list>
+				</property>
+			</bean>
 		</property>
 	</bean>
 
 	<bean id="budgetUserService" class="org.kuali.module.budget.service.impl.BudgetUserServiceImpl" parent="kualiModuleUserServiceBase">
-	</bean>
-
-	<bean id="budgetDocumentService" class="org.kuali.module.budget.service.impl.BudgetDocumentServiceImpl">
-		<property name="budgetConstructionDao">
-			<ref bean="budgetConstructionDao" />
-		</property>
 	</bean>
 
 	<bean id="lockService" class="org.kuali.module.budget.service.impl.LockServiceImpl">
@@ -68,7 +61,11 @@
 		</property>
 	</bean>
 
-	<bean id="budgetConstructionDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb" />
+	<bean id="budgetConstructionDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb">
+		<property name="jcdAlias">
+			<value>dataSource</value>
+		</property>
+	</bean>
 	
 	<bean id="budgetConstructionOrganizationReportsService" class="org.kuali.module.budget.service.impl.BudgetConstructionOrganizationReportsServiceImpl">
 		<property name="budgetConstructionOrganizationReportsDao">
@@ -76,7 +73,11 @@
 		</property>
 	</bean>
 
-	<bean id="budgetConstructionOrganizationReportsDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionOrganizationReportsDaoOjb" />
+	<bean id="budgetConstructionOrganizationReportsDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionOrganizationReportsDaoOjb">
+		<property name="jcdAlias">
+			<value>dataSource</value>
+		</property>
+	</bean>
 		
     <bean id="genesisService" class="org.kuali.module.budget.service.impl.GenesisServiceImpl">
         <property name="genesisDao">
@@ -84,7 +85,10 @@
         </property>
     </bean>
 
-    <bean id="genesisDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.GenesisDaoOjb">
+    <bean id="genesisDao" class="org.kuali.module.budget.dao.ojb.GenesisDaoOjb">
+        <property name="jcdAlias">
+            <value>dataSource</value>
+        </property>
         <property name="dateTimeService">
         	<ref bean="dateTimeService"/>
         </property>
@@ -96,127 +100,19 @@
         </property>
     </bean>
     
-	<bean id="fiscalYearStartDate"
-	      class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-	      <property name="staticField"><value>org.kuali.module.budget.dao.ojb.FiscalYearMakersDaoOjb.START_JULY</value>
-	      </property>
-	</bean>
-	
 	
     <bean id="dateMakerService" class="org.kuali.module.budget.service.impl.DateMakerServiceImpl">
         <property name="fiscalYearMakersDao">
             <ref bean="fiscalYearMakersDao" />
         </property>
-   </bean>
+    </bean>
 
-    <bean id="fiscalYearMakersDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.FiscalYearMakersDaoOjb" >
-        <property name="persistenceStructureService">
-            <ref bean="persistenceStructureService" />
-        </property>
-        <property name="dateTimeService">
-            <ref bean="dateTimeService" />
-        </property>
-        <property name="fiscalYearStartDate">
-            <ref bean="fiscalYearStartDate" />
-        </property>
-        <property name="makerObjectsList">
-          <map>
-            <entry key="org.kuali.module.chart.bo.OrganizationReversion">
-              <value>org.kuali.module.chart.bo.OrganizationReversion</value>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.OrganizationReversionDetail">
-              <value>org.kuali.module.chart.bo.OrganizationReversionDetail</value>
-            </entry>    
-            <entry key="org.kuali.module.chart.bo.SubObjCd">
-              <value>org.kuali.module.chart.bo.SubObjCd</value>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.ObjectCode">
-              <value>org.kuali.module.chart.bo.ObjectCode</value>
-            </entry>    
-            <entry key="org.kuali.kfs.bo.Options">
-              <value>org.kuali.kfs.bo.Options</value>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.OffsetDefinition">
-              <value>org.kuali.module.chart.bo.OffsetDefinition</value>
-            </entry>    
-            <entry key="org.kuali.module.labor.bo.BenefitsCalculation">
-              <value>org.kuali.module.labor.bo.BenefitsCalculation</value>
-            </entry>
-            <entry key="org.kuali.module.labor.bo.LaborObject">
-              <value>org.kuali.module.labor.bo.LaborObject</value>
-            </entry>    
-            <entry key="org.kuali.module.labor.bo.PositionObjectBenefit">
-              <value>org.kuali.module.labor.bo.PositionObjectBenefit</value>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.AccountingPeriod">
-              <value>org.kuali.module.chart.bo.AccountingPeriod</value>
-            </entry>    
-            <entry key="org.kuali.module.gl.bo.UniversityDate">
-              <value>org.kuali.module.gl.bo.UniversityDate</value>
-            </entry>    
-          </map>
-        </property>  
-        <property name="childParentArrayMap">
-          <map>
-            <entry key="org.kuali.module.chart.bo.OrganizationReversionDetail">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-                <value>org.kuali.module.chart.bo.ObjectCode</value>
-                <value>org.kuali.module.chart.bo.OrganizationReversion</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.OrganizationReversion">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.SubObjCd">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-                <value>org.kuali.module.chart.bo.ObjectCode</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.ObjectCode">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.OffsetDefinition">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-                <value>org.kuali.module.chart.bo.ObjectCode</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.labor.bo.BenefitsCalculation">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.labor.bo.PositionObjectBenefit">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-                <value>org.kuali.module.labor.bo.BenefitsCalculation</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.AccountingPeriod">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.gl.bo.UniversityDate">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-          </map>
-        </property>
-        <property name="laggingCopyCycle">
-          <set>
-            <value>org.kuali.module.chart.bo.OrganizationReversion</value>
-            <value>org.kuali.module.chart.bo.OrganizationReversionDetail</value>
-          </set>
+    <bean id="fiscalYearMakersDao" class="org.kuali.module.budget.dao.ojb.FiscalYearMakersDaoOjb">
+        <property name="jcdAlias">
+            <value>dataSource</value>
         </property>
     </bean>
+    
 
     <bean id="calculatedSalaryFoundationTrackerOverrideService" class="org.kuali.module.budget.service.impl.CalculatedSalaryFoundationTrackerOverrideServiceImpl">
     </bean>

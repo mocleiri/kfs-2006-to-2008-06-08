@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/web/struts/CashReceiptAction.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,21 +27,21 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.rule.event.AddCheckEvent;
+import org.kuali.core.rule.event.DeleteCheckEvent;
+import org.kuali.core.rule.event.UpdateCheckEvent;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.Timer;
 import org.kuali.core.util.WebUtils;
+import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CheckBase;
 import org.kuali.module.financial.document.CashReceiptDocument;
-import org.kuali.module.financial.rule.event.AddCheckEvent;
-import org.kuali.module.financial.rule.event.DeleteCheckEvent;
-import org.kuali.module.financial.rule.event.UpdateCheckEvent;
 import org.kuali.module.financial.rules.CashReceiptDocumentRuleUtil;
 import org.kuali.module.financial.service.CashReceiptCoverSheetService;
 import org.kuali.module.financial.service.CashReceiptService;
@@ -51,7 +53,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 /**
  * 
  */
-public class CashReceiptAction extends KualiAccountingDocumentActionBase {
+public class CashReceiptAction extends KualiTransactionalDocumentActionBase {
     /**
      * Adds handling for check updates
      * 
@@ -102,7 +104,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
         String directory = getServlet().getServletConfig().getServletContext().getRealPath(CashReceiptCoverSheetServiceImpl.CR_COVERSHEET_TEMPLATE_RELATIVE_DIR);
 
         // retrieve document
-        String documentNumber = request.getParameter(KFSPropertyConstants.DOCUMENT_NUMBER);
+        String documentNumber = request.getParameter(PropertyConstants.DOCUMENT_NUMBER);
 
         CashReceiptDocument document = (CashReceiptDocument) SpringServiceLocator.getDocumentService().getByDocumentHeaderId(documentNumber);
 
@@ -143,7 +145,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
                     crDoc.setTotalCheckAmount(crDoc.calculateCheckTotal());
 
                     // notify user
-                    GlobalVariables.getMessageList().add(KFSKeyConstants.CashReceipt.MSG_CHECK_ENTRY_INDIVIDUAL);
+                    GlobalVariables.getMessageList().add(KeyConstants.CashReceipt.MSG_CHECK_ENTRY_INDIVIDUAL);
                 }
                 else {
                     // restore saved checkTotal
@@ -153,7 +155,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
                     crDoc.setCheckEntryMode(formMode);
 
                     // notify user
-                    GlobalVariables.getMessageList().add(KFSKeyConstants.CashReceipt.MSG_CHECK_ENTRY_TOTAL);
+                    GlobalVariables.getMessageList().add(KeyConstants.CashReceipt.MSG_CHECK_ENTRY_TOTAL);
                 }
             }
         }
@@ -176,7 +178,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
             // only generate update events for specific action methods
             String methodToCall = cform.getMethodToCall();
             if (UPDATE_EVENT_ACTIONS.contains(methodToCall)) {
-                SpringServiceLocator.getKualiRuleService().applyRules(new UpdateCheckEvent(KFSPropertyConstants.DOCUMENT + "." + KFSPropertyConstants.CHECK + "[" + index + "]", cdoc, formCheck));
+                SpringServiceLocator.getKualiRuleService().applyRules(new UpdateCheckEvent(PropertyConstants.DOCUMENT + "." + PropertyConstants.CHECK + "[" + index + "]", cdoc, formCheck));
             }
             index++;
         }
@@ -200,7 +202,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
         newCheck.setDocumentNumber(crDoc.getDocumentNumber());
 
         // check business rules
-        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddCheckEvent(KFSConstants.NEW_CHECK_PROPERTY_NAME, crDoc, newCheck));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddCheckEvent(Constants.NEW_CHECK_PROPERTY_NAME, crDoc, newCheck));
         if (rulePassed) {
             // add check
             crDoc.addCheck(newCheck);
@@ -209,7 +211,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
             crForm.setNewCheck(new CheckBase());
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -230,7 +232,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
         Check oldCheck = crDoc.getCheck(deleteIndex);
 
 
-        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new DeleteCheckEvent(KFSConstants.EXISTING_CHECK_PROPERTY_NAME, crDoc, oldCheck));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new DeleteCheckEvent(Constants.EXISTING_CHECK_PROPERTY_NAME, crDoc, oldCheck));
 
         if (rulePassed) {
             // delete check
@@ -242,10 +244,10 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
             }
         }
         else {
-            GlobalVariables.getErrorMap().putError("document.check[" + deleteIndex + "]", KFSKeyConstants.Check.ERROR_CHECK_DELETERULE, Integer.toString(deleteIndex));
+            GlobalVariables.getErrorMap().putError("document.check[" + deleteIndex + "]", KeyConstants.Check.ERROR_CHECK_DELETERULE, Integer.toString(deleteIndex));
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
@@ -279,7 +281,7 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
                     crDoc.setTotalCheckAmount(crDoc.calculateCheckTotal());
 
                     // notify user
-                    GlobalVariables.getMessageList().add(KFSKeyConstants.CashReceipt.MSG_CHECK_ENTRY_INDIVIDUAL);
+                    GlobalVariables.getMessageList().add(KeyConstants.CashReceipt.MSG_CHECK_ENTRY_INDIVIDUAL);
                 }
                 else {
                     // restore saved checkTotal
@@ -289,12 +291,12 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
                     crDoc.setCheckEntryMode(formMode);
 
                     // notify user
-                    GlobalVariables.getMessageList().add(KFSKeyConstants.CashReceipt.MSG_CHECK_ENTRY_TOTAL);
+                    GlobalVariables.getMessageList().add(KeyConstants.CashReceipt.MSG_CHECK_ENTRY_TOTAL);
                 }
             }
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 

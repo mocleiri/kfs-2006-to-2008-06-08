@@ -39,7 +39,7 @@ public class FlexibleOffsetAccountServiceTest extends KualiTestBase {
     public void testGetByPrimaryId_valid() throws Exception {
         boolean enabled = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG);
    
-        TestUtils.setSystemParameter(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG, "Y", true, false);
+        TestUtils.setFlexibleOffsetSystemParameter(true);
         OffsetAccount offsetAccount = getFlexibleOffsetAccountService().getByPrimaryIdIfEnabled(OFFSET_ACCOUNT1.chartOfAccountsCode, OFFSET_ACCOUNT1.accountNumber, OFFSET_ACCOUNT1.financialOffsetObjectCode);
         if (offsetAccount == null) {
            throw new RuntimeException("Offset Account came back null, cannot perform asserts.");
@@ -52,13 +52,13 @@ public class FlexibleOffsetAccountServiceTest extends KualiTestBase {
         assertEquals(OFFSET_ACCOUNT1.financialOffsetAccountNumber, offsetAccount.getFinancialOffsetAccount().getAccountNumber());
     }
 
-    public void testGetByPrimaryId_validDisabled() throws Exception {
-        TestUtils.setSystemParameter(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG, "N", false, false);
+    public void testGetByPrimaryId_validDisabled() throws NoSuchMethodException, InvocationTargetException {
+        TestUtils.mockConfigurationServiceForFlexibleOffsetEnabled(false);
         assertNull(getFlexibleOffsetAccountService().getByPrimaryIdIfEnabled(OFFSET_ACCOUNT1.chartOfAccountsCode, OFFSET_ACCOUNT1.accountNumber, OFFSET_ACCOUNT1.financialOffsetAccountNumber));
     }
 
-    public void testGetByPrimaryId_invalid() throws Exception {
-        TestUtils.setSystemParameter(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG,"N", true, false);
+    public void testGetByPrimaryId_invalid() {
+        TestUtils.mockConfigurationServiceForFlexibleOffsetEnabled(true);
         assertNull(getFlexibleOffsetAccountService().getByPrimaryIdIfEnabled("XX", "XX", "XX"));
     }
 

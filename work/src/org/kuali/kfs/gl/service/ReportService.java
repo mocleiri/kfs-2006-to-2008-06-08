@@ -27,8 +27,8 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.document.CorrectionDocument;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
-import org.kuali.module.gl.util.Message;
 
 /**
  */
@@ -202,7 +202,7 @@ public interface ReportService {
      * @param reportSummary
      * @param runDate
      */
-    public void generateBalanceForwardStatisticsReport(List reportSummary, Date runDate, OriginEntryGroup openAccountOriginEntryGroup, OriginEntryGroup closedAccountOriginEntryGroup);
+    public void generateBalanceForwardStatisticsReport(List reportSummary, Date runDate);
 
     /**
      * Encumbrance Closing Report
@@ -210,7 +210,7 @@ public interface ReportService {
      * @param reportSummary
      * @param runDate
      */
-    public void generateEncumbranceClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate, OriginEntryGroup originEntryGroup);
+    public void generateEncumbranceClosingStatisticsReport(List reportSummary, Date runDate);
 
     /**
      * Nominal Activity Closing Report
@@ -219,7 +219,7 @@ public interface ReportService {
      * @param reportSummary
      * @param runDate
      */
-    public void generateNominalActivityClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate, OriginEntryGroup originEntryGroup);
+    public void generateNominalActivityClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate);
     
     /**
      * Poster Reversal Transactions Listing
