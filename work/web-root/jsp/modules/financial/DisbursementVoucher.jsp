@@ -13,7 +13,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
+<%@ taglib tagdir="/WEB-INF/tags/dv" prefix="dv"%>
 
 <kul:documentPage showDocumentInfo="true"
 	htmlFormAction="financialDisbursementVoucher"
@@ -45,18 +46,18 @@
 
 	<kul:hiddenDocumentFields />
 
-	<html:hidden property="document.dvPayeeDetail.documentNumber" />
+	<html:hidden property="document.dvPayeeDetail.financialDocumentNumber" />
 	<html:hidden property="document.dvPayeeDetail.versionNumber" />
 	<html:hidden
-		property="document.dvNonEmployeeTravel.documentNumber" />
+		property="document.dvNonEmployeeTravel.financialDocumentNumber" />
 	<html:hidden property="document.dvNonEmployeeTravel.versionNumber" />
 	<html:hidden
-		property="document.dvPreConferenceDetail.documentNumber" />
+		property="document.dvPreConferenceDetail.financialDocumentNumber" />
 	<html:hidden property="document.dvPreConferenceDetail.versionNumber" />
-	<html:hidden property="document.dvWireTransfer.documentNumber" />
+	<html:hidden property="document.dvWireTransfer.financialDocumentNumber" />
 	<html:hidden property="document.dvWireTransfer.versionNumber" />
 	<html:hidden
-		property="document.dvNonResidentAlienTax.documentNumber" />
+		property="document.dvNonResidentAlienTax.financialDocumentNumber" />
 	<html:hidden property="document.dvNonResidentAlienTax.versionNumber" />
 
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
@@ -85,7 +86,7 @@
 
 	<dv:dvPrePaidTravel />
 
-	<gl:generalLedgerPendingEntries />
+	<kul:generalLedgerPendingEntries />
 
 	<kul:notes />
 

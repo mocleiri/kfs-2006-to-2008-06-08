@@ -24,16 +24,12 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.Note;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.bo.OrganizationParameter;
 import org.kuali.module.purap.bo.PurchaseOrderView;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
-import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.service.PurapService;
 
 public class PurapServiceImpl implements PurapService {
@@ -41,7 +37,6 @@ public class PurapServiceImpl implements PurapService {
 
     private BusinessObjectService businessObjectService;
     private KualiConfigurationService kualiConfigurationService;
-    private PurapAccountingService purapAccountingService;
     
     public void setBusinessObjectService(BusinessObjectService boService) {
         this.businessObjectService = boService;    
@@ -49,10 +44,6 @@ public class PurapServiceImpl implements PurapService {
 
     public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
         this.kualiConfigurationService = kualiConfigurationService;    
-    }
-    
-    public void setPurapAccountingService(PurapAccountingService purapAccountingService) {
-        this.purapAccountingService = purapAccountingService;
     }
     
     /**
@@ -216,32 +207,5 @@ public class PurapServiceImpl implements PurapService {
         String securityGroup = (String)PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(documentType);
         String[] itemTypes = kualiConfigurationService.getApplicationParameterValues(securityGroup, PurapConstants.BELOW_THE_LINES_PARAMETER);
         return itemTypes;
-    }
-    
-    public List<SourceAccountingLine> generateSummary(List<PurchasingApItem> items) {
-        return purapAccountingService.generateSummary(items);
-    }
-    
-    
-    /*
-     *    PURCHASING DOCUMENT METHODS
-     * 
-     */
-    public KualiDecimal getApoLimit(Integer vendorContractGeneratedIdentifier, String chart, String org) {
-        KualiDecimal purchaseOrderTotalLimit = SpringServiceLocator.getVendorService().getApoLimitFromContract(
-                vendorContractGeneratedIdentifier, chart, org);
-        if (ObjectUtils.isNull(purchaseOrderTotalLimit)) {
-            // We didn't find the limit on the vendor contract, get it from the org parameter table.
-            if ( ObjectUtils.isNull(chart) || ObjectUtils.isNull(org) ) {
-                return null;
-            }
-            OrganizationParameter organizationParameter = new OrganizationParameter();
-            organizationParameter.setChartOfAccountsCode(chart);
-            organizationParameter.setOrganizationCode(org);
-            Map orgParamKeys = SpringServiceLocator.getPersistenceService().getPrimaryKeyFieldValues(organizationParameter);
-            organizationParameter = (OrganizationParameter) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(OrganizationParameter.class, orgParamKeys);
-            purchaseOrderTotalLimit = (organizationParameter == null) ? null : organizationParameter.getOrganizationAutomaticPurchaseOrderLimit();
-        }
-        return purchaseOrderTotalLimit;
     }
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/DisbursementVoucherPayeeDetail.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +20,16 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.financial.lookup.keyvalues.PayeeTypeValuesFinder;
-import org.kuali.module.financial.lookup.keyvalues.PaymentReasonValuesFinder;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.lookup.keyvalues.PayeeTypeValuesFinder;
+import org.kuali.core.lookup.keyvalues.PaymentReasonValuesFinder;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBase {
+public class DisbursementVoucherPayeeDetail extends BusinessObjectBase {
 
     private String documentNumber;
     private String disbVchrPaymentReasonCode;
@@ -569,7 +571,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 }

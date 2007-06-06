@@ -18,7 +18,7 @@ import java.util.*;
 import org.kuali.module.budget.bo.*;
 
 public interface GenesisDao {
-    
+
     /*
      * return a map of values for the budget construction control flags
      * for the fiscal year (flag name, flag value)
@@ -49,13 +49,15 @@ public interface GenesisDao {
    
    // intialization for genesis
    public void clearDBForGenesis(Integer BaseYear);
-    
+   
    // pending budget construction general ledger
-   public void ensureObjectClassRIForBudget(Integer BaseYear);
    public void initialLoadToPBGL(Integer currentFiscalYear);
    public void updateToPBGL(Integer currentFiscalYear);
    
    // document creation
+   //@@TODO:  the first two are non-transactional, and are "deprecated"
+   public void createNewBCDocuments(Integer currentFiscalYear);
+   public void primeNewBCHeadersDocumentCreation(Integer currentFiscalYear);
    // create document with embedded workflow
    public void createNewBCDocumentsFromGLCSF(Integer BaseYear,
                                              boolean GLUpdatesAllowed,
@@ -69,12 +71,4 @@ public interface GenesisDao {
    public void createNewBCPosition(Integer BaseYear,
                                    boolean PosSyncAllowed,
                                    boolean CSFUpdatesAllowed);
-
-   // budget construction CSF and budget construction appointment funding
-   public void buildAppointmentFundingAndBCSF(Integer BaseYear);
-   
-   // this is a junk method in genesis that was used to unit test various SQL
-   public void genesisUnitTest(Integer BaseYear);
 }
-
-

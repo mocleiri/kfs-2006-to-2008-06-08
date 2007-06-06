@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/PurchasingDocumentBase.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +20,24 @@ package org.kuali.module.purap.document;
 import java.sql.Date;
 import java.util.List;
 
-import org.kuali.core.bo.Campus;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.TypedArrayList;
 import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.Campus;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
-import org.kuali.module.purap.bo.BillingAddress;
+import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.bo.DeliveryRequiredDateReason;
 import org.kuali.module.purap.bo.FundingSource;
+import org.kuali.module.purap.bo.PurchaseOrderCostSource;
 import org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod;
+import org.kuali.module.purap.bo.PurchasingItem;
+import org.kuali.module.purap.bo.PurchasingItemBase;
 import org.kuali.module.purap.bo.RecurringPaymentType;
+import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.bo.RequisitionSource;
-import org.kuali.module.vendor.bo.ContractManager;
-import org.kuali.module.vendor.bo.PurchaseOrderCostSource;
-import org.kuali.module.vendor.bo.VendorAddress;
-import org.kuali.module.vendor.bo.VendorContract;
-import org.kuali.module.vendor.bo.VendorDetail;
+import org.kuali.module.purap.bo.VendorContract;
+import org.kuali.module.purap.bo.VendorDetail;
 
 /**
  * Purchasing Document Base
@@ -54,6 +57,13 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     private String organizationCode;
     private String deliveryCampusCode;
     private KualiDecimal purchaseOrderTotalLimit;
+    private String vendorName;
+    private String vendorLine1Address;
+    private String vendorLine2Address;
+    private String vendorCityName;
+    private String vendorStateCode;
+    private String vendorPostalCode;
+    private String vendorCountryCode;
     private boolean vendorRestrictedIndicator;
     private String vendorPhoneNumber;
     private String vendorFaxNumber;
@@ -96,15 +106,12 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     private String externalOrganizationB2bSupplierIdentifier;
     private Integer contractManagerCode;
     private boolean purchaseOrderAutomaticIndicator;
-    private String vendorPaymentTermsCode;
-    private String vendorShippingTitleCode;
-    private String vendorShippingPaymentTermsCode;
 
-    // NOT PERSISTED IN DB
-    private String vendorContractName;
-    private String supplierDiversityLabel;
-    private String vendorContactsLabel;
-    private boolean deliveryBuildingOther; 
+    private String vendorNumber; //not persisted in db
+    private Integer vendorAddressGeneratedIdentifier; //not persisted in db
+    private String vendorContractName; //not persisted in db
+    private String supplierDiversityLabel; //not persisted in db
+    private String vendorContactsLabel; //not persisted in db
     
     // REFERENCE OBJECTS
     private FundingSource fundingSource;
@@ -121,14 +128,17 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     private Account nonInstitutionFundAccount;
     private Chart nonInstitutionFundChartOfAccounts;
     private VendorContract vendorContract;
-    private ContractManager contractManager;
-
     
+    //COLLECTIONS
+    private List<PurchasingItem> items;
+    
+
     public PurchasingDocumentBase() {
         super();
+        items = new TypedArrayList(PurchasingItemBase.class);
     }
 
-
+    
     /**
      * Retrieve all references common to purchasing
      */
@@ -141,12 +151,12 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
         this.refreshReferenceObject("chartOfAccounts");
         this.refreshReferenceObject("organization");
         this.refreshReferenceObject("deliveryCampus");
-        this.refreshReferenceObject("vendorContract");
-        this.refreshReferenceObject("contractManager");
     }
 
     /**
-     * @see org.kuali.module.purap.document.PurchasingDocument#templateVendorDetail(org.kuali.module.vendor.bo.VendorDetail)
+     * Convenience method to set vendor detail fields based on a given VendorDetail.
+     * 
+     * @param vendorDetail
      */
     public void templateVendorDetail(VendorDetail vendorDetail) {
         if (vendorDetail == null) {
@@ -154,11 +164,14 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
         }
     
         this.setVendorDetail(vendorDetail);
+        this.setVendorNumber(vendorDetail.getVendorHeaderGeneratedIdentifier() + PurapConstants.DASH + vendorDetail.getVendorDetailAssignedIdentifier());
         this.setVendorName(vendorDetail.getVendorName());
     }
     
     /**
-     * @see org.kuali.module.purap.document.PurchasingDocument#templateVendorContract(org.kuali.module.vendor.bo.VendorContract)
+     * Convenience method to set vendor contract fields based on a given VendorContract.
+     * 
+     * @param vendorContract
      */
     public void templateVendorContract(VendorContract vendorContract) {
         if (vendorContract == null) {
@@ -167,33 +180,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
 
         this.setVendorContract(vendorContract);
         this.setVendorContractName(vendorContract.getVendorContractName());
-    }
-    
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#templateVendorAddress(org.kuali.module.vendor.bo.VendorAddress)
-     */
-    public void templateVendorAddress(VendorAddress vendorAddress) {
-        super.templateVendorAddress(vendorAddress);
-        this.setVendorFaxNumber(vendorAddress.getVendorFaxNumber());
     }    
-    
-    /**
-     * Convenience method to set billing address fields based on a given BillingAddress.
-     * 
-     * @param billingAddress
-     */
-    public void templateBillingAddress(BillingAddress billingAddress) {
-        if (ObjectUtils.isNotNull(billingAddress)) {
-            this.setBillingName(billingAddress.getBillingName());
-            this.setBillingLine1Address(billingAddress.getBillingLine1Address());
-            this.setBillingLine2Address(billingAddress.getBillingLine2Address());
-            this.setBillingCityName(billingAddress.getBillingCityName());
-            this.setBillingStateCode(billingAddress.getBillingStateCode());
-            this.setBillingPostalCode(billingAddress.getBillingPostalCode());
-            this.setBillingCountryCode(billingAddress.getBillingCountryCode());
-            this.setBillingPhoneNumber(billingAddress.getBillingPhoneNumber());
-        }
-    }
     
     // GETTERS AND SETTERS    
     /**
@@ -394,6 +381,146 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
      */
     public void setPurchaseOrderTotalLimit(KualiDecimal purchaseOrderTotalLimit) {
         this.purchaseOrderTotalLimit = purchaseOrderTotalLimit;
+    }
+
+    /**
+     * Gets the vendorName attribute.
+     * 
+     * @return Returns the vendorName
+     * 
+     */
+    public String getVendorName() { 
+        return vendorName;
+    }
+
+    /**
+     * Sets the vendorName attribute.
+     * 
+     * @param vendorName The vendorName to set.
+     * 
+     */
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    /**
+     * Gets the vendorLine1Address attribute.
+     * 
+     * @return Returns the vendorLine1Address
+     * 
+     */
+    public String getVendorLine1Address() { 
+        return vendorLine1Address;
+    }
+
+    /**
+     * Sets the vendorLine1Address attribute.
+     * 
+     * @param vendorLine1Address The vendorLine1Address to set.
+     * 
+     */
+    public void setVendorLine1Address(String vendorLine1Address) {
+        this.vendorLine1Address = vendorLine1Address;
+    }
+
+    /**
+     * Gets the vendorLine2Address attribute.
+     * 
+     * @return Returns the vendorLine2Address
+     * 
+     */
+    public String getVendorLine2Address() { 
+        return vendorLine2Address;
+    }
+
+    /**
+     * Sets the vendorLine2Address attribute.
+     * 
+     * @param vendorLine2Address The vendorLine2Address to set.
+     * 
+     */
+    public void setVendorLine2Address(String vendorLine2Address) {
+        this.vendorLine2Address = vendorLine2Address;
+    }
+
+    /**
+     * Gets the vendorCityName attribute.
+     * 
+     * @return Returns the vendorCityName
+     * 
+     */
+    public String getVendorCityName() { 
+        return vendorCityName;
+    }
+
+    /**
+     * Sets the vendorCityName attribute.
+     * 
+     * @param vendorCityName The vendorCityName to set.
+     * 
+     */
+    public void setVendorCityName(String vendorCityName) {
+        this.vendorCityName = vendorCityName;
+    }
+
+    /**
+     * Gets the vendorStateCode attribute.
+     * 
+     * @return Returns the vendorStateCode
+     * 
+     */
+    public String getVendorStateCode() { 
+        return vendorStateCode;
+    }
+
+    /**
+     * Sets the vendorStateCode attribute.
+     * 
+     * @param vendorStateCode The vendorStateCode to set.
+     * 
+     */
+    public void setVendorStateCode(String vendorStateCode) {
+        this.vendorStateCode = vendorStateCode;
+    }
+
+    /**
+     * Gets the vendorPostalCode attribute.
+     * 
+     * @return Returns the vendorPostalCode
+     * 
+     */
+    public String getVendorPostalCode() { 
+        return vendorPostalCode;
+    }
+
+    /**
+     * Sets the vendorPostalCode attribute.
+     * 
+     * @param vendorPostalCode The vendorPostalCode to set.
+     * 
+     */
+    public void setVendorPostalCode(String vendorPostalCode) {
+        this.vendorPostalCode = vendorPostalCode;
+    }
+
+    /**
+     * Gets the vendorCountryCode attribute.
+     * 
+     * @return Returns the vendorCountryCode
+     * 
+     */
+    public String getVendorCountryCode() { 
+        return vendorCountryCode;
+    }
+
+    /**
+     * Sets the vendorCountryCode attribute.
+     * 
+     * @param vendorCountryCode The vendorCountryCode to set.
+     * 
+     */
+    public void setVendorCountryCode(String vendorCountryCode) {
+        this.vendorCountryCode = vendorCountryCode;
     }
 
     /**
@@ -1496,6 +1623,22 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
         this.nonInstitutionFundChartOfAccounts = nonInstitutionFundChartOfAccounts;
     }
 
+    public String getVendorNumber() {
+        return vendorNumber;
+    }
+
+    public void setVendorNumber(String vendorNumber) {
+        this.vendorNumber = vendorNumber;
+    }
+
+    public Integer getVendorAddressGeneratedIdentifier() {
+        return vendorAddressGeneratedIdentifier;
+    }
+
+    public void setVendorAddressGeneratedIdentifier(Integer vendorAddressGeneratedIdentifier) {
+        this.vendorAddressGeneratedIdentifier = vendorAddressGeneratedIdentifier;
+    }
+
     public String getVendorContractName() {
         return vendorContractName;
     }
@@ -1520,70 +1663,76 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
         this.vendorContract = vendorContract;
     }
 
-    /**
-     * Gets the deliveryBuildingOther attribute. 
-     * @return Returns the deliveryBuildingOther.
-     */
-    public boolean isDeliveryBuildingOther() {
-        return deliveryBuildingOther;
-    }
 
     /**
-     * Sets the deliveryBuildingOther attribute value.
-     * @param deliveryBuildingOther The deliveryBuildingOther to set.
+     * Gets the items attribute. 
+     * @return Returns the items.
      */
-    public void setDeliveryBuildingOther(boolean deliveryBuildingOther) {
-        this.deliveryBuildingOther = deliveryBuildingOther;
+    public List getItems() {
+        return items;
+    }
+
+
+    /**
+     * Sets the items attribute value.
+     * @param items The items to set.
+     */
+    public void setItems(List items) {
+        this.items = items;
+    }
+
+    public void addItem(PurchasingItem item) {
+        int itemLinePosition = items.size();
+        if(item.getItemLineNumber()!=null) {
+            itemLinePosition = item.getItemLineNumber().intValue();
+        }
+       
+        //if the user entered something set line number to that
+        if(itemLinePosition>1&&itemLinePosition<items.size()) {
+            itemLinePosition = item.getItemLineNumber() - 1;
+        }
+        
+        items.add(itemLinePosition,item);
+        renumberItems(itemLinePosition);
     }
     
-    public void setVendorContactsLabel(String vendorContactsLabel) {
-        this.vendorContactsLabel = vendorContactsLabel;
+    public void deleteItem(int lineNum) {
+        if(items.remove(lineNum)==null) {
+            //throw error here
+        }
+        renumberItems(lineNum);
+    }
+    
+    public void renumberItems(int start) {
+        for (int i = start; i<items.size(); i++) {
+            PurchasingItem item = (PurchasingItem)items.get(i);
+            item.setItemLineNumber(new Integer(i+1));
+        }
+    }
+    
+    public PurchasingItem getItem(int pos) {
+        while (getItems().size() <= pos) {
+            //TODO: totally incorrect shouldn't be ReqItem fix later
+            getItems().add(new RequisitionItem());
+        }
+        return (PurchasingItem)items.get(pos);
+    }
+    public KualiDecimal getTotal() {
+        KualiDecimal total = new KualiDecimal("0");
+        for (PurchasingItem item : items) {
+           total = total.add(item.getExtendedPrice());
+       }
+       return total;
     }
 
-    public ContractManager getContractManager() {
-        return contractManager;
-    }
-
-    public void setContractManager(ContractManager contractManager) {
-        this.contractManager = contractManager;
-    }
-
-
+    /**
+     * @see org.kuali.core.document.TransactionalDocumentBase#buildListOfDeletionAwareLists()
+     */
     @Override
     public List buildListOfDeletionAwareLists() {
         List managedLists = super.buildListOfDeletionAwareLists();
         managedLists.add(getItems());
         return managedLists;
-    }
-
-
-    public String getVendorPaymentTermsCode() {
-        return vendorPaymentTermsCode;
-    }
-
-
-    public void setVendorPaymentTermsCode(String vendorPaymentTermsCode) {
-        this.vendorPaymentTermsCode = vendorPaymentTermsCode;
-    }
-
-
-    public String getVendorShippingPaymentTermsCode() {
-        return vendorShippingPaymentTermsCode;
-    }
-
-
-    public void setVendorShippingPaymentTermsCode(String vendorShippingPaymentTermsCode) {
-        this.vendorShippingPaymentTermsCode = vendorShippingPaymentTermsCode;
-    }
-
-
-    public String getVendorShippingTitleCode() {
-        return vendorShippingTitleCode;
-    }
-
-
-    public void setVendorShippingTitleCode(String vendorShippingTitleCode) {
-        this.vendorShippingTitleCode = vendorShippingTitleCode;
     }
 
     

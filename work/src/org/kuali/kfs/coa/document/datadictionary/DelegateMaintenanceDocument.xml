@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@
 <dictionaryEntry>
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.chart.bo.Delegate</businessObjectClass>
-        <maintainableClass>org.kuali.module.chart.maintenance.KualiDelegateMaintainableImpl</maintainableClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
         <businessRulesClass>org.kuali.module.chart.rules.DelegateRule</businessRulesClass>
         <preRulesCheckClass>org.kuali.module.chart.rules.DelegatePreRules</preRulesCheckClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -42,18 +42,17 @@
         <summary>Account Delegate Maintenance Document</summary>
         <description>Maintenance document which allows you to create, remove or modify Account Delegates.</description>
         <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ACCOUNT_DELEGATE" />
-
+        
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
             <field attributeName="accountNumber" />
-            <field attributeName="financialDocumentTypeCode" />
             <field attributeName="accountDelegateSystemId" />
         </lockingKeys>
 
         <defaultExistenceChecks>
             <reference attributeName="account" attributeToHighlightOnFail="accountNumber" />
             <reference attributeName="accountDelegate" attributeToHighlightOnFail="accountDelegate.personUserIdentifier" />
-            <reference attributeName="documentType" attributeToHighlightOnFail="financialDocumentTypeCode" />
+            <reference attributeName="documentType" attributeToHighlightOnFail="financialDocumentTypeCode" activeIndicatorAttributeName="finDocumentTypeActiveIndicator" />
         </defaultExistenceChecks>
 
         <maintainableSections>
@@ -76,7 +75,7 @@
                         <defaultValue>true</defaultValue>
                     </maintainableField>
                     <maintainableField name="accountDelegateStartDate" required="true">
-                        <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.CurrentDateMMDDYYYYFinder</defaultValueFinderClass>
+                        <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.CurrentDateMMDDYYYYFinder</defaultValueFinderClass>
                     </maintainableField>
                     <maintainableField name="versionNumber" />
                 </maintainableItems>

@@ -17,20 +17,18 @@
 package org.kuali.module.budget.bo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.SubAccount;
+import org.kuali.PropertyConstants;
 
 /**
  * 
@@ -55,7 +53,6 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     private UniversalUser budgetTransactionLockUser;
     private Org organizationLevelOrganization;
     private DocumentHeader financialDocument;
-    private BudgetConstructionAccountReports budgetConstructionAccountReports;
     
     private List budgetConstructionAccountSelect;
 
@@ -422,43 +419,11 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     }    
     
     /**
-     * Gets the budgetConstructionAccountReports attribute. 
-     * @return Returns the budgetConstructionAccountReports.
-     */
-    public BudgetConstructionAccountReports getBudgetConstructionAccountReports() {
-        return budgetConstructionAccountReports;
-    }
-
-    /**
-     * Sets the budgetConstructionAccountReports attribute value.
-     * @param budgetConstructionAccountReports The budgetConstructionAccountReports to set.
-     */
-    public void setBudgetConstructionAccountReports(BudgetConstructionAccountReports budgetConstructionAccountReports) {
-        this.budgetConstructionAccountReports = budgetConstructionAccountReports;
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("documentNumber", getDocumentNumber());
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-        simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());
-        simpleValues.put("accountNumber", getAccountNumber());
-        simpleValues.put("subAccountNumber", getSubAccountNumber());
-
-        return simpleValues;
-    }
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }

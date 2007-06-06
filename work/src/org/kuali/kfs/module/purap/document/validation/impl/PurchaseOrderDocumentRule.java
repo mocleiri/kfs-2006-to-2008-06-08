@@ -52,7 +52,7 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
         valid &= processVendorStipulationValidation((PurchaseOrderDocument) purapDocument);
         return valid;
     }
-
+    
     /**
      * This method performs any validation for the Additional tab.
      * 
@@ -66,56 +66,31 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
     }
 
     /**
+     * 
      * @see org.kuali.module.purap.rules.PurchasingDocumentRuleBase#processItemValidation(org.kuali.module.purap.document.PurchasingDocument)
      */
     @Override
     public boolean processItemValidation(PurchasingDocument purDocument) {
         boolean valid = super.processItemValidation(purDocument);
         for (PurchasingApItem item : purDocument.getItems()) {
-            String identifierString = (item.getItemType().isItemTypeAboveTheLineIndicator() ? "Item " + item.getItemLineNumber().toString() : item.getItemType().getItemTypeDescription());
+            String identifierString = (item.getItemType().isItemTypeAboveTheLineIndicator() ?  "Item " + item.getItemLineNumber().toString() : item.getItemType().getItemTypeDescription());
             valid &= validateEmptyItemWithAccounts((PurchaseOrderItem) item, identifierString);
             valid &= validateItemWithoutAccounts((PurchaseOrderItem) item, identifierString);
             valid &= validateItemUnitOfMeasure((PurchaseOrderItem) item, identifierString);
-            if (purDocument.getDocumentHeader().getWorkflowDocument() != null && purDocument.getDocumentHeader().getWorkflowDocument().getDocumentType().equals(PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_AMENDMENT_DOCUMENT)) {
-                valid &= validateItemForAmendment((PurchaseOrderItem) item, identifierString);
-            }
         }
         valid &= validateTradeInAndDiscountCoexistence(purDocument);
         return valid;
     }
 
-    private boolean validateItemForAmendment(PurchaseOrderItem item, String identifierString) {
-        boolean valid = true;
-        if ((item.getItemInvoicedTotalQuantity() != null) && (!(item.getItemInvoicedTotalQuantity()).isZero())) {
-            if (item.getItemQuantity() == null) {
-                valid = false;
-                GlobalVariables.getErrorMap().putError("newPurchasingItemLine" , PurapKeyConstants.ERROR_ITEM_AMND_NULL, "Item Quantity", identifierString);
-            }
-            else if (item.getItemQuantity().compareTo(item.getItemInvoicedTotalQuantity()) < 0) {
-                valid = false;
-                GlobalVariables.getErrorMap().putError("newPurchasingItemLine" , PurapKeyConstants.ERROR_ITEM_AMND_INVALID, "Item Quantity", identifierString);
-            }
-        }
-
-        if (item.getItemInvoicedTotalAmount() != null) {
-            KualiDecimal total = item.getExtendedPrice();
-            if ((total == null) || total.compareTo(item.getItemInvoicedTotalAmount()) < 0) {
-                valid = false;
-                GlobalVariables.getErrorMap().putError("newPurchasingItemLine" , PurapKeyConstants.ERROR_ITEM_AMND_INVALID_AMT, "Item Extended Price", identifierString);
-            }
-        }
-        return valid;
-    }
-
     /**
-     * This method validates that the item detail must not be empty if its account is not empty and its item type is ITEM.
      * 
+     * This method validates that the item detail must not be empty if its account is not empty.
      * @param item
      * @return
      */
-    boolean validateEmptyItemWithAccounts(PurchaseOrderItem item, String identifierString) {
+    private boolean validateEmptyItemWithAccounts(PurchaseOrderItem item, String identifierString) {
         boolean valid = true;
-        if (item.getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE) && item.isItemDetailEmpty() && !item.isAccountListEmpty()) {
+        if (item.isItemDetailEmpty() && !item.isAccountListEmpty()) {
             valid = false;
             GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_ACCOUNTING_NOT_ALLOWED, identifierString);
         }
@@ -123,12 +98,12 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
     }
 
     /**
-     * This method validates that the item must contain at least one account
      * 
+     * This method validates that the item must contain at least one account
      * @param item
      * @return
      */
-    boolean validateItemWithoutAccounts(PurchaseOrderItem item, String identifierString) {
+    private boolean validateItemWithoutAccounts(PurchaseOrderItem item, String identifierString) {
         boolean valid = true;
         if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && (new KualiDecimal(item.getItemUnitPrice())).isNonZero() && item.isAccountListEmpty()) {
             valid = false;
@@ -138,12 +113,13 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
     }
 
     /**
+     * 
      * This method validates that if the item type is ITEM, the unit of measure field is required.
      * 
      * @param item
      * @return
      */
-    boolean validateItemUnitOfMeasure(PurchaseOrderItem item, String identifierString) {
+    private boolean validateItemUnitOfMeasure(PurchaseOrderItem item, String identifierString) {
         boolean valid = true;
         if (item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_ITEM_CODE) && StringUtils.isEmpty(item.getItemUnitOfMeasureCode())) {
             valid = false;
@@ -153,15 +129,16 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
     }
 
     /**
+     * 
      * This method validates that the purchase order cannot have both trade in and discount item.
      * 
      * @param purDocument
      * @return
      */
-    boolean validateTradeInAndDiscountCoexistence(PurchasingDocument purDocument) {
+    private boolean validateTradeInAndDiscountCoexistence(PurchasingDocument purDocument) {
         boolean discountExists = false;
         boolean tradeInExists = false;
-
+        
         for (PurchasingApItem item : purDocument.getItems()) {
             if (item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE)) {
                 discountExists = true;
@@ -257,10 +234,9 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
     public boolean validateTotalDollarAmountIsLessThanPurchaseOrderTotalLimit(PurchasingDocument purDocument) {
         boolean valid = true;
         if (ObjectUtils.isNotNull(purDocument.getPurchaseOrderTotalLimit()) && ObjectUtils.isNotNull(((AmountTotaling) purDocument).getTotalDollarAmount())) {
-            KualiDecimal totalAmount = ((AmountTotaling) purDocument).getTotalDollarAmount();
             if (((AmountTotaling) purDocument).getTotalDollarAmount().isGreaterThan(purDocument.getPurchaseOrderTotalLimit())) {
                 valid &= false;
-                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_TOTAL_LIMIT, PurapKeyConstants.REQ_TOTAL_GREATER_THAN_PO_TOTAL_LIMIT);
+                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_TOTAL_LIMIT, PurapKeyConstants.REQ_TOTAL_GREATER_THAN_PO_TOTAL_LIMIT);                            
             }
         }
         return valid;

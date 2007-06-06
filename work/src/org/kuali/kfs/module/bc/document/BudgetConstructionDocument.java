@@ -15,22 +15,19 @@
  */
 package org.kuali.module.budget.document;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
+import org.kuali.Constants;
+import org.kuali.Constants.BudgetConstructionConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.KFSConstants.BudgetConstructionConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.bo.BudgetConstructionAccountReports;
 import org.kuali.module.budget.bo.PendingBudgetConstructionGeneralLedger;
@@ -65,15 +62,6 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
     private List pendingBudgetConstructionGeneralLedgerExpenditureLines;
 
     private Integer previousUniversityFiscalYear;
-
-    // revenue and expenditure line totals
-    private KualiDecimal revenueAccountLineAnnualBalanceAmountTotal;
-    private KualiDecimal revenueFinancialBeginningBalanceLineAmountTotal;
-    private KualiDecimal revenuePercentChangeTotal;
-    private KualiDecimal expenditureAccountLineAnnualBalanceAmountTotal;
-    private KualiDecimal expenditureFinancialBeginningBalanceLineAmountTotal;
-    private KualiDecimal expenditurePercentChangeTotal;
-    
     
     public BudgetConstructionDocument(){
         super();
@@ -81,20 +69,6 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
 //        setPendingBudgetConstructionGeneralLedgerRevenueLines(new ArrayList());
         setPendingBudgetConstructionGeneralLedgerExpenditureLines(new TypedArrayList(PendingBudgetConstructionGeneralLedger.class));
         setPendingBudgetConstructionGeneralLedgerRevenueLines(new TypedArrayList(PendingBudgetConstructionGeneralLedger.class));
-        zeroTotals();
-    }
-    
-    /**
-     * This zeros revenue and expenditure totals displayed on the BC document screen
-     */
-    public void zeroTotals(){
-
-        revenueAccountLineAnnualBalanceAmountTotal = new KualiDecimal(0);
-        revenueFinancialBeginningBalanceLineAmountTotal = new KualiDecimal(0);
-        revenuePercentChangeTotal = new KualiDecimal(0);
-        expenditureAccountLineAnnualBalanceAmountTotal = new KualiDecimal(0);
-        expenditureFinancialBeginningBalanceLineAmountTotal = new KualiDecimal(0);
-        expenditurePercentChangeTotal = new KualiDecimal(0);
     }
     
 /**
@@ -139,45 +113,6 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
 //        while (iter.hasNext()){
 //            iter.next().refreshReferenceObject("budgetConstructionMonthly");
 //        }
-        
-    }
-
-    /**
-     * This adds a revenue or expenditure line to the appropriate list
-     * 
-     * @param isRevenue
-     * @param line
-     */
-    public void addPBGLLine(PendingBudgetConstructionGeneralLedger line, boolean isRevenue){
-        int insertPoint = 0;
-        ListIterator pbglLines;
-        if (isRevenue){
-            pbglLines = this.getPendingBudgetConstructionGeneralLedgerRevenueLines().listIterator();
-        } else {
-            pbglLines = this.getPendingBudgetConstructionGeneralLedgerExpenditureLines().listIterator();
-        }
-        while (pbglLines.hasNext()){
-            PendingBudgetConstructionGeneralLedger pbglLine = (PendingBudgetConstructionGeneralLedger) pbglLines.next();
-            if (pbglLine.getFinancialObjectCode().compareToIgnoreCase(line.getFinancialObjectCode()) < 0){
-                insertPoint++;
-            } else {
-                if (pbglLine.getFinancialObjectCode().compareToIgnoreCase(line.getFinancialObjectCode()) > 0){
-                    break;
-                } else {
-                    if ((pbglLine.getFinancialObjectCode().compareToIgnoreCase(line.getFinancialObjectCode()) == 0) &&
-                        (pbglLine.getFinancialSubObjectCode().compareToIgnoreCase(line.getFinancialSubObjectCode()) < 0)){
-                        insertPoint++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        if (isRevenue){
-            this.pendingBudgetConstructionGeneralLedgerRevenueLines.add(insertPoint,line);
-        } else {
-            this.pendingBudgetConstructionGeneralLedgerExpenditureLines.add(insertPoint,line);
-        }
         
     }
 
@@ -547,116 +482,6 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
     }
     
     /**
-     * Gets the expenditureAccountLineAnnualBalanceAmountTotal attribute. 
-     * @return Returns the expenditureAccountLineAnnualBalanceAmountTotal.
-     */
-    public KualiDecimal getExpenditureAccountLineAnnualBalanceAmountTotal() {
-        return expenditureAccountLineAnnualBalanceAmountTotal;
-    }
-
-    /**
-     * Sets the expenditureAccountLineAnnualBalanceAmountTotal attribute value.
-     * @param expenditureAccountLineAnnualBalanceAmountTotal The expenditureAccountLineAnnualBalanceAmountTotal to set.
-     */
-    public void setExpenditureAccountLineAnnualBalanceAmountTotal(KualiDecimal expenditureAccountLineAnnualBalanceAmountTotal) {
-        this.expenditureAccountLineAnnualBalanceAmountTotal = expenditureAccountLineAnnualBalanceAmountTotal;
-    }
-
-    /**
-     * Gets the expenditureFinancialBeginningBalanceLineAmountTotal attribute. 
-     * @return Returns the expenditureFinancialBeginningBalanceLineAmountTotal.
-     */
-    public KualiDecimal getExpenditureFinancialBeginningBalanceLineAmountTotal() {
-        return expenditureFinancialBeginningBalanceLineAmountTotal;
-    }
-
-    /**
-     * Sets the expenditureFinancialBeginningBalanceLineAmountTotal attribute value.
-     * @param expenditureFinancialBeginningBalanceLineAmountTotal The expenditureFinancialBeginningBalanceLineAmountTotal to set.
-     */
-    public void setExpenditureFinancialBeginningBalanceLineAmountTotal(KualiDecimal expenditureFinancialBeginningBalanceLineAmountTotal) {
-        this.expenditureFinancialBeginningBalanceLineAmountTotal = expenditureFinancialBeginningBalanceLineAmountTotal;
-    }
-
-    /**
-     * Gets the expenditurePercentChangeTotal attribute. 
-     * @return Returns the expenditurePercentChangeTotal.
-     */
-    public KualiDecimal getExpenditurePercentChangeTotal() {
-        if (expenditureFinancialBeginningBalanceLineAmountTotal == null || expenditureFinancialBeginningBalanceLineAmountTotal.isZero()){
-            this.expenditurePercentChangeTotal = null;
-        } else {
-            BigDecimal diffRslt = (expenditureAccountLineAnnualBalanceAmountTotal.bigDecimalValue().setScale(4)).subtract(expenditureFinancialBeginningBalanceLineAmountTotal.bigDecimalValue().setScale(4));
-            BigDecimal divRslt = diffRslt.divide((expenditureFinancialBeginningBalanceLineAmountTotal.bigDecimalValue().setScale(4)),BigDecimal.ROUND_HALF_UP);
-            this.expenditurePercentChangeTotal = new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2)); 
-        }
-        return expenditurePercentChangeTotal;
-    }
-
-    /**
-     * Sets the expenditurePercentChangeTotal attribute value.
-     * @param expenditurePercentChangeTotal The expenditurePercentChangeTotal to set.
-     */
-    public void setExpenditurePercentChangeTotal(KualiDecimal expenditurePercentChangeTotal) {
-        this.expenditurePercentChangeTotal = expenditurePercentChangeTotal;
-    }
-
-    /**
-     * Gets the revenueAccountLineAnnualBalanceAmountTotal attribute. 
-     * @return Returns the revenueAccountLineAnnualBalanceAmountTotal.
-     */
-    public KualiDecimal getRevenueAccountLineAnnualBalanceAmountTotal() {
-        return revenueAccountLineAnnualBalanceAmountTotal;
-    }
-
-    /**
-     * Sets the revenueAccountLineAnnualBalanceAmountTotal attribute value.
-     * @param revenueAccountLineAnnualBalanceAmountTotal The revenueAccountLineAnnualBalanceAmountTotal to set.
-     */
-    public void setRevenueAccountLineAnnualBalanceAmountTotal(KualiDecimal revenueAccountLineAnnualBalanceAmountTotal) {
-        this.revenueAccountLineAnnualBalanceAmountTotal = revenueAccountLineAnnualBalanceAmountTotal;
-    }
-
-    /**
-     * Gets the revenueFinancialBeginningBalanceLineAmountTotal attribute. 
-     * @return Returns the revenueFinancialBeginningBalanceLineAmountTotal.
-     */
-    public KualiDecimal getRevenueFinancialBeginningBalanceLineAmountTotal() {
-        return revenueFinancialBeginningBalanceLineAmountTotal;
-    }
-
-    /**
-     * Sets the revenueFinancialBeginningBalanceLineAmountTotal attribute value.
-     * @param revenueFinancialBeginningBalanceLineAmountTotal The revenueFinancialBeginningBalanceLineAmountTotal to set.
-     */
-    public void setRevenueFinancialBeginningBalanceLineAmountTotal(KualiDecimal revenueFinancialBeginningBalanceLineAmountTotal) {
-        this.revenueFinancialBeginningBalanceLineAmountTotal = revenueFinancialBeginningBalanceLineAmountTotal;
-    }
-
-    /**
-     * Gets the revenuePercentChangeTotal attribute. 
-     * @return Returns the revenuePercentChangeTotal.
-     */
-    public KualiDecimal getRevenuePercentChangeTotal() {
-        if (revenueFinancialBeginningBalanceLineAmountTotal == null || revenueFinancialBeginningBalanceLineAmountTotal.isZero()){
-            this.revenuePercentChangeTotal = null;
-        } else {
-            BigDecimal diffRslt = (revenueAccountLineAnnualBalanceAmountTotal.bigDecimalValue().setScale(4)).subtract(revenueFinancialBeginningBalanceLineAmountTotal.bigDecimalValue().setScale(4));
-            BigDecimal divRslt = diffRslt.divide((revenueFinancialBeginningBalanceLineAmountTotal.bigDecimalValue().setScale(4)),BigDecimal.ROUND_HALF_UP);
-            this.revenuePercentChangeTotal = new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2)); 
-        }
-        return revenuePercentChangeTotal;
-    }
-
-    /**
-     * Sets the revenuePercentChangeTotal attribute value.
-     * @param revenuePercentChangeTotal The revenuePercentChangeTotal to set.
-     */
-    public void setRevenuePercentChangeTotal(KualiDecimal revenuePercentChangeTotal) {
-        this.revenuePercentChangeTotal = revenuePercentChangeTotal;
-    }
-
-    /**
      *   the budget construction document never appears in anyone's in-box
      *   budget construction controls access by a "pull-up/push-down" mechanism instead
      *   but, a budget construction document is routed so that the routing hierarchy
@@ -669,12 +494,12 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
     @Override
     public void handleRouteStatusChange() {
         if (getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
-            getDocumentHeader().setFinancialDocumentStatusCode(KFSConstants.DocumentStatusCodes.ENROUTE);
+            getDocumentHeader().setFinancialDocumentStatusCode(Constants.DocumentStatusCodes.ENROUTE);
         }
         /*  the status below is comparable to "approved" status for other documents */
         if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
             getDocumentHeader().setFinancialDocumentStatusCode(
-                KFSConstants.BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_INITIAL_STATUS);
+                Constants.BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_INITIAL_STATUS);
         }
         LOG.info("Status is: " + getDocumentHeader().getFinancialDocumentStatusCode());
     }
@@ -685,7 +510,7 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/AdvanceDepositDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +20,10 @@ package org.kuali.module.financial.document;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.core.document.Copyable;
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.AdvanceDepositDetail;
 
 /**
@@ -30,8 +31,10 @@ import org.kuali.module.financial.bo.AdvanceDepositDetail;
  * eventually post transactions to the G/L. It integrates with workflow. Since an Advance Deposit document is a one sided
  * transactional document, only accepting funds into the university, the accounting line data will be held in the source accounting
  * line data structure only.
+ * 
+ * 
  */
-public class AdvanceDepositDocument extends CashReceiptFamilyBase implements Copyable  {
+public class AdvanceDepositDocument extends CashReceiptFamilyBase {
     // holds details about each advance deposit
     private List<AdvanceDepositDetail> advanceDeposits = new ArrayList<AdvanceDepositDetail>();
 
@@ -120,7 +123,7 @@ public class AdvanceDepositDocument extends CashReceiptFamilyBase implements Cop
      */
     public final void prepareNewAdvanceDeposit(AdvanceDepositDetail advanceDepositDetail) {
         advanceDepositDetail.setFinancialDocumentLineNumber(this.nextAdvanceDepositLineNumber);
-        advanceDepositDetail.setFinancialDocumentColumnTypeCode(KFSConstants.AdvanceDepositConstants.CASH_RECEIPT_ADVANCE_DEPOSIT_COLUMN_TYPE_CODE);
+        advanceDepositDetail.setFinancialDocumentColumnTypeCode(Constants.AdvanceDepositConstants.CASH_RECEIPT_ADVANCE_DEPOSIT_COLUMN_TYPE_CODE);
         advanceDepositDetail.setDocumentNumber(this.getDocumentNumber());
         advanceDepositDetail.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(this.getClass()));
     }
@@ -168,7 +171,7 @@ public class AdvanceDepositDocument extends CashReceiptFamilyBase implements Cop
      * @return KualiDecimal
      */
     @Override
-    public KualiDecimal getTotalDollarAmount() {
+    public KualiDecimal getSumTotalAmount() {
         return this.totalAdvanceDepositAmount;
     }
 

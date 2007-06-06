@@ -20,21 +20,27 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 
+import org.kuali.KeyConstants;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.OriginationCode;
+import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
+import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.chart.bo.SubAccount;
+import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.exception.LoadException;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
+public class LaborOriginEntry extends OriginEntry {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborOriginEntry.class);
     private static String SPACES = "                                                                                                              ";
     
@@ -65,11 +71,18 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
     private String setid;
     private Date transactionDateTimeStamp;
 
+    private ObjectCode laborLedgerOriginalFinancialObject;
+    private Chart laborLedgerOriginalChartOfAccounts;
+    private Account laborLedgerOriginalAccount;
+    
     private DocumentHeader financialDocument;
     private DocumentType referenceFinancialDocumentType;
     private OriginationCode referenceFinancialSystemOrigination;
     private AccountingPeriod payrollEndDateFiscalPeriod;
-   
+    private SubAccount laborLedgerOriginalSubAccount;
+    private SubObjCd laborLedgerOriginalFinancialSubObject;
+    
+    
     
     /**
      * Default constructor.
@@ -86,40 +99,9 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
         this(null, null);
     }
     
-    public LaborOriginEntry(LaborTransaction t) {
+    public LaborOriginEntry(Transaction t) {
         this();
         setTransaction(t);
-        
-        setPositionNumber(t.getPositionNumber());
-        setTransactionPostingDate(t.getTransactionPostingDate());
-        setPayPeriodEndDate(t.getPayPeriodEndDate());
-        setTransactionTotalHours(t.getTransactionTotalHours());
-        setPayrollEndDateFiscalYear(t.getPayrollEndDateFiscalYear());
-        setPayrollEndDateFiscalPeriodCode(t.getPayrollEndDateFiscalPeriodCode());
-        setFinancialDocumentApprovedCode(t.getFinancialDocumentApprovedCode());
-        setTransactionEntryOffsetCode(t.getTransactionEntryOffsetCode());
-        setTransactionEntryProcessedTimestamp(t.getTransactionEntryProcessedTimestamp());
-        setEmplid(t.getEmplid());
-        setEmployeeRecord(t.getEmployeeRecord());
-        setEarnCode(t.getEarnCode());
-        setPayGroup(t.getPayGroup());
-        setSalaryAdministrationPlan(t.getSalaryAdministrationPlan());
-        setGrade(t.getGrade());
-        setRunIdentifier(t.getRunIdentifier());
-        setLaborLedgerOriginalChartOfAccountsCode(t.getLaborLedgerOriginalChartOfAccountsCode());
-        setLaborLedgerOriginalAccountNumber(t.getLaborLedgerOriginalAccountNumber());
-        setLaborLedgerOriginalSubAccountNumber(t.getLaborLedgerOriginalSubAccountNumber());
-        setLaborLedgerOriginalFinancialObjectCode(t.getLaborLedgerOriginalFinancialObjectCode());
-        setLaborLedgerOriginalFinancialSubObjectCode(t.getLaborLedgerOriginalFinancialSubObjectCode());
-        setHrmsCompany(getHrmsCompany());
-        setSetid(t.getSetid());
-        //public Date transactionDateTimeStamp;
-       
-        setFinancialDocument(t.getFinancialDocument());
-        setReferenceFinancialDocumentType(t.getReferenceFinancialDocumentType());
-        setReferenceFinancialSystemOrigination(t.getReferenceFinancialSystemOrigination());
-        setPayrollEndDateFiscalPeriod(t.getPayrollEndDateFiscalPeriod());
-        
     }
 
     public LaborOriginEntry(String line) {
@@ -642,6 +624,67 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
         this.transactionDateTimeStamp = transactionDateTimeStamp;
     }
 
+
+    /**
+     * Gets the laborLedgerOriginalFinancialObject attribute.
+     * 
+     * @return Returns the laborLedgerOriginalFinancialObject
+     * 
+     */
+    public ObjectCode getLaborLedgerOriginalFinancialObject() { 
+        return laborLedgerOriginalFinancialObject;
+    }
+
+    /**
+     * Sets the laborLedgerOriginalFinancialObject attribute.
+     * 
+     * @param laborLedgerOriginalFinancialObject The laborLedgerOriginalFinancialObject to set.
+     */
+    @Deprecated
+    public void setLaborLedgerOriginalFinancialObject(ObjectCode laborLedgerOriginalFinancialObject) {
+        this.laborLedgerOriginalFinancialObject = laborLedgerOriginalFinancialObject;
+    }
+
+        /**
+     * Gets the laborLedgerOriginalChartOfAccounts attribute.
+     * 
+     * @return Returns the laborLedgerOriginalChartOfAccounts
+     * 
+     */
+    public Chart getLaborLedgerOriginalChartOfAccounts() { 
+        return laborLedgerOriginalChartOfAccounts;
+    }
+
+    /**
+     * Sets the laborLedgerOriginalChartOfAccounts attribute.
+     * 
+     * @param laborLedgerOriginalChartOfAccounts The laborLedgerOriginalChartOfAccounts to set.
+     */
+    @Deprecated
+    public void setLaborLedgerOriginalChartOfAccounts(Chart laborLedgerOriginalChartOfAccounts) {
+        this.laborLedgerOriginalChartOfAccounts = laborLedgerOriginalChartOfAccounts;
+    }
+
+    /**
+     * Gets the laborLedgerOriginalAccount attribute.
+     * 
+     * @return Returns the laborLedgerOriginalAccount
+     * 
+     */
+    public Account getLaborLedgerOriginalAccount() { 
+        return laborLedgerOriginalAccount;
+    }
+
+    /**
+     * Sets the laborLedgerOriginalAccount attribute.
+     * 
+     * @param laborLedgerOriginalAccount The laborLedgerOriginalAccount to set.
+     */
+    @Deprecated
+    public void setLaborLedgerOriginalAccount(Account laborLedgerOriginalAccount) {
+        this.laborLedgerOriginalAccount = laborLedgerOriginalAccount;
+    }
+
     /**
      * Gets the financialDocument attribute. 
      * @return Returns the financialDocument.
@@ -657,6 +700,40 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
     @Deprecated
     public void setFinancialDocument(DocumentHeader financialDocument) {
         this.financialDocument = financialDocument;
+    }
+
+    /**
+     * Gets the laborLedgerOriginalFinancialSubObject attribute. 
+     * @return Returns the laborLedgerOriginalFinancialSubObject.
+     */
+    public SubObjCd getLaborLedgerOriginalFinancialSubObject() {
+        return laborLedgerOriginalFinancialSubObject;
+    }
+
+    /**
+     * Sets the laborLedgerOriginalFinancialSubObject attribute value.
+     * @param laborLedgerOriginalFinancialSubObject The laborLedgerOriginalFinancialSubObject to set.
+     */
+    @Deprecated
+    public void setLaborLedgerOriginalFinancialSubObject(SubObjCd laborLedgerOriginalFinancialSubObject) {
+        this.laborLedgerOriginalFinancialSubObject = laborLedgerOriginalFinancialSubObject;
+    }
+
+    /**
+     * Gets the laborLedgerOriginalSubAccount attribute. 
+     * @return Returns the laborLedgerOriginalSubAccount.
+     */
+    public SubAccount getLaborLedgerOriginalSubAccount() {
+        return laborLedgerOriginalSubAccount;
+    }
+
+    /**
+     * Sets the laborLedgerOriginalSubAccount attribute value.
+     * @param laborLedgerOriginalSubAccount The laborLedgerOriginalSubAccount to set.
+     */
+    @Deprecated
+    public void setLaborLedgerOriginalSubAccount(SubAccount laborLedgerOriginalSubAccount) {
+        this.laborLedgerOriginalSubAccount = laborLedgerOriginalSubAccount;
     }
 
     /**
@@ -829,8 +906,18 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
         sb.append(getField(2, laborLedgerOriginalChartOfAccountsCode));
         sb.append(getField(7, laborLedgerOriginalAccountNumber));
         sb.append(getField(5, laborLedgerOriginalSubAccountNumber));
-        sb.append(getField(4, laborLedgerOriginalFinancialObjectCode));
-        sb.append(getField(3, laborLedgerOriginalFinancialSubObjectCode));
+        
+        if (laborLedgerOriginalFinancialObject == null){
+            sb.append("    ");
+        } else {
+            sb.append(getField(4, laborLedgerOriginalFinancialObject.toString()));
+        }
+        if (laborLedgerOriginalFinancialSubObject == null){
+            sb.append("   ");
+        } else {
+            sb.append(getField(3, laborLedgerOriginalFinancialSubObject.toString()));
+        }
+        
         sb.append(getField(3, hrmsCompany));
         sb.append(getField(5, setid));
         
@@ -857,7 +944,7 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
                 setUniversityFiscalYear(new Integer(line.substring(0, 4)));
             }
             catch (NumberFormatException e) {
-                GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "University Fiscal Year" });
+                GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "University Fiscal Year" });
                 throw new LoadException("Invalid university fiscal year");
             }
 
@@ -882,7 +969,7 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
                 setTransactionLedgerEntrySequenceNumber(new Integer(line.substring(51, 56).trim()));
         }
             catch (NumberFormatException e) {
-                GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Sequence Number" });
+                GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Sequence Number" });
                 throw new LoadException("Invalid sequence number");
             }
         }
@@ -900,7 +987,7 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
         }
         catch (NumberFormatException e) {
             //TODO: change the error constants 
-            GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Ledger Entry Amount" });
+            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Ledger Entry Amount" });
             throw new LoadException("Invalid Entry Amount");
         }
         
@@ -911,7 +998,7 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
         }
         catch (ParseException e) {
             //TODO: change the error constants 
-            GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Date" });
+            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Date" });
             throw new LoadException("Invalid Transaction Date");
         }
         
@@ -931,7 +1018,7 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
         }
         catch (ParseException e) {
             //TODO: change the error constants 
-            GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Date" });
+            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Date" });
             throw new LoadException("Invalid Transaction Date");
         }
         
@@ -940,7 +1027,7 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
         }
         catch (ParseException e) {
             //TODO: change the error constants 
-            GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Date" });
+            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Date" });
             throw new LoadException("Invalid Transaction Date");
         }
         
@@ -962,8 +1049,6 @@ public class LaborOriginEntry extends OriginEntry implements LaborTransaction {
         //TODO: is COMPANY HrmsCompany? 
         setHrmsCompany(getValue(line, 286, 289));
         setSetid(getValue(line, 289, 294));
-    
-       
         
     }
     

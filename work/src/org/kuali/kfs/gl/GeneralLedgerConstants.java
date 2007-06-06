@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,7 @@ package org.kuali.module.gl;
  */
 public class GLConstants {
     public static final String DASH_ORGANIZATION_REFERENCE_ID = "--------";
-    public static final int ORIGIN_ENTRY_ID_MAXIMUM_SIZE = 14;
-    
+
     public static class DummyBusinessObject {
         static final public String COST_SHARE_OPTION = "dummyBusinessObject.costShareOption";
         static final public String PENDING_ENTRY_OPTION = "dummyBusinessObject.pendingEntryOption";
@@ -48,10 +47,7 @@ public class GLConstants {
         static final public String OBJECT_LEVEL_CODE = "FIN_OBJ_LVL_CD";
         static final public String OBJECT_LEVEL_CODE2 = "FIN_OBJ_LEVEL_CD";
         static final public String OBJECT_CODE = "FIN_OBJECT_CD";
-        // amounts in the balances table
-        static final public String ANNUAL_BALANCE = "ACLN_ANNL_BAL_AMT";
-        static final public String BEGINNING_BALANCE = "FIN_BEG_BAL_LN_AMT";
-        
+
         static final public String UNIVERSITY_FISCAL_YEAR = "UNIV_FISCAL_YR";
         static final public String CHART_OF_ACCOUNTS_CODE = "FIN_COA_CD";
         static final public String ACCOUNT_NUMBER = "ACCOUNT_NBR";
@@ -79,7 +75,8 @@ public class GLConstants {
     }
 
     public static class LookupableBeanKeys {
-        static final public String PENDING_ENTRY = "glPendingEntryLookupable";
+        static final public String PENDING_ENTRY = "glPendingEntryLookupableImpl";
+        static final public String COLLECTOR_FILE_PARSER = "glCollectorFileParser";
     }
 
     public static final String GL_ACCOUNT_BALANCE_SERVICE_GROUP = "GL.ACCOUNT_BALANCE_SERVICE";
@@ -104,8 +101,6 @@ public class GLConstants {
         static final public String LIABILITY_OBJECT_CODE = "LIABILITY.OBJECT_CODE";
 
         static final public String PLANT_INDEBTEDNESS_IND = "PLANT_INDEBTEDNESS.IND";
-        
-        static final public String SCRUBBER_CUTOFF_TIME = "SCRUBBER_CUTOFF_TIME";
     }
 
     public static class GlScrubberGroupRules {

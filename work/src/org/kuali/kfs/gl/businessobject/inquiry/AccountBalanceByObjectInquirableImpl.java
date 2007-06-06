@@ -21,9 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.service.BusinessObjectDictionaryService;
+import org.kuali.core.service.LookupService;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.AccountBalanceByObject;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
@@ -36,8 +37,11 @@ import org.kuali.module.gl.web.Constant;
  * 
  */
 public class AccountBalanceByObjectInquirableImpl extends AbstractGLInquirableImpl {
-    @SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceByObjectInquirableImpl.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceByObjectInquirableImpl.class);
+
+    private BusinessObjectDictionaryService dataDictionary;
+    private LookupService lookupService;
+    private Class businessObjectClass;
 
     /**
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#buildUserDefinedAttributeKeyList()
@@ -45,12 +49,12 @@ public class AccountBalanceByObjectInquirableImpl extends AbstractGLInquirableIm
     protected List buildUserDefinedAttributeKeyList() {
         List keys = new ArrayList();
 
-        keys.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        keys.add(KFSPropertyConstants.ACCOUNT_NUMBER);
-        keys.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        keys.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        keys.add(KFSPropertyConstants.OBJECT_CODE);
-        keys.add(KFSPropertyConstants.SUB_OBJECT_CODE);
+        keys.add(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
+        keys.add(PropertyConstants.ACCOUNT_NUMBER);
+        keys.add(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
+        keys.add(PropertyConstants.SUB_ACCOUNT_NUMBER);
+        keys.add(PropertyConstants.OBJECT_CODE);
+        keys.add(PropertyConstants.SUB_OBJECT_CODE);
         keys.add(Constant.COST_SHARE_OPTION);
         keys.add(Constant.CONSOLIDATION_OPTION);
 
@@ -62,7 +66,7 @@ public class AccountBalanceByObjectInquirableImpl extends AbstractGLInquirableIm
      */
     protected Map getUserDefinedAttributeMap() {
         Map userDefinedAttributeMap = new HashMap();
-        userDefinedAttributeMap.put(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, "");
+        userDefinedAttributeMap.put(PropertyConstants.FINANCIAL_OBJECT_CODE, "");
         userDefinedAttributeMap.put(GLConstants.DummyBusinessObject.LINK_BUTTON_OPTION, "");
         userDefinedAttributeMap.put(GLConstants.BalanceInquiryDrillDowns.OBJECT_LEVEL_CODE, "");
         return userDefinedAttributeMap;
@@ -73,7 +77,7 @@ public class AccountBalanceByObjectInquirableImpl extends AbstractGLInquirableIm
      */
     protected String getAttributeName(String attributeName) {
         if (attributeName.equals(GLConstants.DummyBusinessObject.LINK_BUTTON_OPTION)) {
-            attributeName = KFSPropertyConstants.GENERAL_LEDGER_PENDING_ENTRY;
+            attributeName = PropertyConstants.UNIVERSITY_FISCAL_YEAR;
         }
         return attributeName;
     }
@@ -100,23 +104,20 @@ public class AccountBalanceByObjectInquirableImpl extends AbstractGLInquirableIm
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getLookupableImplAttributeName()
      */
     protected String getLookupableImplAttributeName() {
-        return Constant.GL_LOOKUPABLE_PENDING_ENTRY;
+        return Constant.GL_LOOKUPABLE_ACCOUNT_BALANCE_PENDING_ENTRY;
     }
 
     /**
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getBaseUrl()
      */
     protected String getBaseUrl() {
-        return KFSConstants.GL_MODIFIED_INQUIRY_ACTION;
+        return Constants.GL_MODIFIED_INQUIRY_ACTION;
     }
 
     /**
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getInquiryBusinessObjectClass(String)
      */
     protected Class getInquiryBusinessObjectClass(String attributeName) {
-    	if ( KFSPropertyConstants.GENERAL_LEDGER_PENDING_ENTRY.equals( attributeName ) ) {
-    		return GeneralLedgerPendingEntry.class;
-    	}
         return AccountBalanceByObject.class;
     }
 
@@ -124,6 +125,6 @@ public class AccountBalanceByObjectInquirableImpl extends AbstractGLInquirableIm
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
      */
     protected void addMoreParameters(Properties parameter, String attributeName) {
-        parameter.put(KFSConstants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME, getLookupableImplAttributeName());
+        parameter.put(Constants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME, getLookupableImplAttributeName());
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.BankAccount">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Bank Account Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="financialDocumentBankCode" />
                 <field attributeName="finDocumentBankAccountNumber" />
                 <field attributeName="finDocumentBankAccountDesc" />
@@ -33,11 +33,15 @@
                 <field attributeName="cashOffsetSubAccountNumber" />
                 <field attributeName="cashOffsetObjectCode" />
                 <field attributeName="cashOffsetSubObjectCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Bank Account Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.BankAccount">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Bank Account</instructions>
 
@@ -74,7 +78,7 @@
                 <required>true</required>
             </attributeReference>
 
-            <attribute name="finDocumentBankAccountNumber" forceUppercase="true">
+            <attribute name="finDocumentBankAccountNumber" forceUppercase="false">
                 <label>Bank Account Number</label>
                 <shortLabel>Bank Acct</shortLabel>
 

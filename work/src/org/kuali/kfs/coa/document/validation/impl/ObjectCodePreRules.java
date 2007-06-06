@@ -33,17 +33,14 @@ import org.kuali.module.chart.service.ObjectLevelService;
 public class ObjectCodePreRules extends PreRulesContinuationBase {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjectCodePreRules.class);
 
-    private static ChartService chartService;
-    private static ObjectLevelService objectLevelService;
+    private ChartService chartService;
+    private ObjectLevelService objectLevelService;
     private Map reportsTo;
 
     public ObjectCodePreRules() {
-    	if ( objectLevelService == null ) {
-    		objectLevelService = SpringServiceLocator.getObjectLevelService();
-    		chartService = SpringServiceLocator.getChartService();
-    	}
-    	
+        this.setChartService(SpringServiceLocator.getChartService());
         reportsTo = chartService.getReportsToHierarchy();
+        this.setObjectLevelService(SpringServiceLocator.getObjectLevelService());
     }
 
 
@@ -59,6 +56,7 @@ public class ObjectCodePreRules extends PreRulesContinuationBase {
 
         String chart = newObjectCode.getChartOfAccountsCode();
         String reportsToChart = (String) reportsTo.get(chart);
+        ObjLevel financialObjectLevel = objectLevelService.getByPrimaryId(chart, newObjectCode.getFinancialObjectLevelCode());
         if (LOG.isDebugEnabled()) {
             LOG.debug("Chart: " + chart);
             LOG.debug("reportsTo: " + reportsToChart);
@@ -74,7 +72,7 @@ public class ObjectCodePreRules extends PreRulesContinuationBase {
         }
         
         // If Object Level is inactive, ask user confirmation question
-        ObjLevel financialObjectLevel = objectLevelService.getByPrimaryId(chart, newObjectCode.getFinancialObjectLevelCode());         
+         
         if (!(financialObjectLevel == null)) {
             if (!financialObjectLevel.isFinancialObjectLevelActiveIndicator()){
                 String objectLevelChartOfAccountCode = financialObjectLevel.getChartOfAccountsCode();
@@ -95,5 +93,12 @@ public class ObjectCodePreRules extends PreRulesContinuationBase {
 
         return true;
 
+    }
+
+    public void setChartService(ChartService chartService) {
+        this.chartService = chartService;
+    }  
+    public void setObjectLevelService(ObjectLevelService objectLevelService) {
+         this.objectLevelService = objectLevelService;
     }
 }

@@ -22,10 +22,10 @@ import java.util.Map;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.service.ChartUserService;
@@ -53,7 +53,6 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
     private String personUniversalIdentifier;
     private UniversalUser user;
     private String appointmentTypeCode; // Not present in the database - only for the convenience of the user interface
-    private String appointmentTypeDescription; // Not present in the database - only for the convenience of the user interface
     private boolean personSeniorKeyIndicator;
     private boolean personSecretarialClericalIndicator;
     private boolean personPostDoctoralIndicator;
@@ -125,7 +124,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("userSequenceNumber", this.budgetUserSequenceNumber);
         return m;
     }
@@ -434,24 +433,6 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
     }
 
     /**
-     * Gets the appointmentTypeDescription attribute.
-     * 
-     * @return Returns the appointmentTypeDescription.
-     */
-    public String getAppointmentTypeDescription() {
-        return appointmentTypeDescription;
-    }
-
-    /**
-     * Sets the appointmentTypeDescription attribute value.
-     * 
-     * @param appointmentTypeDescription The appointmentTypeDescription to set.
-     */
-    public void setAppointmentTypeDescription(String appointmentTypeDescription) {
-        this.appointmentTypeDescription = appointmentTypeDescription;
-    }
-    
-    /**
      * Log the state of this object.
      */
     public void logState() {
@@ -464,7 +445,6 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
         LOG.info("  role: (" + this.role + ")");
         LOG.info("  personUniversalIdentifier: (" + this.personUniversalIdentifier + ")");
         LOG.info("  appointmentTypeCode: (" + this.appointmentTypeCode + ")");
-        LOG.info("  appointmentTypeDescription: (" + this.appointmentTypeDescription + ")");
         LOG.info("  personSeniorKeyIndicator: (" + this.personSeniorKeyIndicator + ")");
         LOG.info("  personSecretarialClericalIndicator: (" + this.personSecretarialClericalIndicator + ")");
         LOG.info("  personPostDoctoralIndicator: (" + this.personPostDoctoralIndicator + ")");
