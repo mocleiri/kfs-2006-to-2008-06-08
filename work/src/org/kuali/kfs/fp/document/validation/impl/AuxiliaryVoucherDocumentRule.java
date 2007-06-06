@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,76 +15,76 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.kfs.KFSConstants.ACCOUNTING_LINE_ERRORS;
-import static org.kuali.kfs.KFSConstants.ACCOUNTING_PERIOD_STATUS_CLOSED;
-import static org.kuali.kfs.KFSConstants.ACCOUNTING_PERIOD_STATUS_CODE_FIELD;
-import static org.kuali.kfs.KFSConstants.AUXILIARY_LINE_HELPER_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.CREDIT_AMOUNT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.DEBIT_AMOUNT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.DOCUMENT_ERRORS;
-import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
-import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
-import static org.kuali.kfs.KFSConstants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.SQUARE_BRACKET_LEFT;
-import static org.kuali.kfs.KFSConstants.SQUARE_BRACKET_RIGHT;
-import static org.kuali.kfs.KFSConstants.VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_ACCOUNTING_PERIOD_CLOSED;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_ACCOUNTING_PERIOD_THREE_OPEN;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_AV_INCORRECT_FISCAL_YEAR_AVRC;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_AV_INCORRECT_POST_PERIOD_AVRC;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_BALANCE;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_BALANCE_CONSIDERING_CREDIT_AND_DEBIT_AMOUNTS;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_INCORRECT_OBJ_CODE_WITH_SUB_TYPE_OBJ_LEVEL_AND_OBJ_TYPE;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_ZERO_OR_NEGATIVE_AMOUNT;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_ACCOUNTING_PERIOD_OUT_OF_RANGE;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_DIFFERENT_CHARTS;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_DIFFERENT_SUB_FUND_GROUPS;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_DOCUMENT_AUXILIARY_VOUCHER_INVALID_OBJECT_SUB_TYPE_CODE;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_INVALID_ACCRUAL_REVERSAL_DATE;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.REVERSAL_DATE;
-import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
-import static org.kuali.kfs.util.SpringServiceLocator.getAccountingPeriodService;
+import static org.kuali.Constants.ACCOUNTING_LINE_ERRORS;
+import static org.kuali.Constants.ACCOUNTING_PERIOD_STATUS_CLOSED;
+import static org.kuali.Constants.ACCOUNTING_PERIOD_STATUS_CODE_FIELD;
+import static org.kuali.Constants.AUXILIARY_LINE_HELPER_PROPERTY_NAME;
+import static org.kuali.Constants.CREDIT_AMOUNT_PROPERTY_NAME;
+import static org.kuali.Constants.DEBIT_AMOUNT_PROPERTY_NAME;
+import static org.kuali.Constants.DOCUMENT_ERRORS;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
+import static org.kuali.Constants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME;
+import static org.kuali.Constants.SHEBANG;
+import static org.kuali.Constants.SQUARE_BRACKET_LEFT;
+import static org.kuali.Constants.SQUARE_BRACKET_RIGHT;
+import static org.kuali.Constants.VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME;
+import static org.kuali.Constants.VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_ACCOUNTING_PERIOD_CLOSED;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_ACCOUNTING_PERIOD_THREE_OPEN;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_AV_INCORRECT_FISCAL_YEAR_AVRC;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_AV_INCORRECT_POST_PERIOD_AVRC;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_BALANCE;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_BALANCE_CONSIDERING_CREDIT_AND_DEBIT_AMOUNTS;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_INCORRECT_OBJ_CODE_WITH_SUB_TYPE_OBJ_LEVEL_AND_OBJ_TYPE;
+import static org.kuali.KeyConstants.ERROR_ZERO_OR_NEGATIVE_AMOUNT;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_ACCOUNTING_PERIOD_OUT_OF_RANGE;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_DIFFERENT_CHARTS;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_DIFFERENT_SUB_FUND_GROUPS;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_DOCUMENT_AUXILIARY_VOUCHER_INVALID_OBJECT_SUB_TYPE_CODE;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_INVALID_ACCRUAL_REVERSAL_DATE;
+import static org.kuali.PropertyConstants.FINANCIAL_OBJECT_CODE;
+import static org.kuali.PropertyConstants.REVERSAL_DATE;
+import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodService;
+import static org.kuali.core.util.SpringServiceLocator.getKualiConfigurationService;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.AUXILIARY_VOUCHER_SECURITY_GROUPING;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.RESTRICTED_COMBINED_CODES;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.RESTRICTED_OBJECT_SUB_TYPE_CODES;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.RESTRICTED_PERIOD_CODES;
-import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.BusinessRule;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.exceptions.ValidationException;
+import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.document.AuxiliaryVoucherDocument;
 import org.kuali.module.financial.document.DistributionOfIncomeAndExpenseDocument;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
  * Business rule(s) applicable to <code>{@link AuxiliaryVoucherDocument}</code>.
+ * 
+ * 
  */
-public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
+public class AuxiliaryVoucherDocumentRule extends TransactionalDocumentRuleBase {
     private static Log LOG = LogFactory.getLog(AuxiliaryVoucherDocumentRule.class);
 
     /**
@@ -120,39 +120,26 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * <li> debitCreditCode isBlank
      * </ol>
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(AccountingDocument FinancialDocument, AccountingLine accountingLine) throws IllegalStateException {
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) throws IllegalStateException {
         String debitCreditCode = accountingLine.getDebitCreditCode();
         if (StringUtils.isBlank(debitCreditCode)) {
             throw new IllegalStateException(IsDebitUtils.isDebitCalculationIllegalStateExceptionMessage);
         }
         return IsDebitUtils.isDebitCode(debitCreditCode);
     }
-    /**
-     * overrides the parent to display correct error message for a single sided document
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isSourceAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.FinancialDocument)
-     */
-    @Override
-    protected boolean isSourceAccountingLinesRequiredNumberForRoutingMet(AccountingDocument FinancialDocument) {
-        if (0 == FinancialDocument.getSourceAccountingLines().size()) {
-            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, KFSKeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES);
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
+
     /**
      * Overrides the parent to return true, because Auxiliary Voucher documents only use the SourceAccountingLines data structures.
      * The list that holds TargetAccountingLines should be empty. This will be checked when the document is "routed" or submitted to
      * post - it's called automatically by the parent's processRouteDocument method.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.FinancialDocument)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.TransactionalDocument)
      */
     @Override
-    protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(AccountingDocument FinancialDocument) {
+    protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
         return true;
     }
 
@@ -160,7 +147,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * Overrides the parent to return true, because Auxiliary Voucher documents aren't restricted from using any object code. This
      * is part of the "save" check that gets done. This method is called automatically by the parent's processSaveDocument method.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isObjectCodeAllowed(org.kuali.core.bo.AccountingLine)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isObjectCodeAllowed(org.kuali.core.bo.AccountingLine)
      */
     @Override
     public boolean isObjectCodeAllowed(AccountingLine accountingLine) {
@@ -170,11 +157,11 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     /**
      * Accounting lines for Auxiliary Vouchers can be positive or negative, just not "$0.00".
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isAmountValid(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isAmountValid(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean isAmountValid(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
         boolean retval = true;
         KualiDecimal amount = accountingLine.getAmount();
 
@@ -237,14 +224,15 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     /**
      * This method sets the appropriate document type and object type codes into the GLPEs based on the type of AV document chosen.
      * 
-     * @see FinancialDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(FinancialDocument, AccountingLine,
+     * @see TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument, AccountingLine,
      *      GeneralLedgerPendingEntry)
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processExplicitGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processExplicitGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper, org.kuali.core.bo.AccountingLine,
      *      org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
-    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument document, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+    @Override
+    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument document, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
         AuxiliaryVoucherDocument auxVoucher = (AuxiliaryVoucherDocument) document;
 
         java.sql.Date reversalDate = auxVoucher.getReversalDate();
@@ -265,20 +253,20 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * An Accrual Voucher only generates offsets if it is a recode (AVRC). So this method overrides to do nothing more than return
      * true if it's not a recode. If it is a recode, then it is responsible for generating two offsets with a document type of DI.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processOffsetGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processOffsetGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper, org.kuali.core.bo.AccountingLine,
      *      org.kuali.module.gl.bo.GeneralLedgerPendingEntry, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
     @Override
-    protected boolean processOffsetGeneralLedgerPendingEntry(AccountingDocument FinancialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, AccountingLine accountingLineCopy, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
-        AuxiliaryVoucherDocument auxVoucher = (AuxiliaryVoucherDocument) FinancialDocument;
+    protected boolean processOffsetGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, AccountingLine accountingLineCopy, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+        AuxiliaryVoucherDocument auxVoucher = (AuxiliaryVoucherDocument) transactionalDocument;
 
         // do not generate an offset entry if this is a normal or adjustment AV type
         if (auxVoucher.isAccrualType() || auxVoucher.isAdjustmentType()) {
-            return processOffsetGeneralLedgerPendingEntryForAccrualsAndAdjustments(FinancialDocument, sequenceHelper, accountingLineCopy, explicitEntry, offsetEntry);
+            return processOffsetGeneralLedgerPendingEntryForAccrualsAndAdjustments(transactionalDocument, sequenceHelper, accountingLineCopy, explicitEntry, offsetEntry);
         }
         else if (auxVoucher.isRecodeType()) { // recodes generate offsets
-            return processOffsetGeneralLedgerPendingEntryForRecodes(FinancialDocument, sequenceHelper, accountingLineCopy, explicitEntry, offsetEntry);
+            return processOffsetGeneralLedgerPendingEntryForRecodes(transactionalDocument, sequenceHelper, accountingLineCopy, explicitEntry, offsetEntry);
         }
         else {
             throw new IllegalStateException("Illegal auxiliary voucher type: " + auxVoucher.getTypeCode());
@@ -288,14 +276,14 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     /**
      * This method handles generating or not generating the appropriate offsets if the AV type is a recode.
      * 
-     * @param FinancialDocument
+     * @param transactionalDocument
      * @param sequenceHelper
      * @param accountingLineCopy
      * @param explicitEntry
      * @param offsetEntry
      * @return boolean
      */
-    private boolean processOffsetGeneralLedgerPendingEntryForRecodes(AccountingDocument FinancialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, AccountingLine accountingLineCopy, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+    private boolean processOffsetGeneralLedgerPendingEntryForRecodes(TransactionalDocument transactionalDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, AccountingLine accountingLineCopy, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
         // the explicit entry has already been generated and added to the list, so to get the right offset, we have to set the value
         // of the document type code on the explicit
         // to the type code for a DI document so that it gets passed into the next call and we retrieve the right offset definition
@@ -306,14 +294,14 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
 
         // call the super to process an offset entry; see the customize method below for AVRC specific attribute values
         // pass in the explicit deep copy
-        boolean success = super.processOffsetGeneralLedgerPendingEntry(FinancialDocument, sequenceHelper, accountingLineCopy, explicitEntryDeepCopy, offsetEntry);
+        boolean success = super.processOffsetGeneralLedgerPendingEntry(transactionalDocument, sequenceHelper, accountingLineCopy, explicitEntryDeepCopy, offsetEntry);
 
         // increment the sequence appropriately
         sequenceHelper.increment();
 
         // now generate the AVRC DI entry
         // pass in the explicit deep copy
-        success &= processAuxiliaryVoucherRecodeDistributionOfIncomeAndExpenseGeneralLedgerPendingEntry(FinancialDocument, sequenceHelper, explicitEntryDeepCopy);
+        success &= processAuxiliaryVoucherRecodeDistributionOfIncomeAndExpenseGeneralLedgerPendingEntry(transactionalDocument, sequenceHelper, explicitEntryDeepCopy);
 
         return success;
     }
@@ -321,18 +309,18 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     /**
      * This method handles generating or not generating the appropriate offsets if the AV type is accrual or adjustment.
      * 
-     * @param FinancialDocument
+     * @param transactionalDocument
      * @param sequenceHelper
      * @param accountingLineCopy
      * @param explicitEntry
      * @param offsetEntry
      * @return boolean
      */
-    private boolean processOffsetGeneralLedgerPendingEntryForAccrualsAndAdjustments(AccountingDocument FinancialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, AccountingLine accountingLineCopy, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+    private boolean processOffsetGeneralLedgerPendingEntryForAccrualsAndAdjustments(TransactionalDocument transactionalDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, AccountingLine accountingLineCopy, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
         boolean success = true;
 
-        if (isDocumentForMultipleAccounts(FinancialDocument)) {
-            success &= super.processOffsetGeneralLedgerPendingEntry(FinancialDocument, sequenceHelper, accountingLineCopy, explicitEntry, offsetEntry);
+        if (isDocumentForMultipleAccounts(transactionalDocument)) {
+            success &= super.processOffsetGeneralLedgerPendingEntry(transactionalDocument, sequenceHelper, accountingLineCopy, explicitEntry, offsetEntry);
         }
         else {
             sequenceHelper.decrement(); // the parent already increments; b/c it assumes that all documents have offset entries all
@@ -347,14 +335,14 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * see if they are all for the same account or not. It recognized the first account element as the base, and then it iterates
      * through the rest. If it comes across one that doesn't match, then we know it's for multiple accounts.
      * 
-     * @param FinancialDocument
+     * @param transactionalDocument
      * @return boolean
      */
-    private boolean isDocumentForMultipleAccounts(AccountingDocument FinancialDocument) {
+    private boolean isDocumentForMultipleAccounts(TransactionalDocument transactionalDocument) {
         String baseAccountNumber = "";
 
         int index = 0;
-        List<AccountingLine> lines = FinancialDocument.getSourceAccountingLines();
+        List<AccountingLine> lines = transactionalDocument.getSourceAccountingLines();
         for (AccountingLine line : lines) {
             if (index == 0) {
                 baseAccountNumber = line.getAccountNumber();
@@ -373,12 +361,13 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * document type is set to DI. This uses the explicit entry as its model. In addition, an offset is generated for accruals
      * (AVAE) and adjustments (AVAD), but only if the document contains accounting lines for more than one account.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#customizeOffsetGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#customizeOffsetGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry,
      *      org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
-    protected boolean customizeOffsetGeneralLedgerPendingEntry(AccountingDocument FinancialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
-        AuxiliaryVoucherDocument auxDoc = (AuxiliaryVoucherDocument) FinancialDocument;
+    @Override
+    protected boolean customizeOffsetGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+        AuxiliaryVoucherDocument auxDoc = (AuxiliaryVoucherDocument) transactionalDocument;
 
         // set the document type to that of a Distrib. Of Income and Expense if it's a recode
         if (auxDoc.isRecodeType()) {
@@ -412,12 +401,12 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * This method creates an AV recode specifc GLPE with a document type of DI. The sequence is managed outside of this method. It
      * uses the explicit entry as its model and then tweaks values appropriately.
      * 
-     * @param FinancialDocument
+     * @param transactionalDocument
      * @param sequenceHelper
      * @param explicitEntry
      * @return
      */
-    private boolean processAuxiliaryVoucherRecodeDistributionOfIncomeAndExpenseGeneralLedgerPendingEntry(AccountingDocument FinancialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, GeneralLedgerPendingEntry explicitEntry) {
+    private boolean processAuxiliaryVoucherRecodeDistributionOfIncomeAndExpenseGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, GeneralLedgerPendingEntry explicitEntry) {
         // create a new instance based off of the explicit entry
         GeneralLedgerPendingEntry recodeGlpe = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(explicitEntry);
 
@@ -437,7 +426,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         recodeGlpe.setTransactionEntryOffsetIndicator(false);
 
         // add the new recode offset entry to the document now
-        FinancialDocument.getGeneralLedgerPendingEntries().add(recodeGlpe);
+        transactionalDocument.getGeneralLedgerPendingEntries().add(recodeGlpe);
 
         return true;
     }
@@ -450,14 +439,13 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @return object type for an AuxiliaryVoucher document
      */
     protected String getObjectTypeCode(AccountingLine line) {
-        Options options = SpringServiceLocator.getOptionsService().getCurrentYearOptions();
         String objectTypeCode = line.getObjectCode().getFinancialObjectTypeCode();
 
-        if (options.getFinObjTypeExpenditureexpCd().equals(objectTypeCode) || options.getFinObjTypeExpendNotExpCode().equals(objectTypeCode)) {
-            objectTypeCode = options.getFinObjTypeExpNotExpendCode();
+        if (OBJECT_TYPE_CODE.EXPENSE_EXPENDITURE.equals(objectTypeCode) || OBJECT_TYPE_CODE.EXPENDITURE_NOT_EXPENSE.equals(objectTypeCode)) {
+            objectTypeCode = OBJECT_TYPE_CODE.EXPENSE_NOT_EXPENDITURE;
         }
-        else if (options.getFinObjectTypeIncomecashCode().equals(objectTypeCode) || options.getFinObjTypeExpendNotExpCode().equals(objectTypeCode)) {
-            objectTypeCode = options.getFinObjTypeIncomeNotCashCd();
+        else if (OBJECT_TYPE_CODE.INCOME_CASH.equals(objectTypeCode) || OBJECT_TYPE_CODE.EXPENDITURE_NOT_EXPENSE.equals(objectTypeCode)) {
+            objectTypeCode = OBJECT_TYPE_CODE.INCOME_NOT_CASH;
         }
 
         return objectTypeCode;
@@ -471,14 +459,13 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @return object type code
      */
     protected String getObjectTypeCodeForRecodeDistributionOfIncomeAndExpenseEntry(GeneralLedgerPendingEntry explicitEntry) {
-        Options options = SpringServiceLocator.getOptionsService().getCurrentYearOptions();
         String objectTypeCode = explicitEntry.getFinancialObjectTypeCode();
 
-        if (options.getFinObjTypeExpNotExpendCode().equals(objectTypeCode)) {
-            objectTypeCode = options.getFinObjTypeExpenditureexpCd();
+        if (OBJECT_TYPE_CODE.EXPENSE_NOT_EXPENDITURE.equals(objectTypeCode)) {
+            objectTypeCode = OBJECT_TYPE_CODE.EXPENSE_EXPENDITURE;
         }
-        else if (options.getFinObjTypeIncomeNotCashCd().equals(objectTypeCode)) {
-            objectTypeCode = options.getFinObjectTypeIncomecashCode();
+        else if (OBJECT_TYPE_CODE.INCOME_NOT_CASH.equals(objectTypeCode)) {
+            objectTypeCode = OBJECT_TYPE_CODE.INCOME_CASH;
         }
 
         return objectTypeCode;
@@ -487,11 +474,11 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     /**
      * Overrides to call super and then validate that the
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean processCustomAddAccountingLineBusinessRules(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean processCustomAddAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine) {
         boolean valid = super.processCustomAddAccountingLineBusinessRules(document, accountingLine);
 
         if (valid) {
@@ -503,11 +490,11 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * @see FinancialDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see TransactionalDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean processCustomReviewAccountingLineBusinessRules(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean processCustomReviewAccountingLineBusinessRules(TransactionalDocument document, AccountingLine accountingLine) {
         boolean valid = true;
         valid &= super.processCustomReviewAccountingLineBusinessRules(document, accountingLine);
         if (valid) {
@@ -524,7 +511,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * requires all <code>{@link AccountingLine}</code> instances belong to the same Fund Group. That's done here by iterating
      * through the <code>{@link AccountingLine}</code> instances.
      * 
-     * @see FinancialDocumentRuleBase#processCustomRouteDocumentBusinessRules(Document)
+     * @see TransactionalDocumentRuleBase#processCustomRouteDocumentBusinessRules(Document)
      */
     @Override
     protected boolean processCustomRouteDocumentBusinessRules(Document document) {
@@ -537,12 +524,12 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
 
         // make sure that a single chart is used for all accounting lines in the document
         if (valid) {
-            valid = isSingleChartUsed((AccountingDocument) document);
+            valid = isSingleChartUsed((TransactionalDocument) document);
         }
 
         // make sure that a single sub fund group is used for all accounting lines in the document
         if (valid) {
-            valid = isSingleSubFundGroupUsed((AccountingDocument) document);
+            valid = isSingleSubFundGroupUsed((TransactionalDocument) document);
         }
 
         // make sure that a reversal date is entered for accruals
@@ -554,13 +541,13 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * Iterates <code>{@link AccountingLine}</code> instances in a given <code>{@link FinancialDocument}</code> instance and
+     * Iterates <code>{@link AccountingLine}</code> instances in a given <code>{@link TransactionalDocument}</code> instance and
      * compares them to see if they are all in the same Chart.
      * 
      * @param document
      * @return boolean
      */
-    protected boolean isSingleChartUsed(AccountingDocument document) {
+    protected boolean isSingleChartUsed(TransactionalDocument document) {
         boolean valid = true;
 
         String baseChartCode = null;
@@ -584,13 +571,13 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * Iterates <code>{@link AccountingLine}</code> instances in a given <code>{@link FinancialDocument}</code> instance and
+     * Iterates <code>{@link AccountingLine}</code> instances in a given <code>{@link TransactionalDocument}</code> instance and
      * compares them to see if they are all in the same Sub-Fund Group.
      * 
      * @param document
      * @return boolean
      */
-    protected boolean isSingleSubFundGroupUsed(AccountingDocument document) {
+    protected boolean isSingleSubFundGroupUsed(TransactionalDocument document) {
         boolean valid = true;
 
         String baseSubFundGroupCode = null;
@@ -637,12 +624,12 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * Added a check for simple balance between credit and debit values as entered on the accountingLines, since that is also a
      * requirement.
      * 
-     * @param FinancialDocument
+     * @param transactionalDocument
      * @return boolean
      */
     @Override
-    protected boolean isDocumentBalanceValidConsideringDebitsAndCredits(AccountingDocument FinancialDocument) {
-        AuxiliaryVoucherDocument avDoc = (AuxiliaryVoucherDocument) FinancialDocument;
+    protected boolean isDocumentBalanceValidConsideringDebitsAndCredits(TransactionalDocument transactionalDocument) {
+        AuxiliaryVoucherDocument avDoc = (AuxiliaryVoucherDocument) transactionalDocument;
 
         return accountingLinesBalance(avDoc) && glpesBalance(avDoc);
     }
@@ -696,6 +683,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         return balanced;
     }
 
+
     /**
      * Fixes <code>{@link ObjectType}</code> for the given <code>{@link AccountingLine}</code> instance
      * 
@@ -714,11 +702,11 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @param accountingLine
      * @return boolean
      */
-    private boolean isValidDocWithSubAndLevel(AccountingDocument document, AccountingLine accountingLine) {
+    private boolean isValidDocWithSubAndLevel(TransactionalDocument document, AccountingLine accountingLine) {
         boolean retval = true;
 
         StringBuffer combinedCodes = new StringBuffer("objectType=").append(accountingLine.getObjectType().getCode()).append(";objSubTyp=").append(accountingLine.getObjectCode().getFinancialObjectSubType().getCode()).append(";objLevel=").append(accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode());
-        
+
         retval = !getParameterRule(RESTRICTED_COMBINED_CODES).getParameterText().equals(combinedCodes.toString());
 
         if (!retval) {
@@ -730,7 +718,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * This method determins if the posting period is valid for the document type.
+     * This method determins if the posting period is valid for the document type
      * 
      * @param document
      * @param period
@@ -738,48 +726,58 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @return true if it is a valid period for posting into
      */
     protected boolean isPeriodAllowed(AuxiliaryVoucherDocument document) {
-        /*
-         * Nota bene: a full summarization of these rules can be found in the comments to KULRNE-4634
-         */
         // first we need to get the period itself to check these things
         boolean valid = true;
-        AccountingPeriod acctPeriod = getAccountingPeriodService().getByPeriod(document.getPostingPeriodCode(), document.getPostingYear());
-        
+        Integer period = new Integer(document.getPostingPeriodCode());
+        Integer year = document.getPostingYear();
+        AccountingPeriod acctPeriod = getAccountingPeriodService().getByPeriod(document.getPostingPeriodCode(), year);
+
+        // if current period is period 1 can't post back more than 3 open periods
+        // grab the current period
+        Timestamp ts = document.getDocumentHeader().getWorkflowDocument().getCreateDate();
+        AccountingPeriod currPeriod = getAccountingPeriodService().getByDate(new Date(ts.getTime()));
+        Integer currPeriodVal = new Integer(currPeriod.getUniversityFiscalPeriodCode());
+
+        if (currPeriodVal == 1) {
+            if (period < 11) {
+                reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_PERIOD_THREE_OPEN);
+                return false;
+            }
+        }
+
+        // can't post back more than 2 periods
+        if (period <= currPeriodVal) {
+            if ((currPeriodVal - period) > 2) {
+                reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
+                return false;
+            }
+        }
+        else {
+            // if currPeriodVal is less than period then that means it can only be
+            // period 2 (see period 1 rule above)and period 13 as the only possible combination,
+            // if not then error out
+            if (currPeriodVal != 2) {
+                reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
+                return false;
+            }
+            else {
+                if (period != 13) {
+                    reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
+                    return false;
+                }
+            }
+        }
+
         valid = succeedsRule(RESTRICTED_PERIOD_CODES, document.getPostingPeriodCode());
         if (!valid) {
             reportError(ACCOUNTING_PERIOD_STATUS_CODE_FIELD, ERROR_ACCOUNTING_PERIOD_OUT_OF_RANGE);
         }
-        
+
         // can't post into a closed period
         if (acctPeriod == null || acctPeriod.getUniversityFiscalPeriodStatusCode().equalsIgnoreCase(ACCOUNTING_PERIOD_STATUS_CLOSED)) {
             reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_PERIOD_CLOSED);
             return false;
         }
-        
-        Timestamp ts = new Timestamp(new java.util.Date().getTime());
-        AccountingPeriod currPeriod = getAccountingPeriodService().getByDate(new Date(ts.getTime()));
-        
-        if (acctPeriod.getUniversityFiscalYear().equals(SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear())) {
-            if (getAccountingPeriodService().compareAccountingPeriodsByDate(acctPeriod, currPeriod) < 0) {
-                // we've only got problems if the av's accounting period is earlier than now
-                
-                // are we in the grace period for this accounting period?
-                if (!AuxiliaryVoucherDocumentRule.calculateIfWithinGracePeriod(new Date(ts.getTime()), acctPeriod)) {
-                    reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
-                    return false;
-                }
-            }
-        } else {
-            // it's not the same fiscal year, so we need to test whether we are currently
-            // in the grace period of the acctPeriod
-            if (!AuxiliaryVoucherDocumentRule.calculateIfWithinGracePeriod(new Date(ts.getTime()), acctPeriod) && AuxiliaryVoucherDocumentRule.isEndOfPreviousFiscalYear(acctPeriod)) {
-                reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
-                return false;
-            }
-        }
-        
-        Integer period = new Integer(document.getPostingPeriodCode());
-        Integer year = document.getPostingYear();
 
         // check for specific posting issues
         if (document.isRecodeType()) {
@@ -800,64 +798,6 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
             }
         }
         return valid;
-    }
-    
-    /**
-     * 
-     * This method checks if a given moment of time is within an accounting period, or its
-     * auxiliary voucher grace period.
-     * @param today a date to check if it is within the period 
-     * @param periodToCheck the  
-     * @return
-     */
-    public static boolean calculateIfWithinGracePeriod(Date today, AccountingPeriod periodToCheck) {
-        boolean result = false;
-        int todayAsComparableDate = AuxiliaryVoucherDocumentRule.comparableDateForm(today);
-        int periodClose = new Integer(AuxiliaryVoucherDocumentRule.comparableDateForm(periodToCheck.getUniversityFiscalPeriodEndDate()));
-        int periodBegin = AuxiliaryVoucherDocumentRule.comparableDateForm(AuxiliaryVoucherDocumentRule.calculateFirstDayOfMonth(periodToCheck.getUniversityFiscalPeriodEndDate())); 
-        int gracePeriodClose = periodClose + new Integer(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(AUXILIARY_VOUCHER_SECURITY_GROUPING, AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD)).intValue();
-        return (todayAsComparableDate >= periodBegin && todayAsComparableDate <= gracePeriodClose);
-    }
-    
-    /**
-     * 
-     * This method returns a date as an approximate count of days since the BCE epoch.
-     * @param d the date to convert
-     * @return an integer count of days, very approximate
-     */
-    public static int comparableDateForm(Date d) {
-        java.util.Calendar cal = new java.util.GregorianCalendar();
-        cal.setTime(d);
-        return cal.get(java.util.Calendar.YEAR) * 365 + cal.get(java.util.Calendar.DAY_OF_YEAR);
-    }
-    
-    /**
-     * Given a day, this method calculates what the first day of that month was.
-     * @param d date to find first of month for
-     * @return date of the first day of the month
-     */
-    public static Date calculateFirstDayOfMonth(Date d) {
-        java.util.Calendar cal = new java.util.GregorianCalendar();
-        cal.setTime(d);
-        int dayOfMonth = cal.get(java.util.Calendar.DAY_OF_MONTH) - 1;
-        cal.add(java.util.Calendar.DAY_OF_YEAR, -1*dayOfMonth);
-        return new Date(cal.getTimeInMillis());
-    }
-    
-    /**
-     * This method checks if the given accounting period ends on the last day
-     * of the previous fiscal year
-     * @param acctPeriod accounting period to check
-     * @return true if the accounting period ends with the fiscal year, false if otherwise
-     */
-    public static boolean isEndOfPreviousFiscalYear(AccountingPeriod acctPeriod) {
-        UniversityDateService dateService = SpringServiceLocator.getUniversityDateService();
-        Date firstDayOfCurrFiscalYear = new Date(dateService.getFirstDateOfFiscalYear(dateService.getCurrentFiscalYear()).getTime());
-        Date periodClose = acctPeriod.getUniversityFiscalPeriodEndDate();
-        java.util.Calendar cal = new java.util.GregorianCalendar();
-        cal.setTime(periodClose);
-        cal.add(java.util.Calendar.DATE, 1);
-        return (firstDayOfCurrFiscalYear.equals(new Date(cal.getTimeInMillis())));
     }
 
     /**
@@ -880,4 +820,5 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
 
         return valid;
     }
+
 }
