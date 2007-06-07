@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,21 +24,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.DocumentHeader;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.Copyable;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.core.lookup.keyvalues.DisbursementVoucherDocumentationLocationValuesFinder;
+import org.kuali.core.lookup.keyvalues.PaymentMethodValuesFinder;
 import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.chart.bo.ChartUser;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel;
@@ -48,17 +48,16 @@ import org.kuali.module.financial.bo.DisbursementVoucherPreConferenceDetail;
 import org.kuali.module.financial.bo.DisbursementVoucherPreConferenceRegistrant;
 import org.kuali.module.financial.bo.DisbursementVoucherWireTransfer;
 import org.kuali.module.financial.bo.Payee;
-import org.kuali.module.financial.lookup.keyvalues.DisbursementVoucherDocumentationLocationValuesFinder;
-import org.kuali.module.financial.lookup.keyvalues.PaymentMethodValuesFinder;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
- * This is the business object that represents the DisbursementVoucher document in Kuali.
+ * 
  */
-public class DisbursementVoucherDocument extends AccountingDocumentBase implements Copyable {
+public class DisbursementVoucherDocument extends TransactionalDocumentBase {
     private Integer finDocNextRegistrantLineNbr;
     private String disbVchrContactPersonName;
     private String disbVchrContactPhoneNumber;
@@ -105,7 +104,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
 
     
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getPendingLedgerEntriesForSufficientFundsChecking()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getPendingLedgerEntriesForSufficientFundsChecking()
      */
     @Override
     public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
@@ -118,7 +117,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
             if (kualiConfigurationService.getApplicationParameterRule("SYSTEM", "SufficientFundsExpenseObjectTypes").succeedsRule(ple.getFinancialObjectTypeCode())) {
                 //is an expense object type, keep checking
                 ple.refreshNonUpdateableReferences();
-                if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(KFSConstants.SF_TYPE_CASH_AT_ACCOUNT)) {
+                if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(Constants.SF_TYPE_CASH_AT_ACCOUNT)) {
                     //is a cash account
                     if (flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinancialCashObjectCode()) == null
                             && flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinAccountsPayableObjectCode()) == null) {
@@ -126,7 +125,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
                         
                         ple = (GeneralLedgerPendingEntry)ObjectUtils.deepCopy(ple);
                         ple.setFinancialObjectCode(ple.getChart().getFinancialCashObjectCode());
-                        ple.setTransactionDebitCreditCode(ple.getTransactionDebitCreditCode().equals(KFSConstants.GL_DEBIT_CODE) ? KFSConstants.GL_CREDIT_CODE : KFSConstants.GL_DEBIT_CODE);
+                        ple.setTransactionDebitCreditCode(ple.getTransactionDebitCreditCode().equals(Constants.GL_DEBIT_CODE) ? Constants.GL_CREDIT_CODE : Constants.GL_DEBIT_CODE);
                         ples.add(ple);
                     }
                     
@@ -745,7 +744,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         this.getDvPayeeDetail().setDisbursementVoucherPayeeTypeCode(DisbursementVoucherRuleConstants.DV_PAYEE_TYPE_EMPLOYEE);
         this.getDvPayeeDetail().setDisbVchrPayeeIdNumber(employee.getPersonUniversalIdentifier());
         this.getDvPayeeDetail().setDisbVchrPayeePersonName(employee.getPersonName());
-        this.getDvPayeeDetail().setDisbVchrPayeeLine1Addr(employee.getCampusCode()+"-"+employee.getPrimaryDepartmentCode());
+        this.getDvPayeeDetail().setDisbVchrPayeeLine1Addr(employee.getDeptid());
         this.getDvPayeeDetail().setDisbVchrPayeeLine2Addr("");
         this.getDvPayeeDetail().setDisbVchrPayeeCityName(employee.getCampus().getCampusName() + " CAMPUS");
         this.getDvPayeeDetail().setDisbVchrPayeeStateCode("");
@@ -765,22 +764,22 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     @Override
     public void prepareForSave() {
         if (dvWireTransfer != null) {
-            dvWireTransfer.setDocumentNumber(this.documentNumber);
+            dvWireTransfer.setFinancialDocumentNumber(this.financialDocumentNumber);
         }
 
         if (dvNonResidentAlienTax != null) {
-            dvNonResidentAlienTax.setDocumentNumber(this.documentNumber);
+            dvNonResidentAlienTax.setFinancialDocumentNumber(this.financialDocumentNumber);
         }
 
-        dvPayeeDetail.setDocumentNumber(this.documentNumber);
+        dvPayeeDetail.setFinancialDocumentNumber(this.financialDocumentNumber);
 
         if (dvNonEmployeeTravel != null) {
-            dvNonEmployeeTravel.setDocumentNumber(this.documentNumber);
+            dvNonEmployeeTravel.setFinancialDocumentNumber(this.financialDocumentNumber);
             dvNonEmployeeTravel.setTotalTravelAmount(dvNonEmployeeTravel.getTotalTravelAmount());
         }
 
         if (dvPreConferenceDetail != null) {
-            dvPreConferenceDetail.setDocumentNumber(this.documentNumber);
+            dvPreConferenceDetail.setFinancialDocumentNumber(this.financialDocumentNumber);
             dvPreConferenceDetail.setDisbVchrConferenceTotalAmt(dvPreConferenceDetail.getDisbVchrConferenceTotalAmt());
         }
     }
@@ -814,11 +813,11 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#toCopy()
+     * @see org.kuali.core.document.TransactionalDocumentBase#convertIntoCopy()
      */
     @Override
-    public void toCopy() throws WorkflowException {
-        super.toCopy();
+    public void convertIntoCopy() throws WorkflowException {
+        super.convertIntoCopy();
         initiateDocument();
 
         // clear fields
@@ -849,7 +848,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
             payee = (Payee) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(Payee.class, keys);
             if (payee == null) {
                 getDvPayeeDetail().setDisbVchrPayeeIdNumber("");
-                GlobalVariables.getMessageList().add(KFSKeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
+                GlobalVariables.getMessageList().add(KeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
             }
             else {
                 templatePayee(payee);
@@ -863,7 +862,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
             employee = (UniversalUser) SpringServiceLocator.getBusinessObjectService().retrieve(employee);
             if (employee == null) {
                 getDvPayeeDetail().setDisbVchrPayeeIdNumber("");
-                GlobalVariables.getMessageList().add(KFSKeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
+                GlobalVariables.getMessageList().add(KeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
             }
             else {
                 templateEmployee(employee);
@@ -877,9 +876,9 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
      * generic, shared logic used to iniate a dv document
      */
     public void initiateDocument() {
-        UniversalUser currentUser = GlobalVariables.getUserSession().getUniversalUser();
-        setDisbVchrContactPersonName(currentUser.getPersonName());
-        setCampusCode(((ChartUser)currentUser.getModuleUser( ChartUser.MODULE_ID )).getOrganization().getOrganizationPhysicalCampusCode());
+        KualiUser currentUser = GlobalVariables.getUserSession().getKualiUser();
+        setDisbVchrContactPersonName(currentUser.getUniversalUser().getPersonName());
+        setCampusCode(currentUser.getOrganization().getOrganizationPhysicalCampusCode());
 
         // due date
         Calendar calendar = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
@@ -912,7 +911,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {

@@ -15,14 +15,19 @@
  */
 package org.kuali.module.chart.rules;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.core.document.Document;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
+import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
@@ -43,37 +48,47 @@ import org.kuali.module.chart.service.ObjectLevelService;
  */
 public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
 
-    private static ObjectLevelService objectLevelService;
-    private static ObjectCodeService objectCodeService;
-    private static ObjectConsService  objectConsService;
+    DateTimeService dateTimeService;
+    ObjectLevelService objectLevelService;
+    ObjectCodeService objectCodeService;
+    ObjectConsService  objectConsService;
 
-    private final static String OBJECT_CODE_ILLEGAL_VALUES = "ObjectCodeIllegalValues";
-    private final static String OBJECT_CODE_VALID_BUDGET_AGGREGATION_CODES = "ObjectCodeValidBudgetAggregationCodes";
-    private final static String OBJECT_CODE_VALID_FEDERAL_FUNDED_CODES = "ObjectCodeValidFederalFundedCodes";
+    final static String OBJECT_CODE_ILLEGAL_VALUES = "ObjectCodeIllegalValues";
+    final static String OBJECT_CODE_VALID_BUDGET_AGGREGATION_CODES = "ObjectCodeValidBudgetAggregationCodes";
+    final static String OBJECT_CODE_VALID_YEAR_CODE_EXCEPTIONS = "ObjectCodeValidYearCodeExceptions";
+    final static String OBJECT_CODE_VALID_FEDERAL_FUNDED_CODES = "ObjectCodeValidFederalFundedCodes";
 
 
-    private static KualiConfigurationService configService;
-    private static ChartService chartService;
+    private KualiConfigurationService configService;
+    private ChartService chartService;
     private Map reportsTo;
     private static Set illegalValues;
+    private static Set validYearCodeExceptions;
     private static Set validBudgetAggregationCodes;
     private static Set validFederalFundedCodes;
 
+    private final static int CHART_CODE = 1;
+    private final static int OBJECT_LEVEL = 2;
+    private final static int OBJECT_TYPE = 3;
+    private final static int SUB_TYPE = 4;
+
     public ObjectCodeRule() {
 
-    	if ( objectConsService == null ) {
-	        configService = SpringServiceLocator.getKualiConfigurationService();
-	
-	        illegalValues = retrieveParameterSet(OBJECT_CODE_ILLEGAL_VALUES);
-	        validBudgetAggregationCodes = retrieveParameterSet(OBJECT_CODE_VALID_BUDGET_AGGREGATION_CODES);
-	        validFederalFundedCodes = retrieveParameterSet(OBJECT_CODE_VALID_FEDERAL_FUNDED_CODES);
-	
-	        objectLevelService = SpringServiceLocator.getObjectLevelService();
-	        objectCodeService = SpringServiceLocator.getObjectCodeService();
-	        chartService = SpringServiceLocator.getChartService();
-	        objectConsService = SpringServiceLocator.getObjectConsService();
-    	}
+        configService = SpringServiceLocator.getKualiConfigurationService();
+
+        illegalValues = retrieveParameterSet(OBJECT_CODE_ILLEGAL_VALUES);
+        validYearCodeExceptions = retrieveParameterSet(OBJECT_CODE_VALID_YEAR_CODE_EXCEPTIONS);
+        validBudgetAggregationCodes = retrieveParameterSet(OBJECT_CODE_VALID_BUDGET_AGGREGATION_CODES);
+        validFederalFundedCodes = retrieveParameterSet(OBJECT_CODE_VALID_FEDERAL_FUNDED_CODES);
+
+        dateTimeService = SpringServiceLocator.getDateTimeService();
+        objectLevelService = SpringServiceLocator.getObjectLevelService();
+        objectCodeService = SpringServiceLocator.getObjectCodeService();
+        chartService = SpringServiceLocator.getChartService();
         reportsTo = chartService.getReportsToHierarchy();
+        objectConsService = SpringServiceLocator.getObjectConsService();
+
+
     }
 
 
@@ -81,7 +96,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
 
         // default to success
         boolean success = true;
-        //success &= checkEmptyValues(document);
+        success &= checkEmptyValues(document);
 
         Object maintainableObject = document.getNewMaintainableObject().getBusinessObject();
 
@@ -99,11 +114,11 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
         Object maintainableObject = document.getNewMaintainableObject().getBusinessObject();
         success &= processObjectCodeRules((ObjectCode) maintainableObject);
 
-        //success &= checkEmptyValues(document);
+        success &= checkEmptyValues(document);
 
         return success;
     }
-    /*
+
     private boolean checkEmptyValues(MaintenanceDocument maintenanceDocument) {
         boolean success = true;
 
@@ -112,7 +127,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
 
         return success;
     }
-	*/
+
     private boolean processObjectCodeRules(ObjectCode objectCode) {
 
         boolean result = true;
@@ -126,6 +141,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
 
         Integer year = objectCode.getUniversityFiscalYear();
         String chartCode = objectCode.getChartOfAccountsCode();
+        String reportsToChartCode = objectCode.getReportsToChartOfAccountsCode();
         String calculatedReportsToChartCode;
         String reportsToObjectCode = objectCode.getReportsToFinancialObjectCode();
         String nextYearObjectCode = objectCode.getNextYearFinancialObjectCode();
@@ -137,7 +153,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
         // So, we are simulating here what the pre-rule will do.
         calculatedReportsToChartCode = (String) reportsTo.get(chartCode);
 
-        if (!verifyReportsToChartCode(year, chartCode, objectCode.getFinancialObjectCode(), calculatedReportsToChartCode, reportsToObjectCode)) {
+        if (!verifyReportsToChartCode(calculatedReportsToChartCode, year, reportsToObjectCode)) {
             this.putFieldError("reportsToFinancialObjectCode", KFSKeyConstants.ERROR_DOCUMENT_REPORTS_TO_OBJCODE_ILLEGAL, reportsToObjectCode);
             result = false;
         }
@@ -324,23 +340,58 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
         return result;
     }
 
-    protected boolean verifyObjectCode(Integer year, String chart, String objectCode) {
-        return null != objectCodeService.getByPrimaryId(year, chart, objectCode);
+    /**
+     * 
+     * @deprecated KULCOA-1245 - This check for existence of a mandatory transfer elimination code has been moved to the ObjectCode Document xml.
+     * @param mandatoryTransferEliminationCode 
+     * @return
+     */
+    protected boolean isLegalMandatoryTransferEliminationCode(String mandatoryTransferEliminationCode) {
+        boolean result = false;
+        return result;
     }
 
-    protected boolean verifyReportsToChartCode(Integer year, String chart, String objectCode, String reportsToChartCode, String reportsToObjectCode) {
+
+    protected boolean verifyObjectCode(Integer year, String chart, String objectCode) {
+        ObjectCode o = objectCodeService.getByPrimaryId(year, chart, objectCode);
+
+        return o != null;
+
+    }
+
+    protected boolean verifyReportsToChartCode(String reportsToChartCode, Integer year, String reportsToObjectCode) {
         // TODO: verify this ambiguously stated rule against the UNIFACE source
         // When the value of reportsToChartCode does not have an institutional exception, the Reports to Object
         // (rpts_to_fin_obj_cd) fiscal year, and chart code must exist in the object code table
-    	
-    	// if the chart and object are the same, then skip the check
-    	// this assumes that the valiidity of the reports-to object code has already been tested (and corrected if necessary)
-    	if ( reportsToChartCode.equals( chart ) && reportsToObjectCode.equals( objectCode ) ) {
-    		return true;
-    	}
+        if (!verifyObjectCode(year, reportsToChartCode, reportsToObjectCode)) {
+            // Year must be valid, unless the rpts_to_fin_coa_cd is listed as an exclusion
 
-    	// otherwise, check if the object is valid
-    	return verifyObjectCode(year, reportsToChartCode, reportsToObjectCode);
+            if (!permitted(validYearCodeExceptions, reportsToChartCode)) {
+                return false;
+            }
+            else {
+                ObjectCode o;
+                List yearList = new ArrayList();
+                yearList = objectCodeService.getYearList(reportsToChartCode, reportsToObjectCode);
+                if (yearList != null) {
+                    return false;
+
+                }
+            }
+
+        }
+        return true;
+    }
+
+    protected boolean isDocumentValidForSave(Document document) {
+        if (null == document) {
+            return false;
+        }
+
+        boolean valid = true;
+        // valid rules
+
+        return valid;
     }
 
     private Set retrieveParameterSet(String parameterName) {
@@ -355,5 +406,10 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
         }
         return result;
     }
+
+    /**
+     * 
+     * @deprecated use putFieldError or putGlobalError instead
+     */
 
 }

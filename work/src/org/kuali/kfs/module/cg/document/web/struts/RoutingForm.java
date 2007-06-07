@@ -23,12 +23,12 @@ import java.util.Map;
 import org.kuali.core.datadictionary.DataDictionary;
 import org.kuali.core.datadictionary.DocumentEntry;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.web.format.PhoneNumberFormatter;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.web.struts.form.BudgetOverviewFormHelper;
 import org.kuali.module.kra.document.ResearchDocument;
 import org.kuali.module.kra.routingform.bo.RoutingFormInstitutionCostShare;
+import org.kuali.module.kra.routingform.bo.RoutingFormKeyword;
 import org.kuali.module.kra.routingform.bo.RoutingFormOrganization;
 import org.kuali.module.kra.routingform.bo.RoutingFormOrganizationCreditPercent;
 import org.kuali.module.kra.routingform.bo.RoutingFormOtherCostShare;
@@ -40,7 +40,6 @@ import org.kuali.module.kra.web.struts.form.ResearchDocumentFormBase;
 public class RoutingForm extends ResearchDocumentFormBase {
     
     private boolean auditActivated;
-    private int numAuditErrors;
     
     //Main Page
     private RoutingFormPersonnel newRoutingFormPerson;
@@ -62,9 +61,6 @@ public class RoutingForm extends ResearchDocumentFormBase {
     private boolean templateAddress;
     private boolean templateAdHocPermissions;
     private boolean templateAdHocApprovers;
-    
-    // Approvals
-    private String approvalsMessage;
     
     private Map systemParametersMap;
     
@@ -89,9 +85,6 @@ public class RoutingForm extends ResearchDocumentFormBase {
         setDocument(new RoutingFormDocument());
         
         periodBudgetOverviewFormHelpers = new ArrayList();
-
-        setFormatterType("document.routingFormPersonnel.personPhoneNumber", PhoneNumberFormatter.class);
-        setFormatterType("document.routingFormPersonnel.personFaxNumber", PhoneNumberFormatter.class);
     }
     
     @Override
@@ -110,15 +103,6 @@ public class RoutingForm extends ResearchDocumentFormBase {
     public void setAuditActivated(boolean auditActivated) {
         this.auditActivated = auditActivated;
     }
-    
-    public int getNumAuditErrors() {
-        return numAuditErrors;
-    }
-
-    public void setNumAuditErrors(int numAuditErrors) {
-        this.numAuditErrors = numAuditErrors;
-    }
-
     public void setNewRoutingFormInstitutionCostShare(RoutingFormInstitutionCostShare newRoutingFormInstitutionCostShare) {
         this.newRoutingFormInstitutionCostShare = newRoutingFormInstitutionCostShare;
     }
@@ -222,14 +206,6 @@ public class RoutingForm extends ResearchDocumentFormBase {
         this.allPeriodsSelected = allPeriodsSelected;
     }
     
-    public String getApprovalsMessage() {
-        return approvalsMessage;
-    }
-
-    public void setApprovalsMessage(String approvalsMessage) {
-        this.approvalsMessage = approvalsMessage;
-    }
-
     /**
      * Gets the two column size of routingFormProjectTypes, zero based. The result will be rounded up so that the left column has an additional element for odd sized lists.
      * @return half size of routingFormProjectTypes, rounded up, zero based
