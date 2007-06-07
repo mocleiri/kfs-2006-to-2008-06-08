@@ -192,6 +192,7 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
         dvDocument.getDvNonResidentAlienTax().setStateIncomeTaxPercent(stateTax);
 
         getDisbursementVoucherTaxService().processNonResidentAlienTax(dvDocument);
+        getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         List newTaxNumbers = getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         assertTrue(newTaxNumbers.size() == 3);
         assertEquals("Check total does not match original amount", checkAmount, dvDocument.getDisbVchrCheckTotalAmount());

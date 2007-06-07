@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.web.struts.form;
 
@@ -20,13 +27,13 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.util.LabelValueBean;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.Constants.DocumentStatusCodes.CashReceipt;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.SimpleBooleanFormatter;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSConstants.DocumentStatusCodes.CashReceipt;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CheckBase;
@@ -35,8 +42,11 @@ import org.kuali.module.financial.document.CashReceiptDocument;
 
 /**
  * This class is the action form for Cash Receipts.
+ * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class CashReceiptForm extends KualiAccountingDocumentFormBase {
+
+public class CashReceiptForm extends KualiTransactionalDocumentFormBase {
     private static final long serialVersionUID = 1L;
     private static final String CAN_PRINT_COVERSHEET_SIG_STR = "isCoverSheetPrintingAllowed";
     private Check newCheck;
@@ -183,29 +193,29 @@ public class CashReceiptForm extends KualiAccountingDocumentFormBase {
         CashReceiptDocument crd = getCashReceiptDocument();
         String financialDocumentStatusCode = crd.getDocumentHeader().getFinancialDocumentStatusCode();
         if (financialDocumentStatusCode.equals(CashReceipt.VERIFIED)) {
-            financialDocumentStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.CashReceipt.MSG_VERIFIED_BUT_NOT_AWAITING_DEPOSIT);
+            financialDocumentStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashReceipt.MSG_VERIFIED_BUT_NOT_AWAITING_DEPOSIT);
         }
-        else if (financialDocumentStatusCode.equals(CashReceipt.INTERIM) || financialDocumentStatusCode.equals(CashReceipt.FINAL)) {
-            CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getDocumentNumber());
+        else if (financialDocumentStatusCode.equals(CashReceipt.INTERIM) || financialDocumentStatusCode.equals(CashReceipt.FINAL) ) {
+            CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getFinancialDocumentNumber());
             if (cmd != null) {
-                String cmdFinancialDocNbr = cmd.getDocumentNumber();
+                String cmdFinancialDocNbr = cmd.getFinancialDocumentNumber();
 
-                String loadCMDocUrl = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.CashManagement.URL_LOAD_DOCUMENT_CASH_MGMT);
+                String loadCMDocUrl = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashManagement.URL_LOAD_DOCUMENT_CASH_MGMT);
                 loadCMDocUrl = StringUtils.replace(loadCMDocUrl, "{0}", cmdFinancialDocNbr);
 
-                financialDocumentStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.CashReceipt.MSG_VERIFIED_AND_AWAITING_DEPOSIT);
+                financialDocumentStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashReceipt.MSG_VERIFIED_AND_AWAITING_DEPOSIT);
                 financialDocumentStatusMessage = StringUtils.replace(financialDocumentStatusMessage, "{0}", loadCMDocUrl);
             }
         }
-        else if (financialDocumentStatusCode.equals(KFSConstants.DocumentStatusCodes.APPROVED)) {
-            CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getDocumentNumber());
+        else if (financialDocumentStatusCode.equals(Constants.DocumentStatusCodes.APPROVED)) {
+            CashManagementDocument cmd = SpringServiceLocator.getCashManagementService().getCashManagementDocumentForCashReceiptId(crd.getFinancialDocumentNumber());
             if (cmd != null) {
-                String cmdFinancialDocNbr = cmd.getDocumentNumber();
+                String cmdFinancialDocNbr = cmd.getFinancialDocumentNumber();
 
-                String loadCMDocUrl = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.CashManagement.URL_LOAD_DOCUMENT_CASH_MGMT);
+                String loadCMDocUrl = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashManagement.URL_LOAD_DOCUMENT_CASH_MGMT);
                 loadCMDocUrl = StringUtils.replace(loadCMDocUrl, "{0}", cmdFinancialDocNbr);
 
-                financialDocumentStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.CashReceipt.MSG_VERIFIED_AND_DEPOSITED);
+                financialDocumentStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashReceipt.MSG_VERIFIED_AND_DEPOSITED);
                 financialDocumentStatusMessage = StringUtils.replace(financialDocumentStatusMessage, "{0}", loadCMDocUrl);
             }
         }
@@ -226,8 +236,8 @@ public class CashReceiptForm extends KualiAccountingDocumentFormBase {
             if (crd.getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
                 String unitName = SpringServiceLocator.getCashReceiptService().getCashReceiptVerificationUnitForCampusCode(crd.getCampusLocationCode());
                 CashDrawer cd = SpringServiceLocator.getCashDrawerService().getByWorkgroupName(unitName, false);
-                if (cd != null && crd.getDocumentHeader().getWorkflowDocument().isApprovalRequested() && cd.isClosed() && !crd.getDocumentHeader().getWorkflowDocument().isAdHocRequested()) {
-                    cashDrawerStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.CashReceipt.MSG_CASH_DRAWER_CLOSED_VERIFICATION_NOT_ALLOWED);
+                if (cd != null && crd.getDocumentHeader().getWorkflowDocument().isApprovalRequested() && cd.isClosed()) {
+                    cashDrawerStatusMessage = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.CashReceipt.MSG_CASH_DRAWER_CLOSED_VERIFICATION_NOT_ALLOWED);
                     cashDrawerStatusMessage = StringUtils.replace(cashDrawerStatusMessage, "{0}", unitName);
                 }
             }

@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.util;
 
@@ -19,7 +26,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -27,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.module.gl.bo.Transaction;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -42,11 +49,13 @@ import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
+ * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
+ * @version $Id: TransactionReport.java,v 1.16.2.1 2006-07-26 21:52:17 abyrne Exp $
  */
 public class TransactionReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TransactionReport.class);
 
-    static public class PageHelper extends PdfPageEventHelper {
+    class PageHelper extends PdfPageEventHelper {
         public Date runDate;
         public Font headerFont;
         public String title;
@@ -84,8 +93,6 @@ public class TransactionReport {
     }
 
     /**
-     * Generate transaction report
-     * 
      * @param reportErrors
      * @param reportSummary
      * @param runDate
@@ -93,25 +100,7 @@ public class TransactionReport {
      * @param fileprefix
      * @param destinationDirectory
      */
-    public void generateReport(Map<Transaction, List<Message>> reportErrors, List<Summary> reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
-        LOG.debug("generateReport() started");
-
-        List transactions = new ArrayList();
-        if(reportErrors != null){
-            transactions.addAll(reportErrors.keySet());
-        }
-        generateReport(transactions, reportErrors, reportSummary, runDate, title, fileprefix, destinationDirectory);
-    }
-
-    /**
-     * @param reportErrors
-     * @param reportSummary
-     * @param runDate
-     * @param title
-     * @param fileprefix
-     * @param destinationDirectory
-     */
-    public void generateReport(List<Transaction> errorSortedList, Map<Transaction, List<Message>> reportErrors, List<Summary> reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
+    public void generateReport(Map<Transaction,List<Message>> reportErrors, List<Summary> reportSummary, Date runDate, String title, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
 
         Font headerFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
@@ -147,7 +136,7 @@ public class TransactionReport {
             summary.addCell(cell);
 
             for (Iterator iter = reportSummary.iterator(); iter.hasNext();) {
-                Summary s = (Summary) iter.next();
+                Summary s = (Summary)iter.next();
 
                 cell = new PdfPCell(new Phrase(s.getDescription(), textFont));
                 cell.setBorder(Rectangle.NO_BORDER);
@@ -213,7 +202,7 @@ public class TransactionReport {
                 cell = new PdfPCell(new Phrase("Warning", headerFont));
                 warnings.addCell(cell);
 
-                for (Iterator errorIter = errorSortedList.iterator(); errorIter.hasNext();) {
+                for (Iterator errorIter = reportErrors.keySet().iterator(); errorIter.hasNext();) {
                     Transaction tran = (Transaction) errorIter.next();
                     boolean first = true;
 
@@ -221,16 +210,11 @@ public class TransactionReport {
                     for (Iterator listIter = errors.iterator(); listIter.hasNext();) {
                         String msg = null;
                         Object m = listIter.next();
-                        if (m instanceof Message) {
-                            Message mm = (Message) m;
+                        if ( m instanceof Message ) {
+                            Message mm = (Message)m;
                             msg = mm.getMessage();
-                        }
-                        else {
-                            if ( m == null ) {
-                                msg = "";
-                            } else {
-                            	msg = m.toString();
-                        	}
+                        } else {
+                            msg = m.toString();
                         }
 
                         if (first) {
@@ -263,7 +247,7 @@ public class TransactionReport {
                             warnings.addCell(cell);
                             cell = new PdfPCell(new Phrase(tran.getFinancialSystemOriginationCode(), textFont));
                             warnings.addCell(cell);
-                            cell = new PdfPCell(new Phrase(tran.getDocumentNumber(), textFont));
+                            cell = new PdfPCell(new Phrase(tran.getFinancialDocumentNumber(), textFont));
                             warnings.addCell(cell);
                             if (tran.getTransactionLedgerEntrySequenceNumber() == null) {
                                 cell = new PdfPCell(new Phrase("NULL", textFont));

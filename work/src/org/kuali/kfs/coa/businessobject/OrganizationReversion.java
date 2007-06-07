@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/OrganizationReversion.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +22,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.bo.Options;
 
 /**
  * 
  */
-public class OrganizationReversion extends PersistableBusinessObjectBase {
+public class OrganizationReversion extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
@@ -404,16 +406,5 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
 
     public void setOrganization(Org organization) {
         this.organization = organization;
-    }
-    
-    /**
-     * 
-     * This method (a hack by any other name...) returns a string so that an
-     * organization reversion can have a link to view its own inquiry page
-     * after a look up
-     * @return the String "View Organization Reversion"
-     */
-    public String getOrganizationReversionViewer() {
-        return "View Organization Reversion";
     }
 }

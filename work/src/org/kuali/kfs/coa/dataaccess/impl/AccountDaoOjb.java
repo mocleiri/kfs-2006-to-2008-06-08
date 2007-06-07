@@ -17,27 +17,31 @@ package org.kuali.module.chart.dao.ojb;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.Constants;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountResponsibility;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 import org.kuali.module.chart.dao.AccountDao;
+import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * This class is the OJB implementation of the AccountDao interface.
+ * 
+ * 
  */
-public class AccountDaoOjb extends PlatformAwareDaoBaseOjb implements AccountDao {
+
+public class AccountDaoOjb extends PersistenceBrokerDaoSupport implements AccountDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountDaoOjb.class);
 
     private DateTimeService dateTimeService;
@@ -74,21 +78,6 @@ public class AccountDaoOjb extends PlatformAwareDaoBaseOjb implements AccountDao
         accountResponsibilities.addAll(getDelegatedResponsibilities(universalUser));
         return accountResponsibilities;
     }
-    
-    /**
-     * 
-     * This method determines if the given user has any responsibilities on the given account
-     * @param universalUser the user to check responsibilities for
-     * @param account the account to check responsibilities on
-     * @return true if user is somehow responsible for account, false if otherwise
-     */
-    public boolean determineUserResponsibilityOnAccount(UniversalUser universalUser, Account account) {
-        boolean result = hasFiscalOfficerResponsibility(universalUser, account);
-        if (!result) {
-            result = hasDelegatedResponsibility(universalUser, account);
-        }
-        return result;
-    }
 
     /**
      * @see org.kuali.module.chart.dao.AccountDao#getPrimaryDelegationByExample(org.kuali.module.chart.bo.Delegate,
@@ -108,12 +97,12 @@ public class AccountDaoOjb extends PlatformAwareDaoBaseOjb implements AccountDao
 
     private Criteria getDelegateByExampleCriteria(Delegate delegateExample, String totalDollarAmount, String accountsDelegatePrmrtIndicator) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, delegateExample.getChartOfAccountsCode());
-        criteria.addEqualTo(KFSConstants.ACCOUNT_NUMBER_PROPERTY_NAME, delegateExample.getAccountNumber());
+        criteria.addEqualTo(Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, delegateExample.getChartOfAccountsCode());
+        criteria.addEqualTo(Constants.ACCOUNT_NUMBER_PROPERTY_NAME, delegateExample.getAccountNumber());
         Criteria docTypeMatchCriteria = new Criteria();
-        docTypeMatchCriteria.addEqualTo(KFSConstants.FINANCIAL_DOCUMENT_TYPE_CODE, delegateExample.getFinancialDocumentTypeCode());
+        docTypeMatchCriteria.addEqualTo(Constants.FINANCIAL_DOCUMENT_TYPE_CODE, delegateExample.getFinancialDocumentTypeCode());
         Criteria docTypeAllCriteria = new Criteria();
-        docTypeAllCriteria.addEqualTo(KFSConstants.FINANCIAL_DOCUMENT_TYPE_CODE, "ALL");
+        docTypeAllCriteria.addEqualTo(Constants.FINANCIAL_DOCUMENT_TYPE_CODE, "ALL");
         Criteria docTypeOrCriteria = new Criteria();
         docTypeOrCriteria.addOrCriteria(docTypeMatchCriteria);
         docTypeOrCriteria.addOrCriteria(docTypeAllCriteria);
@@ -127,7 +116,6 @@ public class AccountDaoOjb extends PlatformAwareDaoBaseOjb implements AccountDao
             totalDollarAmountInRangeCriteria.addGreaterOrEqualThan("finDocApprovalToThisAmount", totalDollarAmount);
             Criteria totalDollarAmountZeroCriteria = new Criteria();
             totalDollarAmountZeroCriteria.addEqualTo("finDocApprovalToThisAmount", "0");
-            totalDollarAmountZeroCriteria.addLessOrEqualThan("finDocApprovalFromThisAmt", totalDollarAmount);
             Criteria totalDollarAmountOrCriteria = new Criteria();
             totalDollarAmountOrCriteria.addOrCriteria(totalDollarAmountInRangeCriteria);
             totalDollarAmountOrCriteria.addOrCriteria(totalDollarAmountZeroCriteria);
@@ -150,29 +138,6 @@ public class AccountDaoOjb extends PlatformAwareDaoBaseOjb implements AccountDao
             fiscalOfficerResponsibilities.add(accountResponsibility);
         }
         return fiscalOfficerResponsibilities;
-    }
-    
-    /**
-     * 
-     * This method determines if a given user has fiscal officer responsiblity on a given account.
-     * @param universalUser the user to check responsibilities for
-     * @param account the account to check responsibilities on
-     * @return true if user does have fiscal officer responsibility on account, false if otherwise
-     */
-    private boolean hasFiscalOfficerResponsibility(UniversalUser universalUser, Account account) {
-        boolean hasFiscalOfficerResponsibility = false;
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo("accountFiscalOfficerSystemIdentifier", universalUser.getPersonUniversalIdentifier());
-        criteria.addEqualTo("chartOfAccountsCode", account.getChartOfAccountsCode());
-        criteria.addEqualTo("accountNumber", account.getAccountNumber());
-        Collection accounts = getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Account.class, criteria));
-        if (accounts != null && accounts.size() > 0) {
-            Account retrievedAccount = (Account)accounts.iterator().next();
-            if (ObjectUtils.isNotNull(retrievedAccount)) {
-                hasFiscalOfficerResponsibility = true;
-            }
-        }
-        return hasFiscalOfficerResponsibility;
     }
 
     /**
@@ -199,36 +164,6 @@ public class AccountDaoOjb extends PlatformAwareDaoBaseOjb implements AccountDao
             }
         }
         return delegatedResponsibilities;
-    }
-    
-    /**
-     * 
-     * This method determines if a user has delegated responsibilities on a given account.
-     * @param universalUser the user to check responsibilities for
-     * @param account the account to check responsibilities on
-     * @return true if user has delegated responsibilities
-     */
-    private boolean hasDelegatedResponsibility(UniversalUser universalUser, Account account) {
-        boolean hasResponsibility = false;
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo("accountDelegateSystemId", universalUser.getPersonUniversalIdentifier());
-        criteria.addEqualTo("chartOfAccountsCode", account.getChartOfAccountsCode());
-        criteria.addEqualTo("accountNumber", account.getAccountNumber());
-        Collection accountDelegates = getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Delegate.class, criteria));
-        for (Iterator iter = accountDelegates.iterator(); iter.hasNext() && !hasResponsibility;) {
-            Delegate accountDelegate = (Delegate) iter.next();
-            if (accountDelegate.isAccountDelegateActiveIndicator()) {
-                // the start_date should never be null in the real world, but
-                // there is some test data that
-                // contains null startDates, therefore this check.
-                if (ObjectUtils.isNotNull(accountDelegate.getAccountDelegateStartDate())) {
-                    if (!accountDelegate.getAccountDelegateStartDate().after(dateTimeService.getCurrentDate())) {
-                        hasResponsibility = true;
-                    }
-                }
-            }
-        }
-        return hasResponsibility;
     }
 
     public Iterator getAllAccounts() {

@@ -1,38 +1,41 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service.impl;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.service.DateTimeService;
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
@@ -41,22 +44,17 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.util.LedgerEntry;
 import org.kuali.module.gl.util.LedgerEntryHolder;
-import org.kuali.module.gl.util.OriginEntryStatistics;
-import org.kuali.module.gl.util.PosterOutputSummaryEntry;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ * @author jsissom
+ * @author Laran Evans <lc278@cornell.edu>
+ * @version $Id: OriginEntryServiceImpl.java,v 1.16.2.3 2006-07-26 21:51:22 abyrne Exp $
+ */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
 
-    private static final String ENTRY_GROUP_ID = "entryGroupId";
-    private static final String FINANCIAL_DOCUMENT_TYPE_CODE = "financialDocumentTypeCode";
-    private static final String FINANCIAL_SYSTEM_ORIGINATION_CODE = "financialSystemOriginationCode";
-
     private OriginEntryDao originEntryDao;
     private OriginEntryGroupService originEntryGroupService;
-    
-    private DateTimeService dateTimeService;
 
     /**
      * 
@@ -81,55 +79,6 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         super();
     }
 
-    public OriginEntryStatistics getStatistics(Integer groupId) {
-        LOG.debug("getStatistics() started");
-
-        OriginEntryStatistics oes = new OriginEntryStatistics();
-
-        oes.setCreditTotalAmount(originEntryDao.getGroupTotal(groupId, true));
-        oes.setDebitTotalAmount(originEntryDao.getGroupTotal(groupId, false));
-        oes.setRowCount(originEntryDao.getGroupCount(groupId));
-
-        return oes;
-    }
-
-    /**
-     * 
-     * @see org.kuali.module.gl.service.OriginEntryService#copyEntries(java.util.Date, java.lang.String, boolean, boolean, boolean, java.util.Collection)
-     */
-    public OriginEntryGroup copyEntries(Date date, String sourceCode, boolean valid,boolean process,boolean scrub,Collection<OriginEntry> entries) {
-        LOG.debug("copyEntries() started");
-
-        OriginEntryGroup newOriginEntryGroup = originEntryGroupService.createGroup(date, sourceCode, valid, process, scrub);
-
-        // Create new Entries with newOriginEntryGroup
-        for (OriginEntry oe : entries) {
-            oe.setEntryGroupId(newOriginEntryGroup.getId());
-            createEntry(oe, newOriginEntryGroup);
-        }
-
-        return newOriginEntryGroup;
-    }
-
-    
-    /**
-     * @see org.kuali.module.gl.service.OriginEntryService#copyEntries(java.sql.Date, java.lang.String, boolean, boolean, boolean, java.util.Iterator)
-     */
-    public OriginEntryGroup copyEntries(Date date, String sourceCode, boolean valid, boolean process, boolean scrub, Iterator<OriginEntry> entries) {
-        LOG.debug("copyEntries() started");
-
-        OriginEntryGroup newOriginEntryGroup = originEntryGroupService.createGroup(date, sourceCode, valid, process, scrub);
-
-        // Create new Entries with newOriginEntryGroup
-        while (entries.hasNext()) {
-            OriginEntry oe = entries.next();
-            oe.setEntryGroupId(newOriginEntryGroup.getId());
-            createEntry(oe, newOriginEntryGroup);
-        }
-
-        return newOriginEntryGroup;
-    }
-
     /**
      * 
      * @see org.kuali.module.gl.service.OriginEntryService#delete(org.kuali.module.gl.bo.OriginEntry)
@@ -144,21 +93,10 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      * 
      * @see org.kuali.module.gl.service.OriginEntryService#getDocumentsByGroup(org.kuali.module.gl.bo.OriginEntryGroup)
      */
-    public Collection<OriginEntry> getDocumentsByGroup(OriginEntryGroup oeg) {
+    public Iterator<OriginEntry> getDocumentsByGroup(OriginEntryGroup oeg) {
         LOG.debug("getDocumentsByGroup() started");
 
-        Collection<OriginEntry> results = new ArrayList<OriginEntry>();
-        Iterator i = originEntryDao.getDocumentsByGroup(oeg);
-        while ( i.hasNext() ) {
-            Object[] data = (Object[])i.next();
-            OriginEntry oe = new OriginEntry();
-            oe.setDocumentNumber((String)data[0]);
-            oe.setFinancialDocumentTypeCode((String)data[1]);
-            oe.setFinancialSystemOriginationCode((String)data[2]);
-            results.add(oe);
-    }
-
-        return results;
+        return originEntryDao.getDocumentsByGroup(oeg);
     }
 
     /**
@@ -168,7 +106,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public Iterator<OriginEntry> getEntriesByGroup(OriginEntryGroup originEntryGroup) {
         LOG.debug("getEntriesByGroup() started");
 
-        return originEntryDao.getEntriesByGroup(originEntryGroup, OriginEntryDao.SORT_DOCUMENT);
+        return originEntryDao.getEntriesByGroup(originEntryGroup,OriginEntryDao.SORT_DOCUMENT);
     }
 
     public Iterator<OriginEntry> getBadBalanceEntries(Collection groups) {
@@ -180,19 +118,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public Iterator<OriginEntry> getEntriesByGroupAccountOrder(OriginEntryGroup oeg) {
         LOG.debug("getEntriesByGroupAccountOrder() started");
 
-        return originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_ACCOUNT);
-    }
-
-    public Iterator<OriginEntry> getEntriesByGroupReportOrder(OriginEntryGroup oeg) {
-        LOG.debug("getEntriesByGroupAccountOrder() started");
-
-        return originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_REPORT);
-    }
-    
-    public Iterator<OriginEntry> getEntriesByGroupListingReportOrder(OriginEntryGroup oeg) {
-        LOG.debug("getEntriesByGroupAccountOrder() started");
-
-        return originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_LISTING_REPORT);
+        return originEntryDao.getEntriesByGroup(oeg,OriginEntryDao.SORT_ACCOUNT);
     }
 
     /**
@@ -204,10 +130,10 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         LOG.debug("getEntriesByGroup() started");
 
         Map criteria = new HashMap();
-        criteria.put(ENTRY_GROUP_ID, originEntryGroup.getId());
-        criteria.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
-        criteria.put(FINANCIAL_DOCUMENT_TYPE_CODE, documentTypeCode);
-        criteria.put(FINANCIAL_SYSTEM_ORIGINATION_CODE, originCode);
+        criteria.put("entryGroupId", originEntryGroup.getId());
+        criteria.put("financialDocumentNumber", documentNumber);
+        criteria.put("financialDocumentTypeCode", documentTypeCode);
+        criteria.put("financialSystemOriginationCode", originCode);
 
         return originEntryDao.getMatchingEntries(criteria);
     }
@@ -278,7 +204,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public void loadFlatFile(String filename, String groupSourceCode, boolean isValid, boolean isProcessed, boolean isScrub) {
         LOG.debug("loadFlatFile() started");
 
-        java.sql.Date groupDate = new java.sql.Date(dateTimeService.getCurrentDate().getTime());
+        java.sql.Date groupDate = new java.sql.Date(System.currentTimeMillis());
         OriginEntryGroup newGroup = originEntryGroupService.createGroup(groupDate, groupSourceCode, isValid, isProcessed, isScrub);
 
         BufferedReader input = null;
@@ -311,11 +237,9 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      * @see org.kuali.module.gl.service.OriginEntryService#getSummaryByGroupId(Collection)
      */
     public LedgerEntryHolder getSummaryByGroupId(Collection groupIdList) {
-        LOG.debug("getSummaryByGroupId() started");
-
         LedgerEntryHolder ledgerEntryHolder = new LedgerEntryHolder();
 
-        if (groupIdList.size() == 0) {
+        if ( groupIdList.size() == 0 ) {
             return ledgerEntryHolder;
         }
 
@@ -349,11 +273,11 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         // construct a ledger entry with the information fetched from the given array
         LedgerEntry ledgerEntry = new LedgerEntry(fiscalYear, periodCode, balanceType, originCode);
-        if (KFSConstants.GL_CREDIT_CODE.equals(debitCreditCode)) {
+        if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             ledgerEntry.setCreditAmount(amount);
             ledgerEntry.setCreditCount(count);
         }
-        else if (KFSConstants.GL_DEBIT_CODE.equals(debitCreditCode)) {
+        else if (Constants.GL_DEBIT_CODE.equals(debitCreditCode)) {
             ledgerEntry.setDebitAmount(amount);
             ledgerEntry.setDebitCount(count);
         }
@@ -365,143 +289,34 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         return ledgerEntry;
     }
+    //TODO
+    public void flatFile(String filename, Integer groupId, BufferedOutputStream bw) {
+        
+        
+        LOG.debug("exportFlatFile() started");
 
-    /**
-     * 
-     * @see org.kuali.module.gl.service.OriginEntryService#flatFile(java.lang.Integer, java.io.BufferedOutputStream)
-     */
-    public void flatFile(Integer groupId, BufferedOutputStream bw) {
-        LOG.debug("flatFile() started");
-        OriginEntryGroup oeg = new OriginEntryGroup();
-        oeg.setId(groupId);
-        flatFile(getEntriesByGroup(oeg), bw);
-    }
-    
-    /**
-     * This method writes origin entries into a file format.  This particular implementation
-     * will use the OriginEntry.getLine method to generate the text for this file.
-     * 
-     * @param entries An iterator of OriginEntries
-     * @param bw an opened, ready-for-output bufferedOutputStream.
-     */
-    public void flatFile(Iterator<OriginEntry> entries, BufferedOutputStream bw) {
         try {
-            while (entries.hasNext()) {
-                OriginEntry e = entries.next();
+
+            OriginEntryGroup oeg = new OriginEntryGroup();
+            oeg.setId(groupId);
+            Iterator i = getEntriesByGroup(oeg);
+            while (i.hasNext()) {
+                OriginEntry e = (OriginEntry) i.next();
                 bw.write((e.getLine() + "\n").getBytes());
             }
         }
         catch (IOException e) {
-            LOG.error("flatFile() Error writing to file", e);
-            throw new RuntimeException("Error writing to file: " + e.getMessage());
+            LOG.error("exportFlatFile() Error writing to file", e);
         }
-    }
-
-    /**
-     * 
-     * @see org.kuali.module.gl.service.OriginEntryService#getMatchingEntriesByCollection(java.util.Map)
-     */
-    public Collection<OriginEntry> getMatchingEntriesByCollection(Map searchCriteria) {
-        LOG.debug("getMatchingEntriesByCollection() started");
-
+                }
+        
+    public Collection getMatchingEntriesByCollection(Map searchCriteria){
         return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
+        
     }
-
-    /**
-     * @see org.kuali.module.gl.service.OriginEntryService#getMatchingEntriesByList(java.util.Map)
-     */
-    public List<OriginEntry> getEntriesByGroupId(Integer groupId) {
-        if (groupId == null) {
-            throw new IllegalArgumentException("Group ID is null");
-        }
-        Map<String, Object> searchCriteria = new HashMap<String, Object>();
-        searchCriteria.put(ENTRY_GROUP_ID, groupId);
-        Collection<OriginEntry> searchResultAsCollection = getMatchingEntriesByCollection(searchCriteria);
-        if (searchResultAsCollection instanceof List) {
-            return (List<OriginEntry>) searchResultAsCollection;
-        }
-        else {
-            return new ArrayList<OriginEntry>(searchResultAsCollection);
-        }
-    }
-
-    /**
-     * 
-     * @see org.kuali.module.gl.service.OriginEntryService#getExactMatchingEntry(java.lang.Integer)
-     */
-    public OriginEntry getExactMatchingEntry(Integer entryId) {
-        LOG.debug("getExactMatchingEntry() started");
-
+        
+    public OriginEntry getExactMatchingEntry(Integer entryId){
         return originEntryDao.getExactMatchingEntry(entryId);
     }
-
-    /**
-     * 
-     * @see org.kuali.module.gl.service.OriginEntryService#getPosterOutputSummaryByGroupId(java.util.Collection)
-     */
-    public Map<String,PosterOutputSummaryEntry> getPosterOutputSummaryByGroupId(Collection groupIdList) {
-        LOG.debug("getPosterOutputSummaryByGroupId() started");
-
-        Map<String,PosterOutputSummaryEntry> output = new HashMap<String,PosterOutputSummaryEntry>();
-
-        if (groupIdList.size() == 0) {
-            return output;
-        }
-
-        Iterator entrySummaryIterator = originEntryDao.getPosterOutputSummaryByGroupId(groupIdList);
-        while (entrySummaryIterator.hasNext()) {
-            Object[] entrySummary = (Object[]) entrySummaryIterator.next();            
-            PosterOutputSummaryEntry posterOutputSummaryEntry = new PosterOutputSummaryEntry();
-            int indexOfField = 0;
-
-            Object tempEntry = entrySummary[indexOfField++];
-            String entry = (tempEntry == null) ? "" : tempEntry.toString();
-            posterOutputSummaryEntry.setBalanceTypeCode(entry);
-
-            tempEntry = entrySummary[indexOfField++];
-            entry = (tempEntry == null) ? null : tempEntry.toString();
-            posterOutputSummaryEntry.setUniversityFiscalYear(new Integer(entry));
-
-            tempEntry = entrySummary[indexOfField++];
-            entry = (tempEntry == null) ? "" : tempEntry.toString();
-            posterOutputSummaryEntry.setFiscalPeriodCode(entry);
-
-            tempEntry = entrySummary[indexOfField++];
-            entry = (tempEntry == null) ? "" : tempEntry.toString();
-            posterOutputSummaryEntry.setFundGroup(entry);
-
-            tempEntry = entrySummary[indexOfField++];
-            String objectTypeCode = (tempEntry == null) ? "" : tempEntry.toString();
-            posterOutputSummaryEntry.setObjectTypeCode(objectTypeCode);
-
-            tempEntry = entrySummary[indexOfField++];
-            String debitCreditCode = (tempEntry == null) ? KFSConstants.GL_BUDGET_CODE : tempEntry.toString();
-
-            tempEntry = entrySummary[indexOfField];
-            entry = (tempEntry == null) ? "0" : tempEntry.toString();            
-            KualiDecimal amount = new KualiDecimal(entry);
-
-            posterOutputSummaryEntry.setAmount(debitCreditCode, objectTypeCode, amount);
-
-            if ( output.containsKey(posterOutputSummaryEntry.getKey()) ) {
-                PosterOutputSummaryEntry pose = output.get(posterOutputSummaryEntry.getKey());
-                pose.add(posterOutputSummaryEntry);
-            } else {
-                output.put(posterOutputSummaryEntry.getKey(),posterOutputSummaryEntry);
-            }
-        }
-        return output;
-    }
     
-
-    /**
-     * @see org.kuali.module.gl.service.OriginEntryService#getGroupCount(java.lang.Integer)
-     */
-    public Integer getGroupCount(Integer groupId) {
-        return originEntryDao.getGroupCount(groupId);
-    }
-
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
-    }
 }

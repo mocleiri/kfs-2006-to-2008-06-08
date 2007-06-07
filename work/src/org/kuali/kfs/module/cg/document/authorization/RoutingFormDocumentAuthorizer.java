@@ -30,7 +30,6 @@ import org.kuali.module.kra.KraKeyConstants;
 import org.kuali.module.kra.document.ResearchDocumentAuthorizer;
 import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
 import org.kuali.module.kra.service.ResearchDocumentPermissionsService;
-import org.kuali.workflow.KualiWorkflowUtils;
 
 public class RoutingFormDocumentAuthorizer extends ResearchDocumentAuthorizer {
 
@@ -44,11 +43,7 @@ public class RoutingFormDocumentAuthorizer extends ResearchDocumentAuthorizer {
         
         // Check initiator
         if (workflowDocument.getInitiatorNetworkId().equalsIgnoreCase(u.getPersonUserIdentifier())) {
-            if (workflowDocument.stateIsEnroute()) {
-                permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.VIEW_ONLY);
-            } else {
-                permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
-            }
+            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
             return finalizeEditMode(routingFormDocument, permissionCode);
         }
         
@@ -59,11 +54,7 @@ public class RoutingFormDocumentAuthorizer extends ResearchDocumentAuthorizer {
                 String role = person.getPersonRole().getPersonRoleCode();
                 if (KraConstants.PROJECT_DIRECTOR_CODE.equals(role)
                         || KraConstants.CO_PROJECT_DIRECTOR_CODE.equals(role)) {
-                    if (workflowDocument.getRouteHeader().getDocRouteLevel() > KraConstants.projectDirectorRouteLevel) {
-                        permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.VIEW_ONLY);
-                    } else {
-                        permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
-                    }
+                    permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.FULL_ENTRY);
                     
                     return finalizeEditMode(routingFormDocument, permissionCode);
                 }
@@ -74,17 +65,20 @@ public class RoutingFormDocumentAuthorizer extends ResearchDocumentAuthorizer {
             }
         }
         
-        // Org approvers are view-only
-        if (permissionsService.isUserInOrgHierarchy(routingFormDocument.buildProjectDirectorReportXml(true), KualiWorkflowUtils.KRA_ROUTING_FORM_DOC_TYPE, u.getPersonUniversalIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.VIEW_ONLY);
+        // TODO Check default org permissions - project director, cost sharing orgs.  Need to set up routing first. Update constants.
+        if (permissionsService.isUserInOrgHierarchy(routingFormDocument.buildProjectDirectorReportXml(true), u.getPersonUniversalIdentifier())) {
+            permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getApplicationParameterValue(
+                    KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.PROJECT_DIRECTOR_ORG_BUDGET_PERMISSION));
         }
         
-        if (permissionsService.isUserInOrgHierarchy(routingFormDocument.buildCostShareOrgReportXml(true), KualiWorkflowUtils.KRA_ROUTING_FORM_DOC_TYPE, u.getPersonUniversalIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.VIEW_ONLY);
+        if (permissionsService.isUserInOrgHierarchy(routingFormDocument.buildCostShareOrgReportXml(true), u.getPersonUniversalIdentifier())) {
+            permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getApplicationParameterValue(
+                    KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.COST_SHARE_ORGS_BUDGET_PERMISSION));
         }
         
-        if (permissionsService.isUserInOrgHierarchy(routingFormDocument.buildOtherOrgReportXml(true), KualiWorkflowUtils.KRA_ROUTING_FORM_DOC_TYPE, u.getPersonUniversalIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, AuthorizationConstants.EditMode.VIEW_ONLY);
+        if (permissionsService.isUserInOrgHierarchy(routingFormDocument.buildOtherOrgReportXml(true), u.getPersonUniversalIdentifier())) {
+            permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getApplicationParameterValue(
+                    KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.COST_SHARE_ORGS_BUDGET_PERMISSION));
         }
         
         permissionCode = getPermissionCodeByPrecedence(permissionCode, getAdHocEditMode(routingFormDocument, u));
@@ -103,19 +97,12 @@ public class RoutingFormDocumentAuthorizer extends ResearchDocumentAuthorizer {
     public DocumentActionFlags getDocumentActionFlags(Document document, UniversalUser user) {
 
         DocumentActionFlags flags = super.getDocumentActionFlags(document, user);
-        RoutingFormDocument routingFormDocument = (RoutingFormDocument) document;
-        
+
         flags.setCanAcknowledge(false);
-        
-        if (!flags.getCanRoute()
-                && routingFormDocument.isUserProjectDirector(user.getPersonUniversalIdentifier())
-                && routingFormDocument.getDocumentHeader().getWorkflowDocument().stateIsSaved()) {
-            flags.setCanRoute(true);
-        }
 //        flags.setCanApprove(false);
         flags.setCanBlanketApprove(false);
         flags.setCanCancel(false);
-//        flags.setCanDisapprove(false);
+        flags.setCanDisapprove(false);
         flags.setCanFYI(false);
         flags.setCanClose(false);
         flags.setCanSave(true);
