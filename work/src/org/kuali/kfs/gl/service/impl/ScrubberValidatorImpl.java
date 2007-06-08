@@ -743,21 +743,14 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         LOG.debug("validateUniversityFiscalPeriodCode() started");
 
         if (!StringUtils.hasText(originEntry.getUniversityFiscalPeriodCode())) {
-            if (universityRunDate.getAccountingPeriod().isOpen()) {
-                workingEntry.setUniversityFiscalPeriodCode(universityRunDate.getUniversityFiscalAccountingPeriod());
-                workingEntry.setUniversityFiscalYear(universityRunDate.getUniversityFiscalYear());
-    
-                // Retrieve these objects because the fiscal year is the primary key for them
-                persistenceService.retrieveReferenceObject(originEntry, "financialSubObject");
-                persistenceService.retrieveReferenceObject(originEntry, "financialObject");
-                persistenceService.retrieveReferenceObject(originEntry, "accountingPeriod");
-                persistenceService.retrieveReferenceObject(originEntry, "option");
-            }
-            else {
-                return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_ACCOUNTING_PERIOD_CLOSED) +
-                        " (year " + universityRunDate.getUniversityFiscalYear() + ", period " +
-                        universityRunDate.getUniversityFiscalAccountingPeriod()+ ")", Message.TYPE_FATAL);
-            }
+            workingEntry.setUniversityFiscalPeriodCode(universityRunDate.getUniversityFiscalAccountingPeriod());
+            workingEntry.setUniversityFiscalYear(universityRunDate.getUniversityFiscalYear());
+
+            // Retrieve these objects because the fiscal year is the primary key for them
+            persistenceService.retrieveReferenceObject(originEntry, "financialSubObject");
+            persistenceService.retrieveReferenceObject(originEntry, "financialObject");
+            persistenceService.retrieveReferenceObject(originEntry, "accountingPeriod");
+            persistenceService.retrieveReferenceObject(originEntry, "option");
         }
         else {
             if (originEntry.getAccountingPeriod() == null) {
