@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
         <preRulesCheckClass>org.kuali.module.chart.rules.ObjectCodePreRules</preRulesCheckClass>
 
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -38,17 +38,13 @@
         <documentTypeName>KualiObjectCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>OBJT</documentTypeCode>
 
-		<webScriptFile>../dwr/interface/ChartService.js</webScriptFile>
-		<webScriptFile>../scripts/kfs/objectInfo.js</webScriptFile>
-
-
         <label>Object Code Maintenance Document</label>
         <shortLabel>OCMainDoc</shortLabel>
 
         <summary>Object Code maintenance document</summary>
         <description>Document used to create or update Object Code objects</description>
         <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_OBJECT_CODE" />
-
+        
         <lockingKeys>
             <field attributeName="universityFiscalYear" />
             <field attributeName="chartOfAccountsCode" />
@@ -58,17 +54,13 @@
         <defaultExistenceChecks>
             <reference attributeName="universityFiscal" attributeToHighlightOnFail="universityFiscalYear" />
             <reference attributeName="chartOfAccounts" attributeToHighlightOnFail="chartOfAccountsCode" />            
-            <reference attributeName="finObjMandatoryTrnfrelim" attributeToHighlightOnFail="finObjMandatoryTrnfrelimCd" />
-            <reference attributeName="financialObjectLevel" attributeToHighlightOnFail="financialObjectLevelCode" />
-            <reference attributeName="financialObjectType" attributeToHighlightOnFail="financialObjectTypeCode" />
-			<reference attributeName="financialObjectSubType" attributeToHighlightOnFail="financialObjectSubTypeCode" />            
         </defaultExistenceChecks>
 
         <maintainableSections>
             <maintainableSection title="Edit Object Code">
                 <maintainableItems>
                     <maintainableField name="universityFiscalYear" required="true">
-                        <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
+                        <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.FiscalYearFinder</defaultValueFinderClass>
                     </maintainableField>
                     <maintainableField name="chartOfAccountsCode" required="true" />
                     <maintainableField name="financialObjectCode" required="true" />
@@ -85,7 +77,7 @@
                     </maintainableField>
                     <maintainableField name="financialBudgetAggregationCd" required="true" />
                     <maintainableField name="finObjMandatoryTrnfrelimCd" required="true" />
-                    <maintainableField name="financialFederalFundedCode" required="true" />
+                    <maintainableField name="financialFederalFundedCode" />
                     <maintainableField name="nextYearFinancialObjectCode" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>

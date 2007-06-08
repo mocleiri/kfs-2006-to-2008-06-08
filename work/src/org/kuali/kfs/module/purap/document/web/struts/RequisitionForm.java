@@ -18,12 +18,13 @@ package org.kuali.module.purap.web.struts.form;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.module.purap.bo.PurchasingApItem;
-import org.kuali.module.purap.bo.RequisitionAccount;
 import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.document.RequisitionDocument;
 
 /**
- * This class is the form class for the Requisition document. 
+ * This class is the form class for the Requisition document. This method extends the parent KualiTransactionalDocumentFormBase
+ * class which contains all of the common form methods and form attributes needed by the Requisition document.
+ * 
  */
 public class RequisitionForm extends PurchasingFormBase {
 
@@ -33,6 +34,7 @@ public class RequisitionForm extends PurchasingFormBase {
     public RequisitionForm() {
         super();
         setDocument(new RequisitionDocument());
+        this.setNewPurchasingItemLine(setupNewPurchasingItemLine());
     }
 
     /**
@@ -76,15 +78,8 @@ public class RequisitionForm extends PurchasingFormBase {
      */
     @Override
     public PurchasingApItem setupNewPurchasingItemLine() {
-        RequisitionItem ri = new RequisitionItem();
-        return ri;
+        return new RequisitionItem();
     }
     
-    /**
-     * @see org.kuali.module.purap.web.struts.form.PurchasingFormBase#setupNewPurchasingAccountingLine()
-     */
-    @Override
-    public RequisitionAccount setupNewPurchasingAccountingLine() {
-        return new RequisitionAccount();
-    }
+    
 }

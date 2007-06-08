@@ -1,18 +1,3 @@
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
@@ -23,7 +8,7 @@
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
         <businessRulesClass>org.kuali.module.chart.rules.SubAccountRule</businessRulesClass>
         <preRulesCheckClass>org.kuali.module.chart.rules.SubAccountPreRules</preRulesCheckClass>
-		
+
         <documentAuthorizerClass>org.kuali.module.chart.document.SubAccountDocumentAuthorizer</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
@@ -36,15 +21,11 @@
         <documentTypeName>KualiSubAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>SACC</documentTypeCode>
 
-		<webScriptFile>../dwr/interface/AccountService.js</webScriptFile>
-		<webScriptFile>../scripts/chart/subAccountDocument.js</webScriptFile>
-
-        <label>Sub-Account Maintenance Document</label>
+        <label>Sub Account Maintenance Document</label>
         <shortLabel>SubAccountMainDoc</shortLabel>
 
-        <summary>Sub-Account maintenance document</summary>
-        <description>Document used to create or update Sub-Account objects</description>
-        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_SUB_ACCOUNT" />
+        <summary>Sub Account maintenance document</summary>
+        <description>Document used to create or update Sub Account objects</description>
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
@@ -55,21 +36,22 @@
         <defaultExistenceChecks>
             <reference attributeName="chart" activeIndicatorAttributeName="finChartOfAccountActiveIndicator" activeIndicatorReversed="false" attributeToHighlightOnFail="chartOfAccountsCode" displayFieldName="Chart Code" />
             <reference attributeName="account" activeIndicatorAttributeName="accountClosedIndicator" activeIndicatorReversed="true" attributeToHighlightOnFail="accountNumber" displayFieldName="Account Number" />
-            <reference attributeName="financialReportChart" activeIndicatorAttributeName="finChartOfAccountActiveIndicator" activeIndicatorReversed="false" attributeToHighlightOnFail="financialReportChartCode" displayFieldName="Financial Reporting Chart Code" />
+            <reference attributeName="financialReportChart" activeIndicatorAttributeName="finChartOfAccountActiveIndicator" activeIndicatorReversed="false" attributeToHighlightOnFail="chartOfAccountsCode" displayFieldName="Financial Reporting Chart Code" />
             <reference attributeName="reportingCode" attributeToHighlightOnFail="financialReportingCode" displayFieldName="Financial Reporting Code for this Financial Reporting Chart Code and Financial Reporting Org Code combination" />
+        
         </defaultExistenceChecks>
 
         <maintainableSections>
-            <maintainableSection title="Edit Sub-Account Code">
+            <maintainableSection title="Edit Sub Account Code">
                 <maintainableItems>
                     <maintainableField name="chartOfAccountsCode" required="true" />
-                    <maintainableField name="accountNumber" required="true" webUILeaveFieldFunction="updateICR" webUILeaveFieldCallbackFunction="updateICR_Callback" />
+                    <maintainableField name="accountNumber" required="true" />
                     <maintainableField name="subAccountNumber" required="true" />
                     <maintainableField name="subAccountName" required="true" />
                     <maintainableField name="subAccountActiveIndicator" required="false">
                         <defaultValue>true</defaultValue>
                     </maintainableField>
-                    <maintainableField name="a21SubAccount.subAccountTypeCode" required="true">
+                    <maintainableField name="a21SubAccount.subAccountTypeCode" required="false">
                         <defaultValue>EX</defaultValue>
                     </maintainableField>
                     <maintainableField name="versionNumber" />

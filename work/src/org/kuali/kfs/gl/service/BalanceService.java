@@ -22,6 +22,9 @@ import java.util.Map;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.gl.bo.Balance;
 
+/**
+ */
+
 public interface BalanceService {
     /**
      * Save

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/validation/impl/DisbursementVoucherDocumentPreRules.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +21,19 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
+import org.kuali.core.lookup.keyvalues.PaymentReasonValuesFinder;
 import org.kuali.core.rules.PreRulesContinuationBase;
 import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.uidraw.KeyLabelPair;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel;
 import org.kuali.module.financial.bo.DisbursementVoucherWireTransfer;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.module.financial.lookup.keyvalues.PaymentReasonValuesFinder;
 
 /**
  * Checks warnings and prompt conditions for dv document.
@@ -86,7 +88,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
         String[] travelNonEmplPaymentReasonCodes = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues(DV_DOCUMENT_PARAMETERS_GROUP_NM, NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
 
         if (hasNonEmployeeTravelValues(dvNonEmplTrav) && !RulesUtils.makeSet(travelNonEmplPaymentReasonCodes).contains(dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
-            String questionText = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.QUESTION_CLEAR_UNNEEDED_TAB);
+            String questionText = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.QUESTION_CLEAR_UNNEEDED_TAB);
 
             PaymentReasonValuesFinder payReasonValues = new PaymentReasonValuesFinder();
             List<KeyLabelPair> reasons = payReasonValues.getKeyValues();
@@ -101,7 +103,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
             Object[] args = { "payment reason", "'" + dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonName() + "'", "Non-Employee Travel", "'" + nonEmplTravReasonStr + "'" };
             questionText = MessageFormat.format(questionText, args);
 
-            boolean clearTab = super.askOrAnalyzeYesNoQuestion(KFSConstants.DisbursementVoucherDocumentConstants.CLEAR_NON_EMPLOYEE_TAB_QUESTION_ID, questionText);
+            boolean clearTab = super.askOrAnalyzeYesNoQuestion(Constants.DisbursementVoucherDocumentConstants.CLEAR_NON_EMPLOYEE_TAB_QUESTION_ID, questionText);
             if (clearTab) {
                 DisbursementVoucherNonEmployeeTravel blankDvNonEmplTrav = new DisbursementVoucherNonEmployeeTravel();
                 blankDvNonEmplTrav.setDocumentNumber(dvNonEmplTrav.getDocumentNumber());
@@ -110,7 +112,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
             }
             else {
                 // return to document if the user doesn't want to clear the Non Employee Travel tab
-                super.event.setActionForwardName(KFSConstants.MAPPING_BASIC);
+                super.event.setActionForwardName(Constants.MAPPING_BASIC);
                 tabStatesOK = false;
             }
         }
@@ -197,19 +199,19 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
 
         // if payment method is CHECK and wire tab contains data, ask user to clear tab
         if ((StringUtils.equals(DisbursementVoucherRuleConstants.PAYMENT_METHOD_CHECK, dvDocument.getDisbVchrPaymentMethodCode()) || StringUtils.equals(DisbursementVoucherRuleConstants.PAYMENT_METHOD_WIRE, dvDocument.getDisbVchrPaymentMethodCode())) && hasForeignDraftValues(dvForeignDraft)) {
-            String questionText = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.QUESTION_CLEAR_UNNEEDED_TAB);
+            String questionText = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.QUESTION_CLEAR_UNNEEDED_TAB);
 
             Object[] args = { "payment method", dvDocument.getDisbVchrPaymentMethodCode(), "Foreign Draft", DisbursementVoucherRuleConstants.PAYMENT_METHOD_DRAFT };
             questionText = MessageFormat.format(questionText, args);
 
-            boolean clearTab = super.askOrAnalyzeYesNoQuestion(KFSConstants.DisbursementVoucherDocumentConstants.CLEAR_FOREIGN_DRAFT_TAB_QUESTION_ID, questionText);
+            boolean clearTab = super.askOrAnalyzeYesNoQuestion(Constants.DisbursementVoucherDocumentConstants.CLEAR_FOREIGN_DRAFT_TAB_QUESTION_ID, questionText);
             if (clearTab) {
                 // NOTE: Can't replace with new instance because Wire Transfer uses same object
                 clearForeignDraftValues(dvForeignDraft);
             }
             else {
                 // return to document if the user doesn't want to clear the Wire Transfer tab
-                super.event.setActionForwardName(KFSConstants.MAPPING_BASIC);
+                super.event.setActionForwardName(Constants.MAPPING_BASIC);
                 tabStatesOK = false;
             }
         }
@@ -261,19 +263,19 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
 
         // if payment method is CHECK and wire tab contains data, ask user to clear tab
         if ((StringUtils.equals(DisbursementVoucherRuleConstants.PAYMENT_METHOD_CHECK, dvDocument.getDisbVchrPaymentMethodCode()) || StringUtils.equals(DisbursementVoucherRuleConstants.PAYMENT_METHOD_DRAFT, dvDocument.getDisbVchrPaymentMethodCode())) && hasWireTransferValues(dvWireTransfer)) {
-            String questionText = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSKeyConstants.QUESTION_CLEAR_UNNEEDED_TAB);
+            String questionText = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.QUESTION_CLEAR_UNNEEDED_TAB);
 
             Object[] args = { "payment method", dvDocument.getDisbVchrPaymentMethodCode(), "Wire Transfer", DisbursementVoucherRuleConstants.PAYMENT_METHOD_WIRE };
             questionText = MessageFormat.format(questionText, args);
 
-            boolean clearTab = super.askOrAnalyzeYesNoQuestion(KFSConstants.DisbursementVoucherDocumentConstants.CLEAR_WIRE_TRANSFER_TAB_QUESTION_ID, questionText);
+            boolean clearTab = super.askOrAnalyzeYesNoQuestion(Constants.DisbursementVoucherDocumentConstants.CLEAR_WIRE_TRANSFER_TAB_QUESTION_ID, questionText);
             if (clearTab) {
                 // NOTE: Can't replace with new instance because Foreign Draft uses same object
                 clearWireTransferValues(dvWireTransfer);
             }
             else {
                 // return to document if the user doesn't want to clear the Wire Transfer tab
-                super.event.setActionForwardName(KFSConstants.MAPPING_BASIC);
+                super.event.setActionForwardName(Constants.MAPPING_BASIC);
                 tabStatesOK = false;
             }
         }

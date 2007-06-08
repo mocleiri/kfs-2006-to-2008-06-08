@@ -132,7 +132,7 @@
 
             <attribute name="iuNormalWorkMonths" forceUppercase="true">
                 <label>Normal Work Months</label>
-                <shortLabel>WM</shortLabel>
+                <shortLabel>Work Months</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><numeric /></validationPattern>
@@ -147,7 +147,7 @@
 
             <attribute name="iuPayMonths" forceUppercase="true">
                 <label>Pay Months</label>
-                <shortLabel>PM</shortLabel>
+                <shortLabel>Pay Months</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><numeric /></validationPattern>
@@ -225,7 +225,7 @@
                 <shortLabel>Position Desc</shortLabel>
 
                 <maxLength>30</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="32" />
@@ -276,7 +276,7 @@
 
             <attribute name="positionGradeDefault" forceUppercase="true">
                 <label>Position Salary Grade Default</label>
-                <shortLabel>Grd</shortLabel>
+                <shortLabel>Default</shortLabel>
 
                 <maxLength>3</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -336,13 +336,13 @@
 
             <attribute name="positionSalaryPlanDefault" forceUppercase="true">
                 <label>Position Salary Plan Default</label>
-                <shortLabel>SPln</shortLabel>
+                <shortLabel>Sal Plan Default</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <text size="5" />
+                    <text size="6" />
                 </control>
 
                 <summary>Position Salary Plan Default</summary>

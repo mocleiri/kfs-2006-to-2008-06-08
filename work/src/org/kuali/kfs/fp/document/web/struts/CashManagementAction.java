@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,23 +28,23 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
+import org.kuali.Constants.CashDrawerConstants;
+import org.kuali.Constants.DepositConstants;
+import org.kuali.KeyConstants.CashManagement;
 import org.kuali.core.authorization.AuthorizationConstants;
+import org.kuali.core.authorization.DocumentAuthorizer;
 
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.authorization.DocumentAuthorizer;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.action.KualiDocumentActionBase;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSConstants.CashDrawerConstants;
-import org.kuali.kfs.KFSConstants.DepositConstants;
-import org.kuali.kfs.KFSKeyConstants.CashManagement;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Deposit;
 import org.kuali.module.financial.document.CashManagementDocument;
-import org.kuali.module.financial.document.authorization.CashManagementDocumentAuthorizer;
+import org.kuali.module.financial.document.CashManagementDocumentAuthorizer;
 import org.kuali.module.financial.service.CashDrawerService;
 import org.kuali.module.financial.web.struts.form.CashManagementForm;
 import org.kuali.module.financial.web.struts.form.CashManagementForm.CashDrawerSummary;
@@ -231,7 +233,7 @@ public class CashManagementAction extends KualiDocumentActionBase {
         // display status message
         GlobalVariables.getMessageList().add(CashManagement.STATUS_DEPOSIT_CANCELED);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
@@ -271,7 +273,7 @@ public class CashManagementAction extends KualiDocumentActionBase {
 
         cmForm.getCashDrawerSummary().resummarize(cmDoc);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
@@ -297,7 +299,7 @@ public class CashManagementAction extends KualiDocumentActionBase {
         CashDrawerService cds = SpringServiceLocator.getCashDrawerService();
         cds.openCashDrawer(cmDoc.getWorkgroupName(), cmDoc.getDocumentNumber());
         try {
-            SpringServiceLocator.getDocumentService().saveDocument(cmDoc);
+            SpringServiceLocator.getDocumentService().saveDocument(cmDoc, null, null);
         }
         catch (WorkflowException e) {
             // force it closed if workflow proves recalcitrant
@@ -308,7 +310,7 @@ public class CashManagementAction extends KualiDocumentActionBase {
         // update the CashDrawerSummary to reflect the change
         cmForm.populateCashDrawerSummary();
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
