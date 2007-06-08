@@ -22,7 +22,7 @@
 		<property name="moduleCode" value="RA" />
 		<property name="moduleUserService" ref="kraUserService" />
 		<property name="moduleAuthorizer">
-			<bean class="org.kuali.kfs.authorization.KfsModuleAuthorizerBase">
+			<bean class="org.kuali.core.authorization.KualiModuleAuthorizerBase">
 				<property name="packagePrefixes">
 					<list>
 						<value>org.kuali.module.kra.</value>
@@ -38,30 +38,31 @@
 		</property>
 		<property name="dataDictionaryPackages">
 			<list>
-				<value>org/kuali/module/kra/datadictionary</value>
-				<value>org/kuali/module/kra/budget/datadictionary</value>
-				<value>org/kuali/module/kra/routingform/datadictionary</value>
+				<value>org.kuali.module.kra.datadictionary</value>
+				<value>org.kuali.module.kra.budget.datadictionary</value>
+				<value>org.kuali.module.kra.routingform.datadictionary</value>
 			</list>
 		</property>
-		<property name="databaseRepositoryFilePaths">
-			<list>
-				<value>org/kuali/module/kra/OJB-repository-kra.xml</value>
-			</list>
+		<property name="ojbMetadataLoader">
+			<bean class="org.kuali.rice.OjbMetadataLoader">
+				<property name="repositoryDescriptors">
+					<list>
+						<value>classpath:org/kuali/module/kra/OJB-repository-kra.xml</value>
+					</list>
+				</property>
+			</bean>
 		</property>
 	</bean>
 
 	<bean id="kraUserService" class="org.kuali.module.kra.service.impl.KraUserServiceImpl" parent="kualiModuleUserServiceBase">
-		<property name="kualiModuleUserDao" ref="kraUserDao" />
-	</bean>
-	
-	<bean id="kraUserDao" class="org.kuali.module.kra.budget.dao.ojb.KraUserDaoOjb">
-		<property name="configService" ref="kualiConfigurationService" />
 	</bean>
 
 	<!-- The following is temporary, only until SH_UNIV_DATE_T is corrected in the databse -->
 
 	<bean id="dateTimeService" class="org.kuali.core.service.impl.DateTimeServiceImpl">
 	</bean>
+
+	<bean id="universityDateDao" class="org.kuali.module.gl.dao.ojb.UniversityDateDaoOjb" />
 
 	<bean id="budgetService" class="org.kuali.module.kra.budget.service.impl.BudgetServiceImpl">
 		<property name="documentService">
@@ -97,10 +98,6 @@
 		<property name="documentService">
 			<ref bean="documentService" />
 		</property>
-    <property name="maintenanceDocumentDictionaryService">
-      		<ref bean="maintenanceDocumentDictionaryService" />
-    	</property>
-
 	</bean>
 
 	<bean id="budgetFringeRateService" class="org.kuali.module.kra.budget.service.impl.BudgetFringeRateServiceImpl">
@@ -213,9 +210,6 @@
 		</property>
 		<property name="purposeService">
 			<ref bean="purposeService" />
-		</property>
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService" />
 		</property>
 	</bean>
 

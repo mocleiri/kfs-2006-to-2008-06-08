@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.IcrAutomatedEntry;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -61,9 +61,11 @@ import org.kuali.module.gl.service.ReportService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ * 
+ * @version $Id: PosterServiceImpl.java,v 1.42.2.7 2007-02-10 11:37:34 j2eemgr Exp $
+ */
 public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
 
@@ -73,7 +75,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     public static final String SELECT_CODE = "S";
 
     public static final KualiDecimal warningMaxDifference = new KualiDecimal("0.05");
-    public static final String DATE_FORMAT_STRING = "yyyyMMdd";
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
     private BeanFactory beanFactory;
     private List transactionPosters;
@@ -90,6 +92,13 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private ReportService reportService;
     private KualiConfigurationService kualiConfigurationService;
     private FlexibleOffsetAccountService flexibleOffsetAccountService;
+
+    /**
+     * 
+     */
+    public PosterServiceImpl() {
+        super();
+    }
 
     /**
      * Post scrubbed GL entries to GL tables.
@@ -197,7 +206,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
                 addReporting(reportSummary, "GL_REVERSAL_T", PosterServiceImpl.SELECT_CODE);
 
                 postTransaction(tran, mode, reportSummary, reportError, invalidGroup, validGroup, runUniversityDate);
-
+                
                 // Report Reversal poster valid transactions
                 reportService.generatePosterReversalTransactionsListing(runDate, validGroup);
 
@@ -230,11 +239,11 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
             Reversal reversal = new Reversal(tran);
 
             // Reverse the debit/credit code
-            if (KFSConstants.GL_DEBIT_CODE.equals(reversal.getTransactionDebitCreditCode())) {
-                reversal.setTransactionDebitCreditCode(KFSConstants.GL_CREDIT_CODE);
+            if (Constants.GL_DEBIT_CODE.equals(reversal.getTransactionDebitCreditCode())) {
+                reversal.setTransactionDebitCreditCode(Constants.GL_CREDIT_CODE);
             }
-            else if (KFSConstants.GL_CREDIT_CODE.equals(reversal.getTransactionDebitCreditCode())) {
-                reversal.setTransactionDebitCreditCode(KFSConstants.GL_DEBIT_CODE);
+            else if (Constants.GL_CREDIT_CODE.equals(reversal.getTransactionDebitCreditCode())) {
+                reversal.setTransactionDebitCreditCode(Constants.GL_DEBIT_CODE);
             }
 
             UniversityDate udate = universityDateDao.getByPrimaryKey(reversal.getFinancialDocumentReversalDate());
@@ -244,23 +253,23 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
 
                 AccountingPeriod ap = accountingPeriodService.getByPeriod(reversal.getUniversityFiscalPeriodCode(), reversal.getUniversityFiscalYear());
                 if (ap != null) {
-                    if (KFSConstants.ACCOUNTING_PERIOD_STATUS_CLOSED.equals(ap.getUniversityFiscalPeriodStatusCode())) {
+                    if (Constants.ACCOUNTING_PERIOD_STATUS_CLOSED.equals(ap.getUniversityFiscalPeriodStatusCode())) {
                         reversal.setUniversityFiscalYear(runUniversityDate.getUniversityFiscalYear());
                         reversal.setUniversityFiscalPeriodCode(runUniversityDate.getUniversityFiscalAccountingPeriod());
                     }
                     reversal.setFinancialDocumentReversalDate(null);
-                    String newDescription = KFSConstants.GL_REVERSAL_DESCRIPTION_PREFIX + reversal.getTransactionLedgerEntryDescription();
+                    String newDescription = Constants.GL_REVERSAL_DESCRIPTION_PREFIX + reversal.getTransactionLedgerEntryDescription();
                     if (newDescription.length() > 40) {
                         newDescription = newDescription.substring(0, 40);
                     }
                     reversal.setTransactionLedgerEntryDescription(newDescription);
                 }
                 else {
-                    errors.add(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_UNIV_DATE_NOT_IN_ACCOUNTING_PERIOD_TABLE));
+                    errors.add(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_UNIV_DATE_NOT_IN_ACCOUNTING_PERIOD_TABLE));
                 }
             }
             else {
-                errors.add(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_REVERSAL_DATE_NOT_IN_UNIV_DATE_TABLE));
+                errors.add(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_REVERSAL_DATE_NOT_IN_UNIV_DATE_TABLE));
             }
 
             PersistenceService ps = SpringServiceLocator.getPersistenceService();
@@ -444,7 +453,7 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
         else if ("#".equals(icrEntry.getAccountNumber())) {
             e.setAccountNumber(et.getAccount().getIndirectCostRecoveryAcctNbr());
             e.setChartOfAccountsCode(et.getAccount().getIndirectCostRcvyFinCoaCode());
-            e.setSubAccountNumber(KFSConstants.DASHES_SUB_ACCOUNT_NUMBER);
+            e.setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
         }
         else {
             e.setAccountNumber(icrEntry.getAccountNumber());
@@ -453,11 +462,10 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
             // TODO Reporting thing line 1946
         }
 
-        e.setFinancialDocumentTypeCode(kualiConfigurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
-        e.setFinancialSystemOriginationCode(kualiConfigurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.GL_ORIGINATION_CODE));
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
-        e.setDocumentNumber(sdf.format(runDate));
-        if (KFSConstants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator())) {
+        e.setFinancialDocumentTypeCode(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
+        e.setFinancialSystemOriginationCode(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_ORIGINATION_CODE));
+        e.setFinancialDocumentNumber(sdf.format(runDate));
+        if (Constants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator())) {
             e.setTransactionLedgerEntryDescription(getChargeDescription(pct, et.getObjectCode(), et.getAccount().getAcctIndirectCostRcvyTypeCd(), et.getAccountObjectDirectCostAmount().abs()));
         }
         else {
@@ -472,16 +480,16 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
         ObjectCode oc = objectCodeService.getByPrimaryId(e.getUniversityFiscalYear(), e.getChartOfAccountsCode(), e.getFinancialObjectCode());
         if (oc == null) {
             // TODO This should be a report thing, not an exception
-            throw new IllegalArgumentException(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_OBJECT_CODE_NOT_FOUND_FOR) + e.getUniversityFiscalYear() + "," + e.getChartOfAccountsCode() + "," + e.getFinancialObjectCode());
+            throw new IllegalArgumentException(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_OBJECT_CODE_NOT_FOUND_FOR) + e.getUniversityFiscalYear() + "," + e.getChartOfAccountsCode() + "," + e.getFinancialObjectCode());
         }
         e.setFinancialObjectTypeCode(oc.getFinancialObjectTypeCode());
 
         if (generatedTransactionAmount.isNegative()) {
-            if (KFSConstants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator())) {
-                e.setTransactionDebitCreditCode(KFSConstants.GL_CREDIT_CODE);
+            if (Constants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator())) {
+                e.setTransactionDebitCreditCode(Constants.GL_CREDIT_CODE);
             }
             else {
-                e.setTransactionDebitCreditCode(KFSConstants.GL_DEBIT_CODE);
+                e.setTransactionDebitCreditCode(Constants.GL_DEBIT_CODE);
             }
             e.setTransactionLedgerEntryAmount(generatedTransactionAmount.negated());
         }
@@ -489,8 +497,8 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
             e.setTransactionLedgerEntryAmount(generatedTransactionAmount);
         }
 
-        if (et.getBalanceTypeCode().equals(et.getOption().getExtrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getIntrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getPreencumbranceFinBalTypeCd()) || et.getBalanceTypeCode().equals(et.getOption().getCostShareEncumbranceBalanceTypeCd())) {
-            e.setDocumentNumber(kualiConfigurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
+        if (et.getBalanceTypeCode().equals(et.getOption().getExtrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getIntrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getPreencumbranceFinBalTypeCd()) || et.getBalanceTypeCode().equals(et.getOption().getCostShareEncumbranceBalanceTypeCode())) {
+            e.setFinancialDocumentNumber(kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
         }
         e.setProjectCode(et.getProjectCode());
         if (GLConstants.DASH_ORGANIZATION_REFERENCE_ID.equals(et.getOrganizationReferenceId())) {
@@ -505,26 +513,26 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
 
         // Now generate Offset
         e = new OriginEntry(e);
-        if (KFSConstants.GL_DEBIT_CODE.equals(e.getTransactionDebitCreditCode())) {
-            e.setTransactionDebitCreditCode(KFSConstants.GL_CREDIT_CODE);
+        if (Constants.GL_DEBIT_CODE.equals(e.getTransactionDebitCreditCode())) {
+            e.setTransactionDebitCreditCode(Constants.GL_CREDIT_CODE);
         }
         else {
-            e.setTransactionDebitCreditCode(KFSConstants.GL_DEBIT_CODE);
+            e.setTransactionDebitCreditCode(Constants.GL_DEBIT_CODE);
         }
-        e.setFinancialSubObjectCode(KFSConstants.DASHES_SUB_OBJECT_CODE);
+        e.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
         e.setFinancialObjectCode(icrEntry.getOffsetBalanceSheetObjectCodeNumber());
 
         ObjectCode balSheetObjectCode = objectCodeService.getByPrimaryId(icrEntry.getUniversityFiscalYear(), e.getChartOfAccountsCode(), icrEntry.getOffsetBalanceSheetObjectCodeNumber());
         if (balSheetObjectCode == null) {
             List warnings = new ArrayList();
-            warnings.add(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_INVALID_OFFSET_OBJECT_CODE) + icrEntry.getUniversityFiscalYear() + "-" + e.getChartOfAccountsCode() + "-" + icrEntry.getOffsetBalanceSheetObjectCodeNumber());
+            warnings.add(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_INVALID_OFFSET_OBJECT_CODE) + icrEntry.getUniversityFiscalYear() + "-" + e.getChartOfAccountsCode() + "-" + icrEntry.getOffsetBalanceSheetObjectCodeNumber());
             reportErrors.put(e, warnings);
         }
         else {
             e.setFinancialObjectTypeCode(balSheetObjectCode.getFinancialObjectTypeCode());
         }
 
-        if (KFSConstants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator())) {
+        if (Constants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator())) {
             e.setTransactionLedgerEntryDescription(getChargeDescription(pct, et.getObjectCode(), et.getAccount().getAcctIndirectCostRcvyTypeCd(), et.getAccountObjectDirectCostAmount().abs()));
         }
         else {
@@ -602,6 +610,15 @@ public class PosterServiceImpl implements PosterService, BeanFactoryAware {
         }
         else {
             reporting.put(key, new Integer(1));
+        }
+    }
+
+    public void init() {
+        LOG.debug("init() started");
+
+        // If we are in test mode
+        if (beanFactory.containsBean("testDateTimeService")) {
+            dateTimeService = (DateTimeService) beanFactory.getBean("testDateTimeService");
         }
     }
 
