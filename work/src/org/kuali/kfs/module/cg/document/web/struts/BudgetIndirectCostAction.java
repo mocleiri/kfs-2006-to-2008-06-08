@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.Constants;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.bo.BudgetIndirectCost;
 import org.kuali.module.kra.budget.bo.BudgetIndirectCostLookup;
 import org.kuali.module.kra.budget.rules.event.RecalculateIndirectCostEvent;
@@ -65,7 +67,7 @@ public class BudgetIndirectCostAction extends BudgetAction {
 
         // If our rule failed, reload the current page.
         if (!rulePassed) {
-            return mapping.findForward(KFSConstants.MAPPING_BASIC);
+            return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
         BudgetIndirectCost indirectCost = new BudgetIndirectCost(budgetForm.getBudgetDocument().getBudget().getIndirectCost());
@@ -81,7 +83,7 @@ public class BudgetIndirectCostAction extends BudgetAction {
         
         super.save(mapping, form, request, response);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 

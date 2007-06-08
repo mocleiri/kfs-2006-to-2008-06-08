@@ -15,7 +15,6 @@
  */
 package org.kuali.module.labor.service.impl;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -27,7 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.kuali.core.bo.DocumentHeader;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.FinancialSystemParameter;
 import org.kuali.core.rule.KualiParameterRule;
@@ -36,35 +37,31 @@ import org.kuali.core.service.DocumentTypeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.bo.OriginationCode;
-import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.AccountingPeriod;
-import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.chart.bo.SubAccount;
-import org.kuali.module.chart.bo.SubObjCd;
+import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.chart.service.OffsetDefinitionService;
+import org.kuali.module.financial.exceptions.InvalidFlexibleOffsetException;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
 import org.kuali.module.gl.GLConstants;
+
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.UniversityDateDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
+import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.service.ScrubberValidator;
-//TODO: should be changed to RaborScrubberReportData
-import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
+import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.util.Message;
+import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 import org.kuali.module.gl.util.ObjectHelper;
+import org.kuali.module.gl.util.OriginEntryStatistics;
+import org.kuali.module.gl.util.StringHelper;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.service.LaborOriginEntryService;
-import org.kuali.module.labor.service.LaborReportService;
-import org.kuali.module.labor.util.ReportRegistry;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.util.StringUtils;
 
@@ -93,7 +90,7 @@ public class LaborScrubberProcess {
     private KualiConfigurationService kualiConfigurationService;
     private UniversityDateDao universityDateDao;
     private PersistenceService persistenceService;
-    private LaborReportService laborReportService;
+    private ReportService reportService;
     private ScrubberValidator scrubberValidator;
 
     private Map<String, FinancialSystemParameter> parameters;
@@ -139,7 +136,7 @@ public class LaborScrubberProcess {
     /**
      * These parameters are all the dependencies.
      */
-    public LaborScrubberProcess(FlexibleOffsetAccountService flexibleOffsetAccountService, DocumentTypeService documentTypeService, BeanFactory beanFactory, LaborOriginEntryService laborOriginEntryService, OriginEntryGroupService originEntryGroupService, DateTimeService dateTimeService, OffsetDefinitionService offsetDefinitionService, ObjectCodeService objectCodeService, KualiConfigurationService kualiConfigurationService, UniversityDateDao universityDateDao, PersistenceService persistenceService, LaborReportService laborReportService, ScrubberValidator scrubberValidator) {
+    public LaborScrubberProcess(FlexibleOffsetAccountService flexibleOffsetAccountService, DocumentTypeService documentTypeService, BeanFactory beanFactory, LaborOriginEntryService laborOriginEntryService, OriginEntryGroupService originEntryGroupService, DateTimeService dateTimeService, OffsetDefinitionService offsetDefinitionService, ObjectCodeService objectCodeService, KualiConfigurationService kualiConfigurationService, UniversityDateDao universityDateDao, PersistenceService persistenceService, ReportService reportService, ScrubberValidator scrubberValidator) {
         super();
         this.flexibleOffsetAccountService = flexibleOffsetAccountService;
         this.documentTypeService = documentTypeService;
@@ -152,7 +149,7 @@ public class LaborScrubberProcess {
         this.kualiConfigurationService = kualiConfigurationService;
         this.universityDateDao = universityDateDao;
         this.persistenceService = persistenceService;
-        this.laborReportService = laborReportService;
+        this.reportService = reportService;
         this.scrubberValidator = scrubberValidator;
 
         parameters = kualiConfigurationService.getParametersByGroup(GLConstants.GL_SCRUBBER_GROUP);
@@ -190,9 +187,6 @@ public class LaborScrubberProcess {
         // We are in report only mode if we pass a group to this method.
         // if not, we are in batch mode and we scrub the backup group
         reportOnlyMode = (group != null);
-        
-        //get reportDirectory
-        String reportsDirectory = ReportRegistry.getReportsDirectory();
 
         scrubberReportErrors = new HashMap<Transaction, List<Message>>();
 
@@ -203,7 +197,7 @@ public class LaborScrubberProcess {
 
         universityRunDate = universityDateDao.getByPrimaryKey(runDate);
         if (universityRunDate == null) {
-            throw new IllegalStateException(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_UNIV_DATE_NOT_FOUND));
+            throw new IllegalStateException(kualiConfigurationService.getPropertyString(KeyConstants.ERROR_UNIV_DATE_NOT_FOUND));
         }
 
         setOffsetString();
@@ -212,9 +206,9 @@ public class LaborScrubberProcess {
         // Create the groups that will store the valid and error entries that come out of the scrubber
         // We don't need groups for the reportOnlyMode
         if (!reportOnlyMode) {
-            validGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.LABOR_SCRUBBER_VALID, true, true, false);
-            errorGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.LABOR_SCRUBBER_ERROR, false, true, false);
-            expiredGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.LABOR_SCRUBBER_EXPIRED, false, true, false);
+            validGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_VALID, true, true, false);
+            errorGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_ERROR, false, true, false);
+            expiredGroup = originEntryGroupService.createGroup(runDate, OriginEntrySource.SCRUBBER_EXPIRED, false, true, false);
         }
 
         // get the origin entry groups to be processed by Scrubber
@@ -224,15 +218,15 @@ public class LaborScrubberProcess {
             groupsToScrub.add(group);
         }
         else {
-            groupsToScrub = originEntryGroupService.getLaborBackupGroups(runDate);
+            groupsToScrub = originEntryGroupService.getBackupGroups(runDate);
         }
         LOG.debug("scrubEntries() number of groups to scrub: " + groupsToScrub.size());
 
         // generate the reports based on the origin entries to be processed by scrubber
         if (reportOnlyMode) {
-            laborReportService.generateScrubberLedgerSummaryReportOnline(group,documentNumber, reportsDirectory, runDate);
+            reportService.generateScrubberLedgerSummaryReportOnline(runDate, group,documentNumber);
         } else {
-            laborReportService.generateScrubberLedgerSummaryReportBatch(groupsToScrub, reportsDirectory, runDate);
+            reportService.generateScrubberLedgerSummaryReportBatch(runDate, groupsToScrub);
         }
 
         // Scrub all of the OriginEntryGroups waiting to be scrubbed as of runDate.
@@ -254,10 +248,10 @@ public class LaborScrubberProcess {
 
         // generate the scrubber status summary report
         if (reportOnlyMode) {
-            laborReportService.generateOnlineScrubberStatisticsReport(group.getId(), scrubberReport, scrubberReportErrors,documentNumber, reportsDirectory, runDate);
+            reportService.generateOnlineScrubberStatisticsReport(group.getId(), runDate, scrubberReport, scrubberReportErrors,documentNumber);
         }
         else {
-            laborReportService.generateBatchScrubberStatisticsReport(scrubberReport, scrubberReportErrors, reportsDirectory, runDate);
+            reportService.generateBatchScrubberStatisticsReport(runDate, scrubberReport, scrubberReportErrors);
         }
 
         // run the demerger
@@ -270,12 +264,12 @@ public class LaborScrubberProcess {
         // Run the reports
         if ( reportOnlyMode ) {
             // Run transaction list
-            laborReportService.generateScrubberTransactionsOnline(group,documentNumber, reportsDirectory, runDate);
+            reportService.generateScrubberTransactionsOnline(runDate, group,documentNumber);
         } else {
             // Run bad balance type report and removed transaction report
-            laborReportService.generateScrubberBadBalanceTypeListingReport(groupsToScrub, reportsDirectory, runDate);
+            reportService.generateScrubberBadBalanceTypeListingReport(runDate, groupsToScrub);
 
-            laborReportService.generateScrubberRemovedTransactions(errorGroup, reportsDirectory, runDate);
+            reportService.generateScrubberRemovedTransactions(runDate, errorGroup);
         }
     }
 
@@ -346,14 +340,19 @@ public class LaborScrubberProcess {
             boolean saveValidTransaction = false;
 
             // Build a scrubbed entry
-            // Labor has more fields
             LaborOriginEntry scrubbedEntry = new LaborOriginEntry();
-            buildScrubbedEntry(unscrubbedEntry, scrubbedEntry);
-            
-            //For Labor Scrubber
-            boolean validateAccountIndicator = false;
-            
-            List<Message> tmperrors = scrubberValidator.validateTransaction(unscrubbedEntry, scrubbedEntry, universityRunDate, validateAccountIndicator);
+            scrubbedEntry.setDocumentNumber(unscrubbedEntry.getDocumentNumber());
+            scrubbedEntry.setOrganizationDocumentNumber(unscrubbedEntry.getOrganizationDocumentNumber());
+            scrubbedEntry.setOrganizationReferenceId(unscrubbedEntry.getOrganizationReferenceId());
+            scrubbedEntry.setReferenceFinancialDocumentNumber(unscrubbedEntry.getReferenceFinancialDocumentNumber());
+
+            Integer transactionNumber = unscrubbedEntry.getTransactionLedgerEntrySequenceNumber();
+            scrubbedEntry.setTransactionLedgerEntrySequenceNumber(null == transactionNumber ? new Integer(0) : transactionNumber);
+            scrubbedEntry.setTransactionLedgerEntryDescription(unscrubbedEntry.getTransactionLedgerEntryDescription());
+            scrubbedEntry.setTransactionLedgerEntryAmount(unscrubbedEntry.getTransactionLedgerEntryAmount());
+            scrubbedEntry.setTransactionDebitCreditCode(unscrubbedEntry.getTransactionDebitCreditCode());
+
+            List<Message> tmperrors = scrubberValidator.validateTransaction(unscrubbedEntry, scrubbedEntry, universityRunDate);
             transactionErrors.addAll(tmperrors);
 
             // Expired account?
@@ -407,7 +406,7 @@ public class LaborScrubberProcess {
 
                 if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && 
                         costShareEncBalanceTypeCodes.succeedsRule(scrubbedEntry.getFinancialBalanceTypeCode()) && 
-                        scrubbedEntry.getAccount().isForContractsAndGrants() && KFSConstants.COST_SHARE.equals(subAccountTypeCode) && 
+                        scrubbedEntry.getAccount().isForContractsAndGrants() && Constants.COST_SHARE.equals(subAccountTypeCode) && 
                         costShareEncFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && 
                         costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim())) {
 
@@ -426,7 +425,7 @@ public class LaborScrubberProcess {
                 if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && 
                         scrubbedEntry.getOption().getActualFinancialBalanceTypeCd().equals(scrubbedEntry.getFinancialBalanceTypeCode()) && 
                         scrubbedEntry.getAccount().isForContractsAndGrants() && 
-                        KFSConstants.COST_SHARE.equals(subAccountTypeCode) && 
+                        Constants.COST_SHARE.equals(subAccountTypeCode) && 
                         costShareFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && 
                         costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim())) {
                     if (scrubbedEntry.isDebit()) {
@@ -551,11 +550,11 @@ public class LaborScrubberProcess {
      * 
      */
     private void setDescriptions() {
-        offsetDescription = kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_GENERATED_OFFSET);
-        capitalizationDescription = kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_GENERATED_CAPITALIZATION);
-        liabilityDescription = kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_GENERATED_LIABILITY);
-        costShareDescription = kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_GENERATED_COST_SHARE);
-        transferDescription = kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_GENERATED_TRANSFER);
+        offsetDescription = kualiConfigurationService.getPropertyString(KeyConstants.MSG_GENERATED_OFFSET);
+        capitalizationDescription = kualiConfigurationService.getPropertyString(KeyConstants.MSG_GENERATED_CAPITALIZATION);
+        liabilityDescription = kualiConfigurationService.getPropertyString(KeyConstants.MSG_GENERATED_LIABILITY);
+        costShareDescription = kualiConfigurationService.getPropertyString(KeyConstants.MSG_GENERATED_COST_SHARE);
+        transferDescription = kualiConfigurationService.getPropertyString(KeyConstants.MSG_GENERATED_TRANSFER);
     }
 
     /**
@@ -819,51 +818,5 @@ public class LaborScrubberProcess {
         }
         cutoffTime = cutoffParam.getFinancialSystemParameterText();
         setCutoffTime(cutoffTime);
-    }
-    
-    protected void buildScrubbedEntry(LaborOriginEntry unscrubbedEntry, LaborOriginEntry scrubbedEntry){
-        scrubbedEntry.setDocumentNumber(unscrubbedEntry.getDocumentNumber());
-        scrubbedEntry.setOrganizationDocumentNumber(unscrubbedEntry.getOrganizationDocumentNumber());
-        scrubbedEntry.setOrganizationReferenceId(unscrubbedEntry.getOrganizationReferenceId());
-        scrubbedEntry.setReferenceFinancialDocumentNumber(unscrubbedEntry.getReferenceFinancialDocumentNumber());
-
-        Integer transactionNumber = unscrubbedEntry.getTransactionLedgerEntrySequenceNumber();
-        scrubbedEntry.setTransactionLedgerEntrySequenceNumber(null == transactionNumber ? new Integer(0) : transactionNumber);
-        scrubbedEntry.setTransactionLedgerEntryDescription(unscrubbedEntry.getTransactionLedgerEntryDescription());
-        scrubbedEntry.setTransactionLedgerEntryAmount(unscrubbedEntry.getTransactionLedgerEntryAmount());
-        scrubbedEntry.setTransactionDebitCreditCode(unscrubbedEntry.getTransactionDebitCreditCode());
-        
-        // For Labor's more fields 
-        // It might be changed based on Labor Scrubber's business rule
-        
-        scrubbedEntry.setPositionNumber(unscrubbedEntry.getPositionNumber());
-        scrubbedEntry.setTransactionPostingDate(unscrubbedEntry.getTransactionPostingDate());
-        scrubbedEntry.setPayPeriodEndDate(unscrubbedEntry.getPayPeriodEndDate());
-        scrubbedEntry.setTransactionTotalHours(unscrubbedEntry.getTransactionTotalHours());
-        scrubbedEntry.setPayrollEndDateFiscalYear(unscrubbedEntry.getPayrollEndDateFiscalYear());
-        scrubbedEntry.setPayrollEndDateFiscalPeriodCode(unscrubbedEntry.getPayrollEndDateFiscalPeriodCode());
-        scrubbedEntry.setFinancialDocumentApprovedCode(unscrubbedEntry.getFinancialDocumentApprovedCode());
-        scrubbedEntry.setTransactionEntryOffsetCode(unscrubbedEntry.getTransactionEntryOffsetCode());
-        scrubbedEntry.setTransactionEntryProcessedTimestamp(unscrubbedEntry.getTransactionEntryProcessedTimestamp());
-        scrubbedEntry.setEmplid(unscrubbedEntry.getEmplid());
-        scrubbedEntry.setEmployeeRecord(unscrubbedEntry.getEmployeeRecord());
-        scrubbedEntry.setEarnCode(unscrubbedEntry.getEarnCode());
-        scrubbedEntry.setPayGroup(unscrubbedEntry.getPayGroup());
-        scrubbedEntry.setSalaryAdministrationPlan(unscrubbedEntry.getSalaryAdministrationPlan());
-        scrubbedEntry.setGrade(unscrubbedEntry.getGrade());
-        scrubbedEntry.setRunIdentifier(unscrubbedEntry.getRunIdentifier());
-        scrubbedEntry.setLaborLedgerOriginalChartOfAccountsCode(unscrubbedEntry.getLaborLedgerOriginalChartOfAccountsCode());
-        scrubbedEntry.setLaborLedgerOriginalAccountNumber(unscrubbedEntry.getLaborLedgerOriginalAccountNumber());
-        scrubbedEntry.setLaborLedgerOriginalSubAccountNumber(unscrubbedEntry.getLaborLedgerOriginalSubAccountNumber());
-        scrubbedEntry.setLaborLedgerOriginalFinancialObjectCode(unscrubbedEntry.getLaborLedgerOriginalFinancialObjectCode());
-        scrubbedEntry.setLaborLedgerOriginalFinancialSubObjectCode(unscrubbedEntry.getLaborLedgerOriginalFinancialSubObjectCode());
-        scrubbedEntry.setHrmsCompany(unscrubbedEntry.getHrmsCompany());
-        scrubbedEntry.setSetid(unscrubbedEntry.getSetid());
-        scrubbedEntry.setTransactionDateTimeStamp(unscrubbedEntry.getTransactionDateTimeStamp());
-        scrubbedEntry.setFinancialDocument(unscrubbedEntry.getFinancialDocument());
-        scrubbedEntry.setReferenceFinancialDocumentType(unscrubbedEntry.getReferenceFinancialDocumentType());
-        scrubbedEntry.setReferenceFinancialSystemOrigination(unscrubbedEntry.getReferenceFinancialSystemOrigination());
-        scrubbedEntry.setPayrollEndDateFiscalPeriod(unscrubbedEntry.getPayrollEndDateFiscalPeriod());
-        
     }
 }

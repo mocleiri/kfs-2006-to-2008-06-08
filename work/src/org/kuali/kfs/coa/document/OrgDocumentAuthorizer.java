@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,17 @@
 package org.kuali.module.chart.document;
 
 import org.apache.log4j.Logger;
+import org.kuali.Constants;
+import org.kuali.core.authorization.MaintenanceDocumentAuthorizations;
 import org.kuali.core.bo.user.KualiGroup;
-import org.kuali.core.bo.user.UniversalUser;
-
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizations;
-import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase;
+import org.kuali.core.document.MaintenanceDocumentAuthorizerBase;
 import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.exceptions.GroupNotFoundException;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.KualiGroupService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * Org/Organization specific authorization rules.
@@ -54,7 +53,7 @@ public class OrgDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase {
      * @return
      * 
      */
-    public MaintenanceDocumentAuthorizations getFieldAuthorizations(MaintenanceDocument document, UniversalUser user) {
+    public MaintenanceDocumentAuthorizations getFieldAuthorizations(MaintenanceDocument document, KualiUser user) {
 
         MaintenanceDocumentAuthorizations auths = new MaintenanceDocumentAuthorizations();
 
@@ -69,7 +68,7 @@ public class OrgDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase {
         configService = SpringServiceLocator.getKualiConfigurationService();
         KualiGroup group = null;
         try {
-            String groupName = configService.getApplicationParameterValue(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ORG_PLANT_WORKGROUP_PARM_NAME);
+            String groupName = configService.getApplicationParameterValue(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.ORG_PLANT_WORKGROUP_PARM_NAME);
 
             // create a new KualiGroup instance with that name
             KualiGroupService groupService = SpringServiceLocator.getKualiGroupService();

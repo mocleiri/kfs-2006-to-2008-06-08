@@ -64,6 +64,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumentActionBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(KualiAccountingDocumentActionBase.class);
     
+
     /**
      * Adds check for accountingLine updates, generates and dispatches any events caused by such updates
      * 
@@ -82,14 +83,9 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
             processAccountingLines(financialDocument, transForm, KFSConstants.SOURCE);
             processAccountingLines(financialDocument, transForm, KFSConstants.TARGET);
         }
-        
+
         // This is after a potential handleUpdate(), to display automatically cleared overrides following a route or save.
         processAccountingLineOverrides(transForm);
-        
-        // this refershes if the accounting lines within the form are editable or not
-        if (ObjectUtils.isNotNull(transForm.getDocument()) && ObjectUtils.isNotNull(transForm.getDocument().getDocumentHeader()) && ObjectUtils.isNotNull(transForm.getDocument().getDocumentNumber()) && SpringServiceLocator.getWorkflowDocumentService().workflowDocumentExists(transForm.getDocument().getDocumentNumber())) {
-            transForm.refreshEditableAccounts();
-        }
 
         // proceed as usual
         ActionForward result = super.execute(mapping, form, request, response);
@@ -817,6 +813,9 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         parameters.put(KFSConstants.DOC_FORM_KEY, callerDocFormKey);
         parameters.put(KFSConstants.BACK_LOCATION, basePath + mapping.getPath() + ".do");
 
+        if (StringUtils.isNotBlank(line.getBudgetYear())) {
+            parameters.put("budgetYear", line.getBudgetYear());
+        }
         if (StringUtils.isNotBlank(line.getReferenceOriginCode())) {
             parameters.put("referenceOriginCode", line.getReferenceOriginCode());
         }
@@ -857,7 +856,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     }
 
     @Override
-    public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {        
+    public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward forward = super.save(mapping, form, request, response);
         
         // KULEDOCS-1443: For the revert button, set the new baseline accounting lines as the most recently saved lines
@@ -867,5 +866,4 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         
         return forward;
     }
-    
 }

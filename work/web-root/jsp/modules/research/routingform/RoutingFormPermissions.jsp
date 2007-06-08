@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRoutingFormDocument"
@@ -25,7 +25,7 @@
 	
 	<kra-rf:routingFormHiddenDocumentFields />
 	
-	<kra:kraAdHocRecipients adhocType="P" adhocLabel="Permissions" excludeActionRequested="true" disableActionRequested="true" actionRequestedDefault="" editingMode="${KualiForm.editingMode}"/>
+	<kra-rf:routingFormAdHocPermissions />
 	
 	<kra-rf:routingFormDefaultPermissions />
 	

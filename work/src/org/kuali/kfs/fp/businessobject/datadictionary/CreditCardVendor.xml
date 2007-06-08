@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.CreditCardVendor">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Credit Card Vendor Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="financialDocumentCreditCardVendorNumber" />
                 <field attributeName="financialDocumentCreditCardVendorName" />
                 <field attributeName="financialDocumentCreditCardTypeCode" />
@@ -38,11 +38,15 @@
                 <field attributeName="expenseFinancialObjectCode" />
                 <field attributeName="expenseFinancialSubObjectCode" />
                 <field attributeName="expenseSubAccountNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Credit Card Vendor Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.CreditCardVendor">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Credit Card Vendor</instructions>
 
@@ -117,7 +121,7 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.CreditCardTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CreditCardTypeValuesFinder" />
                 </control>
 
                 <summary><![CDATA[&nbsp;]]></summary>
@@ -132,7 +136,7 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
 
                 <summary><![CDATA[&nbsp;]]></summary>
@@ -188,7 +192,7 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
 
                 <summary>

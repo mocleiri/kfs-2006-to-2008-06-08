@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/PendingBudgetConstructionAppointmentFunding.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,11 @@ package org.kuali.module.budget.bo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -35,7 +34,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 /**
  * 
  */
-public class PendingBudgetConstructionAppointmentFunding extends PersistableBusinessObjectBase {
+public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
@@ -51,7 +50,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	private BigDecimal appointmentRequestedCsfTimePercent;
 	private KualiDecimal appointmentTotalIntendedAmount;
 	private BigDecimal appointmentTotalIntendedFteQuantity;
-	private KualiInteger appointmentRequestedAmount;
+	private KualiDecimal appointmentRequestedAmount;
 	private BigDecimal appointmentRequestedTimePercent;
 	private BigDecimal appointmentRequestedFteQuantity;
 	private BigDecimal appointmentRequestedPayRate;
@@ -68,59 +67,19 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
     private BudgetConstructionPosition budgetConstructionPosition;
     private BudgetConstructionAdministrativePost budgetConstructionAdministrativePost;
     private BudgetConstructionAccountReports budgetConstructionAccountReports;
-//    private BudgetConstructionCalculatedSalaryFoundationTracker bcnCalculatedSalaryFoundationTracker;
-    private BudgetConstructionIntendedIncumbent budgetConstructionIntendedIncumbent;
-    private BudgetConstructionDuration budgetConstructionDuration;
     
-    private List bcnCalculatedSalaryFoundationTracker;
     private List budgetConstructionSalaryFunding;
     private List budgetConstructionAppointmentFundingReason;
-    
-    private KualiDecimal percentChange;
     
 	/**
 	 * Default constructor.
 	 */
 	public PendingBudgetConstructionAppointmentFunding() {
         budgetConstructionSalaryFunding = new ArrayList();
-        bcnCalculatedSalaryFoundationTracker = new ArrayList();
 
 	}
-    
-    /**
-     * 
-     * Gets(sets) the percentChange based on the current values of csf and request amounts
-     * Checks to see if a CSF object exists
-     * @return Returns percentChange
-     */
-    public KualiDecimal getPercentChange() {
-        
-        if (bcnCalculatedSalaryFoundationTracker.isEmpty()){
-            percentChange = null;
-        } else {
-            BudgetConstructionCalculatedSalaryFoundationTracker csfLine = (BudgetConstructionCalculatedSalaryFoundationTracker) bcnCalculatedSalaryFoundationTracker.get(0);
-
-            if (csfLine.getCsfAmount() == null || csfLine.getCsfAmount().isZero()){
-                percentChange = null;
-            } else {
-                BigDecimal diffRslt = (appointmentRequestedAmount.bigDecimalValue().setScale(4)).subtract(csfLine.getCsfAmount().bigDecimalValue().setScale(4));
-                BigDecimal divRslt = diffRslt.divide((csfLine.getCsfAmount().bigDecimalValue().setScale(4)),BigDecimal.ROUND_HALF_UP);
-                percentChange = new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2)); 
-            }
-        }    
-        return percentChange;
-    }
 
 	/**
-     * Sets the percentChange attribute value.
-     * @param percentChange The percentChange to set.
-     * @deprecated
-     */
-    public void setPercentChange(KualiDecimal percentChange) {
-        this.percentChange = percentChange;
-    }
-
-    /**
 	 * Gets the universityFiscalYear attribute.
 	 * 
 	 * @return Returns the universityFiscalYear
@@ -420,7 +379,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	 * @return Returns the appointmentRequestedAmount
 	 * 
 	 */
-	public KualiInteger getAppointmentRequestedAmount() { 
+	public KualiDecimal getAppointmentRequestedAmount() { 
 		return appointmentRequestedAmount;
 	}
 
@@ -430,7 +389,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	 * @param appointmentRequestedAmount The appointmentRequestedAmount to set.
 	 * 
 	 */
-	public void setAppointmentRequestedAmount(KualiInteger appointmentRequestedAmount) {
+	public void setAppointmentRequestedAmount(KualiDecimal appointmentRequestedAmount) {
 		this.appointmentRequestedAmount = appointmentRequestedAmount;
 	}
 
@@ -770,76 +729,6 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
     }    
     
     /**
-     * Gets the budgetConstructionDuration attribute. 
-     * @return Returns the budgetConstructionDuration.
-     */
-    public BudgetConstructionDuration getBudgetConstructionDuration() {
-        return budgetConstructionDuration;
-    }
-
-    /**
-     * Sets the budgetConstructionDuration attribute value.
-     * @param budgetConstructionDuration The budgetConstructionDuration to set.
-     */
-    public void setBudgetConstructionDuration(BudgetConstructionDuration budgetConstructionDuration) {
-        this.budgetConstructionDuration = budgetConstructionDuration;
-    }
-
-    /**
-     * Gets the budgetConstructionIntendedIncumbent attribute. 
-     * @return Returns the budgetConstructionIntendedIncumbent.
-     */
-    public BudgetConstructionIntendedIncumbent getBudgetConstructionIntendedIncumbent() {
-        return budgetConstructionIntendedIncumbent;
-    }
-
-    /**
-     * Sets the budgetConstructionIntendedIncumbent attribute value.
-     * @param budgetConstructionIntendedIncumbent The budgetConstructionIntendedIncumbent to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionIntendedIncumbent(BudgetConstructionIntendedIncumbent budgetConstructionIntendedIncumbent) {
-        this.budgetConstructionIntendedIncumbent = budgetConstructionIntendedIncumbent;
-    }
-
-    /**
-     * Gets the bcnCalculatedSalaryFoundationTracker attribute. 
-     * @return Returns the bcnCalculatedSalaryFoundationTracker.
-     */
-    public List<BudgetConstructionCalculatedSalaryFoundationTracker> getBcnCalculatedSalaryFoundationTracker() {
-        return bcnCalculatedSalaryFoundationTracker;
-    }
-
-    /**
-     * Sets the bcnCalculatedSalaryFoundationTracker attribute value.
-     * @param bcnCalculatedSalaryFoundationTracker The bcnCalculatedSalaryFoundationTracker to set.
-     * @deprecated
-     */
-    public void setBcnCalculatedSalaryFoundationTracker(List<BudgetConstructionCalculatedSalaryFoundationTracker> bcnCalculatedSalaryFoundationTracker) {
-        this.bcnCalculatedSalaryFoundationTracker = bcnCalculatedSalaryFoundationTracker;
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-        simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());
-        simpleValues.put("accountNumber", getAccountNumber());
-        simpleValues.put("subAccountNumber", getSubAccountNumber());
-        simpleValues.put("financialObjectCode", getFinancialObjectCode());
-        simpleValues.put("financialSubObjectCode", getFinancialSubObjectCode());
-        simpleValues.put("positionNumber", getPositionNumber());
-        simpleValues.put("emplid", getEmplid());
-
-        return simpleValues;
-    }
-  
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
@@ -856,5 +745,5 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
         m.put("emplid", this.emplid);
         return m;
     }
-    
+
 }

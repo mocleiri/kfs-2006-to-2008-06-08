@@ -22,8 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.module.gl.bo.Transaction;
 
 import com.lowagie.text.Document;
@@ -179,14 +179,14 @@ public class TransactionListingReport {
                     transactionList.addCell(cell);
                     cell = new PdfPCell(new Phrase(tran.getFinancialSystemOriginationCode(), textFont));
                     transactionList.addCell(cell);
-                    cell = new PdfPCell(new Phrase(tran.getDocumentNumber(), textFont));
+                    cell = new PdfPCell(new Phrase(tran.getFinancialDocumentNumber(), textFont));
                     transactionList.addCell(cell);
                     cell = new PdfPCell(new Phrase(tran.getTransactionLedgerEntryDescription(), textFont));
                     transactionList.addCell(cell);
 
                     DecimalFormat decimalFormat = new DecimalFormat();
 
-                    if (KFSConstants.GL_DEBIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
+                    if (Constants.GL_DEBIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
                         cell = new PdfPCell(new Phrase(nf.format(tran.getTransactionLedgerEntryAmount().doubleValue()), textFont));
                         debitTotal = debitTotal.add(tran.getTransactionLedgerEntryAmount());
                     }
@@ -196,7 +196,7 @@ public class TransactionListingReport {
                     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     transactionList.addCell(cell);
 
-                    if (KFSConstants.GL_CREDIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
+                    if (Constants.GL_CREDIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
                         cell = new PdfPCell(new Phrase(nf.format(tran.getTransactionLedgerEntryAmount().doubleValue()), textFont));
                         creditTotal = creditTotal.add(tran.getTransactionLedgerEntryAmount());
                     }
@@ -206,7 +206,7 @@ public class TransactionListingReport {
                     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     transactionList.addCell(cell);
                     
-                    if (!KFSConstants.GL_CREDIT_CODE.equals(tran.getTransactionDebitCreditCode()) && !KFSConstants.GL_DEBIT_CODE.equals(tran.getTransactionDebitCreditCode())){
+                    if (!Constants.GL_CREDIT_CODE.equals(tran.getTransactionDebitCreditCode()) && !Constants.GL_DEBIT_CODE.equals(tran.getTransactionDebitCreditCode())){
                         cell = new PdfPCell(new Phrase(nf.format(tran.getTransactionLedgerEntryAmount().doubleValue()), textFont));
                         budgetTotal = budgetTotal.add(tran.getTransactionLedgerEntryAmount());
                     }

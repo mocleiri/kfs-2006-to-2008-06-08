@@ -304,7 +304,6 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
         for (Iterator iter = accountSet.iterator(); iter.hasNext();) {
             PurApAccountingLine accountToAlter = (PurApAccountingLine) iter.next();
             SourceAccountingLine sourceLine = accountToAlter.generateSourceAccountingLine();
-            sourceAccounts.add(sourceLine);
         }
         return sourceAccounts;
     }
@@ -336,8 +335,8 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
         String methodName = "getProcessablePurapItems()";
         List<PurchasingApItem> newItemList = new ArrayList<PurchasingApItem>();
         // error out if we have an invalid 'itemTypeCodesAreIncluded' value
-        if ( (!(ITEM_TYPES_INCLUDED_VALUE.equals(itemTypeCodesAreIncluded))) && (!(ITEM_TYPES_EXCLUDED_VALUE.equals(itemTypeCodesAreIncluded))) ) {
-           throwRuntimeException(methodName, "Invalid parameter found while trying to find processable items for dealing with purchasing/accounts payable accounts");
+        if ( (!(ITEM_TYPES_INCLUDED_VALUE.equals(itemTypeCodesAreIncluded))) || (!(ITEM_TYPES_EXCLUDED_VALUE.equals(itemTypeCodesAreIncluded))) ) {
+            throwRuntimeException(methodName, "Invalid parameter found while trying to find processable items for dealing with purchasing/accounts payable accounts");
         }
         for (PurchasingApItem currentItem : items) {
             if ( (itemTypeCodes != null) && (!(itemTypeCodes.isEmpty())) ) {

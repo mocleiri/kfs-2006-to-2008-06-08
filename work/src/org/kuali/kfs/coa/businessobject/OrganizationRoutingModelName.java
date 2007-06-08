@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/OrganizationRoutingModelName.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +18,21 @@
 
 package org.kuali.module.chart.bo;
 
-import org.apache.log4j.Logger;
-import org.kuali.core.util.TypedArrayList;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import org.kuali.core.UserSession;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.bo.user.KualiModuleUser;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.chart.bo.ChartUser;
-import org.kuali.rice.KNSServiceLocator;
+
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class OrganizationRoutingModelName extends PersistableBusinessObjectBase {
-    private static final Logger LOG = Logger.getLogger(OrganizationRoutingModelName.class );
+public class OrganizationRoutingModelName extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String organizationCode;
     private String organizationRoutingModelName;
-    private List<OrganizationRoutingModel> organizationRoutingModel;
+    private List organizationRoutingModel;
 
     private Org organization;
     private Chart chartOfAccounts;
@@ -50,7 +41,8 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * Default constructor.
      */
     public OrganizationRoutingModelName() {
-        organizationRoutingModel = new TypedArrayList(OrganizationRoutingModel.class);
+        organizationRoutingModel = new ArrayList();
+
     }
 
     /**
@@ -161,7 +153,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * 
      * @return Returns the organizationRoutingModel.
      */
-    public List<OrganizationRoutingModel> getOrganizationRoutingModel() {
+    public List getOrganizationRoutingModel() {
         return organizationRoutingModel;
     }
 
@@ -170,7 +162,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * 
      * @param organizationRoutingModel The organizationRoutingModel to set.
      */
-    public void setOrganizationRoutingModel(List<OrganizationRoutingModel> organizationRoutingModel) {
+    public void setOrganizationRoutingModel(List organizationRoutingModel) {
         this.organizationRoutingModel = organizationRoutingModel;
     }
 
@@ -185,17 +177,5 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
         return m;
     }
 
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#linkEditableUserFields()
-     */
-    @Override
-    public void linkEditableUserFields() {
-        super.linkEditableUserFields();
-        if (this == null) {
-            throw new IllegalArgumentException("parameter passed in was null");
-        }
-        List bos = new ArrayList();
-        bos.addAll(getOrganizationRoutingModel());
-        SpringServiceLocator.getBusinessObjectService().linkUserFields(bos);
-    }
+
 }
