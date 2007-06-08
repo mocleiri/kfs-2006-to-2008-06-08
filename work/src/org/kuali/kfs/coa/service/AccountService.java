@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/service/AccountService.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -75,14 +77,6 @@ public interface AccountService {
      * @return a list of Accounts that the user has responsibility for
      */
     public List getAccountsThatUserIsResponsibleFor(UniversalUser kualiUser);
-    
-    /**
-     * Does the given user have responsibilites on the given account?
-     * @param kualiUser the universal user to check responsibilities for
-     * @param account the account to check responsibilities on
-     * @return true if user does have responsibilities, false if otherwise
-     */
-    public boolean hasResponsibilityOnAccount(UniversalUser kualiUser, Account account);
 
     /**
      * get all accounts in the system. This is needed by a sufficient funds rebuilder job

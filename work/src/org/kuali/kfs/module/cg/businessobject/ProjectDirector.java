@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/ProjectDirector.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,35 +20,31 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.bo.user.UserId;
 import org.kuali.core.bo.user.UuId;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * 
  */
-public class ProjectDirector extends PersistableBusinessObjectBase {
+public class ProjectDirector extends BusinessObjectBase {
 
     private static final long serialVersionUID = -8864103362445919041L;
     private String personUniversalIdentifier;
-    private String personUserIdentifier; // secondary key from user input, not persisted but takes priority over primary key.
     private UniversalUser universalUser;
 
     /**
      * Default no-arg constructor.
      */
     public ProjectDirector() {
+        universalUser = new UniversalUser();
     }
 
     public UniversalUser getUniversalUser() {
-        // If personUserIdentifier is not set, then fall back to personUniversalIdentifier.
-        if (personUserIdentifier == null) {
-            universalUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(personUniversalIdentifier, universalUser);
-        }
+        universalUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(personUniversalIdentifier, universalUser);
         return universalUser;
     }
 
@@ -83,39 +81,9 @@ public class ProjectDirector extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("universalUser.getUniversalIdentifier", this.getPersonUniversalIdentifier());
+        m.put("universaliUser.getUniversalIdentifier", this.getPersonUniversalIdentifier());
         return m;
     }
 
-    public String getPersonName() {
-        UniversalUser u = getUniversalUser();
-        return u == null ? "" : u.getPersonName();
-    }
-
-    public void setPersonName(String personName) {
-        if ( universalUser == null ) {
-            universalUser = new UniversalUser();
-        }
-        universalUser.setPersonName( personName );
-    }
-
-    public String getPersonUserIdentifier() {
-        if (personUserIdentifier != null) {
-            return personUserIdentifier;
-        }
-        UniversalUser u = getUniversalUser();
-        return u == null ? "" : u.getPersonUserIdentifier();
-    }
-
-    public void setPersonUserIdentifier(String personUserIdentifier) {
-        this.personUserIdentifier = personUserIdentifier;
-        if (universalUser == null || !personUserIdentifier.equals(universalUser.getPersonUserIdentifier())) {
-            try {
-                universalUser = SpringServiceLocator.getUniversalUserService().getUniversalUserByAuthenticationUserId( personUserIdentifier );
-            } catch ( UserNotFoundException ex ) {
-                universalUser = null;
-            }
-        }
-    }
 
 }

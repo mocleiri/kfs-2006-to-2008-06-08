@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,22 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 
 /**
  * 
  */
-public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessObjectBase {
+public class DisbursementVoucherNonEmployeeExpense extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private Integer financialDocumentLineNumber;
     private String disbVchrExpenseCode;
     private String disbVchrExpenseCompanyName;
     private KualiDecimal disbVchrExpenseAmount;
 
     private TravelExpenseTypeCode disbVchrExpense;
-    private TravelCompanyCode disbVchrExpenseCompany;
-    private DisbursementVoucherNonEmployeeTravel disbursementVoucherNonEmployeeTravel;
-    
+
     private boolean isPrepaid;
 
     /**
@@ -47,30 +44,30 @@ public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessOb
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     /**
      * Gets the financialDocumentLineNumber attribute.
      * 
-     * @return Returns the financialDocumentLineNumber
+     * @return - Returns the financialDocumentLineNumber
      * 
      */
     public Integer getFinancialDocumentLineNumber() {
@@ -91,7 +88,7 @@ public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessOb
     /**
      * Gets the disbVchrExpenseCode attribute.
      * 
-     * @return Returns the disbVchrExpenseCode
+     * @return - Returns the disbVchrExpenseCode
      * 
      */
     public String getDisbVchrExpenseCode() {
@@ -131,7 +128,7 @@ public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessOb
     /**
      * Gets the disbVchrExpenseCompanyName attribute.
      * 
-     * @return Returns the disbVchrExpenseCompanyName
+     * @return - Returns the disbVchrExpenseCompanyName
      * 
      */
     public String getDisbVchrExpenseCompanyName() {
@@ -152,7 +149,7 @@ public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessOb
     /**
      * Gets the disbVchrExpenseCompanyName attribute.
      * 
-     * @return Returns the disbVchrExpenseCompanyName
+     * @return - Returns the disbVchrExpenseCompanyName
      * 
      */
     public String getDisbVchrPrePaidExpenseCompanyName() {
@@ -173,7 +170,7 @@ public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessOb
     /**
      * Gets the disbVchrExpenseAmount attribute.
      * 
-     * @return Returns the disbVchrExpenseAmount
+     * @return - Returns the disbVchrExpenseAmount
      * 
      */
     public KualiDecimal getDisbVchrExpenseAmount() {
@@ -194,7 +191,7 @@ public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessOb
     /**
      * Gets the disbVchrExpense attribute.
      * 
-     * @return Returns the disbVchrExpense
+     * @return - Returns the disbVchrExpense
      * 
      */
     public TravelExpenseTypeCode getDisbVchrExpense() {
@@ -212,45 +209,11 @@ public class DisbursementVoucherNonEmployeeExpense extends PersistableBusinessOb
     }
 
     /**
-     * Gets the disbVchrExpenseCompany attribute. 
-     * @return Returns the disbVchrExpenseCompany.
-     */
-    public TravelCompanyCode getDisbVchrExpenseCompany() {
-        return disbVchrExpenseCompany;
-    }
-
-    /**
-     * Sets the disbVchrExpenseCompany attribute value.
-     * @param disbVchrExpenseCompany The disbVchrExpenseCompany to set.
-     * @deprecated
-     */
-    public void setDisbVchrExpenseCompany(TravelCompanyCode disbVchrExpenseCompany) {
-        this.disbVchrExpenseCompany = disbVchrExpenseCompany;
-    }
-
-    /**
-     * Gets the disbursementVoucherNonEmployeeTravel attribute. 
-     * @return Returns the disbursementVoucherNonEmployeeTravel.
-     */
-    public DisbursementVoucherNonEmployeeTravel getDisbursementVoucherNonEmployeeTravel() {
-        return disbursementVoucherNonEmployeeTravel;
-    }
-
-    /**
-     * Sets the disbursementVoucherNonEmployeeTravel attribute value.
-     * @param disbursementVoucherNonEmployeeTravel The disbursementVoucherNonEmployeeTravel to set.
-     * @deprecated
-     */
-    public void setDisbursementVoucherNonEmployeeTravel(DisbursementVoucherNonEmployeeTravel disbursementVoucherNonEmployeeTravel) {
-        this.disbursementVoucherNonEmployeeTravel = disbursementVoucherNonEmployeeTravel;
-    }
-
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         if (this.financialDocumentLineNumber != null) {
             m.put("financialDocumentLineNumber", this.financialDocumentLineNumber.toString());
         }

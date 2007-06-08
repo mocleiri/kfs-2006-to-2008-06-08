@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,19 +24,21 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.core.bo.TargetAccountingLine;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine;
 import org.kuali.module.financial.document.ProcurementCardDocument;
 
 /**
  * This class is the form class for the ProcurementCard document. This method extends the parent KualiTransactionalDocumentFormBase
  * class which contains all of the common form methods and form attributes needed by the Procurment Card document.
+ * 
+ * 
  */
-public class ProcurementCardForm extends KualiAccountingDocumentFormBase {
+public class ProcurementCardForm extends KualiTransactionalDocumentFormBase {
     private static final long serialVersionUID = 1L;
     private List newTargetLines;
 
@@ -55,11 +57,11 @@ public class ProcurementCardForm extends KualiAccountingDocumentFormBase {
         // handle new accountingLine, if one is being added
         String methodToCall = this.getMethodToCall();
         if (StringUtils.isNotBlank(methodToCall)) {
-            if (methodToCall.equals(KFSConstants.INSERT_SOURCE_LINE_METHOD)) {
+            if (methodToCall.equals(Constants.INSERT_SOURCE_LINE_METHOD)) {
                 populateSourceAccountingLine(getNewSourceLine());
             }
 
-            if (methodToCall.equals(KFSConstants.INSERT_TARGET_LINE_METHOD)) {
+            if (methodToCall.equals(Constants.INSERT_TARGET_LINE_METHOD)) {
                 // This is the addition for the override: Handle multiple accounting lines ...
                 for (Iterator newTargetLinesIter = getNewTargetLines().iterator(); newTargetLinesIter.hasNext();) {
                     TargetAccountingLine targetAccountingLine = (TargetAccountingLine) newTargetLinesIter.next();
@@ -70,7 +72,7 @@ public class ProcurementCardForm extends KualiAccountingDocumentFormBase {
 
         // don't call populateAccountingLines if you are copying or errorCorrecting a document,
         // since you want the accountingLines in the copy to be "identical" to those in the original
-        if (!StringUtils.equals(methodToCall, KFSConstants.COPY_METHOD) && !StringUtils.equals(methodToCall, KFSConstants.ERRORCORRECT_METHOD)) {
+        if (!StringUtils.equals(methodToCall, Constants.COPY_METHOD) && !StringUtils.equals(methodToCall, Constants.ERRORCORRECT_METHOD)) {
             populateAccountingLines();
         }
 

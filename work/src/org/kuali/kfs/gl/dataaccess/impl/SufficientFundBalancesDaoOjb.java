@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,26 @@ import java.util.Collection;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.PropertyConstants;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.SufficientFundBalances;
 import org.kuali.module.gl.dao.SufficientFundBalancesDao;
 
 public class SufficientFundBalancesDaoOjb extends PlatformAwareDaoBaseOjb implements SufficientFundBalancesDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundBalancesDaoOjb.class);
 
+    public SufficientFundBalancesDaoOjb() {
+        super();
+    }
+
     public SufficientFundBalances getByPrimaryId(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialObjectCode) {
         LOG.debug("getByPrimaryId() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
-        crit.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
-        crit.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, accountNumber);
-        crit.addEqualTo(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, financialObjectCode);
+        crit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
+        crit.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
+        crit.addEqualTo(PropertyConstants.ACCOUNT_NUMBER, accountNumber);
+        crit.addEqualTo(PropertyConstants.FINANCIAL_OBJECT_CODE, financialObjectCode);
 
         QueryByCriteria qbc = QueryFactory.newQuery(SufficientFundBalances.class, crit);
         return (SufficientFundBalances) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
@@ -51,9 +55,9 @@ public class SufficientFundBalancesDaoOjb extends PlatformAwareDaoBaseOjb implem
         LOG.debug("getByObjectCode() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
-        crit.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
-        crit.addEqualTo(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, financialObjectCode);
+        crit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
+        crit.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
+        crit.addEqualTo(PropertyConstants.FINANCIAL_OBJECT_CODE, financialObjectCode);
 
         QueryByCriteria qbc = QueryFactory.newQuery(SufficientFundBalances.class, crit);
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
@@ -63,9 +67,9 @@ public class SufficientFundBalancesDaoOjb extends PlatformAwareDaoBaseOjb implem
         LOG.debug("deleteByAccountNumber() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
-        crit.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
-        crit.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, accountNumber);
+        crit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
+        crit.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
+        crit.addEqualTo(PropertyConstants.ACCOUNT_NUMBER, accountNumber);
 
         QueryByCriteria qbc = QueryFactory.newQuery(SufficientFundBalances.class, crit);
         getPersistenceBrokerTemplate().deleteByQuery(qbc);
@@ -88,10 +92,10 @@ public class SufficientFundBalancesDaoOjb extends PlatformAwareDaoBaseOjb implem
 
         Criteria criteria = new Criteria();
         QueryByCriteria qbc = QueryFactory.newQuery(SufficientFundBalances.class, criteria);
-        qbc.addOrderBy(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, true);
-        qbc.addOrderBy(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, true);
-        qbc.addOrderBy(KFSPropertyConstants.ACCOUNT_NUMBER, true);
-        qbc.addOrderBy(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, true);
+        qbc.addOrderBy(PropertyConstants.UNIVERSITY_FISCAL_YEAR, true);
+        qbc.addOrderBy(PropertyConstants.CHART_OF_ACCOUNTS_CODE, true);
+        qbc.addOrderBy(PropertyConstants.ACCOUNT_NUMBER, true);
+        qbc.addOrderBy(PropertyConstants.FINANCIAL_OBJECT_CODE, true);
 
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
     }

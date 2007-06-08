@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,15 +21,13 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail">
 
-
-        
-        <titleAttribute>dvPayeeDetail</titleAttribute>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
 
             <attributeReference name="disbVchrPaymentReasonCode" sourceClassName="org.kuali.module.financial.bo.PaymentReasonCode" sourceAttributeName="code">
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.PaymentReasonValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.PaymentReasonValuesFinder" />
                 </control>
                 <description>The description of the reason for the document Payment. Select one from the pulldown list.</description>
             </attributeReference>
@@ -47,7 +45,7 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.PayeeTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.PayeeTypeValuesFinder" />
                 </control>
 
                 <summary>
@@ -173,6 +171,5 @@
 
             <attributeReference name="disbVchrAlienPaymentCode" sourceClassName="org.kuali.module.financial.bo.Payee" sourceAttributeName="alienPaymentCode" />
         </attributes>
-        <objectLabel>DV Payee Detail</objectLabel>
     </businessObject>
 </dictionaryEntry>

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +25,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Agency;
 import org.kuali.module.cg.bo.ProjectDirector;
-import org.kuali.module.kra.bo.AdhocOrg;
-import org.kuali.module.kra.bo.AdhocPerson;
-import org.kuali.module.kra.bo.AdhocWorkgroup;
+import org.kuali.PropertyConstants;
 
 /**
  * 
@@ -39,7 +38,7 @@ import org.kuali.module.kra.bo.AdhocWorkgroup;
  * 
  * 
  */
-public class Budget extends PersistableBusinessObjectBase {
+public class Budget extends BusinessObjectBase {
 
     private static final long serialVersionUID = 8113894775967293272L;
     private String documentNumber;
@@ -47,8 +46,9 @@ public class Budget extends PersistableBusinessObjectBase {
     private String budgetName;
     private boolean institutionCostShareIndicator;
     private String budgetProgramAnnouncementNumber;
-    private String budgetProjectDirectorUniversalIdentifier;
+    private String budgetProjectDirectorSystemId;
     private boolean budgetThirdPartyCostShareIndicator;
+    private String budgetStatusCode;
     private KualiDecimal budgetPersonnelInflationRate;
     private KualiDecimal budgetNonpersonnelInflationRate;
     private String electronicResearchAdministrationGrantNumber;
@@ -78,6 +78,9 @@ public class Budget extends PersistableBusinessObjectBase {
     private List institutionCostShareItems;
     private List thirdPartyCostShareItems;
     private List institutionCostSharePersonnelItems;
+    private List<BudgetAdHocPermission> adHocPermissions;
+    private List<BudgetAdHocOrg> adHocOrgs;
+    private List<BudgetAdHocWorkgroup> adHocWorkgroups;
 
     private BudgetIndirectCost indirectCost;
 
@@ -102,6 +105,9 @@ public class Budget extends PersistableBusinessObjectBase {
         institutionCostShareItems = new ArrayList();
         thirdPartyCostShareItems = new ArrayList();
         institutionCostSharePersonnelItems = new ArrayList();
+        adHocPermissions = new ArrayList<BudgetAdHocPermission>();
+        adHocOrgs = new ArrayList<BudgetAdHocOrg>();
+        adHocWorkgroups = new ArrayList<BudgetAdHocWorkgroup>();
         budgetIndirectCostLookups = new ArrayList<BudgetIndirectCostLookup>();
 
     }
@@ -142,7 +148,21 @@ public class Budget extends PersistableBusinessObjectBase {
     public void setProjectDirector(ProjectDirector projectDirector) {
         this.projectDirector = projectDirector;
     }
-
+    
+    /**
+     * Gets the project director from the personnel list as a BudgetUser
+     * 
+     * @return BudgetUser the project director
+     */
+    public BudgetUser getProjectDirectorFromList() {
+        for (Iterator iter = this.personnel.iterator(); iter.hasNext();) {
+            BudgetUser person = (BudgetUser) iter.next();
+            if (person.isPersonProjectDirectorIndicator()) {
+                return person;
+            }
+        }
+        return null;
+    }
 
     /**
      * @return Returns the budgetFederalPassThroughIndicator.
@@ -204,17 +224,31 @@ public class Budget extends PersistableBusinessObjectBase {
     }
 
     /**
-     * @return Returns the budgetProjectDirectorUniversalIdentifier.
+     * @return Returns the budgetProjectDirectorSystemId.
      */
-    public String getBudgetProjectDirectorUniversalIdentifier() {
-        return budgetProjectDirectorUniversalIdentifier;
+    public String getBudgetProjectDirectorSystemId() {
+        return budgetProjectDirectorSystemId;
     }
 
     /**
-     * @param budgetProjectDirectorUniversalIdentifier The budgetProjectDirectorUniversalIdentifier to set.
+     * @param budgetProjectDirectorSystemId The budgetProjectDirectorSystemId to set.
      */
-    public void setBudgetProjectDirectorUniversalIdentifier(String budgetProjectDirectorUniversalIdentifier) {
-        this.budgetProjectDirectorUniversalIdentifier = budgetProjectDirectorUniversalIdentifier;
+    public void setBudgetProjectDirectorSystemId(String budgetProjectDirectorSystemId) {
+        this.budgetProjectDirectorSystemId = budgetProjectDirectorSystemId;
+    }
+
+    /**
+     * @return Returns the budgetStatusCode.
+     */
+    public String getBudgetStatusCode() {
+        return budgetStatusCode;
+    }
+
+    /**
+     * @param budgetStatusCode The budgetStatusCode to set.
+     */
+    public void setBudgetStatusCode(String budgetStatusCode) {
+        this.budgetStatusCode = budgetStatusCode;
     }
 
     /**
@@ -391,7 +425,7 @@ public class Budget extends PersistableBusinessObjectBase {
     protected LinkedHashMap toStringMapper() {
         // TODO Auto-generated method stub
         LinkedHashMap map = new LinkedHashMap();
-        map.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        map.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return map;
     }
 
@@ -429,10 +463,23 @@ public class Budget extends PersistableBusinessObjectBase {
         this.documentNumber = documentNumber;
     }
 
+    // /**
+    // * @return Returns the budgetDocument.
+    // */
+    // public BudgetDocument getBudgetDocument() {
+    // return budgetDocument;
+    // }
+    // /**
+    // * @param budgetDocument The budgetDocument to set.
+    // */
+    // public void setBudgetDocument(BudgetDocument budgetDocument) {
+    // this.budgetDocument = budgetDocument;
+    // }
+
     /**
      * @return Returns the fringeRates.
      */
-    public List<BudgetFringeRate> getFringeRates() {
+    public List getFringeRates() {
         return fringeRates;
     }
 
@@ -491,7 +538,7 @@ public class Budget extends PersistableBusinessObjectBase {
      * 
      * @return Returns the nonpersonnelItems.
      */
-    public List<BudgetNonpersonnel> getNonpersonnelItems() {
+    public List getNonpersonnelItems() {
         return nonpersonnelItems;
     }
 
@@ -668,12 +715,7 @@ public class Budget extends PersistableBusinessObjectBase {
      * @return String[]
      */
     public String[] getBudgetTypeCodeArray() {
-        String[] array = this.getBudgetTypeCodeText().split("-");
-        return array;
-    }
-    
-    public void addBudgetTypeCode(String budgetTypeCode) {
-        this.setBudgetTypeCodeText(this.getBudgetTypeCodeText() + "-" + budgetTypeCode);
+        return this.getBudgetTypeCodeText().split("-");
     }
 
     public void setBudgetTypeCodeArray(String[] budgetTypeCodeArray) {
@@ -690,7 +732,7 @@ public class Budget extends PersistableBusinessObjectBase {
     /**
      * @return Returns the institutionCostShareItems.
      */
-    public List<BudgetInstitutionCostShare> getInstitutionCostShareItems() {
+    public List getInstitutionCostShareItems() {
         return institutionCostShareItems;
     }
 
@@ -785,7 +827,7 @@ public class Budget extends PersistableBusinessObjectBase {
         return getAllUserAppointmentTaskPeriods(false);
     }
 
-    public List<UserAppointmentTaskPeriod> getAllUserAppointmentTaskPeriods(boolean forceRefreshPriorToSave) {
+    public List getAllUserAppointmentTaskPeriods(boolean forceRefreshPriorToSave) {
         if (allUserAppointmentTaskPeriods == null) {
             List list = new ArrayList();
             for (Iterator i = getAllUserAppointmentTasks(forceRefreshPriorToSave).iterator(); i.hasNext();) {
@@ -806,7 +848,7 @@ public class Budget extends PersistableBusinessObjectBase {
     /**
      * @return Returns the thirdPartyCostShareItems.
      */
-    public List<BudgetThirdPartyCostShare> getThirdPartyCostShareItems() {
+    public List getThirdPartyCostShareItems() {
         return thirdPartyCostShareItems;
     }
 
@@ -909,6 +951,88 @@ public class Budget extends PersistableBusinessObjectBase {
      */
     public void setInstitutionCostSharePersonnelItems(List institutionCostSharePersonnelItems) {
         this.institutionCostSharePersonnelItems = institutionCostSharePersonnelItems;
+    }
+
+
+    /**
+     * Gets the adHocPermissions attribute.
+     * 
+     * @return Returns the adHocPermissions.
+     */
+    public List<BudgetAdHocPermission> getAdHocPermissions() {
+        return adHocPermissions;
+    }
+
+    /**
+     * Sets the adHocPermissions attribute value.
+     * 
+     * @param adHocPermissions The adHocPermissions to set.
+     */
+    public void setAdHocPermissions(List<BudgetAdHocPermission> adHocPermissions) {
+        this.adHocPermissions = adHocPermissions;
+    }
+    
+    /**
+     * Gets the BudgetAdHocPermission item at given index.
+     * 
+     * @param index
+     * @return BudgetAdHocPermission
+     */
+    public BudgetAdHocPermission getBudgetAdHocPermissionItem(int index) {
+        while (this.getAdHocPermissions().size() <= index) {
+            this.getAdHocPermissions().add(new BudgetAdHocPermission());
+        }
+        return this.getAdHocPermissions().get(index);
+    }
+        
+    /**
+     * Gets the adHocOrgs attribute. 
+     * @return Returns the adHocOrgs.
+     */
+    public List<BudgetAdHocOrg> getAdHocOrgs() {
+        return adHocOrgs;
+    }
+
+    /**
+     * Sets the adHocOrgs attribute value.
+     * @param adHocOrgs The adHocOrgs to set.
+     */
+    public void setAdHocOrgs(List<BudgetAdHocOrg> adHocOrgs) {
+        this.adHocOrgs = adHocOrgs;
+    }
+    
+    /**
+     * Gets the BudgetAdHocOrg item at given index.
+     * 
+     * @param index
+     * @return BudgetAdHocOrg
+     */
+    public BudgetAdHocOrg getBudgetAdHocOrgItem(int index) {
+        while (this.getAdHocOrgs().size() <= index) {
+            this.getAdHocOrgs().add(new BudgetAdHocOrg());
+        }
+        return this.getAdHocOrgs().get(index);
+    }
+
+    public List<BudgetAdHocWorkgroup> getAdHocWorkgroups() {
+        return adHocWorkgroups;
+    }
+
+    public void setAdHocWorkgroups(List<BudgetAdHocWorkgroup> adHocWorkgroups) {
+        this.adHocWorkgroups = adHocWorkgroups;
+    }
+    
+    /**
+     * Gets the BudgetAdHocWorkgroup item at given index.
+     * 
+     * @param index
+     * @return BudgetAdHocWorkgroup
+     */
+    public BudgetAdHocWorkgroup getBudgetAdHocWorkgroupItem(int index) {
+        while (this.getAdHocWorkgroups().size() <= index) {
+            this.getAdHocWorkgroups().add(new BudgetAdHocWorkgroup());
+        }
+        return this.getAdHocWorkgroups().get(index);
     }
 
     public Date getDefaultNextPeriodBeginDate() {

@@ -1,35 +1,43 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.financial.lookup.keyvalues.PayeeTypeValuesFinder;
-import org.kuali.module.financial.lookup.keyvalues.PaymentReasonValuesFinder;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.lookup.keyvalues.PayeeTypeValuesFinder;
+import org.kuali.core.lookup.keyvalues.PaymentReasonValuesFinder;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 
 /**
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBase {
+public class DisbursementVoucherPayeeDetail extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private String disbVchrPaymentReasonCode;
     private boolean disbVchrAlienPaymentCode;
     private String disbVchrPayeeIdNumber;
@@ -61,30 +69,30 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     /**
      * Gets the disbVchrPaymentReasonCode attribute.
      * 
-     * @return Returns the disbVchrPaymentReasonCode
+     * @return - Returns the disbVchrPaymentReasonCode
      * 
      */
     public String getDisbVchrPaymentReasonCode() {
@@ -105,7 +113,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrAlienPaymentCode attribute.
      * 
-     * @return Returns the disbVchrAlienPaymentCode
+     * @return - Returns the disbVchrAlienPaymentCode
      * 
      */
     public boolean isDisbVchrAlienPaymentCode() {
@@ -126,7 +134,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPayeeIdNumber attribute.
      * 
-     * @return Returns the disbVchrPayeeIdNumber
+     * @return - Returns the disbVchrPayeeIdNumber
      * 
      */
     public String getDisbVchrPayeeIdNumber() {
@@ -147,7 +155,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPayeePersonName attribute.
      * 
-     * @return Returns the disbVchrPayeePersonName
+     * @return - Returns the disbVchrPayeePersonName
      * 
      */
     public String getDisbVchrPayeePersonName() {
@@ -168,7 +176,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPayeeLine1Addr attribute.
      * 
-     * @return Returns the disbVchrPayeeLine1Addr
+     * @return - Returns the disbVchrPayeeLine1Addr
      * 
      */
     public String getDisbVchrPayeeLine1Addr() {
@@ -189,7 +197,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPayeeLine2Addr attribute.
      * 
-     * @return Returns the disbVchrPayeeLine2Addr
+     * @return - Returns the disbVchrPayeeLine2Addr
      * 
      */
     public String getDisbVchrPayeeLine2Addr() {
@@ -210,7 +218,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPayeeCityName attribute.
      * 
-     * @return Returns the disbVchrPayeeCityName
+     * @return - Returns the disbVchrPayeeCityName
      * 
      */
     public String getDisbVchrPayeeCityName() {
@@ -231,7 +239,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPayeeStateCode attribute.
      * 
-     * @return Returns the disbVchrPayeeStateCode
+     * @return - Returns the disbVchrPayeeStateCode
      * 
      */
     public String getDisbVchrPayeeStateCode() {
@@ -252,7 +260,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPayeeZipCode attribute.
      * 
-     * @return Returns the disbVchrPayeeZipCode
+     * @return - Returns the disbVchrPayeeZipCode
      * 
      */
     public String getDisbVchrPayeeZipCode() {
@@ -273,7 +281,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPayeeCountryCode attribute.
      * 
-     * @return Returns the disbVchrPayeeCountryCode
+     * @return - Returns the disbVchrPayeeCountryCode
      * 
      */
     public String getDisbVchrPayeeCountryCode() {
@@ -294,7 +302,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrRemitPersonName attribute.
      * 
-     * @return Returns the disbVchrRemitPersonName
+     * @return - Returns the disbVchrRemitPersonName
      * 
      */
     public String getDisbVchrRemitPersonName() {
@@ -315,7 +323,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrRemitLine1Addr attribute.
      * 
-     * @return Returns the disbVchrRemitLine1Addr
+     * @return - Returns the disbVchrRemitLine1Addr
      * 
      */
     public String getDisbVchrRemitLine1Addr() {
@@ -336,7 +344,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrRemitLine2Addr attribute.
      * 
-     * @return Returns the disbVchrRemitLine2Addr
+     * @return - Returns the disbVchrRemitLine2Addr
      * 
      */
     public String getDisbVchrRemitLine2Addr() {
@@ -357,7 +365,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrRemitCityName attribute.
      * 
-     * @return Returns the disbVchrRemitCityName
+     * @return - Returns the disbVchrRemitCityName
      * 
      */
     public String getDisbVchrRemitCityName() {
@@ -378,7 +386,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrRemitStateCode attribute.
      * 
-     * @return Returns the disbVchrRemitStateCode
+     * @return - Returns the disbVchrRemitStateCode
      * 
      */
     public String getDisbVchrRemitStateCode() {
@@ -399,7 +407,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrRemitZipCode attribute.
      * 
-     * @return Returns the disbVchrRemitZipCode
+     * @return - Returns the disbVchrRemitZipCode
      * 
      */
     public String getDisbVchrRemitZipCode() {
@@ -420,7 +428,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrRemitCountryCode attribute.
      * 
-     * @return Returns the disbVchrRemitCountryCode
+     * @return - Returns the disbVchrRemitCountryCode
      * 
      */
     public String getDisbVchrRemitCountryCode() {
@@ -441,7 +449,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPayeeEmployeeCode attribute.
      * 
-     * @return Returns the disbVchrPayeeEmployeeCode
+     * @return - Returns the disbVchrPayeeEmployeeCode
      * 
      */
     public boolean isDisbVchrPayeeEmployeeCode() {
@@ -462,7 +470,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the dvPayeeRevolvingFundCode attribute.
      * 
-     * @return Returns the dvPayeeRevolvingFundCode
+     * @return - Returns the dvPayeeRevolvingFundCode
      * 
      */
     public boolean isDvPayeeRevolvingFundCode() {
@@ -483,7 +491,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
     /**
      * Gets the disbVchrPaymentReason attribute.
      * 
-     * @return Returns the disbVchrPaymentReason
+     * @return - Returns the disbVchrPaymentReason
      * 
      */
     public PaymentReasonCode getDisbVchrPaymentReason() {
@@ -569,7 +577,7 @@ public class DisbursementVoucherPayeeDetail extends PersistableBusinessObjectBas
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 }

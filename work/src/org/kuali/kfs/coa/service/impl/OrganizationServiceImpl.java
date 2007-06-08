@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/service/impl/OrganizationServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +20,16 @@ package org.kuali.module.chart.service.impl;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.util.spring.Cached;
-import org.kuali.kfs.KFSConstants.*;
-import org.kuali.kfs.util.SpringServiceLocator;
+
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
 import org.kuali.module.chart.service.OrganizationService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the Org structure. This is the default implementation, that is delivered with Kuali.
+ * 
+ * 
  */
-@Transactional
 public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationDao organizationDao;
     
@@ -51,7 +51,6 @@ public class OrganizationServiceImpl implements OrganizationService {
      * 
      * @see org.kuali.module.chart.service.impl.OrganizationServiceImpl#getByPrimaryId(java.lang.String, java.lang.String)
      */
-    @Cached
     public Org getByPrimaryIdWithCaching(String chartOfAccountsCode, String organizationCode) {
         return organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
     }
@@ -118,21 +117,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         
         return organizationDao.getActiveOrgsByType( organizationTypeCode );
     }
-   
-    /*
-     *   returns the chart of accounts code and the orgnization code of the root
-     *   organization
-     */
-    public String[] getRootOrganizationCode()
-    {
-        String rootChart = 
-        SpringServiceLocator.getChartService().getUniversityChart().getChartOfAccountsCode();
-        String selfReportsOrgType =
-        SpringServiceLocator.getKualiConfigurationService().getApplicationRule(
-                ChartApcParms.GROUP_CHART_MAINT_EDOCS,
-                ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES).getRuleText();
-        return (organizationDao.getRootOrganizationCode(rootChart,
-                                                        selfReportsOrgType));
-    }
+    
     
 }

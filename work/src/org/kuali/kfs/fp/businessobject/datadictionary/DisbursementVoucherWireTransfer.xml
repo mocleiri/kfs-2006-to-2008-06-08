@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.DisbursementVoucherWireTransfer">
 
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
 
@@ -106,7 +106,7 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.kfs.lookup.keyvalues.CountryValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CountryValuesFinder" />
                 </control>
 
                 <summary>
@@ -178,7 +178,7 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.CurrencyTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CurrencyTypeValuesFinder" />
                 </control>
 
                 <summary>
@@ -250,7 +250,7 @@
                 <required>false</required>
 
                 <control>
-                    <radio valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.BankAccountTypeValuesFinder" />
+                    <radio valuesFinderClass="org.kuali.core.lookup.keyvalues.BankAccountTypeValuesFinder" />
                 </control>
 
                 <summary>

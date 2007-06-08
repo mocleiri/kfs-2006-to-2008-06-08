@@ -1,19 +1,4 @@
-<%--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
---%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 
 <c:set var="rawDepositTypeCode" value="${KualiForm.depositTypeCode}" />
 <c:set var="docTitle"
@@ -42,9 +27,6 @@ function checkAllOrNone() {
   }
 }
 </script>
-	<script type='text/javascript' src="dwr/interface/BankService.js"></script>
-	<script type='text/javascript' src="dwr/interface/BankAccountService.js"></script>
-	<script type='text/javascript' src="scripts/financial/objectInfo.js"></script>
 
 	<html:hidden property="cashDrawerVerificationUnit" />
 	<html:hidden property="cashManagementDocId" />
@@ -152,26 +134,26 @@ function checkAllOrNone() {
 					<tr>
 						<td colspan="9"
 							style="background-color: gray; border-bottom: 1px solid gray; padding: 0px"><img
-							src="${ConfigProperties.kr.externalizable.images.url}pixel_clear.gif" alt="" width="1" height="1" /></td>
+							src="images/pixel_clear.gif" alt="" width="1" height="1" /></td>
 					</tr>
 
 					<tr>
 						<td>
 						<div align="center"><html:checkbox
 							property="depositWizardHelper[${ctr}].selectedValue"
-							value="${cashReceipt.documentNumber}" /></div>
+							value="${cashReceipt.financialDocumentNumber}" /></div>
 						</td>
 						<td>
 						<div align="center"><b>${(ctr + 1)}</b></div>
 						</td>
 						<td>
 						<div align="center"><a
-							href="financialCashReceipt.do?methodToCall=docHandler&docId=${cashReceipt.documentHeader.documentNumber}&command=displayDocSearchView"
+							href="financialCashReceipt.do?methodToCall=docHandler&docId=${cashReceipt.documentHeader.financialDocumentNumber}&command=displayDocSearchView"
 							target="new"> <kul:htmlControlAttribute
-							property="depositableCashReceipt[${ctr}].documentNumber"
-							attributeEntry="${cashReceiptAttributes.documentNumber}"
+							property="depositableCashReceipt[${ctr}].financialDocumentNumber"
+							attributeEntry="${cashReceiptAttributes.financialDocumentNumber}"
 							readOnly="true" /> </a> <html:hidden
-							property="depositableCashReceipt[${ctr}].documentHeader.documentNumber" />
+							property="depositableCashReceipt[${ctr}].documentHeader.financialDocumentNumber" />
 						</div>
 						</td>
 						<td>
@@ -253,7 +235,7 @@ function checkAllOrNone() {
 				<tr>
 					<td colspan="9"
 						style="background-color: gray; border-bottom: 1px solid gray; padding: 0px"><img
-						src="${ConfigProperties.kr.externalizable.images.url}pixel_clear.gif" alt="" width="1" height="1" /></td>
+						src="images/pixel_clear.gif" alt="" width="1" height="1" /></td>
 				</tr>
 
 			</table>
@@ -263,12 +245,12 @@ function checkAllOrNone() {
 
 			<div id="globalbuttons" class="globalbuttons"><html:image
 				property="methodToCall.createDeposit"
-				src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_create.gif" alt="create" title="create"
+				src="images/buttonsmall_create.gif" alt="create"
 				styleClass="tinybutton" /> <html:image
-				property="methodToCall.refresh" src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_refresh.gif"
-				alt="refresh" title="refresh" styleClass="tinybutton" /> <html:image
-				property="methodToCall.cancel" src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_cancel.gif"
-				alt="cancel" title="cancel" styleClass="tinybutton" /></div>
+				property="methodToCall.refresh" src="images/buttonsmall_refresh.gif"
+				alt="refresh" styleClass="tinybutton" /> <html:image
+				property="methodToCall.cancel" src="images/buttonsmall_cancel.gif"
+				alt="cancel" styleClass="tinybutton" /></div>
 		</kul:tab>
 	</c:if>
 
@@ -288,9 +270,9 @@ function checkAllOrNone() {
 		</table>
 
 		<div id="globalbuttons" class="globalbuttons"><html:image
-			property="methodToCall.refresh" src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_refresh.gif"
-			alt="refresh" title="refresh" styleClass="tinybutton" /> <html:image
-			property="methodToCall.cancel" src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_cancel.gif"
-			alt="cancel" title="cancel" styleClass="tinybutton" /></div>
+			property="methodToCall.refresh" src="images/buttonsmall_refresh.gif"
+			alt="refresh" styleClass="tinybutton" /> <html:image
+			property="methodToCall.cancel" src="images/buttonsmall_cancel.gif"
+			alt="cancel" styleClass="tinybutton" /></div>
 	</c:if>
 </kul:page>
