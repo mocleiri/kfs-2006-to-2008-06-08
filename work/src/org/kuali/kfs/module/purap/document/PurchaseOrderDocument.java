@@ -16,12 +16,12 @@
 
 package org.kuali.module.purap.document;
 
-import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.Note;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.document.Copyable;
@@ -32,16 +32,13 @@ import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.bo.ItemType;
+import org.kuali.module.purap.bo.PurchaseOrderAccount;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderStatusHistory;
 import org.kuali.module.purap.bo.PurchaseOrderVendorChoice;
-import org.kuali.module.purap.bo.PurchaseOrderVendorQuote;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.bo.PurchaseOrderView;
-import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.bo.RecurringPaymentFrequency;
-import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.service.PurchaseOrderPostProcessorService;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.bo.PaymentTermType;
@@ -77,8 +74,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
     private Integer purchaseOrderPreviousIdentifier;
     private Integer alternateVendorHeaderGeneratedIdentifier;
     private Integer alternateVendorDetailAssignedIdentifier;
-    private Integer newQuoteVendorHeaderGeneratedIdentifier;
-    private Integer newQuoteVendorDetailAssignedIdentifier;
+    private String alternateVendorNumber; //not persisted in db
     private String alternateVendorName;
     private String statusChange;
     private String statusChangeNote;
@@ -86,22 +82,18 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
     private boolean pendingActionIndicator;
     private Date purchaseOrderFirstTransmissionDate;
     
-    //COLLECTIONS
-    private List<PurchaseOrderVendorStipulation> purchaseOrderVendorStipulations;
-    private List<PurchaseOrderVendorQuote> purchaseOrderVendorQuotes;
-
-    // NOT PERSISTED IN DB
-    private String alternateVendorNumber;
-    private String purchaseOrderRetransmissionMethodCode;
-    private String retransmitHeader;
-    private Integer purchaseOrderQuoteListIdentifier;
-    
-    // REFERENCE OBJECTS
     private PurchaseOrderVendorChoice purchaseOrderVendorChoice;
     private PaymentTermType vendorPaymentTerms;
     private ShippingTitle vendorShippingTitle;
     private ShippingPaymentTerms vendorShippingPaymentTerms;
     private RecurringPaymentFrequency recurringPaymentFrequency;
+    
+    //COLLECTIONS
+    private List<PurchaseOrderVendorStipulation> purchaseOrderVendorStipulations;
+    
+    //Not persisted in db
+    private String purchaseOrderRetransmissionMethodCode;
+    private String retransmitHeader;
     
     /**
 	 * Default constructor.
@@ -109,7 +101,6 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
 	public PurchaseOrderDocument() {
         super();
         this.purchaseOrderVendorStipulations = new TypedArrayList( PurchaseOrderVendorStipulation.class );
-        this.purchaseOrderVendorQuotes = new TypedArrayList( PurchaseOrderVendorQuote.class );
     }
 
     /**
@@ -195,11 +186,12 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
 
         this.setStatusCode(PurapConstants.PurchaseOrderStatuses.IN_PROCESS);
         //copy items from req to pending (which will copy the item's accounts and assets)
-        List<PurchaseOrderItem> items = new ArrayList();
-        for (PurchasingApItem reqItem : ((PurchasingAccountsPayableDocument) requisitionDocument).getItems()) {
-          items.add(new PurchaseOrderItem((RequisitionItem)reqItem, this));
-        }
-        this.setItems(items);
+//        List items = new ArrayList();
+//        for (Iterator iter = requisitionDocument.getItems().iterator(); iter.hasNext();) {
+//          RequisitionItem reqItem = (RequisitionItem) iter.next();
+//          items.add(new PurchaseOrderItem(reqItem, this));
+//        }
+//        this.setItems(items);
         
     }
 
@@ -207,6 +199,13 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         super.refreshAllReferences();
     }
     
+    /**
+     * Perform logic needed to initiate PO Document
+     */
+    public void initiateDocument() {
+
+    }
+
     public PurchaseOrderVendorStipulation getPurchaseOrderVendorStipulation(int index) {
         while (getPurchaseOrderVendorStipulations().size() <= index) {
             getPurchaseOrderVendorStipulations().add(new PurchaseOrderVendorStipulation());
@@ -460,20 +459,6 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         this.purchaseOrderVendorStipulations = purchaseOrderVendorStipulations;
     }
 
-    public List<PurchaseOrderVendorQuote> getPurchaseOrderVendorQuotes() {
-        return purchaseOrderVendorQuotes;
-    }
-
-    public void setPurchaseOrderVendorQuotes(List<PurchaseOrderVendorQuote> purchaseOrderVendorQuotes) {
-        this.purchaseOrderVendorQuotes = purchaseOrderVendorQuotes;
-    }
-
-    public PurchaseOrderVendorQuote getPurchaseOrderVendorQuote(int index) {
-        while (getPurchaseOrderVendorQuotes().size() <= index) {
-            getPurchaseOrderVendorQuotes().add(new PurchaseOrderVendorQuote());
-        }
-        return (PurchaseOrderVendorQuote)purchaseOrderVendorQuotes.get(index);
-    }
 
     public void setStatusChange(String statusChange) {
         this.statusChange = statusChange;
@@ -651,7 +636,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         }
         return documentBusinessObject;
     }
-    
+
     public void refreshDocumentBusinessObject() {
         documentBusinessObject = SpringServiceLocator.getPurchaseOrderService().getOldestPurchaseOrder(getPurapDocumentIdentifier(),this);
     }
@@ -670,65 +655,6 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         return PurchaseOrderItem.class;
 }
 
-    public Integer getNewQuoteVendorDetailAssignedIdentifier() {
-        return newQuoteVendorDetailAssignedIdentifier;
-    }
-
-    public void setNewQuoteVendorDetailAssignedIdentifier(Integer newQuoteVendorDetailAssignedIdentifier) {
-        this.newQuoteVendorDetailAssignedIdentifier = newQuoteVendorDetailAssignedIdentifier;
-    }
-
-    public Integer getNewQuoteVendorHeaderGeneratedIdentifier() {
-        return newQuoteVendorHeaderGeneratedIdentifier;
-    }
-
-    public void setNewQuoteVendorHeaderGeneratedIdentifier(Integer newQuoteVendorHeaderGeneratedIdentifier) {
-        this.newQuoteVendorHeaderGeneratedIdentifier = newQuoteVendorHeaderGeneratedIdentifier;
-    }
-    
-    public Integer getPurchaseOrderQuoteListIdentifier() {
-        return purchaseOrderQuoteListIdentifier;
-    }
-
-    public void setPurchaseOrderQuoteListIdentifier(Integer purchaseOrderQuoteListIdentifier) {
-        this.purchaseOrderQuoteListIdentifier = purchaseOrderQuoteListIdentifier;
-    }
-
-    public boolean isPurchaseOrderAwarded() {
-        return (getAwardedVendorQuote() != null);
-    }
-
-    public PurchaseOrderVendorQuote getAwardedVendorQuote() {
-        for (PurchaseOrderVendorQuote vendorQuote : purchaseOrderVendorQuotes) {
-            if (vendorQuote.getPurchaseOrderQuoteAwardDate() != null) {
-                return vendorQuote;
-            }
-        }
-        return null;
-    }
-    
-    @Override
-    public KualiDecimal getTotalDollarAmount() {
-        //return total without inactive and with below the line
-        return getTotalDollarAmount(false, true);
-    }
-    
-    //TODO: look into merging this with the super method with excludedTypes.  Can probably find a way to \ 
-    //abstract out the active flag which would be the only real difference
-    public KualiDecimal getTotalDollarAmount(boolean includeInactive, boolean includeBelowTheLine) {
-        KualiDecimal total = new KualiDecimal(BigDecimal.ZERO);
-        for (PurchaseOrderItem item : (List<PurchaseOrderItem>)getItems()) {
-            ItemType it = item.getItemType();
-            if((includeBelowTheLine || it.isItemTypeAboveTheLineIndicator()) &&
-               (includeInactive || item.isItemActiveIndicator())) {
-                KualiDecimal extendedPrice = item.getExtendedPrice();
-                KualiDecimal itemTotal = (extendedPrice != null) ? extendedPrice : KualiDecimal.ZERO;
-                total = total.add(itemTotal);
-            }
-        }
-        return total;
-    }
-    
     /**
      * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getSourceAccountingLineClass()
      */

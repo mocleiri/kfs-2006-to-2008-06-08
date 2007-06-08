@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,19 @@ package org.kuali.module.gl.bo;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.OriginationCode;
+import org.kuali.core.bo.user.Options;
+import org.kuali.core.document.DocumentType;
+import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.bo.OriginationCode;
+import org.kuali.core.web.uidraw.KeyLabelPair;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
@@ -43,38 +44,41 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.exception.LoadException;
 import org.springframework.util.StringUtils;
 
-public class OriginEntry extends PersistableBusinessObjectBase implements Transaction {
+/**
+ */
+public class OriginEntry extends BusinessObjectBase implements Transaction {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntry.class);
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     private Integer entryId;
     private Integer entryGroupId;
-    protected String accountNumber;
-    protected String documentNumber;
-    protected String referenceFinancialDocumentNumber;
-    protected String referenceFinancialDocumentTypeCode;
-    protected Date financialDocumentReversalDate;
-    protected String financialDocumentTypeCode;
-    protected String financialBalanceTypeCode;
-    protected String chartOfAccountsCode;
-    protected String financialObjectTypeCode;
-    protected String financialObjectCode;
-    protected String financialSubObjectCode;
-    protected String financialSystemOriginationCode;
-    protected String referenceFinancialSystemOriginationCode;
-    protected String organizationDocumentNumber;
-    protected String organizationReferenceId;
-    protected String projectCode;
-    protected String subAccountNumber;
-    protected Date transactionDate;
-    protected String transactionDebitCreditCode;
-    protected String transactionEncumbranceUpdateCode;
-    protected Integer transactionLedgerEntrySequenceNumber;
-    protected KualiDecimal transactionLedgerEntryAmount;
-    protected String transactionLedgerEntryDescription;
-    protected String universityFiscalPeriodCode;
-    protected Integer universityFiscalYear;
+    private String accountNumber;
+    private String financialDocumentNumber;
+    private String referenceFinancialDocumentNumber;
+    private String referenceFinancialDocumentTypeCode;
+    private Date financialDocumentReversalDate;
+    private String financialDocumentTypeCode;
+    private String financialBalanceTypeCode;
+    private String chartOfAccountsCode;
+    private String financialObjectTypeCode;
+    private String financialObjectCode;
+    private String financialSubObjectCode;
+    private String financialSystemOriginationCode;
+    private String referenceFinancialSystemOriginationCode;
+    private String organizationDocumentNumber;
+    private String organizationReferenceId;
+    private String projectCode;
+    private String subAccountNumber;
+    private Date transactionDate;
+    private String transactionDebitCreditCode;
+    private String transactionEncumbranceUpdateCode;
+    private Integer transactionLedgerEntrySequenceNumber;
+    private KualiDecimal transactionLedgerEntryAmount;
+    private String transactionLedgerEntryDescription;
+    private String universityFiscalPeriodCode;
+    private Integer universityFiscalYear;
+    private String budgetYear;
     private boolean transactionScrubberOffsetGenerationIndicator;
 
     // bo references
@@ -98,7 +102,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
 
     public OriginEntry(GeneralLedgerPendingEntry glpe) {
         accountNumber = glpe.getAccountNumber();
-        documentNumber = glpe.getDocumentNumber();
+        financialDocumentNumber = glpe.getFinancialDocumentNumber();
         referenceFinancialDocumentNumber = glpe.getReferenceFinancialDocumentNumber();
         referenceFinancialDocumentTypeCode = glpe.getReferenceFinancialDocumentTypeCode();
         financialDocumentReversalDate = glpe.getFinancialDocumentReversalDate();
@@ -122,6 +126,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         transactionLedgerEntryDescription = glpe.getTransactionLedgerEntryDescription();
         universityFiscalPeriodCode = glpe.getUniversityFiscalPeriodCode();
         universityFiscalYear = glpe.getUniversityFiscalYear();
+        budgetYear = glpe.getBudgetYear();
     }
 
     /**
@@ -130,37 +135,37 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
     public OriginEntry(String financialDocumentTypeCode, String financialSystemOriginationCode) {
         super();
 
-        setChartOfAccountsCode(KFSConstants.EMPTY_STRING);
-        setAccountNumber(KFSConstants.EMPTY_STRING);
-        setSubAccountNumber(KFSConstants.DASHES_SUB_ACCOUNT_NUMBER);
-        setProjectCode(KFSConstants.DASHES_PROJECT_CODE);
+        setChartOfAccountsCode(Constants.EMPTY_STRING);
+        setAccountNumber(Constants.EMPTY_STRING);
+        setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
+        setProjectCode(Constants.DASHES_PROJECT_CODE);
 
         setFinancialDocumentTypeCode(financialDocumentTypeCode);
         setFinancialSystemOriginationCode(financialSystemOriginationCode);
 
-        setFinancialObjectCode(KFSConstants.EMPTY_STRING);
-        setFinancialSubObjectCode(KFSConstants.DASHES_SUB_OBJECT_CODE);
-        setFinancialBalanceTypeCode(KFSConstants.EMPTY_STRING);
-        setFinancialObjectTypeCode(KFSConstants.EMPTY_STRING);
-        setDocumentNumber(KFSConstants.EMPTY_STRING);
+        setFinancialObjectCode(Constants.EMPTY_STRING);
+        setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
+        setFinancialBalanceTypeCode(Constants.EMPTY_STRING);
+        setFinancialObjectTypeCode(Constants.EMPTY_STRING);
+        setFinancialDocumentNumber(Constants.EMPTY_STRING);
         setFinancialDocumentReversalDate(null);
 
         setUniversityFiscalYear(new Integer(0));
-        setUniversityFiscalPeriodCode(KFSConstants.EMPTY_STRING);
+        setUniversityFiscalPeriodCode(Constants.EMPTY_STRING);
 
         setTransactionLedgerEntrySequenceNumber(new Integer(1));
         setTransactionLedgerEntryAmount(new KualiDecimal(0));
-        setTransactionLedgerEntryDescription(KFSConstants.EMPTY_STRING);
+        setTransactionLedgerEntryDescription(Constants.EMPTY_STRING);
         setTransactionDate(null);
-        setTransactionDebitCreditCode(KFSConstants.EMPTY_STRING);
-        setTransactionEncumbranceUpdateCode(KFSConstants.EMPTY_STRING);
+        setTransactionDebitCreditCode(Constants.EMPTY_STRING);
+        setTransactionEncumbranceUpdateCode(Constants.EMPTY_STRING);
 
-        setOrganizationDocumentNumber(KFSConstants.EMPTY_STRING);
-        setOrganizationReferenceId(KFSConstants.EMPTY_STRING);
+        setOrganizationDocumentNumber(Constants.EMPTY_STRING);
+        setOrganizationReferenceId(Constants.EMPTY_STRING);
 
-        setReferenceFinancialDocumentTypeCode(KFSConstants.EMPTY_STRING);
-        setReferenceFinancialSystemOriginationCode(KFSConstants.EMPTY_STRING);
-        setReferenceFinancialDocumentNumber(KFSConstants.EMPTY_STRING);
+        setReferenceFinancialDocumentTypeCode(Constants.EMPTY_STRING);
+        setReferenceFinancialSystemOriginationCode(Constants.EMPTY_STRING);
+        setReferenceFinancialDocumentNumber(Constants.EMPTY_STRING);
     }
 
     /**
@@ -186,7 +191,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
 
     public void setTransaction(Transaction t) {
         setAccountNumber(t.getAccountNumber());
-        setDocumentNumber(t.getDocumentNumber());
+        setFinancialDocumentNumber(t.getFinancialDocumentNumber());
         setReferenceFinancialDocumentNumber(t.getReferenceFinancialDocumentNumber());
         setReferenceFinancialDocumentTypeCode(t.getReferenceFinancialDocumentTypeCode());
         setFinancialDocumentReversalDate(t.getFinancialDocumentReversalDate());
@@ -212,21 +217,20 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         setUniversityFiscalYear(t.getUniversityFiscalYear());
     }
 
-    protected java.sql.Date parseDate(String sdate, boolean beLenientWithDates) throws ParseException {
+    private java.sql.Date parseDate(String sdate, boolean beLenientWithDates) throws ParseException {
         if ((sdate == null) || (sdate.trim().length() == 0)) {
             return null;
         }
         else {
-
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
             sdf.setLenient(beLenientWithDates);
 
-                java.util.Date d = sdf.parse(sdate);
-                return new Date(d.getTime());
-            }
-            }
+            java.util.Date d = sdf.parse(sdate);
+            return new Date(d.getTime());
+        }
+    }
 
-    protected String formatDate(Date date) {
+    private String formatDate(Date date) {
         if (date == null) {
             return "          ";
         }
@@ -236,20 +240,12 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         }
     }
 
-    protected String getValue(String line, int s, int e) {
+    private String getValue(String line, int s, int e) {
         String v = line.substring(s, e);
         return StringUtils.trimTrailingWhitespace(v);
     }
-    
-    /**
-     * This method loads the fields of this origin entry by parsing the passed in the string
-     * It is assumed that the String does not contain the origin entry ID, but if it does, it 
-     * will be ignored
-     * 
-     * @param line a string representing an origin entry
-     * @param lineNumber used to render an error message by identifying this line
-     * @throws LoadException
-     */
+
+    // lineNumber is for showing error message
     public void setFromTextFile(String line, int lineNumber) throws LoadException {
 
         // Just in case
@@ -260,10 +256,9 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
                 setUniversityFiscalYear(new Integer(line.substring(0, 4)));
             }
             catch (NumberFormatException e) {
-                GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "University Fiscal Year" });
+                GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "University Fiscal Year" });
                 throw new LoadException("Invalid university fiscal year");
             }
-
         }
         else {
             setUniversityFiscalYear(null);
@@ -279,13 +274,13 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         setUniversityFiscalPeriodCode(getValue(line, 29, 31));
         setFinancialDocumentTypeCode(getValue(line, 31, 35));
         setFinancialSystemOriginationCode(getValue(line, 35, 37));
-        setDocumentNumber(getValue(line, 37, 51));
+        setFinancialDocumentNumber(getValue(line, 37, 51));
         if (!"     ".equals(line.substring(51, 56)) && !"00000".equals(line.substring(51, 56))) {
             try {
                 setTransactionLedgerEntrySequenceNumber(new Integer(line.substring(51, 56).trim()));
-        }
+            }
             catch (NumberFormatException e) {
-                GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Sequence Number" });
+                GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Sequence Number" });
                 throw new LoadException("Invalid sequence number");
             }
         }
@@ -298,7 +293,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
             setTransactionLedgerEntryAmount(new KualiDecimal(line.substring(96, 113).trim()));
         }
         catch (NumberFormatException e) {
-            GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Ledger Entry Amount" });
+            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Ledger Entry Amount" });
             throw new LoadException("Invalid Entry Amount");
         }
 
@@ -308,7 +303,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
             setTransactionDate(parseDate(line.substring(114, 124), false));
         }
         catch (ParseException e) {
-            GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Date" });
+            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Transaction Date" });
             throw new LoadException("Invalid Transaction Date");
         }
 
@@ -322,16 +317,16 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
             setFinancialDocumentReversalDate(parseDate(line.substring(172, 182), true));
         }
         catch (ParseException e) {
-            GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Financial Document Reversal Date" });
+            GlobalVariables.getErrorMap().putError("fileUpload", KeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Financial Document Reversal Date" });
             throw new LoadException("Invalid Reversal Date");
         }
 
         setTransactionEncumbranceUpdateCode(line.substring(182, 183));
     }
 
-    private static String SPACES = "                                                                                                                                                                                       ";
+    private static String SPACES = "                                                                                                              ";
 
-    protected String getField(int size, String value) {
+    private String getField(int size, String value) {
         if (value == null) {
             return SPACES.substring(0, size);
         }
@@ -364,7 +359,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         sb.append(getField(2, universityFiscalPeriodCode));
         sb.append(getField(4, financialDocumentTypeCode));
         sb.append(getField(2, financialSystemOriginationCode));
-        sb.append(getField(14, documentNumber));
+        sb.append(getField(14, financialDocumentNumber));
 
         // This is the cobol code for transaction sequence numbers.
         // 3025 019280 IF TRN-ENTR-SEQ-NBR OF GLEN-RECORD NOT NUMERIC
@@ -428,7 +423,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         map.put("financialObjectTypeCode", financialObjectTypeCode);
         map.put("financialSubObjectCode", financialSubObjectCode);
         map.put("financialBalanceTypeCode", financialBalanceTypeCode);
-        map.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        map.put("financialDocumentNumber", financialDocumentNumber);
         map.put("financialDocumentTypeCode", financialDocumentTypeCode);
         map.put("financialSystemOriginationCode", financialSystemOriginationCode);
         map.put("transactionLedgerEntrySequenceNumber", transactionLedgerEntrySequenceNumber);
@@ -499,12 +494,12 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         this.transactionDebitCreditCode = transactionDebitCreditCode;
     }
 
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     public Date getFinancialDocumentReversalDate() {
@@ -659,14 +654,6 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         this.transactionLedgerEntryAmount = transactionLedgerEntryAmount;
     }
 
-    public void setTransactionLedgerEntryAmount(String transactionLedgerEntryAmount) {
-        this.transactionLedgerEntryAmount = new KualiDecimal(transactionLedgerEntryAmount);
-    }
-    
-    public void clearTransactionLedgerEntryAmount(){
-        this.transactionLedgerEntryAmount = null;
-    }
-    
     public String getTransactionLedgerEntryDescription() {
         return transactionLedgerEntryDescription;
     }
@@ -812,12 +799,20 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
         this.referenceDocumentType = referenceDocumentType;
     }
 
+    public String getBudgetYear() {
+        return budgetYear;
+    }
+
+    public void setBudgetYear(String budgetYear) {
+        this.budgetYear = budgetYear;
+    }
+
     public boolean isDebit() {
-        return KFSConstants.GL_DEBIT_CODE.equals(this.transactionDebitCreditCode);
+        return Constants.GL_DEBIT_CODE.equals(this.transactionDebitCreditCode);
     }
 
     public boolean isCredit() {
-        return KFSConstants.GL_CREDIT_CODE.equals(this.transactionDebitCreditCode);
+        return Constants.GL_CREDIT_CODE.equals(this.transactionDebitCreditCode);
     }
 
     public void setFieldValue(String fieldName,String fieldValue) {
@@ -847,8 +842,8 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
             setFinancialDocumentTypeCode(fieldValue);
         } else if ( "financialSystemOriginationCode".equals(fieldName) ) {
             setFinancialSystemOriginationCode(fieldValue);
-        } else if ( KFSPropertyConstants.DOCUMENT_NUMBER.equals(fieldName) ) {
-            setDocumentNumber(fieldValue);
+        } else if ( "financialDocumentNumber".equals(fieldName) ) {
+            setFinancialDocumentNumber(fieldValue);
         } else if ( "transactionLedgerEntrySequenceNumber".equals(fieldName) ) {
             if ( StringUtils.hasText(fieldValue) ) {
                 setTransactionLedgerEntrySequenceNumber(Integer.parseInt(fieldValue));
@@ -861,7 +856,7 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
             if ( StringUtils.hasText(fieldValue) ) {
                 setTransactionLedgerEntryAmount(new KualiDecimal(fieldValue));
             } else {
-                clearTransactionLedgerEntryAmount();
+                setTransactionLedgerEntryAmount(null);
             }
         } else if ( "transactionDebitCreditCode".equals(fieldName) ) {
             setTransactionDebitCreditCode(fieldValue);
@@ -929,8 +924,8 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
             return getFinancialDocumentTypeCode();
         } else if ( "financialSystemOriginationCode".equals(fieldName) ) {
             return getFinancialSystemOriginationCode();
-        } else if ( KFSPropertyConstants.DOCUMENT_NUMBER.equals(fieldName) ) {
-            return getDocumentNumber();
+        } else if ( "financialDocumentNumber".equals(fieldName) ) {
+            return getFinancialDocumentNumber();
         } else if ( "transactionLedgerEntrySequenceNumber".equals(fieldName) ) {
             return getTransactionLedgerEntrySequenceNumber();
         } else if ( "transactionLedgerEntryDescription".equals(fieldName) ) {
@@ -959,6 +954,6 @@ public class OriginEntry extends PersistableBusinessObjectBase implements Transa
             return getTransactionEncumbranceUpdateCode();        
         } else {
             throw new IllegalArgumentException("Invalid Field Name " + fieldName);
-}
+        }
     }
 }

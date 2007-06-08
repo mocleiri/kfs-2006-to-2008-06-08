@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.gl.bo.Entry">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
             <title>General Ledger Entry</title>
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
@@ -34,7 +34,7 @@
                 <field attributeName="universityFiscalPeriodCode" />
                 <field attributeName="financialSystemOriginationCode" />
                 <field attributeName="financialDocumentTypeCode" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="transactionLedgerEntrySequenceNumber" />
                 <field attributeName="transactionLedgerEntryDescription" />
                 <field attributeName="transactionLedgerEntryAmount" />
@@ -50,7 +50,8 @@
                 <field attributeName="transactionEncumbranceUpdateCode" />
                 <field attributeName="transactionPostingDate" />
                 <field attributeName="transactionDateTimeStamp" noInquiry="true" />
-            </inquiryFields></inquirySection></inquirySections>
+                <field attributeName="budgetYear" />
+            </inquiryFields>
         </inquiry>
 
         <lookup>
@@ -62,7 +63,7 @@
 
             <lookupFields>
                 <lookupField attributeName="universityFiscalYear" required="true">
-                    <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
+                    <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.FiscalYearFinder</defaultValueFinderClass>
                 </lookupField>
 
                 <lookupField attributeName="chartOfAccountsCode" required="true" />
@@ -83,7 +84,7 @@
 
                 <lookupField attributeName="financialDocumentTypeCode" />
                 <lookupField attributeName="financialSystemOriginationCode" />
-                <lookupField attributeName="documentNumber" />
+                <lookupField attributeName="financialDocumentNumber" />
                 <lookupField attributeName="organizationDocumentNumber" />
 
                 <lookupField attributeName="projectCode" />
@@ -114,7 +115,7 @@
 
                 <field attributeName="financialDocumentTypeCode" />
                 <field attributeName="financialSystemOriginationCode" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
 
                 <field attributeName="transactionLedgerEntryDescription" />
                 <field attributeName="transactionLedgerEntryAmount" />
@@ -210,7 +211,7 @@
                 <description>The code corresponding to the system which created the General Ledger entry, e.g., 01 = Kuali Financial System (KFS).</description>
             </attribute>
 
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber">
+            <attributeReference name="financialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber">
                 <description>The system generated Document Number attached to the accounting transaction. Used for tracking purposes.</description>
             </attributeReference>
 
@@ -334,7 +335,18 @@
 
             <attributeReference name="transactionDateTimeStamp" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericDate" />
 
-            <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="pendingEntryOption" >
+            <attribute name="budgetYear" forceUppercase="false">
+                <label>Budget Year</label>
+                <shortLabel>Bdgt. Year</shortLabel>
+                <maxLength>4</maxLength>
+                <control>
+                    <text size="6" />
+                </control>
+                <summary>The budget year for this transaction.</summary>
+                <description>This is the budget year associated with this pending ledger entry.</description>
+            </attribute>
+
+            <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" sourceAttributeName="pendingEntryOption" >
             	<label>Pending Entry Approved Indicator</label>
                 <shortLabel>Pending Entry Approved Indicator</shortLabel>
             </attributeReference>
