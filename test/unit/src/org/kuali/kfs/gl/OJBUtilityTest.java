@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ojb.broker.query.Criteria;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.module.gl.bo.AccountBalance;
-import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
+import org.kuali.module.gl.bo.DummyBusinessObject;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.test.KualiTestBase;
 import org.kuali.test.WithTestSpringContext;
@@ -36,7 +36,7 @@ public class OJBUtilityTest extends KualiTestBase {
 
     // test cases for buildPropertyMap method
     public void testBuildPropertyMap() throws Exception {
-        TransientBalanceInquiryAttributes dummyBusinessObject = new TransientBalanceInquiryAttributes();
+        DummyBusinessObject dummyBusinessObject = new DummyBusinessObject();
 
         dummyBusinessObject.setAmountViewOption(Constant.ACCUMULATE);
         Map propertyMap = OJBUtility.buildPropertyMap(dummyBusinessObject);
@@ -75,7 +75,7 @@ public class OJBUtilityTest extends KualiTestBase {
 
     public void testGetResultSizeFromMap() throws Exception {
         Map propertyMap = new HashMap();
-        propertyMap.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, "2007");
+        propertyMap.put(PropertyConstants.UNIVERSITY_FISCAL_YEAR, "2007");
 
         Long resultSize = OJBUtility.getResultSizeFromMap(propertyMap, new AccountBalance());
         assertTrue("Should be greater than 0 if there are account balance records", resultSize.intValue() > 0);

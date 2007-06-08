@@ -1,41 +1,44 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of 
+ * the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License");
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.document;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Timestamp;
 
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.Constants;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.module.financial.bo.PreEncumbranceDocumentAccountingLineParser;
-import org.kuali.module.gl.util.SufficientFundsItem;
 
 /**
- * The Pre-Encumbrance document provides the capability to record encumbrances independently of purchase orders, travel, or Physical
- * Plant work orders. These transactions are for the use of the account manager to earmark funds for which unofficial commitments
- * have already been made.
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @version $Id: PreEncumbranceDocument.java,v 1.2.2.1 2006-07-26 21:49:54 abyrne Exp $
  */
-public class PreEncumbranceDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling{
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PreEncumbranceDocument.class);
+public class PreEncumbranceDocument extends TransactionalDocumentBase {
 
-    private java.sql.Date reversalDate;
+    private Timestamp reversalDate;
 
     /**
      * Initializes the array lists and some basic info.
@@ -46,22 +49,9 @@ public class PreEncumbranceDocument extends AccountingDocumentBase implements Co
 
     /**
      * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#checkSufficientFunds()
-     */
-    @Override
-    public List<SufficientFundsItem> checkSufficientFunds() {
-        LOG.debug("checkSufficientFunds() started");
-
-        // This document does not do sufficient funds checking
-        return new ArrayList<SufficientFundsItem>();
-    }
-
-
-    /**
-     * 
      * @return Timestamp
      */
-    public java.sql.Date getReversalDate() {
+    public Timestamp getReversalDate() {
         return reversalDate;
     }
 
@@ -69,32 +59,32 @@ public class PreEncumbranceDocument extends AccountingDocumentBase implements Co
      * 
      * @param reversalDate
      */
-    public void setReversalDate(java.sql.Date reversalDate) {
+    public void setReversalDate(Timestamp reversalDate) {
         this.reversalDate = reversalDate;
     }
 
     /**
      * Overrides the base implementation to return "Encumbrance".
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return KFSConstants.ENCUMBRANCE;
+        return Constants.ENCUMBRANCE;
     }
 
     /**
      * Overrides the base implementation to return "Disencumbrance".
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return KFSConstants.DISENCUMBRANCE;
+        return Constants.DISENCUMBRANCE;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {

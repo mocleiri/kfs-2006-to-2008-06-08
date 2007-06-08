@@ -16,28 +16,20 @@
 package org.kuali.module.kra.routingform.rules;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
 
 import org.kuali.core.document.Document;
-import org.kuali.core.rule.KualiParameterRule;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.cg.bo.ProjectDirector;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.KraKeyConstants;
 import org.kuali.module.kra.routingform.bo.RoutingFormBudget;
 import org.kuali.module.kra.routingform.bo.RoutingFormOrganizationCreditPercent;
 import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
 import org.kuali.module.kra.routingform.bo.RoutingFormProjectType;
-import org.kuali.module.kra.routingform.bo.RoutingFormQuestion;
 import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 import org.kuali.module.kra.util.AuditCluster;
 import org.kuali.module.kra.util.AuditError;
@@ -60,30 +52,10 @@ public class RoutingFormAuditRule {
         boolean valid = true;
         
         valid &= processRoutingFormMainPageAuditChecks(routingFormDocument);
-        valid &= processRoutingFormProjectDetailsAuditChecks(routingFormDocument);
         
         return valid;
     }
     
-    private static boolean processRoutingFormProjectDetailsAuditChecks(RoutingFormDocument routingFormDocument) {
-        boolean valid = true;
-        
-        List<AuditError> auditErrors = new ArrayList<AuditError>();
-        
-        for (RoutingFormQuestion routingFormQuestion : routingFormDocument.getRoutingFormQuestions()) {
-            if (routingFormQuestion.getYesNoIndicator() == null) {
-                valid = false;
-            }
-        }
-        
-        if (!valid) {
-            auditErrors.add(new AuditError("document.projectDetails.otherProjectDetailsQuestions", KraKeyConstants.AUDIT_OTHER_PROJECT_DETAILS_NOT_SELECTED, "projectdetails.anchor1"));
-            GlobalVariables.getAuditErrorMap().put("projectDetailsAuditErrors", new AuditCluster("Project Details", auditErrors));
-        }
-        
-        return valid;
-    }
-
     /**
      * Runs audit mode business rule checks on a Main Page.
      * 
@@ -150,46 +122,43 @@ public class RoutingFormAuditRule {
      * @return
      */
     private static boolean processRoutingFormMainPagePersonnelUnitsAuditChecks(List<AuditError> auditErrors, RoutingFormDocument routingFormDocument) {
-        final String PERSON_ROLE_CODE_OTHER = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "KraRoutingFormPersonRoleCodeOther");
-        
         boolean valid = true;
+
         int projectDirectorCount = 0;
         
         int i = 0;
         for (RoutingFormPersonnel person : routingFormDocument.getRoutingFormPersonnel()) {
             if (person.isPersonToBeNamedIndicator()) {
                 valid = false;
-                auditErrors.add(new AuditError("document.routingFormPersonnel[" + i + "].personUniversalIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_REQUIRED, "mainpage.anchor2"));
+                auditErrors.add(new AuditError("document.routingFormPerson[" + i + "].personSystemIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_REQUIRED, "mainpage.anchor2"));
             }
             
-            if (person.isProjectDirector()) {
+            if (KraConstants.PERSON_ROLE_CODE_PD.equals(person.getPersonRoleCode())) {
                 projectDirectorCount++;
                 
-                Map fieldValues = new HashMap();
-                fieldValues.put(KFSPropertyConstants.PERSON_UNIVERSAL_IDENTIFIER, person.getPersonUniversalIdentifier());
-                ProjectDirector projectDirector = (ProjectDirector) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(ProjectDirector.class, fieldValues);
-                if (projectDirector == null) {
+                /* TODO KULERA-816: Following line has to be replaced with an appropriate workgroup call. */
+                if (false) {
                     valid = false;
-                    auditErrors.add(new AuditError("document.routingFormPersonnel[" + i + "].personUniversalIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_NOT_PD, "mainpage.anchor2"));
+                    auditErrors.add(new AuditError("document.routingFormPerson[" + i + "].personSystemIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_NOT_PD, "mainpage.anchor2"));
                 }
             }
 
             if (ObjectUtils.isNull(person.getPersonRoleCode())) {
                 valid = false;
-                auditErrors.add(new AuditError("document.routingFormPersonnel[" + i + "].personRoleCode", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_ROLE_CODE_REQUIRED, "mainpage.anchor2"));
-            } else if (PERSON_ROLE_CODE_OTHER.equals(person.getPersonRoleCode()) && ObjectUtils.isNull(person.getPersonRoleText())) {
+                auditErrors.add(new AuditError("document.routingFormPerson[" + i + "].personRoleCode", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_ROLE_CODE_REQUIRED, "mainpage.anchor2"));
+            } else if (KraConstants.PERSON_ROLE_CODE_OTHER.equals(person.getPersonRoleCode()) && ObjectUtils.isNull(person.getPersonRoleText())) {
                 valid = false;
-                auditErrors.add(new AuditError("document.routingFormPersonnel[" + i + "].personRoleText", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_ROLE_TEXT_REQUIRED, "mainpage.anchor2"));
+                auditErrors.add(new AuditError("document.routingFormPerson[" + i + "].personRoleText", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_ROLE_TEXT_REQUIRED, "mainpage.anchor2"));
             }
             
             if (ObjectUtils.isNull(person.getPersonFinancialAidPercent())) {
                 valid = false;
-                auditErrors.add(new AuditError("document.routingFormPersonnel[" + i + "].personFinancialAidPercent", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_FA_REQUIRED, "mainpage.anchor2"));
+                auditErrors.add(new AuditError("document.routingFormPerson[" + i + "].personFinancialAidPercent", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_FA_REQUIRED, "mainpage.anchor2"));
             }
             
             if (ObjectUtils.isNull(person.getPersonCreditPercent())) {
                 valid = false;
-                auditErrors.add(new AuditError("document.routingFormPersonnel[" + i + "].personCreditPercent", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_CREDIT_REQUIRED, "mainpage.anchor2"));
+                auditErrors.add(new AuditError("document.routingFormPerson[" + i + "].personCreditPercent", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_CREDIT_REQUIRED, "mainpage.anchor2"));
             }
             
             i++;
@@ -197,22 +166,22 @@ public class RoutingFormAuditRule {
         
         if(projectDirectorCount == 0) {
             valid = false;
-            auditErrors.add(new AuditError("document.routingFormPersonnel.personUniversalIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_PD_REQUIRED, "mainpage.anchor2"));
+            auditErrors.add(new AuditError("document.routingFormPersonnel.personSystemIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_PD_REQUIRED, "mainpage.anchor2"));
         } else if (projectDirectorCount > 1) {
             valid = false;
-            auditErrors.add(new AuditError("document.routingFormPersonnel.personUniversalIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_ONLY_ONE_PD, "mainpage.anchor2"));
+            auditErrors.add(new AuditError("document.routingFormPersonnel.personSystemIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_ONLY_ONE_PD, "mainpage.anchor2"));
         }
         
         i = 0;
         for (RoutingFormOrganizationCreditPercent org : routingFormDocument.getRoutingFormOrganizationCreditPercents()) {
             if (ObjectUtils.isNull(org.getOrganizationFinancialAidPercent())) {
                 valid = false;
-                auditErrors.add(new AuditError("document.routingFormOrganizationCreditPercents[" + i + "].personFinancialAidPercent", KraKeyConstants.AUDIT_MAIN_PAGE_ORG_FA_REQUIRED, "mainpage.anchor2"));
+                auditErrors.add(new AuditError("document.routingFormOrganizationCreditPercent[" + i + "].personFinancialAidPercent", KraKeyConstants.AUDIT_MAIN_PAGE_ORG_FA_REQUIRED, "mainpage.anchor2"));
             }
             
             if (ObjectUtils.isNull(org.getOrganizationCreditPercent())) {
                 valid = false;
-                auditErrors.add(new AuditError("document.routingFormOrganizationCreditPercents[" + i + "].personCreditPercent", KraKeyConstants.AUDIT_MAIN_PAGE_ORG_CREDIT_REQUIRED, "mainpage.anchor2"));
+                auditErrors.add(new AuditError("document.routingFormOrganizationCreditPercent[" + i + "].personCreditPercent", KraKeyConstants.AUDIT_MAIN_PAGE_ORG_CREDIT_REQUIRED, "mainpage.anchor2"));
             }
             
             i++;
@@ -238,33 +207,18 @@ public class RoutingFormAuditRule {
      * @return
      */
     private static boolean processRoutingFormMainPageSubmissionDetailsAuditChecks(List<AuditError> auditErrors, RoutingFormDocument routingFormDocument) {
-        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
-        final String SUBMISSION_TYPE_CHANGE = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.SUBMISSION_TYPE_CHANGE);
-        final String PROJECT_TYPE_NEW = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "KraRoutingFormProjectTypeNew");
-        final String PROJECT_TYPE_TIME_EXTENTION = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "KraRoutingFormProjectTypeTimeExtention");
-        final String PROJECT_TYPE_BUDGET_REVISION_ACTIVE = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "KraRoutingFormProjectTypeBudgetRevisionActive");
-        final String PROJECT_TYPE_BUDGET_REVISION_PENDING = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "KraRoutingFormProjectTypeBudgetRevisionPending");
-        final String PROJECT_TYPE_OTHER = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.PROJECT_TYPE_OTHER);
-        final String PURPOSE_RESEARCH = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.PURPOSE_RESEARCH);
-        final String PURPOSE_OTHER = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.PURPOSE_OTHER);
-        
         boolean valid = true;
         
-        // Submission type - Grants.gov
-//        if (ObjectUtils.isNull(routingFormDocument.getSubmissionTypeCode())) {
-//            valid = false;
-//            auditErrors.add(new AuditError("document.submissionTypeCode", KraKeyConstants.AUDIT_MAIN_PAGE_SUBMISSION_TYPE_REQUIRED, "mainpage.anchor3"));
-//        }
-//        if (SUBMISSION_TYPE_CHANGE.equals(routingFormDocument.getSubmissionTypeCode()) && ObjectUtils.isNull(routingFormDocument.getPreviousFederalIdentifier())) {
-//            valid = false;
-//            auditErrors.add(new AuditError("document.previousFederalIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_SUBMISSION_TYPE_FEDID_REQUIRED, "mainpage.anchor3"));
-//        }
+        if (ObjectUtils.isNull(routingFormDocument.getSubmissionTypeCode())) {
+            valid = false;
+            auditErrors.add(new AuditError("document.submissionTypeCode", KraKeyConstants.AUDIT_MAIN_PAGE_SUBMISSION_TYPE_REQUIRED, "mainpage.anchor3"));
+        }
+        if (KraConstants.SUBMISSION_TYPE_CHANGE.equals(routingFormDocument.getSubmissionTypeCode()) && ObjectUtils.isNull(routingFormDocument.getPreviousFederalIdentifier())) {
+            valid = false;
+            auditErrors.add(new AuditError("document.previousFederalIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_SUBMISSION_TYPE_FEDID_REQUIRED, "mainpage.anchor3"));
+        }
 
-        // Project Type
-        
-        // TreeSet so that we get the natural order of projectCodes. Important because
-        // KraDevelopmentGroup.KraRoutingFormProjectTypesValid has elements in alphabetic order.
-        TreeSet<String> treeSet = new TreeSet();
+        String projectTypes[] = new String[routingFormDocument.getRoutingFormProjectTypes().size()];
         
         // Could do asList(projectTypes).contains but that's a bit less efficient since we need to check for quiet a few of them.
         boolean projectTypeNew = false;
@@ -277,20 +231,19 @@ public class RoutingFormAuditRule {
             valid = false;
             auditErrors.add(new AuditError("document.routingFormProjectTypes", KraKeyConstants.AUDIT_MAIN_PAGE_PROJECT_TYPE_REQUIRED, "mainpage.anchor3"));
         } else if (routingFormDocument.getRoutingFormProjectTypes() != null) {
+            int i = 0;
             for(RoutingFormProjectType routingFormProjectType : routingFormDocument.getRoutingFormProjectTypes()) {
-                if(routingFormProjectType.isProjectTypeSelectedIndicator()) {
-                    treeSet.add(routingFormProjectType.getProjectTypeCode());
-                }
+                projectTypes[i] = routingFormProjectType.getProjectTypeCode();
                 
-                if (routingFormProjectType.getProjectTypeCode().equals(PROJECT_TYPE_NEW) && routingFormProjectType.isProjectTypeSelectedIndicator()) {
+                if (routingFormProjectType.getProjectTypeCode().equals(KraConstants.PROJECT_TYPE_NEW)) {
                     projectTypeNew = true;
-                } else if (routingFormProjectType.getProjectTypeCode().equals(PROJECT_TYPE_TIME_EXTENTION) && routingFormProjectType.isProjectTypeSelectedIndicator()) {
+                } else if (routingFormProjectType.getProjectTypeCode().equals(KraConstants.PROJECT_TYPE_TIME_EXTENTION)) {
                     projectTypeTimeExtention = true;
-                } else if (routingFormProjectType.getProjectTypeCode().equals(PROJECT_TYPE_BUDGET_REVISION_ACTIVE) && routingFormProjectType.isProjectTypeSelectedIndicator()) {
+                } else if (routingFormProjectType.getProjectTypeCode().equals(KraConstants.PROJECT_TYPE_BUDGET_REVISION_ACTIVE)) {
                     projectTypeBudgetRevisionActive = true;
-                } else if (routingFormProjectType.getProjectTypeCode().equals(PROJECT_TYPE_BUDGET_REVISION_PENDING) && routingFormProjectType.isProjectTypeSelectedIndicator()) {
+                } else if (routingFormProjectType.getProjectTypeCode().equals(KraConstants.PROJECT_TYPE_BUDGET_REVISION_PENDING)) {
                     projectTypeBudgetRevisionPending = true;
-                } else if (routingFormProjectType.getProjectTypeCode().equals(PROJECT_TYPE_OTHER) && routingFormProjectType.isProjectTypeSelectedIndicator()) {
+                } else if (routingFormProjectType.getProjectTypeCode().equals(KraConstants.PROJECT_TYPE_OTHER)) {
                     projectTypeOther = true;
                     
                     if (ObjectUtils.isNull(routingFormDocument.getProjectTypeOtherDescription())) {
@@ -298,20 +251,25 @@ public class RoutingFormAuditRule {
                         auditErrors.add(new AuditError("document.projectTypeOtherDescription", KraKeyConstants.AUDIT_MAIN_PAGE_PROJECT_TYPE_OTHER_REQUIRED, "mainpage.anchor3"));
                     }
                 }
+                
+                i++;
             }
             
-            // We could use .toString but rather not rely on the implementation of that.
+            // It's important to sort because KraDevelopmentGroup.KraRoutingFormProjectTypesValid has elements in alphabetic order.
+            Arrays.sort(projectTypes);
+            
+            // We could use .toString but rather not rely on the representation implementation of that.
             String projectTypesString = "";
-            for(Iterator<String> iter = treeSet.iterator(); iter.hasNext(); ) {
-                String projectType = iter.next();
-                projectTypesString += projectType;
-                if (iter.hasNext()) {
-                    projectTypesString += "$";
+            for(i = 0; i < projectTypes.length; i++) {
+                projectTypesString += projectTypes[i];
+                if (projectTypes.length != i+1) {
+                    projectTypesString += ",";
                 }
             }
             
-            KualiParameterRule activeRule = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterRule(KraConstants.KRA_ADMIN_GROUP_NAME, "KraRoutingFormProjectTypesValid");
-            if (activeRule.failsRule(projectTypesString)) {
+            String[] projectTypesValid = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues("KraDevelopmentGroup", "KraRoutingFormProjectTypesValid");
+            List<String> projectTypesValidList = Arrays.asList(projectTypesValid);
+            if (!projectTypesValidList.contains(projectTypesString)) {
                 valid = false;
                 auditErrors.add(new AuditError("document.routingFormProjectTypes", KraKeyConstants.AUDIT_MAIN_PAGE_PROJECT_TYPE_INVALID, "mainpage.anchor3"));
             }
@@ -333,26 +291,19 @@ public class RoutingFormAuditRule {
             auditErrors.add(new AuditError("document.routingFormPurposeCode", KraKeyConstants.AUDIT_MAIN_PAGE_PURPOSE_REQUIRED, "mainpage.anchor3"));
         }
 
-        // Purpose
-        if (PURPOSE_RESEARCH.equals(routingFormDocument.getRoutingFormPurposeCode()) && ObjectUtils.isNull(routingFormDocument.getResearchTypeCode())) {
+        if (KraConstants.PURPOSE_RESEARCH.equals(routingFormDocument.getRoutingFormPurposeCode()) && ObjectUtils.isNull(routingFormDocument.getResearchTypeCode())) {
             valid = false;
             auditErrors.add(new AuditError("document.researchTypeCode", KraKeyConstants.AUDIT_MAIN_PAGE_PURPOSE_RESEARCH_TYPE_REQUIRED, "mainpage.anchor3"));
         }
         
-        if (PURPOSE_OTHER.equals(routingFormDocument.getRoutingFormPurposeCode()) && ObjectUtils.isNull(routingFormDocument.getRoutingFormOtherPurposeDescription())) {
+        if (KraConstants.PURPOSE_OTHER.equals(routingFormDocument.getRoutingFormPurposeCode()) && ObjectUtils.isNull(routingFormDocument.getRoutingFormOtherPurposeDescription())) {
             valid = false;
             auditErrors.add(new AuditError("document.routingFormOtherPurposeDescription", KraKeyConstants.AUDIT_MAIN_PAGE_PURPOSE_OTHER_REQUIRED, "mainpage.anchor3"));
         }
         
-        // Title, Lay Description, & Abstract
         if (ObjectUtils.isNull(routingFormDocument.getRoutingFormProjectTitle())) {
             valid = false;
             auditErrors.add(new AuditError("document.routingFormProjectTitle", KraKeyConstants.AUDIT_MAIN_PAGE_TITLE_REQUIRED, "mainpage.anchor3"));
-        }
-        
-        if (ObjectUtils.isNull(routingFormDocument.getRoutingFormLayDescription())) {
-            valid = false;
-            auditErrors.add(new AuditError("document.routingFormLayDescription", KraKeyConstants.AUDIT_MAIN_PAGE_LAY_DESCRIPTION_REQUIRED, "mainpage.anchor3"));
         }
         
         if (ObjectUtils.isNull(routingFormDocument.getProjectAbstract())) {

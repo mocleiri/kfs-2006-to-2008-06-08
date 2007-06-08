@@ -26,10 +26,11 @@ import java.util.Map;
 import org.kuali.core.service.ConfigurableDateService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.core.util.UnitTestSqlDao;
 import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.OriginEntryDao;
+import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.dao.LaborOriginEntryDao;
@@ -69,7 +70,7 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
 
         // Other objects needed for the tests
         persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
-        unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("unitTestSqlDao");
+        unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("glUnitTestSqlDao");
         laborOriginEntryService = (LaborOriginEntryService) beanFactory.getBean("laborOriginEntryService");
 
         originEntryDao = (OriginEntryDao) beanFactory.getBean("glOriginEntryDao");
@@ -105,11 +106,11 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
 
     protected void loadTransactions(String[] transactions, OriginEntryGroup group) {
         for (int i = 0; i < transactions.length; i++) {
-            LaborOriginEntry loe = new LaborOriginEntry(transactions[i]);
-            laborOriginEntryService.createEntry(loe, group);
+            OriginEntry e = new OriginEntry(transactions[i]);
+            laborOriginEntryService.createEntry(e, group);
         }
 
-        persistenceService.clearCache();
+        persistenceService.getPersistenceBroker().clearCache();
     }
 
     protected void clearExpenditureTable() {
@@ -152,7 +153,7 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
      * @param requiredEntries
      */
     protected void assertOriginEntries(int groupCount, EntryHolder[] requiredEntries) {
-        persistenceService.clearCache();
+        persistenceService.getPersistenceBroker().clearCache();
 
         List groups = unitTestSqlDao.sqlSelect("select * from gl_origin_entry_grp_t order by origin_entry_grp_src_cd");
         assertEquals("Number of groups is wrong", groupCount, groups.size());
@@ -186,10 +187,9 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
 
             // Check transaction - this is done this way so that Anthill prints the two transactions to make
             // resolving the issue easier.
-            
-            //This test is not good for Labor because input and output is little different.  -- Amount data 
-            /*String expected = requiredEntries[count].transactionLine.substring(0, 294);// trim();
-            String found = foundTransaction.getLine().substring(0, 294);// trim();
+
+            String expected = requiredEntries[count].transactionLine.substring(0, 173);// trim();
+            String found = foundTransaction.getLine().substring(0, 173);// trim();
 
             if (!found.equals(expected)) {
                 System.err.println("Expected transaction: " + expected);
@@ -197,7 +197,6 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
 
                 fail("Transaction " + foundTransaction.getEntryId() + " doesn't match expected output");
             }
-            */            
             count++;
         }
     }

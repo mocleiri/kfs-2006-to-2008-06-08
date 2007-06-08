@@ -17,84 +17,164 @@ package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.kuali.kfs.bo.SourceAccountingLine;
+import org.kuali.kfs.bo.AccountingLineBase;
+import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.SubAccount;
 
-public abstract class PurApAccountingLineBase extends SourceAccountingLine implements PurApAccountingLine {
+public class PurApAccountingLineBase extends AccountingLineBase implements PurApAccountingLine {
 
+    private Chart chartOfAccounts;
+    private Account account;
+    private SubAccount subAccount;
     protected Integer accountIdentifier;
     private Integer itemIdentifier;
+    private String chartOfAccountsCode;
+    private String accountNumber;
+    private String subAccountNumber;
+    private String financialObjectCode;
+    private String financialSubObjectCode;
+    private String projectCode;
+    private String organizationReferenceId;
     private BigDecimal accountLinePercent;
+    
+    
+    /**
+     * Gets the chartOfAccounts attribute.
+     * 
+     * @return Returns the chartOfAccounts
+     * 
+     */
+    public Chart getChartOfAccounts() { 
+        return chartOfAccounts;
+    }
 
-    public Integer getAccountIdentifier() {
-        return accountIdentifier;
+    /**
+     * Sets the chartOfAccounts attribute.
+     * 
+     * @param chartOfAccounts The chartOfAccounts to set.
+     * @deprecated
+     */
+    public void setChartOfAccounts(Chart chartOfAccounts) {
+        this.chartOfAccounts = chartOfAccounts;
+    }
+
+    /**
+     * Gets the account attribute.
+     * 
+     * @return Returns the account
+     * 
+     */
+    public Account getAccount() { 
+        return account;
+    }
+
+    /**
+     * Sets the account attribute.
+     * 
+     * @param account The account to set.
+     * @deprecated
+     */
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    /**
+     * Gets the subAccount attribute. 
+     * @return Returns the subAccount.
+     */
+    public SubAccount getSubAccount() {
+        return subAccount;
+    }
+
+    /**
+     * Sets the subAccount attribute value.
+     * @param subAccount The subAccount to set.
+     * @deprecated
+     */
+    public void setSubAccount(SubAccount subAccount) {
+        this.subAccount = subAccount;
+    }
+
+    public Integer getAccountIdentifier() { 
+    	return accountIdentifier;
     }
 
     public void setAccountIdentifier(Integer requisitionAccountIdentifier) {
-        this.accountIdentifier = requisitionAccountIdentifier;
+    	this.accountIdentifier = requisitionAccountIdentifier;
     }
 
-    public Integer getItemIdentifier() {
-        return itemIdentifier;
+    public Integer getItemIdentifier() { 
+    	return itemIdentifier;
     }
 
     public void setItemIdentifier(Integer requisitionItemIdentifier) {
-        this.itemIdentifier = requisitionItemIdentifier;
+    	this.itemIdentifier = requisitionItemIdentifier;
     }
 
-    public BigDecimal getAccountLinePercent() {
-        return accountLinePercent;
+    public String getChartOfAccountsCode() { 
+    	return chartOfAccountsCode;
+    }
+
+    public void setChartOfAccountsCode(String chartOfAccountsCode) {
+    	this.chartOfAccountsCode = chartOfAccountsCode;
+    }
+
+    public String getAccountNumber() { 
+    	return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+    	this.accountNumber = accountNumber;
+    }
+
+    public String getSubAccountNumber() { 
+    	return subAccountNumber;
+    }
+
+    public void setSubAccountNumber(String subAccountNumber) {
+    	this.subAccountNumber = subAccountNumber;
+    }
+
+    public String getFinancialObjectCode() { 
+    	return financialObjectCode;
+    }
+
+    public void setFinancialObjectCode(String financialObjectCode) {
+    	this.financialObjectCode = financialObjectCode;
+    }
+
+    public String getFinancialSubObjectCode() { 
+    	return financialSubObjectCode;
+    }
+
+    public void setFinancialSubObjectCode(String financialSubObjectCode) {
+    	this.financialSubObjectCode = financialSubObjectCode;
+    }
+
+    public String getProjectCode() { 
+    	return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+    	this.projectCode = projectCode;
+    }
+
+    public String getOrganizationReferenceId() { 
+    	return organizationReferenceId;
+    }
+
+    public void setOrganizationReferenceId(String organizationReferenceId) {
+    	this.organizationReferenceId = organizationReferenceId;
+    }
+
+    public BigDecimal getAccountLinePercent() { 
+    	return accountLinePercent;
     }
 
     public void setAccountLinePercent(BigDecimal accountLinePercent) {
-        this.accountLinePercent = accountLinePercent;
+    	this.accountLinePercent = accountLinePercent;
     }
-
-    public boolean isEmpty() {
-        return !(StringUtils.isNotEmpty(getAccountNumber()) || 
-                 StringUtils.isNotEmpty(getChartOfAccountsCode()) || 
-                 StringUtils.isNotEmpty(getFinancialObjectCode()) || 
-                 StringUtils.isNotEmpty(getFinancialSubObjectCode()) || 
-                 StringUtils.isNotEmpty(getOrganizationReferenceId()) || 
-                 StringUtils.isNotEmpty(getProjectCode()) || 
-                 StringUtils.isNotEmpty(getSubAccountNumber()));
-    }
-
-    public PurApAccountingLine createBlankAmountsCopy() {
-        // TODO PURAP - Finish Me
-        return null;
-    }
-
-    // TODO PURAP - need more fields for comparison or not? - look at org.kuali.kfs.bo.AccountingLineBase#getValuesMap()
-    public boolean accountStringsAreEqual(PurApAccountingLine accountingLine) {
-        if (accountingLine == null) { return false;}
-        return new EqualsBuilder()
-          .append(getChartOfAccountsCode(), accountingLine.getChartOfAccountsCode())
-          .append(getAccountNumber(),accountingLine.getAccountNumber())
-          .append(getSubAccountNumber(),accountingLine.getSubAccountNumber())
-          .append(getFinancialObjectCode(),accountingLine.getFinancialObjectCode())
-          .append(getFinancialSubObjectCode(),accountingLine.getFinancialSubObjectCode())
-          .append(getProjectCode(),accountingLine.getProjectCode())
-          .append(getOrganizationReferenceId(),accountingLine.getOrganizationReferenceId())
-//          .append(getReferenceOriginCode(),accountingLine.getReferenceOriginCode())
-//          .append(getReferenceNumber(),accountingLine.getReferenceNumber())
-//          .append(getReferenceTypeCode(),accountingLine.getReferenceTypeCode())
-          .isEquals();
-    }
-
-    // TODO PURAP - this method needs to copy any account field we need to display 
-    //              and its fields should probably match method 'accountStringsAreEqual' above
-    public SourceAccountingLine generateSourceAccountingLine() {
-        SourceAccountingLine sourceLine = new SourceAccountingLine();
-        sourceLine.setChartOfAccountsCode(getChartOfAccountsCode());
-        sourceLine.setAccountNumber(getAccountNumber());
-        sourceLine.setSubAccountNumber(getSubAccountNumber());
-        sourceLine.setFinancialObjectCode(getFinancialObjectCode());
-        sourceLine.setFinancialSubObjectCode(getFinancialSubObjectCode());
-        sourceLine.setProjectCode(getProjectCode());
-        sourceLine.setOrganizationReferenceId(getOrganizationReferenceId());
-        sourceLine.setAmount(getAmount());
-        return sourceLine;
-    }
+    
+    
 }

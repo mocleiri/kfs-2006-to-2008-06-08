@@ -40,7 +40,7 @@ public class SubcontractorRule extends MaintenanceDocumentRuleBase {
      * 
      * @param maintenanceDocument - document to be tested
      * @return whether maintenance doc passes
-     * @throws org.kuali.core.exceptions.ValidationException
+     * @throws ValidationException
      */
     @Override
     protected boolean validateMaintenanceDocument(MaintenanceDocument maintenanceDocument) {

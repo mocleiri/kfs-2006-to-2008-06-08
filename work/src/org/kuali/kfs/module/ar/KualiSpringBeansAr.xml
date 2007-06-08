@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ar/KualiSpringBeansAr.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,38 +17,34 @@
  limitations under the License.
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-<beans>	
-	<bean id="arModule" class="org.kuali.core.KualiModule">
-		<property name="moduleId" value="ar" />
-		<property name="moduleName" value="Kuali Accounts Receivable" />
-		<property name="moduleCode" value="AR" />
-		<property name="moduleUserService" ref="arUserService" />
-		<property name="moduleAuthorizer">
-			<bean class="org.kuali.kfs.authorization.KfsModuleAuthorizerBase">
-				<property name="packagePrefixes">
-					<list>
-						<value>org.kuali.module.ar.</value>
-					</list>
-				</property>
-			</bean>
-		</property>
-		<property name="moduleUserRule">
-			<null />
-		</property>
-		<property name="moduleUserPreRules">
-			<null />
-		</property>
-		<property name="dataDictionaryPackages">
-			<list>
-				<value>org/kuali/module/ar/datadictionary</value>
-			</list>
-		</property>
-		<property name="databaseRepositoryFilePaths">
-			<list>
-				<value>org/kuali/module/ar/OJB-repository-ar.xml</value>
-			</list>
-		</property>
+<beans>
+	<bean id="ar-Module" class="org.kuali.core.KualiModule">
+    	<property name="moduleId">
+    		<value>ar</value>
+    	</property>
+    	<property name="moduleName">
+    		<value>Kuali Accounts Receivable</value>
+    	</property>
+    	<property name="moduleUserService">
+    		<ref bean="arUserService" />
+    	</property>
+    	<property name="moduleAuthorizer">
+		    <bean class="org.kuali.core.authorization.KualiModuleAuthorizerBase">    
+		    	<property name="packagePrefixes">
+		    		<list>
+		    			<value>org.kuali.module.ar.</value>
+		    		</list>
+		    	</property>
+		    </bean>
+    	</property>
+    	<property name="moduleUserRule"><null /></property>
+    	<property name="moduleUserPreRules"><null /></property>
 	</bean>
+		
+    <bean id="arUserService" class="org.kuali.module.ar.service.impl.ArUserServiceImpl" parent="kualiModuleUserServiceBase">
+    	<property name="chartUserService">
+    		<ref bean="chartUserService" />
+    	</property>
+    </bean>
 
-	<bean id="arUserService" class="org.kuali.module.ar.service.impl.ArUserServiceImpl"  parent="kualiModuleUserServiceBase" />
 </beans>

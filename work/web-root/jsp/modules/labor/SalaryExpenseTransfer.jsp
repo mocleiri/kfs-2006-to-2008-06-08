@@ -1,5 +1,7 @@
 <%--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/labor/SalaryExpenseTransfer.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -13,136 +15,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
-
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 <kul:documentPage showDocumentInfo="true"
-    documentTypeName="KualiSalaryExpenseTransferDocument"
-    htmlFormAction="laborSalaryExpenseTransfer" renderMultipart="true"
-    showTabButtons="true">
+	documentTypeName="KualiSalaryExpenseTransferDocument"
+	htmlFormAction="laborSalaryExpenseTransfer" renderMultipart="true"
+	showTabButtons="true">
 
-    <html:hidden property="financialBalanceTypeCode" />
-    <kul:hiddenDocumentFields />
-    <kul:documentOverview editingMode="${KualiForm.editingMode}" />
-    <kul:tab tabTitle="Employee Lookup" defaultOpen="true"
-        tabErrorKey="${Constants.EMPLOYEE_LOOKUP_ERRORS}">
-        <div class="tab-container" align=center>
-            <div class="h2-container"><b>Employee Lookup</b></div>
-            <table cellpadding="0" cellspacing="0" class="datatable"
-                summary="employee lookup">
-    
-              <tr>
-                <kul:htmlAttributeHeaderCell
-                    attributeEntry="${DataDictionary.UniversalUser.attributes.personPayrollIdentifier}"
-                    horizontal="true"
-                    forceRequired="true"
-                    />
-                <td>
-                        <ld:employee userIdFieldName="emplid" 
-                                  userNameFieldName="user.personName" 
-                                  fieldConversions="personPayrollIdentifier:emplid"
-                                  lookupParameters="emplid:personPayrollIdentifier,universityFiscalYear:universityFiscalYear"
-                                  hasErrors="${hasErrors}"
-                                  onblur="${onblur}"
-                                  highlight="${addHighlighting}">
-                            <jsp:attribute name="helpLink" trim="true">
-                                <kul:help
-                                    businessObjectClassName="${field.businessObjectClassName}"
-                                    attributeName="${field.fieldHelpName}"
-                                    altText="${field.fieldHelpSummary}" />      
-                            </jsp:attribute>
-                        </ld:employee>
- 
-                </td>
-              </tr>
-              <tr>
-                <kul:htmlAttributeHeaderCell
-                    horizontal="true"
-                    forceRequired="false"
-                    literalLabel="Last Queried Fiscal Year"
-                    />
-                <td>${KualiForm.universityFiscalYear}&nbsp;</td>
-              </tr>
-            </table>
-                <p>
-        </div>
-    </kul:tab>
-
-      <c:set var="copyMethod" value="" scope="request"/>
-      <c:set var="actionInfixVar" value="" scope="request"/>
-      <c:set var="accountingLineIndexVar" value="" scope="request"/>
+	<kul:hiddenDocumentFields />
+	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
 	<fin:accountingLines editingMode="${KualiForm.editingMode}"
-		editableAccounts="${KualiForm.editableAccounts}" inherit="false"
-		optionalFields="positionNumber,payrollEndDateFiscalYear,payrollEndDateFiscalPeriodCode,payrollTotalHours">
+		editableAccounts="${KualiForm.editableAccounts}" />
+	<ld:laborLedgerPendingEntries />
+	<kul:notes />
+	<kul:adHocRecipients />
+	<kul:routeLog />
+	<kul:panelFooter />
+	<kul:documentControls transactionalDocument="true" />
 
-      <jsp:attribute name="groupsOverride">
-      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="datatable">
-        <fin:subheadingWithDetailToggleRow
-            columnCount="${columnCount}"
-             subheading="Accounting Lines"/>
-        <ld:importedAccountingLineGroup
-            isSource="true"
-            columnCountUntilAmount="${columnCountUntilAmount}"
-            columnCount="${columnCount}"
-            optionalFields="${optionalFieldsMap}"
-            extraRowFields="${extraSourceRowFieldsMap}"
-            editingMode="${KualiForm.editingMode}"
-            editableAccounts="${editableAccountsMap}"
-            editableFields="${KualiForm.accountingLineEditableFields}"
-            debitCreditAmount="${debitCreditAmountString}"
-            currentBaseAmount="${currentBaseAmountString}"
-            extraHiddenFields="${extraHiddenFieldsMap}"
-            useCurrencyFormattedTotal="${useCurrencyFormattedTotalBoolean}"
-            includeObjectTypeCode="${includeObjectTypeCodeBoolean}"
-            displayMonthlyAmounts="${displayMonthlyAmountsBoolean}"
-            forcedReadOnlySourceFields="${KualiForm.forcedReadOnlyFields}"
-            accountingLineAttributes="${accountingLineAttributesMap}">
-            <jsp:attribute name="importRowOverride">
-                <html:image property="methodToCall.copyAllAccountingLines" src="${ConfigProperties.externalizable.images.url}tinybutton-copyall.gif" title="Copy all Source Accounting Lines" alt="Copy all Source Lines" styleClass="tinybutton"/>
-				<html:image property="methodToCall.deleteAllAccountingLines"
-   				                 src="images/tinybutton-deleteall.gif"
-							   title="Delete all Source Accounting Lines"
-							     alt="Delete all Source Lines" styleClass="tinybutton" />
-                Import from Labor Ledger
-                <gl:balanceInquiryLookup
-                    boClassName="org.kuali.module.labor.bo.LedgerBalance"
-                    actionPath="glBalanceInquiryLookup.do"
-                    lookupParameters="emplid:emplid,financialBalanceTypeCode:financialBalanceTypeCode,'S':fiscalObjectFringeOrSalaryCode"
-                    hideReturnLink="false" />
-            </jsp:attribute>
-            <jsp:attribute name="customActions">
-                <c:set var="copyMethod" value="copyAccountingLine.line${accountingLineIndexVar}" scope="request" />
-                <html:image property="methodToCall.${copyMethod}.anchoraccounting${actionInfixVar}Anchor" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-copy2.gif" title="Copy an Accounting Line" alt="Copy an Accounting Line" styleClass="tinybutton"/>
-            </jsp:attribute>
-        </ld:importedAccountingLineGroup>
-
-        <ld:importedAccountingLineGroup
-            isSource="false"
-            columnCountUntilAmount="${columnCountUntilAmount}"
-            columnCount="${columnCount}"
-            optionalFields="${optionalFieldsMap}"
-            extraRowFields="${extraTargetRowFieldsMap}"
-            editingMode="${KualiForm.editingMode}"
-            editableAccounts="${editableAccountsMap}"
-            editableFields="${editableFieldsMap}"
-            debitCreditAmount="${debitCreditAmountString}"
-            currentBaseAmount="${currentBaseAmountString}"
-            forcedReadOnlyFields="${KualiForm.forcedReadOnlyTargetFields}"
-            extraHiddenFields="${extraHiddenFieldsMap}"
-            useCurrencyFormattedTotal="${useCurrencyFormattedTotalBoolean}"
-            includeObjectTypeCode="${includeObjectTypeCodeBoolean}"
-            displayMonthlyAmounts="${displayMonthlyAmountsBoolean}"
-            accountingLineAttributes="${accountingLineAttributesMap}">
-            <jsp:attribute name="importRowOverride">
-            </jsp:attribute>
-         </ld:importedAccountingLineGroup>
-      </table>
-      </jsp:attribute>
-    </fin:accountingLines>
-    <ld:laborLedgerPendingEntries />
-    <kul:notes />
-    <kul:adHocRecipients />
-    <kul:routeLog />
-    <kul:panelFooter />
-    <kul:documentControls transactionalDocument="true" />
 </kul:documentPage>

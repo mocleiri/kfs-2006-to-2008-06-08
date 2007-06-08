@@ -1,51 +1,44 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service;
 
-import java.util.List;
+import java.io.InputStream;
 
-import org.kuali.module.gl.batch.collector.CollectorBatch;
-
-/**
- * Provides methods for processing gl incoming batch files.
- */
 public interface CollectorService {
+    /**
+     * Given an inputStream to the collector XML, load the data into the
+     * origin entry table.  If there are errors loading the file, throw a CollectorLoadException that has a list of all the issues.
+     * 
+     * @param inputStream inputStream of collector XML
+     * @return origin entry group ID
+     */
+    public void loadCollectorFile(String fileName);
 
     /**
-     * Loads the file given by the filename, then performs the collector process: parse, validate, store, email.
+     * Given a group ID, scrub all of the transactions. If there are errors with the data, return a list of them. If there are no
+     * errors, return an empty list.
      * 
-     * @param fileName - name of file to load (including path)
-     * @return boolean - true if load was successful, false if errors were encountered
+     * @return string staging directory
      */
-    public boolean loadCollectorFile(String fileName);
-
-    /**
-     * Validates the contents of a parsed file.
-     * 
-     * @param batch - batch to validate
-     * @return boolean - true if validation was OK, false if there were errors
-     */
-    public boolean performValidation(CollectorBatch batch);
-
-    /**
-     * Reconciles the trailer total count and amount to the actual parsed contents.
-     * 
-     * @param batch - batch to check trailer
-     * @return boolean - true if trailer check was OK, false if totals did not match
-     */
-    public boolean checkTrailerTotals(CollectorBatch batch);
-
+    public String getStagingDirectory();
 }

@@ -258,7 +258,7 @@ public class KFSConstants extends Constants {
     public static final String PROJECT_CODE_PROPERTY_NAME = "projectCode";
 
     public static final String INQUIRABLE_ATTRIBUTE_NAME = "kualiInquirable";
-    public static final String INQUIRY_ACTION = "kr/inquiry.do";
+    public static final String INQUIRY_ACTION = "inquiry.do";
     public static final String INQUIRY_IMPL_ATTRIBUTE_NAME = "inquirableImplServiceName";
     public static final String JOURNAL_VOUCHER_CHANGE_BALANCE_TYPE_QUESTION = "JournalVoucherChangeBalanceTypeQuestion";
     public static final String JOURNAL_VOUCHER_ROUTE_OUT_OF_BALANCE_DOCUMENT_QUESTION = "JournalVoucherRouteOutOfBalanceDocumentQuestion";
@@ -268,7 +268,7 @@ public class KFSConstants extends Constants {
     public static final String VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME = ".credit";
     public static final String VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME = ".debit";
     public static final String KUALI_WORKFLOW_APPLICATION_CODE = "kuali";
-    public static final String LOOKUP_ACTION = "kr/lookup.do";
+    public static final String LOOKUP_ACTION = "lookup.do";
     public static final String MULTIPLE_VALUE_LOOKUP_ACTION = "multipleValueLookup.do";
     public static final String LOOKUP_RESULTS_SEQUENCE_NUMBER = "lookupResultsSequenceNumber";
     public static final String LOOKUP_RESULTS_BO_CLASS_NAME = "lookupResultsBOClassName";
@@ -461,8 +461,7 @@ public class KFSConstants extends Constants {
     public static final String NOT_LOGICAL_OPERATOR = "!";
     // add AND operator to thest if it is uncommented below
     public static final String[] LOGICAL_OPERATORS = { OR_LOGICAL_OPERATOR, NOT_LOGICAL_OPERATOR };
-    public static final String WILDCARD_CHARACTER = "*";
-    public static final String[] QUERY_CHARACTERS = { WILDCARD_CHARACTER, "?", "%", ">", "<", "..", OR_LOGICAL_OPERATOR, NOT_LOGICAL_OPERATOR, "=" };
+    public static final String[] QUERY_CHARACTERS = { "*", "?", "%", ">", "<", "..", OR_LOGICAL_OPERATOR, NOT_LOGICAL_OPERATOR, "=" };
 
     // disbursement voucher error fields
     public static final String DV_PAYEE_TAB_ERRORS = "DVPayeeErrors,document.dvPayeeDetail.disbVchrPayeeIdNumber,document.dvPayeeDetail.disbVchrPayeeCityName,document.dvPayeeDetail.disbVchrPayeePersonName," + "document.dvPayeeDetail.disbVchrPayeeStateCode,document.dvPayeeDetail.disbVchrPayeeLine1Addr,document.dvPayeeDetail.disbVchrPayeeZipCode,document.dvPayeeDetail.disbVchrPayeeLine2Addr,document.dvPayeeDetail.disbVchrPayeeCountryCode,";
@@ -692,9 +691,6 @@ public class KFSConstants extends Constants {
     public static class ParameterGroups {
         public static final String SYSTEM = "SYSTEM";
         public static final String GENERAL_LEDGER_CORRECTION_PROCESS = "Kuali.FinancialTransactionProcessing.GeneralLedgerCorrectionProcessDocument";
-        public static final String BATCH_UPLOAD_SECURITY_GROUP_NAME = "Kuali.Batch.BatchInputFileUpload";
-        public static final String COLLECTOR_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.Collector";
-        public static final String ENTERPRSISE_FEEDER_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.EnterpriseFeeder";
     }
 
     public static class SystemGroupParameterNames {
@@ -721,17 +717,7 @@ public class KFSConstants extends Constants {
         public static final String LOOKUP_RESULTS_LIMIT = "lookup.results.limit";
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_PER_PAGE = "multipleValueLookupResultsPerPage";
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_EXPIRATION_AGE = "multipleValueLookupResultsExpirationAge";
-      
-        public static final String ACTIVE_INPUT_TYPES_PARAMETER_NAME = "ACTIVE_INPUT_TYPES";
-        public static final String PCDO_FILE_TYPE_WORKGROUP_PARAMAETER_NAME = PCDO_FILE_TYPE_INDENTIFIER + ".WORKGROUP";
-        public static final String COLLECTOR_FILE_TYPE_WORKGROUP_PARAMAETER_NAME = COLLECTOR_FILE_TYPE_INDENTIFIER + ".WORKGROUP";
-        public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_WORKGROUP_PARAMAETER_NAME = ENTERPRISE_FEEDER_FILE_SET_TYPE_INDENTIFIER + ".WORKGROUP";
         
-        public static final String COLLECTOR_EMAIL_FROM_PARAMETER_NAME = "EmailFrom";
-        public static final String COLLECTOR_EMAIL_SUBJECT_PARAMETER_NAME = "SubjectLine";
-        public static final String COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES = "EqualDebitCreditTotalDocumentTypes";
-        public static final String COLLECTOR_PERFORM_DUPLICATE_HEADER_CHECK = "PerformDuplicateHeaderCheck";
-   
         /**
          * Used by PurgePendingAttachmentsJob to compute the maximum amount of time a pending attachment is allowed to
          * persist on the file system before being deleted.
@@ -739,7 +725,6 @@ public class KFSConstants extends Constants {
         public static final String PURGE_PENDING_ATTACHMENTS_STEP_MAX_AGE = "purgePendingAttachmentsStepMaxAge";
         
         public static final String JOB_ADMIN_WORKGROUP = "Job.Admin.Workgroup";
-        
     }
 
     public static class GeneralLedgerApplicationParameterKeys {
@@ -752,10 +737,6 @@ public class KFSConstants extends Constants {
     public static class GeneralLedgerCorrectionProcessApplicationParameterKeys {
         public static final String RECORD_COUNT_FUNCTIONALITY_LIMIT = "RECORD_COUNT_FUNCTIONALITY_LIMIT";
         public static final String RECORDS_PER_PAGE = "RECORDS_PER_PAGE";
-    }
-
-    public static class EnterpriseFeederApplicationParameterKeys {
-        public static final String TO_ADDRESS = "ToAddress";
     }
 
     public static class ParameterValues {
@@ -902,7 +883,6 @@ public class KFSConstants extends Constants {
         public final static String BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION =
                                    "Budget Construction";
         public final static String BUDGET_CONSTRUCTION_DOCUMENT_INITIAL_STATUS = "$";
-        public final static String ORG_REVIEW_RULE_TEMPLATE = "KualiOrgReviewTemplate";
         
         /*  codes used in the Calculated Salary Foundation (CSF) */
         public final static String VACANT_CSF_LINE = "V";
@@ -948,19 +928,4 @@ public class KFSConstants extends Constants {
         public static final String PREVIOUSLY_SORTED_COLUMN_INDEX_PARAM = "previouslySortedColumnIndex";
         public static final String VIEWED_PAGE_NUMBER = "viewedPageNumber";
     }
-    
-    public static final String PCDO_FILE_TYPE_INDENTIFIER = "procurementCardInputFileType";
-    public static final String COLLECTOR_FILE_TYPE_INDENTIFIER = "collectorInputFileType";
-    public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_INDENTIFIER = "enterpriseFeederFileSetType";
-    
-    // next 3 variables for the enterprise feeder batch upload
-    public static final String DATA_FILE_TYPE = "DATA";
-    public static final String RECON_FILE_TYPE = "RECON";
-    
-    /**
-     * The base implementation of {@link org.kuali.module.gl.util.EnterpriseFeederStatusBase} uses strings contained within ApplicationResources.properties
-     * to store the human-readable descriptions of each status object.  The fully qualified class name is appended to the end of this key to generate the 
-     * true key.  For example, gl.EnterpriseFeeder.StatusDescriptionPrefix.org.kuali.module.gl.util.FileReconBadLoadAbortedStatus
-     */
-    public static final String ENTERPRISE_FEEDER_STATUS_DESCRIPTION_PREFIX = "gl.EnterpriseFeeder.StatusDescription.";
 }

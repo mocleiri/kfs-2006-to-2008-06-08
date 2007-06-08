@@ -23,11 +23,10 @@ import org.kuali.module.gl.batch.poster.VerifyTransaction;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.util.Message;
 import org.kuali.module.labor.rules.TransactionFieldValidator;
-import org.kuali.module.labor.util.MessageBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * This class is a validator for the transactions processed by Labor Poster.
+ * This class...
  */
 @Transactional
 public class LaborPosterTransactionValidator implements VerifyTransaction {
@@ -36,21 +35,27 @@ public class LaborPosterTransactionValidator implements VerifyTransaction {
      */
     public List<Message> verifyTransaction(Transaction tranaction) {        
         List<Message> messageList = new ArrayList<Message>();
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkUniversityFiscalYear(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkChartOfAccountsCode(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkAccountNumber(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkSubAccountNumber(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkUniversityFiscalPeriodCode(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialBalanceTypeCode(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialObjectCode(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialSubObjectCode(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialObjectTypeCode(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialDocumentTypeCode(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialDocumentNumber(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialSystemOriginationCode(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkTransactionDebitCreditCode(tranaction));
-        MessageBuilder.addMessageIntoList(messageList, TransactionFieldValidator.checkTransactionLedgerEntrySequenceNumber(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkUniversityFiscalYear(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkChartOfAccountsCode(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkAccountNumber(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkSubAccountNumber(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkUniversityFiscalPeriodCode(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialBalanceTypeCode(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialObjectCode(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialSubObjectCode(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialObjectTypeCode(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialDocumentTypeCode(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialDocumentNumber(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkFinancialSystemOriginationCode(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkTransactionDebitCreditCode(tranaction));
+        addMessageIntoList(messageList, TransactionFieldValidator.checkTransactionLedgerEntrySequenceNumber(tranaction));
                 
         return messageList;
+    }
+    
+    private void addMessageIntoList(List<Message> messageList, Message message){
+        if(message != null){
+            messageList.add(message);
+        }
     }
 }

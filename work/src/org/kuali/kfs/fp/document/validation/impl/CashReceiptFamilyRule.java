@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,44 +16,44 @@
 package org.kuali.module.financial.rules;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
+import org.kuali.KeyConstants.CashReceipt;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.KFSKeyConstants.CashReceipt;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjLevel;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.document.CashReceiptFamilyBase;
-
-import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import static org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
 
 /**
  * Business rule(s) shared amongst to CashReceipt-related documents.
+ * 
+ * 
  */
-public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements CashReceiptDocumentRuleConstants {
+public class CashReceiptFamilyRule extends TransactionalDocumentRuleBase implements CashReceiptDocumentRuleConstants {
 
     /**
      * Cash Receipt documents allow both positive and negative values, so we only need to check for zero amounts.
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isAmountValid(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isAmountValid(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean isAmountValid(AccountingDocument document, AccountingLine accountingLine) {
+    public boolean isAmountValid(TransactionalDocument document, AccountingLine accountingLine) {
         KualiDecimal amount = accountingLine.getAmount();
 
-        if (KFSConstants.ZERO.compareTo(amount) == 0) { // amount == 0
-            GlobalVariables.getErrorMap().putError(KFSConstants.AMOUNT_PROPERTY_NAME, KFSKeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
+        if (Constants.ZERO.compareTo(amount) == 0) { // amount == 0
+            GlobalVariables.getErrorMap().putError(Constants.AMOUNT_PROPERTY_NAME, KeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
             return false;
         }
 
@@ -76,10 +76,10 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
             String unitName = SpringServiceLocator.getCashReceiptService().getCashReceiptVerificationUnitForCampusCode(crd.getCampusLocationCode());
             CashDrawer cd = SpringServiceLocator.getCashDrawerService().getByWorkgroupName(unitName, false);
             if (cd == null) {
-                throw new IllegalStateException("There is no cash drawer associated with unitName '" + unitName + "' from cash receipt " + crd.getDocumentNumber());
+                throw new IllegalStateException("There is no cash drawer associated with unitName '" + unitName + "' from cash receipt " + crd.getFinancialDocumentNumber());
             }
             else if (cd.isClosed()) {
-                GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_ERRORS, KFSKeyConstants.CashReceipt.MSG_CASH_DRAWER_CLOSED_VERIFICATION_NOT_ALLOWED, cd.getWorkgroupName());
+                GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KeyConstants.CashReceipt.MSG_CASH_DRAWER_CLOSED_VERIFICATION_NOT_ALLOWED, cd.getWorkgroupName());
                 valid = false;
             }
         }
@@ -91,24 +91,24 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
      * For Cash Receipt documents, the document is balanced if the sum total of checks and cash and coin equals the sum total of the
      * accounting lines. In addition, the sum total of checks and cash and coin must be greater than zero.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isDocumentBalanceValid(org.kuali.core.document.FinancialDocument)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isDocumentBalanceValid(org.kuali.core.document.TransactionalDocument)
      */
     @Override
-    protected boolean isDocumentBalanceValid(AccountingDocument FinancialDocument) {
-        CashReceiptFamilyBase cr = (CashReceiptFamilyBase) FinancialDocument;
+    protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
+        CashReceiptFamilyBase cr = (CashReceiptFamilyBase) transactionalDocument;
 
         // make sure that cash reconciliation total is greater than zero
-        boolean isValid = cr.getTotalDollarAmount().compareTo(KFSConstants.ZERO) > 0;
+        boolean isValid = cr.getSumTotalAmount().compareTo(Constants.ZERO) > 0;
         if (!isValid) {
-            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + KFSPropertyConstants.SUM_TOTAL_AMOUNT, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_NO_CASH_RECONCILIATION_TOTAL);
+            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + PropertyConstants.SUM_TOTAL_AMOUNT, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_NO_CASH_RECONCILIATION_TOTAL);
         }
 
         if (isValid) {
             // make sure the document is in balance
-            isValid = cr.getSourceTotal().compareTo(cr.getTotalDollarAmount()) == 0;
+            isValid = cr.getSourceTotal().compareTo(cr.getSumTotalAmount()) == 0;
 
             if (!isValid) {
-                GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + KFSPropertyConstants.SUM_TOTAL_AMOUNT, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_BALANCE);
+                GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + PropertyConstants.SUM_TOTAL_AMOUNT, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_BALANCE);
             }
         }
 
@@ -132,14 +132,14 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
 
             ObjectCode objectCode = accountingLine.getObjectCode();
             if (ObjectUtils.isNull(objectCode)) {
-                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+                accountingLine.refreshReferenceObject(PropertyConstants.OBJECT_CODE);
             }
 
             if (rule.failsRule(objectCode.getFinancialObjectTypeCode())) {
                 valid = false;
 
                 // add message
-                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectTypeCode() });
+                GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectTypeCode() });
             }
         }
 
@@ -163,12 +163,12 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
 
             ObjectCode objectCode = accountingLine.getObjectCode();
             if (ObjectUtils.isNull(objectCode)) {
-                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+                accountingLine.refreshReferenceObject(PropertyConstants.OBJECT_CODE);
             }
 
             ObjLevel objectLevel = objectCode.getFinancialObjectLevel();
             if (ObjectUtils.isNull(objectCode)) {
-                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+                accountingLine.refreshReferenceObject(PropertyConstants.OBJECT_CODE);
             }
 
             String consolidatedObjectCode = objectLevel.getConsolidatedObjectCode();
@@ -177,7 +177,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
                 valid = false;
 
                 // add message
-                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_CONSOLIDATED_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectLevel.getFinancialObjectLevelCode(), consolidatedObjectCode });
+                GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_CONSOLIDATED_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectLevel.getFinancialObjectLevelCode(), consolidatedObjectCode });
             }
         }
 
@@ -201,14 +201,14 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
 
             ObjectCode objectCode = accountingLine.getObjectCode();
             if (ObjectUtils.isNull(objectCode)) {
-                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+                accountingLine.refreshReferenceObject(PropertyConstants.OBJECT_CODE);
             }
 
             if (rule.failsRule(objectCode.getFinancialObjectSubTypeCode())) {
                 valid = false;
 
                 // add message
-                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_SUB_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectSubTypeCode() });
+                GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_SUB_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectSubTypeCode() });
             }
         }
 
@@ -219,22 +219,22 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
      * Cash receipt documents do not utilize the target accounting line list. A CR doc is one sided, so this method should always
      * return true.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.FinancialDocument)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.TransactionalDocument)
      */
     @Override
-    protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(AccountingDocument FinancialDocument) {
+    protected boolean isTargetAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
         return true;
     }
 
     /**
      * Cash receipt documents need at least one accounting line. Had to override to supply a Cash Receipt specific method.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isSourceAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.FinancialDocument)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#isSourceAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.TransactionalDocument)
      */
     @Override
-    protected boolean isSourceAccountingLinesRequiredNumberForRoutingMet(AccountingDocument FinancialDocument) {
-        if (0 == FinancialDocument.getSourceAccountingLines().size()) {
-            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, KFSKeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES);
+    protected boolean isSourceAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
+        if (0 == transactionalDocument.getSourceAccountingLines().size()) {
+            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + PropertyConstants.SOURCE_ACCOUNTING_LINES, KeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES);
             return false;
         }
         else {
@@ -245,10 +245,11 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
     /**
      * Overrides to set the entry's description to the description from the accounting line, if a value exists.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
-    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument FinancialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+    @Override
+    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
         String accountingLineDescription = accountingLine.getFinancialDocumentLineDescription();
         if (StringUtils.isNotBlank(accountingLineDescription)) {
             explicitEntry.setTransactionLedgerEntryDescription(accountingLineDescription);
@@ -256,15 +257,15 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
     }
 
     /**
-     * @see IsDebitUtils#isDebitConsideringType(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringType(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(AccountingDocument FinancialDocument, AccountingLine accountingLine) {
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         // error corrections are not allowed
-        IsDebitUtils.disallowErrorCorrectionDocumentCheck(this, FinancialDocument);
-        return IsDebitUtils.isDebitConsideringType(this, FinancialDocument, accountingLine);
+        IsDebitUtils.disallowErrorCorrectionDocumentCheck(this, transactionalDocument);
+        return IsDebitUtils.isDebitConsideringType(this, transactionalDocument, accountingLine);
     }
 
 
@@ -276,7 +277,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
         boolean isValid = true;
 
         if (crdoc.getSourceTotal().isZero()) {
-            String errorProperty = DOCUMENT_ERROR_PREFIX + KFSPropertyConstants.SOURCE_ACCOUNTING_LINES;
+            String errorProperty = DOCUMENT_ERROR_PREFIX + PropertyConstants.SOURCE_ACCOUNTING_LINES;
 
             isValid = false;
             GlobalVariables.getErrorMap().putError(errorProperty, CashReceipt.ERROR_ZERO_TOTAL, "Accounting Line Total");

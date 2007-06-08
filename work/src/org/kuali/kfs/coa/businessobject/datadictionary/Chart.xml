@@ -1,399 +1,373 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 
 <dictionaryEntry>
-    <businessObject businessObjectClass="org.kuali.module.chart.bo.Chart">
-
-
-        <inquiry>
-            <title>Chart Inquiry</title>
-
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="chartOfAccountsCode" />
-                <field attributeName="finCoaManagerUniversal.personName" />
-                <field attributeName="finChartOfAccountDescription" />
-                <field attributeName="finChartOfAccountActiveIndicator" />
-                <field attributeName="financialCashObjectCode" />
-                <field attributeName="finAccountsPayableObjectCode" />
-                <field attributeName="incBdgtEliminationsFinObjCd" />
-                <field attributeName="expBdgtEliminationsFinObjCd" />
-                <field attributeName="reportsToChartOfAccountsCode" />
-                <field attributeName="finAccountsReceivableObjCode" />
-                <field attributeName="finInternalEncumbranceObjCd" />
-                <field attributeName="finExternalEncumbranceObjCd" />
-                <field attributeName="finPreEncumbranceObjectCode" />
-                <field attributeName="icrIncomeFinancialObjectCode" />
-                <field attributeName="icrExpenseFinancialObjectCd" />
-                <field attributeName="fundBalanceObjectCode" />
-            </inquiryFields></inquirySection></inquirySections>
-        </inquiry>
-
-        <lookup>
-            <title>Chart Lookup</title>
-
-            <instructions>Lookup a Chart</instructions>
-
-            <defaultSort attributeName="chartOfAccountsCode" sortAscending="true" />
-
-            <lookupFields>
-                <lookupField attributeName="chartOfAccountsCode" required="false" noLookup="true" />
-                <lookupField attributeName="finChartOfAccountDescription" />
-                <lookupField attributeName="finChartOfAccountActiveIndicator">
-                    <defaultValue>Y</defaultValue>
-                </lookupField>
-                <lookupField attributeName="financialCashObjectCode" />
-                <lookupField attributeName="finAccountsPayableObjectCode" />
-            </lookupFields>
-
-            <resultFields>
-                <field attributeName="chartOfAccountsCode" />
-                <field attributeName="finChartOfAccountDescription" />
-                <field attributeName="finChartOfAccountActiveIndicator" />
-                <field attributeName="financialCashObjectCode" />
-                <field attributeName="finAccountsPayableObjectCode" />
-                <field attributeName="finCoaManagerUniversal.personName" />
-            </resultFields>
-        </lookup>
-
-        <titleAttribute>chartOfAccountsCode</titleAttribute>
-
-        <!--
-            Note that this has alot of items that should 
-            be converted to <attributeReference> tags, but until the 
-            underlying BO is updated to use real sub-objects rather 
-            than just strings, doing that will cause this DD to break.
-        -->
-        <attributes>
-            <attribute name="chartOfAccountsCode" forceUppercase="true">
-                <label>Chart Code</label>
-                <shortLabel>Chart</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern>
-                    <alpha exactLength="2" />
-                </validationPattern>
-                <required>true</required>
-
-                <control>
-                    <text size="2" />
-                </control>
-
-                <summary>Chart Code</summary>
-                <description>The code for the Chart of Accounts for an Account. It is part of the primary key. Kuali accommodates more than one Chart of Accounts.</description>
-            </attribute>
-
-            <attribute name="codeAndDescription" forceUppercase="false">
-                <label>Chart Code</label>
-                <shortLabel>Chart Code</shortLabel>
-
-                <maxLength>43</maxLength>
-
-                <control>
-                    <text size="43" />
-                </control>
-
-                <summary>Chart Code</summary>
-                <description>Chart Code</description>
-
-            </attribute>
-
-            <attributeReference name="finCoaManagerUniversalId" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUniversalIdentifier">
-                <label>Chart Manager Employee Id</label>
-                <shortLabel>Chart Manager</shortLabel>
-                <displayLabelAttribute>finCoaManagerUniversal.personUserIdentifier</displayLabelAttribute>
-                <required>true</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Chart Manager</description>
-            </attributeReference>
-
-            <attributeReference name="finCoaManagerUniversal.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
-                <label>Chart Manager UserID</label>
-                <shortLabel>UserID</shortLabel>
-                <required>false</required>
-                <control>
-                    <kualiUser universalIdAttributeName="finCoaManagerUniversalId" userIdAttributeName="finCoaManagerUniversal.personUserIdentifier" personNameAttributeName="finCoaManagerUniversal.personName" />
-                </control>
-                <summary>Chart Manager UserID</summary>
-                <description>The UserID of the Chart Manager.</description>
-            </attributeReference>
-
-            <attributeReference name="finCoaManagerUniversal.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
-                <label>Chart Manager Name</label>
-                <shortLabel>Name</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The Name of the Chart Manager.</description>
-            </attributeReference>
-
-            <attribute name="finChartOfAccountDescription" forceUppercase="false">
-                <label>Chart Description</label>
-                <shortLabel>Description</shortLabel>
-
-                <maxLength>40</maxLength>
-                <required>true</required>
-                <control>
-                    <text size="40" />
-                </control>
-
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>A description of the Chart of Accounts. For Search Criteria, select the Help for the Chart Lookup title.</description>
-            </attribute>
-            <attributeReference name="finChartOfAccountActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator">
-                <label>Chart Active Indicator</label>
-                <shortLabel>ChartActive</shortLabel>
-                <required>false</required>
-                <summary>Chart Active Indicator</summary>
-                <description>Radioboxes in the entry form that indicate if the Chart is active or inactive. If "Both" is checked in the Lookup, then both "Yes" (active) or "No" (inactive) values are listed in the search.</description>
-
-            </attributeReference>
-
-            <attributeReference name="financialCashObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Cash Object Code</label>
-                <shortLabel>CashObjCode</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>Cash Object Code</summary>
-                <description>The code for the "object" of accounting for a cash transaction.</description>
-            </attributeReference>
-
-            <attributeReference name="finAccountsPayableObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Accounts Payable Object Code</label>
-                <shortLabel>APObjectCode</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The code for the "object" of accounting for an Accounts Payable transaction.</description>
-            </attributeReference>
-
-            <attributeReference name="incBdgtEliminationsFinObjCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Income Budget Elimination Object Code</label>
-                <shortLabel>incBudgElimObjCode</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Income Budget Elimination Object Code value used.</description>
-            </attributeReference>
-
-            <attributeReference name="expBdgtEliminationsFinObjCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Expense Budget Elimination Object Code</label>
-                <shortLabel>expBudgElimObjCode</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Expense Budget Elimination Object Code value used.</description>
-            </attributeReference>
-
-            <attributeReference name="reportsToChartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
-                <label>Reports To Chart of Accounts Code</label>
-                <shortLabel>rptsToChartCode</shortLabel>
-
-                <maxLength>2</maxLength>
-                <required>true</required>
-
-                <control>
-                	<text size="2"/>
-                </control>
-
-                <summary>Reports To Chart of Accounts Code</summary>
-                <description>
-                    <![CDATA[&nbsp;]]>
-                </description>
-            </attributeReference>
-
-            <attributeReference name="finAccountsReceivableObjCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Accounts Receivable Object Code</label>
-                <shortLabel>acctsReceivObjCode</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>
-                    <![CDATA[&nbsp;]]>
-                </description>
-            </attributeReference>
-
-            <attributeReference name="finInternalEncumbranceObjCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Internal Encumbrances Object Code</label>
-                <shortLabel>intEncumObjCode</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>
-                    <![CDATA[&nbsp;]]>
-                </description>
-            </attributeReference>
-
-            <attributeReference name="finExternalEncumbranceObjCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>External Encumbrances Object Code</label>
-                <shortLabel>exEncumObjCode</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>
-                    <![CDATA[&nbsp;]]>
-                </description>
-            </attributeReference>
-
-            <attributeReference name="finPreEncumbranceObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Pre Encumbrances Object Code</label>
-                <shortLabel>PreEncumObjCode</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>Pre Encumbrances Object Code</summary>
-                <description>
-                    <![CDATA[&nbsp;]]>
-                </description>
-            </attributeReference>
-
-            <attributeReference name="icrIncomeFinancialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Indirect Cost Recovery Income Object Code</label>
-                <shortLabel>IndirecCostRecovIncObjCde</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>
-                    <![CDATA[&nbsp;]]>
-                </description>
-            </attributeReference>
-            <attributeReference name="icrExpenseFinancialObjectCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Indirect Cost Recovery Expense Object Code</label>
-                <shortLabel>IndirecCostRecovExpObjCde</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>
-                    <![CDATA[&nbsp;]]>
-                </description>
-            </attributeReference>
-
-            <attributeReference name="fundBalanceObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Fund Balance Object Code</label>
-                <shortLabel>FndBalObjCde</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>
-                    <![CDATA[&nbsp;]]>
-                </description>
-            </attributeReference>
-
-
-
-            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
-
-        </attributes>
-
-        <relationships>
-            <relationship objectAttributeName="finCoaManagerUniversal" >
-                <primitiveAttribute sourceName="finCoaManagerUniversalId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="finCoaManagerUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="finCoaManagerUniversal.personName" targetName="personName" />
-            </relationship>
-        </relationships>
-
-		<objectLabel>Chart</objectLabel>
-    </businessObject>
+  <businessObject businessObjectClass="org.kuali.module.chart.bo.Chart">
+    <customAttributeEnabled>false</customAttributeEnabled>
+
+    <inquiry>
+      <title>Chart Inquiry</title>
+
+      <inquiryFields>
+        <field attributeName="chartOfAccountsCode" />
+        <field attributeName="finCoaManagerUniversal.personUniversalIdentifier" />
+        <field attributeName="finChartOfAcctOriginationCd" />
+        <field attributeName="finChartOfAccountDescription" />
+        <field attributeName="finChartOfAccountActiveIndicator" />
+        <field attributeName="financialCashObject.financialObjectCode" />
+        <field attributeName="finAccountsPayableObject.financialObjectCode" />
+        <field attributeName="incBdgtEliminationsFinObj.financialObjectCode" />
+        <field attributeName="expBdgtEliminationsFinObj.financialObjectCode" />
+        <field attributeName="reportsToChartOfAccounts.chartOfAccountsCode" />
+        <field attributeName="finAccountsReceivableObj.financialObjectCode" />
+        <field attributeName="finInternalEncumbranceObj.financialObjectCode" />
+        <field attributeName="finExternalEncumbranceObj.financialObjectCode" />
+        <field attributeName="finPreEncumbranceObject.financialObjectCode" />
+        <field attributeName="icrIncomeFinancialObject.financialObjectCode" />
+        <field attributeName="icrExpenseFinancialObject.financialObjectCode" />
+      </inquiryFields>
+    </inquiry>
+
+    <lookup>
+      <title>Chart Lookup</title>
+
+      <menubar>
+        <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Chart">Create New</a>]]>
+      </menubar>
+
+      <instructions>Lookup a Chart</instructions>
+
+      <defaultSort
+        attributeName="chartOfAccountsCode"
+        sortAscending="true" />
+
+      <lookupFields>
+        <lookupField attributeName="chartOfAccountsCode" required="false" />
+        <lookupField attributeName="finCoaManagerUniversal.personUniversalIdentifier" />
+        <lookupField attributeName="finChartOfAcctOriginationCd" />
+        <lookupField attributeName="finChartOfAccountDescription" />
+        <lookupField attributeName="finChartOfAccountActiveIndicator" />
+        <lookupField attributeName="financialCashObject.financialObjectCode" />
+        <lookupField attributeName="finAccountsPayableObject.financialObjectCode" />
+      </lookupFields>
+
+      <resultFields>
+        <field attributeName="chartOfAccountsCode" />
+        <field attributeName="finCoaManagerUniversal.personUniversalIdentifier" />
+        <field attributeName="finChartOfAcctOriginationCd" />
+        <field attributeName="finChartOfAccountDescription" />
+        <field attributeName="finChartOfAccountActiveIndicator" />
+        <field attributeName="financialCashObject.financialObjectCode" />
+        <field attributeName="finAccountsPayableObject.financialObjectCode" />
+      </resultFields>
+    </lookup>
+
+    <titleAttribute>chartOfAccountsCode</titleAttribute>
+
+    <!--
+      Note that this has alot of items that should 
+      be converted to <attributeReference> tags, but until the 
+      underlying BO is updated to use real sub-objects rather 
+      than just strings, doing that will cause this DD to break.
+    -->
+    <attributes>
+      <attribute
+        name="chartOfAccountsCode"
+        forceUppercase="true">
+        <label>Chart Code</label>
+        <shortLabel>Chart</shortLabel>
+
+        <maxLength>2</maxLength>
+        <validationPattern>
+          <alpha exactLength="2" />
+        </validationPattern>
+		<required>true</required>
+		
+        <control>
+          <!-- text size="2" /-->
+          <!-- If we want to go back to the drop-down list, then use this:-->
+            <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder"/>
+        </control>
+
+        <summary>Chart of Accounts Code</summary>
+        <description>Financial Chart of Accounts Code</description>
+      </attribute>
+
+      <attributeReference
+        name="finCoaManagerUniversal.personUniversalIdentifier"
+        sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
+        sourceAttributeName="genericSystemId">
+        <label>Chart Manager Employee Id</label>
+        <shortLabel>Chart Manager</shortLabel>
+        <summary>Chart Manager</summary>
+        <description>Chart Manager</description>
+      </attributeReference>
+
+      <attribute
+        name="finChartOfAcctOriginationCd"
+        forceUppercase="true">
+        <label>Origin Code</label>
+        <shortLabel>Origin</shortLabel>
+
+        <maxLength>2</maxLength>
+        <validationPattern>
+          <numeric />
+        </validationPattern>
+
+        <control>
+          <text size="2" />
+        </control>
+
+        <summary>Origin Code</summary>
+        <description>Origin Code</description>
+      </attribute>
+
+      <attribute
+        name="finChartOfAccountDescription"
+        forceUppercase="false">
+        <label>Chart Description</label>
+        <shortLabel>Description</shortLabel>
+
+        <maxLength>40</maxLength>
+
+        <control>
+          <text size="40" />
+        </control>
+
+        <summary>The chart's description</summary>
+        <description>The chart's description...</description>
+      </attribute>
+
+      <attributeReference
+        name="finChartOfAccountActiveIndicator"
+        sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
+        sourceAttributeName="activeIndicator" />
+
+      <attribute
+        name="financialCashObject.financialObjectCode"
+        forceUppercase="true">
+        <label>Cash Object Code</label>
+        <shortLabel>CashObjCode</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>Cash Object Code value.</summary>
+        <description>The Cash Object Code value used.</description>
+      </attribute>
+
+      <attribute
+        name="finAccountsPayableObject.financialObjectCode"
+        forceUppercase="true">
+        <label>Accounts Payable Object Code</label>
+        <shortLabel>APObjectCode</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>Accounts Payable Object Code value.</summary>
+        <description>The Accounts Payable Object Code value used.</description>
+      </attribute>
+
+      <attribute
+        name="incBdgtEliminationsFinObj.financialObjectCode"
+        forceUppercase="true">
+        <label>Income Budget Elimination Object Code</label>
+        <shortLabel>incBudgElimObjCode</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>Income Budget Elimination Object Code value.</summary>
+        <description>
+          Income Budget Elimination Object Code value used.
+        </description>
+      </attribute>
+
+      <attribute
+        name="expBdgtEliminationsFinObj.financialObjectCode"
+        forceUppercase="true">
+        <label>Expense Budget Elimination Object Code</label>
+        <shortLabel>expBudgElimObjCode</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>Expense Budget Elimination Object Code value.</summary>
+        <description>
+          Expense Budget Elimination Object Code value used.
+        </description>
+      </attribute>
+
+      <attribute
+        name="reportsToChartOfAccounts.chartOfAccountsCode"
+        forceUppercase="true">
+        <label>Reports To Chart of Accounts Code</label>
+        <shortLabel>rptsToChartCode</shortLabel>
+
+        <maxLength>2</maxLength>
+        <validationPattern>
+          <anyCharacter />
+        </validationPattern>
+
+        <control>
+          <select
+            valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+        </control>
+
+        <summary>Origin Code</summary>
+        <description>Origin Code</description>
+      </attribute>
+
+      <attribute
+        name="finAccountsReceivableObj.financialObjectCode"
+        forceUppercase="true">
+        <label>Accounts Receivable Object Code</label>
+        <shortLabel>acctsReceivObjCode</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>Accounts Receivable Object Code value.</summary>
+        <description>Accounts Receivable Object Code value used.</description>
+      </attribute>
+
+      <attribute
+        name="finInternalEncumbranceObj.financialObjectCode"
+        forceUppercase="true">
+        <label>Internal Encumbrances Object Code</label>
+        <shortLabel>intEncumObjCode</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>Internal Encumbrances Object Code value.</summary>
+        <description>Internal Encumbrances Object Code value used.</description>
+      </attribute>
+
+      <attribute
+        name="finExternalEncumbranceObj.financialObjectCode"
+        forceUppercase="true">
+        <label>External Encumbrances Object Code</label>
+        <shortLabel>exEncumObjCode</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>External Encumbrances Object Code value.</summary>
+        <description>External Encumbrances Object Code value used.</description>
+      </attribute>
+
+      <attribute
+        name="finPreEncumbranceObject.financialObjectCode"
+        forceUppercase="true">
+        <label>Pre Encumbrances Object Code</label>
+        <shortLabel>PreEncumObjCode</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>Pre Encumbrances Object Code value.</summary>
+        <description>Pre Encumbrances Object Code value used.</description>
+      </attribute>
+
+      <attribute
+        name="icrIncomeFinancialObject.financialObjectCode"
+        forceUppercase="true">
+        <label>Indirect Cost Recovery Income Object Code</label>
+        <shortLabel>IndirecCostRecovIncObjCde</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>Indirect Cost Recovery Income Object Code value.</summary>
+        <description>
+          Indirect Cost Recovery Income Object Code value used.
+        </description>
+      </attribute>
+
+      <attribute
+        name="icrExpenseFinancialObject.financialObjectCode"
+        forceUppercase="true">
+        <label>Indirect Cost Recovery Expense Object Code</label>
+        <shortLabel>IndirecCostRecovExpObjCde</shortLabel>
+
+        <maxLength>4</maxLength>
+        <validationPattern>
+          <alphaNumeric />
+        </validationPattern>
+
+        <control>
+          <text size="4" />
+        </control>
+
+        <summary>Indirect Cost Recovery Expense Object Code value.</summary>
+        <description>
+          Indirect Cost Recovery Expense Object Code value used.
+        </description>
+      </attribute>
+      
+ 	<attributeReference name="versionNumber" 
+ 		sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" 
+ 		sourceAttributeName="versionNumber" />
+
+    </attributes>
+  </businessObject>
 </dictionaryEntry>
 
