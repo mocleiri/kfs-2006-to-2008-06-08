@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.ProjectCode">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Project Code Inquiry</title>
 
-            <inquirySections><inquirySection title="Project Code Attributes"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
                 <field attributeName="chartOfAccountsCode" />
@@ -32,11 +32,15 @@
                 <field attributeName="projectManagerUniversal.personName" forceInquiry="true" />
                 <field attributeName="projectDescription" />
                 <field attributeName="active" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Project Code Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ProjectCode"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup a Project Code</instructions>
 
@@ -191,12 +195,9 @@
         <relationships>
             <relationship objectAttributeName="projectManagerUniversal" >
                 <primitiveAttribute sourceName="projectManagerUniversalId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="projectManagerUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="projectManagerUniversal.personName" targetName="personName" />
             </relationship>
         </relationships>
 
-		<objectLabel>Project Code</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

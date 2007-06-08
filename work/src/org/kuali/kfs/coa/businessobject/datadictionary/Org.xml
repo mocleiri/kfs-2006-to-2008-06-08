@@ -1,30 +1,14 @@
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.Org">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
-            <title>Organization Code Inquiry</title>
-			<inquirableClass>org.kuali.module.chart.maintenance.OrgInquirable</inquirableClass>
+            <title>Organization Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
 
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="organizationCode" />
@@ -78,23 +62,28 @@
 		        <field attributeName="organizationExtension.fiscalApproverUniversal.personName" />
 		        
 		        <field attributeName="organizationExtension.hrmsLastUpdateDate" />
-            </inquiryFields></inquirySection></inquirySections>
+		        
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Organization Code Lookup</title>
+            <title>Organization Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Org">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup an Organization</instructions>
 
             <defaultSort attributeName="chartOfAccountsCode" sortAscending="false" />
 
             <lookupFields>
-                <lookupField attributeName="organizationName" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="organizationCode" required="false" forceLookup="true" />
                 <lookupField attributeName="responsibilityCenterCode" required="false" />
                 <lookupField attributeName="organizationTypeCode" required="false" />
-                <lookupField attributeName="reportsToChartOfAccountsCode" required="false"  />
+                <lookupField attributeName="organizationName" required="false" />
+                <lookupField attributeName="reportsToChartOfAccountsCode" required="false" noLookup="true" />
                 <lookupField attributeName="reportsToOrganizationCode" required="false" />
                 <lookupField attributeName="organizationActiveIndicator" required="false">
                     <defaultValue>Y</defaultValue>
@@ -108,10 +97,8 @@
                 <field attributeName="responsibilityCenterCode" />
                 <field attributeName="organizationTypeCode" />
                 <field attributeName="organizationName" />
-                <field attributeName="reportsToChartOfAccountsCode" />
-                <field attributeName="reportsToOrganizationCode" />
-                <field attributeName="organizationActiveIndicator" />               
                 <field attributeName="organizationManagerUniversal.personName" />
+                <field attributeName="organizationActiveIndicator" />
             </resultFields>
         </lookup>
 
@@ -122,9 +109,8 @@
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
                 <control>
-                    <text size="2" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
-                <summary>Chart Of Accounts Code</summary>
             </attributeReference>
 
             <attribute name="organizationCode" forceUppercase="true">
@@ -141,7 +127,9 @@
                     <text size="4" />
                 </control>
 
-                <summary>Organization Code</summary>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
                 <description>The code used to represent an organization.</description>
             </attribute>
 
@@ -159,28 +147,13 @@
                     <text size="40" />
                 </control>
 
-                <summary>Organization Name</summary>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
                 <description>
-                    The long descriptive name of this Organization Code.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
-
-
-            <attribute name="codeAndDescription" forceUppercase="false">
-                <label>Organization Code and Description</label>
-                <shortLabel>Org Code and Des</shortLabel>
-
-                <maxLength>45</maxLength>
-
-                <control>
-                    <text size="45" />
-                </control>
-
-                <summary>Organization Code and Des</summary>
-                <description>Organization Code and Description</description>
-
-            </attribute>
-
 
             <attributeReference name="organizationManagerUniversalId" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericSystemId">
                 <label>Organization Manager UserID</label>
@@ -197,7 +170,7 @@
                 </description>
             </attributeReference>
 
-            <attributeReference name="organizationManagerUniversal.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
+            <attributeReference name="organizationManagerUniversal.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.KualiUser" sourceAttributeName="personUserIdentifier">
                 <label>Organization Manager UserID</label>
                 <shortLabel>OrgMgrUserId</shortLabel>
                 <required>false</required>
@@ -241,9 +214,11 @@
                     <text size="2" />
                 </control>
 
-                <summary>Responsibility Center Code</summary>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
                 <description>
-                    The Responsibility Center to which this Organization belongs.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
 
@@ -265,7 +240,7 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                    The campus code which represents the physical location of this organization.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
 
@@ -280,12 +255,14 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.OrgTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.OrgTypeValuesFinder" />
                 </control>
 
-                <summary>Organization Type</summary>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
                 <description>
-                    The type of organization such as campus (C), responsibility center (R), university chart organization (U), and other organizations (O), and not official (N).
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
 
@@ -318,7 +295,7 @@
                 <shortLabel>Plant Chart</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -346,7 +323,7 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                   The zip code assigned by the US Postal Service which relates to the city where this organization is located.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
 
@@ -368,7 +345,7 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                    The state where correspondence can be sent on issues identified to the organization.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
 
@@ -390,7 +367,7 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                    The country where correspondence can be sent on issues identified to the organization.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
             
@@ -412,7 +389,7 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                    The street address where correspondence can be sent on issues identified to the organization.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
 
@@ -434,7 +411,7 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                    The second line of the street address where correspondence can be sent on issues identified to the organization.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
             <attribute name="organizationCityName" forceUppercase="false">
@@ -455,7 +432,7 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                    The city where correspondence can be sent on issues identified to the organization.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
 
@@ -463,10 +440,12 @@
                 <label>Reports to Chart Code</label>
                 <shortLabel>Rpts to Chart</shortLabel>
                 <required>true</required>
-       	 		<control>
-        	 	 <text size="2" />
-        		</control>
-                <summary>Reports to Chart Code</summary>
+                <control>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
+                </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -476,7 +455,9 @@
                 <label>Reports to Organization</label>
                 <shortLabel>Rpts to Org</shortLabel>
                 <required>true</required>
-                <summary>Reports to Organization</summary>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -509,7 +490,9 @@
             <attributeReference name="organizationActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean">
                 <label>Active</label>
                 <shortLabel>Act.</shortLabel>
-                <summary>Organization Active Indicator</summary>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
                 <description>
                     <![CDATA[&nbsp;]]>
                 </description>
@@ -532,7 +515,7 @@
                 <shortLabel>Chart Code</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -599,7 +582,7 @@
         	</control>
 
         	<summary><![CDATA[&nbsp;]]></summary>
-        	<description>The company in the HRMS system to which this organization belongs.</description>
+        	<description><![CDATA[&nbsp;]]></description>
 		</attribute>
 
 		<attributeReference name="organizationExtension.hrmsIuOrganizationAddress2" 
@@ -634,7 +617,7 @@
       </attributeReference>
 
 	  <attributeReference name="organizationExtension.hrmsPersonnelApproverUniversal.personUserIdentifier" 
-	  					  sourceClassName="org.kuali.core.bo.user.UniversalUser" 
+	  					  sourceClassName="org.kuali.core.bo.user.KualiUser" 
 	  					  sourceAttributeName="personUserIdentifier">
 			<label>Personnel Approver UserID</label>
 			<shortLabel>Personnel Approver</shortLabel>
@@ -675,7 +658,7 @@
       </attributeReference>
 
 	  <attributeReference name="organizationExtension.fiscalApproverUniversal.personUserIdentifier" 
-	  					  sourceClassName="org.kuali.core.bo.user.UniversalUser" 
+	  					  sourceClassName="org.kuali.core.bo.user.KualiUser" 
 	  					  sourceAttributeName="personUserIdentifier">
 			<label>Fiscal Approver UserID</label>
 			<shortLabel>Fiscal Approver</shortLabel>
@@ -766,16 +749,6 @@
    			sourceAttributeName="versionNumber" />
    			
         </attributes>
-
-        <relationships>
-            <relationship objectAttributeName="organizationManagerUniversal" >
-                <primitiveAttribute sourceName="organizationManagerUniversalId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="organizationManagerUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="organizationManagerUniversal.personName" targetName="personName" />
-            </relationship>
-        </relationships>
-
-		<objectLabel>Organization Code</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

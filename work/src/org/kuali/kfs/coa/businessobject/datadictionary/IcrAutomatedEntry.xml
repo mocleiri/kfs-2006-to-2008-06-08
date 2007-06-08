@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/IcrAutomatedEntry.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.IcrAutomatedEntry">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Indirect Cost Recovery Automated Entry Inquiry</title>
@@ -69,7 +71,7 @@
                 <field attributeName="subAccountNumber" />
                 <field attributeName="awardIndrCostRcvyEntryNbr" />
                 <field attributeName="transactionDebitIndicator" />
-                <field attributeName="awardIndrCostRcvyRatePct" />
+                <!--  <field attributeName="awardIndrCostRcvyRatePct" /> -->
             </resultFields>
         </lookup>
 
@@ -153,8 +155,7 @@
                 <validationPattern>
                     <anyCharacter />
                 </validationPattern>
-                <!-- KULRNE-4298: false for required allows for empty subaccount codes to be converted to dashes without complaint by the DictionaryValidationService. -->
-                <required>false</required>
+                <required>true</required>
                 <control>
                     <text size="5" />
                 </control>
@@ -163,24 +164,9 @@
                 <description>Sub-Account Number</description>
             </attribute>
 
-            <attribute name="financialObjectCode" forceUppercase="true">
-                <label>Object Code</label>
-                <shortLabel>Object</shortLabel>
-
-                <maxLength>4</maxLength>
-                <validationPattern>
-                    <anyCharacter />
-                </validationPattern>
+            <attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
                 <required>true</required>
-                <control>
-                    <text size="4" />
-                </control>
-
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The code for the "object" of accounting for a transaction, expressed as a 4-digit numeric text, including leading zeros. For Search Criteria, select the Help for the Object Code Lookup title.</description>
-            </attribute>
+            </attributeReference>
 
             <attribute name="financialSubObjectCode" forceUppercase="true">
                 <label>Sub-Object Code</label>
@@ -190,8 +176,7 @@
                 <validationPattern>
                     <anyCharacter />
                 </validationPattern>
-                <!-- KULRNE-4298: false for required allows for empty subobject codes to be converted to dashes without complaint by the DictionaryValidationService. -->
-                <required>false</required>
+                <required>true</required>
                 <control>
                     <text size="3" />
                 </control>
@@ -219,7 +204,7 @@
                 </validationPattern>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.kfs.lookup.keyvalues.DebitCreditValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.DebitCreditValuesFinder" />
                 </control>
                 <summary>Object Type Debit Credit Code</summary>
                 <description>The unique code indicating that the object type is a credit or a debit.</description>

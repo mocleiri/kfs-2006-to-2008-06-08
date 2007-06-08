@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/validation/impl/OrgRule.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +25,19 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.user.KualiGroup;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.service.OrganizationService;
 
@@ -43,14 +48,16 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     protected static final String APC_HRMS_ACTIVE_KEY = "Org.HrmsOrgActive";
     protected static final String PLANT_WORKGROUP_PARM_NAME = "Org.PlantWorkgroup";
     
-    private static OrganizationService orgService;
+    private OrganizationService orgService;
 
     private Org oldOrg;
     private Org newOrg;
+    private boolean isChartManager;
     private boolean isHrmsOrgActivated;
 
     public OrgRule() {
         super();
+        isChartManager = false;
 
         // Pseudo-inject some services.
         //
@@ -58,9 +65,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         // to spring-managed with these services injected by Spring at some later date.
         // When this happens, just remove these calls to the setters with
         // SpringServiceLocator, and configure the bean defs for spring.
-        if ( orgService == null ) {
-        	orgService = SpringServiceLocator.getOrganizationService();
-        }
+        this.setOrgService(SpringServiceLocator.getOrganizationService());
     }
 
     /**
@@ -71,6 +76,9 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         boolean success = true;
 
         LOG.info("Entering processCustomApproveDocumentBusinessRules()");
+
+        // determine whether this person is the Chart manager for this org
+        isChartManager = isChartManager(GlobalVariables.getUserSession().getUniversalUser());
 
         // determine whether HRMS ORG is activated in this app instance
         isHrmsOrgActivated = isHrmsOrgActivated();
@@ -98,6 +106,9 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
 
         LOG.info("Entering processCustomRouteDocumentBusinessRules()");
 
+        // determine whether this person is the Chart manager for this org
+        isChartManager = isChartManager(GlobalVariables.getUserSession().getUniversalUser());
+
         // determine whether HRMS ORG is activated in this app instance
         isHrmsOrgActivated = isHrmsOrgActivated();
 
@@ -122,6 +133,9 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
 
         LOG.info("Entering processCustomSaveDocumentBusinessRules()");
+
+        // determine whether this person is the Chart manager for this org
+        isChartManager = isChartManager(GlobalVariables.getUserSession().getUniversalUser());
 
         // determine whether HRMS ORG is activated in this app instance
         isHrmsOrgActivated = isHrmsOrgActivated();
@@ -151,14 +165,19 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
             return success;
         }
 
-        success &= checkPlantAttributes();
+        success &= checkChartManagerRequiredActiveExistence();
 
         return success;
     }
 
-    protected boolean checkPlantAttributes() {
+    protected boolean checkChartManagerRequiredActiveExistence() {
 
         boolean success = true;
+
+        // shortcut out with no enforcement if this org is closed
+        if (!newOrg.isOrganizationActiveIndicator()) {
+            return success;
+        }
 
         /* KULCOA-1132 - exit if the user is not a member of the
            plant maintainer work group.  */
@@ -171,26 +190,23 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
             return true;
         }
         
-        // relax this edit for 
-        if ( !getOrgMustReportToSelf( newOrg ) ) {
-	        // require Org Plant ChartCode
-	        success &= checkEmptyBOField("organizationPlantChartCode", newOrg.getOrganizationPlantChartCode(), "Organization Plant Chart of Accounts Code");
-	        
-	        // require Org Plant AccountNumber
-	        success &= checkEmptyBOField("organizationPlantAccountNumber", newOrg.getOrganizationPlantAccountNumber(), "Organization Plant Account Number");
-	        
-	        // require Campus Plant ChartCode
-	        success &= checkEmptyBOField("campusPlantChartCode", newOrg.getCampusPlantChartCode(), "Campus Plant Chart of Accounts Code");
-	        
-	        // require Org Plant ChartCode
-	        success &= checkEmptyBOField("campusPlantAccountNumber", newOrg.getCampusPlantAccountNumber(), "Campus Plant Account Number");
-	        
-	        // validate Org Plant Account
-	        success &= getDictionaryValidationService().validateReferenceExistsAndIsActive(newOrg, "organizationPlantAccount", "accountClosedIndicator", true, true, MAINTAINABLE_ERROR_PREFIX + "organizationPlantAccountNumber", "Organization Plant Account");
-	        
-	        // validate Campus Plant Account
-	        success &= getDictionaryValidationService().validateReferenceExistsAndIsActive(newOrg, "campusPlantAccount", "accountClosedIndicator", true, true, MAINTAINABLE_ERROR_PREFIX + "campusPlantAccountNumber", "Campus Plant Account");
-        }
+        // require Org Plant ChartCode
+        success &= checkEmptyBOField("organizationPlantChartCode", newOrg.getOrganizationPlantChartCode(), "Organization Plant Chart of Accounts Code");
+        
+        // require Org Plant AccountNumber
+        success &= checkEmptyBOField("organizationPlantAccountNumber", newOrg.getOrganizationPlantAccountNumber(), "Organization Plant Account Number");
+        
+        // require Campus Plant ChartCode
+        success &= checkEmptyBOField("campusPlantChartCode", newOrg.getCampusPlantChartCode(), "Campus Plant Chart of Accounts Code");
+        
+        // require Org Plant ChartCode
+        success &= checkEmptyBOField("campusPlantAccountNumber", newOrg.getCampusPlantAccountNumber(), "Campus Plant Account Number");
+        
+        // validate Org Plant Account
+        success &= getDictionaryValidationService().validateReferenceExistsAndIsActive(newOrg, "organizationPlantAccount", "accountClosedIndicator", true, true, MAINTAINABLE_ERROR_PREFIX + "organizationPlantAccountNumber", "Organization Plant Account");
+        
+        // validate Campus Plant Account
+        success &= getDictionaryValidationService().validateReferenceExistsAndIsActive(newOrg, "campusPlantAccount", "accountClosedIndicator", true, true, MAINTAINABLE_ERROR_PREFIX + "campusPlantAccountNumber", "Campus Plant Account");
         
         return success;
     }
@@ -253,7 +269,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                 childAccountList.append(", ... (" + (childAccounts.size() - count) + " more)");
             }
 
-            putGlobalError(KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_OPEN_CHILD_ACCOUNTS_ON_ORG_CLOSURE, childAccountList.toString());
+            putGlobalError(KeyConstants.ERROR_DOCUMENT_ORGMAINT_OPEN_CHILD_ACCOUNTS_ON_ORG_CLOSURE, childAccountList.toString());
             success &= false;
         }
 
@@ -281,7 +297,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                 childOrgsList.append(", ... (" + (childOrgs.size() - count) + " more)");
             }
 
-            putGlobalError(KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_OPEN_CHILD_ORGS_ON_ORG_CLOSURE, childOrgsList.toString());
+            putGlobalError(KeyConstants.ERROR_DOCUMENT_ORGMAINT_OPEN_CHILD_ORGS_ON_ORG_CLOSURE, childOrgsList.toString());
             success &= false;
         }
 
@@ -289,7 +305,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         // if org is being closed, end-date must be valid and present
         if (ObjectUtils.isNull(newOrg.getOrganizationEndDate())) {
             success &= false;
-            putFieldError("organizationEndDate", KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_END_DATE_REQUIRED_ON_ORG_CLOSURE);
+            putFieldError("organizationEndDate", KeyConstants.ERROR_DOCUMENT_ORGMAINT_END_DATE_REQUIRED_ON_ORG_CLOSURE);
         }
         return success;
 
@@ -327,10 +343,6 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         return success;
     }
 
-    private boolean getOrgMustReportToSelf( Org organization ) {
-    	return applyApcRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, organization.getOrganizationTypeCode());    	
-    }
-    
     protected boolean checkSimpleRules(MaintenanceDocument document) {
 
         boolean success = true;
@@ -348,7 +360,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
             Date endDate = newOrg.getOrganizationEndDate();
 
             if (endDate.before(beginDate)) {
-                putFieldError("organizationEndDate", KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_END_DATE_GREATER_THAN_BEGIN_DATE);
+                putFieldError("organizationEndDate", KeyConstants.ERROR_DOCUMENT_ORGMAINT_END_DATE_GREATER_THAN_BEGIN_DATE);
                 success &= false;
             }
         }
@@ -358,9 +370,14 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
             Timestamp today = getDateTimeService().getCurrentTimestamp();
             today.setTime(DateUtils.truncate(today, Calendar.DAY_OF_MONTH).getTime());
             if (newOrg.getOrganizationBeginDate().before(today)) {
-                putFieldError("organizationBeginDate", KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_STARTDATE_IN_PAST);
+                putFieldError("organizationBeginDate", KeyConstants.ERROR_DOCUMENT_ORGMAINT_STARTDATE_IN_PAST);
                 success &= false;
             }
+        }
+        
+        boolean orgMustReportToSelf = false;
+        if (applyApcRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, newOrg.getOrganizationTypeCode())) {
+            orgMustReportToSelf = true;
         }
         
         // Reports To Chart/Org should not be same as this Chart/Org
@@ -369,11 +386,11 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                 && ObjectUtils.isNotNull(newOrg.getReportsToOrganizationCode()) 
                 && ObjectUtils.isNotNull(newOrg.getChartOfAccountsCode())
                 && ObjectUtils.isNotNull(newOrg.getOrganizationCode()) ) {
-            if ( !getOrgMustReportToSelf( newOrg ) ) {
+            if ( !orgMustReportToSelf ) {
                 
                 if ((newOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode())) 
                         && (newOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode()))) {
-                    putFieldError("reportsToOrganizationCode", KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_SAME_ORG);
+                    putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_SAME_ORG);
                     success = false;
                 } else {
                     // Don't allow a circular reference on Reports to Chart/Org
@@ -390,13 +407,13 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                             // if a null is returned on the first iteration, then the reports-to org does not exist
                             // fail the validation
                             if ( loopCount == 1 ) {
-                                putFieldError("reportsToOrganizationCode", KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_MUST_EXIST);
+                                putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_MUST_EXIST);
                                 success = false;
                             }
                         } else {
                             // on the first iteration, check whether the reports-to organization is active
                             if ( loopCount == 1 && !tempOrg.isOrganizationActiveIndicator() ) {
-                                putFieldError("reportsToOrganizationCode", KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_MUST_EXIST);
+                                putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_MUST_EXIST);
                                 success = false;
                                 continueSearch = false;
                             } else {
@@ -406,7 +423,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
         
                                 if ((tempOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode())) 
                                         && (tempOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode())) ) {
-                                    putFieldError("reportsToOrganizationCode", KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_CIRCULAR_REF_TO_SAME_ORG);
+                                    putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_CANNOT_BE_CIRCULAR_REF_TO_SAME_ORG);
                                     success = false;
                                     continueSearch = false;
                                 }
@@ -417,7 +434,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                         }
                         // stop the search if we reach an org that must report to itself 
                         if ( continueSearch 
-                                && applyApcRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, tempOrg.getOrganizationTypeCode()) ) {
+                                && applyApcRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, tempOrg.getOrganizationTypeCode()) ) {
                             continueSearch = false;
                         }
     
@@ -426,21 +443,18 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
             } else { // org must report to self (university level organization)
                 if ( !(newOrg.getReportsToChartOfAccountsCode().equals(newOrg.getChartOfAccountsCode()) 
                         && newOrg.getReportsToOrganizationCode().equals(newOrg.getOrganizationCode()) ) ) {
-                    putFieldError("reportsToOrganizationCode", KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_MUST_BE_SAME_ORG);
+                    putFieldError("reportsToOrganizationCode", KeyConstants.ERROR_DOCUMENT_ORGMAINT_REPORTING_ORG_MUST_BE_SAME_ORG);
                     success = false;
                 }
                 // org must be the only one of that type
-                KualiParameterRule rule = configService.getApplicationParameterRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
+                KualiParameterRule rule = configService.getApplicationParameterRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
                 String topLevelOrgTypeCode = rule.getParameterText();
                 List<Org> topLevelOrgs = orgService.getActiveOrgsByType( topLevelOrgTypeCode );
                 if ( !topLevelOrgs.isEmpty() ) {
-                    // is the new org in the topLevelOrgs list?  If not, then there's an error; if so, we're editing the top level org
-                    if (!topLevelOrgs.contains(newOrg)) {
-                        putFieldError( "organizationTypeCode", 
-                                KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_ONLY_ONE_TOP_LEVEL_ORG,
-                                topLevelOrgs.get(0).getChartOfAccountsCode()+"-"+topLevelOrgs.get(0).getOrganizationCode() );
-                        success = false;
-                    }
+                    putFieldError( "organizationTypeCode", 
+                            KeyConstants.ERROR_DOCUMENT_ORGMAINT_ONLY_ONE_TOP_LEVEL_ORG,
+                            topLevelOrgs.get(0).getChartOfAccountsCode()+"-"+topLevelOrgs.get(0).getOrganizationCode() );
+                    success = false;
                 }
             }
         }
@@ -450,7 +464,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     }
 
     // check that defaultAccount is present unless
-    // ( (orgType = U or C) and ( document is a "create new" or "edit" ))
+    // ( (orgType = U or C) and ( document is a "create new" ))
 
     protected boolean checkDefaultAccountNumber(MaintenanceDocument document) {
 
@@ -463,12 +477,12 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
 
         if (ObjectUtils.isNotNull(newOrg.getOrganizationTypeCode())) {
             organizationTypeCode = newOrg.getOrganizationTypeCode();
-            if (applyApcRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.DEFAULT_ACCOUNT_NOT_REQUIRED_ORG_TYPES, newOrg.getOrganizationTypeCode())) {
+            if (applyApcRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.DEFAULT_ACCOUNT_NOT_REQUIRED_ORG_TYPES, newOrg.getOrganizationTypeCode())) {
                 exemptOrganizationTypeCode = true;
             }
         }
-        if (missingDefaultAccountNumber && (!exemptOrganizationTypeCode || (!document.isNew() && !document.isEdit()))) {
-            putFieldError("organizationDefaultAccountNumber", KFSKeyConstants.ERROR_DOCUMENT_ORGMAINT_DEFAULT_ACCOUNT_NUMBER_REQUIRED);
+        if (missingDefaultAccountNumber && (!exemptOrganizationTypeCode || !document.isNew())) {
+            putFieldError("organizationDefaultAccountNumber", KeyConstants.ERROR_DOCUMENT_ORGMAINT_DEFAULT_ACCOUNT_NUMBER_REQUIRED);
             success &= false;
         }
         return success;
@@ -513,6 +527,29 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
 
     /**
      * 
+     * This method determines whether the given use is a ChartManager for the chart this Org belongs to.
+     * 
+     * @param user - user to test
+     * @return true if the user is the Chart Manager, false otherwise
+     * 
+     */
+    protected boolean isChartManager(UniversalUser user) {
+
+        // see if this person is manager for the requested chart
+        boolean success = ((ChartUser)user.getModuleUser( ChartUser.MODULE_ID )).isManagerForChart(newOrg.getChartOfAccountsCode());
+
+        if (success) {
+            LOG.info("User: [" + user.getPersonUserIdentifier() + "] " + user.getPersonName() + " is a Chart Manager for this Org's Chart: " + newOrg.getChartOfAccountsCode());
+        }
+        else {
+            LOG.info("User: [" + user.getPersonUserIdentifier() + "] " + user.getPersonName() + " is NOT a Chart Manager for this Org's Chart: " + newOrg.getChartOfAccountsCode());
+        }
+
+        return success;
+    }
+
+    /**
+     * 
      * This method looks up in the APC system whether ther HRMS Org system is turned on.
      * 
      * @return true or false depending on the app configuration
@@ -520,7 +557,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
      */
     protected boolean isHrmsOrgActivated() {
 
-        String flag = getConfigService().getApplicationParameterValue(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, APC_HRMS_ACTIVE_KEY);
+        String flag = getConfigService().getApplicationParameterValue(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, APC_HRMS_ACTIVE_KEY);
         if (flag.trim().equalsIgnoreCase("Y")) {
             return true;
         }
@@ -548,6 +585,15 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * Sets the orgService attribute value.
+     * 
+     * @param orgService The orgService to set.
+     */
+    public void setOrgService(OrganizationService orgService) {
+        this.orgService = orgService;
+    }
+
+    /**
      * 
      * This method tests whether the specified user is part of the group that grants authorization to the Plant fields.
      * 
@@ -558,7 +604,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     protected boolean isPlantAuthorized(UniversalUser user) {
 
         // attempt to get the group name that grants access to the Plant fields
-        String allowedPlantWorkgroup = getConfigService().getApplicationParameterValue(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, PLANT_WORKGROUP_PARM_NAME);
+        String allowedPlantWorkgroup = getConfigService().getApplicationParameterValue(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, PLANT_WORKGROUP_PARM_NAME);
 
         if (user.isMember( allowedPlantWorkgroup )) {
             LOG.info("User '" + user.getPersonUserIdentifier() + "' is a member of the group '" + allowedPlantWorkgroup + "', which gives them access to the Plant fields.");

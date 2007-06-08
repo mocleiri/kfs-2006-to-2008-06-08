@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.service.impl;
 
@@ -22,21 +29,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.authorization.DocumentAuthorizer;
+import org.kuali.PropertyConstants;
+import org.kuali.Constants.CashDrawerConstants;
+import org.kuali.Constants.DepositConstants;
+import org.kuali.Constants.DocumentStatusCodes;
+import org.kuali.core.authorization.DocumentAuthorizer;
+import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
 import org.kuali.core.exceptions.InfrastructureException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.KFSConstants.CashDrawerConstants;
-import org.kuali.kfs.KFSConstants.DepositConstants;
-import org.kuali.kfs.KFSConstants.DocumentStatusCodes;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Bank;
 import org.kuali.module.financial.bo.BankAccount;
 import org.kuali.module.financial.bo.CashDrawer;
@@ -50,11 +57,10 @@ import org.kuali.module.financial.exceptions.InvalidCashReceiptState;
 import org.kuali.module.financial.service.CashDrawerService;
 import org.kuali.module.financial.service.CashManagementService;
 import org.kuali.module.financial.web.struts.form.CashDrawerStatusCodeFormatter;
-import org.springframework.transaction.annotation.Transactional;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
-@Transactional
 public class CashManagementServiceImpl implements CashManagementService {
     private BusinessObjectService businessObjectService;
     private CashDrawerService cashDrawerService;
@@ -79,7 +85,7 @@ public class CashManagementServiceImpl implements CashManagementService {
 
         // get CashReceiptHeader for the CashReceipt, if any
         HashMap primaryKeys = new HashMap();
-        primaryKeys.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentId);
+        primaryKeys.put(PropertyConstants.FINANCIAL_DOCUMENT_NUMBER, documentId);
         CashReceiptHeader crh = (CashReceiptHeader) businessObjectService.findByPrimaryKey(CashReceiptHeader.class, primaryKeys);
 
         // get the DepositCashReceiptControl for the CashReceiptHeader
@@ -111,10 +117,12 @@ public class CashManagementServiceImpl implements CashManagementService {
         }
 
         // check user authorization
-        UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
+        KualiUser user = GlobalVariables.getUserSession().getKualiUser();
         String documentTypeName = SpringServiceLocator.getDataDictionaryService().getDocumentTypeNameByClass(CashManagementDocument.class);
         DocumentAuthorizer documentAuthorizer = SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(documentTypeName);
-        documentAuthorizer.canInitiate(documentTypeName, user);
+        if (!documentAuthorizer.canInitiate(documentTypeName, user)) {
+            throw new DocumentTypeAuthorizationException(user.getPersonUserIdentifier(), "initiate", documentTypeName);
+        }
 
         // check cash drawer
         CashDrawer cd = cashDrawerService.getByWorkgroupName(unitName, true);
@@ -176,7 +184,7 @@ public class CashManagementServiceImpl implements CashManagementService {
 
         //
         // lock the cashDrawer
-        cashDrawerService.lockCashDrawer(cashManagementDoc.getWorkgroupName(), cashManagementDoc.getDocumentNumber());
+        cashDrawerService.lockCashDrawer(cashManagementDoc.getWorkgroupName(), cashManagementDoc.getFinancialDocumentNumber());
 
 
         //
@@ -205,13 +213,13 @@ public class CashManagementServiceImpl implements CashManagementService {
             documentService.updateDocument(crDoc);
 
             CashReceiptHeader crHeader = new CashReceiptHeader();
-            crHeader.setDocumentNumber(crDoc.getDocumentNumber());
+            crHeader.setFinancialDocumentNumber(crDoc.getFinancialDocumentNumber());
             crHeader.setCashReceiptDocument(crDoc);
             crHeader.setWorkgroupName(cashManagementDoc.getWorkgroupName());
 
             DepositCashReceiptControl dcc = new DepositCashReceiptControl();
-            dcc.setFinancialDocumentCashReceiptNumber(crHeader.getDocumentNumber());
-            dcc.setFinancialDocumentDepositNumber(deposit.getDocumentNumber());
+            dcc.setFinancialDocumentCashReceiptNumber(crHeader.getFinancialDocumentNumber());
+            dcc.setFinancialDocumentDepositNumber(deposit.getFinancialDocumentNumber());
             dcc.setFinancialDocumentDepositLineNumber(deposit.getFinancialDocumentDepositLineNumber());
 
             dcc.setCashReceiptHeader(crHeader);
@@ -226,7 +234,7 @@ public class CashManagementServiceImpl implements CashManagementService {
         //
         // unlock the cashDrawer, if needed
         if (!isFinalDeposit) {
-            cashDrawerService.unlockCashDrawer(cashManagementDoc.getWorkgroupName(), cashManagementDoc.getDocumentNumber());
+            cashDrawerService.unlockCashDrawer(cashManagementDoc.getWorkgroupName(), cashManagementDoc.getFinancialDocumentNumber());
         }
     }
 
@@ -242,10 +250,10 @@ public class CashManagementServiceImpl implements CashManagementService {
             throw new IllegalArgumentException("invalid (null) cashManagementDoc");
         }
         else if (!cashManagementDoc.getDocumentHeader().getWorkflowDocument().stateIsSaved()) {
-            throw new IllegalStateException("cashManagementDoc '" + cashManagementDoc.getDocumentNumber() + "' is not in 'saved' state");
+            throw new IllegalStateException("cashManagementDoc '" + cashManagementDoc.getFinancialDocumentNumber() + "' is not in 'saved' state");
         }
         else if (cashManagementDoc.hasFinalDeposit()) {
-            throw new IllegalStateException("cashManagementDoc '" + cashManagementDoc.getDocumentNumber() + "' hasFinalDeposit");
+            throw new IllegalStateException("cashManagementDoc '" + cashManagementDoc.getFinancialDocumentNumber() + "' hasFinalDeposit");
         }
         if (bankAccount == null) {
             throw new IllegalArgumentException("invalid (null) bankAccount");
@@ -261,7 +269,7 @@ public class CashManagementServiceImpl implements CashManagementService {
             for (CashReceiptDocument cashReceipt : selectedCashReceipts) {
                 String statusCode = cashReceipt.getDocumentHeader().getFinancialDocumentStatusCode();
                 if (!StringUtils.equals(statusCode, DocumentStatusCodes.CashReceipt.VERIFIED)) {
-                    throw new InvalidCashReceiptState("cash receipt document " + cashReceipt.getDocumentNumber() + " has a status other than 'verified' ");
+                    throw new InvalidCashReceiptState("cash receipt document " + cashReceipt.getFinancialDocumentNumber() + " has a status other than 'verified' ");
                 }
             }
         }
@@ -269,7 +277,7 @@ public class CashManagementServiceImpl implements CashManagementService {
 
     private Deposit buildDeposit(CashManagementDocument cashManagementDoc, String depositTypeCode, String depositTicketNumber, BankAccount bankAccount, List<CashReceiptDocument> selectedCashReceipts) {
         Deposit deposit = new Deposit();
-        deposit.setDocumentNumber(cashManagementDoc.getDocumentNumber());
+        deposit.setFinancialDocumentNumber(cashManagementDoc.getFinancialDocumentNumber());
         deposit.setCashManagementDocument(cashManagementDoc);
 
         deposit.setDepositTypeCode(depositTypeCode);
@@ -291,7 +299,7 @@ public class CashManagementServiceImpl implements CashManagementService {
         KualiDecimal total = KualiDecimal.ZERO;
         for (Iterator i = selectedCashReceipts.iterator(); i.hasNext();) {
             CashReceiptDocument crDoc = (CashReceiptDocument) i.next();
-            total = total.add(crDoc.getTotalDollarAmount());
+            total = total.add(crDoc.getSumTotalAmount());
         }
         deposit.setDepositAmount(total);
 
@@ -382,7 +390,7 @@ public class CashManagementServiceImpl implements CashManagementService {
 
         // unlock the cashDrawer, if needed
         if (deposit.getDepositTypeCode() == DepositConstants.DEPOSIT_TYPE_FINAL) {
-            cashDrawerService.unlockCashDrawer(depositWorkgroup, deposit.getDocumentNumber());
+            cashDrawerService.unlockCashDrawer(depositWorkgroup, deposit.getFinancialDocumentNumber());
         }
 
         // delete the Deposit from the database
@@ -400,7 +408,7 @@ public class CashManagementServiceImpl implements CashManagementService {
             throw new IllegalArgumentException("invalid (null) CashManagementDocument");
         }
         if (!cmDoc.hasFinalDeposit()) {
-            throw new IllegalStateException("cmDoc " + cmDoc.getDocumentNumber() + " is missing a FinalDeposit");
+            throw new IllegalStateException("cmDoc " + cmDoc.getFinancialDocumentNumber() + " is missing a FinalDeposit");
         }
 
         String workgroupName = cmDoc.getWorkgroupName();
@@ -440,7 +448,7 @@ public class CashManagementServiceImpl implements CashManagementService {
 
         // retrieve CashReceiptHeaders
         Map criteriaMap = new HashMap();
-        criteriaMap.put("depositCashReceiptControl.financialDocumentDepositNumber", deposit.getDocumentNumber());
+        criteriaMap.put("depositCashReceiptControl.financialDocumentDepositNumber", deposit.getFinancialDocumentNumber());
         criteriaMap.put("depositCashReceiptControl.financialDocumentDepositLineNumber", deposit.getFinancialDocumentDepositLineNumber());
 
         List crHeaders = new ArrayList(businessObjectService.findMatching(CashReceiptHeader.class, criteriaMap));
@@ -448,7 +456,7 @@ public class CashManagementServiceImpl implements CashManagementService {
             List idList = new ArrayList();
             for (Iterator i = crHeaders.iterator(); i.hasNext();) {
                 CashReceiptHeader crHeader = (CashReceiptHeader) i.next();
-                idList.add(crHeader.getDocumentNumber());
+                idList.add(crHeader.getFinancialDocumentNumber());
             }
 
             try {

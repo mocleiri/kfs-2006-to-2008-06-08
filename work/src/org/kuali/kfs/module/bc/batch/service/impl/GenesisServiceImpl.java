@@ -15,18 +15,11 @@
  */
 package org.kuali.module.budget.service.impl;
 
-import java.lang.*;
-
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSConstants.*;
+import org.kuali.Constants;
+import org.kuali.Constants.*;
 import org.kuali.module.budget.dao.GenesisDao;
-import org.kuali.module.budget.dao.ojb.GenesisDaoOjb;
 import org.kuali.module.budget.service.GenesisService;
 import org.springframework.transaction.annotation.Transactional;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 
  
 @Transactional
@@ -36,8 +29,6 @@ public class GenesisServiceImpl implements GenesisService {
     
       private GenesisDao genesisDao;
 
-      private static Logger LOG = org.apache.log4j.Logger.getLogger(GenesisServiceImpl.class);
-      
       public final void testStep (Integer BaseYear)
       {
          genesisDao.updateToPBGL(BaseYear);  
@@ -60,12 +51,12 @@ public class GenesisServiceImpl implements GenesisService {
 
       public void testPositionBuild(Integer currentFiscalYear)
       {
-//         boolean CSFOK     = CSFUpdatesAllowed(currentFiscalYear);
-//         boolean PSSynchOK = BatchPositionSynchAllowed(currentFiscalYear);
-//         genesisDao.createNewBCPosition(currentFiscalYear,
-//                                        PSSynchOK,
-//                                        CSFOK);
-          genesisDao.genesisUnitTest(currentFiscalYear);      }
+          boolean CSFOK     = CSFUpdatesAllowed(currentFiscalYear+1);
+          boolean PSSynchOK = BatchPositionSynchAllowed(currentFiscalYear+1);
+          genesisDao.createNewBCPosition(currentFiscalYear,
+                                         PSSynchOK,
+                                         CSFOK);
+      }
       
       /*
        *   here are some flag value routines
@@ -114,7 +105,7 @@ public class GenesisServiceImpl implements GenesisService {
       {
 
           if (genesisDao.getBudgetConstructionControlFlag(universityFiscalYear,
-                  KFSConstants.BudgetConstructionConstants.BUDGET_CONSTRUCTION_GENESIS_RUNNING))
+                  Constants.BudgetConstructionConstants.BUDGET_CONSTRUCTION_GENESIS_RUNNING))
           {
               // wipe out BC HEADER with deleteByQuery
               // wipe out appointment funding GL
@@ -129,9 +120,9 @@ public class GenesisServiceImpl implements GenesisService {
               return;
           };
           if (genesisDao.getBudgetConstructionControlFlag(universityFiscalYear,
-                     KFSConstants.BudgetConstructionConstants.BUDGET_CONSTRUCTION_ACTIVE) &&
+                     Constants.BudgetConstructionConstants.BUDGET_CONSTRUCTION_ACTIVE) &&
                      genesisDao.getBudgetConstructionControlFlag(universityFiscalYear,
-                     KFSConstants.BudgetConstructionConstants.BASE_BUDGET_UPDATES_OK))
+                     Constants.BudgetConstructionConstants.BASE_BUDGET_UPDATES_OK))
           {   
               // this is the more complicated branch that updates the BC GL
               // there should be a private method called here, as in the first branch
@@ -185,70 +176,43 @@ public class GenesisServiceImpl implements GenesisService {
     {
         genesisDao.clearDBForGenesis(BaseYear); 
     }
-    // this step updates the budget from the payroll (CSF) and the GL once
-    // genesis has run.
-    public void bCUpdateStep(Integer BaseYear)
+      
+    public void createProxyBCHeadersTransactional(Integer BaseYear)
     {
-        genesisDao.clearHangingBCLocks(BaseYear);
-        genesisDao.ensureObjectClassRIForBudget(BaseYear);
-        genesisDao.createNewBCDocumentsFromGLCSF(BaseYear,
-                GLUpdatesAllowed(BaseYear), CSFUpdatesAllowed(BaseYear));
-        if (GLUpdatesAllowed(BaseYear))
-        {
-           genesisDao.updateToPBGL(BaseYear);
-        }
-        genesisDao.initialLoadToPBGL(BaseYear);
-        boolean CSFOK     = CSFUpdatesAllowed(BaseYear);
-        boolean PSSynchOK = BatchPositionSynchAllowed(BaseYear);
-        genesisDao.createNewBCPosition(BaseYear,
-                                       PSSynchOK,
-                                       CSFOK);
-        if (CSFOK)
-        {
-            genesisDao.buildAppointmentFundingAndBCSF(BaseYear);
-        }
-        genesisDao.rebuildOrganizationHierarchy(BaseYear);
+        genesisDao.primeNewBCHeadersDocumentCreation(BaseYear);
     }
-
-     public void genesisStep(Integer BaseYear)
+ //  this step must be re-done
+ //  we need (1) an intiation step that sets the flags,
+ //              builds the chart, and creates the proxy
+ //              documents
+ //          (2) a non-transactional step (not in this service)
+ //              that sets document numbers and routes the
+ //              documents.  this should be called directly
+ //              from geneisDao.
+ //          (3) a step that does the rest (initializes the
+ //              document status, builds the org hieratchy and
+ //              the GL, and resets the flags
+ //           THERE COULD BE A DOCUMENT STEP, AS LONG AS THE
+ //           THE TRANSACTIONAL PARTS COME FROM A SERVICE AND 
+ //           BUT THE DOCUMENT ROUTE IS FROM genesisDao AND IS
+ //           NON_TRANSACTIONAL.   
+    public void genesisStep(Integer BaseYear)
     {
-        LOG.warn(String.format("\nstarting Genesis:\n  flags")); 
         genesisDao.setControlFlagsAtTheStartOfGenesis(BaseYear);
-        LOG.warn(String.format("\n  clear database"));
         genesisDao.clearDBForGenesis(BaseYear);
-        LOG.warn(String.format("\n  referential integrity for object classes"));
-        genesisDao.ensureObjectClassRIForBudget(BaseYear);
-        LOG.warn(String.format("\n  new BC documents"));
         genesisDao.createNewBCDocumentsFromGLCSF(BaseYear,
                 GLUpdatesAllowed(BaseYear), CSFUpdatesAllowed(BaseYear));
-        LOG.warn(String.format("\n  chart for budget"));
         genesisDao.createChartForNextBudgetCycle();
-        LOG.warn(String.format("\n  load to PBGL"));
         genesisDao.initialLoadToPBGL(BaseYear);
-        LOG.warn(String.format("\n  new positions"));
-        boolean CSFOK     = CSFUpdatesAllowed(BaseYear);
-        boolean PSSynchOK = BatchPositionSynchAllowed(BaseYear);
-        genesisDao.createNewBCPosition(BaseYear,
-                                       PSSynchOK,
-                                       CSFOK);
-        if (CSFOK)
-        {
-            LOG.warn("\n  appointment funding/BCSF");
-            genesisDao.buildAppointmentFundingAndBCSF(BaseYear);
-        }
-        LOG.warn("\n  organization hierarchy");
         genesisDao.rebuildOrganizationHierarchy(BaseYear);
-        LOG.warn("\n  reset control flags");
         genesisDao.setControlFlagsAtTheEndOfGenesis(BaseYear);
-        LOG.warn("\n  end of genesis");
     }
-
- //  these steps are no longer needed now that workflow runs locally in the same
- //  transaction as genesis    
+    
     public void genesisDocumentStep (Integer BaseYear)
     {
         genesisDao.setControlFlagsAtTheStartOfGenesis(BaseYear);
         genesisDao.clearDBForGenesis(BaseYear);
+//        genesisDao.primeNewBCHeadersDocumentCreation(BaseYear);
         genesisDao.createNewBCDocumentsFromGLCSF(BaseYear,
                 GLUpdatesAllowed(BaseYear), CSFUpdatesAllowed(BaseYear));
     }
