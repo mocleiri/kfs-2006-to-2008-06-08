@@ -30,8 +30,11 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
+import org.kuali.module.purap.PurapConstants.RequisitionSources;
+import org.kuali.module.purap.PurapConstants.VendorChoice;
 import org.kuali.module.purap.bo.ItemType;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderStatusHistory;
@@ -120,6 +123,22 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         return true;
     }
 
+    
+    
+    @Override
+    public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
+        // FIXME
+        return new ArrayList();
+    }
+
+    public void setDefaultValuesForAPO() {
+        this.setPurchaseOrderAutomaticIndicator(Boolean.TRUE);
+
+        if (!RequisitionSources.B2B.equals(this.getRequisitionSourceCode())) {
+            this.setPurchaseOrderVendorChoiceCode(VendorChoice.SMALL_ORDER);
+        }
+    }
+    
     public void populatePurchaseOrderFromRequisition(RequisitionDocument requisitionDocument) {
 // TODO fix this (is this data correct?  is there a better way of doing this?
 //        this.setPurchaseOrderCreateDate(requisitionDocument.getDocumentHeader().getWorkflowDocument().getCreateDate());
