@@ -133,7 +133,7 @@ public class BudgetForm extends ResearchDocumentFormBase {
         academicYearSubdivisionNames = new ArrayList();
         
         DataDictionary dataDictionary = SpringServiceLocator.getDataDictionaryService().getDataDictionary();
-        DocumentEntry budgetDocumentEntry = dataDictionary.getDocumentEntry(org.kuali.module.kra.budget.document.BudgetDocument.class);
+        DocumentEntry budgetDocumentEntry = dataDictionary.getDocumentEntry(org.kuali.module.kra.budget.document.BudgetDocument.class.getName());
         this.setHeaderNavigationTabs(budgetDocumentEntry.getHeaderTabNavigation());
     }
 
@@ -606,7 +606,9 @@ public class BudgetForm extends ResearchDocumentFormBase {
         if (this.getBudgetDocument().getBudget().isProjectDirectorToBeNamedIndicator()) {
             return new KeyLabelPair("DataDictionary.Budget.attributes.budgetProjectDirectorUniversalIdentifier", TO_BE_NAMED_LABEL);
         }
-        else if (this.getBudgetDocument().getBudget().getProjectDirector() != null && this.getBudgetDocument().getBudget().getProjectDirector().getUniversalUser() != null) {
+        else if (  this.getBudgetDocument().getBudget().getProjectDirector() != null 
+        		&& this.getBudgetDocument().getBudget().getProjectDirector().getUniversalUser() != null 
+        		&& this.getBudgetDocument().getBudget().getProjectDirector().getUniversalUser().getPersonUniversalIdentifier() != null ) {
             return new KeyLabelPair("DataDictionary.Budget.attributes.budgetProjectDirectorUniversalIdentifier", this.getBudgetDocument().getBudget().getProjectDirector().getUniversalUser().getPersonName());
         }
         return null;
