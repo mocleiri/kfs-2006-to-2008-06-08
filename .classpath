@@ -80,7 +80,7 @@
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-io-1.2.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-commons-shared-0.9-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-commons-core-0.9-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-commons-core-0.9-SNAPSHOT.jar" sourcepath="/rice-commons-kns-config"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/kew-2.4.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-ksb-0.9-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/xfire-all-1.2.4.jar"/>
