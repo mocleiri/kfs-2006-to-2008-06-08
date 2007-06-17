@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
@@ -19,15 +28,15 @@ package org.kuali.module.budget.bo;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase {
+public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 
 	private String organizationChartOfAccountsCode;
 	private String organizationCode;
@@ -51,7 +60,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the organizationChartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the organizationChartOfAccountsCode
+	 * @return - Returns the organizationChartOfAccountsCode
 	 * 
 	 */
 	public String getOrganizationChartOfAccountsCode() { 
@@ -61,7 +70,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the organizationChartOfAccountsCode attribute.
 	 * 
-	 * @param organizationChartOfAccountsCode The organizationChartOfAccountsCode to set.
+	 * @param - organizationChartOfAccountsCode The organizationChartOfAccountsCode to set.
 	 * 
 	 */
 	public void setOrganizationChartOfAccountsCode(String organizationChartOfAccountsCode) {
@@ -72,7 +81,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the organizationCode attribute.
 	 * 
-	 * @return Returns the organizationCode
+	 * @return - Returns the organizationCode
 	 * 
 	 */
 	public String getOrganizationCode() { 
@@ -82,7 +91,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the organizationCode attribute.
 	 * 
-	 * @param organizationCode The organizationCode to set.
+	 * @param - organizationCode The organizationCode to set.
 	 * 
 	 */
 	public void setOrganizationCode(String organizationCode) {
@@ -93,7 +102,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the csfAmount attribute.
 	 * 
-	 * @return Returns the csfAmount
+	 * @return - Returns the csfAmount
 	 * 
 	 */
 	public KualiDecimal getCsfAmount() { 
@@ -103,7 +112,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the csfAmount attribute.
 	 * 
-	 * @param csfAmount The csfAmount to set.
+	 * @param - csfAmount The csfAmount to set.
 	 * 
 	 */
 	public void setCsfAmount(KualiDecimal csfAmount) {
@@ -114,7 +123,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the appointmentRequestedAmount attribute.
 	 * 
-	 * @return Returns the appointmentRequestedAmount
+	 * @return - Returns the appointmentRequestedAmount
 	 * 
 	 */
 	public KualiDecimal getAppointmentRequestedAmount() { 
@@ -124,7 +133,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the appointmentRequestedAmount attribute.
 	 * 
-	 * @param appointmentRequestedAmount The appointmentRequestedAmount to set.
+	 * @param - appointmentRequestedAmount The appointmentRequestedAmount to set.
 	 * 
 	 */
 	public void setAppointmentRequestedAmount(KualiDecimal appointmentRequestedAmount) {
@@ -135,7 +144,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the appointmentRequestedFteQuantity attribute.
 	 * 
-	 * @return Returns the appointmentRequestedFteQuantity
+	 * @return - Returns the appointmentRequestedFteQuantity
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedFteQuantity() { 
@@ -145,7 +154,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the appointmentRequestedFteQuantity attribute.
 	 * 
-	 * @param appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
+	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
 	 * 
 	 */
 	public void setAppointmentRequestedFteQuantity(BigDecimal appointmentRequestedFteQuantity) {
@@ -156,7 +165,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the initialRequestedAmount attribute.
 	 * 
-	 * @return Returns the initialRequestedAmount
+	 * @return - Returns the initialRequestedAmount
 	 * 
 	 */
 	public KualiDecimal getInitialRequestedAmount() { 
@@ -166,7 +175,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the initialRequestedAmount attribute.
 	 * 
-	 * @param initialRequestedAmount The initialRequestedAmount to set.
+	 * @param - initialRequestedAmount The initialRequestedAmount to set.
 	 * 
 	 */
 	public void setInitialRequestedAmount(KualiDecimal initialRequestedAmount) {
@@ -177,7 +186,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the initialRequestedFteQuantity attribute.
 	 * 
-	 * @return Returns the initialRequestedFteQuantity
+	 * @return - Returns the initialRequestedFteQuantity
 	 * 
 	 */
 	public BigDecimal getInitialRequestedFteQuantity() { 
@@ -187,7 +196,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the initialRequestedFteQuantity attribute.
 	 * 
-	 * @param initialRequestedFteQuantity The initialRequestedFteQuantity to set.
+	 * @param - initialRequestedFteQuantity The initialRequestedFteQuantity to set.
 	 * 
 	 */
 	public void setInitialRequestedFteQuantity(BigDecimal initialRequestedFteQuantity) {
@@ -198,7 +207,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the personUniversalIdentifier attribute.
 	 * 
-	 * @return Returns the personUniversalIdentifier
+	 * @return - Returns the personUniversalIdentifier
 	 * 
 	 */
 	public Long getPersonUniversalIdentifier() { 
@@ -208,7 +217,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the personUniversalIdentifier attribute.
 	 * 
-	 * @param personUniversalIdentifier The personUniversalIdentifier to set.
+	 * @param - personUniversalIdentifier The personUniversalIdentifier to set.
 	 * 
 	 */
 	public void setPersonUniversalIdentifier(Long personUniversalIdentifier) {
@@ -219,7 +228,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the organizationChartOfAccounts attribute.
 	 * 
-	 * @return Returns the organizationChartOfAccounts
+	 * @return - Returns the organizationChartOfAccounts
 	 * 
 	 */
 	public Chart getOrganizationChartOfAccounts() { 
@@ -229,7 +238,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the organizationChartOfAccounts attribute.
 	 * 
-	 * @param organizationChartOfAccounts The organizationChartOfAccounts to set.
+	 * @param - organizationChartOfAccounts The organizationChartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setOrganizationChartOfAccounts(Chart organizationChartOfAccounts) {
@@ -239,7 +248,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Gets the organization attribute.
 	 * 
-	 * @return Returns the organization
+	 * @return - Returns the organization
 	 * 
 	 */
 	public Org getOrganization() { 
@@ -249,7 +258,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	/**
 	 * Sets the organization attribute.
 	 * 
-	 * @param organization The organization to set.
+	 * @param - organization The organization to set.
 	 * @deprecated
 	 */
 	public void setOrganization(Org organization) {
@@ -257,7 +266,7 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 	}
 
 	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    

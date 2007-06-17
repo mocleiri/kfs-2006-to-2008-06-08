@@ -34,7 +34,7 @@
 
         <documentTypeName>KualiLaborJournalVoucherDocument</documentTypeName>
         <documentTypeCode>LLJV</documentTypeCode>
-        <label>Labor Distribution Journal Voucher</label>
+        <label>Labor Journal Voucher Document</label>
         <shortLabel>LJVDoc</shortLabel>
 
         <attributes>

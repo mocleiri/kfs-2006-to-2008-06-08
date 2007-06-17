@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.rules.SubAccountRule;
 
 public class SubAccountTypeValuesFinder extends KeyValuesBase {
@@ -42,7 +42,7 @@ public class SubAccountTypeValuesFinder extends KeyValuesBase {
     public List getKeyValues() {
 
         // todo: use getApplicationParameterValues() instead?
-        KualiParameterRule parmRule = configService.getApplicationParameterRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, SubAccountRule.CG_ALLOWED_SUBACCOUNT_TYPE_CODES);
+        KualiParameterRule parmRule = configService.getApplicationParameterRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, SubAccountRule.CG_ALLOWED_SUBACCOUNT_TYPE_CODES);
         // now we need to retrieve the parm values
         String[] parmValues = { "" };
         if (StringUtils.isNotBlank(parmRule.getParameterText())) {

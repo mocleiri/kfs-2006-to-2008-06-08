@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,7 @@ import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -36,17 +35,25 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.PropertyConstants;
 
 /**
  * This is the generic class which contains all the elements on a typical line of accounting elements. These are all the accounting
  * items necessary to create a pending entry to the G/L. All transaction documents will use this business object inherently.
+ * 
+ * 
  */
 public abstract class AccountingLineBase extends PersistableBusinessObjectBase implements Serializable, AccountingLine {
     private static Logger LOG = Logger.getLogger(AccountingLineBase.class);
 
+    //
+    // Note: if you add any new instance fields here, you must add handling for them in the copyFrom and isLike methods
+    //
+
     private String documentNumber;
     private Integer sequenceNumber; // relative to the grouping of acctng lines
     private Integer postingYear;
+    private String budgetYear;
     private KualiDecimal amount;
     private String referenceOriginCode;
     private String referenceNumber;
@@ -59,7 +66,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     private String organizationReferenceId;
     private String debitCreditCode; // should only be set by the Journal Voucher or Auxiliary Voucher document
     private String encumbranceUpdateCode; // should only be set by the Journal Voucher document
-    protected String financialDocumentLineTypeCode;
+    protected String ojbConcreteClass; // attribute needed for OJB polymorphism - do not alter!
     protected String financialDocumentLineDescription;
 
     private String chartOfAccountsCode;
@@ -94,7 +101,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         subAccount = new SubAccount();
         subObjectCode = new SubObjCd();
         project = new ProjectCode();
-        postingYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
+        postingYear = SpringServiceLocator.getDateTimeService().getCurrentFiscalYear();
         objectCode.setUniversityFiscalYear(postingYear);
         // all Financial Transaction Processing accounting lines (those extending from this) should use a balance type
         // of Actual, except for JV which allows a choice and PE which uses "PE"
@@ -518,17 +525,17 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     }
 
     /**
-     * @return Returns the financialDocumentLineTypeCode.
+     * @return Returns the ojbConcreteClass.
      */
-    public String getFinancialDocumentLineTypeCode() {
-        return financialDocumentLineTypeCode;
+    public String getOjbConcreteClass() {
+        return ojbConcreteClass;
     }
 
     /**
-     * @param financialDocumentLineTypeCode The financialDocumentLineTypeCode to set.
+     * @param ojbConcreteClass The ojbConcreteClass to set.
      */
-    public void setFinancialDocumentLineTypeCode(String financialDocumentLineTypeCode) {
-        this.financialDocumentLineTypeCode = financialDocumentLineTypeCode;
+    public void setOjbConcreteClass(String ojbConcreteClass) {
+        this.ojbConcreteClass = ojbConcreteClass;
     }
 
     /**
@@ -575,12 +582,26 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     }
 
     /**
+     * @return Returns the budgetYear.
+     */
+    public String getBudgetYear() {
+        return budgetYear;
+    }
+
+    /**
+     * @param budgetYear The budgetYear to set.
+     */
+    public void setBudgetYear(String budgetYear) {
+        this.budgetYear = budgetYear;
+    }
+
+    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
 
         m.put("sequenceNumber", sequenceNumber);
         m.put("postingYear", postingYear);
@@ -648,7 +669,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
             setOrganizationReferenceId(other.getOrganizationReferenceId());
             setDebitCreditCode(other.getDebitCreditCode());
             setEncumbranceUpdateCode(other.getEncumbranceUpdateCode());
-            setFinancialDocumentLineTypeCode(other.getFinancialDocumentLineTypeCode());
+            setOjbConcreteClass(other.getOjbConcreteClass());
             setFinancialDocumentLineDescription(other.getFinancialDocumentLineDescription());
             setAccountExpiredOverride(other.getAccountExpiredOverride());
             setAccountExpiredOverrideNeeded(other.getAccountExpiredOverrideNeeded());
@@ -788,7 +809,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         Map simpleValues = new HashMap();
 
         simpleValues.put("sequenceNumber", getSequenceNumber());
-        simpleValues.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        simpleValues.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
         simpleValues.put("postingYear", getPostingYear());
         simpleValues.put("amount", getAmount());
         simpleValues.put("referenceOriginCode", getReferenceOriginCode());
@@ -799,7 +820,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         simpleValues.put("organizationReferenceId", getOrganizationReferenceId());
         simpleValues.put("debitCreditCode", getDebitCreditCode());
         simpleValues.put("encumbranceUpdateCode", getEncumbranceUpdateCode());
-        simpleValues.put("financialDocumentLineTypeCode", getFinancialDocumentLineTypeCode());
+        simpleValues.put("ojbConcreteClass", getOjbConcreteClass());
         simpleValues.put("financialDocumentLineDescription", getFinancialDocumentLineDescription());
 
         simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());

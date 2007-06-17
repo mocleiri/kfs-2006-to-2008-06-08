@@ -15,11 +15,11 @@
  */
 package org.kuali.module.budget.rules;
 
+import org.kuali.KeyConstants;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.budget.bo.BudgetConstructionAccountReports;
 import org.kuali.module.chart.service.ChartService;
 
@@ -112,11 +112,11 @@ public class BudgetConstructionAccountReportsRule extends MaintenanceDocumentRul
                if (transactionUserId.equals(chartUserId)||transactionUserId.equals(rootChartUserId)){
                    success = true;
                }else{
-                   putFieldError("chartOfAccountsCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_REPORTING_USER_MUST_BE_CHART_MANAGER_OR_ROOT_MANAGER);
+                   putFieldError("chartOfAccountsCode", KeyConstants.ERROR_DOCUMENT_ACCMAINT_REPORTING_USER_MUST_BE_CHART_MANAGER_OR_ROOT_MANAGER);
                    success = false;
                }
         } else{
-            putFieldError("chartOfAccountsCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_REPORTING_USER_MUST_BE_CHART_MANAGER_OR_ROOT_MANAGER);
+            putFieldError("chartOfAccountsCode", KeyConstants.ERROR_DOCUMENT_ACCMAINT_REPORTING_USER_MUST_BE_CHART_MANAGER_OR_ROOT_MANAGER);
             success = false;
         }
 //        LOG.info("transactionUserId = " + transactionUserId );
@@ -133,6 +133,8 @@ public class BudgetConstructionAccountReportsRule extends MaintenanceDocumentRul
      * 
      * It also calls the BusinessObjectBase.refresh(), which will attempt to load all sub-objects from the DB by their primary keys,
      * if available.
+     * 
+     * @param document - the maintenanceDocument being evaluated
      * 
      */
     public void setupConvenienceObjects() {

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/document/datadictionary/PositionObjectBenefitMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +25,7 @@
         <businessObjectClass>org.kuali.module.labor.bo.PositionObjectBenefit</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -33,7 +35,7 @@
         </authorizations>
 
 		<documentTypeName>KualiPositionObjectBenefitMaintenanceDocument</documentTypeName>
-		<documentTypeCode>LOBN</documentTypeCode>
+		<documentTypeCode>POBN</documentTypeCode>
 
 		<label>Position Object Benefit Maintenance Document</label>
 		<shortLabel>Pos Obj Benefit Maint Doc</shortLabel>
@@ -63,7 +65,7 @@
 	            	<maintainableField name="chartOfAccountsCode" required="true" />
 	            	<maintainableField name="financialObjectCode" required="true"/>
 	            	<maintainableField name="financialObjectBenefitsTypeCode" required="true"/>
-	            	<maintainableField name="versionNumber" />
+	            	<maintainableField name="versionNumber" required="false"/>
 	         	</maintainableItems>
 	        </maintainableSection>
 	    </maintainableSections>

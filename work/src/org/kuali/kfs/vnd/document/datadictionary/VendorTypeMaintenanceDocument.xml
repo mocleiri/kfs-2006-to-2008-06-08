@@ -55,8 +55,6 @@
                     <maintainableField name="vendorContractAllowedIndicator" />
                     <maintainableField name="vendorAddressTypeRequiredCode" required="true" />
                     <maintainableField name="active" />
-                    <maintainableField name="vendorShowReviewIndicator" />
-                    <maintainableField name="vendorReviewText" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

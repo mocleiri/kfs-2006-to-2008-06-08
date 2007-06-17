@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,11 @@ package org.kuali.module.financial.document.authorization;
 import java.util.Iterator;
 import java.util.List;
 
+
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
 import org.kuali.core.exceptions.InactiveDocumentTypeAuthorizationException;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.FiscalYearFunctionControl;
 
 /**
@@ -37,8 +39,8 @@ public class YearEndBudgetAdjustmentDocumentAuthorizer extends BudgetAdjustmentD
      */
     @Override
     public void canInitiate(String documentTypeName, UniversalUser user) {
-        List allowedYears = SpringServiceLocator.getFiscalYearFunctionControlService().getBudgetAdjustmentAllowedYears();
-        Integer previousPostingYear = new Integer(SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear().intValue() - 1);
+        List allowedYears = SpringServiceLocator.getKeyValuesService().getBudgetAdjustmentAllowedYears();
+        Integer previousPostingYear = new Integer(SpringServiceLocator.getDateTimeService().getCurrentFiscalYear().intValue() - 1);
 
         // if previous fiscal year not active, BA document is not allowed to be initiated
         if (allowedYears == null || allowedYears.isEmpty()) {

@@ -1,18 +1,3 @@
-/*
- * Copyright 2006-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.kra.budget.web.struts.action;
 
 import java.util.ArrayList;
@@ -27,8 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.Constants;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.rules.event.UpdateNonpersonnelEventBase;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
@@ -70,7 +55,7 @@ public class BudgetNonpersonnelAction extends BudgetAction {
         // convert the array back to a list and set into the form
         budgetForm.setNewNonpersonnelList(Arrays.asList(newNonpersonnelArray));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward deleteNonpersonnel(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -101,7 +86,7 @@ public class BudgetNonpersonnelAction extends BudgetAction {
             }
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward saveNonpersonnel(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -114,7 +99,7 @@ public class BudgetNonpersonnelAction extends BudgetAction {
         if (!rulePassed) {
             budgetForm.setCurrentTaskNumber(budgetForm.getPreviousTaskNumber());
             budgetForm.setCurrentPeriodNumber(budgetForm.getPreviousPeriodNumber());
-            return mapping.findForward(KFSConstants.MAPPING_BASIC);
+            return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
         // check if any "Check All" checkbox is checked.
@@ -136,7 +121,7 @@ public class BudgetNonpersonnelAction extends BudgetAction {
         Integer nonpersonnelNextSequenceNumber = budgetForm.getBudgetDocument().getNonpersonnelNextSequenceNumber();
         
         // we are only saving nonpersonnel items, so load the doc and set the nonpersonnel items to the proper ones.
-        super.load(mapping, form, request, response);
+        this.load(mapping, form, request, response);
         budgetForm.getBudgetDocument().getBudget().setNonpersonnelItems(nonpersonnelList);
         budgetForm.getBudgetDocument().setNonpersonnelNextSequenceNumber(nonpersonnelNextSequenceNumber);
 
@@ -178,7 +163,7 @@ public class BudgetNonpersonnelAction extends BudgetAction {
         if (!rulePassed) {
             budgetForm.setCurrentTaskNumber(budgetForm.getPreviousTaskNumber());
             budgetForm.setCurrentPeriodNumber(budgetForm.getPreviousPeriodNumber());
-            return mapping.findForward(KFSConstants.MAPPING_BASIC);
+            return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
         // Refresh reference objects so that NonpersonnelObjectCode is populated. This
@@ -190,7 +175,7 @@ public class BudgetNonpersonnelAction extends BudgetAction {
         budgetForm.setBudgetNonpersonnelCopyOverFormHelper(new BudgetNonpersonnelCopyOverFormHelper(budgetForm));
 
         // preparee what category was selected
-        String parameterName = (String) request.getAttribute(KFSConstants.METHOD_TO_CALL_ATTRIBUTE);
+        String parameterName = (String) request.getAttribute(Constants.METHOD_TO_CALL_ATTRIBUTE);
         String lineCode = StringUtils.substringBetween(parameterName, ".code", ".");
         budgetForm.setCurrentNonpersonnelCategoryCode(lineCode);
 

@@ -15,15 +15,19 @@
  */
 package org.kuali.module.purap.web.struts.form;
 
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.purap.bo.PurchasingApItem;
 
 /**
- * This class is the form class for the Purchasing documents.
+ * This class is the form class for the Purchasing documents. This method extends the parent KualiTransactionalDocumentFormBase
+ * class which contains all of the common form methods and form attributes needed by the Purchasing documents.
+ * 
  */
-public class AccountsPayableFormBase extends PurchasingAccountsPayableFormBase {
+public class AccountsPayableFormBase extends KualiTransactionalDocumentFormBase {
     
     private PurchasingApItem newPurchasingItemLine;
-    private Boolean notOtherDeliveryBuilding = true;
+    private Boolean notOtherDelBldg = true;
     
     /**
      * Constructs a RequisitionForm instance and sets up the appropriately casted document. 
@@ -60,11 +64,11 @@ public class AccountsPayableFormBase extends PurchasingAccountsPayableFormBase {
     public PurchasingApItem setupNewPurchasingItemLine() {
         return null;
     }
-    public Boolean getNotOtherDeliveryBuilding() {
-        return notOtherDeliveryBuilding;
+    public Boolean getNotOtherDelBldg() {
+        return notOtherDelBldg;
     }
-    public void setNotOtherDeliveryBuilding(Boolean notOtherDeliveryBuilding) {
-        this.notOtherDeliveryBuilding = notOtherDeliveryBuilding;
+    public void setNotOtherDelBldg(Boolean notOtherDelBldg) {
+        this.notOtherDelBldg = notOtherDelBldg;
     }
        
 }

@@ -15,20 +15,14 @@
  */
 package org.kuali.module.labor.batch;
 
-import org.kuali.kfs.batch.AbstractStep;
+import org.kuali.core.batch.AbstractStep;
 import org.kuali.module.labor.service.LaborPosterService;
 
-/**
- * This class defines the batch step for labor poster
- */
 public class LaborPosterStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborPosterStep.class);
     private LaborPosterService laborPosterService;
 
-    /**
-     * @see org.kuali.kfs.batch.Step#execute()
-     */
-    public boolean execute(String jobName) {
+    public boolean execute() {
         laborPosterService.postMainEntries();
         return true;
     }

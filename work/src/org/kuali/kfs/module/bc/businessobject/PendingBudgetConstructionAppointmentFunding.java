@@ -1,31 +1,35 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -33,9 +37,9 @@ import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class PendingBudgetConstructionAppointmentFunding extends PersistableBusinessObjectBase {
+public class PendingBudgetConstructionAppointmentFunding extends BusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
@@ -51,7 +55,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	private BigDecimal appointmentRequestedCsfTimePercent;
 	private KualiDecimal appointmentTotalIntendedAmount;
 	private BigDecimal appointmentTotalIntendedFteQuantity;
-	private KualiInteger appointmentRequestedAmount;
+	private KualiDecimal appointmentRequestedAmount;
 	private BigDecimal appointmentRequestedTimePercent;
 	private BigDecimal appointmentRequestedFteQuantity;
 	private BigDecimal appointmentRequestedPayRate;
@@ -61,69 +65,23 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	private boolean positionSalaryChangeIndicator;
 
     private ObjectCode financialObject;
+	private BudgetConstructionSalaryFunding budgetConstructionSalaryFunding;
 	private Chart chartOfAccounts;
 	private Account account;
     private SubAccount subAccount;
     private SubObjCd financialSubObject;
-    private BudgetConstructionPosition budgetConstructionPosition;
-    private BudgetConstructionAdministrativePost budgetConstructionAdministrativePost;
-    private BudgetConstructionAccountReports budgetConstructionAccountReports;
-//    private BudgetConstructionCalculatedSalaryFoundationTracker bcnCalculatedSalaryFoundationTracker;
-    private BudgetConstructionIntendedIncumbent budgetConstructionIntendedIncumbent;
-    private BudgetConstructionDuration budgetConstructionDuration;
-    
-    private List bcnCalculatedSalaryFoundationTracker;
-    private List budgetConstructionSalaryFunding;
-    private List budgetConstructionAppointmentFundingReason;
-    
-    private KualiDecimal percentChange;
     
 	/**
 	 * Default constructor.
 	 */
 	public PendingBudgetConstructionAppointmentFunding() {
-        budgetConstructionSalaryFunding = new ArrayList();
-        bcnCalculatedSalaryFoundationTracker = new ArrayList();
 
 	}
-    
-    /**
-     * 
-     * Gets(sets) the percentChange based on the current values of csf and request amounts
-     * Checks to see if a CSF object exists
-     * @return Returns percentChange
-     */
-    public KualiDecimal getPercentChange() {
-        
-        if (bcnCalculatedSalaryFoundationTracker.isEmpty()){
-            percentChange = null;
-        } else {
-            BudgetConstructionCalculatedSalaryFoundationTracker csfLine = (BudgetConstructionCalculatedSalaryFoundationTracker) bcnCalculatedSalaryFoundationTracker.get(0);
-
-            if (csfLine.getCsfAmount() == null || csfLine.getCsfAmount().isZero()){
-                percentChange = null;
-            } else {
-                BigDecimal diffRslt = (appointmentRequestedAmount.bigDecimalValue().setScale(4)).subtract(csfLine.getCsfAmount().bigDecimalValue().setScale(4));
-                BigDecimal divRslt = diffRslt.divide((csfLine.getCsfAmount().bigDecimalValue().setScale(4)),BigDecimal.ROUND_HALF_UP);
-                percentChange = new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2)); 
-            }
-        }    
-        return percentChange;
-    }
 
 	/**
-     * Sets the percentChange attribute value.
-     * @param percentChange The percentChange to set.
-     * @deprecated
-     */
-    public void setPercentChange(KualiDecimal percentChange) {
-        this.percentChange = percentChange;
-    }
-
-    /**
 	 * Gets the universityFiscalYear attribute.
 	 * 
-	 * @return Returns the universityFiscalYear
+	 * @return - Returns the universityFiscalYear
 	 * 
 	 */
 	public Integer getUniversityFiscalYear() { 
@@ -133,7 +91,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the universityFiscalYear attribute.
 	 * 
-	 * @param universityFiscalYear The universityFiscalYear to set.
+	 * @param - universityFiscalYear The universityFiscalYear to set.
 	 * 
 	 */
 	public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -144,7 +102,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the chartOfAccountsCode
+	 * @return - Returns the chartOfAccountsCode
 	 * 
 	 */
 	public String getChartOfAccountsCode() { 
@@ -154,7 +112,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the chartOfAccountsCode attribute.
 	 * 
-	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
+	 * @param - chartOfAccountsCode The chartOfAccountsCode to set.
 	 * 
 	 */
 	public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -165,7 +123,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the accountNumber attribute.
 	 * 
-	 * @return Returns the accountNumber
+	 * @return - Returns the accountNumber
 	 * 
 	 */
 	public String getAccountNumber() { 
@@ -175,7 +133,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the accountNumber attribute.
 	 * 
-	 * @param accountNumber The accountNumber to set.
+	 * @param - accountNumber The accountNumber to set.
 	 * 
 	 */
 	public void setAccountNumber(String accountNumber) {
@@ -186,7 +144,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the subAccountNumber attribute.
 	 * 
-	 * @return Returns the subAccountNumber
+	 * @return - Returns the subAccountNumber
 	 * 
 	 */
 	public String getSubAccountNumber() { 
@@ -196,7 +154,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the subAccountNumber attribute.
 	 * 
-	 * @param subAccountNumber The subAccountNumber to set.
+	 * @param - subAccountNumber The subAccountNumber to set.
 	 * 
 	 */
 	public void setSubAccountNumber(String subAccountNumber) {
@@ -207,7 +165,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the financialObjectCode attribute.
 	 * 
-	 * @return Returns the financialObjectCode
+	 * @return - Returns the financialObjectCode
 	 * 
 	 */
 	public String getFinancialObjectCode() { 
@@ -217,7 +175,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the financialObjectCode attribute.
 	 * 
-	 * @param financialObjectCode The financialObjectCode to set.
+	 * @param - financialObjectCode The financialObjectCode to set.
 	 * 
 	 */
 	public void setFinancialObjectCode(String financialObjectCode) {
@@ -228,7 +186,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the financialSubObjectCode attribute.
 	 * 
-	 * @return Returns the financialSubObjectCode
+	 * @return - Returns the financialSubObjectCode
 	 * 
 	 */
 	public String getFinancialSubObjectCode() { 
@@ -238,7 +196,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the financialSubObjectCode attribute.
 	 * 
-	 * @param financialSubObjectCode The financialSubObjectCode to set.
+	 * @param - financialSubObjectCode The financialSubObjectCode to set.
 	 * 
 	 */
 	public void setFinancialSubObjectCode(String financialSubObjectCode) {
@@ -249,7 +207,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the positionNumber attribute.
 	 * 
-	 * @return Returns the positionNumber
+	 * @return - Returns the positionNumber
 	 * 
 	 */
 	public String getPositionNumber() { 
@@ -259,7 +217,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the positionNumber attribute.
 	 * 
-	 * @param positionNumber The positionNumber to set.
+	 * @param - positionNumber The positionNumber to set.
 	 * 
 	 */
 	public void setPositionNumber(String positionNumber) {
@@ -270,7 +228,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the emplid attribute.
 	 * 
-	 * @return Returns the emplid
+	 * @return - Returns the emplid
 	 * 
 	 */
 	public String getEmplid() { 
@@ -280,7 +238,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the emplid attribute.
 	 * 
-	 * @param emplid The emplid to set.
+	 * @param - emplid The emplid to set.
 	 * 
 	 */
 	public void setEmplid(String emplid) {
@@ -291,7 +249,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentFundingDurationCode attribute.
 	 * 
-	 * @return Returns the appointmentFundingDurationCode
+	 * @return - Returns the appointmentFundingDurationCode
 	 * 
 	 */
 	public String getAppointmentFundingDurationCode() { 
@@ -301,7 +259,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentFundingDurationCode attribute.
 	 * 
-	 * @param appointmentFundingDurationCode The appointmentFundingDurationCode to set.
+	 * @param - appointmentFundingDurationCode The appointmentFundingDurationCode to set.
 	 * 
 	 */
 	public void setAppointmentFundingDurationCode(String appointmentFundingDurationCode) {
@@ -312,7 +270,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentRequestedCsfAmount attribute.
 	 * 
-	 * @return Returns the appointmentRequestedCsfAmount
+	 * @return - Returns the appointmentRequestedCsfAmount
 	 * 
 	 */
 	public KualiDecimal getAppointmentRequestedCsfAmount() { 
@@ -322,7 +280,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentRequestedCsfAmount attribute.
 	 * 
-	 * @param appointmentRequestedCsfAmount The appointmentRequestedCsfAmount to set.
+	 * @param - appointmentRequestedCsfAmount The appointmentRequestedCsfAmount to set.
 	 * 
 	 */
 	public void setAppointmentRequestedCsfAmount(KualiDecimal appointmentRequestedCsfAmount) {
@@ -333,7 +291,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentRequestedCsfFteQuantity attribute.
 	 * 
-	 * @return Returns the appointmentRequestedCsfFteQuantity
+	 * @return - Returns the appointmentRequestedCsfFteQuantity
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedCsfFteQuantity() { 
@@ -343,7 +301,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentRequestedCsfFteQuantity attribute.
 	 * 
-	 * @param appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
+	 * @param - appointmentRequestedCsfFteQuantity The appointmentRequestedCsfFteQuantity to set.
 	 * 
 	 */
 	public void setAppointmentRequestedCsfFteQuantity(BigDecimal appointmentRequestedCsfFteQuantity) {
@@ -354,7 +312,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentRequestedCsfTimePercent attribute.
 	 * 
-	 * @return Returns the appointmentRequestedCsfTimePercent
+	 * @return - Returns the appointmentRequestedCsfTimePercent
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedCsfTimePercent() { 
@@ -364,7 +322,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentRequestedCsfTimePercent attribute.
 	 * 
-	 * @param appointmentRequestedCsfTimePercent The appointmentRequestedCsfTimePercent to set.
+	 * @param - appointmentRequestedCsfTimePercent The appointmentRequestedCsfTimePercent to set.
 	 * 
 	 */
 	public void setAppointmentRequestedCsfTimePercent(BigDecimal appointmentRequestedCsfTimePercent) {
@@ -375,7 +333,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentTotalIntendedAmount attribute.
 	 * 
-	 * @return Returns the appointmentTotalIntendedAmount
+	 * @return - Returns the appointmentTotalIntendedAmount
 	 * 
 	 */
 	public KualiDecimal getAppointmentTotalIntendedAmount() { 
@@ -385,7 +343,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentTotalIntendedAmount attribute.
 	 * 
-	 * @param appointmentTotalIntendedAmount The appointmentTotalIntendedAmount to set.
+	 * @param - appointmentTotalIntendedAmount The appointmentTotalIntendedAmount to set.
 	 * 
 	 */
 	public void setAppointmentTotalIntendedAmount(KualiDecimal appointmentTotalIntendedAmount) {
@@ -396,7 +354,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentTotalIntendedFteQuantity attribute.
 	 * 
-	 * @return Returns the appointmentTotalIntendedFteQuantity
+	 * @return - Returns the appointmentTotalIntendedFteQuantity
 	 * 
 	 */
 	public BigDecimal getAppointmentTotalIntendedFteQuantity() { 
@@ -406,7 +364,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentTotalIntendedFteQuantity attribute.
 	 * 
-	 * @param appointmentTotalIntendedFteQuantity The appointmentTotalIntendedFteQuantity to set.
+	 * @param - appointmentTotalIntendedFteQuantity The appointmentTotalIntendedFteQuantity to set.
 	 * 
 	 */
 	public void setAppointmentTotalIntendedFteQuantity(BigDecimal appointmentTotalIntendedFteQuantity) {
@@ -417,20 +375,20 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentRequestedAmount attribute.
 	 * 
-	 * @return Returns the appointmentRequestedAmount
+	 * @return - Returns the appointmentRequestedAmount
 	 * 
 	 */
-	public KualiInteger getAppointmentRequestedAmount() { 
+	public KualiDecimal getAppointmentRequestedAmount() { 
 		return appointmentRequestedAmount;
 	}
 
 	/**
 	 * Sets the appointmentRequestedAmount attribute.
 	 * 
-	 * @param appointmentRequestedAmount The appointmentRequestedAmount to set.
+	 * @param - appointmentRequestedAmount The appointmentRequestedAmount to set.
 	 * 
 	 */
-	public void setAppointmentRequestedAmount(KualiInteger appointmentRequestedAmount) {
+	public void setAppointmentRequestedAmount(KualiDecimal appointmentRequestedAmount) {
 		this.appointmentRequestedAmount = appointmentRequestedAmount;
 	}
 
@@ -438,7 +396,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentRequestedTimePercent attribute.
 	 * 
-	 * @return Returns the appointmentRequestedTimePercent
+	 * @return - Returns the appointmentRequestedTimePercent
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedTimePercent() { 
@@ -448,7 +406,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentRequestedTimePercent attribute.
 	 * 
-	 * @param appointmentRequestedTimePercent The appointmentRequestedTimePercent to set.
+	 * @param - appointmentRequestedTimePercent The appointmentRequestedTimePercent to set.
 	 * 
 	 */
 	public void setAppointmentRequestedTimePercent(BigDecimal appointmentRequestedTimePercent) {
@@ -459,7 +417,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentRequestedFteQuantity attribute.
 	 * 
-	 * @return Returns the appointmentRequestedFteQuantity
+	 * @return - Returns the appointmentRequestedFteQuantity
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedFteQuantity() { 
@@ -469,7 +427,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentRequestedFteQuantity attribute.
 	 * 
-	 * @param appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
+	 * @param - appointmentRequestedFteQuantity The appointmentRequestedFteQuantity to set.
 	 * 
 	 */
 	public void setAppointmentRequestedFteQuantity(BigDecimal appointmentRequestedFteQuantity) {
@@ -480,7 +438,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentRequestedPayRate attribute.
 	 * 
-	 * @return Returns the appointmentRequestedPayRate
+	 * @return - Returns the appointmentRequestedPayRate
 	 * 
 	 */
 	public BigDecimal getAppointmentRequestedPayRate() { 
@@ -490,7 +448,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentRequestedPayRate attribute.
 	 * 
-	 * @param appointmentRequestedPayRate The appointmentRequestedPayRate to set.
+	 * @param - appointmentRequestedPayRate The appointmentRequestedPayRate to set.
 	 * 
 	 */
 	public void setAppointmentRequestedPayRate(BigDecimal appointmentRequestedPayRate) {
@@ -501,7 +459,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentFundingDeleteIndicator attribute.
 	 * 
-	 * @return Returns the appointmentFundingDeleteIndicator
+	 * @return - Returns the appointmentFundingDeleteIndicator
 	 * 
 	 */
 	public boolean isAppointmentFundingDeleteIndicator() { 
@@ -512,7 +470,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentFundingDeleteIndicator attribute.
 	 * 
-	 * @param appointmentFundingDeleteIndicator The appointmentFundingDeleteIndicator to set.
+	 * @param - appointmentFundingDeleteIndicator The appointmentFundingDeleteIndicator to set.
 	 * 
 	 */
 	public void setAppointmentFundingDeleteIndicator(boolean appointmentFundingDeleteIndicator) {
@@ -523,7 +481,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the appointmentFundingMonth attribute.
 	 * 
-	 * @return Returns the appointmentFundingMonth
+	 * @return - Returns the appointmentFundingMonth
 	 * 
 	 */
 	public Integer getAppointmentFundingMonth() { 
@@ -533,7 +491,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the appointmentFundingMonth attribute.
 	 * 
-	 * @param appointmentFundingMonth The appointmentFundingMonth to set.
+	 * @param - appointmentFundingMonth The appointmentFundingMonth to set.
 	 * 
 	 */
 	public void setAppointmentFundingMonth(Integer appointmentFundingMonth) {
@@ -544,7 +502,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the positionObjectChangeIndicator attribute.
 	 * 
-	 * @return Returns the positionObjectChangeIndicator
+	 * @return - Returns the positionObjectChangeIndicator
 	 * 
 	 */
 	public boolean isPositionObjectChangeIndicator() { 
@@ -555,7 +513,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the positionObjectChangeIndicator attribute.
 	 * 
-	 * @param positionObjectChangeIndicator The positionObjectChangeIndicator to set.
+	 * @param - positionObjectChangeIndicator The positionObjectChangeIndicator to set.
 	 * 
 	 */
 	public void setPositionObjectChangeIndicator(boolean positionObjectChangeIndicator) {
@@ -566,7 +524,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the positionSalaryChangeIndicator attribute.
 	 * 
-	 * @return Returns the positionSalaryChangeIndicator
+	 * @return - Returns the positionSalaryChangeIndicator
 	 * 
 	 */
 	public boolean isPositionSalaryChangeIndicator() { 
@@ -577,7 +535,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the positionSalaryChangeIndicator attribute.
 	 * 
-	 * @param positionSalaryChangeIndicator The positionSalaryChangeIndicator to set.
+	 * @param - positionSalaryChangeIndicator The positionSalaryChangeIndicator to set.
 	 * 
 	 */
 	public void setPositionSalaryChangeIndicator(boolean positionSalaryChangeIndicator) {
@@ -588,7 +546,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the financialObject attribute.
 	 * 
-	 * @return Returns the financialObject
+	 * @return - Returns the financialObject
 	 * 
 	 */
 	public ObjectCode getFinancialObject() { 
@@ -598,7 +556,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the financialObject attribute.
 	 * 
-	 * @param financialObject The financialObject to set.
+	 * @param - financialObject The financialObject to set.
 	 * @deprecated
 	 */
 	public void setFinancialObject(ObjectCode financialObject) {
@@ -606,9 +564,29 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	}
 
 	/**
+	 * Gets the budgetConstructionSalaryFunding attribute.
+	 * 
+	 * @return - Returns the budgetConstructionSalaryFunding
+	 * 
+	 */
+	public BudgetConstructionSalaryFunding getBudgetConstructionSalaryFunding() { 
+		return budgetConstructionSalaryFunding;
+	}
+
+	/**
+	 * Sets the budgetConstructionSalaryFunding attribute.
+	 * 
+	 * @param - budgetConstructionSalaryFunding The budgetConstructionSalaryFunding to set.
+	 * @deprecated
+	 */
+	public void setBudgetConstructionSalaryFunding(BudgetConstructionSalaryFunding budgetConstructionSalaryFunding) {
+		this.budgetConstructionSalaryFunding = budgetConstructionSalaryFunding;
+	}
+
+	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
-	 * @return Returns the chartOfAccounts
+	 * @return - Returns the chartOfAccounts
 	 * 
 	 */
 	public Chart getChartOfAccounts() { 
@@ -618,7 +596,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the chartOfAccounts attribute.
 	 * 
-	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @param - chartOfAccounts The chartOfAccounts to set.
 	 * @deprecated
 	 */
 	public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -628,7 +606,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Gets the account attribute.
 	 * 
-	 * @return Returns the account
+	 * @return - Returns the account
 	 * 
 	 */
 	public Account getAccount() { 
@@ -638,7 +616,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	/**
 	 * Sets the account attribute.
 	 * 
-	 * @param account The account to set.
+	 * @param - account The account to set.
 	 * @deprecated
 	 */
 	public void setAccount(Account account) {
@@ -679,171 +657,11 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
         this.subAccount = subAccount;
     }
     
-    /**
-     * Gets the budgetConstructionPosition attribute.
-     * 
-     * @return Returns the budgetConstructionPosition
-     * 
-     */
-    public BudgetConstructionPosition getBudgetConstructionPosition() { 
-        return budgetConstructionPosition;
-    }
-
-    /**
-     * Sets the budgetConstructionPosition attribute.
-     * 
-     * @param budgetConstructionPosition The budgetConstructionPosition to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionPosition(BudgetConstructionPosition budgetConstructionPosition) {
-        this.budgetConstructionPosition = budgetConstructionPosition;
-    }
-
-    /**
-     * Gets the budgetConstructionSalaryFunding list.
-     * 
-     * @return Returns the budgetConstructionSalaryFunding list
-     * 
-     */
-    public List getBudgetConstructionSalaryFunding() { 
-        return budgetConstructionSalaryFunding;
-    }
-
-    /**
-     * Sets the budgetConstructionSalaryFunding list.
-     * 
-     * @param budgetConstructionSalaryFunding The budgetConstructionSalaryFunding list to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionSalaryFunding(List budgetConstructionSalaryFunding) {
-        this.budgetConstructionSalaryFunding = budgetConstructionSalaryFunding;
-    }
-
-    /**
-     * Gets the budgetConstructionAppointmentFundingReason attribute. 
-     * @return Returns the budgetConstructionAppointmentFundingReason.
-     */
-    public List getBudgetConstructionAppointmentFundingReason() {
-        return budgetConstructionAppointmentFundingReason;
-    }
-
-    /**
-     * Sets the budgetConstructionAppointmentFundingReason attribute value.
-     * @param budgetConstructionAppointmentFundingReason The budgetConstructionAppointmentFundingReason to set.
-     */
-    public void setBudgetConstructionAppointmentFundingReason(List budgetConstructionAppointmentFundingReason) {
-        this.budgetConstructionAppointmentFundingReason = budgetConstructionAppointmentFundingReason;
-    }
-
-    /**
-     * Gets the budgetConstructionAdministrativePost attribute. 
-     * @return Returns the budgetConstructionAdministrativePost.
-     */
-    public BudgetConstructionAdministrativePost getBudgetConstructionAdministrativePost() {
-        return budgetConstructionAdministrativePost;
-    }
-
-    /**
-     * Sets the budgetConstructionAdministrativePost attribute value.
-     * @param budgetConstructionAdministrativePost The budgetConstructionAdministrativePost to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionAdministrativePost(BudgetConstructionAdministrativePost budgetConstructionAdministrativePost) {
-        this.budgetConstructionAdministrativePost = budgetConstructionAdministrativePost;
-    }    
-
-    /**
-     * Gets the budgetConstructionAccountReports attribute. 
-     * @return Returns the budgetConstructionAccountReports.
-     */
-    public BudgetConstructionAccountReports getBudgetConstructionAccountReports() {
-        return budgetConstructionAccountReports;
-    }
-
-    /**
-     * Sets the budgetConstructionAccountReports attribute value.
-     * @param budgetConstructionAccountReports The budgetConstructionAccountReports to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionAccountReports(BudgetConstructionAccountReports budgetConstructionAccountReports) {
-        this.budgetConstructionAccountReports = budgetConstructionAccountReports;
-    }    
-    
-    /**
-     * Gets the budgetConstructionDuration attribute. 
-     * @return Returns the budgetConstructionDuration.
-     */
-    public BudgetConstructionDuration getBudgetConstructionDuration() {
-        return budgetConstructionDuration;
-    }
-
-    /**
-     * Sets the budgetConstructionDuration attribute value.
-     * @param budgetConstructionDuration The budgetConstructionDuration to set.
-     */
-    public void setBudgetConstructionDuration(BudgetConstructionDuration budgetConstructionDuration) {
-        this.budgetConstructionDuration = budgetConstructionDuration;
-    }
-
-    /**
-     * Gets the budgetConstructionIntendedIncumbent attribute. 
-     * @return Returns the budgetConstructionIntendedIncumbent.
-     */
-    public BudgetConstructionIntendedIncumbent getBudgetConstructionIntendedIncumbent() {
-        return budgetConstructionIntendedIncumbent;
-    }
-
-    /**
-     * Sets the budgetConstructionIntendedIncumbent attribute value.
-     * @param budgetConstructionIntendedIncumbent The budgetConstructionIntendedIncumbent to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionIntendedIncumbent(BudgetConstructionIntendedIncumbent budgetConstructionIntendedIncumbent) {
-        this.budgetConstructionIntendedIncumbent = budgetConstructionIntendedIncumbent;
-    }
-
-    /**
-     * Gets the bcnCalculatedSalaryFoundationTracker attribute. 
-     * @return Returns the bcnCalculatedSalaryFoundationTracker.
-     */
-    public List<BudgetConstructionCalculatedSalaryFoundationTracker> getBcnCalculatedSalaryFoundationTracker() {
-        return bcnCalculatedSalaryFoundationTracker;
-    }
-
-    /**
-     * Sets the bcnCalculatedSalaryFoundationTracker attribute value.
-     * @param bcnCalculatedSalaryFoundationTracker The bcnCalculatedSalaryFoundationTracker to set.
-     * @deprecated
-     */
-    public void setBcnCalculatedSalaryFoundationTracker(List<BudgetConstructionCalculatedSalaryFoundationTracker> bcnCalculatedSalaryFoundationTracker) {
-        this.bcnCalculatedSalaryFoundationTracker = bcnCalculatedSalaryFoundationTracker;
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-        simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());
-        simpleValues.put("accountNumber", getAccountNumber());
-        simpleValues.put("subAccountNumber", getSubAccountNumber());
-        simpleValues.put("financialObjectCode", getFinancialObjectCode());
-        simpleValues.put("financialSubObjectCode", getFinancialSubObjectCode());
-        simpleValues.put("positionNumber", getPositionNumber());
-        simpleValues.put("emplid", getEmplid());
-
-        return simpleValues;
-    }
-  
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }
@@ -854,7 +672,6 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
         m.put("financialSubObjectCode", this.financialSubObjectCode);
         m.put("positionNumber", this.positionNumber);
         m.put("emplid", this.emplid);
-        return m;
+	    return m;
     }
-    
 }

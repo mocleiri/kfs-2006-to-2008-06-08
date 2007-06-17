@@ -76,12 +76,12 @@ public class LedgerBalanceLookupableHelperServiceTest extends KualiTestBase {
 
         LedgerBalance ledgerBalance = new LedgerBalance();
         ledgerBalance.setUniversityFiscalYear(2004);
-        ledgerBalance.setEmplid("0000001265");
+        ledgerBalance.setEmplid("1000000005");
         ledgerBalance.setBalanceTypeCode("AC");
         ledgerBalance.setChartOfAccountsCode("BL");
 
         // test the search results before the specified entry is inserted into the database
-        Map fieldValues = buildFieldValues(ledgerBalance, this.getLookupFields(false));       
+        Map fieldValues = buildFieldValues(ledgerBalance, this.getLookupFields(false));
         List searchResults = lookupableHelperService.getSearchResults(fieldValues);
 
         if (searchResults != null) {

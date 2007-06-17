@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.bo.user.KualiGroup;
 
@@ -30,11 +32,9 @@ import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.document.authorization.TransactionalDocumentActionFlags;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 import org.kuali.workflow.KualiWorkflowUtils.RouteLevelNames;
 
@@ -117,7 +117,7 @@ public class DisbursementVoucherDocumentAuthorizer extends AccountingDocumentAut
      */
     private boolean isUserInTaxGroup( UniversalUser user ) {
         if ( taxGroupName == null ) {
-            taxGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_TAX_WORKGROUP );
+            taxGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_TAX_WORKGROUP );
         }
         return user.isMember( taxGroupName );
     }
@@ -129,7 +129,7 @@ public class DisbursementVoucherDocumentAuthorizer extends AccountingDocumentAut
      */
     private boolean isUserInTravelGroup( UniversalUser user ) {
         if ( travelGroupName == null ) {
-            travelGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_TRAVEL_WORKGROUP );
+            travelGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_TRAVEL_WORKGROUP );
         }
         return user.isMember( travelGroupName );
     }
@@ -141,7 +141,7 @@ public class DisbursementVoucherDocumentAuthorizer extends AccountingDocumentAut
      */
     private boolean isUserInFRNGroup( UniversalUser user ) {
         if ( frnGroupName == null ) {
-            frnGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_FOREIGNDRAFT_WORKGROUP );
+            frnGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_FOREIGNDRAFT_WORKGROUP );
         }
         return user.isMember( frnGroupName );
     }
@@ -153,7 +153,7 @@ public class DisbursementVoucherDocumentAuthorizer extends AccountingDocumentAut
      */
     private boolean isUserInWireGroup( UniversalUser user ) {
         if ( wireTransferGroupName == null ) {
-            wireTransferGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_WIRETRANSFER_WORKGROUP );
+            wireTransferGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_WIRETRANSFER_WORKGROUP );
         }
         return user.isMember( wireTransferGroupName );
     }
@@ -165,7 +165,7 @@ public class DisbursementVoucherDocumentAuthorizer extends AccountingDocumentAut
      */
     private boolean isUserInDvAdminGroup( UniversalUser user ) {
         if ( adminGroupName == null ) {
-            adminGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_ADMIN_WORKGROUP );
+            adminGroupName = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( Constants.FinancialApcParms.GROUP_DV_DOCUMENT, Constants.FinancialApcParms.DV_ADMIN_WORKGROUP );
         }
         return user.isMember( adminGroupName );
     }
@@ -187,12 +187,12 @@ public class DisbursementVoucherDocumentAuthorizer extends AccountingDocumentAut
             // retrieve allow object code edit indicator
             boolean allowObjectEdits = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.ALLOW_OBJECT_CODE_EDITS);
             if (allowObjectEdits) {
-                editableFields.put(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, "TRUE");
+                editableFields.put(PropertyConstants.FINANCIAL_OBJECT_CODE, "TRUE");
             }
         }
 
         if ( isUserInTaxGroup( user ) || isUserInFRNGroup( user ) || isUserInWireGroup( user ) || isUserInTravelGroup( user ) ) {
-            editableFields.put(KFSPropertyConstants.AMOUNT, "TRUE");
+            editableFields.put(PropertyConstants.AMOUNT, "TRUE");
         }
 
         return editableFields;

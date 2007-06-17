@@ -1,35 +1,44 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class RestrictedMaterial extends PersistableBusinessObjectBase {
+public class RestrictedMaterial extends BusinessObjectBase {
 
 	private String restrictedMaterialCode;
 	private String restrictedMaterialDescription;
 	private String restrictedMaterialDefaultDescription;
 	private String restrictedMaterialWorkgroupName;
-	private boolean active;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
 	/**
 	 * Default constructor.
@@ -41,7 +50,7 @@ public class RestrictedMaterial extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the restrictedMaterialCode attribute.
 	 * 
-	 * @return Returns the restrictedMaterialCode
+	 * @return - Returns the restrictedMaterialCode
 	 * 
 	 */
 	public String getRestrictedMaterialCode() { 
@@ -51,7 +60,7 @@ public class RestrictedMaterial extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the restrictedMaterialCode attribute.
 	 * 
-	 * @param restrictedMaterialCode The restrictedMaterialCode to set.
+	 * @param - restrictedMaterialCode The restrictedMaterialCode to set.
 	 * 
 	 */
 	public void setRestrictedMaterialCode(String restrictedMaterialCode) {
@@ -62,7 +71,7 @@ public class RestrictedMaterial extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the restrictedMaterialDescription attribute.
 	 * 
-	 * @return Returns the restrictedMaterialDescription
+	 * @return - Returns the restrictedMaterialDescription
 	 * 
 	 */
 	public String getRestrictedMaterialDescription() { 
@@ -72,7 +81,7 @@ public class RestrictedMaterial extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the restrictedMaterialDescription attribute.
 	 * 
-	 * @param restrictedMaterialDescription The restrictedMaterialDescription to set.
+	 * @param - restrictedMaterialDescription The restrictedMaterialDescription to set.
 	 * 
 	 */
 	public void setRestrictedMaterialDescription(String restrictedMaterialDescription) {
@@ -83,7 +92,7 @@ public class RestrictedMaterial extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the restrictedMaterialDefaultDescription attribute.
 	 * 
-	 * @return Returns the restrictedMaterialDefaultDescription
+	 * @return - Returns the restrictedMaterialDefaultDescription
 	 * 
 	 */
 	public String getRestrictedMaterialDefaultDescription() { 
@@ -93,7 +102,7 @@ public class RestrictedMaterial extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the restrictedMaterialDefaultDescription attribute.
 	 * 
-	 * @param restrictedMaterialDefaultDescription The restrictedMaterialDefaultDescription to set.
+	 * @param - restrictedMaterialDefaultDescription The restrictedMaterialDefaultDescription to set.
 	 * 
 	 */
 	public void setRestrictedMaterialDefaultDescription(String restrictedMaterialDefaultDescription) {
@@ -104,7 +113,7 @@ public class RestrictedMaterial extends PersistableBusinessObjectBase {
 	/**
 	 * Gets the restrictedMaterialWorkgroupName attribute.
 	 * 
-	 * @return Returns the restrictedMaterialWorkgroupName
+	 * @return - Returns the restrictedMaterialWorkgroupName
 	 * 
 	 */
 	public String getRestrictedMaterialWorkgroupName() { 
@@ -114,31 +123,36 @@ public class RestrictedMaterial extends PersistableBusinessObjectBase {
 	/**
 	 * Sets the restrictedMaterialWorkgroupName attribute.
 	 * 
-	 * @param restrictedMaterialWorkgroupName The restrictedMaterialWorkgroupName to set.
+	 * @param - restrictedMaterialWorkgroupName The restrictedMaterialWorkgroupName to set.
 	 * 
 	 */
 	public void setRestrictedMaterialWorkgroupName(String restrictedMaterialWorkgroupName) {
 		this.restrictedMaterialWorkgroupName = restrictedMaterialWorkgroupName;
 	}
 
+
 	/**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return - Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    /**
-     * Sets the active attribute value.
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param - dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    /**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    

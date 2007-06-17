@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.kfs.bo.TargetAccountingLine">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
             <attributeReference name="balanceTypeCode" sourceClassName="org.kuali.module.chart.bo.codes.BalanceTyp" sourceAttributeName="code">
@@ -249,6 +249,26 @@
                 <required>false</required>
             </attributeReference>
 
+            <attribute name="budgetYear" forceUppercase="true">
+                <label>Budget Year</label>
+                <shortLabel>Budget Year</shortLabel>
+
+                <maxLength>4</maxLength>
+
+                <validationPattern>
+                    <numeric />
+                </validationPattern>
+                <required>false</required>
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The Budget Year associated with the Account Line. Its calendar span is defined by the implementing institution.</description>
+            </attribute>
+
             <attribute name="accountExpiredOverride">
                 <label>Account Expired Override</label>
                 <shortLabel>Expired Override</shortLabel>
@@ -298,5 +318,17 @@
             </attribute>
         </attributes>
 
+        <collections>
+            <collection name="extendedAttributeValues">
+                <label>Extended Attribute Values</label>
+                <shortLabel>Values</shortLabel>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
+            </collection>
+        </collections>
     </businessObject>
 </dictionaryEntry>

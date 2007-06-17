@@ -9,7 +9,6 @@ package org.kuali.module.labor.util;
 
 import java.util.List;
 
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.batch.JobDescriptor;
 import org.kuali.kfs.batch.Step;
 import org.kuali.kfs.util.SpringServiceLocator;
@@ -37,7 +36,7 @@ public class LaborBatchRunner {
             long start = System.currentTimeMillis();
             System.out.println(stepName + " started at " + start);
 
-            boolean isSuccess = step.execute(getClass().getName());
+            boolean isSuccess = step.execute();
 
             long elapsedTime = System.currentTimeMillis() - start;
             System.out.println("Execution Time = " + elapsedTime + "(" + isSuccess + ")");

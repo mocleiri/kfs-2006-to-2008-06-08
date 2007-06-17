@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/options/PurchaseOrderVendorChoiceValuesFinder.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +22,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.kuali.Constants;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
-import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.uidraw.KeyLabelPair;
 import org.kuali.module.purap.bo.PurchaseOrderVendorChoice;
 
 /**
@@ -41,7 +43,7 @@ public class PurchaseOrderVendorChoiceValuesFinder extends KeyValuesBase {
         KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         Collection codes = boService.findAll(PurchaseOrderVendorChoice.class);
         List labels = new ArrayList();
-        labels.add(new KeyLabelPair(KFSConstants.EMPTY_STRING, KFSConstants.EMPTY_STRING));
+        labels.add(new KeyLabelPair(Constants.EMPTY_STRING, Constants.EMPTY_STRING));
         for (Iterator iter = codes.iterator(); iter.hasNext();) {
             PurchaseOrderVendorChoice povc = (PurchaseOrderVendorChoice) iter.next();
             labels.add(new KeyLabelPair(povc.getPurchaseOrderVendorChoiceCode(), povc.getPurchaseOrderVendorChoiceDescription()));

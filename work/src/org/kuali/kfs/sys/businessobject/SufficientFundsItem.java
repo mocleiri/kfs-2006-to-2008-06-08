@@ -1,30 +1,34 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.util;
 
 import java.io.Serializable;
 
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectType;
-import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.bo.Transaction;
 
 public class SufficientFundsItem implements Serializable, Comparable {
@@ -35,15 +39,6 @@ public class SufficientFundsItem implements Serializable, Comparable {
     private String sufficientFundsObjectCode;
     private KualiDecimal amount;
     private String documentTypeCode;
-    private BalanceTyp balanceTyp;
-
-    public BalanceTyp getBalanceTyp() {
-        return balanceTyp;
-    }
-
-    public void setBalanceTyp(BalanceTyp balanceTyp) {
-        this.balanceTyp = balanceTyp;
-    }
 
     public SufficientFundsItem() {
         amount = KualiDecimal.ZERO;
@@ -57,35 +52,12 @@ public class SufficientFundsItem implements Serializable, Comparable {
         financialObject = tran.getFinancialObject();
         financialObjectType = tran.getObjectType();
         this.sufficientFundsObjectCode = sufficientFundsObjectCode;
-        this.balanceTyp = tran.getBalanceType();
 
         add(tran);
     }
 
-    public SufficientFundsItem(Options universityFiscalYear, AccountingLine accountLine, String sufficientFundsObjectCode) {
-
-        amount = KualiDecimal.ZERO;
-        year = universityFiscalYear;
-        account = accountLine.getAccount();
-        financialObject = accountLine.getObjectCode();
-        financialObjectType = accountLine.getObjectType();
-        this.sufficientFundsObjectCode = sufficientFundsObjectCode;
-        this.balanceTyp = accountLine.getBalanceTyp();
-
-        add(accountLine);
-    }
-
-    public void add(AccountingLine a) {
-        if (a.getObjectType().getFinObjectTypeDebitcreditCd().equals(a.getDebitCreditCode()) || KFSConstants.EMPTY_STRING.equals(a.getDebitCreditCode())) {
-            amount = amount.add(a.getAmount());
-        }
-        else {
-            amount = amount.subtract(a.getAmount());
-        }
-    }
-
     public void add(Transaction t) {
-        if (t.getObjectType().getFinObjectTypeDebitcreditCd().equals(t.getTransactionDebitCreditCode()) || KFSConstants.EMPTY_STRING.equals(t.getTransactionDebitCreditCode())) {
+        if (t.getObjectType().getFinObjectTypeDebitcreditCd().equals(t.getTransactionDebitCreditCode())) {
             amount = amount.add(t.getTransactionLedgerEntryAmount());
         }
         else {
@@ -99,7 +71,7 @@ public class SufficientFundsItem implements Serializable, Comparable {
     }
 
     public String getKey() {
-        return year.getUniversityFiscalYear() + account.getChartOfAccountsCode() + account.getAccountNumber() + financialObjectType.getCode() + sufficientFundsObjectCode + balanceTyp.getCode();
+        return year.getUniversityFiscalYear() + account.getChartOfAccountsCode() + account.getAccountNumber() + financialObjectType.getCode() + sufficientFundsObjectCode;
     }
 
     public String getDocumentTypeCode() {

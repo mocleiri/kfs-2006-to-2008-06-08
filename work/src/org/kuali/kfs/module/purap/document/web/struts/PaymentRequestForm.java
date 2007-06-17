@@ -15,34 +15,23 @@
  */
 package org.kuali.module.purap.web.struts.form;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.util.TypedArrayList;
-import org.kuali.core.web.ui.ExtraButton;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.purap.PurapAuthorizationConstants;
-import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.bo.PaymentRequestAccount;
-import org.kuali.module.purap.bo.PurchaseOrderAccount;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 
 /**
- * This class is the form class for the PaymentRequest document.
+ * This class is the form class for the PaymentRequest document. This method extends the parent KualiTransactionalDocumentFormBase
+ * class which contains all of the common form methods and form attributes needed by the PaymentRequest document.
+ * 
  */
 public class PaymentRequestForm extends AccountsPayableFormBase {
 
     private PurchaseOrderVendorStipulation newPurchaseOrderVendorStipulationLine;
-   // private boolean initialized = false;
 
     /**
      * Constructs a PurchaseOrderForm instance and sets up the appropriately casted document. 
@@ -73,9 +62,9 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
      */
     public KeyLabelPair getAdditionalDocInfo1() {
         if (ObjectUtils.isNotNull(this.getPaymentRequestDocument().getPurapDocumentIdentifier())) {
-            return new KeyLabelPair("DataDictionary.KualiPaymentRequestDocument.attributes.purapDocumentIdentifier", ((PaymentRequestDocument)this.getDocument()).getPurapDocumentIdentifier().toString());
+            return new KeyLabelPair("DataDictionary.KualiPaymentRequestDocument.attributes.identifier", ((PaymentRequestDocument)this.getDocument()).getPurapDocumentIdentifier().toString());
         } else {
-            return new KeyLabelPair("DataDictionary.KualiPaymentRequestDocument.attributes.purapDocumentIdentifier", "Not Available");
+            return new KeyLabelPair("DataDictionary.KualiPaymentRequestDocument.attributes.identifier", "Not Available");
         }
     }
 
@@ -97,7 +86,7 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
     public PurchasingApItem setupNewPurchasingItemLine() {
         return new PurchaseOrderItem();
     }
-
+    
     public PurchaseOrderVendorStipulation getAndResetNewPurchaseOrderVendorStipulationLine() {
         PurchaseOrderVendorStipulation aPurchaseOrderVendorStipulationLine = getNewPurchaseOrderVendorStipulationLine();
         setNewPurchaseOrderVendorStipulationLine(new PurchaseOrderVendorStipulation());
@@ -117,90 +106,5 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
         this.newPurchaseOrderVendorStipulationLine = newPurchaseOrderVendorStipulationLine;
     }
     
-    /**
-     * Gets the initialized attribute. 
-     * @return Returns the initialized.
-     */
-   /*
-    public boolean isInitialized() {
-        return initialized;
-    }
-*/
-   
-    /**
-     * Gets the PaymentRequestInitiated attribute for JSP 
-     * @return Returns the DisplayInitiateTab.
-     */
-  
-    public boolean isPaymentRequestInitiated() { 
-        return StringUtils.equals(this.getPaymentRequestDocument().getStatusCode(),PurapConstants.PaymentRequestStatuses.INITIATE);
-      } 
-
-    /**
-     * This method will generate extra buttons as needed by the init tab and the main preq form.
-     *  
-     */
-    public void showButtons() {
-        
-        PaymentRequestDocument preqDoc = this.getPaymentRequestDocument();        
-
-        //clear out the extra buttons array
-        this.getExtraButtons().clear();
-        
-        if(this.getEditingMode().containsKey(PurapAuthorizationConstants.PaymentRequestEditMode.DISPLAY_INIT_TAB)){
-            if( this.getEditingMode().get(PurapAuthorizationConstants.PaymentRequestEditMode.DISPLAY_INIT_TAB).equals("TRUE") ){
-
-                addExtraButton("methodToCall.continuePREQ", "${kr.externalizable.images.url}buttonsmall_continue.gif", "Continue");                
-                addExtraButton("methodToCall.clearInitFields", "${kr.externalizable.images.url}buttonsmall_clear.gif", "Clear");
-                
-                // Only for debuggin and test:
-                String stat = preqDoc.getStatusCode();                
-            }else{
-                       
-                //if preq holdable and user can put on hold, show button
-                if( SpringServiceLocator.getPaymentRequestService().isPaymentRequestHoldable(preqDoc) ){
-                    if( SpringServiceLocator.getPaymentRequestService().canHoldPaymentRequest(preqDoc, GlobalVariables.getUserSession().getUniversalUser() ) ){
-                        addExtraButton("methodToCall.addHoldOnPayment", "${kr.externalizable.images.url}buttonsmall_paymenthold.gif", "Hold");                     
-                    }
-                }else{                    
-                    //if person can remove hold
-                    if( SpringServiceLocator.getPaymentRequestService().canRemoveHoldPaymentRequest(preqDoc, GlobalVariables.getUserSession().getUniversalUser() )){
-                        addExtraButton("methodToCall.removeHoldFromPayment", "${kr.externalizable.images.url}buttonsmall_removehold.gif", "Remove");
-                    }
-                }    
-
-                //if preq can have a cancel request and user can submit request cancel, show button
-                if( SpringServiceLocator.getPaymentRequestService().canRequestCancelOnPaymentRequest(preqDoc) ){
-                    if( SpringServiceLocator.getPaymentRequestService().canUserRequestCancelOnPaymentRequest(preqDoc, GlobalVariables.getUserSession().getUniversalUser() ) ){
-                        addExtraButton("methodToCall.requestCancelOnPayment", "${kr.externalizable.images.url}buttonsmall_cancel.gif", "Cancel");                     
-                    }
-                }else{                    
-                    //if person can remove request cancel
-                    if( SpringServiceLocator.getPaymentRequestService().canUserRemoveRequestCancelOnPaymentRequest(preqDoc, GlobalVariables.getUserSession().getUniversalUser() )){
-                        addExtraButton("methodToCall.removeCancelRequestFromPayment", "${kr.externalizable.images.url}buttonsmall_removehold.gif", "Remove");
-                    }
-                }    
-            }
-        }
-    }
     
-    /**
-     * This is a utility method to add a new button to the extra buttons
-     * collection.
-     *   
-     * @param property
-     * @param source
-     * @param altText
-     */ 
-    private void addExtraButton(String property, String source, String altText){
-        
-        ExtraButton newButton = new ExtraButton();
-        
-        newButton.setExtraButtonProperty(property);
-        newButton.setExtraButtonSource(source);
-        newButton.setExtraButtonAltText(altText);
-        
-        this.getExtraButtons().add(newButton);
-    }
- 
 }

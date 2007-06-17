@@ -30,7 +30,7 @@ public class PostDataLoadEncryptionStep extends AbstractDatabaseImportExportStep
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PostDataLoadEncryptionStep.class);
     private String attributesToEncryptProperties;
 
-    public boolean execute(String jobName) {
+    public boolean execute() {
         Properties attributesToEncryptProperties = new Properties();
         try {
             attributesToEncryptProperties.load(new FileSystemResource(this.attributesToEncryptProperties).getInputStream());

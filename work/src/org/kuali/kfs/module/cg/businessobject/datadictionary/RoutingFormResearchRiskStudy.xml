@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/RoutingFormResearchRiskStudy.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,14 +21,14 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.routingform.bo.RoutingFormResearchRiskStudy">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Routing Form Research Risk Study Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="routingFormResearchRiskStudySequenceNumber" />
-                <field attributeName="researchRiskStudyApprovalStatusCode" />
+                <field attributeName="researchRiskApprovalPendingIndicator" />
                 <field attributeName="researchRiskExemptionNumber" />
                 <field attributeName="researchRiskStudyApprovalDate" />
                 <field attributeName="researchRiskStudyName" />
@@ -51,7 +53,7 @@
 
             <lookupFields>
                 <lookupField attributeName="routingFormResearchRiskStudySequenceNumber" required="false" />
-                <lookupField attributeName="researchRiskStudyApprovalStatusCode" required="false" />
+                <lookupField attributeName="researchRiskApprovalPendingIndicator" required="false" />
                 <lookupField attributeName="researchRiskExemptionNumber" required="false" />
                 <lookupField attributeName="researchRiskStudyApprovalDate" required="false" />
                 <lookupField attributeName="researchRiskStudyName" required="false" />
@@ -63,7 +65,7 @@
 
             <resultFields>
                 <field attributeName="routingFormResearchRiskStudySequenceNumber" />
-                <field attributeName="researchRiskStudyApprovalStatusCode" />
+                <field attributeName="researchRiskApprovalPendingIndicator" />
                 <field attributeName="researchRiskExemptionNumber" />
                 <field attributeName="researchRiskStudyApprovalDate" />
                 <field attributeName="researchRiskStudyName" />
@@ -91,7 +93,7 @@
                 <description>routingFormResearchRiskStudySequenceNumber description...</description>
 			</attribute>
 
-            <attribute name="researchRiskStudyApprovalStatusCode" forceUppercase="true">
+            <attribute name="researchRiskApprovalPendingIndicator" forceUppercase="true">
                 <label>Approval Status</label>
                 <shortLabel>Indicator</shortLabel>
 
@@ -101,8 +103,8 @@
                     <select valuesFinderClass="org.kuali.module.kra.routingform.lookup.keyvalues.RoutingFormApprovalStatusValuesFinder" />
                 </control>
 
-                <summary>researchRiskStudyApprovalStatusCode</summary>
-                <description>researchRiskStudyApprovalStatusCode description...</description>
+                <summary>researchRiskApprovalPendingIndicator</summary>
+                <description>researchRiskApprovalPendingIndicator description...</description>
 			</attribute>
 
             <attribute name="researchRiskExemptionNumber" forceUppercase="true">
@@ -133,21 +135,6 @@
 
                 <summary>researchRiskStudyApprovalDate</summary>
                 <description>researchRiskStudyApprovalDate description...</description>
-			</attribute>
-			
-			<attribute name="researchRiskStudyExpirationDate" forceUppercase="true">
-                <label>Expiration Date</label>
-                <shortLabel>Date</shortLabel>
-
-                <maxLength>10</maxLength>
-                <validationPattern><date /></validationPattern>
-
-                <control>
-                    <text size="10" />
-                </control>
-
-                <summary>researchRiskStudyExpirationDate</summary>
-                <description>researchRiskStudyExpirationDate description...</description>
 			</attribute>
 
             <attribute name="researchRiskStudyName" forceUppercase="true">

@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.KeyConstants;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.Country;
 import org.kuali.kfs.bo.State;
 import org.kuali.kfs.util.SpringServiceLocator;
@@ -40,7 +40,7 @@ public class SubcontractorRule extends MaintenanceDocumentRuleBase {
      * 
      * @param maintenanceDocument - document to be tested
      * @return whether maintenance doc passes
-     * @throws org.kuali.core.exceptions.ValidationException
+     * @throws ValidationException
      */
     @Override
     protected boolean validateMaintenanceDocument(MaintenanceDocument maintenanceDocument) {
@@ -78,7 +78,7 @@ public class SubcontractorRule extends MaintenanceDocumentRuleBase {
 
         // If no values returned, state code is invalid, throw error
         if(boList.size() < 1) {
-            putFieldError("subcontractorStateCode", KFSKeyConstants.ERROR_STATE_CODE_INVALID, stateCode);            
+            putFieldError("subcontractorStateCode", KeyConstants.ERROR_STATE_CODE_INVALID, stateCode);            
             valid = false;
         }
 
@@ -108,7 +108,7 @@ public class SubcontractorRule extends MaintenanceDocumentRuleBase {
 
         // If no values returned, country code is invalid, throw error
         if(boList.size() < 1) {
-            putFieldError("subcontractorCountryCode", KFSKeyConstants.ERROR_COUNTRY_CODE_INVALID, countryCode);            
+            putFieldError("subcontractorCountryCode", KeyConstants.ERROR_COUNTRY_CODE_INVALID, countryCode);            
             valid = false;
         }
 

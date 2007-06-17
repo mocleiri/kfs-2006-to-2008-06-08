@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,9 @@ import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.document.authorization.TransactionalDocumentActionFlags;
 import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
 import org.kuali.core.exceptions.GroupNotFoundException;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.Timer;
-import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.document.CashReceiptDocument;
@@ -99,16 +98,6 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
      */
     @Override
     public Map getEditableAccounts(TransactionalDocument document, ChartUser user) {
-        return new HashMap();
-    }
-
-    /**
-     * Overrides parent to return an empty Map since FO routing doesn't apply to the CR doc.
-     * 
-     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase#getEditableAccounts(java.util.List, org.kuali.module.chart.bo.ChartUser)
-     */
-    @Override
-    public Map getEditableAccounts(List<AccountingLine> lines, ChartUser user) {
         return new HashMap();
     }
 

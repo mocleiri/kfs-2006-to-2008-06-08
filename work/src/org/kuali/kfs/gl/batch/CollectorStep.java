@@ -49,7 +49,7 @@ public class CollectorStep extends AbstractStep {
     /**
      * Controls the collector process.
      */
-    public boolean execute(String jobName) {
+    public boolean execute() {
         List<String> fileNamesToLoad = batchInputFileService.listInputFileNamesWithDoneFile(collectorInputFileType);
      
         boolean processSuccess = true;

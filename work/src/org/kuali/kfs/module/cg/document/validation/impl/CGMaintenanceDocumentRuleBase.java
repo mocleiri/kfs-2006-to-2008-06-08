@@ -16,7 +16,6 @@
 package org.kuali.module.cg.rules;
 
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,12 +34,6 @@ import org.kuali.module.cg.bo.Primaryable;
  * Rules for the Proposal/Award maintenance document.
  */
 public class CGMaintenanceDocumentRuleBase extends MaintenanceDocumentRuleBase {
-
-    private static final String PROJECT_DIRECTOR_DECEASED = "D";
-    private static final String[] PROJECT_DIRECTOR_INVALID_STATUSES = {PROJECT_DIRECTOR_DECEASED};
-    
-    private static final String AGENCY_TYPE_CODE_FEDERAL = "F";
-    
     /**
      * checks to see if the end date is after the begine date
      * 
@@ -99,39 +92,11 @@ public class CGMaintenanceDocumentRuleBase extends MaintenanceDocumentRuleBase {
     
     /**
      * 
-     * This method takes in a collection of Project Directors and reviews them to see if any have invalid states for being added to
-     * a proposal.  An example would be a status code of "D" which means "Deceased".  Project Directors with a status of "D" cannot
-     * be added to a proposal or award.
-     * 
-     * @param <T>
-     * @param projectDirectors Collection of project directors to be reviewed.
-     * @param elementClass Type of object that the collection belongs to.
-     * @param propertyName Name of field that error will be attached to.
-     * @return True if all the project directors have valid statuses, false otherwise.
-     */
-    protected <T extends CGProjectDirector> boolean checkProjectDirectorsStatuses(List<T> projectDirectors, Class<T> elementClass, String propertyName) {
-        boolean success = true;
-        final String personUserPropertyName = KFSPropertyConstants.PROJECT_DIRECTOR + "." + KFSPropertyConstants.PERSON_USER_IDENTIFIER;
-        String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(elementClass, personUserPropertyName);
-        for(T pd : projectDirectors) {
-            String pdEmplStatusCode = pd.getProjectDirector().getUniversalUser().getEmployeeStatusCode();
-            String pdEmplStatusName = pd.getProjectDirector().getUniversalUser().getEmployeeStatus().getName();
-            if(StringUtils.isBlank(pdEmplStatusCode) || Arrays.asList(PROJECT_DIRECTOR_INVALID_STATUSES).contains(pdEmplStatusCode)) {
-                String[] errors = {pd.getProjectDirector().getPersonName(), pdEmplStatusCode + " - " + pdEmplStatusName};
-                putFieldError(propertyName, KFSKeyConstants.ERROR_INVALID_PROJECT_DIRECTOR_STATUS, errors);
-                success = false;
-            }
-        }
-        return success;
-    }
-    
-    /**
-     * 
      * This method checks to see if the two agency values passed in are the same agency.  The agency for a C&G document cannot
      * be the same as the Federal Pass Through Agency for that same document.
      * @param agency
      * @param federalPassThroughAgency
-     * @param agencyPropertyName
+     * @param propertyName
      * @return True if the agencies are not the same, false otherwise.
      */
     protected boolean checkAgencyNotEqualToFederalPassThroughAgency(Agency agency, Agency federalPassThroughAgency, String agencyPropertyName, String fedPassThroughAgencyPropertyName) {
@@ -140,32 +105,6 @@ public class CGMaintenanceDocumentRuleBase extends MaintenanceDocumentRuleBase {
             putFieldError(agencyPropertyName, KFSKeyConstants.ERROR_AGENCY_EQUALS_FEDERAL_PASS_THROUGH_AGENCY);
             putFieldError(fedPassThroughAgencyPropertyName, KFSKeyConstants.ERROR_FEDERAL_PASS_THROUGH_AGENCY_EQUALS_AGENCY);
             success = false;
-        }
-        return success;
-    }
-
-    /**
-     * checks if the required federal pass through fields are filled in if the federal pass through indicator is yes
-     *
-     * @return
-     */
-    protected boolean checkFederalPassThrough(boolean federalPassThroughIndicator, Agency primaryAgency, String federalPassThroughAgencyNumber, Class propertyClass, String federalPassThroughIndicatorFieldName) {
-        boolean success = true;
-        if (federalPassThroughIndicator) {
-
-            String indicatorLabel = SpringServiceLocator.getDataDictionaryService().getAttributeErrorLabel(propertyClass, federalPassThroughIndicatorFieldName);
-            if (StringUtils.isBlank(federalPassThroughAgencyNumber)) {
-                String agencyLabel = SpringServiceLocator.getDataDictionaryService().getAttributeErrorLabel(propertyClass, KFSPropertyConstants.FEDERAL_PASS_THROUGH_AGENCY_NUMBER);
-                putFieldError(KFSPropertyConstants.FEDERAL_PASS_THROUGH_AGENCY_NUMBER, KFSKeyConstants.ERROR_AWARD_FEDERAL_PASS_THROUGH_INDICATOR_DEPENDENCY_REQUIRED, new String[] { agencyLabel, indicatorLabel });
-                success = false;
-            }
-            else {
-                if(ObjectUtils.isNotNull(primaryAgency) && AGENCY_TYPE_CODE_FEDERAL.equalsIgnoreCase(primaryAgency.getAgencyTypeCode())) {
-                    String agencyLabel = SpringServiceLocator.getDataDictionaryService().getAttributeErrorLabel(propertyClass, KFSPropertyConstants.AGENCY_NUMBER);
-                    putFieldError(KFSPropertyConstants.AGENCY_NUMBER, KFSKeyConstants.ERROR_AGENCY_FEDERAL_AND_FEDERAL_PASS_THROUGH_INDICATOR_CHECKED, new String[] { primaryAgency.getAgencyNumber(), AGENCY_TYPE_CODE_FEDERAL});
-                    success = false;
-                }
-            }
         }
         return success;
     }

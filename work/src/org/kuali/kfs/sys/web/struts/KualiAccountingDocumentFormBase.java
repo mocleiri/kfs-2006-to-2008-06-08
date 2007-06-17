@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,26 +26,24 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.upload.FormFile;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.authorization.DocumentAuthorizer;
 import org.kuali.core.exceptions.InfrastructureException;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.core.web.format.SimpleBooleanFormatter;
 import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.bo.AccountingLine;
+import org.kuali.core.web.ui.AccountingLineDecorator;
 import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineOverride;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizer;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.kfs.web.ui.AccountingLineDecorator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -62,12 +60,13 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
 
     private Map editableAccounts;
     private Map accountingLineEditableFields;
-    private Map forcedLookupOptionalFields;
 
     // TODO: FormFile isn't Serializable, so mark these fields need as transient or create a Serializable subclass of FormFile
     protected FormFile sourceFile;
     protected FormFile targetFile;
     private boolean hideDetails = false;
+
+    private String accountingLineImportInstructionsUrl;
 
     private List<AccountingLineDecorator> sourceLineDecorators;
     private List<AccountingLineDecorator> targetLineDecorators;
@@ -87,7 +86,6 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
         editableAccounts = new HashMap();
         accountingLineEditableFields = new HashMap();
         forcedReadOnlyFields = new HashMap();
-        forcedLookupOptionalFields = new HashMap();
 
         // initialize accountingLine lists
         baselineSourceAccountingLines = new ArrayList();
@@ -96,6 +94,9 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
         // initialize accountingLine decoration lists
         sourceLineDecorators = new ArrayList<AccountingLineDecorator>();
         targetLineDecorators = new ArrayList<AccountingLineDecorator>();
+
+        // initialize accountingLine import instructions URL
+        accountingLineImportInstructionsUrl = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.ACCT_LINE_IMPORT_INSTRUCTIONS_URL);
     }
 
     /**
@@ -114,18 +115,18 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
         // handle new accountingLine, if one is being added
         String methodToCall = this.getMethodToCall();
         if (StringUtils.isNotBlank(methodToCall)) {
-            if (methodToCall.equals(KFSConstants.INSERT_SOURCE_LINE_METHOD)) {
+            if (methodToCall.equals(Constants.INSERT_SOURCE_LINE_METHOD)) {
                 populateSourceAccountingLine(getNewSourceLine());
             }
 
-            if (methodToCall.equals(KFSConstants.INSERT_TARGET_LINE_METHOD)) {
+            if (methodToCall.equals(Constants.INSERT_TARGET_LINE_METHOD)) {
                 populateTargetAccountingLine(getNewTargetLine());
             }
         }
 
         // don't call populateAccountingLines if you are copying or errorCorrecting a document,
         // since you want the accountingLines in the copy to be "identical" to those in the original
-        if (!StringUtils.equals(methodToCall, KFSConstants.COPY_METHOD) && !StringUtils.equals(methodToCall, KFSConstants.ERRORCORRECT_METHOD)) {
+        if (!StringUtils.equals(methodToCall, Constants.COPY_METHOD) && !StringUtils.equals(methodToCall, Constants.ERRORCORRECT_METHOD)) {
             populateAccountingLines();
         }
 
@@ -150,7 +151,7 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
         setAccountingLineEditableFields(financialDocumentAuthorizer.getAccountingLineEditableFields(financialDocument, kualiUser));
         setDocumentActionFlags(financialDocumentAuthorizer.getDocumentActionFlags(financialDocument, kualiUser));
 
-        setEditableAccounts(financialDocumentAuthorizer.getEditableAccounts(glomBaselineAccountingLines(), (ChartUser)kualiUser.getModuleUser( ChartUser.MODULE_ID )));
+        setEditableAccounts(financialDocumentAuthorizer.getEditableAccounts(financialDocument, (ChartUser)kualiUser.getModuleUser( ChartUser.MODULE_ID )));
     }
 
 
@@ -615,11 +616,17 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
     }
 
     /**
-     * TODO this has to be fixed for p2a: KULRNE-4552
      * @return String
      */
     public String getAccountingLineImportInstructionsUrl() {
-        return "https://test.kuali.org/confluence/display/KULRNE/Accounting+Line+Import+Instructions";
+        return accountingLineImportInstructionsUrl;
+    }
+
+    /**
+     * @param accountingLineImportInstructionsUrl
+     */
+    public void setAccountingLineImportInstructionsUrl(String accountingLineImportInstructionsUrl) {
+        this.accountingLineImportInstructionsUrl = accountingLineImportInstructionsUrl;
     }
 
     /**
@@ -669,63 +676,5 @@ public class KualiAccountingDocumentFormBase extends KualiTransactionalDocumentF
         catch (Exception e) {
             throw new InfrastructureException("unable to create a new target accounting line", e);
         }
-    }
-    
-    /**
-     * This method finds its appropriate document authorizer and uses that to reset
-     * the map of editable accounts, based on the current accounting lines.
-     */
-    public void refreshEditableAccounts() {
-        AccountingDocumentAuthorizer authorizer = (AccountingDocumentAuthorizer)SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(this.getDocument());
-        this.setEditableAccounts(authorizer.getEditableAccounts(glomBaselineAccountingLines(), (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID )));
-    }
-    
-    /** 
-     * This method returns a list made up of accounting line from all baseline accounting line sources.
-     * @return a list of accounting lines, made up of all baseline source and baseline target lines.
-     */
-    private List<AccountingLine> glomBaselineAccountingLines() {
-        List<AccountingLine> lines = new ArrayList<AccountingLine>();
-        lines.addAll(harvestAccountingLines(this.getBaselineSourceAccountingLines()));
-        lines.addAll(harvestAccountingLines(this.getBaselineTargetAccountingLines()));
-        return lines;
-    }
-    
-    /**
-     * 
-     * This method takes a generic list, hopefully with some AccountingLine objects in it, and returns a list of AccountingLine objects,
-     * because Java generics are just so wonderful.
-     * 
-     * @param lines a list of objects
-     * @return a list of the accounting lines that were in the lines parameter
-     */
-    private List<AccountingLine> harvestAccountingLines(List lines) {
-        List<AccountingLine> accountingLines = new ArrayList<AccountingLine>();
-        for (Object o: lines) {
-            if (o instanceof AccountingLine) {
-                accountingLines.add((AccountingLine)o);
-            }
-        }
-        return accountingLines;
-    }
-
-    /**
-     * A <code>{@link Map}</code> of names of optional accounting line fields
-     * that require a quickfinder.
-     * 
-     * @return a Map of fields
-     */
-    public void setForcedLookupOptionalFields(Map fieldMap) {
-        forcedLookupOptionalFields = fieldMap;
-    }
-
-    /**
-     * A <code>{@link Map}</code> of names of optional accounting line fields
-     * that require a quickfinder.
-     * 
-     * @return a Map of fields
-     */
-    public Map getForcedLookupOptionalFields() {
-        return forcedLookupOptionalFields;
     }
 }

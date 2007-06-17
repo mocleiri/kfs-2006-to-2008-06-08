@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.PriorYearAccount">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Prior Year Account Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountCityName" />
                 <field attributeName="accountClosedIndicator" />
                 <field attributeName="accountCreateDate" />
@@ -56,7 +41,7 @@
                 <field attributeName="awardPeriodEndMonth" />
                 <field attributeName="awardPeriodEndYear" />
                 <field attributeName="budgetRecordingLevelCode" />
-                <field attributeName="accountCfdaNumber" />
+                <field attributeName="cgCatlfFedDomestcAssistNbr" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="continuationAccountNumber" />
                 <field attributeName="continuationFinChrtOfAcctCd" />
@@ -70,7 +55,7 @@
                 <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="financialObjectivePrsctrlIndicator" />
-                <field attributeName="forContractsAndGrants" />
+                <field attributeName="inCg" />
                 <field attributeName="incomeStreamAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
                 <field attributeName="indirectCostRcvyFinCoaCode" />
@@ -82,11 +67,13 @@
                 <field attributeName="reportsToAccountNumber" />
                 <field attributeName="reportsToChartOfAccountsCode" />
                 <field attributeName="subFundGroupCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Prior Year Account Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.PriorYearAccount">Create New</a>]]></menubar>
 
             <instructions>Look up a Prior Year Account</instructions>
 
@@ -129,7 +116,7 @@
                 <lookupField attributeName="awardPeriodEndMonth" required="false" />
                 <lookupField attributeName="awardPeriodEndYear" required="false" />
                 <lookupField attributeName="budgetRecordingLevelCode" required="false" />
-                <lookupField attributeName="accountCfdaNumber" required="false" />
+                <lookupField attributeName="cgCatlfFedDomestcAssistNbr" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="continuationAccountNumber" required="false" />
                 <lookupField attributeName="continuationFinChrtOfAcctCd" required="false" />
@@ -143,7 +130,7 @@
                 <lookupField attributeName="financialHigherEdFunctionCd" required="false" />
                 <lookupField attributeName="financialIcrSeriesIdentifier" required="false" />
                 <lookupField attributeName="financialObjectivePrsctrlIndicator" required="false" />
-                <lookupField attributeName="forContractsAndGrants" required="false" />
+                <lookupField attributeName="inCg" required="false" />
                 <lookupField attributeName="incomeStreamAccountNumber" required="false" />
                 <lookupField attributeName="incomeStreamFinancialCoaCode" required="false" />
                 <lookupField attributeName="indirectCostRcvyFinCoaCode" required="false" />
@@ -189,7 +176,7 @@
                 <field attributeName="awardPeriodEndMonth" />
                 <field attributeName="awardPeriodEndYear" />
                 <field attributeName="budgetRecordingLevelCode" />
-                <field attributeName="accountCfdaNumber" />
+                <field attributeName="cgCatlfFedDomestcAssistNbr" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="continuationAccountNumber" />
                 <field attributeName="continuationFinChrtOfAcctCd" />
@@ -203,7 +190,7 @@
                 <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="financialObjectivePrsctrlIndicator" />
-                <field attributeName="forContractsAndGrants" />
+                <field attributeName="inCg" />
                 <field attributeName="incomeStreamAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
                 <field attributeName="indirectCostRcvyFinCoaCode" />
@@ -231,8 +218,8 @@
                     <text size="27" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The city in which the account is managed.</description>
+                <summary>accountCityName</summary>
+                <description>accountCityName description...</description>
 			</attribute>
 
             <attribute name="accountClosedIndicator" forceUppercase="true">
@@ -245,8 +232,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>Select the check box if an account is closed, clear the check box if it is open. Closing an account is more permanent than expiring -- no transactions can hit a closed account and a closed account can only be re-opened by a system supervisor.</description>
+                <summary>accountClosedIndicator</summary>
+                <description>accountClosedIndicator description...</description>
 			</attribute>
 
             <attribute name="accountCreateDate" forceUppercase="true">
@@ -260,8 +247,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The date on which the account was created.</description>
+                <summary>accountCreateDate</summary>
+                <description>accountCreateDate description...</description>
 			</attribute>
 
             <attribute name="accountEffectiveDate" forceUppercase="true">
@@ -275,8 +262,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The date on which this account became effective.</description>
+                <summary>accountEffectiveDate</summary>
+                <description>accountEffectiveDate description...</description>
 			</attribute>
 
             <attribute name="accountExpirationDate" forceUppercase="true">
@@ -290,8 +277,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The date on which the account expires.</description>
+                <summary>accountExpirationDate</summary>
+                <description>accountExpirationDate description...</description>
 			</attribute>
 
             <attribute name="accountFiscalOfficerSystemIdentifier" forceUppercase="true">
@@ -305,8 +292,8 @@
                     <text size="12" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The user ID of the fiscal officer. This individual is responsible for the fiscal management of the account. Only exempt employees may be designated a fiscal officer.</description>
+                <summary>accountFiscalOfficerSystemIdentifier</summary>
+                <description>accountFiscalOfficerSystemIdentifier description...</description>
 			</attribute>
 
             <attribute name="accountInFinancialProcessingIndicator" forceUppercase="true">
@@ -319,8 +306,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description><![CDATA[&nbsp;]]></description>
+                <summary>accountInFinancialProcessingIndicator</summary>
+                <description>accountInFinancialProcessingIndicator description...</description>
 			</attribute>
 
             <attribute name="accountManagerSystemIdentifier" forceUppercase="true">
@@ -334,8 +321,8 @@
                     <text size="12" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The user ID of the account manager. The account manager represents the person who understands the purpose of the funds in the account and what aim they are meant to achieve. Only exempt employees may be designated an account manager.</description>
+                <summary>accountManagerSystemIdentifier</summary>
+                <description>accountManagerSystemIdentifier description...</description>
 			</attribute>
 
             <attribute name="accountName" forceUppercase="true">
@@ -349,8 +336,8 @@
                     <text size="42" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The familiar title of a specific account.</description>
+                <summary>accountName</summary>
+                <description>accountName description...</description>
 			</attribute>
 
             <attribute name="accountNumber" forceUppercase="true">
@@ -364,8 +351,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The identifier for a pool of funds assigned to a specific university entity, for a specific function.</description>
+                <summary>accountNumber</summary>
+                <description>accountNumber description...</description>
 			</attribute>
 
             <attribute name="accountOffCampusIndicator" forceUppercase="true">
@@ -378,8 +365,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>Select the check box if the account activities occur off-campus; clear the check box, it if they do not.</description>
+                <summary>accountOffCampusIndicator</summary>
+                <description>accountOffCampusIndicator description...</description>
 			</attribute>
 
             <attribute name="accountPhysicalCampusCode" forceUppercase="true">
@@ -393,8 +380,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The physical campus on which this account is located.</description>
+                <summary>accountPhysicalCampusCode</summary>
+                <description>accountPhysicalCampusCode description...</description>
 			</attribute>
 
             <attribute name="accountRestrictedStatusCode" forceUppercase="true">
@@ -408,8 +395,8 @@
                     <text size="3" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The status code indicatomg whether funds in the account are temporarily restricted (T), restricted (R), or unrestricted (U).</description>
+                <summary>accountRestrictedStatusCode</summary>
+                <description>accountRestrictedStatusCode description...</description>
 			</attribute>
 
             <attribute name="accountRestrictedStatusDate" forceUppercase="true">
@@ -423,8 +410,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The date if the Accounts Restricted Status Code above is T. This date signifies when the funds are targeted to become unrestricted.</description>
+                <summary>accountRestrictedStatusDate</summary>
+                <description>accountRestrictedStatusDate description...</description>
 			</attribute>
 
             <attribute name="accountStateCode" forceUppercase="true">
@@ -438,8 +425,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The state code where the account is managed.</description>
+                <summary>accountStateCode</summary>
+                <description>accountStateCode description...</description>
 			</attribute>
 
             <attribute name="accountStreetAddress" forceUppercase="true">
@@ -453,8 +440,8 @@
                     <text size="32" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The street address where the account is managed.</description>
+                <summary>accountStreetAddress</summary>
+                <description>accountStreetAddress description...</description>
 			</attribute>
 
             <attribute name="accountSufficientFundsCode" forceUppercase="true">
@@ -468,8 +455,8 @@
                     <text size="3" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The indicator to show at what level this account is going to be checked for sufficient funds in the transaction processing environment. The choices are account (A), consolidation (C), object code (O), cash, (H), level (L) or no checking (N).</description>
+                <summary>accountSufficientFundsCode</summary>
+                <description>accountSufficientFundsCode description...</description>
 			</attribute>
 
             <attribute name="accountTypeCode" forceUppercase="true">
@@ -483,8 +470,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The code to categorize accounts for reporting purposes.</description>
+                <summary>accountTypeCode</summary>
+                <description>accountTypeCode description...</description>
 			</attribute>
 
             <attribute name="accountZipCode" forceUppercase="true">
@@ -498,8 +485,8 @@
                     <text size="13" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The postal code assigned by the US Postal Service for the city in which the account is managed.</description>
+                <summary>accountZipCode</summary>
+                <description>accountZipCode description...</description>
 			</attribute>
 
             <attribute name="accountsFringesBnftIndicator" forceUppercase="true">
@@ -512,8 +499,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>Select the check box if this account accepts fringe benefits or clear the check box if it does not. If the check box is not selected, a Fringe Benefits Chart and Fringe Benefits Account must be supplied to indicate where these charges should be posted.</description>
+                <summary>accountsFringesBnftIndicator</summary>
+                <description>accountsFringesBnftIndicator description...</description>
 			</attribute>
 
             <attribute name="accountsSupervisorySystemsIdentifier" forceUppercase="true">
@@ -527,8 +514,8 @@
                     <text size="12" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The user ID of the account supervisor. The supervisor oversees the management of the account at a higher-level than the fiscal officer, but rarely receives any direct requests for action from the KFS. Only exempt employees may be designated an account supervisor.</description>
+                <summary>accountsSupervisorySystemsIdentifier</summary>
+                <description>accountsSupervisorySystemsIdentifier description...</description>
 			</attribute>
 
             <attribute name="acctCustomIndCstRcvyExclCd" forceUppercase="true">
@@ -542,7 +529,7 @@
                     <text size="3" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
+                <summary>acctCustomIndCstRcvyExclCd</summary>
                 <description>acctCustomIndCstRcvyExclCd description...</description>
 			</attribute>
 
@@ -557,7 +544,7 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
+                <summary>acctIndirectCostRcvyTypeCd</summary>
                 <description>acctIndirectCostRcvyTypeCd description...</description>
 			</attribute>
 
@@ -572,7 +559,7 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
+                <summary>awardPeriodBeginMonth</summary>
                 <description>awardPeriodBeginMonth description...</description>
 			</attribute>
 
@@ -587,7 +574,7 @@
                     <text size="6" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
+                <summary>awardPeriodBeginYear</summary>
                 <description>awardPeriodBeginYear description...</description>
 			</attribute>
 
@@ -602,7 +589,7 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
+                <summary>awardPeriodEndMonth</summary>
                 <description>awardPeriodEndMonth description...</description>
 			</attribute>
 
@@ -617,7 +604,7 @@
                     <text size="6" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
+                <summary>awardPeriodEndYear</summary>
                 <description>awardPeriodEndYear description...</description>
 			</attribute>
 
@@ -632,12 +619,12 @@
                     <text size="3" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The indicator to show if this account is recording its budget by account (A), consolidation (C), object code (O), level (L), sub-account (S), mixed (M), or no budget (N).</description>
+                <summary>budgetRecordingLevelCode</summary>
+                <description>budgetRecordingLevelCode description...</description>
 			</attribute>
 
-            <attribute name="accountCfdaNumber" forceUppercase="true">
-                <label>Catalog of Federal Domestic Assistance Number</label>
+            <attribute name="cgCatlfFedDomestcAssistNbr" forceUppercase="true">
+                <label>Cg Catlf Fed Domestc Assist Nbr</label>
                 <shortLabel>Nbr</shortLabel>
 
                 <maxLength>6</maxLength>
@@ -647,8 +634,8 @@
                     <text size="8" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>accountCfdaNumber description...</description>
+                <summary>cgCatlfFedDomestcAssistNbr</summary>
+                <description>cgCatlfFedDomestcAssistNbr description...</description>
 			</attribute>
 
             <attribute name="chartOfAccountsCode" forceUppercase="true">
@@ -662,8 +649,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The identifier for the Chart of Accounts for an account.</description>
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
 			</attribute>
 
             <attribute name="continuationAccountNumber" forceUppercase="true">
@@ -677,8 +664,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The account that accepts transactions which are being processed on this account after the account expiration date. This field is required if the account has an expiration date.</description>
+                <summary>continuationAccountNumber</summary>
+                <description>continuationAccountNumber description...</description>
 			</attribute>
 
             <attribute name="continuationFinChrtOfAcctCd" forceUppercase="true">
@@ -692,8 +679,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Chart of Accounts for the continuation account. This field is required if the account has an expiration date.</description>
+                <summary>continuationFinChrtOfAcctCd</summary>
+                <description>continuationFinChrtOfAcctCd description...</description>
 			</attribute>
 
             <attribute name="contractControlAccountNumber" forceUppercase="true">
@@ -707,8 +694,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The primary spending authority account for a contract that has been assigned multiple accounts in the system. This is the one account that most of the reporting is done out of and it represents more fully than any of the others the full functionality of the project and its corresponding expenditures and revenues.</description>
+                <summary>contractControlAccountNumber</summary>
+                <description>contractControlAccountNumber description...</description>
 			</attribute>
 
             <attribute name="contractControlFinCoaCode" forceUppercase="true">
@@ -722,8 +709,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Chart of Accounts that the contract control account number belongs to.</description>
+                <summary>contractControlFinCoaCode</summary>
+                <description>contractControlFinCoaCode description...</description>
 			</attribute>
 
             <attribute name="endowmentIncomeAccountNumber" forceUppercase="true">
@@ -737,9 +724,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The account designated to receive income generated from an endowment account or the guarantee account for an underwrite for Contract and Grant Accounts.
-</description>
+                <summary>endowmentIncomeAccountNumber</summary>
+                <description>endowmentIncomeAccountNumber description...</description>
 			</attribute>
 
             <attribute name="endowmentIncomeAcctFinCoaCd" forceUppercase="true">
@@ -753,8 +739,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Chart of Account Code which for the account designated to receive income generated from an endowment account or the guarantee account for an underwrite for Contract and Grant accounts.</description>
+                <summary>endowmentIncomeAcctFinCoaCd</summary>
+                <description>endowmentIncomeAcctFinCoaCd description...</description>
 			</attribute>
 
             <attribute name="expired" forceUppercase="true">
@@ -767,7 +753,7 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
+                <summary>expired</summary>
                 <description>expired description...</description>
 			</attribute>
 
@@ -781,8 +767,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>Select the check box if this account includes external encumbrances in its calculation of sufficient funds. Clear the check box if it does not.</description>
+                <summary>extrnlFinEncumSufficntFndIndicator</summary>
+                <description>extrnlFinEncumSufficntFndIndicator description...</description>
 			</attribute>
 
             <attribute name="finPreencumSufficientFundIndicator" forceUppercase="true">
@@ -795,8 +781,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>Select the check box if this account includes pre-encumbrances in its calculation of sufficient funds. Clear the check box, if it does not.</description>
+                <summary>finPreencumSufficientFundIndicator</summary>
+                <description>finPreencumSufficientFundIndicator description...</description>
 			</attribute>
 
             <attribute name="financialHigherEdFunctionCd" forceUppercase="true">
@@ -810,8 +796,8 @@
                     <text size="6" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Higher Education Function Code which classifies the purpose of the account.</description>
+                <summary>financialHigherEdFunctionCd</summary>
+                <description>financialHigherEdFunctionCd description...</description>
 			</attribute>
 
             <attribute name="financialIcrSeriesIdentifier" forceUppercase="true">
@@ -825,8 +811,8 @@
                     <text size="5" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The unique identifier that indicates which record of the Automated Indirect Cost Recovery table is used to determine indirect cost percentage and the income and expense account.</description>
+                <summary>financialIcrSeriesIdentifier</summary>
+                <description>financialIcrSeriesIdentifier description...</description>
 			</attribute>
 
             <attribute name="financialObjectivePrsctrlIndicator" forceUppercase="true">
@@ -839,11 +825,11 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>Select the check box to indicate that this account uses object presence control. Clear the check box, if it does not. Object presence control requires that an Object Code be budgeted for the account before it can be used on an actual or encumbrance transaction.</description>
+                <summary>financialObjectivePrsctrlIndicator</summary>
+                <description>financialObjectivePrsctrlIndicator description...</description>
 			</attribute>
 
-            <attribute name="forContractsAndGrants" forceUppercase="true">
+            <attribute name="inCg" forceUppercase="true">
                 <label>In Cg</label>
                 <shortLabel>Cg</shortLabel>
 
@@ -853,7 +839,7 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
+                <summary>inCg</summary>
                 <description>inCg description...</description>
 			</attribute>
 
@@ -868,8 +854,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Account which has been designated by this account to receive any offset entries in order to balance responsibility center activity.</description>
+                <summary>incomeStreamAccountNumber</summary>
+                <description>incomeStreamAccountNumber description...</description>
 			</attribute>
 
             <attribute name="incomeStreamFinancialCoaCode" forceUppercase="true">
@@ -883,8 +869,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Chart of Account of the account which has been designated by this account to receive any offset entries in order to balance responsibility center activity.</description>
+                <summary>incomeStreamFinancialCoaCode</summary>
+                <description>incomeStreamFinancialCoaCode description...</description>
 			</attribute>
 
             <attribute name="indirectCostRcvyFinCoaCode" forceUppercase="true">
@@ -898,8 +884,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Chart of Accounts (used with the indirect cost recovery account number) that is receiving the indirect cost charged.</description>
+                <summary>indirectCostRcvyFinCoaCode</summary>
+                <description>indirectCostRcvyFinCoaCode description...</description>
 			</attribute>
 
             <attribute name="indirectCostRecoveryAcctNbr" forceUppercase="true">
@@ -913,8 +899,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Account Number that is receiving the indirect cost recovery income generated by this account.</description>
+                <summary>indirectCostRecoveryAcctNbr</summary>
+                <description>indirectCostRecoveryAcctNbr description...</description>
 			</attribute>
 
             <attribute name="intrnlFinEncumSufficntFndIndicator" forceUppercase="true">
@@ -927,8 +913,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>Select the check box if this account includes internal encumbrances in its calculation of sufficient funds. Clear the check box if it does not.</description>
+                <summary>intrnlFinEncumSufficntFndIndicator</summary>
+                <description>intrnlFinEncumSufficntFndIndicator description...</description>
 			</attribute>
 
             <attribute name="organizationCode" forceUppercase="true">
@@ -942,8 +928,8 @@
                     <text size="6" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Organization that owns this account.</description>
+                <summary>organizationCode</summary>
+                <description>organizationCode description...</description>
 			</attribute>
 
             <attribute name="pendingAcctSufficientFundsIndicator" forceUppercase="true">
@@ -956,8 +942,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>Select the check box if sufficient funds checking should be performed on this account. Clear the check box if not.</description>
+                <summary>pendingAcctSufficientFundsIndicator</summary>
+                <description>pendingAcctSufficientFundsIndicator description...</description>
 			</attribute>
 
             <attribute name="programCode" forceUppercase="true">
@@ -971,8 +957,8 @@
                     <text size="8" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The financial reporting classification required by some community colleges.</description>
+                <summary>programCode</summary>
+                <description>programCode description...</description>
 			</attribute>
 
             <attribute name="reportsToAccountNumber" forceUppercase="true">
@@ -986,8 +972,8 @@
                     <text size="9" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Account Number in the chart higher than the current chart that this Account Number reports to.</description>
+                <summary>reportsToAccountNumber</summary>
+                <description>reportsToAccountNumber description...</description>
 			</attribute>
 
             <attribute name="reportsToChartOfAccountsCode" forceUppercase="true">
@@ -1001,8 +987,8 @@
                     <text size="4" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>This value automatically defaults to the Reports to Chart of Accounts Code associated with object code's Chart Code.</description>
+                <summary>reportsToChartOfAccountsCode</summary>
+                <description>reportsToChartOfAccountsCode description...</description>
 			</attribute>
 
             <attribute name="subFundGroupCode" forceUppercase="true">
@@ -1016,8 +1002,8 @@
                     <text size="8" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The attribute which links accounts to a fund.</description>
+                <summary>subFundGroupCode</summary>
+                <description>subFundGroupCode description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
@@ -1027,20 +1013,14 @@
         <relationships>
             <relationship objectAttributeName="accountFiscalOfficerUser" >
                 <primitiveAttribute sourceName="accountFiscalOfficerSystemIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountFiscalOfficerUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountFiscalOfficerUser.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="accountSupervisoryUser" >
                 <primitiveAttribute sourceName="accountsSupervisorySystemsIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountSupervisoryUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountSupervisoryUser.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="accountManagerUser" >
                 <primitiveAttribute sourceName="accountManagerSystemIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountManagerUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountManagerUser.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="accountGuideline" >
@@ -1048,7 +1028,5 @@
                 <primitiveAttribute sourceName="accountNumber" targetName="accountNumber" />
             </relationship>
         </relationships>
-        
-        <objectLabel>Prior Year Account</objectLabel>
     </businessObject>
 </dictionaryEntry>

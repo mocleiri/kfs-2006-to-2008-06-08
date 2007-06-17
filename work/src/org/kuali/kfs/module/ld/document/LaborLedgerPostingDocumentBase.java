@@ -15,73 +15,11 @@
  */
 package org.kuali.module.labor.document;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.kuali.core.document.TransactionalDocument;
-import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.labor.bo.PendingLedgerEntry;
-
+import org.kuali.kfs.document.LedgerPostingDocumentBase;
 
 /**
- * This is the base class implementation for all labor eDocs that are transactional, meaning implementing TransactionalDocumentBase.
- * Additional functionality for labor is provided by this class, suchc as retrieving labor ledger pending entries.
+ * Base implementation for a labor ledger posting document.
  */
-public abstract class LaborLedgerPostingDocumentBase extends AccountingDocumentBase implements LaborLedgerPostingDocument {
+public class LaborLedgerPostingDocumentBase extends LedgerPostingDocumentBase implements LaborLedgerPostingDocument {
 
-    protected List<PendingLedgerEntry> laborLedgerPendingEntries;
-
-    /**
-     * Initializes the pending entries.
-     */
-    public LaborLedgerPostingDocumentBase() {
-        super();
-        setLaborLedgerPendingEntries(new ArrayList<PendingLedgerEntry>());
-    }
-
-    /**
-     * @see org.kuali.module.labor.document.LaborLedgerPostingDocument#getLaborLedgerPendingEntries()
-     */
-    public List<PendingLedgerEntry> getLaborLedgerPendingEntries() {
-        return this.laborLedgerPendingEntries;
-    }
-
-    /**
-     * @see org.kuali.module.labor.document.LaborLedgerPostingDocument#setLaborLedgerPendingEntries(java.util.List)
-     */
-    public void setLaborLedgerPendingEntries(List<PendingLedgerEntry> laborLedgerPendingEntries) {
-        this.laborLedgerPendingEntries = laborLedgerPendingEntries;
-    }
-
-    /**
-     * This implementation is coupled tightly with some underlying issues that the Struts PojoProcessor plugin has with how objects
-     * get instantiated within lists. The first three lines are required otherwise when the PojoProcessor tries to automatically
-     * inject values into the list, it will get an index out of bounds error if the instance at an index is being called and prior
-     * instances at indices before that one are not being instantiated. So changing the code below will cause things to break.
-     *
-     * @param index of Labor Ledger Pending Entry to retrieve
-     * @return PendingLedgerEntry
-     */
-    public PendingLedgerEntry getLaborLedgerPendingEntry(int index) {
-        while (laborLedgerPendingEntries.size() <= index) {
-            laborLedgerPendingEntries.add(new PendingLedgerEntry());
-        }
-        return laborLedgerPendingEntries.get(index);
-    }
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#prepareForSave(org.kuali.core.rule.event.KualiDocumentEvent)
-     */
-    @Override
-    public void prepareForSave(KualiDocumentEvent event) {
-        super.prepareForSave(event);
-        if (!SpringServiceLocator.getLaborLedgerPendingEntryService().generateLaborLedgerPendingEntries(this)) {
-            logErrors();
-            throw new ValidationException("labor ledger LLPE generation failed");
-        }
-    }
 }

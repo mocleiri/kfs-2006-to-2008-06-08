@@ -1,34 +1,38 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.TypedArrayList;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObjectBase {
+public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 
 	private String emplid;
 	private String personName;
@@ -37,22 +41,17 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	private String grade;
 	private String iuClassificationLevel;
 
-    private List budgetConstructionSalarySocialSecurity;
-    private List pendingBudgetConstructionAppointmentFunding;
-    
 	/**
 	 * Default constructor.
 	 */
 	public BudgetConstructionIntendedIncumbent() {
-        budgetConstructionSalarySocialSecurity = new ArrayList();
-        setPendingBudgetConstructionAppointmentFunding(new TypedArrayList(PendingBudgetConstructionAppointmentFunding.class));
-        
+
 	}
 
 	/**
 	 * Gets the emplid attribute.
 	 * 
-	 * @return Returns the emplid
+	 * @return - Returns the emplid
 	 * 
 	 */
 	public String getEmplid() { 
@@ -62,7 +61,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Sets the emplid attribute.
 	 * 
-	 * @param emplid The emplid to set.
+	 * @param - emplid The emplid to set.
 	 * 
 	 */
 	public void setEmplid(String emplid) {
@@ -73,7 +72,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Gets the personName attribute.
 	 * 
-	 * @return Returns the personName
+	 * @return - Returns the personName
 	 * 
 	 */
 	public String getPersonName() { 
@@ -83,7 +82,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Sets the personName attribute.
 	 * 
-	 * @param personName The personName to set.
+	 * @param - personName The personName to set.
 	 * 
 	 */
 	public void setPersonName(String personName) {
@@ -94,7 +93,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Gets the setidSalary attribute.
 	 * 
-	 * @return Returns the setidSalary
+	 * @return - Returns the setidSalary
 	 * 
 	 */
 	public String getSetidSalary() { 
@@ -104,7 +103,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Sets the setidSalary attribute.
 	 * 
-	 * @param setidSalary The setidSalary to set.
+	 * @param - setidSalary The setidSalary to set.
 	 * 
 	 */
 	public void setSetidSalary(String setidSalary) {
@@ -115,7 +114,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Gets the salaryAdministrationPlan attribute.
 	 * 
-	 * @return Returns the salaryAdministrationPlan
+	 * @return - Returns the salaryAdministrationPlan
 	 * 
 	 */
 	public String getSalaryAdministrationPlan() { 
@@ -125,7 +124,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Sets the salaryAdministrationPlan attribute.
 	 * 
-	 * @param salaryAdministrationPlan The salaryAdministrationPlan to set.
+	 * @param - salaryAdministrationPlan The salaryAdministrationPlan to set.
 	 * 
 	 */
 	public void setSalaryAdministrationPlan(String salaryAdministrationPlan) {
@@ -136,7 +135,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Gets the grade attribute.
 	 * 
-	 * @return Returns the grade
+	 * @return - Returns the grade
 	 * 
 	 */
 	public String getGrade() { 
@@ -146,7 +145,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Sets the grade attribute.
 	 * 
-	 * @param grade The grade to set.
+	 * @param - grade The grade to set.
 	 * 
 	 */
 	public void setGrade(String grade) {
@@ -157,7 +156,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Gets the iuClassificationLevel attribute.
 	 * 
-	 * @return Returns the iuClassificationLevel
+	 * @return - Returns the iuClassificationLevel
 	 * 
 	 */
 	public String getIuClassificationLevel() { 
@@ -167,78 +166,19 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	/**
 	 * Sets the iuClassificationLevel attribute.
 	 * 
-	 * @param iuClassificationLevel The iuClassificationLevel to set.
+	 * @param - iuClassificationLevel The iuClassificationLevel to set.
 	 * 
 	 */
 	public void setIuClassificationLevel(String iuClassificationLevel) {
 		this.iuClassificationLevel = iuClassificationLevel;
 	}
 
-    /**
-     * Gets the budgetConstructionSalarySocialSecurity attribute. 
-     * @return Returns the budgetConstructionSalarySocialSecurity.
-     */
-    public List getBudgetConstructionSalarySocialSecurity() {
-        return budgetConstructionSalarySocialSecurity;
-    }
-
-    /**
-     * Sets the budgetConstructionSalarySocialSecurity attribute value.
-     * @param budgetConstructionSalarySocialSecurity The budgetConstructionSalarySocialSecurity to set.
-     */
-    public void setBudgetConstructionSalarySocialSecurity(List budgetConstructionSalarySocialSecurity) {
-        this.budgetConstructionSalarySocialSecurity = budgetConstructionSalarySocialSecurity;
-    }
-
-    /**
-     * Gets the pendingBudgetConstructionAppointmentFunding attribute. 
-     * @return Returns the pendingBudgetConstructionAppointmentFunding.
-     */
-    public List getPendingBudgetConstructionAppointmentFunding() {
-        return pendingBudgetConstructionAppointmentFunding;
-    }
-
-    /**
-     * Sets the pendingBudgetConstructionAppointmentFunding attribute value.
-     * @param pendingBudgetConstructionAppointmentFunding The pendingBudgetConstructionAppointmentFunding to set.
-     * @deprecated
-     */
-    public void setPendingBudgetConstructionAppointmentFunding(List pendingBudgetConstructionAppointmentFunding) {
-        this.pendingBudgetConstructionAppointmentFunding = pendingBudgetConstructionAppointmentFunding;
-    }
-
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @Override
-    public List buildListOfDeletionAwareLists() {
-
-        List managedLists =  super.buildListOfDeletionAwareLists();
-        managedLists.add(getPendingBudgetConstructionAppointmentFunding());
-        return managedLists; 
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("emplid", getEmplid());
-
-        return simpleValues;
-    }
-  
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("emplid", this.emplid);
-        return m;
+	    return m;
     }
-    
-    
 }

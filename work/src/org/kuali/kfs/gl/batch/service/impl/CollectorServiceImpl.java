@@ -1,459 +1,163 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service.impl;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.io.*;
+import java.util.Currency;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.Locale;
 
-import org.apache.commons.collections.Bag;
-import org.apache.commons.collections.bag.HashBag;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.kuali.Constants;
+import org.apache.log4j.*;
+import org.bouncycastle.asn1.x509.qualified.MonetaryValue;
 import org.kuali.core.mail.InvalidAddressException;
 import org.kuali.core.mail.MailMessage;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.MailService;
-import org.kuali.core.util.ErrorMap;
-import org.kuali.core.util.ErrorMessage;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSConstants.ParameterGroups;
-import org.kuali.kfs.KFSConstants.SystemGroupParameterNames;
-import org.kuali.kfs.batch.BatchInputFileType;
-import org.kuali.kfs.exceptions.XMLParseException;
-import org.kuali.kfs.service.BatchInputFileService;
-import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.gl.batch.collector.CollectorBatch;
-import org.kuali.module.gl.bo.CollectorHeader;
-import org.kuali.module.gl.bo.InterDepartmentalBilling;
-import org.kuali.module.gl.bo.OriginEntry;
-import org.kuali.module.gl.service.CollectorService;
-import org.kuali.module.gl.service.InterDepartmentalBillingService;
-import org.kuali.module.gl.service.OriginEntryGroupService;
-import org.kuali.module.gl.service.OriginEntryService;
-import org.springframework.beans.factory.BeanFactory;
+import org.kuali.core.service.*;
+import org.kuali.module.gl.collector.xml.*;
+import org.kuali.module.gl.collector.xml.impl.*;
+import org.kuali.module.gl.service.*;
+import org.springframework.beans.*;
+import org.springframework.beans.factory.*;
 
-/**
- * @see org.kuali.module.gl.service.CollectorService
- */
-public class CollectorServiceImpl implements CollectorService {
+public class CollectorServiceImpl implements CollectorService, BeanFactoryAware {
     private static Logger LOG = Logger.getLogger(CollectorServiceImpl.class);
-
+    
     private InterDepartmentalBillingService interDepartmentalBillingService;
     private OriginEntryService originEntryService;
     private OriginEntryGroupService originEntryGroupService;
     private KualiConfigurationService kualiConfigurationService;
     private MailService mailService;
     private DateTimeService dateTimeService;
-    private BatchInputFileService batchInputFileService;
-    private BatchInputFileType collectorInputFileType;
     private BeanFactory beanFactory;
 
-    /**
-     * Parses the given file, validates the batch, stores the entries, and sends email.
-     * 
-     * @see org.kuali.module.gl.service.CollectorService#loadCollectorFile(java.lang.String)
-     */
-    public boolean loadCollectorFile(String fileName) {
-        boolean isValid = true;
-
-        CollectorBatch batch = doCollectorFileParse(fileName);
-
-        // terminate if there were parse errors
-        if (!GlobalVariables.getErrorMap().isEmpty()) {
-            isValid = false;
-        }
-
-        // do validation, base collector files rules and total checks
-        if (isValid) {
-            isValid = performValidation(batch);
-        }
-
-        if (isValid) {
-            // check totals
-            isValid = checkTrailerTotals(batch);
-        }
-
-        if (isValid) {
-            // store origin group, entries, and id billings
-            batch.setDefaultsAndStore();
-        }
-
-        List<String> errorMessages = translateErrorsFromGlobalVariables();
-        sendEmail(errorMessages, batch);
-
-        return isValid;
-    }
-
-    /**
-     * Calls batch input service to parse the xml contents into an object. Any errors will be contained in GlobalVariables.errorMap
-     * 
-     * @param fileName
-     */
-    private CollectorBatch doCollectorFileParse(String fileName) {
-
-        InputStream inputStream = null;
+    public void loadCollectorFile(String fileName) {
+        CollectorFileParser collectorFileParser = (CollectorFileParser)beanFactory.getBean("glCollectorFileParser");
+        doHardEditParse(collectorFileParser, fileName);
+        List errors = collectorFileParser.getFileHandler().getErrorMessages();
+        if (errors.isEmpty())
+            doCollectorFileParse(collectorFileParser, fileName);
+        sendEmail(collectorFileParser.getFileHandler());
+     }
+    private void doHardEditParse(CollectorFileParser collectorFileParser, String fileName) {
+        HardEditHandler hardEditHandler = new HardEditHandler();
+        hardEditHandler.clear();
+        collectorFileParser.setFileHandler(hardEditHandler);
         try {
-            inputStream = new FileInputStream(fileName);
+            InputStream inputStream1 = new FileInputStream(fileName);
+            collectorFileParser.parse(inputStream1);
+        }catch(FileReadException fre) {
+            //Do something here.
+        }catch(FileNotFoundException fnfe) {
+            //Do something here.
         }
-        catch (FileNotFoundException e) {
-            LOG.error("file to parse not found " + fileName, e);
-            throw new RuntimeException("Cannot find the file requested to be parsed " + fileName + " " + e.getMessage(), e);
-        }
-
-        CollectorBatch parsedObject = null;
-        try {
-            byte[] fileByteContent = IOUtils.toByteArray(inputStream);
-            parsedObject = (CollectorBatch) batchInputFileService.parse(collectorInputFileType, fileByteContent);
-        }
-        catch (IOException e) {
-            LOG.error("error while getting file bytes:  " + e.getMessage(), e);
-            throw new RuntimeException("Error encountered while attempting to get file bytes: " + e.getMessage(), e);
-        }
-        catch (XMLParseException e1) {
-            LOG.error("errors parsing xml " + e1.getMessage(), e1);
-            GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KFSKeyConstants.ERROR_BATCH_UPLOAD_PARSING_XML, new String[] { e1.getMessage() });
-        }
-
-        return parsedObject;
     }
-
-    /**
-     * Performs the following checks on the collector batch: Any errors will be contained in GlobalVariables.errorMap
-     * 
-     * @param batch - batch to validate
-     * @return boolean - true if validation was successful, false it not
-     */
-    public boolean performValidation(CollectorBatch batch) {
-        boolean valid = true;
-
-        boolean performDuplicateHeaderCheck = kualiConfigurationService.getApplicationParameterIndicator(ParameterGroups.COLLECTOR_SECURITY_GROUP_NAME, SystemGroupParameterNames.COLLECTOR_PERFORM_DUPLICATE_HEADER_CHECK);
-        if (performDuplicateHeaderCheck) {
-            valid = duplicateHeaderCheck(batch);
-        }
-
-        if (valid) {
-            valid = checkForMixedDocumentTypes(batch);
-        }
-
-        if (valid) {
-            valid = checkForMixedBalanceTypes(batch);
-        }
-
-        if (valid) {
-            valid = checkDetailKeys(batch);
-        }
-
-        return valid;
-    }
-
-    /**
-     * Checks header against previously loaded batch headers for a duplicate submission.
-     * 
-     * @param batch - batch to check
-     * @return true if header if OK, false if header was used previously
-     */
-    private boolean duplicateHeaderCheck(CollectorBatch batch) {
-        boolean validHeader = true;
-
-        CollectorHeader batchHeader = batch.createCollectorHeader();
-        CollectorHeader foundHeader = (CollectorHeader) SpringServiceLocator.getBusinessObjectService().retrieve(batchHeader);
-
-        if (foundHeader != null) {
-            LOG.error("batch header was matched to a previously loaded batch");
-            GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KFSKeyConstants.Collector.DUPLICATE_BATCH_HEADER);
-
-            validHeader = false;
-        }
-
-        return validHeader;
-    }
-
-    /**
-     * Iterates through the origin entries and builds a map on the document types. Then checks there was only one document type
-     * found.
-     * 
-     * @param batch - batch to check document types
-     * @return true if there is only one document type, false if multiple document types were found.
-     */
-    private boolean checkForMixedDocumentTypes(CollectorBatch batch) {
-        boolean docTypesNotMixed = true;
-
-        Set batchDocumentTypes = new HashSet();
-        for (OriginEntry entry : batch.getOriginEntries()) {
-            batchDocumentTypes.add(entry.getFinancialDocumentTypeCode());
-        }
-
-        if (batchDocumentTypes.size() > 1) {
-            LOG.error("mixed document types found in batch");
-            GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KFSKeyConstants.Collector.MIXED_DOCUMENT_TYPES);
-
-            docTypesNotMixed = false;
-        }
-
-        return docTypesNotMixed;
-    }
-
-    /**
-     * Iterates through the origin entries and builds a map on the balance types. Then checks there was only one balance type found.
-     * 
-     * @param batch - batch to check balance types
-     * @return true if there is only one balance type, false if multiple balance types were found
-     */
-    private boolean checkForMixedBalanceTypes(CollectorBatch batch) {
-        boolean balanceTypesNotMixed = true;
-
-        Set balanceTypes = new HashSet();
-        for (OriginEntry entry : batch.getOriginEntries()) {
-            balanceTypes.add(entry.getFinancialBalanceTypeCode());
-        }
-
-        if (balanceTypes.size() > 1) {
-            LOG.error("mixed balance types found in batch");
-            GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KFSKeyConstants.Collector.MIXED_BALANCE_TYPES);
-
-            balanceTypesNotMixed = false;
-        }
-
-        return balanceTypesNotMixed;
-    }
-
-    /**
-     * Verifies each detail (id billing) record key has an corresponding gl entry in the same batch. The key is built by joining the
-     * values of chart of accounts code, account number, sub account number, object code, and sub object code.
-     * 
-     * @param batch - batch to validate
-     * @return true if all detail records had matching keys, false otherwise
-     */
-    private boolean checkDetailKeys(CollectorBatch batch) {
-        boolean detailKeysFound = true;
-
-        // build a Set of keys from the gl entries to compare with
-        Set glEntryKeys = new HashSet();
-        for (OriginEntry entry : batch.getOriginEntries()) {
-            glEntryKeys.add(StringUtils.join(new String[] { entry.getChartOfAccountsCode(), entry.getAccountNumber(), entry.getSubAccountNumber(), entry.getFinancialObjectCode(), entry.getFinancialSubObjectCode() }, ","));
-        }
-
-        for (InterDepartmentalBilling idBilling : batch.getIdBillings()) {
-            String idBillingKey = StringUtils.join(new String[] { idBilling.getChartOfAccountsCode(), idBilling.getAccountNumber(), idBilling.getSubAccountNumber(), idBilling.getFinancialObjectCode(), idBilling.getFinancialSubObjectCode() }, ",");
-            if (!glEntryKeys.contains(idBillingKey)) {
-                LOG.error("found detail key without a matching gl entry key " + idBillingKey);
-                GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KFSKeyConstants.Collector.NONMATCHING_DETAIL_KEY, idBillingKey);
-
-                detailKeysFound = false;
-                break;
-            }
-        }
-
-        return detailKeysFound;
-    }
-
-    /**
-     * Checks the batch total line count and amounts against the trailer. Any errors will be contained in GlobalVariables.errorMap
-     * 
-     * @param batch - batch to check totals for
-     * @return boolean - true if validation was successful, false it not
-     */
-    public boolean checkTrailerTotals(CollectorBatch batch) {
-        boolean trailerTotalsMatch = true;
-
-        int actualRecordCount = batch.getOriginEntries().size() + batch.getIdBillings().size();
-        if (actualRecordCount != batch.getTotalRecords()) {
-            LOG.error("trailer check on total count did not pass, expected count: " + String.valueOf(batch.getTotalRecords()) + ", actual count: " + String.valueOf(actualRecordCount));
-            GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KFSKeyConstants.Collector.TRAILER_ERROR_COUNTNOMATCH, String.valueOf(batch.getTotalRecords()), String.valueOf(actualRecordCount));
-
-            trailerTotalsMatch = false;
-        }
-
-        KualiDecimal creditAmount = new KualiDecimal(0);
-        KualiDecimal debitAmount = new KualiDecimal(0);
-        KualiDecimal otherAmount = new KualiDecimal(0);
-        for (OriginEntry entry : batch.getOriginEntries()) {
-            if (KFSConstants.GL_CREDIT_CODE.equals(entry.getTransactionDebitCreditCode())) {
-                creditAmount = creditAmount.add(entry.getTransactionLedgerEntryAmount());
-            }
-            else if (KFSConstants.GL_DEBIT_CODE.equals(entry.getTransactionDebitCreditCode())) {
-                debitAmount = debitAmount.add(entry.getTransactionLedgerEntryAmount());
-            }
-            else {
-                otherAmount = otherAmount.add(entry.getTransactionLedgerEntryAmount());
-            }
-        }
-
-        // retrieve document types that balance by equal debits and credits
-        String[] documentTypes = kualiConfigurationService.getApplicationParameterValues(ParameterGroups.COLLECTOR_SECURITY_GROUP_NAME, SystemGroupParameterNames.COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES);
-
-        boolean equalDebitCreditTotal = false;
-        for (int i = 0; i < documentTypes.length; i++) {
-            String documentType = StringUtils.remove(documentTypes[i], "*");
-            if (batch.getOriginEntries().get(0).getFinancialDocumentTypeCode().startsWith(documentType.toUpperCase()) && KFSConstants.BALANCE_TYPE_ACTUAL.equals(batch.getOriginEntries().get(0).getFinancialBalanceTypeCode())) {
-                equalDebitCreditTotal = true;
-            }
-        }
-
-        if (equalDebitCreditTotal) {
-            // credits must equal debits must equal total trailer amount
-            if (!creditAmount.equals(debitAmount) || !creditAmount.equals(batch.getTotalAmount())) {
-                LOG.error("trailer check on total amount did not pass, debit should equal credit, should equal trailer total");
-                GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KFSKeyConstants.Collector.TRAILER_ERROR_AMOUNTNOMATCH1, creditAmount.toString(), debitAmount.toString(), batch.getTotalAmount().toString());
-            }
-        }
-        else {
-            // credits plus debits plus other amount must equal trailer
-            KualiDecimal totalGlEntries = creditAmount.add(debitAmount).add(otherAmount);
-            if (!totalGlEntries.equals(batch.getTotalAmount())) {
-                LOG.error("trailer check on total amount did not pass, sum of gl entry amounts should equal trailer total");
-                GlobalVariables.getErrorMap().putError(Constants.GLOBAL_ERRORS, KFSKeyConstants.Collector.TRAILER_ERROR_AMOUNTNOMATCH2, totalGlEntries.toString(), batch.getTotalAmount().toString());
-            }
-        }
-
-        return trailerTotalsMatch;
-    }
-
-    /**
-     * Sends email with results of the batch processing.
-     * 
-     * @param eerrorMessages - list of error messages that were encountered during processing
-     */
-    private void sendEmail(List<String> errorMessages, CollectorBatch batch) {
+    private void sendEmail(CollectorFileHandler collectorFileHandler) {
         LOG.debug("sendNoteEmails() starting");
         MailMessage message = new MailMessage();
+        message.setFromAddress("doNotReply@KUALI.SYSTEM");
+        message.setSubject("Collector Input Summary");
 
-        message.setFromAddress(mailService.getBatchMailingList());
-        
-        String subject = kualiConfigurationService.getApplicationParameterValue(ParameterGroups.COLLECTOR_SECURITY_GROUP_NAME, SystemGroupParameterNames.COLLECTOR_EMAIL_SUBJECT_PARAMETER_NAME);
-        String productionEnvironmentCode = kualiConfigurationService.getPropertyString(KFSConstants.PROD_ENVIRONMENT_CODE_KEY);
-        String environmentCode = kualiConfigurationService.getPropertyString(KFSConstants.ENVIRONMENT_KEY);
-        if (!StringUtils.equals(productionEnvironmentCode, environmentCode)) {
-            subject = environmentCode + ": " + subject;
-        }
-        message.setSubject(subject);
+        String body = createMessageBody(collectorFileHandler);
 
-        String body = createMessageBody(errorMessages, batch);
         message.setMessage(body);
-        message.addToAddress(batch.getWorkgroupName());
+        
+        String email = collectorFileHandler.getHeader().getWorkgroupName();
+        message.addToAddress(email);
+
         try {
             mailService.sendMessage(message);
-        }
-        catch (InvalidAddressException e) {
+        } catch (InvalidAddressException e) {
             LOG.error("sendErrorEmail() Invalid email address. Message not sent", e);
         }
-    }
-
-    private String createMessageBody(List<String> errorMessages, CollectorBatch batch) {
+   }
+    private String createMessageBody(CollectorFileHandler collectorFileHandler) {
         StringBuffer body = new StringBuffer();
-
+        XmlHeader header = collectorFileHandler.getHeader();
+        XmlTrailer trailer = collectorFileHandler.getTrailer();
         body.append("Header Information:\n\n");
-        if (!GlobalVariables.getErrorMap().containsMessageKey(KFSKeyConstants.ERROR_BATCH_UPLOAD_PARSING_XML)) {
-            body.append("Chart: " + batch.getChartOfAccountsCode() + "\n");
-            body.append("Org: " + batch.getOrganizationCode() + "\n");
-            body.append("Contact: " + batch.getPersonUserID() + "\n");
-            body.append("Email: " + batch.getWorkgroupName() + "\n");
-            body.append("File Date: " + batch.getTransmissionDate() + "\n\n");
-            body.append("Summary Totals:\n");
-
-            // SUMMARY TOTALS HERE
-            body.append("    Total Records: " + String.valueOf(batch.getTotalRecords().intValue()) + "\n");
-            body.append("    Total Amount: " + batch.getTotalAmount() + "\n\n");
-        }
+        body.append("Chart: " + header.getChartOfAccountsCode() + "\n");
+        body.append("Org: " + header.getOrganizationCode() + "\n");
+        body.append("Contact: " + header.getContactPerson() + "\n");
+        body.append("Email: " + header.getWorkgroupName() + "\n");
+        body.append("File Date: " + header.getTransmissionDate() + "\n\n");
+        body.append("Summary Totals:\n");
+        // SUMMARY TOTALS HERE
+        body.append("    Total Records: " + String.valueOf(trailer.getTotalRecords().intValue()) + "\n");
+        body.append("    Total Amount: " + trailer.getTotalAmount() + "\n\n");
         body.append("Reported Errors:\n");
-
         // ERRORS GO HERE
+        List errorMessages = collectorFileHandler.getErrorMessages();
         if (errorMessages.isEmpty()) {
             body.append("----- NO ERRORS TO REPORT -----\nFiles have been added to the system.");
-        }
-        else {
-            for (String currentMessage : errorMessages) {
+        } else {
+            Iterator iter = errorMessages.iterator();
+            while (iter.hasNext()) {
+                String currentMessage = (String)iter.next();
                 body.append(currentMessage + "\n");
             }
             body.append("\n----- THE RECORDS WERE NOT SAVED TO THE DATABASE -----");
         }
         return body.toString();
     }
-
-    /**
-     * Builds actual error message from error key and parameters.
-     * 
-     * @return List<String> of error message text
-     */
-    private List<String> translateErrorsFromGlobalVariables() {
-        List<String> collectorErrors = new ArrayList();
-
-        for (Iterator iter = GlobalVariables.getErrorMap().getPropertiesWithErrors().iterator(); iter.hasNext();) {
-            String errorKey = (String) iter.next();
-
-            for (Iterator iter2 = GlobalVariables.getErrorMap().getMessages(errorKey).iterator(); iter2.hasNext();) {
-                ErrorMessage errorMessage = (ErrorMessage) iter2.next();
-                String messageText = kualiConfigurationService.getPropertyString(errorMessage.getErrorKey());
-                collectorErrors.add(MessageFormat.format(messageText, (Object[]) errorMessage.getMessageParameters()));
-            }
+    private CollectorFileHandlerImpl doCollectorFileParse(CollectorFileParser collectorFileParser, String fileName) {
+        CollectorFileHandlerImpl collectorFileHandler = new CollectorFileHandlerImpl
+                (originEntryService, interDepartmentalBillingService, originEntryGroupService, dateTimeService);
+        collectorFileParser.setFileHandler(collectorFileHandler);
+        try {
+            InputStream inputStream2 = new FileInputStream(fileName);
+            collectorFileParser.parse(inputStream2);
+            return collectorFileHandler;
+        }catch(FileReadException fre) {
+            return null;
+        }catch(FileNotFoundException fnfe) {
+            return null;
         }
-
-        return collectorErrors;
     }
-
     public void setInterDepartmentalBillingService(InterDepartmentalBillingService interDepartmentalBillingService) {
         this.interDepartmentalBillingService = interDepartmentalBillingService;
     }
-
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
     }
-
     public void setOriginEntryService(OriginEntryService originEntryService) {
         this.originEntryService = originEntryService;
     }
-
     public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
         this.kualiConfigurationService = kualiConfigurationService;
     }
-
     public String getStagingDirectory() {
-        return kualiConfigurationService.getPropertyString(KFSConstants.GL_COLLECTOR_STAGING_DIRECTORY);
+        return kualiConfigurationService.getPropertyString("collector.staging.directory");
     }
-
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
+    public static void setLOG(Logger log) {
+        LOG = log;
+    }
     public void setDateTimeService(DateTimeService dateTimeService) {
         this.dateTimeService = dateTimeService;
     }
-
     public void setMailService(MailService mailService) {
         this.mailService = mailService;
     }
-
-    public void setBatchInputFileService(BatchInputFileService batchInputFileService) {
-        this.batchInputFileService = batchInputFileService;
-    }
-
-    public void setCollectorInputFileType(BatchInputFileType collectorInputFileType) {
-        this.collectorInputFileType = collectorInputFileType;
-    }
-
 }

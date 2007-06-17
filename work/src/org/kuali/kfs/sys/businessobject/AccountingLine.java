@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -343,14 +343,14 @@ public interface AccountingLine extends PersistableBusinessObject {
     public void setObjectTypeCode(String objectTypeCode);
 
     /**
-     * @return Returns the financialDocumentLineTypeCode.
+     * @return Returns the ojbConcreteClass.
      */
-    public String getFinancialDocumentLineTypeCode();
+    public String getOjbConcreteClass();
 
     /**
-     * @param financialDocumentLineTypeCode The financialDocumentLineTypeCode to set.
+     * @param ojbConcreteClass The ojbConcreteClass to set.
      */
-    public void setFinancialDocumentLineTypeCode(String financialDocumentLineTypeCode);
+    public void setOjbConcreteClass(String ojbConcreteClass);
 
     /**
      * @return Returns the project.
@@ -392,6 +392,17 @@ public interface AccountingLine extends PersistableBusinessObject {
      * @see org.kuali.core.bo.AccountingLine#isTargetAccountingLine()
      */
     public boolean isTargetAccountingLine();
+
+    /**
+     * @return Returns the budgetYear.
+     */
+    public String getBudgetYear();
+
+    /**
+     * @param budgetYear The budgetYear to set.
+     */
+    public void setBudgetYear(String budgetYear);
+
 
     /**
      * @param other
