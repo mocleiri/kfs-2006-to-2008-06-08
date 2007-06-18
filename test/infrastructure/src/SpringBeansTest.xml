@@ -9,5 +9,9 @@
 	</bean>
 	
 	<bean id="mailService" class="org.kuali.test.NonSendingMailService">
+		<property name="mailSender">
+			<ref bean="mailSender" />
+		</property>
+		<property name="batchMailingList" value="${mailing.list.batch}" />
 	</bean>
 </beans>
