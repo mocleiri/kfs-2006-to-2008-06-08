@@ -55,6 +55,7 @@
 		<property name="jobNames">
 			<list>
 				<value>closeJob</value>
+				<value>cfdaJob</value>
 			</list>
 		</property>
 	</bean>
@@ -160,6 +161,14 @@
         </property>
     </bean>
 
+    <bean id="cfdaJob" parent="scheduledJobDescriptor">
+		<property name="steps">
+			<list>
+				<ref bean="cfdaBatchStep" />
+			</list>
+		</property>
+	</bean>
+
     <bean id="closeBatchStep" class="org.kuali.module.cg.batch.CloseBatchStep">
         <property name="closeService">
             <ref bean="closeService" />
@@ -173,4 +182,5 @@
 			</list>
 		</property>
 	</bean>
+
 </beans>
