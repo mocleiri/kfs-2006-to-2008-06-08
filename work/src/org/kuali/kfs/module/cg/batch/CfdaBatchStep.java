@@ -53,7 +53,7 @@ public class CfdaBatchStep extends AbstractStep {
      * 
      * @see org.kuali.kfs.batch.Step#execute()
      */
-    public boolean execute() throws InterruptedException {
+    public boolean execute(String jobName) throws InterruptedException {
         MailMessage message = new MailMessage();
 
         try {
@@ -63,8 +63,10 @@ public class CfdaBatchStep extends AbstractStep {
             List<String> memberNetworkIds = workgroup.getGroupUsers();
             for(String id : memberNetworkIds) {
                 try {
-                    UniversalUser user = universalUserService.getUniversalUser(id);
+                    UniversalUser user = universalUserService.getUniversalUser(id.toUpperCase());
                     message.addToAddress(user.getPersonEmailAddress());
+                    // TODO Must remember to take this out.
+                    message.addToAddress("lc278@cornell.edu");
                 } catch(UserNotFoundException unfe) {
                     LOG.info("User " + id + " doesn't exist.", unfe);
                 }
