@@ -16,11 +16,11 @@
 package org.kuali.module.purap.document;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ojb.broker.util.collections.ManageableArrayList;
 import org.kuali.core.bo.Note;
 import org.kuali.core.document.AmountTotaling;
@@ -119,7 +119,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     }
 
     public KualiDecimal getTotalDollarAmountAboveLineItems() {
-        return getTotalDollarAmountAllItems(null);
+        return getTotalDollarAmountAboveLineItems(null);
     }
     
     public KualiDecimal getTotalDollarAmountAboveLineItems(String[] excludedTypes) {
@@ -198,11 +198,13 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     }
 
     public String getVendorNumber() {
-        if (ObjectUtils.isNotNull(vendorDetail)) {
-            return vendorDetail.getVendorNumber();
+        if (StringUtils.isNotEmpty(vendorNumber)){
+            return vendorNumber;
         }
-        return "";
-    }
+        else if (ObjectUtils.isNotNull(vendorDetail)) {
+            return vendorDetail.getVendorNumber();
+        }else  return "";
+        }
 
     public void setVendorNumber(String vendorNumber) {
         this.vendorNumber = vendorNumber;
@@ -397,21 +399,24 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
 
     public abstract Class getItemClass();
 
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLines()
-     */
-    @Override
-    public List getSourceAccountingLines() {
-        // TODO: Chris loop through items and get accounts
-        TypedArrayList accounts = null;
-        if (items.size() >= 1) {
-            accounts = new TypedArrayList(getItem(0).getAccountingLineClass());
-        }
-        for (PurchasingApItem item : items) {
-            accounts.addAll(item.getSourceAccountingLines());
-        }
-        return (accounts == null) ? new ArrayList() : accounts;
-    }
+//    /**
+//     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLines()
+//     */
+//    @Override
+//    public List getSourceAccountingLines() {
+//        
+//        return SpringServiceLocator.getPurapAccountingService().generateSummary(this.getItems());
+//
+//        // TODO: Chris loop through items and get accounts
+////        TypedArrayList accounts = null;
+////        if (items.size() >= 1) {
+////            accounts = new TypedArrayList(getItem(0).getAccountingLineClass());
+////        }
+////        for (PurchasingApItem item : items) {
+////            accounts.addAll(item.getSourceAccountingLines());
+////        }
+////        return (accounts == null) ? new ArrayList() : accounts;
+//    }
 
     public String getVendorCityName() {
         return vendorCityName;
