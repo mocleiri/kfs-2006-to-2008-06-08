@@ -15,6 +15,10 @@
  */
 package org.kuali.module.purap.rules;
 
+import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
+import static org.kuali.kfs.KFSConstants.MONTH1;
+import static org.kuali.module.purap.PurapConstants.PO_DOC_TYPE_CODE;
+
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -24,9 +28,14 @@ import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.bo.AccountingLine;
+import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
+import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
@@ -37,6 +46,7 @@ import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
+import org.kuali.workflow.KualiWorkflowUtils.RouteLevelNames;
 
 public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
 
@@ -69,18 +79,18 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
      * @see org.kuali.module.purap.rules.PurchasingDocumentRuleBase#processItemValidation(org.kuali.module.purap.document.PurchasingDocument)
      */
     @Override
-    public boolean processItemValidation(PurchasingDocument purDocument) {
-        boolean valid = super.processItemValidation(purDocument);
-        for (PurchasingApItem item : purDocument.getItems()) {
+    public boolean processItemValidation(PurchasingAccountsPayableDocument purapDocument) {
+        boolean valid = super.processItemValidation(purapDocument);
+        for (PurchasingApItem item : purapDocument.getItems()) {
             String identifierString = (item.getItemType().isItemTypeAboveTheLineIndicator() ? "Item " + item.getItemLineNumber().toString() : item.getItemType().getItemTypeDescription());
             valid &= validateEmptyItemWithAccounts((PurchaseOrderItem) item, identifierString);
             valid &= validateItemWithoutAccounts((PurchaseOrderItem) item, identifierString);
             valid &= validateItemUnitOfMeasure((PurchaseOrderItem) item, identifierString);
-            if (purDocument.getDocumentHeader().getWorkflowDocument() != null && purDocument.getDocumentHeader().getWorkflowDocument().getDocumentType().equals(PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_AMENDMENT_DOCUMENT)) {
+            if (purapDocument.getDocumentHeader().getWorkflowDocument() != null && purapDocument.getDocumentHeader().getWorkflowDocument().getDocumentType().equals(PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_AMENDMENT_DOCUMENT)) {
                 valid &= validateItemForAmendment((PurchaseOrderItem) item, identifierString);
             }
         }
-        valid &= validateTradeInAndDiscountCoexistence(purDocument);
+        valid &= validateTradeInAndDiscountCoexistence((PurchasingDocument)purapDocument);
         return valid;
     }
 
@@ -265,4 +275,45 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
         }
         return valid;
     }
+
+    @Override
+    protected boolean checkAccountingLineAccountAccessibility(AccountingDocument financialDocument, AccountingLine accountingLine, AccountingLineAction action) {
+        KualiWorkflowDocument workflowDocument = financialDocument.getDocumentHeader().getWorkflowDocument();
+        List currentRouteLevels = getCurrentRouteLevels(workflowDocument);
+
+        if (currentRouteLevels.contains(RouteLevelNames.PURCHASE_ORDER_INTERNAL_REVIEW) && workflowDocument.isApprovalRequested()) {
+            // DO NOTHING: do not check that user owns acct lines; at this level, approvers can edit all detail on PO
+            return true;
+        }
+        
+        else {
+            return super.checkAccountingLineAccountAccessibility(financialDocument, accountingLine, action);
+        }
+    }
+
+    @Override
+    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument accountingDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+        super.customizeExplicitGeneralLedgerPendingEntry(accountingDocument, accountingLine, explicitEntry);
+        PurchaseOrderDocument po = (PurchaseOrderDocument)accountingDocument;
+
+        purapCustomizeGeneralLedgerPendingEntry(po, accountingLine, explicitEntry, po.getPurapDocumentIdentifier(), GL_DEBIT_CODE, true);
+        
+        explicitEntry.setTransactionLedgerEntryDescription(entryDescription(po.getVendorName()));
+        explicitEntry.setFinancialDocumentTypeCode(PO_DOC_TYPE_CODE);  //don't think i should have to override this, but default isn't getting the right PO doc
+        
+        UniversityDate uDate = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
+        if (po.getPostingYear().compareTo(uDate.getUniversityFiscalYear()) > 0) {
+            //USE NEXT AS SET ON PO; POs can be forward dated to not encumber until next fiscal year
+            explicitEntry.setUniversityFiscalYear(po.getPostingYear());
+            explicitEntry.setUniversityFiscalPeriodCode(MONTH1);
+        }
+        else {
+            //USE CURRENT; don't use FY on PO in case it's a prior year
+            explicitEntry.setUniversityFiscalYear(uDate.getUniversityFiscalYear());
+            explicitEntry.setUniversityFiscalPeriodCode(uDate.getUniversityFiscalAccountingPeriod());
+            //TODO do we need to update the doc posting year?
+        }
+    }
+
+
 }
