@@ -15,6 +15,7 @@
  */
 package org.kuali.module.budget.dao.ojb;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -24,6 +25,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+
+// @@TODO: not needed for production code
+import org.apache.commons.beanutils.PropertyUtils;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -4188,39 +4192,39 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         }
         */
         /* (2) test the addIn criterion  (worked 04/02/2007) p6spy=yes */
-        Integer RequestYear = BaseYear+1;
-        Criteria criteriaID = new Criteria();
-        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
-                              RequestYear);
-        criteriaID.addIn(KFSPropertyConstants.FINANCIAL_OBJECT_CODE,
-                this.findPositonRequiredObjectCodes(BaseYear));
-        String[] selectCount = {"COUNT(*)"};
-        ReportQueryByCriteria queryID =
-            new ReportQueryByCriteria(PendingBudgetConstructionGeneralLedger.class,
-                                      selectCount,criteriaID);
-        Iterator rowCounter =
-            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-        while (rowCounter.hasNext())
-        {
-            Integer rowCount = 
-                ((BigDecimal)((Object[]) rowCounter.next())[0]).intValue();
-            LOG.info(String.format("\nPBGL rows with detailed position objects: %d",
-                     rowCount));
-        }
+//        Integer RequestYear = BaseYear+1;
+//        Criteria criteriaID = new Criteria();
+//        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+//                              RequestYear);
+//        criteriaID.addIn(KFSPropertyConstants.FINANCIAL_OBJECT_CODE,
+//                this.findPositonRequiredObjectCodes(BaseYear));
+//        String[] selectCount = {"COUNT(*)"};
+//        ReportQueryByCriteria queryID =
+//            new ReportQueryByCriteria(PendingBudgetConstructionGeneralLedger.class,
+//                                      selectCount,criteriaID);
+//        Iterator rowCounter =
+//            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+//        while (rowCounter.hasNext())
+//        {
+//            Integer rowCount = 
+//                ((BigDecimal)((Object[]) rowCounter.next())[0]).intValue();
+//            LOG.info(String.format("\nPBGL rows with detailed position objects: %d",
+//                     rowCount));
+//        }
         // here is an add on to verify that OJB instantiates all joined rows
         // one row at a time
-        criteriaID.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,"BL");
-        QueryByCriteria testQry = 
-            new QueryByCriteria(LaborObject.class,criteriaID);
-        Iterator uncleGuido =
-            getPersistenceBrokerTemplate().getIteratorByQuery(testQry);
-        Integer numerateri = new Integer(0);
-        while (uncleGuido.hasNext())
-        {
-            numerateri = numerateri+1;
-            LOG.warn(String.format("\ninstantiating Object %d",numerateri));
-            LaborObject labObj = (LaborObject) uncleGuido.next();
-        }
+//        criteriaID.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,"BL");
+//        QueryByCriteria testQry = 
+//            new QueryByCriteria(LaborObject.class,criteriaID);
+//        Iterator uncleGuido =
+//            getPersistenceBrokerTemplate().getIteratorByQuery(testQry);
+//        Integer numerateri = new Integer(0);
+//        while (uncleGuido.hasNext())
+//        {
+//            numerateri = numerateri+1;
+//            LOG.warn(String.format("\ninstantiating Object %d",numerateri));
+//            LaborObject labObj = (LaborObject) uncleGuido.next();
+//        }
         /* (3) attempt to test the rounding mechanism (worked 4/4/2007)
         // build the new BC CSF objects in memory
         setUpCSFOverrideKeys(BaseYear); 
@@ -4236,7 +4240,124 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         createNewBCDocumentsFromGLCSF(2007,true,true);
         buildAppointmentFundingAndBCSF(2007);
         */
+        /*
+         * (5)  attempting to speed up document creation
+         */
+        try
+        {
+            testANewBCDocument();
+        }
+        catch (WorkflowException wex)
+        {
+            LOG.warn(String.format("\nproblem creating document %s",
+                                   wex.getMessage()));
+            wex.printStackTrace();
+        }
+        /*
+         *  (6) write out a bean's properties
+         */
+//        try
+//        {
+//            testBeanProperties();
+//        }
+//        catch (IllegalAccessException iaex)
+//        {
+//            LOG.warn(String.format("\n %s",iaex.getMessage()));
+//            iaex.printStackTrace();
+//        }
+//        catch (NoSuchMethodException nsex)
+//        {
+//            LOG.warn(String.format("\n %s",nsex.getMessage()));
+//            nsex.printStackTrace();
+//        }
+//        catch (InvocationTargetException itex)
+//        {
+//            LOG.warn(String.format("\n %s",itex.getMessage()));
+//            itex.printStackTrace();
+//        }
+   }
+    
+    /*
+     *   @@TODO:  take this out
+     */
+    // playing around to see if we can create a new document and have workflow
+    // do fewer steps in the route
+    
+    
+    private void testBeanProperties()
+    throws IllegalAccessException, InvocationTargetException,
+           NoSuchMethodException
+    {
+        HashMap<String,Object> propertyMap;
+        propertyMap = 
+            (HashMap<String,Object>) PropertyUtils.describe(workflowDocumentService);
+        LOG.warn(String.format("\n\nworkflowDocumentService bean properties"));
+        for (Map.Entry<String,Object> printPair: propertyMap.entrySet())
+        {
+          LOG.warn(String.format("\n %s  %s",
+                          printPair.getKey(),
+                          printPair.getValue().toString())); 
+        }
+        
     }
+    
+    private void testANewBCDocument()
+    throws WorkflowException
+    {
+        // first, get rid of anything that's in the header
+        Criteria delCriteria = new Criteria();
+        delCriteria.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,2012);
+        QueryByCriteria queryID = new QueryByCriteria(BudgetConstructionDocument.class,
+                                                      delCriteria);
+        getPersistenceBrokerTemplate().deleteByQuery(queryID);
+        getPersistenceBrokerTemplate().clearCache();
+        // set up the Budget Construction Header
+        BudgetConstructionDocument newBCHdr;
+        newBCHdr = (BudgetConstructionDocument)
+        documentService.getNewDocument(
+                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_NAME);
+        newBCHdr.setUniversityFiscalYear(2012);
+        newBCHdr.setChartOfAccountsCode("BL");
+        newBCHdr.setAccountNumber("1031400");
+        newBCHdr.setSubAccountNumber("-----");
+        newBCHdr.setOrganizationLevelChartOfAccountsCode(
+                BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_CHART_OF_ACCOUNTS_CODE);
+        newBCHdr.setOrganizationLevelOrganizationCode(
+                BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_ORGANIZATION_CODE);
+        newBCHdr.setOrganizationLevelCode(
+                BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_CODE);
+        newBCHdr.setBudgetTransactionLockUserIdentifier(
+                BudgetConstructionConstants.DEFAULT_BUDGET_HEADER_LOCK_IDS);
+        newBCHdr.setBudgetLockUserIdentifier(
+                BudgetConstructionConstants.DEFAULT_BUDGET_HEADER_LOCK_IDS);
+        newBCHdr.setVersionNumber(DEFAULT_VERSION_NUMBER);
+        DocumentHeader kualiDocumentHeader = newBCHdr.getDocumentHeader();
+        newBCHdr.setDocumentNumber(newBCHdr.getDocumentHeader().getDocumentNumber());
+        kualiDocumentHeader.setOrganizationDocumentNumber(
+                            newBCHdr.getUniversityFiscalYear().toString());
+        kualiDocumentHeader.setFinancialDocumentStatusCode(
+                KFSConstants.INITIAL_KUALI_DOCUMENT_STATUS_CD);
+        kualiDocumentHeader.setFinancialDocumentTotalAmount(KualiDecimal.ZERO);
+        kualiDocumentHeader.setFinancialDocumentDescription(String.format("%s %d %s %s",
+                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION,
+                       newBCHdr.getUniversityFiscalYear(),
+                       newBCHdr.getChartOfAccountsCode(),newBCHdr.getAccountNumber()));
+        kualiDocumentHeader.setExplanation(
+                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION);
+        getPersistenceBrokerTemplate().store(newBCHdr);
+        documentService.prepareWorkflowDocument(newBCHdr);
+        workflowDocumentService.route(newBCHdr.getDocumentHeader().getWorkflowDocument(),
+                                      "created by Genesis",null);
+//        KHUNTLEY does not have superuser privileges
+//        the procurement card does a superUserApprove, and its test uses KULUSER 
+//        KULUSER works for us as well, but for our document the superUser method
+//        apparently goes through the same stages as the route method        
+        workflowDocumentService.superUserApprove(newBCHdr.getDocumentHeader().getWorkflowDocument(),
+                "created by Genesis");
+   }
+    
+        
+
 
     //
     //  here are the routines Spring uses to "wire the beans"
