@@ -619,5 +619,20 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
         return chartAcct;
     }
     
+    /**
+     * USED FOR ROUTING ONLY
+     * @deprecated
+     */
+    public String getStatusDescription() {
+        return "";
+}
+
+    /**
+     * USED FOR ROUTING ONLY
+     * @deprecated
+     */
+    public void setStatusDescription(String statusDescription) {
+    }
+
 }
 
