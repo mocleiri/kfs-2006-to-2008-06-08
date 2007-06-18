@@ -71,11 +71,12 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
             accounts.add(new PaymentRequestAccount(this,poa));
         }
         this.setSourceAccountingLines(accounts);
-                
+        this.refreshNonUpdateableReferences();
         //copy custom
         this.purchaseOrderItemUnitPrice = poi.getItemUnitPrice();
         this.purchaseOrderCommodityCode = poi.getPurchaseOrderCommodityCd();
         //set doc fields
+        this.setPurapDocumentIdentifier(preq.getPurapDocumentIdentifier());
         this.paymentRequest = preq;
     }
 
@@ -320,7 +321,7 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
     @Override
     public Class getAccountingLineClass() {
         // TODO Auto-generated method stub
-        return RequisitionAccount.class;
+        return PaymentRequestAccount.class;
     }
 
 }
