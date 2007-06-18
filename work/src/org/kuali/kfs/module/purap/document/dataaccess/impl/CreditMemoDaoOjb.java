@@ -30,6 +30,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.purap.bo.CreditMemoStatusHistory;
 import org.kuali.module.purap.dao.CreditMemoDao;
 import org.kuali.module.purap.document.CreditMemoDocument;
+import org.kuali.module.purap.document.PaymentRequestDocument;
 
 
 public class CreditMemoDaoOjb extends PlatformAwareDaoBaseOjb implements CreditMemoDao {
@@ -42,6 +43,9 @@ public class CreditMemoDaoOjb extends PlatformAwareDaoBaseOjb implements CreditM
       userService = us;
     }
 */
+    public void save(CreditMemoDocument cmDocument) {
+        getPersistenceBrokerTemplate().store(cmDocument);
+    }
     public CreditMemoDaoOjb() {
       super();
     }
@@ -50,7 +54,7 @@ public class CreditMemoDaoOjb extends PlatformAwareDaoBaseOjb implements CreditM
       LOG.debug("getCreditMemoById() started");
 
       Criteria criteria = new Criteria();
-      criteria.addEqualTo("id",id);
+      criteria.addEqualTo("purapDocumentIdentifier",id);
 
       CreditMemoDocument cm = (CreditMemoDocument)getPersistenceBrokerTemplate().getObjectByQuery(new QueryByCriteria(CreditMemoDocument.class,criteria));
       if ( cm != null ) {
@@ -109,9 +113,9 @@ public class CreditMemoDaoOjb extends PlatformAwareDaoBaseOjb implements CreditM
 
         //  criteria:  vendorNumberHeader AND vendorNumberDetail AND creditMemoNumber
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("vendorHeaderGeneratedId", vendorNumberHeaderId);
-        criteria.addEqualTo("vendorDetailAssignedId", vendorNumberDetailId);
-        criteria.addEqualTo("number", creditMemoNumber);
+        criteria.addEqualTo("vendorHeaderGeneratedIdentifier", vendorNumberHeaderId);
+        criteria.addEqualTo("vendorDetailAssignedIdentifier", vendorNumberDetailId);
+        criteria.addEqualTo("creditMemoNumber", creditMemoNumber);
         
         //  use the criteria to do a Count against the DB, and return the resulting 
         // number.  Any positive non-zero result means that a potential duplicate 
@@ -135,10 +139,10 @@ public class CreditMemoDaoOjb extends PlatformAwareDaoBaseOjb implements CreditM
 
         //  criteria:  vendorNumberHeader AND vendorNumberDetail AND date AND amount
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("vendorHeaderGeneratedId", vendorNumberHeaderId);
-        criteria.addEqualTo("vendorDetailAssignedId", vendorNumberDetailId);
-        criteria.addEqualTo("date", date);
-        criteria.addEqualTo("amount", amount);
+        criteria.addEqualTo("vendorHeaderGeneratedIdentifier", vendorNumberHeaderId);
+        criteria.addEqualTo("vendorDetailAssignedIdentifier", vendorNumberDetailId);
+        criteria.addEqualTo("creditMemoDate", date);
+        criteria.addEqualTo("creditMemoAmount", amount);
         
         //  use the criteria to do a Count against the DB, and return the resulting 
         // number.  Any positive non-zero result means that a potential duplicate 
