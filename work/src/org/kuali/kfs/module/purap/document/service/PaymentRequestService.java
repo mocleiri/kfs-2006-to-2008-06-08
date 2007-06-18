@@ -34,37 +34,20 @@ import org.kuali.module.vendor.service.VendorService;
 
 public interface PaymentRequestService {
 
-    public void setBusinessObjectService(BusinessObjectService boService);
-
-    public void setDateTimeService(DateTimeService dateTimeService) ;
-   
-
-    public void setDocumentService(DocumentService documentService) ;
-    
-    public void setNoteService(NoteService noteService);
-    
-
-    public void setGeneralLedgerService(GeneralLedgerService generalLedgerService) ;
-    
-    public void setPurapService(PurapService purapService) ;
-
-    public void setPaymentRequestDao(PaymentRequestDao paymentRequestDao) ;
-
-    public void setWorkflowDocumentService(WorkflowDocumentService workflowDocumentService) ;
-    
-    public void setVendorService(VendorService vendorService) ;
-
     public void save(PaymentRequestDocument paymentRequestDocument);
     
     public List<PaymentRequestDocument> getPaymentRequestsByPurchaseOrderId(Integer poDocId);
     
     public List getPaymentRequestsByPOIdInvoiceAmountInvoiceDate(Integer poId, KualiDecimal invoiceAmount, Date invoiceDate);
     
+    // TODO: Implement me.
+    public List getPaymentRequestsByVendorNumberInvoiceNumber(Integer vendorHeaderGeneratedIdentifier, Integer vendorDetailAssignedIdentifier, String invoiceNumber);
+    
     public boolean isInvoiceDateAfterToday(Date invoiceDate);
     
     public HashMap<String, String> paymentRequestDuplicateMessages(PaymentRequestDocument document);
     
-    public HashMap<String, String> ExpiredOrClosedAccountsList(PaymentRequestDocument document);
+    public HashMap<String, String> expiredOrClosedAccountsList(PaymentRequestDocument document);
     
     public void addContinuationAccountsNote(PaymentRequestDocument document, HashMap<String, String> accounts);
     
@@ -77,6 +60,26 @@ public interface PaymentRequestService {
     public boolean canRemoveHoldPaymentRequest(PaymentRequestDocument document, UniversalUser user);
     
     public void removeHoldOnPaymentRequest(PaymentRequestDocument document);
+       
+    public PaymentRequestDocument getPaymentRequestById(Integer poDocId);
+    
+    public void requestCancelOnPaymentRequest(PaymentRequestDocument document, String note) throws Exception;
+    
+    public boolean canRequestCancelOnPaymentRequest(PaymentRequestDocument document);
+    
+    public boolean canUserRequestCancelOnPaymentRequest(PaymentRequestDocument document, UniversalUser user);
+    
+    public boolean canUserRemoveRequestCancelOnPaymentRequest(PaymentRequestDocument document, UniversalUser user);
+    
+    public void removeRequestCancelOnPaymentRequest(PaymentRequestDocument document, String note) throws Exception;
+
+    /**
+     * Recalculate the payment request
+     * 
+     * @param pr
+     */
+    public void calculatePaymentRequest(PaymentRequestDocument pr,boolean updateDiscount);
+
     
     /* Start Paste from EPIC */
      
@@ -311,12 +314,6 @@ public interface PaymentRequestService {
      */
   //  public PaymentRequestDocument savePaymentRequest(PaymentRequestDocument pr, UniversalUser user);
     
-    /**
-     * Recalculate the payment request
-     * 
-     * @param pr
-     */
- //   public void calculatePaymentRequest(PaymentRequestDocument pr,boolean updateDiscount);
 
     /**
      * Saves a Doc Note and sends e-mail if necessary.

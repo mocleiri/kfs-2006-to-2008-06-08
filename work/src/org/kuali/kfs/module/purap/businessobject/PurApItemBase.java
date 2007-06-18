@@ -23,6 +23,7 @@ import java.util.List;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.module.purap.PurapConstants;
 
 /**
@@ -64,6 +65,14 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
         resetAccount();
 	}
 
+    public boolean isCanInactivateItem() {
+        //By default, the items of all documents cannot be inactivated.
+        //The only exception is for PurchaseOrderItem, therefore this method
+        //will be overridden in PurchaseOrderItem to indicate whether the item
+        //can be inactivated.
+        return false;
+    }
+    
 	/**
 	 * Gets the ItemIdentifier attribute.
 	 * 
@@ -380,21 +389,37 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 		this.itemType = itemType;
 	}
 
+    
+// from epic
+//    public BigDecimal getExtendedCost() {
+//        if (this.unitPrice == null) {
+//          return null;
+//        } else if (this.getIsServiceItem()) {
+//          return getUnitPrice().setScale(2,BigDecimal.ROUND_HALF_UP);
+//        } else {
+//          return this.orderQuantity.multiply(getUnitPrice()).setScale(2,BigDecimal.ROUND_HALF_UP);
+//        }
+//      }
+
 	/**
      * Gets the extendedPrice attribute. 
      * @return Returns the extendedPrice.
      */
     public KualiDecimal getExtendedPrice() {
-        if(this.itemUnitPrice!=null) {
-            if(!this.itemType.isQuantityBasedGeneralLedgerIndicator() || this.itemQuantity==null) {
+        if (this.itemUnitPrice != null) {
+            if (!this.itemType.isQuantityBasedGeneralLedgerIndicator() || this.itemQuantity == null) {
+                //SERVICE ITEM: return unit price as extended price
                 return new KualiDecimal(this.itemUnitPrice.toString());
             }
             BigDecimal extendedPrice = this.itemUnitPrice.multiply(this.itemQuantity.bigDecimalValue());
+            //ITEM TYPE (qty driven): return (unitPrice x qty)
             return new KualiDecimal(extendedPrice);
-        } else {
-            return null;
         }
-    } 
+        else {
+            //unit price is null; return zero
+            return KFSConstants.ZERO;
+        }
+    }
     
      /**
      * Sets the extendedPrice attribute value.
