@@ -43,6 +43,7 @@ import org.kuali.module.gl.service.OrganizationReversionCategoryLogic;
 import org.kuali.module.gl.service.OrganizationReversionSelection;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
+import org.kuali.module.gl.util.FatalErrorException;
 import org.springframework.beans.factory.BeanFactory;
 
 public class OrganizationReversionProcess {
@@ -122,50 +123,54 @@ public class OrganizationReversionProcess {
             }
             balancesRead++;
 
-            if (!unitOfWork.isSame(bal.getChartOfAccountsCode(), bal.getAccountNumber(), bal.getSubAccountNumber())) {
-                calculateTotals(bal);
-                writeActivity(bal);
-                unitOfWork.setFields(bal.getChartOfAccountsCode(), bal.getAccountNumber(), bal.getSubAccountNumber());
-            }
-
-            if (organizationReversionSelection.isIncluded(bal)) {
-                if (cashOrganizationReversionCategoryLogic.containsObjectCode(bal.getFinancialObject())) {
-                    unitOfWork.addTotalCash(bal.getBeginningBalanceLineAmount());
-                    unitOfWork.addTotalCash(bal.getAccountLineAnnualBalanceAmount());
+            try {
+                if (!unitOfWork.isSame(bal.getChartOfAccountsCode(), bal.getAccountNumber(), bal.getSubAccountNumber())) {
+                    calculateTotals(bal);
+                    writeActivity(bal);
+                    unitOfWork.setFields(bal.getChartOfAccountsCode(), bal.getAccountNumber(), bal.getSubAccountNumber());
                 }
-                else {
-                    for (Iterator<OrganizationReversionCategory> iter = categoryList.iterator(); iter.hasNext();) {
-                        OrganizationReversionCategory cat = iter.next();
-                        OrganizationReversionCategoryLogic logic = categories.get(cat.getOrganizationReversionCategoryCode());
-                        if (logic.containsObjectCode(bal.getFinancialObject())) {
-                            if (bal.getOption().getActualFinancialBalanceTypeCd().equals(bal.getBalanceTypeCode())) {
-                                // Actual
-                                unitOfWork.addActualAmount(cat.getOrganizationReversionCategoryCode(), bal.getBeginningBalanceLineAmount());
-                                unitOfWork.addActualAmount(cat.getOrganizationReversionCategoryCode(), bal.getAccountLineAnnualBalanceAmount());
-                            }
-                            else if (bal.getOption().getFinObjTypeExpenditureexpCd().equals(bal.getBalanceTypeCode()) || bal.getOption().getCostShareEncumbranceBalanceTypeCd().equals(bal.getBalanceTypeCode()) || bal.getOption().getIntrnlEncumFinBalanceTypCd().equals(bal.getBalanceTypeCode())) {
-                                // Encumbrance
-                                KualiDecimal amount = bal.getBeginningBalanceLineAmount().add(bal.getAccountLineAnnualBalanceAmount());
-                                if (amount.isPositive()) {
-                                    unitOfWork.addEncumbranceAmount(cat.getOrganizationReversionCategoryCode(), amount);
+    
+                if (organizationReversionSelection.isIncluded(bal)) {
+                    if (cashOrganizationReversionCategoryLogic.containsObjectCode(bal.getFinancialObject())) {
+                        unitOfWork.addTotalCash(bal.getBeginningBalanceLineAmount());
+                        unitOfWork.addTotalCash(bal.getAccountLineAnnualBalanceAmount());
+                    }
+                    else {
+                        for (Iterator<OrganizationReversionCategory> iter = categoryList.iterator(); iter.hasNext();) {
+                            OrganizationReversionCategory cat = iter.next();
+                            OrganizationReversionCategoryLogic logic = categories.get(cat.getOrganizationReversionCategoryCode());
+                            if (logic.containsObjectCode(bal.getFinancialObject())) {
+                                if (bal.getOption().getActualFinancialBalanceTypeCd().equals(bal.getBalanceTypeCode())) {
+                                    // Actual
+                                    unitOfWork.addActualAmount(cat.getOrganizationReversionCategoryCode(), bal.getBeginningBalanceLineAmount());
+                                    unitOfWork.addActualAmount(cat.getOrganizationReversionCategoryCode(), bal.getAccountLineAnnualBalanceAmount());
                                 }
-                            }
-                            else if (KFSConstants.BALANCE_TYPE_CURRENT_BUDGET.equals(bal.getBalanceTypeCode())) {
-                                // Budget
-                                if (!"0110".equals(bal.getObjectCode())) {
-                                    unitOfWork.addBudgetAmount(cat.getOrganizationReversionCategoryCode(), bal.getBeginningBalanceLineAmount());
-                                    unitOfWork.addBudgetAmount(cat.getOrganizationReversionCategoryCode(), bal.getAccountLineAnnualBalanceAmount());
+                                else if (bal.getOption().getFinObjTypeExpenditureexpCd().equals(bal.getBalanceTypeCode()) || bal.getOption().getCostShareEncumbranceBalanceTypeCd().equals(bal.getBalanceTypeCode()) || bal.getOption().getIntrnlEncumFinBalanceTypCd().equals(bal.getBalanceTypeCode())) {
+                                    // Encumbrance
+                                    KualiDecimal amount = bal.getBeginningBalanceLineAmount().add(bal.getAccountLineAnnualBalanceAmount());
+                                    if (amount.isPositive()) {
+                                        unitOfWork.addEncumbranceAmount(cat.getOrganizationReversionCategoryCode(), amount);
+                                    }
                                 }
+                                else if (KFSConstants.BALANCE_TYPE_CURRENT_BUDGET.equals(bal.getBalanceTypeCode())) {
+                                    // Budget
+                                    if (!"0110".equals(bal.getObjectCode())) {
+                                        unitOfWork.addBudgetAmount(cat.getOrganizationReversionCategoryCode(), bal.getBeginningBalanceLineAmount());
+                                        unitOfWork.addBudgetAmount(cat.getOrganizationReversionCategoryCode(), bal.getAccountLineAnnualBalanceAmount());
+                                    }
+                                }
+                                break;
                             }
-                            break;
                         }
                     }
                 }
+            } catch (FatalErrorException fee) {
+                LOG.info(fee.getMessage());
             }
         }
     }
 
-    private void writeActivity(Balance bal) {
+    private void writeActivity(Balance bal) throws FatalErrorException {
         if (unitOfWork.getTotalReversion().compareTo(KualiDecimal.ZERO) != 0) {
             writeReversion();
         }
@@ -193,7 +198,7 @@ public class OrganizationReversionProcess {
         return entry;
     }
 
-    private void writeCash() {
+    private void writeCash() throws FatalErrorException {
         OriginEntry entry = getEntry();
         entry.setChartOfAccountsCode(unitOfWork.chartOfAccountsCode);
         entry.setAccountNumber(unitOfWork.accountNbr);
@@ -204,6 +209,7 @@ public class OrganizationReversionProcess {
 
         persistenceService.retrieveReferenceObject(entry, FINANCIAL_OBJECT);
         if (entry.getFinancialObject() == null) {
+            throw new FatalErrorException("Object Code for Entry not found: "+entry);
             // TODO Error! Line 3426
         }
 
@@ -237,6 +243,7 @@ public class OrganizationReversionProcess {
 
         persistenceService.retrieveReferenceObject(entry, FINANCIAL_OBJECT);
         if (entry.getFinancialObject() == null) {
+            throw new FatalErrorException("Object Code for Entry not found: "+entry);
             // TODO Error! Line 3522
         }
 
@@ -269,6 +276,7 @@ public class OrganizationReversionProcess {
 
         persistenceService.retrieveReferenceObject(entry, FINANCIAL_OBJECT);
         if (entry.getFinancialObject() == null) {
+            throw new FatalErrorException("Object Code for Entry not found: "+entry);
             // TODO Error! Line 3624
         }
 
@@ -302,6 +310,7 @@ public class OrganizationReversionProcess {
 
         persistenceService.retrieveReferenceObject(entry, FINANCIAL_OBJECT);
         if (entry.getFinancialObject() == null) {
+            throw new FatalErrorException("Object Code for Entry not found: "+entry);
             // TODO Error! Line 3722
         }
 
@@ -326,7 +335,7 @@ public class OrganizationReversionProcess {
         // 3778 030960 ADD +1 TO SEQ-WRITE-COUNT.
     }
 
-    private void writeMany() {
+    private void writeMany() throws FatalErrorException {
         for (Iterator<OrganizationReversionCategory> iter = categoryList.iterator(); iter.hasNext();) {
             OrganizationReversionCategory cat = iter.next();
             OrganizationReversionDetail detail = organizationReversion.getOrganizationReversionDetail(cat.getOrganizationReversionCategoryCode());
@@ -353,6 +362,7 @@ public class OrganizationReversionProcess {
 
                 persistenceService.retrieveReferenceObject(entry, FINANCIAL_OBJECT);
                 if (entry.getFinancialObject() == null) {
+                    throw new FatalErrorException("Object Code for Entry not found: "+entry);
                     // TODO Error! Line 3224
                 }
 
@@ -382,6 +392,7 @@ public class OrganizationReversionProcess {
 
                 persistenceService.retrieveReferenceObject(entry, FINANCIAL_OBJECT);
                 if (entry.getFinancialObject() == null) {
+                    throw new FatalErrorException("Object Code for Entry not found: "+entry);
                     // TODO Error! Line 3304
                 }
 
@@ -402,7 +413,7 @@ public class OrganizationReversionProcess {
         }
     }
 
-    private void writeCarryForward() {
+    private void writeCarryForward() throws FatalErrorException {
         OriginEntry entry = getEntry();
         entry.setUniversityFiscalYear(paramUniversityFiscalYear + 1);
         entry.setChartOfAccountsCode(unitOfWork.chartOfAccountsCode);
@@ -420,6 +431,7 @@ public class OrganizationReversionProcess {
 
         persistenceService.retrieveReferenceObject(entry, FINANCIAL_OBJECT);
         if (entry.getFinancialObject() == null) {
+            throw new FatalErrorException("Object Code for Entry not found: "+entry);
             // TODO Error! Line 2960
         }
 
@@ -474,7 +486,7 @@ public class OrganizationReversionProcess {
         // 3089 024330 ADD +1 TO SEQ-WRITE-COUNT.
     }
 
-    private void writeReversion() {
+    private void writeReversion() throws FatalErrorException {
         OriginEntry entry = getEntry();
         entry.setChartOfAccountsCode(unitOfWork.chartOfAccountsCode);
         entry.setAccountNumber(unitOfWork.accountNbr);
@@ -516,7 +528,7 @@ public class OrganizationReversionProcess {
         entry.setFinancialBalanceTypeCode("RE");
         entry.setFinancialObjectTypeCode(objectCode.getFinancialObjectTypeCode());
         entry.setUniversityFiscalPeriodCode(KFSConstants.MONTH13);
-        entry.setDocumentNumber("AC" + unitOfWork.accountNbr + " " + unitOfWork.subAccountNbr);
+        entry.setDocumentNumber("AC" + unitOfWork.accountNbr + unitOfWork.subAccountNbr);
         entry.setTransactionLedgerEntryDescription(kualiConfigurationService.getPropertyString(KFSKeyConstants.OrganizationReversionProcess.FUND_REVERTED_FROM) + unitOfWork.accountNbr + " " + unitOfWork.subAccountNbr);
         entry.setTransactionLedgerEntryAmount(unitOfWork.getTotalReversion());
 
@@ -530,7 +542,7 @@ public class OrganizationReversionProcess {
         // 2909 022610 ADD +1 TO SEQ-WRITE-COUNT.
     }
 
-    private void calculateTotals(Balance bal) {
+    private void calculateTotals(Balance bal) throws FatalErrorException {
         if ((account == null) || (!bal.getChartOfAccountsCode().equals(account.getChartOfAccountsCode())) || (!bal.getAccountNumber().equals(account.getAccountNumber()))) {
             if (endOfYear) {
                 account = bal.getAccount();
@@ -562,11 +574,13 @@ public class OrganizationReversionProcess {
 
         if ((organizationReversion == null) || (!organizationReversion.getChartOfAccountsCode().equals(bal.getChartOfAccountsCode())) || (!organizationReversion.getOrganizationCode().equals(account.getOrganizationCode()))) {
             organizationReversion = organizationReversionService.getByPrimaryId(paramUniversityFiscalYear, bal.getChartOfAccountsCode(), account.getOrganizationCode());
-            if (organizationReversion == null) {
-                // TODO ERROR! Line 2058
-            }
         }
 
+        if (organizationReversion == null) {
+            // we can't find an organization reversion for this balance?  Throw exception
+            throw new FatalErrorException("No Organization Reversion found for: "+paramUniversityFiscalYear+"-"+bal.getChartOfAccountsCode()+"-"+account.getOrganizationCode());
+            // TODO ERROR! Line 2058
+        }
         // Accounts with the type of S3 have all rules always set to A
         if (KFSConstants.ACCOUNT_TYPE_S3.equals(bal.getAccount().getAccountTypeCode())) {
             List details = organizationReversion.getOrganizationReversionDetail();
@@ -584,6 +598,10 @@ public class OrganizationReversionProcess {
             CategoryAmount amount = unitOfWork.amounts.get(categoryCode);
 
             OrganizationReversionDetail detail = organizationReversion.getOrganizationReversionDetail(categoryCode);
+            
+            if (detail == null) {
+                throw new FatalErrorException("Organization Reversion "+organizationReversion.getUniversityFiscalYear()+"-"+organizationReversion.getChartOfAccountsCode()+"-"+organizationReversion.getOrganizationCode()+" does not have a detail for category "+categoryCode);
+            }
             String ruleCode = detail.getOrganizationReversionCode();
 
             if (KFSConstants.RULE_CODE_R1.equals(ruleCode) || KFSConstants.RULE_CODE_N1.equals(ruleCode) || KFSConstants.RULE_CODE_C1.equals(ruleCode)) {

@@ -17,16 +17,20 @@
 package org.kuali.module.purap.bo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 
 /**
  * 
  */
 public class PurchaseOrderItem extends PurchasingItemBase {
+    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchaseOrderItem.class);
 
     private String documentNumber;
     private KualiDecimal itemInvoicedTotalQuantity;
@@ -103,7 +107,39 @@ public class PurchaseOrderItem extends PurchasingItemBase {
         //the inactivate button.
         this.setItemActiveIndicator(true);
     }    
-        
+
+    public void prepareToSave() {
+        List accounts = (List)this.getSourceAccountingLines();
+//        Collections.sort(accounts);
+
+        KualiDecimal accountTotalAmount = new KualiDecimal(0);
+        PurchaseOrderAccount lastAccount = null;
+
+        for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
+            PurchaseOrderAccount account = (PurchaseOrderAccount) iterator.next();
+
+            if (!account.isEmpty()) {
+                KualiDecimal acctAmount = this.getExtendedPrice().multiply(new KualiDecimal(account.getAccountLinePercent().toString()));
+//                acctAmount = acctAmount.divide(new KualiDecimal(100), 2, BigDecimal.ROUND_HALF_UP);
+                acctAmount = acctAmount.divide(new KualiDecimal(100));
+                account.setAmount(acctAmount);
+                account.setItemAccountOutstandingEncumbranceAmount(acctAmount);
+                LOG.debug("getDisplayItems() account amount = " + account.getAmount());
+
+                accountTotalAmount = accountTotalAmount.add(acctAmount);
+                lastAccount = (PurchaseOrderAccount)ObjectUtils.deepCopy(account);
+            }
+        }
+
+        // Rounding
+//        if (lastAccount != null && this.getAmount() != null) {
+//            KualiDecimal difference = this.getAmount().subtract(accountTotalAmount);
+//            KualiDecimal tempAmount = lastAccount.getAmount();
+//            lastAccount.setAmount(tempAmount.add(difference));
+//        }
+
+    }
+
     /**
      * Gets the itemActiveIndicator attribute.
      * 
@@ -311,5 +347,20 @@ public class PurchaseOrderItem extends PurchasingItemBase {
     public Class getAccountingLineClass() {
         return PurchaseOrderAccount.class;
     }
+    
+    @Override
+    public boolean isCanInactivateItem() {
+        if (purchaseOrder == null && versionNumber == null) {
+            //don't allow newly added item to be inactivatable.
+            return false;
+        }
+        else if (versionNumber!= null && isAmendmentStatus() && itemActiveIndicator && !purchaseOrder.getContainsUnpaidPaymentRequestsOrCreditMemos()) {
+            return true;
+        }
+        return false;
+    }
 
+    private boolean isAmendmentStatus() {
+        return purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.AMENDMENT);
+    }
 }
