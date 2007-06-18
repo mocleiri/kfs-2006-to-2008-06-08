@@ -21,11 +21,7 @@
 <!-- what is the purpose of this c:if? would it be better to still dipslay the section header with message that there are not items -->
 <tr>
 	<td colspan="10" class="subhead">
-		<span class="subhead-left">Edit Items&nbsp;&nbsp;
-		<html:image
-    		src="${ConfigProperties.kr.externalizable.images.url}tinybutton-expandall.gif"
-			    alt="expand all" title="toggle" styleClass="tinybutton" />			    
-	    </span>
+		<span class="subhead-left">Edit Items</span>
 	</td>
 </tr>
 
@@ -71,6 +67,7 @@
 		<tr>
 			<td class="infoline" nowrap="nowrap">
 			    <html:hidden property="document.item[${ctr}].itemIdentifier" /> 
+			    <html:hidden property="document.item[${ctr}].purapDocumentIdentifier" /> 
 			    <html:hidden property="document.item[${ctr}].versionNumber" /> 
 			    <html:hidden property="document.item[${ctr}].itemTypeCode" /> 
 			    <html:hidden property="document.item[${ctr}].itemType.itemTypeCode" /> 
