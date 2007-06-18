@@ -100,6 +100,8 @@ public class PurapConstants {
 
     public static class Workgroups {
         public static final String WORKGROUP_ACCOUNTS_PAYABLE = "PURAP.WORKGROUP.ACCOUNTS_PAYABLE";
+        //TODO: need an accounts payable supervisor group
+        public static final String WORKGROUP_ACCOUNTS_PAYABLE_SUPERVISOR = "PURAP.WORKGROUP.ACCOUNTS_PAYABLE";
         public static final String WORKGROUP_PURCHASING = "PURAP.WORKGROUP.PURCHASING";
         public static final String WORKGROUP_TAXNBR_ACCESSIBLE = "PURAP.WORKGROUP.TAXNBR_ACCESSIBLE";
     }
@@ -311,6 +313,13 @@ public class PurapConstants {
         public static String SINGLE_CONFIRMATION_QUESTION = "singleConfirmationQuestion";
     }
 
+    // PAYMENT REQUEST PAY DATE CALCULATION DAYS
+    public static int PREQ_PAY_DATE_CALCULATION_DAYS = 28;
+
+    // Weird PaymentTermsType is due on either the 10th or 25th with no discount
+    public static String PMT_TERMS_TYP_NO_DISCOUNT_CD = "00N2T";
+
+    
     public static class PaymentRequestStatuses {
         public static String INITIATE = "INIT";
         public static String IN_PROCESS = "INPR";
@@ -321,6 +330,8 @@ public class PurapConstants {
         public static String AWAITING_FISCAL_APPROVAL = "AFOA";
         public static String DEPARTMENT_APPROVED = "DPTA";
         public static String AUTO_APPROVED = "AUTO";        
+        public static String AWAITING_CHART_REVIEW = "ACHA";
+        public static String AWAITING_TAX_APPROVAL = "ATAX";
         /*
          * Modify as required: public static String CANCELLED = "CANC"; public static String CLOSED = "CLOS"; public static String
          * AWAIT_CONTENT_APRVL = "ACNT"; public static String AWAIT_SUB_ACCT_APRVL = "ASUB"; public static String AWAIT_FISCAL_APRVL =
@@ -350,6 +361,13 @@ public class PurapConstants {
         public static String HOLD_PREQ_QUESTION = "HoldPREQ";
         public static String CONFIRM_HOLD_QUESTION = "ConfirmHold";
         public static String HOLD_NOTE_PREFIX = "Note entered while placing Payment Request on hold : ";
+        public static String CANCEL_PREQ_QUESTION = "CancelPREQ";
+        public static String CONFIRM_CANCEL_QUESTION = "ConfirmCancel";
+        public static String CANCEL_NOTE_PREFIX = "Note entered while requesting cancel on Payment Request : ";
+        public static String REMOVE_CANCEL_PREQ_QUESTION = "RemoveCancelPREQ";
+        public static String CONFIRM_REMOVE_CANCEL_QUESTION = "ConfirmRemoveCancel";
+        public static String REMOVE_CANCEL_NOTE_PREFIX = "Note entered while requesting a remove cancel on Payment Request : ";
+
     }
 
     private static HashMap<String, String> itemTypes()
@@ -378,6 +396,9 @@ public class PurapConstants {
         public static final String UNIT_OF_MEASURE = "Unit of Measure";
         public static final String DESCRIPTION = "Description";
         public static final String UNIT_COST = "Unit Cost";
+        public static final String INVOICE_QUANTITY = "Qty Invoiced";
+        public static final String OPEN_QUANTITY = "Open Qty";
+        public static final String INVOICE_EXTENDED_PRICE = "Total Inv Cost";
     }
     
     public static class CreditMemoStatuses {
@@ -391,6 +412,13 @@ public class PurapConstants {
         public static final String TYPE_VENDOR = "Vendor";
         public static final String TYPE_PO = "PO";
         public static final String TYPE_PREQ = "PREQ";
+    }
+    
+    public static class CMDocumentsStrings {
+        public static String DUPLICATE_CREDIT_MEMO_QUESTION = "CMDuplicateInvoice";
+        public static String HOLD_CREDIT_MEMO_QUESTION = "HoldPREQ";
+        public static String CONFIRM_HOLD_QUESTION = "ConfirmHold";
+        public static String HOLD_NOTE_PREFIX = "Note entered while placing Payment Request on hold : ";
     }
     
     private static HashMap<String,String> uncopyableFields() {
@@ -416,4 +444,8 @@ public class PurapConstants {
      * item/doc specific ones
      */
     public final static HashMap<String,String> ITEM_UNCOPYABLE_FIELDS = uncopyableItemFields();
+
+    public final static String PO_DOC_TYPE_CODE = "PO";
+    public final static String PURAP_ORIGIN_CODE = "EP";
+    
 }
