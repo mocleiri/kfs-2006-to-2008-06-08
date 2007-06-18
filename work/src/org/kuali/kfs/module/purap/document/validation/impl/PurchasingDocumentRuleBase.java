@@ -17,9 +17,7 @@ package org.kuali.module.purap.rules;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.validation.fieldlevel.PhoneNumberValidationPattern;
@@ -36,7 +34,6 @@ import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapConstants.ItemFields;
 import org.kuali.module.purap.PurapConstants.ItemTypeCodes;
-import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.bo.PurchasingItemBase;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
@@ -55,7 +52,6 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
     @Override
     public boolean processValidation(PurchasingAccountsPayableDocument purapDocument) {
         boolean valid = super.processValidation(purapDocument);
-        valid &= processItemValidation((PurchasingDocument) purapDocument);
         valid &= processPaymentInfoValidation((PurchasingDocument) purapDocument);
         valid &= processDeliveryValidation((PurchasingDocument) purapDocument);
         return valid;
@@ -67,9 +63,10 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
      * @param purDocument
      * @return
      */
-    public boolean processItemValidation(PurchasingDocument purDocument) {
-        boolean valid = true;
-        List<PurchasingApItem> itemList = purDocument.getItems();
+    @Override
+    public boolean processItemValidation(PurchasingAccountsPayableDocument purapDocument) {
+        boolean valid = super.processItemValidation(purapDocument);
+        List<PurchasingApItem> itemList = purapDocument.getItems();
         for (PurchasingApItem item : itemList) {
             SpringServiceLocator.getDictionaryValidationService().validateBusinessObject(item);
             String identifierString = (item.getItemType().isItemTypeAboveTheLineIndicator() ?  "Item " + item.getItemLineNumber().toString() : item.getItemType().getItemTypeDescription());
@@ -81,8 +78,8 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
                 valid &= validateItemQuantity(item, identifierString);
             }
         }
-        valid &= validateTotalCost(purDocument);
-        valid &= validateContainsAtLeastOneItem(purDocument);
+        valid &= validateTotalCost((PurchasingDocument)purapDocument);
+        valid &= validateContainsAtLeastOneItem((PurchasingDocument)purapDocument);
         return valid;
     }
 
