@@ -27,8 +27,8 @@ import org.kuali.module.purap.util.PurApObjectUtils;
  */
 public class PaymentRequestAccount extends PurApAccountingLineBase {
 
-	private KualiDecimal itemAccountTotalAmount;
-	private KualiDecimal disencumberedAmount;
+	private KualiDecimal itemAccountTotalAmount = KualiDecimal.ZERO;
+	private KualiDecimal disencumberedAmount = KualiDecimal.ZERO;
 
     private PaymentRequestItem paymentRequestItem;
     
@@ -99,15 +99,15 @@ public class PaymentRequestAccount extends PurApAccountingLineBase {
         this.paymentRequestItem = paymentRequestItem;
     }
 
-    /**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-	 */
-	@Override
-    protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
-        if (this.getAccountIdentifier() != null) {
-            m.put("paymentRequestAccountIdentifier", this.getAccountIdentifier().toString());
-        }
-	    return m;
-    }
+//    /**
+//	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+//	 */
+//	@Override
+//    protected LinkedHashMap toStringMapper() {
+//	    LinkedHashMap m = new LinkedHashMap();	    
+//        if (this.getAccountIdentifier() != null) {
+//            m.put("paymentRequestAccountIdentifier", this.getAccountIdentifier().toString());
+//        }
+//	    return m;
+//    }
 }
