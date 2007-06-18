@@ -15,6 +15,7 @@
  */
 package org.kuali.module.purap.service.impl;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.Note;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.BusinessObjectService;
@@ -43,7 +44,11 @@ import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
+import org.kuali.module.purap.PurapParameterConstants;
+import org.kuali.module.purap.PurapConstants.PREQDocumentsStrings;
+import org.kuali.module.purap.PurapConstants.PaymentRequestStatuses;
+import org.kuali.module.purap.bo.PaymentRequestItem;
+import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.dao.PaymentRequestDao;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
@@ -51,6 +56,7 @@ import org.kuali.module.purap.service.GeneralLedgerService;
 import org.kuali.module.purap.service.PaymentRequestService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.PurchaseOrderService;
+import org.kuali.module.vendor.bo.PaymentTermType;
 import org.kuali.module.vendor.service.VendorService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -224,27 +230,24 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
      * @param invoiceNumber            invoice number as entered by AP
      * @return List of Pay Reqs.
      */
-    private List getPaymentRequestsByVendorNumberInvoiceNumber(Integer vendorHeaderGeneratedId, Integer vendorDetailAssignedId, String invoiceNumber) {
+    public List getPaymentRequestsByVendorNumberInvoiceNumber(Integer vendorHeaderGeneratedId, Integer vendorDetailAssignedId, String invoiceNumber) {
         LOG.debug("getActivePaymentRequestsByVendorNumberInvoiceNumber() started");
         return paymentRequestDao.getActivePaymentRequestsByVendorNumberInvoiceNumber(vendorHeaderGeneratedId, vendorDetailAssignedId, invoiceNumber);
     }
 
+    /**
+     * @see org.kuali.module.purap.service.PaymentRequestService#paymentRequestDuplicateMessages(org.kuali.module.purap.document.PaymentRequestDocument)
+     */
     public HashMap<String, String> paymentRequestDuplicateMessages(PaymentRequestDocument document) {
         HashMap<String, String> msgs;
         msgs = new HashMap<String, String>();
         KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
-        UniversalUser currentUser = (UniversalUser) GlobalVariables.getUserSession().getUniversalUser();
 
 
         Integer purchaseOrderId = document.getPurchaseOrderIdentifier();
 
         PurchaseOrderDocument po = purchaseOrderService.getCurrentPurchaseOrder(purchaseOrderId);
 
-        // This line is for test only to simulate duplicate messages, need to remove after Code review
-        // msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_DATE_AMONT_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_PREQ_DATE_AMOUNT));
-
-
-        //then check that there are no other non-cancelled PREQs for this vendor number and invoice number
         Integer vendorDetailAssignedId = po.getVendorDetailAssignedIdentifier();
         Integer vendorHeaderGeneratedId = po.getVendorHeaderGeneratedIdentifier();
 
@@ -253,78 +256,67 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
             boolean addedMessage = false;
             List cancelled = new ArrayList();
             List voided = new ArrayList();
-            for (Iterator iter = preqs.iterator(); iter.hasNext();) {
-                PaymentRequestDocument testPREQ = (PaymentRequestDocument) iter.next();
-
-                if ((!(PurapConstants.PaymentRequestStatuses.CANCELLED_POST_APPROVE.equals(testPREQ.getStatus().getStatusCode()))) && (!(PurapConstants.PaymentRequestStatuses.CANCELLED_IN_PROCESS.equals(testPREQ.getStatus().getStatusCode())))) {
-
-                    msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE));
+            for (PaymentRequestDocument testPREQ : preqs) {
+                if (StringUtils.equals(testPREQ.getStatusCode(),PaymentRequestStatuses.CANCELLED_POST_APPROVE)) {
+                    cancelled.add(testPREQ);
+                }
+                else if (StringUtils.equals(testPREQ.getStatusCode(),PaymentRequestStatuses.CANCELLED_IN_PROCESS)) {
+                    voided.add(testPREQ);
+                }
+                else {
+                    msgs.put(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE));
                     addedMessage = true;
                     break;
                 }
-                else if (PurapConstants.PaymentRequestStatuses.CANCELLED_IN_PROCESS.equals(testPREQ.getStatus().getStatusCode())) {
-                    voided.add(testPREQ);
-                }
-                else if (PurapConstants.PaymentRequestStatuses.CANCELLED_POST_APPROVE.equals(testPREQ.getStatus().getStatusCode())) {
-                    cancelled.add(testPREQ);
-                }
             }
-            // custom error message for duplicates related to cancelled/voided PREQs
+            // Custom error message for duplicates related to cancelled/voided PREQs
             if (!addedMessage) {
                 if ((!(voided.isEmpty())) && (!(cancelled.isEmpty()))) {
-
-                    msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_CANCELLEDORVOIDED));
+                    msgs.put(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_CANCELLEDORVOIDED));
                 }
                 else if ((!(voided.isEmpty())) && (cancelled.isEmpty())) {
-
-                    msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_VOIDED));
+                    msgs.put(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_VOIDED));
                 }
                 else if ((voided.isEmpty()) && (!(cancelled.isEmpty()))) {
                     // messages.add("errors.duplicate.vendor.invoice.cancelled");
-                    msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_CANCELLED));
+                    msgs.put(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_CANCELLED));
                 }
             }
         }
 
-        // check that the invoice date and invoice total amount entered are not on any existing non-cancelled PREQs for this PO
+        // Check that the invoice date and invoice total amount entered are not on any existing non-cancelled PREQs for this PO
         preqs = getPaymentRequestsByPOIdInvoiceAmountInvoiceDate(purchaseOrderId, document.getVendorInvoiceAmount(), document.getInvoiceDate());
         if (preqs.size() > 0) {
             boolean addedMessage = false;
             List cancelled = new ArrayList();
             List voided = new ArrayList();
-            msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT));
-            for (Iterator iter = preqs.iterator(); iter.hasNext();) {
-                PaymentRequestDocument testPREQ = (PaymentRequestDocument) iter.next();
-                if ((!(PurapConstants.PaymentRequestStatuses.CANCELLED_POST_APPROVE.equals(testPREQ.getStatus().getStatusCode()))) && (!(PurapConstants.PaymentRequestStatuses.CANCELLED_IN_PROCESS.equals(testPREQ.getStatus().getStatusCode())))) {
-                    msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT));
-                    addedMessage = true;
-
-                    break;
-                }
-                else if (PurapConstants.PaymentRequestStatuses.CANCELLED_IN_PROCESS.equals(testPREQ.getStatus().getStatusCode())) {
-                    voided.add(testPREQ);
-                }
-                else if (PurapConstants.PaymentRequestStatuses.CANCELLED_POST_APPROVE.equals(testPREQ.getStatus().getStatusCode())) {
+            msgs.put(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT));
+            for (PaymentRequestDocument testPREQ : preqs) {
+                if (StringUtils.equalsIgnoreCase(testPREQ.getStatusCode(),PaymentRequestStatuses.CANCELLED_POST_APPROVE)) {
                     cancelled.add(testPREQ);
                 }
+                else if (StringUtils.equalsIgnoreCase(testPREQ.getStatusCode(),PaymentRequestStatuses.CANCELLED_IN_PROCESS)) {
+                    voided.add(testPREQ);
+                }
+                else {
+                    msgs.put(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT));
+                    addedMessage = true;
+                    break;
+                }
             }
-            // custom error message for duplicates related to cancelled/voided PREQs
+            // Custom error message for duplicates related to cancelled/voided PREQs
             if (!addedMessage) {
 
                 if ((!(voided.isEmpty())) && (!(cancelled.isEmpty()))) {
-
-                    msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT_CANCELLEDORVOIDED));
-
+                    msgs.put(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT_CANCELLEDORVOIDED));
                 }
                 else if ((!(voided.isEmpty())) && (cancelled.isEmpty())) {
-
-                    msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT_VOIDED));
+                    msgs.put(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT_VOIDED));
                     addedMessage = true;
 
                 }
                 else if ((voided.isEmpty()) && (!(cancelled.isEmpty()))) {
-
-                    msgs.put(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT_CANCELLED));
+                    msgs.put(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, kualiConfiguration.getPropertyString(PurapKeyConstants.MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT_CANCELLED));
                     addedMessage = true;
                 }
             }
@@ -333,7 +325,10 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
 
         return msgs;
     }
-
+    
+    public PaymentRequestDocument getPaymentRequestById(Integer poDocId){
+        return paymentRequestDao.getPaymentRequestById(poDocId); 
+    }
 
     public List<PaymentRequestDocument> getPaymentRequestsByPurchaseOrderId(Integer poDocId) {
         return paymentRequestDao.getPaymentRequestsByPurchaseOrderId(poDocId);
@@ -382,7 +377,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
     }
 
 
-    public HashMap<String, String> ExpiredOrClosedAccountsList(PaymentRequestDocument document) {
+    public HashMap<String, String> expiredOrClosedAccountsList(PaymentRequestDocument document) {
 
         HashMap<String, String> list = new HashMap<String, String>();
         Integer POID = document.getPurchaseOrderIdentifier();
@@ -392,6 +387,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         PurchaseOrderDocument po = SpringServiceLocator.getPurchaseOrderService().getCurrentPurchaseOrder(document.getPurchaseOrderIdentifier());
         
         //TODO: check for for po not be null
+        //TODO: also, this method should not call po.getSourceAccountingLines; that method is not reliable for PURAP docs. (hjs)
         List accountNumberList = new ArrayList();
         for (Iterator i = po.getSourceAccountingLines().iterator(); i.hasNext();) {
             SourceAccountingLine poAccountingLine = (SourceAccountingLine) i.next();
@@ -421,6 +417,96 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         return list;
     }
 
+    /*
+     * Calculate based on the terms and calculate a date 10 days from today.  Pick the
+     * one that is the farthest out.  We always calculate the discount date, if there is one.
+     */
+    private Date calculatePayDate(Date invoiceDate,PaymentTermType terms) {
+      LOG.debug("calculatePayDate() started");
+      //TODO: this method is mainly a direct copy from epic.  It could be made a lot better by using the DateUtils and checking if those constants should be app params
+      Calendar invoiceDateCalendar = Calendar.getInstance();
+      invoiceDateCalendar.setTime(invoiceDate);
+      invoiceDateCalendar.set(Calendar.HOUR, 12);
+      invoiceDateCalendar.set(Calendar.MINUTE, 0);
+      invoiceDateCalendar.set(Calendar.SECOND, 0);
+      invoiceDateCalendar.set(Calendar.MILLISECOND, 0);
+      invoiceDateCalendar.set(Calendar.AM_PM, Calendar.AM);
+
+      // 10 days from now
+      Calendar processDateCalendar = Calendar.getInstance();
+      processDateCalendar.setTime(new java.util.Date());
+      processDateCalendar.add(Calendar.DAY_OF_MONTH,10);
+      processDateCalendar.set(Calendar.HOUR, 12);
+      processDateCalendar.set(Calendar.MINUTE, 0);
+      processDateCalendar.set(Calendar.SECOND, 0);
+      processDateCalendar.set(Calendar.MILLISECOND, 0);
+      processDateCalendar.set(Calendar.AM_PM, Calendar.AM);
+
+      // Handle this weird one.  Due on the 10th or the 25th
+      if ("".equals(terms.getVendorPaymentTermsCode())) {
+        // Payment terms are empty
+        invoiceDateCalendar.add(Calendar.DATE,PurapConstants.PREQ_PAY_DATE_CALCULATION_DAYS);
+        
+      } else {
+        // Payment terms are not empty
+        if ( PurapConstants.PMT_TERMS_TYP_NO_DISCOUNT_CD.equals(terms.getVendorPaymentTermsCode()) ) {
+          int dayOfMonth = invoiceDateCalendar.get(Calendar.DAY_OF_MONTH);
+          if ( dayOfMonth < 10 ) {
+            invoiceDateCalendar.set(Calendar.DAY_OF_MONTH,10);
+          } else {
+            invoiceDateCalendar.set(Calendar.DAY_OF_MONTH,25);
+          }
+        } else {
+          if ( (terms.getVendorDiscountDueNumber() != null) && (terms.getVendorDiscountDueNumber().intValue() > 0) ) {
+            if ( "date".equals(terms.getVendorDiscountDueTypeDescription()) ) {
+              invoiceDateCalendar.set(Calendar.DAY_OF_MONTH,terms.getVendorDiscountDueNumber().intValue());
+            } else {
+              invoiceDateCalendar.add(Calendar.DAY_OF_MONTH,terms.getVendorDiscountDueNumber().intValue());
+            }
+          } else {
+            if ( "date".endsWith(terms.getVendorNetDueTypeDescription()) ) {
+              invoiceDateCalendar.set(Calendar.DAY_OF_MONTH,terms.getVendorNetDueNumber().intValue());
+            } else {
+              invoiceDateCalendar.add(Calendar.DAY_OF_MONTH,terms.getVendorNetDueNumber().intValue());
+            }
+          }
+        }
+      }
+      if ( processDateCalendar.after(invoiceDateCalendar) ) {
+        return new Date(processDateCalendar.getTime().getTime());
+      } else {
+        return new Date(invoiceDateCalendar.getTime().getTime());
+      }
+    }
+
+
+    
+    public void calculatePaymentRequest(PaymentRequestDocument paymentRequest,boolean updateDiscount) {
+        LOG.debug("calculatePaymentRequest() started");
+        //refresh the payment and shipping terms
+        paymentRequest.refreshNonUpdateableReferences();
+        
+        if(paymentRequest.getPaymentRequestPayDate()==null) {
+            //TODO: do some in depth tests on this
+            paymentRequest.setPaymentRequestPayDate(calculatePayDate(paymentRequest.getInvoiceDate(),paymentRequest.getVendorPaymentTerms()));
+        }
+        
+        for (PaymentRequestItem item : (List<PaymentRequestItem>)paymentRequest.getItems()) {
+            if(item.getItemType().isItemTypeAboveTheLineIndicator() &&
+                !item.getItemType().isQuantityBasedGeneralLedgerIndicator()) {
+                PurchaseOrderItem poi = (PurchaseOrderItem)paymentRequest.getPurchaseOrderDocument().getItem(item.getItemLineNumber().intValue());
+                item.setItemUnitPrice(new BigDecimal(item.getItemExtendedPrice().toString()));
+            }
+        }
+        
+        if(updateDiscount) {
+            //TODO: still have to merge this with other changes I did for discount
+            //calculateDiscount(paymentRequest);
+        }
+        
+        //TODO Chris merge in distribute accounts code and call here
+    }
+    
 
     public void addContinuationAccountsNote(PaymentRequestDocument document, HashMap<String, String> accounts) {
         Note note = new Note();
@@ -519,6 +605,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
     public boolean canHoldPaymentRequest(PaymentRequestDocument document, UniversalUser user){
         boolean canHold = false;
         
+        String accountsPayableGroup = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
         
         /* The user is an approver of the document,
          * The user is a member of the Accounts Payable group
@@ -527,7 +614,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
              (document.getDocumentHeader().hasWorkflowDocument() &&
              ( document.getDocumentHeader().getWorkflowDocument().stateIsEnroute() && 
                document.getDocumentHeader().getWorkflowDocument().isApprovalRequested() ) ) ||
-            ( user.isMember("KUALI_PURAP_ACCOUNTS_PAYABLE") && user.isSupervisorUser() == false) ){
+            ( user.isMember(accountsPayableGroup)) ){
             
             canHold = true;
         }
@@ -543,17 +630,136 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
     public boolean canRemoveHoldPaymentRequest(PaymentRequestDocument document, UniversalUser user){
         boolean canRemoveHold = false;
         
+        String accountsPayableSupervisorGroup = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE_SUPERVISOR);
+        
         /* The user is the person who put the preq on hold
          * The user is a member of the AP Supervisor group
          */
         if( document.isHoldIndicator() &&
             ( user.getPersonUniversalIdentifier().equals( document.getAccountsPayableHoldIdentifier() ) ||
-             (user.isMember("KUALI_PURAP_ACCOUNTS_PAYABLE") && user.isSupervisorUser() == true) ) ){
+             (user.isMember(accountsPayableSupervisorGroup)) ) ){
             
             canRemoveHold = true;
         }
         return canRemoveHold;
     }
+    
+    /**
+     * This method marks a payment request as requested to be cancelled.
+     * 
+     * @see org.kuali.module.purap.service.PaymentRequestService#addHoldOnPaymentRequest(org.kuali.module.purap.document.PaymentRequestDocument, java.lang.String)
+     */
+    public void requestCancelOnPaymentRequest(PaymentRequestDocument document, String note) throws Exception{        
+        //save the note
+        Note noteObj = documentService.createNoteFromDocument(document, note);
+        documentService.addNoteToDocument(document, noteObj);
+        noteService.save(noteObj);
+        
+        //retrieve and save with hold indicator set to true
+        PaymentRequestDocument preqDoc = paymentRequestDao.getPaymentRequestById(document.getPurapDocumentIdentifier());        
+        preqDoc.setPaymentRequestedCancelIndicator(true);
+        preqDoc.setAccountsPayableRequestCancelIdentifier( GlobalVariables.getUserSession().getUniversalUser().getPersonUniversalIdentifier() );
+        paymentRequestDao.save(preqDoc);
+        
+        //must also save it on the incoming document
+        document.setPaymentRequestedCancelIndicator(true);
+        document.setAccountsPayableRequestCancelIdentifier( GlobalVariables.getUserSession().getUniversalUser().getPersonUniversalIdentifier() );
+    }
+    
+    /**
+     * This method removes a cancel on a payment request.
+     * 
+     * @see org.kuali.module.purap.service.PaymentRequestService#removeHoldOnPaymentRequest(org.kuali.module.purap.document.PaymentRequestDocument)
+     */
+    public void removeRequestCancelOnPaymentRequest(PaymentRequestDocument document, String note) throws Exception{
+        //retrieve and save with hold indicator set to false
+        PaymentRequestDocument preqDoc = paymentRequestDao.getPaymentRequestById(document.getPurapDocumentIdentifier());                    
+        preqDoc.setPaymentRequestedCancelIndicator(false);
+        preqDoc.setAccountsPayableRequestCancelIdentifier(null);
+        paymentRequestDao.save(preqDoc);
+
+        //must also save it on the incoming document
+        document.setPaymentRequestedCancelIndicator(false);
+        document.setAccountsPayableRequestCancelIdentifier(null);
+    }   
+
+    /**
+     * This method determines if this document may have a cancel requested
+     * 
+     * @see org.kuali.module.purap.service.PaymentRequestService#isPaymentRequestHoldable(org.kuali.module.purap.document.PaymentRequestDocument)
+     */
+    public boolean canRequestCancelOnPaymentRequest(PaymentRequestDocument document){
+        boolean canCancel = false;
+        String statusCode = document.getStatusCode();
+        
+        /* The document is not already requested to be canceled,
+         * The document has not been extracted,
+         * The document is out for approval,
+         * The document is one of a set of specific PREQ status codes
+         */
+        if( document.getPaymentRequestedCancelIndicator() == false &&
+            document.getExtractedDate() == null &&
+            document.getDocumentHeader().hasWorkflowDocument() &&
+            ( document.getDocumentHeader().getWorkflowDocument().stateIsEnroute() && 
+              document.getDocumentHeader().getWorkflowDocument().isApprovalRequested() ) &&
+            ( PurapConstants.PaymentRequestStatuses.AWAITING_SUB_ACCT_MGR_APPROVAL.equals(statusCode) ||
+              PurapConstants.PaymentRequestStatuses.AWAITING_FISCAL_APPROVAL.equals(statusCode) ||
+              PurapConstants.PaymentRequestStatuses.AWAITING_CHART_REVIEW.equals(statusCode) ||
+              PurapConstants.PaymentRequestStatuses.AWAITING_TAX_APPROVAL.equals(statusCode)) ){
+            
+            canCancel = true;
+        }
+        
+        return canCancel;
+    }
+    
+    /**
+     * This method determines if a user has permission to request cancel on a PREQ
+     * 
+     * @see org.kuali.module.purap.service.PaymentRequestService#canHoldPaymentRequest(org.kuali.module.purap.document.PaymentRequestDocument, org.kuali.core.bo.user.UniversalUser)
+     */
+    public boolean canUserRequestCancelOnPaymentRequest(PaymentRequestDocument document, UniversalUser user){
+        boolean canHold = false;
+        
+        String accountsPayableGroup = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
+        
+        /* The user is an approver of the document,
+         * The user is a member of the Accounts Payable group
+         */
+        if( document.getPaymentRequestedCancelIndicator() == false &&
+             (document.getDocumentHeader().hasWorkflowDocument() &&
+             ( document.getDocumentHeader().getWorkflowDocument().stateIsEnroute() && 
+               document.getDocumentHeader().getWorkflowDocument().isApprovalRequested() ) ) ||
+            ( user.isMember(accountsPayableGroup)) ){
+            
+            canHold = true;
+        }
+        
+        return canHold;
+    }
+
+    /**
+     * This method determines if a user has permission to remove a request for cancel on a PREQ
+     * 
+     * @see org.kuali.module.purap.service.PaymentRequestService#canRemoveHoldPaymentRequest(org.kuali.module.purap.document.PaymentRequestDocument, org.kuali.core.bo.user.UniversalUser)
+     */
+    public boolean canUserRemoveRequestCancelOnPaymentRequest(PaymentRequestDocument document, UniversalUser user){
+        boolean canRemoveHold = false;
+        
+        String accountsPayableSupervisorGroup = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE_SUPERVISOR);
+        
+        /* The user is the person who requested a cancel on the preq
+         * The user is a member of the AP Supervisor group
+         */
+        if( document.getPaymentRequestedCancelIndicator() &&
+            ( user.getPersonUniversalIdentifier().equals( document.getAccountsPayableHoldIdentifier() ) ||
+             (user.isMember(accountsPayableSupervisorGroup))) ){
+            
+            canRemoveHold = true;
+        }
+        return canRemoveHold;
+    }
+
     /*
      public PaymentRequestInitializationValidationErrors verifyPreqInitialization(
      Integer purchaseOrderId, String invoiceNumber, BigDecimal invoiceAmount, Timestamp invoiceDate,
@@ -564,135 +770,6 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
      List expirAcctList = new ArrayList();
      List closeAcctList = new ArrayList();
      
-     PaymentRequestInitializationValidationErrors initValidationErrors = new PaymentRequestInitializationValidationErrors();
-
-     PurchaseOrder po = purchaseOrderService.getPurchaseOrderById(purchaseOrderId,u);
-     
-     if (po == null) {
-     // no PO was found in the system - notify the user
-     messages.add("errors.po.not.exist");
-     initValidationErrors.errorMessages = messages;
-     SERVICELOG.debug("verifyPreqInitialization() ended");    
-     return initValidationErrors;
-     }
-     
-     // Verify that there exists at least 1 item left to be invoiced
-     initValidationErrors.setPurchaseOrderNumberToUse(purchaseOrderId);
-     boolean zeroDollar = true;
-     for (Iterator itemIter = po.getItems().iterator(); itemIter.hasNext();) {
-     PurchaseOrderItem poi = (PurchaseOrderItem) itemIter.next();
-     BigDecimal encumberedQuantity = poi.getOutstandingEncumberedQuantity() == null ? zero : poi.getOutstandingEncumberedQuantity();
-     if (encumberedQuantity.compareTo(zero) == 1) {
-     zeroDollar = false;
-     break;
-     }
-     }
-     
-     // if messages exist now there is no need to check anything else
-     if (!messages.isEmpty()) {
-     initValidationErrors.errorMessages = messages;
-     SERVICELOG.debug("verifyPreqInitialization() ended");
-     return initValidationErrors;
-     }
-     
-     // Check invoice date to make sure it is today or before
-     if (this.isInvoiceDateAfterToday(invoiceDate)) {
-     messages.add("errors.invalid.invoice.date");
-     }
-     //    Timestamp now = new Timestamp( (new Date()).getTime() );
-     //    if ( invoiceDate.getTime() > now.getTime() ) {
-     //      messages.add("errors.invalid.invoice.date");
-     //    }
-     
-     if (EpicConstants.PO_STAT_OPEN.equals(po.getPurchaseOrderStatus().getCode())) {
-     //then check that there are no other non-cancelled PREQs for this vendor number and invoice number
-     Integer vendorDetailAssignedId = po.getVendorDetailAssignedId();
-     Integer vendorHeaderGeneratedId = po.getVendorHeaderGeneratedId();
-
-     List preqs = getPaymentRequestsByVendorNumberInvoiceNumber(vendorHeaderGeneratedId,vendorDetailAssignedId,invoiceNumber);
-     if (preqs.size() > 0) {
-     boolean addedError = false;
-     List cancelled = new ArrayList();
-     List voided = new ArrayList();
-     for (Iterator iter = preqs.iterator(); iter.hasNext();) {
-     PaymentRequest testPREQ = (PaymentRequest) iter.next();
-     if ( (!(EpicConstants.PREQ_STAT_CANCELLED_POST_APPROVE.equals(testPREQ.getStatus().getCode()))) && 
-     (!(EpicConstants.PREQ_STAT_CANCELLED_IN_PROCESS.equals(testPREQ.getStatus().getCode()))) ) {
-     messages.add("errors.duplicate.vendor.invoice");
-     addedError = true;
-     break;
-     } else if (EpicConstants.PREQ_STAT_CANCELLED_IN_PROCESS.equals(testPREQ.getStatus().getCode())) {
-     voided.add(testPREQ);
-     } else if (EpicConstants.PREQ_STAT_CANCELLED_POST_APPROVE.equals(testPREQ.getStatus().getCode())) {
-     cancelled.add(testPREQ);
-     }
-     }
-     // custom error message for duplicates related to cancelled/voided PREQs
-     if (!addedError) {
-     if ( (!(voided.isEmpty())) && (!(cancelled.isEmpty())) ) {
-     messages.add("errors.duplicate.vendor.invoice.cancelledOrVoided");
-     } else if ( (!(voided.isEmpty())) && (cancelled.isEmpty()) ) {
-     messages.add("errors.duplicate.vendor.invoice.voided");
-     } else if ( (voided.isEmpty()) && (!(cancelled.isEmpty())) ) {
-     messages.add("errors.duplicate.vendor.invoice.cancelled");
-     }
-     }
-     }
-     
-     //check that the invoice date and invoice total amount entered are not on any existing non-cancelled PREQs for this PO
-     preqs = getPaymentRequestsByPOIdInvoiceAmountInvoiceDate(po.getId(), invoiceAmount, invoiceDate);
-     if (preqs.size() > 0) {
-     boolean addedError = false;
-     List cancelled = new ArrayList();
-     List voided = new ArrayList();
-     for (Iterator iter = preqs.iterator(); iter.hasNext();) {
-     PaymentRequest testPREQ = (PaymentRequest) iter.next();
-     if ( (!(EpicConstants.PREQ_STAT_CANCELLED_POST_APPROVE.equals(testPREQ.getStatus().getCode()))) && 
-     (!(EpicConstants.PREQ_STAT_CANCELLED_IN_PROCESS.equals(testPREQ.getStatus().getCode()))) ) {
-     messages.add("errors.duplicate.invoice.date.amount");
-     addedError = true;
-     break;
-     } else if (EpicConstants.PREQ_STAT_CANCELLED_IN_PROCESS.equals(testPREQ.getStatus().getCode())) {
-     voided.add(testPREQ);
-     } else if (EpicConstants.PREQ_STAT_CANCELLED_POST_APPROVE.equals(testPREQ.getStatus().getCode())) {
-     cancelled.add(testPREQ);
-     }
-     }
-     // custom error message for duplicates related to cancelled/voided PREQs
-     if (!addedError) {
-     if ( (!(voided.isEmpty())) && (!(cancelled.isEmpty())) ) {
-     messages.add("errors.duplicate.invoice.date.amount.cancelledOrVoided");
-     } else if ( (!(voided.isEmpty())) && (cancelled.isEmpty()) ) {
-     messages.add("errors.duplicate.invoice.date.amount.voided");
-     } else if ( (voided.isEmpty()) && (!(cancelled.isEmpty())) ) {
-     messages.add("errors.duplicate.invoice.date.amount.cancelled");
-     }
-     }
-     }
-     
-     this.checkForExpiredOrClosedAccounts(po, initValidationErrors, closedAccounts, expiredAccounts);
-     
-     } else if (EpicConstants.PO_STAT_PAYMENT_HOLD.equals(po.getPurchaseOrderStatus().getCode())) {
-     //PO is not open - notify the user
-     messages.add("errors.po.status.hold");
-     } else {
-     //PO is not open - notify the user
-     messages.add("errors.po.not.open");
-     }
-
-     if ( 1 == 2 ) {
-     // TODO 2006: delyea PREQ CLOSE PO: Add code to return encumberances check for auto close of PO
-     initValidationErrors.setCanAutoClosePO(false);
-     //initValidationErrors.setCanAutoClosePO(generalLedgerService.isPOAutoCloseEligible(prd.getPreq()) && (prd.getPreq().getPurchaseOrder().getRecurringPaymentType() == null));
-     }
-
-     initValidationErrors.errorMessages = messages;
-     SERVICELOG.debug("verifyPreqInitialization() ended");    
-     return initValidationErrors;
-     }
-     */
-
-
     /**
      * Creates a PaymentRequestDocument from given RequisitionDocument
      * 
@@ -730,4 +807,161 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
      }
      */
 
+  /**
+   * Retrieve a list of PREQs that aren't approved, check to see if they match specific
+   * requirements, then auto-approve them if possible.
+   *
+   */
+    /*
+  public void autoApprovePaymentRequests() {
+    LOG.debug("autoApprovePaymentRequests() started");
+    
+    // Get all the payment requests that have the status for Auto Approve
+    String[] statuses = EpicConstants.PREQ_STATUSES_FOR_AUTO_APPROVE;
+    
+    // get ap supervisor user
+    User apSupervisor = this.getAccountsPayableSupervisorUser();
+
+    // Get the user that will approve them
+    Collection requests = paymentRequestDao.getByStatuses(statuses);
+
+    // default auto approve limit is $5,000
+    String defaultLimit = applicationSettingService.getString("AP_AUTO_APPROVE_MAX_AMOUNT");
+
+    for (Iterator ri = requests.iterator(); ri.hasNext();) {
+      PaymentRequest preq = (PaymentRequest)ri.next();
+      boolean autoApproveExcluded = false;
+      LOG.info("autoApprovePaymentRequests() Attempting Auto Approve for PREQ " + preq.getId());
+      
+      // Only process preq's that aren't held
+      if ( preq.getPaymentHoldIndicator().booleanValue() ) {
+        LOG.info("autoApprovePaymentRequests() PREQ " + preq.getId() + " is held... will not auto approve");
+        continue;
+      }
+      
+      // Only process preq's that aren't requested for cancel
+      if ( preq.getPaymentRequestCancelIndicator().booleanValue() ) {
+        LOG.info("autoApprovePaymentRequests() PREQ " + preq.getId() + " is requested for cancel... will not auto approve");
+        continue;
+      }
+
+      // Only process preq's that have a pay date of now or before
+      Date now = new Date();
+      if ( preq.getPaymentRequestPayDate().getTime() > now.getTime() ) {
+        // Don't process it.  It isn't ready to be paid yet
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date(preq.getPaymentRequestPayDate().getTime()));
+        LOG.info("autoApprovePaymentRequests() PREQ " + preq.getId() + " has pay date " + 
+            (c.get(Calendar.MONTH) + 1) + "-" + c.get(Calendar.DATE) + "-" + c.get(Calendar.YEAR) + "... will not auto approve");
+        // we add one above because January's value is 0, February is 1, and so on
+        continue;
+      }
+
+      // Only process preq's whose vendor is not an exclusion from auto approve in ownership type table
+      VendorHeader vh = vendorService.getVendorHeader(preq.getVendorHeaderGeneratedId());
+      if ( (vh != null) && (vh.getOwnershipType() != null) &&
+           (vh.getOwnershipType().getExcludeFromAutoApprove() != null) &&
+           (vh.getOwnershipType().getExcludeFromAutoApprove().booleanValue()) ) {
+        LOG.info("autoApprovePaymentRequests() PREQ " + preq.getId() + " has vendor auto approve exclusion set to true in ownership type table... will not auto approve");
+        continue;
+      }
+      
+      if (routingService.willDocumentRouteToTaxAsEmployee(preq.getDocumentHeader().getId(),apSupervisor)) {
+        LOG.info("autoApprovePaymentRequests() PREQ " + preq.getId() + " is scheduled to route as Employee to Tax Area... will not auto approve");
+        continue;
+      }
+      
+      // Orders below the autoApproveAmount will be auto approved
+      BigDecimal autoApproveAmount = null;
+      
+      // Find the lowest auto approve amount in all the accounts
+      String chart = null;
+      String accountNumber = null;
+      for (Iterator iter = preq.getDisplayAccounts().iterator(); iter.hasNext();) {
+        DisplayAccount acct = (DisplayAccount)iter.next();
+
+        // Only proces the preq whose chart and account number
+        // are not in the maintenance table for Auto Approve Exclusion
+        chart = acct.getFinancialChartOfAccountsCode();
+        accountNumber = acct.getAccountNumber();
+
+        if ( (acct.getAmount() != null) && (BigDecimal.ZERO.compareTo(acct.getAmount()) < 0) ) {
+          AutoApproveExclusion aae = autoApproveExclusionService.getByChartAndAcct(chart, accountNumber);
+          // as long as there's at least one account whose chart/acct is in the maint.
+          // table, we should break from this inner for-loop and continue with the 
+          // next preq.
+          if (aae != null && aae.getActive().booleanValue()) {
+            autoApproveExcluded = true;
+            break;
+          }
+        }
+            
+        BigDecimal limit = null;
+
+        // Check chart
+        limit = negativePaymentRequestApprovalLimitService.chartApprovalLimit(acct.getFinancialChartOfAccountsCode());
+        if ( (limit != null) && (limit.compareTo(autoApproveAmount) < 0) ) {
+          autoApproveAmount = limit;
+        }
+
+        // Check account
+        limit = negativePaymentRequestApprovalLimitService.accountApprovalLimit(acct.getFinancialChartOfAccountsCode(),acct.getAccountNumber());
+        if ( (limit != null) && (limit.compareTo(autoApproveAmount) < 0) ) {
+          autoApproveAmount = limit;
+        }
+
+        // Check account's org
+        Account account = chartOfAccountsService.getAccount(acct.getFinancialChartOfAccountsCode(),acct.getAccountNumber());
+        if ( account == null ) {
+          // if account is non-existant then check to see if any dollars are assigned
+          if ( (acct.getAmount() == null) || (BigDecimal.ZERO.compareTo(acct.getAmount()) == 0) ) {
+            LOG.info("autoApprovePaymentRequests() PREQ " + preq.getId() + " has invalid account " + acct.getFinancialChartOfAccountsCode() + "/" 
+                + acct.getAccountNumber() + " but will skip because account has no money assigned to it");
+            continue;
+          } else {
+            LOG.error("autoApprovePaymentRequests() Invalid account on preq " + acct.getFinancialChartOfAccountsCode() + "/" + acct.getAccountNumber());
+            throw new IllegalArgumentException("Invalid account on preq " + acct.getFinancialChartOfAccountsCode() + "/" + acct.getAccountNumber());
+          }
+        }
+        limit = negativePaymentRequestApprovalLimitService.organizationApprovalLimit(acct.getFinancialChartOfAccountsCode(),account.getOrganizationCode());
+        if ( (limit != null) && (limit.compareTo(autoApproveAmount) < 0) ) {
+          autoApproveAmount = limit;
+        }
+      }
+      
+      // if the chart and acct nbr of this preq is in the maintenance table to be
+      // excluded from auto approve, then don't do the autoApprovePaymentRequest
+      if (autoApproveExcluded) {
+        LOG.info("autoApprovePaymentRequests() PREQ " + preq.getId() + " is excluded based on Auto Approve Exclusion settings for Chart-Account combo" +
+                chart + "-" + accountNumber + "... will not auto approve");
+        continue;
+      }
+      
+      if ( (FormValidation.isStringEmpty(defaultLimit)) && (autoApproveAmount == null) ) {
+        LOG.error("autoApprovePaymentRequests() Unable to get AP Auto Approve Max Amount and none set for PREQ " + preq.getId());
+        throw new InternalError("Unable to get AP Auto Approve Max Amount");
+      }
+      BigDecimal testAutoApproveAmount = new BigDecimal(defaultLimit);
+      if ( autoApproveAmount != null ) {
+        testAutoApproveAmount = autoApproveAmount;
+      }
+      if ( preq.getTotalCost().compareTo(testAutoApproveAmount) < 0 ) {
+        String env = environmentService.getEnvironment();
+        if (EnvironmentService.PRODUCTION_ENVIRONMENT.equals(env)) {
+          LOG.debug("autoApprovePaymentRequests() auto approving PREQ with ID " + preq.getId() + " and status " + preq.getStatus().getCode());
+          routingService.autoApprovePaymentRequest(preq,apSupervisor);
+        } else {
+          LOG.debug("autoApprovePaymentRequests() if not final approved... auto approving PREQ with ID " + preq.getId() + " and status " + preq.getStatus().getCode());
+          routingService.autoApprovePaymentRequestSkipPrevious(preq,apSupervisor);
+        }
+      } else {
+        LOG.info("autoApprovePaymentRequests() PREQ " + preq.getId() + " has total cost " + preq.getTotalCost().doubleValue() + 
+            " and is not less than the auto approve max limit of " + testAutoApproveAmount.doubleValue() + "... will not auto approve");
+      }
+    }
+  }
+
+     */
+    
+    
 }
