@@ -15,18 +15,19 @@
  */
 package org.kuali.module.purap.rules;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.validation.fieldlevel.ZipcodeValidationPattern;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.util.ErrorMap;
+import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLine;
+import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
@@ -35,8 +36,6 @@ import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
 import org.kuali.workflow.KualiWorkflowUtils.RouteLevelNames;
-
-import edu.iu.uis.eden.exception.WorkflowException;
 
 public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
    
@@ -135,19 +134,14 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
     }
     
     /**
-     * A helper method for determining the route levels for a given document.
-     * 
-     * @param workflowDocument
-     * @return List
+     * @see org.kuali.kfs.rules.GeneralLedgerPostingDocumentRuleBase#populateOffsetGeneralLedgerPendingEntry(java.lang.Integer,
+     *      org.kuali.kfs.bo.GeneralLedgerPendingEntry, org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper,
+     *      org.kuali.kfs.bo.GeneralLedgerPendingEntry)
      */
-    protected static List getCurrentRouteLevels(KualiWorkflowDocument workflowDocument) {
-        try {
-            return Arrays.asList(workflowDocument.getNodeNames());
-        }
-        catch (WorkflowException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    @Override
+    protected boolean populateOffsetGeneralLedgerPendingEntry(Integer universityFiscalYear, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, GeneralLedgerPendingEntry offsetEntry) {
+        //Requisition doesn't generate GL entries
+        return true;
+    } 
 
 }
