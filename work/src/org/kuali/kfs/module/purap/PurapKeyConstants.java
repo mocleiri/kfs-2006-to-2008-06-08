@@ -77,6 +77,10 @@ public class PurapKeyConstants {
     public static final String ERROR_PURCHASE_ORDER_NOT_OPEN="error.invoice.purchaseOrder.notOpen";
     public static final String ERROR_PURCHASE_ORDER_IS_PENDING="error.invoice.purchaseOrder.isPending";
     public static final String ERROR_INVALID_INVOICE_DATE="errors.invalid.invoice.date";
+    public static final String ERROR_NO_ITEMS_TO_INVOICE="errors.invoice.items.noneLeft";
+    public static final String ERROR_PAYMENT_REQUEST_REASON_REQUIRED = "error.paymentRequest.reasonRequired";    
+    public static final String ERROR_CANCEL_CANCELLED="errors.cancel.cancelled";
+    public static final String ERROR_CANCEL_EXTRACTED="errors.cancel.extracted";
    
     public static final String MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT="message.duplicate.preq.date.amount";
     public static final String MESSAGE_DUPLICATE_INVOICE_DATE_AMOUNT_CANCELLEDORVOIDED="message.duplicate.invoice.date.amount.cancelledOrVoided";
@@ -92,8 +96,15 @@ public class PurapKeyConstants {
     
     public static final String PAYMENT_REQUEST_QUESTION_DOCUMENT = "paymentRequest.question.text";
     public static final String PAYMENT_REQUEST_MESSAGE_HOLD_DOCUMENT="paymentRequest.message.hold.text";
-    public static final String ERROR_PAYMENT_REQUEST_REASON_REQUIRED = "error.paymentRequest.reasonRequired";
-    
+
+    public static final String PAYMENT_REQUEST_QUESTION_CANCEL_DOCUMENT = "paymentRequest.question.cancel.text";
+    public static final String PAYMENT_REQUEST_MESSAGE_CANCEL_DOCUMENT="paymentRequest.message.cancel.text";
+
+    public static final String PAYMENT_REQUEST_QUESTION_REMOVE_CANCEL_DOCUMENT = "paymentRequest.question.remove.cancel.text";
+    public static final String PAYMENT_REQUEST_MESSAGE_REMOVE_CANCEL_DOCUMENT="paymentRequest.message.remove.cancel.text";
+
+    public static final String WARNING_ENCUMBER_NEXT_FY="warning.encumber.nextFY";
+    public static final String WARNING_CANCEL_REOPEN_PO="warning.cancel.reOpenPO";
     //Item
     public static final String ERROR_ITEM_AMOUNT_BELOW_ZERO="errors.item.amount.belowZero";
     public static final String ERROR_ITEM_AMOUNT_NOT_BELOW_ZERO="errors.item.amount.notBelowZero";
@@ -104,6 +115,7 @@ public class PurapKeyConstants {
     public static final String ERROR_ITEM_EMPTY="errors.item.empty";
     public static final String ERROR_ITEM_ACCOUNTING_NOT_ALLOWED="errors.item.accounting.notallowed";
     public static final String ERROR_ITEM_ACCOUNTING_INCOMPLETE="errors.item.accounting.incomplete";
+    public static final String ERROR_ITEM_ACCOUNTING_TOTAL="errors.item.accounting.total";
     public static final String ERROR_PURCHASE_ORDER_EXCEEDING_TOTAL_LIMIT="errors.purchaseorder.exceedingTotalLimit";
     public static final String ERROR_ITEM_REQUIRED="errors.item.required";
     public static final String ERROR_ITEM_UNIT_OF_MEASURE_REQUIRED="errors.item.unitOfMeasure.required";
@@ -113,7 +125,19 @@ public class PurapKeyConstants {
     public static final String ERROR_ITEM_AMND_NULL="errors.item.amnd.null";
     public static final String ERROR_ITEM_AMND_INVALID="errors.item.amnd.invalid";
     public static final String ERROR_ITEM_AMND_INVALID_AMT="errors.item.amnd.invalidAmt";
+    public static final String ERROR_ITEM_QUANTITY_TOO_MANY="errors.item.quantity.tooMany";
+    public static final String ERROR_ITEM_QUANTITY_REQUIRED="errors.item.quantity.required";
+    public static final String ERROR_ITEM_AMOUNT_ALREADY_PAID="errors.item.amount.alreadyPaid";
     
     //Credit Memo
     public static final String ERROR_CREDIT_MEMO_REQUIRED_FIELDS="errors.credit.memo.required.fields";
+    public static final String MESSAGE_DUPLICATE_CREDIT_MEMO_VENDOR_NUMBER="message.duplicate.creditMemo.vendorNumber";
+    public static final String MESSAGE_DUPLICATE_CREDIT_MEMO_VENDOR_NUMBER_DATE_AMOUNT="message.duplicate.creditMemo.vendorNumber.date.amount";
+    
+    public static final String ERROR_PURCHASE_ORDER_INVALID="errors.purchaseOrder.invalid";
+    public static final String ERROR_PURCAHSE_ORDER_INVALID_STATUS="errors.purchaseOrder.invalid.status";
+    public static final String ERROR_PAYMENT_REQEUEST_INVALID="errors.paymentRequest.invalid";
+    public static final String ERROR_PAYMENT_REQEUEST_INVALID_SATATUS="errors.paymentRequest.invalid.status";
+    public static final String ERROR_VENDOR_NUMBER_INVALID="errors.vendorNumber.invalid";
+
 }
