@@ -59,7 +59,6 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
     public void refreshAllReferences() {
         super.refreshAllReferences();
         this.refreshReferenceObject("processingCampus");
-        this.refreshReferenceObject("purchaseOrderDocument");
     }
 
     public boolean requiresAccountsPayableReviewRouting() {
@@ -153,6 +152,9 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
     }
 
     public PurchaseOrderDocument getPurchaseOrderDocument() {
+        if(purchaseOrderDocument==null && this.getPurchaseOrderIdentifier()!=null) {
+            purchaseOrderDocument = SpringServiceLocator.getPurchaseOrderService().getCurrentPurchaseOrder(this.getPurchaseOrderIdentifier());
+        }
         return purchaseOrderDocument;
     }
 
