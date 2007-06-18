@@ -16,9 +16,12 @@
 
 package org.kuali.module.purap.document;
 
+import static org.kuali.kfs.KFSConstants.ZERO;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +29,7 @@ import org.kuali.core.bo.Note;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.TransactionalDocument;
+import org.kuali.core.rule.event.KualiDocumentEvent;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
@@ -35,7 +39,9 @@ import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapConstants.RequisitionSources;
 import org.kuali.module.purap.PurapConstants.VendorChoice;
+import org.kuali.module.purap.bo.CreditMemoView;
 import org.kuali.module.purap.bo.ItemType;
+import org.kuali.module.purap.bo.PaymentRequestView;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderStatusHistory;
 import org.kuali.module.purap.bo.PurchaseOrderVendorChoice;
@@ -123,8 +129,40 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
         return true;
     }
 
+    public void customPrepareForSave(KualiDocumentEvent event) {
+
+        // Set outstanding encumbered quantity/amount on items
+        for (Iterator items = this.getItems().iterator(); items.hasNext();) {
+            PurchaseOrderItem item = (PurchaseOrderItem) items.next();
+
+            // Set quantities
+            item.setItemOutstandingEncumberedQuantity(item.getItemQuantity());
+            item.setItemReceivedTotalQuantity(ZERO);
+            item.setItemReturnedTotalQuantity(ZERO);
+            item.setItemInvoicedTotalQuantity(ZERO);
+            item.setItemInvoicedTotalAmount(ZERO);
+
+            // Set amount
+            item.setItemOutstandingEncumbranceAmount(item.getExtendedPrice() == null ? ZERO : item.getExtendedPrice());
+
+            //TODO check setting of outstanding amount in the accounts in item.prepareToSave()
+            item.prepareToSave();
+        }//endfor
+
+    }//end customPrepareForSave()
     
-    
+    @Override
+    public void prepareForSave(KualiDocumentEvent event) {
+        customPrepareForSave(event);
+        if (ObjectUtils.isNull(getPurapDocumentIdentifier())) {
+            //need to save to generate PO id to save in GL entries
+            SpringServiceLocator.getPurchaseOrderService().save(this);
+        }
+        this.refreshNonUpdateableReferences();
+        this.setSourceAccountingLines(SpringServiceLocator.getPurapAccountingService().generateSummaryWithNoZeroTotals(this.getItems()));
+        super.prepareForSave(event);
+    }
+
     @Override
     public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
         // FIXME
@@ -254,8 +292,17 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
     public void handleRouteLevelChange() {
         LOG.debug("handleRouteLevelChange() started");
         super.handleRouteLevelChange();
+    }
 
-
+    public List getItemsActiveOnly() {
+        List returnList = new ArrayList();
+        for (Iterator iter = getItems().iterator(); iter.hasNext();) {
+            PurchaseOrderItem item = (PurchaseOrderItem) iter.next();
+            if (item.isItemActiveIndicator()) {
+                returnList.add(item);
+    }
+        }
+        return returnList;
     }
 
     // SETTERS AND GETTERS
@@ -746,6 +793,32 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase implements Cop
             }
         }
         return total;
+    }
+    
+    public boolean getContainsUnpaidPaymentRequestsOrCreditMemos() {
+        if (getRelatedPaymentRequestViews() != null) {
+            for (PaymentRequestView element : getRelatedPaymentRequestViews()) {
+                // If the PREQ is neither cancelled nor voided, check whether the PREQ has been paid.
+                // If it has not been paid, then this method will return true.
+                if (!element.getStatusCode().equals(PurapConstants.PaymentRequestStatuses.CANCELLED_IN_PROCESS) && !element.getStatusCode().equals(PurapConstants.PaymentRequestStatuses.CANCELLED_POST_APPROVE)) {
+                    if (element.getPaymentPaidDate() == null) {
+                        return true;
+                    }
+                }
+            }// endfor
+        }
+        if (getRelatedCreditMemoViews() != null) {
+            for (CreditMemoView element : getRelatedCreditMemoViews()) {
+                // If the CM is cancelled, check whether the CM has been paid.
+                // If it has not been paid, then this method will return true.
+                if (!element.getCreditMemoStatusCode().equals(PurapConstants.CreditMemoStatuses.CANCELLED_POST_APPROVE)) {
+                    if (element.getCreditMemoPaidTimestamp() == null) {
+                        return true;
+                    }
+                }
+            }// endfor
+        }
+        return false;
     }
     
     /**
