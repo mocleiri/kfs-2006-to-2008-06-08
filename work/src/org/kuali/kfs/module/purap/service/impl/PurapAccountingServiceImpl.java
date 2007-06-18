@@ -23,10 +23,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.service.PurapAccountingService;
+import org.kuali.module.purap.util.PurApItemUtils;
 
 public class PurapAccountingServiceImpl implements PurapAccountingService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurapAccountingServiceImpl.class);
@@ -281,22 +283,23 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
         Set<PurApAccountingLine> accountSet = new HashSet<PurApAccountingLine>();
         
         for (PurchasingApItem currentItem : items) {
-            for (PurApAccountingLine account : currentItem.getSourceAccountingLines()) {
-                boolean thisAccountAlreadyInSet = false;
-                for (Iterator iter = accountSet.iterator(); iter.hasNext();) {
-                    PurApAccountingLine alreadyAddedAccount = (PurApAccountingLine) iter.next();
-                    if (alreadyAddedAccount.accountStringsAreEqual(account)) {
-                        // TODO ckirschenman - do we need to re-add 'alreadyAddedAccount' back into the Set or will it update ok?
-                        alreadyAddedAccount.setAmount(alreadyAddedAccount.getAmount().add(account.getAmount()));
-                        thisAccountAlreadyInSet = true;
-                        break;
+            if(PurApItemUtils.checkItemActive(currentItem)) {
+                for (PurApAccountingLine account : currentItem.getSourceAccountingLines()) {
+                    boolean thisAccountAlreadyInSet = false;
+                    for (Iterator iter = accountSet.iterator(); iter.hasNext();) {
+                        PurApAccountingLine alreadyAddedAccount = (PurApAccountingLine) iter.next();
+                        if (alreadyAddedAccount.accountStringsAreEqual(account)) {
+                            alreadyAddedAccount.setAmount(alreadyAddedAccount.getAmount().add(account.getAmount()));
+                            thisAccountAlreadyInSet = true;
+                            break;
+                        }
                     }
-                }
-                if (!thisAccountAlreadyInSet) {
-                    // TODO ckirschenman - should we create a new account object here so that my summing above doesn't alter the existing account list?
-                    accountSet.add(account);
+                    if (!thisAccountAlreadyInSet) {
+                        PurApAccountingLine accountToAdd = (PurApAccountingLine)ObjectUtils.deepCopy(account);
+                        accountSet.add(accountToAdd);
                 }
             }
+        }
         }
         
         // convert list of PurApAccountingLine objects to SourceAccountingLineObjects
