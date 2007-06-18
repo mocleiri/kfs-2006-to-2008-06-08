@@ -16,7 +16,6 @@
 package org.kuali.module.purap.web.struts.action;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,30 +25,23 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.Constants;
 import org.kuali.core.bo.Note;
 import org.kuali.core.question.ConfirmationQuestion;
-import org.kuali.core.rule.event.SaveDocumentEvent;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.TypedArrayList;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
-import org.kuali.core.web.ui.ExtraButton;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
-import org.kuali.module.purap.PurapAuthorizationConstants;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapKeyConstants;
-import org.kuali.module.purap.PurapConstants.PODocumentsStrings;
 import org.kuali.module.purap.PurapConstants.PREQDocumentsStrings;
-import org.kuali.module.purap.PurapConstants.PurchaseOrderDocTypes;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.question.SingleConfirmationQuestion;
+import org.kuali.module.purap.rule.event.ContinueAccountsPayableEvent;
 import org.kuali.module.purap.service.PaymentRequestService;
 import org.kuali.module.purap.web.struts.form.PaymentRequestForm;
-import org.kuali.rice.KNSServiceLocator;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -96,55 +88,54 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
         Map editMode = preqForm.getEditingMode();
         
         Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
-        //String reason = request.getParameter(KFSConstants.QUESTION_REASON_ATTRIBUTE_NAME);
-
-        KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
-
-     
-        
+       
+        KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();     
         PaymentRequestService paymentRequestService = SpringServiceLocator.getPaymentRequestService();
-        HashMap<String, String> duplicateMessages = paymentRequestService.paymentRequestDuplicateMessages(paymentRequestDocument);
         
-        if (!duplicateMessages.isEmpty()){
-  
-            if (question == null) {
-              // ask question if not already asked
-              return this.performQuestionWithoutInput(mapping, form, request, response, PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, duplicateMessages.get(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION) , KFSConstants.CONFIRMATION_QUESTION, KFSConstants.ROUTE_METHOD, "");
-
-            } 
+        Integer poId = paymentRequestDocument.getPurchaseOrderIdentifier();
+        PurchaseOrderDocument purchaseOrderDocument = SpringServiceLocator.getPurchaseOrderService().getCurrentPurchaseOrder(paymentRequestDocument.getPurchaseOrderIdentifier());
+        
+        if (ObjectUtils.isNotNull(purchaseOrderDocument)) {
+            HashMap<String, String> duplicateMessages = paymentRequestService.paymentRequestDuplicateMessages(paymentRequestDocument);
             
-            Object buttonClicked = request.getParameter(KFSConstants.QUESTION_CLICKED_BUTTON);
-           
-            if ((PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION.equals(question)) && ConfirmationQuestion.NO.equals(buttonClicked)) {
+            if (!duplicateMessages.isEmpty()){
+      
+                if (question == null) {
+                  // ask question if not already asked
+                  return this.performQuestionWithoutInput(mapping, form, request, response, PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, duplicateMessages.get(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION) , KFSConstants.CONFIRMATION_QUESTION, KFSConstants.ROUTE_METHOD, "");
+    
+                } 
                 
-                // if no button clicked just reload the doc in the INITIATE status and let the user to change the input values
+                Object buttonClicked = request.getParameter(KFSConstants.QUESTION_CLICKED_BUTTON);
                
-                paymentRequestDocument.setStatusCode(PurapConstants.PaymentRequestStatuses.INITIATE);
-                //editMode.put(PurapAuthorizationConstants.PaymentRequestEditMode.DISPLAY_INIT_TAB, "TRUE");
-                return mapping.findForward(KFSConstants.MAPPING_BASIC);
-             }
+                if ((PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION.equals(question)) && ConfirmationQuestion.NO.equals(buttonClicked)) {
+                    
+                    // if no button clicked just reload the doc in the INITIATE status and let the user to change the input values
+                   
+                    paymentRequestDocument.setStatusCode(PurapConstants.PaymentRequestStatuses.INITIATE);
+                    //editMode.put(PurapAuthorizationConstants.PaymentRequestEditMode.DISPLAY_INIT_TAB, "TRUE");
+                    return mapping.findForward(KFSConstants.MAPPING_BASIC);
+                 }
+            }
         }
         
         // If we are here either there was no duplicate or there was a duplicate and the user hits continue, in either case we need to validate the business rules
         paymentRequestDocument.getDocumentHeader().setFinancialDocumentDescription("dummy data to pass the business rule");
-        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new SaveDocumentEvent(paymentRequestDocument)); 
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new ContinueAccountsPayableEvent(paymentRequestDocument));        
         paymentRequestDocument.getDocumentHeader().setFinancialDocumentDescription(null);
-        if (rulePassed) {
-            
-            Integer poId = paymentRequestDocument.getPurchaseOrderIdentifier();
-            PurchaseOrderDocument purchaseOrderDocument = SpringServiceLocator.getPurchaseOrderService().getCurrentPurchaseOrder(paymentRequestDocument.getPurchaseOrderIdentifier());
+        
+        if (rulePassed) {           
             paymentRequestDocument.populatePaymentRequestFromPurchaseOrder(purchaseOrderDocument);
             paymentRequestDocument.setStatusCode(PurapConstants.PaymentRequestStatuses.IN_PROCESS);
             paymentRequestDocument.refreshAllReferences();
 
-            //editMode.put(PurapAuthorizationConstants.PaymentRequestEditMode.DISPLAY_INIT_TAB, "FALSE");
-            
+            //editMode.put(PurapAuthorizationConstants.PaymentRequestEditMode.DISPLAY_INIT_TAB, "FALSE");    
         } else {
             paymentRequestDocument.setStatusCode(PurapConstants.PaymentRequestStatuses.INITIATE);
         }
         
-        //If the list of closed/expired accounts is not empty add a warning and  add a note for the close / epired accounts which get replaced
-//        HashMap<String, String> expiredOrClosedAccounts = paymentRequestService.ExpiredOrClosedAccountsList(paymentRequestDocument);
+        //If the list of closed/expired accounts is not empty add a warning and add a note for the close / epired accounts which get replaced
+        //HashMap<String, String> expiredOrClosedAccounts = paymentRequestService.expiredOrClosedAccountsList(paymentRequestDocument);
         //TODO: Chris finish above method for now just set to empty
         HashMap<String, String> expiredOrClosedAccounts = new HashMap<String,String>();
         
@@ -302,6 +293,194 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
         
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
+
+/**
+ * This action requests a cancel on a preq, prompting for a reason before hand.
+ * This stops further approvals or routing.
+ * 
+ * @param mapping
+ * @param form
+ * @param request
+ * @param response
+ * @return
+ * @throws Exception
+ */
+public ActionForward requestCancelOnPayment(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {    
+    LOG.debug("requestCancelOnPayment() method");
+
+    String operation = "Hold ";
+    return askCancelQuestion(mapping, form, request, response, PREQDocumentsStrings.CANCEL_PREQ_QUESTION, PREQDocumentsStrings.CONFIRM_CANCEL_QUESTION, PurapConstants.PAYMENT_REQUEST_DOCUMENT, PREQDocumentsStrings.CANCEL_NOTE_PREFIX, PurapKeyConstants.PAYMENT_REQUEST_MESSAGE_CANCEL_DOCUMENT, operation);
+}
+
+/**
+ * This action removes a request for cancel on a PREQ.
+ * 
+ * @param mapping
+ * @param form
+ * @param request
+ * @param response
+ * @return
+ * @throws Exception
+ */
+public ActionForward removeCancelRequestFromPayment(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    
+    LOG.debug("removeCancelRequestFromPayment() method");
+
+    String operation = "Cancel ";
+    return askRemoveCancelQuestion(mapping, form, request, response, PREQDocumentsStrings.REMOVE_CANCEL_PREQ_QUESTION, PREQDocumentsStrings.CONFIRM_REMOVE_CANCEL_QUESTION, PurapConstants.PAYMENT_REQUEST_DOCUMENT, PREQDocumentsStrings.REMOVE_CANCEL_NOTE_PREFIX, PurapKeyConstants.PAYMENT_REQUEST_MESSAGE_REMOVE_CANCEL_DOCUMENT, operation);
+}
+
+/**
+ * This method prompts for a reason to request to cancel a preq.
+ * 
+ * @param mapping
+ * @param form
+ * @param request
+ * @param response
+ * @param questionType
+ * @param confirmType
+ * @param noteTextIntro
+ * @param messageType
+ * @param notePrefixType
+ * @param mappingType
+ * @return
+ * @throws Exception
+ */
+private ActionForward askCancelQuestion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, String questionType, String confirmType, String documentType, String notePrefix, String messageType, String operation) throws Exception {
+
+    LOG.debug("askCancelQuestion started.");
+    KualiDocumentFormBase kualiDocumentFormBase = (KualiDocumentFormBase) form;
+    PaymentRequestDocument preqDocument = (PaymentRequestDocument) kualiDocumentFormBase.getDocument();
+    Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
+    String reason = request.getParameter(KFSConstants.QUESTION_REASON_ATTRIBUTE_NAME);
+    String noteText = "";
+
+    KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
+
+    // Start in logic for confirming the close.
+    if (question == null) {
+        String key = kualiConfiguration.getPropertyString(PurapKeyConstants.PAYMENT_REQUEST_QUESTION_DOCUMENT);
+        String message = StringUtils.replace(key, "{0}", operation);
+
+        // Ask question if not already asked.
+        return this.performQuestionWithInput(mapping, form, request, response, questionType, message, KFSConstants.CONFIRMATION_QUESTION, questionType, "");
+    }
+    else {
+        Object buttonClicked = request.getParameter(KFSConstants.QUESTION_CLICKED_BUTTON);
+        if (question.equals(questionType) && buttonClicked.equals(ConfirmationQuestion.NO)) {
+            // If 'No' is the button clicked, just reload the doc
+            return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        }
+        else if (question.equals(confirmType) && buttonClicked.equals(SingleConfirmationQuestion.OK)) {
+            // This is the case when the user clicks on "OK" in the end.
+            // After we inform the user that the close has been rerouted, we'll redirect to the portal page.
+            return mapping.findForward(KFSConstants.MAPPING_PORTAL);
+        }
+        else {
+            // Have to check length on value entered.
+            String introNoteMessage = notePrefix + KFSConstants.BLANK_SPACE;
+
+            // Build out full message.
+            noteText = introNoteMessage + reason;
+            int noteTextLength = noteText.length();
+
+            // Get note text max length from DD.
+            int noteTextMaxLength = SpringServiceLocator.getDataDictionaryService().getAttributeMaxLength(Note.class, KFSConstants.NOTE_TEXT_PROPERTY_NAME).intValue();
+
+            if (StringUtils.isBlank(reason) || (noteTextLength > noteTextMaxLength)) {
+                // Figure out exact number of characters that the user can enter.
+                int reasonLimit = noteTextMaxLength - noteTextLength;
+
+                if (reason == null) {
+                    // Prevent a NPE by setting the reason to a blank string.
+                    reason = "";
+                }
+                return this.performQuestionWithInputAgainBecauseOfErrors(mapping, form, request, response, questionType, kualiConfiguration.getPropertyString(PurapKeyConstants.PAYMENT_REQUEST_QUESTION_DOCUMENT), KFSConstants.CONFIRMATION_QUESTION, questionType, "", reason, PurapKeyConstants.ERROR_PAYMENT_REQUEST_REASON_REQUIRED, KFSConstants.QUESTION_REASON_ATTRIBUTE_NAME, new Integer(reasonLimit).toString());
+            }
+        }
+    }
+    
+    //set the cancel indicator on the preq
+    SpringServiceLocator.getPaymentRequestService().requestCancelOnPaymentRequest(preqDocument, noteText);
+    
+    return mapping.findForward(KFSConstants.MAPPING_BASIC);
+}
+
+/**
+ * This method prompts for a reason to remove a request to cancel a preq.
+ * 
+ * @param mapping
+ * @param form
+ * @param request
+ * @param response
+ * @param questionType
+ * @param confirmType
+ * @param noteTextIntro
+ * @param messageType
+ * @param notePrefixType
+ * @param mappingType
+ * @return
+ * @throws Exception
+ */
+private ActionForward askRemoveCancelQuestion(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, String questionType, String confirmType, String documentType, String notePrefix, String messageType, String operation) throws Exception {
+
+    LOG.debug("askRemoveCancelQuestion started.");
+    KualiDocumentFormBase kualiDocumentFormBase = (KualiDocumentFormBase) form;
+    PaymentRequestDocument preqDocument = (PaymentRequestDocument) kualiDocumentFormBase.getDocument();
+    Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
+    String reason = request.getParameter(KFSConstants.QUESTION_REASON_ATTRIBUTE_NAME);
+    String noteText = "";
+
+    KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
+
+    // Start in logic for confirming the close.
+    if (question == null) {
+        String key = kualiConfiguration.getPropertyString(PurapKeyConstants.PAYMENT_REQUEST_QUESTION_DOCUMENT);
+        String message = StringUtils.replace(key, "{0}", operation);
+
+        // Ask question if not already asked.
+        return this.performQuestionWithInput(mapping, form, request, response, questionType, message, KFSConstants.CONFIRMATION_QUESTION, questionType, "");
+    }
+    else {
+        Object buttonClicked = request.getParameter(KFSConstants.QUESTION_CLICKED_BUTTON);
+        if (question.equals(questionType) && buttonClicked.equals(ConfirmationQuestion.NO)) {
+            // If 'No' is the button clicked, just reload the doc
+            return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        }
+        else if (question.equals(confirmType) && buttonClicked.equals(SingleConfirmationQuestion.OK)) {
+            // This is the case when the user clicks on "OK" in the end.
+            // After we inform the user that the close has been rerouted, we'll redirect to the portal page.
+            return mapping.findForward(KFSConstants.MAPPING_PORTAL);
+        }
+        else {
+            // Have to check length on value entered.
+            String introNoteMessage = notePrefix + KFSConstants.BLANK_SPACE;
+
+            // Build out full message.
+            noteText = introNoteMessage + reason;
+            int noteTextLength = noteText.length();
+
+            // Get note text max length from DD.
+            int noteTextMaxLength = SpringServiceLocator.getDataDictionaryService().getAttributeMaxLength(Note.class, KFSConstants.NOTE_TEXT_PROPERTY_NAME).intValue();
+
+            if (StringUtils.isBlank(reason) || (noteTextLength > noteTextMaxLength)) {
+                // Figure out exact number of characters that the user can enter.
+                int reasonLimit = noteTextMaxLength - noteTextLength;
+
+                if (reason == null) {
+                    // Prevent a NPE by setting the reason to a blank string.
+                    reason = "";
+                }
+                return this.performQuestionWithInputAgainBecauseOfErrors(mapping, form, request, response, questionType, kualiConfiguration.getPropertyString(PurapKeyConstants.PAYMENT_REQUEST_QUESTION_DOCUMENT), KFSConstants.CONFIRMATION_QUESTION, questionType, "", reason, PurapKeyConstants.ERROR_PAYMENT_REQUEST_REASON_REQUIRED, KFSConstants.QUESTION_REASON_ATTRIBUTE_NAME, new Integer(reasonLimit).toString());
+            }
+        }
+    }
+    
+    //unset the cancel indicator on the preq
+    SpringServiceLocator.getPaymentRequestService().removeRequestCancelOnPaymentRequest(preqDocument, noteText);
+    
+    return mapping.findForward(KFSConstants.MAPPING_BASIC);
+}
 
     /**
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#save(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
