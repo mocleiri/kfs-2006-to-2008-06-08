@@ -124,6 +124,8 @@ public class KFSConstants extends Constants {
     public static final String EMPLOYEE_ACTIVE_STATUS = "A";
     public static final String EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME = "sourceAccountingLine";
     public static final String EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME = "targetAccountingLine";
+    public static final String SOURCE_ACCT_LINE_TYPE_CODE = "F";  // F = From, the label for this on most documents
+    public static final String TARGET_ACCT_LINE_TYPE_CODE = "T";  // T = To, the label for this on most documents
     public static final String EXTRA_BUTTON_SOURCE = "extraButtonSource";
     public static final String EXTRA_BUTTON_PARAMS = "extraButtonParams";
     public static final String NEW_DOCUMENT_NOTE_PROPERTY_NAME = "newDocumentNote";
@@ -179,7 +181,7 @@ public class KFSConstants extends Constants {
     public static final String LABOR_DISTRIBUTION_ORIGIN_CODE = "LD";
     public static final String STAND_IN_BUSINESS_OBJECT_FOR_ATTRIBUTES = "AttributeReferenceDummy";
     public static final String LABOR_MODIFIED_INQUIRY_ACTION = "laborModifiedInquiry.do";
-    public static final String PERSON_FUNDING_INQUIRY_ACTION = "personFundingInquiry.do";    
+    public static final String EMPLOYEE_FUNDING_INQUIRY_ACTION = "employeeFundingInquiry.do";    
     public static final String OVERRIDE_KEYS = "overrideKeys";
 
     /**
@@ -223,7 +225,7 @@ public class KFSConstants extends Constants {
     public static final String GL_CREDIT_CODE = "C";
     public static final String GL_BUDGET_CODE = " ";
 
-    // TRN_ENCUMB_UPDT_CD value values
+    // TRN_ENCUM_UPDT_CD value values
     public static final String ENCUMB_UPDT_DOCUMENT_CD = "D";
     public static final String ENCUMB_UPDT_REFERENCE_DOCUMENT_CD = "R";
     public static final String ENCUMB_UPDT_NO_ENCUMBRANCE_CD = "N";
@@ -657,6 +659,9 @@ public class KFSConstants extends Constants {
     public static class ChartApcParms {
         public static final String GROUP_CHART_MAINT_EDOCS = "ChartMaintenanceEDoc";
 
+        public static final String FISCAL_YEAR_MAKER_REPLACE_MODE = "replaceMode";
+        public static final String FISCAL_YEAR_MAKER_SOURCE_FISCAL_YEAR = "sourceFiscalYear";
+
         // Account parms
         public static final String ACCOUNT_USER_EMP_STATUSES = "Account.User.AllowedEmployeeStatus";
         public static final String ACCOUNT_USER_EMP_TYPES = "Account.User.AllowedEmployeeType";
@@ -695,6 +700,7 @@ public class KFSConstants extends Constants {
         public static final String BATCH_UPLOAD_SECURITY_GROUP_NAME = "Kuali.Batch.BatchInputFileUpload";
         public static final String COLLECTOR_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.Collector";
         public static final String ENTERPRSISE_FEEDER_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.EnterpriseFeeder";
+        public static final String CHART_FISCAL_YEAR_MAKER = "Chart.FiscalYearMaker";
     }
 
     public static class SystemGroupParameterNames {
@@ -727,11 +733,12 @@ public class KFSConstants extends Constants {
         public static final String COLLECTOR_FILE_TYPE_WORKGROUP_PARAMAETER_NAME = COLLECTOR_FILE_TYPE_INDENTIFIER + ".WORKGROUP";
         public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_WORKGROUP_PARAMAETER_NAME = ENTERPRISE_FEEDER_FILE_SET_TYPE_INDENTIFIER + ".WORKGROUP";
         
-        public static final String COLLECTOR_EMAIL_FROM_PARAMETER_NAME = "EmailFrom";
         public static final String COLLECTOR_EMAIL_SUBJECT_PARAMETER_NAME = "SubjectLine";
         public static final String COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES = "EqualDebitCreditTotalDocumentTypes";
         public static final String COLLECTOR_PERFORM_DUPLICATE_HEADER_CHECK = "PerformDuplicateHeaderCheck";
    
+        public static final String BATCH_SCHEDULE_CUTOFF_TIME = "scheduleStep_CUTOFF_TIME";
+        public static final String BATCH_SCHEDULE_CUTOFF_TIME_IS_NEXT_DAY = "scheduleStep_IS_CUTOFF_TIME_NEXT_DAY";
         /**
          * Used by PurgePendingAttachmentsJob to compute the maximum amount of time a pending attachment is allowed to
          * persist on the file system before being deleted.
@@ -964,4 +971,6 @@ public class KFSConstants extends Constants {
      * true key.  For example, gl.EnterpriseFeeder.StatusDescriptionPrefix.org.kuali.module.gl.util.FileReconBadLoadAbortedStatus
      */
     public static final String ENTERPRISE_FEEDER_STATUS_DESCRIPTION_PREFIX = "gl.EnterpriseFeeder.StatusDescription.";
+    
+    public static final String BATCH_STEP_RUNNER_JOB_NAME = "stepRunByBatchStepRunner";
 }
