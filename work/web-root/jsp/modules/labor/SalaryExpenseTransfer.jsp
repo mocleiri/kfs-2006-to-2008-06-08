@@ -95,24 +95,24 @@
             useCurrencyFormattedTotal="${useCurrencyFormattedTotalBoolean}"
             includeObjectTypeCode="${includeObjectTypeCodeBoolean}"
             displayMonthlyAmounts="${displayMonthlyAmountsBoolean}"
-            forcedReadOnlySourceFields="${KualiForm.forcedReadOnlyFields}"
+            forcedReadOnlyFields="${KualiForm.forcedReadOnlyTargetFields}"
             accountingLineAttributes="${accountingLineAttributesMap}">
             <jsp:attribute name="importRowOverride">
                 <html:image property="methodToCall.copyAllAccountingLines" src="${ConfigProperties.externalizable.images.url}tinybutton-copyall.gif" title="Copy all Source Accounting Lines" alt="Copy all Source Lines" styleClass="tinybutton"/>
-				<html:image property="methodToCall.deleteAllAccountingLines"
-   				                 src="images/tinybutton-deleteall.gif"
-							   title="Delete all Source Accounting Lines"
-							     alt="Delete all Source Lines" styleClass="tinybutton" />
+   			        <html:image property="methodToCall.deleteAllAccountingLines"
+					    src="${ConfigProperties.externalizable.images.url}tinybutton-deleteall.gif"
+						title="Delete all Source Accounting Lines"
+						alt="Delete all Source Lines" styleClass="tinybutton" />
                 Import from Labor Ledger
                 <gl:balanceInquiryLookup
-                    boClassName="org.kuali.module.labor.bo.LedgerBalance"
+                    boClassName="org.kuali.module.labor.bo.LedgerBalanceForSalaryExpenseTransfer"
                     actionPath="glBalanceInquiryLookup.do"
-                    lookupParameters="emplid:emplid,financialBalanceTypeCode:financialBalanceTypeCode,'S':fiscalObjectFringeOrSalaryCode"
+                    lookupParameters="emplid:emplid,financialBalanceTypeCode:financialBalanceTypeCode"
                     hideReturnLink="false" />
             </jsp:attribute>
             <jsp:attribute name="customActions">
                 <c:set var="copyMethod" value="copyAccountingLine.line${accountingLineIndexVar}" scope="request" />
-                <html:image property="methodToCall.${copyMethod}.anchoraccounting${actionInfixVar}Anchor" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-copy2.gif" title="Copy an Accounting Line" alt="Copy an Accounting Line" styleClass="tinybutton"/>
+                <html:image property="methodToCall.${copyMethod}.anchoraccounting${actionInfixVar}Anchor" src="${ConfigProperties.externalizable.images.url}tinybutton-copy2.gif" title="Copy an Accounting Line" alt="Copy an Accounting Line" styleClass="tinybutton"/>
             </jsp:attribute>
         </ld:importedAccountingLineGroup>
 
