@@ -16,9 +16,12 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 
 public abstract class PurApAccountingLineBase extends SourceAccountingLine implements PurApAccountingLine {
@@ -58,7 +61,8 @@ public abstract class PurApAccountingLineBase extends SourceAccountingLine imple
                  StringUtils.isNotEmpty(getFinancialSubObjectCode()) || 
                  StringUtils.isNotEmpty(getOrganizationReferenceId()) || 
                  StringUtils.isNotEmpty(getProjectCode()) || 
-                 StringUtils.isNotEmpty(getSubAccountNumber()));
+                 StringUtils.isNotEmpty(getSubAccountNumber()) ||
+                 ObjectUtils.isNotNull(getAccountLinePercent()));
     }
 
     public PurApAccountingLine createBlankAmountsCopy() {
@@ -96,5 +100,24 @@ public abstract class PurApAccountingLineBase extends SourceAccountingLine imple
         sourceLine.setOrganizationReferenceId(getOrganizationReferenceId());
         sourceLine.setAmount(getAmount());
         return sourceLine;
+    }
+    
+    /**
+     * 
+     * @see org.kuali.kfs.bo.AccountingLineBase#toStringMapper()
+     */
+    @Override
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();
+
+        m.put("chart", getChartOfAccountsCode());
+        m.put("account", getAccountNumber());
+        m.put("objectCode", getFinancialObjectCode());
+        m.put("subAccount", getSubAccountNumber());
+        m.put("subObjectCode", getFinancialSubObjectCode());
+        m.put("projectCode", getProjectCode());
+        m.put("orgRefId", getOrganizationReferenceId());
+
+        return m;
     }
 }
