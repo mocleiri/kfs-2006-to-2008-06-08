@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <project name="kuali" default="dist-local" basedir=".">
-	<!-- run the help task to view usage instructions -->
+	<!-- run the help target to view usage instructions for public targets -->
 	<target name="dist-local" if="is.local.build" depends="clean,filter-project,filter-local" description="Prepare local configuration files and tokenized resources and deploy tomcat context file on development workstation">
 		<copy file="${metainf.directory}/${tomcat.context.file}" tofile="${appserver.localhost.dir}/${ant.project.name}-${build.environment}.xml" overwrite="true" />
 	</target>
 
-	<target name="test-local" depends="use-test-spring-beans,dist-local,make-tests,test" description="Run all unit tests and format results"/>
+	<target name="test-local" depends="init-test-properties,dist-local,make-tests,test" description="Run all unit tests and format results"/>
 
 	<target name="echo-properties" depends="init-filter-sets" description="Print all build properties that have been set">
 		<echoproperties />
@@ -195,6 +195,11 @@
 			<include name="**/*.xsd" />
 		</patternset>
 	</target>
+	
+	<target name="init-test-properties">
+		<property name="import.test.spring.beans" value="true" />
+		<property name="use.quartz.scheduling" value="true" />
+	</target>
 
 	<target name="clean-project" depends="init-project-properties">
 		<delete dir="${metainf.directory}" />
@@ -320,13 +325,7 @@
 		</copy>
 	</target>
 
-	<target name="use-test-spring-beans">
-		<property name="import.test.spring.beans" value="true" />
-		<!-- force scheduler on -->
-		<property name="use.quartz.scheduling" value="true" />
-	</target>
-
-	<target name="make-tests" depends="use-test-spring-beans,init-make-references,filter-project">
+	<target name="make-tests" depends="init-test-properties,init-make-references,filter-project">
 		<mkdir dir="${test.classes.directory}" />
 		<javac destdir="${test.classes.directory}" debug="true" deprecation="true" optimize="true" fork="true" memoryinitialsize="${compile.min.memory}" memorymaximumsize="${compile.max.memory}">
 			<classpath refid="compile.tests.classpath" />
@@ -389,11 +388,11 @@
 		<jar jarfile="${ant.project.name}-${build.environment}.war" basedir="${war.directory}" compress="false" />
 	</target>
 		
-	<target name="continuous-integration" depends="use-test-spring-beans,clean,make-tests,test">
+	<target name="continuous-integration" depends="init-test-properties,clean,make-tests,test">
 		<fail if="tests.failed" message="Tests failed" />
 	</target>
 
-	<target name="update-rice-all" depends="init-project-properties,update-rice-web">
+	<target name="update-rice" depends="init-project-properties,update-rice-web">
 		<maven goals="package" mavenhome="${maven.home.directory}" />
 		<delete>
 			<fileset dir="${lib.directory}" includes="${rice.output.file.prefix}${rice.output.lib.suffix},${workflow.name}*${rice.output.lib.suffix}" />
