@@ -50,36 +50,14 @@
 		<condition property="base.application.url" value="${local.environment.url}">
 			<equals arg1="${is.local.build}" arg2="true" />
 		</condition>
-		<condition property="base.htdocs.url" value="${local.environment.url}">
-			<equals arg1="${is.local.build}" arg2="true" />
-		</condition>
-		<condition property="base.cas.url" value="${local.environment.url}">
-			<equals arg1="${is.local.build}" arg2="true" />
-		</condition>
 		<condition property="base.application.url" value="${prod.environment.url}">
 			<or>
 				<equals arg1="${build.environment}" arg2="ptd" />
 				<equals arg1="${build.environment}" arg2="gl" />
 			</or>
 		</condition>
-		<condition property="base.htdocs.url" value="${prod.environment.url}">
-			<or>
-				<equals arg1="${build.environment}" arg2="ptd" />
-				<equals arg1="${build.environment}" arg2="gl" />
-			</or>
-		</condition>
-		<condition property="base.cas.url" value="${prod.environment.url}">
-			<or>
-				<equals arg1="${build.environment}" arg2="ptd" />
-				<equals arg1="${build.environment}" arg2="gl" />
-			</or>
-		</condition>
 		<property name="base.application.url" value="${test.environment.url}" />
-		<property name="base.htdocs.url" value="${test.environment.url}" />
-		<property name="htdocs.url" value="${base.htdocs.url}${ant.project.name}/${build.environment}/" />
-		<property name="base.cas.url" value="${test.environment.url}" />
 		<property name="application.url" value="${base.application.url}${ant.project.name}-${build.environment}" />
-		<property name="cas.url" value="${base.cas.url}${ant.project.name}-${build.environment}/cas" />
 		<condition property="datasource.url" value="${mysql.datasource.url}">
 			<equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" />
 		</condition>
@@ -161,12 +139,11 @@
 			<filter token="environment" value="${build.environment}" />
 			<filter token="version" value="${project.cvs.tag}" />
 			<filter token="application-url" value="${application.url}" />
-			<filter token="htdocs-url" value="${htdocs.url}" />
-			<filter token="htdocs-logs-url" value="${htdocs.url}logs/" />
-			<filter token="htdocs-staging-url" value="${htdocs.url}staging/" />
-			<filter token="cas-url" value="${cas.url}" />
-			<filter token="workflow-url" value="${base.application.url}${ant.project.name}-${build.environment}/${workflow.application}" />
 			<filter token="externalizable-static-content-url" value="${externalizable.static.content.url}" />
+			<filter token="htdocs-url" value="${base.application.url}${ant.project.name}/${build.environment}/" />
+			<filter token="cas-url" value="${application.url}/${cas.application}" />
+			<filter token="rice-url" value="${application.url}/${rice.application}" />
+			<filter token="workflow-url" value="${application.url}/${workflow.application}" />
 			<filter token="web-authentication-filter" value="${web.authentication.filter}" />
 			<filter token="web-authentication-service" value="${web.authentication.service}" />
 			<filter token="maintain-users-locally" value="${maintain.users.locally}" />
@@ -558,74 +535,61 @@
         </sequential>
     </macrodef>
 
-	<target name="update-rice-jar" depends="init-project-properties" description="updates the Rice JAR file in the WEB-INF/lib directory">
-		<!-- build the rice jar and war files -->
-		<maven goals="compiler:compile jar:jar" mavenhome="${maven.home.directory}" />
-		<!-- copy main JAR file to lib directory -->
-		<copy file="${rice.project.directory}/kns/target/rice-kns-${rice.version}.jar" todir="${lib.directory}" overwrite="true" verbose="true" />
+	<target name="update-rice-libs" depends="init-project-properties" description="updates the Rice JAR file in the WEB-INF/lib directory">
+		<maven goals="package" mavenhome="${maven.home.directory}" />
+		<delete>
+			<fileset dir="${lib.directory}" includes="${rice.output.file.prefix}${rice.output.lib.suffix}" />
+		</delete>
+		<copy todir="${lib.directory}" flatten="true">
+			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.lib.suffix}" excludes="${rice.excludes}" />
+		</copy>
 	</target>
-
+	
 	<target name="update-rice-web" depends="init-project-properties" description="Replaces all rice-controlled web content in work/web-root">
-		<!-- copy the central web content from rice into KFS -->
 		<delete>
-			<fileset dir="${work.directory}/web-root/kr">
-				<include name="**/*.*" />
-			</fileset>
+			<fileset dir="${webroot.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/**" />
 		</delete>
-		<delete>
-			<fileset dir="${work.directory}/web-root/WEB-INF/tags/kr">
-				<include name="**/*.tag" />
-			</fileset>
-		</delete>
-		<copy todir="${work.directory}/web-root" overwrite="true">
-			<fileset dir="${rice.project.directory}/kns/src/test/webapp">
-		    	<include name="kr/**/**" />		    	
-		    	<include name="WEB-INF/tags/kr/**/*.tag" />
+		<copy todir="${webroot.directory}">
+			<fileset dir="${rice.sampleapp.directory}">
+		    	<include name="${rice.application}/**/**" />		    	
+		    	<include name="${tags.directory}/${rice.application}/**/*.tag" />
 			</fileset>
 		</copy>
 	</target>
 	
-	<target name="update-rice-misc" depends="init-project-properties">
-		<!-- copy licenses -->
-		<!--
-		<copy todir="${licenses.directory}/rice">
-			<fileset dir="${rice.project.directory}/${licenses.directory}" />
-		</copy>
-		-->
-		<!-- copy DDL files -->
-		<delete dir="${database.rice.directory}" failonerror="false" />
-		<copy todir="${database.rice.directory}">
-			<fileset dir="${rice.project.directory}/${rice.ddl.directory}" includes="**/**" />
-		</copy>
-	</target>
-
-	<target name="update-rice-javadoc" depends="init-project-properties">
-		<!-- generate the javadoc and copy to kuali-dependencies -->
+	<target name="update-rice-docs" depends="init-project-properties">
 		<maven goals="javadoc:jar" mavenhome="${maven.home.directory}" />
-		<copy todir="${dependencies.project.directory}" file="${rice.project.directory}/kns/target/kns-${rice.version}-javadoc.jar" overwrite="true" />
+		<delete>
+			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.doc.suffix}" />
+		</delete>
+		<copy todir="${dependencies.project.directory}" flatten="true">
+			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.doc.suffix}" excludes="${rice.excludes}" />
+		</copy>
 	</target>
 
-	<target name="update-rice-src" depends="init-project-properties">
-		<!-- TODO: jar the source and place in kuali_dependencies -->
-		<jar destfile="${dependencies.project.directory}/kns-${rice.version}-src.jar">
-			<fileset dir="${rice.project.directory}/kns/src/main/java">
-				<include name="**/**"/>
-			</fileset>
-		</jar>
+	<target name="update-rice-source" depends="init-project-properties">
+		<maven goals="source:jar" mavenhome="${maven.home.directory}" />		
+		<delete>
+			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.src.suffix}" />
+		</delete>
+		<copy todir="${dependencies.project.directory}" flatten="true">
+			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.src.suffix}" excludes="${rice.excludes}" />
+		</copy>
 	</target>
 
-	<target name="update-rice-classes" depends="init-project-properties">
-		<!-- build the rice class files -->
-		<maven goals="compiler:compile" mavenhome="${maven.home.directory}" />
-		<!-- remove the jar file from the lib directory -->
-		<delete file="${lib.directory}/kns-${rice.version}.jar" verbose="true" failonerror="false" />
-		<!-- copy the contents of the target directory -->
-		<copy todir="${webinf.directory}/classes">
-			<fileset dir="${rice.project.directory}/kns/target/classes" includes="**/**" />
+	<target name="update-rice-quick" depends="init-project-properties,update-rice-web">
+		<delete>
+			<fileset dir="${lib.directory}" includes="${rice.output.file.prefix}${rice.output.lib.suffix}" />
+		</delete>
+		<copy todir="${classes.directory}" includeemptydirs="false" overwrite="true">
+			<fileset dir="${rice.project.directory}" includes="${rice.output.classes.directories}" excludes="${rice.excludes}" />
+			<filtermapper>
+				<replaceregex pattern="^\w+/target/classes/" replace="" />
+			</filtermapper>
 		</copy>
 	</target>
 	
-	<target name="update-rice" depends="init-project-properties,update-rice-jar,update-rice-web" description="Updates all rice content in the KFS project." />		
+	<target name="update-rice-all" depends="init-project-properties,update-rice-libs,update-rice-web,update-rice-source,update-rice-docs" description="Updates all rice content in the KFS project." />		
 	
 	<target name="help" description="Describe public targets">
 		<echo>--- OVERVIEW ---
