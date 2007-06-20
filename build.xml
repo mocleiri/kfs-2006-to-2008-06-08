@@ -411,37 +411,38 @@
 	</target>
 
 	<target name="update-rice" depends="init-project-properties,update-rice-web">
-		<maven goals="package" mavenhome="${maven.home.directory}" />
 		<delete>
-			<fileset dir="${lib.directory}" includes="${rice.output.file.prefix}${rice.output.lib.suffix},${workflow.name}*${rice.output.lib.suffix}" />
+			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.src.suffix},${rice.output.file.prefix}${rice.output.doc.suffix}" />
 		</delete>
+		<delete>
+			<fileset dir="${basedir}" includes="${lib.directory}/${rice.output.file.prefix}${rice.output.lib.suffix},${workflow.name}*${rice.output.lib.suffix},${database.directory}/${workflow.name}/${ddl.directory}/**/**,${licenses.directory}/${workflow.name}/**/**" />
+		</delete>
+        <sequential>
+            <java classname="org.codehaus.classworlds.Launcher" dir="${rice.project.directory}" fork="true" >
+            	<arg line="${maven.options} ${maven.goals}"/>
+            	<sysproperty key="classworlds.conf" value="${maven.home.directory}/bin/m2.conf"/>
+            	<sysproperty key="maven.home" value="${maven.home.directory}"/>
+            	<sysproperty key="maven.test.skip" value="true"/>
+            	<classpath>
+            		<fileset dir="${maven.home.directory}/boot">
+    					<include name="classworlds-*.jar"/>
+					</fileset>
+            	</classpath>
+            </java>
+        </sequential>
 		<copy todir="${lib.directory}" flatten="true">
 			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.lib.suffix}" excludes="${rice.excludes}" />
 		</copy>
 		<copy file="${user.home}/.m2/repository/${workflow.name}/${workflow.name}/${workflow.version}/${workflow.name}-${workflow.version}${rice.output.lib.suffix}" todir="${lib.directory}" />
-		<maven goals="source:jar" mavenhome="${maven.home.directory}" />		
-		<delete>
-			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.src.suffix}" />
-		</delete>
 		<copy todir="${dependencies.project.directory}" flatten="true">
 			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.src.suffix}" excludes="${rice.excludes}" />
 		</copy>
-		<maven goals="javadoc:jar" mavenhome="${maven.home.directory}" />
-		<delete>
-			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.doc.suffix}" />
-		</delete>
 		<copy todir="${dependencies.project.directory}" flatten="true">
 			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.doc.suffix}" excludes="${rice.excludes}" />
 		</copy>
-		<delete>
-			<fileset dir="${database.directory}/${workflow.name}/${ddl.directory}" />
-		</delete>
 		<copy todir="${database.directory}/${workflow.name}/${ddl.directory}">
 			<fileset dir="${rice.ddl.directory}" />
 		</copy>
-		<delete>
-			<fileset dir="${licenses.directory}/${workflow.name}" />
-		</delete>
 		<copy todir="${licenses.directory}/${workflow.name}">
 			<fileset dir="${workflow.project.directory}/${licenses.directory}" />
 		</copy>
@@ -459,29 +460,6 @@
 			</fileset>
 		</copy>
 	</target>
-	
-    <macrodef name="maven">
-        <attribute name="goals" />
-        <attribute name="project" default="rice" />
-        <attribute name="offline" default="true" />
-        <attribute name="mavenHome" />
-        <sequential>
-        	<condition property="maven.options" value="--offline">
-        		<equals arg1="@{offline}" arg2="true" casesensitive="false" trim="true"/>
-        	</condition >
-            <java classname="org.codehaus.classworlds.Launcher" dir="${@{project}.project.directory}" fork="true" >
-            	<arg line="${maven.options} @{goals}"/>
-            	<sysproperty key="classworlds.conf" value="@{mavenHome}/bin/m2.conf"/>
-            	<sysproperty key="maven.home" value="@{mavenHome}"/>
-            	<sysproperty key="maven.test.skip" value="true"/>
-            	<classpath>
-            		<fileset dir="@{mavenHome}/boot">
-    					<include name="classworlds-*.jar"/>
-					</fileset>
-            	</classpath>
-            </java>
-        </sequential>
-    </macrodef>
 	
 	<target name="help" description="Describe public targets">
 		<echo>--- OVERVIEW ---
