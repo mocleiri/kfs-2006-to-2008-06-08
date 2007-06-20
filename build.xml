@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="kuali" default="dist-local" basedir=".">
 	<!-- run the help task to view usage instructions -->
-	<target name="dist-local" if="is.local.build" depends="clean,filter-project,filter-local,dist-workflow-local" description="Prepare local configuration files and tokenized resources and deploy tomcat context file on development workstation">
+	<target name="dist-local" if="is.local.build" depends="clean,filter-project,filter-local" description="Prepare local configuration files and tokenized resources and deploy tomcat context file on development workstation">
 		<copy file="${metainf.directory}/${tomcat.context.file}" tofile="${appserver.localhost.dir}/${ant.project.name}-${build.environment}.xml" overwrite="true" />
 	</target>
 
@@ -11,7 +11,7 @@
 		<echoproperties />
 	</target>
 	
-	<target name="clean" depends="clean-project,clean-local,clean-workflow-local" description="Remove all build output" />
+	<target name="clean" depends="clean-project,clean-local" description="Remove all build output" />
 
 	<target name="init-user-properties">
 		<property file="${user.home}/${ant.project.name}-build.properties" />
@@ -157,8 +157,6 @@
 			<filter token="ojb-sequencemanager-class" value="${ojb.sequencemanager.class}" />
 			<filter token="database-platform-class" value="${database.platform.class}" />
 			<filter token="workflow-database-platform-class" value="${workflow.database.platform.class}" />
-			<filter token="webservices-keystore-password" value="${webservices.keystore.password}" />
-			<filter token="workflow-webservices-keystore-password" value="${workflow.webservices.keystore.password}" />
 			<filter token="encryption-key" value="${encryption.key}" />
 			<filter token="context-docbase" value="${context.docbase}" />
 			<filter token="appenders" value="${appenders}" />
@@ -187,8 +185,7 @@
 		<path id="compile.tests.classpath">
 			<path refid="compile.source.classpath" />
 			<fileset dir="${test.lib.directory}" includes="*.jar" />
-			<pathelement location="${build.workflow.appserver.directory}/classes"/>
-			<fileset dir="${build.workflow.appserver.directory}" includes="*.jar"/>
+			<pathelement location="${appserver.classes.dir}"/>
 		</path>
 		<patternset id="non.java.resources">
 			<include name="**/*.properties" />
@@ -197,25 +194,6 @@
 			<include name="**/*.html" />
 			<include name="**/*.xsd" />
 		</patternset>
-	</target>
-
-	<target name="init-source-only-package">
-		<property name="package.type" value="source" />	
-	</target>
-
-	<target name="init-binary-only-package">
-		<property name="package.type" value="binary" />
-	</target>
-	
-	<target name="init-binary-and-source-package">
-		<property name="package.type" value="both" />
-	</target>
-			
-	<target name="init-package-directories" depends="init-project-properties">
-		<delete dir="${packaging.contents.directory}" />
-		<mkdir dir="${packaging.contents.directory}" />
-		<get dest="${packaging.server.zip.file}" src="https://test.kuali.org/confluence/download/attachments/9969/${appserver}.zip" />
-		<unzip src="${packaging.server.zip.file}" dest="${packaging.contents.directory}" />
 	</target>
 
 	<target name="clean-project" depends="init-project-properties">
@@ -238,12 +216,17 @@
 	<target name="clean-local" if="is.local.build" depends="init-project-properties">
 		<delete failonerror="false">
 			<fileset dir="${appserver.lib.dir}">
-				<present targetdir="${build.appserver.directory}" />
+				<present targetdir="${build.appserver.lib.directory}" />
 			</fileset>
 		</delete>
 		<delete failonerror="false">
 			<fileset dir="${appserver.lib.dir}">
 				<present targetdir="${drivers.directory}" />
+			</fileset>
+		</delete>
+		<delete failonerror="false">
+			<fileset dir="${appserver.classes.dir}">
+				<present targetdir="${build.appserver.classes.directory}" />
 			</fileset>
 		</delete>
 		<delete failonerror="false">
@@ -270,22 +253,12 @@
 		<delete dir="${static.root.directory}" failonerror="false" />
 	</target>
 
-	<target name="clean-workflow-local" if="is.local.build" depends="init-project-properties">
-		<delete failonerror="false">
-			<fileset dir="${appserver.classes.dir}" includes="${workflow.appserver.classes.list}" />
-		</delete>
-		<delete failonerror="false">
-			<fileset dir="${appserver.lib.dir}" includes="${workflow.appserver.library.list}" />
-		</delete>
-		<delete dir="${workflow.embedded.webapp.directory}" failonerror="false"/>
-	</target>
-	
 	<target name="filter-project-log4j" unless="use.p6spy.local" depends="init-filter-sets">
-		<copy file="${build.appserver.directory}/${log4j.library}" todir="${lib.directory}"/>
+		<copy file="${build.appserver.lib.directory}/${log4j.library}" todir="${lib.directory}"/>
 	</target>
 	
 	<target name="filter-project-p6spy" if="use.p6spy.local" depends="filter-project-log4j">
-		<copy file="${build.appserver.directory}/${log4j.library}" todir="${appserver.lib.dir}"/>
+		<copy file="${build.appserver.lib.directory}/${log4j.library}" todir="${appserver.lib.dir}"/>
 	</target>
 	
 	<target name="filter-project" depends="filter-project-p6spy">
@@ -303,7 +276,12 @@
 	</target>
 
 	<target name="filter-local" if="is.local.build" depends="init-filter-sets">
-		<copy file="${build.appserver.directory}/${p6spy.library}" todir="${appserver.lib.dir}" overwrite="true" />
+		<copy todir="${appserver.classes.dir}" overwrite="true">
+			<fileset dir="${build.appserver.classes.directory}" excludes="${log4j.library}" />
+		</copy>
+		<copy todir="${appserver.lib.dir}" overwrite="true">
+			<fileset dir="${build.appserver.lib.directory}" excludes="${log4j.library}" />
+		</copy>
 		<copy todir="${appserver.lib.dir}" overwrite="true">
 			<fileset dir="${drivers.directory}" />
 		</copy>
@@ -330,15 +308,6 @@
 		</copy>
 	</target>
 	
-	<target name="filter-workflow-local" depends="init-filter-sets">
-		<copy todir="${appserver.classes.dir}" overwrite="true">
-			<fileset dir="${build.workflow.appserver.directory}" includes="${workflow.appserver.classes.list}" />
-		</copy>
-		<copy todir="${appserver.lib.dir}" overwrite="true">
-			<fileset dir="${build.workflow.appserver.directory}" includes="${workflow.appserver.library.list}" />
-		</copy>
-	</target>
-
 	<target name="make-source" depends="init-make-references,filter-project">
 		<mkdir dir="${make-source.target.directory}" />
 		<javac destdir="${make-source.target.directory}" srcdir="${source.directory}" debug="true" deprecation="true" optimize="true" fork="true" memoryinitialsize="${compile.min.memory}" memorymaximumsize="${compile.max.memory}">
@@ -377,38 +346,12 @@
 		</copy>
 	</target>
 	
-	<target name="make-zips" depends="filter-local,filter-workflow-local">
+	<target name="make-zips" depends="filter-local">
 		<zip destfile="settings.zip" basedir="${settings.directory}" />
 		<zip destfile="security.zip" basedir="${security.directory}" />
 		<zip destfile="skel.zip" basedir="${static.directory}" />
 	</target>
-	
-	<target name="make-source-only-package" depends="init-package-directories">
-		<copy todir="${packaging.distribution.directory}" includeemptydirs="false">
-			<fileset dir="${basedir}" excludes="**/*.class,${packaged.build.properties.files}" />
-		</copy>
-	</target>
-	
-	<target name="make-javadoc" depends="init-project-properties">
-		<mkdir dir="${packaging.javadoc.directory}"/>
-	    <javadoc destdir="${packaging.javadoc.directory}" packagenames="org.*" locale="en" useexternalfile="yes" maxmemory="512M">
-	        <sourcepath>
-	        		<pathelement location="${source.directory}"/>
-	        </sourcepath>
-	    		<classpath refid="compile.source.classpath"/>
-	    </javadoc>
-	</target>
-
-	<target name="make-binary-only-package" depends="init-package-directories,dist,make-javadoc">
-		<copy file="${ant.project.name}-${build.environment}.war" todir="${build.appserver.directory}" />
-		<ant target="clean-project" />
-		<copy todir="${packaging.distribution.directory}" includeemptydirs="false">
-			<fileset dir="${basedir}" includes="*.*,licenses/**/*,build/**/*" excludes="${packaged.build.properties.files}" />
-		</copy>
-	</target>
-	
-	<target name="make-binary-and-source-package" depends="make-source-only-package,make-binary-only-package" />
-	
+		
 	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
 	<target name="test">
 		<mkdir dir="${test.temp.directory}" />
@@ -440,78 +383,66 @@
 	</target>
 	
 	<target name="dist" depends="make-source">
-		<unzip dest="${war.directory}" src="${build.workflow.appserver.directory}/workflow-embedded-content.zip"/>
 		<copy todir="${war.directory}">
 			<fileset dir="${webroot.directory}" excludes="WEB-INF/classes/**/**" />
 		</copy>
 		<jar jarfile="${ant.project.name}-${build.environment}.war" basedir="${war.directory}" compress="false" />
 	</target>
-
-	<target name="dist-workflow-local" depends="filter-workflow-local">
-		<unzip dest="${webroot.directory}" src="${build.workflow.appserver.directory}/workflow-embedded-content.zip"/>
-	</target>
-
-	<target name="dist-package" depends="init-package-directories">
-		<copy todir="${packaging.distribution.directory}">
-			<fileset dir="${basedir}" includes="${packaged.build.properties.files}" />
-			<filterset>
-				<filter token="package-type" value="${package.type}" />
-				<filter token="classes-directory" value="${classes.directory}" />
-			</filterset>
-		</copy>
-		<delete file="${packaging.contents.directory}-${package.type}.zip" />
-		<zip basedir="${packaging.contents.directory}" destfile="${packaging.contents.directory}-${package.type}.zip" />
-	</target>
-
-	<target name="dist-source-only-package" depends="init-source-only-package,make-source-only-package,dist-package"/>
-		
-	<target name="dist-binary-only-package" depends="init-binary-only-package,make-binary-only-package,dist-package"/>
-	
-	<target name="dist-binary-and-source-package" depends="init-binary-and-source-package,make-binary-and-source-package,dist-package" />
 		
 	<target name="continuous-integration" depends="use-test-spring-beans,clean,make-tests,test">
 		<fail if="tests.failed" message="Tests failed" />
 	</target>
 
-	<target name="update-workflow" depends="init-project-properties">
-		<property name="${workflow.application}.workflow.environment" value="${build.environment}" />
-		<property name="${workflow.application}.tomcat5.home" value="${appserver.home}" />
-		<property name="${workflow.application}.institution" value="${ant.project.name}" />
-		<property name="${workflow.application}.src.dist.loc" value="${workflow.project.directory}/dist" />
-		<property name="${workflow.application}.datasource.ojb.platform" value="${ojb.platform}" />
-		<propertyset id="en-properties">
-		  <propertyref prefix="${workflow.application}."/>
-		  <mapper type="glob" from="${workflow.application}.*" to="*"/>
-		</propertyset>
-		<ant dir="${workflow.project.directory}" target="clean" inheritall="false"/>
-		<ant dir="${workflow.project.directory}" target="dist-embedded-web-content" inheritall="false">
-			<propertyset refid="en-properties" />
-		</ant>
-		<copy file="${workflow.project.directory}/dist/workflow-embedded-content.zip" todir="${build.workflow.appserver.directory}" overwrite="true" />
+	<target name="update-rice-all" depends="init-project-properties,update-rice-web">
+		<maven goals="package" mavenhome="${maven.home.directory}" />
 		<delete>
-			<fileset dir="${lib.directory}" includes="kew-*.jar" />
+			<fileset dir="${lib.directory}" includes="${rice.output.file.prefix}${rice.output.lib.suffix},${workflow.name}*${rice.output.lib.suffix}" />
 		</delete>
-		<ant dir="${workflow.project.directory}" target="dist-client-not-iu" inheritall="false">
-			<propertyset refid="${workflow.application}-properties" />
-		</ant>
-		<copy file="${workflow.project.directory}/dist/kew-${workflow.version}.jar" todir="${lib.directory}" overwrite="true" />
+		<copy todir="${lib.directory}" flatten="true">
+			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.lib.suffix}" excludes="${rice.excludes}" />
+		</copy>
+		<copy file="${user.home}/.m2/repository/${workflow.name}/${workflow.name}/${workflow.version}/${workflow.name}-${workflow.version}${rice.output.lib.suffix}" todir="${lib.directory}" />
+		<maven goals="source:jar" mavenhome="${maven.home.directory}" />		
 		<delete>
-			<fileset dir="${licenses.directory}/kew" />
+			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.src.suffix}" />
 		</delete>
-		<copy todir="${licenses.directory}/kew">
-			<fileset dir="${workflow.project.directory}/${licenses.directory}" />
+		<copy todir="${dependencies.project.directory}" flatten="true">
+			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.src.suffix}" excludes="${rice.excludes}" />
+		</copy>
+		<maven goals="javadoc:jar" mavenhome="${maven.home.directory}" />
+		<delete>
+			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.doc.suffix}" />
+		</delete>
+		<copy todir="${dependencies.project.directory}" flatten="true">
+			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.doc.suffix}" excludes="${rice.excludes}" />
 		</copy>
 		<delete>
-			<fileset dir="${database.workflow.directory}" />
+			<fileset dir="${database.directory}/${workflow.name}/${ddl.directory}" />
 		</delete>
-		<copy todir="${database.workflow.directory}" overwrite="true">
-			<fileset dir="${workflow.project.directory}/${workflow.ddl.directory}" />
+		<copy todir="${database.directory}/${workflow.name}/${ddl.directory}">
+			<fileset dir="${rice.ddl.directory}" />
+		</copy>
+		<delete>
+			<fileset dir="${licenses.directory}/${workflow.name}" />
+		</delete>
+		<copy todir="${licenses.directory}/${workflow.name}">
+			<fileset dir="${workflow.project.directory}/${licenses.directory}" />
 		</copy>
 	</target>
 	
-	<!-- = = = = = = = = = = = = = = = = =
-          macrodef: maven          
-         = = = = = = = = = = = = = = = = = -->
+	<target name="update-rice-web" depends="init-project-properties">
+		<delete>
+			<fileset dir="${webroot.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/**,${workflow.application}/**/**" />
+		</delete>
+		<copy todir="${webroot.directory}">
+			<fileset dir="${rice.sampleapp.directory}">
+		    	<include name="${rice.application}/**/**" />	    	
+		    	<include name="${tags.directory}/${rice.application}/**/*.tag" />
+				<include name="${workflow.application}/**/**" />
+			</fileset>
+		</copy>
+	</target>
+	
     <macrodef name="maven">
         <attribute name="goals" />
         <attribute name="project" default="rice" />
@@ -534,62 +465,6 @@
             </java>
         </sequential>
     </macrodef>
-
-	<target name="update-rice-libs" depends="init-project-properties" description="updates the Rice JAR file in the WEB-INF/lib directory">
-		<maven goals="package" mavenhome="${maven.home.directory}" />
-		<delete>
-			<fileset dir="${lib.directory}" includes="${rice.output.file.prefix}${rice.output.lib.suffix}" />
-		</delete>
-		<copy todir="${lib.directory}" flatten="true">
-			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.lib.suffix}" excludes="${rice.excludes}" />
-		</copy>
-	</target>
-	
-	<target name="update-rice-web" depends="init-project-properties" description="Replaces all rice-controlled web content in work/web-root">
-		<delete>
-			<fileset dir="${webroot.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/**" />
-		</delete>
-		<copy todir="${webroot.directory}">
-			<fileset dir="${rice.sampleapp.directory}">
-		    	<include name="${rice.application}/**/**" />		    	
-		    	<include name="${tags.directory}/${rice.application}/**/*.tag" />
-			</fileset>
-		</copy>
-	</target>
-	
-	<target name="update-rice-docs" depends="init-project-properties">
-		<maven goals="javadoc:jar" mavenhome="${maven.home.directory}" />
-		<delete>
-			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.doc.suffix}" />
-		</delete>
-		<copy todir="${dependencies.project.directory}" flatten="true">
-			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.doc.suffix}" excludes="${rice.excludes}" />
-		</copy>
-	</target>
-
-	<target name="update-rice-source" depends="init-project-properties">
-		<maven goals="source:jar" mavenhome="${maven.home.directory}" />		
-		<delete>
-			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.src.suffix}" />
-		</delete>
-		<copy todir="${dependencies.project.directory}" flatten="true">
-			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.src.suffix}" excludes="${rice.excludes}" />
-		</copy>
-	</target>
-
-	<target name="update-rice-quick" depends="init-project-properties,update-rice-web">
-		<delete>
-			<fileset dir="${lib.directory}" includes="${rice.output.file.prefix}${rice.output.lib.suffix}" />
-		</delete>
-		<copy todir="${classes.directory}" includeemptydirs="false" overwrite="true">
-			<fileset dir="${rice.project.directory}" includes="${rice.output.classes.directories}" excludes="${rice.excludes}" />
-			<filtermapper>
-				<replaceregex pattern="^\w+/target/classes/" replace="" />
-			</filtermapper>
-		</copy>
-	</target>
-	
-	<target name="update-rice-all" depends="init-project-properties,update-rice-libs,update-rice-web,update-rice-source,update-rice-docs" description="Updates all rice content in the KFS project." />		
 	
 	<target name="help" description="Describe public targets">
 		<echo>--- OVERVIEW ---
