@@ -200,7 +200,12 @@
 		<property name="import.test.spring.beans" value="true" />
 		<property name="use.quartz.scheduling" value="true" />
 	</target>
-
+	
+	<target name="init-batch-properties">
+		<property name="appserver.home" value="${user.home}/.securedir/java" />
+		<property file="${appserver.home}/build.properties" />
+	</target>
+	
 	<target name="clean-project" depends="init-project-properties">
 		<delete dir="${metainf.directory}" />
 		<delete file="${webinf.directory}/${web.xml.file}" />
@@ -257,6 +262,8 @@
 		</delete>
 		<delete dir="${static.root.directory}" failonerror="false" />
 	</target>
+	
+	<target name="clean-batch" depends="init-batch-properties,clean" />
 
 	<target name="filter-project-log4j" unless="use.p6spy.local" depends="init-filter-sets">
 		<copy file="${build.appserver.lib.directory}/${log4j.library}" todir="${lib.directory}"/>
@@ -350,7 +357,19 @@
 		<zip destfile="security.zip" basedir="${security.directory}" />
 		<zip destfile="skel.zip" basedir="${static.directory}" />
 	</target>
-		
+	
+	<target name="make-batch" depends="clean-batch,dist-local,make-source">
+		<property file="${appserver.home}/brte-script-build.properties" />
+		<copy todir="${batch.script.distribution.directory}" overwrite="true">
+			<fileset dir="${batch.script.directory}" />
+			<filterset>
+				<filter token="batch-script-prefix" value="${batch.script.prefix}" />
+				<filter token="batch-command-prefix" value="${batch.command.prefix}" />
+				<filter token="batch-script-suffix" value="${batch.script.suffix}" />
+			</filterset>
+		</copy>
+	</target>
+	
 	<!-- please be careful if you muck with these settings - you can seriously hose the continuous integration process -->
 	<target name="test">
 		<mkdir dir="${test.temp.directory}" />
