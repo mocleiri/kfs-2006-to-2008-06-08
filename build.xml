@@ -411,7 +411,7 @@
 	</target>
 	
 	<target name="setup-rice" depends="init-project-properties">
-		<maven options="-DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.1.0.3.0 -Dpackaging=jar -Dfile=${drivers.directory}/ojdbc14.jar" goals="install:install-file" />
+		<copy file="${drivers.directory}/ojdbc14.jar" tofile="${user.home}/.m2/repository/com/oracle/ojdbc14/10.1.0.3.0/ojdbc14-10.1.0.3.0.jar" />
 		<copy todir="${user.home}">
 			<fileset dir="${build.config.directory}/userHomeDirectory/kuali" includes="**/**" />
 			<filterset>
@@ -419,6 +419,14 @@
 				<filter token="test-rice-password" value="${rice.datasource.password.test}" />
 			</filterset>
 		</copy>
+		<replace file=".classpath" token="${kns.lib.classpath.entry}" value="" summary="true" />
+		<replace file=".classpath" token="${test.src.classpath.entry}" value="${test.src.classpath.entry}${kns.src.classpath.entries}" summary="true" />
+		<replace file=".classpath" token="${output.classpath.entry}" value="${rice.src.classpath.entry}${output.classpath.entry}" summary="true" />
+		<replace file=".project" token="${natures.project.attribute.endtag}" value="${natures.project.attribute.endtag}${rice.project.attributes}" summary="true" />
+		<delete file="${lib.directory}/${rice.name}-kns-${rice.version}${rice.output.lib.suffix}" />
+		<delete>
+			<fileset dir="${classes.directory}" includes="**/**" />
+		</delete>
 		<touch file="${rice.project.directory}/pom.xml" />
 	</target>
 
@@ -429,7 +437,17 @@
 		<delete>
 			<fileset dir="${basedir}" includes="${lib.directory}/${rice.output.file.prefix}${rice.output.lib.suffix},${workflow.name}*${rice.output.lib.suffix},${database.directory}/${rice.name}/**/**,${licenses.directory}/${rice.name}/**/**" />
 		</delete>
-		<maven options="--offline" goals="package source:jar javadoc:jar" />
+        <java classname="org.codehaus.classworlds.Launcher" dir="${rice.project.directory}" fork="true" >
+        	<arg line="${maven.options} package source:jar javadoc:jar"/>
+        	<sysproperty key="classworlds.conf" value="${maven.home.directory}/bin/m2.conf"/>
+        	<sysproperty key="maven.home" value="${maven.home.directory}"/>
+        	<sysproperty key="maven.test.skip" value="true"/>
+        	<classpath>
+        		<fileset dir="${maven.home.directory}/boot">
+					<include name="classworlds-*.jar"/>
+				</fileset>
+        	</classpath>
+        </java>
 		<copy todir="${lib.directory}" flatten="true">
 			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.lib.suffix}" excludes="${rice.excludes}" />
 		</copy>
@@ -463,24 +481,6 @@
 			</fileset>
 		</copy>
 	</target>
-	
-	<macrodef name="maven">
-		<attribute name="goals" />
-		<attribute name="options" />
-		<sequential>
-	        <java classname="org.codehaus.classworlds.Launcher" dir="${rice.project.directory}" fork="true" >
-	        	<arg line="@{options} @{goals}"/>
-	        	<sysproperty key="classworlds.conf" value="${maven.home.directory}/bin/m2.conf"/>
-	        	<sysproperty key="maven.home" value="${maven.home.directory}"/>
-	        	<sysproperty key="maven.test.skip" value="true"/>
-	        	<classpath>
-	        		<fileset dir="${maven.home.directory}/boot">
-						<include name="classworlds-*.jar"/>
-					</fileset>
-	        	</classpath>
-	        </java>
-		</sequential>
-	</macrodef>
 	
 	<target name="help" description="Describe public targets">
 		<echo>--- OVERVIEW ---
