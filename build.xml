@@ -206,31 +206,24 @@
 	</target>
 	
 	<target name="clean-project" depends="init-project-properties">
-		<delete dir="${metainf.directory}" />
-		<delete file="${webinf.directory}/${web.xml.file}" />
+		<delete failonerror="false">
+			<fileset dir="${basedir}" includes="${webroot.directory}/${rice.application}/**/**,${webroot.directory}/${tags.directory}/${rice.application}/**/**,${webroot.directory}/${workflow.application}/**/**,${webinf.directory}/${web.xml.file},${lib.directory}/${log4j.library},${war.directory}/**/**,${test.directory}/**/**,*.war,*.zip" />
+		</delete>
 		<delete failonerror="false">
 			<fileset dir="${source.directory}" includes="${tokenized.source.files}" />
-		</delete>
-		<delete file="${lib.directory}/${log4j.library}" />
-		<delete dir="${war.directory}" />
-		<delete dir="${test.directory}" />
-		<delete>
-			<fileset dir="." includes="*.war" />
-		</delete>
-		<delete>
-			<fileset dir="." includes="*.zip" />
 		</delete>
 	</target>
 
 	<target name="clean-local" if="is.local.build" depends="init-project-properties">
-		<delete failonerror="false">
-			<fileset dir="${appserver.lib.dir}">
-				<present targetdir="${build.appserver.lib.directory}" />
-			</fileset>
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${external.config.directory}" includes="**/${ant.project.name}/"/>
 		</delete>
 		<delete failonerror="false">
 			<fileset dir="${appserver.lib.dir}">
-				<present targetdir="${drivers.directory}" />
+				<or>
+					<present targetdir="${build.appserver.lib.directory}" />
+					<present targetdir="${drivers.directory}" />
+				</or>
 			</fileset>
 		</delete>
 		<delete failonerror="false">
@@ -242,24 +235,11 @@
 			<fileset dir="${appserver.localhost.dir}" includes="${ant.project.name}-*.xml" />
 		</delete>
 		<delete failonerror="false">
-			<fileset dir="${appserver.deploy.dir}" includes="${ant.project.name}-*.war" />
+			<fileset dir="${appserver.deploy.dir}" includes="${ant.project.name}-*.war,${ant.project.name}-*/**" />
 		</delete>
 		<delete failonerror="false" includeemptydirs="true">
 			<fileset dir="${appserver.work.dir}" includes="${ant.project.name}-*/**" />
 		</delete>
-		<delete failonerror="false" includeemptydirs="true">
-			<fileset dir="${appserver.deploy.dir}" includes="${ant.project.name}-*/**" />
-		</delete>
-		<delete failonerror="false" includeemptydirs="true">
-			<fileset dir="${settings.root.directory}" includes="*/${ant.project.name}/"/>
-		</delete>
-		<delete failonerror="false" includeemptydirs="true">
-			<fileset dir="${security.root.directory}" includes="*/${ant.project.name}/"/>
-		</delete>
-		<delete failonerror="false" includeemptydirs="true">
-			<fileset dir="${logs.root.directory}" includes="*/${ant.project.name}/"/>
-		</delete>
-		<delete dir="${static.root.directory}" failonerror="false" />
 	</target>
 	
 	<target name="clean-batch" depends="init-batch-properties,clean" />
@@ -273,6 +253,7 @@
 	</target>
 	
 	<target name="filter-project" depends="filter-project-p6spy">
+		<unzip dest="${webroot.directory}" src="${build.config.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" />
 		<mkdir dir="${metainf.directory}" />
 		<copy file="${build.tokenized.resources.directory}/${tomcat.context.file}" todir="${metainf.directory}" overwrite="true">
 			<filterset refid="general.filterset" />
@@ -302,13 +283,6 @@
 		</copy>
 		<copy file="${user.home}/${log4j.settings.file}" todir="${settings.directory}" failonerror="false" overwrite="true">
 			<filterset refid="general.filterset" />
-		</copy>
-		<copy todir="${security.directory}" overwrite="true">
-			<fileset dir="${build.security.directory}" excludes="${webservices.keystore.files}" />
-			<filterset refid="general.filterset" />
-		</copy>
-		<copy todir="${security.directory}" overwrite="true">
-			<fileset dir="${build.security.directory}" includes="${webservices.keystore.files}" />
 		</copy>
 		<copy todir="${logs.directory}" overwrite="true">
 			<fileset dir="${build.logs.directory}" />
@@ -432,7 +406,7 @@
 		<delete>
 			<fileset dir="${basedir}" includes="${lib.directory}/${rice.output.file.prefix}${rice.output.lib.suffix}" />
 		</delete>
-		<zip compress="true" destfile="${build.config.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" basedir="${rice.sampleapp.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/*.tag,${workflow.application}/**/**"/>
+		<zip compress="true" destfile="${build.config.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" basedir="${rice.sampleapp.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/*.tag,${workflow.application}/**/**" excludes="**/CVS" />
 		<maven goals="package" />
 		<copy todir="${lib.directory}" flatten="true">
 			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.lib.suffix}" excludes="${rice.excludes}" />
@@ -494,9 +468,8 @@
 			
 	you should start using this build script as follows
 			- copy build/configurationFiles/userHomeDirectory/${ant.project.name}-build.properties to ${user.home}
-			- obtain the values for ${datasource.username}, ${datasource.password}, ${webservices.keystore.password}
-			  and ${encryption.key} for the dev environment from someone on the project, and put them in
-			  ${user.home}\${ant.project.name}-build.properties
+			- obtain the values for ${datasource.username}, ${datasource.password} and ${encryption.key} for the
+			  dev environment from someone on the project, and put them in ${user.home}\${ant.project.name}-build.properties
 			- override other property values in ${user.home}\${ant.project.name}-build.properties to permanently
 			  customize the build process for your machine or temporarily customize the process for execution of a
 			  given build target
