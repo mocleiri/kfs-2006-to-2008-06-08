@@ -207,7 +207,7 @@
 	
 	<target name="clean-project" depends="init-project-properties">
 		<delete failonerror="false">
-			<fileset dir="${basedir}" includes="${webroot.directory}/${rice.application}/**/**,${webroot.directory}/${tags.directory}/${rice.application}/**/**,${webroot.directory}/${workflow.application}/**/**,${webinf.directory}/${web.xml.file},${lib.directory}/${log4j.library},${war.directory}/**/**,${test.directory}/**/**,*.war,*.zip" />
+			<fileset dir="${basedir}" includes="${webinf.directory}/${web.xml.file},${lib.directory}/${log4j.library},${war.directory}/**/**,${test.directory}/**/**,*.war,*.zip,${webroot.directory}/${rice.application}/**/**,${webroot.directory}/${tags.directory}/${rice.application}/**/**,${webroot.directory}/${workflow.application}/**/**,${database.directory}/${rice.name}/**/**,${licenses.directory}/${rice.name}/**/**" />
 		</delete>
 		<delete failonerror="false">
 			<fileset dir="${source.directory}" includes="${tokenized.source.files}" />
@@ -254,6 +254,8 @@
 	
 	<target name="filter-project" depends="filter-project-p6spy">
 		<unzip dest="${webroot.directory}" src="${build.config.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" />
+		<unzip dest="${database.directory}/${rice.name}" src="${build.config.directory}/${rice.name}-${rice.version}${rice.output.ddl.suffix}" />
+		<unzip dest="${licenses.directory}/${rice.name}" src="${build.config.directory}/${rice.name}-${rice.version}${rice.output.licenses.suffix}" />
 		<mkdir dir="${metainf.directory}" />
 		<copy file="${build.tokenized.resources.directory}/${tomcat.context.file}" todir="${metainf.directory}" overwrite="true">
 			<filterset refid="general.filterset" />
@@ -397,30 +399,33 @@
 		<touch file="${rice.project.directory}/pom.xml" />
 	</target>
 	
-	<target name="update-rice-dev" depends="update-rice-basic,dist-local" />
+	<target name="update-rice-dev" depends="update-rice-lib,update-rice-web,dist-local" />
 	
-	<target name="update-rice-basic" depends="init-project-properties">
-		<delete>
-			<fileset dir="${build.config.directory}" includes="${rice.name}-*${rice.output.web.suffix}" />
-		</delete>
+	<target name="update-rice-lib" depends="init-project-properties">
 		<delete>
 			<fileset dir="${basedir}" includes="${lib.directory}/${rice.output.file.prefix}${rice.output.lib.suffix}" />
 		</delete>
-		<zip compress="true" destfile="${build.config.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" basedir="${rice.sampleapp.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/*.tag,${workflow.application}/**/**" excludes="**/CVS/*" />
 		<maven goals="package" />
 		<copy todir="${lib.directory}" flatten="true">
 			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.lib.suffix}" excludes="${rice.excludes}" />
 		</copy>
 	</target>
 	
-	<target name="update-rice-extended" depends="update-rice-basic">
+	<target name="update-rice-web" depends="init-project-properties">
+		<delete>
+			<fileset dir="${build.config.directory}" includes="${rice.name}-*${rice.output.web.suffix}" />
+		</delete>
+		<zip compress="true" destfile="${build.config.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" basedir="${rice.sampleapp.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/*.tag,${workflow.application}/**/**" excludes="**/CVS" />
+	</target>
+	
+	<target name="update-rice-extended" depends="update-rice-lib,update-rice-web">
 		<delete>
 			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.src.suffix},${rice.output.file.prefix}${rice.output.doc.suffix}" />
 		</delete>
-		<delete>
-			<fileset dir="${basedir}" includes="${workflow.name}*${rice.output.lib.suffix},${database.directory}/${rice.name}/**/**,${licenses.directory}/${rice.name}/**/**" />
-		</delete>
 		<maven goals="source:jar javadoc:jar" />
+		<delete>
+			<fileset dir="${lib.directory}" includes="${workflow.name}*${rice.output.lib.suffix}" />
+		</delete>
 		<copy file="${user.home}/.m2/repository/${workflow.name}/${workflow.name}/${workflow.version}/${workflow.name}-${workflow.version}${rice.output.lib.suffix}" todir="${lib.directory}" />
 		<copy todir="${dependencies.project.directory}" flatten="true">
 			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.src.suffix}" excludes="${rice.excludes}" />
@@ -428,15 +433,16 @@
 		<copy todir="${dependencies.project.directory}" flatten="true">
 			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.doc.suffix}" excludes="${rice.excludes}" />
 		</copy>
-		<copy todir="${database.directory}/${rice.name}">
-			<fileset dir="${rice.project.directory}" includes="${rice.ddl.files}" excludes="${rice.excludes}" />
+		<mkdir dir="temp" />
+		<copy todir="temp">
+			<fileset dir="${rice.project.directory}" includes="${rice.ddl.files}" excludes="${rice.excludes},**/CVS" />
 			<filtermapper>
 				<replaceregex pattern="^\w+/src/main/config/" replace="" />
 			</filtermapper>
 		</copy>
-		<copy todir="${licenses.directory}/${rice.name}">
-			<fileset dir="${workflow.project.directory}/${licenses.directory}" />
-		</copy>
+		<zip compress="true" destfile="${build.config.directory}/${rice.name}-${rice.version}-ddl.zip" basedir="temp" />
+		<delete dir="temp" />
+		<zip compress="true" destfile="${build.config.directory}/${rice.name}-${rice.version}-licenses.zip" basedir="${workflow.project.directory}/${licenses.directory}" excludes="**/CVS" />
 	</target>
 	
 	<macrodef name="maven">
