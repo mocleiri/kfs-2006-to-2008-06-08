@@ -411,7 +411,7 @@
 	</target>
 	
 	<target name="setup-rice" depends="init-project-properties">
-		<copy file="${drivers.directory}/ojdbc14.jar" tofile="${user.home}/.m2/repository/com/oracle/ojdbc14/10.1.0.3.0/ojdbc14-10.1.0.3.0.jar" />
+		<maven options="--offline -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.1.0.3.0 -Dpackaging=jar -Dfile=${drivers.directory}/ojdbc14.jar" goals="install:install-file" />
 		<copy todir="${user.home}">
 			<fileset dir="${build.config.directory}/userHomeDirectory/kuali" includes="**/**" />
 			<filterset>
@@ -419,38 +419,34 @@
 				<filter token="test-rice-password" value="${rice.datasource.password.test}" />
 			</filterset>
 		</copy>
-		<replace file=".classpath" token="${kns.lib.classpath.entry}" value="" summary="true" />
-		<replace file=".classpath" token="${test.src.classpath.entry}" value="${test.src.classpath.entry}${kns.src.classpath.entries}" summary="true" />
-		<replace file=".classpath" token="${output.classpath.entry}" value="${rice.src.classpath.entry}${output.classpath.entry}" summary="true" />
-		<replace file=".project" token="${natures.project.attribute.endtag}" value="${natures.project.attribute.endtag}${rice.project.attributes}" summary="true" />
-		<delete file="${lib.directory}/${rice.name}-kns-${rice.version}${rice.output.lib.suffix}" />
-		<delete>
-			<fileset dir="${classes.directory}" includes="**/**" />
-		</delete>
+		<maven goals="install" options="-Pinstall-kns-dev -Dpackaging=jar" />
 		<touch file="${rice.project.directory}/pom.xml" />
 	</target>
-
-	<target name="update-rice" depends="init-project-properties,update-rice-web">
+	
+	<target name="update-rice-dev" depends="update-rice-basic,dist-local" />
+	
+	<target name="update-rice-basic" depends="init-project-properties">
+		<delete>
+			<fileset dir="${build.config.directory}" includes="${rice.name}-*${rice.output.web.suffix}" />
+		</delete>
+		<delete>
+			<fileset dir="${basedir}" includes="${lib.directory}/${rice.output.file.prefix}${rice.output.lib.suffix}" />
+		</delete>
+		<zip compress="true" destfile="${build.config.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" basedir="${rice.sampleapp.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/*.tag,${workflow.application}/**/**"/>
+		<maven goals="package" />
+		<copy todir="${lib.directory}" flatten="true">
+			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.lib.suffix}" excludes="${rice.excludes}" />
+		</copy>
+	</target>
+	
+	<target name="update-rice-extended" depends="update-rice-basic">
 		<delete>
 			<fileset dir="${dependencies.project.directory}" includes="${rice.output.file.prefix}${rice.output.src.suffix},${rice.output.file.prefix}${rice.output.doc.suffix}" />
 		</delete>
 		<delete>
-			<fileset dir="${basedir}" includes="${lib.directory}/${rice.output.file.prefix}${rice.output.lib.suffix},${workflow.name}*${rice.output.lib.suffix},${database.directory}/${rice.name}/**/**,${licenses.directory}/${rice.name}/**/**" />
+			<fileset dir="${basedir}" includes="${workflow.name}*${rice.output.lib.suffix},${database.directory}/${rice.name}/**/**,${licenses.directory}/${rice.name}/**/**" />
 		</delete>
-        <java classname="org.codehaus.classworlds.Launcher" dir="${rice.project.directory}" fork="true" >
-        	<arg line="${maven.options} package source:jar javadoc:jar"/>
-        	<sysproperty key="classworlds.conf" value="${maven.home.directory}/bin/m2.conf"/>
-        	<sysproperty key="maven.home" value="${maven.home.directory}"/>
-        	<sysproperty key="maven.test.skip" value="true"/>
-        	<classpath>
-        		<fileset dir="${maven.home.directory}/boot">
-					<include name="classworlds-*.jar"/>
-				</fileset>
-        	</classpath>
-        </java>
-		<copy todir="${lib.directory}" flatten="true">
-			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.lib.suffix}" excludes="${rice.excludes}" />
-		</copy>
+		<maven goals="source:jar javadoc:jar" />
 		<copy file="${user.home}/.m2/repository/${workflow.name}/${workflow.name}/${workflow.version}/${workflow.name}-${workflow.version}${rice.output.lib.suffix}" todir="${lib.directory}" />
 		<copy todir="${dependencies.project.directory}" flatten="true">
 			<fileset dir="${rice.project.directory}" includes="${rice.output.directories}${rice.output.file.prefix}${rice.version}${rice.output.src.suffix}" excludes="${rice.excludes}" />
@@ -469,18 +465,23 @@
 		</copy>
 	</target>
 	
-	<target name="update-rice-web" depends="init-project-properties">
-		<delete>
-			<fileset dir="${webroot.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/**,${workflow.application}/**/**" />
-		</delete>
-		<copy todir="${webroot.directory}">
-			<fileset dir="${rice.sampleapp.directory}">
-		    	<include name="${rice.application}/**/**" />	    	
-		    	<include name="${tags.directory}/${rice.application}/**/*.tag" />
-				<include name="${workflow.application}/**/**" />
-			</fileset>
-		</copy>
-	</target>
+	<macrodef name="maven">
+		<attribute name="goals" />
+		<attribute name="options" default="--offline" />
+		<sequential>
+	        <java classname="org.codehaus.classworlds.Launcher" dir="${rice.project.directory}" fork="true" >
+	        	<arg line="@{options} @{goals}"/>
+	        	<sysproperty key="classworlds.conf" value="${maven.home.directory}/bin/m2.conf"/>
+	        	<sysproperty key="maven.home" value="${maven.home.directory}"/>
+	        	<sysproperty key="maven.test.skip" value="true"/>
+	        	<classpath>
+	        		<fileset dir="${maven.home.directory}/boot">
+						<include name="classworlds-*.jar"/>
+					</fileset>
+	        	</classpath>
+	        </java>
+		</sequential>
+	</macrodef>
 	
 	<target name="help" description="Describe public targets">
 		<echo>--- OVERVIEW ---
