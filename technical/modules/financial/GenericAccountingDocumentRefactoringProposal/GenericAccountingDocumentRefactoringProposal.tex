@@ -24,7 +24,8 @@
   \section{Motivation}
   \verb|AccountingDocument| is currently imposing a class hierarchy restriction of \verb|SourceAccountingLine|
   and \verb|TargetAccountingLine|. This can be problematic for documents that want to share characteristics 
-  between Source and Target \verb|AccountingLine| types, but maintain the document hierarchy.
+  between Source and Target \verb|AccountingLine| types, but maintain the document hierarchy. Two documents
+  that suffer from this syndrome are \verb|BudgetAdjustmentDocument| and anything that inherits \verb|LaborExpenseTransferDocument|
   
   \subsection{Use Cases}
   \subsubsection{LaborExpenseTransferDocument Hierarchy}
@@ -59,11 +60,70 @@
   \section{Implementation}
   \subsection{Changes to AccountingDocument and AccountingDocumentBase}
   \subsubsection{AccountingDocument}
+  \begin{enumerate}
+    \item Define \verb|AccountingDocument| generically
+      \lstinputlisting[linerange=@latex.ClassSignatureStart-@latex.ClassSignatureStop]{../../../../../kuali_project/work/src/org/kuali/kfs/document/AccountingDocument.java}
+      \begin{lstlisting}
+    ...
+    ...
+}
+  \end{lstlisting}
+
+  \end{enumerate}
   \subsubsection{AccountingDocumentBase}
+  \begin{enumerate}
+    \item Define \verb|AccountingDocumentBase| generically
+      \lstinputlisting[linerange=@latex.ClassSignatureStart-@latex.ClassSignatureStop]{../../../../../kuali_project/work/src/org/kuali/kfs/document/AccountingDocumentBase.java}
+      \begin{lstlisting}
+    ...
+    ...
+}
+  \end{lstlisting}
+  \end{enumerate}
+
   \subsection{Changes to KualiAccountingDocumentActionBase}
   \begin{enumerate}
+    \item Define \verb|KualiAccountingDocumentActionBase| generically
+      \lstinputlisting[linerange=@latex.ClassSignatureStart-@latex.ClassSignatureStop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/action/KualiAccountingDocumentActionBase.java}
+      \begin{lstlisting}
+    ...
+    ...
+}
+  \end{lstlisting}
+
     \item Cast \verb|ActionForm| to \verb|KualiAccountingDocumentFormBase<Source, Target>|. For example, in the \verb|KualiAccountingDocumentActionBase#execute()| method:
-      \lstinputlisting[linerange=ExecuteCastStart-ExecuteCastEnd]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/action/KualiAccountingDocumentActionBase.java}
+      \lstinputlisting[linerange=@latex.ExecuteCastStart-@latex.ExecuteCastEnd]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/action/KualiAccountingDocumentActionBase.java}
+      \begin{lstlisting}
+        ...
+        ...
+    }
+      \end{lstlisting}
+    \item Change cast from \verb|AccountingDocument| to \verb|AccountingDocument<Source, Target>|. For example, in the \verb|KualiAccountingDocumentActionBase#execute()| method:
+      \begin{lstlisting}
+        ...
+        ...
+      \end{lstlisting}
+      \lstinputlisting[linerange=@latex.ExecuteAccountingDocumentCastStart-@latex.ExecuteAccountingDocumentCastEnd]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/action/KualiAccountingDocumentActionBase.java}
+      \begin{lstlisting}
+        ...
+        ...
+      \end{lstlisting}
+    \item Use generic \verb|List<Source>| or \verb|List<Target>| instead of just \verb|List|
+      \lstinputlisting[linerange=@latex.loadDocumentGenericListStart-@latex.loadDocumentGenericListStop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/action/KualiAccountingDocumentActionBase.java}
+      \begin{lstlisting}
+        ...
+        ...
+      \end{lstlisting}
+
+    \item Change method signatures to use \verb|KualiAccountingDocumentFormBase<Source, Target>| respectively
+      \lstinputlisting[linerange=@latex.processSignatureStart-@latex.processSignatureStop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/action/KualiAccountingDocumentActionBase.java}
+      \begin{lstlisting}
+        ...
+        ...
+    }
+      \end{lstlisting}
+
+      \lstinputlisting[linerange=@latex.processGenericSignatureStart-@latex.processGenericSignatureStop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/action/KualiAccountingDocumentActionBase.java}
       \begin{lstlisting}
         ...
         ...
@@ -71,24 +131,61 @@
       \end{lstlisting}
   \end{enumerate}
   \subsection{Changes to KualiAccountingDocumentFormBase}
+  \begin{enumerate}
+    \item Define \verb|KualiAccountingDocumentActionBase| generically
+      \lstinputlisting[linerange=@latex.ClassSignatureStart-@latex.ClassSignatureStop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/form/KualiAccountingDocumentFormBase.java}
+      \begin{lstlisting}
+    ...
+    ...
+}
+  \end{lstlisting}
+    \item Use generic \verb|List<Source>| or \verb|List<Target>| instead of just \verb|List|
+      \begin{lstlisting}
+    ...
+    ...
+      \end{lstlisting}
+      \lstinputlisting[linerange=@latex.GenericListStart-@latex.GenericListStop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/form/KualiAccountingDocumentFormBase.java}
+      \begin{lstlisting}
+    ...
+    ...
+      \end{lstlisting}
+      \lstinputlisting[linerange=@latex.GenericList2Start-@latex.GenericList2Stop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/form/KualiAccountingDocumentFormBase.java}
+      \begin{lstlisting}
+    ...
+    ...
+      \end{lstlisting}
+    \item Change cast from \verb|AccountingDocument| to \verb|AccountingDocument<Source, Target>|
+      \begin{lstlisting}
+        ...
+        ...
+      \end{lstlisting}
+      \lstinputlisting[linerange=@latex.AccountingDocumentCastStart-@latex.AccountingDocumentCastStop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/form/KualiAccountingDocumentFormBase.java}
+      \begin{lstlisting}
+        ...
+        ...
+      \end{lstlisting}
+    \item Generics affords us to use the new for loop
+      \lstinputlisting[linerange=@latex.forLoopStart-@latex.forLoopStop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/form/KualiAccountingDocumentFormBase.java}
+
+    \item Since we are using generics, \verb|Object| cannot just freely be passed around. Sometimes we have to cast
+      \lstinputlisting[linerange=@latex.SourceCastStart-@latex.SourceCastStop]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/form/KualiAccountingDocumentFormBase.java}
+      
+      \item Remove casts to \verb|SourceAccountingLine|. Generics does this for us.
+  \end{enumerate}
   \subsection{Changes to Struts Classes}
   EDoc classes that inherit from \verb|AccountingDocument| \verb|AccountingDocumentBase| also require implementations of
   \verb|KualiAccountingDocumentFormBase| and \verb|KualiAccountingDocumentActionBase|. Classes that inherit from require 
   the following refactorings. 
   \begin{enumerate}
     \item Class signature change. For example:
-%\verb|public class IndirectCostAdjustmentDocumentActionBase 
-%        extends AccountingDocumentBase<SourceAccountingLine, TargetAccountingLine> implements Copyable, Correctable, AmountTotaling {
-
-%public class IndirectCostAdjustmentDocumentFormBase 
-%        extends AccountingDocumentBase<SourceAccountingLine, TargetAccountingLine> implements Copyable, Correctable, AmountTotaling {|
+      \lstinputlisting[linerange=@latex.ClassSignatureStart-@latex.ClassSignatureStop]{../../../../../kuali_project/work/src/org/kuali/module/financial/web/struts/action/TransferOfFundsAction.java}
+      \lstinputlisting[linerange=@latex.ClassSignatureStart-@latex.ClassSignatureStop]{../../../../../kuali_project/work/src/org/kuali/module/financial/web/struts/form/TransferOfFundsForm.java}
   \end{enumerate}
   \subsection{Changes to EDoc Classes}
   EDoc classes that inherit from \verb|AccountingDocument| \verb|AccountingDocumentBase| require the following refactorings.
   \begin{enumerate}
     \item Class signature change. For example:
-%\verb|public class IndirectCostAdjustmentDocument 
-%       extends AccountingDocumentBase<SourceAccountingLine, TargetAccountingLine> implements Copyable, Correctable, AmountTotaling {|
+      \lstinputlisting[linerange=@latex.ClassSignatureStart-@latex.ClassSignatureStop]{../../../../../kuali_project/work/src/org/kuali/module/financial/document/AuxiliaryVoucherDocument.java}
   \end{enumerate}
   \subsection{Changes to IndirectCostAdjustmentDocument}
     \begin{enumerate}
@@ -98,9 +195,17 @@
   \subsection{Changes to ProcurementCardDocument}
     \begin{enumerate}
       \item Remove casting on anything since generics takes care of everything
+        \begin{lstlisting}
+          ProcurementCardSourceAccountingLine line = (ProcurementCardSourceAccountingLine) sourceLine;
+        \end{lstlisting}
+
       \item Remove casting in ProcurementCardTransactionDetail since generics takes care of that too.
       \item Change all references to SourceAccountingLine to ProcurementCardSourceAccountingLine
+      \lstinputlisting[linerange=@latex.SourceSignatureStart-@latex.SourceSignatureStop]{../../../../../kuali_project/work/src/org/kuali/module/financial/document/ProcurementCardDocument.java}
+      \lstinputlisting[linerange=@latex.SourceSignature2Start-@latex.SourceSignature2Stop]{../../../../../kuali_project/work/src/org/kuali/module/financial/document/ProcurementCardDocument.java}
       \item Change all references to TargetAccountingLine to ProcurementCardTargetAccountingLine
+      \lstinputlisting[linerange=@latex.TargetSignatureStart-@latex.TargetSignatureStop]{../../../../../kuali_project/work/src/org/kuali/module/financial/document/ProcurementCardDocument.java}
+      \lstinputlisting[linerange=@latex.TargetSignature2Start-@latex.TargetSignature2Stop]{../../../../../kuali_project/work/src/org/kuali/module/financial/document/ProcurementCardDocument.java}
    \end{enumerate}
 
 \end{document}
