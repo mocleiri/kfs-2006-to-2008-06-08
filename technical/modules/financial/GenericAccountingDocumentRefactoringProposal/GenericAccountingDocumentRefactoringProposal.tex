@@ -1,0 +1,91 @@
+\documentclass[12pt,notitlepage]{article}
+\author{Leo Przybylski \\
+\texttt{przybyls@u.arizona.edu}}
+\usepackage{graphicx}
+\input{../../../general/S5.tex}
+\fulltitle{AccountingDocument Refactoring Using Generics Proposal}
+
+
+\begin{document}
+  \texonly{
+    \lstset{language=Java,
+      basicstyle=\small,
+      keywordstyle=\color{Purple}\bfseries,
+      commentstyle=\color{DarkGreen},
+      identifierstyle=\color{DarkBlue},
+      rangeprefix=\/\/\ ,
+      rangesuffix=,
+      breaklines=true,
+      breakatwhitespace=true,
+      includerangemarker=false}
+  }
+  \maketitle
+  \texonly{\tableofcontents \listoffigures} 
+  \section{Motivation}
+  \verb|AccountingDocument| is currently imposing a class hierarchy restriction of \verb|SourceAccountingLine|
+  and \verb|TargetAccountingLine|. This can be problematic for documents that want to share characteristics 
+  between Source and Target \verb|AccountingLine| types, but maintain the document hierarchy.
+  
+  \subsection{Use Cases}
+  \subsubsection{LaborExpenseTransferDocument Hierarchy}
+  \verb|ExpenseTransferSourceAccountingLine| and \verb|ExpenseTransferTargetAccountingLine| share the same 
+  characteristics through the \verb|ExpenseTransferAccountingLineBase| class. Unfortunately, this relationship
+  prevents \verb|ExpenseTransferSourceAccountingLine| and \verb|ExpenseTransferTargetAccountingLine| from 
+  inheriting from \verb|SourceAccountingLine| and \verb|TargetAccountingLine| respectively. As a result, they 
+  cannot be used as Source and Target lines for the \verb|AccountingDocument|
+  \newpage
+  To illustrate using the \verb|LaborExpenseTransferDocument|
+  \begin{figure}[!h]
+    \caption{View of the AccountingDocument Parallel Hierarchy}
+    \includegraphics[bb=10 300 300 640]{../Diagrams/AccountingDocumentParallelHierachy_class.png}
+  \end{figure}
+  The above shows the relationship that requires \verb|AccountingDocument| to use \verb|SourceAccountingLine|
+  and \verb|TargetAccountingLine|
+  \begin{figure}[!h]
+    \caption{View of the ExpenseTransferDocument Hierarchy}
+    \includegraphics[bb=25 250 400 450]{../Diagrams/ExpenseTransferDocumentHierarchy_class.png}
+  \end{figure}
+  The diagram above illustrates the \verb|ExpenseTransferDocument| hierarchy
+
+  The diagram above illustrates how \verb|ExpenseTransferSourceAccountingLine| and \verb|ExpenseTransferTargetAccountingLine|
+  cannot also be \verb|SourceAccountingLine| and \verb|TargetAccountingLine| respectively.
+
+  \section{Implementation}
+  \subsection{Changes to AccountingDocument and AccountingDocumentBase}
+  \subsubsection{AccountingDocument}
+  \subsubsection{AccountingDocumentBase}
+  \subsection{Changes to KualiAccountingDocumentActionBase}
+  \subsection{Changes to KualiAccountingDocumentFormBase}
+  \subsection{Changes to Struts Classes}
+  EDoc classes that inherit from \verb|AccountingDocument| \verb|AccountingDocumentBase| also require implementations of
+  \verb|KualiAccountingDocumentFormBase| and \verb|KualiAccountingDocumentActionBase|. Classes that inherit from require 
+  the following refactorings. 
+  \begin{enumerate}
+    \item Class signature change. For example:
+%\verb|public class IndirectCostAdjustmentDocumentActionBase 
+%        extends AccountingDocumentBase<SourceAccountingLine, TargetAccountingLine> implements Copyable, Correctable, AmountTotaling {
+
+%public class IndirectCostAdjustmentDocumentFormBase 
+%        extends AccountingDocumentBase<SourceAccountingLine, TargetAccountingLine> implements Copyable, Correctable, AmountTotaling {|
+  \end{enumerate}
+  \subsection{Changes to EDoc Classes}
+  EDoc classes that inherit from \verb|AccountingDocument| \verb|AccountingDocumentBase| require the following refactorings.
+  \begin{enumerate}
+    \item Class signature change. For example:
+%\verb|public class IndirectCostAdjustmentDocument 
+%       extends AccountingDocumentBase<SourceAccountingLine, TargetAccountingLine> implements Copyable, Correctable, AmountTotaling {|
+  \end{enumerate}
+  \subsection{Changes to IndirectCostAdjustmentDocument}
+    \begin{enumerate}
+    \item Remove casting on anything since generics takes care of everything
+    \end{enumerate}
+    
+  \subsection{Changes to ProcurementCardDocument}
+    \begin{enumerate}
+      \item Remove casting on anything since generics takes care of everything
+      \item Remove casting in ProcurementCardTransactionDetail since generics takes care of that too.
+      \item Change all references to SourceAccountingLine to ProcurementCardSourceAccountingLine
+      \item Change all references to TargetAccountingLine to ProcurementCardTargetAccountingLine
+   \end{enumerate}
+
+\end{document}
