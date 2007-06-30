@@ -39,22 +39,37 @@
     \caption{View of the AccountingDocument Parallel Hierarchy}
     \includegraphics[bb=10 300 300 640]{../Diagrams/AccountingDocumentParallelHierachy_class.png}
   \end{figure}
+
   The above shows the relationship that requires \verb|AccountingDocument| to use \verb|SourceAccountingLine|
   and \verb|TargetAccountingLine|
+  \newpage
   \begin{figure}[!h]
     \caption{View of the ExpenseTransferDocument Hierarchy}
     \includegraphics[bb=25 250 400 450]{../Diagrams/ExpenseTransferDocumentHierarchy_class.png}
   \end{figure}
   The diagram above illustrates the \verb|ExpenseTransferDocument| hierarchy
 
+  \begin{figure}[!h]
+    \caption{View of the AccountingLine Hierarchy}
+    \includegraphics[bb=25 50 450 250]{../Diagrams/AccountingLineHierarchy_class.png}
+  \end{figure}
   The diagram above illustrates how \verb|ExpenseTransferSourceAccountingLine| and \verb|ExpenseTransferTargetAccountingLine|
-  cannot also be \verb|SourceAccountingLine| and \verb|TargetAccountingLine| respectively.
+  cannot also be \verb|SourceAccountingLine| and \verb|TargetAccountingLine| respectively due to single inheritance.
 
   \section{Implementation}
   \subsection{Changes to AccountingDocument and AccountingDocumentBase}
   \subsubsection{AccountingDocument}
   \subsubsection{AccountingDocumentBase}
   \subsection{Changes to KualiAccountingDocumentActionBase}
+  \begin{enumerate}
+    \item Cast \verb|ActionForm| to \verb|KualiAccountingDocumentFormBase<Source, Target>|. For example, in the \verb|KualiAccountingDocumentActionBase#execute()| method:
+      \lstinputlisting[linerange=ExecuteCastStart-ExecuteCastEnd]{../../../../../kuali_project/work/src/org/kuali/kfs/web/struts/action/KualiAccountingDocumentActionBase.java}
+      \begin{lstlisting}
+        ...
+        ...
+    }
+      \end{lstlisting}
+  \end{enumerate}
   \subsection{Changes to KualiAccountingDocumentFormBase}
   \subsection{Changes to Struts Classes}
   EDoc classes that inherit from \verb|AccountingDocument| \verb|AccountingDocumentBase| also require implementations of
