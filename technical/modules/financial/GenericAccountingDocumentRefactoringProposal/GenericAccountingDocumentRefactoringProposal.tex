@@ -206,6 +206,39 @@
       \item Change all references to TargetAccountingLine to ProcurementCardTargetAccountingLine
       \lstinputlisting[linerange=@latex.TargetSignatureStart-@latex.TargetSignatureStop]{../../../../../kuali_project/work/src/org/kuali/module/financial/document/ProcurementCardDocument.java}
       \lstinputlisting[linerange=@latex.TargetSignature2Start-@latex.TargetSignature2Stop]{../../../../../kuali_project/work/src/org/kuali/module/financial/document/ProcurementCardDocument.java}
-   \end{enumerate}
+    \end{enumerate}
+
+    \section{Conclusion}
+    The result of these generics for \sf Source \rm  and \sf TargetAccountingLine \rm 's is \emph{Strict Typing}. For some, this is a good thing. It means
+    a lot more compile-time validation. Loose Typing can result in unforeseeable runtime errors.
+
+    \subsection{No More Downcast to \sf Object \rm}
+    \sf Lists \rm and other \sf Collection \rm instances now require the exact type of \sf AccountingLine \rm expected.
+
+    \subsection{Adding Just \sf AccountingLine \rm to a \sf Document \rm is not Allowed Anymore}
+    You need to have the exact type because of \emph{Strict Typing}. Not only do you need the exact type, but the exact type
+    of \sf Source \rm or the exact type of \sf Target. \rm
+
+    \subsection{There is an Increased Need to Pay Attention to \sf TypeVariable\rm 's}
+    Though, the typing is strict, it isn't absolutely strict. If attention isn't given to generic type declarations, then unexpected things can occur. To explain, \sf AccountingDocument \rm is
+    defined as:
+    \lstinputlisting[linerange=@latex.ClassSignatureStart-@latex.ClassSignatureStop]{../../../../../kuali_project/work/src/org/kuali/kfs/document/AccountingDocument.java}
+    \begin{lstlisting}
+    ...
+    ...
+}
+    \end{lstlisting}
+    Which means that the \sf TypeVariable\rm 's given only have to inherit from \sf AccountingLine.\rm 
+
+    \lstinputlisting[linerange=@latex.ClassSignatureStart-@latex.ClassSignatureStop]{../../../../../kuali_project/work/src/org/kuali/module/labor/document/LaborJournalVoucherDocument.java}
+    \begin{lstlisting}
+    ...
+    ...
+}
+  \end{lstlisting}
+    The source listing above shows that there are two generic declarations for the \sf Source \rm and \sf TargetAccountingLine \rm instances. 
+    \sf JournalVoucherDocument \rm and \sf LaborLedgerPostingDocument \rm require generics and have to be the same. Java won't allow the class
+    to compile otherwise. That is good in some respect. Even though it is a hassle, you can expect that the problem is solved at compile time 
+    rather than some difficult runtime debugging process. You won't be caught off guard or surprised by any runtime exceptions/errors.
 
 \end{document}
