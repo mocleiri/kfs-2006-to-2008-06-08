@@ -1,25 +1,8 @@
-/*
- * Copyright 2006-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.gl.service;
 
 import java.util.List;
 
-import org.kuali.core.document.TransactionalDocument;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.document.GeneralLedgerPostingDocument;
+import org.kuali.core.document.FinancialDocument;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.util.SufficientFundsItem;
@@ -28,7 +11,7 @@ import org.kuali.module.gl.util.SufficientFundsItem;
 /**
  * Service used for manipulating disbursement voucher cover sheets.
  * 
- * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public interface SufficientFundsService {
 
@@ -38,12 +21,12 @@ public interface SufficientFundsService {
      * @param document document
      * @return Empty List if has sufficient funds for all accounts, List of SufficientFundsItem if not
      */
-    public List<SufficientFundsItem> checkSufficientFunds(GeneralLedgerPostingDocument document);
+    public List<SufficientFundsItem> checkSufficientFunds(FinancialDocument document);
 
     /**
      * This method checks for sufficient funds on a list of transactions
      * 
-     * @param transactions list of transactions
+     * @param document document
      * @return Empty List if has sufficient funds for all accounts, List of SufficientFundsItem if not
      */
     public List<SufficientFundsItem> checkSufficientFunds(List<? extends Transaction> transactions);

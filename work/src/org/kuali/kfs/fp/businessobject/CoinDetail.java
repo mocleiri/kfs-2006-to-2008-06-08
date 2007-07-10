@@ -1,36 +1,43 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.kfs.KFSConstants;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 
 /**
- * 
+ * @author Kuali Nervous System Team ()
  */
-public class CoinDetail extends PersistableBusinessObjectBase {
+public class CoinDetail extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private String financialDocumentTypeCode;
-    private String cashieringRecordSource;
+    private String financialDocumentColumnTypeCode;
     private KualiDecimal financialDocumentFiftyCentAmount;
     private KualiDecimal financialDocumentTwentyFiveCentAmount;
     private KualiDecimal financialDocumentTenCentAmount;
@@ -47,30 +54,30 @@ public class CoinDetail extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
      * 
      */
     public String getFinancialDocumentTypeCode() {
@@ -89,29 +96,30 @@ public class CoinDetail extends PersistableBusinessObjectBase {
 
 
     /**
-     * Gets the cashieringRecordSource attribute.
+     * Gets the financialDocumentColumnTypeCode attribute.
      * 
-     * @return Returns the cashieringRecordSource
+     * @return - Returns the financialDocumentColumnTypeCode
      * 
      */
-    public String getCashieringRecordSource() {
-        return cashieringRecordSource;
+    public String getFinancialDocumentColumnTypeCode() {
+        return financialDocumentColumnTypeCode;
     }
 
     /**
-     * Sets the cashieringRecordSource attribute.
+     * Sets the financialDocumentColumnTypeCode attribute.
      * 
-     * @param cashieringRecordSource The cashieringRecordSource to set.
+     * @param financialDocumentColumnTypeCode The financialDocumentColumnTypeCode to set.
      * 
      */
-    public void setCashieringRecordSource(String financialDocumentColumnTypeCode) {
-        this.cashieringRecordSource = financialDocumentColumnTypeCode;
+    public void setFinancialDocumentColumnTypeCode(String financialDocumentColumnTypeCode) {
+        this.financialDocumentColumnTypeCode = financialDocumentColumnTypeCode;
     }
+
 
     /**
      * Gets the financialDocumentFiftyCentAmount attribute.
      * 
-     * @return Returns the financialDocumentFiftyCentAmount
+     * @return - Returns the financialDocumentFiftyCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentFiftyCentAmount() {
@@ -128,26 +136,11 @@ public class CoinDetail extends PersistableBusinessObjectBase {
         this.financialDocumentFiftyCentAmount = financialDocumentFiftyCentAmount;
     }
 
-    /**
-     * Returns the number of half-cent coins in the drawer
-     * @return the count of half cent coins in the drawer
-     */
-    public int getFiftyCentCount() {
-        return financialDocumentFiftyCentAmount.divide(KFSConstants.CoinTypeAmounts.FIFTY_CENT_AMOUNT).intValue();
-    }
-    
-    /**
-     * Sets the number of fifty cent coins in the drawer. This is useful if, you know, you're in da club, with, say a bottle full of "bub"
-     * @param count the number of fifty cent coins present in the drawer
-     */
-    public void setFiftyCentCount(int count) {
-        financialDocumentFiftyCentAmount = new KualiDecimal(count).multiply(KFSConstants.CoinTypeAmounts.FIFTY_CENT_AMOUNT);
-    }
 
     /**
      * Gets the financialDocumentTwentyFiveCentAmount attribute.
      * 
-     * @return Returns the financialDocumentTwentyFiveCentAmount
+     * @return - Returns the financialDocumentTwentyFiveCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTwentyFiveCentAmount() {
@@ -164,26 +157,11 @@ public class CoinDetail extends PersistableBusinessObjectBase {
         this.financialDocumentTwentyFiveCentAmount = financialDocumentTwentyFiveCentAmount;
     }
 
-    /**
-     * Returns the number of quarters in the drawer
-     * @return the count of quarters in the drawer
-     */
-    public int getTwentyFiveCentCount() {
-        return financialDocumentTwentyFiveCentAmount.divide(KFSConstants.CoinTypeAmounts.TWENTY_FIVE_CENT_AMOUNT).intValue();
-    }
-    
-    /**
-     * Sets the number of quarters in the drawer
-     * @param count the number of quarters present in the drawer
-     */
-    public void setTwentyFiveCentCount(int count) {
-        financialDocumentTwentyFiveCentAmount = new KualiDecimal(count).multiply(KFSConstants.CoinTypeAmounts.TWENTY_FIVE_CENT_AMOUNT);
-    }
 
     /**
      * Gets the financialDocumentTenCentAmount attribute.
      * 
-     * @return Returns the financialDocumentTenCentAmount
+     * @return - Returns the financialDocumentTenCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTenCentAmount() {
@@ -200,26 +178,11 @@ public class CoinDetail extends PersistableBusinessObjectBase {
         this.financialDocumentTenCentAmount = financialDocumentTenCentAmount;
     }
 
-    /**
-     * Returns the number of dimes in the drawer
-     * @return the count of dimes in the drawer
-     */
-    public int getTenCentCount() {
-        return financialDocumentTenCentAmount.divide(KFSConstants.CoinTypeAmounts.TEN_CENT_AMOUNT).intValue();
-    }
-    
-    /**
-     * Sets the number of dimes in the drawer
-     * @param count the number of dimes present in the drawer
-     */
-    public void setTenCentCount(int count) {
-        financialDocumentTenCentAmount = new KualiDecimal(count).multiply(KFSConstants.CoinTypeAmounts.TEN_CENT_AMOUNT);
-    }
 
     /**
      * Gets the financialDocumentFiveCentAmount attribute.
      * 
-     * @return Returns the financialDocumentFiveCentAmount
+     * @return - Returns the financialDocumentFiveCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentFiveCentAmount() {
@@ -236,26 +199,11 @@ public class CoinDetail extends PersistableBusinessObjectBase {
         this.financialDocumentFiveCentAmount = financialDocumentFiveCentAmount;
     }
 
-    /**
-     * Returns the number of nickels in the drawer
-     * @return the count of nickels in the drawer
-     */
-    public int getFiveCentCount() {
-        return financialDocumentFiveCentAmount.divide(KFSConstants.CoinTypeAmounts.FIVE_CENT_AMOUNT).intValue();
-    }
-    
-    /**
-     * Sets the number of nickels in the drawer
-     * @param count the number of nickels present in the drawer
-     */
-    public void setFiveCentCount(int count) {
-        financialDocumentFiveCentAmount = new KualiDecimal(count).multiply(KFSConstants.CoinTypeAmounts.FIVE_CENT_AMOUNT);
-    }
 
     /**
      * Gets the financialDocumentOneCentAmount attribute.
      * 
-     * @return Returns the financialDocumentOneCentAmount
+     * @return - Returns the financialDocumentOneCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentOneCentAmount() {
@@ -272,26 +220,11 @@ public class CoinDetail extends PersistableBusinessObjectBase {
         this.financialDocumentOneCentAmount = financialDocumentOneCentAmount;
     }
 
-    /**
-     * Returns the number of pennies in the drawer
-     * @return the count of pennies in the drawer
-     */
-    public int getOneCentCount() {
-        return financialDocumentOneCentAmount.divide(KFSConstants.CoinTypeAmounts.ONE_CENT_AMOUNT).intValue();
-    }
-    
-    /**
-     * Sets the number of pennies in the drawer
-     * @param count the number of pennies present in the drawer
-     */
-    public void setOneCentCount(int count) {
-        financialDocumentOneCentAmount = new KualiDecimal(count).multiply(KFSConstants.CoinTypeAmounts.ONE_CENT_AMOUNT);
-    }
 
     /**
      * Gets the financialDocumentOtherCentAmount attribute.
      * 
-     * @return Returns the financialDocumentOtherCentAmount
+     * @return - Returns the financialDocumentOtherCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentOtherCentAmount() {
@@ -312,7 +245,7 @@ public class CoinDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentHundredCentAmount attribute.
      * 
-     * @return Returns the financialDocumentHundredCentAmount
+     * @return - Returns the financialDocumentHundredCentAmount
      * 
      */
     public KualiDecimal getFinancialDocumentHundredCentAmount() {
@@ -329,30 +262,15 @@ public class CoinDetail extends PersistableBusinessObjectBase {
         this.financialDocumentHundredCentAmount = financialDocumentHundredCentAmount;
     }
 
-    /**
-     * Returns the number of dollar coins--Sacajawea, Susan B. Anthony, or otherwise--in the drawer
-     * @return the count of dollar coins in the drawer
-     */
-    public int getHundredCentCount() {
-        return financialDocumentHundredCentAmount.divide(KFSConstants.CoinTypeAmounts.HUNDRED_CENT_AMOUNT).intValue();
-    }
-    
-    /**
-     * Sets the number of hundred cent coins in the drawer
-     * @param count the number of hundred cent coins present in the drawer
-     */
-    public void setHundredCentCount(int count) {
-        financialDocumentHundredCentAmount = new KualiDecimal(count).multiply(KFSConstants.CoinTypeAmounts.HUNDRED_CENT_AMOUNT);
-    }
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
-        m.put("cashieringRecordSource", this.cashieringRecordSource);
+        m.put("financialDocumentColumnTypeCode", this.financialDocumentColumnTypeCode);
         return m;
     }
 }

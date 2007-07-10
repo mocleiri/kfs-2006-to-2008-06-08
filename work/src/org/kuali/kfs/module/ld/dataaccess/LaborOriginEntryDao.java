@@ -17,7 +17,6 @@ package org.kuali.module.labor.dao;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -57,6 +56,4 @@ public interface LaborOriginEntryDao extends OriginEntryDao{
     Collection<LaborOriginEntry> testingLaborGetAllEntries(); 
     
     Iterator<LaborOriginEntry> getLaborEntriesByGroup(OriginEntryGroup oeg, int sort);
-    
-    Collection getMatchingEntriesByCollection(Map searchCriteria); 
 }

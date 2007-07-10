@@ -19,22 +19,27 @@ import org.kuali.core.util.KualiDecimal;
 
 
 /**
+ * 
  * provides centralized storage of constants that occur throughout the tests
+ * 
+ * 
  */
 public interface KualiTestConstants {
-  
     /**
      * contains Test related constants
+     * 
+     * 
      */
     public final class TestConstants {
         private static final String HOST = "localhost";
         private static final String PORT = "8080";
         public static final String BASE_PATH = "http://" + HOST + ":" + PORT + "/";
         public static final String MESSAGE = "JUNIT test entry. If this exist after the tests are not cleaning up correctly. Created by class";
-        public static final String TEST_BATCH_STAGING_DIRECTORY = "/java/projects/kuali_project/test/src/org/kuali/test/staging/";
-        
+
         /**
          * group of data values that should work if used togther
+         * 
+         * 
          */
         public static class Data1 {
             public final static String ACCOUNT_NUMBER = "9544900";
@@ -53,7 +58,6 @@ public interface KualiTestConstants {
             public static final String KUALI_JV_USER_WORKGROUP = "KUALI_ROLE_JOURNAL_VOUCHER_DOCUMENT_USER";
             public static final String WORKFLOW_ADMIN_WORKGROUP = "WorkflowAdmin";
             public static final String KUALI_DV_ADMIN_WORKGROUP = "KUALI_ROLE_DV_ADMIN";
-            public static final String KUALI_FMSOPS = "KUALI_FMSOPS";
         }
 
         public static class Data3 {
@@ -111,12 +115,12 @@ public interface KualiTestConstants {
 
         public static class Data5 {
             public static final String BUDGET_AGGREGATION_CODE1 = "O";
-            public static final String BUDGET_AGGREGATION_NAME1 = "OBJECT";
+            public static final String BUDGET_AGGREGATION_NAME1 = "Object";
             public static final String BUDGET_AGGREGATION_CODE2 = "L";
-            public static final String BUDGET_AGGREGATION_NAME2 = "OBJECT LEVEL";
+            public static final String BUDGET_AGGREGATION_NAME2 = "Object Level";
 
             public static final String FEDERAL_FUNDED_CODE1 = "F";
-            public static final String FEDERAL_FUNDED_NAME1 = "FEDERALLY FUNDED AND OWNED";
+            public static final String FEDERAL_FUNDED_NAME1 = "Federally funded and owned";
             public static final String FEDERAL_FUNDED_CODE_BAD = "A";
             public static final String FEDERAL_FUNDED_NAME_BAD = "This is a bad code name";
         }
