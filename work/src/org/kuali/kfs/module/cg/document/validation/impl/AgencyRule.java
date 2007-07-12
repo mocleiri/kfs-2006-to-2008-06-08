@@ -15,22 +15,17 @@
  */
 package org.kuali.module.cg.rules;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.List;
 
+import org.kuali.KeyConstants;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Agency;
-import org.kuali.module.cg.bo.AgencyType;
-import org.apache.log4j.Logger;
 
 public class AgencyRule extends MaintenanceDocumentRuleBase {
-    protected static Logger LOG = org.apache.log4j.Logger.getLogger(AgencyRule.class);
 
     Agency newAgency;
     Agency oldAgency;
@@ -44,48 +39,29 @@ public class AgencyRule extends MaintenanceDocumentRuleBase {
 
     @Override
     protected boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
-        LOG.info("Entering AgencyRule.processCustomApproveDocumentBusinessRules");
         boolean success = super.processCustomApproveDocumentBusinessRules(document);
 
         success &= checkAgencyReportsTo(document);
         
-        LOG.info("Leaving AgencyRule.processCustomApproveDocumentBusinessRules");
         return success;
     }
 
     @Override
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
-        LOG.info("Entering AgencyRule.processCustomRouteDocumentBusinessRules");
         boolean success = super.processCustomRouteDocumentBusinessRules(document);
         
         success &= checkAgencyReportsTo(document);
         
-        LOG.info("Leaving AgencyRule.processCustomRouteDocumentBusinessRules");
         return success;
     }
 
     @Override
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
-        LOG.info("Entering AgencyRule.processCustomSaveDocumentBusinessRules");
         boolean success = super.processCustomSaveDocumentBusinessRules(document);
         
         success &= checkAgencyReportsTo(document);
-        success &= validateAgencyType(document);
         
-        LOG.info("Leaving AgencyRule.processCustomSaveDocumentBusinessRules");
         return success;
-    }
-
-    private boolean validateAgencyType(MaintenanceDocument document) {
-        String agencyType = newAgency.getAgencyTypeCode();
-        Map params = new HashMap();
-        params.put("code", agencyType);
-        Object o = businessObjectService.findByPrimaryKey(AgencyType.class, params);
-        if(null == o) {
-            putFieldError("agencyTypeCode", KFSKeyConstants.ERROR_AGENCY_TYPE_NOT_FOUND, agencyType);
-            return false;
-        }
-        return false;
     }
 
     private boolean checkAgencyReportsTo(MaintenanceDocument document) {
@@ -94,17 +70,17 @@ public class AgencyRule extends MaintenanceDocumentRuleBase {
         if (newAgency.getReportsToAgencyNumber() != null) {
             if (newAgency.getReportsToAgency() == null) { //Agency must exist
 
-                putFieldError("reportsToAgencyNumber", KFSKeyConstants.ERROR_AGENCY_NOT_FOUND, newAgency.getReportsToAgencyNumber());
+                putFieldError("reportsToAgencyNumber", KeyConstants.ERROR_AGENCY_NOT_FOUND, newAgency.getReportsToAgencyNumber());
                 success = false;
                 
-            } else if (!newAgency.getReportsToAgency().isHistoricalIndicator()) { //Agency must be active. See KULCG-263
+            } else if (newAgency.getReportsToAgency().isHistoricalIndicator()) { //Agency must be active
 
-                putFieldError("reportsToAgencyNumber", KFSKeyConstants.ERROR_AGENCY_INACTIVE, newAgency.getReportsToAgencyNumber());
+                putFieldError("reportsToAgencyNumber", KeyConstants.ERROR_AGENCY_INACTIVE, newAgency.getReportsToAgencyNumber());
                 success = false;
                 
             } else if (newAgency.getAgencyNumber().equals(newAgency.getReportsToAgencyNumber())) {
                 
-                putFieldError("reportsToAgencyNumber", KFSKeyConstants.ERROR_AGENCY_REPORTS_TO_SELF, newAgency.getAgencyNumber());
+                putFieldError("reportsToAgencyNumber", KeyConstants.ERROR_AGENCY_REPORTS_TO_SELF, newAgency.getAgencyNumber());
                 success = false;
                 
             } else { //No circular references
@@ -118,7 +94,7 @@ public class AgencyRule extends MaintenanceDocumentRuleBase {
                         agencies.add(agency.getAgencyNumber());                        
                     } else {
                         
-                        putFieldError("reportsToAgencyNumber", KFSKeyConstants.ERROR_AGENCY_CIRCULAR_REPORTING, agency.getAgencyNumber());
+                        putFieldError("reportsToAgencyNumber", KeyConstants.ERROR_AGENCY_CIRCULAR_REPORTING, agency.getAgencyNumber());
                         success = false;
                     }
 

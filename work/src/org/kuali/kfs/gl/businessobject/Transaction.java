@@ -21,15 +21,12 @@ package org.kuali.module.gl.bo;
 
 import java.sql.Date;
 
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.Options;
-import org.kuali.core.bo.DocumentType;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectType;
-import org.kuali.module.chart.bo.SubAccount;
-import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 public interface Transaction {
@@ -41,7 +38,7 @@ public interface Transaction {
 
     public String getTransactionDebitCreditCode();
 
-    public String getDocumentNumber();
+    public String getFinancialDocumentNumber();
 
     public Date getFinancialDocumentReversalDate();
 
@@ -97,10 +94,4 @@ public interface Transaction {
     public ObjectType getObjectType();
     
     public void refreshNonUpdateableReferences();
-
-    public SubAccount getSubAccount();
-    
-    public SubObjCd getFinancialSubObject();
-    
-    public DocumentType getDocumentType();
 }

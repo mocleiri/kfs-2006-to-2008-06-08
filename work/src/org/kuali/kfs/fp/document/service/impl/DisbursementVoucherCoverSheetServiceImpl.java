@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.service.impl;
 
@@ -26,18 +33,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.lookup.keyvalues.KeyValuesFinder;
+import org.kuali.core.lookup.keyvalues.PaymentMethodValuesFinder;
 import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.PersistenceStructureService;
-import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.service.PersistenceService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.uidraw.KeyLabelPair;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 import org.kuali.module.financial.bo.PaymentReasonCode;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.module.financial.lookup.keyvalues.PaymentMethodValuesFinder;
 import org.kuali.module.financial.rules.DisbursementVoucherDocumentRule;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 import org.kuali.module.financial.service.DisbursementVoucherCoverSheetService;
@@ -51,11 +58,13 @@ import com.lowagie.text.pdf.PdfStamper;
  * 
  * Service used for manipulating disbursement voucher cover sheets.
  * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ * @version $Id: DisbursementVoucherCoverSheetServiceImpl.java,v 1.5.6.2 2006-09-06 22:37:49 tdurkin Exp $
  */
 public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVoucherCoverSheetService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherCoverSheetServiceImpl.class);
 
-    public static final String DV_COVERSHEET_TEMPLATE_RELATIVE_DIR = "static/help/templates/financial";
+    public static final String DV_COVERSHEET_TEMPLATE_RELATIVE_DIR = "templates/financial";
     public static final String DV_COVERSHEET_TEMPLATE_NM = "disbursementVoucherCoverSheetTemplate.pdf";
 
     public static String DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM = "DV_COVER_SHEET_TEMPLATE_LINES";
@@ -67,7 +76,7 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
 
     private KualiConfigurationService kualiConfigurationService;
     private BusinessObjectService businessObjectService;
-    private PersistenceStructureService persistenceStructureService;
+    private PersistenceService persistenceService;
 
     /**
      * 
@@ -84,7 +93,7 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
             String bar = "";
             String rlines = "";
 
-            String docNumber = document.getDocumentNumber();
+            String docNumber = document.getFinancialDocumentNumber();
             String initiator = document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
             String payee = document.getDvPayeeDetail().getDisbVchrPayeePersonName();
 
@@ -161,14 +170,14 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
      * @param keyValue
      * @return
      */
-    private PersistableBusinessObject retrieveObjectByKey(Class clazz, String keyValue) {
-        List primaryKeyFields = persistenceStructureService.listPrimaryKeyFieldNames(clazz);
+    private BusinessObject retrieveObjectByKey(Class clazz, String keyValue) {
+        List primaryKeyFields = persistenceService.listPrimaryKeyFieldNames(clazz);
         if (primaryKeyFields.size() != 1) {
             throw new IllegalArgumentException("multi-part key found. expecting single key field for " + clazz.getName());
         }
         Map primaryKeys = new HashMap();
         primaryKeys.put(primaryKeyFields.get(0), keyValue);
-        PersistableBusinessObject b = businessObjectService.findByPrimaryKey(clazz, primaryKeys);
+        BusinessObject b = businessObjectService.findByPrimaryKey(clazz, primaryKeys);
 
         return b;
     }
@@ -247,11 +256,22 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
     }
 
     /**
-     * Sets the persistenceStructureService attribute value.
+     * Gets the persistenceService attribute.
      * 
-     * @param persistenceStructureService The persistenceService to set.
+     * @return Returns the persistenceService.
      */
-    public void setPersistenceStructureService(PersistenceStructureService persistenceStructureService) {
-        this.persistenceStructureService = persistenceStructureService;
+    public PersistenceService getPersistenceService() {
+        return persistenceService;
     }
+
+    /**
+     * Sets the persistenceService attribute value.
+     * 
+     * @param persistenceService The persistenceService to set.
+     */
+    public void setPersistenceService(PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
+    }
+
+
 }
