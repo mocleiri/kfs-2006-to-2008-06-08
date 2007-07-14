@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,20 +19,22 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.BenefitsType">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Labor Benefits Type Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="positionBenefitTypeCode" />
                 <field attributeName="positionBenefitTypeDescription" />
                 <field attributeName="positionBenefitRetirementIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Labor Benefits Type Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.BenefitsType">Create New</a>]]></menubar>
 
             <instructions>Lookup an Benefits Type</instructions>
 
@@ -74,7 +76,7 @@
 			</attribute>
 
             <attribute name="positionBenefitTypeCode" forceUppercase="true">
-                <label>Labor Position Benefit Type Code</label>
+                <label>Position Benefit Type Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>

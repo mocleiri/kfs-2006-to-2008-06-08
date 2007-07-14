@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,35 +15,20 @@
  */
 function updateICR( acctField, callbackFunction ) {
 	var chartCode = getElementValue( findElPrefix( acctField.name ) + ".chartOfAccountsCode" );
-	var accountCode = getElementValue( acctField.name );
-	if ( accountCode != "" && chartCode != "" ) {
-		var dwrReply = {
-			callback:callbackFunction,
-			errorHandler:function( errorMessage ) { 
-				window.status = errorMessage;
-			}
-		};
-		AccountService.getByPrimaryIdWithCaching( chartCode, accountCode, dwrReply );
+	if ( acctField.value.trim() != "" && chartCode != "" ) {
+		loadKualiObjectWithCallback( callbackFunction, "accountICR", chartCode, acctField.value.toUpperCase().trim(), "", "", "", "" );
 	}
 }
 
-function updateICR_Callback( data ) {
+function updateICR_Callback( responseText ) {
+	var data = responseText.parseJSON();
+
 	// check if the current user has permissions to the ICR fields
 	if ( kualiElements["document.newMaintainableObject.a21SubAccount.financialIcrSeriesIdentifier"].type.toLowerCase() != "hidden" ) {
-		if (data.financialIcrSeriesIdentifier) {
-			setElementValue( "document.newMaintainableObject.a21SubAccount.financialIcrSeriesIdentifier", data.financialIcrSeriesIdentifier );
-		}
-		if (data.indirectCostRcvyFinCoaCode) {
-			setElementValue( "document.newMaintainableObject.a21SubAccount.indirectCostRecoveryChartOfAccountsCode", data.indirectCostRcvyFinCoaCode );
-		}
-		if (data.indirectCostRecoveryAcctNbr) {
-			setElementValue( "document.newMaintainableObject.a21SubAccount.indirectCostRecoveryAccountNumber", data.indirectCostRecoveryAcctNbr );
-		}
-		if (data.accountOffCampusIndicator) {
-			setElementValue( "document.newMaintainableObject.a21SubAccount.offCampusCode", data.accountOffCampusIndicator );
-		}
-		if (data.acctIndirectCostRcvyTypeCd) {
-			setElementValue( "document.newMaintainableObject.a21SubAccount.indirectCostRecoveryTypeCode", data.acctIndirectCostRcvyTypeCd );
-		}
+		setElementValue( "document.newMaintainableObject.a21SubAccount.financialIcrSeriesIdentifier", data.financialIcrSeriesIdentifier );
+		setElementValue( "document.newMaintainableObject.a21SubAccount.indirectCostRecoveryChartOfAccountsCode", data.indirectCostRecoveryChartOfAccountsCode );
+		setElementValue( "document.newMaintainableObject.a21SubAccount.indirectCostRecoveryAccountNumber", data.indirectCostRecoveryAccountNumber );
+		setElementValue( "document.newMaintainableObject.a21SubAccount.offCampusCode", data.offCampusCode );
+		setElementValue( "document.newMaintainableObject.a21SubAccount.indirectCostRecoveryTypeCode", data.indirectCostRecoveryTypeCode );
 	}
 }

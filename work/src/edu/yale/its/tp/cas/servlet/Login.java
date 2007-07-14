@@ -20,8 +20,8 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.Constants;
+import org.kuali.core.util.SpringServiceLocator;
 
 import edu.yale.its.tp.cas.ticket.*;
 import edu.yale.its.tp.cas.auth.*;
@@ -32,7 +32,7 @@ import edu.yale.its.tp.cas.auth.*;
 public class Login extends HttpServlet {
 
     // *********************************************************************
-    // KFSConstants
+    // Constants
 
     // cookie IDs
     private static final String TGC_ID = "CASTGC";

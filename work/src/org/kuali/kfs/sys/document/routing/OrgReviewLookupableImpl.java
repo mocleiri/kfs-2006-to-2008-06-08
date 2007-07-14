@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.kfs.util.SpringServiceLocator;
 
 import edu.iu.uis.eden.EdenConstants;
-import edu.iu.uis.eden.KEWServiceLocator;
+import edu.iu.uis.eden.SpringServiceLocator;
 import edu.iu.uis.eden.lookupable.Column;
 import edu.iu.uis.eden.lookupable.Field;
 import edu.iu.uis.eden.lookupable.Row;
@@ -69,7 +68,7 @@ public class OrgReviewLookupableImpl implements WorkflowLookupable {
      * variables based on it.
      */
     public OrgReviewLookupableImpl() {
-        RuleTemplate ruleTemplate = ((RuleTemplateService) KEWServiceLocator.getService(KEWServiceLocator.RULE_TEMPLATE_SERVICE)).findByRuleTemplateName("KualiOrgReviewTemplate");
+        RuleTemplate ruleTemplate = ((RuleTemplateService) SpringServiceLocator.getService(SpringServiceLocator.RULE_TEMPLATE_SERVICE)).findByRuleTemplateName("KualiOrgReviewTemplate");
         this.ruleTemplateId = ruleTemplate.getRuleTemplateId();
         this.orgReviewAttribute = ruleTemplate.getRuleTemplateAttribute(0).getWorkflowAttribute();
         this.orgReviewAttribute.setRequired(false);
@@ -156,7 +155,7 @@ public class OrgReviewLookupableImpl implements WorkflowLookupable {
                 }
             }
         }
-        Iterator rules = ((RuleService) KEWServiceLocator.getService(KEWServiceLocator.RULE_SERVICE)).search(docTypeSearchName, null, ruleTemplateId, null, null, null, null, null, isActive, attributes).iterator();
+        Iterator rules = ((RuleService) SpringServiceLocator.getService(SpringServiceLocator.RULE_SERVICE)).search(docTypeSearchName, null, ruleTemplateId, null, null, null, null, null, isActive, attributes).iterator();
         List displayList = new ArrayList();
         while (rules.hasNext()) {
             displayList.add(new OrgReviewLookupableResult((RuleBaseValues) rules.next()));

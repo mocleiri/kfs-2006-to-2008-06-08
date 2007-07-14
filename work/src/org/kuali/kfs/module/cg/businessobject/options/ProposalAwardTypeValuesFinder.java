@@ -22,8 +22,8 @@ import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.ProposalAwardType;
 
 public class ProposalAwardTypeValuesFinder extends KeyValuesBase {
@@ -33,16 +33,17 @@ public class ProposalAwardTypeValuesFinder extends KeyValuesBase {
      */
     public List getKeyValues() {
 
-        Collection<ProposalAwardType> codes = SpringServiceLocator.getKeyValuesService().findAll(ProposalAwardType.class);
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
+        Collection codes = boService.findAll(ProposalAwardType.class);
 
         List<KeyLabelPair> labels = new ArrayList<KeyLabelPair>();
         labels.add(new KeyLabelPair("", ""));
 
 
-        for (ProposalAwardType proposalAwardType : codes) {
-            if(proposalAwardType.isRowActiveIndicator()) {
-                labels.add(new KeyLabelPair(proposalAwardType.getProposalAwardTypeCode(), proposalAwardType.getProposalAwardTypeCode() + " - " + proposalAwardType.getProposalAwardTypeDescription()));
-            }
+        for (Iterator iter = codes.iterator(); iter.hasNext();) {
+            ProposalAwardType proposalAwardType = (ProposalAwardType) iter.next();
+
+            labels.add(new KeyLabelPair(proposalAwardType.getProposalAwardTypeCode(), proposalAwardType.getProposalAwardTypeCode() + " - " + proposalAwardType.getProposalAwardTypeDescription()));
         }
 
         return labels;

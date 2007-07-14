@@ -1,21 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.bo;
-
-import static org.kuali.kfs.util.SpringServiceLocator.getBusinessObjectService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,56 +28,52 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.test.WithTestSpringContext;
+import org.kuali.core.dao.BusinessObjectDao;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBaseWithSpring;
 
-@WithTestSpringContext
-public class OrganizationRoutingModelTest extends KualiTestBase {
-
-    OrganizationRoutingModel model;
-
-    @Override
+public class OrganizationRoutingModelTest extends KualiTestBaseWithSpring {
+    
+    OrganizationRoutingModel model = new OrganizationRoutingModel();
+    
+    private final static String MODEL_NAME="junit-test";
+    
+    BusinessObjectService boService;
+    
     protected void setUp() throws Exception {
         super.setUp();
-        Map<String,String> fieldValues=new HashMap<String, String>();
-        fieldValues.put(KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, "BL");
-        fieldValues.put(KFSConstants.ORGANIZATION_CODE_PROPERTY_NAME,"CLAS");
-        List<OrganizationRoutingModel> results = (List<OrganizationRoutingModel>)getBusinessObjectService().findMatching(OrganizationRoutingModel.class, fieldValues);
-        assertFalse("no models found", results.isEmpty());
-
-        model=results.get(0);
+        boService = SpringServiceLocator.getBusinessObjectService();
     }
-
+    
     public void testSaveModel() {
-        String name= model.getOrganizationRoutingModelName();
-        OrganizationRoutingModel routingModel = new OrganizationRoutingModel();
-        routingModel.setOrganizationRoutingModelName(name);
-        routingModel.setChartOfAccountsCode(model.getChartOfAccountsCode());
-        routingModel.setOrganizationCode(model.getOrganizationCode());
-        routingModel.setAccountDelegateUniversalId(model.getAccountDelegateUniversalId());
-        routingModel.setFinancialDocumentTypeCode("xx");
-        getBusinessObjectService().save(routingModel);
-
-        assertTrue(loadModel(name, model.getClass()));
+        model.setOrganizationRoutingModelName(MODEL_NAME);
+        model.setChartOfAccountsCode("BL");
+        model.setOrganizationCode("AMUS");
+        model.setAccountDelegateUniversalId("12345");
+        model.setFinancialDocumentTypeCode("xx");
+        
+        boService.save(model);
+        assertTrue(loadModel(MODEL_NAME));
     }
 
-    private boolean loadModel(String name, Class clazz) {
-
-        Map<String, String> fieldValues = new HashMap<String, String>();
-        fieldValues.put("ORG_RTNG_MDL_NM", name);
-
-        Collection<OrganizationRoutingModel> foundModel = getBusinessObjectService().findMatching(clazz, fieldValues);
-
-        List<DelegateGlobalDetail> delegateGlobals = new ArrayList<DelegateGlobalDetail>();
-
+    public boolean loadModel(String name) {
+        
+        Map fieldValues = new HashMap();
+        Collection<OrganizationRoutingModel> foundModel;
+        fieldValues.put("ORG_RTNG_MDL_NM",name);
+        
+        foundModel=boService.findMatching(model.getClass(),fieldValues);
+        
+        List<DelegateChangeDocument> delegateChanges = new ArrayList();
+        
         for (OrganizationRoutingModel model : foundModel) {
-            delegateGlobals.add(new DelegateGlobalDetail(model));
+            delegateChanges.add(new DelegateChangeDocument(model));
         }
-
-        return (foundModel != null && !foundModel.isEmpty());
-
+        
+        return foundModel!=null && foundModel.size()>0;
+        
     }
-
+    
 
 }
