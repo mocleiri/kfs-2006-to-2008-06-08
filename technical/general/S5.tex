@@ -46,12 +46,10 @@
 
 \newcommand{\maketitle}{
     \xml{div class="slide"}
-    \EmptyP{\HlxTitleP}{\HlxBlk\xml{h1}\HlxTitle\xml{/h1}
-    \EmptyP{\HlxAuthorP}{\xml{h2}\HlxAuthor\xml{/h2}}{}
-    \EmptyP{\HlxDate}{\xml{h3}\HlxDate\xml{/h3}}{}
-    \xml{/div}
-    }{}}
-
+    \xml{h1}\HlxTitle\xml{/h1}
+    \xml{h2}\HlxAuthor\xml{/h2}
+    \xml{h3}\HlxDate\xml{/h3}
+    \xml{/div}}
 \end{ifhtml}
 
 \newenvironment{s5presentation}{\endpar%
@@ -90,7 +88,7 @@
 \newenvironment{s5slide}{\xml{div class="slide"}}{\xml{/div}}
 \newcommand{\fulltitle}[1]{\title{#1}\htmlonly{\htmltitle{#1}}}
 \newcommand{\thumbnail}[2]{\endpar%
-\xml{a href="#1" rel="lightbox[gallery]"}\xml{img src="#2" border="0" width="100"/}\xml{/a}
+\xml{a href="#1" id="external" rel="lightbox[gallery]"}\xml{img src="#2" id="external" border="0" width="100"/}\xml{/a}
 }
 \newenvironment{slideshow}{\endpar%
   \HlxBlk\xml{ul class="gallery"}\begingroup\stepcounter{listcounter}%
