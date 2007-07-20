@@ -98,6 +98,7 @@ ul.gallery li {
 	margin-right: 10px;
 	margin-bottom: 10px;
     list-style-type: none;
+    vertical-align: bottom;
 	}	
 
 /* diagnostics
