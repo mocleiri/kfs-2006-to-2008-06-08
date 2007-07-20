@@ -90,6 +90,15 @@ img.incremental {visibility: hidden;}
 .slide .current {color: #B02;}
 .slide {background transparent;}
 
+ul.gallery li {
+	padding: 3px 3px 8px 3px;
+	background-color: #222;
+	border: 1px solid #2a2a2a;
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 10px;
+    list-style-type: none;
+	}	
 
 /* diagnostics
 
