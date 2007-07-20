@@ -9,6 +9,14 @@
 \definecolor{Purple}{rgb}{0.5,0,0.5}
 
 \begin{ifhtml}
+\newcommand{\HlxSubTitle}{}
+\newcommand{\HlxSubTitleP}{}
+\newcommand{\subtitle}[1]{\renewcommand{\HlxSubTitleP}{1}%
+  \renewcommand{\HlxSubTitle}{#1}}
+\newcommand{\HlxAffiliation}{}
+\newcommand{\HlxAffiliationP}{}
+\newcommand{\affiliation}[1]{\renewcommand{\HlxAffiliationP}{1}%
+  \renewcommand{\HlxAffiliation}{#1}}
 \newcommand{\sf}[1]{\xml{span style="font-family: sans-serif;"}#1\xml{/span}}
 \newcommand{\rm}[1]{\xml{span style="font-family: serif;"}#1\xml{/span}}
 \newcommand{\bf}[1]{\xml{span style="font-weight: bold;"}#1\xml{/span}}
@@ -76,3 +84,15 @@
     \end{rawxml}}{\HlxBlk\xml{/div}}
 \newenvironment{s5slide}{\xml{div class="slide"}}{\xml{/div}}
 \newcommand{\fulltitle}[1]{\title{#1}\htmlonly{\htmltitle{#1}}}
+\newcommand{\thumbnail}[2]{\endpar%
+\xml{a href="#1" rel="lightbox[gallery]"}\xml{img src="#2" border="0" /}\xml{/a}
+}
+\newenvironment{slideshow}{\endpar%
+  \HlxBlk\xml{ul class="gallery"}\begingroup\stepcounter{listcounter}%
+  \newcounter{gallerycounter}%
+  \newcommand{\item}{%
+      \setcounter{gallerycounter}{\thelistcounter}%
+      \HlxBlk\xml{li}}\ignorespaces}%
+    {\begin{ifequal}{\thegallerycounter}{\thelistcounter}%
+        \xml{/li}\end{ifequal}\endgroup%
+    \HlxBlk\xml{/ul}}
