@@ -3,22 +3,28 @@
     \section{Setting up KFS}
     \begin{itemize}
       \item First things first, get KFS running
-      \item Files to change
-        \begin{itemize}
-          \item Copy kuali-build.properties from: \\
-                  kuali_project/build/userHome  \\
-                  to \\
-                  \verb|[user directory]/kuali-build.properties| \\
-          \item Change datasource values
-            \begin{itemize}
-              \item datasource url \- \verb|[brian's ip]:1521|
-              \item \verb|user\pw| change
-            \end{itemize}
-          \item Insert \verb|ojdbc14.jar| into \verb|/java/drivers| (Create the directory if necessary.)
-        \end{itemize}
+      \item Copy\/download zip file
+      \item Unzip file to \verb|/java/projects|
+      \item Import project into Eclipse
     \end{itemize}
   \end{s5slide}
-
+  \begin{s5slide}
+      \section{Files to change}
+      \begin{ifhtml}
+          \begin{itemize}
+            \item Copy \verb|kuali-build.properties| from: \\
+                    \verb|kuali_project/build/userHome|  \\
+                    to \\
+                    \verb|[user directory]/kuali-build.properties| \\
+            \item Change datasource values
+              \begin{itemize}
+                \item datasource url \- \verb|[brian's ip]:1521|
+                \item \verb|user\pw| change
+              \end{itemize}
+            \item Insert \verb|ojdbc14.jar| into \verb|/java/drivers| (Create the directory if necessary.)
+          \end{itemize}
+      \end{ifhtml} 
+  \end{s5slide}
   \begin{s5slide}
     \section{Setup continued}
     \begin{itemize}
