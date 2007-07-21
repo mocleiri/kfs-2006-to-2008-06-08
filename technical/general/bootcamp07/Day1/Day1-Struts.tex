@@ -1,5 +1,41 @@
 \begin{ifhtml}
   \begin{s5slide}
     \section{Introduction to Struts}
+    \begin{itemize}
+      \item What is Struts?
+      \item \code{struts-config.xml} and \code{web.xml}
+      \item \code{ActionServlet}
+      \item \code{Action} and \code{ActionForm}
+      \item \code{PojoPlugin} and \code{PojoForm}
+    \end{itemize}
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{What is Struts?}
+     ``Web applications based on JavaServer Pages sometimes commingle database code, page design code, and control flow code. In practice, we find that unless these concerns are separated, larger applications become difficult to maintain.
+
+One way to separate concerns in a software application is to use a \MVC (Model-View-Controller not Marvel vs. Capcom) 
+architecture. The Model represents the business or database code, the View represents the page design code, and the Controller represents the navigational code. The Struts framework is designed to help developers create web applications that utilize a MVC architecture.'' -- from 
+\href{http://struts.apache.org}{struts.apache.org}
+
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{\code{struts-config.xml} and \code{web.xml}}
+    The \code{web.xml} is responsible for configuring the \code{ActionServlet}. \xml{br /}
+
+    Part of the configuration of the \code{ActionServlet} specifies the \code{struts-config.xml}.    
+\xml{pre}\verb|<init-param>
+    <param-name>config</param-name>
+    <param-value>/WEB-INF/struts-config.xml</param-value>
+</init-param>|\xml{/pre}\xml{br /}
+    
+    The \code{struts-config.xml} is where \code{Action}'s, \code{ActionForm}'s, and plugins for Struts
+    are declared and configured.
+    \begin{s5notes}
+      \begin{itemize}
+        \item Warner has BO
+      \end{itemize}
+    \end{s5notes}
   \end{s5slide}
 \end{ifhtml}
