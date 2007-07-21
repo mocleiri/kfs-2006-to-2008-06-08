@@ -1,0 +1,34 @@
+    \W \begin{s5slide}
+        \W \section{Setting up KFS}
+        \begin{ifhtml}
+            \begin{itemize}
+                \item First things first, get KFS running
+                \item Files to change
+                \begin{itemize}
+                    \item Copy kuali-build.properties from: \\
+                    kuali_project/build/userHome  \\
+                    to \\
+                    \verb|[user directory]/kuali-build.properties| \\
+                    \item Change datasource values
+                    	\begin{itemize}
+                    		\item datasource url \- \verb|[brian's ip]:1521|
+                    		\item \verb|user\pw| change
+                    	\end{itemize}
+                    \item Insert \verb|ojdbc14.jar| into \verb|/java/drivers| (Create the directory if necessary.)
+                \end{itemize}
+            \end{itemize}
+        \end{ifhtml} 
+    \W \end{s5slide}
+    \W \begin{s5slide}
+        \W \section{Setup continued}
+        \begin{ifhtml}
+            \begin{itemize}
+                \item Make sure that the oracle driver installed properly
+                \item Setup Tomcat startup/shutdown
+                \item Let's try starting the app - is it running?
+                \begin{itemize}
+                    \item http://localhost:8080/kuali-dev
+                \end{itemize}
+            \end{itemize}
+        \end{ifhtml} 
+    \W \end{s5slide}
