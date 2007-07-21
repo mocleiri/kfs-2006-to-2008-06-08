@@ -66,7 +66,7 @@
   <div id="controls"><!-- DO NOT EDIT --></div>
   <div id="currentSlide"><!-- DO NOT EDIT --></div>
   <div id="header">
-    <img style="position: relative; top:30px; left: 18px;" src="ui/kuali/logo.png" />
+    <img style="position: relative; top:30px; left: 18px;" id="logo" src="ui/kuali/logo.png" />
   </div>
   <div id="footer">
     <div class="footer_l">
@@ -82,7 +82,9 @@
  </div>
 <div class="presentation">
     \end{rawxml}}{\HlxBlk\xml{/div}}
-\newenvironment{s5slide}{\xml{div class="slide"}}{\xml{/div}}
+\newenvironment{s5slide}{\xml{div class="slide"}
+\newenvironment{s5notes}{\xml{div class="notes"}}{\xml{/div}}
+}{\xml{/div}}
 \newcommand{\fulltitle}[1]{\title{#1}\htmlonly{\htmltitle{#1}}}
 \newcommand{\thumbnail}[2]{\endpar%
 \xml{a href="#1" id="external" rel="lightbox[gallery]"}\xml{img src="#2" id="external" border="0" width="100"/}\xml{/a}
