@@ -451,9 +451,17 @@ function fontScale() {  // causes layout problems in FireFox that get fixed if b
 	var newSize = Math.min(Math.round(vSize/vScale),Math.round(hSize/hScale));
     var fillerHeight = Math.round(vSize/1.1);
     var filler = document.getElementById('filler');
+    var logo = document.getElementById('logo');
+    var logoHeight = Math.round(vSize/7);
+    var logoWidth = Math.round(hSize/7);
     
     if (filler != null) {
         filler.height = fillerHeight;
+    }
+
+    if (logo !=null) {
+        logo.height = logoHeight;
+        logo.wdith = logoWidth;
     }
 
 	fontSize(newSize + 'px');

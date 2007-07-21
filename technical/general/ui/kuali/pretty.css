@@ -52,8 +52,9 @@ sup {font-size: smaller; line-height: 1px;}
 .slide img.leader {display: block; margin: 0 auto;}
 
 div.long {font-size: 0.75em;}
-.slide h1 {position: absolute; top: 0.7em; left: 200px; z-index: 20;
+.slide h1 {position: absolute; top: 0.7em; left: 6em; z-index: 20;
   margin: 0; padding: 0.3em 0 0 50px; white-space: nowrap;
+  line-height : 50%;
   font: bold 150%/1em Helvetica, sans-serif; text-transform: capitalize;
   color: #87220C; background: transparent;}
 .slide h3 {font-size: 130%;}
