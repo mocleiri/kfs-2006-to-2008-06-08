@@ -4,19 +4,35 @@
     \begin{itemize}
       \item What is Struts?
       \item \code{struts-config.xml} and \code{web.xml}
-      \item \code{ActionServlet}
-      \item \code{Action} and \code{ActionForm}
+      \item \code{ActionServlet} and \code{KualiRequestProcessor}
+      \item \code{DispatchAction}, \code{Action} and \code{ActionForm}
       \item \code{PojoPlugin} and \code{PojoForm}
     \end{itemize}
   \end{s5slide}
 
   \begin{s5slide}
     \section{What is Struts?}
-     ``Web applications based on JavaServer Pages sometimes commingle database code, page design code, and control flow code. In practice, we find that unless these concerns are separated, larger applications become difficult to maintain.
+     ``Web applications based on JavaServer Pages sometimes co-mingle database code, page design code, and control flow code. In practice, we find that unless these concerns are separated, larger applications become difficult to maintain.
 
 One way to separate concerns in a software application is to use a \MVC (Model-View-Controller not Marvel vs. Capcom) 
 architecture. The Model represents the business or database code, the View represents the page design code, and the Controller represents the navigational code. The Struts framework is designed to help developers create web applications that utilize a MVC architecture.'' -- from 
 \href{http://struts.apache.org}{struts.apache.org}
+
+    \begin{slideshow}
+      \item \thumbnail{../Diagrams/KualiMVCStack.png}{../Diagrams/KualiMVCStack-thumb.png}
+      \item \thumbnail{../Diagrams/StrutsHierarchy_class.png}{../Diagrams/StrutsHierarchy_class-thumb.png}
+    \end{slideshow}
+
+    \begin{s5notes}
+      \begin{itemize}
+        \item The framework provides its own web Controller component and integrates with other technologies to provide the Model and the View.
+        \item The framework's Controller acts as a bridge between the application's Model and the web View. When a request 
+          is received, the Controller invokes an Action  class. The Action class consults with the Model (or, preferably, a Facade representing 
+          your Model) to examine or update the application's state. The framework provides an ActionForm  class to help transfer data between 
+          Model and View.
+        \item Discuss Diagram
+      \end{itemize}
+    \end{s5notes}
 
   \end{s5slide}
 
@@ -25,7 +41,7 @@ architecture. The Model represents the business or database code, the View repre
     The \code{web.xml} is responsible for configuring the \code{ActionServlet}. \xml{br /}
 
     Part of the configuration of the \code{ActionServlet} specifies the \code{struts-config.xml}.    
-\xml{pre}\verb|<init-param>
+\xml{pre style="color: blue"}\verb|<init-param>
     <param-name>config</param-name>
     <param-value>/WEB-INF/struts-config.xml</param-value>
 </init-param>|\xml{/pre}\xml{br /}
@@ -34,8 +50,82 @@ architecture. The Model represents the business or database code, the View repre
     are declared and configured.
     \begin{s5notes}
       \begin{itemize}
-        \item Warner has BO
+        \item Use Eclipse to go over web.xml and struts-config.xml
+        \item Introduce KualiRequestProcessor, but not in detail.
+        What is KualiRequestProcessor?
+        \item Point out the PojoPlugin
+        \item Explain Action Mapping wildcards
       \end{itemize}
+    \end{s5notes}
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{\code{KualiActionServlet} and \\ \code{KualiRequestProcessor}}
+    \code{KualiActionServlet} intercepts all requests based on its servlet mapping which characteristically makes all those
+    requests, struts requests. It is basically the sentry for our \MVC .
+
+    Just as the \code{struts-config.xml} describes, the \code{KualiRequestProcessor} is the \emph{Controller} aspect of our
+    \MVC .
+    \begin{slideshow}
+      \item \thumbnail{../Diagrams/KualiRequestProcessor_class.png}{../Diagrams/KualiRequestProcessor_class-thumb.png}
+      \item \thumbnail{../Diagrams/StrutsDocument_Sequence.png}{../Diagrams/StrutsDocument_Sequence-thumb.png}
+    \end{slideshow}
+    \begin{s5notes}
+      \code{KualiActionServlet} intercepts all requests based on its servlet mapping which characteristically makes all those
+      requests, struts requests. It is basically the sentry for our \MVC .
+      
+      Just as the \code{struts-config.xml} describes, the \code{KualiRequestProcessor} is the \emph{Controller} aspect of our
+      \MVC .
+
+      \begin{itemize}
+        \item Review KualiActionServlet mapping
+        \item Discuss Diagrams
+        \item Diagram 1 is missing populate. Explain that populate is also called.
+      \end{itemize}
+    \end{s5notes}
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{\code{Action}, \code{DispatchAction}, and \code{ActionForm}}
+
+    \begin{itemize}
+      \item \code{ActionForm} is a bean class provided by the framework to communicate data between View and Model.
+      \item \code{Action} represents the ``action'' of an HTML form.
+      \item \code{DispatchAction} allows method dispatching of an \code{Action} hence the name.
+      \item \code{Action} and \code{ActionForm} represent a parallel hierarchy provided by the framework.
+    \end{itemize}
+
+    \begin{slideshow}
+      \item \thumbnail{../Diagrams/StrutsHierarchy_class.png}{../Diagrams/StrutsHierarchy_class-thumb.png}
+    \end{slideshow}
+    
+    \begin{s5notes}
+      \begin{itemize}
+      \item Discuss Diagram
+      \item DispatchAction allows us to dynamically change execute() method per request. This allows us to consolidate action calls, share action behavior easier, and minimize XML.
+      \item ActionForm is created by the request processor prior to action exectution
+      \item ActionForm is like a bean that carries data to be communicated back and forth between the model and the view
+      \item Action is a java representation of the ``action'' attribute of a form. It uses attributes of the ActionForm like a bean as it were.
+      \item Action and ActionForm promote Parallel Hierarchy
+      \end{itemize}
+    \end{s5notes}
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{\code{PojoPlugin} and \code{PojoForm}}
+    \begin{itemize}
+      \item \code{PojoForm} is used for handling incoming request data and setting \code{ActionForm} values from request data.
+      \item \code{PojoForm} also handles formatting and type conversions which Struts normally does pretty poorly.
+      \item \code{PojoPlugin} is used to go the other direction which formats data being put onto the form from the Model
+    \end{itemize}
+    
+    \begin{s5notes}
+      \begin{itemize}
+      \item Discuss PojoForm is for formatting and handling incoming request data. Not for formatting outgoing data. PojoPlugin handles outgoing formatting.
+      \item \code{PojoForm} is used for handling incoming request data and setting \code{ActionForm} values from request data.
+      \item \code{PojoForm} also handles formatting and type conversions which Struts normally does pretty poorly.
+      \item \code{PojoPlugin} is used to go the other direction which formats data being put onto the form from the Model
+        \end{itemize}
     \end{s5notes}
   \end{s5slide}
 \end{ifhtml}
