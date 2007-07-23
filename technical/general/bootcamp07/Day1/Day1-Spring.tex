@@ -1,0 +1,141 @@
+\begin{ifhtml}
+  \begin{s5slide}
+    \section{Introduction to Spring}
+    \begin{itemize}
+      \item Spring is a JEE Framework
+      \item A Kuali Service
+      \item \code{SpringServiceLocator}
+      \item DAO's and Spring
+      \item Unit Testing Services
+    \end{itemize}
+
+    \begin{s5notes}
+      Thing's to go over
+      \begin{itemize}
+      \item Spring is a JEE Framework
+      \item \code{SpringServiceLocator}
+      \item DAO's and Spring
+      \item Unit testing and Services        
+      \end{itemize}
+    \end{s5notes} 
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{Spring is a JEE Framework}
+    Some time back, EJB (Entity Beans in particular) had a monopoly on JEE. EJB was synonymous with JEE. EJB's had their share of 
+    problems, and Spring addresses them in these ways.
+    \begin{itemize}
+      \item Spring is small footprint
+      \item Abstract Transaction Management Layer
+      \item Spring is an Inversion of Control Container
+      \item Dependency Injection
+    \end{itemize}
+
+    \begin{s5notes}
+      \begin{itemize}
+        \item EJB is frequently regarded as being heavy. Heavy in implementation, and in development turnaround. It has been necessary
+          even for small applications because of the Transaction Management. Spring gives transaction management for very little cost, 
+          so it becomes attractive for simpler architectures. Sure Kuali is a really huge app, but EJB still isn't right for it because
+          of the simple Domain Model architecture that Kuali is following. It is still overkill for EJB. There are other reasons that 
+          EJB is unattractive for Kuali, but we won't go into that.
+        \item EJB is very very difficult to test and debug because of the nature of RMI, and the fact that EJB is programmed to classes
+          instead of interfaces. Spring makes it much easier to program to interface through Inversion of Control.
+        \item Spring claims inversion of control by configuration of application components and lifecycle management of Java objects.
+          Really, what this means is it defines an abstraction for relating Java Objects to frameworks and libraries and manages all of
+          that for us.
+        \item Spring is also really easy to configure because of introspection and Dependency Injection. Kuali uses XML to configure 
+          services for Spring, but Spring does all of the work of introspection (determine an object's type at runtime,) and dependency 
+          discovery/validation and aggregate assignment. That's what it means by injection. That's all part of being an IoC container.
+        \item Dependency Injection is good because it's more orthogonal and modular type of development. Services can freely be 
+          developed without having to worry about requisites and dependencies.
+      \end{itemize}
+    \end{s5notes} 
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{A Kuali Service}
+    The \code{BusinessObjectService} is used to handle storing and retrieving Business Objects. As a service, it is agnostic to persistence,
+    but it does deal with persistent storage through something called the BusinessObjectDao.
+
+    \begin{s5notes}
+      \begin{itemize}
+        \item Show a simple example of a Kuali Spring Service. BusinessObjectService (show config, interface, and impl)
+      \end{itemize}
+    \end{s5notes} 
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{\code{SpringServiceLocator}}
+    ``We have Dependency Injection. Why do we need something like \code{SpringServiceLocator}?'' 
+
+    Our \MVC \ does not know anything about Spring, we have to contact Spring through a singleton. 
+
+    \begin{s5notes}
+      \begin{itemize}
+        \item ``We have Dependency Injection. Why do we need something like \code{SpringServiceLocator}?'' Our \MVC \ does not know 
+          anything about Spring, we have to contact Spring through a singleton. In most cases, Dependency Injection is used. When 
+          it can't be used, we have \code{SpringServiceLocator}.
+        \item Explore class diagram of relationships of the SpringServiceLocator
+        \item Show sequence of service discovery through the SpringServiceLocator
+      \end{itemize}
+    \end{s5notes} 
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{DAO's and Spring}
+    \begin{itemize}
+      \item DAO is (Data Access Object)
+      \item Will discuss DAO's in more detail on Day 2
+      \item DAO's are defined as ``beans'' or ``services'' in Spring configuration
+      \item DAO's are injected for use into other services (Example, DocumentDao and LookupDao.)
+    \end{itemize}
+
+    \begin{s5notes}
+      \begin{itemize}
+      \item DAO is (Data Access Object)
+      \item Will discuss DAO's in more detail on Day 2
+      \item DAO's are defined as ``beans'' or ``services'' in Spring configuration. This makes them services pretty much.
+      \item DAO's are injected for use into other services (Example, DocumentDao and LookupDao.)
+      \item It is recommended not to write unit tests for DAO's, but rather for services they are injected into
+      \end{itemize}
+    \end{s5notes} 
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{Unit Testing Services}
+    \begin{itemize}
+      \item KFS Unit Testing is of Services mostly rather than Business Objects or DAO's
+      \item Kuali and TDD
+        \begin{itemize}
+          \item Test first
+          \item red-green pattern
+          \item Unit Tests vs. Integration Tests
+        \end{itemize}
+      \item KFS has a special unit testing extension framework with annotations for testing Spring Services
+    \end{itemize}
+
+    \begin{s5notes}
+      \begin{itemize}
+      \item KFS Unit Testing is of Services mostly rather than Business Objects or DAO's, so it makes sense to talk about unit 
+        testing and services at the same time.
+      \item TDD is not a hard-and-fast requirement, it is hugely beneficial though. Most people that use it, can't imagine not 
+        using it. The basic idea is to write tests for interfaces (no implementation yet.) This gets tests to run and compile. 
+        At first, tests always fail. As you develop implementations, the tests start to pass. This is referred to as ``red-green'' 
+        because you start red and become green later.
+      \item Look at examples of services unit tests. (BusinessObjectService unit tests.)
+      \item Discuss unit tests are what we call the tests we write. Code Coverage is important. 
+      \end{itemize}
+    \end{s5notes} 
+  \end{s5slide}
+
+  \begin{s5slide}
+    \section{Spring Workshop Session}
+    \subsection{Goals}
+    \begin{enumerate}
+      \item Create and register a service that interacts with the Mock Persistance DAO
+      \item Integrate the Service into our Struts Action from the Struts Workshop
+      \item Build and run unit tests for the service.
+    \end{enumerate}
+
+  \end{s5slide}
+\end{ifhtml}
