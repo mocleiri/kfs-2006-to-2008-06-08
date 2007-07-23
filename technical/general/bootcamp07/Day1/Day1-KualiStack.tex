@@ -7,7 +7,6 @@
     \end{s5slide}
     \begin{s5slide}
         \section{What are we using?}
-        \begin{ifhtml}
             \begin{itemize}
                 \item Struts for our view layer
                 \item Spring for our dependency injection layer
@@ -30,7 +29,6 @@
                     \item Workflow
                 \end{itemize}
             \end{itemize}
-        \end{ifhtml} 
     \end{s5slide}
     \begin{s5slide}
         \section{How do these pieces fit together?}
@@ -53,11 +51,9 @@
                     \item Contains UI information as well as other data used to process documents and BOs
                 \end{itemize}
             \end{itemize}
-        \end{ifhtml} 
     \end{s5slide}
     \begin{s5slide}
         \section{Service Oriented Architecture}
-        \begin{ifhtml}
             \begin{itemize}
                 \item Kuali uses SOA to reduce inter-dependency between implementations
                 \begin{itemize}
@@ -67,11 +63,12 @@
                 \item Spring is used to control the inter-dependencies between service layers
                 \item We will review Spring more this afternoon
             \end{itemize}
-        \end{ifhtml} 
+            \begin{s5notes}
+                show some of the services and how they fit together in spring
+            \end{s5notes}
     \end{s5slide}
     \begin{s5slide}
         \section{Kuali Domain Model}
-        \begin{ifhtml}
             \begin{itemize}
                 \item Domain Model consists of:
                 \begin{itemize}
@@ -83,10 +80,21 @@
                     
                 \end{itemize}
             \end{itemize}
-        \end{ifhtml}
         \begin{s5notes}
             Show the files for the different pieces of the Domain Model
         \end{s5notes} 
     \end{s5slide}
-    
+    \begin{s5slide}
+        \section{Documents}
+            \begin{itemize}
+                \item Documents use the Domain Model (BOs)
+                \item Documents use Rules to validate data going into the Domain Models during different events (some of those validation errors bubble back up to Struts)
+                \item Documents use the Document Authorizer Services to determine what actions a specific user is allowed to perform on a particular document
+                \item Documents use the Persistence Service to persist their data (about themselves and the BOs they contain)
+            \end{itemize}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{More later}
+            While this is a high-level overview of our stack we will be covering more of these pieces in more detail (but not all of them)
+    \end{s5slide}
 \end{ifhtml}

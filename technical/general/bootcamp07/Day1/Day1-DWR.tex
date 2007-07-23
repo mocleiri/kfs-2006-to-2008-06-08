@@ -1,0 +1,177 @@
+\begin{ifhtml}
+    \begin{s5slide}
+        \section{What is DWR?}
+            \begin{itemize}
+                \item Direct Web Remoting (DWR) is:
+                \begin{itemize}
+                    \item An Ajax framework - allows you to abstract your Ajax needs beyond just an XHR request
+                    \item Java-focused - makes it easier to configure your services and beans to be called through Ajax
+                    \item Simple and easy to install and use
+                \end{itemize}
+            \end{itemize}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{What is Ajax?}
+            \begin{itemize}
+                \item Originally stood for Asynchronous JavaScript and XML
+                \item Now more of a generic term no longer an acronym
+                \begin{itemize}
+                    \item Typically encompasses the following:
+                    \begin{itemize}
+                        \item XmlHttpRequest (XHR) calls to Web servers 
+                        \item Doing something dynamic with those calls on the client
+                        \item Client-side validation (with or without XHR, but most likely with)
+                        \item Dynamic JavaScript effects (most likely combined with XHR calls)
+                    \end{itemize}
+                    \item Lumped in with the term "Web 2.0"
+                \end{itemize}
+            \end{itemize}
+            \begin{s5notes}
+                \begin{itemize}
+                    \item Originally stood for Asynchronous JavaScript and XML
+                    \item Now more of a generic term no longer an acronym
+                    \begin{itemize}
+                        \item Typically encompasses the following:
+                        \begin{itemize}
+                            \item XmlHttpRequest (XHR) calls to Web servers 
+                            \item Doing something dynamic with those calls on the client
+                            \item Client-side validation (with or without XHR, but most likely with)
+                            \item Dynamic JavaScript effects (most likely combined with XHR calls)
+                        \end{itemize}
+                        \item Lumped in with the term "Web 2.0"
+                    \end{itemize}
+                \end{itemize}
+            \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{Ajax Layers}
+            \begin{itemize}
+                \item Low level – XMLHttpRequest, IFrame (used to store and pass information w/out XMLHttpRequest)
+                \item Remoting Toolkit – DWR, JSON-RPC, dojo.io.bind(), Prototype
+                \item UI Toolkit – Dojo, SmartClient, Backbase, etc., Script.aculo.us
+                \item Ajaxian Web Frameworks – Tapestry, Rails, ASP.NET
+            \end{itemize}
+            \begin{itemize}
+                \item DWR Currently sites in-between Remoting and UI Toolkit and moving more into the UI Toolkit realm
+            \end{itemize}
+            \begin{s5notes}
+                \begin{itemize}
+                    \item Low level – XHR/iframe
+                    \item Remoting Toolkit
+                    \item UI Toolkit - Dojo/Scriptaculous
+                    \item Ajaxian Web Frameworks – Tapestry, Rails, ASP.NET
+                \end{itemize}
+                \begin{itemize}
+                    \item DWR Currently sites in-between Remoting and UI Toolkit and moving more into the UI Toolkit realm
+                \end{itemize}
+            \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{Ajax Adoption rates}
+            \begin{itemize}
+                \item Denial
+                \item Progressive Enhancement
+                \item Second Site
+                \item Accessible JavaScript
+            \end{itemize}
+            \begin{s5notes}
+                \begin{itemize}
+                    \item Denial
+                    \item Progressive Enhancement
+                    \item Second Site
+                    \item Accessible JavaScript
+                \end{itemize}
+                \begin{itemize}
+                    \item Currently KFS is in "Progressive Enhancement" - we are slowly adding new pieces here and there, but it isn't a priority for KFS
+                    \item KRA though (and Leo can speak to this) will be more Ajaxy
+                \end{itemize}
+            \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{DWR and Java}
+            \begin{itemize}
+                \item DWR is designed to be used specifically with Java (the server-side piece of it)   
+                \item But this doesn't preclude you in using DWR's client-side piece on non-Java sites
+            \end{itemize}
+            \begin{itemize}
+                \item Some neat features of DWR:
+                \begin{itemize}
+                    \item Can automatically generate the necessary JavaScript on the fly based on your configuration
+                    \item Extremely easy to control what access there is to your beans and services
+                    \item Easy to configure bean creation
+                \end{itemize}
+            \end{itemize}
+            
+        \begin{s5notes}
+            \begin{itemize}
+                \item DWR/Java link   
+                \item but can still use client-side with anything you want
+            \end{itemize}
+            \begin{itemize}
+                \item Neat features:
+                \begin{itemize}
+                    \item generates JavaScript on the fly
+                    \item Access control of beans/services
+                    \item Easy to configure bean creation
+                \end{itemize}
+                \item All of these we will get to shortly
+            \end{itemize}
+        \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{How do we use DWR in KFS?}
+            \begin{itemize}
+                \item Two easy to spot places:
+                \begin{itemize}
+                    \item User lookups
+                    \item Chart/Account lookups
+                \end{itemize}
+            \end{itemize}
+        \begin{s5notes}
+            Show a username being filled in, show an account number being filled in within a running Kuali
+        \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{What is involved with \\getting this to work?}
+            \begin{itemize}
+                \item First the actual DWR configuration
+                \item Then we have the generated JavaScript
+                \item Then we wrap that JavaScript in our own JavaScript library so we pass in the right info to it
+            \end{itemize}
+        \begin{s5notes}
+            \begin{itemize}
+                \item Show the DWR configuration file (dwr-core.xml, dwr-chart.xml)
+                \item Show the generated JavaScript for account and user stuff (AccountService, UserService)
+                \item Show our JavaScript that uses the account and user JavaScript (accountGlobal.js, objectInfo.js)
+                \item \code{param name="include"} - what parameters to 
+                
+            \end{itemize}
+        \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{Behind the scenes Spring bean creation}
+            \begin{itemize}
+                \item We have created our own \code{SpringCreator} called \code{GlobalResourceDelegatingSpringCreator} that handles our bean creation for us
+                \item Connects to our Spring context and attempts to retrieve a bean instance for us
+                \item Primarily customized to report back more helpful error messages
+            \end{itemize}
+            \begin{s5notes}
+                \begin{itemize}
+                    \item Show our GlobalResourceDelegatingSpringCreator (accountGlobal.js, objectInfo.js)
+                \end{itemize}
+            \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{Debugging DWR instance}
+            \begin{itemize}
+                \item Easy to configure (but make sure you turn it off before deploying publicly)
+                \item In our servlet context we can set a debug parameter
+            \end{itemize}
+            \begin{s5notes}
+                \begin{itemize}
+                    \item Show changing dwr-invoker to true and restarting app to see all the services available
+                    \item Demo actually looking up an account number through the web interface to test DWR
+                \end{itemize}
+            \end{s5notes}
+    \end{s5slide}
+\end{ifhtml}
