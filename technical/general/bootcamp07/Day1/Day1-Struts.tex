@@ -125,7 +125,52 @@ architecture. The Model represents the business or database code, the View repre
       \item \code{PojoForm} is used for handling incoming request data and setting \code{ActionForm} values from request data.
       \item \code{PojoForm} also handles formatting and type conversions which Struts normally does pretty poorly.
       \item \code{PojoPlugin} is used to go the other direction which formats data being put onto the form from the Model
-        \end{itemize}
+      \end{itemize}
     \end{s5notes}
   \end{s5slide}
+  
+  \begin{s5slide}
+    \section{JSP, JSTL, Custom Tags, \\ and Expression Language}
+    \begin{itemize}
+      \item JSP and JSTL specifications are part of JEE
+      \item KFS uses JSP version 2.4 and JSTL version 2.0 which is part of tomcat 5.5.x and JEE 4.0
+      \item Rice KNS uses JSP version 2.5 and JSTL version 2.1 which is part of the the latest Jetty version,
+        tomcat 6.x and JEE 5.0
+    \end{itemize}
+  \end{s5slide}
+
+  \begin{s5notes}
+    \begin{itemize}
+      \item JSP and JSTL specifications are part of JEE
+      \item KFS uses JSP version 2.4 and JSTL version 2.0 which is part of tomcat 5.5.x and JEE 4.0
+      \item Rice KNS uses JSP version 2.5 and JSTL version 2.1 which is part of the the latest Jetty version,
+        tomcat 6.x and JEE 5.0
+    \end{itemize}
+  \end{s5notes}
+
+  \begin{s5slide}
+    \section{Struts/JSP Workshop}
+    \subsection{Goals}
+    \begin{enumerate}
+      \item Create an ActionForm that uses KualiForm
+      \item Create an Action that uses KualiAction
+      \item Create a JSP
+      \item Use Session to store blog data
+      \item Use Expression Language to constrain UI
+    \end{enumerate}
+  \end{s5slide}
+
+  \begin{s5notes}
+    \begin{itemize}
+      \item Go over stuff
+    \end{itemize}
+    \begin{enumerate}
+      \item Create an ActionForm that uses KualiForm
+      \item Create an Action that uses KualiAction
+      \item Create a JSP
+      \item Use Session to store blog data
+      \item Use Expression Language to constrain UI
+    \end{enumerate}
+  \end{s5notes}
+
 \end{ifhtml}
