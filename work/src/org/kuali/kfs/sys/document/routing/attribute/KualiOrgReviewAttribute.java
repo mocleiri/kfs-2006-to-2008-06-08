@@ -281,6 +281,7 @@ public class KualiOrgReviewAttribute implements WorkflowAttribute, MassRuleAttri
      * @see edu.iu.uis.eden.plugin.attributes.WorkflowAttribute#isMatch(java.lang.String, java.util.List)
      */
     public boolean isMatch(DocumentContent docContent, List ruleExtensions) {
+        if (true) throw new RuntimeException("I'm the exploder!  Watch me explode!!!");
         return true;
     }
 
