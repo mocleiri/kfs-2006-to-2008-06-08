@@ -1,0 +1,54 @@
+\documentclass[12pt,notitlepage]{article}
+\author{Warner Onstine and Leo Przybylski}
+\usepackage{graphicx}
+\input{../../S5.tex}
+\fulltitle{Bootcamp}
+\W \subtitle{Day 2}
+
+\W \affiliation{University of Arizona}
+
+\newcommand{\Encapsulation}{\sf{\href{http://en.wikipedia.org/wiki/Information_hiding}{Encapsulation}}\rm{}}
+\newcommand{\Abstraction}{\sf{\href{http://en.wikipedia.org/wiki/Abstraction}{Abstraction}}\rm{}}
+\newcommand{\Inheritance}{\sf{\href{http://en.wikipedia.org/wiki/Inheritance_(computer_science)}{Inheritance}}\rm{}}
+\newcommand{\ObjectModel}{\sf{\href{http://en.wikipedia.org/wiki/Object_model}{Object Model}}\rm{}}
+\newcommand{\Modularity}{\sf{\href{http://en.wikipedia.org/wiki/Modularity_(programming)}{Modularity}}\rm{}}
+\newcommand{\Polymorphism}{\sf{\href{http://en.wikipedia.org/wiki/Type_polymorphism}{Polymorphism}}\rm{}}
+\newcommand{\MultiInheritance}{\sf{\href{http://en.wikipedia.org/wiki/Multiple_inheritance}{Multiple-Inheritance}}\rm{}}
+\newcommand{\Kuali}{\emph{\href{http://www.kuali.org}{Kuali}}\rm{}}
+\newcommand{\KualiFinancialSystem}{\emph{\href{http://www.kuali.org}{Kuali Financial System}}\rm{}}
+\newcommand{\KFS}{\emph{\href{http://www.kuali.org}{KFS}}}
+\newcommand{\MVC}{\emph{\href{http://en.wikipedia.org/wiki/Model-view-controller}{MVC}}}
+
+\begin{document}
+  \W \begin{s5presentation}
+  \maketitle
+    \W \begin{s5slide}
+        \W \section{Today}
+        \begin{ifhtml}
+            \begin{itemize}
+                \item Introducing the Maintenance Framework
+                \item Creating a new Maintenance document from the ground up
+            \end{itemize}
+        \end{ifhtml} 
+    \W \end{s5slide}
+\input{Day2-OJB_BOs.tex}
+\input{Day2-DataDictionary.tex}
+\input{Day2-BusinessRules.tex}
+\input{Day2-RulesObjCd.tex}
+\input{Day2-AppParamsPreRules.tex}
+
+    \W \begin{s5slide}
+        \W \section{Daily Wrap-up}
+        \begin{ifhtml}
+            \begin{itemize}
+                \item What did we learn today?
+                \begin{itemize}
+                    \item Struts application flow
+                    \item How to create a new Struts application (within the confines of KFS)
+                \end{itemize}
+            \end{itemize}
+        \end{ifhtml} 
+    \W \end{s5slide}
+    
+    \W \end{s5presentation}
+\end{document}
