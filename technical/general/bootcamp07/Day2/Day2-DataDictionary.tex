@@ -12,12 +12,37 @@
     \begin{s5slide}
         \section{What are the different elements of a DD file (BO)}
             \begin{itemize}
-                \item 
+                \item businessObject - top-level declaration (besides dictionaryEntry)
+                \item inquiry
+                    \begin{itemize}
+                        \item inquiryFields
+                    \end{itemize}
+                \item lookup
+                    \begin{itemize}
+                        \item lookupFields
+                        \item resultFields
+                    \end{itemize}
+                \item attributes
+                    \begin{itemize}
+                        \item attributeReference
+                        \item attribute
+                    \end{itemize}
             \end{itemize}
     \end{s5slide}
     \begin{s5slide}
         \section{What are the different elements of a DD file (MaintDoc)}
-            
+            \begin{itemize}
+                \item maintenanceDocument - top-level declaration for MaintDocs
+                \item businessObjectClass - class this will be maintaining
+                \item maintainableClass - class for maintaining (handles CRUD operations)
+                \item businessRulesClass & preRulesCheckClass - business rules
+                \item documentAuthorizerClass - handles authorization for this doc
+                \item documentTypeName & documentTypeCode - workflow stuff
+                \item webScriptFile - custom JavaScript for this maintainable
+                \item lockingKeys - when created this "locks" this transaction until approved
+                \item defaultExistenceChecks - basic rules checks on related objects (do they exist?)
+                \item maintainableSections - next slide
+            \end{itemize}
             \begin{s5notes}
                 Point out difference in required here and on BO file
                 For Maint docs this is actually used to create the UI
@@ -37,7 +62,7 @@
                 \item Now we are going to try our hand at creating a Maintenance Document - ObjectCode
             \end{itemize}
             \begin{s5notes}
-                Walk them through creating ObjectCodeMaintenance.xml
+                Walk through creating ObjectCodeMaintenance.xml
             \end{s5notes}
     \end{s5slide}
 \end{ifhtml}

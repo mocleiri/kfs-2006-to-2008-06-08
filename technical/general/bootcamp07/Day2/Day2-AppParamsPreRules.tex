@@ -1,92 +1,50 @@
 \begin{ifhtml}
     \begin{s5slide}
-        \section{Kuali Stack Overview}
-        \begin{ifhtml}
-            \xml{img style="align:center" src="../Diagrams/KNS-Components.png"}
-        \end{ifhtml} 
+        \section{Application Parameters}
+            There are two types of Application Parameters:
+            \begin{itemize}
+                \item Lists of values 
+                \item KualiParameterRule - whether or not a given set of values is valid
+            \end{itemize}
     \end{s5slide}
     \begin{s5slide}
-        \section{What are we using?}
-        \begin{ifhtml}
+        \section{Some Application Parameters for ObjectCode}
             \begin{itemize}
-                \item Struts for our view layer
-                \item Spring for our dependency injection layer
-                \item OJB for our ORM (Object-Relational Mapping) Layer
+                \item isLegalObjectCode - looks up illegal values from database
             \end{itemize}
-            \begin{itemize}
-                \item Our custom pieces
-                \begin{itemize}
-                    \item Service Layer (driven through Spring)
-                    \begin{itemize}
-                        \item Document Service
-                        \item Rules Service
-                        \item Document Authorizer Service
-                        \item Persistence Service
-                        \item DataDictionary Service
-                    \end{itemize}
-                    \item Documents
-                    \item Business Objects (BOs)
-                    \item Application Parameters (rules helpers - db backed rules)
-                    \item Workflow
-                \end{itemize}
-            \end{itemize}
-        \end{ifhtml} 
+            \begin{s5notes}
+                Walk through db to show what values we have
+            \end{s5notes}
     \end{s5slide}
     \begin{s5slide}
-        \section{How do these pieces fit together?}
-        \begin{ifhtml}
-            \begin{itemize}
-                \item Struts
-                \begin{itemize}
-                    \item View layer used for interaction with the user
-                    \item controls formatting of data back and forth to Web using formatters 
-                \end{itemize}
-                \item Document
-                \begin{itemize}
-                    \item Primary interaction point for dealing with the system
-                    \item Contains all the BOs that need to be persisted to the system
-                    \item Accessed through Struts using \code{KualiForm}
-                \end{itemize}
-                \item DataDictionary
-                \begin{itemize}
-                    \item Used to retrieve Metadata about documents and BOs
-                    \item Contains UI information as well as other data used to process documents and BOs
-                \end{itemize}
-            \end{itemize}
-        \end{ifhtml} 
-    \end{s5slide}
-    \begin{s5slide}
-        \section{Service Oriented Architecture}
-        \begin{ifhtml}
-            \begin{itemize}
-                \item Kuali uses SOA to reduce inter-dependency between implementations
-                \begin{itemize}
-                    \item Easier to swap out \code{DocumentAuthorizerService} with your own implementation
-                    \item Or replace the \code{RulesService} with your own custom implementation that uses non-code solutions (Drools, JESS, etc.)
-                \end{itemize}
-                \item Spring is used to control the inter-dependencies between service layers
-                \item We will review Spring more this afternoon
-            \end{itemize}
-        \end{ifhtml} 
-    \end{s5slide}
-    \begin{s5slide}
-        \section{Kuali Domain Model}
-        \begin{ifhtml}
-            \begin{itemize}
-                \item Domain Model consists of:
-                \begin{itemize}
-                    \item Business Object (\code{ObjectCode.java})
-                    \item DataDictionary file (\code{ObjectCode.xml})
-                    \item OJB Mapping for BO (\code{OJB-repository.chart.xml})
-                    \item DAO - Data Access Object (not all BOs have DAOs)
-                    \item We will cover the domain model in more detail tomorrow morning
-                    
-                \end{itemize}
-            \end{itemize}
-        \end{ifhtml}
+        \section{KualiParameterRule}
+            
         \begin{s5notes}
-            Show the files for the different pieces of the Domain Model
-        \end{s5notes} 
+            Show KualiAccountingDocumentActionBase
+        \end{s5notes}
     \end{s5slide}
-    
+    \begin{s5slide}
+        \section{When to use which?}
+            \begin{itemize}
+                \item Use ApplicationParameter when it is not business-related but more configuration (this is a new idea and hasn't fully populated yet)
+                \item Use KualiParameterRule when it is a business requirement that can be configured
+            \end{itemize}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{Pre rules}
+            Pre rules are needed for the following cases:
+            \begin{itemize}
+                \item You need to ask the user a question (ie - did you mean to use a closed account?)
+                \item You need to modify data on the form behind the scenes
+            \end{itemize}
+            Currently in KFS you cannot modify data on BOs (or documents) in rules as the entire document is deep-copied before passing in
+    \end{s5slide}
+    \begin{s5slide}
+        \section{ObjectCode PreRules}
+            Now we need to add in some PreRules for ObjectCode
+            \begin{itemize}
+                \item setting the right reports to chart of account
+                \item inactive Object Level Code - Are you sure you want to use an inactive Object Level Code
+            \end{itemize}
+    \end{s5slide}
 \end{ifhtml}
