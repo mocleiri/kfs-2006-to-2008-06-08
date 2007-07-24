@@ -6,13 +6,6 @@
           \item OJB Mapping Review
           \item BusinessObjects
           \item OJB, Spring, and DAO's ... again
-          \item \xml{u}PersistenceBroker\xml{/u} (PB or JPB, but not PBJ, PB and J, or PB'n'J)
-            \begin{itemize}
-              \item \xml{u}AccountingLineDao\xml{/u}
-              \item \xml{u}PlatformAwareDaoBase\xml{/u}
-              \item \xml{u}PersistenceBrokerTemplate\xml{/u}
-              \item \xml{u}PersistenceBrokerDaoSupport\xml{/u} 
-            \end{itemize}
         \end{itemize}
         \begin{s5notes}
         \end{s5notes}
@@ -51,6 +44,7 @@
         \item Mappings try to handle RDBMS table structure relationships and object-oriented hierarchy relationships
            at the same time. Tricky.
          \item In a Simple Domain Model, there mostly mappings for 1-to-1 table/java object.
+         \item Kuali uses the Optimistic Locking paradigm supported by OJB
       \end{itemize}
       
       \begin{s5notes}
@@ -60,25 +54,54 @@
             or multiple tables.
           \item Not advocating OJB, so much as the power of ORM's and Spring PersistenceBroker.
           \item Kuali uses the Simple Domain Model or Rich Domain Model?
+          \item OJB supports different mechanisms for locking tables, but Kuali uses optimistic locking which
+            is a software implementation. This means that it is not provided natively by the RDBMS. OJB handles 
+            optimistic locking similar to CVS (by using a version number.) The way it works is each table has a
+            ``versionNumber.'' When the record is updated, it compares version numbers. If two updates happen
+            simultaneously, they will have different version numbers. Only the transaction with the most recent
+            version number can be updated. The other transaction will be thrown out, forgotten, lost in the ether.
         \end{itemize}
       \end{s5notes}
     \end{s5slide}
 
     \begin{s5slide}
       \section{Business Objects}
+      \begin{itemize}
+        \item Commonly referred as a POJO (Plain-old Java Object)
+        \item Helper classes implemented with Rich-Domain Model and Data Mapper Java EE Design Patterns
+        \item Typically one BO per table. Inheritence and Transaction Script design pattern (DAO) used when complexity ensues
+      \end{itemize}
       \begin{s5notes}
+        \begin{itemize}
+          \item Business objects are used to help as a separation of concerns betwen granular functionality and abstract persistence layer.
+          \item Does not have to be a POJO. Can contain functionality, but Kuali uses them strictly as POJO
+          \item Talk about relationship to Domain Model
+        \end{itemize}
+        \begin{slideshow}
+        \item \thumbnail{../Diagrams/PersistableBusinessObject_class.png}{../Diagrams/PersistableBusinessObject_class-thumb.png}
+        \end{slideshow}
         \end{s5notes}
     \end{s5slide}
 
     \begin{s5slide}
       \section{OJB, Spring, and DAO's...again}
+      \subsection{\xml{u}PersistenceBroker\xml{/u} (PB or JPB, but not PBJ, PB and J, or PB'n'J)}
+      \begin{itemize}
+      \item It's responsible for Spring/OJB/DAO integration. 
+      \item Without \xml{u}PersistenceBroker\xml{u}, DAO's are just plain services.
+      \item \xml{u}AccountingLineDaoOjb\xml{/u}
+      \item \xml{u}PlatformAwareDaoBaseOjb\xml{/u}
+      \item \xml{u}PersistenceBrokerTemplate\xml{/u}
+      \item \xml{u}PersistenceBrokerDaoSupport\xml{/u} 
+      \end{itemize}
+      
+      \begin{slideshow}
+      \item \thumbnail{../Diagrams/PersistenceBroker_class.png}{../Diagrams/PersistenceBroker_class-thumb.png}
+      \end{slideshow}
+
       \begin{s5notes}
+        Persistence broker integrates Service with OJB. Show diagrams and code.
       \end{s5notes}
     \end{s5slide}
 
-    \begin{s5slide}
-      \section{\xml{u}PersistenceBroker\xml{/u}}
-      \begin{s5notes}
-      \end{s5notes}
-    \end{s5slide}
 \end{ifhtml}

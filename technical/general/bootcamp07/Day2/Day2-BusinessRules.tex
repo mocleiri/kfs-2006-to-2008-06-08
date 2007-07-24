@@ -1,8 +1,50 @@
 \begin{ifhtml}
     \begin{s5slide}
         \section{Events and Business Rules}
-
+        \begin{itemize}
+          \item How are events used in Kuali?
+          \item How are events triggered?
+          \item Different classes of events in KFS
+          \item Scenarios for new events
+          \item The \xml{u}KualiRulesService\xml{/u}
+        \end{itemize}
+        
         \begin{s5notes}
+          
+        \end{s5notes} 
+    \end{s5slide}
+
+    \begin{s5slide}
+        \section{How are events used in Kuali?}
+        \begin{itemize}
+          \item These events are strictly concerning the Kuali Nervous System 
+          \item They are the sentry for business rules execution.
+          \item Events are open-ended 
+            \begin{itemize}
+            \item Events can occur for exceptions
+            \item UI changes can result in event triggering
+            \item Workflow routing status change can trigger an event
+            \item (opposite of above) An event can trigger workflow routing of some kind
+            \end{itemize}
+        \end{itemize}
+        
+        \begin{s5notes}
+          Events triggering is responsible for business rules execution. When an event is triggered, 
+          the event framework handles the event and executes the appropriate rule for it. Even though events are triggered 
+          on some workflow routing, that does not make them ``workflow routing events.'' These are also not events for Swing/AWT.
+          
+        \end{s5notes} 
+    \end{s5slide}
+
+    \begin{s5slide}
+        \section{How are events triggered?}
+        \begin{itemize}
+          \item Events can be triggered in any class, but are always triggered in response to some user input
+          \item Event object instantiation usually occurs within the Struts \xml{u}Action\xml{/u}.
+        \end{itemize}
+        
+        \begin{s5notes}
+          When a user clicks a ``save'' button or ``add'' button, an event may be triggered for that. Let's look at some events.
         \end{s5notes} 
     \end{s5slide}
 \end{ifhtml}
