@@ -35,9 +35,9 @@
                 \item maintenanceDocument - top-level declaration for MaintDocs
                 \item businessObjectClass - class this will be maintaining
                 \item maintainableClass - class for maintaining (handles CRUD operations)
-                \item businessRulesClass & preRulesCheckClass - business rules
+                \item businessRulesClass and preRulesCheckClass - business rules
                 \item documentAuthorizerClass - handles authorization for this doc
-                \item documentTypeName & documentTypeCode - workflow stuff
+                \item documentTypeName and documentTypeCode - workflow stuff
                 \item webScriptFile - custom JavaScript for this maintainable
                 \item lockingKeys - when created this "locks" this transaction until approved
                 \item defaultExistenceChecks - basic rules checks on related objects (do they exist?)
@@ -51,7 +51,21 @@
             
     \end{s5slide}
     \begin{s5slide}
+        \section{MaintDoc DD continued}
+            \begin{itemize}
+                \item maintainableSection - sections in a document (display)
+                \item maintainableItems - items to be maintained in a section
+                \item maintainableField - the actual items to be maintained
+            \end{itemize}
+    \end{s5slide}
+    \begin{s5slide}
         \section{What are the different elements of a DD file (TransDoc)}
+            \begin{itemize}
+                \item transactionalDocument - root element
+                \item documentClass instead of maintainableClass
+                \item rest of the elements are attributes and attributeReferences
+                \item most of the MaintDoc elements are used here as well - except the maintainableSection
+            \end{itemize}
             \begin{s5notes}
                 Transactional docs do not use the majority of the DD for UI generation they do use it for validation elements (visual as well as real validation)
             \end{s5notes}
