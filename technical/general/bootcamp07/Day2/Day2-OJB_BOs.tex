@@ -1,92 +1,84 @@
 \begin{ifhtml}
     \begin{s5slide}
-        \section{Kuali Stack Overview}
-        \begin{ifhtml}
-            \xml{img style="align:center" src="../Diagrams/KNS-Components.png"}
-        \end{ifhtml} 
-    \end{s5slide}
-    \begin{s5slide}
-        \section{What are we using?}
-        \begin{ifhtml}
+        \section{OJB and Business Objects}
+        \begin{itemize}
+          \item Domain Model Review
+          \item OJB Mapping Review
+          \item BusinessObjects
+          \item OJB, Spring, and DAO's ... again
+          \item \xml{u}PersistenceBroker\xml{/u} (PB or JPB, but not PBJ, PB and J, or PB'n'J)
             \begin{itemize}
-                \item Struts for our view layer
-                \item Spring for our dependency injection layer
-                \item OJB for our ORM (Object-Relational Mapping) Layer
+              \item \xml{u}AccountingLineDao\xml{/u}
+              \item \xml{u}PlatformAwareDaoBase\xml{/u}
+              \item \xml{u}PersistenceBrokerTemplate\xml{/u}
+              \item \xml{u}PersistenceBrokerDaoSupport\xml{/u} 
             \end{itemize}
-            \begin{itemize}
-                \item Our custom pieces
-                \begin{itemize}
-                    \item Service Layer (driven through Spring)
-                    \begin{itemize}
-                        \item Document Service
-                        \item Rules Service
-                        \item Document Authorizer Service
-                        \item Persistence Service
-                        \item DataDictionary Service
-                    \end{itemize}
-                    \item Documents
-                    \item Business Objects (BOs)
-                    \item Application Parameters (rules helpers - db backed rules)
-                    \item Workflow
-                \end{itemize}
-            \end{itemize}
-        \end{ifhtml} 
-    \end{s5slide}
-    \begin{s5slide}
-        \section{How do these pieces fit together?}
-        \begin{ifhtml}
-            \begin{itemize}
-                \item Struts
-                \begin{itemize}
-                    \item View layer used for interaction with the user
-                    \item controls formatting of data back and forth to Web using formatters 
-                \end{itemize}
-                \item Document
-                \begin{itemize}
-                    \item Primary interaction point for dealing with the system
-                    \item Contains all the BOs that need to be persisted to the system
-                    \item Accessed through Struts using \code{KualiForm}
-                \end{itemize}
-                \item DataDictionary
-                \begin{itemize}
-                    \item Used to retrieve Metadata about documents and BOs
-                    \item Contains UI information as well as other data used to process documents and BOs
-                \end{itemize}
-            \end{itemize}
-        \end{ifhtml} 
-    \end{s5slide}
-    \begin{s5slide}
-        \section{Service Oriented Architecture}
-        \begin{ifhtml}
-            \begin{itemize}
-                \item Kuali uses SOA to reduce inter-dependency between implementations
-                \begin{itemize}
-                    \item Easier to swap out \code{DocumentAuthorizerService} with your own implementation
-                    \item Or replace the \code{RulesService} with your own custom implementation that uses non-code solutions (Drools, JESS, etc.)
-                \end{itemize}
-                \item Spring is used to control the inter-dependencies between service layers
-                \item We will review Spring more this afternoon
-            \end{itemize}
-        \end{ifhtml} 
-    \end{s5slide}
-    \begin{s5slide}
-        \section{Kuali Domain Model}
-        \begin{ifhtml}
-            \begin{itemize}
-                \item Domain Model consists of:
-                \begin{itemize}
-                    \item Business Object (\code{ObjectCode.java})
-                    \item DataDictionary file (\code{ObjectCode.xml})
-                    \item OJB Mapping for BO (\code{OJB-repository.chart.xml})
-                    \item DAO - Data Access Object (not all BOs have DAOs)
-                    \item We will cover the domain model in more detail tomorrow morning
-                    
-                \end{itemize}
-            \end{itemize}
-        \end{ifhtml}
+        \end{itemize}
         \begin{s5notes}
-            Show the files for the different pieces of the Domain Model
-        \end{s5notes} 
+        \end{s5notes}
     \end{s5slide}
     
+    \begin{s5slide}
+      \section{Domain Model Review}
+      \begin{itemize}
+        \item Two distinctions (Rich and Simple) Domain Models
+        \item Domain Model represents an architecture where business objects and business rules are 
+          abstracted from functionality and persistence layers
+        \item Kuali uses Spring to create a service layer to act as interfaces to business objects and
+          rules
+        \item Kuali uses OJB to represent an abstraction of the persistence layer
+        \item Kuali uses something called a \xml{u}PersistenceBroker\xml{/u} for the service layer to
+          contact the persistence layer
+      \end{itemize}
+      \begin{s5notes}
+        \begin{itemize}
+        \item Two distinctions (Rich and Simple) Domain Models
+        \item Domain Model represents an architecture where business objects and business rules are 
+          abstracted from functionality and persistence layers
+        \item Kuali uses Spring to create a service layer to act as interfaces to business objects and
+          rules
+        \item Kuali uses OJB to represent an abstraction of the persistence layer
+        \item Kuali uses something called a \xml{u}PersistenceBroker\xml{/u} for the service layer to
+          contact the persistence layer
+        \end{itemize}
+      \end{s5notes}
+    \end{s5slide}
+
+    \begin{s5slide}
+      \section {OJB Mapping Review}
+      \begin{itemize}
+        \item Like Spring and JUnit, supports programming to interface.
+        \item Mappings try to handle RDBMS table structure relationships and object-oriented hierarchy relationships
+           at the same time. Tricky.
+         \item In a Simple Domain Model, there mostly mappings for 1-to-1 table/java object.
+      \end{itemize}
+      
+      \begin{s5notes}
+        \begin{itemize}
+          \item OJB allows interface mappings. This means that a table can be mapped to a Java interface.
+          \item OJB can handle inheritence. That means more than one class/interface using the same table, 
+            or multiple tables.
+          \item Not advocating OJB, so much as the power of ORM's and Spring PersistenceBroker.
+          \item Kuali uses the Simple Domain Model or Rich Domain Model?
+        \end{itemize}
+      \end{s5notes}
+    \end{s5slide}
+
+    \begin{s5slide}
+      \section{Business Objects}
+      \begin{s5notes}
+        \end{s5notes}
+    \end{s5slide}
+
+    \begin{s5slide}
+      \section{OJB, Spring, and DAO's...again}
+      \begin{s5notes}
+      \end{s5notes}
+    \end{s5slide}
+
+    \begin{s5slide}
+      \section{\xml{u}PersistenceBroker\xml{/u}}
+      \begin{s5notes}
+      \end{s5notes}
+    \end{s5slide}
 \end{ifhtml}
