@@ -22,7 +22,45 @@
 \begin{document}
   \W \begin{s5presentation}
   \maketitle
+
+\begin{ifhtml}
+    \begin{s5slide}
+      \section{Today's Agenda}
+      \begin{enumerate}
+        \item \xml{u}TransactionalDocument\xml{/u} Overview
+        \item \xml{u}TransactionalDocument\xml{/u} Workshop
+          \begin{itemize}
+            \item Add new components to the InternalBillingDocument
+            \item Add new events for the InternalBillingDocument
+            \item Add new rules for the InternalBillingDocument
+            \item Write some unit tests
+          \end{itemize}
+          \item Lookup Framework
+          \item More DWR
+          \item Wrap up
+      \end{enumerate}
+    \end{s5slide}
+\end{ifhtml}  
+
+  \input{Day3-TransactionalDocumentOverview.tex}
+
+\begin{ifhtml}
+  \begin{s5slide}
+    \section{Break}
+    \[\subsection{Time for a Break}\]
+  \end{s5slide}
+\end{ifhtml}
+
+  \input{Day3-TransactionalDocumentWorkshop.tex}
   \input{Day3-Lookup.tex}
+\begin{ifhtml}
+  \begin{s5slide}
+    \section{Lunch}
+    \[\subsection{I'm Hungry}\]
+  \end{s5slide}
+\end{ifhtml}
+
+\input{Day3-DWR.tex}
   
   \W \end{s5presentation}
 \end{document}

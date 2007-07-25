@@ -1,0 +1,71 @@
+\begin{ifhtml}
+    \begin{s5slide}
+      \section{\xml{u}TransactionalDocument\xml{/u} Overview}
+      \begin{itemize}
+      \item Your Basic Kuali Document Hierarchy
+      \item Accounting lines
+      \end{itemize}
+      
+      \begin{s5notes}
+        
+      \end{s5notes}
+    \end{s5slide}
+    
+    \begin{s5slide}
+      \section{Document Hierarchy}
+      \begin{itemize}
+      \item Two basic types of documents that extend \xml{u}DocumentBase\xml{/u}
+      \item Nothing extends \xml{u}MaintenanceDocument\xml{/u}
+      \item \xml{u}AccountingDocumentBase\xml{/u} is a KFS document
+      \item Parallel Hierarchies that exist in KFS for shotgun surgeons
+      \item Known sources of Parallel Hierarchies in KFS
+        \begin{itemize}
+        \item Struts (Action and ActionForm or KualiAction and KualiForm) and JSPs
+        \item AccountingLines (Source and Target AccountingLines
+        \item Business Rules
+        \item Document Authorizer
+        \end{itemize}
+      \end{itemize}      
+
+      \begin{slideshow}
+      \item \thumbnail{../Diagrams/DocumentHierarchy_class.png}{../Diagrams/DocumentHierarchy_class-thumb.png}      
+      \item \thumbnail{../Diagrams/ExtendedHierarchy_class.png}{../Diagrams/ExtendedDocumentHierarchy_class-thumb.png}      
+      \end{slideshow}
+    \end{s5slide}
+
+    \begin{s5slide}
+      \section{KFS \xml{u}AccountingDocument\xml{/u}\\
+        Struts Hierarchy}
+      \begin{itemize}
+        \item Follows the normal Kuali Document Hierarchy
+        \item Needs an Action and ActionForm class that inherits from
+          Kuali TransactionalDocumentFormBase and KualiTransactionalDocumentActionBase classes
+        \item All roads lead back to PojoFormBase and Action
+        \end{itemize}
+      \begin{slideshow}
+      \item \thumbnail{../Diagrams/KualiStrutsHierarchy_class.png}{../Diagrams/KualiStrutsHierarchy_class-thumb.png}
+      \item \thumbnail{../Diagrams/AccountingDocumentStruts_class.png}{../Diagrams/AccountingDocumentStruts_class-thumb.png}
+      \item \thumbnail{../Diagrams/StrutsDocument_class.png}{../Diagrams/StrutsDocument_class-thumb.png}
+      \end{slideshow}
+      \begin{itemize}
+      \end{itemize}
+    \end{s5slide}
+
+    \begin{s5slide}
+      \section{\xml{u}TransactionalDocumentBase\xml{/u}\\
+        Hierarchy}
+      \begin{itemize}
+        \item TransactionalDocumentBase is extended, but MaintenanceDocument is never extended
+        \item Most commonly extended document in KFS is AccountingDocumentBase
+        \item AccountingDocumentBase is a TransactionalDocument
+        \item AccountingDocuments have AccountingLines
+        \item TransactionalDocumentRuleBase for Business Rules and Struts follow similar hierarchies
+      \end{itemize}
+      
+      \begin{slideshow}
+      \item \thumbnail{../Diagrams/DocumentHierarchy_class.png}{../Diagrams/DocumentHierarchy_class-thumb.png}
+      \item \thumbnail{../Diagrams/ExtendedDocumentHierarchy_class.png}{../Diagrams/ExtendedDocumentHierarchy_class-thumb.png}
+      \end{slideshow}
+    \end{s5slide}
+
+\end{ifhtml}
