@@ -1,0 +1,71 @@
+\begin{ifhtml}
+    \begin{s5slide}
+        \section{What is the Lookup Framework?}
+            \begin{itemize}
+                \item Allows users to look up Business Objects (defined in DD files) from:
+                \begin{itemize}
+                    \item Maintenance Documents
+                    \item Transactional Documents
+                    \item Lookup screens
+                    \item Just about anywhere in Kuali, given the right configuration
+                \end{itemize}
+                \item These BOs values (primary keys) are then passed back to the document the user was working on
+            \end{itemize}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{How does the Lookup Framework work?}
+        Alot of it is automatic, but can require some setup
+            \begin{itemize}
+                \item Not all BOs are lookupable
+                \begin{itemize}
+                    \item If they aren't defined through DD then you won't be able to look them up
+                    \item If you don't have references for all of the keys then you can't look them up (no place to store primary key data)
+                \end{itemize}
+                \item To determine if a BO reference is lookupable KFS must be able to:
+                \begin{itemize}
+                    \item First, find its entry in the DD
+                    \item Second, are lookups turned off for this BO?
+                    \item Finally, make sure that all the primary keys match and are storable
+                \end{itemize}
+            \end{itemize}
+            \begin{s5notes}
+                Walk through some of the code for determining Lookupability
+            \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{Once it determines it can\\ be looked up what happens?}
+            \begin{itemize}
+                \item There are two sides to every lookup:
+                \begin{itemize}
+                    \item Document doing the lookup
+                    \item The return (values being returned)
+                \end{itemize}
+                \item Since KFS is mostly URL driven (not much stored in the session) we transform the request and return into the URL of the Lookup itself
+            \end{itemize}
+            \begin{s5notes}
+                Show the HTML code for a common lookup
+            \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{What if I want to\\ return multiple values?}
+            \begin{itemize}
+                \item Multiple value lookups are used on Globals (remember we mentioned those briefly?)
+                \begin{itemize}
+                    \item Globals operate on many BOs at once and you need an easy way for users to select multiple items at once to return to the Global document
+                \end{itemize}
+                \item So, the Lookup will then take those temporary (selected) values and put them into a temporary space in the database until the user returns to the originating document
+                \item But the same principle of Lookups is still the same
+            \end{itemize}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{Introducing BusinessObjectMetaDataService}
+            This class helps us with the MetaData of a BO class (including information from the DD as well as OJB).
+            \begin{s5notes}
+                show BOMDServiceImpl
+            \end{s5notes}
+    \end{s5slide}
+    \begin{s5slide}
+        \section{Leo's stuff on Inquiry}
+            
+    \end{s5slide}
+\end{ifhtml}
