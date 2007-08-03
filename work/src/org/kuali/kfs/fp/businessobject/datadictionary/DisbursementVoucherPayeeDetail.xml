@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
      "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
@@ -21,15 +6,13 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail">
 
-
-        
-        <titleAttribute>dvPayeeDetail</titleAttribute>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
 
             <attributeReference name="disbVchrPaymentReasonCode" sourceClassName="org.kuali.module.financial.bo.PaymentReasonCode" sourceAttributeName="code">
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.PaymentReasonValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.PaymentReasonValuesFinder" />
                 </control>
                 <description>The description of the reason for the document Payment. Select one from the pulldown list.</description>
             </attributeReference>
@@ -47,23 +30,25 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.PayeeTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.PayeeTypeValuesFinder" />
                 </control>
 
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>
-                    The type of payee for searching.  Either of 1) DV Payee: a payee established using the Payee document, or 2) Employee: a payee identified as an employee by information fed into the KFS from some another source.
+                    <![CDATA[&nbsp;]]>
                 </description>
             </attribute>
 
             <attributeReference name="disbVchrPayeePersonName" sourceClassName="org.kuali.module.financial.bo.Payee" sourceAttributeName="payeePersonName">
+                <required>true</required>
                 <description>Full name of document Payee, expressed as "Lastname, Firstname Initial"</description>
 
             </attributeReference>
 
             <attributeReference name="disbVchrPayeeLine1Addr" sourceClassName="org.kuali.module.financial.bo.Payee" sourceAttributeName="payeeLine1Addr">
+                <required>true</required>
                 <description>First address line of Payee.</description>
 
             </attributeReference>
@@ -89,6 +74,7 @@
             </attributeReference>
 
             <attributeReference name="disbVchrPayeeCountryCode" sourceClassName="org.kuali.module.financial.bo.Payee" sourceAttributeName="payeeCountryCode">
+                <required>true</required>
                 <description>The name of the Country of the Payee. Select one from the pulldown list.</description>
 
             </attributeReference>
@@ -96,7 +82,6 @@
             <attributeReference name="disbVchrRemitPersonName" sourceClassName="org.kuali.module.financial.bo.Payee" sourceAttributeName="payeePersonName">
                 <label>Remit Name</label>
                 <shortLabel>Remit Nm</shortLabel>
-                <required>false</required>
 
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -107,7 +92,6 @@
             <attributeReference name="disbVchrRemitLine1Addr" sourceClassName="org.kuali.module.financial.bo.Payee" sourceAttributeName="payeeLine1Addr">
                 <label>Remit Address 1</label>
                 <shortLabel>Remit Addr 1</shortLabel>
-                <required>false</required>
 
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -159,7 +143,6 @@
             <attributeReference name="disbVchrRemitCountryCode" sourceClassName="org.kuali.module.financial.bo.Payee" sourceAttributeName="payeeCountryCode">
                 <label>Remit Country</label>
                 <shortLabel>Remit Cntry</shortLabel>
-                <required>false</required>
 
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -173,6 +156,5 @@
 
             <attributeReference name="disbVchrAlienPaymentCode" sourceClassName="org.kuali.module.financial.bo.Payee" sourceAttributeName="alienPaymentCode" />
         </attributes>
-        <objectLabel>DV Payee Detail</objectLabel>
     </businessObject>
 </dictionaryEntry>
