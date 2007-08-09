@@ -68,7 +68,7 @@
         <dia:point val="3,10"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.95,9.95;10.3675,12.05"/>
+        <dia:rectangle val="2.95,9.95;10.3675,12.25"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="3,10"/>
@@ -77,7 +77,7 @@
         <dia:real val="7.3174999999999999"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="2"/>
+        <dia:real val="2.2000000000000002"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$EPS_PROPOSAL#</dia:string>
@@ -146,13 +146,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -199,7 +199,7 @@
         <dia:point val="16,10"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.95,9.95;24.6,12.65"/>
+        <dia:rectangle val="15.95,9.95;24.6,13.05"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="16,10"/>
@@ -208,7 +208,7 @@
         <dia:real val="8.5500000000000007"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="2.6000000000000005"/>
+        <dia:real val="3"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$EPS_PROP_PERSON#</dia:string>
@@ -277,13 +277,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -353,7 +353,7 @@
         <dia:point val="10.3175,10.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.2675,9.85;16.75,11.5175"/>
+        <dia:rectangle val="10.2675,9.8;16.75,11.5175"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="10.3175,10.6"/>
@@ -421,7 +421,7 @@
         <dia:point val="7,18"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.95,17.95;16.315,21.25"/>
+        <dia:rectangle val="6.95,17.95;16.315,21.85"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="7,18"/>
@@ -430,7 +430,7 @@
         <dia:real val="9.2650000000000006"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="3.2000000000000002"/>
+        <dia:real val="3.8000000000000003"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$EPS_PROP_PERS_YNQ#</dia:string>
@@ -499,13 +499,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -598,7 +598,7 @@
         <dia:point val="15,3"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.95,2.95;25.05,6.25"/>
+        <dia:rectangle val="14.95,2.95;25.05,6.85"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="15,3"/>
@@ -607,7 +607,7 @@
         <dia:real val="10"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="3.2000000000000002"/>
+        <dia:real val="3.8000000000000003"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$EPS_PROP_PERSON_BIO#</dia:string>
@@ -676,13 +676,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -775,7 +775,7 @@
         <dia:point val="9,-4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="8.95,-4.05;20.65,-0.75"/>
+        <dia:rectangle val="8.95,-4.05;20.65,-0.15"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="9,-4"/>
@@ -784,7 +784,7 @@
         <dia:real val="11.6"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="3.2000000000000002"/>
+        <dia:real val="3.8000000000000003"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$EPS_PROP_PERSON_BIO_PDF#</dia:string>
@@ -853,13 +853,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -952,7 +952,7 @@
         <dia:point val="17,18"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="16.95,17.95;28.4925,21.25"/>
+        <dia:rectangle val="16.95,17.95;28.4925,21.85"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="17,18"/>
@@ -961,7 +961,7 @@
         <dia:real val="11.442500000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="3.2000000000000002"/>
+        <dia:real val="3.8000000000000003"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$EPS_PROP_PERSON_DEGREE#</dia:string>
@@ -1030,13 +1030,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -1129,16 +1129,16 @@
         <dia:point val="-1,18"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-1.05,17.95;2.7025,20.05"/>
+        <dia:rectangle val="-1.05,17.95;3.75,20.25"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-1,18"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="3.6524999999999999"/>
+        <dia:real val="4.7000000000000002"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="2"/>
+        <dia:real val="2.2000000000000002"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$YNQ#</dia:string>
@@ -1207,13 +1207,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -1257,14 +1257,14 @@
     </dia:object>
     <dia:object type="UML - Association" version="1" id="O8">
       <dia:attribute name="obj_pos">
-        <dia:point val="2.6525,18.6"/>
+        <dia:point val="3.7,18.6"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="2.6525,17.9175;7.07071,19.5175"/>
+        <dia:rectangle val="3.7,17.8;7.07071,19.5175"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="2.6525,18.6"/>
-        <dia:point val="2.6525,18.6"/>
+        <dia:point val="3.7,18.6"/>
+        <dia:point val="3.7,18.6"/>
         <dia:point val="7,18.6"/>
         <dia:point val="7,18.6"/>
       </dia:attribute>
@@ -1328,7 +1328,7 @@
         <dia:point val="28,11"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="27.95,10.95;35.0875,13.05"/>
+        <dia:rectangle val="27.95,10.95;35.0875,13.25"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="28,11"/>
@@ -1337,7 +1337,7 @@
         <dia:real val="7.0374999999999996"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="2"/>
+        <dia:real val="2.2000000000000002"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$SCHOOL_CODE#</dia:string>
@@ -1406,13 +1406,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -1456,19 +1456,19 @@
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O10">
       <dia:attribute name="obj_pos">
-        <dia:point val="19,27"/>
+        <dia:point val="19,25"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.95,26.95;25.835,29.05"/>
+        <dia:rectangle val="18.95,24.95;25.835,27.25"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="19,27"/>
+        <dia:point val="19,25"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="6.7850000000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="2"/>
+        <dia:real val="2.2000000000000002"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$DEGREE_TYPE#</dia:string>
@@ -1537,13 +1537,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -1587,15 +1587,15 @@
     </dia:object>
     <dia:object type="UML - Association" version="1" id="O11">
       <dia:attribute name="obj_pos">
-        <dia:point val="14.8,-0.8"/>
+        <dia:point val="14.8,-0.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.75,-0.85;20.9,3.8"/>
+        <dia:rectangle val="14.75,-0.25;20.9,3.8"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="14.8,-0.8"/>
-        <dia:point val="14.8,1.1"/>
-        <dia:point val="20,1.1"/>
+        <dia:point val="14.8,-0.2"/>
+        <dia:point val="14.8,1.4"/>
+        <dia:point val="20,1.4"/>
         <dia:point val="20,3"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
@@ -1658,7 +1658,7 @@
         <dia:point val="22,-4"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.95,-4.05;35.0025,-0.75"/>
+        <dia:rectangle val="21.95,-4.05;35.0025,-0.15"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="22,-4"/>
@@ -1667,7 +1667,7 @@
         <dia:real val="12.952500000000001"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="3.2000000000000002"/>
+        <dia:real val="3.8000000000000003"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#OSP$EPS_PROP_PERSON_BIO_SOURCE#</dia:string>
@@ -1736,13 +1736,13 @@
         <dia:font family="sans" style="8" name="Helvetica-Oblique"/>
       </dia:attribute>
       <dia:attribute name="normal_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="polymorphic_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="abstract_font_height">
-        <dia:real val="0.60000000000000009"/>
+        <dia:real val="0.80000000000000004"/>
       </dia:attribute>
       <dia:attribute name="classname_font_height">
         <dia:real val="0.80000000000000004"/>
@@ -1832,13 +1832,13 @@
     </dia:object>
     <dia:object type="UML - Association" version="1" id="O13">
       <dia:attribute name="obj_pos">
-        <dia:point val="31.5188,13"/>
+        <dia:point val="31.5188,13.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="27.6925,12.95;32.0688,19.5175"/>
+        <dia:rectangle val="27.6925,13.15;32.0688,19.5175"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="31.5188,13"/>
+        <dia:point val="31.5188,13.2"/>
         <dia:point val="31.5188,18.6"/>
         <dia:point val="28.4425,18.6"/>
       </dia:attribute>
@@ -1898,16 +1898,16 @@
     </dia:object>
     <dia:object type="UML - Association" version="1" id="O14">
       <dia:attribute name="obj_pos">
-        <dia:point val="22.3925,27"/>
+        <dia:point val="22.3925,25"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="21.9713,20.45;23.6212,27.8"/>
+        <dia:rectangle val="21.9713,21.05;23.6212,25.8"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="22.3925,27"/>
-        <dia:point val="22.3925,24.1"/>
-        <dia:point val="22.7213,24.1"/>
-        <dia:point val="22.7213,21.2"/>
+        <dia:point val="22.3925,25"/>
+        <dia:point val="22.3925,23.4"/>
+        <dia:point val="22.7213,23.4"/>
+        <dia:point val="22.7213,21.8"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -1969,13 +1969,13 @@
         <dia:point val="22.7213,18"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="19.525,11.85;23.2713,18.8"/>
+        <dia:rectangle val="19.525,12.25;23.2713,18.8"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="22.7213,18"/>
-        <dia:point val="22.7213,15.3"/>
-        <dia:point val="20.275,15.3"/>
-        <dia:point val="20.275,12.6"/>
+        <dia:point val="22.7213,15.5"/>
+        <dia:point val="20.275,15.5"/>
+        <dia:point val="20.275,13"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -2034,13 +2034,13 @@
     </dia:object>
     <dia:object type="UML - Association" version="1" id="O16">
       <dia:attribute name="obj_pos">
-        <dia:point val="20,6.2"/>
+        <dia:point val="20,6.8"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="19.525,6.15;21.175,10.8"/>
+        <dia:rectangle val="19.525,6.75;21.175,10.8"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="20,6.2"/>
+        <dia:point val="20,6.8"/>
         <dia:point val="20,8"/>
         <dia:point val="20.275,8"/>
         <dia:point val="20.275,10"/>
@@ -2102,13 +2102,13 @@
     </dia:object>
     <dia:object type="UML - Association" version="1" id="O17">
       <dia:attribute name="obj_pos">
-        <dia:point val="28.4763,-0.8"/>
+        <dia:point val="28.4763,-0.2"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.25,-0.85;29.0263,4.5175"/>
+        <dia:rectangle val="24.25,-0.25;29.0263,4.5175"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="28.4763,-0.8"/>
+        <dia:point val="28.4763,-0.2"/>
         <dia:point val="28.4763,3.6"/>
         <dia:point val="25,3.6"/>
       </dia:attribute>
@@ -2171,12 +2171,12 @@
         <dia:point val="11.6325,18"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="11.5825,11.45;16.75,18.8"/>
+        <dia:rectangle val="11.5825,11.7;16.75,18.8"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="11.6325,18"/>
-        <dia:point val="11.6325,12.2"/>
-        <dia:point val="16,12.2"/>
+        <dia:point val="11.6325,12.5"/>
+        <dia:point val="16,12.5"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
