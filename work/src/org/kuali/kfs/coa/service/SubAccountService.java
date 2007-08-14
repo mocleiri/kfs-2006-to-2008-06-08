@@ -15,8 +15,6 @@
  */
 package org.kuali.module.chart.service;
 
-import java.util.List;
-
 import org.kuali.module.chart.bo.SubAccount;
 
 /**
@@ -35,21 +33,4 @@ public interface SubAccountService {
      * @see SubAccountService
      */
     public SubAccount getByPrimaryId(String chartOfAccountsCode, String accountNumber, String subAccountNumber);
-    
-    /**
-     * Method is used by KualiSubAccountAttribute to enable caching for routing.
-     * 
-     * @see SubAccountService#getByPrimaryId(String, String, String)
-     */
-    public SubAccount getByPrimaryIdWithCaching(String chartOfAccountsCode, String accountNumber, String subAccountNumber);
-
-    /**
-     * Retrieves SubAccount objects associated with the given chart-org-subAccount code combination
-     * 
-     * @param chartOfAccountsCode - 'Reports To' Chart of Accounts Code
-     * @param organizationCode - 'Reports To' Organization Code
-     * @param subAccountNumber - Sub Account Number
-     * @return a list of SubAccount objects
-     */
-    public List getSubAccountsByReportsToOrganization(String chartOfAccountsCode, String organizationCode, String subAccountNumber);
 }

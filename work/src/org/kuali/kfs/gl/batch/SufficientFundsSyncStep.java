@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,24 @@
  */
 package org.kuali.module.gl.batch;
 
-import org.kuali.kfs.batch.AbstractStep;
+import org.kuali.core.batch.Step;
 import org.kuali.module.gl.service.SufficientFundsSyncService;
 
-public class SufficientFundsSyncStep extends AbstractStep {
+public class SufficientFundsSyncStep implements Step {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundsSyncStep.class);
+
     private SufficientFundsSyncService sufficientFundsSyncService;
 
-    public boolean execute(String jobName) {
+    public boolean performStep() {
+        LOG.debug("performStep() started");
+
         sufficientFundsSyncService.syncSufficientFunds();
+
         return true;
+    }
+
+    public String getName() {
+        return "Sufficient Funds Synchronization";
     }
 
     public void setSufficientFundsSyncService(SufficientFundsSyncService sfss) {

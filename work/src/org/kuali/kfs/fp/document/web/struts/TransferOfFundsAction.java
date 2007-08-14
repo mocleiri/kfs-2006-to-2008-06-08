@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,14 @@
  */
 package org.kuali.module.financial.web.struts.action;
 
-import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
-
+import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 
 /**
  * This class extends the parent KualiTransactionalDocumentActionBase class, which contains all common action methods. Since the TOF
  * follows the basic transactional document pattern, there are no specific actions that it has to implement; however, this empty
  * class is necessary for integrating into the framework.
+ * 
+ * 
  */
-public class TransferOfFundsAction extends KualiAccountingDocumentActionBase {
+public class TransferOfFundsAction extends KualiTransactionalDocumentActionBase {
 }

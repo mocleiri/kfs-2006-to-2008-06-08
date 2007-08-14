@@ -17,20 +17,17 @@ package org.kuali.module.financial.service;
 
 
 /**
- * Provides methods to load batch files for the procurement card batch job.
+ * Service interface provides methods to load procurment card data.
+ * 
+ * 
  */
 public interface ProcurementCardLoadTransactionsService {
 
     /**
-     * Validates and parses the file identified by the given files name. If successful, parsed entries are stored.
+     * Looks for an procurement card input file, if found will load the data, validate the data, and then load into the transaction
+     * table.
      * 
-     * @param fileNaem - name of file to process
      * @return boolean indicating if the load was successful
      */
-    public boolean loadProcurementCardFile(String fileName);
-    
-    /**
-     * Clears out temporary transaction table.
-     */
-    public void cleanTransactionsTable();
+    public boolean loadProcurementCardDataFile();
 }

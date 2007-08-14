@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 package org.kuali.test.monitor;
 
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.core.workflow.service.WorkflowDocumentService;
-import org.kuali.kfs.context.SpringContext;
 
 import edu.iu.uis.eden.EdenConstants;
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -26,10 +25,10 @@ import edu.iu.uis.eden.exception.WorkflowException;
 public class DocumentWorkflowRequestMonitor extends ChangeMonitor {
 
     private final Long docHeaderId;
-    private final UniversalUser user;
+    private final KualiUser user;
     private final String actionRequestedCode;
 
-    public DocumentWorkflowRequestMonitor(Long docHeaderId, UniversalUser user, String actionRequestedCode) {
+    public DocumentWorkflowRequestMonitor(Long docHeaderId, KualiUser user, String actionRequestedCode) {
         this.docHeaderId = docHeaderId;
         this.user = user;
         this.actionRequestedCode = actionRequestedCode;
@@ -38,7 +37,7 @@ public class DocumentWorkflowRequestMonitor extends ChangeMonitor {
     public boolean valueChanged()
         throws WorkflowException
     {
-        KualiWorkflowDocument document = SpringContext.getBean(WorkflowDocumentService.class).createWorkflowDocument(docHeaderId, user);
+        KualiWorkflowDocument document = SpringServiceLocator.getWorkflowDocumentService().createWorkflowDocument(docHeaderId, user);
         if (EdenConstants.ACTION_REQUEST_COMPLETE_REQ.equals(actionRequestedCode)) {
             return document.isCompletionRequested();
         }

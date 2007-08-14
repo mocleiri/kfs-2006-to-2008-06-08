@@ -15,10 +15,10 @@
  */
 package org.kuali.module.chart.service;
 
-import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.dao.ProjectCodeDao;
 import org.kuali.module.chart.service.impl.ProjectCodeServiceImpl;
+import org.kuali.test.KualiTestBase;
 
 /**
  * This class tests the ProjectCode service.
@@ -31,7 +31,6 @@ public class ProjectCodeServiceTest extends KualiTestBase {
     private FakeProjectCodeDao projectCodeDao;
     private ProjectCodeServiceImpl projectCodeService;
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

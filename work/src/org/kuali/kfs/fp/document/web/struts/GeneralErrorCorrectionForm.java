@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,15 @@
  */
 package org.kuali.module.financial.web.struts.form;
 
-import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.financial.document.GeneralErrorCorrectionDocument;
 
 /**
  * This class is the Struts specific form object that works in conjunction with the pojo utilities to build the UI.
+ * 
+ * 
  */
-public class GeneralErrorCorrectionForm extends KualiAccountingDocumentFormBase {
+public class GeneralErrorCorrectionForm extends KualiTransactionalDocumentFormBase {
     private static final long serialVersionUID = 1L;
 
     /**

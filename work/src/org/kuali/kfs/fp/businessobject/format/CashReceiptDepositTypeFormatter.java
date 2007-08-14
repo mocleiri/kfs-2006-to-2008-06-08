@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 package org.kuali.module.financial.web.struts.form;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.Formatter;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
 
 public class CashReceiptDepositTypeFormatter extends Formatter {
     private final String INTERIM_CD;
@@ -30,11 +29,11 @@ public class CashReceiptDepositTypeFormatter extends Formatter {
     private final String FINAL_MSG;
 
     public CashReceiptDepositTypeFormatter() {
-        INTERIM_CD = KFSConstants.DepositConstants.DEPOSIT_TYPE_INTERIM;
-        INTERIM_MSG = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSKeyConstants.Deposit.DEPOSIT_TYPE_INTERIM);
+        INTERIM_CD = Constants.DepositConstants.DEPOSIT_TYPE_INTERIM;
+        INTERIM_MSG = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.Deposit.DEPOSIT_TYPE_INTERIM);
 
-        FINAL_CD = KFSConstants.DepositConstants.DEPOSIT_TYPE_FINAL;
-        FINAL_MSG = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSKeyConstants.Deposit.DEPOSIT_TYPE_FINAL);
+        FINAL_CD = Constants.DepositConstants.DEPOSIT_TYPE_FINAL;
+        FINAL_MSG = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.Deposit.DEPOSIT_TYPE_FINAL);
     }
 
 

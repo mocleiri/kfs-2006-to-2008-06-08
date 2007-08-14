@@ -20,6 +20,8 @@ import java.util.Collection;
 import org.kuali.module.gl.bo.OriginEntrySource;
 
 /**
+ *  
+ * @version $Id: OriginEntrySourceDao.java,v 1.2.8.4 2007-02-10 11:37:33 j2eemgr Exp $
  * 
  */
 

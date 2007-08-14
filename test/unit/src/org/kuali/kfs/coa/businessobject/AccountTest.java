@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,39 +15,46 @@
  */
 package org.kuali.module.chart.bo;
 
-import static org.kuali.kfs.util.SpringServiceLocator.getDateTimeService;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.test.ConfigureContext;
+import org.kuali.core.service.DateTimeService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class...
  * 
  * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class AccountTest extends KualiTestBase {
 
-    private static final String TEST_DATE_1_TODAY = "04/22/2002 07:48 PM";
-    private static final String TEST_DATE_1_YESTERDAY = "04/21/2002 07:48 PM";
-    private static final String TEST_DATE_1_TOMORROW = "04/23/2002 07:48 PM";
+    private static final String TEST_DATE_1_TODAY = "2002-04-22 19:48:23";
+    private static final String TEST_DATE_1_YESTERDAY = "2002-04-21 19:48:23";
+    private static final String TEST_DATE_1_TOMORROW = "2002-04-23 19:48:23";
 
-    private static final String TEST_DATE_2_TODAY = "04/22/2002 10:23 AM";
-    private static final String TEST_DATE_2_YESTERDAY = "04/21/2002 10:23 AM";
-    private static final String TEST_DATE_2_TOMORROW = "04/23/2002 10:23 AM";
+    private static final String TEST_DATE_2_TODAY = "2002-04-22 10:23:08";
+    private static final String TEST_DATE_2_YESTERDAY = "2002-04-21 10:23:08";
+    private static final String TEST_DATE_2_TOMORROW = "2002-04-23 10:23:08";
 
-    private static final String TEST_DATE_3_TODAY = "04/22/2002 06:14 AM";
-    private static final String TEST_DATE_3_YESTERDAY = "04/21/2002 06:14 AM";
-    private static final String TEST_DATE_3_TOMORROW = "04/23/2002 06:14 AM";
+    private static final String TEST_DATE_3_TODAY = "2002-04-22 06:14:55";
+    private static final String TEST_DATE_3_YESTERDAY = "2002-04-21 06:14:55";
+    private static final String TEST_DATE_3_TOMORROW = "2002-04-23 06:14:55";
+
+    private DateTimeService dateTimeService;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        dateTimeService = SpringServiceLocator.getDateTimeService();
+    }
 
     // pass this a name, and it returns a setup timestamp instance
-    private Timestamp getTimestamp(String timestampString) {
+    private Timestamp getNamedTimestamp(String timestampString) {
         Timestamp timestamp;
         try {
-            timestamp = getDateTimeService().convertToSqlTimestamp(timestampString);
+            timestamp = dateTimeService.convertToSqlTimestamp(timestampString);
         }
         catch (ParseException e) {
             assertNull("Timestamp String was not parseable", e);
@@ -59,15 +66,15 @@ public class AccountTest extends KualiTestBase {
     // since all the tests are doing the same thing, this is centralized
     private void doTest(String expirationDateString, String testDateString, boolean expectedResult) {
 
-        Timestamp expirationDate = getTimestamp(expirationDateString);
-        Timestamp testDate = getTimestamp(testDateString);
+        Timestamp expirationDate = getNamedTimestamp(expirationDateString);
+        Timestamp testDate = getNamedTimestamp(testDateString);
 
         // setup the account, and set its expiration date
         Account account = new Account();
         account.setAccountExpirationDate(expirationDate);
 
         // test against isExpired, and get the result
-        boolean actualResult = account.isExpired(getDateTimeService().getCalendar(testDate));
+        boolean actualResult = account.isExpired(dateTimeService.getCalendar(testDate));
 
         // compare the result to what was expected
         assertEquals(expectedResult, actualResult);

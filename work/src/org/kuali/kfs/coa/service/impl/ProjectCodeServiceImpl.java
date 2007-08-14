@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,23 @@
  */
 package org.kuali.module.chart.service.impl;
 
-
+import org.kuali.core.service.KualiUserService;
+import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.dao.ProjectCodeDao;
 import org.kuali.module.chart.service.ProjectCodeService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the ProjectCode structure. This is the default implementation, that is delivered
  * with Kuali.
+ * 
+ * 
  */
-@Transactional
 public class ProjectCodeServiceImpl implements ProjectCodeService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProjectCodeServiceImpl.class);
 
     private ProjectCodeDao projectCodeDao;
+    private KualiUserService kualiUserService;
     
     /**
      * Retrieves an ProjectCode object based on primary key.
@@ -64,5 +66,9 @@ public class ProjectCodeServiceImpl implements ProjectCodeService {
     public void setProjectCodeDao(ProjectCodeDao projectCodeDao) {
         this.projectCodeDao = projectCodeDao;
     }
+
+    public void setKualiUserService(KualiUserService kualiUserService) {
+        this.kualiUserService = kualiUserService;
+    }  
 
 }

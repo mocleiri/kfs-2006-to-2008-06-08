@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@ package org.kuali.module.chart.service.impl;
 import org.kuali.module.chart.bo.ObjLevel;
 import org.kuali.module.chart.dao.ObjectLevelDao;
 import org.kuali.module.chart.service.ObjectLevelService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the ObjLevel structure. This is the default implementation, that is delivered with
  * Kuali.
+ * 
+ * 
  */
-@Transactional
 public class ObjectLevelServiceImpl implements ObjectLevelService {
     private ObjectLevelDao objectLevelDao;
 

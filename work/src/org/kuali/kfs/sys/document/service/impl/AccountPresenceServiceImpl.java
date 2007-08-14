@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,12 @@ import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.service.AccountPresenceService;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.dao.BalanceDao;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ * Imlementation of AccountPresenceService
+ * 
+ * 
+ */
 public class AccountPresenceServiceImpl implements AccountPresenceService {
     private BalanceDao balanceDao;
 

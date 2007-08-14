@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,15 @@ package org.kuali.module.chart.service.impl;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.dao.SubObjectCodeDao;
 import org.kuali.module.chart.service.SubObjectCodeService;
-import org.kuali.module.financial.service.UniversityDateService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the SubObjectCode structure. This is the default implementation that gets delivered
  * with Kuali.
+ * 
+ * 
  */
-@Transactional
 public class SubObjectCodeServiceImpl implements SubObjectCodeService {
     private SubObjectCodeDao subObjectCodeDao;
-    private UniversityDateService universityDateService;
 
     /**
      * @see org.kuali.module.chart.service.SubObjectCodeService#getByPrimaryId(java.lang.Integer, java.lang.String,
@@ -39,17 +37,16 @@ public class SubObjectCodeServiceImpl implements SubObjectCodeService {
     }
 
     /**
-     * @see org.kuali.module.chart.service.SubObjectCodeService#getByPrimaryIdForCurrentYear(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     * @return Returns the SubObjectCodeDao
      */
-    public SubObjCd getByPrimaryIdForCurrentYear(String chartOfAccountsCode, String accountNumber, String financialObjectCode, String financialSubObjectCode) {
-        return this.getByPrimaryId(universityDateService.getCurrentFiscalYear(), chartOfAccountsCode, accountNumber, financialObjectCode, financialSubObjectCode);
+    public SubObjectCodeDao getSubObjectCodeDao() {
+        return subObjectCodeDao;
     }
 
+    /**
+     * @param subObjectCodeDao The SubObjectCode object to set
+     */
     public void setSubObjectCodeDao(SubObjectCodeDao subObjectCodeDao) {
         this.subObjectCodeDao = subObjectCodeDao;
-    }
-
-    public void setUniversityDateService(UniversityDateService universityDateService) {
-        this.universityDateService = universityDateService;
     }
 }

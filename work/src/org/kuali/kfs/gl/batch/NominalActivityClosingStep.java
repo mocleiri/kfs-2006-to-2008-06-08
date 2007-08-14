@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,30 @@
  */
 package org.kuali.module.gl.batch;
 
-import org.kuali.kfs.batch.AbstractStep;
+import org.kuali.core.batch.Step;
 import org.kuali.module.gl.batch.closing.year.service.YearEndService;
 
-public class NominalActivityClosingStep extends AbstractStep {
+/**
+ */
+public class NominalActivityClosingStep implements Step {
+
     public YearEndService yearEndService;
 
+    public NominalActivityClosingStep() {
+        super();
+    }
+
     /**
-     * @see org.kuali.kfs.batch.Step#performStep()
+     * @see org.kuali.core.batch.Step#getName()
      */
-    public boolean execute(String jobName) {
+    public String getName() {
+        return "Nominal Activity Closing Step";
+    }
+
+    /**
+     * @see org.kuali.core.batch.Step#performStep()
+     */
+    public boolean performStep() {
         yearEndService.closeNominalActivity();
         return true;
     }
@@ -35,4 +49,5 @@ public class NominalActivityClosingStep extends AbstractStep {
     public void setYearEndService(YearEndService yearEndService) {
         this.yearEndService = yearEndService;
     }
+
 }

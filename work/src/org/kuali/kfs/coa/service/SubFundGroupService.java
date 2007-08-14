@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,18 +35,4 @@ public interface SubFundGroupService {
      * @return
      */
     public SubFundGroup getByChartAndAccount(String chartCode, String accountNumber);
-    
-    public boolean isForContractsAndGrants(SubFundGroup subFundGroup);
-    
-    public String getContractsAndGrantsDenotingAttributeLabel();
-    
-    /**
-     * Extracts the appropriate value from the sub fund group for the C&G method selected. 
-     * 
-     * @param subFundGroup
-     * @return
-     */
-    public String getContractsAndGrantsDenotingValue( SubFundGroup subFundGroup );
-    
-    public String getContractsAndGrantsDenotingValue();
 }

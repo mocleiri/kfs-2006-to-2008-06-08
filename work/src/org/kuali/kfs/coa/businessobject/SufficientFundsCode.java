@@ -15,7 +15,7 @@
  */
 package org.kuali.module.chart.bo.codes;
 
-import org.kuali.module.chart.bo.KualiSystemCode;
+import org.kuali.core.bo.KualiSystemCode;
 
 /**
  * This class...

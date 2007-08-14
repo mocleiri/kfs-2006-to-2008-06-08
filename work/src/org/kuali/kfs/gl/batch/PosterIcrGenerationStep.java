@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,42 @@
  */
 package org.kuali.module.gl.batch;
 
-import org.kuali.kfs.batch.AbstractStep;
+import org.kuali.core.batch.Step;
 import org.kuali.module.gl.service.PosterService;
 
-public class PosterIcrGenerationStep extends AbstractStep {
+/**
+ * 
+ * 
+ */
+public class PosterIcrGenerationStep implements Step {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterIcrGenerationStep.class);
+
     private PosterService posterService;
 
-    public boolean execute(String jobName) {
+    public PosterIcrGenerationStep() {
+        super();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.core.batch.Step#performStep()
+     */
+    public boolean performStep() {
+        LOG.debug("performStep() started");
+
         posterService.generateIcrTransactions();
+
         return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.core.batch.Step#getName()
+     */
+    public String getName() {
+        return "Generate ICR Entries";
     }
 
     public void setPosterService(PosterService ps) {
