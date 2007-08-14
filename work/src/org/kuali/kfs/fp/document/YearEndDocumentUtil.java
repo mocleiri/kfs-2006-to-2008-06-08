@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 
 package org.kuali.module.financial.document;
 
+import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.document.TransactionalDocument;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 
 /**
@@ -38,7 +37,7 @@ public class YearEndDocumentUtil {
      * @return the previous fiscal year used with all GLPE
      */
     public static final Integer getPreviousFiscalYear() {
-        int i = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear().intValue() - 1;
+        int i = SpringServiceLocator.getDateTimeService().getCurrentFiscalYear().intValue() - 1;
         return new Integer(i);
     }
 
