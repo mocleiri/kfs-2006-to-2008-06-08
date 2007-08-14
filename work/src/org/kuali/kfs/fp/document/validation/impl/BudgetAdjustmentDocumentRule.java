@@ -15,9 +15,9 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.kfs.KFSConstants.SOURCE_ACCOUNTING_LINE_ERRORS;
-import static org.kuali.kfs.KFSConstants.TARGET_ACCOUNTING_LINE_ERRORS;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_ACCOUNTING_LINE_TOTAL_CHANGED;
+import static org.kuali.Constants.SOURCE_ACCOUNTING_LINE_ERRORS;
+import static org.kuali.Constants.TARGET_ACCOUNTING_LINE_ERRORS;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_ACCOUNTING_LINE_TOTAL_CHANGED;
 import static org.kuali.module.financial.rules.BudgetAdjustmentDocumentRuleConstants.BUDGET_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING;
 import static org.kuali.module.financial.rules.BudgetAdjustmentDocumentRuleConstants.GENERATE_TOF_GLPE_ENTRIES_PARM_NM;
 import static org.kuali.module.financial.rules.BudgetAdjustmentDocumentRuleConstants.MONTH_10_PERIOD_CODE;
@@ -44,9 +44,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.InfrastructureException;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
@@ -54,26 +56,20 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.format.CurrencyFormatter;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.Options;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
 import org.kuali.kfs.rules.AccountingLineRuleUtil;
-import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
-import org.kuali.module.financial.service.FiscalYearFunctionControlService;
-import org.kuali.module.financial.service.UniversityDateService;
 
 /**
  * Business rule(s) applicable to Budget Adjustment Card document.
@@ -94,8 +90,8 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         LOG.debug("validating accounting line # " + accountingLine.getSequenceNumber());
 
         /* if they have entered a base amount for line, verify it can be adjusted for the posting year */
-        if (budgetAccountingLine.getBaseBudgetAdjustmentAmount().isNonZero() && !SpringContext.getBean(FiscalYearFunctionControlService.class).isBaseAmountChangeAllowed(((BudgetAdjustmentDocument) FinancialDocument).getPostingYear())) {
-            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT, KFSKeyConstants.ERROR_DOCUMENT_BA_BASE_AMOUNT_CHANGE_NOT_ALLOWED);
+        if (budgetAccountingLine.getBaseBudgetAdjustmentAmount().isNonZero() && !SpringServiceLocator.getFiscalYearFunctionControlService().isBaseAmountChangeAllowed(((BudgetAdjustmentDocument) FinancialDocument).getPostingYear())) {
+            GlobalVariables.getErrorMap().putError(PropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT, KeyConstants.ERROR_DOCUMENT_BA_BASE_AMOUNT_CHANGE_NOT_ALLOWED);
             allow = false;
         }
 
@@ -122,6 +118,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         BudgetAdjustmentDocument baDocument = (BudgetAdjustmentDocument) document;
 
         if (isValid) {
+            isValid = isValid && isAllAccountingLinesMatchingBudgetYear((AccountingDocument) document);
             isValid = isValid && validateFundGroupAdjustmentRestrictions(baDocument);
         }
 
@@ -151,7 +148,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         }
 
         BudgetAdjustmentAccountingLine budgetAccountingLine = (BudgetAdjustmentAccountingLine) accountingLine;
-        Integer currentFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        Integer currentFiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
         /* Create Base Budget GLPE if base amount != 0 */
         if (budgetAccountingLine.getBaseBudgetAdjustmentAmount().isNonZero()) {
             GeneralLedgerPendingEntry explicitEntry = new GeneralLedgerPendingEntry();
@@ -159,7 +156,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
 
             /* D/C code is empty for BA, set correct balance type, correct amount */
             explicitEntry.setTransactionDebitCreditCode("");
-            explicitEntry.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_BASE_BUDGET);
+            explicitEntry.setFinancialBalanceTypeCode(Constants.BALANCE_TYPE_BASE_BUDGET);
             explicitEntry.setTransactionLedgerEntryAmount(budgetAccountingLine.getBaseBudgetAdjustmentAmount().multiply(amountSign).kualiDecimalValue());
             // set fiscal period, if next fiscal year set to 01, else leave to current period
             if (currentFiscalYear.equals(FinancialDocument.getPostingYear() - 1)) {
@@ -182,7 +179,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
 
             /* D/C code is empty for BA, set correct balance type, correct amount */
             explicitEntry.setTransactionDebitCreditCode("");
-            explicitEntry.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_CURRENT_BUDGET);
+            explicitEntry.setFinancialBalanceTypeCode(Constants.BALANCE_TYPE_CURRENT_BUDGET);
             explicitEntry.setTransactionLedgerEntryAmount(budgetAccountingLine.getCurrentBudgetAdjustmentAmount().multiply(amountSign));
             // set fiscal period, if next fiscal year set to 01, else leave to current period
             if (currentFiscalYear.equals(FinancialDocument.getPostingYear() - 1)) {
@@ -263,7 +260,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
 
         /* D/C code is empty for BA, set correct balance type, correct amount */
         explicitEntry.setTransactionDebitCreditCode("");
-        explicitEntry.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_MONTHLY_BUDGET);
+        explicitEntry.setFinancialBalanceTypeCode(Constants.BALANCE_TYPE_MONTHLY_BUDGET);
         explicitEntry.setTransactionLedgerEntryAmount(monthAmount);
         explicitEntry.setUniversityFiscalPeriodCode(fiscalPeriod);
 
@@ -288,9 +285,9 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         boolean success = true;
 
         // check on-off tof flag
-        boolean generateTransfer = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterIndicator(BUDGET_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, GENERATE_TOF_GLPE_ENTRIES_PARM_NM);
-        String transferObjectCode = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(BUDGET_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, TRANSFER_OBJECT_CODE_PARM_NM);
-        Integer currentFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        boolean generateTransfer = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(BUDGET_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, GENERATE_TOF_GLPE_ENTRIES_PARM_NM);
+        String transferObjectCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(BUDGET_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, TRANSFER_OBJECT_CODE_PARM_NM);
+        Integer currentFiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
 
         if (generateTransfer) {
             // map of income chart/accounts with balance as value
@@ -322,12 +319,12 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
                     populateExplicitGeneralLedgerPendingEntry(FinancialDocument, accountingLine, sequenceHelper, explicitEntry);
 
                     /* override and set object type to income */
-                    Options options = SpringContext.getBean(OptionsService.class).getCurrentYearOptions();
+                    Options options = SpringServiceLocator.getOptionsService().getCurrentYearOptions();
                     explicitEntry.setFinancialObjectTypeCode(options.getFinObjectTypeIncomecashCode());
 
                     /* D/C code is empty for BA, set correct balance type, correct amount */
                     explicitEntry.setTransactionDebitCreditCode("");
-                    explicitEntry.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_CURRENT_BUDGET);
+                    explicitEntry.setFinancialBalanceTypeCode(Constants.BALANCE_TYPE_CURRENT_BUDGET);
                     explicitEntry.setTransactionLedgerEntryAmount(streamAmount);
 
                     // set fiscal period, if next fiscal year set to 01, else leave to current period
@@ -351,7 +348,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
                     populateExplicitGeneralLedgerPendingEntry(FinancialDocument, accountingLine, sequenceHelper, explicitEntry);
 
                     /* override and set object type to transfer */
-                    explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferIncomeCd());
+                    explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferIncomeCode());
 
                     /* set document type to tof */
                     explicitEntry.setFinancialDocumentTypeCode(getTransferDocumentType());
@@ -398,7 +395,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
 
         KualiDecimal monthlyTotal = budgetAdjustmentAccountingLine.getMonthlyLinesTotal();
         if (monthlyTotal.isNonZero() && monthlyTotal.compareTo(budgetAdjustmentAccountingLine.getCurrentBudgetAdjustmentAmount()) != 0) {
-            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.CURRENT_BUDGET_ADJUSTMENT_AMOUNT, KFSKeyConstants.ERROR_DOCUMENT_BA_MONTH_TOTAL_NOT_EQUAL_CURRENT);
+            GlobalVariables.getErrorMap().putError(PropertyConstants.CURRENT_BUDGET_ADJUSTMENT_AMOUNT, KeyConstants.ERROR_DOCUMENT_BA_MONTH_TOTAL_NOT_EQUAL_CURRENT);
             validMonthlyLines = false;
         }
 
@@ -439,7 +436,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         for (Iterator iter = accountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
             SubFundGroup subFund = line.getAccount().getSubFundGroup();
-            if (!KFSConstants.BudgetAdjustmentDocumentConstants.ADJUSTMENT_RESTRICTION_LEVEL_NONE.equals(subFund.getFundGroupBudgetAdjustmentRestrictionLevelCode())) {
+            if (!Constants.BudgetAdjustmentDocumentConstants.ADJUSTMENT_RESTRICTION_LEVEL_NONE.equals(subFund.getFundGroupBudgetAdjustmentRestrictionLevelCode())) {
                 restrictionLevel = subFund.getFundGroupBudgetAdjustmentRestrictionLevelCode();
                 restrictedToSubFund = true;
                 accountRestrictingSubFund = line.getAccountNumber();
@@ -448,15 +445,15 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
                 restrictionLevel = subFund.getFundGroup().getFundGroupBudgetAdjustmentRestrictionLevelCode();
             }
 
-            if (KFSConstants.BudgetAdjustmentDocumentConstants.ADJUSTMENT_RESTRICTION_LEVEL_CHART.equals(restrictionLevel)) {
+            if (Constants.BudgetAdjustmentDocumentConstants.ADJUSTMENT_RESTRICTION_LEVEL_CHART.equals(restrictionLevel)) {
                 restrictedToChart = true;
                 accountRestrictingChart = line.getAccountNumber();
             }
-            else if (KFSConstants.BudgetAdjustmentDocumentConstants.ADJUSTMENT_RESTRICTION_LEVEL_ORGANIZATION.equals(restrictionLevel)) {
+            else if (Constants.BudgetAdjustmentDocumentConstants.ADJUSTMENT_RESTRICTION_LEVEL_ORGANIZATION.equals(restrictionLevel)) {
                 restrictedToOrg = true;
                 accountRestrictingOrg = line.getAccountNumber();
             }
-            else if (KFSConstants.BudgetAdjustmentDocumentConstants.ADJUSTMENT_RESTRICTION_LEVEL_ACCOUNT.equals(restrictionLevel)) {
+            else if (Constants.BudgetAdjustmentDocumentConstants.ADJUSTMENT_RESTRICTION_LEVEL_ACCOUNT.equals(restrictionLevel)) {
                 restrictedToAccount = true;
                 accountRestrictingAccount = line.getAccountNumber();
             }
@@ -486,14 +483,14 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
                 String previousFundGroup = previousLine.getAccount().getSubFundGroup().getFundGroupCode();
 
                 if (!currentFundGroup.equals(previousFundGroup)) {
-                    errors.putErrorWithoutFullErrorPath(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_BA_MIXED_FUND_GROUPS);
+                    errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_BA_MIXED_FUND_GROUPS);
                     isAdjustmentAllowed = false;
                     break;
                 }
 
                 if (restrictedToSubFund) {
                     if (!line.getAccount().getSubFundGroupCode().equals(previousLine.getAccount().getSubFundGroupCode())) {
-                        errors.putErrorWithoutFullErrorPath(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingSubFund, subFundLabel });
+                        errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingSubFund, subFundLabel });
                         isAdjustmentAllowed = false;
                         break;
                     }
@@ -502,10 +499,10 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
                 if (restrictedToChart) {
                     if (!line.getChartOfAccountsCode().equals(previousLine.getChartOfAccountsCode())) {
                         if (restrictedToSubFund) {
-                            errors.putErrorWithoutFullErrorPath(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingChart, subFundLabel + " and " + chartLabel });
+                            errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingChart, subFundLabel + " and " + chartLabel });
                         }
                         else {
-                            errors.putErrorWithoutFullErrorPath(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingChart, fundLabel + " and " + chartLabel });
+                            errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingChart, fundLabel + " and " + chartLabel });
                         }
                         isAdjustmentAllowed = false;
                         break;
@@ -515,10 +512,10 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
                 if (restrictedToOrg) {
                     if (!line.getAccount().getOrganizationCode().equals(previousLine.getAccount().getOrganizationCode())) {
                         if (restrictedToSubFund) {
-                            errors.putErrorWithoutFullErrorPath(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingOrg, subFundLabel + " and " + orgLabel });
+                            errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingOrg, subFundLabel + " and " + orgLabel });
                         }
                         else {
-                            errors.putErrorWithoutFullErrorPath(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingOrg, fundLabel + " and " + orgLabel });
+                            errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingOrg, fundLabel + " and " + orgLabel });
                         }
                         isAdjustmentAllowed = false;
                         break;
@@ -527,7 +524,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
 
                 if (restrictedToAccount) {
                     if (!line.getAccountNumber().equals(previousLine.getAccountNumber())) {
-                        errors.putErrorWithoutFullErrorPath(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingAccount, acctLabel });
+                        errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_BA_RESTRICTION_LEVELS, new String[] { accountRestrictingAccount, acctLabel });
                         isAdjustmentAllowed = false;
                         break;
                     }
@@ -553,7 +550,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
 
         boolean objectCodeAllowed = true;
 
-        String errorKey = KFSPropertyConstants.FINANCIAL_OBJECT_LEVEL_CODE;
+        String errorKey = PropertyConstants.FINANCIAL_OBJECT_LEVEL_CODE;
 
         /* check object sub type global restrictions */
         objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(BUDGET_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, RESTRICTED_OBJECT_SUB_TYPE_CODES, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, AccountingLineRuleUtil.getObjectSubTypeCodeLabel());
@@ -572,19 +569,19 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         BudgetAdjustmentAccountingLine budgetAccountingLine = (BudgetAdjustmentAccountingLine) accountingLine;
         ErrorMap errors = GlobalVariables.getErrorMap();
 
-        String errorKey = KFSPropertyConstants.ACCOUNT_NUMBER;
+        String errorKey = PropertyConstants.ACCOUNT_NUMBER;
         boolean accountNumberAllowed = true;
 
         // check account has a budget recording level
         if (StringUtils.isBlank(accountingLine.getAccount().getBudgetRecordingLevelCode()) || ACCOUNT_NUMBER.BUDGET_LEVEL_NO_BUDGET.equals(accountingLine.getAccount().getBudgetRecordingLevelCode())) {
-            errors.putError(errorKey, KFSKeyConstants.ERROR_DOCUMENT_BA_NON_BUDGETED_ACCOUNT, accountingLine.getAccountNumber());
+            errors.putError(errorKey, KeyConstants.ERROR_DOCUMENT_BA_NON_BUDGETED_ACCOUNT, accountingLine.getAccountNumber());
             accountNumberAllowed = false;
         }
 
         // if current adjustment amount is non zero, account must have an associated income stream chart and account
         if (budgetAccountingLine.getCurrentBudgetAdjustmentAmount().isNonZero()) {
             if (ObjectUtils.isNull(accountingLine.getAccount().getIncomeStreamAccount())) {
-                errors.putError(errorKey, KFSKeyConstants.ERROR_DOCUMENT_BA_NO_INCOME_STREAM_ACCOUNT, accountingLine.getAccountNumber());
+                errors.putError(errorKey, KeyConstants.ERROR_DOCUMENT_BA_NO_INCOME_STREAM_ACCOUNT, accountingLine.getAccountNumber());
                 accountNumberAllowed = false;
             }
         }
@@ -606,26 +603,26 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
 
         // check amounts both current and base amounts are not zero
         if (budgetAccountingLine.getCurrentBudgetAdjustmentAmount().isZero() && budgetAccountingLine.getBaseBudgetAdjustmentAmount().isZero()) {
-            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT, KFSKeyConstants.ERROR_BA_AMOUNT_ZERO);
+            GlobalVariables.getErrorMap().putError(PropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT, KeyConstants.ERROR_BA_AMOUNT_ZERO);
             amountValid = false;
         }
 
         // if not an error correction, all amounts must be positive
         if (!isErrorCorrection(document)) {
-            amountValid &= checkAmountSign(budgetAccountingLine.getCurrentBudgetAdjustmentAmount(), KFSPropertyConstants.CURRENT_BUDGET_ADJUSTMENT_AMOUNT, "Current");
-            amountValid &= checkAmountSign(budgetAccountingLine.getBaseBudgetAdjustmentAmount().kualiDecimalValue(), KFSPropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT, "Base");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth1LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_1_LINE_AMOUNT, "Month 1");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth2LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_2_LINE_AMOUNT, "Month 2");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth3LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_3_LINE_AMOUNT, "Month 3");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth4LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_4_LINE_AMOUNT, "Month 4");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth5LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_5_LINE_AMOUNT, "Month 5");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth6LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_6_LINE_AMOUNT, "Month 6");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth7LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_7_LINE_AMOUNT, "Month 7");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth8LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_8_LINE_AMOUNT, "Month 8");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth8LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_9_LINE_AMOUNT, "Month 9");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth10LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_10_LINE_AMOUNT, "Month 10");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth10LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_11_LINE_AMOUNT, "Month 11");
-            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth12LineAmount(), KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_12_LINE_AMOUNT, "Month 12");
+            amountValid &= checkAmountSign(budgetAccountingLine.getCurrentBudgetAdjustmentAmount(), PropertyConstants.CURRENT_BUDGET_ADJUSTMENT_AMOUNT, "Current");
+            amountValid &= checkAmountSign(budgetAccountingLine.getBaseBudgetAdjustmentAmount().kualiDecimalValue(), PropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT, "Base");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth1LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_1_LINE_AMOUNT, "Month 1");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth2LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_2_LINE_AMOUNT, "Month 2");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth3LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_3_LINE_AMOUNT, "Month 3");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth4LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_4_LINE_AMOUNT, "Month 4");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth5LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_5_LINE_AMOUNT, "Month 5");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth6LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_6_LINE_AMOUNT, "Month 6");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth7LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_7_LINE_AMOUNT, "Month 7");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth8LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_8_LINE_AMOUNT, "Month 8");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth8LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_9_LINE_AMOUNT, "Month 9");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth10LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_10_LINE_AMOUNT, "Month 10");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth10LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_11_LINE_AMOUNT, "Month 11");
+            amountValid &= checkAmountSign(budgetAccountingLine.getFinancialDocumentMonth12LineAmount(), PropertyConstants.FINANCIAL_DOCUMENT_MONTH_12_LINE_AMOUNT, "Month 12");
         }
 
         return amountValid;
@@ -649,7 +646,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
 
         // check base amounts are equal
         if (baDocument.getSourceBaseBudgetTotal().compareTo(baDocument.getTargetBaseBudgetTotal()) != 0) {
-            GlobalVariables.getErrorMap().putError(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_BA_BASE_AMOUNTS_BALANCED);
+            GlobalVariables.getErrorMap().putError(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_BA_BASE_AMOUNTS_BALANCED);
             balanced = false;
         }
 
@@ -662,7 +659,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         }
 
         if (totalCurrentAmount.isNonZero()) {
-            GlobalVariables.getErrorMap().putError(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_BA_CURRENT_AMOUNTS_BALANCED);
+            GlobalVariables.getErrorMap().putError(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_BA_CURRENT_AMOUNTS_BALANCED);
             balanced = false;
         }
 
@@ -719,7 +716,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         boolean correctSign = true;
 
         if (amount.isNegative()) {
-            GlobalVariables.getErrorMap().putError(propertyName, KFSKeyConstants.ERROR_BA_AMOUNT_NEGATIVE, label);
+            GlobalVariables.getErrorMap().putError(propertyName, KeyConstants.ERROR_BA_AMOUNT_NEGATIVE, label);
             correctSign = false;
         }
 
@@ -736,7 +733,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
     protected boolean isSourceAccountingLinesRequiredNumberForRoutingMet(AccountingDocument FinancialDocument) {
         // check that both source and target are not empty, in which case is an error
         if (FinancialDocument.getSourceAccountingLines().isEmpty() && FinancialDocument.getTargetAccountingLines().isEmpty()) {
-            GlobalVariables.getErrorMap().putError(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_NO_ACCOUNTING_LINES);
+            GlobalVariables.getErrorMap().putError(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_NO_ACCOUNTING_LINES);
             return false;
         }
 

@@ -26,14 +26,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
@@ -105,25 +103,6 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         // Create new Entries with newOriginEntryGroup
         for (OriginEntry oe : entries) {
-            oe.setEntryGroupId(newOriginEntryGroup.getId());
-            createEntry(oe, newOriginEntryGroup);
-        }
-
-        return newOriginEntryGroup;
-    }
-
-    
-    /**
-     * @see org.kuali.module.gl.service.OriginEntryService#copyEntries(java.sql.Date, java.lang.String, boolean, boolean, boolean, java.util.Iterator)
-     */
-    public OriginEntryGroup copyEntries(Date date, String sourceCode, boolean valid, boolean process, boolean scrub, Iterator<OriginEntry> entries) {
-        LOG.debug("copyEntries() started");
-
-        OriginEntryGroup newOriginEntryGroup = originEntryGroupService.createGroup(date, sourceCode, valid, process, scrub);
-
-        // Create new Entries with newOriginEntryGroup
-        while (entries.hasNext()) {
-            OriginEntry oe = entries.next();
             oe.setEntryGroupId(newOriginEntryGroup.getId());
             createEntry(oe, newOriginEntryGroup);
         }
@@ -330,7 +309,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     }
 
     // create or update a ledger entry with the array of information from the given entry summary object
-    public static LedgerEntry buildLedgerEntry(Object[] entrySummary) {
+    private LedgerEntry buildLedgerEntry(Object[] entrySummary) {
         // extract the data from an array and use them to populate a ledger entry
         Object oFiscalYear = entrySummary[0];
         Object oPeriodCode = entrySummary[1];
@@ -341,10 +320,10 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         Object oCount = entrySummary[6];
 
         Integer fiscalYear = oFiscalYear != null ? new Integer(oFiscalYear.toString()) : null;
-        String periodCode = oPeriodCode != null ? oPeriodCode.toString() : GLConstants.getSpaceUniversityFiscalPeriodCode();
-        String balanceType = oBalanceType != null ? oBalanceType.toString() : GLConstants.getSpaceBalanceTypeCode();
-        String originCode = oOriginCode != null ? oOriginCode.toString() : GLConstants.getSpaceFinancialSystemOriginationCode();
-        String debitCreditCode = oDebitCreditCode != null ? oDebitCreditCode.toString() : GLConstants.getSpaceDebitCreditCode();
+        String periodCode = oPeriodCode != null ? oPeriodCode.toString() : "  ";
+        String balanceType = oBalanceType != null ? oBalanceType.toString() : "  ";
+        String originCode = oOriginCode != null ? oOriginCode.toString() : "  ";
+        String debitCreditCode = oDebitCreditCode != null ? oDebitCreditCode.toString() : " ";
         KualiDecimal amount = oAmount != null ? new KualiDecimal(oAmount.toString()) : KualiDecimal.ZERO;
         int count = oCount != null ? Integer.parseInt(oCount.toString()) : 0;
 
@@ -406,24 +385,6 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         LOG.debug("getMatchingEntriesByCollection() started");
 
         return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
-    }
-
-    /**
-     * @see org.kuali.module.gl.service.OriginEntryService#getMatchingEntriesByList(java.util.Map)
-     */
-    public List<OriginEntry> getEntriesByGroupId(Integer groupId) {
-        if (groupId == null) {
-            throw new IllegalArgumentException("Group ID is null");
-        }
-        Map<String, Object> searchCriteria = new HashMap<String, Object>();
-        searchCriteria.put(ENTRY_GROUP_ID, groupId);
-        Collection<OriginEntry> searchResultAsCollection = getMatchingEntriesByCollection(searchCriteria);
-        if (searchResultAsCollection instanceof List) {
-            return (List<OriginEntry>) searchResultAsCollection;
-        }
-        else {
-            return new ArrayList<OriginEntry>(searchResultAsCollection);
-        }
     }
 
     /**
