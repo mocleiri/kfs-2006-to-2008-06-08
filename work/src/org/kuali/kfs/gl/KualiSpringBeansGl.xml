@@ -18,7 +18,7 @@
 <beans>
 	<bean id="glModule" class="org.kuali.core.KualiModule">
 		<property name="moduleId" value="gl" />
-		<property name="moduleName" value="General Ledger" />
+		<property name="moduleName" value="Kuali General Ledger" />
 		<property name="moduleCode" value="GL" />
 		<property name="moduleUserService" ref="glUserService" />
 		<property name="initializeDataDictionary" value="true" />
@@ -49,23 +49,24 @@
 		</property>
 		<property name="jobNames">
 			<list>
-				<value>clearPendingEntriesForCancelledOrDisapprovedDocumentsJob</value>
-				<value>enterpriseFeedJob</value>
-				<value>collectorJob</value>
-				<value>nightlyOutJob</value>
-				<value>scrubberJob</value>
-				<value>posterJob</value>
-				<value>sufficientFundsJob</value>
-				<value>posterSummaryReportJob</value>
-				<value>clearPendingEntriesJob</value>
-				<value>encumbranceForwardJob</value>
-				<value>balanceForwardJob</value>
-				<value>nominalActivityClosingJob</value>
-				<value>organizationReversionClosingJob</value>
-				<value>organizationReversionOpeningJob</value>
-				<value>manualPurgeJob</value>
-				<value>clearOldOriginEntriesJob</value>
-				<value>purgeCorrectionProcessFilesJob</value>
+				<value>glClearPendingEntriesForCancelledOrDisapprovedDocumentsJob</value>
+				<value>glOriginEntryEnterpriseFeederJob</value>
+				<value>glCollectorJob</value>
+				<value>glNightlyOutJob</value>
+				<value>glScrubberJob</value>
+				<value>glPosterJob</value>
+				<value>glSufficientFundsJob</value>
+				<value>glPosterSummaryReportJob</value>
+				<value>glClearPendingJob</value>
+				<value>glYearEndJob</value>
+				<value>glManualPurgeJob</value>
+				<value>glClearOldOriginEntriesJob</value>
+				<value>glPurgeCorrectionProcessFilesJob</value>
+			</list>
+		</property>
+		<property name="triggerNames">
+			<list>
+				<value>glYearEndJobTrigger</value>
 			</list>
 		</property>
 	</bean>
@@ -406,41 +407,11 @@
 		<property name="cashOrganizationReversionCategoryLogic">
 			<ref bean="glCashOrganizationReversionCategoryLogic" />
 		</property>
-		<property name="reportService">
-			<ref bean="glReportService" />
-		</property>
-		<property name="orgReversionUnitOfWorkService">
-			<ref bean="glOrgReversionUnitOfWorkService" />
-		</property>
 	</bean>
-	
+			
 	<bean id="glCollectorService" class="org.kuali.module.gl.service.impl.CollectorServiceImpl">
-		<property name="collectorHelperService">
-			<ref bean="glCollectorHelperService" />
-		</property>
-		<property name="collectorInputFileType">
-			<ref bean="collectorInputFileType" />
-		</property>
-		<property name="originEntryGroupService">
-			<ref bean="glOriginEntryGroupService" />
-		</property>
-		<property name="batchInputFileService">
-		    <ref bean="batchInputFileService" />
-		</property>
-		<property name="dateTimeService">
-			<ref bean="dateTimeService" />
-		</property>
-		<property name="collectorScrubberService">
-			<ref bean="glCollectorScrubberService" />
-		</property>
-		<property name="runDateService">
-			<ref bean="glRunDateService" />
-		</property>
-	</bean>
-	
-	<bean id="glCollectorHelperService" class="org.kuali.module.gl.service.impl.CollectorHelperServiceImpl">
-		<property name="collectorDetailService">
-			<ref bean="glCollectorDetailService" />
+		<property name="interDepartmentalBillingService">
+			<ref bean="glInterDepartmentalBillingService" />
 		</property>
 		<property name="originEntryService">
 			<ref bean="glOriginEntryService" />
@@ -457,43 +428,12 @@
 		<property name="dateTimeService">
 			<ref bean="dateTimeService" />
 		</property>
-		<property name="collectorScrubberService">
-		    <ref bean="glCollectorScrubberService" />
-		</property>
 		<property name="batchInputFileService">
 		    <ref bean="batchInputFileService" />
 		</property>
 		<property name="collectorInputFileType">
-			<ref bean="collectorInputFileType" />
+		    <ref bean="collectorInputFileType" />
 		</property>
-	</bean>
-
-	<bean id="glCollectorScrubberService" class="org.kuali.module.gl.service.impl.scrubber.CollectorScrubberServiceImpl">
-		<property name="dateTimeService">
-			<ref bean="dateTimeService" />
-		</property>
-		<property name="universityDateDao">
-			<ref bean="universityDateDao" />
-		</property>
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService" />
-		</property>
-		<property name="scrubberService">
-			<ref bean="glScrubberService" />
-		</property>
-	</bean>
-	
-	<bean id="glCollectorReportService" class="org.kuali.module.gl.service.impl.CollectorReportServiceImpl">
-		<property name="dateTimeService">
-			<ref bean="dateTimeService" />
-		</property>
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService"/>
-		</property>
-		<property name="mailService">
-			<ref bean="mailService"/>
-		</property>
-		<property name="directoryName" value="${reports.directory}"/>
 	</bean>
 
 	<bean id="glOrganizationReversionSelection" class="org.kuali.module.gl.service.impl.orgreversion.OrganizationReversionSelectionImpl" />
@@ -597,9 +537,6 @@
 		<property name="scrubberValidator">
 			<ref bean="glScrubberValidator" />
 		</property>
-		<property name="scrubberProcessObjectCodeOverride">
-			<ref bean="glScrubberProcessObjectCodeOverride" />
-		</property>
 	</bean>
 
 	<bean id="glScrubberValidator" class="org.kuali.module.gl.service.impl.ScrubberValidatorImpl">
@@ -618,9 +555,6 @@
 		<property name="accountService">
 			<ref bean="accountService" />
 		</property>
-	</bean>
-
-	<bean id="glScrubberProcessObjectCodeOverride" class="org.kuali.module.gl.service.impl.ScrubberProcessObjectCodeOverrideImpl">
 	</bean>
 
 	<bean id="glSufficientFundsSyncService" class="org.kuali.module.gl.service.impl.SufficientFundsSyncServiceImpl">
@@ -873,9 +807,9 @@
 		</property>
 	</bean>
 
-	<bean id="glCollectorDetailService" class="org.kuali.module.gl.service.impl.CollectorDetailServiceImpl">
-		<property name="collectorDetailDao">
-			<ref bean="glCollectorDetailDao" />
+	<bean id="glInterDepartmentalBillingService" class="org.kuali.module.gl.service.impl.InterDepartmentalBillingServiceImpl">
+		<property name="interDepartmentalBillingDao">
+			<ref bean="glInterDepartmentalBillingDao" />
 		</property>
 	</bean>
 
@@ -1000,7 +934,6 @@
 		<property name="universityDateService">
 			<ref bean="universityDateService" />
 		</property>
-		<property name="dbPlatform" ref="dbPlatformDao" />
 	</bean>
 
 	<bean id="glAccountBalanceConsolidationDao" parent="glAccountBalanceDaoBase" class="org.kuali.module.gl.dao.jdbc.AccountBalanceConsolidationDaoJdbc">
@@ -1008,7 +941,6 @@
 
 	<bean id="glAccountBalanceLevelDao" parent="glAccountBalanceDaoBase" class="org.kuali.module.gl.dao.jdbc.AccountBalanceLevelDaoJdbc">
 	</bean>
-	
 	<bean id="glAccountBalanceObjectDao" parent="glAccountBalanceDaoBase" class="org.kuali.module.gl.dao.jdbc.AccountBalanceObjectDaoJdbc">
 	</bean>
 
@@ -1042,7 +974,7 @@
 
 	<bean id="glSufficientFundRebuildDao" parent="platformAwareDao" class="org.kuali.module.gl.dao.ojb.SufficientFundRebuildDaoOjb" />
 
-	<bean id="glCollectorDetailDao" parent="platformAwareDao" class="org.kuali.module.gl.dao.ojb.CollectorDetailDaoOjb" />
+	<bean id="glInterDepartmentalBillingDao" parent="platformAwareDao" class="org.kuali.module.gl.dao.ojb.InterDepartmentalBillingDaoOjb" />
 
 	<bean id="glCorrectionDocumentDao" parent="platformAwareDao" class="org.kuali.module.gl.dao.ojb.CorrectionDocumentDaoOjb" />
 	
@@ -1107,10 +1039,10 @@
 	<bean id="testDateTimeService" class="org.kuali.core.service.impl.ConfigurableDateTimeServiceImpl">
     </bean>
     
-	<bean id="clearPendingEntriesForCancelledOrDisapprovedDocumentsJob" parent="scheduledJobDescriptor">
+	<bean id="glClearPendingEntriesForCancelledOrDisapprovedDocumentsJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="clearPendingEntriesForCancelledOrDisapprovedDocumentsStep" />
+				<ref bean="glClearPendingEntriesForCancelledOrDisapprovedDocumentsStep" />
 			</list>
 		</property>
 		<property name="dependencies">
@@ -1120,170 +1052,155 @@
 		</property>
 	</bean>
 
-	<bean id="collectorJob" parent="scheduledJobDescriptor">
+	<bean id="glCollectorJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="collectorStep" />
+				<ref bean="glCollectorStep" />
 			</list>
 		</property>
 	</bean>
 	
-	<bean id="nightlyOutJob" parent="scheduledJobDescriptor">
+	<bean id="glNightlyOutJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="nightlyOutStep" />
+				<ref bean="glNightlyOutStep" />
 			</list>
 		</property>
 		<property name="dependencies">
 			<map>
-				<entry key="clearPendingEntriesForCancelledOrDisapprovedDocumentsJob" value="softDependency" />
+				<entry key="glClearPendingEntriesForCancelledOrDisapprovedDocumentsJob" value="softDependency" />
 			</map>
 		</property>
 	</bean>
 	
-	<bean id="scrubberJob" parent="scheduledJobDescriptor">
+	<bean id="glScrubberJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="createBackupGroupStep" />
-				<ref bean="scrubberStep" />
+				<ref bean="glCreateBackupGroupStep" />
+				<ref bean="glScrubberStep" />
 			</list>
 		</property>
 		<property name="dependencies">
 			<map>
-				<entry key="enterpriseFeedJob" value="hardDependency"/>
-				<entry key="collectorJob" value="softDependency" />
-				<entry key="nightlyOutJob" value="hardDependency" />
+				<entry key="glOriginEntryEnterpriseFeederJob" value="hardDependency"/>
+				<entry key="glCollectorJob" value="hardDependency" />
+				<entry key="glNightlyOutJob" value="hardDependency" />
 			</map>
 		</property>
 	</bean>	
 
-	<bean id="posterJob" parent="scheduledJobDescriptor">
+	<bean id="glPosterJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="posterEntriesStep" />
-				<ref bean="posterReversalStep" />
-				<ref bean="posterIcrGenerationStep" />
-				<ref bean="posterIcrEntriesStep" />
-				<ref bean="icrEncumbranceGenerationStep" />
-				<ref bean="icrEncumbranceReversalStep" />
+				<ref bean="glPosterEntriesStep" />
+				<ref bean="glPosterReversalStep" />
+				<ref bean="glPosterIcrGenerationStep" />
+				<ref bean="glPosterIcrEntriesStep" />
 			</list>
 		</property>
 		<property name="dependencies">
 			<map>
-				<entry key="scrubberJob" value="hardDependency" />
+				<entry key="glScrubberJob" value="hardDependency" />
 			</map>
 		</property>
 	</bean>
 	
-	<bean id="sufficientFundsJob" parent="scheduledJobDescriptor">
+	<bean id="glSufficientFundsJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="sufficientFundsSyncStep" />
-				<ref bean="sufficientFundsRebuilderStep" />
+				<ref bean="glSufficientFundsSyncStep" />
+				<ref bean="glSufficientFundsRebuilderStep" />
 			</list>
 		</property>
 		<property name="dependencies">
 			<map>
-				<entry key="posterJob" value="hardDependency" />
+				<entry key="glPosterJob" value="hardDependency" />
 			</map>
 		</property>
 	</bean>
 	
-	<bean id="posterSummaryReportJob" parent="scheduledJobDescriptor">
+	<bean id="glPosterSummaryReportJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="posterSummaryReportStep" />
+				<ref bean="glGlSummaryReportStep" />
 			</list>
 		</property>
 		<property name="dependencies">
 			<map>
-				<entry key="posterJob" value="hardDependency" />
+				<entry key="glPosterJob" value="hardDependency" />
 			</map>
 		</property>
 	</bean>
 	
-	<bean id="clearPendingEntriesJob" parent="scheduledJobDescriptor">
+	<bean id="glClearPendingJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="clearPendingEntriesStep" />
+				<ref bean="glClearPendingStep" />
 			</list>
 		</property>
 		<property name="dependencies">
 			<map>
-				<entry key="sufficientFundsJob" value="hardDependency" />
-				<entry key="posterSummaryReportJob" value="hardDependency" />
+				<entry key="glSufficientFundsJob" value="hardDependency" />
+				<entry key="glPosterSummaryReportJob" value="hardDependency" />
 			</map>
 		</property>
 	</bean>
 	
-	<bean id="clearOldOriginEntriesJob" parent="unscheduledJobDescriptor">
+	<bean id="glClearOldOriginEntriesJob" parent="unscheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="clearOldOriginEntryStep" />
+				<ref bean="glClearOldOriginEntryStep" />
 			</list>
 		</property>		
 	</bean>
 	
-	<bean id="manualPurgeJob" parent="unscheduledJobDescriptor">
+	<bean id="glManualPurgeJob" parent="unscheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="purgeEntryStep" />
-				<ref bean="purgeBalanceStep" />
-				<ref bean="purgeSufficientFundBalancesStep" />
-				<ref bean="purgeEncumbranceStep" />
-				<ref bean="purgeAccountBalancesStep" />
-				<ref bean="purgeCollectorDetailStep" />
+				<ref bean="glPurgeEntryStep" />
+				<ref bean="glPurgeBalanceStep" />
+				<ref bean="glPurgeSufficientFundBalancesStep" />
+				<ref bean="glPurgeEncumbranceStep" />
+				<ref bean="glPurgeAccountBalancesStep" />
+				<ref bean="glPurgeInterDepartmentalBillingStep" />
 			</list>
 		</property>
 	</bean>
 	
-	<bean id="encumbranceForwardJob" parent="scheduledJobDescriptor">
+	<bean id="glYearEndJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="encumbranceForwardStep" />
+				<ref bean="glEncumbranceForwardStep" />
+				<ref bean="glBalanceForwardStep" />
+				<ref bean="glNominalActivityClosingStep" />
+				<ref bean="glOrganizationReversionEndOfYearStep" />
 			</list>
 		</property>
 	</bean>
 	
-	<bean id="balanceForwardJob" parent="scheduledJobDescriptor">
-		<property name="steps">
-			<list>
-				<ref bean="balanceForwardStep" />
-			</list>
-		</property>
+	<bean id="glYearEndJobTrigger" parent="cronTrigger">
+		<property name="jobName" value="glYearEndJob" />
+		<property name="cronExpression" value="00 00 08 ? * *" />
 	</bean>
 	
-	<bean id="nominalActivityClosingJob" parent="scheduledJobDescriptor">
+	<bean id="glYearBeginJob" parent="unscheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="nominalActivityClosingStep" />
-			</list>
-		</property>
-	</bean>
-	
-	<bean id="organizationReversionClosingJob" parent="scheduledJobDescriptor">
-		<property name="steps">
-			<list>
-				<ref bean="organizationReversionClosingStep" />
-			</list>
-		</property>
-	</bean>
-		
-	<bean id="organizationReversionOpeningJob" parent="unscheduledJobDescriptor">
-		<property name="steps">
-			<list>
-				<ref bean="organizationReversionOpeningStep" />
+				<ref bean="glOrganizationReversionBeginningOfYearStep" />
 			</list>
 		</property>
 	</bean>
 
-	<bean id="clearPendingEntriesForCancelledOrDisapprovedDocumentsStep" class="org.kuali.module.gl.batch.ClearPendingEntriesForCancelledOrDisapprovedDocumentsStep" parent="step">
+	<bean id="glClearPendingEntriesForCancelledOrDisapprovedDocumentsStep" class="org.kuali.module.gl.batch.ClearPendingEntriesForCancelledOrDisapprovedDocumentsStep">
 		<property name="generalLedgerPendingEntryService">
 			<ref bean="generalLedgerPendingEntryService" />
 		</property>
 	</bean>
 
-	<bean id="purgeEntryStep" class="org.kuali.module.gl.batch.PurgeEntryStep" parent="step">
+	<bean id="glPurgeEntryStep" class="org.kuali.module.gl.batch.PurgeEntryStep">
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
 		<property name="entryService">
 			<ref bean="glEntryService" />
 		</property>
@@ -1292,7 +1209,10 @@
 		</property>
 	</bean>
 
-	<bean id="purgeBalanceStep" class="org.kuali.module.gl.batch.PurgeBalanceStep" parent="step">
+	<bean id="glPurgeBalanceStep" class="org.kuali.module.gl.batch.PurgeBalanceStep">
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
 		<property name="balanceService">
 			<ref bean="glBalanceService" />
 		</property>
@@ -1301,7 +1221,10 @@
 		</property>
 	</bean>
 
-	<bean id="purgeSufficientFundBalancesStep" class="org.kuali.module.gl.batch.PurgeSufficientFundBalancesStep" parent="step">
+	<bean id="glPurgeSufficientFundBalancesStep" class="org.kuali.module.gl.batch.PurgeSufficientFundBalancesStep">
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
 		<property name="sufficientFundsService">
 			<ref bean="sufficientFundsService" />
 		</property>
@@ -1310,7 +1233,10 @@
 		</property>
 	</bean>
 
-	<bean id="purgeEncumbranceStep" class="org.kuali.module.gl.batch.PurgeEncumbranceStep" parent="step">
+	<bean id="glPurgeEncumbranceStep" class="org.kuali.module.gl.batch.PurgeEncumbranceStep">
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
 		<property name="encumbranceService">
 			<ref bean="glEncumbranceService" />
 		</property>
@@ -1319,7 +1245,10 @@
 		</property>
 	</bean>
 
-	<bean id="purgeAccountBalancesStep" class="org.kuali.module.gl.batch.PurgeAccountBalancesStep" parent="step">
+	<bean id="glPurgeAccountBalancesStep" class="org.kuali.module.gl.batch.PurgeAccountBalancesStep">
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
 		<property name="accountBalanceService">
 			<ref bean="glAccountBalanceService" />
 		</property>
@@ -1328,112 +1257,118 @@
 		</property>
 	</bean>
 
-	<bean id="purgeCollectorDetailStep" class="org.kuali.module.gl.batch.PurgeCollectorDetailStep" parent="step">
-		<property name="collectorDetailService">
-			<ref bean="glCollectorDetailService" />
+	<bean id="glPurgeInterDepartmentalBillingStep" class="org.kuali.module.gl.batch.PurgeInterDepartmentalBillingStep">
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
+		<property name="interDepartmentalBillingService">
+			<ref bean="glInterDepartmentalBillingService" />
 		</property>
 		<property name="chartService">
 			<ref bean="chartService" />
 		</property>
 	</bean>
 
-	<bean id="sufficientFundsRebuilderStep" class="org.kuali.module.gl.batch.SufficientFundsRebuilderStep" parent="step">
+	<bean id="glSufficientFundsRebuilderStep" class="org.kuali.module.gl.batch.SufficientFundsRebuilderStep">
 		<property name="sufficientFundsRebuilderService">
 			<ref bean="glSufficientFundsRebuilderService" />
 		</property>
 	</bean>
 
-	<bean id="scrubberStep" class="org.kuali.module.gl.batch.ScrubberStep" parent="step">
+	<bean id="glScrubberStep" class="org.kuali.module.gl.batch.ScrubberStep">
 		<property name="scrubberService">
 			<ref bean="glScrubberService" />
 		</property>
 	</bean>
 
-	<bean id="posterEntriesStep" class="org.kuali.module.gl.batch.PosterEntriesStep" parent="step">
+	<bean id="glPosterEntriesStep" class="org.kuali.module.gl.batch.PosterEntriesStep">
 		<property name="posterService">
 			<ref bean="glPosterService" />
 		</property>
 	</bean>
 
-	<bean id="posterIcrEntriesStep" class="org.kuali.module.gl.batch.PosterIcrEntriesStep" parent="step">
+	<bean id="glPosterIcrEntriesStep" class="org.kuali.module.gl.batch.PosterIcrEntriesStep">
 		<property name="posterService">
 			<ref bean="glPosterService" />
 		</property>
 	</bean>
 
-	<bean id="posterReversalStep" class="org.kuali.module.gl.batch.PosterReversalStep" parent="step">
+	<bean id="glPosterReversalStep" class="org.kuali.module.gl.batch.PosterReversalStep">
 		<property name="posterService">
 			<ref bean="glPosterService" />
 		</property>
 	</bean>
 
-	<bean id="posterIcrGenerationStep" class="org.kuali.module.gl.batch.PosterIcrGenerationStep" parent="step">
+	<bean id="glPosterIcrGenerationStep" class="org.kuali.module.gl.batch.PosterIcrGenerationStep">
 		<property name="posterService">
 			<ref bean="glPosterService" />
 		</property>
 	</bean>
 
-	<bean id="nightlyOutStep" class="org.kuali.module.gl.batch.NightlyOutStep" parent="step">
+	<bean id="glNightlyOutStep" class="org.kuali.module.gl.batch.NightlyOutStep">
 		<property name="nightlyOutService">
 			<ref bean="glNightlyOutService" />
 		</property>
 	</bean>
 
-	<bean id="clearPendingEntriesStep" class="org.kuali.module.gl.batch.ClearPendingStep" parent="step">
+	<bean id="glClearPendingStep" class="org.kuali.module.gl.batch.ClearPendingStep">
 		<property name="nightlyOutService">
 			<ref bean="glNightlyOutService" />
 		</property>
 	</bean>
 
-	<bean id="textFileLoaderStep" class="org.kuali.module.gl.batch.TextFileLoaderStep" parent="step">
+	<bean id="glTextFileLoaderStep" class="org.kuali.module.gl.batch.TextFileLoaderStep">
 		<property name="originEntryService">
 			<ref bean="glOriginEntryService" />
 		</property>
 	</bean>
 
-	<bean id="textExportStep" class="org.kuali.module.gl.batch.TextExportStep" parent="step">
+	<bean id="glTextExportStep" class="org.kuali.module.gl.batch.TextExportStep">
 		<property name="originEntryService">
 			<ref bean="glOriginEntryService" />
 		</property>
 	</bean>
 
-	<bean id="sufficientFundsSyncStep" class="org.kuali.module.gl.batch.SufficientFundsSyncStep" parent="step">
+	<bean id="glSufficientFundsSyncStep" class="org.kuali.module.gl.batch.SufficientFundsSyncStep">
 		<property name="sufficientFundsSyncService">
 			<ref bean="glSufficientFundsSyncService" />
 		</property>
 	</bean>
 
-	<bean id="encumbranceForwardStep" class="org.kuali.module.gl.batch.EncumbranceForwardStep" parent="step">
+	<bean id="glEncumbranceForwardStep" class="org.kuali.module.gl.batch.EncumbranceForwardStep">
 		<property name="yearEndService">
 			<ref bean="glYearEndService" />
 		</property>
 	</bean>
 
-	<bean id="balanceForwardStep" class="org.kuali.module.gl.batch.BalanceForwardStep" parent="step">
+	<bean id="glBalanceForwardStep" class="org.kuali.module.gl.batch.BalanceForwardStep">
 		<property name="yearEndService">
 			<ref bean="glYearEndService" />
 		</property>
 	</bean>
 
-	<bean id="nominalActivityClosingStep" class="org.kuali.module.gl.batch.NominalActivityClosingStep" parent="step">
+	<bean id="glNominalActivityClosingStep" class="org.kuali.module.gl.batch.NominalActivityClosingStep">
 		<property name="yearEndService">
 			<ref bean="glYearEndService" />
 		</property>
 	</bean>
 
-	<bean id="icrEncumbranceGenerationStep" class="org.kuali.module.gl.batch.IcrEncumbranceGenerationStep" parent="step">
+	<bean id="glIcrEncumbranceGenerationStep" class="org.kuali.module.gl.batch.IcrEncumbranceGenerationStep">
 		<property name="icrEncumbranceService">
 			<ref bean="glIcrEncumbranceService" />
 		</property>
 	</bean>
 
-	<bean id="icrEncumbranceReversalStep" class="org.kuali.module.gl.batch.IcrEncumbranceReversalStep" parent="step">
+	<bean id="glIcrEncumbranceReversalStep" class="org.kuali.module.gl.batch.IcrEncumbranceReversalStep">
 		<property name="icrEncumbranceReversalService">
 			<ref bean="glIcrEncumbranceReversalService" />
 		</property>
 	</bean>
 	
-	<bean id="posterSummaryReportStep" class="org.kuali.module.gl.batch.GlSummaryReportStep" parent="step">
+	<bean id="glGlSummaryReportStep" class="org.kuali.module.gl.batch.GlSummaryReportStep">
+		<property name="dateTimeService">
+			<ref bean="dateTimeService" />
+		</property>
 		<property name="reportService">
 			<ref bean="glReportService" />
 		</property>
@@ -1445,40 +1380,46 @@
 		</property>
 	</bean>
 
-	<bean id="createBackupGroupStep" class="org.kuali.module.gl.batch.CreateBackupGroupStep" parent="step">
+	<bean id="glCreateBackupGroupStep" class="org.kuali.module.gl.batch.CreateBackupGroupStep">
 		<property name="originEntryGroupService">
 			<ref bean="glOriginEntryGroupService" />
 		</property>
 	</bean>
 
-	<bean id="clearOldOriginEntryStep" class="org.kuali.module.gl.batch.ClearOldOriginEntryStep" parent="step">
+	<bean id="glClearOldOriginEntryStep" class="org.kuali.module.gl.batch.ClearOldOriginEntryStep">
 		<property name="originEntryGroupService">
 			<ref bean="glOriginEntryGroupService" />
 		</property>
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
 	</bean>
 
-	<bean id="organizationReversionClosingStep" class="org.kuali.module.gl.batch.OrganizationReversionEndOfYearStep" parent="step">
+	<bean id="glOrganizationReversionEndOfYearStep" class="org.kuali.module.gl.batch.OrganizationReversionEndOfYearStep">
 		<property name="organizationReversionProcessService">
 			<ref bean="glOrganizationReversionProcessService" />
 		</property>
 	</bean>
 
-	<bean id="organizationReversionOpeningStep" class="org.kuali.module.gl.batch.OrganizationReversionBeginningOfYearStep" parent="step">
+	<bean id="glOrganizationReversionBeginningOfYearStep" class="org.kuali.module.gl.batch.OrganizationReversionBeginningOfYearStep">
 		<property name="organizationReversionProcessService">
 			<ref bean="glOrganizationReversionProcessService" />
 		</property>
 	</bean>
 	
-	<bean id="collectorStep" class="org.kuali.module.gl.batch.collector.CollectorStep" parent="step">
+	<bean id="glCollectorStep" class="org.kuali.module.gl.batch.collector.CollectorStep">
 		<property name="collectorService">
 			<ref bean="glCollectorService" />
 		</property>
-		<property name="collectorReportService">
-			<ref bean="glCollectorReportService" />
+		<property name="batchInputFileService">
+		    <ref bean="batchInputFileService" />
+		</property>
+		<property name="collectorInputFileType">
+		    <ref bean="collectorInputFileType" />
 		</property>
 	</bean>
 
-	<bean id="purgeCorrectionProcessFilesStep" class="org.kuali.module.gl.batch.PurgeCorrectionProcessFilesStep" parent="step">
+	<bean id="glPurgeCorrectionProcessFilesStep" class="org.kuali.module.gl.batch.PurgeCorrectionProcessFilesStep" parent="step">
 		<property name="correctionDocumentDao">
 			<ref bean="glCorrectionDocumentDao" />
 		</property>
@@ -1487,15 +1428,15 @@
 		</property>
 	</bean>
 	
-	<bean id="purgeCorrectionProcessFilesJob" parent="scheduledJobDescriptor">
+	<bean id="glPurgeCorrectionProcessFilesJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="purgeCorrectionProcessFilesStep" />
+				<ref bean="glPurgeCorrectionProcessFilesStep" />
 			</list>
 		</property>
 	</bean>
 	
-	<bean id="correctionProcessOriginEntryService" class="org.kuali.module.gl.service.impl.GlCorrectionProcessOriginEntryServiceImpl">
+	<bean id="glCorrectionProcessOriginEntryService" class="org.kuali.module.gl.service.impl.GlCorrectionProcessOriginEntryServiceImpl">
 		<property name="businessObjectService">
 			<ref bean="businessObjectService"/>
 		</property>
@@ -1517,8 +1458,8 @@
 	    <property name="dateTimeService">
 	       <ref bean="dateTimeService"/>
 	    </property>
-	    <property name="collectorHelperService">
-	       <ref bean="glCollectorHelperService"/>
+	    <property name="collectorService">
+	       <ref bean="glCollectorService"/>
 	    </property>
 	</bean>
 
@@ -1571,15 +1512,15 @@
 		</property>
 	</bean>
 	
-	<bean id="enterpriseFeedJob" parent="scheduledJobDescriptor">
+	<bean id="glOriginEntryEnterpriseFeederJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="enterpriseFeedStep" />
+				<ref bean="glOriginEntryEnterpriseFeederStep" />
 			</list>
 		</property>
 	</bean>
 	
-	<bean id="enterpriseFeedStep" class="org.kuali.module.gl.batch.FeederStep" parent="step">
+	<bean id="glOriginEntryEnterpriseFeederStep" class="org.kuali.module.gl.batch.FeederStep">
 		<property name="enterpriseFeederService">
 			<ref bean="glOriginEntryEnterpriseFeederService" />
 		</property>
@@ -1591,21 +1532,6 @@
 		</property>
 		<property name="mailService">
 			<ref bean="mailService"/>
-		</property>
-	</bean>
-	
-	<bean id="glOrgReversionUnitOfWorkService" class="org.kuali.module.gl.service.impl.OrgReversionUnitOfWorkServiceImpl">
-		<property name="businessObjectService">
-			<ref bean="businessObjectService" />
-		</property>
-		<property name="orgReversionUnitOfWorkDao">
-			<bean class="org.kuali.module.gl.dao.jdbc.OrgReversionUnitOfWorkDaoJdbc" parent="platformAwareDaoJdbc" />
-		</property>
-	</bean>
-	
-	<bean id="glRunDateService" class="org.kuali.module.gl.service.impl.RunDateServiceImpl">
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService"/>
 		</property>
 	</bean>
 </beans>
