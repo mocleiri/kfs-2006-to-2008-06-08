@@ -25,9 +25,8 @@ import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.document.authorization.MaintenanceDocumentActionFlags;
 import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizations;
 import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.vendor.VendorAuthorizationConstants;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.VendorPropertyConstants;
@@ -45,9 +44,7 @@ public class VendorDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase 
     public MaintenanceDocumentAuthorizations getFieldAuthorizations(MaintenanceDocument document, UniversalUser user) {
         MaintenanceDocumentAuthorizations auths = new MaintenanceDocumentAuthorizations();
         VendorDetail vendor = (VendorDetail)document.getNewMaintainableObject().getBusinessObject();
-        VendorDetail oldVendor = (VendorDetail)document.getOldMaintainableObject().getBusinessObject();
         VendorHeader vendorHeader = vendor.getVendorHeader();
-        VendorHeader oldVendorHeader = oldVendor.getVendorHeader();
         
         //If the vendor is not a parent, there are certain fields that should be readOnly
         if (!vendor.isVendorParentIndicator()) {
@@ -78,8 +75,8 @@ public class VendorDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase 
         //N in the vendor type maintenance table, then we have to set the vendor type as readOnly field.
         else if (ObjectUtils.isNotNull(vendor.getVendorHeaderGeneratedIdentifier()) &&
                  ObjectUtils.isNotNull(vendorHeader) &&
-                 ObjectUtils.isNotNull(oldVendorHeader.getVendorType()) && 
-                 !oldVendorHeader.getVendorType().isVendorTypeChangeAllowedIndicator()) {
+                 ObjectUtils.isNotNull(vendorHeader.getVendorType()) && 
+                 !vendorHeader.getVendorType().isVendorTypeChangeAllowedIndicator()) {
             auths.addReadonlyAuthField(VendorPropertyConstants.VENDOR_TYPE_CODE);
         }
         setVendorContractFieldsAuthorization(vendor, auths, user);
@@ -94,7 +91,7 @@ public class VendorDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase 
     public Map getEditMode(Document document, UniversalUser user) {
         Map editMode = super.getEditMode(document, user);
         VendorDetail vendor = (VendorDetail)((MaintenanceDocument)document).getNewMaintainableObject().getBusinessObject();
-        String taxNbrAccessibleWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue( VendorRuleConstants.PURAP_ADMIN_GROUP, VendorConstants.Workgroups.WORKGROUP_TAXNBR_ACCESSIBLE );
+        String taxNbrAccessibleWorkgroup = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( VendorRuleConstants.PURAP_ADMIN_GROUP, VendorConstants.Workgroups.WORKGROUP_TAXNBR_ACCESSIBLE );
 
         if (user.isMember(taxNbrAccessibleWorkgroup)) {
             editMode.put(VendorAuthorizationConstants.VendorEditMode.TAX_ENTRY, "TRUE");
@@ -122,7 +119,7 @@ public class VendorDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase 
      * @param user
      */
     private void setVendorContractFieldsAuthorization(VendorDetail vendor, MaintenanceDocumentAuthorizations auths, UniversalUser user) {
-        String purchasingWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue( VendorRuleConstants.PURAP_ADMIN_GROUP, VendorConstants.Workgroups.WORKGROUP_PURCHASING); 
+        String purchasingWorkgroup = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue( VendorRuleConstants.PURAP_ADMIN_GROUP, VendorConstants.Workgroups.WORKGROUP_PURCHASING); 
         if (!user.isMember(purchasingWorkgroup)) {
             List<VendorContract> contracts = vendor.getVendorContracts();
             int i = 0;

@@ -15,232 +15,165 @@
  */
 package org.kuali.module.purap.web.struts.action;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.core.bo.Note;
-import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.question.ConfirmationQuestion;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.KualiRuleService;
-import org.kuali.core.service.NoteService;
+import org.kuali.core.rule.event.SaveDocumentEvent;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
-import org.kuali.module.purap.PurapConstants.CMDocumentsStrings;
-import org.kuali.module.purap.document.AccountsPayableDocument;
 import org.kuali.module.purap.document.CreditMemoDocument;
-import org.kuali.module.purap.rule.event.CalculateAccountsPayableEvent;
+import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.rule.event.ContinueAccountsPayableEvent;
-import org.kuali.module.purap.service.CreditMemoCreateService;
 import org.kuali.module.purap.service.CreditMemoService;
-import org.kuali.module.purap.util.PurQuestionCallback;
 import org.kuali.module.purap.web.struts.form.CreditMemoForm;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
- * This class handles specific Actions requests for the Credit Memo document..
+ * This class handles specific Actions requests for the Requisition.
+ * 
  */
 public class CreditMemoAction extends AccountsPayableActionBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CreditMemoAction.class);
-
+    
     /**
-     * Do initialization for a new credit memo
+     * Do initialization for a new requisition
      * 
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#createDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
      */
     @Override
     protected void createDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
+        
         super.createDocument(kualiDocumentFormBase);
+        
         ((CreditMemoDocument) kualiDocumentFormBase.getDocument()).initiateDocument();
+
     }
 
     /**
-     * Handles continue request. This request comes from the initial screen which gives indicates whether the type is preq, po, or
-     * vendor. Based on that, the credit memo is initially populated and the remaining tabs shown.
+     * @see org.kuali.core.web.struts.action.KualiAction#refresh(org.apache.struts.action.ActionMapping,
+     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
-    public ActionForward continueCreditMemo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @Override
+    public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+ 
+        CreditMemoForm preqForm = (CreditMemoForm) form;
+        CreditMemoDocument document = (CreditMemoDocument) preqForm.getDocument();
+                
+        return super.refresh(mapping, form, request, response);
+    }
+    
+   
+    public ActionForward continueCM(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        LOG.debug("continueCM() method");
+
         CreditMemoForm preqForm = (CreditMemoForm) form;
         CreditMemoDocument creditMemoDocument = (CreditMemoDocument) preqForm.getDocument();
+        Map editMode = preqForm.getEditingMode();
+        
+        Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
+        //String reason = request.getParameter(KFSConstants.QUESTION_REASON_ATTRIBUTE_NAME);
 
-        // preform duplicate check which will forward to a question prompt if one is found
-        ActionForward forward = performDuplicateCreditMemoCheck(mapping, form, request, response, creditMemoDocument);
-        if (forward != null) {
-            return forward;
-        }
+        KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
-        // perform validation of init tab
-        boolean isValid = SpringContext.getBean(KualiRuleService.class).applyRules(new ContinueAccountsPayableEvent(creditMemoDocument));
-        if (!isValid) {
+  
+        
+         CreditMemoService creditMemoService = SpringServiceLocator.getCreditMemoService();
+         HashMap<String, String> duplicateMessages = creditMemoService.creditMemoDuplicateMessages(creditMemoDocument);
+        
+       if (!duplicateMessages.isEmpty()){
+  
+            if (question == null) {
+              // ask question if not already asked
+              return this.performQuestionWithoutInput(mapping, form, request, response, PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, duplicateMessages.get(PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION) , KFSConstants.CONFIRMATION_QUESTION, KFSConstants.ROUTE_METHOD, "");
+
+            } 
+            
+            Object buttonClicked = request.getParameter(KFSConstants.QUESTION_CLICKED_BUTTON);
+           
+            if ((PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION.equals(question)) && ConfirmationQuestion.NO.equals(buttonClicked)) {
+                
+                // if no button clicked just reload the doc in the INITIATE status and let the user to change the input values
+               
+                creditMemoDocument.setStatusCode(PurapConstants.CreditMemoStatuses.INITIATE);
+                //editMode.put(PurapAuthorizationConstants.CreditMemoEditMode.DISPLAY_INIT_TAB, "TRUE");
+                return mapping.findForward(KFSConstants.MAPPING_BASIC);
+             }
+       }
+        
+        // If we are here either there was no duplicate or there was a duplicate and the user hits continue, in either case we need to validate the business rules
+        creditMemoDocument.getDocumentHeader().setFinancialDocumentDescription("dummy data to pass the business rule");
+       // boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new SaveDocumentEvent(creditMemoDocument));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new ContinueAccountsPayableEvent(creditMemoDocument)); 
+        creditMemoDocument.getDocumentHeader().setFinancialDocumentDescription(null);
+        if (rulePassed) {
+            
+            Integer poId = creditMemoDocument.getPurchaseOrderIdentifier();
+            PurchaseOrderDocument purchaseOrderDocument = SpringServiceLocator.getPurchaseOrderService().getCurrentPurchaseOrder(creditMemoDocument.getPurchaseOrderIdentifier());
+            String vendorNbr = creditMemoDocument.getVendorNumber();
+        
+         ///   creditMemoDocument.populateCreditMemoVendorFileds(vendorNbr);
+            creditMemoDocument.setStatusCode(PurapConstants.CreditMemoStatuses.IN_PROCESS);
+            creditMemoDocument.refreshAllReferences();
+
+            //editMode.put(PurapAuthorizationConstants.CreditMemoEditMode.DISPLAY_INIT_TAB, "FALSE");
+            
+        } else {
             creditMemoDocument.setStatusCode(PurapConstants.CreditMemoStatuses.INITIATE);
         }
-        else {
-            creditMemoDocument.setStatusCode(PurapConstants.CreditMemoStatuses.IN_PROCESS);
-            SpringContext.getBean(CreditMemoCreateService.class).populateDocumentAfterInit(creditMemoDocument);
-            SpringContext.getBean(CreditMemoService.class).saveDocumentWithoutValidation(creditMemoDocument);
+       
+        //If the list of closed/expired accounts is not empty add a warning and  add a note for the close / epired accounts which get replaced
+      /*
+        HashMap<String, String> expiredOrClosedAccounts = creditMemoService.ExpiredOrClosedAccountsList(creditMemoDocument);
+ 
+        if (!expiredOrClosedAccounts.isEmpty()){
+            GlobalVariables.getMessageList().add(PurapKeyConstants.MESSAGE_CLOSED_OR_EXPIRED_ACCOUNTS_REPLACED);
+            creditMemoService.addContinuationAccountsNote(creditMemoDocument, expiredOrClosedAccounts);
         }
-
-        creditMemoDocument.refreshNonUpdateableReferences();
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        
+        */
+        
+        return super.refresh(mapping, form, request, response);
+        //return mapping.findForward(KFSConstants.MAPPING_PORTAL);
+  
     }
-
-    /**
-     * Clears out fields of the init tab.
-     */
+    
     public ActionForward clearInitFields(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CreditMemoForm cmForm = (CreditMemoForm) form;
-        CreditMemoDocument creditMemoDocument = (CreditMemoDocument) cmForm.getDocument();
+        LOG.debug("clearInitValues() method");
+
+        CreditMemoForm preqForm = (CreditMemoForm) form;
+        CreditMemoDocument creditMemoDocument = (CreditMemoDocument) preqForm.getDocument();
         creditMemoDocument.clearInitFields();
 
         return super.refresh(mapping, form, request, response);
+        //return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
-
     /**
-     * Calls CreditMemoService to perform the duplicate credit memo check. If one is found, a question is setup and control is
-     * forwarded to the question action method. Coming back from the question prompt the button that was clicked is checked and if
-     * 'no' was selected they are forward back to the page still in init mode.
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#save(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
-    private ActionForward performDuplicateCreditMemoCheck(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, CreditMemoDocument creditMemoDocument) throws Exception {
-        ActionForward forward = null;
-        String duplicateMessage = SpringContext.getBean(CreditMemoService.class).creditMemoDuplicateMessages(creditMemoDocument);
-        if (StringUtils.isNotBlank(duplicateMessage)) {
-            Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
-            if (question == null) {
-                return this.performQuestionWithoutInput(mapping, form, request, response, PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, duplicateMessage, KFSConstants.CONFIRMATION_QUESTION, "continueCreditMemo", "");
-            }
-
-            Object buttonClicked = request.getParameter(KFSConstants.QUESTION_CLICKED_BUTTON);
-            if ((PurapConstants.PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION.equals(question)) && ConfirmationQuestion.NO.equals(buttonClicked)) {
-                forward = mapping.findForward(KFSConstants.MAPPING_BASIC);
-            }
-        }
-
-        return forward;
-    }
-
-    /**
-     * Calls methods to perform credit allowed calculation and total credit memo amount
-     */
+    /*
     @Override
-    protected void customCalculate(AccountsPayableDocument apDoc) {
-        CreditMemoDocument cmDocument = (CreditMemoDocument) apDoc;
+    public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // TODO Auto-generated method stub
+        LOG.debug("save() method");
 
-        // check rules before doing calculation
-//TODO: ckirschenman - the way this rule is currently implemented interferes with proration.  Either make the rules it calls simpler or remove this
-//        boolean valid = SpringContext.getBean(KualiRuleService.class).applyRules(new PreCalculateAccountsPayableEvent(cmDocument));
-
-//        if (valid) {
-            // update extended price on item lines
-            cmDocument.updateExtendedPriceOnItems();
-
-            // call service method to finish up calculation
-            SpringContext.getBean(CreditMemoService.class).calculateCreditMemo(cmDocument);
-
-            // notice we're ignoring whether the boolean, because these are just warnings they shouldn't halt anything
-            SpringContext.getBean(KualiRuleService.class).applyRules(new CalculateAccountsPayableEvent(cmDocument));
-//        }
+        CreditMemoForm preqForm = (CreditMemoForm) form;
+        CreditMemoDocument document = (CreditMemoDocument) preqForm.getDocument();
+        
+        SpringServiceLocator.getCreditMemoService().save(document);
+        return super.save(mapping, form, request, response);
     }
-
-    /**
-     * This action puts a credit memo on hold, prompting for a reason before hand. This stops further approvals or routing.
-     */
-    public ActionForward addHoldOnCreditMemo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String operation = "Hold ";
-        
-        PurQuestionCallback callback = new PurQuestionCallback() {
-            public void doPostQuestion(AccountsPayableDocument document, String noteText) throws Exception {
-                SpringContext.getBean(CreditMemoService.class).addHoldOnCreditMemo((CreditMemoDocument) document, noteText);
-            }
-        };
-        
-        return askQuestionWithInput(mapping, form, request, response, CMDocumentsStrings.HOLD_CM_QUESTION, operation, CMDocumentsStrings.HOLD_NOTE_PREFIX, PurapKeyConstants.CREDIT_MEMO_QUESTION_HOLD_DOCUMENT, callback);
-    }
-
-    /**
-     * This action removes a hold on the credit memo.
-     */
-    public ActionForward removeHoldFromCreditMemo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String operation = "Remove Hold ";
-        
-        PurQuestionCallback callback = new PurQuestionCallback() {
-            public void doPostQuestion(AccountsPayableDocument document, String noteText) throws Exception {
-                SpringContext.getBean(CreditMemoService.class).removeHoldOnCreditMemo((CreditMemoDocument) document, noteText);
-            }
-        };
-        
-        return askQuestionWithInput(mapping, form, request, response, CMDocumentsStrings.REMOVE_HOLD_CM_QUESTION, operation, CMDocumentsStrings.REMOVE_HOLD_NOTE_PREFIX, PurapKeyConstants.CREDIT_MEMO_QUESTION_REMOVE_HOLD_DOCUMENT, callback);
-    }
-    
-    /**
-     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#cancel(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public ActionForward cancel(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String operation = "Cancel ";
-        
-        PurQuestionCallback callback = new PurQuestionCallback() {
-            public void doPostQuestion(AccountsPayableDocument document, String noteText) throws Exception {
-                CreditMemoDocument cmDocument = (CreditMemoDocument)document;
-                DocumentService documentService = SpringContext.getBean(DocumentService.class);
-                // save the note
-                Note noteObj = documentService.createNoteFromDocument(cmDocument, noteText);
-                documentService.addNoteToDocument(cmDocument, noteObj);
-                SpringContext.getBean(NoteService.class, "noteService").save(noteObj);
-                documentService.cancelDocument(cmDocument, noteText);            }
-        };
-        
-        return askQuestionWithInput(mapping, form, request, response, CMDocumentsStrings.CANCEL_CM_QUESTION, CMDocumentsStrings.CANCEL_NOTE_PREFIX, operation, PurapKeyConstants.CREDIT_MEMO_QUESTION_CANCEL_DOCUMENT, callback);
-    }
-
-    /**
-     * Checks that calculation has been performed, calls cm service to run rules and approve document, and checks for needed
-     * unmatched override if needed.
-     * 
-     * @see org.kuali.module.purap.web.struts.action.AccountsPayableActionBase#approve(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CreditMemoForm cmForm = (CreditMemoForm) form;
-        CreditMemoDocument creditMemoDocument = (CreditMemoDocument) cmForm.getDocument();
-
-        if (!cmForm.isCalculated()) {
-            GlobalVariables.getErrorMap().putError(KFSConstants.DOCUMENT_ERRORS, PurapKeyConstants.ERROR_APPROVE_REQUIRES_CALCULATE);
-            return mapping.findForward(KFSConstants.MAPPING_BASIC);
-        }
-
-        // route and catch validation errors to check for unmatched total error
-        try {
-            creditMemoDocument.updateExtendedPriceOnItems();
-            SpringContext.getBean(CreditMemoService.class).calculateCreditMemo(creditMemoDocument);
-            super.route(mapping, form, request, response);
-
-//            SpringServiceLocator.getCreditMemoService().route(creditMemoDocument, cmForm.getAnnotation(), combineAdHocRecipients(cmForm));
-        }
-        catch (ValidationException e) {
-            // check for needed override
-            if (GlobalVariables.getErrorMap().containsMessageKey(PurapKeyConstants.ERROR_CREDIT_MEMO_INVOICE_AMOUNT_NONMATCH)) {
-                cmForm.setShowTotalOverride(true);
-            }
-            throw new ValidationException(e.getMessage(), e);
-        }
-        
-        // add route success message
-        GlobalVariables.getMessageList().add(KFSKeyConstants.MESSAGE_ROUTE_SUCCESSFUL);
-        cmForm.setAnnotation("");
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
-    }
-
+    */
 }

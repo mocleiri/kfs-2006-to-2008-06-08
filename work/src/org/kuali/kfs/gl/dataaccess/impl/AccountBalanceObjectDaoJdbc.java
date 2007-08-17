@@ -22,8 +22,7 @@ import java.util.Map;
 
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.AccountBalanceObjectDao;
@@ -122,7 +121,7 @@ public class AccountBalanceObjectDaoJdbc extends AccountBalanceDaoJdbcBase imple
             String balanceStatementSql = 
 	        		"SELECT CURR_BDLN_BAL_AMT,ACLN_ACTLS_BAL_AMT,ACLN_ENCUM_BAL_AMT " +
 	        		"FROM fp_interim1_obj_mt " +
-	        		"WHERE sesid = ? AND univ_fiscal_yr = ? AND fin_coa_cd = ? AND account_nbr = ? AND sub_acct_nbr = ?" +
+	        		"WHERE sesid = ? univ_fiscal_yr = ? AND fin_coa_cd = ? AND account_nbr = ? AND sub_acct_nbr = ?" +
 					" AND fin_object_cd = ? AND fin_sub_obj_cd = ?";
         
 	        String updateBalanceStatementSql = 
@@ -283,7 +282,7 @@ public class AccountBalanceObjectDaoJdbc extends AccountBalanceDaoJdbcBase imple
         // without the nulls (because we will post eDocs
         // with blank years tonight most probably.
 
-        UniversityDate today = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+        UniversityDate today = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
 
         clearTempTable( "gl_pending_entry_mt", "PERSON_UNVL_ID" );
 
@@ -293,12 +292,12 @@ public class AccountBalanceObjectDaoJdbc extends AccountBalanceDaoJdbcBase imple
         		"FIN_COA_CD, ACCOUNT_NBR, SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FIN_BALANCE_TYP_CD," +
         		"FIN_OBJ_TYP_CD, UNIV_FISCAL_YR, UNIV_FISCAL_PRD_CD, TRN_LDGR_ENTR_DESC, TRN_LDGR_ENTR_AMT, TRN_DEBIT_CRDT_CD," +
         		"TRANSACTION_DT, FDOC_TYP_CD, ORG_DOC_NBR, PROJECT_CD, ORG_REFERENCE_ID, FDOC_REF_TYP_CD, FS_REF_ORIGIN_CD,FDOC_REF_NBR, " +
-        		"FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD,TRNENTR_PROCESS_TM) ";
+        		"FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD,TRNENTR_PROCESS_TM, BDGT_YR) ";
 
         String selectSql = "SELECT ?, p.FS_ORIGIN_CD, p.FDOC_NBR, p.TRN_ENTR_SEQ_NBR, p.FIN_COA_CD, p.ACCOUNT_NBR, NVL(p.SUB_ACCT_NBR,'-----'), " +
         		" p.FIN_OBJECT_CD, NVL(p.FIN_SUB_OBJ_CD,'---'), p.FIN_BALANCE_TYP_CD,p.FIN_OBJ_TYP_CD, p.UNIV_FISCAL_YR, " +
         		" p.UNIV_FISCAL_PRD_CD, p.TRN_LDGR_ENTR_DESC, p.TRN_LDGR_ENTR_AMT, p.TRN_DEBIT_CRDT_CD,"
-				+ "p.TRANSACTION_DT, p.FDOC_TYP_CD, p.ORG_DOC_NBR, PROJECT_CD, p.ORG_REFERENCE_ID, p.FDOC_REF_TYP_CD, p.FS_REF_ORIGIN_CD,p.FDOC_REF_NBR, p.FDOC_REVERSAL_DT, p.TRN_ENCUM_UPDT_CD, p.FDOC_APPROVED_CD, p.ACCT_SF_FINOBJ_CD, p.TRN_ENTR_OFST_CD,p.TRNENTR_PROCESS_TM "
+				+ "p.TRANSACTION_DT, p.FDOC_TYP_CD, p.ORG_DOC_NBR, PROJECT_CD, p.ORG_REFERENCE_ID, p.FDOC_REF_TYP_CD, p.FS_REF_ORIGIN_CD,p.FDOC_REF_NBR, p.FDOC_REVERSAL_DT, p.TRN_ENCUM_UPDT_CD, p.FDOC_APPROVED_CD, p.ACCT_SF_FINOBJ_CD, p.TRN_ENTR_OFST_CD,p.TRNENTR_PROCESS_TM, p.BDGT_YR "
 				+ "FROM gl_pending_entry_t p,ca_object_code_t o,fp_doc_header_t d "
 				+ "WHERE o.FIN_COA_CD = p.FIN_COA_CD AND o.FIN_OBJECT_CD = p.FIN_OBJECT_CD AND o.FIN_OBJ_LEVEL_CD = ?"
 				+ " AND p.fdoc_nbr = d.fdoc_nbr AND "
@@ -324,11 +323,11 @@ public class AccountBalanceObjectDaoJdbc extends AccountBalanceDaoJdbcBase imple
 			selectSql = selectSql + "AND (p.univ_fiscal_yr is null OR p.univ_fiscal_yr = ? )";
 			params.add(  universityFiscalYear );
 		} else {
-			selectSql = selectSql + "AND p.univ_fiscal_yr = ?";
+			selectSql = selectSql + "AND p.univ_fiscal_yr = " + universityFiscalYear;
 			params.add(  universityFiscalYear );
 		}
 
-		getSimpleJdbcTemplate().update( insertSql + selectSql, params.toArray() );
+		getSimpleJdbcTemplate().update( insertSql = selectSql, params.toArray() );
 
         if (isCostShareExcluded) {
             purgeCostShareEntries( "gl_pending_entry_mt", "person_unvl_id" );

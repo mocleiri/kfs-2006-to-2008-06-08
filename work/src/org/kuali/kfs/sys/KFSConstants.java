@@ -17,17 +17,13 @@ package org.kuali.kfs;
 
 import java.util.HashMap;
 
-import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.DataDictionaryService;
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.gl.bo.OriginEntry;
-import org.kuali.module.labor.bo.LaborOriginEntry;
 
 /**
  * This class is used to define global constants.
  */
-public class KFSConstants {
+public class KFSConstants extends Constants {
     private static final long serialVersionUID = 2882277719647128949L;
     
     // special user used in the post-processor
@@ -38,6 +34,7 @@ public class KFSConstants {
     public static final String PARAM_MAINTENANCE_VIEW_MODE_LOOKUP = "lookup";
     public static final String PARAM_MAINTENANCE_VIEW_MODE_INQUIRY = "inquiry";
     
+    public static final String CONFIGURATION_FILE_NAME = "configuration";
     public static final String ENVIRONMENT_KEY = "environment";
     public static final String VERSION_KEY = "version";
     public static final String LOG4J_SETTINGS_FILE_KEY = "log4j.settings.file";
@@ -49,35 +46,22 @@ public class KFSConstants {
     public static final String ATTACHMENTS_PENDING_DIRECTORY_KEY = "attachments.pending.directory";
     public static final String HTDOCS_LOGS_URL_KEY = "htdocs.logs.url";
     public static final String HTDOCS_STAGING_URL_KEY = "htdocs.staging.url";
-    public static final String STAGING_DIRECTORY_KEY = "staging.directory";
     public static final String EXTERNALIZABLE_HELP_URL_KEY = "externalizable.help.url";
     public static final String EXTERNALIZABLE_IMAGES_URL_KEY = "externalizable.images.url";
-    public static final String RICE_EXTERNALIZABLE_IMAGES_URL_KEY = "kr.externalizable.images.url";
     public static final String REPORTS_DIRECTORY_KEY = "reports.directory";
     public static final String WORKFLOW_URL_KEY = "workflow.url";
+    public static final String LOOKUP_RESULTS_LIMIT_URL_KEY = "lookup.results.limit";
     public static final String PROD_ENVIRONMENT_CODE_KEY = "production.environment.code";
     public static final String MAINTAIN_USERS_LOCALLY_KEY = "maintain.users.locally";
-    public static final String KFS_BATCH_COMPONENTS_BEAN_NAME = "kfsBatchComponents";
+    public static final String DOCHANDLER_DO_URL = "/DocHandler.do?docId=";
+    public static final String DOCHANDLER_URL_CHUNK = "&command=displayDocSearchView";
     
     public static final String DATABASE_REPOSITORY_FILES_LIST_NAME = "databaseRepositoryFilePaths";
     public static final String SCRIPT_CONFIGURATION_FILES_LIST_NAME = "scriptConfigurationFilePaths";
     public static final String JOB_NAMES_LIST_NAME = "jobNames";
     public static final String TRIGGER_NAMES_LIST_NAME = "triggerNames";
-    
-    public static final String CROSS_MODULE_ID = "core";
-    public static final String CROSS_MODULE_CODE = "CF";
-    public static final String CROSS_MODULE_NAME = "Core Functionality";
-    public static final String KFS_MODULE_ID = "kfs";
-    public static final String KFS_MODULE_CODE = "FS";
-    public static final String KFS_MODULE_NAME = "Financial Systems";
 
-    public static final String LOOKUP_RESULTS_LIMIT_URL_KEY = "lookup.results.limit";
-    public static final String DOCHANDLER_DO_URL = "/DocHandler.do?docId=";
-    public static final String DOCHANDLER_URL_CHUNK = "&command=displayDocSearchView";
-   
     public static final String ACCOUNT_NUMBER_PROPERTY_NAME = "accountNumber";
-    public static final String MODULE_ID_PROPERTY_NAME = "moduleId";
-    public static final String MODULE_CODE_PROPERTY_NAME = "moduleCode";
     public static final String ACCOUNT_STATUS_CLOSED = "Y";
     public static final String ACCOUNTING_PERIOD_STATUS_CODE_FIELD = "universityFiscalPeriodStatusCode";
     public static final String ACCOUNTING_PERIOD_STATUS_CLOSED = "C";
@@ -104,7 +88,6 @@ public class KFSConstants {
     public static final String BALANCE_TYPE_INTERNAL_ENCUMBRANCE = "IE";
     public static final String BALANCE_TYPE_COST_SHARE_ENCUMBRANCE = "CE";
     public static final String BALANCE_TYPE_ACTUAL = "AC";
-    public static final String BALANCE_TYPE_AUDIT_TRAIL = "NB";
     public static final String BALANCE_TYPE_A21 = "A2";
     public static final String BALANCE_TYPE_BUDGET_STATISTICS = "BS";
     public static final String BALANCE_TYPE_PRE_ENCUMBRANCE = "PE";
@@ -115,6 +98,7 @@ public class KFSConstants {
     public static final String CHANGE_JOURNAL_VOUCHER_BALANCE_TYPE_METHOD = "changeBalanceType";
     public static final String CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME = "chartOfAccountsCode";
     public static final String CONFIRMATION_QUESTION = "confirmationQuestion";
+    public static final String CONFIGURATION_SERVICE_DATA_FILE_NAME = "configurationServiceData.xml";
     public static final String CONSOLIDATED_SUBACCOUNT = "*ALL*";
     public static final String CONVERSION_FIELDS_PARAMETER = "conversionFields";
     public static final String LOOKUP_READ_ONLY_FIELDS = "readOnlyFields";
@@ -122,6 +106,7 @@ public class KFSConstants {
     public static final String COST_SHARE = "CS";
     public static final String CREDIT_AMOUNT_PROPERTY_NAME = "newSourceLineCredit";
     public static final String DEBIT_AMOUNT_PROPERTY_NAME = "newSourceLineDebit";
+    public static final String DEFAULT_RETURN_LOCATION = "lookup.do";
     public static final String DELETE_LINE_METHOD = "deleteLine";
     public static final String DICTIONARY_BO_NAME = "dictionaryBusinessObjectName";
     public static final String DISENCUMBRANCE = "Disencumbrance";
@@ -139,8 +124,6 @@ public class KFSConstants {
     public static final String EMPLOYEE_ACTIVE_STATUS = "A";
     public static final String EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME = "sourceAccountingLine";
     public static final String EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME = "targetAccountingLine";
-    public static final String SOURCE_ACCT_LINE_TYPE_CODE = "F";  // F = From, the label for this on most documents
-    public static final String TARGET_ACCT_LINE_TYPE_CODE = "T";  // T = To, the label for this on most documents
     public static final String EXTRA_BUTTON_SOURCE = "extraButtonSource";
     public static final String EXTRA_BUTTON_PARAMS = "extraButtonParams";
     public static final String NEW_DOCUMENT_NOTE_PROPERTY_NAME = "newDocumentNote";
@@ -188,12 +171,15 @@ public class KFSConstants {
     public static final String FINANCIAL_DOCUMENT_TYPE_CODE = "financialDocumentTypeCode";
     public static final String ORGANIZATION_CODE_PROPERTY_NAME = "organizationCode";
     public static final String ORIGIN_CODE_KUALI = "01";
+    public static final String PERIOD_CODE_ANNUAL_BALNCE = "AB";
+    public static final String PERIOD_CODE_BEGINNING_BALNCE = "BB";
+    public static final String PERIOD_CODE_CG_BEGINNING_BALNCE = "CB";
     public static final String TRANSFER_FUNDS = "TF";
     public static final String[] ENCUMBRANCE_BALANCE_TYPE = new String[] { BALANCE_TYPE_EXTERNAL_ENCUMBRANCE, BALANCE_TYPE_INTERNAL_ENCUMBRANCE, BALANCE_TYPE_PRE_ENCUMBRANCE };
     public static final String LABOR_DISTRIBUTION_ORIGIN_CODE = "LD";
-    public static final String STAND_IN_BUSINESS_OBJECT_FOR_ATTRIBUTES = "KFSAttributeReferenceDummy";
+    public static final String STAND_IN_BUSINESS_OBJECT_FOR_ATTRIBUTES = "AttributeReferenceDummy";
     public static final String LABOR_MODIFIED_INQUIRY_ACTION = "laborModifiedInquiry.do";
-    public static final String EMPLOYEE_FUNDING_INQUIRY_ACTION = "employeeFundingInquiry.do";    
+    public static final String PERSON_FUNDING_INQUIRY_ACTION = "personFundingInquiry.do";    
     public static final String OVERRIDE_KEYS = "overrideKeys";
 
     /**
@@ -237,7 +223,7 @@ public class KFSConstants {
     public static final String GL_CREDIT_CODE = "C";
     public static final String GL_BUDGET_CODE = " ";
 
-    // TRN_ENCUM_UPDT_CD value values
+    // TRN_ENCUMB_UPDT_CD value values
     public static final String ENCUMB_UPDT_DOCUMENT_CD = "D";
     public static final String ENCUMB_UPDT_REFERENCE_DOCUMENT_CD = "R";
     public static final String ENCUMB_UPDT_NO_ENCUMBRANCE_CD = "N";
@@ -272,7 +258,7 @@ public class KFSConstants {
     public static final String PROJECT_CODE_PROPERTY_NAME = "projectCode";
 
     public static final String INQUIRABLE_ATTRIBUTE_NAME = "kualiInquirable";
-    public static final String INQUIRY_ACTION = "kr/inquiry.do";
+    public static final String INQUIRY_ACTION = "inquiry.do";
     public static final String INQUIRY_IMPL_ATTRIBUTE_NAME = "inquirableImplServiceName";
     public static final String JOURNAL_VOUCHER_CHANGE_BALANCE_TYPE_QUESTION = "JournalVoucherChangeBalanceTypeQuestion";
     public static final String JOURNAL_VOUCHER_ROUTE_OUT_OF_BALANCE_DOCUMENT_QUESTION = "JournalVoucherRouteOutOfBalanceDocumentQuestion";
@@ -282,7 +268,8 @@ public class KFSConstants {
     public static final String VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME = ".credit";
     public static final String VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME = ".debit";
     public static final String KUALI_WORKFLOW_APPLICATION_CODE = "kuali";
-    public static final String LOOKUP_ACTION = "kr/lookup.do";
+    public static final String LOOKUP_ACTION = "lookup.do";
+    public static final String MULTIPLE_VALUE_LOOKUP_ACTION = "multipleValueLookup.do";
     public static final String LOOKUP_RESULTS_SEQUENCE_NUMBER = "lookupResultsSequenceNumber";
     public static final String LOOKUP_RESULTS_BO_CLASS_NAME = "lookupResultsBOClassName";
     public static final String LOOKED_UP_COLLECTION_NAME = "lookedUpCollectionName";
@@ -474,11 +461,10 @@ public class KFSConstants {
     public static final String NOT_LOGICAL_OPERATOR = "!";
     // add AND operator to thest if it is uncommented below
     public static final String[] LOGICAL_OPERATORS = { OR_LOGICAL_OPERATOR, NOT_LOGICAL_OPERATOR };
-    public static final String WILDCARD_CHARACTER = "*";
-    public static final String[] QUERY_CHARACTERS = { WILDCARD_CHARACTER, "?", "%", ">", "<", "..", OR_LOGICAL_OPERATOR, NOT_LOGICAL_OPERATOR, "=" };
+    public static final String[] QUERY_CHARACTERS = { "*", "?", "%", ">", "<", "..", OR_LOGICAL_OPERATOR, NOT_LOGICAL_OPERATOR, "=" };
 
     // disbursement voucher error fields
-    public static final String DV_PAYEE_TAB_ERRORS = "DVPayeeErrors,document.dvPayeeDetail.disbVchrPayeeIdNumber,document.dvPayeeDetail.disbVchrPayeeCityName,document.dvPayeeDetail.disbVchrPayeePersonName," + "document.dvPayeeDetail.disbVchrPayeeStateCode,document.dvPayeeDetail.disbVchrPayeeLine1Addr,document.dvPayeeDetail.disbVchrPayeeZipCode,document.dvPayeeDetail.disbVchrPayeeLine2Addr,document.dvPayeeDetail.disbVchrPayeeCountryCode,document.dvPayeeDetail.disbursementVoucherPayeeTypeCode,";
+    public static final String DV_PAYEE_TAB_ERRORS = "DVPayeeErrors,document.dvPayeeDetail.disbVchrPayeeIdNumber,document.dvPayeeDetail.disbVchrPayeeCityName,document.dvPayeeDetail.disbVchrPayeePersonName," + "document.dvPayeeDetail.disbVchrPayeeStateCode,document.dvPayeeDetail.disbVchrPayeeLine1Addr,document.dvPayeeDetail.disbVchrPayeeZipCode,document.dvPayeeDetail.disbVchrPayeeLine2Addr,document.dvPayeeDetail.disbVchrPayeeCountryCode,";
     public static final String DV_PAYMENT_TAB_ERRORS = "DVPaymentErrors,document.dvPayeeDetail.disbVchrPaymentReasonCode,document.disbVchrCheckTotalAmount,document.disbursementVoucherDueDate,document.dvPayeeDetail.disbVchrAlienPaymentCode," + "document.dvPayeeDetail.disbVchrPayeeEmployeeCode,document.dvPayeeDetail.dvPayeeRevolvingFundCode,document.disbVchrAttachmentCode,document.disbVchrSpecialHandlingCode,document.disbVchrPayeeW9CompleteCode" + "document.disbVchrPaymentMethodCode,document.disbursementVoucherDocumentationLocationCode";
     public static final String DV_NRATAX_TAB_ERRORS = "DVNRATaxErrors,document.dvNonResidentAlienTax.incomeClassCode,document.dvNonResidentAlienTax.incomeTaxTreatyExemptCode,document.dvNonResidentAlienTax.federalIncomeTaxPercent," + "document.dvNonResidentAlienTax.foreignSourceIncomeCode,document.dvNonResidentAlienTax.stateIncomeTaxPercent,document.dvNonResidentAlienTax.incomeTaxGrossUpCode,document.dvNonResidentAlienTax.postalCountryCode," + "document.dvNonResidentAlienTax.referenceFinancialDocumentNumber";
     public static final String DV_FOREIGNDRAFTS_TAB_ERRORS = "DVForeignDraftErrors,document.dvWireTransfer.disbursementVoucherForeignCurrencyTypeCode,document.dvWireTransfer.disbursementVoucherForeignCurrencyTypeName";
@@ -516,6 +502,12 @@ public class KFSConstants {
     public static final String NAVIGATE_TO = "navigateTo.";
     public static final String HEADER_DISPATCH = "headerDispatch.";
 
+    public static final String DASHES_SUB_OBJECT_CODE = "---";
+    public static final String DASHES_SUB_ACCOUNT_NUMBER = "-----";
+    public static final String DASHES_PROJECT_CODE = "----------";
+    public static final String DASHES_POSITION_NUMBER = "--------";
+    public static final String DASHES_EMPL_ID = "-----------";
+
     public static final String APC_ALLOWED_OPERATOR = "A";
     public static final String APC_DENIED_OPERATOR = "D";
     // country
@@ -524,46 +516,6 @@ public class KFSConstants {
     // CashManagement tab errors
     public static final String CASH_MANAGEMENT_ERRORS = "cashManagementDocument.*";
     public static final String CASH_MANAGEMENT_DEPOSIT_ERRORS = "document.deposit*";
-    
-    // Coin and Currency Amounts
-    public static class CoinTypeAmounts {
-        public static final KualiDecimal HUNDRED_CENT_AMOUNT = new KualiDecimal(1.0);
-        public static final KualiDecimal FIFTY_CENT_AMOUNT = new KualiDecimal(0.5);
-        public static final KualiDecimal TWENTY_FIVE_CENT_AMOUNT = new KualiDecimal(0.25);
-        public static final KualiDecimal TEN_CENT_AMOUNT = new KualiDecimal(0.1);
-        public static final KualiDecimal FIVE_CENT_AMOUNT = new KualiDecimal(0.05);
-        public static final KualiDecimal ONE_CENT_AMOUNT = new KualiDecimal(0.01);
-    }
-    
-    public static class CurrencyTypeAmounts {
-        public static final KualiDecimal HUNDRED_DOLLAR_AMOUNT = new KualiDecimal(100.0);
-        public static final KualiDecimal FIFTY_DOLLAR_AMOUNT = new KualiDecimal(50.0);
-        public static final KualiDecimal TWENTY_DOLLAR_AMOUNT = new KualiDecimal(20.0);
-        public static final KualiDecimal TEN_DOLLAR_AMOUNT = new KualiDecimal(10.0);
-        public static final KualiDecimal FIVE_DOLLAR_AMOUNT = new KualiDecimal(5.0);
-        public static final KualiDecimal TWO_DOLLAR_AMOUNT = new KualiDecimal(2.0);
-        public static final KualiDecimal ONE_DOLLAR_AMOUNT = new KualiDecimal(1.0);
-    }
-    
-    // Cashiering source constants
-    public static class CurrencyCoinSources {
-        public static final String CASH_MANAGEMENT_IN = "R"; // money coming in through cashiering activity
-        public static final String DEPOSITS = "D"; // money going out through deposits
-        public static final String CASH_RECEIPTS = "C"; // money coming in through cash receipts
-        public static final String CASH_MANAGEMENT_OUT = "O"; // money going out through cashiering activity
-        public static final String CASH_MANAGEMENT_MASTER = "M"; // an amalgamation of a cashiering transaction
-    }
-    
-    // Constants for check sources
-    // Why are these constants different from the Currency/Coin constants?
-    // Why, I ask you in return, is the sky blue?  That's right, because of
-    // the effect of Rayleigh scattering on atmospheric particles.  That's why.
-    public static class CheckSources {
-        public static final String CASH_RECEIPTS = "R";
-        public static final String CASH_MANAGEMENT = "I";
-    }
-    
-    public static final String CASHIERING_TRANSACTION_OPEN_ITEM_IN_PROCESS_PROPERTY = "document.currentTransaction.openItemInProcess";
 
     // Tab error patterns must be at the top level; JSPs do not have access to the nested classes.
     public static final String EDIT_CASH_RECEIPT_CASH_RECONCILIATION_ERRORS = "document.totalCashAmount,document.totalCheckAmount,document.totalCoinAmount,document.sumTotalAmount";
@@ -704,9 +656,6 @@ public class KFSConstants {
     public static class ChartApcParms {
         public static final String GROUP_CHART_MAINT_EDOCS = "ChartMaintenanceEDoc";
 
-        public static final String FISCAL_YEAR_MAKER_REPLACE_MODE = "replaceMode";
-        public static final String FISCAL_YEAR_MAKER_SOURCE_FISCAL_YEAR = "sourceFiscalYear";
-
         // Account parms
         public static final String ACCOUNT_USER_EMP_STATUSES = "Account.User.AllowedEmployeeStatus";
         public static final String ACCOUNT_USER_EMP_TYPES = "Account.User.AllowedEmployeeType";
@@ -727,11 +676,6 @@ public class KFSConstants {
         
         public static final String ACCOUNT_FUND_GROUP_DENOTES_CG = "Account.FundGroupDenotesCG";
         public static final String ACCOUNT_CG_DENOTING_VALUE = "Account.CGDenotingValue";
-        
-        public static final String DEFAULT_USER_CHART_CODE_SOURCE_ATTRIBUTE = "Default.User.ChartCode.Source.Attribute";
-        public static final String DEFAULT_USER_CHART_CODE_EXTRACTION_REGEXP = "Default.User.ChartCode.Extraction.RegExp";
-        public static final String DEFAULT_USER_ORGANIZATION_CODE_SOURCE_ATTRIBUTE = "Default.User.OrganizationCode.Source.Attribute";
-        public static final String DEFAULT_USER_ORGANIZATION_CODE_EXTRACTION_REGEXP = "Default.User.OrganizationCode.Extraction.RegExp";
     }
 
     public static class FinancialApcParms {
@@ -742,17 +686,11 @@ public class KFSConstants {
         public static final String DV_FOREIGNDRAFT_WORKGROUP = "Workgroup.ForeignDraft"; 
         public static final String DV_WIRETRANSFER_WORKGROUP = "Workgroup.WireTransfer"; 
         public static final String DV_TRAVEL_WORKGROUP = "Workgroup.Travel"; 
-        public static final String ACCOUNTING_LINE_IMPORT_HELP = "ACCOUNTING_LINE_IMPORT_HELP";
     }
     
     public static class ParameterGroups {
         public static final String SYSTEM = "SYSTEM";
-        public static final String FP_GLOBAL_PARAMETERS = "Kuali.FinancialTransactionProcessing.GlobalRules";
         public static final String GENERAL_LEDGER_CORRECTION_PROCESS = "Kuali.FinancialTransactionProcessing.GeneralLedgerCorrectionProcessDocument";
-        public static final String BATCH_UPLOAD_SECURITY_GROUP_NAME = "Kuali.Batch.BatchInputFileUpload";
-        public static final String COLLECTOR_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.Collector";
-        public static final String ENTERPRSISE_FEEDER_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.EnterpriseFeeder";
-        public static final String CHART_FISCAL_YEAR_MAKER = "Chart.FiscalYearMaker";
     }
 
     public static class SystemGroupParameterNames {
@@ -779,20 +717,6 @@ public class KFSConstants {
         public static final String LOOKUP_RESULTS_LIMIT = "lookup.results.limit";
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_PER_PAGE = "multipleValueLookupResultsPerPage";
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_EXPIRATION_AGE = "multipleValueLookupResultsExpirationAge";
-      
-        public static final String ACTIVE_INPUT_TYPES_PARAMETER_NAME = "ACTIVE_INPUT_TYPES";
-        public static final String PCDO_FILE_TYPE_WORKGROUP_PARAMAETER_NAME = PCDO_FILE_TYPE_INDENTIFIER + ".WORKGROUP";
-        public static final String COLLECTOR_FILE_TYPE_WORKGROUP_PARAMAETER_NAME = COLLECTOR_FILE_TYPE_INDENTIFIER + ".WORKGROUP";
-        public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_WORKGROUP_PARAMAETER_NAME = ENTERPRISE_FEEDER_FILE_SET_TYPE_INDENTIFIER + ".WORKGROUP";
-        
-        public static final String COLLECTOR_VALIDATOR_EMAIL_SUBJECT_PARAMETER_NAME = "ValidationEmailSubjectLine";
-        public static final String COLLECTOR_DEMERGER_EMAIL_SUBJECT_PARAMETER_NAME = "DemergerEmailSubjectLine";
-        public static final String COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES = "EqualDebitCreditTotalDocumentTypes";
-        public static final String COLLECTOR_PERFORM_DUPLICATE_HEADER_CHECK = "PerformDuplicateHeaderCheck";
-        
-        public static final String BATCH_SCHEDULE_CUTOFF_TIME = "scheduleStep_CUTOFF_TIME";
-        public static final String BATCH_SCHEDULE_CUTOFF_TIME_IS_NEXT_DAY = "scheduleStep_IS_CUTOFF_TIME_NEXT_DAY";
-        public static final String BATCH_SCHEDULE_STATUS_CHECK_INTERVAL = "scheduleStep_STATUS_CHECK_INTERVAL";
         
         /**
          * Used by PurgePendingAttachmentsJob to compute the maximum amount of time a pending attachment is allowed to
@@ -801,7 +725,6 @@ public class KFSConstants {
         public static final String PURGE_PENDING_ATTACHMENTS_STEP_MAX_AGE = "purgePendingAttachmentsStepMaxAge";
         
         public static final String JOB_ADMIN_WORKGROUP = "Job.Admin.Workgroup";
-        
     }
 
     public static class GeneralLedgerApplicationParameterKeys {
@@ -814,10 +737,6 @@ public class KFSConstants {
     public static class GeneralLedgerCorrectionProcessApplicationParameterKeys {
         public static final String RECORD_COUNT_FUNCTIONALITY_LIMIT = "RECORD_COUNT_FUNCTIONALITY_LIMIT";
         public static final String RECORDS_PER_PAGE = "RECORDS_PER_PAGE";
-    }
-
-    public static class EnterpriseFeederApplicationParameterKeys {
-        public static final String TO_ADDRESS = "ToAddress";
     }
 
     public static class ParameterValues {
@@ -848,9 +767,9 @@ public class KFSConstants {
     public static final String MONTH11 = "11";
     public static final String MONTH12 = "12";
     public static final String MONTH13 = "13";
-    public static final String PERIOD_CODE_ANNUAL_BALANCE = "AB";
-    public static final String PERIOD_CODE_BEGINNING_BALANCE = "BB";
-    public static final String PERIOD_CODE_CG_BEGINNING_BALANCE = "CB";
+    public static final String ANNUAL_BALANCE = "AB";
+    public static final String BEGINNING_BALANCE = "BB";
+    public static final String CG_BEGINNING_BALANCE = "CB";
 
     public static final String REQUEST_SEARCH_RESULTS = "reqSearchResults";
     public static final String REQUEST_SEARCH_RESULTS_SIZE = "reqSearchResultsSize";
@@ -964,7 +883,6 @@ public class KFSConstants {
         public final static String BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION =
                                    "Budget Construction";
         public final static String BUDGET_CONSTRUCTION_DOCUMENT_INITIAL_STATUS = "$";
-        public final static String ORG_REVIEW_RULE_TEMPLATE = "KualiOrgReviewTemplate";
         
         /*  codes used in the Calculated Salary Foundation (CSF) */
         public final static String VACANT_CSF_LINE = "V";
@@ -998,7 +916,6 @@ public class KFSConstants {
     }
     
     public static class PENDING_ENTRY_APPROVED_STATUS_CODE{
-        public static final String APPROVED = "A";
         public static final String PROCESSED = "X";
     }
     
@@ -1010,63 +927,5 @@ public class KFSConstants {
         
         public static final String PREVIOUSLY_SORTED_COLUMN_INDEX_PARAM = "previouslySortedColumnIndex";
         public static final String VIEWED_PAGE_NUMBER = "viewedPageNumber";
-    }
-    
-    public static final String PCDO_FILE_TYPE_INDENTIFIER = "procurementCardInputFileType";
-    public static final String COLLECTOR_FILE_TYPE_INDENTIFIER = "collectorInputFileType";
-    public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_INDENTIFIER = "enterpriseFeederFileSetType";
-    
-    // next 3 variables for the enterprise feeder batch upload
-    public static final String DATA_FILE_TYPE = "DATA";
-    public static final String RECON_FILE_TYPE = "RECON";
-    
-    /**
-     * The base implementation of {@link org.kuali.module.gl.util.EnterpriseFeederStatusBase} uses strings contained within ApplicationResources.properties
-     * to store the human-readable descriptions of each status object.  The fully qualified class name is appended to the end of this key to generate the 
-     * true key.  For example, gl.EnterpriseFeeder.StatusDescriptionPrefix.org.kuali.module.gl.util.FileReconBadLoadAbortedStatus
-     */
-    public static final String ENTERPRISE_FEEDER_STATUS_DESCRIPTION_PREFIX = "gl.EnterpriseFeeder.StatusDescription.";
-    
-    public static final String BATCH_STEP_RUNNER_JOB_NAME = "stepRunByBatchStepRunner";
-    
-    // Some static method calls below that could be done in static variables instead but isn't safe to do during class loading w/SpringServiceLocator.
-    private static String DASH_FINANCIAL_SUB_OBJECT_CODE = null;
-    public static String getDashFinancialSubObjectCode() {
-        if (DASH_FINANCIAL_SUB_OBJECT_CODE == null) {
-            DASH_FINANCIAL_SUB_OBJECT_CODE = StringUtils.rightPad("", SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(OriginEntry.class, KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE), '-');
-        }
-        return DASH_FINANCIAL_SUB_OBJECT_CODE;
-    }
-    
-    private static String DASH_SUB_ACCOUNT_NUMBER = null;
-    public static String getDashSubAccountNumber() {
-        if (DASH_SUB_ACCOUNT_NUMBER == null) {
-            DASH_SUB_ACCOUNT_NUMBER = StringUtils.rightPad("", SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(OriginEntry.class, KFSPropertyConstants.SUB_ACCOUNT_NUMBER), '-');
-        }
-        return DASH_SUB_ACCOUNT_NUMBER;
-    }
-    
-    private static String DASH_PROJECT_CODE = null;
-    public static String getDashProjectCode() {
-        if (DASH_PROJECT_CODE == null) {
-            DASH_PROJECT_CODE = StringUtils.rightPad("", SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(OriginEntry.class, KFSPropertyConstants.PROJECT_CODE), '-');
-        }
-        return DASH_PROJECT_CODE;
-    }
-    
-    private static String DASH_POSITION_NUMBER = null;
-    public static String getDashPositionNumber() {
-        if (DASH_POSITION_NUMBER == null) {
-            DASH_POSITION_NUMBER = StringUtils.rightPad("", SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(LaborOriginEntry.class, KFSPropertyConstants.POSITION_NUMBER), '-');
-        }
-        return DASH_POSITION_NUMBER;
-    }
-    
-    private static String DASH_EMPLID_LOWER_CASE = null;
-    public static String getDashEmplIdLowerCase() {
-        if (DASH_EMPLID_LOWER_CASE == null) {
-            DASH_EMPLID_LOWER_CASE = StringUtils.rightPad("", SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(LaborOriginEntry.class, KFSPropertyConstants.EMPLID), '-');
-        }
-        return DASH_EMPLID_LOWER_CASE;
     }
 }

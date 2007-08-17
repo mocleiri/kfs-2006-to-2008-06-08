@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,27 +20,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.Constants;
+import org.kuali.core.bo.BusinessObject;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.SubFundGroup;
 
 public class SubFundGroupCodeDescriptionFormatter extends CodeDescriptionFormatterBase {
 
     @Override
-    protected String getDescriptionOfBO(PersistableBusinessObject bo) {
+    protected String getDescriptionOfBO(BusinessObject bo) {
         return ((SubFundGroup) bo).getSubFundGroupDescription();
     }
 
     @Override
-    protected Map<String, PersistableBusinessObject> getValuesToBusinessObjectsMap(Set values) {
+    protected Map<String, BusinessObject> getValuesToBusinessObjectsMap(Set values) {
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put(KFSConstants.SUB_FUND_GROUP_CODE_PROPERTY_NAME, values);
+        criteria.put(Constants.SUB_FUND_GROUP_CODE_PROPERTY_NAME, values);
 
-        Map<String, PersistableBusinessObject> map = new HashMap<String, PersistableBusinessObject>();
+        Map<String, BusinessObject> map = new HashMap<String, BusinessObject>();
 
-        Collection<SubFundGroup> coll = SpringContext.getBean(BusinessObjectService.class).findMatchingOrderBy(SubFundGroup.class, criteria, "versionNumber", true);
+        Collection<SubFundGroup> coll = SpringServiceLocator.getBusinessObjectService().findMatchingOrderBy(SubFundGroup.class, criteria, "versionNumber", true);
         for (SubFundGroup sfg : coll) {
             map.put(sfg.getSubFundGroupCode(), sfg);
         }

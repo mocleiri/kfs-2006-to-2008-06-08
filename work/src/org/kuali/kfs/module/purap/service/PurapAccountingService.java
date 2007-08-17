@@ -16,15 +16,12 @@
 package org.kuali.module.purap.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchasingApItem;
-import org.kuali.module.purap.dao.ojb.PurApAccountingDaoOjb;
-import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 
 /**
  * This class is used to generate Account Summaries for PURAP Module account lists as well as
@@ -32,32 +29,15 @@ import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
  * other items that may require distribution
  */
 public interface PurapAccountingService {
-    
-    /**
-     * 
-     * @deprecated
-     * @param accounts
-     * @param totalAmount
-     * @param percentScale
-     * @return
-     */
-    public List<PurApAccountingLine> generateAccountDistributionForProration(List<SourceAccountingLine> accounts, KualiDecimal totalAmount, Integer percentScale);
-    
-    public List<PurApAccountingLine> generateAccountDistributionForProration(List<SourceAccountingLine> accounts, KualiDecimal totalAmount, Integer percentScale, Class clazz);
-    
+
+    public List<PurApAccountingLine> generateAccountDistributionForProration(List<PurApAccountingLine> accounts, KualiDecimal totalAmount, Integer percentScale);
+
     public List<PurApAccountingLine> generateAccountDistributionForProrationWithZeroTotal(List<PurApAccountingLine> accounts, Integer percentScale);
 
     public List<SourceAccountingLine> generateSummary(List<PurchasingApItem> items);
-    public Map<SourceAccountingLine, List<PurchasingApItem>> generateSummaryWithItems(List<PurchasingApItem> items);
-    
     public List<SourceAccountingLine> generateSummaryWithNoZeroTotals(List<PurchasingApItem> items);
-    public List<SourceAccountingLine> generateSummaryWithNoZeroTotalsUsingAlternateAmount(List<PurchasingApItem> items);
     public List<SourceAccountingLine> generateSummaryExcludeItemTypes(List<PurchasingApItem> items, Set excludedItemTypeCodes);
     public List<SourceAccountingLine> generateSummaryExcludeItemTypesAndNoZeroTotals(List<PurchasingApItem> items, Set excludedItemTypeCodes);
     public List<SourceAccountingLine> generateSummaryIncludeItemTypes(List<PurchasingApItem> items, Set includedItemTypeCodes);
     public List<SourceAccountingLine> generateSummaryIncludeItemTypesAndNoZeroTotals(List<PurchasingApItem> items, Set includedItemTypeCodes);
-    
-    public void updateAccountAmounts(PurchasingAccountsPayableDocument document);
-    
-    public List<PurApAccountingLine> getAccountsFromItem(PurchasingApItem item);
 }

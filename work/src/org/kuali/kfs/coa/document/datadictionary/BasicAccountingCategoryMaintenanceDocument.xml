@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>BasicAccountingCategoryMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiBasicAccountingCategoryMaintenanceDocument</documentTypeName>
         <documentTypeCode>ACTY</documentTypeCode>
 
         <label>Basic Accounting Category Maintenance Document</label>

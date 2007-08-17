@@ -22,22 +22,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.kuali.Constants;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.Country;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.bo.ItemType;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderVendorQuote;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.vendor.bo.ContractManager;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
-@ConfigureContext
+@WithTestSpringContext
 public class PurchaseOrderQuotePdfTest extends KualiTestBase {
     PurchaseOrderVendorQuote poqv;
     PurchaseOrderDocument po;
@@ -48,7 +46,7 @@ public class PurchaseOrderQuotePdfTest extends KualiTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();     
-        BusinessObjectService businessObjectService = SpringContext.getBean(BusinessObjectService.class);
+        BusinessObjectService businessObjectService = SpringServiceLocator.getBusinessObjectService();
         //Map poCriteria = new HashMap();
         //poCriteria.put("documentNumber", new Integer(291190));
         //Iterator resultIter = (businessObjectService.findMatching(PurchaseOrderDocument.class, poCriteria)).iterator();
@@ -69,7 +67,7 @@ public class PurchaseOrderQuotePdfTest extends KualiTestBase {
         po.setDeliveryStateCode("CA");
         po.setDeliveryCampusCode("BL");
         poqv = new PurchaseOrderVendorQuote();
-        po.setPurchaseOrderQuoteDueDate(SpringContext.getBean(DateTimeService.class, "dateTimeService").getCurrentSqlDate());
+        po.setPurchaseOrderQuoteDueDate(SpringServiceLocator.getDateTimeService().getCurrentSqlDate());
         poqv.setPurchaseOrder(po);
         poqv.setPurchaseOrderVendorQuoteIdentifier(1000);
         poqv.setVendorName("Dusty's Cellar");
@@ -98,7 +96,7 @@ public class PurchaseOrderQuotePdfTest extends KualiTestBase {
         ArrayList itemList = new ArrayList();
         itemList.add(poi);
         po.setItems(itemList);
-        fo = new FileOutputStream("POQuotePDF.pdf");
+        fo = new FileOutputStream("\\POQuotePDF.pdf");
     }
     
     @Override
@@ -106,7 +104,7 @@ public class PurchaseOrderQuotePdfTest extends KualiTestBase {
         super.tearDown();
         fo.close();
         bao.close();
-        poQuotePdf.deletePdf("", "POQuotePDF.pdf");
+        poQuotePdf.deletePdf("", "\\POQuotePDF.pdf");
         
     }
     
@@ -120,7 +118,7 @@ public class PurchaseOrderQuotePdfTest extends KualiTestBase {
      */
     public void testGeneratePOQuotePDF() throws Exception {
 
-        String environment = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSConstants.ENVIRONMENT_KEY);
+        String environment = SpringServiceLocator.getKualiConfigurationService().getPropertyString(Constants.ENVIRONMENT_KEY);
         
         poQuotePdf.generatePOQuotePDF(po, poqv, "East Lansing", "EL", getLogoImageName(), bao, environment);
         bao.writeTo(fo);
@@ -128,7 +126,7 @@ public class PurchaseOrderQuotePdfTest extends KualiTestBase {
     }
 
     private String getLogoImageName () {
-        return "work//web-root//static//images//logo_bl.jpg";
+        return "work/web-root/static/images/logo_bl.jpg";
     }
 
 }

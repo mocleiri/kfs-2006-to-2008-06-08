@@ -19,7 +19,7 @@
 <app:getReference name="PaymentStatus" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html locale="true">
-<link rel="stylesheet" type="text/css"  href="<%= request.getContextPath() %>/pdp/css/pdp_styles.css">
+<link rel="stylesheet" type="text/css"  href="https://docs.onestart.iu.edu/dav/MY/channels/css/styles.css"/>
 <head>
   <html:base />
   <title>Payment Search</title>
@@ -347,6 +347,6 @@
     </c:if>
   </logic:notEmpty>  
   <p>&nbsp;</p>
-  <c:import url="/pdp/backdoor.jsp"/>
+  <c:import url="/backdoor.jsp"/>
 </body>
 </html:html>

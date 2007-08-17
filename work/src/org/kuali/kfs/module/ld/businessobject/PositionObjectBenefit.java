@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/PositionObjectBenefit.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +20,15 @@ package org.kuali.module.labor.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
 
 /**
  * Model of Position Object Benefit
  */
-public class PositionObjectBenefit extends PersistableBusinessObjectBase {
+public class PositionObjectBenefit extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
@@ -145,8 +147,8 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase {
      * Sets the financialObject attribute.
      * 
      * @param financialObject The financialObject to set.
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialObject(ObjectCode financialObject) {
         this.financialObject = financialObject;
     }
@@ -165,8 +167,8 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase {
      * Sets the chartOfAccounts attribute.
      * 
      * @param chartOfAccounts The chartOfAccounts to set.
+     * @deprecated
      */
-    @Deprecated
     public void setChartOfAccounts(Chart chartOfAccounts) {
         this.chartOfAccounts = chartOfAccounts;
     }
@@ -185,8 +187,8 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase {
      * Sets the universityFiscal attribute value.
      * 
      * @param universityFiscal The universityFiscal to set.
+     * @deprecated
      */
-    @Deprecated
     public void setUniversityFiscal(Options universityFiscal) {
         this.universityFiscal = universityFiscal;
     }
@@ -205,8 +207,8 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase {
      * Sets the benefitsCalculation attribute value.
      * 
      * @param benefitsCalculation The benefitsCalculation to set.
+     * @deprecated
      */
-    @Deprecated
     public void setBenefitsCalculation(BenefitsCalculation benefitsCalculation) {
         this.benefitsCalculation = benefitsCalculation;
     }
@@ -215,7 +217,9 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase {
         return financialObjectBenefitsType;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     */
     public void setFinancialObjectBenefitsType(BenefitsType financialObjectBenefitsType) {
         this.financialObjectBenefitsType = financialObjectBenefitsType;
     }
@@ -231,8 +235,8 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase {
     /**
      * Sets the laborObject attribute value.
      * @param laborObject The laborObject to set.
+     * @deprecated
      */
-    @Deprecated
     public void setLaborObject(LaborObject laborObject) {
         this.laborObject = laborObject;
     }

@@ -15,21 +15,20 @@
  */
 package org.kuali.module.labor.web.struts.form;
 
-import java.util.Map;
-
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.OptionsService;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.module.labor.document.BenefitExpenseTransferDocument;
 
 /**
- * This class is the form class for the Benefit Expense Transfer document.
+ * This class is the form class for the Benefit Expense Transfer document. This method extends the parent
+ * KualiTransactionalDocumentFormBase class which contains all of the common form methods and form attributes needed by the
+ * Benefit Expense Transfer document. It adds a new method which is a convenience method for getting at the Benefit Expense Transfer document easier.
+ * 
+ * 
  */
-public class BenefitExpenseTransferForm extends ExpenseTransferDocumentFormBase {
-    private Integer universityFiscalYear;
-    private String chartOfAccountsCode;
-    private String accountNumber;
-    private String subAccountNumber;
+public class BenefitExpenseTransferForm extends LaborDocumentFormBase {
+    private UniversalUser user;
+    private String userId;
+    private String emplid;
 
     /**
      * Constructs a BenefitExpenseTransferForm instance and sets up the appropriately casted document.
@@ -37,7 +36,6 @@ public class BenefitExpenseTransferForm extends ExpenseTransferDocumentFormBase 
     public BenefitExpenseTransferForm() {
         super();
         setDocument(new BenefitExpenseTransferDocument());
-        setUniversityFiscalYear(SpringContext.getBean(OptionsService.class).getCurrentYearOptions().getUniversityFiscalYear());
     }
 
     /**
@@ -45,92 +43,5 @@ public class BenefitExpenseTransferForm extends ExpenseTransferDocumentFormBase 
      */
     public BenefitExpenseTransferDocument getBenefitExpenseTransferDocument() {
         return (BenefitExpenseTransferDocument) getDocument();
-    }
-
-    /**
-     * Gets the accountNumber attribute.
-     * 
-     * @return Returns the accountNumber.
-     */
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    /**
-     * Sets the accountNumber attribute value.
-     * 
-     * @param accountNumber The accountNumber to set.
-     */
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    /**
-     * Gets the subAccountNumber attribute.
-     * 
-     * @return Returns the subAccountNumber.
-     */
-    public String getSubAccountNumber() {
-        return subAccountNumber;
-    }
-
-    /**
-     * Sets the subAccountNumber attribute value.
-     * 
-     * @param subAccountNumber The subAccountNumber to set.
-     */
-    public void setSubAccountNumber(String subAccountNumber) {
-        this.subAccountNumber = subAccountNumber;
-    }
-
-    /**
-     * Gets the chartOfAccountsCode attribute.
-     * 
-     * @return Returns the chartOfAccountsCode.
-     */
-    public String getChartOfAccountsCode() {
-        return chartOfAccountsCode;
-    }
-
-    /**
-     * Sets the chartOfAccountsCode attribute value.
-     * 
-     * @param chartOfAccountsCode The chartOfAccountsCode to set.
-     */
-    public void setChartOfAccountsCode(String chartOfAccountsCode) {
-        this.chartOfAccountsCode = chartOfAccountsCode;
-    }
-
-    /**
-     * Gets the universityFiscalYear attribute.
-     * 
-     * @return Returns the universityFiscalYear.
-     */
-    @Override
-    public Integer getUniversityFiscalYear() {
-        return universityFiscalYear;
-    }
-
-    /**
-     * Sets the universityFiscalYear attribute value.
-     * 
-     * @param universityFiscalYear The universityFiscalYear to set.
-     */
-    @Override
-    public void setUniversityFiscalYear(Integer universityFiscalYear) {
-        this.universityFiscalYear = universityFiscalYear;
-    }
-    
-    /**
-     * @see org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase#getForcedReadOnlyFields()
-     */
-    @Override
-    public Map getForcedReadOnlyTargetFields() {
-        Map map = this.getForcedReadOnlySourceFields();
-        map.remove(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        map.remove(KFSPropertyConstants.ACCOUNT_NUMBER);
-        map.remove(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        map.remove(KFSPropertyConstants.AMOUNT);
-        return map;
-    }
+    }    
 }

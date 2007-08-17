@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.FunctionControlCode">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Function Control Code Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="financialSystemFunctionControlCode" />
                 <field attributeName="financialSystemFunctionDescription" />
                 <field attributeName="financialSystemFunctionDefaultIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Function Control Code Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.FunctionControlCode">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup an Function Control Code</instructions>
 
@@ -72,8 +61,8 @@
                     <text size="8" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>Any of various indicators that control Budget Construction.</description>
+                <summary>financialSystemFunctionControlCode</summary>
+                <description>financialSystemFunctionControlCode description...</description>
             </attribute>
 
             <attribute name="financialSystemFunctionDescription" forceUppercase="true">
@@ -82,15 +71,15 @@
 
                 <maxLength>40</maxLength>
                 <validationPattern>
-                    <anyCharacter allowWhitespace="true" />
+                    <anyCharacter />
                 </validationPattern>
-                <required>true</required>
+
                 <control>
                     <text size="42" />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The functional description for the Yes/No indicator</description>
+                <summary>financialSystemFunctionDescription</summary>
+                <description>financialSystemFunctionDescription description...</description>
             </attribute>
 
             <attribute name="financialSystemFunctionDefaultIndicator" forceUppercase="true">
@@ -103,8 +92,8 @@
                     <checkbox />
                 </control>
 
-                <summary><![CDATA[&nbsp;]]></summary>
-                <description>The Yes/No indicator of the default value when value sfor a new Fiscal Year are generated.</description>
+                <summary>financialSystemFunctionDefaultIndicator</summary>
+                <description>financialSystemFunctionDefaultIndicator description...</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />

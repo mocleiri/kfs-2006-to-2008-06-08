@@ -1,33 +1,41 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class CashieringDocument extends PersistableBusinessObjectBase {
+public class CashieringDocument extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private String depositFinancialSystemOriginationCode;
     private String financialDocumentDepositNumber;
     private KualiDecimal financialDocumentCheckAmount;
@@ -50,30 +58,30 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
     /**
      * Gets the depositFinancialSystemOriginationCode attribute.
      * 
-     * @return Returns the depositFinancialSystemOriginationCode
+     * @return - Returns the depositFinancialSystemOriginationCode
      * 
      */
     public String getDepositFinancialSystemOriginationCode() {
@@ -94,7 +102,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentDepositNumber attribute.
      * 
-     * @return Returns the financialDocumentDepositNumber
+     * @return - Returns the financialDocumentDepositNumber
      * 
      */
     public String getFinancialDocumentDepositNumber() {
@@ -115,7 +123,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentCheckAmount attribute.
      * 
-     * @return Returns the financialDocumentCheckAmount
+     * @return - Returns the financialDocumentCheckAmount
      * 
      */
     public KualiDecimal getFinancialDocumentCheckAmount() {
@@ -136,7 +144,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentAdvanceDepositAmount attribute.
      * 
-     * @return Returns the financialDocumentAdvanceDepositAmount
+     * @return - Returns the financialDocumentAdvanceDepositAmount
      * 
      */
     public KualiDecimal getFinancialDocumentAdvanceDepositAmount() {
@@ -157,7 +165,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentRevolvingFundAmount attribute.
      * 
-     * @return Returns the financialDocumentRevolvingFundAmount
+     * @return - Returns the financialDocumentRevolvingFundAmount
      * 
      */
     public KualiDecimal getFinancialDocumentRevolvingFundAmount() {
@@ -178,7 +186,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentNextCreditCardLineNumber attribute.
      * 
-     * @return Returns the financialDocumentNextCreditCardLineNumber
+     * @return - Returns the financialDocumentNextCreditCardLineNumber
      * 
      */
     public Integer getFinancialDocumentNextCreditCardLineNumber() {
@@ -199,7 +207,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentCashAmount attribute.
      * 
-     * @return Returns the financialDocumentCashAmount
+     * @return - Returns the financialDocumentCashAmount
      * 
      */
     public KualiDecimal getFinancialDocumentCashAmount() {
@@ -220,7 +228,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentCreditCardAmount attribute.
      * 
-     * @return Returns the financialDocumentCreditCardAmount
+     * @return - Returns the financialDocumentCreditCardAmount
      * 
      */
     public KualiDecimal getFinancialDocumentCreditCardAmount() {
@@ -241,7 +249,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTotalCoinAmount attribute.
      * 
-     * @return Returns the financialDocumentTotalCoinAmount
+     * @return - Returns the financialDocumentTotalCoinAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTotalCoinAmount() {
@@ -262,7 +270,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentChangeOutAmount attribute.
      * 
-     * @return Returns the financialDocumentChangeOutAmount
+     * @return - Returns the financialDocumentChangeOutAmount
      * 
      */
     public KualiDecimal getFinancialDocumentChangeOutAmount() {
@@ -283,7 +291,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the nextCheckLineNumber attribute.
      * 
-     * @return Returns the nextCheckLineNumber
+     * @return - Returns the nextCheckLineNumber
      * 
      */
     public Integer getNextCheckLineNumber() {
@@ -304,7 +312,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the nextAdvanceDepositLineNumber attribute.
      * 
-     * @return Returns the nextAdvanceDepositLineNumber
+     * @return - Returns the nextAdvanceDepositLineNumber
      * 
      */
     public Integer getNextAdvanceDepositLineNumber() {
@@ -325,7 +333,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the nextRevolvingFundLineNumber attribute.
      * 
-     * @return Returns the nextRevolvingFundLineNumber
+     * @return - Returns the nextRevolvingFundLineNumber
      * 
      */
     public Integer getNextRevolvingFundLineNumber() {
@@ -348,7 +356,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 }

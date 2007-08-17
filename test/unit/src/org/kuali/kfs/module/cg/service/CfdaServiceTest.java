@@ -1,19 +1,26 @@
 package org.kuali.module.cg.service.impl;
 
+import junit.framework.TestCase;
+
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.IOException;
 
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.cg.service.CfdaService;
+import static org.kuali.kfs.util.SpringServiceLocator.*;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.kuali.module.cg.bo.CatalogOfFederalDomesticAssistanceReference;
 import org.kuali.module.cg.service.CfdaUpdateResults;
-import org.kuali.test.ConfigureContext;
 
 /**
  * User: Laran Evans <lc278@cornell.edu>
  * Date: May 8, 2007
  * Time: 2:04:06 PM
  */
-@ConfigureContext
+@WithTestSpringContext
 public class CfdaServiceTest extends KualiTestBase {
 
     public void testPatternExtraction() {
@@ -34,7 +41,7 @@ public class CfdaServiceTest extends KualiTestBase {
     }
 
     public void testUpdate() throws IOException {
-        CfdaUpdateResults results = SpringContext.getBean(CfdaService.class).update();
+        CfdaUpdateResults results = getCfdaService().update();
     }
 
 }

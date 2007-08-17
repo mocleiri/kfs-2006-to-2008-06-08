@@ -15,11 +15,12 @@
  */
 package org.kuali.module.labor.batch;
 
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.test.ConfigureContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
-@ConfigureContext
+@WithTestSpringContext
 public class LaborPosterStepTest extends KualiTestBase {
     private LaborPosterStep laborPosterStep;
 
@@ -27,7 +28,8 @@ public class LaborPosterStepTest extends KualiTestBase {
     public void setUp() throws Exception {
         super.setUp();
         
-        laborPosterStep = SpringContext.getBean(LaborPosterStep.class);
+        BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();       
+        laborPosterStep = (LaborPosterStep) beanFactory.getBean("laborPosterStep");
     }
     
     public void testExecute() throws Exception{

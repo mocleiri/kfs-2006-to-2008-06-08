@@ -38,8 +38,6 @@ public class VendorConstants {
     public static final String DASH = "-";
     public static final String VENDOR_HEADER_ATTR = "vendorHeader";
     public static final String VENDOR_LOOKUPABLE_IMPL = "vendorLookupable";
-    public static final String VENDOR_ADDRESS_LOOKUPABLE_IMPL = "vendorAddressLookupable";
-    
     //Vendor Tax Types
     public static final String TAX_TYPE_FEIN = "FEIN";
     public static final String TAX_TYPE_SSN = "SSN";
@@ -49,16 +47,6 @@ public class VendorConstants {
         public static final String TOLL_FREE = "TF";
         public static final String PHONE = "PH";
         public static final String FAX = "FX";
-        public static final String PO = "PO";
     }
 
-    public static class AddressTypes {
-        public static final String PURCHASE_ORDER = "PO";
-        public static final String REMIT = "RM";
-    }
- 
-    // Vendor Owner Types
-    public static class OwnerTypes {
-        public static final String NR = "NR";
-    }
 }

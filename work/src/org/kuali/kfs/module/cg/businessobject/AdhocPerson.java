@@ -19,10 +19,7 @@ import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.PropertyConstants;
 
 /**
  * This class represents an ad-hoc person.
@@ -34,8 +31,6 @@ public class AdhocPerson extends AbstractAdhoc {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AdhocPerson.class);
 
     private String personUniversalIdentifier;
-    private String personUserIdentifier;
-    private String name;
     private UniversalUser user;
     
     public AdhocPerson() {
@@ -85,64 +80,6 @@ public class AdhocPerson extends AbstractAdhoc {
     }
     
     /**
-     * 
-     * This method retrieves the associated user id from the UniversalUser attribute.
-     * @return The user id of the associated user.
-     */
-    public String getPersonUserIdentifier() {
-        if ( user == null || user.getPersonUserIdentifier() == null ) {
-            user = null;
-            try {
-                user = SpringContext.getBean(UniversalUserService.class, "universalUserService").getUniversalUser( getPersonUniversalIdentifier() );
-            } catch (UserNotFoundException ex) {
-                // do nothing, leave user as null
-            }
-        }
-        if ( user == null ) {
-            return "";
-        }
-        return user.getPersonUserIdentifier();
-    }
-    
-    /**
-     * 
-     * This method has no function and is only here to satisfy Struts.
-     * @param userIdentifier User id to be passed in.
-     */
-    public void setPersonUserIdentifier(String userIdentifier) {
-        // do nothing, the getter will handle this
-    }
-    
-    /**
-     * 
-     * This method retrieves the associated user name from the UniversalUser attribute.
-     * @return The user name in the format of LAST, FIRST
-     */
-    public String getName() {
-        if ( user == null || user.getPersonName() == null  ) {
-            user = null;
-            try {
-                user = SpringContext.getBean(UniversalUserService.class, "universalUserService").getUniversalUser( getPersonUniversalIdentifier() );
-            } catch ( UserNotFoundException ex ) {
-                // do nothing, leave UU as null
-            }
-        }
-        if ( user == null ) {
-            return "";
-        }
-        return user.getPersonName();
-    }
-    
-    /**
-     * 
-     * This method has no function and is only here to satisfy Struts.
-     * @param name The name of the user.
-     */
-    public void setName(String name) {
-        // do nothing, the getter will handle this
-    }
-    
-    /**
      * Gets the org code based on deptid.
      * 
      * @return Returns the user.
@@ -163,7 +100,7 @@ public class AdhocPerson extends AbstractAdhoc {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
         m.put("personUniversalIdentifier", this.personUniversalIdentifier);
         return m;
     }

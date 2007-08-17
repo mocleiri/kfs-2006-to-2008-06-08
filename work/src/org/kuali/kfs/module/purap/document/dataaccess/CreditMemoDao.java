@@ -16,40 +16,89 @@
 package org.kuali.module.purap.dao;
 
 import java.sql.Date;
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.List;
 
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.module.purap.bo.CreditMemoStatusHistory;
 import org.kuali.module.purap.document.CreditMemoDocument;
 
-/**
- * Defines DB access methods that a CreditMemoDaoImpl must implement.
- */
 public interface CreditMemoDao {
-    /**
-     * Get all the credit memos that need to be extracted
-     * 
-     * @param chartCode if not null, limit results to a single chart
-     * @return Iterator of credit memos
-     */
-    public Iterator<CreditMemoDocument> getCreditMemosToExtract(String chartCode);
+        public static boolean RETRIEVE_ALL_REFERENCES_YES = true;
+        public static boolean RETRIEVE_ALL_REFERENCES_NO = false;
+        
+        public CreditMemoDocument getCreditMemoById(Integer id);
+        public void save(CreditMemoDocument cmDocument);
+     ///   public CreditMemoDocument save(CreditMemoDocument cm,User user,boolean retrieveAllReferences);
+        
+        /**
+         * 
+         * This method tests for a duplicate entry of a credit memo by the combination 
+         * of vendorNumber and creditMemoNumber.
+         * 
+         * This method accepts the two values as arguments, and returns a boolean, describing 
+         * whether a duplicate exists in the system or not.
+         * 
+         * @param vendorNumber - the composite two-part vendorNumber (headerId-detailId)
+         * @param creditMemoNumber - the vendor-supplied creditMemoNumber
+         * @return boolean - true if a match exists in the db, false if not
+         */
+        public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, 
+                                          String creditMemoNumber);
+        
+        /**
+         * 
+         * This method tests for a duplicate entry of a credit memo by the combination 
+         * of vendorNumber, date and amount.
+         * 
+         * This method accepts the values as arguments, and returns a boolean, describing 
+         * whether a duplicate exists in the system or not.
+         * 
+         * @param vendorNumber - the composite two-part vendorNumber (headerId-detailId)
+         * @param creditMemoNumber - the vendor-supplied creditMemoNumber
+         * @return boolean - true if a match exists in the db, false if not
+         */
+        public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, 
+                Date date, KualiDecimal amount);
+        
+        /**
+         * Retreives a list of Credit Memos with the given Req Id.
+         * 
+         * @param requisitionID
+         * @return List of Credit Memos.
+         */
+        public List getCreditMemosByRequisitionId(Integer requisitionID);
+        
+        /**
+         * Retreives a list of Credit Memos with the given PO Id.
+         * 
+         * @param poID
+         * @return List of Credit Memos.
+         */
+       public List getCreditMemosByPOId(Integer poID);
+        
+        /**
+         * Retreives a list of Credit Memos with the given PO Id.
+         * 
+         * @param poID
+         * @return List of Credit Memos.
+         */
+        public List getCreditMemosByPOId(Integer poID, Integer returnListMax);
+        
+        public List getAllCMsByPOIdAndStatus(Integer purchaseOrderID,Collection statusCodes);
 
-    /**
-     * This method tests for a duplicate entry of a credit memo by the combination of vendorNumber and creditMemoNumber. This method
-     * accepts the two values as arguments, and returns a boolean, describing whether a duplicate exists in the system or not.
-     * 
-     * @param vendorNumber - the composite two-part vendorNumber (headerId-detailId)
-     * @param creditMemoNumber - the vendor-supplied creditMemoNumber
-     * @return boolean - true if a match exists in the db, false if not
-     */
-    public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, String creditMemoNumber);
+       public CreditMemoStatusHistory saveCreditMemoStatusHistory(CreditMemoStatusHistory cmsh);
 
-    /**
-     * This method tests for a duplicate entry of a credit memo by the combination of vendorNumber, date and amount. This method
-     * accepts the values as arguments, and returns a boolean, describing whether a duplicate exists in the system or not.
-     * 
-     * @param vendorNumber - the composite two-part vendorNumber (headerId-detailId)
-     * @param creditMemoNumber - the vendor-supplied creditMemoNumber
-     * @return boolean - true if a match exists in the db, false if not
-     */
-    public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, Date date, KualiDecimal amount);
-}
+        /**
+         * Get all the credit memos for a set of statuses
+         * 
+         * @param statuses
+         * @return
+         */
+        public Collection getByStatuses(String statuses[]);
+      /**
+       * @param docId
+       * @return
+       */
+ //     public CreditMemoDocument getCreditMemoByDocId(Long docId);
+}      
