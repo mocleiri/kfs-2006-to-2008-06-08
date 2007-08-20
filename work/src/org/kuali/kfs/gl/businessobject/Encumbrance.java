@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/Encumbrance.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +20,12 @@ package org.kuali.module.gl.bo;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
+import org.kuali.core.bo.OriginationCode;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.bo.OriginationCode;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -35,7 +37,7 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
  * 
  * 
  */
-public class Encumbrance extends PersistableBusinessObjectBase {
+public class Encumbrance extends BusinessObjectBase {
     static final long serialVersionUID = -7494473472438516396L;
 
     private Integer universityFiscalYear;
@@ -66,7 +68,7 @@ public class Encumbrance extends PersistableBusinessObjectBase {
     private OriginationCode originationCode;
     private Options option;
 
-    private TransientBalanceInquiryAttributes dummyBusinessObject;
+    private DummyBusinessObject dummyBusinessObject;
 
     public Encumbrance() {
     }
@@ -87,23 +89,23 @@ public class Encumbrance extends PersistableBusinessObjectBase {
         accountLineEncumbranceAmount = new KualiDecimal("0");
         accountLineEncumbranceClosedAmount = new KualiDecimal("0");
         accountLineEncumbrancePurgeCode = " ";
-        this.dummyBusinessObject = new TransientBalanceInquiryAttributes();
+        this.dummyBusinessObject = new DummyBusinessObject();
     }
 
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap map = new LinkedHashMap();
-        map.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, getUniversityFiscalYear());
-        map.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, getChartOfAccountsCode());
-        map.put(KFSPropertyConstants.ACCOUNT_NUMBER, getAccountNumber());
-        map.put(KFSPropertyConstants.SUB_ACCOUNT_NUMBER, getSubAccountNumber());
-        map.put(KFSPropertyConstants.OBJECT_CODE, getObjectCode());
-        map.put(KFSPropertyConstants.SUB_OBJECT_CODE, getSubObjectCode());
-        map.put(KFSPropertyConstants.BALANCE_TYPE_CODE, getBalanceTypeCode());
-        map.put(KFSPropertyConstants.DOCUMENT_TYPE_CODE, getDocumentTypeCode());
-        map.put(KFSPropertyConstants.ORIGIN_CODE, getOriginCode());
-        map.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
-        map.put(KFSPropertyConstants.ACCOUNT_LINE_ENCUMBRANCE_AMOUNT, getAccountLineEncumbranceAmount());
-        map.put(KFSPropertyConstants.ACCOUNT_LINE_ENCUMBRANCE_CLOSED_AMOUNT, getAccountLineEncumbranceClosedAmount());
+        map.put(PropertyConstants.UNIVERSITY_FISCAL_YEAR, getUniversityFiscalYear());
+        map.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, getChartOfAccountsCode());
+        map.put(PropertyConstants.ACCOUNT_NUMBER, getAccountNumber());
+        map.put(PropertyConstants.SUB_ACCOUNT_NUMBER, getSubAccountNumber());
+        map.put(PropertyConstants.OBJECT_CODE, getObjectCode());
+        map.put(PropertyConstants.SUB_OBJECT_CODE, getSubObjectCode());
+        map.put(PropertyConstants.BALANCE_TYPE_CODE, getBalanceTypeCode());
+        map.put(PropertyConstants.DOCUMENT_TYPE_CODE, getDocumentTypeCode());
+        map.put(PropertyConstants.ORIGIN_CODE, getOriginCode());
+        map.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        map.put(PropertyConstants.ACCOUNT_LINE_ENCUMBRANCE_AMOUNT, getAccountLineEncumbranceAmount());
+        map.put(PropertyConstants.ACCOUNT_LINE_ENCUMBRANCE_CLOSED_AMOUNT, getAccountLineEncumbranceClosedAmount());
         return map;
     }
 
@@ -416,7 +418,7 @@ public class Encumbrance extends PersistableBusinessObjectBase {
      * 
      * @return Returns the dummyBusinessObject.
      */
-    public TransientBalanceInquiryAttributes getDummyBusinessObject() {
+    public DummyBusinessObject getDummyBusinessObject() {
         return dummyBusinessObject;
     }
 
@@ -425,7 +427,7 @@ public class Encumbrance extends PersistableBusinessObjectBase {
      * 
      * @param dummyBusinessObject The dummyBusinessObject to set.
      */
-    public void setDummyBusinessObject(TransientBalanceInquiryAttributes dummyBusinessObject) {
+    public void setDummyBusinessObject(DummyBusinessObject dummyBusinessObject) {
         this.dummyBusinessObject = dummyBusinessObject;
     }
 

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/ObjectCode.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +21,12 @@ import java.util.LinkedHashMap;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.KualiCode;
+import org.kuali.core.bo.Options;
 import org.kuali.core.bo.Summarizable;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.impl.PersistenceStructureServiceImpl;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetAggregationCode;
 import org.kuali.module.chart.bo.codes.FederalFundedCode;
 import org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode;
@@ -33,13 +35,7 @@ import org.kuali.module.gl.bo.SufficientFundRebuild;
 /**
  * 
  */
-public class ObjectCode extends PersistableBusinessObjectBase implements Summarizable {
-    
-    
-    static {
-        PersistenceStructureServiceImpl.referenceConversionMap.put(ObjectCode.class, ObjectCodeCurrent.class);
-    }
-    
+public class ObjectCode extends BusinessObjectBase implements Summarizable {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjectCode.class);
 
     private static final long serialVersionUID = -965833141452795485L;
@@ -78,7 +74,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
      */
     public ObjectCode() {
         // initialize the object fiscal year to the current fiscal year
-        // universityFiscalYear = SpringContext.getBean(DateTimeService.class).getCurrentFiscalYear();
+        // universityFiscalYear = SpringServiceLocator.getDateTimeService().getCurrentFiscalYear();
 
         // construct the referenced objects for the calling of the referencing object
         this.financialObjectLevel = new ObjLevel();
@@ -609,7 +605,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
         try {
             // KULCOA-549: update the sufficient funds table
             // get the current data from the database
-            BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
+            BusinessObjectService boService = SpringServiceLocator.getBusinessObjectService();
             ObjectCode originalObjectCode = (ObjectCode) boService.retrieve(this);
 
             if (originalObjectCode != null) {

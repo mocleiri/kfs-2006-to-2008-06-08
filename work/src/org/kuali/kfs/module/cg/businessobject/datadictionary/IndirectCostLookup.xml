@@ -82,13 +82,13 @@
                 <label>Budget Indirect Cost Rate</label>
                 <shortLabel>BdgtIdcCstRt</shortLabel>
 
-                <maxLength>6</maxLength>
+                <maxLength>5</maxLength>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
 
                 <control>
-                    <text size="7" />
+                    <text size="5" />
                 </control>
 
                 <summary>Budget Indirect Cost Rate.</summary>

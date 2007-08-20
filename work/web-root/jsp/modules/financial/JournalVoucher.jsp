@@ -13,15 +13,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
-
+<%@ include file="/jsp/core/tldHeader.jsp"%>
+<%@ taglib prefix="c" uri="/tlds/c.tld"%>
+<%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd"%>
 <c:set var="journalVoucherAttributes"
-	value="${DataDictionary['JournalVoucherDocument'].attributes}" />
+	value="${DataDictionary['KualiJournalVoucherDocument'].attributes}" />
 <c:set var="readOnly"
 	value="${!empty KualiForm.editingMode['viewOnly']}" />
 
 <kul:documentPage showDocumentInfo="true"
-	documentTypeName="JournalVoucherDocument"
+	documentTypeName="KualiJournalVoucherDocument"
 	htmlFormAction="financialJournalVoucher" renderMultipart="true"
 	showTabButtons="true">
 	<kul:hiddenDocumentFields />
@@ -158,7 +162,7 @@
 		editingMode="${KualiForm.editingMode}"
 		editableAccounts="${KualiForm.editableAccounts}"
 		includeObjectTypeCode="true" />
-	<gl:generalLedgerPendingEntries />
+	<kul:generalLedgerPendingEntries />
 	<kul:notes />
 	<kul:adHocRecipients />
 	<kul:routeLog />

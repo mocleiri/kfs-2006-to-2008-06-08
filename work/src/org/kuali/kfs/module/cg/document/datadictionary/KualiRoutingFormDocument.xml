@@ -22,6 +22,7 @@
     <transactionalDocument>
         <documentClass>org.kuali.module.kra.routingform.document.RoutingFormDocument</documentClass>
         <businessRulesClass>org.kuali.module.kra.routingform.rules.RoutingFormDocumentRule</businessRulesClass>
+        <preRulesCheckClass>org.kuali.module.kra.routingform.rules.RoutingFormDocumentPreRules</preRulesCheckClass>
 
         <documentAuthorizerClass>org.kuali.module.kra.routingform.document.RoutingFormDocumentAuthorizer</documentAuthorizerClass>
         <authorizations>
@@ -272,11 +273,11 @@
       </attribute>
 
             <attribute name="routingFormFellowFullName" forceUppercase="true">
-                <label>Fellow</label>
+                <label>Routing Form Fellow Full Name</label>
                 <shortLabel>Name</shortLabel>
 
                 <maxLength>30</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="32" />
@@ -316,8 +317,8 @@
                 <description>routingFormLastUpdateDate description...</description>
       </attribute>
 
-            <attribute name="routingFormLastUpdateUniversalIdentifier" forceUppercase="true">
-                <label>Routing Form Last Update Universal Identifier</label>
+            <attribute name="routingFormLastUpdateSystemIdentifier" forceUppercase="true">
+                <label>Routing Form Last Update System Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
                 <maxLength>12</maxLength>
@@ -327,16 +328,16 @@
                     <text size="14" />
                 </control>
 
-                <summary>routingFormLastUpdateUniversalIdentifier</summary>
-                <description>routingFormLastUpdateUniversalIdentifier description...</description>
+                <summary>routingFormLastUpdateSystemIdentifier</summary>
+                <description>routingFormLastUpdateSystemIdentifier description...</description>
       </attribute>
 
             <attribute name="routingFormLayDescription" forceUppercase="true">
-                <label>Lay Description of This Request</label>
+                <label>Routing Form Lay Description</label>
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>1000</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <textarea rows="5" cols="80"/>
@@ -380,7 +381,7 @@
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>75</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="12" />
@@ -560,7 +561,7 @@
                 <maxLength>1</maxLength>
 
                 <control>
-                    <text size="1" />
+                    <select valuesFinderClass="org.kuali.module.kra.routingform.lookup.keyvalues.ResearchTypeCodeValuesFinder" />
                 </control>
 
                 <summary>researchTypeCode</summary>

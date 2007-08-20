@@ -20,14 +20,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.AccountResponsibility;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.bo.AccountResponsibility;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
 
@@ -53,7 +50,7 @@ public class BudgetAdjustmentDocumentApprovalNoApprovalSplitNode implements Spli
 
         // retrieve ba document
         String documentID = routeContext.getDocument().getRouteHeaderId().toString();
-        BudgetAdjustmentDocument budgetDocument = (BudgetAdjustmentDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(documentID);
+        BudgetAdjustmentDocument budgetDocument = (BudgetAdjustmentDocument) SpringServiceLocator.getDocumentService().getByDocumentHeaderId(documentID);
 
         //TODO: due to transaction scoping issues, any proxied items in budgetDocument are now irretrievable!  Any 
         //      attempt to retrieve them will cause OJB to throw an exception.  This will be fixed in the 
@@ -88,8 +85,8 @@ public class BudgetAdjustmentDocumentApprovalNoApprovalSplitNode implements Spli
         // check remaining conditions
         if (autoApprovalAllowed) {
             // initiator should be fiscal officer or primary delegate for account
-            UniversalUser initiator = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new AuthenticationUserId(budgetDocument.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId()));
-            List userAccounts = SpringContext.getBean(AccountService.class).getAccountsThatUserIsResponsibleFor(initiator);
+            UniversalUser initiator = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(budgetDocument.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId()));
+            List userAccounts = SpringServiceLocator.getAccountService().getAccountsThatUserIsResponsibleFor(initiator);
             Account userAccount = null;
             for (Iterator iter = userAccounts.iterator(); iter.hasNext();) {
                 AccountResponsibility account = (AccountResponsibility) iter.next();

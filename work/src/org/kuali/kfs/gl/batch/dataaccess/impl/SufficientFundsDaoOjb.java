@@ -353,12 +353,7 @@ public class SufficientFundsDaoOjb extends PlatformAwareDaoBaseOjb implements Su
     private KualiDecimal executeReportQuery(ReportQueryByCriteria reportQuery) {
         Iterator iterator = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(reportQuery);
         if (iterator.hasNext()) {
-            KualiDecimal returnResult = (KualiDecimal) ((Object[]) iterator.next())[0];
-            // finish up the iterator so that the underlying database cursor is closed
-            while (iterator.hasNext()) {
-                iterator.next();
-            }
-            return returnResult;
+            return (KualiDecimal) ((Object[]) iterator.next())[0];
         }
         else {
             return KualiDecimal.ZERO;

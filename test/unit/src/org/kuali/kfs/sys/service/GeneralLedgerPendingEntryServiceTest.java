@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/sys/service/GeneralLedgerPendingEntryServiceTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +19,18 @@ package org.kuali.module.gl.service;
 
 import java.util.Iterator;
 
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.test.ConfigureContext;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the GeneralLedgerPending service.
  * 
  * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
     private final String docHeaderId = "1003";
@@ -41,7 +40,7 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
         super.setUp();
 
         if (generalLedgerPendingEntryService == null) {
-            generalLedgerPendingEntryService = SpringContext.getBean(GeneralLedgerPendingEntryService.class);
+            generalLedgerPendingEntryService = SpringServiceLocator.getGeneralLedgerPendingEntryService();
         }
         // Make sure the document doesn't exist before each test
         generalLedgerPendingEntryService.delete(docHeaderId);
@@ -108,10 +107,9 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
         generalLedgerPendingEntry.setTransactionLedgerEntryAmount(new KualiDecimal("8.8"));
         generalLedgerPendingEntry.setTransactionLedgerEntryDescription("9");
         generalLedgerPendingEntry.setTransactionDebitCreditCode("D");
-        generalLedgerPendingEntry.setTransactionDate(new java.sql.Date(SpringContext.getBean(DateTimeService.class).getCurrentDate().getTime()));
+        generalLedgerPendingEntry.setTransactionDate(new java.sql.Date(new java.util.Date().getTime()));
         generalLedgerPendingEntry.setFinancialDocumentTypeCode("12");
         generalLedgerPendingEntry.setTransactionLedgerEntrySequenceNumber(new Integer(1));
-        generalLedgerPendingEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.APPROVED);
         return generalLedgerPendingEntry;
     }
 }

@@ -18,16 +18,16 @@ package org.kuali.module.kra.budget.bo;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Map;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.KualiModuleService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.service.ChartUserService;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.service.BudgetPersonnelService;
@@ -78,8 +78,8 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      */
     public BudgetUser() {
         super();
-        budgetPersonnelService = SpringContext.getBean(BudgetPersonnelService.class);
-        chartUserService = (ChartUserService) SpringContext.getBean(KualiModuleService.class).getModule("chart").getModuleUserService();
+        budgetPersonnelService = SpringServiceLocator.getBudgetPersonnelService();
+        chartUserService = (ChartUserService) SpringServiceLocator.getKualiModuleService().getModule("chart").getModuleUserService();
     }
     
     public BudgetUser(String documentNumber, Integer budgetUserSequenceNumber) {
@@ -402,11 +402,9 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
             else {
                 this.baseSalary = new KualiDecimal(0);
             }
-
-            StringTokenizer chartOrg = new StringTokenizer(this.user.getPrimaryDepartmentCode(), "-");
             
-            this.fiscalCampusCode = chartOrg.nextToken();
-            this.primaryDepartmentCode = chartOrg.hasMoreElements() ? chartOrg.nextToken() : this.fiscalCampusCode;
+            this.fiscalCampusCode = this.user.getCampusCode();
+            this.primaryDepartmentCode = this.user.getPrimaryDepartmentCode();
         }
         else {
             this.baseSalary = new KualiDecimal(0);

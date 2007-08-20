@@ -16,35 +16,176 @@
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>	
-	<bean class="org.kuali.rice.OjbMetadataLoader">
-		<property name="repositoryDescriptors" value="org/kuali/kfs/OJB-repository-kfs.xml" />
-	</bean>
-	
-	<bean class="org.kuali.core.web.servlet.DWRConfigFileConfigurer">
-		<property name="configFile" value="org/kuali/kfs/dwr-kfs.xml" />
-	</bean>
-	
-	<bean class="org.kuali.core.datadictionary.spring.DataDictionaryLocationConfigurer">
-		<property name="dataDictionaryPackages" value="org/kuali/kfs/datadictionary" />
-	</bean>
-	
-	<!-- begin batch framework -->
-	<bean name="kfsBatchComponents" class="org.springframework.beans.factory.config.MapFactoryBean">
-		<property name="sourceMap">
-			<map>
-				<entry key="org.kuali.kfs.batch.JobDescriptor">
-					<list>
-						<value>scheduleJob</value>
-						<value>purgeJob</value>
-					</list>
-				</entry>
-				<entry key="org.kuali.kfs.batch.TriggerDescriptor">
-					<list>
-						<value>scheduleJobTrigger</value>
-					</list>
-				</entry>	
-			</map>
+
+	<!-- Overriddeen from core to include the kfs.datadictionary package -->
+	<bean id="dataDictionaryService" class="org.kuali.core.service.impl.DataDictionaryServiceImpl">
+		<constructor-arg ref="validationCompletionUtils" />
+		<property name="kualiConfigurationService" ref="kualiConfigurationService" />
+		<property name="authorizationService" ref="authorizationService" />
+		<property name="kualiGroupService" ref="kualiGroupService" />
+		<property name="kualiModuleService" ref="kualiModuleService" />
+		<property name="institutionId" value="${institution}" />
+		<property name="baselinePackages">
+			<list>
+				<value>classpath:org/kuali/core/bo/datadictionary/AdHocRoutePerson.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/AdHocRouteWorkgroup.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/ApplicationConstant.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/Attachment.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/AttributeReferenceDummy.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/BusinessObjectAttributeEntry.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/BusinessRule.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/BusinessRuleSecurity.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/Campus.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/CampusType.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/DocumentGroup.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/DocumentHeader.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/DocumentStatus.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/DocumentType.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/EmployeeStatus.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/EmployeeType.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/FinancialSystemParameter.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/FinancialSystemParameterSecurity.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/Note.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/NoteType.xml</value>
+				<value>classpath:org/kuali/core/bo/datadictionary/UniversalUser.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/BusinessRuleMaintenanceDocument.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/BusinessRuleSecurityMaintenanceDocument.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/CampusMaintenanceDocument.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/CampusTypeMaintenanceDocument.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/DocumentTypeMaintenanceDocument.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/EmployeeStatusMaintenanceDocument.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/EmployeeTypeMaintenanceDocument.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/FinancialSystemParameterSecurityMaintenanceDocument.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/FinancialSystemParameterMaintenanceDocument.xml</value>
+				<value>classpath:org/kuali/core/document/datadictionary/UniversalUserMaintenanceDocument.xml</value>
+				<value>org/kuali/kfs/datadictionary</value>
+			</list>
 		</property>
+	</bean>
+	
+	<bean id="universalUserDao" parent="platformAwareDao" class="org.kuali.core.dao.ojb.UniversalUserDaoOjb" />
+	
+	<bean id="webAuthenticationService" class="org.kuali.core.service.impl.WebAuthenticationServiceCas">
+		<property name="validatePassword" value="false" />
+	</bean>
+	
+	<!-- end core overrides -->
+
+	<bean id="kualiCodeService" class="org.kuali.kfs.service.impl.KualiCodeServiceImpl">
+		<property name="kualiCodeDao">
+			<ref bean="kualiCodeDao" />
+		</property>
+	</bean>
+	
+	<bean id="platformAwareDaoJdbc" class="org.kuali.core.dao.jdbc.PlatformAwareDaoBaseJdbc" abstract="true">
+		<property name="dataSource" ref="dataSource" />	
+	</bean>
+	
+	<bean id="kualiCodeDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.KualiCodeDaoOjb" />
+
+	<bean id="universityDateService" class="org.kuali.module.financial.service.impl.UniversityDateServiceImpl">
+		<property name="universityDateDao"><ref bean="universityDateDao" /></property>
+	</bean>
+
+	<bean id="accountingLineService" class="org.kuali.kfs.service.impl.AccountingLineServiceImpl">
+		<property name="accountingLineDao">
+			<bean parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.AccountingLineDaoOjb" />
+		</property>
+	</bean>
+
+	<bean id="homeOriginationDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.HomeOriginationDaoOjb" />
+
+	<bean id="originationCodeDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.OriginationCodeDaoOjb" />
+
+	<bean id="optionsDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.OptionsDaoOjb" />
+	
+	<bean id="generalLedgerPendingEntryDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.GeneralLedgerPendingEntryDaoOjb">
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
+	</bean>
+
+	<bean id="homeOriginationService" class="org.kuali.kfs.service.impl.HomeOriginationServiceImpl">
+		<property name="homeOriginationDao">
+			<ref bean="homeOriginationDao" />
+		</property>
+	</bean>
+
+	<bean id="originationCodeService" class="org.kuali.kfs.service.impl.OriginationCodeServiceImpl">
+		<property name="originationCodeDao">
+			<ref bean="originationCodeDao" />
+		</property>
+	</bean>
+	
+	<bean id="optionsService" class="org.kuali.kfs.service.impl.OptionsServiceImpl">
+		<property name="optionsDao">
+			<ref bean="optionsDao" />
+		</property>
+	</bean>
+	
+	<bean id="generalLedgerPendingEntryService" class="org.kuali.kfs.service.impl.GeneralLedgerPendingEntryServiceImpl">
+		<property name="generalLedgerPendingEntryDao">
+			<ref bean="generalLedgerPendingEntryDao" />
+		</property>
+		<property name="kualiRuleService">
+			<ref bean="kualiRuleService" />
+		</property>
+		<property name="chartService">
+			<ref bean="chartService" />
+		</property>
+		<property name="optionsService">
+			<ref bean="optionsService" />
+		</property>
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
+		<property name="balanceTypeService">
+			<ref bean="balanceTypService" />
+		</property>
+	</bean>
+
+
+	<bean id="postalZipCodeService" class="org.kuali.kfs.service.impl.PostalZipCodeServiceImpl">
+		<property name="businessObjectService">
+			<ref bean="businessObjectService" />
+		</property>
+	</bean>
+
+    <bean id="batchJobStatusLookupableHelperService" class="org.kuali.kfs.lookup.BatchJobStatusLookupableHelperServiceImpl" singleton="false" parent="kualiLookupableHelperService">
+    	<property name="schedulerService" ref="schedulerService" />
+    	<property name="configService" ref="kualiConfigurationService" />
+    </bean>
+	
+	<bean id="batchJobStatusLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
+	    <property name="lookupableHelperService">
+	        <ref bean="batchJobStatusLookupableHelperService" />
+	    </property>
+	</bean>
+	
+	<bean class="org.kuali.core.util.spring.NamedOrderedListBean">
+		<property name="name" value="databaseRepositoryFilePaths" />
+		<property name="listItem" value="org/kuali/kfs/OJB-repository-kfs.xml" />
+	</bean>
+	
+	<bean class="org.kuali.core.util.spring.NamedOrderedListBean">
+		<property name="name" value="scriptConfigurationFilePaths" />
+		<property name="listItem" value="org/kuali/kfs/dwr-kfs.xml" />
+	</bean>	
+
+	<!-- Quartz stuff -->
+	<bean class="org.kuali.core.util.spring.NamedOrderedListBean">
+		<property name="name" value="jobNames" />
+		<property name="listItems">
+			<list>
+				<value>scheduleJob</value>
+				<value>corePurgeJob</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.kuali.core.util.spring.NamedOrderedListBean">
+		<property name="name" value="triggerNames" />
+		<property name="listItem" value="scheduleJobTrigger" />
 	</bean>
 	
 	<bean id="scheduler" class="org.kuali.kfs.batch.SchedulerFactoryBean">
@@ -117,23 +258,6 @@
 		<property name="cronExpression" value="00 00 23 ? * *" />
 	</bean>
 	
-	<bean id="batchJobStatusLookupableHelperService" class="org.kuali.kfs.lookup.BatchJobStatusLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService">
-    	<property name="schedulerService" ref="schedulerService" />
-    	<property name="configService" ref="kualiConfigurationService" />
-    </bean>
-	
-	<bean id="batchJobStatusLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
-	    <property name="lookupableHelperService">
-	        <ref bean="batchJobStatusLookupableHelperService" />
-	    </property>
-	</bean>
-	
-	<bean id="batchInputFileService" class="org.kuali.kfs.service.impl.BatchInputFileServiceImpl" />
-	
-	<bean id="batchInputFileSetService" class="org.kuali.kfs.service.impl.BatchInputFileSetServiceImpl" />
-	<!-- end btch framework -->
-	
-	<!--  begin core batch jobs -->
 	<!-- database purging/creation/maintenance -->	
 	<bean id="databaseImportExportStep" abstract="true" parent="step">
 		<property name="databaseImportExportService">
@@ -170,17 +294,17 @@
 		</property>
 	</bean>
 
-	<bean id="purgeJob" parent="scheduledJobDescriptor">
+	<bean id="corePurgeJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="purgeDocumentContentsStep" />
+				<ref bean="corePurgeDocumentContentsStep" />
 				<ref bean="purgePendingAttachmentsStep" />
 				<ref bean="purgeOldLookupResultsStep" />
 			</list>
 		</property>
 	</bean>
 
-	<bean id="purgeDocumentContentsStep" class="org.kuali.kfs.batch.PurgeDocumentContentsStep" parent="step">
+	<bean id="corePurgeDocumentContentsStep" class="org.kuali.kfs.batch.PurgeDocumentContentsStep" parent="step">
 		<property name="documentService">
 			<ref bean="documentService" />
 		</property>
@@ -189,110 +313,6 @@
 	<bean id="purgePendingAttachmentsStep" class="org.kuali.kfs.batch.PurgePendingAttachmentsStep" parent="step">
 		<property name="attachmentService">
 			<ref bean="attachmentService" />
-		</property>
-	</bean>
-	<!-- end core batch jobs -->
-	
-	<bean id="kualiCodeService" class="org.kuali.kfs.service.impl.KualiCodeServiceImpl">
-		<property name="kualiCodeDao">
-			<ref bean="kualiCodeDao" />
-		</property>
-	</bean>
-		
-	<bean id="kualiCodeDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.KualiCodeDaoOjb" />
-
-	<bean id="universityDateService" class="org.kuali.module.financial.service.impl.UniversityDateServiceImpl">
-		<property name="universityDateDao"><ref bean="universityDateDao" /></property>
-	</bean>
-
-	<bean id="accountingLineService" class="org.kuali.kfs.service.impl.AccountingLineServiceImpl">
-		<property name="accountingLineDao">
-			<bean parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.AccountingLineDaoOjb" />
-		</property>
-	</bean>
-
-	<bean id="homeOriginationDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.HomeOriginationDaoOjb" />
-
-	<bean id="originationCodeDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.OriginationCodeDaoOjb" />
-
-	<bean id="optionsDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.OptionsDaoOjb" />
-	
-	<bean id="generalLedgerPendingEntryDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.GeneralLedgerPendingEntryDaoOjb">
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService" />
-		</property>
-	</bean>
-
-	<bean id="homeOriginationService" class="org.kuali.kfs.service.impl.HomeOriginationServiceImpl">
-		<property name="homeOriginationDao">
-			<ref bean="homeOriginationDao" />
-		</property>
-	</bean>
-
-	<bean id="originationCodeService" class="org.kuali.kfs.service.impl.OriginationCodeServiceImpl">
-		<property name="originationCodeDao">
-			<ref bean="originationCodeDao" />
-		</property>
-	</bean>
-	
-	<bean id="optionsService" class="org.kuali.kfs.service.impl.OptionsServiceImpl">
-		<property name="optionsDao">
-			<ref bean="optionsDao" />
-		</property>
-	</bean>
-	
-	<bean id="generalLedgerPendingEntryService" class="org.kuali.kfs.service.impl.GeneralLedgerPendingEntryServiceImpl">
-		<property name="generalLedgerPendingEntryDao">
-			<ref bean="generalLedgerPendingEntryDao" />
-		</property>
-		<property name="kualiRuleService">
-			<ref bean="kualiRuleService" />
-		</property>
-		<property name="chartService">
-			<ref bean="chartService" />
-		</property>
-		<property name="optionsService">
-			<ref bean="optionsService" />
-		</property>
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService" />
-		</property>
-		<property name="balanceTypeService">
-			<ref bean="balanceTypService" />
-		</property>
-	</bean>
-
-	<bean id="postalZipCodeService" class="org.kuali.kfs.service.impl.PostalZipCodeServiceImpl">
-		<property name="businessObjectService">
-			<ref bean="businessObjectService" />
-		</property>
-	</bean>
-
-	<bean id="workflow-org.kuali.core.bo.user.UniversalUser-Lookupable" parent="workflowLookupable" singleton="false">
-		<property name="businessObjectClassName">
-			<value>org.kuali.core.bo.user.UniversalUser</value>
-		</property>
-	</bean>
-
-	<bean id="workflow-org.kuali.kfs.bo.KualiModuleBO-Lookupable" parent="workflowLookupable" singleton="false">
-		<property name="businessObjectClassName">
-			<value>org.kuali.kfs.bo.KualiModuleBO</value>
-		</property>
-	</bean>
-	
-	<bean id="workflow-org.kuali.core.bo.Campus-Lookupable" parent="workflowLookupable" singleton="false">
-		<property name="businessObjectClassName">
-			<value>org.kuali.core.bo.Campus</value>
-		</property>
-	</bean>
-
-	<bean id="moduleLookupableHelperService" class="org.kuali.kfs.lookup.ModuleLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService" >
-		<property name="configService" ref="kualiConfigurationService" />
-	</bean>
-
-	<bean id="moduleLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
-		<property name="lookupableHelperService">
-			<ref bean="moduleLookupableHelperService" />
 		</property>
 	</bean>
 </beans>

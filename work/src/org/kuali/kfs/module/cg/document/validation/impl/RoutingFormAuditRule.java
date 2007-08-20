@@ -22,15 +22,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import org.kuali.PropertyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.rule.KualiParameterRule;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.ProjectDirector;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.KraKeyConstants;
@@ -78,7 +77,7 @@ public class RoutingFormAuditRule {
         }
         
         if (!valid) {
-            auditErrors.add(new AuditError("document.projectDetails.otherProjectDetailsQuestions", KraKeyConstants.AUDIT_OTHER_PROJECT_DETAILS_NOT_SELECTED, "projectdetails.anchor1"));
+            auditErrors.add(new AuditError("document.budget.audit.modular.consortium", KraKeyConstants.AUDIT_OTHER_PROJECT_DETAILS_NOT_SELECTED, "projectdetails.anchor1"));
             GlobalVariables.getAuditErrorMap().put("projectDetailsAuditErrors", new AuditCluster("Project Details", auditErrors));
         }
         
@@ -93,33 +92,20 @@ public class RoutingFormAuditRule {
      */
     private static boolean processRoutingFormMainPageAuditChecks(RoutingFormDocument routingFormDocument) {
         boolean valid = true;
-        List<AuditError> hardAuditErrors = new ArrayList<AuditError>();
-        List<AuditError> softAuditErrors = new ArrayList<AuditError>();
-
-        // Perform all validation checks for potential hard audit errors
+        List<AuditError> auditErrors = new ArrayList<AuditError>();
         
         // Agency/Delivery Info
-        valid &= processRoutingFormMainPageAgencyDeliveryAuditChecks(hardAuditErrors, routingFormDocument);
+        valid &= processRoutingFormMainPageAgencyDeliveryAuditChecks(auditErrors, routingFormDocument);
         
         // Personnel and Units/Orgs
-        valid &= processRoutingFormMainPagePersonnelUnitsAuditChecks(hardAuditErrors, routingFormDocument);
+        valid &= processRoutingFormMainPagePersonnelUnitsAuditChecks(auditErrors, routingFormDocument);
         
         // Submission Details
-        valid &= processRoutingFormMainPageSubmissionDetailsAuditChecks(hardAuditErrors, routingFormDocument);
+        valid &= processRoutingFormMainPageSubmissionDetailsAuditChecks(auditErrors, routingFormDocument);
         
         // Done, finish up
-        if (!hardAuditErrors.isEmpty()) {
-            GlobalVariables.getAuditErrorMap().put("mainPageAuditErrors", new AuditCluster("Main Page", hardAuditErrors));
-        }
-
-        // Perform all validation checks for potential soft audit errors
-
-        // Soft audit error check
-        processRoutingFormMainPageSoftErrors(softAuditErrors, routingFormDocument);
-
-        // Done, finish soft errors
-        if (!softAuditErrors.isEmpty()) {
-            GlobalVariables.getAuditErrorMap().put("mainPageAuditErrors", new AuditCluster("Main Page", softAuditErrors, true));
+        if (!auditErrors.isEmpty()) {
+            GlobalVariables.getAuditErrorMap().put("mainPageAuditErrors", new AuditCluster("Main Page", auditErrors));
         }
         
         return valid;
@@ -164,7 +150,7 @@ public class RoutingFormAuditRule {
      * @return
      */
     private static boolean processRoutingFormMainPagePersonnelUnitsAuditChecks(List<AuditError> auditErrors, RoutingFormDocument routingFormDocument) {
-        final String PERSON_ROLE_CODE_OTHER = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "KraRoutingFormPersonRoleCodeOther");
+        final String PERSON_ROLE_CODE_OTHER = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "KraRoutingFormPersonRoleCodeOther");;
         
         boolean valid = true;
         int projectDirectorCount = 0;
@@ -180,8 +166,8 @@ public class RoutingFormAuditRule {
                 projectDirectorCount++;
                 
                 Map fieldValues = new HashMap();
-                fieldValues.put(KFSPropertyConstants.PERSON_UNIVERSAL_IDENTIFIER, person.getPersonUniversalIdentifier());
-                ProjectDirector projectDirector = (ProjectDirector) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(ProjectDirector.class, fieldValues);
+                fieldValues.put(PropertyConstants.PERSON_UNIVERSAL_IDENTIFIER, person.getPersonUniversalIdentifier());
+                ProjectDirector projectDirector = (ProjectDirector) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(ProjectDirector.class, fieldValues);
                 if (projectDirector == null) {
                     valid = false;
                     auditErrors.add(new AuditError("document.routingFormPersonnel[" + i + "].personUniversalIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_PERSON_NOT_PD, "mainpage.anchor2"));
@@ -252,7 +238,7 @@ public class RoutingFormAuditRule {
      * @return
      */
     private static boolean processRoutingFormMainPageSubmissionDetailsAuditChecks(List<AuditError> auditErrors, RoutingFormDocument routingFormDocument) {
-        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
+        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
         final String SUBMISSION_TYPE_CHANGE = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.SUBMISSION_TYPE_CHANGE);
         final String PROJECT_TYPE_NEW = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "KraRoutingFormProjectTypeNew");
         final String PROJECT_TYPE_TIME_EXTENTION = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "KraRoutingFormProjectTypeTimeExtention");
@@ -264,15 +250,15 @@ public class RoutingFormAuditRule {
         
         boolean valid = true;
         
-        // Submission type - Grants.gov
-//        if (ObjectUtils.isNull(routingFormDocument.getSubmissionTypeCode())) {
-//            valid = false;
-//            auditErrors.add(new AuditError("document.submissionTypeCode", KraKeyConstants.AUDIT_MAIN_PAGE_SUBMISSION_TYPE_REQUIRED, "mainpage.anchor3"));
-//        }
-//        if (SUBMISSION_TYPE_CHANGE.equals(routingFormDocument.getSubmissionTypeCode()) && ObjectUtils.isNull(routingFormDocument.getPreviousFederalIdentifier())) {
-//            valid = false;
-//            auditErrors.add(new AuditError("document.previousFederalIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_SUBMISSION_TYPE_FEDID_REQUIRED, "mainpage.anchor3"));
-//        }
+        // Submission type
+        if (ObjectUtils.isNull(routingFormDocument.getSubmissionTypeCode())) {
+            valid = false;
+            auditErrors.add(new AuditError("document.submissionTypeCode", KraKeyConstants.AUDIT_MAIN_PAGE_SUBMISSION_TYPE_REQUIRED, "mainpage.anchor3"));
+        }
+        if (SUBMISSION_TYPE_CHANGE.equals(routingFormDocument.getSubmissionTypeCode()) && ObjectUtils.isNull(routingFormDocument.getPreviousFederalIdentifier())) {
+            valid = false;
+            auditErrors.add(new AuditError("document.previousFederalIdentifier", KraKeyConstants.AUDIT_MAIN_PAGE_SUBMISSION_TYPE_FEDID_REQUIRED, "mainpage.anchor3"));
+        }
 
         // Project Type
         
@@ -324,7 +310,7 @@ public class RoutingFormAuditRule {
                 }
             }
             
-            KualiParameterRule activeRule = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(KraConstants.KRA_ADMIN_GROUP_NAME, "KraRoutingFormProjectTypesValid");
+            KualiParameterRule activeRule = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterRule(KraConstants.KRA_ADMIN_GROUP_NAME, "KraRoutingFormProjectTypesValid");
             if (activeRule.failsRule(projectTypesString)) {
                 valid = false;
                 auditErrors.add(new AuditError("document.routingFormProjectTypes", KraKeyConstants.AUDIT_MAIN_PAGE_PROJECT_TYPE_INVALID, "mainpage.anchor3"));
@@ -358,15 +344,10 @@ public class RoutingFormAuditRule {
             auditErrors.add(new AuditError("document.routingFormOtherPurposeDescription", KraKeyConstants.AUDIT_MAIN_PAGE_PURPOSE_OTHER_REQUIRED, "mainpage.anchor3"));
         }
         
-        // Title, Lay Description, & Abstract
+        // Title & Abstract
         if (ObjectUtils.isNull(routingFormDocument.getRoutingFormProjectTitle())) {
             valid = false;
             auditErrors.add(new AuditError("document.routingFormProjectTitle", KraKeyConstants.AUDIT_MAIN_PAGE_TITLE_REQUIRED, "mainpage.anchor3"));
-        }
-        
-        if (ObjectUtils.isNull(routingFormDocument.getRoutingFormLayDescription())) {
-            valid = false;
-            auditErrors.add(new AuditError("document.routingFormLayDescription", KraKeyConstants.AUDIT_MAIN_PAGE_LAY_DESCRIPTION_REQUIRED, "mainpage.anchor3"));
         }
         
         if (ObjectUtils.isNull(routingFormDocument.getProjectAbstract())) {
@@ -429,6 +410,16 @@ public class RoutingFormAuditRule {
         }
         
         // logic data relation on each row (not relation between the two)
+        if(routingFormBudget.getRoutingFormBudgetDirectAmount() != null && routingFormBudget.getRoutingFormBudgetIndirectCostAmount() != null &&
+                routingFormBudget.getRoutingFormBudgetDirectAmount().isLessThan(routingFormBudget.getRoutingFormBudgetIndirectCostAmount())){
+            valid = false;
+            auditErrors.add(new AuditError("document.routingFormBudget.routingFormBudgetDirectAmount", KraKeyConstants.AUDIT_MAIN_PAGE_DIRECT_LESS_INDIRECT, "mainpage.anchor3"));
+        }
+        if(routingFormBudget.getRoutingFormBudgetTotalDirectAmount() != null && routingFormBudget.getRoutingFormBudgetTotalIndirectCostAmount() != null &&
+                routingFormBudget.getRoutingFormBudgetTotalDirectAmount().isLessThan(routingFormBudget.getRoutingFormBudgetTotalIndirectCostAmount())){
+            valid = false;
+            auditErrors.add(new AuditError("document.routingFormBudget.routingFormBudgetTotalDirectAmount", KraKeyConstants.AUDIT_MAIN_PAGE_TOTAL_DIRECT_LESS_TOTAL_INDIRECT, "mainpage.anchor3"));
+        }
         if(routingFormBudget.getRoutingFormBudgetStartDate() != null && routingFormBudget.getRoutingFormBudgetEndDate() != null &&
                 routingFormBudget.getRoutingFormBudgetStartDate().compareTo(routingFormBudget.getRoutingFormBudgetEndDate()) >= 0){
             valid = false;
@@ -471,28 +462,4 @@ public class RoutingFormAuditRule {
         
         return valid;
     }
-    
-    /**
-     * 
-     * This method reviews the provided routing form document and validates it for any potential soft audit errors.
-     * @param auditErrors Collection of audit errors to be added to the routing form document as soft audit errors.
-     * @param routingFormDocument Instance of the routing form document being validated.
-     */
-    private static void processRoutingFormMainPageSoftErrors(List<AuditError> auditErrors, RoutingFormDocument routingFormDocument) {
-        
-        RoutingFormBudget routingFormBudget = routingFormDocument.getRoutingFormBudget();
-
-        // Amount validation checks
-        if(routingFormBudget.getRoutingFormBudgetDirectAmount() != null && routingFormBudget.getRoutingFormBudgetIndirectCostAmount() != null &&
-                routingFormBudget.getRoutingFormBudgetDirectAmount().isLessThan(routingFormBudget.getRoutingFormBudgetIndirectCostAmount())){
-            auditErrors.add(new AuditError("document.routingFormBudget.routingFormBudgetDirectAmount", KraKeyConstants.AUDIT_MAIN_PAGE_DIRECT_LESS_INDIRECT, "mainpage.anchor3"));
-        }
-        
-        if(routingFormBudget.getRoutingFormBudgetTotalDirectAmount() != null && routingFormBudget.getRoutingFormBudgetTotalIndirectCostAmount() != null &&
-                routingFormBudget.getRoutingFormBudgetTotalDirectAmount().isLessThan(routingFormBudget.getRoutingFormBudgetTotalIndirectCostAmount())){
-            auditErrors.add(new AuditError("document.routingFormBudget.routingFormBudgetTotalDirectAmount", KraKeyConstants.AUDIT_MAIN_PAGE_TOTAL_DIRECT_LESS_TOTAL_INDIRECT, "mainpage.anchor3"));
-        }
-        
-    }
-    
 }

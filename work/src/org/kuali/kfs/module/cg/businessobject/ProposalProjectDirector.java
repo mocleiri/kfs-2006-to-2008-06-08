@@ -18,59 +18,75 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.ObjectUtils;
+import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
 
 /**
  * 
- * Represents a relationship between a {@link Proposal} and a {@link ProjectDirector}.
  */
-public class ProposalProjectDirector extends PersistableBusinessObjectBase implements Primaryable, CGProjectDirector, Inactivateable {
+public class ProposalProjectDirector extends PersistableBusinessObjectBase {
 
     private String personUniversalIdentifier;
     private Long proposalNumber;
     private boolean proposalPrimaryProjectDirectorIndicator;
     private String proposalProjectDirectorProjectTitle;
-    private boolean active;
-    
+
     private ProjectDirector projectDirector;
 
     /**
      * Default constructor.
      */
     public ProposalProjectDirector() {
-        // Struts needs this instance to populate the secondary key, personUserIdentifier.
-        projectDirector = new ProjectDirector();
+
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#getPersonUniversalIdentifier()
+     * Constructor from RoutingFormDocument.
+     */
+    public ProposalProjectDirector(RoutingFormPersonnel routingFormProjectDirector, Long proposalNumber, boolean primaryProjectDirector) {
+        // todo: not set proposalNumber?  Doesn't OJB do this automatically?
+        this.setProposalNumber(proposalNumber);
+        this.setPersonUniversalIdentifier(routingFormProjectDirector.getPersonUniversalIdentifier());
+        this.setProposalPrimaryProjectDirectorIndicator(primaryProjectDirector);
+    }
+
+    
+    /**
+     * Gets the personUniversalIdentifier attribute.
+     * 
+     * @return Returns the personUniversalIdentifier
+     * 
      */
     public String getPersonUniversalIdentifier() {
         return personUniversalIdentifier;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#setPersonUniversalIdentifier(java.lang.String)
+     * Sets the personUniversalIdentifier attribute.
+     * 
+     * @param personUniversalIdentifier The personUniversalIdentifier to set.
+     * 
      */
     public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
         this.personUniversalIdentifier = personUniversalIdentifier;
-        if (projectDirector != null) {
-            projectDirector.setPersonUniversalIdentifier(personUniversalIdentifier);
-        }
     }
 
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#getProposalNumber()
+     * Gets the proposalNumber attribute.
+     * 
+     * @return Returns the proposalNumber
+     * 
      */
     public Long getProposalNumber() {
         return proposalNumber;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#setProposalNumber(java.lang.Long)
+     * Sets the proposalNumber attribute.
+     * 
+     * @param proposalNumber The proposalNumber to set.
+     * 
      */
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
@@ -81,22 +97,18 @@ public class ProposalProjectDirector extends PersistableBusinessObjectBase imple
      * Gets the proposalPrimaryProjectDirectorIndicator attribute.
      * 
      * @return Returns the proposalPrimaryProjectDirectorIndicator
+     * 
      */
     public boolean isProposalPrimaryProjectDirectorIndicator() {
         return proposalPrimaryProjectDirectorIndicator;
     }
 
-    /**
-     * @see Primaryable#isPrimary()
-     */
-    public boolean isPrimary() {
-        return isProposalPrimaryProjectDirectorIndicator();
-    }
 
     /**
      * Sets the proposalPrimaryProjectDirectorIndicator attribute.
      * 
      * @param proposalPrimaryProjectDirectorIndicator The proposalPrimaryProjectDirectorIndicator to set.
+     * 
      */
     public void setProposalPrimaryProjectDirectorIndicator(boolean proposalPrimaryProjectDirectorIndicator) {
         this.proposalPrimaryProjectDirectorIndicator = proposalPrimaryProjectDirectorIndicator;
@@ -107,6 +119,7 @@ public class ProposalProjectDirector extends PersistableBusinessObjectBase imple
      * Gets the proposalProjectDirectorProjectTitle attribute.
      * 
      * @return Returns the proposalProjectDirectorProjectTitle
+     * 
      */
     public String getProposalProjectDirectorProjectTitle() {
         return proposalProjectDirectorProjectTitle;
@@ -116,37 +129,23 @@ public class ProposalProjectDirector extends PersistableBusinessObjectBase imple
      * Sets the proposalProjectDirectorProjectTitle attribute.
      * 
      * @param proposalProjectDirectorProjectTitle The proposalProjectDirectorProjectTitle to set.
+     * 
      */
     public void setProposalProjectDirectorProjectTitle(String proposalProjectDirectorProjectTitle) {
         this.proposalProjectDirectorProjectTitle = proposalProjectDirectorProjectTitle;
     }
 
     /**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-	 *
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#getProjectDirector()
+     * @return the projectDirector.
      */
     public ProjectDirector getProjectDirector() {
         return projectDirector;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#setProjectDirector(org.kuali.module.cg.bo.ProjectDirector)
+     * Sets the projectDirector.
+     * @param projectDirector the projectDirector to set
+     * @deprecated required by UniversalUserServiceImpl.isUniversalUserProperty() for PojoPropertyUtilsBean.getPropertyDescriptor()
      */
     public void setProjectDirector(ProjectDirector projectDirector) {
         this.projectDirector = projectDirector;
@@ -162,18 +161,5 @@ public class ProposalProjectDirector extends PersistableBusinessObjectBase imple
             m.put("proposalNumber", this.proposalNumber.toString());
         }
         return m;
-    }
-
-    /**
-     * This can be displayed by Proposal.xml lookup results.
-     * 
-     * @see Object#toString()
-     */
-    @Override
-    public String toString() {
-        // todo: get "nonexistent", "primary", and "secondary" from ApplicationResources.properties via KFSKeyConstants?
-        String name = ObjectUtils.isNull(getProjectDirector()) ? "nonexistent" : getProjectDirector().getPersonName();
-        String title = getProposalProjectDirectorProjectTitle() == null ? "" : " " + getProposalProjectDirectorProjectTitle();
-        return name + " " + (isProposalPrimaryProjectDirectorIndicator() ? "primary" : "secondary") + title;
     }
 }

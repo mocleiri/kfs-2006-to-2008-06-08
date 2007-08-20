@@ -83,16 +83,18 @@ public class EntryDaoOjb extends PlatformAwareDaoBaseOjb implements EntryDao {
         q.setAttributes(new String[] { "max(transactionLedgerEntrySequenceNumber)" });
 
         Iterator iter = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
-        // would this work better? max = (BigDecimal) getPersistenceBrokerTemplate().getObjectByQuery(q);
-        BigDecimal max = null;
-        while (iter.hasNext()) {
+        if (iter.hasNext()) {
             Object[] data = (Object[]) iter.next();
-            max = (BigDecimal) data[0]; // Don't know why OJB returns a BigDecimal, but it does
+            BigDecimal max = (BigDecimal) data[0]; // Don't know why OJB returns a BigDecimal, but it does
+            if (max == null) {
+                return 0;
+            }
+            else {
+                return max.intValue();
+            }
         }
-        if (max == null) {
+        else {
             return 0;
-        } else {
-            return max.intValue();
         }
     }
 
