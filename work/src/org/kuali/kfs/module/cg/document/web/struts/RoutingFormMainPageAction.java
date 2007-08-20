@@ -28,17 +28,16 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
 import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.lookup.LookupResultsService;
-import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.routingform.bo.Keyword;
 import org.kuali.module.kra.routingform.bo.RoutingFormKeyword;
 import org.kuali.module.kra.routingform.bo.RoutingFormOrganizationCreditPercent;
 import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
 import org.kuali.module.kra.routingform.document.RoutingFormDocument;
+import org.kuali.module.kra.routingform.rules.event.RunRoutingFormAuditEvent;
 import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
 
 public class RoutingFormMainPageAction extends RoutingFormAction {
@@ -59,7 +58,7 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
         routingForm.getRoutingFormDocument().addPerson(routingForm.getNewRoutingFormPerson());
         routingForm.setNewRoutingFormPerson(new RoutingFormPersonnel());
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -75,7 +74,7 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
         
         routingForm.getRoutingFormDocument().getRoutingFormPersonnel().remove(super.getLineToDelete(request));
         
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
     /**
@@ -92,7 +91,7 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
         routingForm.getRoutingFormDocument().addOrganizationCreditPercent(routingForm.getNewRoutingFormOrganizationCreditPercent());
         routingForm.setNewRoutingFormOrganizationCreditPercent(new RoutingFormOrganizationCreditPercent());
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
     /**
@@ -108,7 +107,7 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
         
         routingForm.getRoutingFormDocument().getRoutingFormOrganizationCreditPercents().remove(super.getLineToDelete(request));
         
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
     /**
@@ -125,26 +124,39 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
 
         routingForm.getRoutingFormDocument().getRoutingFormKeywords().remove(super.getLineToDelete(request));
         
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
-     * All keywords are deleted from the routing form list.
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#route(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
-    public ActionForward deleteAllRoutingFormKeyword(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @Override
+    public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         RoutingForm routingForm = (RoutingForm) form;
-
-        routingForm.getRoutingFormDocument().getRoutingFormKeywords().clear();
         
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        retrieveMainPageReferenceObjects(routingForm.getRoutingFormDocument());
+
+        boolean auditErrorsPassed = SpringServiceLocator.getKualiRuleService().applyRules(new RunRoutingFormAuditEvent(routingForm.getRoutingFormDocument()));
+        if (!auditErrorsPassed) {
+            routingForm.setAuditActivated(true);
+            return mapping.findForward(Constants.MAPPING_BASIC);
+        }
+        
+        return super.route(mapping, form, request, response);
     }
     
+    /**
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#approve(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
+    @Override
+    public ActionForward approve(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        RoutingForm routingForm = (RoutingForm) form;
+        
+        retrieveMainPageReferenceObjects(routingForm.getRoutingFormDocument());
+
+        return super.approve(mapping, form, request, response);
+    }
+
     /**
      * @see org.kuali.module.kra.routingform.web.struts.action.RoutingFormAction#save(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
@@ -158,16 +170,6 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
         return super.save(mapping, form, request, response);
     }
 
-    public ActionForward clearFedPassthrough(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        RoutingForm routingForm = (RoutingForm) form;
-        RoutingFormDocument routingFormDocument = routingForm.getRoutingFormDocument();
-        
-        routingFormDocument.setAgencyFederalPassThroughNumber(null);
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObject(routingFormDocument, "federalPassThroughAgency");
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
-    }
-    
     /**
      * Refresh method on Main Page does several things for lookups:
      * <ul>
@@ -185,13 +187,13 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
         RoutingFormDocument routingFormDocument = routingForm.getRoutingFormDocument();
 
         // check to see if we are coming back from a lookup
-        if (KFSConstants.MULTIPLE_VALUE.equals(routingForm.getRefreshCaller())) {
+        if (Constants.MULTIPLE_VALUE.equals(routingForm.getRefreshCaller())) {
             // Multivalue lookup. Note that the multivalue keyword lookup results are returned persisted to avoid using session.
             // Since URLs have a max length of 2000 chars, field conversions can not be done.
             String lookupResultsSequenceNumber = routingForm.getLookupResultsSequenceNumber();
             if (StringUtils.isNotBlank(lookupResultsSequenceNumber)) {
                 Class lookupResultsBOClass = Class.forName(routingForm.getLookupResultsBOClassName());
-                Collection<PersistableBusinessObject> rawValues = SpringContext.getBean(LookupResultsService.class).retrieveSelectedResultBOs(lookupResultsSequenceNumber, lookupResultsBOClass, GlobalVariables.getUserSession().getUniversalUser().getPersonUniversalIdentifier());
+                Collection<PersistableBusinessObject> rawValues = SpringServiceLocator.getLookupResultsService().retrieveSelectedResultBOs(lookupResultsSequenceNumber, lookupResultsBOClass, GlobalVariables.getUserSession().getUniversalUser().getPersonUniversalIdentifier());
                 
                 if(lookupResultsBOClass.isAssignableFrom(Keyword.class)) {
                     for(Iterator iter = rawValues.iterator(); iter.hasNext(); ) {
@@ -204,12 +206,11 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
                     }
                 }
             }
-        } else if (KFSConstants.KUALI_LOOKUPABLE_IMPL.equals(routingForm.getRefreshCaller()) ||
-                KFSConstants.KUALI_USER_LOOKUPABLE_IMPL.equals(routingForm.getRefreshCaller())) {
+        } else if (Constants.KUALI_LOOKUPABLE_IMPL.equals(routingForm.getRefreshCaller()) ||
+                Constants.KUALI_USER_LOOKUPABLE_IMPL.equals(routingForm.getRefreshCaller())) {
             if (request.getParameter("document.routingFormAgency.agencyNumber") != null) {
                 // coming back from an Agency lookup - Agency selected
                 routingFormDocument.setRoutingFormAgencyToBeNamedIndicator(false);
-                routingFormDocument.getRoutingFormAgency().refreshReferenceObject("agency");
             }
             else if ("true".equals(request.getParameter("document.routingFormAgencyToBeNamedIndicator"))) {
                 // coming back from Agency lookup - To Be Named selected
@@ -259,7 +260,7 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
             }
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -300,6 +301,6 @@ public class RoutingFormMainPageAction extends RoutingFormAction {
         referenceObjects.add("adhocOrgs");
         referenceObjects.add("adhocWorkgroups");
 
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(routingFormDocument, referenceObjects);
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(routingFormDocument, referenceObjects);
     }
 }

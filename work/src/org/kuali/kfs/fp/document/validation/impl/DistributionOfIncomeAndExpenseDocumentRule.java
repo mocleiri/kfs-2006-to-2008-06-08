@@ -15,16 +15,15 @@
  */
 package org.kuali.module.financial.rules;
 
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.rule.KualiParameterRule;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
 
 /**
@@ -56,13 +55,13 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends AccountingDocume
 
             ObjectCode objectCode = accountingLine.getObjectCode();
             if (ObjectUtils.isNull(objectCode)) {
-                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+                accountingLine.refreshReferenceObject(PropertyConstants.OBJECT_CODE);
             }
 
             valid = !rule.failsRule(objectSubTypeCode);
 
             if (!valid) {
-                reportError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.DistributionOfIncomeAndExpense.ERROR_DOCUMENT_DI_INVALID_OBJ_SUB_TYPE, objectCode.getFinancialObjectCode(), objectSubTypeCode);
+                reportError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.DistributionOfIncomeAndExpense.ERROR_DOCUMENT_DI_INVALID_OBJ_SUB_TYPE, objectCode.getFinancialObjectCode(), objectSubTypeCode);
             }
         }
         return valid;
@@ -77,7 +76,7 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends AccountingDocume
         boolean valid = super.isObjectTypeAllowed(accountingLine);
 
         if (valid) {
-            KualiParameterRule rule = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(DISTRIBUTION_OF_INCOME_AND_EXPENSE_DOCUMENT_SECURITY_GROUPING, RESTRICTED_OBJECT_TYPE_CODES);
+            KualiParameterRule rule = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterRule(DISTRIBUTION_OF_INCOME_AND_EXPENSE_DOCUMENT_SECURITY_GROUPING, RESTRICTED_OBJECT_TYPE_CODES);
 
             ObjectCode objectCode = accountingLine.getObjectCode();
 
@@ -86,7 +85,7 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends AccountingDocume
             valid = !rule.failsRule(objectTypeCode);
             if (!valid) {
                 // add message
-                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.DistributionOfIncomeAndExpense.ERROR_DOCUMENT_DI_INVALID_OBJECT_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectTypeCode });
+                GlobalVariables.getErrorMap().putError(PropertyConstants.FINANCIAL_OBJECT_CODE, KeyConstants.DistributionOfIncomeAndExpense.ERROR_DOCUMENT_DI_INVALID_OBJECT_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectTypeCode });
             }
         }
 
