@@ -15,28 +15,16 @@
  */
 package org.kuali.module.purap.service.impl;
 
-import java.util.Date;
-import java.util.Iterator;
+import java.util.Calendar;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.Note;
-import org.kuali.core.bo.user.AuthenticationUserId;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.service.ObjectCodeService;
-import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapRuleConstants;
-import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.dao.RequisitionDao;
 import org.kuali.module.purap.document.RequisitionDocument;
 import org.kuali.module.purap.service.PurapService;
@@ -46,58 +34,65 @@ import org.kuali.module.vendor.bo.VendorDetail;
 import org.kuali.module.vendor.service.VendorService;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.iu.uis.eden.exception.WorkflowException;
-
 @Transactional
 public class RequisitionServiceImpl implements RequisitionService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(RequisitionServiceImpl.class);
 
     private BusinessObjectService businessObjectService;
-    private ObjectCodeService objectCodeService;
     private DateTimeService dateTimeService;
     private DocumentService documentService;
     private PurapService purapService;
     private RequisitionDao requisitionDao;
-    private UniversalUserService universalUserService;
-    private UniversityDateService universityDateService;
     private VendorService vendorService;
-    private KualiConfigurationService kualiConfigurationService;
+    
 
-    public void saveDocumentWithoutValidation(RequisitionDocument requisitionDocument) {
-        try {
-//            documentService.validateAndPersistDocument(requisitionDocument, new SaveOnlyDocumentEvent(requisitionDocument));
-            documentService.saveDocumentWithoutRunningValidation(requisitionDocument);
-        }
-        catch (WorkflowException we) {
-            String errorMsg = "Error saving document # " + requisitionDocument.getDocumentHeader().getDocumentNumber() + " " + we.getMessage(); 
-            LOG.error(errorMsg, we);
-            throw new RuntimeException(errorMsg, we);
-        }
-//        catch (ValidationException ve) {
-//            String errorMsg = "Error saving document # " + requisitionDocument.getDocumentHeader().getDocumentNumber() + " " + ve.getMessage(); 
-//            LOG.error(errorMsg, ve);
-//            throw new RuntimeException(errorMsg, ve);
-//        }
+    public void save(RequisitionDocument requisitionDocument) {
+        businessObjectService.save(requisitionDocument);
     }
     
     public RequisitionDocument getRequisitionById(Integer id) {
-        String documentNumber = requisitionDao.getDocumentNumberForRequisitionId(id);
-        if (ObjectUtils.isNotNull(documentNumber)) {
-            try {
-                RequisitionDocument doc = (RequisitionDocument)documentService.getByDocumentHeaderId(documentNumber);
-                if (ObjectUtils.isNotNull(doc)) {
-                    doc.refreshNonUpdateableReferences();
-                }
-                return doc;
-            }
-            catch (WorkflowException e) {
-                String errorMessage = "Error getting requisition document from document service";
-                LOG.error("getRequisitionById() " + errorMessage,e);
-                throw new RuntimeException(errorMessage,e);
-            }
-        }
-        return null;
+        return requisitionDao.getRequisitionById(id);
     }
+    
+//    public void disapproveRequisition(String docHeaderId, String level, String networkId) {
+//        if(RoutingService.REQ_CONTENT_NODE_NAME.equalsIgnoreCase(level)){
+//            //disapproved content
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_CONTENT, networkId);
+//        }
+//        else if(RoutingService.REQ_SUB_ACCT_NODE_NAME.equalsIgnoreCase(level)){
+//            //disapproved subaccount
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_SUB_ACCT, networkId);
+//        }
+//        else if(RoutingService.REQ_FISCAL_OFFICER_NODE_NAME.equalsIgnoreCase(level)){
+//            //disapproved fiscal
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_FISCAL, networkId);
+//        }
+//        else if(RoutingService.REQ_CHART_ORG_NODE_NAME.equalsIgnoreCase(level)){
+//            //disapprove base hierarchy
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_CHART, networkId);
+//        }
+//        else if(RoutingService.REQ_SOD_NODE_NAME.equalsIgnoreCase(level)){
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_SEP_OF_DUTY, networkId);
+//        }
+//    }
+//        
+//   
+//    public boolean failsSeparationOfDuties(String docHeaderId, String networkId, String approverId, int approvals) {
+//        LOG.debug("failsSeparationOfDuties() ");
+//        boolean fails = false;
+//        Requisition r = requisitionService.getRequisitionByDocumentId(docHeaderId);
+//        BigDecimal totalCost = r.getTotalCost();
+//        LOG.debug("failsSeparationOfDuties() - approvals = " + approvals);
+//        LOG.debug("failsSeparationOfDuties() - total cost = " + totalCost);
+//        LOG.debug("failsSeparationOfDuties() - ApproverID = " + networkId);
+//        LOG.debug("failsSeparationOfDuties() - InitiatorID = " + approverId);
+//        if((totalCost.compareTo(new BigDecimal(10000.00)) == 1) && (networkId.equals(approverId)) && (approvals <= 1)){
+//          return true;
+//        }
+//        LOG.debug("failsSeparationOfDuties() return value: " + fails);
+//        return fails;
+//    }
+//
     
     public boolean isAutomaticPurchaseOrderAllowed(RequisitionDocument requisition) {
         LOG.debug("isAutomaticPurchaseOrderAllowed() started");
@@ -146,29 +141,34 @@ public class RequisitionServiceImpl implements RequisitionService {
             return "Requisition total is not greater than zero.";
         }
 
-        for (Iterator iter = requisition.getItems().iterator(); iter.hasNext();) {
-            RequisitionItem item = (RequisitionItem) iter.next();
-            if (item.isItemRestrictedIndicator()) {
-                return "Requisition contains an item that is marked as restricted.";
-            }
-//TODO PHASE 2B - Discounts and trade-ins
-//            if (EpicConstants.ITEM_TYPE_ORDER_DISCOUNT_CODE.equals(item.getItemType().getCode()) || EpicConstants.ITEM_TYPE_TRADE_IN_CODE.equals(item.getItemType().getCode())) {
-//                if ((item.getUnitPrice() != null) && ((zero.compareTo(item.getUnitPrice())) != 0)) {
-//                    // discount or trade-in item has unit price that is not empty or zero
-//                    return "Requisition contains a " + item.getItemType().getDescription() + " item, so it does not qualify as an APO.";
-//                }
+// TODO finish item logic (david and chris)
+//      Collection items = requisition.getItems();
+//      Iterator i = items.iterator();
+//      while (i.hasNext()) {
+//        RequisitionItem item = (RequisitionItem)i.next();
+//        if (item.getRestricted().booleanValue()) {
+//          return "Requisition contains an item that is marked as restricted.";
+//        }
+//        if (EpicConstants.ITEM_TYPE_ORDER_DISCOUNT_CODE.equals(item.getItemType().getCode()) ||
+//                EpicConstants.ITEM_TYPE_TRADE_IN_CODE.equals(item.getItemType().getCode())) {
+//          if ( (item.getUnitPrice() != null) && ((zero.compareTo(item.getUnitPrice())) != 0) ) {
+//            // discount or trade-in item has unit price that is not empty or zero
+//            return "Requisition contains a " + item.getItemType().getDescription() + " item, so it does not qualify as an APO.";
+//          }
+//        }
+//        if (!EpicConstants.REQ_SOURCE_B2B.equals(requisitionSource)) {
+//          Collection accounts = item.getAccounts();
+//          Iterator a = accounts.iterator();
+//          while (a.hasNext()) {
+//            RequisitionAccount account = (RequisitionAccount)a.next();
+//            ObjectCode code = chartOfAccountsService.getObjectCode(account.getFinancialChartOfAccountsCode(), 
+//                account.getFinancialObjectCode(), requisition.getPurchaseOrderEncumbranceFiscalYear());
+//            if (EpicConstants.FIS_CAPITAL_ASSET_OBJECT_LEVEL_CODE.equals(code.getFinancialObjectLevelCode())) {
+//              return "Standard requisition with a capital asset object code.";
 //            }
-//          TODO PHASE 2B - Capital Asset Codes
-//            if (!PurapConstants.RequisitionSources.B2B.equals(requisitionSource)) {
-//                for (Iterator iterator = item.getSourceAccountingLines().iterator(); iterator.hasNext();) {
-//                    RequisitionAccount account = (RequisitionAccount) iterator.next();
-//                    ObjectCode code =  objectCodeService.getByPrimaryId(requisition.getPostingYear(), account.getChartOfAccountsCode(), account.getFinancialObjectCode());
-//                    if (EpicConstants.FIS_CAPITAL_ASSET_OBJECT_LEVEL_CODE.equals(code.getFinancialObjectLevelCode())) {
-//                        return "Standard requisition with a capital asset object code.";
-//                    }
-//                }//endfor accounts
-//            }
-        }//endfor items
+//          }//endwhile accounts
+//        }
+//      }//endwhile items
 
         LOG.debug("isAPO() vendor #" + requisition.getVendorHeaderGeneratedIdentifier() + "-" + requisition.getVendorDetailAssignedIdentifier());
         if (requisition.getVendorHeaderGeneratedIdentifier() == null || requisition.getVendorDetailAssignedIdentifier() == null) {
@@ -183,22 +183,22 @@ public class RequisitionServiceImpl implements RequisitionService {
                 return "Error retrieving vendor from the database.";
             }
 
-            requisition.setVendorRestrictedIndicator(vendorDetail.getVendorRestrictedIndicator());
-            if (requisition.getVendorRestrictedIndicator() != null && requisition.getVendorRestrictedIndicator()) {
+//TODO fix this
+//            Boolean vendorRestricted = vendorDetail.getVendorRestrictedIndicator();
+//            if (vendorRestricted != requisition.getVendorRestrictedIndicator()) {
+//                // restricted status of vendor has changed; save new status to requisition 
+//                requisition.setVendorRestrictedIndicator(vendorDetail.getVendorRestrictedIndicator());
+//                save(requisition);
+//            }
+            if (requisition.getVendorRestrictedIndicator()) {
                 return "Selected vendor is marked as restricted.";
             }
 
             if ((!PurapConstants.RequisitionSources.B2B.equals(requisitionSource)) && (requisition.getVendorContractGeneratedIdentifier() == null)) {
-                UniversalUser initiator = null;
-                try {
-                    initiator = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new AuthenticationUserId(requisition.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId()));
-                }
-                catch (UserNotFoundException e) {
-                    throw new RuntimeException("Document Initiator not found " + e.getMessage());
-                }
-                VendorContract b2bContract = vendorService.getVendorB2BContract(vendorDetail, initiator.getCampusCode());
+                // TODO check what campus we should be using:  REQ initiator?  doc initiator?  delivery campus?
+                VendorContract b2bContract = vendorService.getVendorB2BContract(vendorDetail, requisition.getDeliveryCampusCode());
                 if (b2bContract != null) {
-                    return "Standard requisition with no contract selected but a B2B contract exists for the selected vendor.";
+                    return "Standard requisition with no contract selected but a B2B contract exists for the selected vendorequisition.";
                 }
             }
         }
@@ -208,7 +208,7 @@ public class RequisitionServiceImpl implements RequisitionService {
         }
 
         if ((requisition.getPurchaseOrderTotalLimit() != null) && (KFSConstants.ZERO.compareTo(requisition.getPurchaseOrderTotalLimit()) != 0)) {
-            LOG.debug("isAPO() po total limit is not null and not equal to zero; return false.");
+            LOG.debug("isAPO() po total limit is not null or not equal to zero; return false.");
             return "The 'PO not to exceed' amount has been entered.";
         }
 
@@ -221,35 +221,29 @@ public class RequisitionServiceImpl implements RequisitionService {
             return "Requisition contains alternate vendor names.";
         }
 
-        // TODO PHASE 2B - need to implement validateCapitalASsetNumbersForAPO
+        // TODO need to implement validateCapitalASsetNumbersForAPO
 //        if( !validateCapitalAssetNumbersForAPO( requisition ) ) {
 //            return "Requisition did not pass CAMS validation.";
 //        }
 
-// TODO test newly converting logic
-        Date today = dateTimeService.getCurrentDate(); 
-        Integer currentFY = universityDateService.getCurrentFiscalYear();
-        Date closingDate = universityDateService.getLastDateOfFiscalYear(currentFY);
-        Integer allowApoDate = new Integer(kualiConfigurationService.getApplicationParameterValue(PurapRuleConstants.PURAP_ADMIN_GROUP, PurapRuleConstants.ALLOW_APO_NEXT_FY_DAYS));
-        int diffTodayClosing = dateTimeService.dateDiff(today, closingDate, false);
-        LOG.debug("isApo() req FY = " + requisition.getPostingYear() + " and currentFY = " + currentFY);
-        LOG.debug("isApo() today = " + dateTimeService.toDateString(today) + ", allowApoDate = " + allowApoDate + " and diffTodayClosing = " + diffTodayClosing);
-        
-        if (requisition.getPostingYear().compareTo(currentFY) > 0 &&
-                allowApoDate.intValue() >= diffTodayClosing &&
-                diffTodayClosing >= KFSConstants.ZERO.intValue()) {
-            return "Requisition is set to encumber next fiscal year and approval is not within APO allowed date range.";
-        }
+// TODO finish converting logic
+        Calendar today = dateTimeService.getCurrentCalendar(); 
+//      Calendar allowApoDate = chartOfAccountsService.getDateRangeWithClosingDate(-appSettingService.getInt("ALLOW_APO_NEXT_FY_DAYS").intValue());
+//      Integer currentFY = chartOfAccountsService.getFiscalPeriodForToday().getUniversityFiscalYear();
+//      SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+//      LOG.debug("isApo() req FY = " + requisition.getPurchaseOrderEncumbranceFiscalYear() + " and currentFY = " + currentFY);
+//      LOG.debug("isApo() today = " + sdf.format(today.getTime()) + " and allowApoDate = " + sdf.format(allowApoDate.getTime()));
+//
+//      if (requisition.getPurchaseOrderEncumbranceFiscalYear().compareTo(currentFY) > 0 &&
+//          today.before(allowApoDate)) {
+//        return "Requisition is set to encumber next fiscal year and approval is not within APO allowed date range.";
+//      }
 
         return "";
     }
     
     public void setBusinessObjectService(BusinessObjectService boService) {
         this.businessObjectService = boService;    
-    }
-
-    public void setObjectCodeService(ObjectCodeService objectService) {
-        this.objectCodeService = objectService;    
     }
 
     public void setDateTimeService(DateTimeService dateTimeService) {
@@ -270,18 +264,6 @@ public class RequisitionServiceImpl implements RequisitionService {
 
     public void setPurapService(PurapService purapService) {
         this.purapService = purapService;
-    }
-
-    public void setUniversalUserService(UniversalUserService universalUserService) {
-        this.universalUserService = universalUserService;
-    }
-
-    public void setUniversityDateService(UniversityDateService universityDateService) {
-        this.universityDateService = universityDateService;
-    }
-
-    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
-        this.kualiConfigurationService = kualiConfigurationService;
     }
 
 }

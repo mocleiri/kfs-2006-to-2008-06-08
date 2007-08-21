@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,33 +15,25 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_ACCOUNTING_LINE_INVALID_ACCT_OBJ_CD;
-
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.document.Document;
-import org.kuali.core.rule.KualiParameterRule;
-import org.kuali.core.service.DictionaryValidationService;
-import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.document.TransactionalDocument;
+import org.kuali.core.rule.AddCheckRule;
+import org.kuali.core.rule.DeleteCheckRule;
+import org.kuali.core.rule.UpdateCheckRule;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.document.CashReceiptDocument;
 import org.kuali.module.financial.document.CashReceiptFamilyBase;
-import org.kuali.module.financial.rule.AddCheckRule;
-import org.kuali.module.financial.rule.DeleteCheckRule;
-import org.kuali.module.financial.rule.UpdateCheckRule;
 
 
 /**
  * Business rule(s) applicable to CashReceipt documents.
+ * 
+ * 
  */
 public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements AddCheckRule, DeleteCheckRule, UpdateCheckRule {
     /**
@@ -57,31 +49,18 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
         if (isValid) {
             isValid &= validateAccountingLineTotal((CashReceiptFamilyBase) document);
             isValid &= !CashReceiptDocumentRuleUtil.areCashTotalsInvalid((CashReceiptDocument) document);
-            isValid &= validateAccountAndObjectCodeAllLines((CashReceiptFamilyBase) document);
         }
 
         return isValid;
     }
-    
-    /**
-     * 
-     * @see org.kuali.kfs.rules.AccountingDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.kfs.document.AccountingDocument, org.kuali.kfs.bo.AccountingLine)
-     */
-    @Override
-    protected boolean processCustomAddAccountingLineBusinessRules(AccountingDocument financialDocument, AccountingLine accountingLine) {
-        boolean isValid = true;
-        isValid &= validateAccountAndObjectCode(accountingLine, accountingLine.isSourceAccountingLine(), true, 0);
-        return isValid;
-    }
-
 
     /**
      * Checks to make sure that the check passed in passes all data dictionary validation and that the amount is positive.
      * 
-     * @see org.kuali.core.rule.AddCheckRule#processAddCheckBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AddCheckRule#processAddCheckBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.module.financial.bo.Check)
      */
-    public boolean processAddCheckBusinessRules(AccountingDocument FinancialDocument, Check check) {
+    public boolean processAddCheckBusinessRules(TransactionalDocument transactionalDocument, Check check) {
         boolean isValid = validateCheck(check);
 
         return isValid;
@@ -90,10 +69,10 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
     /**
      * Default implementation does nothing now.
      * 
-     * @see org.kuali.core.rule.DeleteCheckRule#processDeleteCheckBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.DeleteCheckRule#processDeleteCheckBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.module.financial.bo.Check)
      */
-    public boolean processDeleteCheckBusinessRules(AccountingDocument FinancialDocument, Check check) {
+    public boolean processDeleteCheckBusinessRules(TransactionalDocument transactionalDocument, Check check) {
         boolean processed = true;
 
         return processed;
@@ -102,10 +81,10 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
     /**
      * Checks to make sure that the check passed in passes all data dictionary validation and that the amount is positive.
      * 
-     * @see org.kuali.core.rule.UpdateCheckRule#processUpdateCheckRule(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.UpdateCheckRule#processUpdateCheckRule(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.module.financial.bo.Check)
      */
-    public boolean processUpdateCheckRule(AccountingDocument FinancialDocument, Check check) {
+    public boolean processUpdateCheckRule(TransactionalDocument transactionalDocument, Check check) {
         boolean isValid = validateCheck(check);
 
         return isValid;
@@ -119,17 +98,17 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
      */
     private boolean validateCheck(Check check) {
         // validate the specific check coming in
-        SpringContext.getBean(DictionaryValidationService.class).validateBusinessObject(check);
+        SpringServiceLocator.getDictionaryValidationService().validateBusinessObject(check);
 
         boolean isValid = GlobalVariables.getErrorMap().isEmpty();
 
         // check to make sure the amount is also valid
         if (check.getAmount().isZero()) {
-            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.CHECK_AMOUNT, KFSKeyConstants.CashReceipt.ERROR_ZERO_CHECK_AMOUNT, KFSPropertyConstants.CHECKS);
+            GlobalVariables.getErrorMap().putError(PropertyConstants.CHECK_AMOUNT, KeyConstants.CashReceipt.ERROR_ZERO_CHECK_AMOUNT, PropertyConstants.CHECKS);
             isValid = false;
         }
         else if (check.getAmount().isNegative()) {
-            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.CHECK_AMOUNT, KFSKeyConstants.CashReceipt.ERROR_NEGATIVE_CHECK_AMOUNT, KFSPropertyConstants.CHECKS);
+            GlobalVariables.getErrorMap().putError(PropertyConstants.CHECK_AMOUNT, KeyConstants.CashReceipt.ERROR_NEGATIVE_CHECK_AMOUNT, PropertyConstants.CHECKS);
             isValid = false;
         }
 
@@ -147,78 +126,5 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
     public boolean isCoverSheetPrintable(CashReceiptFamilyBase document) {
         KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument();
         return !(workflowDocument.stateIsCanceled() || workflowDocument.stateIsInitiated() || workflowDocument.stateIsDisapproved() || workflowDocument.stateIsException() || workflowDocument.stateIsDisapproved() || workflowDocument.stateIsSaved());
-    }
-
-    /**
-     * 
-     * This method validates all the accounting lines for the right
-     * account/object code pairings, if the account is a sales tax account
-     * @param document
-     * @return
-     */
-    private boolean validateAccountAndObjectCodeAllLines(AccountingDocument document) {
-        boolean isValid = true;
-        List<AccountingLine> sourceLines = document.getSourceAccountingLines();
-        List<AccountingLine> targetLines = document.getTargetAccountingLines();
-        int index = 0;
-        for(AccountingLine accountingLine : sourceLines) {
-            boolean source = false;
-            source = accountingLine.isSourceAccountingLine();
-            validateAccountAndObjectCode(accountingLine, source, false, index);
-            index++;
-        }
-        
-        return isValid;
-    }
-    
-    /**
-     * 
-     * This method processes the accounting line to make sure if a sales tax
-     * account is used the right object code is used with it
-     * @param accountingLine
-     * @return
-     */
-    private boolean validateAccountAndObjectCode(AccountingLine accountingLine, boolean source, boolean newLine, int index) {
-        boolean isValid = true;
-        KualiParameterRule objCdAndAccountRule = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(APPLICATION_PARAMETER_SECURITY_GROUP.KUALI_TRANSACTION_PROCESSING_SALES_TAX_COLLECTION_GROUPING, APPLICATION_PARAMETER.VALID_ACCOUNT_AND_OBJ_CD);
-        //get the object code and account
-        String objCd = accountingLine.getFinancialObjectCode();
-        String account = accountingLine.getAccountNumber();
-        if(!StringUtils.isEmpty(objCd) && !StringUtils.isEmpty(account)) {
-            String paramText = objCdAndAccountRule.getParameterText();
-            String[] params = paramText.split(";");
-            boolean acctsMatched = false;
-            for(int i = 0; i < params.length; i++) {
-                String paramAcct = params[i].split(":")[0];
-                if(account.equalsIgnoreCase(paramAcct)) {
-                    acctsMatched = true;
-                }
-            }
-            if(acctsMatched) {
-                String compare = account + ":" + objCd;
-                if(objCdAndAccountRule.failsRule(compare)) {
-                    isValid = false; 
-                } 
-            }
-            
-        }
-        if(!isValid) {
-            String pathPrefix = "";
-            if(source && !newLine) {
-                pathPrefix = "document." + KFSConstants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME + "[" + index + "]";
-            } else if(!source && !newLine){
-                pathPrefix = "document." + KFSConstants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME + "[" + index + "]";
-            } else if(source && newLine) {
-                pathPrefix = KFSConstants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME;
-            } else if(!source && newLine) {
-                pathPrefix = KFSConstants.NEW_TARGET_ACCT_LINE_PROPERTY_NAME;
-            }
-            GlobalVariables.getErrorMap().addToErrorPath(pathPrefix);
-            
-            GlobalVariables.getErrorMap().putError("accountNumber", ERROR_DOCUMENT_ACCOUNTING_LINE_INVALID_ACCT_OBJ_CD, account, objCd);
-            
-            GlobalVariables.getErrorMap().removeFromErrorPath(pathPrefix);
-        }
-        return isValid;
     }
 }

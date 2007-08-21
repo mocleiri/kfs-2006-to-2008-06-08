@@ -15,21 +15,23 @@
  */
 package org.kuali.module.gl.service;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.Guid;
 import org.kuali.core.util.UnitTestSqlDao;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.test.ConfigureContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class...
  * 
  * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class NightlyOutServiceTest extends KualiTestBase {
 
     private NightlyOutService nightlyOutService;
@@ -40,9 +42,9 @@ public class NightlyOutServiceTest extends KualiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        nightlyOutService = SpringContext.getBean(NightlyOutService.class);
-        unitTestSqlDao = SpringContext.getBean(UnitTestSqlDao.class);
-        dateTimeService = SpringContext.getBean(DateTimeService.class);
+        nightlyOutService = SpringServiceLocator.getNightlyOutService();
+        unitTestSqlDao = (UnitTestSqlDao) SpringServiceLocator.getBeanFactory().getBean("unitTestSqlDao");
+        dateTimeService = SpringServiceLocator.getDateTimeService();
     }
 
     /**

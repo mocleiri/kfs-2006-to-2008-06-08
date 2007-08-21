@@ -16,7 +16,7 @@
 <%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
 <kul:documentPage showDocumentInfo="true"
-    documentTypeName="PurchaseOrderDocument"
+    documentTypeName="KualiPurchaseOrderDocument"
     htmlFormAction="purapPurchaseOrder" renderMultipart="true"
     showTabButtons="true">
 
@@ -24,14 +24,6 @@
         <c:set var="fullEntryMode" value="true" scope="request" />
     </c:if>
 
-    <c:if test="${((KualiForm.editingMode['displayRetransmitTab']) and (KualiForm.document.documentHeader.workflowDocument.routeHeader.docRouteStatus != 'F'))}">
-        <c:set var="retransmitMode" value="true" scope="request" />
-    </c:if>
-    
-    <c:if test="${KualiForm.editingMode['contractManagerChangeable']}">
-    	<c:set var="contractManagerChangeMode" value="true" scope="request" />
-    </c:if>
-    
     <kul:hiddenDocumentFields excludePostingYear="true" />
 
     <purap:hiddenPurapFields />
@@ -43,10 +35,10 @@
     <c:if test="${empty KualiForm.editingMode['amendmentEntry']}">
         <kul:documentOverview editingMode="${KualiForm.editingMode}"
             includePostingYear="true"
-            postingYearAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" >
+            postingYearAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}" >
 
             <purap:purapDocumentDetail
-                documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}"
+                documentAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}"
                 purchaseOrder="true"
                 detailSectionLabel="Purchase Order Detail" />
         </kul:documentOverview>
@@ -56,59 +48,53 @@
         <c:set target="${KualiForm.accountingLineEditingMode}" property="fullEntry" value="true" />
         <kul:documentOverview editingMode="${KualiForm.accountingLineEditingMode}"
             includePostingYear="true"
-            postingYearAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" >
+            postingYearAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}" >
 
             <purap:purapDocumentDetail
-                documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}"
+                documentAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}"
                 purchaseOrder="true"
                 detailSectionLabel="Purchase Order Detail" />
         </kul:documentOverview>
     </c:if>
     
-    <c:if test="${retransmitMode}" >
+    <c:if test="${KualiForm.editingMode['displayRetransmitTab']}" >
         <purap:purchaseOrderRetransmit 
-            documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}"
+            documentAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}"
             itemAttributes="${DataDictionary.PurchaseOrderItem.attributes}"
             displayPurchaseOrderFields="true" />
     </c:if>
     	 		 
-<c:if test="${not retransmitMode}" >
+<c:if test="${not KualiForm.editingMode['displayRetransmitTab']}" >
     <purap:vendor
-        documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" 
-        displayPurchaseOrderFields="true"
-        purchaseOrderAwarded="${KualiForm.document.purchaseOrderAwarded}" />
+        documentAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}" 
+        displayPurchaseOrderFields="true" />
 
     <purap:stipulationsAndInfo
-        documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" />
+        documentAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}" />
 
     <purap:puritems itemAttributes="${DataDictionary.PurchaseOrderItem.attributes}"
         accountingLineAttributes="${DataDictionary.PurchaseOrderAccount.attributes}"
         camsAttributes="${DataDictionary.PurchaseOrderItemCapitalAsset.attributes}" /> 
      
     <purap:paymentinfo
-        documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" 
+        documentAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}" 
         displayPurchaseOrderFields="true"/>
 
     <purap:delivery
-        documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" />
+        documentAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}" />
 
     <purap:additional
-        documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" />
+        documentAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}" />
         
-    <!-- TEMPORARILY DISABLING ACCOUNT SUMMARY FUNCTIONALITY -->
-    <!-- purap:accountsummary
-        itemAttributes="${DataDictionary.PurchaseOrderItem.attributes}"
-    	documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" / -->  
-	
+    <purap:accountsummary
+    	documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" />  
+
     <purap:quotes
-        documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}"
+        documentAttributes="${DataDictionary.KualiPurchaseOrderDocument.attributes}"
         vendorQuoteAttributes="${DataDictionary.PurchaseOrderVendorQuote.attributes}"
-        isPurchaseOrderAwarded="${KualiForm.document.purchaseOrderAwarded}" />
+        isPurchaseOrderAwarded="${KualiForm.document.purchaseOrderAwarded}" /> 
 
     <purap:relatedDocuments
-            documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
-
-    <purap:paymentHistory
             documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
 
     <purap:statushistory 
@@ -118,7 +104,7 @@
           </html:messages>       
     </purap:statushistory>
 
-    <kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}"  allowsNoteFYI="true">
+    <kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}" >
           <html:messages id="warnings" property="noteWarning" message="true">
             &nbsp;&nbsp;&nbsp;<bean:write name="warnings"/><br><br>
           </html:messages>

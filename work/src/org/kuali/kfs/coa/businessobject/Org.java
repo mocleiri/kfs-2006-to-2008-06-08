@@ -24,22 +24,18 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.core.bo.Campus;
-import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.Country;
 import org.kuali.kfs.bo.PostalZipCode;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.service.OrganizationService;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * 
  */
-public class Org extends PersistableBusinessObjectBase implements Inactivateable {
+public class Org extends PersistableBusinessObjectBase {
     private static final Logger LOG = Logger.getLogger(Org.class);
 
     private static final long serialVersionUID = 121873645110037203L;
@@ -103,8 +99,6 @@ public class Org extends PersistableBusinessObjectBase implements Inactivateable
     private String editPlantAccountsSectionBlank;
     private String editPlantAccountsSection;
 
-    private boolean active;
-    
     /**
      * Gets the organizationCode attribute.
      * 
@@ -326,7 +320,7 @@ public class Org extends PersistableBusinessObjectBase implements Inactivateable
     }
 
     public UniversalUser getOrganizationManagerUniversal() {
-        organizationManagerUniversal = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(organizationManagerUniversalId, organizationManagerUniversal);
+        organizationManagerUniversal = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(organizationManagerUniversalId, organizationManagerUniversal);
         return organizationManagerUniversal;
     }
 
@@ -882,7 +876,7 @@ public class Org extends PersistableBusinessObjectBase implements Inactivateable
             String rOrg = org.getReportsToOrganizationCode();
 
             seen.add(org);
-            org = SpringContext.getBean(OrganizationService.class).getByPrimaryId(rChart, rOrg);
+            org = SpringServiceLocator.getOrganizationService().getByPrimaryId(rChart, rOrg);
 
             result.append(rChart + "/" + rOrg + " " + ((org == null) ? "" : org.getOrganizationName()) + "\n");
         }
@@ -893,8 +887,19 @@ public class Org extends PersistableBusinessObjectBase implements Inactivateable
     public String getOrganizationReviewHierarchy() {
 
         Properties params = new Properties();
+
+        /*
+        Lookup.do?
+        methodToCall=start
+        docFormKey=
+        lookupableImplServiceName=OrgReviewLookupable
+        conversionFields=
+        returnLocation=
+        */ 
+        
         params.put("methodToCall", "start");
         params.put("docFormKey", "");
+        //params.put("lookupableImplServiceName", "OrgReviewLookupable");
         params.put("lookupableImplServiceName", "RuleBaseValuesLookupableImplService");
         params.put("fin_coa_cd", this.chartOfAccountsCode);
         params.put("org_cd", this.organizationCode);
@@ -903,7 +908,7 @@ public class Org extends PersistableBusinessObjectBase implements Inactivateable
         params.put("active_ind", "true");
         params.put("ruleTemplateName", "KualiOrgReviewTemplate");
 
-        return UrlFactory.parameterizeUrl(SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSConstants.WORKFLOW_URL_KEY) + "/Lookup.do", params);
+        return UrlFactory.parameterizeUrl(SpringServiceLocator.getKualiConfigurationService().getPropertyString(KFSConstants.WORKFLOW_URL_KEY) + "/Lookup.do", params);
     }
 
     /**
@@ -955,12 +960,5 @@ public class Org extends PersistableBusinessObjectBase implements Inactivateable
         return hashString.hashCode();
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
 }
