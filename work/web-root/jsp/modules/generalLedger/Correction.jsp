@@ -14,9 +14,10 @@
  limitations under the License.
 --%>
 <%@ include file="/jsp/kfs/kfsTldHeader.jsp" %>
+<%@ taglib tagdir="/WEB-INF/tags/gl/glcp" prefix="glcp"%>
 
-<kul:page showDocumentInfo="true" docTitle="${KualiForm.docTitle}"
-	htmlFormAction="${KualiForm.htmlFormAction}" transactionalDocument="false"
+<kul:page showDocumentInfo="true" docTitle="General Ledger Correction Process"
+	htmlFormAction="generalLedgerCorrection"transactionalDocument="false"
 	renderMultipart="true" showTabButtons="true">
   <c:set var="readOnly" value="${empty KualiForm.editingMode['fullEntry']}" />
 
@@ -33,9 +34,6 @@
   <html:hidden property="showSummaryOutputFlag"/>
   <html:hidden property="glcpSearchResultsSequenceNumber"/>
   <html:hidden property="restrictedFunctionalityMode"/>
-  <html:hidden property="inputGroupIdFromLastDocumentLoad"/>
-  <html:hidden property="inputGroupIdFromLastDocumentLoadIsMissing"/>
-  <html:hidden property="persistedOriginEntriesMissing"/>
 
   <c:if test="${debug == true}">
     <kul:tab tabTitle="Debug" defaultOpen="true" tabErrorKey="debug">
@@ -51,7 +49,7 @@
           <tr><td>processInBatch</td><td>${KualiForm.processInBatch}</td></tr>
           <tr><td>chooseSystem</td><td>${KualiForm.chooseSystem}</td></tr>
           <tr><td>editMethod</td><td>${KualiForm.editMethod}</td></tr>
-          <tr><td>inputGroupId</td><td>${KualiForm.document.correctionInputGroupId}</td></tr>
+          <tr><td>inputGroupId</td><td>${KualiForm.inputGroupId}</td></tr>
           <tr><td>outputGroupId</td><td>${KualiForm.outputGroupId}</td></tr>
           <tr><td>inputFileName</td><td>${KualiForm.inputFileName}</td></tr>
           <tr><td>dataLoadedFlag</td><td>${KualiForm.dataLoadedFlag}</td></tr>
@@ -65,7 +63,7 @@
     </kul:tab>
   </c:if>
   <kul:tab tabTitle="Summary" defaultOpen="true" tabErrorKey="summary">
-    <c:if test="${KualiForm.document.correctionTypeCode ne 'R' and (not (KualiForm.persistedOriginEntriesMissing && KualiForm.inputGroupIdFromLastDocumentLoad eq KualiForm.inputGroupId)) && ((KualiForm.dataLoadedFlag and !KualiForm.restrictedFunctionalityMode) or KualiForm.document.correctionOutputGroupId != null or not empty KualiForm.editingMode['viewOnly'])}" >
+    <c:if test="${KualiForm.dataLoadedFlag}" >
       <html:hidden property="document.correctionDebitTotalAmount"/>
       <html:hidden property="document.correctionCreditTotalAmount"/>
       <html:hidden property="document.correctionRowCount"/>
@@ -96,26 +94,7 @@
         </table>
       </div>
     </c:if>
-    <c:if test="${KualiForm.persistedOriginEntriesMissing && KualiForm.inputGroupIdFromLastDocumentLoad eq KualiForm.document.correctionInputGroupId}">
-      <div class="tab-container" align="center"> 
-	    <table cellpadding="0" class="datatable" summary=""> 
-          <tr>
-            <c:if test="${KualiForm.showOutputFlag == true or KualiForm.showSummaryOutputFlag == true}">
-              <td align="left" valign="middle" class="subhead"><span class="subhead-left">Summary of Output Group</span></td>
-            </c:if>
-            <c:if test="${KualiForm.showOutputFlag == false or KualiForm.showSummaryOutputFlag == true}">
-              <td align="left" valign="middle" class="subhead"><span class="subhead-left">Summary of Input Group</span></td>
-            </c:if>
-          </tr>
-        </table>
-        <table cellpadding="0" class="datatable">
-          <tr>
-            <td>The summary is unavailable because the origin entries are unavailable.</td> 
-          </tr>
-        </table>
-      </div>
-    </c:if>
-    <c:if test="${KualiForm.restrictedFunctionalityMode && not KualiForm.persistedOriginEntriesMissing && KualiForm.editingMode['fullEntry']}" >
+    <c:if test="${KualiForm.restrictedFunctionalityMode}" >
       <div class="tab-container" align="center"> 
 	    <table cellpadding="0" class="datatable" summary=""> 
           <tr>
@@ -155,7 +134,7 @@
                   <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|CorrectionEditMethodValuesFinder" label="label" value="key"/>
                 </html:select>
                 <html:hidden property="previousEditMethod"/>
-                <html:image property="methodToCall.selectSystemEditMethod.anchor${currentTabIndex}" src="${ConfigProperties.externalizable.images.url}tinybutton-select.gif" styleClass="tinybutton" alt="Select System and Edit Method" title="Select System and Edit Method"/>
+                <html:image property="methodToCall.selectSystemEditMethod.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-select.gif" styleClass="tinybutton" alt="Select System and Edit Method" title="Select System and Edit Method"/>
               </center>
             </td>
           </tr>
@@ -173,49 +152,14 @@
               <td colspan="2" class="bord-l-b" style="padding: 4px; vertical-align: top;"> 
                 <center>
                   <label for="inputGroupId"><strong>Origin Entry Group</strong></label><br/><br/>
-                  <html:select property="document.correctionInputGroupId" size="10" >
-                    <c:if test="${KualiForm.inputGroupIdFromLastDocumentLoadIsMissing and KualiForm.inputGroupId eq KualiForm.inputGroupIdFromLastDocumentLoad}">
-                      <option value="<c:out value="${KualiForm.inputGroupIdFromLastDocumentLoad}"/>" selected="selected"><c:out value="${KualiForm.inputGroupIdFromLastDocumentLoad}"/> Document was last saved with this origin entry group selected.  Group is no longer in system.</option>
-                    </c:if>
-                    
-                  <c:choose>
-					<c:when test="${KualiForm.documentType == 'LLCP'}" >
-						<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|labor|web|optionfinder|CorrectionLaborGroupEntriesFinder" label="label" value="key" />
-                   	</c:when>
-                   	<c:otherwise>
-                   		<c:choose>
-	                      <c:when test="${KualiForm.editMethod eq 'R'}">
-    	                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|ProcessingCorrectionGroupEntriesFinder" label="label" value="key" />
-        	              </c:when>
-            	          <c:otherwise>
-                	        <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|CorrectionGroupEntriesFinder" label="label" value="key" />
-                    	  </c:otherwise>
-                    	</c:choose>
-                   	</c:otherwise>
-                  </c:choose>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                  <html:select property="inputGroupId" size="10" >
+                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|CorrectionGroupEntriesFinder" label="label" value="key" />
                   </html:select>
-                  
                   <html:hidden property="previousInputGroupId"/>
-                  <br/><br/>
-                  <c:if test="${KualiForm.editMethod eq 'R'}">
-                    <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="${ConfigProperties.externalizable.images.url}tinybutton-remgrpproc.gif" styleClass="tinybutton" alt="deleteDocument" title="Remove Group From Processing" />
-                  </c:if>
-                  <c:if test="${KualiForm.editMethod eq 'M' or KualiForm.editMethod eq 'C'}">
-                    <html:image property="methodToCall.loadGroup.anchor${currentTabIndex}" src="${ConfigProperties.externalizable.images.url}tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntries" title="Show All Entries"/>
-                  </c:if>
-                  <html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}" src="${ConfigProperties.externalizable.images.url}tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="saveToDeskTop" title="Save To Desktop" onclick="excludeSubmitRestriction=true" />
+                  <br/><br/>  
+                  <html:image property="methodToCall.loadGroup.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntries" title="Show All Entries"/>
+                  <html:image property="methodToCall.saveToDesktop.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-cpygrpdesk.gif" styleClass="tinybutton" alt="saveToDeskTop" title="Save To Desktop" onclick="excludeSubmitRestriction=true" />
+                  <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-remgrpproc.gif" styleClass="tinybutton" alt="deleteDocument" title="Remove Group From Processing" />
                 </center> 
               </td>
             </tr>
@@ -232,9 +176,9 @@
           <table cellpadding=0 class="datatable" summary=""> 
             <tr>
               <td class="bord-l-b" style="padding: 4px;">
-                <html:hidden property="document.correctionInputGroupId"/>
+                <html:hidden property="inputGroupId"/>
                 <html:file size="30" property="sourceFile" />
-                <html:image property="methodToCall.uploadFile.anchor${currentTabIndex}" src="${ConfigProperties.externalizable.images.url}tinybutton-loaddoc.gif" styleClass="tinybutton" alt="uploadFile" title="upload file"/>
+                <html:image property="methodToCall.uploadFile.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-loaddoc.gif" styleClass="tinybutton" alt="uploadFile" title="upload file"/>
               </td>
             </tr>
           </table>
@@ -242,7 +186,7 @@
       </c:if>
     </kul:tab>
     <kul:tab tabTitle="Search Results" defaultOpen="true" tabErrorKey="searchResults">
-      <c:if test="${KualiForm.restrictedFunctionalityMode && !KualiForm.persistedOriginEntriesMissing}">
+      <c:if test="${KualiForm.restrictedFunctionalityMode}">
         <div class="tab-container" align="center">
           <table cellpadding=0 class="datatable" summary=""> 
             <tr>
@@ -254,19 +198,7 @@
           </table>
         </div>
       </c:if>
-      <c:if test="${KualiForm.restrictedFunctionalityMode && KualiForm.persistedOriginEntriesMissing && KualiForm.inputGroupIdFromLastDocumentLoad eq KualiForm.document.correctionInputGroupId}">
-        <div class="tab-container" align="center">
-          <table cellpadding=0 class="datatable" summary=""> 
-            <tr>
-              <td align="left" valign="middle" class="subhead">Search Results</td>
-            </tr>
-            <tr>
-              <td><bean:message key="gl.correction.persisted.origin.entries.missing" /></td>
-            </tr>
-          </table>
-        </div>
-      </c:if>
-      <c:if test="${KualiForm.chooseSystem != null and KualiForm.editMethod != null and KualiForm.dataLoadedFlag == true and !KualiForm.restrictedFunctionalityMode and !(KualiForm.persistedOriginEntriesMissing && KualiForm.inputGroupIdFromLastDocumentLoad eq KualiForm.document.correctionInputGroupId)}" >
+      <c:if test="${KualiForm.chooseSystem != null and KualiForm.editMethod != null and KualiForm.dataLoadedFlag == true and !KualiForm.restrictedFunctionalityMode}" >
         <div class="tab-container" align="left" style="overflow: scroll; width: 100% ;"> 
           <table cellpadding=0 class="datatable" summary=""> 
             <tr>
@@ -286,18 +218,9 @@
               </c:choose>
             </tr>
             <tr>
-            	<c:choose>
-	            	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-		              <td>
-    		          	<ld:displayLaborOriginEntrySearchResults laborOriginEntries="${KualiForm.displayEntries}"/>
-        		      </td>
-        		    </c:when>
-            		<c:otherwise>  
-		              <td>
-    		            <glcp:displayOriginEntrySearchResults originEntries="${KualiForm.displayEntries}"/>
-        	 	      </td>
-	        	    </c:otherwise>
-	        	</c:choose>    
+              <td>
+                <glcp:displayOriginEntrySearchResults originEntries="${KualiForm.displayEntries}"/>
+              </td>
             </tr>
             <c:if test="${KualiForm.editMethod == 'M' and KualiForm.editableFlag == true}">
               <tr>
@@ -309,9 +232,7 @@
                     <thead>
                       <tr>
                         <th>Manual Edit</th>
-                        
-                        <c:forEach items="${KualiForm.tableRenderColumnMetadata}" var="column">
-                       
+			            <c:forEach items="${KualiForm.tableRenderColumnMetadata}" var="column">
 				          <th class="sortable">
 					        <c:out value="${column.columnTitle}"/><c:if test="${empty column.columnTitle}">$nbsp;</c:if>
 				          </th>
@@ -321,110 +242,44 @@
                     <tbody>
                       <tr class="odd">
                         <c:choose>
-						  <c:when test="${KualiForm.documentType == 'LLCP'}" >
-			            	<c:choose>
-	                          <c:when test="${KualiForm.laborEntryForManualEdit.entryId == 0}">
-    	                        <td><html:image property="methodToCall.addManualEntry.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-add1.gif" styleClass="tinybutton" alt="edit"/></td>
-        	                  </c:when>
-            	              <c:otherwise>
-                	            <td>
-                    	          <html:hidden property="laborEntryForManualEdit.versionNumber"/>
-                        	      <html:hidden property="laborEntryForManualEdit.entryId"/>
-                            	  <html:hidden property="laborEntryForManualEdit.entryGroupId"/>
-                              	<html:image property="methodToCall.saveManualEntry.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-edit1.gif" styleClass="tinybutton" alt="edit"/>
-                            	</td>
-                         	 </c:otherwise>
-	                        </c:choose>
-                        	<td><html:text property="laborEntryUniversityFiscalYear" size="5"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.chartOfAccountsCode" size="5"/></td>
-    	                    <td><html:text property="laborEntryForManualEdit.accountNumber" size="7"/></td>
-        	                <td><html:text property="laborEntryForManualEdit.subAccountNumber" size="7"/></td>
-            	            <td><html:text property="laborEntryForManualEdit.financialObjectCode" size="5"/></td>
-                	        <td><html:text property="laborEntryForManualEdit.financialSubObjectCode" size="6"/></td>
-                    	    <td><html:text property="laborEntryForManualEdit.financialBalanceTypeCode" size="8"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.financialObjectTypeCode" size="6"/></td>
-    	                    <td><html:text property="laborEntryForManualEdit.universityFiscalPeriodCode" size="6"/></td>
-        	                <td><html:text property="laborEntryForManualEdit.financialDocumentTypeCode" size="10"/></td>
-                	        <td><html:text property="laborEntryForManualEdit.financialSystemOriginationCode" size="6"/></td>
-            	            <td><html:text property="laborEntryForManualEdit.documentNumber" size="14"/></td>
-    	                    <td><html:text property="laborEntryTransactionLedgerEntrySequenceNumber" size="9"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.positionNumber" size="14"/></td>
-        	                <td><html:text property="laborEntryForManualEdit.projectCode" size="7"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.transactionLedgerEntryDescription" size="11"/></td>
-	                        <td><html:text property="laborEntryTransactionLedgerEntryAmount" size="7"/></td>
-            	            <td><html:text property="laborEntryForManualEdit.transactionDebitCreditCode" size="9"/></td>
-                	        <td><html:text property="laborEntryTransactionDate" size="12"/></td>
-                    	    <td><html:text property="laborEntryForManualEdit.organizationDocumentNumber" size="12"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.organizationReferenceId" size="13"/></td>
-        	                <td><html:text property="laborEntryForManualEdit.referenceFinancialDocumentTypeCode" size="10"/></td>
-            	            <td><html:text property="laborEntryForManualEdit.referenceFinancialSystemOriginationCode" size="10"/></td>
-                	        <td><html:text property="laborEntryForManualEdit.referenceFinancialDocumentNumber" size="9"/></td>
-                    	    <td><html:text property="laborEntryFinancialDocumentReversalDate" size="8"/></td>
-                            <td><html:text property="laborEntryForManualEdit.transactionEncumbranceUpdateCode" size="13"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.transactionPostingDate" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.payPeriodEndDate" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.transactionTotalHours" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.payrollEndDateFiscalYear" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.payrollEndDateFiscalPeriodCode" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.emplid" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.employeeRecord" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.earnCode" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.payGroup" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.salaryAdministrationPlan" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.grade" size="14"/></td>
-  	                        <td><html:text property="laborEntryForManualEdit.runIdentifier" size="14"/></td>
- 	                        <td><html:text property="laborEntryForManualEdit.laborLedgerOriginalChartOfAccountsCode" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.laborLedgerOriginalAccountNumber" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.laborLedgerOriginalSubAccountNumber" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.laborLedgerOriginalFinancialObjectCode" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.laborLedgerOriginalFinancialSubObjectCode" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.hrmsCompany" size="14"/></td>
-	                        <td><html:text property="laborEntryForManualEdit.setid" size="14"/></td>
-    	 				  </c:when>
-						  <c:otherwise>
-						  <c:choose>
-	                          <c:when test="${KualiForm.entryForManualEdit.entryId == 0}">
-    	                        <td><html:image property="methodToCall.addManualEntry.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-add1.gif" styleClass="tinybutton" alt="edit"/></td>
-        	                  </c:when>
-            	              <c:otherwise>
-                	            <td>
-                    	          <html:hidden property="entryForManualEdit.versionNumber"/>
-                        	      <html:hidden property="entryForManualEdit.entryId"/>
-                            	  <html:hidden property="entryForManualEdit.entryGroupId"/>
-                              	<html:image property="methodToCall.saveManualEntry.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-edit1.gif" styleClass="tinybutton" alt="edit"/>
-                            	</td>
-                         	 </c:otherwise>
-	                        </c:choose>
-	                        
-			            	<td><html:text property="entryUniversityFiscalYear" size="5"/></td>
-	                        <td><html:text property="entryForManualEdit.chartOfAccountsCode" size="5"/></td>
-    	                    <td><html:text property="entryForManualEdit.accountNumber" size="7"/></td>
-        	                <td><html:text property="entryForManualEdit.subAccountNumber" size="7"/></td>
-            	            <td><html:text property="entryForManualEdit.financialObjectCode" size="5"/></td>
-                	        <td><html:text property="entryForManualEdit.financialSubObjectCode" size="6"/></td>
-                    	    <td><html:text property="entryForManualEdit.financialBalanceTypeCode" size="8"/></td>
-	                        <td><html:text property="entryForManualEdit.financialObjectTypeCode" size="6"/></td>
-    	                    <td><html:text property="entryForManualEdit.universityFiscalPeriodCode" size="6"/></td>
-        	                <td><html:text property="entryForManualEdit.financialDocumentTypeCode" size="10"/></td>
-                	        <td><html:text property="entryForManualEdit.financialSystemOriginationCode" size="6"/></td>
-            	            <td><html:text property="entryForManualEdit.documentNumber" size="14"/></td>
-    	                    <td><html:text property="entryTransactionLedgerEntrySequenceNumber" size="9"/></td>
-	                        <td><html:text property="entryForManualEdit.transactionLedgerEntryDescription" size="11"/></td>
-        	                <td><html:text property="entryTransactionLedgerEntryAmount" size="7"/></td>
-            	            <td><html:text property="entryForManualEdit.transactionDebitCreditCode" size="9"/></td>
-                	        <td><html:text property="entryTransactionDate" size="12"/></td>
-                    	    <td><html:text property="entryForManualEdit.organizationDocumentNumber" size="12"/></td>
-	                        <td><html:text property="entryForManualEdit.projectCode" size="7"/></td>
-    	                    <td><html:text property="entryForManualEdit.organizationReferenceId" size="13"/></td>
-        	                <td><html:text property="entryForManualEdit.referenceFinancialDocumentTypeCode" size="10"/></td>
-            	            <td><html:text property="entryForManualEdit.referenceFinancialSystemOriginationCode" size="10"/></td>
-                	        <td><html:text property="entryForManualEdit.referenceFinancialDocumentNumber" size="9"/></td>
-                    	    <td><html:text property="entryFinancialDocumentReversalDate" size="8"/></td>
-                        	<td><html:text property="entryForManualEdit.transactionEncumbranceUpdateCode" size="13"/></td>
-                          </c:otherwise>	
-                        </c:choose>	
-                  
-                      	</tr>
+                          <c:when test="${KualiForm.entryForManualEdit.entryId == 0}">
+                            <td><html:image property="methodToCall.addManualEntry.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-add1.gif" styleClass="tinybutton" alt="edit"/></td>
+                          </c:when>
+                          <c:otherwise>
+                            <td>
+                              <html:hidden property="entryForManualEdit.versionNumber"/>
+                              <html:hidden property="entryForManualEdit.entryId"/>
+                              <html:hidden property="entryForManualEdit.entryGroupId"/>
+                              <html:image property="methodToCall.saveManualEntry.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-edit1.gif" styleClass="tinybutton" alt="edit"/>
+                            </td>
+                          </c:otherwise>
+                        </c:choose>
+                        <td><html:text property="entryUniversityFiscalYear" size="5"/></td>
+                        <td><html:text property="entryForManualEdit.chartOfAccountsCode" size="5"/></td>
+                        <td><html:text property="entryForManualEdit.accountNumber" size="7"/></td>
+                        <td><html:text property="entryForManualEdit.subAccountNumber" size="7"/></td>
+                        <td><html:text property="entryForManualEdit.financialObjectCode" size="5"/></td>
+                        <td><html:text property="entryForManualEdit.financialSubObjectCode" size="6"/></td>
+                        <td><html:text property="entryForManualEdit.financialBalanceTypeCode" size="8"/></td>
+                        <td><html:text property="entryForManualEdit.financialObjectTypeCode" size="6"/></td>
+                        <td><html:text property="entryForManualEdit.universityFiscalPeriodCode" size="6"/></td>
+                        <td><html:text property="entryForManualEdit.financialDocumentTypeCode" size="10"/></td>
+                        <td><html:text property="entryForManualEdit.financialSystemOriginationCode" size="6"/></td>
+                        <td><html:text property="entryForManualEdit.documentNumber" size="14"/></td>
+                        <td><html:text property="entryTransactionLedgerEntrySequenceNumber" size="9"/></td>
+                        <td><html:text property="entryForManualEdit.transactionLedgerEntryDescription" size="11"/></td>
+                        <td><html:text property="entryTransactionLedgerEntryAmount" size="7"/></td>
+                        <td><html:text property="entryForManualEdit.transactionDebitCreditCode" size="9"/></td>
+                        <td><html:text property="entryTransactionDate" size="12"/></td>
+                        <td><html:text property="entryForManualEdit.organizationDocumentNumber" size="12"/></td>
+                        <td><html:text property="entryForManualEdit.projectCode" size="7"/></td>
+                        <td><html:text property="entryForManualEdit.organizationReferenceId" size="13"/></td>
+                        <td><html:text property="entryForManualEdit.referenceFinancialDocumentTypeCode" size="10"/></td>
+                        <td><html:text property="entryForManualEdit.referenceFinancialSystemOriginationCode" size="10"/></td>
+                        <td><html:text property="entryForManualEdit.referenceFinancialDocumentNumber" size="9"/></td>
+                        <td><html:text property="entryFinancialDocumentReversalDate" size="8"/></td>
+                        <td><html:text property="entryForManualEdit.transactionEncumbranceUpdateCode" size="13"/></td>
+                      </tr>
                     </tbody>
                   </table>
                 </td>
@@ -435,6 +290,14 @@
                 <STRONG> Do you want to edit this document? </STRONG>
                 <html:image property="methodToCall.manualEdit.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-edit1.gif" styleClass="tinybutton" alt="show edit" />
               </td>
+            </c:if>
+            <c:if test="${KualiForm.deleteFileFlag == true}" >
+              <tr>
+                <td>
+                  <STRONG> Do you want mark this group so it is not processed? </STRONG>
+                  <html:image property="methodToCall.deleteGroup.anchor${currentTabIndex - 3}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-delete1.gif" styleClass="tinybutton" alt="Mark Group so it is not processed" />
+                </td>
+              </tr>
             </c:if>
           </table>
         </div>
@@ -520,14 +383,7 @@
                   Field:
                   <html:select property="groupsItem[${group.correctionChangeGroupLineNumber}].correctionCriteria.correctionFieldName">
                     <option value=""></option>
-	                    <c:choose>
-    	                	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-        	            		<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|labor|web|optionfinder|LaborOriginEntryFieldFinder" label="label" value="key"/>
-							</c:when>
-							<c:otherwise>
-		            	        <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
-		                	</c:otherwise>
-		                </c:choose>
+                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                   </html:select>
                   Operator:
                   <html:select property="groupsItem[${group.correctionChangeGroupLineNumber}].correctionCriteria.correctionOperatorCode">
@@ -542,16 +398,7 @@
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].documentNumber"/>
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionChangeGroupLineNumber"/>
                     <html:select property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldName">
-                      
-                      <c:choose>
-    	              	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-        	          		<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|labor|web|optionfinder|LaborOriginEntryFieldFinder" label="label" value="key"/>
-						</c:when>
-						<c:otherwise>
-		            	    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
-		                </c:otherwise>
-		              </c:choose>
-                      
+                      <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                     </html:select>
                     Operator:
                     <html:select property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionOperatorCode">
@@ -567,15 +414,7 @@
                   Field:
                   <html:select property="groupsItem[${group.correctionChangeGroupLineNumber}].correctionChange.correctionFieldName">
                     <option value=""></option>
-                     <c:choose>
-    	              	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-							<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|labor|web|optionfinder|LaborOriginEntryFieldFinder" label="label" value="key"/>
-						</c:when>
-						<c:otherwise>
-		                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
-		                </c:otherwise>
-		              </c:choose>
-
+                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                   </html:select>
                   Replacement Value:
                   <html:text property="groupsItem[${group.correctionChangeGroupLineNumber}].correctionChange.correctionFieldValue"/>
@@ -586,14 +425,7 @@
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].documentNumber"/>
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionChangeGroupLineNumber"/>
                     <html:select property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldName">
-				      <c:choose>
-    	              	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-							<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|labor|web|optionfinder|LaborOriginEntryFieldFinder" label="label" value="key"/>
-						</c:when>
-						<c:otherwise>
-		                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
-		                </c:otherwise>
-		              </c:choose>
+                      <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                     </html:select>
                     Replacement Value:
                     <html:text property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldValue"/>
@@ -637,14 +469,7 @@
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].documentNumber"/>
                     <html:hidden property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionChangeGroupLineNumber"/>
                     <html:select property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldName">
-                     <c:choose>
-    	              	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-							<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|labor|web|optionfinder|LaborOriginEntryFieldFinder" label="label" value="key"/>
-						</c:when>
-						<c:otherwise>
-		                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
-		                </c:otherwise>
-		              </c:choose> 
+                      <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                     </html:select>
                     Operator:
                     <html:select property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionOperatorCode">
@@ -658,16 +483,7 @@
                   Field:
                   <html:select property="groupsItem[${group.correctionChangeGroupLineNumber}].correctionCriteria.correctionFieldName">
                     <option value=""></option>
-                     <c:choose>
-    	              	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-							<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|labor|web|optionfinder|LaborOriginEntryFieldFinder" label="label" value="key"/>
-						</c:when>
-						<c:otherwise>
-		                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
-		                </c:otherwise>
-		              </c:choose> 
-                    
-                    
+                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                   </html:select>
                   Operator:
                   <html:select property="groupsItem[${group.correctionChangeGroupLineNumber}].correctionCriteria.correctionOperatorCode">
@@ -766,12 +582,7 @@
             <td align="left" valign="middle" > <c:out value="${KualiForm.document.correctionOutputGroupId}" /></td>
           </c:if>
           <c:if test="${KualiForm.document.correctionOutputGroupId == null}">
-            <c:if test="${KualiForm.document.correctionTypeCode eq 'R'}">
-              <td align="left" valign="middle" ><c:out value="${Constants.NOT_AVAILABLE_STRING}"/></td>
-            </c:if>
-            <c:if test="${KualiForm.document.correctionTypeCode ne 'R'}">
-              <td align="left" valign="middle" > The output group ID is unavailable until the document has a status of FINAL.</td>
-            </c:if>
+            <td align="left" valign="middle" > The output group ID is unavailable until the document has a status of FINAL.</td>
           </c:if>
         </tr>
         <c:if test="${KualiForm.document.correctionInputFileName != null}">
@@ -801,18 +612,9 @@
             <td align="left" valign="middle" class="subhead"><span class="subhead-left">Search Results - Output Group</span></td>
           </tr>
           <tr>
-         	 <c:choose>
-	         	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-		    	    <td>
-    		    	   	<ld:displayLaborOriginEntrySearchResults laborOriginEntries="${KualiForm.displayEntries}"/>
-        		    </td>
-        		</c:when>
-            	<c:otherwise>  
-		    	    <td>
-    		    	    <glcp:displayOriginEntrySearchResults originEntries="${KualiForm.displayEntries}"/>
-        	 	    </td>
-	         	</c:otherwise>
-	      	 </c:choose> 
+            <td>
+              <glcp:displayOriginEntrySearchResults originEntries="${KualiForm.displayEntries}"/>
+            </td>
           </tr>
         </table>
       </c:if>
@@ -853,14 +655,7 @@
                 <c:forEach items="${group.correctionCriteria}" var="criteria" varStatus="cc">
                   Field:
                   <html:select disabled="true" property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionFieldName">
-                  <c:choose>
-   	              	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-						<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|labor|web|optionfinder|LaborOriginEntryFieldFinder" label="label" value="key"/>
-					</c:when>
-					<c:otherwise>
-	                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
-	                </c:otherwise>
-	              </c:choose>
+                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                   </html:select>
                   Operator:
                   <html:select disabled="true" property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionCriteriaItem[${criteria.correctionCriteriaLineNumber}].correctionOperatorCode">
@@ -875,14 +670,7 @@
                 <c:forEach items="${group.correctionChange}" var="change">
                   Field:
                   <html:select disabled="true" property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldName">
-	              <c:choose>
-   	              	<c:when test="${KualiForm.documentType == 'LLCP'}" >
-						<html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|labor|web|optionfinder|LaborOriginEntryFieldFinder" label="label" value="key"/>
-					</c:when>
-					<c:otherwise>
-	                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
-	                </c:otherwise>
-	              </c:choose>
+                    <html:optionsCollection property="actionFormUtilMap.getOptionsMap~org|kuali|module|gl|web|optionfinder|OriginEntryFieldFinder" label="label" value="key"/>
                   </html:select>
                   Replacement Value:
                   <html:text disabled="true" property="correctionDocument.correctionChangeGroupItem[${group.correctionChangeGroupLineNumber}].correctionChangeItem[${change.correctionChangeLineNumber}].correctionFieldValue"/>

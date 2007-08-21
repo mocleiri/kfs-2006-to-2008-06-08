@@ -33,11 +33,11 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>AccountMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>ACCT</documentTypeCode>
 
-		<webScriptFile>../dwr/interface/SubFundGroupService.js</webScriptFile>
-		<webScriptFile>../scripts/chart/accountDocument.js</webScriptFile>
+		<webScriptFile>dwr/interface/SubFundGroupService.js</webScriptFile>
+		<webScriptFile>scripts/chart/accountDocument.js</webScriptFile>
 
         <label>Account Maintenance Document</label>
         <shortLabel>AcctMaintDoc</shortLabel>
@@ -45,6 +45,8 @@
         <summary>Account maintenance document</summary>
         <description>Document used to create or update Account objects</description>
 		<help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ACCOUNT" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
@@ -68,11 +70,11 @@
             <reference attributeName="accountManagerUser" attributeToHighlightOnFail="accountManagerUser.personUserIdentifier" />
             <reference attributeName="accountRestrictedStatus" attributeToHighlightOnFail="accountRestrictedStatusCode" />
             <reference attributeName="subFundGroup" attributeToHighlightOnFail="subFundGroupCode" />
-            <!--  FIXME: remove after testing -->
-            <reference attributeName="extension.program" activeIndicatorAttributeName="programActiveIndicator" attributeToHighlightOnFail="extension.programCode" />
-
+            <!--  comment program out if not in use at your institution -->
+            <reference attributeName="program" activeIndicatorAttributeName="programActiveIndicator" attributeToHighlightOnFail="programCode" />
             <reference attributeName="budgetRecordingLevel" activeIndicatorAttributeName="active" attributeToHighlightOnFail="budgetRecordingLevelCode" />
             <reference attributeName="acctIndirectCostRcvyType" activeIndicatorAttributeName="active" attributeToHighlightOnFail="acctIndirectCostRcvyTypeCd" />
+            <reference attributeName="contractControlAccount" attributeToHighlightOnFail="contractControlAccountNumber" />
         </defaultExistenceChecks>
 
         <maintainableSections>
@@ -82,22 +84,25 @@
                     <maintainableField name="accountNumber" required="true" />
                     <maintainableField name="accountName" required="true" />
                     <maintainableField name="organizationCode" required="true" />
-                    <!-- FIXME: remove after testing -->
-                    <maintainableField name="extension.programCode" required="false" />
                     <maintainableField name="accountPhysicalCampusCode" required="true" />
-                    <maintainableField name="accountCreateDate" />
                     <maintainableField name="accountEffectiveDate" required="true">
                         <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.CurrentDateMMDDYYYYFinder</defaultValueFinderClass>
                     </maintainableField>
                     <maintainableField name="accountExpirationDate" required="false" />
                     <maintainableField name="accountZipCode" required="true" />
                     <maintainableField name="accountCityName" required="true" />
-                    <maintainableField name="accountStateCode" required="true" />
+                    <maintainableField name="accountStateCode" required="true">
+                        <defaultValue>IN</defaultValue>
+                    </maintainableField>
                     <maintainableField name="accountStreetAddress" required="true" />
                     <maintainableField name="accountOffCampusIndicator" required="false" />
                     <maintainableField name="accountClosedIndicator" required="false" />
-                    <maintainableField name="accountTypeCode" required="true" />
+                    <maintainableField name="accountTypeCode" required="true">
+                    	<defaultValue>NA</defaultValue>
+                    </maintainableField>
                     <maintainableField name="subFundGroupCode" required="true" webUILeaveFieldFunction="onblur_subFundGroup" webUILeaveFieldCallbackFunction="checkRestrictedStatusCode_Callback" />
+                    <!--  comment programCode out if not in use at your institution -->
+                    <maintainableField name="programCode" required="false" />
                     <maintainableField name="accountsFringesBnftIndicator" required="false">
                         <defaultValue>true</defaultValue>
                     </maintainableField>
@@ -111,7 +116,6 @@
                     <maintainableField name="versionNumber" />
                     <maintainableField name="accountGuideline.versionNumber" />
                     <maintainableField name="accountDescription.versionNumber" />
-                    <maintainableField name="extension.versionNumber" />
                 </maintainableItems>
             </maintainableSection>
             <maintainableSection title="Account Responsibility">
