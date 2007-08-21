@@ -20,20 +20,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.lookup.LookupableSpringContext;
+import org.kuali.module.gl.GLSpringBeansRegistry;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.AccountBalanceByConsolidation;
 import org.kuali.module.gl.service.AccountBalanceService;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class contains the test cases that can be applied to the method in AccountBalanceLookupableImpl class.
  * 
  * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class AccountBalanceLookupableHelperServiceTest extends AbstractGLLookupableHelperServiceTestBase {
 
     private AccountBalanceService accountBalanceService;
@@ -41,8 +40,8 @@ public class AccountBalanceLookupableHelperServiceTest extends AbstractGLLookupa
     protected void setUp() throws Exception {
         super.setUp();
 
-        setAccountBalanceService(SpringContext.getBean(AccountBalanceService.class));
-        lookupableHelperServiceImpl = (AbstractGLLookupableHelperServiceImpl)LookupableSpringContext.getLookupableHelperService("glAccountBalanceLookupableHelperService");
+        setAccountBalanceService((AccountBalanceService) beanFactory.getBean(GLSpringBeansRegistry.glAccountBalanceService));
+        lookupableHelperServiceImpl = (AccountBalanceLookupableHelperServiceImpl) beanFactory.getBean(GLSpringBeansRegistry.glAccountBalanceLookupableHelperService);
         lookupableHelperServiceImpl.setBusinessObjectClass(AccountBalanceByConsolidation.class);
     }
 

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +20,19 @@ package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.module.kra.routingform.bo.Purpose;
 
 /**
  * 
  */
-public class IndirectCostLookup extends PersistableBusinessObjectBase {
+public class IndirectCostLookup extends BusinessObjectBase {
 
     private boolean budgetOnCampusIndicator;
     private String budgetPurposeCode;
     private KualiDecimal budgetIndirectCostRate;
-    private Purpose budgetPurpose;
-    private boolean active;
-    
+    private BudgetPurposeCode budgetPurpose;
+
     /**
      * Default no-arg constructor.
      */
@@ -110,7 +110,7 @@ public class IndirectCostLookup extends PersistableBusinessObjectBase {
      * Gets the budgetPurpose attribute. 
      * @return Returns the budgetPurpose.
      */
-    public Purpose getBudgetPurpose() {
+    public BudgetPurposeCode getBudgetPurpose() {
         return budgetPurpose;
     }
 
@@ -118,26 +118,10 @@ public class IndirectCostLookup extends PersistableBusinessObjectBase {
      * Sets the budgetPurpose attribute value.
      * @param budgetPurpose The budgetPurpose to set.
      */
-    public void setBudgetPurpose(Purpose budgetPurpose) {
+    public void setBudgetPurpose(BudgetPurposeCode budgetPurpose) {
         this.budgetPurpose = budgetPurpose;
     }
 
-    /**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }    
-    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */

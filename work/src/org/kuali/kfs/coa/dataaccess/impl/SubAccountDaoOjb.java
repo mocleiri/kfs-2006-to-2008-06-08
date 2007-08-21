@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 package org.kuali.module.chart.dao.ojb;
-
-import java.util.List;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
@@ -46,22 +44,5 @@ public class SubAccountDaoOjb extends PlatformAwareDaoBaseOjb implements SubAcco
         criteria.addEqualTo("subAccountNumber", subAccountNumber);
 
         return (SubAccount) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(SubAccount.class, criteria));
-    }
-
-    /**
-     * Retrieves SubAccount objects associated with the given chart-org-subAccount code combination
-     * 
-     * @param chartOfAccountsCode - 'Reports To' Chart of Accounts Code
-     * @param organizationCode - 'Reports To' Organization Code
-     * @param subAccountNumber - Sub Account Number
-     * @return a list of SubAccount objects
-     */
-    public List getSubAccountsByReportsToOrganization(String chartOfAccountsCode, String organizationCode, String subAccountNumber) {
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo("financialReportChartCode", chartOfAccountsCode);
-        criteria.addEqualTo("finReportOrganizationCode", organizationCode);
-        criteria.addEqualTo("subAccountNumber", subAccountNumber);
-
-        return (List) getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(SubAccount.class, criteria));
     }
 }

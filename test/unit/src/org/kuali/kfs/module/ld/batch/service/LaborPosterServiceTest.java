@@ -32,8 +32,7 @@ import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.web.TestDataGenerator;
@@ -47,9 +46,11 @@ import org.kuali.module.labor.util.testobject.LaborGeneralLedgerEntryForTesting;
 import org.kuali.module.labor.util.testobject.LedgerBalanceForTesting;
 import org.kuali.module.labor.util.testobject.LedgerEntryForTesting;
 import org.kuali.module.labor.util.testobject.OriginEntryGroupForTesting;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
-@ConfigureContext
+@WithTestSpringContext
 public class LaborPosterServiceTest extends KualiTestBase {
 
     private Properties properties;
@@ -74,18 +75,19 @@ public class LaborPosterServiceTest extends KualiTestBase {
         fieldNames = properties.getProperty("fieldNames");
         deliminator = properties.getProperty("deliminator");
 
-        laborOriginEntryService = SpringContext.getBean(LaborOriginEntryService.class);
-        originEntryGroupService = SpringContext.getBean(OriginEntryGroupService.class);
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
-        laborPosterService = SpringContext.getBean(LaborPosterService.class);
-        persistenceService = SpringContext.getBean(PersistenceService.class);
+        BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();
+        laborOriginEntryService = (LaborOriginEntryService) beanFactory.getBean("laborOriginEntryService");
+        originEntryGroupService = (OriginEntryGroupService) beanFactory.getBean("glOriginEntryGroupService");
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
+        laborPosterService = (LaborPosterService) beanFactory.getBean("laborPosterService");
+        persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
 
         groupFieldValues = new HashMap();
         groupFieldValues.put(KFSPropertyConstants.SOURCE_CODE, LABOR_SCRUBBER_VALID);
         originEntryGroupService.deleteOlderGroups(0);
         businessObjectService.deleteMatching(OriginEntryGroup.class, groupFieldValues);
 
-        Date today = (SpringContext.getBean(DateTimeService.class)).getCurrentSqlDate();
+        Date today = ((DateTimeService) beanFactory.getBean("dateTimeService")).getCurrentSqlDate();
         groupToPost = originEntryGroupService.createGroup(today, LABOR_SCRUBBER_VALID, true, true, false);
 
         LaborOriginEntry cleanup = new LaborOriginEntry();
@@ -145,8 +147,8 @@ public class LaborPosterServiceTest extends KualiTestBase {
             ObjectUtil.buildObject(ledgerBalanceForTesting, entry);
 
             assertTrue(expectedDataList.contains(ledgerBalanceForTesting));
-            assertEquals(expectedMonth7Amount, ledgerBalanceForTesting.getMonth7Amount());
-            assertEquals(expectedMonth8Amount, ledgerBalanceForTesting.getMonth8Amount());
+            assertEquals(expectedMonth7Amount, ledgerBalanceForTesting.getMonth7AccountLineAmount());
+            assertEquals(expectedMonth8Amount, ledgerBalanceForTesting.getMonth8AccountLineAmount());
             assertEquals(expectedAnnualBalanceAmount, ledgerBalanceForTesting.getAccountLineAnnualBalanceAmount());
         }
         assertEquals(expectedNumOfData, ledgerEntries.size());

@@ -20,12 +20,9 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.module.purap.PurapConstants;
 
 /**
@@ -42,18 +39,15 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	private String itemCapitalAssetNoteText;
 	private BigDecimal itemUnitPrice;
 	private String itemTypeCode;
+	private String requisitionLineIdentifier;
 	private String itemAuxiliaryPartIdentifier;
 	private String externalOrganizationB2bProductReferenceNumber;
 	private String externalOrganizationB2bProductTypeName;
 	private boolean itemAssignedToTradeInIndicator;
     private KualiDecimal extendedPrice; //not currently in DB
-    private KualiDecimal extendedPriceForAccountSummary;
     
     private List<PurApAccountingLine> sourceAccountingLines;
-    //TODO: add transient back if that doesn't cause  a problem
-    private transient List<PurApAccountingLine> baselineSourceAccountingLines;
     private transient PurApAccountingLine newSourceLine;
-    
     
 	private CapitalAssetTransactionType capitalAssetTransactionType;
 	private ItemType itemType;
@@ -68,15 +62,9 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 //        itemTypeCode = "ITEM";
 //        this.refreshNonUpdateableReferences();
         sourceAccountingLines = new TypedArrayList(getAccountingLineClass());
-        baselineSourceAccountingLines = new TypedArrayList(getAccountingLineClass());
         resetAccount();
 	}
-	
-    public String getItemIdentifierString() {
-        String identifierString = (getItemType().isItemTypeAboveTheLineIndicator() ? "Item " + getItemLineNumber().toString() : getItemType().getItemTypeDescription()); 
-        return identifierString;
-    }
-    
+
 	/**
 	 * Gets the ItemIdentifier attribute.
 	 * 
@@ -242,9 +230,9 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	public void setItemUnitPrice(BigDecimal itemUnitPrice) {
 		if(itemUnitPrice!=null) {
             if(itemUnitPrice.scale()<PurapConstants.DOLLAR_AMOUNT_MIN_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.DOLLAR_AMOUNT_MIN_SCALE, KualiDecimal.ROUND_BEHAVIOR);
+                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.DOLLAR_AMOUNT_MIN_SCALE, BigDecimal.ROUND_HALF_EVEN);
             } else if(itemUnitPrice.scale()>PurapConstants.DOLLAR_AMOUNT_MIN_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.UNIT_PRICE_MAX_SCALE, KualiDecimal.ROUND_BEHAVIOR);
+                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.UNIT_PRICE_MAX_SCALE, BigDecimal.ROUND_HALF_EVEN);
             }
         }
         this.itemUnitPrice = itemUnitPrice;
@@ -269,6 +257,28 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	public void setItemTypeCode(String itemTypeCode) {
 		this.itemTypeCode = itemTypeCode;
 	}
+
+
+	/**
+	 * Gets the requisitionLineIdentifier attribute.
+	 * 
+	 * @return Returns the requisitionLineIdentifier
+	 * 
+	 */
+	public String getRequisitionLineIdentifier() { 
+		return requisitionLineIdentifier;
+	}
+
+	/**
+	 * Sets the LineIdentifier attribute.
+	 * 
+	 * @param LineIdentifier The LineIdentifier to set.
+	 * 
+	 */
+	public void setRequisitionLineIdentifier(String requisitionLineIdentifier) {
+		this.requisitionLineIdentifier = requisitionLineIdentifier;
+	}
+
 
 	/**
 	 * Gets the itemAuxiliaryPartIdentifier attribute.
@@ -393,45 +403,21 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 		this.itemType = itemType;
 	}
 
-    
-// from epic
-//    public BigDecimal getExtendedCost() {
-//        if (this.unitPrice == null) {
-//          return null;
-//        } else if (this.getIsServiceItem()) {
-//          return getUnitPrice().setScale(2,BigDecimal.ROUND_HALF_UP);
-//        } else {
-//          return this.orderQuantity.multiply(getUnitPrice()).setScale(2,BigDecimal.ROUND_HALF_UP);
-//        }
-//      }
-
 	/**
      * Gets the extendedPrice attribute. 
      * @return Returns the extendedPrice.
      */
     public KualiDecimal getExtendedPrice() {
-        return calculateExtendedPrice();
-    }
-
-    /**
-     * This method calculates the extended price based on item type
-     * 
-     * @return KualiDecimal - calculate extended price
-     */
-    public KualiDecimal calculateExtendedPrice() {
-        KualiDecimal extendedPrice = KualiDecimal.ZERO;
-        if (ObjectUtils.isNotNull(itemUnitPrice)) {
-            if (!this.itemType.isQuantityBasedGeneralLedgerIndicator()) {
-                //SERVICE ITEM: return unit price as extended price
-                extendedPrice = new KualiDecimal(this.itemUnitPrice.toString());
-            } else if (ObjectUtils.isNotNull(this.getItemQuantity())) {
-                BigDecimal calcExtendedPrice = this.itemUnitPrice.multiply(this.itemQuantity.bigDecimalValue());
-                //ITEM TYPE (qty driven): return (unitPrice x qty)
-                extendedPrice = new KualiDecimal(calcExtendedPrice);
+        if(this.itemUnitPrice!=null) {
+            if(!this.itemType.isQuantityBasedGeneralLedgerIndicator() || this.itemQuantity==null) {
+                return new KualiDecimal(this.itemUnitPrice.toString());
             }
+            BigDecimal extendedPrice = this.itemUnitPrice.multiply(this.itemQuantity.bigDecimalValue());
+            return new KualiDecimal(extendedPrice);
+        } else {
+            return null;
         }
-        return extendedPrice;
-    }
+    } 
     
      /**
      * Sets the extendedPrice attribute value.
@@ -458,22 +444,6 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
     }
 
     /**
-     * Gets the baselineSourceLines attribute. 
-     * @return Returns the baselineSourceLines.
-     */
-    public List<PurApAccountingLine> getBaselineSourceAccountingLines() {
-        return baselineSourceAccountingLines;
-    }
-
-    /**
-     * Sets the baselineSourceLines attribute value.
-     * @param baselineSourceLines The baselineSourceLines to set.
-     */
-    public void setBaselineSourceAccountingLines(List<PurApAccountingLine> baselineSourceLines) {
-        this.baselineSourceAccountingLines = baselineSourceLines;
-    }
-
-    /**
      * This implementation is coupled tightly with some underlying issues that the Struts PojoProcessor plugin has with how objects
      * get instantiated within lists. The first three lines are required otherwise when the PojoProcessor tries to automatically
      * inject values into the list, it will get an index out of bounds error if the instance at an index is being called and prior
@@ -492,10 +462,6 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
         return (PurApAccountingLine) getSourceAccountingLines().get(index);
     }
 
-    public PurApAccountingLine getBaselineSourceAccountingLine(int index) {
-        return (PurApAccountingLine) getBaselineSourceAccountingLines().get(index);
-    }
-    
     /**
      * This method...
      * @param newAccount
@@ -528,8 +494,7 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
      */
     public void resetAccount() {
         //add a blank accounting line
-        PurApAccountingLine purApAccountingLine = getNewAccount();
-        setNewSourceLine(purApAccountingLine);
+        setNewSourceLine(getNewAccount());
     }
     
     /**
@@ -586,24 +551,4 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
     public void setItemQuantity(KualiDecimal itemQuantity) {
         this.itemQuantity = itemQuantity;
     }
-    
-    public boolean isAccountListEmpty() {
-        List<PurApAccountingLine> accounts = getSourceAccountingLines();
-        if (ObjectUtils.isNotNull(accounts)) {
-            for (PurApAccountingLine element : accounts) {
-                if (!element.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    
-    public KualiDecimal getExtendedPriceForAccountSummary() {
-        return extendedPriceForAccountSummary;
-}
-    public void setExtendedPriceForAccountSummary(KualiDecimal extendedPriceForAccountSummary) {
-        this.extendedPriceForAccountSummary = extendedPriceForAccountSummary;
-    }
-    
 }

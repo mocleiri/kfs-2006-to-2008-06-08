@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +20,23 @@ package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 
 /**
  * 
  */
-public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase implements Comparable {
+public class BudgetTaskPeriodIndirectCost extends BusinessObjectBase implements Comparable {
 
     private String documentNumber; // RDOC_NBR
     private Integer budgetTaskSequenceNumber; // BDGT_TSK_SEQ_NBR
     private Integer budgetPeriodSequenceNumber; // BDGT_PRD_SEQ_NBR
     private KualiDecimal budgetManualIndirectCostRate; // BDGT_MAN_IDC_RT
     private KualiInteger budgetManualMtdcAmount; // BDGT_MAN_MTDC_AMT
+
+    // We will need to remove this, since this is properly storedin the parent IDC object.
+    private String budgetPurposeCode; // BDGT_PRPS_CD
 
     private BudgetTask task; // BudgetTask associated with this taskPeriodLine.
     private BudgetPeriod period; // BudgetPeriod associated with this taskPeriodLine.
@@ -181,6 +186,26 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      */
     public void setBudgetManualMtdcAmount(KualiInteger budgetManualMtdcAmount) {
         this.budgetManualMtdcAmount = budgetManualMtdcAmount;
+    }
+
+    /**
+     * Gets the budgetPurposeCode attribute.
+     * 
+     * @return Returns the budgetPurposeCode
+     * 
+     */
+    public String getBudgetPurposeCode() {
+        return budgetPurposeCode;
+    }
+
+    /**
+     * Sets the budgetPurposeCode attribute.
+     * 
+     * @param budgetPurposeCode The budgetPurposeCode to set.
+     * 
+     */
+    public void setBudgetPurposeCode(String budgetPurposeCode) {
+        this.budgetPurposeCode = budgetPurposeCode;
     }
 
     /**

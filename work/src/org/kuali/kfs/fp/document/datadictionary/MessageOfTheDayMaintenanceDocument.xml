@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.financial.bo.MessageOfTheDay</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-        <businessRulesClass>org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase</businessRulesClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>MessageOfTheDayMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiMessageOfTheDayMaintenanceDocument</documentTypeName>
         <documentTypeCode>MOTD</documentTypeCode>
 
         <label>Message Of The Day Maintenance Document</label>
@@ -46,10 +46,6 @@
             <field attributeName="financialSystemOriginationCode" />
         </lockingKeys>
 
-        <defaultExistenceChecks>
-            <reference attributeName="financialSystemOrigination" attributeToHighlightOnFail="financialSystemOriginationCode" />
-        </defaultExistenceChecks>
-        
         <maintainableSections>
             <maintainableSection title="Edit Message Of The Day">
                 <maintainableItems>

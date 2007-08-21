@@ -1,5 +1,7 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +20,6 @@ package org.kuali.module.financial.service;
 import java.util.List;
 
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.module.financial.bo.CashReceiptHeader;
-import org.kuali.module.financial.document.CashReceiptDocument;
 
 
 public interface CashReceiptService {
@@ -69,13 +69,4 @@ public interface CashReceiptService {
      * @throws IllegalArgumentException if statii is null or empty or contains any blank statusCodes
      */
     public List getCashReceipts(String verificationUnit, String[] statii);
-    
-    /**
-     * This adds the currency and coin details associated with this Cash Receipt document to the
-     * proper cash drawer and to the cumulative Cash Receipt details for the document which opened
-     * the cash drawer.
-     * 
-     * @param crDoc the cash receipt document with cash details to add to the cash drawer
-     */
-    public void addCashDetailsToCashDrawer(CashReceiptDocument crDoc);
 }

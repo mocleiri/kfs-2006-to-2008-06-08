@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.Constants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
@@ -105,7 +109,7 @@ public class BudgetCostShareAction extends BudgetAction {
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
         budgetForm.getNewInstitutionCostShare().setPermissionIndicator(true);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -126,7 +130,7 @@ public class BudgetCostShareAction extends BudgetAction {
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -149,7 +153,7 @@ public class BudgetCostShareAction extends BudgetAction {
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -170,7 +174,7 @@ public class BudgetCostShareAction extends BudgetAction {
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**

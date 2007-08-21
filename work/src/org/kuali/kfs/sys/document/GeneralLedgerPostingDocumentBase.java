@@ -15,21 +15,25 @@
  */
 package org.kuali.kfs.document;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.core.bo.DocumentHeader;
+import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.rule.event.KualiDocumentEvent;
 import org.kuali.core.rule.event.RouteDocumentEvent;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.service.SufficientFundsService;
 import org.kuali.module.gl.util.SufficientFundsItem;
 
@@ -79,7 +83,7 @@ public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase 
      * @see org.kuali.kfs.document.GeneralLedgerPostingDocument#isBankCashOffsetEnabled()
      */
     public boolean isBankCashOffsetEnabled() {
-        return SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterIndicator(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG);
+        return SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG);
     }
 
     /**
@@ -89,7 +93,7 @@ public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase 
         LOG.debug("checkSufficientFunds() started");
 
         if (documentPerformsSufficientFundsCheck()) {
-            SufficientFundsService sufficientFundsService = SpringContext.getBean(SufficientFundsService.class);
+            SufficientFundsService sufficientFundsService = SpringServiceLocator.getSufficientFundsService();
             return sufficientFundsService.checkSufficientFunds(this);
         } else {
             return new ArrayList<SufficientFundsItem>();
@@ -120,28 +124,18 @@ public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase 
     @Override
     public void handleRouteStatusChange() {
         super.handleRouteStatusChange();
-        if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            changeGeneralLedgerPendingEntriesApprovedStatusCode(); // update all glpes for doc and set their status to approved
-        } else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled() || getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-            removeGeneralLedgerPendingEntries();
-        }
+        changeGeneralLedgerPendingEntriesApprovedStatusCode(); // update all glpes for doc and set their status to approved
     }
 
     /**
      * This method iterates over all of the GLPEs for a document and sets their approved status code to APPROVED "A".
      */
     private void changeGeneralLedgerPendingEntriesApprovedStatusCode() {
-        for (GeneralLedgerPendingEntry glpe : getGeneralLedgerPendingEntries()) {
-            glpe.setFinancialDocumentApprovedCode(KFSConstants.DocumentStatusCodes.APPROVED);
+        if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
+            for (GeneralLedgerPendingEntry glpe : getGeneralLedgerPendingEntries()) {
+                glpe.setFinancialDocumentApprovedCode(KFSConstants.DocumentStatusCodes.APPROVED);
+            }
         }
-    }
-    
-    /**
-     * This method calls the service to remove all of the GLPE's associated with this document
-     */
-    private void removeGeneralLedgerPendingEntries() {
-        GeneralLedgerPendingEntryService glpeService = SpringContext.getBean(GeneralLedgerPendingEntryService.class);
-        glpeService.delete(getDocumentHeader().getDocumentNumber());
     }
 
     /**

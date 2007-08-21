@@ -31,20 +31,17 @@ import org.apache.struts.action.ActionMapping;
 import org.kuali.core.authorization.AuthorizationType;
 import org.kuali.core.exceptions.AuthorizationException;
 import org.kuali.core.exceptions.ModuleAuthorizationException;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.KualiModuleService;
-import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.action.KualiAction;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.BCConstants;
 import org.kuali.module.budget.bo.BudgetConstructionPosition;
 import org.kuali.module.budget.document.authorization.BudgetConstructionDocumentAuthorizer;
 import org.kuali.module.budget.web.struts.form.PositionSalarySettingForm;
-
+import org.kuali.rice.KNSServiceLocator;
 
 /**
  * This class...
@@ -71,7 +68,7 @@ public class PositionSalarySettingAction extends KualiAction {
         //but each line needs to be authorized, so need to figure out how to implement this
 
         //TODO should probably use service locator and call
-        //DocumentAuthorizer documentAuthorizer = SpringContext.getBean(DocumentAuthorizationService.class).getDocumentAuthorizer("<BCDoctype>");
+        //DocumentAuthorizer documentAuthorizer = KNSServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer("<BCDoctype>");
         BudgetConstructionDocumentAuthorizer budgetConstructionDocumentAuthorizer = new BudgetConstructionDocumentAuthorizer();
         positionSalarySettingForm.populateAuthorizationFields(budgetConstructionDocumentAuthorizer);
 
@@ -85,22 +82,12 @@ public class PositionSalarySettingAction extends KualiAction {
     protected void checkAuthorization(ActionForm form, String methodToCall) throws AuthorizationException {
 
         AuthorizationType bcAuthorizationType = new AuthorizationType.Default(this.getClass());
-        if ( !SpringContext.getBean(KualiModuleService.class).isAuthorized( GlobalVariables.getUserSession().getUniversalUser(), bcAuthorizationType ) ){
+        if ( !KNSServiceLocator.getKualiModuleService().isAuthorized( GlobalVariables.getUserSession().getUniversalUser(), bcAuthorizationType ) ){
             LOG.error("User not authorized to use this action: " + this.getClass().getName() );
             throw new ModuleAuthorizationException( GlobalVariables.getUserSession().getUniversalUser().getPersonUserIdentifier(), bcAuthorizationType, getKualiModuleService().getResponsibleModule(this.getClass()) );
         }
     }
 
-    /**
-     * This action loads the data for the expansion screen based on the passed in url parameters
-     * 
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
     public ActionForward loadExpansionScreen(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception{
         
         PositionSalarySettingForm positionSalarySettingForm = (PositionSalarySettingForm) form;
@@ -110,7 +97,7 @@ public class PositionSalarySettingAction extends KualiAction {
         fieldValues.put("universityFiscalYear", positionSalarySettingForm.getUniversityFiscalYear());
         fieldValues.put("positionNumber", positionSalarySettingForm.getPositionNumber());
 
-        BudgetConstructionPosition budgetConstructionPosition = (BudgetConstructionPosition) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(BudgetConstructionPosition.class,fieldValues);
+        BudgetConstructionPosition budgetConstructionPosition = (BudgetConstructionPosition) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(BudgetConstructionPosition.class,fieldValues);
         if (budgetConstructionPosition == null){
             //TODO this is an RI error need to report it
         }
@@ -123,7 +110,7 @@ public class PositionSalarySettingAction extends KualiAction {
     }
 
     public ActionForward returnToCaller(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//TODO this will eventually be spit out into close and save methods, with close calling this method        
+        
         PositionSalarySettingForm positionSalarySettingForm = (PositionSalarySettingForm) form;
         BudgetConstructionPosition budgetConstructionPosition = positionSalarySettingForm.getBudgetConstructionPosition();
 
@@ -149,7 +136,7 @@ public class PositionSalarySettingAction extends KualiAction {
         PositionSalarySettingForm positionSalarySettingForm = (PositionSalarySettingForm) form;
 
         // Do specific refresh stuff here based on refreshCaller parameter
-        // typical refresh callers would be lookupable or reasoncode??
+        // typical refresh callers would be kualiLookupable or reasoncode??
         // need to look at optmistic locking problems since we will be storing the values in the form before hand
         // this locking problem may workout if we store first then put the form in session
         String refreshCaller = request.getParameter(KFSConstants.REFRESH_CALLER);
@@ -163,7 +150,7 @@ public class PositionSalarySettingAction extends KualiAction {
 //        if (refreshCaller != null && refreshCaller.equalsIgnoreCase(KFSConstants.KUALI_LOOKUPABLE_IMPL)){
         if (refreshCaller != null && (refreshCaller.endsWith("Lookupable") || (refreshCaller.endsWith("LOOKUPABLE")))){
             final List REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] {"chartOfAccounts", "account", "subAccount", "financialObject", "financialSubObject", "budgetConstructionIntendedIncumbent", "budgetConstructionDuration"}));
-            SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(positionSalarySettingForm.getNewBCAFLine(), REFRESH_FIELDS);            
+            KNSServiceLocator.getPersistenceService().retrieveReferenceObjects(positionSalarySettingForm.getNewBCAFLine(), REFRESH_FIELDS);            
         }
 
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
@@ -203,16 +190,6 @@ public class PositionSalarySettingAction extends KualiAction {
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
     
-    /**
-     * This action adds an appointment funding line to the set of existing funding lines
-     * 
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
     public ActionForward insertBCAFLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         PositionSalarySettingForm tForm = (PositionSalarySettingForm) form;
@@ -221,17 +198,6 @@ public class PositionSalarySettingAction extends KualiAction {
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
-    /**
-     * This action creates a new funding line based on the selected line and sets the emplid to vacant
-     * then marks the selected line delete.
-     * 
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
     public ActionForward performVacateSalarySettingLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         PositionSalarySettingForm tForm = (PositionSalarySettingForm) form;
@@ -240,38 +206,10 @@ public class PositionSalarySettingAction extends KualiAction {
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
-    /**
-     * This action sets the request amount using the CSF amount adjusted by a percent or flat rate
-     *  
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
     public ActionForward performPercentAdjustmentSalarySettingLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         PositionSalarySettingForm tForm = (PositionSalarySettingForm) form;
         GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_MESSAGES,KFSKeyConstants.ERROR_UNIMPLEMENTED, "Percent Adjustment For Salary Setting Line");
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
-    }
-
-    /**
-     * This displays the reason code screen for the selected funding line
-     * 
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    public ActionForward performReasonAnnotation(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        PositionSalarySettingForm tForm = (PositionSalarySettingForm) form;
-        GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_MESSAGES,KFSKeyConstants.ERROR_UNIMPLEMENTED, "Reason Annotation For Salary Setting Line");
 
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }

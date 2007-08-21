@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/datadictionary/LedgerEntry.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.LedgerEntry">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Ledger Entry Inquiry</title>
@@ -137,52 +139,52 @@
             </lookupFields>
 
             <resultFields>
-                <field attributeName="universityFiscalYear" />
-                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
-                <field attributeName="subAccountNumber" />
-                <field attributeName="financialObjectCode" />
-                <field attributeName="financialSubObjectCode" />
-                <field attributeName="financialBalanceTypeCode" />
-                <field attributeName="financialObjectTypeCode" />
-                <field attributeName="universityFiscalPeriodCode" />
-                <field attributeName="financialDocumentTypeCode" />
-                <field attributeName="financialSystemOriginationCode" />
-                <field attributeName="documentNumber" />
-                <field attributeName="positionNumber" />
-                <field attributeName="projectCode" />
-                <field attributeName="transactionLedgerEntryDescription" />
-                <field attributeName="transactionLedgerEntryAmount" />
-                <field attributeName="transactionDebitCreditCode" />
-                <field attributeName="transactionDate" />
-                <field attributeName="organizationDocumentNumber" />
-                <field attributeName="organizationReferenceId" />
-                <field attributeName="referenceFinancialDocumentTypeCode" />
-                <field attributeName="referenceFinancialSystemOriginationCode" />
-                <field attributeName="referenceFinancialDocumentNumber" />
-                <field attributeName="financialDocumentReversalDate" />
-                <field attributeName="transactionEncumbranceUpdateCode" />
-                <field attributeName="transactionPostingDate" />
-                <field attributeName="payPeriodEndDate" />
-                <field attributeName="transactionTotalHours" />
-                <field attributeName="payrollEndDateFiscalYear" />
-                <field attributeName="payrollEndDateFiscalPeriodCode" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="earnCode" />
                 <field attributeName="emplid" />
                 <field attributeName="employeeRecord" />
-				<field attributeName="earnCode" />
-                <field attributeName="payGroup" />
-                <field attributeName="salaryAdministrationPlan" />
-				<field attributeName="grade" />
-                <field attributeName="runIdentifier" />
-                <field attributeName="laborLedgerOriginalChartOfAccountsCode" />
-                <field attributeName="laborLedgerOriginalAccountNumber" />
-                <field attributeName="laborLedgerOriginalSubAccountNumber" />
-                <field attributeName="laborLedgerOriginalFinancialObjectCode" />
-                <field attributeName="laborLedgerOriginalFinancialSubObjectCode" />				
+                <field attributeName="financialBalanceTypeCode" />
+                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentReversalDate" />
+                <field attributeName="financialDocumentTypeCode" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialObjectTypeCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="financialSystemOriginationCode" />
+                <field attributeName="grade" />
                 <field attributeName="hrmsCompany" />
-                <field attributeName="setid" />				
+                <field attributeName="laborLedgerOriginalAccountNumber" />
+                <field attributeName="laborLedgerOriginalChartOfAccountsCode" />
+                <field attributeName="laborLedgerOriginalFinancialObjectCode" />
+                <field attributeName="laborLedgerOriginalFinancialSubObjectCode" />
+                <field attributeName="laborLedgerOriginalSubAccountNumber" />
+                <field attributeName="organizationDocumentNumber" />
+                <field attributeName="organizationReferenceId" />
+                <field attributeName="payGroup" />
+                <field attributeName="payPeriodEndDate" />
+                <field attributeName="payrollEndDateFiscalPeriodCode" />
+                <field attributeName="payrollEndDateFiscalYear" />
+                <field attributeName="positionNumber" />
+                <field attributeName="projectCode" />
+                <field attributeName="referenceFinancialDocumentNumber" />
+                <field attributeName="referenceFinancialDocumentTypeCode" />
+                <field attributeName="referenceFinancialSystemOriginationCode" />
+                <field attributeName="runIdentifier" />
+                <field attributeName="salaryAdministrationPlan" />
+                <field attributeName="setid" />
+                <field attributeName="subAccountNumber" />
+                <field attributeName="transactionDate" />
                 <field attributeName="transactionDateTimeStamp" />
+                <field attributeName="transactionDebitCreditCode" />
+                <field attributeName="transactionEncumbranceUpdateCode" />
+                <field attributeName="transactionLedgerEntryAmount" />
+                <field attributeName="transactionLedgerEntryDescription" />
                 <field attributeName="transactionLedgerEntrySequenceNumber" />
+                <field attributeName="transactionPostingDate" />
+                <field attributeName="transactionTotalHours" />
+                <field attributeName="universityFiscalPeriodCode" />
+                <field attributeName="universityFiscalYear" />
             </resultFields>
         </lookup>
 

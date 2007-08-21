@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.ProcurementCardTransactionDetail">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Procurement Card Transaction Detail Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="documentNumber" />
+            <inquiryFields>
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialDocumentTransactionLineNumber" />
                 <field attributeName="transactionReferenceNumber" />
                 <field attributeName="transactionBillingCurrencyCode" />
@@ -45,12 +45,12 @@
                 <field attributeName="transactionCycleEndDate" />
                 <field attributeName="transactionCycleStartDate" />
                 <field attributeName="transactionTotalAmount" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <attributes>
 
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber" />
+            <attributeReference name="financialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber" />
 
             <attribute name="financialDocumentTransactionLineNumber" forceUppercase="true">
                 <label>Financial Document Transaction Line Number</label>

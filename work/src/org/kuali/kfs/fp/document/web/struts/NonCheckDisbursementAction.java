@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
  */
 package org.kuali.module.financial.web.struts.action;
 
-import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
-
+import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 
 /**
  * Action class for <code>{@link org.kuali.module.financial.document.NonCheckDisbursementDocument}</code> It doesn't do anything
  * because it doesn't need to.
+ * 
+ * 
  */
-public class NonCheckDisbursementAction extends KualiAccountingDocumentActionBase {
+public class NonCheckDisbursementAction extends KualiTransactionalDocumentActionBase {
 }

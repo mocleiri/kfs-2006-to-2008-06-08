@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PurchaseOrderVendorQuote.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +21,15 @@ package org.kuali.module.purap.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.bo.Country;
-import org.kuali.module.purap.document.PurchaseOrderDocument;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
+public class PurchaseOrderVendorQuote extends BusinessObjectBase {
 
-    private String documentNumber;
-    private Integer purchaseOrderVendorQuoteIdentifier;
+	private Integer purchaseOrderVendorQuoteIdentifier;
+	private Integer purchaseOrderIdentifier;
 	private Integer vendorHeaderGeneratedIdentifier;
 	private Integer vendorDetailAssignedIdentifier;
 	private String vendorName;
@@ -44,43 +42,25 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	private String vendorFaxNumber;
 	private String vendorEmailAddress;
 	private String vendorAttentionName;
-	private String purchaseOrderQuoteTransmitTypeCode;
-	private Date purchaseOrderQuoteTransmitDate;
+	private String purchaseOrderQuoteTransactionTypeCode;
+	private Date purchaseOrderQuoteTransactionDate;
 	private Date purchaseOrderQuotePriceExpirationDate;
 	private String purchaseOrderQuoteStatusCode;
 	private Date purchaseOrderQuoteAwardDate;
 	private String purchaseOrderQuoteRankNumber;
     private String vendorCountryCode;
-    private boolean isTransmitPrintDisplayed = false;
     
-    private PurchaseOrderDocument purchaseOrder;
+    private PurchaseOrder purchaseOrder;
 	private PurchaseOrderQuoteStatus purchaseOrderQuoteStatus;
-    private Country vendorCountry;
-    
+
 	/**
 	 * Default constructor.
 	 */
 	public PurchaseOrderVendorQuote() {
 
 	}
-    
-    /**
-     * Gets the documentNumber attribute. 
-     * @return Returns the documentNumber.
-     */
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
 
-    /**
-     * Sets the documentNumber attribute value.
-     * @param documentNumber The documentNumber to set.
-     */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
-
-    /**
+	/**
 	 * Gets the purchaseOrderVendorQuoteIdentifier attribute.
 	 * 
 	 * @return Returns the purchaseOrderVendorQuoteIdentifier
@@ -90,15 +70,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 		return purchaseOrderVendorQuoteIdentifier;
 	}
 
-	public Country getVendorCountry() {
-        return vendorCountry;
-    }
-
-    public void setVendorCountry(Country vendorCountry) {
-        this.vendorCountry = vendorCountry;
-    }
-
-    /**
+	/**
 	 * Sets the purchaseOrderVendorQuoteIdentifier attribute.
 	 * 
 	 * @param purchaseOrderVendorQuoteIdentifier The purchaseOrderVendorQuoteIdentifier to set.
@@ -107,6 +79,28 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	public void setPurchaseOrderVendorQuoteIdentifier(Integer purchaseOrderVendorQuoteIdentifier) {
 		this.purchaseOrderVendorQuoteIdentifier = purchaseOrderVendorQuoteIdentifier;
 	}
+
+
+	/**
+	 * Gets the purchaseOrderIdentifier attribute.
+	 * 
+	 * @return Returns the purchaseOrderIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderIdentifier() { 
+		return purchaseOrderIdentifier;
+	}
+
+	/**
+	 * Sets the purchaseOrderIdentifier attribute.
+	 * 
+	 * @param purchaseOrderIdentifier The purchaseOrderIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderIdentifier(Integer purchaseOrderIdentifier) {
+		this.purchaseOrderIdentifier = purchaseOrderIdentifier;
+	}
+
 
 	/**
 	 * Gets the vendorHeaderGeneratedIdentifier attribute.
@@ -149,16 +143,6 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 		this.vendorDetailAssignedIdentifier = vendorDetailAssignedIdentifier;
 	}
 
-    public String getVendorNumber() {
-        String vendorNumber = "";
-        if (ObjectUtils.isNotNull(this.vendorHeaderGeneratedIdentifier)) {
-            vendorNumber = this.vendorHeaderGeneratedIdentifier.toString();
-        }
-        if (ObjectUtils.isNotNull(this.vendorDetailAssignedIdentifier)) {
-            vendorNumber += "-" + this.vendorDetailAssignedIdentifier.toString();
-        }
-        return vendorNumber;
-    }
 
 	/**
 	 * Gets the vendorName attribute.
@@ -371,44 +355,44 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 
 
 	/**
-	 * Gets the purchaseOrderQuoteTransmitTypeCode attribute.
+	 * Gets the purchaseOrderQuoteTransactionTypeCode attribute.
 	 * 
-	 * @return Returns the purchaseOrderQuoteTransmitTypeCode
+	 * @return Returns the purchaseOrderQuoteTransactionTypeCode
 	 * 
 	 */
-	public String getPurchaseOrderQuoteTransmitTypeCode() { 
-		return purchaseOrderQuoteTransmitTypeCode;
+	public String getPurchaseOrderQuoteTransactionTypeCode() { 
+		return purchaseOrderQuoteTransactionTypeCode;
 	}
 
 	/**
-	 * Sets the purchaseOrderQuoteTransmitTypeCode attribute.
+	 * Sets the purchaseOrderQuoteTransactionTypeCode attribute.
 	 * 
-	 * @param purchaseOrderQuoteTransmitTypeCode The purchaseOrderQuoteTransmitTypeCode to set.
+	 * @param purchaseOrderQuoteTransactionTypeCode The purchaseOrderQuoteTransactionTypeCode to set.
 	 * 
 	 */
-	public void setPurchaseOrderQuoteTransmitTypeCode(String purchaseOrderQuoteTransmitTypeCode) {
-		this.purchaseOrderQuoteTransmitTypeCode = purchaseOrderQuoteTransmitTypeCode;
+	public void setPurchaseOrderQuoteTransactionTypeCode(String purchaseOrderQuoteTransactionTypeCode) {
+		this.purchaseOrderQuoteTransactionTypeCode = purchaseOrderQuoteTransactionTypeCode;
 	}
 
 
 	/**
-	 * Gets the purchaseOrderQuoteTransmitDate attribute.
+	 * Gets the purchaseOrderQuoteTransactionDate attribute.
 	 * 
-	 * @return Returns the purchaseOrderQuoteTransmitDate
+	 * @return Returns the purchaseOrderQuoteTransactionDate
 	 * 
 	 */
-	public Date getPurchaseOrderQuoteTransmitDate() { 
-		return purchaseOrderQuoteTransmitDate;
+	public Date getPurchaseOrderQuoteTransactionDate() { 
+		return purchaseOrderQuoteTransactionDate;
 	}
 
 	/**
-	 * Sets the purchaseOrderQuoteTransmitDate attribute.
+	 * Sets the purchaseOrderQuoteTransactionDate attribute.
 	 * 
-	 * @param purchaseOrderQuoteTransmitDate The purchaseOrderQuoteTransmitDate to set.
+	 * @param purchaseOrderQuoteTransactionDate The purchaseOrderQuoteTransactionDate to set.
 	 * 
 	 */
-	public void setPurchaseOrderQuoteTransmitDate(Date purchaseOrderQuoteTransmitDate) {
-		this.purchaseOrderQuoteTransmitDate = purchaseOrderQuoteTransmitDate;
+	public void setPurchaseOrderQuoteTransactionDate(Date purchaseOrderQuoteTransactionDate) {
+		this.purchaseOrderQuoteTransactionDate = purchaseOrderQuoteTransactionDate;
 	}
 
 
@@ -502,7 +486,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	 * @return Returns the purchaseOrder
 	 * 
 	 */
-	public PurchaseOrderDocument getPurchaseOrder() { 
+	public PurchaseOrder getPurchaseOrder() { 
 		return purchaseOrder;
 	}
 
@@ -512,7 +496,7 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
 	 * @param purchaseOrder The purchaseOrder to set.
 	 * @deprecated
 	 */
-	public void setPurchaseOrder(PurchaseOrderDocument purchaseOrder) {
+	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
 		this.purchaseOrder = purchaseOrder;
 	}
 
@@ -552,20 +536,11 @@ public class PurchaseOrderVendorQuote extends PersistableBusinessObjectBase {
         this.vendorCountryCode = vendorCountryCode;
     }
 
-    public boolean isTransmitPrintDisplayed() {
-        return isTransmitPrintDisplayed;
-    }
-
-    public void setTransmitPrintDisplayed(boolean isTransmitPrintDisplayed) {
-        this.isTransmitPrintDisplayed = isTransmitPrintDisplayed;
-    }
-
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
-        m.put("documentNumber", this.documentNumber);
         if (this.purchaseOrderVendorQuoteIdentifier != null) {
             m.put("purchaseOrderVendorQuoteIdentifier", this.purchaseOrderVendorQuoteIdentifier.toString());
         }

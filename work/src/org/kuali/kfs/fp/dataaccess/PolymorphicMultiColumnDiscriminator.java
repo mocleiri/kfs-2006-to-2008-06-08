@@ -1,6 +1,8 @@
 /*
  * Copyright 2005-2006 The Kuali Foundation.
  * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/dataaccess/PolymorphicMultiColumnDiscriminator.java,v $
+ * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -32,10 +34,10 @@ import org.apache.ojb.broker.metadata.ClassDescriptor;
  * 
  * Sample OBJ config:
  * 
- * <class-descriptor class="org.kuali.bo.ClassA" table="some_common_table" row-reader="org.kuali.dao.ojb.ClassADiscriminator"> ...
+ * <class-descriptor class="org.kuali.bo.ClassA" table="some_common_table"row-reader="org.kuali.dao.ojb.ClassADiscriminator"> ...
  * </class-descriptor>
  * 
- * <class-descriptor class="org.kuali.bo.ClassB" table="some_common_table" row-reader="org.kuali.dao.ojb.ClassBDiscriminator"> ...
+ * <class-descriptor class="org.kuali.bo.ClassB" table="some_common_table"row-reader="org.kuali.dao.ojb.ClassBDiscriminator"> ...
  * </class-descriptor>
  * 
  * (where ClassADiscriminator and ClassBDiscriminator extend PolymorphicMultiColumnDiscriminator)

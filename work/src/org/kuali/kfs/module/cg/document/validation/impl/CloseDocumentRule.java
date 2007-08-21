@@ -15,18 +15,20 @@
  */
 package org.kuali.module.cg.rules;
 
+import org.kuali.core.rules.TransactionalDocumentRuleBase;
+import org.kuali.core.document.Document;
+import org.kuali.core.util.GlobalVariables;
+import org.kuali.module.cg.bo.Close;
+import org.kuali.module.cg.document.CloseDocument;
+import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
+
 import java.sql.Date;
 
-import org.kuali.core.document.Document;
-import org.kuali.core.rules.TransactionalDocumentRuleBase;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.cg.bo.Close;
-
 /**
- * Rules for handling Closes.
+ * User: Laran Evans <lc278@cornell.edu>
+ * Date: Apr 17, 2007
+ * Time: 5:35:09 PM
  */
 public class CloseDocumentRule extends TransactionalDocumentRuleBase {
 
@@ -38,7 +40,7 @@ public class CloseDocumentRule extends TransactionalDocumentRuleBase {
         }
         Close closeDocument = (Close) document;
         Date userDate = closeDocument.getUserInitiatedCloseDate();
-        Date today = SpringContext.getBean(DateTimeService.class).getCurrentSqlDateMidnight();
+        Date today = SpringServiceLocator.getDateTimeService().getCurrentSqlDateMidnight();
         isOk = null != userDate && today.getTime() <= userDate.getTime();
         if(!isOk) {
             GlobalVariables.getErrorMap().putError(
