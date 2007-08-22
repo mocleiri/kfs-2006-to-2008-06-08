@@ -35,7 +35,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ObjectCodeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiObjectCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>OBJT</documentTypeCode>
 
 		<webScriptFile>../dwr/interface/ChartService.js</webScriptFile>

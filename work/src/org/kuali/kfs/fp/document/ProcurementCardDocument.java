@@ -23,13 +23,12 @@ import java.util.List;
 
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.ProcurementCardHolder;
 import org.kuali.module.financial.bo.ProcurementCardSourceAccountingLine;
 import org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine;
@@ -217,7 +216,7 @@ public class ProcurementCardDocument extends AccountingDocumentBase implements A
     @Override
     public void doRouteStatusChange(DocumentRouteStatusChangeVO statusChangeEvent) throws Exception {
         if (EdenConstants.ROUTE_HEADER_ENROUTE_CD.equals(statusChangeEvent.getNewRouteStatus())) {
-            Document retrievedDocument = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(statusChangeEvent.getRouteHeaderId().toString());
+            Document retrievedDocument = SpringServiceLocator.getDocumentService().getByDocumentHeaderId(statusChangeEvent.getRouteHeaderId().toString());
             if (EdenConstants.ROUTE_HEADER_ENROUTE_CD.equals(retrievedDocument.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus()) && !EdenConstants.ROUTE_HEADER_ENROUTE_CD.equals(retrievedDocument.getDocumentHeader().getFinancialDocumentStatusCode())) {
                 throw new RuntimeException("KFS document status is out of sync with Workflow document status");
             }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@
 
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.gl.bo.AccountBalanceByConsolidation">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
             <title>Balances By Consolidation</title>
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
@@ -34,7 +34,7 @@
                 <field attributeName="accountLineActualsBalanceAmount" />
                 <field attributeName="accountLineEncumbranceBalanceAmount" />
                 <field attributeName="dummyBusinessObject.genericAmount" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
@@ -46,7 +46,7 @@
 
             <lookupFields>
                 <lookupField attributeName="universityFiscalYear" required="true">
-                    <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
+                    <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.FiscalYearFinder</defaultValueFinderClass>
                 </lookupField>
 
                 <lookupField attributeName="chartOfAccountsCode" required="true" />
@@ -146,13 +146,13 @@
                 <description>transactionEntryProcessed description...</description>
             </attributeReference>
 
-            <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="pendingEntryOption" />
+            <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" sourceAttributeName="pendingEntryOption" />
 
-            <attributeReference name="dummyBusinessObject.consolidationOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="consolidationOption">
+            <attributeReference name="dummyBusinessObject.consolidationOption" sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" sourceAttributeName="consolidationOption">
                 <description>Radioboxes that specify either Consolidation or Detail balances. If Detail is selected, balances are displayed by Chart, Account Number, Sub-Account Number, Object Code, and Sub-Object Code. If Consolidation is selected, amounts are aggregated by Chart, Account Number, and Object Code.</description>
             </attributeReference>
 
-            <attributeReference name="dummyBusinessObject.costShareOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="costShareOption">
+            <attributeReference name="dummyBusinessObject.costShareOption" sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" sourceAttributeName="costShareOption">
                 <description>Radioboxes that select including or excluding Cost Share Sub Accounts.</description>
             </attributeReference>
 
@@ -170,7 +170,7 @@
 
             <attributeReference name="financialObject.financialObjectLevel.financialConsolidationObject.finConsolidationObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCons" sourceAttributeName="finConsolidationObjectCode" />
 
-            <attributeReference name="dummyBusinessObject.linkButtonOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="linkButtonOption">
+            <attributeReference name="dummyBusinessObject.linkButtonOption" sourceClassName="org.kuali.module.gl.bo.DummyBusinessObject" sourceAttributeName="linkButtonOption">
                 <label>Lookup By Level</label>
                 <shortLabel>Lookup By Level</shortLabel>
                 <summary>Lookup By Level</summary>

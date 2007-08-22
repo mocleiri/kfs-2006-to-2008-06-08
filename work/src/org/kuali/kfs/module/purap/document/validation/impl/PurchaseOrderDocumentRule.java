@@ -16,11 +16,12 @@
 package org.kuali.module.purap.rules;
 
 import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
+import static org.kuali.kfs.KFSConstants.MONTH1;
+import static org.kuali.module.purap.PurapConstants.PO_DOC_TYPE_CODE;
 
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.RicePropertyConstants;
 import org.kuali.core.datadictionary.validation.fieldlevel.ZipcodeValidationPattern;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.util.ErrorMap;
@@ -32,25 +33,20 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapConstants.ItemTypeCodes;
-import org.kuali.module.purap.PurapConstants.PurapDocTypeCodes;
-import org.kuali.module.purap.PurapWorkflowConstants.PurchaseOrderDocument.NodeDetailEnum;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
-import org.kuali.module.purap.service.PurapGeneralLedgerService;
-import org.kuali.module.vendor.VendorPropertyConstants;
-import org.kuali.module.vendor.bo.VendorDetail;
-import org.kuali.module.vendor.service.PhoneNumberService;
-import org.kuali.module.vendor.service.VendorService;
+import org.kuali.workflow.KualiWorkflowUtils.RouteLevelNames;
 
 public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
 
@@ -75,7 +71,7 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
      */
     public boolean processAdditionalValidation(PurchasingDocument purDocument) {
         boolean valid = true;
-        //valid = validateTotalDollarAmountIsLessThanPurchaseOrderTotalLimit(purDocument);
+        valid = validateTotalDollarAmountIsLessThanPurchaseOrderTotalLimit(purDocument);
         return valid;
     }
 
@@ -88,6 +84,7 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
         for (PurchasingApItem item : purapDocument.getItems()) {
             String identifierString = (item.getItemType().isItemTypeAboveTheLineIndicator() ? "Item " + item.getItemLineNumber().toString() : item.getItemType().getItemTypeDescription());
             valid &= validateEmptyItemWithAccounts((PurchaseOrderItem) item, identifierString);
+            valid &= validateItemWithoutAccounts((PurchaseOrderItem) item, identifierString);
             valid &= validateItemUnitOfMeasure((PurchaseOrderItem) item, identifierString);
             if (purapDocument.getDocumentHeader().getWorkflowDocument() != null && purapDocument.getDocumentHeader().getWorkflowDocument().getDocumentType().equals(PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_AMENDMENT_DOCUMENT)) {
                 valid &= validateItemForAmendment((PurchaseOrderItem) item, identifierString);
@@ -102,11 +99,11 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
         if ((item.getItemInvoicedTotalQuantity() != null) && (!(item.getItemInvoicedTotalQuantity()).isZero())) {
             if (item.getItemQuantity() == null) {
                 valid = false;
-                GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY , PurapKeyConstants.ERROR_ITEM_AMND_NULL, "Item Quantity", identifierString);
+                GlobalVariables.getErrorMap().putError("newPurchasingItemLine" , PurapKeyConstants.ERROR_ITEM_AMND_NULL, "Item Quantity", identifierString);
             }
             else if (item.getItemQuantity().compareTo(item.getItemInvoicedTotalQuantity()) < 0) {
                 valid = false;
-                GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY , PurapKeyConstants.ERROR_ITEM_AMND_INVALID, "Item Quantity", identifierString);
+                GlobalVariables.getErrorMap().putError("newPurchasingItemLine" , PurapKeyConstants.ERROR_ITEM_AMND_INVALID, "Item Quantity", identifierString);
             }
         }
 
@@ -114,7 +111,7 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
             KualiDecimal total = item.getExtendedPrice();
             if ((total == null) || total.compareTo(item.getItemInvoicedTotalAmount()) < 0) {
                 valid = false;
-                GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY , PurapKeyConstants.ERROR_ITEM_AMND_INVALID_AMT, "Item Extended Price", identifierString);
+                GlobalVariables.getErrorMap().putError("newPurchasingItemLine" , PurapKeyConstants.ERROR_ITEM_AMND_INVALID_AMT, "Item Extended Price", identifierString);
             }
         }
         return valid;
@@ -130,7 +127,22 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
         boolean valid = true;
         if (item.getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE) && item.isItemDetailEmpty() && !item.isAccountListEmpty()) {
             valid = false;
-            GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_ACCOUNTING_NOT_ALLOWED, identifierString);
+            GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_ACCOUNTING_NOT_ALLOWED, identifierString);
+        }
+        return valid;
+    }
+
+    /**
+     * This method validates that the item must contain at least one account
+     * 
+     * @param item
+     * @return
+     */
+    boolean validateItemWithoutAccounts(PurchaseOrderItem item, String identifierString) {
+        boolean valid = true;
+        if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && (new KualiDecimal(item.getItemUnitPrice())).isNonZero() && item.isAccountListEmpty()) {
+            valid = false;
+            GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_ACCOUNTING_INCOMPLETE, identifierString);
         }
         return valid;
     }
@@ -145,7 +157,7 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
         boolean valid = true;
         if (item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_ITEM_CODE) && StringUtils.isEmpty(item.getItemUnitOfMeasureCode())) {
             valid = false;
-            GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_UNIT_OF_MEASURE_REQUIRED, identifierString);
+            GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_UNIT_OF_MEASURE_REQUIRED, identifierString);
         }
         return valid;
     }
@@ -164,14 +176,14 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
             if (item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE)) {
                 discountExists = true;
                 if (tradeInExists) {
-                    GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_TRADEIN_DISCOUNT_COEXISTENCE);
+                    GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_TRADEIN_DISCOUNT_COEXISTENCE);
                     return false;
                 }
             }
             else if (item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)) {
                 tradeInExists = true;
                 if (discountExists) {
-                    GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_TRADEIN_DISCOUNT_COEXISTENCE);
+                    GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_TRADEIN_DISCOUNT_COEXISTENCE);
                     return false;
                 }
             }
@@ -201,16 +213,8 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
     @Override
     public boolean processVendorValidation(PurchasingAccountsPayableDocument purapDocument) {
         ErrorMap errorMap = GlobalVariables.getErrorMap();
-        errorMap.clearErrorPath();
-        errorMap.addToErrorPath(RicePropertyConstants.DOCUMENT);
         boolean valid = super.processVendorValidation(purapDocument);
         PurchaseOrderDocument poDocument = (PurchaseOrderDocument) purapDocument;
-        // check to see if the vendor exists in the database, i.e. its ID is not null
-        Integer vendorHeaderID = poDocument.getVendorHeaderGeneratedIdentifier();
-        if (ObjectUtils.isNull(vendorHeaderID)) {
-            valid = false;
-            errorMap.putError(VendorPropertyConstants.VENDOR_NAME, PurapKeyConstants.ERROR_NONEXIST_VENDOR);
-        }
         if (StringUtils.isBlank(poDocument.getVendorCountryCode())) {
             // TODO can't this be done by the data dictionary?
             valid = false;
@@ -231,7 +235,6 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
                 errorMap.putError(PurapPropertyConstants.VENDOR_POSTAL_CODE, PurapKeyConstants.ERROR_POSTAL_CODE_INVALID);
             }
         }
-        errorMap.clearErrorPath();
         return valid;
     }
 
@@ -246,15 +249,12 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
      */
     private boolean validateFaxNumberIfTransmissionTypeIsFax(PurchasingDocument purDocument) {
         boolean valid = true;
-        GlobalVariables.getErrorMap().clearErrorPath();
-        GlobalVariables.getErrorMap().addToErrorPath(RicePropertyConstants.DOCUMENT);
         if (ObjectUtils.isNotNull(purDocument.getVendorHeaderGeneratedIdentifier()) && purDocument.getPurchaseOrderTransmissionMethodCode().equals(PurapConstants.POTransmissionMethods.FAX)) {
-            if (ObjectUtils.isNull(purDocument.getVendorFaxNumber()) || !SpringContext.getBean(PhoneNumberService.class).isValidPhoneNumber(purDocument.getVendorFaxNumber())) {
-                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.VENDOR_FAX_NUMBER, PurapKeyConstants.ERROR_FAX_NUMBER_PO_TRANSMISSION_TYPE);
+            if (ObjectUtils.isNull(purDocument.getVendorFaxNumber()) || !SpringServiceLocator.getPhoneNumberService().isValidPhoneNumber(purDocument.getVendorFaxNumber())) {
+                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.REQUISITION_VENDOR_FAX_NUMBER, PurapKeyConstants.ERROR_FAX_NUMBER_PO_TRANSMISSION_TYPE);
                 valid &= false;
             }
         }
-        GlobalVariables.getErrorMap().clearErrorPath();
         return valid;
     }
 
@@ -270,7 +270,7 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
             KualiDecimal totalAmount = ((AmountTotaling) purDocument).getTotalDollarAmount();
             if (((AmountTotaling) purDocument).getTotalDollarAmount().isGreaterThan(purDocument.getPurchaseOrderTotalLimit())) {
                 valid &= false;
-                GlobalVariables.getMessageList().add(PurapKeyConstants.PO_TOTAL_GREATER_THAN_PO_TOTAL_LIMIT);
+                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_TOTAL_LIMIT, PurapKeyConstants.REQ_TOTAL_GREATER_THAN_PO_TOTAL_LIMIT);
             }
         }
         return valid;
@@ -281,11 +281,11 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
         KualiWorkflowDocument workflowDocument = financialDocument.getDocumentHeader().getWorkflowDocument();
         List currentRouteLevels = getCurrentRouteLevels(workflowDocument);
 
-        if (((PurchaseOrderDocument)financialDocument).isDocumentStoppedInRouteNode(NodeDetailEnum.INTERNAL_PURCHASING_REVIEW)) {
-//        if (currentRouteLevels.contains(PurapWorkflowConstants.PurchaseOrderDocument.NodeDetailEnum.INTERNAL_PURCHASING_REVIEW.getName()) && workflowDocument.isApprovalRequested()) {
+        if (currentRouteLevels.contains(RouteLevelNames.PURCHASE_ORDER_INTERNAL_REVIEW) && workflowDocument.isApprovalRequested()) {
             // DO NOTHING: do not check that user owns acct lines; at this level, approvers can edit all detail on PO
             return true;
         }
+        
         else {
             return super.checkAccountingLineAccountAccessibility(financialDocument, accountingLine, action);
         }
@@ -296,10 +296,23 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
         super.customizeExplicitGeneralLedgerPendingEntry(accountingDocument, accountingLine, explicitEntry);
         PurchaseOrderDocument po = (PurchaseOrderDocument)accountingDocument;
 
-        SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(po, 
-                accountingLine, explicitEntry, po.getPurapDocumentIdentifier(), GL_DEBIT_CODE, PurapDocTypeCodes.PO_DOCUMENT, true);
-
-        explicitEntry.setFinancialDocumentTypeCode(PurapDocTypeCodes.PO_DOCUMENT);  //don't think i should have to override this, but default isn't getting the right PO doc
+        purapCustomizeGeneralLedgerPendingEntry(po, accountingLine, explicitEntry, po.getPurapDocumentIdentifier(), GL_DEBIT_CODE, true);
+        
+        explicitEntry.setTransactionLedgerEntryDescription(entryDescription(po.getVendorName()));
+        explicitEntry.setFinancialDocumentTypeCode(PO_DOC_TYPE_CODE);  //don't think i should have to override this, but default isn't getting the right PO doc
+        
+        UniversityDate uDate = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
+        if (po.getPostingYear().compareTo(uDate.getUniversityFiscalYear()) > 0) {
+            //USE NEXT AS SET ON PO; POs can be forward dated to not encumber until next fiscal year
+            explicitEntry.setUniversityFiscalYear(po.getPostingYear());
+            explicitEntry.setUniversityFiscalPeriodCode(MONTH1);
+        }
+        else {
+            //USE CURRENT; don't use FY on PO in case it's a prior year
+            explicitEntry.setUniversityFiscalYear(uDate.getUniversityFiscalYear());
+            explicitEntry.setUniversityFiscalPeriodCode(uDate.getUniversityFiscalAccountingPeriod());
+            //TODO do we need to update the doc posting year?
+        }
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,63 +15,60 @@
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.Constants.BALANCE_TYPE_PRE_ENCUMBRANCE;
+import static org.kuali.PropertyConstants.REFERENCE_NUMBER;
+import static org.kuali.PropertyConstants.REVERSAL_DATE;
 import static org.kuali.core.util.AssertionUtils.assertThat;
-import static org.kuali.kfs.KFSConstants.BALANCE_TYPE_PRE_ENCUMBRANCE;
-import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.REVERSAL_DATE;
-import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
 import static org.kuali.module.financial.rules.PreEncumbranceDocumentRuleConstants.PRE_ENCUMBRANCE_DOCUMENT_SECURITY_GROUPING;
 import static org.kuali.module.financial.rules.PreEncumbranceDocumentRuleConstants.RESTRICTED_OBJECT_TYPE_CODES;
+import static org.kuali.module.financial.rules.TransactionalDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.KualiParameterRule;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
-import org.kuali.kfs.rules.AttributeReference;
-import org.kuali.kfs.service.HomeOriginationService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.PreEncumbranceDocument;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 
 /**
  * Business rule(s) applicable to PreEncumbrance documents.
+ * 
+ * 
  */
-public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
+public class PreEncumbranceDocumentRule extends TransactionalDocumentRuleBase {
 
     /**
-     * @see FinancialDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see TransactionalDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean processCustomAddAccountingLineBusinessRules(AccountingDocument financialDocument, AccountingLine accountingLine) {
+    public boolean processCustomAddAccountingLineBusinessRules(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         return isRequiredReferenceFieldsValid(accountingLine);
     }
 
     /**
-     * @see FinancialDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see TransactionalDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.core.bo.AccountingLine)
      */
     @Override
-    protected boolean processCustomUpdateAccountingLineBusinessRules(AccountingDocument financialDocument, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
+    protected boolean processCustomUpdateAccountingLineBusinessRules(TransactionalDocument transactionalDocument, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
         return isRequiredReferenceFieldsValid(updatedAccountingLine);
     }
 
     /**
-     * @see FinancialDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
+     * @see TransactionalDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
     @Override
-    protected boolean processCustomReviewAccountingLineBusinessRules(AccountingDocument financialDocument, AccountingLine accountingLine) {
+    protected boolean processCustomReviewAccountingLineBusinessRules(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         return isRequiredReferenceFieldsValid(accountingLine);
     }
 
@@ -88,7 +85,7 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
         boolean valid = true;
 
         if (accountingLine.isTargetAccountingLine()) {
-            BusinessObjectEntry boe = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getBusinessObjectEntry(TargetAccountingLine.class.getName());
+            BusinessObjectEntry boe = SpringServiceLocator.getDataDictionaryService().getDataDictionary().getBusinessObjectEntry(TargetAccountingLine.class);
             if (StringUtils.isEmpty(accountingLine.getReferenceNumber())) {
                 putRequiredPropertyError(boe, REFERENCE_NUMBER);
                 valid = false;
@@ -98,7 +95,7 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * @see FinancialDocumentRuleBase#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
+     * @see TransactionalDocumentRuleBase#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
      */
     @Override
     public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
@@ -139,20 +136,20 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
      */
     private boolean isReversalDateValidForRouting(PreEncumbranceDocument preEncumbranceDocument) {
         java.sql.Date reversalDate = preEncumbranceDocument.getReversalDate();
-        return AccountingDocumentRuleUtil.isValidReversalDate(reversalDate, DOCUMENT_ERROR_PREFIX + REVERSAL_DATE);
+        return TransactionalDocumentRuleUtil.isValidReversalDate(reversalDate, DOCUMENT_ERROR_PREFIX + REVERSAL_DATE);
     }
 
     /**
      * PreEncumbrance documents require at least one accounting line in either section for routing.
      * 
-     * @param financialDocument
+     * @param transactionalDocument
      * 
      * @return boolean True if the number of accounting lines are valid for routing, false otherwise.
      */
     @Override
-    protected boolean isAccountingLinesRequiredNumberForRoutingMet(AccountingDocument financialDocument) {
-        if (0 == financialDocument.getSourceAccountingLines().size() && 0 == financialDocument.getTargetAccountingLines().size()) {
-            GlobalVariables.getErrorMap().putError(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_NO_ACCOUNTING_LINES);
+    protected boolean isAccountingLinesRequiredNumberForRoutingMet(TransactionalDocument transactionalDocument) {
+        if (0 == transactionalDocument.getSourceAccountingLines().size() && 0 == transactionalDocument.getTargetAccountingLines().size()) {
+            GlobalVariables.getErrorMap().putError(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_DOCUMENT_NO_ACCOUNTING_LINES);
             return false;
         }
         else {
@@ -163,54 +160,67 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
     /**
      * PreEncumbrance documents don't need to balance in any way.
      * 
-     * @see FinancialDocumentRuleBase#isDocumentBalanceValid(org.kuali.core.document.FinancialDocument)
+     * @see TransactionalDocumentRuleBase#isDocumentBalanceValid(org.kuali.core.document.TransactionalDocument)
      */
     @Override
-    protected boolean isDocumentBalanceValid(AccountingDocument financialDocument) {
+    protected boolean isDocumentBalanceValid(TransactionalDocument transactionalDocument) {
         return true;
     }
 
     /**
      * This method contains Pre Encumbrance document specific GLPE explicit entry attribute assignments.
      * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
-    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument financialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+    @Override
+    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
         explicitEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_PRE_ENCUMBRANCE);
 
         // set the reversal date to what was chosen by the user in the interface
-        PreEncumbranceDocument peDoc = (PreEncumbranceDocument) financialDocument;
+        PreEncumbranceDocument peDoc = (PreEncumbranceDocument) transactionalDocument;
         if (peDoc.getReversalDate() != null) {
             explicitEntry.setFinancialDocumentReversalDate(peDoc.getReversalDate());
         }
         explicitEntry.setTransactionEntryProcessedTs(null);
         if (accountingLine.isSourceAccountingLine()) {
-            explicitEntry.setTransactionEncumbranceUpdateCode(KFSConstants.ENCUMB_UPDT_DOCUMENT_CD);
+            explicitEntry.setTransactionEncumbranceUpdateCode(Constants.ENCUMB_UPDT_DOCUMENT_CD);
         }
         else {
             assertThat(accountingLine.isTargetAccountingLine(), accountingLine);
-            explicitEntry.setTransactionEncumbranceUpdateCode(KFSConstants.ENCUMB_UPDT_REFERENCE_DOCUMENT_CD);
-            explicitEntry.setReferenceFinancialSystemOriginationCode(SpringContext.getBean(HomeOriginationService.class).getHomeOrigination().getFinSystemHomeOriginationCode());
+            explicitEntry.setTransactionEncumbranceUpdateCode(Constants.ENCUMB_UPDT_REFERENCE_DOCUMENT_CD);
+            explicitEntry.setReferenceFinancialSystemOriginationCode(SpringServiceLocator.getHomeOriginationService().getHomeOrigination().getFinSystemHomeOriginationCode());
             explicitEntry.setReferenceFinancialDocumentNumber(accountingLine.getReferenceNumber());
             explicitEntry.setReferenceFinancialDocumentTypeCode(explicitEntry.getFinancialDocumentTypeCode()); // "PE"
         }
     }
 
     /**
+     * This method contains Pre Encumbrance document specific GLPE offset entry attribute assignments.
+     * 
+     * @see TransactionalDocumentRuleBase#customizeOffsetGeneralLedgerPendingEntry(TransactionalDocument, AccountingLine,
+     *      GeneralLedgerPendingEntry, GeneralLedgerPendingEntry)
+     */
+    @Override
+    protected boolean customizeOffsetGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+        offsetEntry.setFinancialObjectTypeCode(explicitEntry.getFinancialObjectTypeCode());
+        return true;
+    }
+
+    /**
      * limits only to expense object type codes
      * 
-     * @see IsDebitUtils#isDebitConsideringSection(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringSection(TransactionalDocumentRuleBase, TransactionalDocument, AccountingLine)
      * 
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
-    public boolean isDebit(AccountingDocument financialDocument, AccountingLine accountingLine) {
+    public boolean isDebit(TransactionalDocument transactionalDocument, AccountingLine accountingLine) {
         // if not expense, or positive amount on an error-correction, or negative amount on a non-error-correction, throw exception
-        if (!isExpense(accountingLine) || (isErrorCorrection(financialDocument) == accountingLine.getAmount().isPositive())) {
+        if (!isExpense(accountingLine) || (isErrorCorrection(transactionalDocument) == accountingLine.getAmount().isPositive())) {
             throw new IllegalStateException(IsDebitUtils.isDebitCalculationIllegalStateExceptionMessage);
         }
 
-        return !IsDebitUtils.isDebitConsideringSection(this, financialDocument, accountingLine);
+        return !IsDebitUtils.isDebitConsideringSection(this, transactionalDocument, accountingLine);
     }
 }
