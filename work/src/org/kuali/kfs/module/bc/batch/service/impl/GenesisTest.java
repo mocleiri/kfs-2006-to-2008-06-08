@@ -16,28 +16,36 @@
 package org.kuali.module.budget.service.impl;
 
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
-import javax.xml.namespace.QName;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.kuali.core.UserSession;
-import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.budget.service.GenesisService;
-import org.kuali.module.chart.service.DateMakerService;
-import org.kuali.rice.resourceloader.SpringResourceLoader;
+import org.kuali.kfs.KFSConstants.*;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.kfs.util.SpringServiceLocator.*;
+import org.kuali.module.budget.service.*;
+import org.kuali.core.service.*;
+import org.kuali.core.*;
+import org.kuali.core.util.*;
+import org.kuali.core.bo.user.*;
+import org.kuali.module.budget.dao.*;
+import org.kuali.module.budget.dao.ojb.*;
 
+import java.lang.reflect.*;
+
+// import these things to handle the configuration
+import org.kuali.core.service.KualiConfigurationService;
+import org.springframework.beans.factory.BeanFactory;
+//  handle workflow
 import edu.iu.uis.eden.exception.WorkflowException;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.workflow.*;
+//this is just for the logger, and could be taken out
+import org.apache.log4j.*;
+import java.util.ResourceBundle;
 
 public class GenesisTest {
     
   private static GenesisService            genesisTestService;
+  private static GenesisDao                genesisDao;
   private static Logger                    LOG;
   private static DateTimeService           dateTimeService;
   private static DateMakerService          dateMakerTestService;
@@ -47,33 +55,21 @@ public class GenesisTest {
   {
       //    this supposedly configures a logger that everybody can fetch and use
       PropertyConfigurator.configure(ResourceBundle.getBundle(
-              "configuration").getString(KFSConstants.LOG4J_SETTINGS_FILE_KEY));
-     //  get one for this routine
+        KFSConstants.CONFIGURATION_FILE_NAME).getString(KFSConstants.LOG4J_SETTINGS_FILE_KEY));
+  //  get one for this routine
       LOG = org.apache.log4j.Logger.getLogger(GenesisTest.class);
      
-      // does this initialize the spring context?
-     QName dummyQName = null; 
-     SpringResourceLoader springResourceLoader =
-         new SpringResourceLoader(dummyQName, "SpringBeans.xml");
-     try
-     {
-     springResourceLoader.start();
-     }
-     catch (Exception ex)
-     {
-        ex.printStackTrace();      
-     };
   //    this supposedly configures spring/ojb
-  //   SpringContext.initializeDDGeneratorApplicationContext();
-  //   configService = 
-  //          SpringContext.getBean(KualiConfigurationService.class);
-  //  (07/06/07) try using the new look-up bean
-  //   GlobalResourceLoader.getService("initializeDDGeneratorApplicationContext");
-     genesisTestService = SpringContext.getBean(GenesisService.class);
+     SpringServiceLocator.initializeDDGeneratorApplicationContext();
+     configService = 
+            SpringServiceLocator.getKualiConfigurationService();
+     genesisDao = (GenesisDao) SpringServiceLocator.getInstance().getApplicationContext().getBean("genesisDao");
+  //    
+     genesisTestService = SpringServiceLocator.getGenesisService();
      dateMakerTestService = 
-          SpringContext.getBean(DateMakerService.class);
+          SpringServiceLocator.getDateMakerService();
       dateTimeService =
-          SpringContext.getBean(DateTimeService.class);
+          SpringServiceLocator.getDateTimeService();
   //
       GlobalVariables.clear();
       try
@@ -108,12 +104,12 @@ public class GenesisTest {
       //
       //
       // update current positions
-        genesisTestService.testPositionBuild(2011);
-// 7/6/07      LOG.warn("\nstarting fiscalYearMakers\n");
-// 7/6/07      dateMakerTestService.fiscalYearMakers(2013,false);
+//        genesisTestService.testPositionBuild(2011);
+      LOG.warn("\nstarting fiscalYearMakers\n");
+      dateMakerTestService.fiscalYearMakers(2012,false);
         //dateMakerTestService.fiscalYearMakers(2009,false);
         //dateMakerTestService.testRoutine(); 
-// 7/6/07      LOG.warn("\nfiscalYearMakers finished\n");
+      LOG.warn("\nfiscalYearMakers finished\n");
       // create the proxy BC headers
       /*
  //     genesisTestService.clearDBForGenesis(2009);
@@ -128,7 +124,7 @@ public class GenesisTest {
      //  genesisTestService.testHierarchyCreation(2009);
      // test the changes we made to the organization service for the root organization
      //   String[] roots = 
-     //       SpringContext.getBean(OrganizationService.class).getRootOrganizationCode();
+     //       SpringServiceLocator.getOrganizationService().getRootOrganizationCode();
      //   LOG.info(String.format("\nroot chart: %s, root organization: %s", roots[0], roots[1]));
   //
   //    genesisTestService.testStep(2007);

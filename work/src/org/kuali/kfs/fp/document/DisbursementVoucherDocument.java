@@ -24,24 +24,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.rules.RulesUtils;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
@@ -55,7 +51,6 @@ import org.kuali.module.financial.bo.Payee;
 import org.kuali.module.financial.lookup.keyvalues.DisbursementVoucherDocumentationLocationValuesFinder;
 import org.kuali.module.financial.lookup.keyvalues.PaymentMethodValuesFinder;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
-import org.kuali.module.financial.service.DisbursementVoucherTaxService;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -63,7 +58,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 /**
  * This is the business object that represents the DisbursementVoucher document in Kuali.
  */
-public class DisbursementVoucherDocument extends AccountingDocumentBase implements Copyable, AmountTotaling {
+public class DisbursementVoucherDocument extends AccountingDocumentBase implements Copyable {
     private Integer finDocNextRegistrantLineNbr;
     private String disbVchrContactPersonName;
     private String disbVchrContactPhoneNumber;
@@ -110,20 +105,20 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
 
     
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getPendingLedgerEntriesForSufficientFundsChecking()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getPendingLedgerEntriesForSufficientFundsChecking()
      */
     @Override
     public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
         List<GeneralLedgerPendingEntry> ples = new ArrayList();
         
-        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        FlexibleOffsetAccountService flexibleOffsetAccountService = SpringContext.getBean(FlexibleOffsetAccountService.class);
+        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
+        FlexibleOffsetAccountService flexibleOffsetAccountService = SpringServiceLocator.getFlexibleOffsetAccountService();
         
         for (GeneralLedgerPendingEntry ple : this.getGeneralLedgerPendingEntries()) {
             if (kualiConfigurationService.getApplicationParameterRule("SYSTEM", "SufficientFundsExpenseObjectTypes").succeedsRule(ple.getFinancialObjectTypeCode())) {
                 //is an expense object type, keep checking
                 ple.refreshNonUpdateableReferences();
-                if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(KFSConstants.SF_TYPE_CASH_AT_ACCOUNT)) {
+                if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(Constants.SF_TYPE_CASH_AT_ACCOUNT)) {
                     //is a cash account
                     if (flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinancialCashObjectCode()) == null
                             && flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinAccountsPayableObjectCode()) == null) {
@@ -131,7 +126,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
                         
                         ple = (GeneralLedgerPendingEntry)ObjectUtils.deepCopy(ple);
                         ple.setFinancialObjectCode(ple.getChart().getFinancialCashObjectCode());
-                        ple.setTransactionDebitCreditCode(ple.getTransactionDebitCreditCode().equals(KFSConstants.GL_DEBIT_CODE) ? KFSConstants.GL_CREDIT_CODE : KFSConstants.GL_DEBIT_CODE);
+                        ple.setTransactionDebitCreditCode(ple.getTransactionDebitCreditCode().equals(Constants.GL_DEBIT_CODE) ? Constants.GL_CREDIT_CODE : Constants.GL_DEBIT_CODE);
                         ples.add(ple);
                     }
                     
@@ -769,10 +764,6 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
      */
     @Override
     public void prepareForSave() {
-        if (this instanceof AmountTotaling) {
-            getDocumentHeader().setFinancialDocumentTotalAmount(((AmountTotaling) this).getTotalDollarAmount());
-        }
-        
         if (dvWireTransfer != null) {
             dvWireTransfer.setDocumentNumber(this.documentNumber);
         }
@@ -800,30 +791,30 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
      */
     private void cleanDocumentData() {
         if (!DisbursementVoucherRuleConstants.PAYMENT_METHOD_WIRE.equals(this.getDisbVchrPaymentMethodCode()) && !DisbursementVoucherRuleConstants.PAYMENT_METHOD_DRAFT.equals(this.getDisbVchrPaymentMethodCode())) {
-            SpringContext.getBean(BusinessObjectService.class).delete(dvWireTransfer);
+            SpringServiceLocator.getBusinessObjectService().delete(dvWireTransfer);
             dvWireTransfer = null;
         }
 
         if (!dvPayeeDetail.isDisbVchrAlienPaymentCode()) {
-            SpringContext.getBean(BusinessObjectService.class).delete(dvNonResidentAlienTax);
+            SpringServiceLocator.getBusinessObjectService().delete(dvNonResidentAlienTax);
             dvNonResidentAlienTax = null;
         }
 
-        String[] travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+        String[] travelNonEmplPaymentReasonCodes = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
         if (!RulesUtils.makeSet(travelNonEmplPaymentReasonCodes).contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
-            SpringContext.getBean(BusinessObjectService.class).delete(dvNonEmployeeTravel);
+            SpringServiceLocator.getBusinessObjectService().delete(dvNonEmployeeTravel);
             dvNonEmployeeTravel = null;
         }
 
-        String[] travelPrepaidPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
+        String[] travelPrepaidPaymentReasonCodes = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
         if (!RulesUtils.makeSet(travelPrepaidPaymentReasonCodes).contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
-            SpringContext.getBean(BusinessObjectService.class).delete(dvPreConferenceDetail);
+            SpringServiceLocator.getBusinessObjectService().delete(dvPreConferenceDetail);
             dvPreConferenceDetail = null;
         }
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#toCopy()
+     * @see org.kuali.core.document.TransactionalDocumentBase#convertIntoCopy()
      */
     @Override
     public void toCopy() throws WorkflowException {
@@ -844,7 +835,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         setDisbVchrPayeeTaxControlCode("");
 
         // clear nra
-        SpringContext.getBean(DisbursementVoucherTaxService.class).clearNRATaxLines(this);
+        SpringServiceLocator.getDisbursementVoucherTaxService().clearNRATaxLines(this);
         setDvNonResidentAlienTax(new DisbursementVoucherNonResidentAlienTax());
 
         // clear waive wire
@@ -854,11 +845,11 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         if (getDvPayeeDetail().isPayee() && !StringUtils.isBlank(getDvPayeeDetail().getDisbVchrPayeeIdNumber())) {
             Payee payee = new Payee();
             payee.setPayeeIdNumber(getDvPayeeDetail().getDisbVchrPayeeIdNumber());
-            Map keys = SpringContext.getBean(PersistenceService.class).getPrimaryKeyFieldValues(payee);
-            payee = (Payee) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(Payee.class, keys);
+            Map keys = SpringServiceLocator.getPersistenceService().getPrimaryKeyFieldValues(payee);
+            payee = (Payee) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(Payee.class, keys);
             if (payee == null) {
                 getDvPayeeDetail().setDisbVchrPayeeIdNumber("");
-                GlobalVariables.getMessageList().add(KFSKeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
+                GlobalVariables.getMessageList().add(KeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
             }
             else {
                 templatePayee(payee);
@@ -869,10 +860,10 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         if (getDvPayeeDetail().isEmployee() && !StringUtils.isBlank(getDvPayeeDetail().getDisbVchrPayeeIdNumber())) {
             UniversalUser employee = new UniversalUser();
             employee.setPersonUniversalIdentifier(getDvPayeeDetail().getDisbVchrPayeeIdNumber());
-            employee = (UniversalUser) SpringContext.getBean(BusinessObjectService.class).retrieve(employee);
+            employee = (UniversalUser) SpringServiceLocator.getBusinessObjectService().retrieve(employee);
             if (employee == null) {
                 getDvPayeeDetail().setDisbVchrPayeeIdNumber("");
-                GlobalVariables.getMessageList().add(KFSKeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
+                GlobalVariables.getMessageList().add(KeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
             }
             else {
                 templateEmployee(employee);
@@ -891,13 +882,13 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         setCampusCode(((ChartUser)currentUser.getModuleUser( ChartUser.MODULE_ID )).getOrganization().getOrganizationPhysicalCampusCode());
 
         // due date
-        Calendar calendar = SpringContext.getBean(DateTimeService.class).getCurrentCalendar();
+        Calendar calendar = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         setDisbursementVoucherDueDate(new Date(calendar.getTimeInMillis()));
 
         // default doc location
         if (StringUtils.isBlank(getDisbursementVoucherDocumentationLocationCode())) {
-            setDisbursementVoucherDocumentationLocationCode(SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.DEFAULT_DOC_LOCATION_PARM_NM));
+            setDisbursementVoucherDocumentationLocationCode(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.DEFAULT_DOC_LOCATION_PARM_NM));
         }
     }
 
@@ -921,21 +912,10 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
         return new BasicFormatWithLineDescriptionAccountingLineParser();
-    }
-    
-    /**
-     * Returns check total.
-     * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTotalDollarAmount()
-     * @return KualiDecimal
-     */
-    @Override
-    public KualiDecimal getTotalDollarAmount() {
-        return this.getDisbVchrCheckTotalAmount();
     }
 }
