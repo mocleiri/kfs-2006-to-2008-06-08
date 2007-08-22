@@ -57,7 +57,7 @@
             <title>Object Code Lookup</title>
 
             <menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCodeGlobal"><img src="${kr.externalizable.images.url}tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCodeChangeDocument"><img src="images/tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
             </menubar>
 
             <instructions>Lookup an Object Code</instructions>
@@ -123,9 +123,11 @@
 
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
+                <!-- 
                 <control>
-				    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" script="if ( typeof setReportsToChartCode == 'function' ) { setReportsToChartCode(); }" /> 
+				    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartCode();" /> 
                 </control>
+                -->
             </attributeReference>
 
             <attribute name="financialObjectCode" forceUppercase="true">
@@ -216,10 +218,11 @@
                 <validationPattern>
                     <alpha exactLength="2" />
                 </validationPattern>
-                <required>true</required>
+                <required>false</required>
                 <control>
-					<text size="2" />
-				</control>
+				    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" /> 
+                </control>
+                
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>

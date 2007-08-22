@@ -18,7 +18,7 @@
 <beans>
 	<bean id="kraModule" class="org.kuali.core.KualiModule">
 		<property name="moduleId" value="kra" />
-		<property name="moduleName" value="Research Administration" />
+		<property name="moduleName" value="Kuali Research Administration" />
 		<property name="moduleCode" value="RA" />
 		<property name="moduleUserService" ref="kraUserService" />
 		<property name="initializeDataDictionary" value="true" />
@@ -57,6 +57,11 @@
 	
 	<bean id="kraUserDao" class="org.kuali.module.kra.budget.dao.ojb.KraUserDaoOjb">
 		<property name="configService" ref="kualiConfigurationService" />
+	</bean>
+
+	<!-- The following is temporary, only until SH_UNIV_DATE_T is corrected in the databse -->
+
+	<bean id="dateTimeService" class="org.kuali.core.service.impl.DateTimeServiceImpl">
 	</bean>
 
 	<bean id="budgetService" class="org.kuali.module.kra.budget.service.impl.BudgetServiceImpl">
@@ -220,12 +225,5 @@
 			<ref bean="businessObjectService" />
 		</property>
 	</bean>
-	
-	<!-- Workflow Lookupables-->
-	
-	<bean id="workflow-org.kuali.module.kra.routingform.bo.ResearchRiskType-Lookupable" parent="workflowLookupable" singleton="false">
-        <property name="businessObjectClassName">
-            <value>org.kuali.module.kra.routingform.bo.ResearchRiskType</value>
-        </property>
-    </bean>
+
 </beans>
