@@ -15,37 +15,38 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.kfs.KFSConstants.ACCOUNTING_LINE_ERRORS;
-import static org.kuali.kfs.KFSConstants.ACCOUNTING_PERIOD_STATUS_CLOSED;
-import static org.kuali.kfs.KFSConstants.ACCOUNTING_PERIOD_STATUS_CODE_FIELD;
-import static org.kuali.kfs.KFSConstants.AUXILIARY_LINE_HELPER_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.CREDIT_AMOUNT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.DEBIT_AMOUNT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.DOCUMENT_ERRORS;
-import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
-import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
-import static org.kuali.kfs.KFSConstants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.SQUARE_BRACKET_LEFT;
-import static org.kuali.kfs.KFSConstants.SQUARE_BRACKET_RIGHT;
-import static org.kuali.kfs.KFSConstants.VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_ACCOUNTING_PERIOD_CLOSED;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_AV_INCORRECT_FISCAL_YEAR_AVRC;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_AV_INCORRECT_POST_PERIOD_AVRC;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_BALANCE;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_BALANCE_CONSIDERING_CREDIT_AND_DEBIT_AMOUNTS;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_INCORRECT_OBJ_CODE_WITH_SUB_TYPE_OBJ_LEVEL_AND_OBJ_TYPE;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_ZERO_OR_NEGATIVE_AMOUNT;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_ACCOUNTING_PERIOD_OUT_OF_RANGE;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_DIFFERENT_CHARTS;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_DIFFERENT_SUB_FUND_GROUPS;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_DOCUMENT_AUXILIARY_VOUCHER_INVALID_OBJECT_SUB_TYPE_CODE;
-import static org.kuali.kfs.KFSKeyConstants.AuxiliaryVoucher.ERROR_INVALID_ACCRUAL_REVERSAL_DATE;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.REVERSAL_DATE;
+import static org.kuali.Constants.ACCOUNTING_LINE_ERRORS;
+import static org.kuali.Constants.ACCOUNTING_PERIOD_STATUS_CLOSED;
+import static org.kuali.Constants.ACCOUNTING_PERIOD_STATUS_CODE_FIELD;
+import static org.kuali.Constants.AUXILIARY_LINE_HELPER_PROPERTY_NAME;
+import static org.kuali.Constants.CREDIT_AMOUNT_PROPERTY_NAME;
+import static org.kuali.Constants.DEBIT_AMOUNT_PROPERTY_NAME;
+import static org.kuali.Constants.DOCUMENT_ERRORS;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
+import static org.kuali.Constants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME;
+import static org.kuali.Constants.SQUARE_BRACKET_LEFT;
+import static org.kuali.Constants.SQUARE_BRACKET_RIGHT;
+import static org.kuali.Constants.VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME;
+import static org.kuali.Constants.VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_ACCOUNTING_PERIOD_CLOSED;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_ACCOUNTING_PERIOD_THREE_OPEN;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_AV_INCORRECT_FISCAL_YEAR_AVRC;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_AV_INCORRECT_POST_PERIOD_AVRC;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_BALANCE;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_BALANCE_CONSIDERING_CREDIT_AND_DEBIT_AMOUNTS;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_INCORRECT_OBJ_CODE_WITH_SUB_TYPE_OBJ_LEVEL_AND_OBJ_TYPE;
+import static org.kuali.KeyConstants.ERROR_ZERO_OR_NEGATIVE_AMOUNT;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_ACCOUNTING_PERIOD_OUT_OF_RANGE;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_DIFFERENT_CHARTS;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_DIFFERENT_SUB_FUND_GROUPS;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_DOCUMENT_AUXILIARY_VOUCHER_INVALID_OBJECT_SUB_TYPE_CODE;
+import static org.kuali.KeyConstants.AuxiliaryVoucher.ERROR_INVALID_ACCRUAL_REVERSAL_DATE;
+import static org.kuali.PropertyConstants.FINANCIAL_OBJECT_CODE;
+import static org.kuali.PropertyConstants.REVERSAL_DATE;
 import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
-import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD;
+import static org.kuali.kfs.util.SpringServiceLocator.getAccountingPeriodService;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.AUXILIARY_VOUCHER_SECURITY_GROUPING;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.RESTRICTED_COMBINED_CODES;
@@ -59,31 +60,24 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.service.DocumentTypeService;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.chart.service.AccountingPeriodService;
 import org.kuali.module.financial.document.AuxiliaryVoucherDocument;
 import org.kuali.module.financial.document.DistributionOfIncomeAndExpenseDocument;
-import org.kuali.module.financial.service.UniversityDateService;
-import org.kuali.module.gl.service.SufficientFundsService;
 
 /**
  * Business rule(s) applicable to <code>{@link AuxiliaryVoucherDocument}</code>.
@@ -141,7 +135,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     @Override
     protected boolean isSourceAccountingLinesRequiredNumberForRoutingMet(AccountingDocument FinancialDocument) {
         if (0 == FinancialDocument.getSourceAccountingLines().size()) {
-            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, KFSKeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES);
+            GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + PropertyConstants.SOURCE_ACCOUNTING_LINES, KeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES);
             return false;
         }
         else {
@@ -306,7 +300,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         // since these offsets are
         // specific to Distrib. of Income and Expense documents - we need to do a deep copy though so we don't do this by reference
         GeneralLedgerPendingEntry explicitEntryDeepCopy = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(explicitEntry);
-        explicitEntryDeepCopy.setFinancialDocumentTypeCode(SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(DistributionOfIncomeAndExpenseDocument.class));
+        explicitEntryDeepCopy.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(DistributionOfIncomeAndExpenseDocument.class));
 
         // call the super to process an offset entry; see the customize method below for AVRC specific attribute values
         // pass in the explicit deep copy
@@ -386,13 +380,13 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
 
         // set the document type to that of a Distrib. Of Income and Expense if it's a recode
         if (auxDoc.isRecodeType()) {
-            offsetEntry.setFinancialDocumentTypeCode(SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(DistributionOfIncomeAndExpenseDocument.class));
+            offsetEntry.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(DistributionOfIncomeAndExpenseDocument.class));
         }
 
         // now set the offset entry to the specific offset object code for the AV generated offset fund balance; only if it's an
         // accrual or adjustment
         if (auxDoc.isAccrualType() || auxDoc.isAdjustmentType()) {
-            String glpeOffsetObjectCode = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(getDefaultSecurityGrouping(), getGeneralLedgerPendingEntryOffsetObjectCode());
+            String glpeOffsetObjectCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(getDefaultSecurityGrouping(), getGeneralLedgerPendingEntryOffsetObjectCode());
             offsetEntry.setFinancialObjectCode(glpeOffsetObjectCode);
         }
 
@@ -407,7 +401,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         offsetEntry.setTransactionEntryOffsetIndicator(false);
 
         offsetEntry.refresh(); // may have changed foreign keys here; need accurate object code and account BOs at least
-        offsetEntry.setAcctSufficientFundsFinObjCd(SpringContext.getBean(SufficientFundsService.class).getSufficientFundsObjectCode(offsetEntry.getFinancialObject(), offsetEntry.getAccount().getAccountSufficientFundsCode()));
+        offsetEntry.setAcctSufficientFundsFinObjCd(SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(offsetEntry.getFinancialObject(), offsetEntry.getAccount().getAccountSufficientFundsCode()));
 
         return true;
     }
@@ -429,7 +423,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         recodeGlpe.setTransactionLedgerEntrySequenceNumber(new Integer(sequenceHelper.getSequenceCounter()));
 
         // set the document type to that of a Distrib. Of Income and Expense
-        recodeGlpe.setFinancialDocumentTypeCode(SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(DistributionOfIncomeAndExpenseDocument.class));
+        recodeGlpe.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(DistributionOfIncomeAndExpenseDocument.class));
 
         // set the object type code base on the value of the explicit entry
         recodeGlpe.setFinancialObjectTypeCode(getObjectTypeCodeForRecodeDistributionOfIncomeAndExpenseEntry(explicitEntry));
@@ -454,7 +448,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @return object type for an AuxiliaryVoucher document
      */
     protected String getObjectTypeCode(AccountingLine line) {
-        Options options = SpringContext.getBean(OptionsService.class).getCurrentYearOptions();
+        Options options = SpringServiceLocator.getOptionsService().getCurrentYearOptions();
         String objectTypeCode = line.getObjectCode().getFinancialObjectTypeCode();
 
         if (options.getFinObjTypeExpenditureexpCd().equals(objectTypeCode) || options.getFinObjTypeExpendNotExpCode().equals(objectTypeCode)) {
@@ -475,7 +469,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @return object type code
      */
     protected String getObjectTypeCodeForRecodeDistributionOfIncomeAndExpenseEntry(GeneralLedgerPendingEntry explicitEntry) {
-        Options options = SpringContext.getBean(OptionsService.class).getCurrentYearOptions();
+        Options options = SpringServiceLocator.getOptionsService().getCurrentYearOptions();
         String objectTypeCode = explicitEntry.getFinancialObjectTypeCode();
 
         if (options.getFinObjTypeExpNotExpendCode().equals(objectTypeCode)) {
@@ -672,7 +666,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      */
     private boolean glpesBalance(AuxiliaryVoucherDocument avDoc) {
         // generate GLPEs specifically here so that we can compare debits to credits
-        if (!SpringContext.getBean(GeneralLedgerPendingEntryService.class).generateGeneralLedgerPendingEntries(avDoc)) {
+        if (!SpringServiceLocator.getGeneralLedgerPendingEntryService().generateGeneralLedgerPendingEntries(avDoc)) {
             throw new ValidationException("general ledger GLPE generation failed");
         }
 
@@ -682,7 +676,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
 
         for (GeneralLedgerPendingEntry glpe : avDoc.getGeneralLedgerPendingEntries()) {
             // make sure we are looking at only the explicit entries that aren't DI types
-            if (!glpe.isTransactionEntryOffsetIndicator() && !glpe.getFinancialDocumentTypeCode().equals(SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(DistributionOfIncomeAndExpenseDocument.class))) {
+            if (!glpe.isTransactionEntryOffsetIndicator() && !glpe.getFinancialDocumentTypeCode().equals(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(DistributionOfIncomeAndExpenseDocument.class))) {
                 if (GL_CREDIT_CODE.equals(glpe.getTransactionDebitCreditCode())) {
                     creditAmount = creditAmount.add(glpe.getTransactionLedgerEntryAmount());
                 }
@@ -734,7 +728,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * This method determins if the posting period is valid for the document type.
+     * This method determins if the posting period is valid for the document type
      * 
      * @param document
      * @param period
@@ -742,48 +736,58 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @return true if it is a valid period for posting into
      */
     protected boolean isPeriodAllowed(AuxiliaryVoucherDocument document) {
-        /*
-         * Nota bene: a full summarization of these rules can be found in the comments to KULRNE-4634
-         */
         // first we need to get the period itself to check these things
         boolean valid = true;
-        AccountingPeriod acctPeriod = SpringContext.getBean(AccountingPeriodService.class).getByPeriod(document.getPostingPeriodCode(), document.getPostingYear());
-        
+        Integer period = new Integer(document.getPostingPeriodCode());
+        Integer year = document.getPostingYear();
+        AccountingPeriod acctPeriod = getAccountingPeriodService().getByPeriod(document.getPostingPeriodCode(), year);
+
+        // if current period is period 1 can't post back more than 3 open periods
+        // grab the current period
+        Timestamp ts = document.getDocumentHeader().getWorkflowDocument().getCreateDate();
+        AccountingPeriod currPeriod = getAccountingPeriodService().getByDate(new Date(ts.getTime()));
+        Integer currPeriodVal = new Integer(currPeriod.getUniversityFiscalPeriodCode());
+
+        if (currPeriodVal == 1) {
+            if (period < 11) {
+                reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_PERIOD_THREE_OPEN);
+                return false;
+            }
+        }
+
+        // can't post back more than 2 periods
+        if (period <= currPeriodVal) {
+            if ((currPeriodVal - period) > 2) {
+                reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
+                return false;
+            }
+        }
+        else {
+            // if currPeriodVal is less than period then that means it can only be
+            // period 2 (see period 1 rule above)and period 13 as the only possible combination,
+            // if not then error out
+            if (currPeriodVal != 2) {
+                reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
+                return false;
+            }
+            else {
+                if (period != 13) {
+                    reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
+                    return false;
+                }
+            }
+        }
+
         valid = succeedsRule(RESTRICTED_PERIOD_CODES, document.getPostingPeriodCode());
         if (!valid) {
             reportError(ACCOUNTING_PERIOD_STATUS_CODE_FIELD, ERROR_ACCOUNTING_PERIOD_OUT_OF_RANGE);
         }
-        
+
         // can't post into a closed period
         if (acctPeriod == null || acctPeriod.getUniversityFiscalPeriodStatusCode().equalsIgnoreCase(ACCOUNTING_PERIOD_STATUS_CLOSED)) {
             reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_PERIOD_CLOSED);
             return false;
         }
-        
-        Timestamp ts = new Timestamp(new java.util.Date().getTime());
-        AccountingPeriod currPeriod = SpringContext.getBean(AccountingPeriodService.class).getByDate(new Date(ts.getTime()));
-        
-        if (acctPeriod.getUniversityFiscalYear().equals(SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear())) {
-            if (SpringContext.getBean(AccountingPeriodService.class).compareAccountingPeriodsByDate(acctPeriod, currPeriod) < 0) {
-                // we've only got problems if the av's accounting period is earlier than now
-                
-                // are we in the grace period for this accounting period?
-                if (!AuxiliaryVoucherDocumentRule.calculateIfWithinGracePeriod(new Date(ts.getTime()), acctPeriod)) {
-                    reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
-                    return false;
-                }
-            }
-        } else {
-            // it's not the same fiscal year, so we need to test whether we are currently
-            // in the grace period of the acctPeriod
-            if (!AuxiliaryVoucherDocumentRule.calculateIfWithinGracePeriod(new Date(ts.getTime()), acctPeriod) && AuxiliaryVoucherDocumentRule.isEndOfPreviousFiscalYear(acctPeriod)) {
-                reportError(DOCUMENT_ERRORS, ERROR_DOCUMENT_ACCOUNTING_TWO_PERIODS);
-                return false;
-            }
-        }
-        
-        Integer period = new Integer(document.getPostingPeriodCode());
-        Integer year = document.getPostingYear();
 
         // check for specific posting issues
         if (document.isRecodeType()) {
@@ -804,64 +808,6 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
             }
         }
         return valid;
-    }
-    
-    /**
-     * 
-     * This method checks if a given moment of time is within an accounting period, or its
-     * auxiliary voucher grace period.
-     * @param today a date to check if it is within the period 
-     * @param periodToCheck the  
-     * @return
-     */
-    public static boolean calculateIfWithinGracePeriod(Date today, AccountingPeriod periodToCheck) {
-        boolean result = false;
-        int todayAsComparableDate = AuxiliaryVoucherDocumentRule.comparableDateForm(today);
-        int periodClose = new Integer(AuxiliaryVoucherDocumentRule.comparableDateForm(periodToCheck.getUniversityFiscalPeriodEndDate()));
-        int periodBegin = AuxiliaryVoucherDocumentRule.comparableDateForm(AuxiliaryVoucherDocumentRule.calculateFirstDayOfMonth(periodToCheck.getUniversityFiscalPeriodEndDate())); 
-        int gracePeriodClose = periodClose + new Integer(SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(AUXILIARY_VOUCHER_SECURITY_GROUPING, AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD)).intValue();
-        return (todayAsComparableDate >= periodBegin && todayAsComparableDate <= gracePeriodClose);
-    }
-    
-    /**
-     * 
-     * This method returns a date as an approximate count of days since the BCE epoch.
-     * @param d the date to convert
-     * @return an integer count of days, very approximate
-     */
-    public static int comparableDateForm(Date d) {
-        java.util.Calendar cal = new java.util.GregorianCalendar();
-        cal.setTime(d);
-        return cal.get(java.util.Calendar.YEAR) * 365 + cal.get(java.util.Calendar.DAY_OF_YEAR);
-    }
-    
-    /**
-     * Given a day, this method calculates what the first day of that month was.
-     * @param d date to find first of month for
-     * @return date of the first day of the month
-     */
-    public static Date calculateFirstDayOfMonth(Date d) {
-        java.util.Calendar cal = new java.util.GregorianCalendar();
-        cal.setTime(d);
-        int dayOfMonth = cal.get(java.util.Calendar.DAY_OF_MONTH) - 1;
-        cal.add(java.util.Calendar.DAY_OF_YEAR, -1*dayOfMonth);
-        return new Date(cal.getTimeInMillis());
-    }
-    
-    /**
-     * This method checks if the given accounting period ends on the last day
-     * of the previous fiscal year
-     * @param acctPeriod accounting period to check
-     * @return true if the accounting period ends with the fiscal year, false if otherwise
-     */
-    public static boolean isEndOfPreviousFiscalYear(AccountingPeriod acctPeriod) {
-        UniversityDateService dateService = SpringContext.getBean(UniversityDateService.class);
-        Date firstDayOfCurrFiscalYear = new Date(dateService.getFirstDateOfFiscalYear(dateService.getCurrentFiscalYear()).getTime());
-        Date periodClose = acctPeriod.getUniversityFiscalPeriodEndDate();
-        java.util.Calendar cal = new java.util.GregorianCalendar();
-        cal.setTime(periodClose);
-        cal.add(java.util.Calendar.DATE, 1);
-        return (firstDayOfCurrFiscalYear.equals(new Date(cal.getTimeInMillis())));
     }
 
     /**
