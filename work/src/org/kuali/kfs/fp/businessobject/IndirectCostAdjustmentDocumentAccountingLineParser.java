@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,21 @@
 
 package org.kuali.module.financial.bo;
 
-import static org.kuali.kfs.KFSPropertyConstants.ACCOUNT_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.ORGANIZATION_REFERENCE_ID;
-import static org.kuali.kfs.KFSPropertyConstants.PROJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.SUB_ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.AMOUNT;
+import static org.kuali.PropertyConstants.CHART_OF_ACCOUNTS_CODE;
+import static org.kuali.PropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
+import static org.kuali.PropertyConstants.ORGANIZATION_REFERENCE_ID;
+import static org.kuali.PropertyConstants.OVERRIDE_CODE;
+import static org.kuali.PropertyConstants.PROJECT_CODE;
+import static org.kuali.PropertyConstants.SUB_ACCOUNT_NUMBER;
 
 import java.util.Map;
 
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.kfs.bo.AccountingLineParserBase;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.bo.AccountingLineParserBase;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.rules.IndirectCostAdjustmentDocumentRuleConstants;
 
 /**
@@ -41,7 +41,7 @@ import org.kuali.module.financial.rules.IndirectCostAdjustmentDocumentRuleConsta
  * 
  */
 public class IndirectCostAdjustmentDocumentAccountingLineParser extends AccountingLineParserBase {
-    private static final String[] FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, AMOUNT };
+    private static final String[] FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, OVERRIDE_CODE, AMOUNT };
 
     /**
      * @see org.kuali.core.bo.AccountingLineParserBase#getSourceAccountingLineFormat()
@@ -67,7 +67,7 @@ public class IndirectCostAdjustmentDocumentAccountingLineParser extends Accounti
     @Override
     protected void performCustomSourceAccountingLinePopulation(Map<String, String> attributeValueMap, SourceAccountingLine sourceAccountingLine, String accountingLineAsString) {
         super.performCustomSourceAccountingLinePopulation(attributeValueMap, sourceAccountingLine, accountingLineAsString);
-        String financialObjectCode = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(IndirectCostAdjustmentDocumentRuleConstants.INDIRECT_COST_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, IndirectCostAdjustmentDocumentRuleConstants.GRANT_OBJECT_CODE);
+        String financialObjectCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(IndirectCostAdjustmentDocumentRuleConstants.INDIRECT_COST_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, IndirectCostAdjustmentDocumentRuleConstants.GRANT_OBJECT_CODE);
         sourceAccountingLine.setFinancialObjectCode(financialObjectCode);
     }
 
@@ -79,7 +79,7 @@ public class IndirectCostAdjustmentDocumentAccountingLineParser extends Accounti
     @Override
     protected void performCustomTargetAccountingLinePopulation(Map<String, String> attributeValueMap, TargetAccountingLine targetAccountingLine, String accountingLineAsString) {
         super.performCustomTargetAccountingLinePopulation(attributeValueMap, targetAccountingLine, accountingLineAsString);
-        String financialObjectCode = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(IndirectCostAdjustmentDocumentRuleConstants.INDIRECT_COST_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, IndirectCostAdjustmentDocumentRuleConstants.RECEIPT_OBJECT_CODE);
+        String financialObjectCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(IndirectCostAdjustmentDocumentRuleConstants.INDIRECT_COST_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, IndirectCostAdjustmentDocumentRuleConstants.RECEIPT_OBJECT_CODE);
         targetAccountingLine.setFinancialObjectCode(financialObjectCode);
     }
 

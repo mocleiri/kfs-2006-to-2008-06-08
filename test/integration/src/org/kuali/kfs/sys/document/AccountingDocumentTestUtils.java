@@ -25,10 +25,10 @@ import junit.framework.Assert;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.kuali.Constants;
 import org.kuali.core.bo.AdHocRouteRecipient;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.datadictionary.DataDictionary;
-import org.kuali.core.datadictionary.TransactionalDocumentEntry;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.core.document.Document;
@@ -38,13 +38,12 @@ import org.kuali.core.service.DocumentService;
 import org.kuali.core.service.TransactionalDocumentDictionaryService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.service.AccountingPeriodService;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.fixtures.UserNameFixture;
 import org.kuali.test.monitor.ChangeMonitor;
 import org.kuali.test.monitor.DocumentVersionMonitor;
@@ -92,9 +91,9 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
         // change the dataDictionary to disallow copying
         DataDictionary d = dataDictionaryService.getDataDictionary();
         Class documentClass = document.getClass();
-        boolean originalValue = d.getDocumentEntry(documentClass.getName()).getAllowsCopy();
+        boolean originalValue = d.getTransactionalDocumentEntry(documentClass).getAllowsCopy();
         try {
-            d.getDocumentEntry(documentClass.getName()).setAllowsCopy(false);
+            d.getTransactionalDocumentEntry(documentClass).setAllowsCopy(false);
 
             boolean failedAsExpected = false;
             try {
@@ -107,7 +106,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
             assertTrue(failedAsExpected);
         }
         finally {
-            d.getDocumentEntry(documentClass.getName()).setAllowsCopy(originalValue);
+            d.getTransactionalDocumentEntry(documentClass).setAllowsCopy(originalValue);
         }
     }
 
@@ -133,9 +132,9 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
         // change the dataDictionary to disallow errorCorrection
         DataDictionary d = dataDictionaryService.getDataDictionary();
         Class documentClass = document.getClass();
-        boolean originalValue = ((TransactionalDocumentEntry)d.getDocumentEntry(documentClass.getName())).getAllowsErrorCorrection();
+        boolean originalValue = d.getTransactionalDocumentEntry(documentClass).getAllowsErrorCorrection();
         try {
-            ((TransactionalDocumentEntry)d.getDocumentEntry(documentClass.getName())).setAllowsErrorCorrection(false);
+            d.getTransactionalDocumentEntry(documentClass).setAllowsErrorCorrection(false);
 
             boolean failedAsExpected = false;
             try {
@@ -148,7 +147,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
             assertTrue(failedAsExpected);
         }
         finally {
-            ((TransactionalDocumentEntry)d.getDocumentEntry(documentClass.getName())).setAllowsErrorCorrection(originalValue);
+            d.getTransactionalDocumentEntry(documentClass).setAllowsErrorCorrection(originalValue);
         }
     }
 
@@ -175,8 +174,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      */
     public static void testRouteDocument(AccountingDocument document, DocumentService documentService) throws Exception {
         document.prepareForSave();
@@ -189,8 +188,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      * 
      */
 
@@ -205,7 +204,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
             document = (AccountingDocument) documentService.getByDocumentHeaderId(documentHeaderId);
 
             // mock a fully approved document
-            document.getDocumentHeader().getWorkflowDocument().getRouteHeader().setDocRouteStatus(KFSConstants.DocumentStatusCodes.APPROVED);
+            document.getDocumentHeader().getWorkflowDocument().getRouteHeader().setDocRouteStatus(Constants.DocumentStatusCodes.APPROVED);
 
             // collect some preCorrect data
             String preCorrectId = document.getDocumentNumber();
@@ -270,8 +269,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      */
     public static void testSaveDocument(AccountingDocument document, DocumentService documentService) throws Exception {
         // get document parameter
@@ -287,8 +286,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      */
     public static void testConvertIntoCopy(AccountingDocument document, DocumentService documentService, int expectedPrePECount) throws Exception {
         // save the original doc, wait for status change
@@ -426,7 +425,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
         for (int i = 0; i < d1.getSourceAccountingLines().size(); i++) {
             d1.getSourceAccountingLine(i).isLike(d2.getSourceAccountingLine(i));
         }
-        Assert.assertEquals(d1.getTargetAccountingLines().size(), d2.getTargetAccountingLines().size());
+        Assert.assertEquals(d2.getTargetAccountingLines().size(), d2.getTargetAccountingLines().size());
         for (int i = 0; i < d1.getTargetAccountingLines().size(); i++) {
             d1.getTargetAccountingLine(i).isLike(d2.getTargetAccountingLine(i));
         }

@@ -13,9 +13,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 <kul:documentPage showDocumentInfo="true"
-	documentTypeName="YearEndBudgetAdjustmentDocument"
+	documentTypeName="KualiYearEndBudgetAdjustmentDocument"
 	htmlFormAction="financialYearEndBudgetAdjustment" renderMultipart="true"
 	showTabButtons="true">
 
@@ -29,7 +29,7 @@
 		extraHiddenFields=",budgetAdjustmentPeriodCode,fringeBenefitIndicator"
 		accountingLineAttributes="${DataDictionary['BudgetAdjustmentSourceAccountingLine'].attributes}" />
 
-	<gl:generalLedgerPendingEntries />
+	<kul:generalLedgerPendingEntries />
 
 	<kul:notes />
 

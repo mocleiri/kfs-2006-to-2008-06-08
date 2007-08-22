@@ -17,9 +17,9 @@ package org.kuali.module.labor.batch.poster;
 
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_MAIN_POSTER_VALID;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
@@ -39,9 +38,11 @@ import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.util.ObjectUtil;
 import org.kuali.module.labor.util.TestDataPreparator;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
-@ConfigureContext
+@WithTestSpringContext
 public class LaborLedgerBalancePosterTest extends KualiTestBase {
     
     private Properties properties;
@@ -67,10 +68,11 @@ public class LaborLedgerBalancePosterTest extends KualiTestBase {
         deliminator = properties.getProperty("deliminator");
         keyFieldList = Arrays.asList(StringUtils.split(fieldNames, deliminator));
         
-        laborLedgerBalancePoster = SpringContext.getBeansOfType(PostTransaction.class).get("laborLedgerBalancePoster");
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
-        originEntryGroupService = SpringContext.getBean(OriginEntryGroupService.class);
-        DateTimeService dateTimeService = SpringContext.getBean(DateTimeService.class);
+        BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();       
+        laborLedgerBalancePoster = (PostTransaction) beanFactory.getBean("laborLedgerBalancePoster");
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
+        originEntryGroupService = (OriginEntryGroupService) beanFactory.getBean("glOriginEntryGroupService");
+        DateTimeService dateTimeService = (DateTimeService)beanFactory.getBean("dateTimeService");
         
         group1 = originEntryGroupService.createGroup(dateTimeService.getCurrentSqlDate(), LABOR_MAIN_POSTER_VALID, false, false, false);        
         today = dateTimeService.getCurrentDate();

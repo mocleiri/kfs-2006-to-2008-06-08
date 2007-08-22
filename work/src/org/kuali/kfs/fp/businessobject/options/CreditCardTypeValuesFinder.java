@@ -23,7 +23,7 @@ import java.util.List;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.CreditCardType;
 
 /**
@@ -39,7 +39,7 @@ public class CreditCardTypeValuesFinder extends KeyValuesBase {
     public List getKeyValues() {
 
         // get a list of all CreditCardTypes
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         List codes = (List) boService.findAll(CreditCardType.class);
 
 

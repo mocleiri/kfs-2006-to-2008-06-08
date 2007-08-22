@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +22,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.kuali.core.bo.Campus;
+import org.kuali.core.bo.PostalZipCode;
+import org.kuali.core.bo.State;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.kfs.bo.PostalZipCode;
-import org.kuali.kfs.bo.State;
 import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
 import org.kuali.module.chart.bo.codes.SufficientFundsCode;
 
@@ -35,7 +36,7 @@ public interface AccountIntf {
      * 
      * @return true if C&G account
      */
-    public boolean isForContractsAndGrants();
+    public boolean isInCg();
 
     /**
      * Gets the accountNumber attribute.
@@ -503,20 +504,20 @@ public interface AccountIntf {
     public void setFinancialObjectivePrsctrlIndicator(boolean _FinancialObjectivePrsctrlIndicator_);
 
     /**
-     * Gets the accountCfdaNumber attribute.
+     * Gets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @return Returns the accountCfdaNumber
+     * @return Returns the cgCatlfFedDomestcAssistNbr
      * 
      */
-    public String getAccountCfdaNumber();
+    public String getCgCatlfFedDomestcAssistNbr();
 
     /**
-     * Sets the accountCfdaNumber attribute.
+     * Sets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @param accountCfdaNumber The accountCfdaNumber to set.
+     * @param cgCatlfFedDomestcAssistNbr The cgCatlfFedDomestcAssistNbr to set.
      * 
      */
-    public void setAccountCfdaNumber(String accountCfdaNumber);
+    public void setCgCatlfFedDomestcAssistNbr(String cgCatlfFedDomestcAssistNbr);
 
     /**
      * Gets the accountOffCampusIndicator attribute.
@@ -801,6 +802,16 @@ public interface AccountIntf {
      */
     public void setContinuationAccount(Account continuationAccount);
 
+    /**
+     * @return Returns the program.
+     */
+    public Program getProgram();
+
+    /**
+     * @param program The program to set.
+     * @deprecated
+     */
+    public void setProgram(Program program);
 
     /**
      * @return Returns the accountGuideline.
@@ -1098,6 +1109,16 @@ public interface AccountIntf {
      * @param sufficientFundsCode The sufficientFundsCode to set.
      */
     public void setSufficientFundsCode(SufficientFundsCode sufficientFundsCode);
+
+    /**
+     * @return Returns the programCode.
+     */
+    public String getProgramCode();
+
+    /**
+     * @param programCode The programCode to set.
+     */
+    public void setProgramCode(String programCode);
 
     /**
      * Implementing equals since I need contains to behave reasonably in a hashed datastructure.

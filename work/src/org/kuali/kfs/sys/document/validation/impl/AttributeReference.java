@@ -15,8 +15,7 @@
  */
 package org.kuali.kfs.rules;
 
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * This class refers to an attribute which has a value and is labeled in the DataDictionary.
@@ -37,7 +36,7 @@ public class AttributeReference {
     public AttributeReference(Class businessObjectClass, String propertyName, Object value) {
         this.propertyName = propertyName;
         this.valueString = value == null ? null : value.toString();
-        this.label = SpringContext.getBean(DataDictionaryService.class).getAttributeLabel(businessObjectClass, propertyName);
+        this.label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(businessObjectClass, propertyName);
     }
 
     /**

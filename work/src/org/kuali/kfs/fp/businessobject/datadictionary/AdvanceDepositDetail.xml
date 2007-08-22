@@ -1,29 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.AdvanceDepositDetail">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber" />
-            <attributeReference name="financialDocumentTypeCode" sourceClassName="org.kuali.core.bo.DocumentType" sourceAttributeName="financialDocumentTypeCode" />
+            <attributeReference name="financialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber" />
+            <attributeReference name="financialDocumentTypeCode" sourceClassName="org.kuali.core.document.DocumentType" sourceAttributeName="financialDocumentTypeCode" />
             <attribute name="financialDocumentColumnTypeCode" forceUppercase="true">
                 <label>Column Type Code</label>
                 <shortLabel>Column Type Code</shortLabel>
@@ -70,42 +55,47 @@
                     <text size="42" />
                 </control>
 
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>A brief description of the transaction. This field is for departmental use only, and does not appear on financial reports.</description>
+                <summary>financialDocumentAdvanceDepositDescription</summary>
+                <description>financialDocumentAdvanceDepositDescription description...</description>
             </attribute>
-            <attribute name="financialDocumentAdvanceDepositReferenceNumber" forceUppercase="true">
+            <attributeReference name="financialDocumentAdvanceDepositReferenceNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber">
                 <label>Reference Number</label>
                 <shortLabel>Reference Number</shortLabel>
                 <maxLength>10</maxLength>
-                <required>true</required>              
-                <control>
-                    <text size="16" />
-                </control>               
-                <summary>
-                	<![CDATA[&nbsp;]]>
-                </summary>
-                <description>The Reference Number is used to record the bank's unique transaction number for the deposit.</description>              
-            </attribute>
-			 <attributeReference name="financialDocumentBankCode" sourceClassName="org.kuali.module.financial.bo.Bank" sourceAttributeName="financialDocumentBankCode">
+                <required>true</required>
+            </attributeReference>
+			<attribute name="financialDocumentBankCode" forceUppercase="true">
                 <label>Bank</label>
                 <shortLabel>Bank</shortLabel>
-                <required>true</required>
-                <summary>
-                	<![CDATA[&nbsp;]]>
-                </summary>
-                <description>The code that designates the bank at which the deposit was made.</description>
-            </attributeReference>
-			<attributeReference name="financialDocumentBankAccountNumber" sourceClassName="org.kuali.module.financial.bo.BankAccount" sourceAttributeName="finDocumentBankAccountNumber">
+                
+                <maxLength>4</maxLength>
+                <validationPattern>
+                    <alphaNumeric/>
+                </validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>financialDocumentBankCode</summary>
+                <description>financialDocumentBankCode description...</description>
+            </attribute>
+			<attribute name="financialDocumentBankAccountNumber" forceUppercase="true">
                 <label>Bank Account</label>
                 <shortLabel>Bank Account</shortLabel>
-                <required>true</required>
-                <summary>
-                	<![CDATA[&nbsp;]]>
-                </summary>
-                <description>The bank account number into which the funds were deposited.</description>
-            </attributeReference>
+                
+                <maxLength>15</maxLength>
+                <validationPattern>
+                    <alphaNumeric/>
+                </validationPattern>
+
+                <control>
+                    <text size="15" />
+                </control>
+
+                <summary>financialDocumentBankAccountNumber</summary>
+                <description>financialDocumentBankAccountNumber description...</description>
+            </attribute>
         </attributes>
     </businessObject>
 </dictionaryEntry>

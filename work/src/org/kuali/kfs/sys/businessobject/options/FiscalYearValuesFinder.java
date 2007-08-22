@@ -24,7 +24,7 @@ import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * This class...
@@ -38,7 +38,7 @@ public class FiscalYearValuesFinder extends KeyValuesBase {
      */
     public List getKeyValues() {
 
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         FiscalYearComparator fiscalYearComparator = new FiscalYearComparator();
         List optionList = (List) boService.findAll(Options.class);
         Collections.sort(optionList, fiscalYearComparator);

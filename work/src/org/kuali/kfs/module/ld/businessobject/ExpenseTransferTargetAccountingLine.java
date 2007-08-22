@@ -18,7 +18,7 @@ package org.kuali.module.labor.bo;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.kfs.bo.TargetAccountingLine;
 
 
@@ -28,8 +28,8 @@ import org.kuali.kfs.bo.TargetAccountingLine;
  * 
  * 
  */
-public class ExpenseTransferTargetAccountingLine extends TargetAccountingLine 
-    implements ExpenseTransferAccountingLine, Comparable<ExpenseTransferTargetAccountingLine> {
+public class ExpenseTransferTargetAccountingLine extends TargetAccountingLine implements ExpenseTransferAccountingLine {
+
     private String positionNumber;
     private BigDecimal payrollTotalHours;    
     private Integer payrollEndDateFiscalYear;
@@ -37,7 +37,16 @@ public class ExpenseTransferTargetAccountingLine extends TargetAccountingLine
     private String emplid;
 
     private LaborObject laborObject;
-    
+
+    /**
+     * This constructor needs to initialize the ojbConcreteClass attribute such that it sets it to its class name. This is how OJB
+     * knows what grouping of objects to work with.
+     */
+    public ExpenseTransferTargetAccountingLine() {
+        super();
+        super.ojbConcreteClass = this.getClass().getName();
+    }
+
     /**
      * Gets the positionNumber attribute.
      * 
@@ -160,26 +169,11 @@ public class ExpenseTransferTargetAccountingLine extends TargetAccountingLine
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
         if (this.getSequenceNumber() != null) {
             m.put("sequenceNumber", this.getSequenceNumber().toString());
         }
         return m;
     }
-
-    /**
-     * Used to for sorting <code>{@link ExpenseTransferAccountingLine}</code> instances within a java 
-     * <code>{@link java.util.Collection}</code> by payrollEndDateFisdalYear and payrollEndDateFiscalPeriodCode
-     * @see java.lang.Comparable#compareTo(T)
-     */
-    public int compareTo(ExpenseTransferTargetAccountingLine o) {
-        if (o == null) throw new NullPointerException("ExpenseTransferAccountingLine is null");
-        int retval = 0;
-        retval = getPayrollEndDateFiscalYear().compareTo(o.getPayrollEndDateFiscalYear());
-        
-        if (retval == 0) {
-            retval = new Integer(getPayrollEndDateFiscalPeriodCode()).compareTo(new Integer(o.getPayrollEndDateFiscalPeriodCode()));
-        }
-        return retval;
-    }
+     
 }

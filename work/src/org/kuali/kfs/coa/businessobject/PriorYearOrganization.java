@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
@@ -19,14 +28,13 @@ package org.kuali.module.chart.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Campus;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Country;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Country;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class PriorYearOrganization extends PersistableBusinessObjectBase {
+public class PriorYearOrganization extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String organizationCode;
@@ -52,7 +60,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     private String organizationCountryCode;
     private String organizationLine1Address;
     private String organizationLine2Address;
-
+    
     private Chart chartOfAccounts;
     private Account organizationDefaultAccount;
     private Org organization;
@@ -64,7 +72,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     private Chart organizationPlantChart;
     private Chart campusPlantChart;
     private Country organizationCountry;
-
+    
     /**
      * Default constructor.
      */
@@ -75,7 +83,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -96,7 +104,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationCode attribute.
      * 
-     * @return Returns the organizationCode
+     * @return - Returns the organizationCode
      * 
      */
     public String getOrganizationCode() {
@@ -117,7 +125,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationManagerUniversalId attribute.
      * 
-     * @return Returns the organizationManagerUniversalId
+     * @return - Returns the organizationManagerUniversalId
      * 
      */
     public String getOrganizationManagerUniversalId() {
@@ -138,7 +146,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationName attribute.
      * 
-     * @return Returns the organizationName
+     * @return - Returns the organizationName
      * 
      */
     public String getOrganizationName() {
@@ -159,7 +167,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the responsibilityCenterCode attribute.
      * 
-     * @return Returns the responsibilityCenterCode
+     * @return - Returns the responsibilityCenterCode
      * 
      */
     public String getResponsibilityCenterCode() {
@@ -180,7 +188,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationPhysicalCampusCode attribute.
      * 
-     * @return Returns the organizationPhysicalCampusCode
+     * @return - Returns the organizationPhysicalCampusCode
      * 
      */
     public String getOrganizationPhysicalCampusCode() {
@@ -201,7 +209,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationTypeCode attribute.
      * 
-     * @return Returns the organizationTypeCode
+     * @return - Returns the organizationTypeCode
      * 
      */
     public String getOrganizationTypeCode() {
@@ -222,7 +230,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationDefaultAccountNumber attribute.
      * 
-     * @return Returns the organizationDefaultAccountNumber
+     * @return - Returns the organizationDefaultAccountNumber
      * 
      */
     public String getOrganizationDefaultAccountNumber() {
@@ -242,7 +250,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationCityName attribute.
      * 
-     * @return Returns the organizationCityName
+     * @return - Returns the organizationCityName
      * 
      */
     public String getOrganizationCityName() {
@@ -263,7 +271,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationStateCode attribute.
      * 
-     * @return Returns the organizationStateCode
+     * @return - Returns the organizationStateCode
      * 
      */
     public String getOrganizationStateCode() {
@@ -284,7 +292,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationZipCode attribute.
      * 
-     * @return Returns the organizationZipCode
+     * @return - Returns the organizationZipCode
      * 
      */
     public String getOrganizationZipCode() {
@@ -305,7 +313,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationBeginDate attribute.
      * 
-     * @return Returns the organizationBeginDate
+     * @return - Returns the organizationBeginDate
      * 
      */
     public Date getOrganizationBeginDate() {
@@ -326,7 +334,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationEndDate attribute.
      * 
-     * @return Returns the organizationEndDate
+     * @return - Returns the organizationEndDate
      * 
      */
     public Date getOrganizationEndDate() {
@@ -347,7 +355,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the reportsToChartOfAccountsCode attribute.
      * 
-     * @return Returns the reportsToChartOfAccountsCode
+     * @return - Returns the reportsToChartOfAccountsCode
      * 
      */
     public String getReportsToChartOfAccountsCode() {
@@ -368,7 +376,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the reportsToOrganizationCode attribute.
      * 
-     * @return Returns the reportsToOrganizationCode
+     * @return - Returns the reportsToOrganizationCode
      * 
      */
     public String getReportsToOrganizationCode() {
@@ -389,7 +397,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationActiveIndicator attribute.
      * 
-     * @return Returns the organizationActiveIndicator
+     * @return - Returns the organizationActiveIndicator
      * 
      */
     public boolean isOrganizationActiveIndicator() {
@@ -411,7 +419,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationInFinancialProcessingIndicator attribute.
      * 
-     * @return Returns the organizationInFinancialProcessingIndicator
+     * @return - Returns the organizationInFinancialProcessingIndicator
      * 
      */
     public boolean isOrganizationInFinancialProcessingIndicator() {
@@ -433,7 +441,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationPlantAccountNumber attribute.
      * 
-     * @return Returns the organizationPlantAccountNumber
+     * @return - Returns the organizationPlantAccountNumber
      * 
      */
     public String getOrganizationPlantAccountNumber() {
@@ -454,7 +462,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the campusPlantAccountNumber attribute.
      * 
-     * @return Returns the campusPlantAccountNumber
+     * @return - Returns the campusPlantAccountNumber
      * 
      */
     public String getCampusPlantAccountNumber() {
@@ -475,7 +483,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationPlantChartCode attribute.
      * 
-     * @return Returns the organizationPlantChartCode
+     * @return - Returns the organizationPlantChartCode
      * 
      */
     public String getOrganizationPlantChartCode() {
@@ -496,7 +504,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the campusPlantChartCode attribute.
      * 
-     * @return Returns the campusPlantChartCode
+     * @return - Returns the campusPlantChartCode
      * 
      */
     public String getCampusPlantChartCode() {
@@ -514,8 +522,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the organizationCountryCode attribute.
-     * 
+     * Gets the organizationCountryCode attribute. 
      * @return Returns the organizationCountryCode.
      */
     public String getOrganizationCountryCode() {
@@ -524,7 +531,6 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
 
     /**
      * Sets the organizationCountryCode attribute value.
-     * 
      * @param organizationCountryCode The organizationCountryCode to set.
      */
     public void setOrganizationCountryCode(String organizationCountryCode) {
@@ -532,8 +538,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the organizationLine1Address attribute.
-     * 
+     * Gets the organizationLine1Address attribute. 
      * @return Returns the organizationLine1Address.
      */
     public String getOrganizationLine1Address() {
@@ -542,7 +547,6 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
 
     /**
      * Sets the organizationLine1Address attribute value.
-     * 
      * @param organizationLine1Address The organizationLine1Address to set.
      */
     public void setOrganizationLine1Address(String organizationLine1Address) {
@@ -550,8 +554,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the organizationLine2Address attribute.
-     * 
+     * Gets the organizationLine2Address attribute. 
      * @return Returns the organizationLine2Address.
      */
     public String getOrganizationLine2Address() {
@@ -560,17 +563,16 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
 
     /**
      * Sets the organizationLine2Address attribute value.
-     * 
      * @param organizationLine2Address The organizationLine2Address to set.
      */
     public void setOrganizationLine2Address(String organizationLine2Address) {
         this.organizationLine2Address = organizationLine2Address;
     }
-
+    
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -590,7 +592,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationDefaultAccount attribute.
      * 
-     * @return Returns the organizationDefaultAccount
+     * @return - Returns the organizationDefaultAccount
      * 
      */
     public Account getOrganizationDefaultAccount() {
@@ -610,7 +612,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organization attribute.
      * 
-     * @return Returns the organization
+     * @return - Returns the organization
      * 
      */
     public Org getOrganization() {
@@ -630,7 +632,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationPhysicalCampus attribute.
      * 
-     * @return Returns the organizationPhysicalCampus
+     * @return - Returns the organizationPhysicalCampus
      * 
      */
     public Campus getOrganizationPhysicalCampus() {
@@ -650,7 +652,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the reportsToOrganization attribute.
      * 
-     * @return Returns the reportsToOrganization
+     * @return - Returns the reportsToOrganization
      * 
      */
     public Org getReportsToOrganization() {
@@ -670,7 +672,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the reportsToChartOfAccounts attribute.
      * 
-     * @return Returns the reportsToChartOfAccounts
+     * @return - Returns the reportsToChartOfAccounts
      * 
      */
     public Chart getReportsToChartOfAccounts() {
@@ -690,7 +692,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationPlantAccount attribute.
      * 
-     * @return Returns the organizationPlantAccount
+     * @return - Returns the organizationPlantAccount
      * 
      */
     public Account getOrganizationPlantAccount() {
@@ -710,7 +712,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the campusPlantAccount attribute.
      * 
-     * @return Returns the campusPlantAccount
+     * @return - Returns the campusPlantAccount
      * 
      */
     public Account getCampusPlantAccount() {
@@ -730,7 +732,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the organizationPlantChart attribute.
      * 
-     * @return Returns the organizationPlantChart
+     * @return - Returns the organizationPlantChart
      * 
      */
     public Chart getOrganizationPlantChart() {
@@ -750,7 +752,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     /**
      * Gets the campusPlantChart attribute.
      * 
-     * @return Returns the campusPlantChart
+     * @return - Returns the campusPlantChart
      * 
      */
     public Chart getCampusPlantChart() {
@@ -768,8 +770,7 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the organizationCountry attribute.
-     * 
+     * Gets the organizationCountry attribute. 
      * @return Returns the organizationCountry.
      */
     public Country getOrganizationCountry() {
@@ -778,14 +779,13 @@ public class PriorYearOrganization extends PersistableBusinessObjectBase {
 
     /**
      * Sets the organizationCountry attribute value.
-     * 
      * @param organizationCountry The organizationCountry to set.
      * @deprecated
      */
     public void setOrganizationCountry(Country organizationCountry) {
         this.organizationCountry = organizationCountry;
     }
-
+    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */

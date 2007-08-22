@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,17 @@ package org.kuali.module.chart.service.impl;
 
 import java.util.Collection;
 
-import org.kuali.core.util.spring.Cached;
-import org.kuali.core.util.spring.Logged;
-import org.kuali.kfs.service.KualiCodeService;
+import org.kuali.core.service.KualiCodeService;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.chart.dao.BalanceTypeDao;
 import org.kuali.module.chart.service.BalanceTypService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This service implementation is the default implementation of the BalanceTyp service that is delivered with Kuali. It uses the
  * balance typs that are defined in the Kuali database.
+ * 
+ * 
  */
-@Transactional
 public class BalanceTypServiceImpl implements BalanceTypService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceTypServiceImpl.class);
 
@@ -62,7 +60,6 @@ public class BalanceTypServiceImpl implements BalanceTypService {
      * @param code The primary key in the database for this data type.
      * @return A fully populated object instance.
      */
-    @Cached
     public BalanceTyp getBalanceTypByCode(String code) {
         return (BalanceTyp) kualiCodeService.getByCode(BalanceTyp.class, code);
     }
@@ -70,7 +67,6 @@ public class BalanceTypServiceImpl implements BalanceTypService {
     /**
      * @see org.kuali.module.chart.service.BalanceTypService#getAllBalanceTyps()
      */
-    @Cached
     public Collection getAllBalanceTyps() {
         return kualiCodeService.getAll(BalanceTyp.class);
     }

@@ -21,21 +21,21 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.core.bo.user.KualiGroup;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.document.authorization.TransactionalDocumentActionFlags;
 import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
-import org.kuali.kfs.bo.AccountingLine;
+import org.kuali.core.exceptions.GroupNotFoundException;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
-import org.kuali.module.chart.bo.ChartUser;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.ServiceBillingControl;
 import org.kuali.module.financial.document.ServiceBillingDocument;
 import org.kuali.module.financial.rules.ServiceBillingDocumentRuleUtil;
-import org.kuali.module.financial.service.ServiceBillingControlService;
 
 /**
  * Authorization permissions specific to the Service Billing document.
@@ -60,17 +60,7 @@ public class ServiceBillingDocumentAuthorizer extends AccountingDocumentAuthoriz
      * @see org.kuali.core.authorization.TransactionalDocumentAuthorizer#getEditableAccounts(org.kuali.core.document.TransactionalDocument,
      *      KualiUser)
      */
-    public Map getEditableAccounts(TransactionalDocument document, ChartUser user) {
-        return new HashMap();
-    }
-
-    /**
-     * Overrides parent to return an empty Map since FO routing doesn't apply to the SB doc.
-     * 
-     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase#getEditableAccounts(java.util.List, org.kuali.module.chart.bo.ChartUser)
-     */
-    @Override
-    public Map getEditableAccounts(List<AccountingLine> lines, ChartUser user) {
+    public Map getEditableAccounts(TransactionalDocument document, UniversalUser user) {
         return new HashMap();
     }
 
@@ -83,7 +73,7 @@ public class ServiceBillingDocumentAuthorizer extends AccountingDocumentAuthoriz
      */
     public void canInitiate(String documentTypeName, UniversalUser user) {
     	boolean canInitiate = false;
-        ServiceBillingControl[] controls = SpringContext.getBean(ServiceBillingControlService.class).getAll();
+        ServiceBillingControl[] controls = SpringServiceLocator.getServiceBillingControlService().getAll();
         for (int i = 0; i < controls.length; i++) {
             if (user.isMember( controls[i].getWorkgroupName() )) {
                 canInitiate = true;

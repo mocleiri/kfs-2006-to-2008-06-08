@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ import org.springframework.dao.DataAccessException;
 /**
  * This class is the OJB implementation of the AccountingLineDao interface.
  */
-
 public class CheckDaoOjb extends PlatformAwareDaoBaseOjb implements CheckDao {
     private static Logger LOG = Logger.getLogger(ChartDaoOjb.class);
 

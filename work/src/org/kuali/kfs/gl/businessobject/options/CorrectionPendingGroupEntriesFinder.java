@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 
@@ -38,7 +38,7 @@ public class CorrectionPendingGroupEntriesFinder extends KeyValuesBase {
     public List getKeyValues() {
         List activeLabels = new ArrayList();
 
-        OriginEntryGroupService originEntryGroupService = SpringContext.getBean(OriginEntryGroupService.class);
+        OriginEntryGroupService originEntryGroupService = SpringServiceLocator.getOriginEntryGroupService();
 
         Collection<OriginEntryGroup> groupPendingList = originEntryGroupService.getOriginEntryGroupsPendingProcessing();
         // Collection groupPendingList = originEntryGroupService.getOriginEntryGroupsPendingProcessing();

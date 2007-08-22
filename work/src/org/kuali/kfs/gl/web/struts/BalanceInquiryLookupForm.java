@@ -15,12 +15,23 @@
  */
 package org.kuali.module.gl.web.struts.form;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+import org.kuali.core.lookup.LookupUtils;
 import org.kuali.core.lookup.Lookupable;
+import org.kuali.core.web.struts.form.LookupForm;
 import org.kuali.core.web.struts.form.MultipleValueLookupForm;
+import org.kuali.core.web.ui.Field;
+import org.kuali.core.web.ui.Row;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.lookup.LookupableSpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.Entry;
 
@@ -41,16 +52,16 @@ import org.kuali.module.gl.bo.Entry;
  * @see org.kuali.module.labor.web.struts.action.SalaryExpenseTransferAction;
  * @see org.kuali.module.labor.web.struts.form.SalaryExpenseTransferForm;
  */
-public class BalanceInquiryLookupForm extends MultipleValueLookupForm {
+public class BalanceInquiryLookupForm extends LookupForm {
     private static final long serialVersionUID = 1L;
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceInquiryForm.class);
 
     private Lookupable pendingEntryLookupable;
     private LookupResultsSelectable selectable;
-    private boolean segmented;
 
     public BalanceInquiryLookupForm() {
+        selectable = new BalanceInquiryLookupResults();
     }
 
     /**
@@ -60,12 +71,12 @@ public class BalanceInquiryLookupForm extends MultipleValueLookupForm {
      */
     @Override
     public void populate(HttpServletRequest request) {
-        Lookupable localPendingEntryLookupable = null;
-
         super.populate(request);
 
+        Lookupable localPendingEntryLookupable = null;
+        
         if (Entry.class.getName().equals(getBusinessObjectClassName())) {
-            localPendingEntryLookupable = LookupableSpringContext.getLookupable(GLConstants.LookupableBeanKeys.PENDING_ENTRY);
+            localPendingEntryLookupable = SpringServiceLocator.getLookupable(GLConstants.LookupableBeanKeys.PENDING_ENTRY);
             }
         
         if (localPendingEntryLookupable != null) {
@@ -73,8 +84,9 @@ public class BalanceInquiryLookupForm extends MultipleValueLookupForm {
             localPendingEntryLookupable.setFieldConversions(getFieldConversions());
         }
         setPendingEntryLookupable(localPendingEntryLookupable);
+
+        getLookupResultsSelectable().populate(request);
     }
-    
 
     /**
      * @param pendingEntryLookupable
@@ -92,20 +104,22 @@ public class BalanceInquiryLookupForm extends MultipleValueLookupForm {
     }
 
     /**
-     * Determines if the balance inquiry lookup should be segmented or not 
-     * 
-     * @return boolean
+     * Retrieve the selectable
+     *
+     * @return LookupResultsSelectable
      */
-    public boolean isSegmented() {
-        return segmented;
+    public LookupResultsSelectable getLookupResultsSelectable() {
+        return selectable;
     }
+
     
     /**
-     * Tells the balance inquiry lookup whether to be segmented or not
+     * Assign selectable
      *
-     * @param seg
+     * @param sel the <code>{@link LookupResultsSelectable}</code> for this form.
      */
-    public void setSegmented(boolean seg) {
-        segmented = seg;
+    public void setLookupResultsSelectable(LookupResultsSelectable sel) {
+        selectable = sel;
     }
+
 }

@@ -19,15 +19,14 @@ package org.kuali.module.cg.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
+import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.Constants;
 
 /**
- * Instances of this class are used to signal to the CloseBatchStep that a close
- * should occur on a particular day.
+ * 
  */
 public class Close extends TransactionalDocumentBase {
 
@@ -42,13 +41,12 @@ public class Close extends TransactionalDocumentBase {
     /**
      * Default constructor.
      */
-    public Close() {}
+    public Close() {
 
-    /**
-     * @return whether or not this document has been approved.
-     */
+    }
+
     public boolean isApproved() {
-        return KFSConstants.DocumentStatusCodes.APPROVED.equals(getDocumentHeader().getFinancialDocumentStatusCode());
+        return Constants.DocumentStatusCodes.APPROVED.equals(getDocumentHeader().getFinancialDocumentStatusCode());
     }
 
     /**
@@ -155,17 +153,13 @@ public class Close extends TransactionalDocumentBase {
         this.userInitiatedCloseDate = userInitiatedCloseDate;
     }
 
-    /**
-     * @return the {@link UniversalUser} for the personUser
-     */
     public UniversalUser getPersonUser() {
-        personUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(personUserIdentifier, personUser);
+        personUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(personUserIdentifier, personUser);
         return personUser;
     }
 
     /**
      * @param personUser The personUser to set.
-     * 
      * @deprecated
      */
     public void setPersonUser(UniversalUser personUser) {

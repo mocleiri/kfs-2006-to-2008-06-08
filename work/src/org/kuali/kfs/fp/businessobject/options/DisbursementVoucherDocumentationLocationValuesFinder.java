@@ -20,9 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
-import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 
 /**
@@ -36,7 +35,7 @@ public class DisbursementVoucherDocumentationLocationValuesFinder extends KeyVal
      * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
-        List boList = (List) SpringContext.getBean(KeyValuesService.class).findAllOrderBy(DisbursementVoucherDocumentationLocation.class, "disbursementVoucherDocumentationLocationName", true);
+        List boList = (List) SpringServiceLocator.getKeyValuesService().findAllOrderBy(DisbursementVoucherDocumentationLocation.class, "disbursementVoucherDocumentationLocationName", true);
         List keyValues = new ArrayList();
         for (Iterator iter = boList.iterator(); iter.hasNext();) {
             DisbursementVoucherDocumentationLocation element = (DisbursementVoucherDocumentationLocation) iter.next();

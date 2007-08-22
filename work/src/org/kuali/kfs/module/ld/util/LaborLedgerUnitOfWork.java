@@ -18,9 +18,9 @@ package org.kuali.module.labor.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 
@@ -63,13 +63,7 @@ public class LaborLedgerUnitOfWork {
 
         if (laborOriginEntry != null) {
             ObjectUtil.buildObject(workingEntry, laborOriginEntry, this.getKeyFields());
-            
-            boolean creditIndicator = KFSConstants.GL_CREDIT_CODE.equals(laborOriginEntry.getTransactionDebitCreditCode());
-            KualiDecimal entryAmount = laborOriginEntry.getTransactionLedgerEntryAmount();
-            KualiDecimal unitAmount = creditIndicator ? entryAmount.negated() : entryAmount;
-            
-            workingEntry.setTransactionLedgerEntryAmount(unitAmount);
-            workingEntry.setTransactionDebitCreditCode(laborOriginEntry.getTransactionDebitCreditCode());
+            workingEntry.setTransactionLedgerEntryAmount(laborOriginEntry.getTransactionLedgerEntryAmount());
             numOfMember = 1;
         }
     }
@@ -85,9 +79,9 @@ public class LaborLedgerUnitOfWork {
             KualiDecimal entryAmount = laborOriginEntry.getTransactionLedgerEntryAmount();
 
             // if the input entry has a "credit" code , then subtract its amount from the unit total amount
-            boolean creditIndicator = KFSConstants.GL_CREDIT_CODE.equals(laborOriginEntry.getTransactionDebitCreditCode());
+            boolean creditIndicator = Constants.GL_CREDIT_CODE.equals(laborOriginEntry.getTransactionDebitCreditCode());
             unitAmount = creditIndicator ? unitAmount.subtract(entryAmount) : unitAmount.add(entryAmount);
-            
+
             workingEntry.setTransactionLedgerEntryAmount(unitAmount);
             numOfMember++;
 
@@ -118,10 +112,9 @@ public class LaborLedgerUnitOfWork {
     /**
      * @see java.lang.Object#toString()
      */
-    @Override
     public String toString() {
         List<String> printablekeyFields = new ArrayList<String>(this.getKeyFields());
-        printablekeyFields.add(KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT);
+        printablekeyFields.add(PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT);
         return ObjectUtil.buildPropertyMap(workingEntry, printablekeyFields).toString();
     }
 
@@ -173,13 +166,11 @@ public class LaborLedgerUnitOfWork {
         this.numOfMember = numOfMember;
     }
 
-    /**
-     * Get the default key fields as a list
-     **/
+    // Get the default key fields as a list
     private List<String> getDefaultKeyFields() {
         List<String> defaultKeyFields = new ArrayList<String>(LaborConstants.consolidationAttributesOfOriginEntry());
-        defaultKeyFields.remove(KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT);
-        defaultKeyFields.remove(KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE);
+        defaultKeyFields.remove(PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT);
+        defaultKeyFields.remove(PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE);
 
         return defaultKeyFields;
     }

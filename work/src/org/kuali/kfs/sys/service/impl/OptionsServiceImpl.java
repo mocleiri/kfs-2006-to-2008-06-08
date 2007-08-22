@@ -17,10 +17,9 @@ package org.kuali.kfs.service.impl;
 
 
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.dao.OptionsDao;
 import org.kuali.kfs.service.OptionsService;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -32,7 +31,7 @@ public class OptionsServiceImpl implements OptionsService {
     public Options getCurrentYearOptions() {
         LOG.debug("getCurrentYearOptions() started");
 
-        Integer fy = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        Integer fy = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
         return optionsDao.getByPrimaryId(fy);
     }
 

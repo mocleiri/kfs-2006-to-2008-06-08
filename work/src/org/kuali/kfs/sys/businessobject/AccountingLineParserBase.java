@@ -16,19 +16,19 @@
 
 package org.kuali.kfs.bo;
 
-import static org.kuali.kfs.KFSKeyConstants.AccountingLineParser.ERROR_INVALID_FILE_FORMAT;
-import static org.kuali.kfs.KFSKeyConstants.AccountingLineParser.ERROR_INVALID_PROPERTY_VALUE;
-import static org.kuali.kfs.KFSPropertyConstants.ACCOUNT_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.ORGANIZATION_REFERENCE_ID;
-import static org.kuali.kfs.KFSPropertyConstants.OVERRIDE_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.POSTING_YEAR;
-import static org.kuali.kfs.KFSPropertyConstants.PROJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.SEQUENCE_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.SUB_ACCOUNT_NUMBER;
+import static org.kuali.KeyConstants.AccountingLineParser.*;
+import static org.kuali.KeyConstants.AccountingLineParser.ERROR_INVALID_PROPERTY_VALUE;
+import static org.kuali.PropertyConstants.ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.AMOUNT;
+import static org.kuali.PropertyConstants.CHART_OF_ACCOUNTS_CODE;
+import static org.kuali.PropertyConstants.FINANCIAL_OBJECT_CODE;
+import static org.kuali.PropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
+import static org.kuali.PropertyConstants.ORGANIZATION_REFERENCE_ID;
+import static org.kuali.PropertyConstants.OVERRIDE_CODE;
+import static org.kuali.PropertyConstants.POSTING_YEAR;
+import static org.kuali.PropertyConstants.PROJECT_CODE;
+import static org.kuali.PropertyConstants.SEQUENCE_NUMBER;
+import static org.kuali.PropertyConstants.SUB_ACCOUNT_NUMBER;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,15 +42,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.exceptions.InfrastructureException;
-import org.kuali.core.service.BusinessObjectDictionaryService;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.format.FormatException;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.exceptions.AccountingLineParserException;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.PropertyConstants;
 
 /**
  * Base class for parsing serialized <code>AccountingLine</code>s for <code>TransactionalDocument</code>s
@@ -180,7 +179,7 @@ public class AccountingLineParserBase implements AccountingLineParser {
 
 
         // force input to uppercase
-        SpringContext.getBean(BusinessObjectDictionaryService.class).performForceUppercase(accountingLine);
+        SpringServiceLocator.getBusinessObjectDictionaryService().performForceUppercase(accountingLine);
         accountingLine.refresh();
 
         return accountingLine;
@@ -195,7 +194,7 @@ public class AccountingLineParserBase implements AccountingLineParser {
      * @param sequenceNumber
      */
     private final void putCommonAttributesInMap(Map<String, String> attributeValueMap, AccountingDocument document, Integer sequenceNumber) {
-        attributeValueMap.put(KFSPropertyConstants.DOCUMENT_NUMBER, document.getDocumentNumber());
+        attributeValueMap.put(PropertyConstants.DOCUMENT_NUMBER, document.getDocumentNumber());
         attributeValueMap.put(POSTING_YEAR, document.getPostingYear().toString());
         attributeValueMap.put(SEQUENCE_NUMBER, sequenceNumber.toString());
     }
@@ -327,7 +326,7 @@ public class AccountingLineParserBase implements AccountingLineParser {
     }
 
     protected String retrieveAttributeLabel(Class clazz, String attributeName) {
-        String label = SpringContext.getBean(DataDictionaryService.class).getAttributeLabel(clazz, attributeName);
+        String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(clazz, attributeName);
         if (StringUtils.isBlank(label)) {
             label = attributeName;
         }

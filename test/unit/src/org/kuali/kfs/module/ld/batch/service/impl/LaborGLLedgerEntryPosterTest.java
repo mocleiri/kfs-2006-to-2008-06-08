@@ -29,8 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
@@ -40,9 +39,11 @@ import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.service.LaborGeneralLedgerEntryService;
 import org.kuali.module.labor.util.ObjectUtil;
 import org.kuali.module.labor.util.TestDataPreparator;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
-@ConfigureContext
+@WithTestSpringContext
 public class LaborGLLedgerEntryPosterTest extends KualiTestBase {
 
     private Properties properties;
@@ -69,11 +70,12 @@ public class LaborGLLedgerEntryPosterTest extends KualiTestBase {
         deliminator = properties.getProperty("deliminator");
         keyFieldList = Arrays.asList(StringUtils.split(fieldNames, deliminator));
 
-        laborGLLedgerEntryPoster = SpringContext.getBeansOfType(PostTransaction.class).get("laborGLLedgerEntryPoster");
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
-        originEntryGroupService = SpringContext.getBean(OriginEntryGroupService.class);
-        laborGeneralLedgerEntryService = SpringContext.getBean(LaborGeneralLedgerEntryService.class);
-        DateTimeService dateTimeService = SpringContext.getBean(DateTimeService.class);
+        BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();
+        laborGLLedgerEntryPoster = (PostTransaction) beanFactory.getBean("laborGLLedgerEntryPoster");
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
+        originEntryGroupService = (OriginEntryGroupService) beanFactory.getBean("glOriginEntryGroupService");
+        laborGeneralLedgerEntryService = (LaborGeneralLedgerEntryService) beanFactory.getBean("laborGeneralLedgerEntryService");
+        DateTimeService dateTimeService = (DateTimeService) beanFactory.getBean("dateTimeService");
 
         group1 = originEntryGroupService.createGroup(dateTimeService.getCurrentSqlDate(), LABOR_MAIN_POSTER_VALID, false, false, false);
         today = dateTimeService.getCurrentDate();

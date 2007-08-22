@@ -60,9 +60,9 @@
                         <field attributeName="vendorRestrictedDate" />
                         <field attributeName="vendorRestrictedPerson.personName" />
                         <field attributeName="vendorRestrictedReasonText" />
-                        <field attributeName="vendorRemitName" />                       
-                        <field attributeName="activeIndicator"/>
-                        <field attributeName="vendorInactiveReasonCode" />               
+                        <field attributeName="vendorRemitName" />
+                        <field attributeName="vendorInactiveReasonCode" />
+                        <field attributeName="activeIndicator"/>               
                     </inquiryFields>
                 </inquirySection>
                 
@@ -76,8 +76,7 @@
                             <field attributeName="vendorCityName" />
                             <field attributeName="vendorStateCode" />
                             <field attributeName="vendorZipCode" />
-                            <field attributeName="active" />
-                            <inquiryCollection name="vendorDefaultAddresses" businessObjectClass="org.kuali.module.vendor.bo.VendorDefaultAddress" summaryTitle="Default Address" >
+                            <inquiryCollection name="vendorDefaultAddresses" businessObjectClass="org.kuali.module.vendor.bo.VendorDefaultAddress" >
                                 <field attributeName="vendorCampusCode" />
                                 <inquirySummaryFields>
            		       		        <inquirySummaryField attributeName="vendorCampusCode" />
@@ -93,7 +92,7 @@
                 
                 <inquirySection title="Contacts">
                     <inquiryFields>
-                        <inquiryCollection name="vendorContacts" businessObjectClass="org.kuali.module.vendor.bo.VendorContact" numberOfColumns="2" summaryTitle="Contact" >                       	
+                        <inquiryCollection name="vendorContacts" businessObjectClass="org.kuali.module.vendor.bo.VendorContact" numberOfColumns="2" >                       	
                         	<field attributeName="vendorContactName"/>
                         	<field attributeName="vendorContactTypeCode"/>
                         	<field attributeName="vendorContactEmailAddress"/>
@@ -106,8 +105,7 @@
                         	<field attributeName="vendorAddressInternationalProvinceName"/>
                         	<field attributeName="vendorCityName"/>  	
                         	<field attributeName="vendorCountryCode"/>
-							<field attributeName="active" />
-                        	<inquiryCollection name="vendorContactPhoneNumbers" businessObjectClass="org.kuali.module.vendor.bo.VendorContactPhoneNumber" numberOfColumns="1" summaryTitle="Phone Number" >
+                        	<inquiryCollection name="vendorContactPhoneNumbers" businessObjectClass="org.kuali.module.vendor.bo.VendorContactPhoneNumber" numberOfColumns="1" >
                         		<field attributeName="vendorPhoneTypeCode"/>
                         		<field attributeName="vendorPhoneNumber"/>
                         		<field attributeName="vendorPhoneExtensionNumber"/>
@@ -126,7 +124,7 @@
                 
                 <inquirySection title="Contracts">
                     <inquiryFields>
-                        <inquiryCollection name="vendorContracts" businessObjectClass="org.kuali.module.vendor.bo.VendorContract" numberOfColumns="2" summaryTitle="Contract" >
+                        <inquiryCollection name="vendorContracts" businessObjectClass="org.kuali.module.vendor.bo.VendorContract" numberOfColumns="2" >
                         	<field attributeName="vendorContractName"/>
                         	<field attributeName="vendorContractDescription"/>                	
                         	<field attributeName="vendorCampusCode"/>
@@ -139,8 +137,7 @@
                         	<field attributeName="vendorShippingTitleCode"/>
                         	<field attributeName="vendorContractExtensionDate"/>
                         	<field attributeName="organizationAutomaticPurchaseOrderLimit"/>
-							<field attributeName="active" />
-                        	<inquiryCollection name="vendorContractOrganizations" businessObjectClass="org.kuali.module.vendor.bo.VendorContractOrganization" summaryTitle="Contract Organization" >
+                        	<inquiryCollection name="vendorContractOrganizations" businessObjectClass="org.kuali.module.vendor.bo.VendorContractOrganization" >
                         		<field attributeName="chartOfAccountsCode"/>
                         		<field attributeName="organizationCode"/>
                         		<field attributeName="vendorContractPurchaseOrderLimitAmount"/>
@@ -160,9 +157,8 @@
                   
  				<inquirySection title="Supplier Diversities">
                     <inquiryFields>
-                        <inquiryCollection name="vendorHeader.vendorSupplierDiversities" businessObjectClass="org.kuali.module.vendor.bo.VendorSupplierDiversity"  summaryTitle="Supplier Diversity" >
+                        <inquiryCollection name="vendorHeader.vendorSupplierDiversities" businessObjectClass="org.kuali.module.vendor.bo.VendorSupplierDiversity" >
                         	<field attributeName="vendorSupplierDiversityCode" />
-							<field attributeName="active" />
                         	<inquirySummaryFields>
                                 <inquirySummaryField attributeName="vendorSupplierDiversityCode" />
                             </inquirySummaryFields>
@@ -172,9 +168,8 @@
                 
     			<inquirySection title="Shipping Special Conditions">
                     <inquiryFields>
-                        <inquiryCollection name="vendorShippingSpecialConditions" businessObjectClass="org.kuali.module.vendor.bo.VendorShippingSpecialCondition" summaryTitle="Shipping Special Condition" >
-                        	<field attributeName="vendorShippingSpecialConditionCode"/>
-							<field attributeName="active" />
+                        <inquiryCollection name="vendorShippingSpecialConditions" businessObjectClass="org.kuali.module.vendor.bo.VendorShippingSpecialCondition" >
+                        	<field attributeName="vendorShippingSpecialCondition.vendorShippingSpecialConditionCode"/>
                             <inquirySummaryFields>
            		       		    <inquirySummaryField attributeName="vendorShippingSpecialConditionCode" />
            		       	    </inquirySummaryFields>    
@@ -186,7 +181,6 @@
                     <inquiryFields>
                         <inquiryCollection name="vendorAliases" businessObjectClass="org.kuali.module.vendor.bo.VendorAlias">
                         	<field attributeName="vendorAliasName"/>
-							<field attributeName="active" />
                         	<inquirySummaryFields>
            		       		    <inquirySummaryField attributeName="vendorAliasName" />
            		       	    </inquirySummaryFields>   
@@ -200,7 +194,6 @@
                         	<field attributeName="vendorPhoneTypeCode"/>
                         	<field attributeName="vendorPhoneNumber"/>
                         	<field attributeName="vendorPhoneExtensionNumber"/>
-							<field attributeName="active" />
                         	<inquirySummaryFields>
            		       		    <inquirySummaryField attributeName="vendorPhoneTypeCode" />
            		       		    <inquirySummaryField attributeName="vendorPhoneNumber" />
@@ -215,21 +208,9 @@
                         	<field attributeName="vendorCustomerNumber"/>
                         	<field attributeName="chartOfAccountsCode"/>
                         	<field attributeName="vendorOrganizationCode"/>
-							<field attributeName="active" />
                         	<inquirySummaryFields>
            		       		    <inquirySummaryField attributeName="vendorCustomerNumber" />
            		       	    </inquirySummaryFields> 
-                        </inquiryCollection>
-                    </inquiryFields>
-                </inquirySection>
-                
-                <inquirySection title="Notes">
-                    <inquiryFields>
-                        <inquiryCollection name="boNotes" businessObjectClass="org.kuali.core.bo.Note">
-                        	<field attributeName="noteText"/>
-                        	<field attributeName="notePostedTimestamp"/>
-                        	<field attributeName="authorUniversal.personName"/>
-							<field attributeName="active" />
                         </inquiryCollection>
                     </inquiryFields>
                 </inquirySection>         
@@ -254,7 +235,7 @@
                 <lookupField attributeName="vendorName" required="false" />
                 <lookupField attributeName="vendorHeader.vendorTaxNumber" required="false" />
                 <lookupField attributeName="vendorNumber" required="false" />      
-                <lookupField attributeName="activeIndicator" required="false" />
+                <lookupField attributeName="activeIndicator" required="false" /> 
                 <lookupField attributeName="vendorHeader.vendorTypeCode" required="false" />         
                 <lookupField attributeName="vendorAddresses.vendorStateCode" required="false" />                   
                 <lookupField attributeName="vendorHeader.vendorSupplierDiversities.vendorSupplierDiversityCode" required="false" />         
@@ -349,23 +330,6 @@
                 <summary>vendorName</summary>
                 <description>Only one format may be used for vendor name. Enter either the Vendor Name OR the Vendor First and Last Name.</description>
 			</attribute>
-
-            <!-- removed in relation to KULPURAP-800
- 
-				attribute name="altVendorName" forceUppercase="true">
-                <label>Corporate > Division Name</label>
-                <shortLabel>Corporate > Division Name</shortLabel>
-
-                <maxLength>45</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
-
-                <control>
-                    <text size="45" />
-                </control>
-
-                <summary>Corporate > Division Name</summary>
-                <description>Only one format may be used for vendor name. Enter either the Vendor Name OR the Vendor First and Last Name.</description>
-			</attribute -->
 
             <attribute name="vendorLastName" forceUppercase="true">
                 <label>Vendor Last Name</label>
@@ -485,11 +449,11 @@
             </attributeReference>
             
             <attributeReference name="vendorRestrictedPerson.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
-                <label>Restricted By</label>
-                <shortLabel>Restricted By</shortLabel>
+                <label>Restricted Person Identifier</label>
+                <shortLabel>Restricted Person ID</shortLabel>
                 <required>false</required>
                 <control>
-                    <kualiUser universalIdAttributeName="vendorRestrictedPersonIdentifier" userIdAttributeName="vendorRestrictedPerson.personUserIdentifier" personNameAttributeName="vendorRestrictedPerson.personName"/>
+                    <hidden />
                 </control>
                 <summary>Restricted Person Identifier</summary>
                 <description>Restricted Person Identifier</description>
@@ -499,6 +463,9 @@
                 <label>Restricted Person Name</label>
                 <shortLabel>Restricted Person Name</shortLabel>
                 <required>false</required>
+                <control>
+                    <kualiUser universalIdAttributeName="vendorRestrictedPersonIdentifier" userIdAttributeName="vendorRestrictedPerson.personUserIdentifier" personNameAttributeName="vendorRestrictedPerson.personName"/>
+                </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
@@ -731,15 +698,6 @@
                     <![CDATA[&nbsp;]]>
                 </summary>
                 <description>Vendor Search Aliases</description>
-            </collection>
-            <collection name="boNotes">
-                <label>Notes</label>
-                <shortLabel>Notes</shortLabel>
-                <elementLabel>Notes</elementLabel>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>Notes</description>
             </collection>
              
         </collections>    

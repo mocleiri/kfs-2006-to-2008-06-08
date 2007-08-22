@@ -30,13 +30,17 @@ import org.kuali.module.gl.web.Constant;
 import org.kuali.module.labor.bo.LedgerEntry;
 
 /**
- * This class is used to generate the URL for the user-defined attributes for the Ledger Balance screen. It is entended the
+ * This class is used to generate the URL for the user-defined attributes for the GL balace screen. It is entended the
  * KualiInquirableImpl class, so it covers both the default implementation and customized implemetnation.
  * 
  * 
  */
 public class LedgerBalanceInquirableImpl extends AbstractLaborInquirableImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LedgerBalanceInquirableImpl.class);
+
+    private BusinessObjectDictionaryService dataDictionary;
+    private LookupService lookupService;
+    private Class businessObjectClass;
 
     /**
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#buildUserDefinedAttributeKeyList()
@@ -47,11 +51,11 @@ public class LedgerBalanceInquirableImpl extends AbstractLaborInquirableImpl {
         keys.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
         keys.add(KFSPropertyConstants.ACCOUNT_NUMBER);
         keys.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        keys.add(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
+        keys.add(KFSPropertyConstants.BALANCE_TYPE_CODE);
         keys.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        keys.add(KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
-        keys.add(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
-        keys.add(KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE);
+        keys.add(KFSPropertyConstants.OBJECT_CODE);
+        keys.add(KFSPropertyConstants.SUB_OBJECT_CODE);
+        keys.add(KFSPropertyConstants.OBJECT_TYPE_CODE);
         keys.add(KFSPropertyConstants.EMPLID);
         keys.add(KFSPropertyConstants.POSITION_NUMBER);
 
@@ -81,8 +85,8 @@ public class LedgerBalanceInquirableImpl extends AbstractLaborInquirableImpl {
         userDefinedAttributeMap.put(KFSPropertyConstants.MONTH12_AMOUNT, KFSConstants.MONTH12);
         userDefinedAttributeMap.put(KFSPropertyConstants.MONTH13_AMOUNT, KFSConstants.MONTH13);
 
-        userDefinedAttributeMap.put(KFSPropertyConstants.BEGINNING_BALANCE_LINE_AMOUNT, KFSConstants.PERIOD_CODE_BEGINNING_BALANCE);
-        userDefinedAttributeMap.put(KFSPropertyConstants.CONTRACTS_GRANTS_BEGINNING_BALANCE_AMOUNT, KFSConstants.PERIOD_CODE_CG_BEGINNING_BALANCE);
+        userDefinedAttributeMap.put(KFSPropertyConstants.BEGINNING_BALANCE_LINE_AMOUNT, KFSConstants.BEGINNING_BALANCE);
+        userDefinedAttributeMap.put(KFSPropertyConstants.CONTRACTS_GRANTS_BEGINNING_BALANCE_AMOUNT, KFSConstants.CG_BEGINNING_BALANCE);
 
         return userDefinedAttributeMap;
     }
@@ -108,6 +112,7 @@ public class LedgerBalanceInquirableImpl extends AbstractLaborInquirableImpl {
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyName(java.lang.String)
      */
     protected String getKeyName(String keyName) {
+        keyName = BusinessObjectFieldConverter.convertToTransactionPropertyName(keyName);
         return keyName;
     }
 
