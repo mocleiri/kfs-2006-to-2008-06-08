@@ -18,13 +18,12 @@ package org.kuali.module.gl.service;
 import java.util.Calendar;
 
 import org.kuali.core.service.PersistenceService;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.gl.OriginEntryTestBase;
 import org.kuali.module.gl.bo.OriginEntrySource;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.suite.RelatesTo;
 
-@ConfigureContext
+@WithTestSpringContext
 public class ScrubberServiceTest extends OriginEntryTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ScrubberServiceTest.class);
 
@@ -36,9 +35,9 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
 
         LOG.debug("setUp() started");
 
-        scrubberService = SpringContext.getBean(ScrubberService.class);
+        scrubberService = (ScrubberService) beanFactory.getBean("glScrubberService");
         scrubberService.setDateTimeService(dateTimeService);
-        persistenceService = SpringContext.getBean(PersistenceService.class);
+        persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
 
         // Get the test date time service so we can specify the date/time of the run
         Calendar c = Calendar.getInstance();
@@ -1370,8 +1369,8 @@ public class ScrubberServiceTest extends OriginEntryTestBase {
     public void testBlankReferenceDocumentNumberWithEncumbranceUpdateCodeOfR() throws Exception {
 
         String[] inputTransactions = { 
-                "2007BA6044900-----1599---EXIN07TOPSLGBLANKRDOC     00000CONCERTO OFFICE PRODUCTS                            48.53C2006-01-05          ----------        CR  01                   R                                        ", 
-                "2007BA6044900-----9041---EXLI07TOPSLDBLANKRDOC     00000CONCERTO OFFICE PRODUCTS                            48.53D2006-01-05          ----------        CR  01                   R                                        " };
+                "2007BA6044900-----1599---EXIN07TOPSLGBLANKRDOC     00000CONCERTO OFFICE PRODUCTS                            48.53C2006-01-05          ----------             CR  01                   R                                        ", 
+                "2007BA6044900-----9041---EXLI07TOPSLDBLANKRDOC     00000CONCERTO OFFICE PRODUCTS                            48.53D2006-01-05          ----------             CR  01                   R                                        " };
 
         EntryHolder[] outputTransactions = { new EntryHolder(OriginEntrySource.BACKUP, inputTransactions[0]), new EntryHolder(OriginEntrySource.BACKUP, inputTransactions[1]), new EntryHolder(OriginEntrySource.SCRUBBER_ERROR, inputTransactions[1]), new EntryHolder(OriginEntrySource.SCRUBBER_ERROR, inputTransactions[0]) };
 
