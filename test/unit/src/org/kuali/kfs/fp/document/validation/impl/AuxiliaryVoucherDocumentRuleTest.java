@@ -17,13 +17,16 @@ package org.kuali.module.financial.rules;
 
 import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
 import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
+import static org.kuali.kfs.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.kfs.util.SpringServiceLocator.getDocumentTypeService;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLineRule_IsObjectCodeAllowed;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLineRule_IsObjectTypeAllowed;
-import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLineRule_ProcessAddAccountingLineBusinessRules;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLine_IsObjectSubTypeAllowed;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testGenerateGeneralLedgerPendingEntriesRule_ProcessGenerateGeneralLedgerPendingEntries;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testRouteDocumentRule_processRouteDocument;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testSaveDocumentRule_ProcessSaveDocument;
+import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLineRule_ProcessAddAccountingLineBusinessRules;
 import static org.kuali.test.fixtures.AccountingLineFixture.ACCRUED_INCOME_LINE;
 import static org.kuali.test.fixtures.AccountingLineFixture.ACCRUED_SICK_PAY_LINE;
 import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_GEC_LINE;
@@ -40,75 +43,72 @@ import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.DocumentTypeService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
-import org.kuali.module.chart.service.AccountingPeriodService;
 import org.kuali.module.financial.document.AuxiliaryVoucherDocument;
-import org.kuali.test.ConfigureContext;
 import org.kuali.test.DocumentTestUtils;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import org.kuali.test.suite.RelatesTo;
 
-@ConfigureContext(session = KHUNTLEY)
+@WithTestSpringContext(session = KHUNTLEY)
 public class AuxiliaryVoucherDocumentRuleTest extends KualiTestBase {
 
     public static final Class<AuxiliaryVoucherDocument> DOCUMENT_CLASS = AuxiliaryVoucherDocument.class;
 
     public void testIsDebit_debitCode() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(SpringContext.getBean(DocumentService.class), AuxiliaryVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), AuxiliaryVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(GL_DEBIT_CODE);
 
-        assertTrue(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
     public void testIsDebit_creditCode() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(SpringContext.getBean(DocumentService.class), AuxiliaryVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), AuxiliaryVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(GL_CREDIT_CODE);
 
-        assertFalse(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
     public void testIsDebit_blankValue() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(SpringContext.getBean(DocumentService.class), AuxiliaryVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), AuxiliaryVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(" ");
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
 
     public void testIsDebit_errorCorrection_debitCode() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(SpringContext.getBean(DocumentService.class), AuxiliaryVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), AuxiliaryVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(GL_DEBIT_CODE);
 
-        assertTrue(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
     public void testIsDebit_errorCorrection_creditCode() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(SpringContext.getBean(DocumentService.class), AuxiliaryVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), AuxiliaryVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(GL_CREDIT_CODE);
 
-        assertFalse(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
     public void testIsDebit_errorCorrection_blankValue() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(SpringContext.getBean(DocumentService.class), AuxiliaryVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), AuxiliaryVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(" ");
 
-        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebitIllegalStateException(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
 
@@ -195,7 +195,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends KualiTestBase {
 
     private AuxiliaryVoucherDocument createDocument() throws Exception {
         // AV document has a restriction on accounting period cannot be more than 2 periods behind current
-        return DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), AuxiliaryVoucherDocument.class);
+        return DocumentTestUtils.createDocument(getDocumentService(), AuxiliaryVoucherDocument.class);
     }
 
     private AuxiliaryVoucherDocument createDocumentValidForRouting() throws Exception {
@@ -207,7 +207,7 @@ public class AuxiliaryVoucherDocumentRuleTest extends KualiTestBase {
     }
 
     private AuxiliaryVoucherDocument createDocumentInvalidDescription() throws Exception {
-        AuxiliaryVoucherDocument document = DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), AuxiliaryVoucherDocument.class);
+        AuxiliaryVoucherDocument document = DocumentTestUtils.createDocument(getDocumentService(), AuxiliaryVoucherDocument.class);
 
         document.getDocumentHeader().setFinancialDocumentDescription(null);
         return document;
@@ -292,13 +292,13 @@ public class AuxiliaryVoucherDocumentRuleTest extends KualiTestBase {
      * period grace periods correctly.
      */
     public void testWithinGracePeriod() {
-        AccountingPeriod firstPeriod = SpringContext.getBean(AccountingPeriodService.class).getByPeriod("10", new Integer(2007));
+        AccountingPeriod firstPeriod = SpringServiceLocator.getAccountingPeriodService().getByPeriod("10", new Integer(2007));
         java.util.Calendar firstPeriodInside = new java.util.GregorianCalendar(2007, java.util.Calendar.MAY, 8);
         java.util.Calendar firstPeriodOutside = new java.util.GregorianCalendar(2007, java.util.Calendar.MAY, 23);
         assertTrue(AuxiliaryVoucherDocumentRule.calculateIfWithinGracePeriod(new java.sql.Date(firstPeriodInside.getTimeInMillis()), firstPeriod));
         assertFalse(AuxiliaryVoucherDocumentRule.calculateIfWithinGracePeriod(new java.sql.Date(firstPeriodOutside.getTimeInMillis()), firstPeriod));
         
-        AccountingPeriod secondPeriod = SpringContext.getBean(AccountingPeriodService.class).getByPeriod("13", new Integer(2006));
+        AccountingPeriod secondPeriod = SpringServiceLocator.getAccountingPeriodService().getByPeriod("13", new Integer(2006));
         java.util.Calendar secondPeriodInside = new java.util.GregorianCalendar(2006, java.util.Calendar.JULY, 20);
         java.util.Calendar secondPeriodOutside = new java.util.GregorianCalendar(2007, java.util.Calendar.JULY, 21);
         assertTrue(AuxiliaryVoucherDocumentRule.calculateIfWithinGracePeriod(new java.sql.Date(secondPeriodInside.getTimeInMillis()), secondPeriod));

@@ -23,15 +23,10 @@ import org.kuali.core.util.KualiInteger;
 public class KraConstants extends JstlConstants {
     private static final long serialVersionUID = 5725060921632498564L;
 
-    public static final String SHORT_TIMESTAMP_FORMAT = "MM/dd/yyyy";
-    public static final String LONG_TIMESTAMP_FORMAT = "MM/dd/yyyy HH:mm:ss";
-    
     public static final int maximumPeriodLengthUnits = Calendar.YEAR;
     public static final int maximumNumberOfPeriods = 20; // used on budgetPeriods.tag
 
     public static final int maximumNumberOfTasks = 20; // used on budgetTasks.tag
-    
-    public static final int projectDirectorRouteLevel = 1;
 
     public static final String SUBCONTRACTOR_CATEGORY_CODE = "SC"; // used on budgetCostShare*.tag and budgetNonpersonnel.tag
 
@@ -81,8 +76,6 @@ public class KraConstants extends JstlConstants {
     public static final String GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE = "graduateAssistantNonpersonnelSubCategoryCode";
     public static final String GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE = "graduateAssistantNonpersonnelCategoryCode";
 
-    public static final String KRA_BUDGET_INDIRECT_COST_PROVIDED_SYSTEM = "KraBudgetIndirectCostProvidedSystem";
-    public static final String KRA_BUDGET_INDIRECT_COST_PROVIDED_MANUALLY = "KraBudgetIndirectCostProvidedManually";
     public static final String KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPES = "KraBudgetPersonnelSummerGridAppointmentTypes";
     public static final String KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPE = "KraBudgetPersonnelSummerGridAppointmentType";
     public static final String KRA_BUDGET_PERSONNEL_FULL_YEAR_APPOINTMENT_TYPES = "KraBudgetPersonnelFullYearAppointmentTypes";
@@ -105,8 +98,6 @@ public class KraConstants extends JstlConstants {
     public static final String KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS = "KraBudgetNumberOfAcademicYearSubdivisions";
     public static final String KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES = "KraBudgetAcademicYearSubdivisionNames";
     
-    public static final String ROUTING_FORM_COST_SHARE_PERMISSION_CODE = "routingFormCostShareRoutingCode";
-    
     // Research Risks codes (system param names)
     public static final String RESEARCH_RISKS_HUMAN_SUBJECTS_ACTIVE_CODE = "researchRisksHumanSubjectsActiveCode";
     public static final String RESEARCH_RISKS_ANIMALS_ACTIVE_CODE = "researchRisksAnimalsActiveCode";
@@ -114,10 +105,6 @@ public class KraConstants extends JstlConstants {
     public static final String MANUAL_BASE = "MN";
     public static final String MODIFIED_TOTAL_DIRECT_COST = "MT";
     
-    public static final String PROJECT_DIRECTOR_REVIEW_NODE_NAME = "Project Director";
-    public static final String PROJECT_DIRECTOR_TEMPLATE_NAME = "KualiRoutingFormProjectDirectorTemplate";
-    public static final String ADHOC_REVIEW_NODE_NAME = "Adhoc Approvers";
-    public static final String ADHOC_REVIEW_TEMPLATE_NAME = "KualiResearchAdhocApproverTemplate";
     public static final String ORG_REVIEW_NODE_NAME = "Org Review";
     public static final String ORG_REVIEW_TEMPLATE_NAME = "KualiResearchOrgReviewTemplate";
     
@@ -139,6 +126,8 @@ public class KraConstants extends JstlConstants {
     public static final String DELETE_TASK_QUESTION_ID = "DeleteTaskQuestion";
     public static final String DELETE_COST_SHARE_QUESTION_ID = "DeleteCostShareQuestion";
     
+    public static final String DELETE_GRANTS_GOV_QUESTION_ID = "DeleteGrantsGovQuestion";
+    
     // Research Risk Types
     public static final String RESEARCH_RISK_TYPE_ALL_COLUMNS = "A";
     public static final String RESEARCH_RISK_TYPE_SOME_COLUMNS = "S";
@@ -151,23 +140,14 @@ public class KraConstants extends JstlConstants {
     // Study Review Statuses
     public static final String RESEARCH_RISK_STUDY_REVIEW_EXEMPT = "X";
     
-    // Following are used in tags on Main Page.
-    public static final String SUBMISSION_TYPE_CHANGE = "KraRoutingFormSubmissionTypeChange";
-    public static final String PROJECT_TYPE_OTHER = "KraRoutingFormProjectTypeOther";
-    public static final String PURPOSE_RESEARCH = "KraRoutingFormPurposeResearch";
-    public static final String PURPOSE_OTHER = "KraRoutingFormPurposeOther";
-    
-    // Role Codes
-    public static final String PROJECT_DIRECTOR_CODE = "P";
-    public static final String CO_PROJECT_DIRECTOR_CODE = "C";
-    public static final String CONTACT_PERSON_ADMINISTRATIVE_CODE = "M";
-    public static final String CONTACT_PERSON_PROPOSAL_CODE = "N";
-    
-    // Ad hoc types
-    public static final String AD_HOC_PERMISSION = "P";
-    public static final String AD_HOC_APPROVER = "A";
-
-    public static class AuthorizationConstants extends org.kuali.core.authorization.AuthorizationConstants.EditMode {
-        public static final String BUDGET_LINKED = "budgetLinked";
-    }
+    public static final String PERSON_ROLE_CODE_PD = "P";
+    public static final String PERSON_ROLE_CODE_OTHER = "O";
+    public static final String SUBMISSION_TYPE_CHANGE = "C";
+    public static final String PROJECT_TYPE_NEW = "N";
+    public static final String PROJECT_TYPE_TIME_EXTENTION = "T";
+    public static final String PROJECT_TYPE_BUDGET_REVISION_ACTIVE = "A";
+    public static final String PROJECT_TYPE_BUDGET_REVISION_PENDING = "P";
+    public static final String PROJECT_TYPE_OTHER = "O";
+    public static final String PURPOSE_RESEARCH = "R";
+    public static final String PURPOSE_OTHER = "O";
 }

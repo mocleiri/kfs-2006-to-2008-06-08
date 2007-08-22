@@ -17,18 +17,17 @@
 package org.kuali.module.budget.bo;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -36,9 +35,10 @@ import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.labor.bo.LaborObject;
 import org.kuali.module.labor.bo.PositionObjectBenefit;
-
+import org.kuali.rice.KNSServiceLocator;
 
 /**
  * 
@@ -54,8 +54,8 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
 	private String financialSubObjectCode;
 	private String financialBalanceTypeCode;
 	private String financialObjectTypeCode;
-	private KualiInteger accountLineAnnualBalanceAmount;
-	private KualiInteger financialBeginningBalanceLineAmount;
+	private KualiDecimal accountLineAnnualBalanceAmount;
+	private KualiDecimal financialBeginningBalanceLineAmount;
 
     private BudgetConstructionHeader budgetConstructionHeader;
 	private ObjectCode financialObject;
@@ -97,7 +97,7 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
             setPercentChange(null);
         } else {
             BigDecimal diffRslt = (accountLineAnnualBalanceAmount.bigDecimalValue().setScale(4)).subtract(financialBeginningBalanceLineAmount.bigDecimalValue().setScale(4));
-            BigDecimal divRslt = diffRslt.divide((financialBeginningBalanceLineAmount.bigDecimalValue().setScale(4)),KualiDecimal.ROUND_BEHAVIOR);
+            BigDecimal divRslt = diffRslt.divide((financialBeginningBalanceLineAmount.bigDecimalValue().setScale(4)),BigDecimal.ROUND_HALF_UP);
             setPercentChange(new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2))); 
         }
         return percentChange;
@@ -302,38 +302,48 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
 
 
 	/**
-     * Gets the accountLineAnnualBalanceAmount attribute. 
-     * @return Returns the accountLineAnnualBalanceAmount.
-     */
-    public KualiInteger getAccountLineAnnualBalanceAmount() {
-        return accountLineAnnualBalanceAmount;
-    }
+	 * Gets the accountLineAnnualBalanceAmount attribute.
+	 * 
+	 * @return Returns the accountLineAnnualBalanceAmount
+	 * 
+	 */
+	public KualiDecimal getAccountLineAnnualBalanceAmount() { 
+		return accountLineAnnualBalanceAmount;
+	}
 
-    /**
-     * Sets the accountLineAnnualBalanceAmount attribute value.
-     * @param accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
-     */
-    public void setAccountLineAnnualBalanceAmount(KualiInteger accountLineAnnualBalanceAmount) {
-        this.accountLineAnnualBalanceAmount = accountLineAnnualBalanceAmount;
-    }
+	/**
+	 * Sets the accountLineAnnualBalanceAmount attribute.
+	 * 
+	 * @param accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
+	 * 
+	 */
+	public void setAccountLineAnnualBalanceAmount(KualiDecimal accountLineAnnualBalanceAmount) {
+		this.accountLineAnnualBalanceAmount = accountLineAnnualBalanceAmount;
+	}
 
-    /**
-     * Gets the financialBeginningBalanceLineAmount attribute. 
-     * @return Returns the financialBeginningBalanceLineAmount.
-     */
-    public KualiInteger getFinancialBeginningBalanceLineAmount() {
-        return financialBeginningBalanceLineAmount;
-    }
 
-    /**
-     * Sets the financialBeginningBalanceLineAmount attribute value.
-     * @param financialBeginningBalanceLineAmount The financialBeginningBalanceLineAmount to set.
-     */
-    public void setFinancialBeginningBalanceLineAmount(KualiInteger financialBeginningBalanceLineAmount) {
-        this.financialBeginningBalanceLineAmount = financialBeginningBalanceLineAmount;
-    }
+	/**
+	 * Gets the financialBeginningBalanceLineAmount attribute.
+	 * 
+	 * @return Returns the financialBeginningBalanceLineAmount
+	 * 
+	 */
+	public KualiDecimal getFinancialBeginningBalanceLineAmount() { 
+		return financialBeginningBalanceLineAmount;
+	}
 
-    /**
+	/**
+	 * Sets the financialBeginningBalanceLineAmount attribute.
+	 * 
+	 * @param financialBeginningBalanceLineAmount The financialBeginningBalanceLineAmount to set.
+	 * 
+	 */
+	public void setFinancialBeginningBalanceLineAmount(KualiDecimal financialBeginningBalanceLineAmount) {
+		this.financialBeginningBalanceLineAmount = financialBeginningBalanceLineAmount;
+	}
+
+
+	/**
 	 * Gets the budgetConstructionMonthly attribute.
 	 * 
 	 * @return Returns the budgetConstructionMonthly
@@ -526,7 +536,7 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
             pkeys.put("chartOfAccountsCode", getChartOfAccountsCode());
             pkeys.put("financialObjectCode", getFinancialObjectCode());
             
-            setLaborObject((LaborObject) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(LaborObject.class,pkeys));
+            setLaborObject((LaborObject) KNSServiceLocator.getBusinessObjectService().findByPrimaryKey(LaborObject.class,pkeys));
             
         }
         return laborObject;
@@ -551,7 +561,7 @@ public class PendingBudgetConstructionGeneralLedger extends PersistableBusinessO
             fieldValues.put("chartOfAccountsCode", getChartOfAccountsCode());
             fieldValues.put("financialObjectCode", getFinancialObjectCode());
             
-            setPositionObjectBenefit((List<PositionObjectBenefit>) SpringContext.getBean(BusinessObjectService.class).findMatching(PositionObjectBenefit.class,fieldValues));
+            setPositionObjectBenefit((List<PositionObjectBenefit>) KNSServiceLocator.getBusinessObjectService().findMatching(PositionObjectBenefit.class,fieldValues));
             
         }
         return positionObjectBenefit;
