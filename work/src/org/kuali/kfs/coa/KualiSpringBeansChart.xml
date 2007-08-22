@@ -18,10 +18,9 @@
 <beans>
 	<bean id="chartModule" class="org.kuali.core.KualiModule">
 		<property name="moduleId" value="chart" />
-		<property name="moduleName" value="Chart Of Accounts" />
-		<property name="moduleCode" value="CA" />
+		<property name="moduleName" value="Kuali Chart Of Accounts" />
+		<property name="moduleCode" value="CH" />
 		<property name="moduleUserService" ref="chartUserService" />
-		<property name="initializeDataDictionary" value="true" />
 		<property name="moduleUserRule">
 			<bean class="org.kuali.module.chart.rules.ChartUserRule" singleton="false" parent="maintenanceDocumentRuleBase">
 				<!--  TODO: bind in other services -->
@@ -52,11 +51,6 @@
 		<property name="scriptConfigurationFilePaths">
 			<list>
 				<value>org/kuali/module/chart/dwr-chart.xml</value>
-			</list>
-		</property>
-		<property name="jobNames">
-			<list>
-				<value>fiscalYearMakerJob</value>
 			</list>
 		</property>
 	</bean>
@@ -93,9 +87,6 @@
 	<bean id="subObjectCodeService" class="org.kuali.module.chart.service.impl.SubObjectCodeServiceImpl">
 		<property name="subObjectCodeDao">
 			<ref bean="subObjectCodeDao" />
-		</property>
-		<property name="universityDateService">
-			<ref bean="universityDateService" />
 		</property>
 	</bean>
 
@@ -227,12 +218,6 @@
 	<bean id="indirectCostRecoveryExclusionTypeDao" parent="platformAwareDao" class="org.kuali.module.chart.dao.ojb.IndirectCostRecoveryExclusionTypeDaoOjb" />
 
 	<bean id="a21SubAccountDao" parent="platformAwareDao" class="org.kuali.module.chart.dao.ojb.A21SubAccountDaoOjb" />
-	
-	<bean id="workflow-org.kuali.module.chart.bo.Campus-Lookupable" parent="workflowLookupable" singleton="false">
-		<property name="businessObjectClassName">
-			<value>org.kuali.core.bo.Campus</value>
-		</property>
-	</bean> 
 
 	<bean id="workflow-org.kuali.module.chart.bo.Chart-Lookupable" parent="workflowLookupable" singleton="false">
 		<property name="businessObjectClassName">
@@ -324,6 +309,12 @@
 		</property>
 	</bean>
 
+	<bean id="workflow-org.kuali.core.bo.Campus-Lookupable" parent="workflowLookupable" singleton="false">
+		<property name="businessObjectClassName">
+			<value>org.kuali.core.bo.Campus</value>
+		</property>
+	</bean>
+
 	<bean id="workflow-org.kuali.module.chart.bo.AcctType-Lookupable" parent="workflowLookupable" singleton="false">
 		<property name="businessObjectClassName">
 			<value>org.kuali.module.chart.bo.AcctType</value>
@@ -342,9 +333,15 @@
 		</property>
 	</bean>
 
+	<bean id="workflow-org.kuali.core.bo.user.UniversalUser-Lookupable" parent="workflowLookupable" singleton="false">
+		<property name="businessObjectClassName">
+			<value>org.kuali.core.bo.user.UniversalUser</value>
+		</property>
+	</bean>
+
 	<bean id="OrgReviewLookupable" class="org.kuali.workflow.attribute.OrgReviewLookupableImpl" singleton="false" />
 
-	<bean id="accountLookupableHelperService" class="org.kuali.module.chart.lookup.KualiAccountLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService" />
+	<bean id="accountLookupableHelperService" class="org.kuali.module.chart.lookup.KualiAccountLookupableHelperServiceImpl" singleton="false" parent="kualiLookupableHelperService" />
 
 	<bean id="accountLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
 		<property name="lookupableHelperService">
@@ -352,7 +349,7 @@
 		</property>
 	</bean>
 
-	<bean id="organizationRoutingModelLookupableHelperService" class="org.kuali.module.chart.lookup.OrganizationRoutingModelNameLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService" />
+	<bean id="organizationRoutingModelLookupableHelperService" class="org.kuali.module.chart.lookup.OrganizationRoutingModelNameLookupableHelperServiceImpl" singleton="false" parent="kualiLookupableHelperService" />
 
 	<bean id="organizationRoutingModelLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
 		<property name="lookupableHelperService">
@@ -360,147 +357,11 @@
 		</property>
 	</bean>
 	
-	<bean id="indirectCostRecoveryExclusionByTypeLookupableHelperService" class="org.kuali.module.chart.lookup.IndirectCostRecoveryExclusionByTypeLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService" />
+	<bean id="indirectCostRecoveryExclusionByTypeLookupableHelperService" class="org.kuali.module.chart.lookup.IndirectCostRecoveryExclusionByTypeLookupableHelperServiceImpl" singleton="false" parent="kualiLookupableHelperService" />
 
 	<bean id="indirectCostRecoveryExclusionByTypeLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
 		<property name="lookupableHelperService">
 			<ref bean="indirectCostRecoveryExclusionByTypeLookupableHelperService" />
 		</property>
 	</bean>
-	
-	<bean id="fiscalYearMakerStep" class="org.kuali.module.chart.batch.FiscalYearMakerStep" parent="step">
-		<property name="dateMakerService">
-			<ref bean="dateMakerService" />
-		</property>
-	</bean>
-	
-	<bean id="fiscalYearMakerJob" parent="unscheduledJobDescriptor">
-		<property name="steps">
-			<list>
-				<ref bean="fiscalYearMakerStep" />
-			</list>
-		</property>
-	</bean>
-	
-		<bean id="fiscalYearStartDate"
-	      class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-	      <property name="staticField"><value>org.kuali.module.chart.dao.ojb.FiscalYearMakersDaoOjb.START_JULY</value>
-	      </property>
-	</bean>
-	
-	
-    <bean id="dateMakerService" class="org.kuali.module.chart.service.impl.DateMakerServiceImpl">
-        <property name="fiscalYearMakersDao">
-            <ref bean="fiscalYearMakersDao" />
-        </property>
-   </bean>
-
-    <bean id="fiscalYearMakersDao" parent="platformAwareDao" class="org.kuali.module.chart.dao.ojb.FiscalYearMakersDaoOjb" >
-        <property name="persistenceStructureService">
-            <ref bean="persistenceStructureService" />
-        </property>
-        <property name="dateTimeService">
-            <ref bean="dateTimeService" />
-        </property>
-        <property name="fiscalYearStartDate">
-            <ref bean="fiscalYearStartDate" />
-        </property>
-        <property name="makerObjectsList">
-          <map>
-            <entry key="org.kuali.module.chart.bo.OrganizationReversion">
-              <value>org.kuali.module.chart.bo.OrganizationReversion</value>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.OrganizationReversionDetail">
-              <value>org.kuali.module.chart.bo.OrganizationReversionDetail</value>
-            </entry>    
-            <entry key="org.kuali.module.chart.bo.SubObjCd">
-              <value>org.kuali.module.chart.bo.SubObjCd</value>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.ObjectCode">
-              <value>org.kuali.module.chart.bo.ObjectCode</value>
-            </entry>    
-            <entry key="org.kuali.kfs.bo.Options">
-              <value>org.kuali.kfs.bo.Options</value>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.OffsetDefinition">
-              <value>org.kuali.module.chart.bo.OffsetDefinition</value>
-            </entry>    
-            <entry key="org.kuali.module.labor.bo.BenefitsCalculation">
-              <value>org.kuali.module.labor.bo.BenefitsCalculation</value>
-            </entry>
-            <entry key="org.kuali.module.labor.bo.LaborObject">
-              <value>org.kuali.module.labor.bo.LaborObject</value>
-            </entry>    
-            <entry key="org.kuali.module.labor.bo.PositionObjectBenefit">
-              <value>org.kuali.module.labor.bo.PositionObjectBenefit</value>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.AccountingPeriod">
-              <value>org.kuali.module.chart.bo.AccountingPeriod</value>
-            </entry>    
-            <entry key="org.kuali.module.gl.bo.UniversityDate">
-              <value>org.kuali.module.gl.bo.UniversityDate</value>
-            </entry>    
-          </map>
-        </property>  
-        <property name="childParentArrayMap">
-          <map>
-            <entry key="org.kuali.module.chart.bo.OrganizationReversionDetail">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-                <value>org.kuali.module.chart.bo.ObjectCode</value>
-                <value>org.kuali.module.chart.bo.OrganizationReversion</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.OrganizationReversion">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.SubObjCd">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-                <value>org.kuali.module.chart.bo.ObjectCode</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.ObjectCode">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.OffsetDefinition">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-                <value>org.kuali.module.chart.bo.ObjectCode</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.labor.bo.BenefitsCalculation">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.labor.bo.PositionObjectBenefit">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-                <value>org.kuali.module.labor.bo.BenefitsCalculation</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.AccountingPeriod">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.gl.bo.UniversityDate">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-          </map>
-        </property>
-        <property name="laggingCopyCycle">
-          <set>
-            <value>org.kuali.module.chart.bo.OrganizationReversion</value>
-            <value>org.kuali.module.chart.bo.OrganizationReversionDetail</value>
-          </set>
-        </property>
-    </bean>
 </beans>

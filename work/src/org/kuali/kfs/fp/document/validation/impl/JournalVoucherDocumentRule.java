@@ -15,57 +15,55 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.kfs.KFSConstants.AMOUNT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.BALANCE_TYPE_BASE_BUDGET;
-import static org.kuali.kfs.KFSConstants.BALANCE_TYPE_BUDGET_STATISTICS;
-import static org.kuali.kfs.KFSConstants.BALANCE_TYPE_CURRENT_BUDGET;
-import static org.kuali.kfs.KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE;
-import static org.kuali.kfs.KFSConstants.BALANCE_TYPE_MONTHLY_BUDGET;
-import static org.kuali.kfs.KFSConstants.BLANK_SPACE;
-import static org.kuali.kfs.KFSConstants.CREDIT_AMOUNT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.DEBIT_AMOUNT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.GENERIC_CODE_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
-import static org.kuali.kfs.KFSConstants.JOURNAL_LINE_HELPER_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.OBJECT_TYPE_CODE_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.SQUARE_BRACKET_LEFT;
-import static org.kuali.kfs.KFSConstants.SQUARE_BRACKET_RIGHT;
-import static org.kuali.kfs.KFSConstants.VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSConstants.VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_REQUIRED;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_ZERO_AMOUNT;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_ZERO_OR_NEGATIVE_AMOUNT;
-import static org.kuali.kfs.KFSKeyConstants.JournalVoucher.ERROR_NEGATIVE_NON_BUDGET_AMOUNTS;
-import static org.kuali.kfs.KFSPropertyConstants.ACCOUNTING_PERIOD;
-import static org.kuali.kfs.KFSPropertyConstants.BALANCE_TYPE;
-import static org.kuali.kfs.KFSPropertyConstants.BALANCE_TYPE_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_ORIGIN_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_TYPE_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.REVERSAL_DATE;
-import static org.kuali.kfs.KFSPropertyConstants.SELECTED_ACCOUNTING_PERIOD;
+import static org.kuali.Constants.AMOUNT_PROPERTY_NAME;
+import static org.kuali.Constants.BALANCE_TYPE_BASE_BUDGET;
+import static org.kuali.Constants.BALANCE_TYPE_BUDGET_STATISTICS;
+import static org.kuali.Constants.BALANCE_TYPE_CURRENT_BUDGET;
+import static org.kuali.Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE;
+import static org.kuali.Constants.BALANCE_TYPE_MONTHLY_BUDGET;
+import static org.kuali.Constants.BLANK_SPACE;
+import static org.kuali.Constants.CREDIT_AMOUNT_PROPERTY_NAME;
+import static org.kuali.Constants.DEBIT_AMOUNT_PROPERTY_NAME;
+import static org.kuali.Constants.GENERIC_CODE_PROPERTY_NAME;
+import static org.kuali.Constants.GL_DEBIT_CODE;
+import static org.kuali.Constants.JOURNAL_LINE_HELPER_PROPERTY_NAME;
+import static org.kuali.Constants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME;
+import static org.kuali.Constants.OBJECT_TYPE_CODE_PROPERTY_NAME;
+import static org.kuali.Constants.SQUARE_BRACKET_LEFT;
+import static org.kuali.Constants.SQUARE_BRACKET_RIGHT;
+import static org.kuali.Constants.VOUCHER_LINE_HELPER_CREDIT_PROPERTY_NAME;
+import static org.kuali.Constants.VOUCHER_LINE_HELPER_DEBIT_PROPERTY_NAME;
+import static org.kuali.KeyConstants.ERROR_DOCUMENT_SINGLE_SECTION_NO_ACCOUNTING_LINES;
+import static org.kuali.KeyConstants.ERROR_REQUIRED;
+import static org.kuali.KeyConstants.ERROR_ZERO_AMOUNT;
+import static org.kuali.KeyConstants.ERROR_ZERO_OR_NEGATIVE_AMOUNT;
+import static org.kuali.KeyConstants.JournalVoucher.ERROR_NEGATIVE_NON_BUDGET_AMOUNTS;
+import static org.kuali.PropertyConstants.ACCOUNTING_PERIOD;
+import static org.kuali.PropertyConstants.BALANCE_TYPE;
+import static org.kuali.PropertyConstants.BALANCE_TYPE_CODE;
+import static org.kuali.PropertyConstants.REFERENCE_NUMBER;
+import static org.kuali.PropertyConstants.REFERENCE_ORIGIN_CODE;
+import static org.kuali.PropertyConstants.REFERENCE_TYPE_CODE;
+import static org.kuali.PropertyConstants.REVERSAL_DATE;
+import static org.kuali.PropertyConstants.SELECTED_ACCOUNTING_PERIOD;
 import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
 import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
-import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.financial.bo.VoucherSourceAccountingLine;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 
 /**
@@ -150,7 +148,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
         // check the selected accounting period
         jvDoc.refreshReferenceObject(ACCOUNTING_PERIOD);
         AccountingPeriod accountingPeriod = jvDoc.getAccountingPeriod();
-        // KFSPropertyConstants.SELECTED_ACCOUNTING_PERIOD is on JournalVoucherForm, not JournalVoucherDocument
+        // PropertyConstants.SELECTED_ACCOUNTING_PERIOD is on JournalVoucherForm, not JournalVoucherDocument
         valid &= AccountingDocumentRuleUtil.isValidOpenAccountingPeriod(accountingPeriod, JournalVoucherDocument.class, ACCOUNTING_PERIOD, DOCUMENT_ERROR_PREFIX + SELECTED_ACCOUNTING_PERIOD);
 
         // check the chosen reversal date, only if they entered a value
@@ -160,21 +158,6 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
         }
 
         return valid;
-    }
-
-    @Override
-    protected KualiDecimal getGeneralLedgerPendingEntryAmountForAccountingLine(AccountingLine accountingLine) {
-        LOG.debug("getGeneralLedgerPendingEntryAmountForAccountingLine(AccountingLine) - start");
-        KualiDecimal returnKualiDecimal;
-            
-        String budgetCodes = SpringContext.getBean(OptionsService.class).getOptions(accountingLine.getPostingYear()).getBudgetCheckingBalanceTypeCd();
-        if (budgetCodes.contains(accountingLine.getBalanceTypeCode())) { 
-            returnKualiDecimal = accountingLine.getAmount();
-        } else {
-            returnKualiDecimal = accountingLine.getAmount().abs();
-        }
-        LOG.debug("getGeneralLedgerPendingEntryAmountForAccountingLine(AccountingLine) - end");
-        return returnKualiDecimal;
     }
 
     /**
@@ -398,7 +381,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     private boolean isRequiredReferenceFieldsValid(AccountingLine accountingLine) {
         boolean valid = true;
 
-        BusinessObjectEntry boe = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getBusinessObjectEntry(VoucherSourceAccountingLine.class.getName());
+        BusinessObjectEntry boe = SpringServiceLocator.getDataDictionaryService().getDataDictionary().getBusinessObjectEntry(SourceAccountingLine.class);
         if (StringUtils.isEmpty(accountingLine.getReferenceOriginCode())) {
             putRequiredPropertyError(boe, REFERENCE_ORIGIN_CODE);
             valid = false;
@@ -428,7 +411,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
             return true;
         }
         else {
-            String label = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getBusinessObjectEntry(ObjectType.class.getName()).getAttributeDefinition(GENERIC_CODE_PROPERTY_NAME).getLabel();
+            String label = SpringServiceLocator.getDataDictionaryService().getDataDictionary().getBusinessObjectEntry(ObjectType.class).getAttributeDefinition(GENERIC_CODE_PROPERTY_NAME).getLabel();
             GlobalVariables.getErrorMap().putError(OBJECT_TYPE_CODE_PROPERTY_NAME, ERROR_REQUIRED, label);
             return false;
         }
@@ -502,7 +485,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     // KualiDecimal lineAmount = sourceAccountingLine.getAmount();
     // String financialObjectTypeCode = sourceAccountingLine.getObjectTypeCode();
     // String sufficientFundsObjectCode =
-    // SpringContext.getBean(SufficientFundsService.class).getSufficientFundsObjectCode(sourceAccountingLine.getObjectCode(),accountSufficientFundsCode);
+    // SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(sourceAccountingLine.getObjectCode(),accountSufficientFundsCode);
     //
     // item = buildSufficentFundsItem(accountNumber, accountSufficientFundsCode, lineAmount, chartOfAccountsCode,
     // sufficientFundsObjectCode, debitCreditCode, financialObjectCode, financialObjectLevelCode, fiscalYear,
@@ -529,4 +512,19 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     // }
     // return null;
     // }
+    /**
+     * 
+     * @see org.kuali.core.rule.DocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
+     */
+    @Override
+    protected boolean processCustomRouteDocumentBusinessRules(Document document) {
+        boolean isValid = super.processCustomRouteDocumentBusinessRules(document);
+
+        if (isValid) {
+            isValid &= isAllAccountingLinesMatchingBudgetYear((AccountingDocument) document);
+        }
+
+        return isValid;
+    }
+
 }

@@ -21,24 +21,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
-import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.format.CurrencyFormatter;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CheckBase;
-import org.kuali.module.financial.bo.CoinDetail;
-import org.kuali.module.financial.bo.CurrencyDetail;
 import org.kuali.module.financial.rule.event.AddCheckEvent;
 import org.kuali.module.financial.rule.event.DeleteCheckEvent;
 import org.kuali.module.financial.rule.event.UpdateCheckEvent;
-import org.kuali.module.financial.service.CashReceiptService;
-import org.kuali.module.financial.service.CheckService;
 import org.kuali.module.gl.util.SufficientFundsItem;
 
 /**
@@ -52,8 +46,6 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
 
     public static final String CHECK_ENTRY_DETAIL = "individual";
     public static final String CHECK_ENTRY_TOTAL = "totals";
-    
-    public static final String DOCUMENT_TYPE = "CR";
 
     // child object containers - for all the different reconciliation detail sections
     private String checkEntryMode = CHECK_ENTRY_DETAIL;
@@ -66,9 +58,6 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
     private KualiDecimal totalCashAmount = KualiDecimal.ZERO;
     private KualiDecimal totalCheckAmount = KualiDecimal.ZERO;
     private KualiDecimal totalCoinAmount = KualiDecimal.ZERO;
-    
-    private CurrencyDetail currencyDetail;
-    private CoinDetail coinDetail;
 
     /**
      * Initializes the array lists and line incrementers.
@@ -76,9 +65,7 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
     public CashReceiptDocument() {
         super();
 
-        setCampusLocationCode(KFSConstants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_CAMPUS_LOCATION_CODE);
-        currencyDetail = new CurrencyDetail();
-        coinDetail = new CoinDetail();
+        setCampusLocationCode(Constants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_CAMPUS_LOCATION_CODE);
     }
 
     /**
@@ -87,7 +74,10 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
      * @return Returns the totalCashAmount.
      */
     public KualiDecimal getTotalCashAmount() {
-        return (currencyDetail != null) ? currencyDetail.getTotalAmount() : KualiDecimal.ZERO;
+        if (totalCashAmount == null) {
+            setTotalCashAmount(KualiDecimal.ZERO);
+        }
+        return totalCashAmount;
     }
 
     /**
@@ -149,7 +139,7 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
      */
     public int getCheckCount() {
         int count = 0;
-        if (ObjectUtils.isNotNull(checks)) {
+        if (checks != null) {
             count = checks.size();
         }
         return count;
@@ -179,7 +169,7 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
      */
     public Check getCheck(int index) {
         while (this.checks.size() <= index) {
-            checks.add(createNewCheck());
+            checks.add(new CheckBase());
         }
         return (Check) checks.get(index);
     }
@@ -187,7 +177,7 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
 
     /**
      * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#checkSufficientFunds()
+     * @see org.kuali.core.document.TransactionalDocumentBase#checkSufficientFunds()
      */
     @Override
     public List<SufficientFundsItem> checkSufficientFunds() {
@@ -209,11 +199,10 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
         super.handleRouteStatusChange();
         // Workflow Status of PROCESSED --> Kuali Doc Status of Verified
         if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            this.getDocumentHeader().setFinancialDocumentStatusCode(KFSConstants.DocumentStatusCodes.CashReceipt.VERIFIED);
-            LOG.info("Adding Cash to Cash Drawer");
-            SpringContext.getBean(CashReceiptService.class).addCashDetailsToCashDrawer(this);
+            this.getDocumentHeader().setFinancialDocumentStatusCode(Constants.DocumentStatusCodes.CashReceipt.VERIFIED);
         }
     }
+
 
     /**
      * This method removes a check from the list and updates the total appropriately.
@@ -284,7 +273,10 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
      * @return Returns the totalCoinAmount.
      */
     public KualiDecimal getTotalCoinAmount() {
-        return (coinDetail != null) ? coinDetail.getTotalAmount() : KualiDecimal.ZERO;
+        if (totalCoinAmount == null) {
+            setTotalCoinAmount(KualiDecimal.ZERO);
+        }
+        return totalCoinAmount;
     }
 
     /**
@@ -308,45 +300,12 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
     /**
      * This method returns the overall total of the document - coin plus check plus cash.
      * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTotalDollarAmount()
      * @return KualiDecimal
      */
     @Override
     public KualiDecimal getTotalDollarAmount() {
         KualiDecimal sumTotalAmount = getTotalCoinAmount().add(getTotalCheckAmount()).add(getTotalCashAmount());
         return sumTotalAmount;
-    }
-
-    /**
-     * Gets the coinDetail attribute. 
-     * @return Returns the coinDetail.
-     */
-    public CoinDetail getCoinDetail() {
-        return coinDetail;
-    }
-
-    /**
-     * Sets the coinDetail attribute value.
-     * @param coinDetail The coinDetail to set.
-     */
-    public void setCoinDetail(CoinDetail coinDetail) {
-        this.coinDetail = coinDetail;
-    }
-
-    /**
-     * Gets the currencyDetail attribute. 
-     * @return Returns the currencyDetail.
-     */
-    public CurrencyDetail getCurrencyDetail() {
-        return currencyDetail;
-    }
-
-    /**
-     * Sets the currencyDetail attribute value.
-     * @param currencyDetail The currencyDetail to set.
-     */
-    public void setCurrencyDetail(CurrencyDetail currencyDetail) {
-        this.currencyDetail = currencyDetail;
     }
 
     /**
@@ -407,66 +366,6 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
             setCheckEntryMode(CHECK_ENTRY_DETAIL);
             setTotalCheckAmount(calculateCheckTotal());
         }
-        refreshCashDetails();
-    }
-    
-    /**
-     * @see org.kuali.core.document.DocumentBase#postProcessSave(org.kuali.core.rule.event.KualiDocumentEvent)
-     */
-    @Override
-    public void postProcessSave(KualiDocumentEvent event) {
-        super.postProcessSave(event);
-        
-        if (retrieveCurrencyDetail() == null) {
-            getCurrencyDetail().setDocumentNumber(this.getDocumentNumber());
-            getCurrencyDetail().setFinancialDocumentTypeCode(CashReceiptDocument.DOCUMENT_TYPE);
-            getCurrencyDetail().setCashieringRecordSource(KFSConstants.CurrencyCoinSources.CASH_RECEIPTS);
-        }
-        
-        if (retrieveCoinDetail() == null) {
-            getCoinDetail().setDocumentNumber(this.getDocumentNumber());
-            getCoinDetail().setFinancialDocumentTypeCode(CashReceiptDocument.DOCUMENT_TYPE);
-            getCoinDetail().setCashieringRecordSource(KFSConstants.CurrencyCoinSources.CASH_RECEIPTS);
-        }
-        
-        SpringContext.getBean(BusinessObjectService.class).save(getCurrencyDetail());
-        SpringContext.getBean(BusinessObjectService.class).save(getCoinDetail());
-    }
-    
-    /**
-     * This method refreshes the currency/coin details for this cash receipt document
-     */
-    public void refreshCashDetails() {
-        this.currencyDetail = retrieveCurrencyDetail();
-        this.coinDetail = retrieveCoinDetail();
-    }
-    
-    /**
-     * Get this document's currency detail from the database
-     * @return the currency detail record for this cash receipt document
-     */
-    private CurrencyDetail retrieveCurrencyDetail() {
-        return (CurrencyDetail)SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(CurrencyDetail.class, getCashDetailPrimaryKey());
-    }
-    
-    /**
-     * Grab this document's coin detail from the database
-     * @return the coin detail record for this cash receipt document
-     */
-    private CoinDetail retrieveCoinDetail() {
-        return (CoinDetail)SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(CoinDetail.class, getCashDetailPrimaryKey());
-    }
-    
-    /**
-     * Generate the primary key for a currency or coin detail related to this document
-     * @return a map with a representation of the proper primary key
-     */
-    private Map getCashDetailPrimaryKey() {
-        Map pk = new HashMap();
-        pk.put("documentNumber", this.getDocumentNumber());
-        pk.put("financialDocumentTypeCode", CashReceiptDocument.DOCUMENT_TYPE);
-        pk.put("cashieringRecordSource", KFSConstants.CurrencyCoinSources.CASH_RECEIPTS);
-        return pk;
     }
 
     /**
@@ -486,10 +385,10 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
         // 2. retrieve current checks from given document
         // 3. compare, creating add/delete/update events as needed
         // 4. apply rules as appropriate returned events
-        List persistedChecks = SpringContext.getBean(CheckService.class).getByDocumentHeaderId(getDocumentNumber());
+        List persistedChecks = SpringServiceLocator.getCheckService().getByDocumentHeaderId(getDocumentNumber());
         List currentChecks = getChecks();
 
-        List events = generateEvents(persistedChecks, currentChecks, KFSConstants.EXISTING_CHECK_PROPERTY_NAME, this);
+        List events = generateEvents(persistedChecks, currentChecks, Constants.EXISTING_CHECK_PROPERTY_NAME, this);
 
         return events;
     }
@@ -582,13 +481,4 @@ public class CashReceiptDocument extends CashReceiptFamilyBase implements Copyab
 
         return checkMap;
     }
-    
-    public Check createNewCheck() {
-        Check newCheck = new CheckBase();
-        newCheck.setFinancialDocumentTypeCode(DOCUMENT_TYPE);
-        newCheck.setCashieringRecordSource(KFSConstants.CheckSources.CASH_RECEIPTS);
-        return newCheck;
-    }
-
-    
 }
