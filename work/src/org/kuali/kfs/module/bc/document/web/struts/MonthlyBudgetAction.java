@@ -15,6 +15,8 @@
  */
 package org.kuali.module.budget.web.struts.action;
 
+import static org.kuali.rice.KNSServiceLocator.getBusinessObjectService;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -27,23 +29,24 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.authorization.AuthorizationType;
+import org.kuali.core.document.Document;
+import org.kuali.core.document.authorization.DocumentAuthorizer;
 import org.kuali.core.exceptions.AuthorizationException;
 import org.kuali.core.exceptions.ModuleAuthorizationException;
 import org.kuali.core.question.ConfirmationQuestion;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.KualiModuleService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.action.KualiAction;
+import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.BCConstants;
 import org.kuali.module.budget.bo.BudgetConstructionMonthly;
 import org.kuali.module.budget.document.authorization.BudgetConstructionDocumentAuthorizer;
 import org.kuali.module.budget.web.struts.form.MonthlyBudgetForm;
-
+import org.kuali.rice.KNSServiceLocator;
 
 public class MonthlyBudgetAction extends KualiAction {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(MonthlyBudgetAction.class);
@@ -63,7 +66,7 @@ public class MonthlyBudgetAction extends KualiAction {
 
 
         //TODO should probably use service locator and call
-        //DocumentAuthorizer documentAuthorizer = SpringContext.getBean(DocumentAuthorizationService.class).getDocumentAuthorizer("<BCDoctype>");
+        //DocumentAuthorizer documentAuthorizer = KNSServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer("<BCDoctype>");
         BudgetConstructionDocumentAuthorizer budgetConstructionDocumentAuthorizer = new BudgetConstructionDocumentAuthorizer();
         monthlyBudgetForm.populateAuthorizationFields(budgetConstructionDocumentAuthorizer);
 /*
@@ -73,7 +76,7 @@ public class MonthlyBudgetAction extends KualiAction {
         if (form instanceof KualiDocumentFormBase) {
             KualiDocumentFormBase formBase = (KualiDocumentFormBase) form;
             Document document = formBase.getDocument();
-            DocumentAuthorizer documentAuthorizer = SpringContext.getBean(DocumentAuthorizationService.class).getDocumentAuthorizer(document);
+            DocumentAuthorizer documentAuthorizer = KNSServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(document);
             formBase.populateAuthorizationFields(documentAuthorizer);
 
             // set returnToActionList flag, if needed
@@ -92,21 +95,21 @@ public class MonthlyBudgetAction extends KualiAction {
     protected void checkAuthorization(ActionForm form, String methodToCall) throws AuthorizationException {
 
         AuthorizationType bcAuthorizationType = new AuthorizationType.Default(this.getClass());
-        if ( !SpringContext.getBean(KualiModuleService.class).isAuthorized( GlobalVariables.getUserSession().getUniversalUser(), bcAuthorizationType ) ){
+        if ( !KNSServiceLocator.getKualiModuleService().isAuthorized( GlobalVariables.getUserSession().getUniversalUser(), bcAuthorizationType ) ){
             LOG.error("User not authorized to use this action: " + this.getClass().getName() );
             throw new ModuleAuthorizationException( GlobalVariables.getUserSession().getUniversalUser().getPersonUserIdentifier(), bcAuthorizationType, getKualiModuleService().getResponsibleModule(this.getClass()) );
         }
 /*
 //TODO from KualiAction - remove when ready
         AuthorizationType defaultAuthorizationType = new AuthorizationType.Default(this.getClass());
-        if ( !SpringContext.getBean(KualiModuleService.class).isAuthorized( GlobalVariables.getUserSession().getUniversalUser(), defaultAuthorizationType ) ) {
+        if ( !KNSServiceLocator.getKualiModuleService().isAuthorized( GlobalVariables.getUserSession().getUniversalUser(), defaultAuthorizationType ) ) {
             LOG.error("User not authorized to use this action: " + this.getClass().getName() );
             throw new ModuleAuthorizationException( GlobalVariables.getUserSession().getUniversalUser().getPersonUserIdentifier(), defaultAuthorizationType, getKualiModuleService().getResponsibleModule(((KualiDocumentFormBase)form).getDocument().getClass()) );
         }
 
 //TODO from KualiDocumentActionBase - remove when ready            
             AuthorizationType documentAuthorizationType = new AuthorizationType.Document(((KualiDocumentFormBase)form).getDocument().getClass(), ((KualiDocumentFormBase)form).getDocument());
-            if ( !SpringContext.getBean(KualiModuleService.class).isAuthorized( GlobalVariables.getUserSession().getUniversalUser(), documentAuthorizationType ) ) {
+            if ( !KNSServiceLocator.getKualiModuleService().isAuthorized( GlobalVariables.getUserSession().getUniversalUser(), documentAuthorizationType ) ) {
                 LOG.error("User not authorized to use this action: " + ((KualiDocumentFormBase)form).getDocument().getClass().getName() );
                 throw new ModuleAuthorizationException( GlobalVariables.getUserSession().getUniversalUser().getPersonUserIdentifier(), documentAuthorizationType, getKualiModuleService().getResponsibleModule(((KualiDocumentFormBase)form).getDocument().getClass()) );
             }
@@ -129,7 +132,7 @@ public class MonthlyBudgetAction extends KualiAction {
         fieldValues.put("financialSubObjectCode", monthlyBudgetForm.getFinancialSubObjectCode());
         fieldValues.put("financialBalanceTypeCode", monthlyBudgetForm.getFinancialBalanceTypeCode());
         fieldValues.put("financialObjectTypeCode", monthlyBudgetForm.getFinancialObjectTypeCode());
-        BudgetConstructionMonthly budgetConstructionMonthly = (BudgetConstructionMonthly) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(BudgetConstructionMonthly.class,fieldValues);
+        BudgetConstructionMonthly budgetConstructionMonthly = (BudgetConstructionMonthly) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(BudgetConstructionMonthly.class,fieldValues);
         if (budgetConstructionMonthly == null){
             budgetConstructionMonthly = new BudgetConstructionMonthly();
             budgetConstructionMonthly.setDocumentNumber(monthlyBudgetForm.getDocumentNumber());
@@ -164,7 +167,7 @@ public class MonthlyBudgetAction extends KualiAction {
         BudgetConstructionMonthly budgetConstructionMonthly = monthlyBudgetForm.getBudgetConstructionMonthly();
         
         // TODO validate and store monthly changes, for now save using BOService
-        SpringContext.getBean(BusinessObjectService.class).save(budgetConstructionMonthly);
+        getBusinessObjectService().save(budgetConstructionMonthly);
         GlobalVariables.getMessageList().add(KFSKeyConstants.MESSAGE_SAVED);
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
@@ -177,7 +180,7 @@ public class MonthlyBudgetAction extends KualiAction {
         if (!monthlyBudgetForm.getEditingMode().containsKey(AuthorizationConstants.BudgetConstructionEditMode.SYSTEM_VIEW_ONLY) &&
              monthlyBudgetForm.getEditingMode().containsKey(AuthorizationConstants.EditMode.FULL_ENTRY)){
             Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
-            KualiConfigurationService kualiConfiguration = SpringContext.getBean(KualiConfigurationService.class);
+            KualiConfigurationService kualiConfiguration = KNSServiceLocator.getKualiConfigurationService();
 
 //TODO create generic question text without reference to saving a document 
             // logic for close question
@@ -190,9 +193,9 @@ public class MonthlyBudgetAction extends KualiAction {
                 if ((KFSConstants.DOCUMENT_SAVE_BEFORE_CLOSE_QUESTION.equals(question)) && ConfirmationQuestion.YES.equals(buttonClicked)) {
                     // if yes button clicked - save the doc
 
-                    //SpringContext.getBean(DocumentService.class).saveDocument(docForm.getDocument());
+                    //KNSServiceLocator.getDocumentService().saveDocument(docForm.getDocument());
                     // TODO for now just do trivial save eventually need to add validation, routelog stuff, etc
-                    SpringContext.getBean(BusinessObjectService.class).save(budgetConstructionMonthly);
+                    getBusinessObjectService().save(budgetConstructionMonthly);
                     
                 }
                 // else go to close logic below

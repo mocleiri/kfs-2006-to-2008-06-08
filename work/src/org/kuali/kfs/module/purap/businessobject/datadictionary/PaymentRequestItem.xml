@@ -35,6 +35,7 @@
 						<field attributeName="itemCapitalAssetNoteText" />
 						<field attributeName="itemCatalogNumber" />
 						<field attributeName="itemDescription" />
+						<field attributeName="itemExtendedPrice" />
 						<field attributeName="itemInvoicedQuantity" />
 						<field attributeName="itemLineNumber" />
 						<field attributeName="itemTypeCode" />
@@ -69,6 +70,7 @@
 				<lookupField attributeName="itemCapitalAssetNoteText" required="false" />
 				<lookupField attributeName="itemCatalogNumber" required="false" />
 				<lookupField attributeName="itemDescription" required="false" />
+				<lookupField attributeName="itemExtendedPrice" required="false" />
 				<lookupField attributeName="itemInvoicedQuantity" required="false" />
 				<lookupField attributeName="itemLineNumber" required="false" />
 				<lookupField attributeName="itemTypeCode" required="false" />
@@ -89,6 +91,7 @@
 				<field attributeName="itemCapitalAssetNoteText" />
 				<field attributeName="itemCatalogNumber" />
 				<field attributeName="itemDescription" />
+				<field attributeName="itemExtendedPrice" />
 				<field attributeName="itemInvoicedQuantity" />
 				<field attributeName="itemLineNumber" />
 				<field attributeName="itemTypeCode" />
@@ -109,7 +112,7 @@
 
 			<attributeReference name="itemInvoicedQuantity" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemQuantity">
 				<label>Item Invoiced Quantity</label>
-				<shortLabel>Qty Invoiced</shortLabel>
+				<shortLabel>Invoiced Quantity</shortLabel>
 				<summary>itemInvoicedQuantity</summary>
 				<description>itemInvoicedQuantity description...</description>
 			</attributeReference>
@@ -140,7 +143,7 @@
 
 			<attributeReference name="itemOutstandingInvoiceQuantity" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemQuantity">
 				<label>Item Outstanding Invoice Quantity</label>
-				<shortLabel>Open Qty</shortLabel>
+				<shortLabel>Outstanding Invoiced Quantity</shortLabel>
 				<summary>itemOutstandingInvoiceQuantity</summary>
 				<description>itemOutstandingInvoiceQuantity description...</description>
 			</attributeReference>
@@ -150,20 +153,6 @@
 				<shortLabel>Outstanding Invoice Amount</shortLabel>
 				<summary>itemOutstandingInvoiceAmount</summary>
 				<description>itemOutstandingInvoiceAmount description...</description>
-			</attributeReference>
-
-			<attributeReference name="poOutstandingQuantity" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemQuantity">
-				<label>Item Open Quantity</label>
-				<shortLabel>Open Qty</shortLabel>
-				<summary>itemOpenQuantity</summary>
-				<description>itemOpenQuantity description...</description>
-			</attributeReference>
-
-			<attributeReference name="itemQuantity" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemQuantity">
-				<label>Quantity Invoiced</label>
-				<shortLabel>Qty Invoiced</shortLabel>
-				<summary>QuantityInvoiced</summary>
-				<description>QuantityInvoiced description...</description>
 			</attributeReference>
 
 		</attributes>

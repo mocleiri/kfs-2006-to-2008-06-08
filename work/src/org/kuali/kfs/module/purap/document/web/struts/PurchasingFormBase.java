@@ -18,6 +18,8 @@ package org.kuali.module.purap.web.struts.form;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.kfs.bo.SourceAccountingLine;
+import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
 import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurApAccountingLineBase;
 import org.kuali.module.purap.bo.PurchasingApItem;
@@ -25,13 +27,12 @@ import org.kuali.module.purap.bo.PurchasingApItem;
 /**
  * This class is the form class for the Purchasing documents.
  */
-public class PurchasingFormBase extends PurchasingAccountsPayableFormBase {
+public class PurchasingFormBase extends KualiAccountingDocumentFormBase {
     
     private Boolean notOtherDeliveryBuilding = true;
     private Boolean hideDistributeAccounts = true;
     private PurchasingApItem newPurchasingItemLine;
 
-    // *** Note that the following variables do not use camel caps ON PURPOSE, because of how the accounting lines tag uses the accountPrefix
     private Integer accountDistributionnextSourceLineNumber;
     private List<PurApAccountingLine> accountDistributionsourceAccountingLines;
     private PurApAccountingLine accountDistributionnewSourceLine;
@@ -147,13 +148,5 @@ public class PurchasingFormBase extends PurchasingAccountsPayableFormBase {
         this.accountDistributionnextSourceLineNumber = new Integer(this.getAccountDistributionnextSourceLineNumber().intValue() + 1);
         this.setAccountDistributionnewSourceLine(setupNewPurchasingAccountingLine());
     }
-//    /**
-//     * @see org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase#getBaselineSourceAccountingLines()
-//     */
-//    @Override
-//    public List getBaselineSourceAccountingLines() {
-//        // TODO Auto-generated method stub
-//        return getSou;
-//    }
 
 }

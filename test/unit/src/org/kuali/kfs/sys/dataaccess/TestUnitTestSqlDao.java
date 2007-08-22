@@ -21,12 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.util.UnitTestSqlDao;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.util.KFSUtils;
-import org.kuali.test.ConfigureContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBase;
 
-@ConfigureContext
 public class TestUnitTestSqlDao extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TestUnitTestSqlDao.class);
 
@@ -40,7 +37,7 @@ public class TestUnitTestSqlDao extends KualiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        unitTestSqlDao = SpringContext.getBean(UnitTestSqlDao.class);
+        unitTestSqlDao = (UnitTestSqlDao) SpringServiceLocator.getBeanFactory().getBean("glUnitTestSqlDao");
     }
 
     public void testSelect() throws Exception {
@@ -58,7 +55,6 @@ public class TestUnitTestSqlDao extends KualiTestBase {
             BigDecimal value = (BigDecimal) m.get("1");
             assertEquals("Field should equal 1", 1.00, value.doubleValue(), 0.01);
         }
-        KFSUtils.exhaustIterator(i);
     }
 
     public void testAllSql() throws Exception {

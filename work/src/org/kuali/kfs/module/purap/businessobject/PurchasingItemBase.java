@@ -22,47 +22,40 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.util.ObjectUtils;
 
 public abstract class PurchasingItemBase extends PurApItemBase implements PurchasingItem {
-
-    public boolean isConsideredEntered() {
-        // TODO PURAP - this check is here because PO 'Change' docs all extend this class not PurchaseOrderDocumentRule... is that hierarchy necessary?
-        if (this instanceof PurchaseOrderItem) {
-            // if item is PO item... only validate active items
-            PurchaseOrderItem poi = (PurchaseOrderItem)this;
-            if (!poi.isItemActiveIndicator()) {
-                return false;
-            }
-        }
-        if (!getItemType().isItemTypeAboveTheLineIndicator()) {
-            if ( (ObjectUtils.isNull(getItemUnitPrice())) && (StringUtils.isBlank(getItemDescription())) && (getSourceAccountingLines().isEmpty()) ) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    public boolean isConsideredEmpty() {
-        return isEmpty();
-    }
-
     public boolean isEmpty() {
         return ! ( StringUtils.isNotEmpty(getItemUnitOfMeasureCode()) ||
                    StringUtils.isNotEmpty(getItemCatalogNumber()) ||
                    StringUtils.isNotEmpty(getItemDescription()) ||
                    StringUtils.isNotEmpty(getItemCapitalAssetNoteText()) ||
+                   StringUtils.isNotEmpty(getRequisitionLineIdentifier()) ||
                    StringUtils.isNotEmpty(getItemAuxiliaryPartIdentifier()) ||
                    ObjectUtils.isNotNull(getItemQuantity()) ||
-                   (ObjectUtils.isNotNull(getItemUnitPrice()) && (getItemUnitPrice().compareTo(BigDecimal.ZERO) != 0)) ||
+                   (ObjectUtils.isNotNull(getItemUnitPrice()) && (getItemUnitPrice().compareTo(new BigDecimal("0")) != 0)) ||
                    ObjectUtils.isNotNull(getCapitalAssetTransactionType()) ||
-                   (!this.isAccountListEmpty()));                  
+                   (!this.isAccountListEmpty()));
+                   
     }
 
     public boolean isItemDetailEmpty() {
-        boolean empty = true;
-        empty &= ObjectUtils.isNull(getItemQuantity()) || StringUtils.isEmpty(getItemQuantity().toString());
-        empty &= StringUtils.isEmpty(getItemUnitOfMeasureCode());
-        empty &= StringUtils.isEmpty(getItemCatalogNumber());
-        empty &= StringUtils.isEmpty(getItemDescription());
-        empty &= ObjectUtils.isNull(getItemUnitPrice()) || (getItemUnitPrice().compareTo(BigDecimal.ZERO) == 0);
-        return empty;
+        return  ( 
+            (ObjectUtils.isNull(getItemQuantity()) || StringUtils.isEmpty(getItemQuantity().toString())&&
+            StringUtils.isEmpty(getItemUnitOfMeasureCode()) &&
+            StringUtils.isEmpty(getItemCatalogNumber()) &&
+            StringUtils.isEmpty(getItemDescription()) &&
+            (ObjectUtils.isNull(getItemUnitPrice()) || (getItemUnitPrice().compareTo(new BigDecimal("0")) == 0)))) ; 
+      }
+    
+    
+    public boolean isAccountListEmpty() {
+        List<PurApAccountingLine> accounts = getSourceAccountingLines();
+        if (ObjectUtils.isNotNull(accounts)) {
+            for (PurApAccountingLine element : accounts) {
+                if (!element.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
+
 }

@@ -29,7 +29,6 @@ import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.KFSUtils;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.Reversal;
 import org.kuali.module.gl.bo.Transaction;
@@ -81,9 +80,8 @@ public class ReversalDaoOjb extends PlatformAwareDaoBaseOjb implements ReversalD
 
         Iterator iter = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
         if (iter.hasNext()) {
-            Object[] data = (Object[]) KFSUtils.retrieveFirstAndExhaustIterator(iter);
+            Object[] data = (Object[]) iter.next();
             BigDecimal max = (BigDecimal) data[0]; // Don't know why OJB returns a BigDecimal, but it does
-            
             if (max == null) {
                 return 0;
             }

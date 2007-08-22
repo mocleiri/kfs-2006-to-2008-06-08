@@ -21,19 +21,11 @@ package org.kuali.module.purap;
 public class PurapRuleConstants {
 
     // GROUP NAMES
-    public static final String PURAP_ADMIN_GROUP = PurapParameterConstants.PURAP_ADMIN_GROUP;
-    public static String CREDIT_MEMO_RULES_GROUP = "Kuali.Purchasing.CreditMemoDocument";
+    public static String PURAP_ADMIN_GROUP = "PurapAdminGroup";
 
     // RULE NAMES
-    public static final String ALLOW_ENCUMBER_NEXT_YEAR_DAYS = "PURAP.ALLOW_ENCUMBER_NEXT_YEAR_DAYS";
-    public static final String ALLOW_APO_NEXT_FY_DAYS = "PURAP.ALLOW_APO_NEXT_FY_DAYS";
-    public static final String ALLOW_BACKPOST_DAYS = "PURAP.ALLOW_BACKPOST_DAYS";
-    
-    public static final String RESTRICTED_OBJECT_TYPE_PARM_NM = "RESTRICTED_OBJECT_TYPE";
-    public static final String RESTRICTED_OBJECT_CONSOLIDATION_PARM_NM = "RESTRICTED_OBJECT_CONSOLIDATION";
-    public static final String RESTRICTED_OBJECT_LEVEL_PARM_NM = "RESTRICTED_OBJECT_LEVEL";
-    public static final String RESTRICTED_OBJECT_LEVEL_BY_TYPE_PARM_PREFIX = "RESTRICTED_OBJECT_LEVEL_OBJECT_TYPE_";
-    public static final String RESTRICTED_OBJECT_SUB_TYPE_PARM_NM = "RESTRICTED_OBJECT_SUB_TYPE";
-    
-    public static final String PURAP_VENDOR_TYPE_ALLOWED_ON_REQ_AND_PO  = "PURAP_VENDOR_TYPE_ALLOWED_ON_REQ_AND_PO";
+    public static final String PURAP_DOCUMENT_PO_ACTIONS = "PURAP.DOCUMENT.PO.ACTIONS";
+    public static final String PURAP_DOCUMENT_PREQ_ACTIONS = "PURAP.DOCUMENT.PO.ACTIONS";
+    public static final String PURAP_DOCUMENT_ASSIGN_CM_ACTIONS = "PURAP.DOCUMENT.ASSIGN.CM.ACTIONS";
+
 }

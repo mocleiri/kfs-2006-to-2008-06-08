@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/PriorYearAccount.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,24 +26,20 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.apache.ojb.broker.PersistenceBroker;
-import org.apache.ojb.broker.PersistenceBrokerException;
-import org.kuali.core.bo.Campus;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.Constants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.PostalZipCode;
+import org.kuali.core.bo.State;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.bo.PostalZipCode;
-import org.kuali.kfs.bo.State;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
 import org.kuali.module.chart.bo.codes.SufficientFundsCode;
-import org.kuali.module.chart.service.SubFundGroupService;
 
 /**
  * 
  */
-public class PriorYearAccount extends PersistableBusinessObjectBase implements AccountIntf {
+public class PriorYearAccount extends BusinessObjectBase implements AccountIntf {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PriorYearAccount.class);
 
     private String chartOfAccountsCode;
@@ -71,9 +69,10 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     private boolean intrnlFinEncumSufficntFndIndicator;
     private boolean finPreencumSufficientFundIndicator;
     private boolean financialObjectivePrsctrlIndicator;
-    private String accountCfdaNumber;
+    private String cgCatlfFedDomestcAssistNbr;
     private boolean accountOffCampusIndicator;
     private boolean accountClosedIndicator;
+    private String programCode;
 
     private String accountFiscalOfficerSystemIdentifier;
     private String accountsSupervisorySystemsIdentifier;
@@ -117,7 +116,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     private PostalZipCode postalZipCode;
     private BudgetRecordingLevelCode budgetRecordingLevel;
     private SufficientFundsCode sufficientFundsCode;
-
+    private Program program;
 
     // Several kinds of Dummy Attributes for dividing sections on Inquiry page
     private String accountResponsibilitySectionBlank;
@@ -134,7 +133,6 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     private AccountDescription accountDescription;
 
     private List subAccounts;
-    private boolean forContractsAndGrants;
 
     /**
      * Default no-arg constructor.
@@ -142,13 +140,33 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     public PriorYearAccount() {
     }
 
-    public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
-        super.afterLookup(persistenceBroker);
-        // This is needed to put a value in the object so the persisted XML has a flag that
-        // can be used in routing to determine if an account is a C&G Account
-        forContractsAndGrants = SpringContext.getBean(SubFundGroupService.class).isForContractsAndGrants(getSubFundGroup());
+    /**
+     * This tells if this account is a C&G account.
+     * 
+     * @return true if C&G account
+     */
+    public boolean isInCg() {
+        // IF C&G is a sub fund group, use this line
+        // return isInCgSubFundGroup();
+
+        // IF C&G is a fund group, use this line
+        return isInCgFundGroup();
     }
-    
+
+    private boolean isInCgFundGroup() {
+        if (getSubFundGroup() != null) {
+            return Constants.CONTRACTS_AND_GRANTS.equals(getSubFundGroup().getFundGroupCode());
+        }
+        else {
+            // If sub fund group is missing
+            return false;
+        }
+    }
+
+    private boolean isInCgSubFundGroup() {
+        return Constants.CONTRACTS_AND_GRANTS.equals(getSubFundGroupCode());
+    }
+
     /**
      * Gets the accountNumber attribute.
      * 
@@ -389,7 +407,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
             return false;
         }
 
-        return this.isExpired(SpringContext.getBean(DateTimeService.class).getCurrentCalendar());
+        return this.isExpired(SpringServiceLocator.getDateTimeService().getCurrentCalendar());
     }
 
     /**
@@ -763,23 +781,23 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     }
 
     /**
-     * Gets the accountCfdaNumber attribute.
+     * Gets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @return Returns the accountCfdaNumber
+     * @return Returns the cgCatlfFedDomestcAssistNbr
      * 
      */
-    public String getAccountCfdaNumber() {
-        return accountCfdaNumber;
+    public String getCgCatlfFedDomestcAssistNbr() {
+        return cgCatlfFedDomestcAssistNbr;
     }
 
     /**
-     * Sets the accountCfdaNumber attribute.
+     * Sets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @param accountCfdaNumber The accountCfdaNumber to set.
+     * @param cgCatlfFedDomestcAssistNbr The cgCatlfFedDomestcAssistNbr to set.
      * 
      */
-    public void setAccountCfdaNumber(String accountCfdaNumber) {
-        this.accountCfdaNumber = accountCfdaNumber;
+    public void setCgCatlfFedDomestcAssistNbr(String cgCatlfFedDomestcAssistNbr) {
+        this.cgCatlfFedDomestcAssistNbr = cgCatlfFedDomestcAssistNbr;
     }
 
     /**
@@ -1083,7 +1101,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     }
 
     public UniversalUser getAccountFiscalOfficerUser() {
-        accountFiscalOfficerUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountFiscalOfficerSystemIdentifier, accountFiscalOfficerUser);
+        accountFiscalOfficerUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountFiscalOfficerSystemIdentifier, accountFiscalOfficerUser);
         return accountFiscalOfficerUser;
     }
 
@@ -1097,7 +1115,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     }
 
     public UniversalUser getAccountManagerUser() {
-        accountManagerUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountManagerSystemIdentifier, accountManagerUser);
+        accountManagerUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountManagerSystemIdentifier, accountManagerUser);
         return accountManagerUser;
     }
 
@@ -1111,7 +1129,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
 
 
     public UniversalUser getAccountSupervisoryUser() {
-        accountSupervisoryUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountsSupervisorySystemsIdentifier, accountSupervisoryUser);
+        accountSupervisoryUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountsSupervisorySystemsIdentifier, accountSupervisoryUser);
         return accountSupervisoryUser;
     }
 
@@ -1141,6 +1159,20 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
         this.continuationAccount = continuationAccount;
     }
 
+    /**
+     * @return Returns the program.
+     */
+    public Program getProgram() {
+        return program;
+    }
+
+    /**
+     * @param program The program to set.
+     * @deprecated
+     */
+    public void setProgram(Program program) {
+        this.program = program;
+    }
 
     /**
      * @return Returns the accountGuideline.
@@ -1148,6 +1180,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     public AccountGuideline getAccountGuideline() {
         return accountGuideline;
     }
+
 
     /**
      * @param accountGuideline The accountGuideline to set.
@@ -1556,6 +1589,19 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
         this.sufficientFundsCode = sufficientFundsCode;
     }
 
+    /**
+     * @return Returns the programCode.
+     */
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    /**
+     * @param programCode The programCode to set.
+     */
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
   
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
@@ -1732,11 +1778,4 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
         return guidelinesAndPurposeSectionBlank;
     }
 
-    /**
-     * Gets the forContractsAndGrants attribute. 
-     * @return Returns the forContractsAndGrants.
-     */
-    public boolean isForContractsAndGrants() {
-        return forContractsAndGrants;
-    }
 }

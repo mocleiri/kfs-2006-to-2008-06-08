@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/service/impl/DisbursementVoucherCoverSheetServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,18 +28,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.lookup.keyvalues.KeyValuesFinder;
+import org.kuali.core.lookup.keyvalues.PaymentMethodValuesFinder;
 import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.PersistenceStructureService;
-import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.service.PersistenceService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.uidraw.KeyLabelPair;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 import org.kuali.module.financial.bo.PaymentReasonCode;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.module.financial.lookup.keyvalues.PaymentMethodValuesFinder;
 import org.kuali.module.financial.rules.DisbursementVoucherDocumentRule;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 import org.kuali.module.financial.service.DisbursementVoucherCoverSheetService;
@@ -55,7 +57,7 @@ import com.lowagie.text.pdf.PdfStamper;
 public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVoucherCoverSheetService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherCoverSheetServiceImpl.class);
 
-    public static final String DV_COVERSHEET_TEMPLATE_RELATIVE_DIR = "static/help/templates/financial";
+    public static final String DV_COVERSHEET_TEMPLATE_RELATIVE_DIR = "templates/financial";
     public static final String DV_COVERSHEET_TEMPLATE_NM = "disbursementVoucherCoverSheetTemplate.pdf";
 
     public static String DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM = "DV_COVER_SHEET_TEMPLATE_LINES";
@@ -67,7 +69,7 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
 
     private KualiConfigurationService kualiConfigurationService;
     private BusinessObjectService businessObjectService;
-    private PersistenceStructureService persistenceStructureService;
+    private PersistenceService persistenceService;
 
     /**
      * 
@@ -105,14 +107,14 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
             }
             // retrieve data for alien payment code
             if (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
-                String taxDocumentationLocationCode = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM);
+                String taxDocumentationLocationCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM);
 
                 address = retrieveAddress(taxDocumentationLocationCode);
                 alien = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM);
                 lines = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM);
             }
             // retrieve data for travel payment reasons
-            String[] travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+            String[] travelNonEmplPaymentReasonCodes = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
             if (RulesUtils.makeSet(travelNonEmplPaymentReasonCodes).contains(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
                 bar = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM);
                 rlines = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM);
@@ -161,14 +163,14 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
      * @param keyValue
      * @return
      */
-    private PersistableBusinessObject retrieveObjectByKey(Class clazz, String keyValue) {
-        List primaryKeyFields = persistenceStructureService.listPrimaryKeyFieldNames(clazz);
+    private BusinessObject retrieveObjectByKey(Class clazz, String keyValue) {
+        List primaryKeyFields = persistenceService.listPrimaryKeyFieldNames(clazz);
         if (primaryKeyFields.size() != 1) {
             throw new IllegalArgumentException("multi-part key found. expecting single key field for " + clazz.getName());
         }
         Map primaryKeys = new HashMap();
         primaryKeys.put(primaryKeyFields.get(0), keyValue);
-        PersistableBusinessObject b = businessObjectService.findByPrimaryKey(clazz, primaryKeys);
+        BusinessObject b = businessObjectService.findByPrimaryKey(clazz, primaryKeys);
 
         return b;
     }
@@ -247,11 +249,22 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
     }
 
     /**
-     * Sets the persistenceStructureService attribute value.
+     * Gets the persistenceService attribute.
      * 
-     * @param persistenceStructureService The persistenceService to set.
+     * @return Returns the persistenceService.
      */
-    public void setPersistenceStructureService(PersistenceStructureService persistenceStructureService) {
-        this.persistenceStructureService = persistenceStructureService;
+    public PersistenceService getPersistenceService() {
+        return persistenceService;
     }
+
+    /**
+     * Sets the persistenceService attribute value.
+     * 
+     * @param persistenceService The persistenceService to set.
+     */
+    public void setPersistenceService(PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
+    }
+
+
 }

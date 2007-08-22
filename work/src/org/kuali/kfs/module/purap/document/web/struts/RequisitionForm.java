@@ -18,12 +18,13 @@ package org.kuali.module.purap.web.struts.form;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.module.purap.bo.PurchasingApItem;
-import org.kuali.module.purap.bo.RequisitionAccount;
 import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.document.RequisitionDocument;
 
 /**
- * This class is the form class for the Requisition document. 
+ * This class is the form class for the Requisition document. This method extends the parent KualiTransactionalDocumentFormBase
+ * class which contains all of the common form methods and form attributes needed by the Requisition document.
+ * 
  */
 public class RequisitionForm extends PurchasingFormBase {
 
@@ -33,6 +34,7 @@ public class RequisitionForm extends PurchasingFormBase {
     public RequisitionForm() {
         super();
         setDocument(new RequisitionDocument());
+        this.setNewPurchasingItemLine(setupNewPurchasingItemLine());
     }
 
     /**
@@ -54,9 +56,9 @@ public class RequisitionForm extends PurchasingFormBase {
      */
     public KeyLabelPair getAdditionalDocInfo1() {
         if (ObjectUtils.isNotNull(this.getRequisitionDocument().getPurapDocumentIdentifier())) {
-            return new KeyLabelPair("DataDictionary.RequisitionDocument.attributes.purapDocumentIdentifier", ((RequisitionDocument)this.getDocument()).getPurapDocumentIdentifier().toString());
+            return new KeyLabelPair("DataDictionary.KualiRequisitionDocument.attributes.purapDocumentIdentifier", ((RequisitionDocument)this.getDocument()).getPurapDocumentIdentifier().toString());
         } else {
-            return new KeyLabelPair("DataDictionary.RequisitionDocument.attributes.purapDocumentIdentifier", "Not Available");
+            return new KeyLabelPair("DataDictionary.KualiRequisitionDocument.attributes.purapDocumentIdentifier", "Not Available");
         }
     }
 
@@ -65,9 +67,9 @@ public class RequisitionForm extends PurchasingFormBase {
      */
     public KeyLabelPair getAdditionalDocInfo2() {
         if (ObjectUtils.isNotNull(this.getRequisitionDocument().getStatus())) {
-            return new KeyLabelPair("DataDictionary.RequisitionDocument.attributes.statusCode", ((RequisitionDocument)this.getDocument()).getStatus().getStatusDescription());
+            return new KeyLabelPair("DataDictionary.KualiRequisitionDocument.attributes.statusCode", ((RequisitionDocument)this.getDocument()).getStatus().getStatusDescription());
         } else {
-            return new KeyLabelPair("DataDictionary.RequisitionDocument.attributes.statusCode", "Not Available");
+            return new KeyLabelPair("DataDictionary.KualiRequisitionDocument.attributes.statusCode", "Not Available");
         }
     }
 
@@ -76,15 +78,8 @@ public class RequisitionForm extends PurchasingFormBase {
      */
     @Override
     public PurchasingApItem setupNewPurchasingItemLine() {
-        RequisitionItem ri = new RequisitionItem();
-        return ri;
+        return new RequisitionItem();
     }
     
-    /**
-     * @see org.kuali.module.purap.web.struts.form.PurchasingFormBase#setupNewPurchasingAccountingLine()
-     */
-    @Override
-    public RequisitionAccount setupNewPurchasingAccountingLine() {
-        return new RequisitionAccount();
-    }
+    
 }

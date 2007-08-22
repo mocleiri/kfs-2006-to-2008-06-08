@@ -69,9 +69,7 @@ public class KualiAttributeTestUtil {
         docType.setName(docTypeName);
         docRouteHeaderValue.setDocumentTypeId(docType.getDocumentTypeId());
         routeContext.setDocument(docRouteHeaderValue);
-        StandardDocumentContent newContent = new StandardDocumentContent(readerToString(reader), routeContext);
-        routeContext.setDocumentContent(newContent);
-        return newContent;
+        return new StandardDocumentContent(readerToString(reader), routeContext);
     }
 
     private static String readerToString(Reader is) throws IOException {

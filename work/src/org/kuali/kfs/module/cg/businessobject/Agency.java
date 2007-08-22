@@ -23,8 +23,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.kra.budget.bo.AgencyExtension;
 
 /**
- * This class defines an agency as it is used and referenced within the Contracts and Grants portion of 
- * a college or university financial system.
+ * 
  */
 public class Agency extends PersistableBusinessObjectBase {
 
@@ -218,8 +217,6 @@ public class Agency extends PersistableBusinessObjectBase {
      * 
      * @param reportsToAgencyNumber The reportsToAgency to set.
      * @deprecated
-     * 
-     * @todo Why is this deprecated?
      */
     public void setReportsToAgency(Agency reportsToAgencyNumber) {
         this.reportsToAgency = reportsToAgencyNumber;
@@ -240,8 +237,6 @@ public class Agency extends PersistableBusinessObjectBase {
      * 
      * @param agencyType The agencyType to set.
      * @deprecated
-     * 
-     * @todo Why is this deprecated?
      */
     public void setAgencyType(AgencyType agencyType) {
         this.agencyType = agencyType;
@@ -275,14 +270,6 @@ public class Agency extends PersistableBusinessObjectBase {
         this.agencyExtension = agencyExtension;
     }
     
-    /**
-     * This method compares the passed in agency object against this agency 
-     * object to check for equality. Equality is defined by if the agency passed
-     * in has the same agency number as the agency being compared to.
-     * 
-     * @param agency The agency object to be compared.
-     * @return True if the agency passed in is determined to be equal, false otherwise.
-     */
     public boolean equals(Agency agency) {
         return this.agencyNumber.equals(agency.getAgencyNumber());
     }

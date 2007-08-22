@@ -23,22 +23,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.PurapWorkflowConstants;
 import org.kuali.module.purap.bo.AssignContractManagerDetail;
-import org.kuali.module.purap.service.PurapService;
-import org.kuali.module.purap.service.PurchaseOrderService;
-import org.kuali.module.purap.service.RequisitionService;
 
 import edu.iu.uis.eden.EdenConstants;
 import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
@@ -54,16 +46,6 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
     private String organizationDocumentNumber;
     private String financialDocumentInErrorNumber;
     private String financialDocumentTemplateNumber;
-
-    // Not persisted (only for labels in tag) 
-    private String requisitionNumber;
-    private String deliveryCampusCode;
-    private String vendorName;
-    private String generalDescription;
-    private String requisitionTotalAmount;
-    private String requisitionCreateDate;
-    private String firstItemDescription;
-    private String firstObjectCode;
     // TODO: remove following field from here, OJB, and database after workflow API to retrieve this is implemented
     private Date documentFinalDate;
 
@@ -94,7 +76,7 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
 
         Map fieldValues = new HashMap();
         fieldValues.put(PurapPropertyConstants.STATUS_CODE, PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN);
-        List<RequisitionDocument> unassignedRequisitions = new ArrayList(SpringContext.getBean(BusinessObjectService.class).findMatchingOrderBy(RequisitionDocument.class, 
+        List<RequisitionDocument> unassignedRequisitions = new ArrayList(SpringServiceLocator.getBusinessObjectService().findMatchingOrderBy(RequisitionDocument.class, 
                 fieldValues, PurapPropertyConstants.PURAP_DOC_ID, true));
 
         for (RequisitionDocument req : unassignedRequisitions) {
@@ -117,15 +99,15 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
                 
                 if (ObjectUtils.isNotNull(detail.getContractManagerCode())) {
                     // Get the requisition for this AssignContractManagerDetail.
-                    RequisitionDocument req = SpringContext.getBean(RequisitionService.class).getRequisitionById(detail.getRequisitionIdentifier());
+                    RequisitionDocument req = SpringServiceLocator.getRequisitionService().getRequisitionById(detail.getRequisitionIdentifier());
 
                     if (ObjectUtils.isNull(req.getContractManagerCode()) &&
                             req.getStatusCode().equals(PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN)) { 
                         //only update REQ if code is empty and status is correct
                         req.setContractManagerCode(detail.getContractManagerCode());
-                        SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(req, PurapConstants.RequisitionStatuses.CLOSED);
-                        SpringContext.getBean(RequisitionService.class).saveDocumentWithoutValidation(req);
-                        SpringContext.getBean(PurchaseOrderService.class).createPurchaseOrderDocument(req);
+                        SpringServiceLocator.getPurapService().updateStatusAndStatusHistory(req, PurapConstants.RequisitionStatuses.CLOSED);
+                        SpringServiceLocator.getRequisitionService().save(req);
+                        PurchaseOrderDocument poDocument = SpringServiceLocator.getPurchaseOrderService().createPurchaseOrderDocument(req);
 
                     }
                     else {
@@ -145,14 +127,14 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
                 KualiWorkflowDocument workflowDoc = this.getDocumentHeader().getWorkflowDocument();
                 String currentNodeName = null;
                 try {
-                    currentNodeName = PurapWorkflowConstants.DOC_ADHOC_NODE_NAME;
+                    currentNodeName = PurapConstants.DOC_ADHOC_NODE_NAME;
                     if (!(EdenConstants.ROUTE_HEADER_INITIATED_CD.equals(workflowDoc.getRouteHeader().getDocRouteStatus()))) {
                         if (this.getCurrentRouteNodeName(workflowDoc) != null) {
                             currentNodeName = this.getCurrentRouteNodeName(workflowDoc);
                         }
                     }
                     workflowDoc.appSpecificRouteDocumentToUser(EdenConstants.ACTION_REQUEST_FYI_REQ, currentNodeName, 0, 
-                            PurapWorkflowConstants.AssignContractManagerDocument.ASSIGN_CONTRACT_DOC_ERROR_COMPLETING_POST_PROCESSING + failedReqs, 
+                            PurapConstants.ASSIGN_CONTRACT_DOC_ERROR_COMPLETING_POST_PROCESSING + failedReqs, 
                             new NetworkIdVO(workflowDoc.getInitiatorNetworkId()), "Initiator", true);
                 }
                 catch (WorkflowException e) {
@@ -173,27 +155,11 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
             return nodeNames[0];
         }
     }
-    
-    /**
-     * @see org.kuali.core.document.Document#getDocumentTitle()
-     */
-    @Override
-    public String getDocumentTitle() {
-        String title = "";
-        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP,PurapParameterConstants.PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE);
-        if (StringUtils.equalsIgnoreCase(specificTitle,Boolean.TRUE.toString())) {
-            title = PurapWorkflowConstants.AssignContractManagerDocument.WORKFLOW_DOCUMENT_TITLE;
-        }
-        else {
-            title = super.getDocumentTitle();
-        }
-        return title;
-    }
-    
+
     public List getAssignContractManagerDetails() {
         return assignContractManagerDetails;
     }
- 
+
     public void setAssignContractManagerDetails(List assignContractManagerDetails) {
         this.assignContractManagerDetails = assignContractManagerDetails;
     }
@@ -268,70 +234,6 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
 
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
-    }
-
-    /**
-     * Gets the firstObjectCode attribute. 
-     * @return Returns the firstObjectCode.
-     */
-    public String getFirstObjectCode() {
-        return firstObjectCode;
-    }
-    
-    /**
-     * Gets the deliveryCampusCode attribute. 
-     * @return Returns the deliveryCampusCode.
-     */
-    public String getDeliveryCampusCode() {
-        return deliveryCampusCode;
-    }
-
-    /**
-     * Gets the firstItemDescription attribute. 
-     * @return Returns the firstItemDescription.
-     */
-    public String getFirstItemDescription() {
-        return firstItemDescription;
-    }
-
-    /**
-     * Gets the generalDescription attribute. 
-     * @return Returns the generalDescription.
-     */
-    public String getGeneralDescription() {
-        return generalDescription;
-    }
-
-    /**
-     * Gets the requisitionCreateDate attribute. 
-     * @return Returns the requisitionCreateDate.
-     */
-    public String getRequisitionCreateDate() {
-        return requisitionCreateDate;
-    }
-
-    /**
-     * Gets the requisitionNumber attribute. 
-     * @return Returns the requisitionNumber.
-     */
-    public String getRequisitionNumber() {
-        return requisitionNumber;
-    }
-
-    /**
-     * Gets the requisitionTotalAmount attribute. 
-     * @return Returns the requisitionTotalAmount.
-     */
-    public String getRequisitionTotalAmount() {
-        return requisitionTotalAmount;
-    }
-
-    /**
-     * Gets the vendorName attribute. 
-     * @return Returns the vendorName.
-     */
-    public String getVendorName() {
-        return vendorName;
     }
 
 }
