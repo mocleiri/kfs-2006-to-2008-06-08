@@ -1,17 +1,26 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.bo;
@@ -22,14 +31,14 @@ import java.util.LinkedHashMap;
 
 import org.apache.commons.beanutils.converters.SqlDateConverter;
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.Constants;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 
 /**
- * 
+ * @author Kuali Financial Transactions Team ()
  */
-public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
+public class ProcurementCardTransaction extends BusinessObjectBase {
 
     private Integer transactionSequenceRowNumber;
     private String transactionCreditCardNumber;
@@ -91,7 +100,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionSequenceRowNumber attribute.
      * 
-     * @return Returns the transactionSequenceRowNumber
+     * @return - Returns the transactionSequenceRowNumber
      * 
      */
     public Integer getTransactionSequenceRowNumber() {
@@ -112,7 +121,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionCreditCardNumber attribute.
      * 
-     * @return Returns the transactionCreditCardNumber
+     * @return - Returns the transactionCreditCardNumber
      * 
      */
     public String getTransactionCreditCardNumber() {
@@ -133,7 +142,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTotalAmount attribute.
      * 
-     * @return Returns the financialDocumentTotalAmount
+     * @return - Returns the financialDocumentTotalAmount
      * 
      */
     public KualiDecimal getFinancialDocumentTotalAmount() {
@@ -163,7 +172,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionDebitCreditCode attribute.
      * 
-     * @return Returns the transactionDebitCreditCode
+     * @return - Returns the transactionDebitCreditCode
      * 
      */
     public String getTransactionDebitCreditCode() {
@@ -184,7 +193,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -205,7 +214,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return Returns the accountNumber
+     * @return - Returns the accountNumber
      * 
      */
     public String getAccountNumber() {
@@ -226,7 +235,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the subAccountNumber attribute.
      * 
-     * @return Returns the subAccountNumber
+     * @return - Returns the subAccountNumber
      * 
      */
     public String getSubAccountNumber() {
@@ -247,7 +256,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return Returns the financialObjectCode
+     * @return - Returns the financialObjectCode
      * 
      */
     public String getFinancialObjectCode() {
@@ -268,7 +277,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialSubObjectCode attribute.
      * 
-     * @return Returns the financialSubObjectCode
+     * @return - Returns the financialSubObjectCode
      * 
      */
     public String getFinancialSubObjectCode() {
@@ -289,7 +298,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the projectCode attribute.
      * 
-     * @return Returns the projectCode
+     * @return - Returns the projectCode
      * 
      */
     public String getProjectCode() {
@@ -310,7 +319,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionCycleStartDate attribute.
      * 
-     * @return Returns the transactionCycleStartDate
+     * @return - Returns the transactionCycleStartDate
      * 
      */
     public Date getTransactionCycleStartDate() {
@@ -337,7 +346,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionCycleEndDate attribute.
      * 
-     * @return Returns the transactionCycleEndDate
+     * @return - Returns the transactionCycleEndDate
      * 
      */
     public Date getTransactionCycleEndDate() {
@@ -363,7 +372,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderName attribute.
      * 
-     * @return Returns the cardHolderName
+     * @return - Returns the cardHolderName
      * 
      */
     public String getCardHolderName() {
@@ -384,7 +393,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionDate attribute.
      * 
-     * @return Returns the transactionDate
+     * @return - Returns the transactionDate
      * 
      */
     public Date getTransactionDate() {
@@ -405,7 +414,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionReferenceNumber attribute.
      * 
-     * @return Returns the transactionReferenceNumber
+     * @return - Returns the transactionReferenceNumber
      * 
      */
     public String getTransactionReferenceNumber() {
@@ -426,7 +435,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionMerchantCategoryCode attribute.
      * 
-     * @return Returns the transactionMerchantCategoryCode
+     * @return - Returns the transactionMerchantCategoryCode
      * 
      */
     public String getTransactionMerchantCategoryCode() {
@@ -447,7 +456,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionPostingDate attribute.
      * 
-     * @return Returns the transactionPostingDate
+     * @return - Returns the transactionPostingDate
      * 
      */
     public Date getTransactionPostingDate() {
@@ -468,7 +477,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionOriginalCurrencyCode attribute.
      * 
-     * @return Returns the transactionOriginalCurrencyCode
+     * @return - Returns the transactionOriginalCurrencyCode
      * 
      */
     public String getTransactionOriginalCurrencyCode() {
@@ -489,7 +498,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionBillingCurrencyCode attribute.
      * 
-     * @return Returns the transactionBillingCurrencyCode
+     * @return - Returns the transactionBillingCurrencyCode
      * 
      */
     public String getTransactionBillingCurrencyCode() {
@@ -510,7 +519,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionOriginalCurrencyAmount attribute.
      * 
-     * @return Returns the transactionOriginalCurrencyAmount
+     * @return - Returns the transactionOriginalCurrencyAmount
      * 
      */
     public KualiDecimal getTransactionOriginalCurrencyAmount() {
@@ -540,7 +549,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionCurrencyExchangeRate attribute.
      * 
-     * @return Returns the transactionCurrencyExchangeRate
+     * @return - Returns the transactionCurrencyExchangeRate
      * 
      */
     public BigDecimal getTransactionCurrencyExchangeRate() {
@@ -570,7 +579,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionSettlementAmount attribute.
      * 
-     * @return Returns the transactionSettlementAmount
+     * @return - Returns the transactionSettlementAmount
      * 
      */
     public KualiDecimal getTransactionSettlementAmount() {
@@ -600,7 +609,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionSalesTaxAmount attribute.
      * 
-     * @return Returns the transactionSalesTaxAmount
+     * @return - Returns the transactionSalesTaxAmount
      * 
      */
     public KualiDecimal getTransactionSalesTaxAmount() {
@@ -630,7 +639,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionTaxExemptIndicator attribute.
      * 
-     * @return Returns the transactionTaxExemptIndicator
+     * @return - Returns the transactionTaxExemptIndicator
      * 
      */
     public boolean getTransactionTaxExemptIndicator() {
@@ -648,7 +657,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     }
 
     public void setTransactionTaxExemptIndicator(String transactionTaxExemptIndicator) {
-        if (KFSConstants.ACTIVE_INDICATOR.equals(transactionTaxExemptIndicator)) {
+        if (Constants.ACTIVE_INDICATOR.equals(transactionTaxExemptIndicator)) {
             this.transactionTaxExemptIndicator = true;
         }
         else {
@@ -660,7 +669,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionPurchaseIdentifierIndicator attribute.
      * 
-     * @return Returns the transactionPurchaseIdentifierIndicator
+     * @return - Returns the transactionPurchaseIdentifierIndicator
      * 
      */
     public boolean getTransactionPurchaseIdentifierIndicator() {
@@ -678,7 +687,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     }
 
     public void setTransactionPurchaseIdentifierIndicator(String transactionPurchaseIdentifierIndicator) {
-        if (KFSConstants.ACTIVE_INDICATOR.equals(transactionPurchaseIdentifierIndicator)) {
+        if (Constants.ACTIVE_INDICATOR.equals(transactionPurchaseIdentifierIndicator)) {
             this.transactionPurchaseIdentifierIndicator = true;
         }
         else {
@@ -690,7 +699,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionPurchaseIdentifierDescription attribute.
      * 
-     * @return Returns the transactionPurchaseIdentifierDescription
+     * @return - Returns the transactionPurchaseIdentifierDescription
      * 
      */
     public String getTransactionPurchaseIdentifierDescription() {
@@ -711,7 +720,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionUnitContactName attribute.
      * 
-     * @return Returns the transactionUnitContactName
+     * @return - Returns the transactionUnitContactName
      * 
      */
     public String getTransactionUnitContactName() {
@@ -732,7 +741,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionTravelAuthorizationCode attribute.
      * 
-     * @return Returns the transactionTravelAuthorizationCode
+     * @return - Returns the transactionTravelAuthorizationCode
      * 
      */
     public String getTransactionTravelAuthorizationCode() {
@@ -753,7 +762,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the transactionPointOfSaleCode attribute.
      * 
-     * @return Returns the transactionPointOfSaleCode
+     * @return - Returns the transactionPointOfSaleCode
      * 
      */
     public String getTransactionPointOfSaleCode() {
@@ -774,7 +783,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the vendorName attribute.
      * 
-     * @return Returns the vendorName
+     * @return - Returns the vendorName
      * 
      */
     public String getVendorName() {
@@ -795,7 +804,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the vendorLine1Address attribute.
      * 
-     * @return Returns the vendorLine1Address
+     * @return - Returns the vendorLine1Address
      * 
      */
     public String getVendorLine1Address() {
@@ -816,7 +825,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the vendorLine2Address attribute.
      * 
-     * @return Returns the vendorLine2Address
+     * @return - Returns the vendorLine2Address
      * 
      */
     public String getVendorLine2Address() {
@@ -837,7 +846,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the vendorCityName attribute.
      * 
-     * @return Returns the vendorCityName
+     * @return - Returns the vendorCityName
      * 
      */
     public String getVendorCityName() {
@@ -858,7 +867,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the vendorStateCode attribute.
      * 
-     * @return Returns the vendorStateCode
+     * @return - Returns the vendorStateCode
      * 
      */
     public String getVendorStateCode() {
@@ -879,7 +888,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the vendorZipCode attribute.
      * 
-     * @return Returns the vendorZipCode
+     * @return - Returns the vendorZipCode
      * 
      */
     public String getVendorZipCode() {
@@ -900,7 +909,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the vendorOrderNumber attribute.
      * 
-     * @return Returns the vendorOrderNumber
+     * @return - Returns the vendorOrderNumber
      * 
      */
     public String getVendorOrderNumber() {
@@ -921,7 +930,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the visaVendorIdentifier attribute.
      * 
-     * @return Returns the visaVendorIdentifier
+     * @return - Returns the visaVendorIdentifier
      * 
      */
     public String getVisaVendorIdentifier() {
@@ -942,7 +951,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderAlternateName attribute.
      * 
-     * @return Returns the cardHolderAlternateName
+     * @return - Returns the cardHolderAlternateName
      * 
      */
     public String getCardHolderAlternateName() {
@@ -963,7 +972,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderLine1Address attribute.
      * 
-     * @return Returns the cardHolderLine1Address
+     * @return - Returns the cardHolderLine1Address
      * 
      */
     public String getCardHolderLine1Address() {
@@ -984,7 +993,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderLine2Address attribute.
      * 
-     * @return Returns the cardHolderLine2Address
+     * @return - Returns the cardHolderLine2Address
      * 
      */
     public String getCardHolderLine2Address() {
@@ -1005,7 +1014,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderCityName attribute.
      * 
-     * @return Returns the cardHolderCityName
+     * @return - Returns the cardHolderCityName
      * 
      */
     public String getCardHolderCityName() {
@@ -1026,7 +1035,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderStateCode attribute.
      * 
-     * @return Returns the cardHolderStateCode
+     * @return - Returns the cardHolderStateCode
      * 
      */
     public String getCardHolderStateCode() {
@@ -1047,7 +1056,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderZipCode attribute.
      * 
-     * @return Returns the cardHolderZipCode
+     * @return - Returns the cardHolderZipCode
      * 
      */
     public String getCardHolderZipCode() {
@@ -1068,7 +1077,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderWorkPhoneNumber attribute.
      * 
-     * @return Returns the cardHolderWorkPhoneNumber
+     * @return - Returns the cardHolderWorkPhoneNumber
      * 
      */
     public String getCardHolderWorkPhoneNumber() {
@@ -1089,7 +1098,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardLimit attribute.
      * 
-     * @return Returns the cardLimit
+     * @return - Returns the cardLimit
      * 
      */
     public KualiDecimal getCardLimit() {
@@ -1119,7 +1128,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardCycleAmountLimit attribute.
      * 
-     * @return Returns the cardCycleAmountLimit
+     * @return - Returns the cardCycleAmountLimit
      * 
      */
     public KualiDecimal getCardCycleAmountLimit() {
@@ -1149,7 +1158,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardCycleVolumeLimit attribute.
      * 
-     * @return Returns the cardCycleVolumeLimit
+     * @return - Returns the cardCycleVolumeLimit
      * 
      */
     public KualiDecimal getCardCycleVolumeLimit() {
@@ -1179,7 +1188,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardStatusCode attribute.
      * 
-     * @return Returns the cardStatusCode
+     * @return - Returns the cardStatusCode
      * 
      */
     public String getCardStatusCode() {
@@ -1200,7 +1209,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     /**
      * Gets the cardNoteText attribute.
      * 
-     * @return Returns the cardNoteText
+     * @return - Returns the cardNoteText
      * 
      */
     public String getCardNoteText() {
