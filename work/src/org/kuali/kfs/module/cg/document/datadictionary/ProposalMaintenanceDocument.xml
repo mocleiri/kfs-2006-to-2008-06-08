@@ -33,7 +33,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ProposalMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiContractsAndGrantsProposalMaintenanceDocument</documentTypeName>
         <documentTypeCode>PRPL</documentTypeCode>
 
         <webScriptFile>../dwr/interface/AgencyService.js</webScriptFile>
@@ -159,14 +159,14 @@
                 <maintainableItems>
                     <maintainableCollection name="proposalResearchRisks" businessObjectClass="org.kuali.module.cg.bo.ProposalResearchRisk" includeAddLine="false">
                         <maintainableField name="researchRiskType.researchRiskTypeDescription" readOnly="true" />
-                        <maintainableField name="researchRiskTypeIndicator" required="false" />
+                        <maintainableField name="isActive" required="false" />
                         <!-- hidden fields -->
                         <maintainableField name="newCollectionRecord" />
                         <maintainableField name="versionNumber" />
                         <maintainableField name="researchRiskTypeCode" />
                         <summaryFields>
                             <summaryField name="researchRiskType.researchRiskTypeDescription" />
-                            <summaryField name="active" />
+                            <summaryField name="isActive" />
                         </summaryFields>
                     </maintainableCollection>
                 </maintainableItems>
