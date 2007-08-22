@@ -32,8 +32,7 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.bo.AppointmentType;
 import org.kuali.module.kra.budget.bo.AppointmentTypeEffectiveDate;
@@ -67,7 +66,6 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
     public void createPersonnelDetail(BudgetUser budgetUser, BudgetDocument budgetDocument) {
         BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
         budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-        budgetUser.setAppointmentTypeDescription(budgetFringeRate.getAppointmentType().getAppointmentTypeDescription());
 
         BudgetFringeRate secondaryBudgetFringeRate = null;
         if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
@@ -153,8 +151,8 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
         boolean calculateCalendarYear = StringUtils.equals(budgetFringeRate.getInstitutionAppointmentTypeCode(), getAppointmentTypeMappings().get(KraConstants.ACADEMIC_SUMMER).toString());
 
-        Integer periodStartDateEvaluationYear = SpringContext.getBean(UniversityDateService.class).getFiscalYear(period.getBudgetPeriodBeginDate());
-        Integer periodEndDateEvaluationYear = SpringContext.getBean(UniversityDateService.class).getFiscalYear(period.getBudgetPeriodEndDate());
+        Integer periodStartDateEvaluationYear = SpringServiceLocator.getUniversityDateService().getFiscalYear(period.getBudgetPeriodBeginDate());
+        Integer periodEndDateEvaluationYear = SpringServiceLocator.getUniversityDateService().getFiscalYear(period.getBudgetPeriodEndDate());
 
         if (calculateCalendarYear) { // currently only used for Academic Summer appointments
             Calendar startDateCalendar = Calendar.getInstance();
@@ -194,7 +192,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
             double inflationFactor = inflationRate.doubleValue() / 100 + 1;
 
-            int compareToYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear().intValue();
+            int compareToYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear().intValue();
 
             if (budgetUser.getBudgetSalaryFiscalYear() !=  null) {
                 compareToYear = budgetUser.getBudgetSalaryFiscalYear().intValue();
@@ -222,14 +220,14 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
             }
 
 
-            BigDecimal dailySalaryForAppointmentTypeDuration = fullSalaryForAppointmentTypeDuration.divide(new BigDecimal(SpringContext.getBean(DateTimeService.class).dateDiff(dailySalaryStartDate, dailySalaryEndDate, true)));
+            BigDecimal dailySalaryForAppointmentTypeDuration = fullSalaryForAppointmentTypeDuration.divide(new BigDecimal(SpringServiceLocator.getDateTimeService().dateDiff(dailySalaryStartDate, dailySalaryEndDate, true)));
 
             // Step 2 - find out the number of days in the period
             Date workStartDate = (period.getBudgetPeriodBeginDate().before(evalStartDate) ? evalStartDate : period.getBudgetPeriodBeginDate());
             Date workEndDate = (period.getBudgetPeriodEndDate().after(evalEndDate) ? evalEndDate : period.getBudgetPeriodEndDate());
 
             //method can return a negative - this may occur in cases when we are modifying the dates to calcualte based on.  For example, summer appointments in periods that 
-            int dateDiff = SpringContext.getBean(DateTimeService.class).dateDiff(workStartDate, workEndDate, true);
+            int dateDiff = SpringServiceLocator.getDateTimeService().dateDiff(workStartDate, workEndDate, true);
             int daysInPeriod = dateDiff > 0 ? dateDiff : 0;
 
             // Step 3 - multiply the number of days in the period (Step 2) by the daily salary (Step 1)
@@ -324,8 +322,8 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                 userAppointmentTaskPeriod.setTotalFringeAmount(new KualiInteger(0));
                 
 
-                BigDecimal costShareFringeRateDecimalMultiplier = budgetFringeRate.getInstitutionCostShareFringeRateAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, KualiDecimal.ROUND_BEHAVIOR);
-                BigDecimal agnecyFringeRateDecimalMultiplier = budgetFringeRate.getContractsAndGrantsFringeRateAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, KualiDecimal.ROUND_BEHAVIOR);
+                BigDecimal costShareFringeRateDecimalMultiplier = budgetFringeRate.getInstitutionCostShareFringeRateAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, BigDecimal.ROUND_HALF_EVEN);
+                BigDecimal agnecyFringeRateDecimalMultiplier = budgetFringeRate.getContractsAndGrantsFringeRateAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, BigDecimal.ROUND_HALF_EVEN);
 
                 if (StringUtils.equals(getAppointmentTypeMappings().get(KraConstants.ACADEMIC_SUMMER).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) {
                     PeriodSalary periodSalary = userAppointmentTaskPeriod.getPeriodSalary() != null ? userAppointmentTaskPeriod.getPeriodSalary() : new PeriodSalary(new KualiInteger(0), 0);
@@ -338,7 +336,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
                     BigDecimal workWeeksPercent = weeks > 0 && workWeeks > 0 ? new BigDecimal(workWeeks / weeks) : new BigDecimal(0);
 
-                    BigDecimal userBudgetPeriodSalaryAmount = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().bigDecimalValue().multiply(workWeeksPercent).setScale(0, KualiDecimal.ROUND_BEHAVIOR);
+                    BigDecimal userBudgetPeriodSalaryAmount = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().bigDecimalValue().multiply(workWeeksPercent).setScale(0, BigDecimal.ROUND_HALF_EVEN);
 
                     userAppointmentTaskPeriod.setUserBudgetPeriodSalaryAmount(new KualiInteger(userBudgetPeriodSalaryAmount));
                     
@@ -349,10 +347,10 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
                 if (StringUtils.contains(getAppointmentTypeMappings().get(KraConstants.FULL_YEAR).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode()) || StringUtils.contains(getAppointmentTypeMappings().get(KraConstants.ACADEMIC_YEAR_SUMMER).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) {
 
-                    KualiInteger agencyRequestSalary = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().multiply(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, KualiDecimal.ROUND_BEHAVIOR));
+                    KualiInteger agencyRequestSalary = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().multiply(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, BigDecimal.ROUND_HALF_EVEN));
                     KualiInteger agencyRequestFringe = agencyRequestSalary.multiply(agnecyFringeRateDecimalMultiplier);
 
-                    KualiInteger institutionCostShareRequestSalary = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().multiply(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, KualiDecimal.ROUND_BEHAVIOR));
+                    KualiInteger institutionCostShareRequestSalary = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().multiply(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, BigDecimal.ROUND_HALF_EVEN));
                     KualiInteger institutionCostShareRequestFringe = institutionCostShareRequestSalary.multiply(costShareFringeRateDecimalMultiplier);
 
                     userAppointmentTaskPeriod.setAgencyRequestTotalAmount(agencyRequestSalary);
@@ -452,7 +450,6 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
             // Update the Fringes for this person to ensure that we're getting the most recent amounts
             BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
             budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-            budgetUser.setAppointmentTypeDescription(budgetFringeRate.getAppointmentType().getAppointmentTypeDescription());
 
             BudgetFringeRate secondaryBudgetFringeRate = null;
             if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
@@ -561,7 +558,6 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
     public void reconcilePersonTaskPeriod(BudgetUser budgetUser, BudgetDocument budgetDocument) {
         BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
         budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-        budgetUser.setAppointmentTypeDescription(budgetFringeRate.getAppointmentType().getAppointmentTypeDescription());
         if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
             budgetUser.setSecondaryAppointmentTypeCode(budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode());
         }
@@ -779,7 +775,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
             return appointmentTypeEffectiveDate.getAppointmentTypeBeginDate();
         }
         else {
-            return SpringContext.getBean(UniversityDateService.class).getFirstDateOfFiscalYear(fiscalYear);
+            return SpringServiceLocator.getUniversityDateService().getFirstDateOfFiscalYear(fiscalYear);
         }
     }
 
@@ -792,7 +788,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
             return appointmentTypeEffectiveDate.getAppointmentTypeEndDate();
         }
         else {
-            return SpringContext.getBean(UniversityDateService.class).getLastDateOfFiscalYear(fiscalYear);
+            return SpringServiceLocator.getUniversityDateService().getLastDateOfFiscalYear(fiscalYear);
         }
     }
 

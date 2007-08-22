@@ -20,18 +20,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.exceptions.PurError;
-import org.kuali.module.purap.service.PurapService;
-import org.kuali.module.purap.util.PurApItemUtils;
 import org.kuali.module.purap.util.PurApObjectUtils;
-
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -45,11 +40,12 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
     private KualiDecimal itemInvoicedQuantity;
 	
     private BigDecimal purchaseOrderItemUnitPrice;
+	private KualiDecimal itemExtendedPrice;
 	private String purchaseOrderCommodityCode;
     private KualiDecimal itemOutstandingInvoiceQuantity;
     private KualiDecimal itemOutstandingInvoiceAmount;
     
-    private transient PaymentRequestDocument paymentRequest;
+    private PaymentRequestDocument paymentRequest;
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PaymentRequestItem.class);
 
@@ -66,7 +62,7 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
      */
     public PaymentRequestItem(PurchaseOrderItem poi,PaymentRequestDocument preq) {
         //copy base attributes w/ extra array of fields not to be copied
-        PurApObjectUtils.populateFromBaseClass(PurApItemBase.class, poi, this, PurapConstants.PREQ_ITEM_UNCOPYABLE_FIELDS);
+        PurApObjectUtils.populateFromBaseClass(PurApItemBase.class, poi, this, PurapConstants.ITEM_UNCOPYABLE_FIELDS);
         
         //set up accounts
         List accounts = new ArrayList();
@@ -85,31 +81,18 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
     }
 
     public PurchaseOrderItem getPurchaseOrderItem() {
-        //TODO: look into, this is total hackery but works for now, revisit during QA 
-        if(ObjectUtils.isNotNull(this.getPurapDocumentIdentifier())) {
-            if(ObjectUtils.isNull(this.getPaymentRequest())) {
-                this.refreshReferenceObject("paymentRequest");
-            }
-        }
-        //ideally we should do this a different way - maybe move it all into the service or save this info somehow (make sure and update though)
-        if (getPaymentRequest() != null) {
-          PurchaseOrderDocument po = getPaymentRequest().getPurchaseOrderDocument();
-          PurchaseOrderItem poi = null;
-          if(this.getItemType().isItemTypeAboveTheLineIndicator()) {
-              poi = (PurchaseOrderItem)po.getItem(this.getItemLineNumber().intValue() - 1);
-          } else {
-              poi = (PurchaseOrderItem)SpringContext.getBean(PurapService.class).getBelowTheLineByType(po, this.getItemType());
-          }
+        if (paymentRequest != null) {
+          PurchaseOrderDocument po = paymentRequest.getPurchaseOrderDocument();
+          PurchaseOrderItem poi = (PurchaseOrderItem)po.getItem(this.getItemLineNumber().intValue());
           if (poi != null) {
             return poi;
           } else {
-            LOG.warn("getPurchaseOrderItem() Returning null because PurchaseOrderItem object for line number" + getItemLineNumber() + "or itemType " + getItemTypeCode() + " is null");
+            LOG.warn("getPurchaseOrderItem() Returning null because PurchaseOrderItem object for line number" + getItemLineNumber() + " is null");
             return null;
           }
         } else {
-          
           LOG.error("getPurchaseOrderItem() Returning null because paymentRequest object is null");
-          throw new PurError("Payment Request Object in Purchase Order item line number " + getItemLineNumber() + "or itemType " + getItemTypeCode() + " is null");
+          throw new PurError("Payment Request Object in Purchase Order item line number " + getItemLineNumber() + " is null");
         }
       }
     
@@ -122,7 +105,7 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
         if ( poi == null ) {
           return KualiDecimal.ZERO;
         } else {
-          return poi.getItemOutstandingEncumberedAmount();
+          return poi.getItemOutstandingEncumbranceAmount();
         }
     }
     
@@ -185,7 +168,7 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
         ItemType iT = poi.getItemType();
         //if service add the po outstanding amount to outstandingamount 
         if(StringUtils.equals(iT.getItemTypeCode(),PurapConstants.ItemTypeCodes.ITEM_TYPE_SERVICE_CODE)) {
-            outstandingAmount.add(poi.getItemOutstandingEncumberedAmount());
+            outstandingAmount.add(poi.getItemOutstandingEncumbranceAmount());
         } else {
             //else add outstanding quantity * unitprice
             BigDecimal qty = new BigDecimal(this.getPoOutstandingQuantity(poi).toString());
@@ -198,23 +181,23 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
     }
       
 	/**
-	 * don't use this, use itemQuantity instead
+	 * Gets the itemInvoicedQuantity attribute.
 	 * 
 	 * @return Returns the itemInvoicedQuantity
-	 * @deprecated
+	 * 
 	 */
 	public KualiDecimal getItemInvoicedQuantity() { 
-		return getItemQuantity();
+		return itemInvoicedQuantity;
 	}
 
 	/**
-	 * don't use this, use itemQuantity instead
+	 * Sets the itemInvoicedQuantity attribute.
 	 * 
 	 * @param itemInvoicedQuantity The itemInvoicedQuantity to set.
-	 * @deprecated
+	 * 
 	 */
 	public void setItemInvoicedQuantity(KualiDecimal itemInvoicedQuantity) {
-		this.setItemQuantity(itemInvoicedQuantity);
+		this.itemInvoicedQuantity = itemInvoicedQuantity;
 	}
 
 
@@ -236,6 +219,27 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
 	 */
 	public void setPurchaseOrderItemUnitPrice(BigDecimal purchaseOrderItemUnitPrice) {
 		this.purchaseOrderItemUnitPrice = purchaseOrderItemUnitPrice;
+	}
+
+
+	/**
+	 * Gets the itemExtendedPrice attribute.
+	 * 
+	 * @return Returns the itemExtendedPrice
+	 * 
+	 */
+	public KualiDecimal getItemExtendedPrice() { 
+		return itemExtendedPrice;
+	}
+
+	/**
+	 * Sets the itemExtendedPrice attribute.
+	 * 
+	 * @param itemExtendedPrice The itemExtendedPrice to set.
+	 * 
+	 */
+	public void setItemExtendedPrice(KualiDecimal itemExtendedPrice) {
+		this.itemExtendedPrice = itemExtendedPrice;
 	}
 
 	/**
@@ -303,68 +307,21 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
 	/**
 	 * Sets the paymentRequest attribute.
 	 * 
-	 * @param paymentRequest The paymentRequest to set
+	 * @param paymentRequest The paymentRequest to set.
+	 * @deprecated
 	 */
 	public void setPaymentRequest(PaymentRequestDocument paymentRequest) {
 		this.paymentRequest = paymentRequest;
 	}
 
-    public void generateAccountListFromPoItemAccounts(List<PurApAccountingLine> accounts) {
-        for (PurApAccountingLine line : accounts) {
-            PurchaseOrderAccount poa = (PurchaseOrderAccount)line; 
-            if(!line.isEmpty()) {
-                getSourceAccountingLines().add(new PaymentRequestAccount(this,poa));
-            }
-        }
-    }
     
      /**
      * @see org.kuali.module.purap.bo.PurchasingItemBase#getAccountingLineClass()
      */
     @Override
     public Class getAccountingLineClass() {
+        // TODO Auto-generated method stub
         return PaymentRequestAccount.class;
     }
 
-    /* TODO Chris/delyea - Should this be leveraging the isConsideredEntered() method for items instead of the paymentRequestItems.tag file using the isNonZero() method
-     *                     problem with the isNonZero() method would be user enters a QTY but no unit price and saves the PREQ... total might be zero but item must show
-     */
-    public boolean isDisplayOnPreq() {
-        PurchaseOrderItem poi = getPurchaseOrderItem();
-        if(ObjectUtils.isNull(poi)) {
-            LOG.debug("poi was null");
-            return false;
-        }
-
-        //if the po item is not active... skip it
-        if(!poi.isItemActiveIndicator()) {
-            LOG.debug("poi was not active: "+poi.toString());
-            return false;
-        }
-        
-        ItemType poiType = poi.getItemType();
-        
-        if(poiType.isQuantityBasedGeneralLedgerIndicator()) {
-            if(poi.getItemQuantity().isGreaterThan(poi.getItemInvoicedTotalQuantity())) {
-                return true;
-            } else {
-                if(ObjectUtils.isNotNull(this.getItemQuantity()) &&
-                   this.getItemQuantity().isGreaterThan(KualiDecimal.ZERO)) {
-                   return true; 
-                }
-            }
-            
-            return false;
-        } else { //not quantity based
-            if(poi.getItemOutstandingEncumberedAmount().isGreaterThan(KualiDecimal.ZERO)) {
-                return true;
-            } else {
-                if(PurApItemUtils.isNonZeroExtended(this)) {
-                    return true;
-                }
-                return false;
-            }
-            
-        }
-    }
 }

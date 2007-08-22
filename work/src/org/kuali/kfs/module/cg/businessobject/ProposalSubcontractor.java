@@ -18,22 +18,21 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.module.kra.routingform.bo.RoutingFormSubcontractor;
 
 /**
  * 
  */
-public class ProposalSubcontractor extends PersistableBusinessObjectBase implements Inactivateable {
+public class ProposalSubcontractor extends PersistableBusinessObjectBase {
 
     private String proposalSubcontractorNumber;
     private Long proposalNumber;
     private String subcontractorNumber;
     private KualiDecimal proposalSubcontractorAmount;
     private String proposalSubcontractorDescription;
-    private boolean active;
     
     private Subcontractor subcontractor;
 
@@ -141,22 +140,6 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      */
     public void setProposalSubcontractorDescription(String proposalSubcontractorDescription) {
         this.proposalSubcontractorDescription = proposalSubcontractorDescription;
-    }
-
-    /**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     /**

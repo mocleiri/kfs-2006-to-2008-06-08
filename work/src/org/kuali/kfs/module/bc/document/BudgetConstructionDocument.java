@@ -15,9 +15,9 @@
  */
 package org.kuali.module.budget.document;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -25,14 +25,11 @@ import java.util.Map;
 
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.KFSConstants.BudgetConstructionConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.bo.BudgetConstructionAccountReports;
 import org.kuali.module.budget.bo.PendingBudgetConstructionGeneralLedger;
 import org.kuali.module.chart.bo.Account;
@@ -66,15 +63,6 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
     private List pendingBudgetConstructionGeneralLedgerExpenditureLines;
 
     private Integer previousUniversityFiscalYear;
-
-    // revenue and expenditure line totals
-    private KualiInteger revenueAccountLineAnnualBalanceAmountTotal;
-    private KualiInteger revenueFinancialBeginningBalanceLineAmountTotal;
-    private KualiDecimal revenuePercentChangeTotal;
-    private KualiInteger expenditureAccountLineAnnualBalanceAmountTotal;
-    private KualiInteger expenditureFinancialBeginningBalanceLineAmountTotal;
-    private KualiDecimal expenditurePercentChangeTotal;
-    
     
     public BudgetConstructionDocument(){
         super();
@@ -82,20 +70,6 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
 //        setPendingBudgetConstructionGeneralLedgerRevenueLines(new ArrayList());
         setPendingBudgetConstructionGeneralLedgerExpenditureLines(new TypedArrayList(PendingBudgetConstructionGeneralLedger.class));
         setPendingBudgetConstructionGeneralLedgerRevenueLines(new TypedArrayList(PendingBudgetConstructionGeneralLedger.class));
-        zeroTotals();
-    }
-    
-    /**
-     * This zeros revenue and expenditure totals displayed on the BC document screen
-     */
-    public void zeroTotals(){
-
-        revenueAccountLineAnnualBalanceAmountTotal = new KualiInteger(BigDecimal.ZERO);
-        revenueFinancialBeginningBalanceLineAmountTotal = new KualiInteger(BigDecimal.ZERO);
-        revenuePercentChangeTotal = new KualiDecimal(0);
-        expenditureAccountLineAnnualBalanceAmountTotal = new KualiInteger(BigDecimal.ZERO);
-        expenditureFinancialBeginningBalanceLineAmountTotal = new KualiInteger(BigDecimal.ZERO);
-        expenditurePercentChangeTotal = new KualiDecimal(0);
     }
     
 /**
@@ -123,7 +97,7 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
         // this needs to do query FIN_OBJ_TYP_CD IN ('IN','IC','IN') or equivalent
         fieldValues.put("FIN_OBJ_TYP_CD", "IN");
         
-        pendingBudgetConstructionGeneralLedgerRevenueLines = (ArrayList) SpringContext.getBean(BusinessObjectService.class).findMatchingOrderBy(PendingBudgetConstructionGeneralLedger.class, fieldValues, "FIN_OBJECT_CD", true);
+        pendingBudgetConstructionGeneralLedgerRevenueLines = (ArrayList) SpringServiceLocator.getBusinessObjectService().findMatchingOrderBy(PendingBudgetConstructionGeneralLedger.class, fieldValues, "FIN_OBJECT_CD", true);
         if (LOG.isDebugEnabled()) {
             LOG.debug("pendingBudgetConstructionGeneralLedgerRevenue is: "+pendingBudgetConstructionGeneralLedgerRevenueLines);
         }
@@ -132,7 +106,7 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
         fieldValues.remove("FIN_OBJ_TYP_CD");
         fieldValues.put("FIN_OBJ_TYP_CD", "EX");
 
-        pendingBudgetConstructionGeneralLedgerExpenditureLines = (ArrayList) SpringContext.getBean(BusinessObjectService.class).findMatchingOrderBy(PendingBudgetConstructionGeneralLedger.class, fieldValues, "FIN_OBJECT_CD", true);
+        pendingBudgetConstructionGeneralLedgerExpenditureLines = (ArrayList) SpringServiceLocator.getBusinessObjectService().findMatchingOrderBy(PendingBudgetConstructionGeneralLedger.class, fieldValues, "FIN_OBJECT_CD", true);
         if (LOG.isDebugEnabled()) {
             LOG.debug("pendingBudgetConstructionGeneralLedgerExpenditure is: "+pendingBudgetConstructionGeneralLedgerExpenditureLines);
         }
@@ -144,19 +118,15 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
     }
 
     /**
-     * This adds a revenue or expenditure line to the appropriate list
+     * This adds a revenue line to the revenue lines list
+     * It assumes a line with the object, subobject key does not already exist
      * 
-     * @param isRevenue
      * @param line
      */
-    public void addPBGLLine(PendingBudgetConstructionGeneralLedger line, boolean isRevenue){
+    public void addRevenueLine(PendingBudgetConstructionGeneralLedger line){
+        //TODO need to check for unique key here? or during rules check?
         int insertPoint = 0;
-        ListIterator pbglLines;
-        if (isRevenue){
-            pbglLines = this.getPendingBudgetConstructionGeneralLedgerRevenueLines().listIterator();
-        } else {
-            pbglLines = this.getPendingBudgetConstructionGeneralLedgerExpenditureLines().listIterator();
-        }
+        ListIterator pbglLines = this.getPendingBudgetConstructionGeneralLedgerRevenueLines().listIterator();
         while (pbglLines.hasNext()){
             PendingBudgetConstructionGeneralLedger pbglLine = (PendingBudgetConstructionGeneralLedger) pbglLines.next();
             if (pbglLine.getFinancialObjectCode().compareToIgnoreCase(line.getFinancialObjectCode()) < 0){
@@ -174,14 +144,20 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
                 }
             }
         }
-        if (isRevenue){
-            this.pendingBudgetConstructionGeneralLedgerRevenueLines.add(insertPoint,line);
-        } else {
-            this.pendingBudgetConstructionGeneralLedgerExpenditureLines.add(insertPoint,line);
-        }
-        
+        this.pendingBudgetConstructionGeneralLedgerRevenueLines.add(insertPoint,line);
     }
-
+    
+    /**
+     * This adds a expenditure line to the expenditure lines list
+     * 
+     * @param line
+     */
+    public void addExpenditureLine(PendingBudgetConstructionGeneralLedger line){
+        //TODO this needs to insert at the proper point based on object, subobject ordering
+        //need to check for unique key here? or during rules check?
+        this.pendingBudgetConstructionGeneralLedgerExpenditureLines.add(line);
+    }
+    
     /**
      * Gets the universityFiscalYear attribute.
      * 
@@ -413,7 +389,7 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
     }
     
     public UniversalUser getBudgetLockUser() {
-        budgetLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(budgetLockUserIdentifier, budgetLockUser);
+        budgetLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(budgetLockUserIdentifier, budgetLockUser);
         return budgetLockUser;
     }
 
@@ -428,7 +404,7 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
     }
 
     public UniversalUser getBudgetTransactionLockUser() {
-        budgetTransactionLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(budgetTransactionLockUserIdentifier, budgetTransactionLockUser);
+        budgetTransactionLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(budgetTransactionLockUserIdentifier, budgetTransactionLockUser);
         return budgetTransactionLockUser;
     }
 
@@ -547,116 +523,6 @@ public class BudgetConstructionDocument extends TransactionalDocumentBase {
         this.pendingBudgetConstructionGeneralLedgerExpenditureLines = pendingBudgetConstructionGeneralLedgerExpenditureLines;
     }
     
-    /**
-     * Gets the expenditureAccountLineAnnualBalanceAmountTotal attribute. 
-     * @return Returns the expenditureAccountLineAnnualBalanceAmountTotal.
-     */
-    public KualiInteger getExpenditureAccountLineAnnualBalanceAmountTotal() {
-        return expenditureAccountLineAnnualBalanceAmountTotal;
-    }
-
-    /**
-     * Sets the expenditureAccountLineAnnualBalanceAmountTotal attribute value.
-     * @param expenditureAccountLineAnnualBalanceAmountTotal The expenditureAccountLineAnnualBalanceAmountTotal to set.
-     */
-    public void setExpenditureAccountLineAnnualBalanceAmountTotal(KualiInteger expenditureAccountLineAnnualBalanceAmountTotal) {
-        this.expenditureAccountLineAnnualBalanceAmountTotal = expenditureAccountLineAnnualBalanceAmountTotal;
-    }
-
-    /**
-     * Gets the expenditureFinancialBeginningBalanceLineAmountTotal attribute. 
-     * @return Returns the expenditureFinancialBeginningBalanceLineAmountTotal.
-     */
-    public KualiInteger getExpenditureFinancialBeginningBalanceLineAmountTotal() {
-        return expenditureFinancialBeginningBalanceLineAmountTotal;
-    }
-
-    /**
-     * Sets the expenditureFinancialBeginningBalanceLineAmountTotal attribute value.
-     * @param expenditureFinancialBeginningBalanceLineAmountTotal The expenditureFinancialBeginningBalanceLineAmountTotal to set.
-     */
-    public void setExpenditureFinancialBeginningBalanceLineAmountTotal(KualiInteger expenditureFinancialBeginningBalanceLineAmountTotal) {
-        this.expenditureFinancialBeginningBalanceLineAmountTotal = expenditureFinancialBeginningBalanceLineAmountTotal;
-    }
-
-    /**
-     * Gets the revenueAccountLineAnnualBalanceAmountTotal attribute. 
-     * @return Returns the revenueAccountLineAnnualBalanceAmountTotal.
-     */
-    public KualiInteger getRevenueAccountLineAnnualBalanceAmountTotal() {
-        return revenueAccountLineAnnualBalanceAmountTotal;
-    }
-
-    /**
-     * Sets the revenueAccountLineAnnualBalanceAmountTotal attribute value.
-     * @param revenueAccountLineAnnualBalanceAmountTotal The revenueAccountLineAnnualBalanceAmountTotal to set.
-     */
-    public void setRevenueAccountLineAnnualBalanceAmountTotal(KualiInteger revenueAccountLineAnnualBalanceAmountTotal) {
-        this.revenueAccountLineAnnualBalanceAmountTotal = revenueAccountLineAnnualBalanceAmountTotal;
-    }
-
-    /**
-     * Gets the revenueFinancialBeginningBalanceLineAmountTotal attribute. 
-     * @return Returns the revenueFinancialBeginningBalanceLineAmountTotal.
-     */
-    public KualiInteger getRevenueFinancialBeginningBalanceLineAmountTotal() {
-        return revenueFinancialBeginningBalanceLineAmountTotal;
-    }
-
-    /**
-     * Sets the revenueFinancialBeginningBalanceLineAmountTotal attribute value.
-     * @param revenueFinancialBeginningBalanceLineAmountTotal The revenueFinancialBeginningBalanceLineAmountTotal to set.
-     */
-    public void setRevenueFinancialBeginningBalanceLineAmountTotal(KualiInteger revenueFinancialBeginningBalanceLineAmountTotal) {
-        this.revenueFinancialBeginningBalanceLineAmountTotal = revenueFinancialBeginningBalanceLineAmountTotal;
-    }
-
-    /**
-     * Gets the expenditurePercentChangeTotal attribute. 
-     * @return Returns the expenditurePercentChangeTotal.
-     */
-    public KualiDecimal getExpenditurePercentChangeTotal() {
-        if (expenditureFinancialBeginningBalanceLineAmountTotal == null || expenditureFinancialBeginningBalanceLineAmountTotal.isZero()){
-            this.expenditurePercentChangeTotal = null;
-        } else {
-            BigDecimal diffRslt = (expenditureAccountLineAnnualBalanceAmountTotal.bigDecimalValue().setScale(4)).subtract(expenditureFinancialBeginningBalanceLineAmountTotal.bigDecimalValue().setScale(4));
-            BigDecimal divRslt = diffRslt.divide((expenditureFinancialBeginningBalanceLineAmountTotal.bigDecimalValue().setScale(4)),KualiDecimal.ROUND_BEHAVIOR);
-            this.expenditurePercentChangeTotal = new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2)); 
-        }
-        return expenditurePercentChangeTotal;
-    }
-
-    /**
-     * Sets the expenditurePercentChangeTotal attribute value.
-     * @param expenditurePercentChangeTotal The expenditurePercentChangeTotal to set.
-     */
-    public void setExpenditurePercentChangeTotal(KualiDecimal expenditurePercentChangeTotal) {
-        this.expenditurePercentChangeTotal = expenditurePercentChangeTotal;
-    }
-
-    /**
-     * Gets the revenuePercentChangeTotal attribute. 
-     * @return Returns the revenuePercentChangeTotal.
-     */
-    public KualiDecimal getRevenuePercentChangeTotal() {
-        if (revenueFinancialBeginningBalanceLineAmountTotal == null || revenueFinancialBeginningBalanceLineAmountTotal.isZero()){
-            this.revenuePercentChangeTotal = null;
-        } else {
-            BigDecimal diffRslt = (revenueAccountLineAnnualBalanceAmountTotal.bigDecimalValue().setScale(4)).subtract(revenueFinancialBeginningBalanceLineAmountTotal.bigDecimalValue().setScale(4));
-            BigDecimal divRslt = diffRslt.divide((revenueFinancialBeginningBalanceLineAmountTotal.bigDecimalValue().setScale(4)),KualiDecimal.ROUND_BEHAVIOR);
-            this.revenuePercentChangeTotal = new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2)); 
-        }
-        return revenuePercentChangeTotal;
-    }
-
-    /**
-     * Sets the revenuePercentChangeTotal attribute value.
-     * @param revenuePercentChangeTotal The revenuePercentChangeTotal to set.
-     */
-    public void setRevenuePercentChangeTotal(KualiDecimal revenuePercentChangeTotal) {
-        this.revenuePercentChangeTotal = revenuePercentChangeTotal;
-    }
-
     /**
      *   the budget construction document never appears in anyone's in-box
      *   budget construction controls access by a "pull-up/push-down" mechanism instead

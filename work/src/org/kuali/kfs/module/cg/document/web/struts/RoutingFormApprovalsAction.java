@@ -27,10 +27,8 @@ import org.apache.struts.action.ActionMapping;
 import org.kuali.core.bo.AdHocRouteWorkgroup;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
-import org.kuali.module.kra.routingform.service.RoutingFormProjectDetailsService;
-import org.kuali.module.kra.routingform.service.RoutingFormResearchRiskService;
 import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
 
 public class RoutingFormApprovalsAction extends RoutingFormAction {
@@ -85,8 +83,8 @@ public class RoutingFormApprovalsAction extends RoutingFormAction {
             
             // send FYIs, adhoc requests
             List<AdHocRouteWorkgroup> routeWorkgroups = new ArrayList<AdHocRouteWorkgroup>();
-            List<String> workgroupNames = SpringContext.getBean(RoutingFormResearchRiskService.class).getNotificationWorkgroups(routingForm.getRoutingFormDocument().getDocumentNumber());
-            List<String> projectDetailsWorkgroupNames = SpringContext.getBean(RoutingFormProjectDetailsService.class).getNotificationWorkgroups(routingForm.getRoutingFormDocument().getDocumentNumber());
+            List<String> workgroupNames = SpringServiceLocator.getRoutingFormResearchRiskService().getNotificationWorkgroups(routingForm.getRoutingFormDocument().getDocumentNumber());
+            List<String> projectDetailsWorkgroupNames = SpringServiceLocator.getRoutingFormProjectDetailsService().getNotificationWorkgroups(routingForm.getRoutingFormDocument().getDocumentNumber());
             // make sure there are no overlaps, then merge
             workgroupNames.removeAll(projectDetailsWorkgroupNames);
             workgroupNames.addAll(projectDetailsWorkgroupNames);
@@ -102,12 +100,6 @@ public class RoutingFormApprovalsAction extends RoutingFormAction {
         
         ActionForward forward = super.approve(mapping, form, request, response);
         return forward;
-    }
-    
-    @Override
-    public ActionForward disapprove(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        cacheAndLoad(mapping, form, request, response);
-        return super.disapprove(mapping, form, request, response);
     }
     
     @Override
@@ -144,13 +136,6 @@ public class RoutingFormApprovalsAction extends RoutingFormAction {
     public ActionForward deleteOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         cacheAndLoad(mapping, form, request, response);
         return super.deleteOrg(mapping, form, request, response);
-    }
-    
-    public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        super.refresh(mapping, form, request, response);
-        // Have to reload when coming back from the lookup, since we need the whole doc to run audit
-        cacheAndLoad(mapping, form, request, response);
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
     
     private void cacheAndLoad(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {

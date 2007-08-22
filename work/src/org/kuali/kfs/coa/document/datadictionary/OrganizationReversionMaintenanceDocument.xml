@@ -21,7 +21,7 @@
 <dictionaryEntry>
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.chart.bo.OrganizationReversion</businessObjectClass>
-        <maintainableClass>org.kuali.module.chart.maintenance.OrganizationReversionMaintainableImpl</maintainableClass>
+        <maintainableClass>org.kuali.module.chart.maintenance.OrganizationReversionMaintainable</maintainableClass>
         <businessRulesClass>org.kuali.module.chart.rules.OrganizationReversionRule</businessRulesClass>
         <preRulesCheckClass>org.kuali.module.chart.rules.OrganizationReversionPreRules</preRulesCheckClass>
         <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
@@ -33,16 +33,18 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>OrganizationReversionMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiOrganizationReversionMaintenanceDocument</documentTypeName>
         <documentTypeCode>ORGR</documentTypeCode>
         
-        <webScriptFile>../dwr/interface/ObjectCodeService.js</webScriptFile>
-        <webScriptFile>../scripts/chart/orgReversionDocument.js</webScriptFile>
+        <webScriptFile>dwr/interface/ObjectCodeService.js</webScriptFile>
+        <webScriptFile>scripts/chart/orgReversionDocument.js</webScriptFile>
         
         <label>Organization Reversion Maintenance Document</label>
         <shortLabel>OrganizationRefersionMaintenanceDocument</shortLabel>
         <summary>Organization Reversion Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Organization Reversions, remove exsiting Organization Reversions, or modify existing Organization Reversions.</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="universityFiscalYear" />
