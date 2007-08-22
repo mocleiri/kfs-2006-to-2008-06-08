@@ -18,7 +18,6 @@ package org.kuali.module.purap.rules;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.RicePropertyConstants;
 import org.kuali.core.datadictionary.validation.fieldlevel.ZipcodeValidationPattern;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.util.ErrorMap;
@@ -29,19 +28,17 @@ import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.PurapWorkflowConstants.RequisitionDocument.NodeDetailEnum;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
-import org.kuali.module.purap.service.PurapService;
+import org.kuali.workflow.KualiWorkflowUtils.RouteLevelNames;
 
 public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
-
+   
     /**
      * Tabs included on Purchasing Documents are: Payment Info Delivery Additional
      * 
@@ -52,16 +49,6 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
         boolean valid = super.processValidation(purapDocument);
         valid &= processAdditionalValidation((PurchasingDocument) purapDocument);
         return valid;
-    }
-    
-    @Override
-    public boolean requiresAccountValidationOnAllEnteredItems(PurchasingAccountsPayableDocument document) {
-        //For Requisitions only, if the requisition status is in process,
-        //then we don't need account validation.
-        if (SpringContext.getBean(PurapService.class).willDocumentStopAtGivenFutureRouteNode(document, NodeDetailEnum.CONTENT_REVIEW)) {
-            return false;
-        }
-        return super.requiresAccountValidationOnAllEnteredItems(document);
     }
     
     /**
@@ -98,8 +85,6 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
     @Override
     public boolean processVendorValidation(PurchasingAccountsPayableDocument purapDocument) {
         ErrorMap errorMap = GlobalVariables.getErrorMap();
-        errorMap.clearErrorPath();
-        errorMap.addToErrorPath(RicePropertyConstants.DOCUMENT);
         boolean valid = super.processVendorValidation(purapDocument);
         RequisitionDocument reqDocument = (RequisitionDocument)purapDocument;
         if (reqDocument.getRequisitionSourceCode().equals(PurapConstants.RequisitionSources.STANDARD_ORDER)) { 
@@ -113,7 +98,6 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
                 }
             }
         }
-        errorMap.clearErrorPath();
         return valid;
     }
     
@@ -125,15 +109,12 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
      */
     public boolean validateTotalDollarAmountIsLessThanPurchaseOrderTotalLimit(PurchasingDocument purDocument) {
         boolean valid = true;
-        GlobalVariables.getErrorMap().clearErrorPath();
-        GlobalVariables.getErrorMap().addToErrorPath(RicePropertyConstants.DOCUMENT);
         if (ObjectUtils.isNotNull(purDocument.getPurchaseOrderTotalLimit()) && ObjectUtils.isNotNull(((AmountTotaling) purDocument).getTotalDollarAmount())) {
             if (((AmountTotaling) purDocument).getTotalDollarAmount().isGreaterThan(purDocument.getPurchaseOrderTotalLimit())) {
                 valid &= false;
                 GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_TOTAL_LIMIT, PurapKeyConstants.ERROR_PURCHASE_ORDER_EXCEEDING_TOTAL_LIMIT);                
             }
         }
-        GlobalVariables.getErrorMap().clearErrorPath();
         return valid;
     }
 
@@ -142,11 +123,11 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
         KualiWorkflowDocument workflowDocument = financialDocument.getDocumentHeader().getWorkflowDocument();
         List currentRouteLevels = getCurrentRouteLevels(workflowDocument);
 
-        if (((RequisitionDocument)financialDocument).isDocumentStoppedInRouteNode(NodeDetailEnum.CONTENT_REVIEW)) {
-//        if (currentRouteLevels.contains(NodeDetailEnum.CONTENT_REVIEW.getName()) && workflowDocument.isApprovalRequested()) {
+        if (currentRouteLevels.contains(RouteLevelNames.REQUISITION_CONTENT_REVIEW) && workflowDocument.isApprovalRequested()) {
             // DO NOTHING: do not check that user owns acct lines; at this level, approvers can edit all detail on REQ
             return true;
         }
+        
         else {
             return super.checkAccountingLineAccountAccessibility(financialDocument, accountingLine, action);
         }

@@ -30,7 +30,6 @@ import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.authorization.DocumentAuthorizer;
 import org.kuali.core.question.ConfirmationQuestion;
-import org.kuali.core.service.DocumentAuthorizationService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
@@ -40,12 +39,10 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.chart.service.BalanceTypService;
 import org.kuali.module.financial.bo.VoucherAccountingLineHelper;
 import org.kuali.module.financial.bo.VoucherAccountingLineHelperBase;
-import org.kuali.module.financial.bo.VoucherSourceAccountingLine;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 import org.kuali.module.financial.document.VoucherDocument;
 import org.kuali.module.financial.web.struts.form.JournalVoucherForm;
@@ -95,7 +92,7 @@ public class JournalVoucherAction extends VoucherAction {
             // must call this here, because execute in the super method will never have control for this particular action
             // this is called in the parent by super.execute()
             Document document = journalVoucherForm.getDocument();
-            DocumentAuthorizer documentAuthorizer = SpringContext.getBean(DocumentAuthorizationService.class).getDocumentAuthorizer(document);
+            DocumentAuthorizer documentAuthorizer = SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(document);
             journalVoucherForm.populateAuthorizationFields(documentAuthorizer);
         }
         else { // otherwise call the super
@@ -115,9 +112,7 @@ public class JournalVoucherAction extends VoucherAction {
     public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // process the question but we need to make sure there are lines and then check to see if it's not balanced
         VoucherDocument vDoc = ((VoucherForm) form).getVoucherDocument();
-        
-        KualiDecimal balance = vDoc.getCreditTotal().subtract(vDoc.getDebitTotal());
-        if (vDoc.getSourceAccountingLines().size() > 0 && balance.compareTo(KFSConstants.ZERO) != 0) {
+        if (vDoc.getSourceAccountingLines().size() > 0 && ((AmountTotaling) vDoc).getTotalDollarAmount().compareTo(KFSConstants.ZERO) != 0) {
             // it's not in "balance"
             ActionForward returnForward = processRouteOutOfBalanceDocumentConfirmationQuestion(mapping, form, request, response);
 
@@ -282,7 +277,7 @@ public class JournalVoucherAction extends VoucherAction {
         // accouting lines, because that is the only impact
         if (jvDoc.getSourceAccountingLines().size() != 0) {
             String question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
-            KualiConfigurationService kualiConfiguration = SpringContext.getBean(KualiConfigurationService.class);
+            KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
             if (question == null) { // question hasn't been asked
                 String message = buildBalanceTypeChangeConfirmationMessage(jvForm, kualiConfiguration);
@@ -372,7 +367,7 @@ public class JournalVoucherAction extends VoucherAction {
      */
     private BalanceTyp getPopulatedBalanceTypeInstance(String balanceTypeCode) {
         // now we have to get the code and the name of the original and new balance types
-        return SpringContext.getBean(BalanceTypService.class).getBalanceTypByCode(balanceTypeCode);
+        return SpringServiceLocator.getBalanceTypService().getBalanceTypByCode(balanceTypeCode);
     }
 
     /**
@@ -393,9 +388,9 @@ public class JournalVoucherAction extends VoucherAction {
 
         KualiDecimal ZERO = new KualiDecimal("0.00");
         for (int i = 0; i < sourceLines.size(); i++) {
-            VoucherSourceAccountingLine sourceLine = (VoucherSourceAccountingLine) sourceLines.get(i);
+            SourceAccountingLine sourceLine = (SourceAccountingLine) sourceLines.get(i);
             sourceLine.setAmount(ZERO);
-            sourceLine.setDebitCreditCode(KFSConstants.GL_DEBIT_CODE); // default to debit
+            sourceLine.setDebitCreditCode(null); // will be needed, reset to make sure
 
             helperLines.add(new VoucherAccountingLineHelperBase()); // populate with a fresh new empty object
         }
@@ -414,7 +409,7 @@ public class JournalVoucherAction extends VoucherAction {
         ArrayList sourceLines = (ArrayList) jvDoc.getSourceAccountingLines();
 
         for (int i = 0; i < sourceLines.size(); i++) {
-            VoucherSourceAccountingLine sourceLine = (VoucherSourceAccountingLine) sourceLines.get(i);
+            SourceAccountingLine sourceLine = (SourceAccountingLine) sourceLines.get(i);
             sourceLine.setReferenceOriginCode(null); // won't be needed in this mode
             sourceLine.setReferenceNumber(null); // won't be needed in this mode
             sourceLine.setReferenceTypeCode(null); // won't be needed in this mode
@@ -438,7 +433,7 @@ public class JournalVoucherAction extends VoucherAction {
             VoucherAccountingLineHelper helperLine = (VoucherAccountingLineHelper) helperLines.get(i);
             SourceAccountingLine sourceLine = (SourceAccountingLine) sourceLines.get(i);
             sourceLine.setAmount(ZERO);
-            sourceLine.setDebitCreditCode(KFSConstants.GL_DEBIT_CODE); // single sided is always debit
+            sourceLine.setDebitCreditCode(null);
 
             helperLine.setCredit(null); // won't be needed in this mode
             helperLine.setDebit(null); // won't be needed in this mode
@@ -509,7 +504,7 @@ public class JournalVoucherAction extends VoucherAction {
         JournalVoucherDocument jvDoc = jvForm.getJournalVoucherDocument();
 
         String question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
-        KualiConfigurationService kualiConfiguration = SpringContext.getBean(KualiConfigurationService.class);
+        KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
         if (question == null) { // question hasn't been asked
             String currencyFormattedDebitTotal = (String) new CurrencyFormatter().format(jvDoc.getDebitTotal());

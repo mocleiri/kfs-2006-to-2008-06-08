@@ -15,6 +15,7 @@
  */
 package org.kuali.module.kra.budget.document;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,21 +24,21 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.user.AuthenticationUserId;
+
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.document.Document;
+import org.kuali.core.document.DocumentBase;
 import org.kuali.core.exceptions.IllegalObjectStateException;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.PersistenceService;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.web.format.FormatException;
 import org.kuali.core.workflow.DocumentInitiator;
 import org.kuali.core.workflow.KualiDocumentXmlMaterializer;
 import org.kuali.core.workflow.KualiTransactionalDocumentInformation;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.service.ChartUserService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.bo.AdhocOrg;
 import org.kuali.module.kra.budget.bo.Budget;
@@ -47,8 +48,9 @@ import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUser;
-import org.kuali.module.kra.budget.service.BudgetService;
 import org.kuali.module.kra.document.ResearchDocumentBase;
+
+import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * Budget
@@ -89,7 +91,7 @@ public class BudgetDocument extends ResearchDocumentBase {
     }
 
     public void initialize() {
-        SpringContext.getBean(BudgetService.class).initializeBudget(this);
+        SpringServiceLocator.getBudgetService().initializeBudget(this);
     }
     
     //TODO Can't use this just yet - need to ensure that rules are run prior to this being called
@@ -102,7 +104,7 @@ public class BudgetDocument extends ResearchDocumentBase {
 //    public void prepareForSave() {
 //        super.prepareForSave();
 //        try {
-//            SpringContext.getBean(BudgetService.class).prepareBudgetForSave(this);
+//            SpringServiceLocator.getBudgetService().prepareBudgetForSave(this);
 //        } catch (WorkflowException e) {
 //            throw new RuntimeException("no document found for documentNumber '" + this.documentHeader + "'", e);
 //        }
@@ -166,7 +168,7 @@ public class BudgetDocument extends ResearchDocumentBase {
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
 
         return m;
     }
@@ -347,36 +349,33 @@ public class BudgetDocument extends ResearchDocumentBase {
         list.add(this.getAdhocWorkgroups());
             
         Budget budget = this.getBudget();
-        list.add(budget.getNonpersonnelItems());
-        list.add(budget.getAllUserAppointmentTaskPeriods(this.isForceRefreshOfBOSubListsForSave()));
-        list.add(budget.getAllUserAppointmentTasks(this.isForceRefreshOfBOSubListsForSave()));
-        list.add(budget.getPersonnel());
+            list.add(budget.getTasks());
+            list.add(budget.getPeriods());
+            list.add(budget.getNonpersonnelItems());
+            list.add(budget.getAllUserAppointmentTaskPeriods(this.isForceRefreshOfBOSubListsForSave()));
+            list.add(budget.getAllUserAppointmentTasks(this.isForceRefreshOfBOSubListsForSave()));
+            list.add(budget.getPersonnel());
 
-        list.add(budget.getAllThirdPartyCostSharePeriods(this.isForceRefreshOfBOSubListsForSave()));
-        list.add(budget.getThirdPartyCostShareItems());
+            list.add(budget.getAllThirdPartyCostSharePeriods(this.isForceRefreshOfBOSubListsForSave()));
+            list.add(budget.getThirdPartyCostShareItems());
 
-        list.add(budget.getAllInstitutionCostSharePeriods(this.isForceRefreshOfBOSubListsForSave()));
-        list.add(budget.getInstitutionCostShareItems());
+            list.add(budget.getAllInstitutionCostSharePeriods(this.isForceRefreshOfBOSubListsForSave()));
+            list.add(budget.getInstitutionCostShareItems());
 
-        list.add(budget.getInstitutionCostSharePersonnelItems());
-        
-        if (budget.getIndirectCost() != null && budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems() != null) {
-            list.add(budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems());
-        } else {
-            list.add(new ArrayList());
-        }
-        
-        if (budget.getModularBudget() != null) {
-            list.add(budget.getModularBudget().getBudgetModularPeriods());
-        } else {
-            list.add(new ArrayList());
-        }
-
-        //Lots of FKs from previous collections point to these two, so they need to handled last
-        list.add(budget.getTasks());
-        list.add(budget.getPeriods());
-
-        
+            list.add(budget.getInstitutionCostSharePersonnelItems());
+            
+            if (budget.getIndirectCost() != null && budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems() != null) {
+                list.add(budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems());
+            } else {
+                list.add(new ArrayList());
+            }
+            
+            if (budget.getModularBudget() != null) {
+                list.add(budget.getModularBudget().getBudgetModularPeriods());
+            } else {
+                list.add(new ArrayList());
+            }
+            
         return list;
     }
     
@@ -386,7 +385,7 @@ public class BudgetDocument extends ResearchDocumentBase {
         DocumentInitiator initiator = new DocumentInitiator();
         String initiatorNetworkId = documentHeader.getWorkflowDocument().getInitiatorNetworkId();
         try {
-            UniversalUser initiatorUser = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new AuthenticationUserId(initiatorNetworkId));
+            UniversalUser initiatorUser = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(initiatorNetworkId));
             initiator.setUniversalUser(initiatorUser);
         }
         catch (UserNotFoundException e) {
@@ -403,7 +402,7 @@ public class BudgetDocument extends ResearchDocumentBase {
         List referenceObjects = new ArrayList();
         referenceObjects.add("personnel");
         referenceObjects.add("institutionCostShareItems");
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(budget, referenceObjects);
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(budget, referenceObjects);
         this.refreshReferenceObject("adhocOrgs");
         
         StringBuffer xml = new StringBuffer("<documentContent>");
@@ -447,11 +446,7 @@ public class BudgetDocument extends ResearchDocumentBase {
                 xml.append("<chartOrg><chartOfAccountsCode>");
                 xml.append(projectDirector.getFiscalCampusCode());
                 xml.append("</chartOfAccountsCode><organizationCode>");
-                if (StringUtils.isBlank(projectDirector.getPrimaryDepartmentCode())) {
-                    xml.append(SpringContext.getBean(ChartUserService.class).getDefaultOrganizationCode(projectDirector.getUser()));
-                } else {
-                    xml.append(projectDirector.getPrimaryDepartmentCode());
-                }
+                xml.append(projectDirector.getPrimaryDepartmentCode());
                 xml.append("</organizationCode></chartOrg>");
             }
         }
@@ -470,7 +465,7 @@ public class BudgetDocument extends ResearchDocumentBase {
      */
     public String buildCostShareOrgReportXml(boolean encloseContent) {
         
-        String costSharePermissionCode = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(
+        String costSharePermissionCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(
                 KraConstants.KRA_ADMIN_GROUP_NAME, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
         
         StringBuffer xml = new StringBuffer();
