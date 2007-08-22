@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +20,16 @@ package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class BudgetBaseCode extends PersistableBusinessObjectBase {
+public class BudgetBaseCode extends BusinessObjectBase {
 
     private String budgetBaseCode;
     private String budgetBaseDescription;
-    private boolean active;
-    
+
     /**
      * Default no-arg constructor.
      */
@@ -76,22 +77,6 @@ public class BudgetBaseCode extends PersistableBusinessObjectBase {
         this.budgetBaseDescription = budgetBaseDescription;
     }
 
-    /**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }    
-    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */

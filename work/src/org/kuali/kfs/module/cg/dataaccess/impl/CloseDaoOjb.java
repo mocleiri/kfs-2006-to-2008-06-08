@@ -15,36 +15,31 @@
  */
 package org.kuali.module.cg.dao.ojb;
 
-import java.util.Iterator;
-
 import org.apache.ojb.broker.query.Criteria;
-import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.apache.ojb.broker.query.Query;
+import org.apache.ojb.broker.query.QueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.KFSUtils;
 import org.kuali.module.cg.bo.Close;
 import org.kuali.module.cg.dao.CloseDao;
+import org.kuali.Constants;
 import org.springmodules.orm.ojb.PersistenceBrokerTemplate;
 
-/**
- * @see CloseDao
- */
+import java.util.Iterator;
+import java.util.Collection;
+
 public class CloseDaoOjb extends PlatformAwareDaoBaseOjb implements CloseDao {
 
-    /**
-     * @see org.kuali.module.cg.dao.CloseDao#getMaxApprovedClose()
-     */
     public Close getMaxApprovedClose() {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("documentHeader.financialDocumentStatusCode", KFSConstants.DocumentStatusCodes.APPROVED);
+        criteria.addEqualTo("documentHeader.financialDocumentStatusCode", Constants.DocumentStatusCodes.APPROVED);
         QueryByCriteria query = QueryFactory.newQuery(Close.class, criteria);
         query.addOrderByDescending("documentNumber");
         PersistenceBrokerTemplate template = getPersistenceBrokerTemplate();
         Iterator i = template.getIteratorByQuery(query);
         if(null != i) {
             if(i.hasNext()) {
-                Close close = (Close) KFSUtils.retrieveFirstAndExhaustIterator(i);
+                Close close = (Close) i.next();
                 if(null == close.getAwardClosedCount()) {
                     close.setAwardClosedCount(0L);
                 }
@@ -57,9 +52,6 @@ public class CloseDaoOjb extends PlatformAwareDaoBaseOjb implements CloseDao {
         return null;
     }
 
-    /**
-     * @see org.kuali.module.cg.dao.CloseDao#save(org.kuali.module.cg.bo.Close)
-     */
     public void save(Close close) {
         getPersistenceBrokerTemplate().store(close);
     }

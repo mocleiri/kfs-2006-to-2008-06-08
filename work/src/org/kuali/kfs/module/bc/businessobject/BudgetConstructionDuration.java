@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionDuration.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +20,16 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class BudgetConstructionDuration extends PersistableBusinessObjectBase {
+public class BudgetConstructionDuration extends BusinessObjectBase {
 
 	private String appointmentDurationCode;
 	private String appointmentDurationDescription;
-	private boolean rowActiveIndicator;
+	private String rowActiveIndicator;
 
 	/**
 	 * Default constructor.
@@ -79,22 +81,27 @@ public class BudgetConstructionDuration extends PersistableBusinessObjectBase {
 
 
 	/**
-     * Gets the rowActiveIndicator attribute. 
-     * @return Returns the rowActiveIndicator.
-     */
-    public boolean isRowActiveIndicator() {
-        return rowActiveIndicator;
-    }
+	 * Gets the rowActiveIndicator attribute.
+	 * 
+	 * @return Returns the rowActiveIndicator
+	 * 
+	 */
+	public String getRowActiveIndicator() { 
+		return rowActiveIndicator;
+	}
 
-    /**
-     * Sets the rowActiveIndicator attribute value.
-     * @param rowActiveIndicator The rowActiveIndicator to set.
-     */
-    public void setRowActiveIndicator(boolean rowActiveIndicator) {
-        this.rowActiveIndicator = rowActiveIndicator;
-    }
+	/**
+	 * Sets the rowActiveIndicator attribute.
+	 * 
+	 * @param rowActiveIndicator The rowActiveIndicator to set.
+	 * 
+	 */
+	public void setRowActiveIndicator(String rowActiveIndicator) {
+		this.rowActiveIndicator = rowActiveIndicator;
+	}
 
-    /**
+
+	/**
 	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {

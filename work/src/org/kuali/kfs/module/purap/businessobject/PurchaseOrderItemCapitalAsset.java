@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PurchaseOrderItemCapitalAsset.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +20,14 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class PurchaseOrderItemCapitalAsset extends PersistableBusinessObjectBase {
+public class PurchaseOrderItemCapitalAsset extends BusinessObjectBase {
 
-    private String documentNumber;
-    private Integer purchaseOrderItemCapitalAssetIdentifier;
+	private Integer purchaseOrderItemCapitalAssetIdentifier;
 	private Integer purchaseOrderItemIdentifier;
 	private Long capitalAssetNumber;
 
@@ -40,22 +41,6 @@ public class PurchaseOrderItemCapitalAsset extends PersistableBusinessObjectBase
 	}
 
 	/**
-     * Gets the documentNumber attribute. 
-     * @return Returns the documentNumber.
-     */
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
-
-    /**
-     * Sets the documentNumber attribute value.
-     * @param documentNumber The documentNumber to set.
-     */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
-
-    /**
 	 * Gets the purchaseOrderItemCapitalAssetIdentifier attribute.
 	 * 
 	 * @return Returns the purchaseOrderItemCapitalAssetIdentifier
@@ -142,7 +127,6 @@ public class PurchaseOrderItemCapitalAsset extends PersistableBusinessObjectBase
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("documentNumber", this.documentNumber);
         if (this.purchaseOrderItemCapitalAssetIdentifier != null) {
             m.put("purchaseOrderItemCapitalAssetIdentifier", this.purchaseOrderItemCapitalAssetIdentifier.toString());
         }

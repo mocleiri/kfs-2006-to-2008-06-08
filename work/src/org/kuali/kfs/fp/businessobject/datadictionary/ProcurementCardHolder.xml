@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.ProcurementCardHolder">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Procurement Card Holder Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="documentNumber" />
+            <inquiryFields>
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="cardCycleAmountLimit" />
                 <field attributeName="cardCycleVolumeLimit" />
                 <field attributeName="cardHolderName" />
@@ -42,7 +42,7 @@
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
                 <field attributeName="subAccountNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <attributes>
@@ -248,7 +248,7 @@
                 <shortLabel>Dflt Chrt</shortLabel>
             </attributeReference>
 
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber" />
+            <attributeReference name="financialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber" />
 
             <attributeReference name="subAccountNumber" sourceClassName="org.kuali.module.chart.bo.SubAccount" sourceAttributeName="subAccountNumber">
                 <label>Default Sub-Account</label>

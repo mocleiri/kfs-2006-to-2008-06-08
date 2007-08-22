@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>BuildingMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiBuildingMaintenanceDocument</documentTypeName>
         <documentTypeCode>BLDG</documentTypeCode>
 
         <label>Building Maintenance Document</label>
@@ -47,7 +47,6 @@
         </lockingKeys>
 
 		<defaultExistenceChecks>
-			<reference attributeName="campus" attributeToHighlightOnFail="campusCode" />
 			<reference attributeName="buildingAddressZip" attributeToHighlightOnFail="buildingAddressZipCode" />
 		</defaultExistenceChecks>
 

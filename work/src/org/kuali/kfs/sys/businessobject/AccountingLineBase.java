@@ -26,8 +26,7 @@ import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -36,9 +35,7 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.chart.service.BalanceTypService;
-import org.kuali.module.financial.bo.SalesTax;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.PropertyConstants;
 
 /**
  * This is the generic class which contains all the elements on a typical line of accounting elements. These are all the accounting
@@ -50,6 +47,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     private String documentNumber;
     private Integer sequenceNumber; // relative to the grouping of acctng lines
     private Integer postingYear;
+    private String budgetYear;
     private KualiDecimal amount;
     private String referenceOriginCode;
     private String referenceNumber;
@@ -57,16 +55,13 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     private String overrideCode = AccountingLineOverride.CODE.NONE;
     private boolean accountExpiredOverride; // for the UI, persisted in overrideCode
     private boolean accountExpiredOverrideNeeded; // for the UI, not persisted
-    private boolean nonFringeAccountOverride; // for the UI, persisted in overrideCode
-    private boolean nonFringeAccountOverrideNeeded; // for the UI, not persisted
     private boolean objectBudgetOverride;
     private boolean objectBudgetOverrideNeeded;
     private String organizationReferenceId;
     private String debitCreditCode; // should only be set by the Journal Voucher or Auxiliary Voucher document
     private String encumbranceUpdateCode; // should only be set by the Journal Voucher document
-    protected String financialDocumentLineTypeCode;
+    protected String ojbConcreteClass; // attribute needed for OJB polymorphism - do not alter!
     protected String financialDocumentLineDescription;
-    protected boolean salesTaxRequired;
 
     private String chartOfAccountsCode;
     private String accountNumber;
@@ -88,7 +83,6 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     private ObjectType objectType; // should only be set by the Journal Voucher document
     private OriginationCode referenceOrigin;
     private DocumentType referenceType;
-    private SalesTax salesTax;
 
     /**
      * This constructor sets up empty instances for the dependent objects.
@@ -101,14 +95,12 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         subAccount = new SubAccount();
         subObjectCode = new SubObjCd();
         project = new ProjectCode();
-        postingYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        postingYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
         objectCode.setUniversityFiscalYear(postingYear);
         // all Financial Transaction Processing accounting lines (those extending from this) should use a balance type
         // of Actual, except for JV which allows a choice and PE which uses "PE"
-        balanceTyp = SpringContext.getBean(BalanceTypService.class).getActualBalanceTyp();
+        balanceTyp = SpringServiceLocator.getBalanceTypService().getActualBalanceTyp();
         objectType = new ObjectType();
-        // salesTax = new SalesTax();
-        salesTaxRequired = false;
     }
 
 
@@ -374,37 +366,6 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         this.subObjectCode = subObjectCode;
     }
 
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLine#getSalesTax()
-     */
-    public SalesTax getSalesTax() {
-        return salesTax;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLine#setSalesTax(org.kuali.module.financial.bo.SalesTax)
-     * @deprecated
-     */
-    public void setSalesTax(SalesTax salesTax) {
-        this.salesTax = salesTax;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLine#isSalesTaxRequired()
-     */
-    public boolean isSalesTaxRequired() {
-        return salesTaxRequired;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLine#setSalesTaxRequired(boolean)
-     */
-    public void setSalesTaxRequired(boolean salesTaxRequired) {
-        this.salesTaxRequired = salesTaxRequired;
-    }
-
-
     /**
      * @param documentNumber The documentNumber to set.
      */
@@ -558,17 +519,17 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     }
 
     /**
-     * @return Returns the financialDocumentLineTypeCode.
+     * @return Returns the ojbConcreteClass.
      */
-    public String getFinancialDocumentLineTypeCode() {
-        return financialDocumentLineTypeCode;
+    public String getOjbConcreteClass() {
+        return ojbConcreteClass;
     }
 
     /**
-     * @param financialDocumentLineTypeCode The financialDocumentLineTypeCode to set.
+     * @param ojbConcreteClass The ojbConcreteClass to set.
      */
-    public void setFinancialDocumentLineTypeCode(String financialDocumentLineTypeCode) {
-        this.financialDocumentLineTypeCode = financialDocumentLineTypeCode;
+    public void setOjbConcreteClass(String ojbConcreteClass) {
+        this.ojbConcreteClass = ojbConcreteClass;
     }
 
     /**
@@ -615,12 +576,26 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     }
 
     /**
+     * @return Returns the budgetYear.
+     */
+    public String getBudgetYear() {
+        return budgetYear;
+    }
+
+    /**
+     * @param budgetYear The budgetYear to set.
+     */
+    public void setBudgetYear(String budgetYear) {
+        this.budgetYear = budgetYear;
+    }
+
+    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
 
         m.put("sequenceNumber", sequenceNumber);
         m.put("postingYear", postingYear);
@@ -688,7 +663,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
             setOrganizationReferenceId(other.getOrganizationReferenceId());
             setDebitCreditCode(other.getDebitCreditCode());
             setEncumbranceUpdateCode(other.getEncumbranceUpdateCode());
-            setFinancialDocumentLineTypeCode(other.getFinancialDocumentLineTypeCode());
+            setOjbConcreteClass(other.getOjbConcreteClass());
             setFinancialDocumentLineDescription(other.getFinancialDocumentLineDescription());
             setAccountExpiredOverride(other.getAccountExpiredOverride());
             setAccountExpiredOverrideNeeded(other.getAccountExpiredOverrideNeeded());
@@ -704,27 +679,6 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
             setProjectCode(other.getProjectCode());
             setBalanceTypeCode(other.getBalanceTypeCode());
             setObjectTypeCode(other.getObjectTypeCode());
-
-            // sales tax
-            if (ObjectUtils.isNotNull(other.getSalesTax())) {
-                SalesTax salesTax = getSalesTax();
-                SalesTax origSalesTax = other.getSalesTax();
-                if (salesTax != null) {
-                    salesTax.setAccountNumber(origSalesTax.getAccountNumber());
-                    salesTax.setChartOfAccountsCode(origSalesTax.getChartOfAccountsCode());
-                    salesTax.setFinancialDocumentGrossSalesAmount(origSalesTax.getFinancialDocumentGrossSalesAmount());
-                    salesTax.setFinancialDocumentTaxableSalesAmount(origSalesTax.getFinancialDocumentTaxableSalesAmount());
-                    salesTax.setFinancialDocumentSaleDate(origSalesTax.getFinancialDocumentSaleDate());
-
-                    // primary keys
-                    salesTax.setDocumentNumber(other.getDocumentNumber());
-                    salesTax.setFinancialDocumentLineNumber(other.getSequenceNumber());
-                    salesTax.setFinancialDocumentLineTypeCode(other.getFinancialDocumentLineTypeCode());
-                }
-                else {
-                    salesTax = origSalesTax;
-                }
-            }
 
             // object references
             setChart((Chart) ObjectUtils.deepCopy(other.getChart()));
@@ -839,34 +793,6 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
     public void setObjectBudgetOverrideNeeded(boolean objectBudgetOverrideNeeded) {
         this.objectBudgetOverrideNeeded = objectBudgetOverrideNeeded;
     }
-    
-    /**
-     * @see org.kuali.kfs.bo.AccountingLine#isNonFringeAccountOverride()
-     */
-    public boolean getNonFringeAccountOverride() {
-        return nonFringeAccountOverride;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLine#setNonFringeAccountOverride(boolean)
-     */
-    public void setNonFringeAccountOverride(boolean nonFringeAccountOverride) {
-        this.nonFringeAccountOverride = nonFringeAccountOverride;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLine#isNonFringeAccountOverrideNeeded()
-     */
-    public boolean getNonFringeAccountOverrideNeeded() {
-        return nonFringeAccountOverrideNeeded;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLine#setNonFringeAccountOverrideNeeded(boolean)
-     */
-    public void setNonFringeAccountOverrideNeeded(boolean nonFringeAccountOverrideNeeded) {
-        this.nonFringeAccountOverrideNeeded = nonFringeAccountOverrideNeeded;
-    }
 
     /**
      * Returns a map with the primitive field names as the key and the primitive values as the map value.
@@ -877,7 +803,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         Map simpleValues = new HashMap();
 
         simpleValues.put("sequenceNumber", getSequenceNumber());
-        simpleValues.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        simpleValues.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
         simpleValues.put("postingYear", getPostingYear());
         simpleValues.put("amount", getAmount());
         simpleValues.put("referenceOriginCode", getReferenceOriginCode());
@@ -888,7 +814,7 @@ public abstract class AccountingLineBase extends PersistableBusinessObjectBase i
         simpleValues.put("organizationReferenceId", getOrganizationReferenceId());
         simpleValues.put("debitCreditCode", getDebitCreditCode());
         simpleValues.put("encumbranceUpdateCode", getEncumbranceUpdateCode());
-        simpleValues.put("financialDocumentLineTypeCode", getFinancialDocumentLineTypeCode());
+        simpleValues.put("ojbConcreteClass", getOjbConcreteClass());
         simpleValues.put("financialDocumentLineDescription", getFinancialDocumentLineDescription());
 
         simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());

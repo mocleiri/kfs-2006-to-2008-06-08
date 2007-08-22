@@ -1,58 +1,52 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.apache.ojb.broker.PersistenceBroker;
-import org.apache.ojb.broker.PersistenceBrokerException;
-import org.kuali.core.bo.Campus;
-import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.bo.PostalZipCode;
-import org.kuali.kfs.bo.State;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.cg.bo.AwardAccount;
-import org.kuali.module.cg.bo.Cfda;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.PostalZipCode;
+import org.kuali.core.bo.State;
+import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
-import org.kuali.module.chart.bo.codes.ICRTypeCode;
 import org.kuali.module.chart.bo.codes.SufficientFundsCode;
-import org.kuali.module.chart.service.SubFundGroupService;
-import org.kuali.module.gl.bo.SufficientFundRebuild;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class Account extends PersistableBusinessObjectBase implements AccountIntf {
-    protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Account.class);
+public class Account extends BusinessObjectBase {
+
+    private static final long serialVersionUID = -144120733742373200L;
 
     private String chartOfAccountsCode;
     private String accountNumber;
@@ -81,7 +75,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     private boolean intrnlFinEncumSufficntFndIndicator;
     private boolean finPreencumSufficientFundIndicator;
     private boolean financialObjectivePrsctrlIndicator;
-    private String accountCfdaNumber;
+    private String cgCatlfFedDomestcAssistNbr;
     private boolean accountOffCampusIndicator;
     private boolean accountClosedIndicator;
 
@@ -108,7 +102,6 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     private String indirectCostRecoveryAcctNbr;
 
     private Chart chartOfAccounts;
-    private Chart endowmentIncomeChartOfAccounts;
     private Org organization;
     private AcctType accountType;
     private Campus accountPhysicalCampus;
@@ -122,32 +115,17 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     private Account contractControlAccount;
     private Account incomeStreamAccount;
     private Account indirectCostRecoveryAcct;
-    private ICRTypeCode acctIndirectCostRcvyType;
-    private UniversalUser accountFiscalOfficerUser;
-    private UniversalUser accountSupervisoryUser;
-    private UniversalUser accountManagerUser;
+    private KualiUser accountFiscalOfficerUser;
+    private KualiUser accountSupervisoryUser;
+    private KualiUser accountManagerUser;
     private PostalZipCode postalZipCode;
     private BudgetRecordingLevelCode budgetRecordingLevel;
     private SufficientFundsCode sufficientFundsCode;
-    private Cfda cfda;
-
-    // Several kinds of Dummy Attributes for dividing sections on Inquiry page
-    private String accountResponsibilitySectionBlank;
-    private String accountResponsibilitySection;
-    private String contractsAndGrantsSectionBlank;
-    private String contractsAndGrantsSection;
-    private String guidelinesAndPurposeSectionBlank;
-    private String guidelinesAndPurposeSection;
-    private String accountDescriptionSectionBlank;
-    private String accountDescriptionSection;
-
-    private boolean forContractsAndGrants;
-
+    
     private AccountGuideline accountGuideline;
     private AccountDescription accountDescription;
-
+    
     private List subAccounts;
-    private List awards;
 
     /**
      * Default no-arg constructor.
@@ -155,44 +133,11 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     public Account() {
     }
 
-    public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
-        super.afterLookup(persistenceBroker);
-        // This is needed to put a value in the object so the persisted XML has a flag that
-        // can be used in routing to determine if an account is a C&G Account
-        forContractsAndGrants = SpringContext.getBean(SubFundGroupService.class).isForContractsAndGrants(getSubFundGroup());
-    }
-
-    /**
-     * This method gathers all SubAccounts related to this account if the account is marked as closed to deactivate
-     */
-    public List<PersistableBusinessObject> generateDeactivationsToPersist() {
-        BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
-
-        // retreive all the existing sub accounts for this
-        List<SubAccount> bosToDeactivate = new ArrayList();
-        Map<String, Object> fieldValues;
-        Collection existingSubAccounts;
-        if (this.isAccountClosedIndicator() == true) {
-            fieldValues = new HashMap();
-            fieldValues.put("chartOfAccountsCode", this.getChartOfAccountsCode());
-            fieldValues.put("accountNumber", this.getAccountNumber());
-            fieldValues.put("subAccountActiveIndicator", true);
-            existingSubAccounts = boService.findMatching(SubAccount.class, fieldValues);
-            bosToDeactivate.addAll(existingSubAccounts);
-        }
-
-
-        // mark all the sub accounts as inactive
-        for (SubAccount subAccount : bosToDeactivate) {
-            subAccount.setSubAccountActiveIndicator(false);
-        }
-        return new ArrayList<PersistableBusinessObject>(bosToDeactivate);
-    }
 
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return Returns the accountNumber
+     * @return - Returns the accountNumber
      * 
      */
     public String getAccountNumber() {
@@ -202,7 +147,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountNumber attribute.
      * 
-     * @param accountNumber The accountNumber to set.
+     * @param - accountNumber The accountNumber to set.
      * 
      */
     public void setAccountNumber(String accountNumber) {
@@ -212,7 +157,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountName attribute.
      * 
-     * @return Returns the accountName
+     * @return - Returns the accountName
      * 
      */
     public String getAccountName() {
@@ -222,7 +167,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountName attribute.
      * 
-     * @param accountName The accountName to set.
+     * @param - accountName The accountName to set.
      * 
      */
     public void setAccountName(String accountName) {
@@ -232,7 +177,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the _AccountsFringesBnftIndicator_ attribute.
      * 
-     * @return Returns the _AccountsFringesBnftIndicator_
+     * @return - Returns the _AccountsFringesBnftIndicator_
      * 
      */
     public boolean isAccountsFringesBnftIndicator() {
@@ -242,7 +187,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the _AccountsFringesBnftIndicator_ attribute.
      * 
-     * @param _AccountsFringesBnftIndicator_ The _AccountsFringesBnftIndicator_ to set.
+     * @param - _AccountsFringesBnftIndicator_ The _AccountsFringesBnftIndicator_ to set.
      * 
      */
     public void setAccountsFringesBnftIndicator(boolean _AccountsFringesBnftIndicator_) {
@@ -252,7 +197,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountRestrictedStatusDate attribute.
      * 
-     * @return Returns the accountRestrictedStatusDate
+     * @return - Returns the accountRestrictedStatusDate
      * 
      */
     public Timestamp getAccountRestrictedStatusDate() {
@@ -262,7 +207,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountRestrictedStatusDate attribute.
      * 
-     * @param accountRestrictedStatusDate The accountRestrictedStatusDate to set.
+     * @param - accountRestrictedStatusDate The accountRestrictedStatusDate to set.
      * 
      */
     public void setAccountRestrictedStatusDate(Timestamp accountRestrictedStatusDate) {
@@ -272,7 +217,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountCityName attribute.
      * 
-     * @return Returns the accountCityName
+     * @return - Returns the accountCityName
      * 
      */
     public String getAccountCityName() {
@@ -282,7 +227,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountCityName attribute.
      * 
-     * @param accountCityName The accountCityName to set.
+     * @param - accountCityName The accountCityName to set.
      * 
      */
     public void setAccountCityName(String accountCityName) {
@@ -292,7 +237,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountStateCode attribute.
      * 
-     * @return Returns the accountStateCode
+     * @return - Returns the accountStateCode
      * 
      */
     public String getAccountStateCode() {
@@ -302,7 +247,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountStateCode attribute.
      * 
-     * @param accountStateCode The accountStateCode to set.
+     * @param - accountStateCode The accountStateCode to set.
      * 
      */
     public void setAccountStateCode(String accountStateCode) {
@@ -312,7 +257,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountStreetAddress attribute.
      * 
-     * @return Returns the accountStreetAddress
+     * @return - Returns the accountStreetAddress
      * 
      */
     public String getAccountStreetAddress() {
@@ -322,7 +267,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountStreetAddress attribute.
      * 
-     * @param accountStreetAddress The accountStreetAddress to set.
+     * @param - accountStreetAddress The accountStreetAddress to set.
      * 
      */
     public void setAccountStreetAddress(String accountStreetAddress) {
@@ -332,7 +277,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountZipCode attribute.
      * 
-     * @return Returns the accountZipCode
+     * @return - Returns the accountZipCode
      * 
      */
     public String getAccountZipCode() {
@@ -342,7 +287,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountZipCode attribute.
      * 
-     * @param accountZipCode The accountZipCode to set.
+     * @param - accountZipCode The accountZipCode to set.
      * 
      */
     public void setAccountZipCode(String accountZipCode) {
@@ -352,7 +297,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountCreateDate attribute.
      * 
-     * @return Returns the accountCreateDate
+     * @return - Returns the accountCreateDate
      * 
      */
     public Timestamp getAccountCreateDate() {
@@ -362,7 +307,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountCreateDate attribute.
      * 
-     * @param accountCreateDate The accountCreateDate to set.
+     * @param - accountCreateDate The accountCreateDate to set.
      * 
      */
     public void setAccountCreateDate(Timestamp accountCreateDate) {
@@ -372,7 +317,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountEffectiveDate attribute.
      * 
-     * @return Returns the accountEffectiveDate
+     * @return - Returns the accountEffectiveDate
      * 
      */
     public Timestamp getAccountEffectiveDate() {
@@ -382,7 +327,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountEffectiveDate attribute.
      * 
-     * @param accountEffectiveDate The accountEffectiveDate to set.
+     * @param - accountEffectiveDate The accountEffectiveDate to set.
      * 
      */
     public void setAccountEffectiveDate(Timestamp accountEffectiveDate) {
@@ -392,7 +337,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountExpirationDate attribute.
      * 
-     * @return Returns the accountExpirationDate
+     * @return - Returns the accountExpirationDate
      * 
      */
     public Timestamp getAccountExpirationDate() {
@@ -402,7 +347,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountExpirationDate attribute.
      * 
-     * @param accountExpirationDate The accountExpirationDate to set.
+     * @param - accountExpirationDate The accountExpirationDate to set.
      * 
      */
     public void setAccountExpirationDate(Timestamp accountExpirationDate) {
@@ -413,60 +358,50 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
      * 
      * This method determines whether the account is expired or not.
      * 
-     * Note that if Expiration Date is the same as today, then this will return false. It will only return true if the account
+     * Note that if Expiration Date is the same as today, then this 
+     * will return false.  It will only return true if the account 
      * expiration date is one day earlier than today or earlier.
      * 
-     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
+     * Note that this logic ignores all time components when doing the 
+     * comparison.  It only does the before/after comparison based on 
      * date values, not time-values.
      * 
-     * @return true or false based on the logic outlined above
+     * @return - true or false based on the logic outlined above
      * 
      */
     public boolean isExpired() {
-        LOG.debug("entering isExpired()");
-        // dont even bother trying to test if the accountExpirationDate is null
-        if (this.accountExpirationDate == null) {
-            return false;
-        }
-
-        return this.isExpired(SpringContext.getBean(DateTimeService.class).getCurrentCalendar());
+        return this.isExpired(SpringServiceLocator.getDateTimeService().getCurrentCalendar());
     }
-
+    
     /**
      * 
      * This method determines whether the account is expired or not.
      * 
-     * Note that if Expiration Date is the same date as testDate, then this will return false. It will only return true if the
-     * account expiration date is one day earlier than testDate or earlier.
+     * Note that if Expiration Date is the same date as testDate, then this 
+     * will return false.  It will only return true if the account 
+     * expiration date is one day earlier than testDate or earlier.
      * 
-     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
+     * Note that this logic ignores all time components when doing the 
+     * comparison.  It only does the before/after comparison based on 
      * date values, not time-values.
      * 
-     * @param testDate - Calendar instance with the date to test the Account's Expiration Date against. This is most commonly set to
-     *        today's date.
-     * @return true or false based on the logic outlined above
+     * @param testDate - Calendar instance with the date to test the Account's Expiration Date against.  
+     *                   This is most commonly set to today's date.
+     * @return - true or false based on the logic outlined above
      * 
      */
-    public boolean isExpired(Calendar testDate) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("entering isExpired(" + testDate + ")");
-        }
+     public boolean isExpired(Calendar testDate) {
 
-        // dont even bother trying to test if the accountExpirationDate is null
-        if (this.accountExpirationDate == null) {
-            return false;
-        }
-
-        // remove any time-components from the testDate
+        //	remove any time-components from the testDate
         testDate = DateUtils.truncate(testDate, Calendar.DAY_OF_MONTH);
-
-        // get a calendar reference to the Account Expiration
+        
+        //	get a calendar reference to the Account Expiration 
         // date, and remove any time components
         Calendar acctDate = Calendar.getInstance();
-        acctDate.setTime(this.accountExpirationDate);
+        acctDate.setTime(getAccountExpirationDate());
         acctDate = DateUtils.truncate(acctDate, Calendar.DAY_OF_MONTH);
-
-        // if the Account Expiration Date is before the testDate
+        
+        //	if the Account Expiration Date is before the testDate
         if (acctDate.before(testDate)) {
             return true;
         }
@@ -474,38 +409,34 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
             return false;
         }
     }
-
-    /**
-     * 
-     * This method determines whether the account is expired or not.
-     * 
-     * Note that if Expiration Date is the same date as testDate, then this will return false. It will only return true if the
-     * account expiration date is one day earlier than testDate or earlier.
-     * 
-     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
-     * date values, not time-values.
-     * 
-     * @param testDate - java.util.Date instance with the date to test the Account's Expiration Date against. This is most commonly
-     *        set to today's date.
-     * @return true or false based on the logic outlined above
-     * 
-     */
+    
+     /**
+      * 
+      * This method determines whether the account is expired or not.
+      * 
+      * Note that if Expiration Date is the same date as testDate, then this 
+      * will return false.  It will only return true if the account 
+      * expiration date is one day earlier than testDate or earlier.
+      * 
+      * Note that this logic ignores all time components when doing the 
+      * comparison.  It only does the before/after comparison based on 
+      * date values, not time-values.
+      * 
+      * @param testDate - java.util.Date instance with the date to test the Account's Expiration Date against.  
+      *                   This is most commonly set to today's date.
+      * @return - true or false based on the logic outlined above
+      * 
+      */
     public boolean isExpired(Date testDate) {
-
-        // dont even bother trying to test if the accountExpirationDate is null
-        if (this.accountExpirationDate == null) {
-            return false;
-        }
-
         Calendar acctDate = Calendar.getInstance();
         acctDate.setTime(testDate);
-        return isExpired(acctDate);
+        return this.isExpired(acctDate);
     }
-
+    
     /**
      * Gets the awardPeriodEndYear attribute.
      * 
-     * @return Returns the awardPeriodEndYear
+     * @return - Returns the awardPeriodEndYear
      * 
      */
     public Integer getAwardPeriodEndYear() {
@@ -515,7 +446,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the awardPeriodEndYear attribute.
      * 
-     * @param awardPeriodEndYear The awardPeriodEndYear to set.
+     * @param - awardPeriodEndYear The awardPeriodEndYear to set.
      * 
      */
     public void setAwardPeriodEndYear(Integer awardPeriodEndYear) {
@@ -525,7 +456,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the awardPeriodEndMonth attribute.
      * 
-     * @return Returns the awardPeriodEndMonth
+     * @return - Returns the awardPeriodEndMonth
      * 
      */
     public String getAwardPeriodEndMonth() {
@@ -535,7 +466,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the awardPeriodEndMonth attribute.
      * 
-     * @param awardPeriodEndMonth The awardPeriodEndMonth to set.
+     * @param - awardPeriodEndMonth The awardPeriodEndMonth to set.
      * 
      */
     public void setAwardPeriodEndMonth(String awardPeriodEndMonth) {
@@ -545,7 +476,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the awardPeriodBeginYear attribute.
      * 
-     * @return Returns the awardPeriodBeginYear
+     * @return - Returns the awardPeriodBeginYear
      * 
      */
     public Integer getAwardPeriodBeginYear() {
@@ -555,7 +486,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the awardPeriodBeginYear attribute.
      * 
-     * @param awardPeriodBeginYear The awardPeriodBeginYear to set.
+     * @param - awardPeriodBeginYear The awardPeriodBeginYear to set.
      * 
      */
     public void setAwardPeriodBeginYear(Integer awardPeriodBeginYear) {
@@ -565,7 +496,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the awardPeriodBeginMonth attribute.
      * 
-     * @return Returns the awardPeriodBeginMonth
+     * @return - Returns the awardPeriodBeginMonth
      * 
      */
     public String getAwardPeriodBeginMonth() {
@@ -575,7 +506,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the awardPeriodBeginMonth attribute.
      * 
-     * @param awardPeriodBeginMonth The awardPeriodBeginMonth to set.
+     * @param - awardPeriodBeginMonth The awardPeriodBeginMonth to set.
      * 
      */
     public void setAwardPeriodBeginMonth(String awardPeriodBeginMonth) {
@@ -585,7 +516,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the acctIndirectCostRcvyTypeCd attribute.
      * 
-     * @return Returns the acctIndirectCostRcvyTypeCd
+     * @return - Returns the acctIndirectCostRcvyTypeCd
      * 
      */
     public String getAcctIndirectCostRcvyTypeCd() {
@@ -595,7 +526,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the acctIndirectCostRcvyTypeCd attribute.
      * 
-     * @param acctIndirectCostRcvyTypeCd The acctIndirectCostRcvyTypeCd to set.
+     * @param - acctIndirectCostRcvyTypeCd The acctIndirectCostRcvyTypeCd to set.
      * 
      */
     public void setAcctIndirectCostRcvyTypeCd(String acctIndirectCostRcvyTypeCd) {
@@ -605,7 +536,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the acctCustomIndCstRcvyExclCd attribute.
      * 
-     * @return Returns the acctCustomIndCstRcvyExclCd
+     * @return - Returns the acctCustomIndCstRcvyExclCd
      * 
      */
     public String getAcctCustomIndCstRcvyExclCd() {
@@ -615,7 +546,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the acctCustomIndCstRcvyExclCd attribute.
      * 
-     * @param acctCustomIndCstRcvyExclCd The acctCustomIndCstRcvyExclCd to set.
+     * @param - acctCustomIndCstRcvyExclCd The acctCustomIndCstRcvyExclCd to set.
      * 
      */
     public void setAcctCustomIndCstRcvyExclCd(String acctCustomIndCstRcvyExclCd) {
@@ -625,7 +556,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the financialIcrSeriesIdentifier attribute.
      * 
-     * @return Returns the financialIcrSeriesIdentifier
+     * @return - Returns the financialIcrSeriesIdentifier
      * 
      */
     public String getFinancialIcrSeriesIdentifier() {
@@ -635,7 +566,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the financialIcrSeriesIdentifier attribute.
      * 
-     * @param financialIcrSeriesIdentifier The financialIcrSeriesIdentifier to set.
+     * @param - financialIcrSeriesIdentifier The financialIcrSeriesIdentifier to set.
      * 
      */
     public void setFinancialIcrSeriesIdentifier(String financialIcrSeriesIdentifier) {
@@ -645,7 +576,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountInFinancialProcessingIndicator attribute.
      * 
-     * @return Returns the accountInFinancialProcessingIndicator
+     * @return - Returns the accountInFinancialProcessingIndicator
      * 
      */
     public boolean getAccountInFinancialProcessingIndicator() {
@@ -655,7 +586,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountInFinancialProcessingIndicator attribute.
      * 
-     * @param accountInFinancialProcessingIndicator The accountInFinancialProcessingIndicator to set.
+     * @param - accountInFinancialProcessingIndicator The accountInFinancialProcessingIndicator to set.
      * 
      */
     public void setAccountInFinancialProcessingIndicator(boolean accountInFinancialProcessingIndicator) {
@@ -665,7 +596,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the budgetRecordingLevelCode attribute.
      * 
-     * @return Returns the budgetRecordingLevelCode
+     * @return - Returns the budgetRecordingLevelCode
      * 
      */
     public String getBudgetRecordingLevelCode() {
@@ -675,7 +606,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the budgetRecordingLevelCode attribute.
      * 
-     * @param budgetRecordingLevelCode The budgetRecordingLevelCode to set.
+     * @param - budgetRecordingLevelCode The budgetRecordingLevelCode to set.
      * 
      */
     public void setBudgetRecordingLevelCode(String budgetRecordingLevelCode) {
@@ -685,7 +616,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountSufficientFundsCode attribute.
      * 
-     * @return Returns the accountSufficientFundsCode
+     * @return - Returns the accountSufficientFundsCode
      * 
      */
     public String getAccountSufficientFundsCode() {
@@ -695,7 +626,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountSufficientFundsCode attribute.
      * 
-     * @param accountSufficientFundsCode The accountSufficientFundsCode to set.
+     * @param - accountSufficientFundsCode The accountSufficientFundsCode to set.
      * 
      */
     public void setAccountSufficientFundsCode(String accountSufficientFundsCode) {
@@ -705,7 +636,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the pendingAcctSufficientFundsIndicator attribute.
      * 
-     * @return Returns the pendingAcctSufficientFundsIndicator
+     * @return - Returns the pendingAcctSufficientFundsIndicator
      * 
      */
     public boolean isPendingAcctSufficientFundsIndicator() {
@@ -715,7 +646,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the pendingAcctSufficientFundsIndicator attribute.
      * 
-     * @param pendingAcctSufficientFundsIndicator The pendingAcctSufficientFundsIndicator to set.
+     * @param - pendingAcctSufficientFundsIndicator The pendingAcctSufficientFundsIndicator to set.
      * 
      */
     public void setPendingAcctSufficientFundsIndicator(boolean pendingAcctSufficientFundsIndicator) {
@@ -725,7 +656,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the extrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @return Returns the extrnlFinEncumSufficntFndIndicator
+     * @return - Returns the extrnlFinEncumSufficntFndIndicator
      * 
      */
     public boolean isExtrnlFinEncumSufficntFndIndicator() {
@@ -735,7 +666,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the extrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @param extrnlFinEncumSufficntFndIndicator The extrnlFinEncumSufficntFndIndicator to set.
+     * @param - extrnlFinEncumSufficntFndIndicator The extrnlFinEncumSufficntFndIndicator to set.
      * 
      */
     public void setExtrnlFinEncumSufficntFndIndicator(boolean extrnlFinEncumSufficntFndIndicator) {
@@ -745,7 +676,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the intrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @return Returns the intrnlFinEncumSufficntFndIndicator
+     * @return - Returns the intrnlFinEncumSufficntFndIndicator
      * 
      */
     public boolean isIntrnlFinEncumSufficntFndIndicator() {
@@ -755,7 +686,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the intrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @param intrnlFinEncumSufficntFndIndicator The intrnlFinEncumSufficntFndIndicator to set.
+     * @param - intrnlFinEncumSufficntFndIndicator The intrnlFinEncumSufficntFndIndicator to set.
      * 
      */
     public void setIntrnlFinEncumSufficntFndIndicator(boolean intrnlFinEncumSufficntFndIndicator) {
@@ -765,7 +696,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the finPreencumSufficientFundIndicator attribute.
      * 
-     * @return Returns the finPreencumSufficientFundIndicator
+     * @return - Returns the finPreencumSufficientFundIndicator
      * 
      */
     public boolean isFinPreencumSufficientFundIndicator() {
@@ -775,7 +706,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the finPreencumSufficientFundIndicator attribute.
      * 
-     * @param finPreencumSufficientFundIndicator The finPreencumSufficientFundIndicator to set.
+     * @param - finPreencumSufficientFundIndicator The finPreencumSufficientFundIndicator to set.
      * 
      */
     public void setFinPreencumSufficientFundIndicator(boolean finPreencumSufficientFundIndicator) {
@@ -785,7 +716,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the _FinancialObjectivePrsctrlIndicator_ attribute.
      * 
-     * @return Returns the _FinancialObjectivePrsctrlIndicator_
+     * @return - Returns the _FinancialObjectivePrsctrlIndicator_
      * 
      */
     public boolean isFinancialObjectivePrsctrlIndicator() {
@@ -795,7 +726,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the _FinancialObjectivePrsctrlIndicator_ attribute.
      * 
-     * @param _FinancialObjectivePrsctrlIndicator_ The _FinancialObjectivePrsctrlIndicator_ to set.
+     * @param - _FinancialObjectivePrsctrlIndicator_ The _FinancialObjectivePrsctrlIndicator_ to set.
      * 
      */
     public void setFinancialObjectivePrsctrlIndicator(boolean _FinancialObjectivePrsctrlIndicator_) {
@@ -803,37 +734,29 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     }
 
     /**
-     * Gets the accountCfdaNumber attribute.
+     * Gets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @return Returns the accountCfdaNumber
+     * @return - Returns the cgCatlfFedDomestcAssistNbr
      * 
      */
-    public String getAccountCfdaNumber() {
-        return accountCfdaNumber;
+    public String getCgCatlfFedDomestcAssistNbr() {
+        return cgCatlfFedDomestcAssistNbr;
     }
 
     /**
-     * Sets the accountCfdaNumber attribute.
+     * Sets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @param accountCfdaNumber The accountCfdaNumber to set.
+     * @param - cgCatlfFedDomestcAssistNbr The cgCatlfFedDomestcAssistNbr to set.
      * 
      */
-    public void setAccountCfdaNumber(String accountCfdaNumber) {
-        this.accountCfdaNumber = accountCfdaNumber;
-    }
-
-    public Cfda getCfda() {
-        return cfda;
-    }
-
-    public void setCfda(Cfda cfda) {
-        this.cfda = cfda;
+    public void setCgCatlfFedDomestcAssistNbr(String cgCatlfFedDomestcAssistNbr) {
+        this.cgCatlfFedDomestcAssistNbr = cgCatlfFedDomestcAssistNbr;
     }
 
     /**
      * Gets the accountOffCampusIndicator attribute.
      * 
-     * @return Returns the accountOffCampusIndicator
+     * @return - Returns the accountOffCampusIndicator
      * 
      */
     public boolean isAccountOffCampusIndicator() {
@@ -843,7 +766,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountOffCampusIndicator attribute.
      * 
-     * @param accountOffCampusIndicator The accountOffCampusIndicator to set.
+     * @param - accountOffCampusIndicator The accountOffCampusIndicator to set.
      * 
      */
     public void setAccountOffCampusIndicator(boolean accountOffCampusIndicator) {
@@ -853,7 +776,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountClosedIndicator attribute.
      * 
-     * @return Returns the accountClosedIndicator
+     * @return - Returns the accountClosedIndicator
      * 
      */
     public boolean isAccountClosedIndicator() {
@@ -863,7 +786,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountClosedIndicator attribute.
      * 
-     * @param accountClosedIndicator The accountClosedIndicator to set.
+     * @param - accountClosedIndicator The accountClosedIndicator to set.
      * 
      */
     public void setAccountClosedIndicator(boolean accountClosedIndicator) {
@@ -873,7 +796,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -883,7 +806,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the chartOfAccounts attribute.
      * 
-     * @param chartOfAccounts The chartOfAccounts to set.
+     * @param - chartOfAccounts The chartOfAccounts to set.
      * @deprecated
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -893,7 +816,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the organization attribute.
      * 
-     * @return Returns the organization
+     * @return - Returns the organization
      * 
      */
     public Org getOrganization() {
@@ -903,7 +826,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the organization attribute.
      * 
-     * @param organization The organization to set.
+     * @param - organization The organization to set.
      * @deprecated
      */
     public void setOrganization(Org organization) {
@@ -913,7 +836,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountType attribute.
      * 
-     * @return Returns the accountType
+     * @return - Returns the accountType
      * 
      */
     public AcctType getAccountType() {
@@ -923,7 +846,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountType attribute.
      * 
-     * @param accountType The accountType to set.
+     * @param - accountType The accountType to set.
      * @deprecated
      */
     public void setAccountType(AcctType accountType) {
@@ -933,7 +856,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountPhysicalCampus attribute.
      * 
-     * @return Returns the accountPhysicalCampus
+     * @return - Returns the accountPhysicalCampus
      * 
      */
     public Campus getAccountPhysicalCampus() {
@@ -943,7 +866,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountPhysicalCampus attribute.
      * 
-     * @param accountPhysicalCampus The accountPhysicalCampus to set.
+     * @param - accountPhysicalCampus The accountPhysicalCampus to set.
      * @deprecated
      */
     public void setAccountPhysicalCampus(Campus accountPhysicalCampus) {
@@ -953,7 +876,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountState attribute
      * 
-     * @return Returns the accountState
+     * @return - Returns the accountState
      */
     public State getAccountState() {
         return accountState;
@@ -972,7 +895,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the subFundGroup attribute.
      * 
-     * @return Returns the subFundGroup
+     * @return - Returns the subFundGroup
      * 
      */
     public SubFundGroup getSubFundGroup() {
@@ -982,7 +905,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the subFundGroup attribute.
      * 
-     * @param subFundGroup The subFundGroup to set.
+     * @param - subFundGroup The subFundGroup to set.
      * @deprecated
      */
     public void setSubFundGroup(SubFundGroup subFundGroup) {
@@ -992,7 +915,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the financialHigherEdFunction attribute.
      * 
-     * @return Returns the financialHigherEdFunction
+     * @return - Returns the financialHigherEdFunction
      * 
      */
     public HigherEdFunction getFinancialHigherEdFunction() {
@@ -1002,7 +925,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the financialHigherEdFunction attribute.
      * 
-     * @param financialHigherEdFunction The financialHigherEdFunction to set.
+     * @param - financialHigherEdFunction The financialHigherEdFunction to set.
      * @deprecated
      */
     public void setFinancialHigherEdFunction(HigherEdFunction financialHigherEdFunction) {
@@ -1012,7 +935,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the accountRestrictedStatus attribute.
      * 
-     * @return Returns the accountRestrictedStatus
+     * @return - Returns the accountRestrictedStatus
      * 
      */
     public RestrictedStatus getAccountRestrictedStatus() {
@@ -1022,7 +945,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the accountRestrictedStatus attribute.
      * 
-     * @param accountRestrictedStatus The accountRestrictedStatus to set.
+     * @param - accountRestrictedStatus The accountRestrictedStatus to set.
      * @deprecated
      */
     public void setAccountRestrictedStatus(RestrictedStatus accountRestrictedStatus) {
@@ -1032,7 +955,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the reportsToAccount attribute.
      * 
-     * @return Returns the reportsToAccount
+     * @return - Returns the reportsToAccount
      * 
      */
     public Account getReportsToAccount() {
@@ -1042,7 +965,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the reportsToAccount attribute.
      * 
-     * @param reportsToAccount The reportsToAccount to set.
+     * @param - reportsToAccount The reportsToAccount to set.
      * @deprecated
      */
     public void setReportsToAccount(Account reportsToAccount) {
@@ -1052,7 +975,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the endowmentIncomeAccount attribute.
      * 
-     * @return Returns the endowmentIncomeAccount
+     * @return - Returns the endowmentIncomeAccount
      * 
      */
     public Account getEndowmentIncomeAccount() {
@@ -1062,7 +985,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the endowmentIncomeAccount attribute.
      * 
-     * @param endowmentIncomeAccount The endowmentIncomeAccount to set.
+     * @param - endowmentIncomeAccount The endowmentIncomeAccount to set.
      * @deprecated
      */
     public void setEndowmentIncomeAccount(Account endowmentIncomeAccount) {
@@ -1072,7 +995,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the contractControlAccount attribute.
      * 
-     * @return Returns the contractControlAccount
+     * @return - Returns the contractControlAccount
      * 
      */
     public Account getContractControlAccount() {
@@ -1082,7 +1005,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the contractControlAccount attribute.
      * 
-     * @param contractControlAccount The contractControlAccount to set.
+     * @param - contractControlAccount The contractControlAccount to set.
      * @deprecated
      */
     public void setContractControlAccount(Account contractControlAccount) {
@@ -1093,7 +1016,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the incomeStreamAccount attribute.
      * 
-     * @return Returns the incomeStreamAccount
+     * @return - Returns the incomeStreamAccount
      * 
      */
     public Account getIncomeStreamAccount() {
@@ -1103,7 +1026,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the incomeStreamAccount attribute.
      * 
-     * @param incomeStreamAccount The incomeStreamAccount to set.
+     * @param - incomeStreamAccount The incomeStreamAccount to set.
      * @deprecated
      */
     public void setIncomeStreamAccount(Account incomeStreamAccount) {
@@ -1113,7 +1036,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Gets the indirectCostRecoveryAcct attribute.
      * 
-     * @return Returns the indirectCostRecoveryAcct
+     * @return - Returns the indirectCostRecoveryAcct
      * 
      */
     public Account getIndirectCostRecoveryAcct() {
@@ -1123,7 +1046,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     /**
      * Sets the indirectCostRecoveryAcct attribute.
      * 
-     * @param indirectCostRecoveryAcct The indirectCostRecoveryAcct to set.
+     * @param - indirectCostRecoveryAcct The indirectCostRecoveryAcct to set.
      * @deprecated
      */
     public void setIndirectCostRecoveryAcct(Account indirectCostRecoveryAcct) {
@@ -1131,17 +1054,11 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     }
 
 
-    public UniversalUser getAccountFiscalOfficerUser() {
-        accountFiscalOfficerUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountFiscalOfficerSystemIdentifier, accountFiscalOfficerUser);
-        return accountFiscalOfficerUser;
-    }
-    
     /**
-     * The network id of the account fiscal officer
-     * @return the network id of the account fiscal officer
+     * @return Returns the accountFiscalOfficerUser.
      */
-    public String getAccountFiscalOfficerUserPersonUserIdentifier() {
-        return this.getAccountFiscalOfficerUser().getPersonUserIdentifier();
+    public KualiUser getAccountFiscalOfficerUser() {
+        return accountFiscalOfficerUser;
     }
 
 
@@ -1149,55 +1066,41 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
      * @param accountFiscalOfficerUser The accountFiscalOfficerUser to set.
      * @deprecated
      */
-    public void setAccountFiscalOfficerUser(UniversalUser accountFiscalOfficerUser) {
+    public void setAccountFiscalOfficerUser(KualiUser accountFiscalOfficerUser) {
         this.accountFiscalOfficerUser = accountFiscalOfficerUser;
     }
 
-    public UniversalUser getAccountManagerUser() {
-        accountManagerUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountManagerSystemIdentifier, accountManagerUser);
+
+    /**
+     * @return Returns the accountManagerUser.
+     */
+    public KualiUser getAccountManagerUser() {
         return accountManagerUser;
     }
-    
-    /**
-     * Returns the network id of the account manager user
-     * @return the network id of the account manager user
-     */
-    public String getAccountManagerUserPersonUserIdentifier() {
-        return this.getAccountManagerUser().getPersonUserIdentifier();
-    }
+
 
     /**
      * @param accountManagerUser The accountManagerUser to set.
      * @deprecated
      */
-    public void setAccountManagerUser(UniversalUser accountManagerUser) {
+    public void setAccountManagerUser(KualiUser accountManagerUser) {
         this.accountManagerUser = accountManagerUser;
     }
 
 
-    public UniversalUser getAccountSupervisoryUser() {
-        accountSupervisoryUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountsSupervisorySystemsIdentifier, accountSupervisoryUser);
+    /**
+     * @return Returns the accountSupervisoryUser.
+     */
+    public KualiUser getAccountSupervisoryUser() {
         return accountSupervisoryUser;
     }
 
-    /**
-     * So, if you've read the comments for getAccountFiscalOfficerUserPersonUserIdentifier
-     * and getAccountManagerUserPersonUserIdentifier, then you would suspect that this method
-     * would return the network id for the account supervisory user.  But--ha ha!  You'd be
-     * wrong.  This method has a devious and unexpected twist.
-     * 
-     * No, actually, I'm kidding.  This returns the network if the account supervisory user.
-     * @return Take a guess. Honestly.
-     */
-    public String getAccountSupervisoryUserPersonUserIdentifier() {
-        return this.getAccountSupervisoryUser().getPersonUserIdentifier();
-    }
-    
+
     /**
      * @param accountSupervisoryUser The accountSupervisoryUser to set.
      * @deprecated
      */
-    public void setAccountSupervisoryUser(UniversalUser accountSupervisoryUser) {
+    public void setAccountSupervisoryUser(KualiUser accountSupervisoryUser) {
         this.accountSupervisoryUser = accountSupervisoryUser;
     }
 
@@ -1218,6 +1121,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
         this.continuationAccount = continuationAccount;
     }
 
+
     /**
      * @return Returns the accountGuideline.
      */
@@ -1236,23 +1140,21 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
 
 
     /**
-     * Gets the accountDescription attribute.
-     * 
+     * Gets the accountDescription attribute. 
      * @return Returns the accountDescription.
      */
     public AccountDescription getAccountDescription() {
         return accountDescription;
     }
-
+    
     /**
      * Sets the accountDescription attribute value.
-     * 
      * @param accountDescription The accountDescription to set.
      */
     public void setAccountDescription(AccountDescription accountDescription) {
         this.accountDescription = accountDescription;
     }
-
+    
     /**
      * @return Returns the subAccounts.
      */
@@ -1580,53 +1482,47 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     }
 
     /**
-     * Gets the postalZipCode attribute.
-     * 
+     * Gets the postalZipCode attribute. 
      * @return Returns the postalZipCode.
      */
     public PostalZipCode getPostalZipCode() {
         return postalZipCode;
     }
-
+    
     /**
      * Sets the postalZipCode attribute value.
-     * 
      * @param postalZipCode The postalZipCode to set.
      */
     public void setPostalZipCode(PostalZipCode postalZipCode) {
         this.postalZipCode = postalZipCode;
     }
-
+    
     /**
-     * Gets the budgetRecordingLevel attribute.
-     * 
+     * Gets the budgetRecordingLevel attribute. 
      * @return Returns the budgetRecordingLevel.
      */
     public BudgetRecordingLevelCode getBudgetRecordingLevel() {
         return budgetRecordingLevel;
     }
-
+    
     /**
      * Sets the budgetRecordingLevel attribute value.
-     * 
      * @param budgetRecordingLevel The budgetRecordingLevel to set.
      */
     public void setBudgetRecordingLevel(BudgetRecordingLevelCode budgetRecordingLevel) {
         this.budgetRecordingLevel = budgetRecordingLevel;
     }
-
+    
     /**
-     * Gets the sufficientFundsCode attribute.
-     * 
+     * Gets the sufficientFundsCode attribute. 
      * @return Returns the sufficientFundsCode.
      */
     public SufficientFundsCode getSufficientFundsCode() {
         return sufficientFundsCode;
     }
-
+    
     /**
      * Sets the sufficientFundsCode attribute value.
-     * 
      * @param sufficientFundsCode The sufficientFundsCode to set.
      */
     public void setSufficientFundsCode(SufficientFundsCode sufficientFundsCode) {
@@ -1634,23 +1530,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     }
     
     /**
-     * Gets the acctIndirectCostRcvyType attribute. 
-     * @return Returns the acctIndirectCostRcvyType.
-     */
-    public ICRTypeCode getAcctIndirectCostRcvyType() {
-        return acctIndirectCostRcvyType;
-    }
-
-    /**
-     * Sets the acctIndirectCostRcvyType attribute value.
-     * @param acctIndirectCostRcvyType The acctIndirectCostRcvyType to set.
-     */
-    public void setAcctIndirectCostRcvyType(ICRTypeCode acctIndirectCostRcvyType) {
-        this.acctIndirectCostRcvyType = acctIndirectCostRcvyType;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
@@ -1709,221 +1589,4 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
         String key = getChartOfAccountsCode() + ":" + getAccountNumber();
         return key;
     }
-
-    /**
-     * Gets the dummy attribute.
-     * 
-     * @return Returns the dummy.
-     */
-
-    /**
-     * Gets the accountResponsibilitySection attribute.
-     * 
-     * @return Returns the accountResponsibilitySection.
-     */
-    public String getAccountResponsibilitySection() {
-        return accountResponsibilitySection;
-    }
-
-    /**
-     * Sets the accountResponsibilitySection attribute value.
-     * 
-     * @param accountResponsibilitySection The accountResponsibilitySection to set.
-     */
-    public void setAccountResponsibilitySection(String accountResponsibilitySection) {
-        this.accountResponsibilitySection = accountResponsibilitySection;
-    }
-
-    /**
-     * Gets the contractsAndGrantsSection attribute.
-     * 
-     * @return Returns the contractsAndGrantsSection.
-     */
-    public String getContractsAndGrantsSection() {
-        return contractsAndGrantsSection;
-    }
-
-    /**
-     * Sets the contractsAndGrantsSection attribute value.
-     * 
-     * @param contractsAndGrantsSection The contractsAndGrantsSection to set.
-     */
-    public void setContractsAndGrantsSection(String contractsAndGrantsSection) {
-        this.contractsAndGrantsSection = contractsAndGrantsSection;
-    }
-
-    /**
-     * Gets the accountDescriptionSection attribute.
-     * 
-     * @return Returns the accountDescriptionSection.
-     */
-    public String getAccountDescriptionSection() {
-        return accountDescriptionSection;
-    }
-
-    /**
-     * Sets the accountDescriptionSection attribute value.
-     * 
-     * @param accountDescriptionSection The accountDescriptionSection to set.
-     */
-    public void setAccountDescriptionSection(String accountDescriptionSection) {
-        this.accountDescriptionSection = accountDescriptionSection;
-    }
-
-    /**
-     * Gets the guidelinesAndPurposeSection attribute.
-     * 
-     * @return Returns the guidelinesAndPurposeSection.
-     */
-    public String getGuidelinesAndPurposeSection() {
-        return guidelinesAndPurposeSection;
-    }
-
-    /**
-     * Sets the guidelinesAndPurposeSection attribute value.
-     * 
-     * @param guidelinesAndPurposeSection The guidelinesAndPurposeSection to set.
-     */
-    public void setGuidelinesAndPurposeSection(String guidelinesAndPurposeSection) {
-        this.guidelinesAndPurposeSection = guidelinesAndPurposeSection;
-    }
-
-    /**
-     * Gets the accountResponsibilitySectionBlank attribute.
-     * 
-     * @return Returns the accountResponsibilitySectionBlank.
-     */
-    public String getAccountResponsibilitySectionBlank() {
-        return accountResponsibilitySectionBlank;
-    }
-
-    /**
-     * Gets the contractsAndGrantsSectionBlank attribute.
-     * 
-     * @return Returns the contractsAndGrantsSectionBlank.
-     */
-    public String getContractsAndGrantsSectionBlank() {
-        return contractsAndGrantsSectionBlank;
-    }
-
-    /**
-     * Gets the accountDescriptionSectionBlank attribute.
-     * 
-     * @return Returns the accountDescriptionSectionBlank.
-     */
-    public String getAccountDescriptionSectionBlank() {
-        return accountDescriptionSectionBlank;
-    }
-
-    /**
-     * Gets the guidelinesAndPurposeSectionBlank attribute.
-     * 
-     * @return Returns the guidelinesAndPurposeSectionBlank.
-     */
-    public String getGuidelinesAndPurposeSectionBlank() {
-        return guidelinesAndPurposeSectionBlank;
-    }
-
-    /**
-     * Gets the endowmentIncomeChartOfAccounts attribute.
-     * 
-     * @return Returns the endowmentIncomeChartOfAccounts.
-     */
-    public Chart getEndowmentIncomeChartOfAccounts() {
-        return endowmentIncomeChartOfAccounts;
-    }
-
-    /**
-     * Sets the endowmentIncomeChartOfAccounts attribute value.
-     * 
-     * @param endowmentIncomeChartOfAccounts The endowmentIncomeChartOfAccounts to set.
-     */
-    public void setEndowmentIncomeChartOfAccounts(Chart endowmentIncomeChartOfAccounts) {
-        this.endowmentIncomeChartOfAccounts = endowmentIncomeChartOfAccounts;
-    }
-
-    @Override
-    public void beforeUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
-        super.beforeUpdate(persistenceBroker);
-        try {
-            // KULCOA-549: update the sufficient funds table
-            // get the current data from the database
-            BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
-            Account originalAcct = (Account) boService.retrieve(this);
-
-            if (originalAcct != null) {
-                if (!originalAcct.getSufficientFundsCode().equals(getSufficientFundsCode()) || originalAcct.isExtrnlFinEncumSufficntFndIndicator() != isExtrnlFinEncumSufficntFndIndicator() || originalAcct.isIntrnlFinEncumSufficntFndIndicator() != isIntrnlFinEncumSufficntFndIndicator() || originalAcct.isPendingAcctSufficientFundsIndicator() != isPendingAcctSufficientFundsIndicator() || originalAcct.isFinPreencumSufficientFundIndicator() != isFinPreencumSufficientFundIndicator()) {
-                    SufficientFundRebuild sfr = new SufficientFundRebuild();
-                    sfr.setAccountFinancialObjectTypeCode(SufficientFundRebuild.REBUILD_ACCOUNT);
-                    sfr.setChartOfAccountsCode(getChartOfAccountsCode());
-                    sfr.setAccountNumberFinancialObjectCode(getAccountNumber());
-                    if (boService.retrieve(sfr) == null) {
-                        persistenceBroker.store(sfr);
-                    }
-                }
-            }
-        }
-        catch (Exception ex) {
-            LOG.error("Problem updating sufficient funds rebuild table: ", ex);
-        }
-    }
-
-    /**
-     * Gets the forContractsAndGrants attribute. 
-     * @return Returns the forContractsAndGrants.
-     */
-    public boolean isForContractsAndGrants() {
-        return forContractsAndGrants;
-    }
-
-    /**
-     * 
-     * This method returns a collection of AwardAccount objects.
-     * @return Collection of assicated AwardAccounts.
-     */
-    public List<AwardAccount> getAwards() {
-        return awards;
-    }
-
-    /**
-     * 
-     * This method sets the associated collection of AwardAccounts to the local collection attribute.
-     * @param awards New collection of AwardAccounts to be assigned to this Account.
-     */
-    public void setAwards(List<AwardAccount> awards) {
-        this.awards = awards;
-    }
-
-
-    /**
-     * @return Returns the accountNameAndExtensionDescription.
-     */
-    public String getAccountNameAndExtensionDescription() {
-        String resultString;
-        AccountExtension accountExtension;
-        Program program;
-        resultString = this.getAccountName();
-        if (this.getExtension() != null){
-            accountExtension = (AccountExtension) this.getExtension();
-            if (accountExtension.getProgram() != null){
-                program = accountExtension.getProgram();
-                resultString = accountName + 
-                "[br]Program=" + 
-                program.getProgramCode() + "-" + 
-                program.getProgramName();
-            }         
-        }      
-      return  resultString;
-    }
-
-    /**
-     * Sets the accountNameAndExtensionDescription attribute value.
-     * 
-     * @param accountNameAndExtensionDescription The accountNameAndExtensionDescription to set.
-     */
-    public void setAccountNameAndExtensionDescription(String dummy ) {
-        
-    }
-
-
 }

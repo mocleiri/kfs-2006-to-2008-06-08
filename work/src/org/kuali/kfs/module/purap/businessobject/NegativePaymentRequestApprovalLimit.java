@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/NegativePaymentRequestApprovalLimit.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +20,7 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -27,7 +29,7 @@ import org.kuali.module.chart.bo.Org;
 /**
  * 
  */
-public class NegativePaymentRequestApprovalLimit extends PersistableBusinessObjectBase {
+public class NegativePaymentRequestApprovalLimit extends BusinessObjectBase {
 
 	private Integer negativePaymentRequestApprovalLimitIdentifier;
 	private String chartOfAccountsCode;

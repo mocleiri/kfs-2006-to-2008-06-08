@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionBalanceByAccount.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +21,8 @@ package org.kuali.module.budget.bo;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjLevel;
@@ -33,7 +34,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 /**
  * 
  */
-public class BudgetConstructionBalanceByAccount extends PersistableBusinessObjectBase {
+public class BudgetConstructionBalanceByAccount extends BusinessObjectBase {
 
 	private String personUniversalIdentifier;
 	private Integer universityFiscalYear;
@@ -50,8 +51,8 @@ public class BudgetConstructionBalanceByAccount extends PersistableBusinessObjec
 	private BigDecimal appointmentRequestedFteQuantity;
 	private BigDecimal appointmentRequestedCsfFteQuantity;
 	private BigDecimal csfFullTimeEmploymentQuantity;
-	private KualiInteger accountLineAnnualBalanceAmount;
-	private KualiInteger financialBeginningBalanceLineAmount;
+	private KualiDecimal accountLineAnnualBalanceAmount;
+	private KualiDecimal financialBeginningBalanceLineAmount;
 	private BigDecimal positionCsfLeaveFteQuantity;
 
     private ObjectCode financialObject;
@@ -385,38 +386,48 @@ public class BudgetConstructionBalanceByAccount extends PersistableBusinessObjec
 
 
 	/**
-     * Gets the accountLineAnnualBalanceAmount attribute. 
-     * @return Returns the accountLineAnnualBalanceAmount.
-     */
-    public KualiInteger getAccountLineAnnualBalanceAmount() {
-        return accountLineAnnualBalanceAmount;
-    }
+	 * Gets the accountLineAnnualBalanceAmount attribute.
+	 * 
+	 * @return Returns the accountLineAnnualBalanceAmount
+	 * 
+	 */
+	public KualiDecimal getAccountLineAnnualBalanceAmount() { 
+		return accountLineAnnualBalanceAmount;
+	}
 
-    /**
-     * Sets the accountLineAnnualBalanceAmount attribute value.
-     * @param accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
-     */
-    public void setAccountLineAnnualBalanceAmount(KualiInteger accountLineAnnualBalanceAmount) {
-        this.accountLineAnnualBalanceAmount = accountLineAnnualBalanceAmount;
-    }
+	/**
+	 * Sets the accountLineAnnualBalanceAmount attribute.
+	 * 
+	 * @param accountLineAnnualBalanceAmount The accountLineAnnualBalanceAmount to set.
+	 * 
+	 */
+	public void setAccountLineAnnualBalanceAmount(KualiDecimal accountLineAnnualBalanceAmount) {
+		this.accountLineAnnualBalanceAmount = accountLineAnnualBalanceAmount;
+	}
 
-    /**
-     * Gets the financialBeginningBalanceLineAmount attribute. 
-     * @return Returns the financialBeginningBalanceLineAmount.
-     */
-    public KualiInteger getFinancialBeginningBalanceLineAmount() {
-        return financialBeginningBalanceLineAmount;
-    }
 
-    /**
-     * Sets the financialBeginningBalanceLineAmount attribute value.
-     * @param financialBeginningBalanceLineAmount The financialBeginningBalanceLineAmount to set.
-     */
-    public void setFinancialBeginningBalanceLineAmount(KualiInteger financialBeginningBalanceLineAmount) {
-        this.financialBeginningBalanceLineAmount = financialBeginningBalanceLineAmount;
-    }
+	/**
+	 * Gets the financialBeginningBalanceLineAmount attribute.
+	 * 
+	 * @return Returns the financialBeginningBalanceLineAmount
+	 * 
+	 */
+	public KualiDecimal getFinancialBeginningBalanceLineAmount() { 
+		return financialBeginningBalanceLineAmount;
+	}
 
-    /**
+	/**
+	 * Sets the financialBeginningBalanceLineAmount attribute.
+	 * 
+	 * @param financialBeginningBalanceLineAmount The financialBeginningBalanceLineAmount to set.
+	 * 
+	 */
+	public void setFinancialBeginningBalanceLineAmount(KualiDecimal financialBeginningBalanceLineAmount) {
+		this.financialBeginningBalanceLineAmount = financialBeginningBalanceLineAmount;
+	}
+
+
+	/**
 	 * Gets the positionCsfLeaveFteQuantity attribute.
 	 * 
 	 * @return Returns the positionCsfLeaveFteQuantity

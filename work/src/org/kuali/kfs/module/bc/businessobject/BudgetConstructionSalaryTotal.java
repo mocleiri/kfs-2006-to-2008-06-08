@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionSalaryTotal.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +21,22 @@ package org.kuali.module.budget.bo;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 
 /**
  * 
  */
-public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase {
+public class BudgetConstructionSalaryTotal extends BusinessObjectBase {
 
 	private String organizationChartOfAccountsCode;
 	private String organizationCode;
-	private KualiInteger csfAmount;
-	private KualiInteger appointmentRequestedAmount;
+	private KualiDecimal csfAmount;
+	private KualiDecimal appointmentRequestedAmount;
 	private BigDecimal appointmentRequestedFteQuantity;
-	private KualiInteger initialRequestedAmount;
+	private KualiDecimal initialRequestedAmount;
 	private BigDecimal initialRequestedFteQuantity;
 	private Long personUniversalIdentifier;
 
@@ -92,38 +93,48 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 
 
 	/**
-     * Gets the csfAmount attribute. 
-     * @return Returns the csfAmount.
-     */
-    public KualiInteger getCsfAmount() {
-        return csfAmount;
-    }
-
-    /**
-     * Sets the csfAmount attribute value.
-     * @param csfAmount The csfAmount to set.
-     */
-    public void setCsfAmount(KualiInteger csfAmount) {
-        this.csfAmount = csfAmount;
-    }
+	 * Gets the csfAmount attribute.
+	 * 
+	 * @return Returns the csfAmount
+	 * 
+	 */
+	public KualiDecimal getCsfAmount() { 
+		return csfAmount;
+	}
 
 	/**
-     * Gets the appointmentRequestedAmount attribute. 
-     * @return Returns the appointmentRequestedAmount.
-     */
-    public KualiInteger getAppointmentRequestedAmount() {
-        return appointmentRequestedAmount;
-    }
+	 * Sets the csfAmount attribute.
+	 * 
+	 * @param csfAmount The csfAmount to set.
+	 * 
+	 */
+	public void setCsfAmount(KualiDecimal csfAmount) {
+		this.csfAmount = csfAmount;
+	}
 
-    /**
-     * Sets the appointmentRequestedAmount attribute value.
-     * @param appointmentRequestedAmount The appointmentRequestedAmount to set.
-     */
-    public void setAppointmentRequestedAmount(KualiInteger appointmentRequestedAmount) {
-        this.appointmentRequestedAmount = appointmentRequestedAmount;
-    }
 
-    /**
+	/**
+	 * Gets the appointmentRequestedAmount attribute.
+	 * 
+	 * @return Returns the appointmentRequestedAmount
+	 * 
+	 */
+	public KualiDecimal getAppointmentRequestedAmount() { 
+		return appointmentRequestedAmount;
+	}
+
+	/**
+	 * Sets the appointmentRequestedAmount attribute.
+	 * 
+	 * @param appointmentRequestedAmount The appointmentRequestedAmount to set.
+	 * 
+	 */
+	public void setAppointmentRequestedAmount(KualiDecimal appointmentRequestedAmount) {
+		this.appointmentRequestedAmount = appointmentRequestedAmount;
+	}
+
+
+	/**
 	 * Gets the appointmentRequestedFteQuantity attribute.
 	 * 
 	 * @return Returns the appointmentRequestedFteQuantity
@@ -145,22 +156,27 @@ public class BudgetConstructionSalaryTotal extends PersistableBusinessObjectBase
 
 
 	/**
-     * Gets the initialRequestedAmount attribute. 
-     * @return Returns the initialRequestedAmount.
-     */
-    public KualiInteger getInitialRequestedAmount() {
-        return initialRequestedAmount;
-    }
+	 * Gets the initialRequestedAmount attribute.
+	 * 
+	 * @return Returns the initialRequestedAmount
+	 * 
+	 */
+	public KualiDecimal getInitialRequestedAmount() { 
+		return initialRequestedAmount;
+	}
 
-    /**
-     * Sets the initialRequestedAmount attribute value.
-     * @param initialRequestedAmount The initialRequestedAmount to set.
-     */
-    public void setInitialRequestedAmount(KualiInteger initialRequestedAmount) {
-        this.initialRequestedAmount = initialRequestedAmount;
-    }
+	/**
+	 * Sets the initialRequestedAmount attribute.
+	 * 
+	 * @param initialRequestedAmount The initialRequestedAmount to set.
+	 * 
+	 */
+	public void setInitialRequestedAmount(KualiDecimal initialRequestedAmount) {
+		this.initialRequestedAmount = initialRequestedAmount;
+	}
 
-    /**
+
+	/**
 	 * Gets the initialRequestedFteQuantity attribute.
 	 * 
 	 * @return Returns the initialRequestedFteQuantity

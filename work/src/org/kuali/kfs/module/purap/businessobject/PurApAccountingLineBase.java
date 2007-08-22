@@ -16,12 +16,9 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.bo.SourceAccountingLine;
 
 public abstract class PurApAccountingLineBase extends SourceAccountingLine implements PurApAccountingLine {
@@ -29,7 +26,6 @@ public abstract class PurApAccountingLineBase extends SourceAccountingLine imple
     protected Integer accountIdentifier;
     private Integer itemIdentifier;
     private BigDecimal accountLinePercent;
-    private KualiDecimal alternateAmount; //not stored in DB; needed for disencumbrances and such
 
     public Integer getAccountIdentifier() {
         return accountIdentifier;
@@ -62,15 +58,12 @@ public abstract class PurApAccountingLineBase extends SourceAccountingLine imple
                  StringUtils.isNotEmpty(getFinancialSubObjectCode()) || 
                  StringUtils.isNotEmpty(getOrganizationReferenceId()) || 
                  StringUtils.isNotEmpty(getProjectCode()) || 
-                 StringUtils.isNotEmpty(getSubAccountNumber()) ||
-                 ObjectUtils.isNotNull(getAccountLinePercent()));
+                 StringUtils.isNotEmpty(getSubAccountNumber()));
     }
 
     public PurApAccountingLine createBlankAmountsCopy() {
-        PurApAccountingLine newAccount = (PurApAccountingLine)ObjectUtils.deepCopy(this);
-        newAccount.setAccountLinePercent(BigDecimal.ZERO);
-        newAccount.setAmount(KualiDecimal.ZERO);
-        return newAccount;
+        // TODO PURAP - Finish Me
+        return null;
     }
 
     // TODO PURAP - need more fields for comparison or not? - look at org.kuali.kfs.bo.AccountingLineBase#getValuesMap()
@@ -103,40 +96,5 @@ public abstract class PurApAccountingLineBase extends SourceAccountingLine imple
         sourceLine.setOrganizationReferenceId(getOrganizationReferenceId());
         sourceLine.setAmount(getAmount());
         return sourceLine;
-    }
-    
-    /**
-     * 
-     * @see org.kuali.kfs.bo.AccountingLineBase#toStringMapper()
-     */
-    @Override
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
-
-        m.put("chart", getChartOfAccountsCode());
-        m.put("account", getAccountNumber());
-        m.put("objectCode", getFinancialObjectCode());
-        m.put("subAccount", getSubAccountNumber());
-        m.put("subObjectCode", getFinancialSubObjectCode());
-        m.put("projectCode", getProjectCode());
-        m.put("orgRefId", getOrganizationReferenceId());
-
-        return m;
-    }
-
-    public KualiDecimal getAlternateAmount() {
-        return alternateAmount;
-    }
-
-    public void setAlternateAmount(KualiDecimal alternateAmount) {
-        this.alternateAmount = alternateAmount;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLineBase#getSequenceNumber()
-     */
-    @Override
-    public Integer getSequenceNumber() {
-        return this.getAccountIdentifier();
     }
 }

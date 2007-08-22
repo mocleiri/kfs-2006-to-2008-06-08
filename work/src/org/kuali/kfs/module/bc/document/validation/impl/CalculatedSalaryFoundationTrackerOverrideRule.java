@@ -19,10 +19,9 @@ import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.bo.CalculatedSalaryFoundationTrackerOverride;
 import org.kuali.module.budget.service.CalculatedSalaryFoundationTrackerOverrideService;
-import org.kuali.module.financial.service.UniversityDateService;
 
 public class CalculatedSalaryFoundationTrackerOverrideRule extends MaintenanceDocumentRuleBase {
     
@@ -37,8 +36,8 @@ public class CalculatedSalaryFoundationTrackerOverrideRule extends MaintenanceDo
         // This approach is being used to make it simpler to convert the Rule classes
         // to spring-managed with these services injected by Spring at some later date.
         // When this happens, just remove these calls to the setters with
-        // SpringContext, and configure the bean defs for spring.
-        this.setCalculatedSalaryFoundationTrackerOverrideService(SpringContext.getBean(CalculatedSalaryFoundationTrackerOverrideService.class));
+        // SpringServiceLocator, and configure the bean defs for spring.
+        this.setCalculatedSalaryFoundationTrackerOverrideService(SpringServiceLocator.getCalculatedSalaryFoundationTrackerOverrideService());
     }
     
     /**
@@ -80,7 +79,7 @@ public class CalculatedSalaryFoundationTrackerOverrideRule extends MaintenanceDo
 
         if ((ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear())) && (document.isNew())) {
 
-            Integer currentFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+            Integer currentFiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
             Integer universityFiscalYear = newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear();
             if (!(universityFiscalYear.equals(currentFiscalYear))) {
                 putFieldError("universityFiscalYear", KFSKeyConstants.ERROR_FISCAL_YEAR_NOT_CURRENT, "Fiscal Year");

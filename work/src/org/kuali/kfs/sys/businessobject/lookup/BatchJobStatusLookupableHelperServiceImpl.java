@@ -70,6 +70,9 @@ public class BatchJobStatusLookupableHelperServiceImpl extends KualiLookupableHe
     public String getActionUrls(BusinessObject businessObject) {
         if ( businessObject instanceof BatchJobStatus ) {
             BatchJobStatus job = (BatchJobStatus)businessObject;
+            if ( LOG.isInfoEnabled() ) {
+                LOG.info(job);
+            }
             String linkText = "Modify";
             StringBuffer sb = new StringBuffer();
             if ( configService.hasApplicationParameter(KFSConstants.ParameterGroups.SYSTEM,KFSConstants.SystemGroupParameterNames.JOB_ADMIN_WORKGROUP) ) {            
@@ -78,7 +81,7 @@ public class BatchJobStatusLookupableHelperServiceImpl extends KualiLookupableHe
                     linkText = "View";
                 }
             }
-            sb.append( "<a href=\"" + configService.getPropertyString(KFSConstants.APPLICATION_URL_KEY) + "/batchModify.do?methodToCall=start&name=" ).append( UrlFactory.encode( job.getName() ) )
+            sb.append( "<a href=\"batchModify.do?methodToCall=start&name=" ).append( UrlFactory.encode( job.getName() ) )
                     .append( "&group=" ).append( UrlFactory.encode( job.getGroup() ) ).append( "\">" ).append( linkText ).append( "</a>" );
 
             return sb.toString();

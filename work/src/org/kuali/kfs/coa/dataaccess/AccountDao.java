@@ -18,8 +18,7 @@ package org.kuali.module.chart.dao;
 import java.util.Iterator;
 import java.util.List;
 
-
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 
@@ -58,16 +57,7 @@ public interface AccountDao {
      * @param kualiUser
      * @return a list of AccountResponsibility objects
      */
-    public List getAccountsThatUserIsResponsibleFor(UniversalUser kualiUser);
-    
-    /**
-     * 
-     * This method should determine if the given user has any responsibilities on the given account
-     * @param universalUser the user to check responsibilities for
-     * @param account the account to check responsibilities on
-     * @return true if user is somehow responsible for account, false if otherwise
-     */
-    public boolean determineUserResponsibilityOnAccount(UniversalUser universalUser, Account account);
+    public List getAccountsThatUserIsResponsibleFor(KualiUser kualiUser);
 
     /**
      * get all accounts in the system. This is needed by a sufficient funds rebuilder job

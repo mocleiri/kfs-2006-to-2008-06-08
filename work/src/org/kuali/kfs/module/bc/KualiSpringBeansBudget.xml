@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/KualiSpringBeansBudget.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -16,106 +18,44 @@
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-	<bean id="budgetModule" class="org.kuali.core.KualiModule">
-		<property name="moduleId" value="budget" />
-		<property name="moduleName" value="Budget Construction" />
-		<property name="moduleCode" value="BC" />
-		<property name="moduleUserService" ref="budgetUserService" />
-		<property name="initializeDataDictionary" value="true" />
-		<property name="moduleAuthorizer">
-			<bean class="org.kuali.module.budget.authorization.BudgetModuleAuthorizer">
-				<property name="packagePrefixes">
-					<list>
-						<value>org.kuali.module.budget.</value>
-					</list>
-				</property>
-			</bean>
-		</property>
-		<property name="moduleUserRule">
-			<null />
-		</property>
-		<property name="moduleUserPreRules">
-			<null />
-		</property>
-		<property name="dataDictionaryPackages">
-			<list>
-				<value>org/kuali/module/budget/datadictionary</value>
-			</list>
-		</property>
-		<property name="databaseRepositoryFilePaths">
-			<list>
-				<value>org/kuali/module/budget/OJB-repository-budget.xml</value>
-			</list>
-		</property>
-		<property name="scriptConfigurationFilePaths">
-			<list>
-				<value>org/kuali/module/budget/dwr-budget.xml</value>
-			</list>
-		</property>
+	<bean id="budget-Module" class="org.kuali.core.KualiModule">
+    	<property name="moduleId">
+    		<value>budget</value>
+    	</property>
+    	<property name="moduleName">
+    		<value>Kuali Budget Construction</value>
+    	</property>
+    	<property name="moduleUserService">
+    		<ref bean="budgetUserService" />
+    	</property>
+    	<property name="moduleAuthorizer">
+		    <bean class="org.kuali.core.authorization.KualiModuleAuthorizerBase">    
+		    	<property name="packagePrefixes">
+		    		<list>
+		    			<value>org.kuali.module.budget.</value>
+		    		</list>
+		    	</property>
+		    </bean>
+    	</property>
+    	<property name="moduleUserRule"><null /></property>
+    	<property name="moduleUserPreRules"><null /></property>
 	</bean>
-
-	<bean id="budgetUserService" class="org.kuali.module.budget.service.impl.BudgetUserServiceImpl" parent="kualiModuleUserServiceBase">
-	</bean>
-
-	<bean id="budgetDocumentService" class="org.kuali.module.budget.service.impl.BudgetDocumentServiceImpl">
-		<property name="budgetConstructionDao">
-			<ref bean="budgetConstructionDao" />
-		</property>
-	</bean>
-
-	<bean id="budgetOrganizationTreeService" class="org.kuali.module.budget.service.impl.BudgetOrganizationTreeServiceImpl">
-		<property name="budgetConstructionOrganizationReportsService">
-			<ref bean="budgetConstructionOrganizationReportsService" />
-		</property>
-		<property name="businessObjectService">
-			<ref bean="businessObjectService" />
-		</property>
-		<property name="budgetConstructionDao">
-			<ref bean="budgetConstructionDao" />
-		</property>
-	</bean>
-
-	<bean id="lockService" class="org.kuali.module.budget.service.impl.LockServiceImpl">
-		<property name="budgetConstructionDao">
-			<ref bean="budgetConstructionDao" />
-		</property>
-	</bean>
-
-	<bean id="permissionService" class="org.kuali.module.budget.service.impl.PermissionServiceImpl">
-		<property name="organizationService">
-			<ref bean="organizationService" />
-		</property>
-	</bean>
-
-	<bean id="budgetConstructionDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb" />
-	
-	<bean id="budgetConstructionOrganizationReportsService" class="org.kuali.module.budget.service.impl.BudgetConstructionOrganizationReportsServiceImpl">
-		<property name="budgetConstructionOrganizationReportsDao">
-			<ref bean="budgetConstructionOrganizationReportsDao" />
-		</property>
-	</bean>
-
-	<bean id="budgetConstructionOrganizationReportsDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionOrganizationReportsDaoOjb" />
 		
-    <bean id="genesisService" class="org.kuali.module.budget.service.impl.GenesisServiceImpl">
-        <property name="genesisDao">
-            <ref bean="genesisDao" />
+    <bean id="budgetUserService" class="org.kuali.module.budget.service.impl.BudgetUserServiceImpl" parent="kualiModuleUserServiceBase">
+    	<property name="chartUserService">
+    		<ref bean="chartUserService" />
+    	</property>
+    </bean>
+
+    <bean id="lockService" class="org.kuali.module.budget.service.impl.LockServiceImpl">
+        <property name="budgetConstructionDao">
+            <ref bean="budgetConstructionDao" />
         </property>
     </bean>
 
-    <bean id="genesisDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.GenesisDaoOjb">
-        <property name="dateTimeService">
-        	<ref bean="dateTimeService"/>
-        </property>
-        <property name="documentService">
-            <ref bean="documentService" />
-        </property>
-        <property name="workflowDocumentService">
-            <ref bean="workflowDocumentService" />
+    <bean id="budgetConstructionDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb">
+        <property name="jcdAlias">
+            <value>dataSource</value>
         </property>
     </bean>
-
-    <bean id="calculatedSalaryFoundationTrackerOverrideService" class="org.kuali.module.budget.service.impl.CalculatedSalaryFoundationTrackerOverrideServiceImpl">
-    </bean>
-    	
 </beans>

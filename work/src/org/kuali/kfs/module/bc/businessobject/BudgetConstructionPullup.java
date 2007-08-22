@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionPullup.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +20,21 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.budget.service.BudgetConstructionOrganizationReportsService;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 
 /**
  * 
  */
-public class BudgetConstructionPullup extends PersistableBusinessObjectBase {
+public class BudgetConstructionPullup extends BusinessObjectBase {
 
 	private String chartOfAccountsCode;
 	private String organizationCode;
 	private String reportsToChartOfAccountsCode;
 	private String reportsToOrganizationCode;
 	private Integer pullFlag;
-	private String personUniversalIdentifier;
-    
-    public boolean isLeaf;
+	private Long personUniversalIdentifier;
 
     private Chart chartOfAccounts;
 	private Org organization;
@@ -156,30 +154,27 @@ public class BudgetConstructionPullup extends PersistableBusinessObjectBase {
 
 
 	/**
-     * Gets the personUniversalIdentifier attribute. 
-     * @return Returns the personUniversalIdentifier.
-     */
-    public String getPersonUniversalIdentifier() {
-        return personUniversalIdentifier;
-    }
+	 * Gets the personUniversalIdentifier attribute.
+	 * 
+	 * @return Returns the personUniversalIdentifier
+	 * 
+	 */
+	public Long getPersonUniversalIdentifier() { 
+		return personUniversalIdentifier;
+	}
 
-    /**
-     * Sets the personUniversalIdentifier attribute value.
-     * @param personUniversalIdentifier The personUniversalIdentifier to set.
-     */
-    public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
-        this.personUniversalIdentifier = personUniversalIdentifier;
-    }
+	/**
+	 * Sets the personUniversalIdentifier attribute.
+	 * 
+	 * @param personUniversalIdentifier The personUniversalIdentifier to set.
+	 * 
+	 */
+	public void setPersonUniversalIdentifier(Long personUniversalIdentifier) {
+		this.personUniversalIdentifier = personUniversalIdentifier;
+	}
 
-    /**
-     * Gets the isLeaf attribute. 
-     * @return Returns the isLeaf.
-     */
-    public boolean isLeaf() {
-        return SpringContext.getBean(BudgetConstructionOrganizationReportsService.class).isLeafOrg(this.chartOfAccountsCode, this.organizationCode);
-    }
 
-    /**
+	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
 	 * @return Returns the chartOfAccounts

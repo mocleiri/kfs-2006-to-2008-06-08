@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package org.kuali.module.financial.document;
 
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.core.util.SpringServiceLocator;
 
 
 /**
  * Year End version of the <code>BudgetAdjustmentDocument</code>
+ * 
+ * 
  */
 public class YearEndBudgetAdjustmentDocument extends BudgetAdjustmentDocument implements YearEndDocument {
 
@@ -36,7 +37,7 @@ public class YearEndBudgetAdjustmentDocument extends BudgetAdjustmentDocument im
      * set posting year to previous fiscal year
      */
     public void initiateDocument() {
-        Integer previousYearParam = new Integer(SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear().intValue() - 1);
+        Integer previousYearParam = new Integer(SpringServiceLocator.getDateTimeService().getCurrentFiscalYear().intValue() - 1);
         setPostingYear(previousYearParam);
     }
 }

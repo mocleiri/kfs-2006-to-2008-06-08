@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionAppointmentFundingReason.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +20,8 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -30,7 +31,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 /**
  * 
  */
-public class BudgetConstructionAppointmentFundingReason extends PersistableBusinessObjectBase {
+public class BudgetConstructionAppointmentFundingReason extends BusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
@@ -41,7 +42,7 @@ public class BudgetConstructionAppointmentFundingReason extends PersistableBusin
 	private String positionNumber;
 	private String emplid;
 	private String appointmentFundingReasonCode;
-	private KualiInteger appointmentFundingReasonAmount;
+	private KualiDecimal appointmentFundingReasonAmount;
 
     private ObjectCode financialObject;
 	private Account account;
@@ -247,22 +248,27 @@ public class BudgetConstructionAppointmentFundingReason extends PersistableBusin
 
 
 	/**
-     * Gets the appointmentFundingReasonAmount attribute. 
-     * @return Returns the appointmentFundingReasonAmount.
-     */
-    public KualiInteger getAppointmentFundingReasonAmount() {
-        return appointmentFundingReasonAmount;
-    }
+	 * Gets the appointmentFundingReasonAmount attribute.
+	 * 
+	 * @return Returns the appointmentFundingReasonAmount
+	 * 
+	 */
+	public KualiDecimal getAppointmentFundingReasonAmount() { 
+		return appointmentFundingReasonAmount;
+	}
 
-    /**
-     * Sets the appointmentFundingReasonAmount attribute value.
-     * @param appointmentFundingReasonAmount The appointmentFundingReasonAmount to set.
-     */
-    public void setAppointmentFundingReasonAmount(KualiInteger appointmentFundingReasonAmount) {
-        this.appointmentFundingReasonAmount = appointmentFundingReasonAmount;
-    }
+	/**
+	 * Sets the appointmentFundingReasonAmount attribute.
+	 * 
+	 * @param appointmentFundingReasonAmount The appointmentFundingReasonAmount to set.
+	 * 
+	 */
+	public void setAppointmentFundingReasonAmount(KualiDecimal appointmentFundingReasonAmount) {
+		this.appointmentFundingReasonAmount = appointmentFundingReasonAmount;
+	}
 
-    /**
+
+	/**
 	 * Gets the financialObject attribute.
 	 * 
 	 * @return Returns the financialObject

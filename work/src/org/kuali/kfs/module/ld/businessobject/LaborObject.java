@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/LaborObject.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +20,14 @@ package org.kuali.module.labor.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
 
 /**
  * 
  */
-public class LaborObject extends PersistableBusinessObjectBase implements Inactivateable {
+public class LaborObject extends BusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
@@ -41,8 +41,6 @@ public class LaborObject extends PersistableBusinessObjectBase implements Inacti
     private ObjectCode financialObject;
 	private Chart chartOfAccounts;
     private PositionObjectGroup positionObjectGroup;
-    private Options option;
-    private boolean active;
     
 	/**
 	 * Default constructor.
@@ -235,8 +233,8 @@ public class LaborObject extends PersistableBusinessObjectBase implements Inacti
 	 * Sets the financialObject attribute.
 	 * 
 	 * @param financialObject The financialObject to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setFinancialObject(ObjectCode financialObject) {
 		this.financialObject = financialObject;
 	}
@@ -255,8 +253,8 @@ public class LaborObject extends PersistableBusinessObjectBase implements Inacti
 	 * Sets the chartOfAccounts attribute.
 	 * 
 	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setChartOfAccounts(Chart chartOfAccounts) {
 		this.chartOfAccounts = chartOfAccounts;
 	}
@@ -272,6 +270,7 @@ public class LaborObject extends PersistableBusinessObjectBase implements Inacti
     /**
      * Sets the positionObjectGroup attribute value.
      * @param positionObjectGroup The positionObjectGroup to set.
+     * @deprecated
      */
     public void setPositionObjectGroup(PositionObjectGroup positionObjectGroup) {
         this.positionObjectGroup = positionObjectGroup;
@@ -289,12 +288,5 @@ public class LaborObject extends PersistableBusinessObjectBase implements Inacti
         m.put("financialObjectCode", this.financialObjectCode);
         return m;
     }    
-    
-    public boolean isActive() {
-        return this.active;
-    }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionIntendedIncumbent.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +19,15 @@
 package org.kuali.module.budget.bo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.TypedArrayList;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObjectBase {
+public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 
 	private String emplid;
 	private String personName;
@@ -45,7 +44,7 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
 	 */
 	public BudgetConstructionIntendedIncumbent() {
         budgetConstructionSalarySocialSecurity = new ArrayList();
-        setPendingBudgetConstructionAppointmentFunding(new TypedArrayList(PendingBudgetConstructionAppointmentFunding.class));
+        pendingBudgetConstructionAppointmentFunding = new ArrayList();
         
 	}
 
@@ -201,36 +200,11 @@ public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObje
     /**
      * Sets the pendingBudgetConstructionAppointmentFunding attribute value.
      * @param pendingBudgetConstructionAppointmentFunding The pendingBudgetConstructionAppointmentFunding to set.
-     * @deprecated
      */
     public void setPendingBudgetConstructionAppointmentFunding(List pendingBudgetConstructionAppointmentFunding) {
         this.pendingBudgetConstructionAppointmentFunding = pendingBudgetConstructionAppointmentFunding;
     }
 
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @Override
-    public List buildListOfDeletionAwareLists() {
-
-        List managedLists =  super.buildListOfDeletionAwareLists();
-        managedLists.add(getPendingBudgetConstructionAppointmentFunding());
-        return managedLists; 
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("emplid", getEmplid());
-
-        return simpleValues;
-    }
-  
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */

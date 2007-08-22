@@ -27,7 +27,7 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.labor.bo.LaborOriginEntry;
-import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
+import org.kuali.module.labor.bo.PendingLedgerEntry;
 import org.kuali.module.labor.service.LaborLedgerPendingEntryService;
 import org.kuali.module.labor.service.LaborNightlyOutService;
 import org.kuali.module.labor.service.LaborReportService;
@@ -40,8 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class LaborNightlyOutServiceImpl implements LaborNightlyOutService {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborNightlyOutServiceImpl.class);
-    
     private LaborLedgerPendingEntryService laborLedgerPendingEntryService;
     private OriginEntryGroupService originEntryGroupService;
     private LaborReportService laborReportService;
@@ -64,18 +62,17 @@ public class LaborNightlyOutServiceImpl implements LaborNightlyOutService {
         String reportDirectory = ReportRegistry.getReportsDirectory();
         OriginEntryGroup group = originEntryGroupService.createGroup(runDate, OriginEntrySource.LABOR_EDOC, true, true, true);
 
-        Iterator<LaborLedgerPendingEntry> pendingEntries = laborLedgerPendingEntryService.findApprovedPendingLedgerEntries();
+        Iterator<PendingLedgerEntry> pendingEntries = laborLedgerPendingEntryService.findApprovedPendingLedgerEntries();
         while (pendingEntries != null && pendingEntries.hasNext()) {
-            LaborLedgerPendingEntry pendingEntry = pendingEntries.next();
+            PendingLedgerEntry pendingEntry = pendingEntries.next();
 
             // copy the pending entry to origin entry table
-            boolean isSaved = saveAsOriginEntry(pendingEntry, group);
-            if(isSaved){
-                // update the pending entry to indicate it has been copied
-                pendingEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
-                pendingEntry.setTransactionDate(runDate);
-                businessObjectService.save(pendingEntry);
-            }
+            saveAsOriginEntry(pendingEntry, group);
+
+            // update the pending entry to indicate it has been copied
+            pendingEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
+            pendingEntry.setTransactionDate(runDate);
+            businessObjectService.save(pendingEntry);
         }
 
         Collection<OriginEntryGroup> groupList = new ArrayList<OriginEntryGroup>();
@@ -86,21 +83,14 @@ public class LaborNightlyOutServiceImpl implements LaborNightlyOutService {
     /*
      * save pending ledger entry as origin entry
      */
-    private boolean saveAsOriginEntry(LaborLedgerPendingEntry pendingEntry, OriginEntryGroup group) {
-        try {
-            LaborOriginEntry originEntry = new LaborOriginEntry();
-            ObjectUtil.buildObject(originEntry, pendingEntry);
+    private void saveAsOriginEntry(PendingLedgerEntry pendingEntry, OriginEntryGroup group) {
+        LaborOriginEntry originEntry = new LaborOriginEntry();
+        ObjectUtil.buildObject(originEntry, pendingEntry);
 
-            originEntry.setTransactionPostingDate(group.getDate());
-            originEntry.setEntryGroupId(group.getId());
+        originEntry.setTransactionPostingDate(group.getDate());
+        originEntry.setEntryGroupId(group.getId());
 
-            businessObjectService.save(originEntry);
-        }
-        catch (Exception e) {
-            LOG.debug("Fail to copy the pending entry as origin entry" + e);
-            return false;
-        }
-        return true;
+        businessObjectService.save(originEntry);
     }
 
     /**

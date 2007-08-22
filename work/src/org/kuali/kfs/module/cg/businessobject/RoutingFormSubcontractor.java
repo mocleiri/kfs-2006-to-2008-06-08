@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormSubcontractor.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +18,21 @@
 
 package org.kuali.module.kra.routingform.bo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.cg.bo.Subcontractor;
 
 /**
  * 
  */
-public class RoutingFormSubcontractor extends PersistableBusinessObjectBase {
+public class RoutingFormSubcontractor extends BusinessObjectBase {
 
 	private String documentNumber;
 	private Integer routingFormSubcontractorSequenceNumber;
-	private KualiInteger routingFormSubcontractorAmount;
+	private BigDecimal routingFormSubcontractorAmount;
 	private String routingFormSubcontractorNumber;
     private Subcontractor subcontractor;
 
@@ -89,7 +91,7 @@ public class RoutingFormSubcontractor extends PersistableBusinessObjectBase {
 	 * @return Returns the routingFormSubcontractorAmount
 	 * 
 	 */
-	public KualiInteger getRoutingFormSubcontractorAmount() { 
+	public BigDecimal getRoutingFormSubcontractorAmount() { 
 		return routingFormSubcontractorAmount;
 	}
 
@@ -99,7 +101,7 @@ public class RoutingFormSubcontractor extends PersistableBusinessObjectBase {
 	 * @param routingFormSubcontractorAmount The routingFormSubcontractorAmount to set.
 	 * 
 	 */
-	public void setRoutingFormSubcontractorAmount(KualiInteger routingFormSubcontractorAmount) {
+	public void setRoutingFormSubcontractorAmount(BigDecimal routingFormSubcontractorAmount) {
 		this.routingFormSubcontractorAmount = routingFormSubcontractorAmount;
 	}
 
@@ -150,7 +152,7 @@ public class RoutingFormSubcontractor extends PersistableBusinessObjectBase {
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.routingFormSubcontractorSequenceNumber != null) {
             m.put("routingFormSubcontractorSequenceNumber", this.routingFormSubcontractorSequenceNumber.toString());
         }

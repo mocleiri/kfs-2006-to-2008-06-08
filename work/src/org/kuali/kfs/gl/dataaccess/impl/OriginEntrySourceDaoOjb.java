@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ public class OriginEntrySourceDaoOjb extends PlatformAwareDaoBaseOjb implements 
     private static final String UNIVERSITY_FISCAL_PERIOD_CODE = "universityFiscalPeriodCode";
     private static final String FINANCIAL_DOCUMENT_TYPE_CODE = "financialDocumentTypeCode";
     private static final String FINANCIAL_SYSTEM_ORIGINATION_CODE = "financialSystemOriginationCode";
+    private static final String FINANCIAL_DOCUMENT_NUMBER = "financialDocumentNumber";
     private static final String TRANSACTION_LEDGER_ENTRY_SEQUENCE_NUMBER = "transactionLedgerEntrySequenceNumber";
 
     public OriginEntrySourceDaoOjb() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,11 @@ package org.kuali.module.gl.service.impl;
 
 import java.util.Collection;
 
-import org.kuali.kfs.KFSConstants;
+import org.kuali.Constants;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
 import org.kuali.module.gl.dao.SufficientFundRebuildDao;
 import org.kuali.module.gl.service.SufficientFundRebuildService;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class SufficientFundRebuildServiceImpl implements SufficientFundRebuildService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundRebuildServiceImpl.class);
 
@@ -38,13 +36,13 @@ public class SufficientFundRebuildServiceImpl implements SufficientFundRebuildSe
     public Collection getAllAccountEntries() {
         LOG.debug("getAllAccountEntries() started");
 
-        return sufficientFundRebuildDao.getByType(KFSConstants.SF_TYPE_ACCOUNT);
+        return sufficientFundRebuildDao.getByType(Constants.SF_TYPE_ACCOUNT);
     }
 
     public Collection getAllObjectEntries() {
         LOG.debug("getAllObjectEntries() started");
 
-        return sufficientFundRebuildDao.getByType(KFSConstants.SF_TYPE_OBJECT);
+        return sufficientFundRebuildDao.getByType(Constants.SF_TYPE_OBJECT);
     }
 
     public SufficientFundRebuild getByAccount(String chartOfAccountsCode, String accountNumberFinancialObjectCode) {

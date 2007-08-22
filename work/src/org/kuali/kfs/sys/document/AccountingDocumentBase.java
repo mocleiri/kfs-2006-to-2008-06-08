@@ -21,25 +21,27 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.exceptions.ValidationException;
+import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.rule.event.KualiDocumentEvent;
+import org.kuali.core.rule.event.RouteDocumentEvent;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.bo.AccountingLineParserBase;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.rule.event.AccountingLineEvent;
 import org.kuali.kfs.rule.event.AddAccountingLineEvent;
 import org.kuali.kfs.rule.event.DeleteAccountingLineEvent;
 import org.kuali.kfs.rule.event.ReviewAccountingLineEvent;
 import org.kuali.kfs.rule.event.UpdateAccountingLineEvent;
-import org.kuali.kfs.service.AccountingLineService;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -66,28 +68,28 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLines()
+     * @see org.kuali.core.document.FinancialDocument#getSourceAccountingLines()
      */
     public List getSourceAccountingLines() {
         return this.sourceAccountingLines;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#setSourceAccountingLines(java.util.List)
+     * @see org.kuali.core.document.FinancialDocument#setSourceAccountingLines(java.util.List)
      */
     public void setSourceAccountingLines(List sourceLines) {
         this.sourceAccountingLines = sourceLines;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLines()
+     * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLines()
      */
     public List getTargetAccountingLines() {
         return this.targetAccountingLines;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#setTargetAccountingLines(java.util.List)
+     * @see org.kuali.core.document.FinancialDocument#setTargetAccountingLines(java.util.List)
      */
     public void setTargetAccountingLines(List targetLines) {
         this.targetAccountingLines = targetLines;
@@ -98,7 +100,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
      * been stored in the nextSourceLineNumber variable, adds the accounting line to the list that is aggregated by this object, and
      * then handles incrementing the nextSourceLineNumber variable for you.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#addSourceAccountingLine(SourceAccountingLine)
+     * @see org.kuali.core.document.FinancialDocument#addSourceAccountingLine(org.kuali.core.bo.SourceAccountingLine)
      */
     public void addSourceAccountingLine(SourceAccountingLine line) {
         line.setSequenceNumber(this.getNextSourceLineNumber());
@@ -111,7 +113,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
      * been stored in the nextTargetLineNumber variable, adds the accounting line to the list that is aggregated by this object, and
      * then handles incrementing the nextTargetLineNumber variable for you.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#addTargetAccountingLine(TargetAccountingLine)
+     * @see org.kuali.core.document.FinancialDocument#addTargetAccountingLine(org.kuali.core.bo.TargetAccountingLine)
      */
     public void addTargetAccountingLine(TargetAccountingLine line) {
         line.setSequenceNumber(this.getNextTargetLineNumber());
@@ -126,7 +128,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
      * instances at indices before that one are not being instantiated. So changing the code below will cause adding lines to break
      * if you add more than one item to the list.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLine(int)
+     * @see org.kuali.core.document.FinancialDocument#getSourceAccountingLine(int)
      */
     public SourceAccountingLine getSourceAccountingLine(int index) {
         while (getSourceAccountingLines().size() <= index) {
@@ -150,7 +152,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
      * instances at indices before that one are not being instantiated. So changing the code below will cause adding lines to break
      * if you add more than one item to the list.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLine(int)
+     * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLine(int)
      */
     public TargetAccountingLine getTargetAccountingLine(int index) {
         while (getTargetAccountingLines().size() <= index) {
@@ -168,31 +170,32 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.FinancialDocument#getSourceAccountingLinesSectionTitle()
      */
     public String getSourceAccountingLinesSectionTitle() {
-        return KFSConstants.SOURCE;
+        return Constants.SOURCE;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLinesSectionTitle()
      */
     public String getTargetAccountingLinesSectionTitle() {
-        return KFSConstants.TARGET;
+        return Constants.TARGET;
     }
 
     /**
      * Since one side of the document should match the other and the document should balance, the total dollar amount for the
      * document should either be the expense line or the income line. This is the default implementation of this interface method so
      * it should be overridden appropriately if your document cannot make this assumption.
-     * @return if target total is zero, source total, otherwise target total
+     * 
+     * @see org.kuali.core.document.FinancialDocument#getTotalDollarAmount()
      */
     public KualiDecimal getTotalDollarAmount() {
         return getTargetTotal().equals(new KualiDecimal(0)) ? getSourceTotal() : getTargetTotal();
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceTotal()
+     * @see org.kuali.core.document.FinancialDocument#getSourceTotal()
      */
     public KualiDecimal getSourceTotal() {
         KualiDecimal total = new KualiDecimal(0);
@@ -210,7 +213,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetTotal()
+     * @see org.kuali.core.document.FinancialDocument#getTargetTotal()
      */
     public KualiDecimal getTargetTotal() {
         KualiDecimal total = new KualiDecimal(0);
@@ -228,28 +231,28 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getNextSourceLineNumber()
+     * @see org.kuali.core.document.FinancialDocument#getNextSourceLineNumber()
      */
     public Integer getNextSourceLineNumber() {
         return this.nextSourceLineNumber;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#setNextSourceLineNumber(java.lang.Integer)
+     * @see org.kuali.core.document.FinancialDocument#setNextSourceLineNumber(java.lang.Integer)
      */
     public void setNextSourceLineNumber(Integer nextLineNumber) {
         this.nextSourceLineNumber = nextLineNumber;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getNextTargetLineNumber()
+     * @see org.kuali.core.document.FinancialDocument#getNextTargetLineNumber()
      */
     public Integer getNextTargetLineNumber() {
         return this.nextTargetLineNumber;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#setNextTargetLineNumber(java.lang.Integer)
+     * @see org.kuali.core.document.FinancialDocument#setNextTargetLineNumber(java.lang.Integer)
      */
     public void setNextTargetLineNumber(Integer nextLineNumber) {
         this.nextTargetLineNumber = nextLineNumber;
@@ -258,7 +261,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     /**
      * Returns the default Source accounting line class.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLineClass()
+     * @see org.kuali.core.document.FinancialDocument#getSourceAccountingLineClass()
      */
     public Class getSourceAccountingLineClass() {
         return SourceAccountingLine.class;
@@ -267,7 +270,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     /**
      * Returns the default Target accounting line class.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLineClass()
+     * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLineClass()
      */
     public Class getTargetAccountingLineClass() {
         return TargetAccountingLine.class;
@@ -291,7 +294,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     }
 
     /**
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocumentBase#toCopy()
+     * @see org.kuali.module.gl.document.GeneralLedgerPostingDocumentBase#toCopy()
      */
     @Override
     public void toCopy() throws WorkflowException {
@@ -300,7 +303,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     }
 
     /**
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocumentBase#toErrorCorrection()
+     * @see org.kuali.module.gl.document.GeneralLedgerPostingDocumentBase#toErrorCorrection()
      */
     @Override
     public void toErrorCorrection() throws WorkflowException {
@@ -349,11 +352,11 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     }
 
     public void prepareForSave(KualiDocumentEvent event) {
-        if (!SpringContext.getBean(GeneralLedgerPendingEntryService.class).generateGeneralLedgerPendingEntries(this)) {
+        super.prepareForSave(event);
+        if (!SpringServiceLocator.getGeneralLedgerPendingEntryService().generateGeneralLedgerPendingEntries(this)) {
             logErrors();
             throw new ValidationException("general ledger GLPE generation failed");
         }
-        super.prepareForSave(event);
     }
 
     @Override
@@ -365,19 +368,19 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
         // 2. retrieve current accountingLines from given document
         // 3. compare, creating add/delete/update events as needed
         // 4. apply rules as appropriate returned events
-        List persistedSourceLines = SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(getSourceAccountingLineClass(), getDocumentNumber());
+        List persistedSourceLines = SpringServiceLocator.getAccountingLineService().getByDocumentHeaderId(getSourceAccountingLineClass(), getDocumentNumber());
         List currentSourceLines = getSourceAccountingLines();
 
-        List sourceEvents = generateEvents(persistedSourceLines, currentSourceLines, KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME, this);
+        List sourceEvents = generateEvents(persistedSourceLines, currentSourceLines, Constants.DOCUMENT_PROPERTY_NAME + "." + Constants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME, this);
         for (Iterator i = sourceEvents.iterator(); i.hasNext();) {
             AccountingLineEvent sourceEvent = (AccountingLineEvent) i.next();
             events.add(sourceEvent);
         }
 
-        List persistedTargetLines = SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(getTargetAccountingLineClass(), getDocumentNumber());
+        List persistedTargetLines = SpringServiceLocator.getAccountingLineService().getByDocumentHeaderId(getTargetAccountingLineClass(), getDocumentNumber());
         List currentTargetLines = getTargetAccountingLines();
 
-        List targetEvents = generateEvents(persistedTargetLines, currentTargetLines, KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME, this);
+        List targetEvents = generateEvents(persistedTargetLines, currentTargetLines, Constants.DOCUMENT_PROPERTY_NAME + "." + Constants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME, this);
         for (Iterator i = targetEvents.iterator(); i.hasNext();) {
             AccountingLineEvent targetEvent = (AccountingLineEvent) i.next();
             events.add(targetEvent);
@@ -440,7 +443,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
         // detect deletions
         for (Iterator i = persistedLineMap.entrySet().iterator(); i.hasNext();) {
             // the deleted line is not displayed on the page, so associate the error with the whole group
-            String groupErrorPathPrefix = errorPathPrefix + KFSConstants.ACCOUNTING_LINE_GROUP_SUFFIX;
+            String groupErrorPathPrefix = errorPathPrefix + Constants.ACCOUNTING_LINE_GROUP_SUFFIX;
             Map.Entry e = (Map.Entry) i.next();
             AccountingLine persistedLine = (AccountingLine) e.getValue();
             DeleteAccountingLineEvent deleteEvent = new DeleteAccountingLineEvent(groupErrorPathPrefix, document, persistedLine, true);

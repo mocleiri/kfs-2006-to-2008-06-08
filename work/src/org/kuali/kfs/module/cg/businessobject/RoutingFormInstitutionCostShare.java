@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormInstitutionCostShare.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +18,26 @@
 
 package org.kuali.module.kra.routingform.bo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class RoutingFormInstitutionCostShare extends PersistableBusinessObjectBase {
+public class RoutingFormInstitutionCostShare extends BusinessObjectBase {
 
 	private Integer routingFormCostShareSequenceNumber;
 	private String documentNumber;
 	private String accountNumber;
 	private String chartOfAccountsCode;
 	private String organizationCode;
-	private KualiInteger routingFormCostShareAmount;
+	private BigDecimal routingFormCostShareAmount;
 	private String routingFormCostShareDescription;
 
     private Account account;
@@ -161,7 +162,7 @@ public class RoutingFormInstitutionCostShare extends PersistableBusinessObjectBa
 	 * @return Returns the routingFormCostShareAmount
 	 * 
 	 */
-	public KualiInteger getRoutingFormCostShareAmount() { 
+	public BigDecimal getRoutingFormCostShareAmount() { 
 		return routingFormCostShareAmount;
 	}
 
@@ -171,7 +172,7 @@ public class RoutingFormInstitutionCostShare extends PersistableBusinessObjectBa
 	 * @param routingFormCostShareAmount The routingFormCostShareAmount to set.
 	 * 
 	 */
-	public void setRoutingFormCostShareAmount(KualiInteger routingFormCostShareAmount) {
+	public void setRoutingFormCostShareAmount(BigDecimal routingFormCostShareAmount) {
 		this.routingFormCostShareAmount = routingFormCostShareAmount;
 	}
 
@@ -264,7 +265,7 @@ public class RoutingFormInstitutionCostShare extends PersistableBusinessObjectBa
         if (this.routingFormCostShareSequenceNumber != null) {
             m.put("routingFormCostShareSequenceNumber", this.routingFormCostShareSequenceNumber.toString());
         }
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
 	    return m;
     }
 }

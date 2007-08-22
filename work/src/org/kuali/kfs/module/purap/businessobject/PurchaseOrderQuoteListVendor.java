@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PurchaseOrderQuoteListVendor.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +20,18 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.module.vendor.bo.VendorDetail;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class PurchaseOrderQuoteListVendor extends PersistableBusinessObjectBase {
+public class PurchaseOrderQuoteListVendor extends BusinessObjectBase {
 
 	private Integer purchaseOrderQuoteListIdentifier;
 	private Integer vendorHeaderGeneratedIdentifier;
 	private Integer vendorDetailAssignedIdentifier;
 
     private PurchaseOrderQuoteList purchaseOrderQuoteList;
-
-    private VendorDetail vendorDetail;
     
 	/**
 	 * Default constructor.
@@ -118,15 +117,6 @@ public class PurchaseOrderQuoteListVendor extends PersistableBusinessObjectBase 
      */
     public void setPurchaseOrderQuoteList(PurchaseOrderQuoteList purchaseOrderQuoteList) {
         this.purchaseOrderQuoteList = purchaseOrderQuoteList;
-    }
-
-
-    public VendorDetail getVendorDetail() {
-        return vendorDetail;
-    }
-
-    public void setVendorDetail(VendorDetail vendorDetail) {
-        this.vendorDetail = vendorDetail;
     }
 
     /**

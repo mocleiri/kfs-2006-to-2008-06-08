@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,19 +22,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
 import org.kuali.module.financial.service.BudgetAdjustmentLaborBenefitsService;
 import org.kuali.module.labor.bo.BenefitsCalculation;
-import org.kuali.module.labor.bo.PositionObjectBenefit;
+import org.kuali.module.labor.bo.LaborObjectBenefit;
 
 /**
  * These service performs methods related to the generation of labor benefit accounting lines for the budget adjustment document.
@@ -76,7 +76,7 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
             Collection objectBenefits = retrieveLaborObjectBenefits(fiscalYear, line);
             if (objectBenefits != null) {
                 for (Iterator iterator = objectBenefits.iterator(); iterator.hasNext();) {
-                    PositionObjectBenefit objectBenefit = (PositionObjectBenefit) iterator.next();
+                    LaborObjectBenefit objectBenefit = (LaborObjectBenefit) iterator.next();
                     BenefitsCalculation benefitsCalculation = objectBenefit.getBenefitsCalculation();
 
                     // now create and set properties for the benefit line
@@ -142,11 +142,11 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
     private Collection retrieveLaborObjectBenefits(Integer fiscalYear, BudgetAdjustmentAccountingLine line) {
         Map searchCriteria = new HashMap();
 
-        searchCriteria.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
-        searchCriteria.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, line.getChartOfAccountsCode());
-        searchCriteria.put(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, line.getFinancialObjectCode());
+        searchCriteria.put(PropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
+        searchCriteria.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, line.getChartOfAccountsCode());
+        searchCriteria.put(PropertyConstants.FINANCIAL_OBJECT_CODE, line.getFinancialObjectCode());
 
-        return getBusinessObjectService().findMatching(PositionObjectBenefit.class, searchCriteria);
+        return getBusinessObjectService().findMatching(LaborObjectBenefit.class, searchCriteria);
     }
 
     /**

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionCalculatedSalaryFoundationTracker.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +21,8 @@ package org.kuali.module.budget.bo;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.KualiInteger;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -30,7 +32,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 /**
  * 
  */
-public class BudgetConstructionCalculatedSalaryFoundationTracker extends PersistableBusinessObjectBase {
+public class BudgetConstructionCalculatedSalaryFoundationTracker extends BusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
@@ -40,7 +42,7 @@ public class BudgetConstructionCalculatedSalaryFoundationTracker extends Persist
 	private String financialSubObjectCode;
 	private String positionNumber;
 	private String emplid;
-	private KualiInteger csfAmount;
+	private KualiDecimal csfAmount;
 	private BigDecimal csfFullTimeEmploymentQuantity;
 	private BigDecimal csfTimePercent;
 	private String csfFundingStatusCode;
@@ -233,7 +235,7 @@ public class BudgetConstructionCalculatedSalaryFoundationTracker extends Persist
 	 * @return Returns the csfAmount
 	 * 
 	 */
-	public KualiInteger getCsfAmount() { 
+	public KualiDecimal getCsfAmount() { 
 		return csfAmount;
 	}
 
@@ -243,7 +245,7 @@ public class BudgetConstructionCalculatedSalaryFoundationTracker extends Persist
 	 * @param csfAmount The csfAmount to set.
 	 * 
 	 */
-	public void setCsfAmount(KualiInteger csfAmount) {
+	public void setCsfAmount(KualiDecimal csfAmount) {
 		this.csfAmount = csfAmount;
 	}
 

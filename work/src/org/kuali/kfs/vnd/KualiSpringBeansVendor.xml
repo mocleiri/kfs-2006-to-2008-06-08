@@ -18,9 +18,8 @@
 <beans>
 	<bean id="vendorModule" class="org.kuali.core.KualiModule">
 		<property name="moduleId" value="vendor" />
-		<property name="moduleName" value="Vendor" />
+		<property name="moduleName" value="Kuali Vendor" />
 		<property name="moduleCode" value="VN" />
-		<property name="initializeDataDictionary" value="true" />
 		<property name="moduleUserService" ref="vendorUserService" />
 		<property name="moduleAuthorizer">
 			<bean class="org.kuali.kfs.authorization.KfsModuleAuthorizerBase">
@@ -46,18 +45,6 @@
 			<list>
 				<value>org/kuali/module/vendor/OJB-repository-vendor.xml</value>
 			</list>
-		</property>
-	</bean>
-
-	<bean id="workflow-org.kuali.module.vendor.bo.VendorType-Lookupable" parent="workflowLookupable" singleton="false">
-		<property name="businessObjectClassName">
-			<value>org.kuali.module.vendor.bo.VendorType</value>
-		</property>
-	</bean>
-
-	<bean id="workflow-org.kuali.module.vendor.bo.ContractManager-Lookupable" parent="workflowLookupable" singleton="false">
-		<property name="businessObjectClassName">
-			<value>org.kuali.module.vendor.bo.ContractManager</value>
 		</property>
 	</bean>
 
@@ -139,75 +126,6 @@
         </property>
     </bean>
     
-    <bean id="vendorContractLookupableHelperService" class="org.kuali.module.vendor.lookup.VendorContractLookupableHelperServiceImpl" singleton="false">
-        <property name="persistenceStructureService">
-            <ref bean="persistenceStructureService" />
-        </property>
-        <property name="lookupService">
-            <ref bean="lookupService" />
-        </property>
-        <property name="lookupDao">
-            <ref bean="lookupDao" />
-        </property>
-        <property name="vendorService">
-            <ref bean="vendorService" />
-        </property>
-        <property name="dateTimeService">
-            <ref bean="dateTimeService" />
-        </property>                
-        <property name="businessObjectMetaDataService">
-            <ref bean="businessObjectMetaDataService" />
-        </property>
-        <property name="businessObjectDictionaryService">
-            <ref bean="businessObjectDictionaryService" />
-        </property>
-        <property name="dataDictionaryService">
-            <ref bean="dataDictionaryService" />
-        </property>
-    </bean>
-    
-    <bean id="vendorAddressLookupableHelperService" class="org.kuali.module.vendor.lookup.VendorAddressLookupableHelperServiceImpl" singleton="false">
-        <property name="persistenceStructureService">
-            <ref bean="persistenceStructureService" />
-        </property>
-        <property name="lookupService">
-            <ref bean="lookupService" />
-        </property>
-        <property name="businessObjectMetaDataService">
-            <ref bean="businessObjectMetaDataService" />
-        </property>
-        <property name="businessObjectDictionaryService">
-            <ref bean="businessObjectDictionaryService" />
-        </property>
-        <property name="dataDictionaryService">
-            <ref bean="dataDictionaryService" />
-        </property>
-        <property name="universalUserService">
-            <ref bean="universalUserService" />
-        </property>
-    </bean>
-  
-    <bean id="vendorCustomerNumberLookupableHelperService" class="org.kuali.module.vendor.lookup.VendorCustomerNumberLookupableHelperServiceImpl" singleton="false">
-        <property name="persistenceStructureService">
-            <ref bean="persistenceStructureService" />
-        </property>
-        <property name="lookupService">
-            <ref bean="lookupService" />
-        </property>
-        <property name="businessObjectMetaDataService">
-            <ref bean="businessObjectMetaDataService" />
-        </property>
-        <property name="businessObjectDictionaryService">
-            <ref bean="businessObjectDictionaryService" />
-        </property>
-        <property name="dataDictionaryService">
-            <ref bean="dataDictionaryService" />
-        </property>
-        <property name="universalUserService">
-            <ref bean="universalUserService" />
-        </property>
-    </bean>
-    
     <bean id="vendorLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
         <property name="lookupableHelperService">
             <ref bean="vendorLookupableHelperService" />
@@ -220,22 +138,4 @@
         </property>
     </bean>
     
-    <bean id="vendorContractLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
-        <property name="lookupableHelperService">
-            <ref bean="vendorContractLookupableHelperService" />
-        </property>
-    </bean>
-    
-    <bean id="vendorAddressLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
-        <property name="lookupableHelperService">
-            <ref bean="vendorAddressLookupableHelperService" />
-        </property>
-    </bean>
-  
-    <bean id="vendorCustomerNumberLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
-        <property name="lookupableHelperService">
-            <ref bean="vendorCustomerNumberLookupableHelperService" />
-        </property>
-    </bean>
-   
 </beans>

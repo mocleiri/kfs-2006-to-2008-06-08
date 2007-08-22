@@ -16,8 +16,7 @@
 
 package org.kuali.kfs.bo;
 
-import static org.kuali.kfs.KFSKeyConstants.AccountingLineParser.ERROR_INVALID_FILE_FORMAT;
-import static org.kuali.kfs.KFSKeyConstants.AccountingLineParser.ERROR_INVALID_PROPERTY_VALUE;
+import static org.kuali.kfs.KFSKeyConstants.AccountingLineParser.*;
 import static org.kuali.kfs.KFSPropertyConstants.ACCOUNT_NUMBER;
 import static org.kuali.kfs.KFSPropertyConstants.AMOUNT;
 import static org.kuali.kfs.KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE;
@@ -42,15 +41,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.exceptions.InfrastructureException;
-import org.kuali.core.service.BusinessObjectDictionaryService;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.format.FormatException;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.exceptions.AccountingLineParserException;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * Base class for parsing serialized <code>AccountingLine</code>s for <code>TransactionalDocument</code>s
@@ -180,7 +178,7 @@ public class AccountingLineParserBase implements AccountingLineParser {
 
 
         // force input to uppercase
-        SpringContext.getBean(BusinessObjectDictionaryService.class).performForceUppercase(accountingLine);
+        SpringServiceLocator.getBusinessObjectDictionaryService().performForceUppercase(accountingLine);
         accountingLine.refresh();
 
         return accountingLine;
@@ -327,7 +325,7 @@ public class AccountingLineParserBase implements AccountingLineParser {
     }
 
     protected String retrieveAttributeLabel(Class clazz, String attributeName) {
-        String label = SpringContext.getBean(DataDictionaryService.class).getAttributeLabel(clazz, attributeName);
+        String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(clazz, attributeName);
         if (StringUtils.isBlank(label)) {
             label = attributeName;
         }

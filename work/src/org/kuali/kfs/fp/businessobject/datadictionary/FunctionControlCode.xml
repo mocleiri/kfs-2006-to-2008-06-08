@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,20 +19,24 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.FunctionControlCode">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Function Control Code Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="financialSystemFunctionControlCode" />
                 <field attributeName="financialSystemFunctionDescription" />
                 <field attributeName="financialSystemFunctionDefaultIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Function Control Code Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.FunctionControlCode">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup an Function Control Code</instructions>
 
@@ -84,7 +88,7 @@
                 <validationPattern>
                     <anyCharacter allowWhitespace="true" />
                 </validationPattern>
-                <required>true</required>
+
                 <control>
                     <text size="42" />
                 </control>

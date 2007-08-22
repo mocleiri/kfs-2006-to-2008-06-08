@@ -15,8 +15,6 @@
  */
 package org.kuali.module.kra.web.struts.action;
 
-import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
 import org.kuali.core.bo.AdHocRoutePerson;
 import org.kuali.core.bo.AdHocRouteWorkgroup;
 import org.kuali.core.bo.user.AuthenticationUserId;
@@ -31,15 +30,10 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.rule.event.AddAdHocRoutePersonEvent;
 import org.kuali.core.rule.event.AddAdHocRouteWorkgroupEvent;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.KualiRuleService;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.core.service.WebAuthenticationService;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.struts.action.KualiDocumentActionBase;
-import org.kuali.core.web.struts.form.KualiForm;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.KraKeyConstants;
 import org.kuali.module.kra.bo.AdhocOrg;
@@ -72,20 +66,8 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
         researchForm.setDocId(researchForm.getDocument().getDocumentNumber());
         super.loadDocument(researchForm);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
-    
-    @Override
-    /**
-     * Overriding headerTab to customize how clearing tab state works on Budget.  Specifically, additional attributes (selected task and period) should be cleared any time header navigation occurs.
-     */
-    public ActionForward headerTab(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-        ((KualiForm)form).setTabStates(new HashMap());
-        
-        return super.headerTab(mapping, form, request, response);
-    }
-
     
     public ActionForward docHandler(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -97,22 +79,6 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
             researchForm.getResearchDocument().initialize();
         }
         return forward;
-    }
-    
-
-    public ActionForward notes(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        this.load(mapping, form, request, response);
-
-        ResearchDocumentFormBase researchDocumentForm = (ResearchDocumentFormBase)form;
-        
-        if (researchDocumentForm.getDocument().getDocumentHeader().isBoNotesSupport() && (researchDocumentForm.getDocument().getDocumentHeader().getBoNotes() == null || researchDocumentForm.getDocument().getDocumentHeader().getBoNotes().isEmpty())) {
-            researchDocumentForm.getDocument().refreshReferenceObject("documentHeader");
-        }
-
-        researchDocumentForm.setTabStates(new HashMap());
-        
-        return mapping.findForward("notes");
     }
     
     @Override
@@ -129,11 +95,11 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
         AdHocRoutePerson adHocRoutePerson = (AdHocRoutePerson) researchForm.getNewAdHocRoutePerson();
 
         // check business rules
-        boolean rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(new AddAdHocRoutePersonEvent(researchDocument, (AdHocRoutePerson) researchForm.getNewAdHocRoutePerson()));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAdHocRoutePersonEvent(researchDocument, (AdHocRoutePerson) researchForm.getNewAdHocRoutePerson()));
         
         if (rulePassed) {
             AdhocPerson newAdHocPermission = researchForm.getNewAdHocPerson();
-            UniversalUser user = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new AuthenticationUserId(adHocRoutePerson.getId()));
+            UniversalUser user = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(adHocRoutePerson.getId()));
             newAdHocPermission.setPersonUniversalIdentifier(user.getPersonUniversalIdentifier());
             user.setPersonUserIdentifier(StringUtils.upperCase(user.getPersonUserIdentifier()));
             if (adHocRoutePerson.getActionRequested() == null || StringUtils.isBlank(adHocRoutePerson.getActionRequested())) {
@@ -143,14 +109,14 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
                 newAdHocPermission.setAdhocTypeCode(KraConstants.AD_HOC_APPROVER);
             }
             newAdHocPermission.setUser(user);
-            newAdHocPermission.setPersonAddedTimestamp(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
-            newAdHocPermission.setAddedByPerson(SpringContext.getBean(WebAuthenticationService.class).getNetworkId(request));
+            newAdHocPermission.setPersonAddedTimestamp(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
+            newAdHocPermission.setAddedByPerson(SpringServiceLocator.getWebAuthenticationService().getNetworkId(request));
             researchDocument.getAdhocPersons().add(newAdHocPermission);
             researchForm.setNewAdHocPerson(new AdhocPerson());
             researchForm.setNewAdHocRoutePerson(new AdHocRoutePerson());
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
     @Override
@@ -167,7 +133,7 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
         AdHocRouteWorkgroup adHocRouteWorkgroup = (AdHocRouteWorkgroup) researchForm.getNewAdHocRouteWorkgroup();
 
         // check business rules
-        boolean rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(
                 new AddAdHocRouteWorkgroupEvent(researchDocument, (AdHocRouteWorkgroup) researchForm.getNewAdHocRouteWorkgroup()));
         
         if (rulePassed) {
@@ -179,13 +145,13 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
                 newAdHocWorkgroup.setAdhocTypeCode(KraConstants.AD_HOC_APPROVER);
             }
             newAdHocWorkgroup.setPermissionCode(researchForm.getNewAdHocWorkgroupPermissionCode());
-            newAdHocWorkgroup.setPersonAddedTimestamp(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
-            newAdHocWorkgroup.setAddedByPerson(SpringContext.getBean(WebAuthenticationService.class).getNetworkId(request));
+            newAdHocWorkgroup.setPersonAddedTimestamp(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
+            newAdHocWorkgroup.setAddedByPerson(SpringServiceLocator.getWebAuthenticationService().getNetworkId(request));
             researchDocument.getAdhocWorkgroups().add(newAdHocWorkgroup);
             researchForm.setNewAdHocRouteWorkgroup(new AdHocRouteWorkgroup());
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
     /**
@@ -198,13 +164,13 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
      * @return ActionForward
      * @throws Exception
      */
-    public ActionForward delete(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward delete(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         
         ResearchDocumentFormBase researchForm = (ResearchDocumentFormBase) form;
         ResearchDocument researchDocument = (ResearchDocument) researchForm.getDocument();
         researchDocument.getAdhocPersons().remove(getLineToDelete(request));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
     /**
@@ -217,13 +183,13 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
      * @return ActionForward
      * @throws Exception
      */
-    public ActionForward deleteWorkgroup(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward deleteWorkgroup(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         
         ResearchDocumentFormBase researchForm = (ResearchDocumentFormBase) form;
         ResearchDocument researchDocument = (ResearchDocument) researchForm.getDocument();
         researchDocument.getAdhocWorkgroups().remove(getLineToDelete(request));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
     /**
@@ -236,7 +202,7 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
      * @return ActionForward
      * @throws Exception
      */
-    public ActionForward addOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward addOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
         ResearchDocumentFormBase researchForm = (ResearchDocumentFormBase) form;
         ResearchDocument researchDocument = (ResearchDocument) researchForm.getDocument();
@@ -252,13 +218,13 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
             } else {
                 newAdHocOrg.setAdhocTypeCode(KraConstants.AD_HOC_APPROVER);
             }
-            newAdHocOrg.setPersonAddedTimestamp(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
-            newAdHocOrg.setAddedByPerson(SpringContext.getBean(WebAuthenticationService.class).getNetworkId(request));
+            newAdHocOrg.setPersonAddedTimestamp(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
+            newAdHocOrg.setAddedByPerson(SpringServiceLocator.getWebAuthenticationService().getNetworkId(request));
             researchDocument.getAdhocOrgs().add(newAdHocOrg);
             researchForm.setNewAdHocOrg(new AdhocOrg());
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     } 
 
     /**
@@ -271,12 +237,12 @@ public abstract class ResearchDocumentActionBase extends KualiDocumentActionBase
      * @return ActionForward
      * @throws Exception
      */
-    public ActionForward deleteOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward deleteOrg(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
         ResearchDocumentFormBase researchForm = (ResearchDocumentFormBase) form;
         ResearchDocument researchDocument = (ResearchDocument) researchForm.getDocument();
         researchDocument.getAdhocOrgs().remove(getLineToDelete(request));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionAccountReports.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +20,7 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
@@ -26,7 +28,7 @@ import org.kuali.module.chart.bo.Org;
 /**
  * 
  */
-public class BudgetConstructionAccountReports extends PersistableBusinessObjectBase {
+public class BudgetConstructionAccountReports extends BusinessObjectBase {
 
 	private String chartOfAccountsCode;
 	private String accountNumber;
@@ -37,7 +39,6 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
     private Chart chartOfAccounts;
 	private Org reportsToOrganization;
 	private Chart reportsToChartOfAccounts;
-    private BudgetConstructionOrganizationReports budgetConstructionOrganizationReports;
 
 	/**
 	 * Default constructor.
@@ -211,23 +212,6 @@ public class BudgetConstructionAccountReports extends PersistableBusinessObjectB
 	}
 
 	/**
-     * Gets the budgetConstructionOrganizationReports attribute. 
-     * @return Returns the budgetConstructionOrganizationReports.
-     */
-    public BudgetConstructionOrganizationReports getBudgetConstructionOrganizationReports() {
-        return budgetConstructionOrganizationReports;
-    }
-
-    /**
-     * Sets the budgetConstructionOrganizationReports attribute value.
-     * @param budgetConstructionOrganizationReports The budgetConstructionOrganizationReports to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionOrganizationReports(BudgetConstructionOrganizationReports budgetConstructionOrganizationReports) {
-        this.budgetConstructionOrganizationReports = budgetConstructionOrganizationReports;
-    }
-
-    /**
 	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {

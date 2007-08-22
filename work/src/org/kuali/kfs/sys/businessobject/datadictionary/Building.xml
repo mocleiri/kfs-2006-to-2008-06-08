@@ -151,8 +151,8 @@
             </attribute>
             
             <attribute name="buildingAddressZipCode">
-            	<label>Building Address Postal Code</label>
-            	<shortLabel>Bldg. Postal Code</shortLabel>
+            	<label>Building Address Zip Code</label>
+            	<shortLabel>Bldg. Zip</shortLabel>
             	
             	<maxLength>11</maxLength>
             	<validationPattern><zipcode /></validationPattern>

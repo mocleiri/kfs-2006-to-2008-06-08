@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormBudget.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +18,27 @@
 
 package org.kuali.module.kra.routingform.bo;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class RoutingFormBudget extends PersistableBusinessObjectBase {
+public class RoutingFormBudget extends BusinessObjectBase {
 
 	private String documentNumber;
 	private Integer routingFormBudgetMaximumPeriodNumber;
 	private Integer routingFormBudgetMinimumPeriodNumber;
-    private String routingFormBudgetIndirectCostDescription;
-    
-    private KualiInteger routingFormBudgetDirectAmount;
-    private KualiInteger routingFormBudgetTotalDirectAmount;
-    private KualiInteger routingFormBudgetIndirectCostAmount;
-    private KualiInteger routingFormBudgetTotalIndirectCostAmount;
-    
-    private Date routingFormBudgetEndDate;
-    private Date routingFormBudgetStartDate;
-    private Date routingFormBudgetTotalEndDate;
-    private Date routingFormBudgetTotalStartDate;
-   
+	private BigDecimal routingFormBudgetDirectAmount;
+	private Date routingFormBudgetEndDate;
+	private BigDecimal routingFormBudgetIndirectCostAmount;
+	private String routingFormBudgetIndirectCostDescription;
+	private Date routingFormBudgetStartDate;
+
 	/**
 	 * Default constructor.
 	 */
@@ -119,7 +115,7 @@ public class RoutingFormBudget extends PersistableBusinessObjectBase {
 	 * @return Returns the routingFormBudgetDirectAmount
 	 * 
 	 */
-	public KualiInteger getRoutingFormBudgetDirectAmount() { 
+	public BigDecimal getRoutingFormBudgetDirectAmount() { 
 		return routingFormBudgetDirectAmount;
 	}
 
@@ -129,7 +125,7 @@ public class RoutingFormBudget extends PersistableBusinessObjectBase {
 	 * @param routingFormBudgetDirectAmount The routingFormBudgetDirectAmount to set.
 	 * 
 	 */
-	public void setRoutingFormBudgetDirectAmount(KualiInteger routingFormBudgetDirectAmount) {
+	public void setRoutingFormBudgetDirectAmount(BigDecimal routingFormBudgetDirectAmount) {
 		this.routingFormBudgetDirectAmount = routingFormBudgetDirectAmount;
 	}
 
@@ -161,7 +157,7 @@ public class RoutingFormBudget extends PersistableBusinessObjectBase {
 	 * @return Returns the routingFormBudgetIndirectCostAmount
 	 * 
 	 */
-	public KualiInteger getRoutingFormBudgetIndirectCostAmount() { 
+	public BigDecimal getRoutingFormBudgetIndirectCostAmount() { 
 		return routingFormBudgetIndirectCostAmount;
 	}
 
@@ -171,7 +167,7 @@ public class RoutingFormBudget extends PersistableBusinessObjectBase {
 	 * @param routingFormBudgetIndirectCostAmount The routingFormBudgetIndirectCostAmount to set.
 	 * 
 	 */
-	public void setRoutingFormBudgetIndirectCostAmount(KualiInteger routingFormBudgetIndirectCostAmount) {
+	public void setRoutingFormBudgetIndirectCostAmount(BigDecimal routingFormBudgetIndirectCostAmount) {
 		this.routingFormBudgetIndirectCostAmount = routingFormBudgetIndirectCostAmount;
 	}
 
@@ -217,101 +213,13 @@ public class RoutingFormBudget extends PersistableBusinessObjectBase {
 		this.routingFormBudgetStartDate = routingFormBudgetStartDate;
 	}
 
-    /**
-     * Gets the routingFormBudgetTotalDirectAmount attribute. 
-     * @return Returns the routingFormBudgetTotalDirectAmount.
-     */
-    public KualiInteger getRoutingFormBudgetTotalDirectAmount() {
-        return routingFormBudgetTotalDirectAmount;
-    }
 
-    /**
-     * Sets the routingFormBudgetTotalDirectAmount attribute value.
-     * @param routingFormBudgetTotalDirectAmount The routingFormBudgetTotalDirectAmount to set.
-     */
-    public void setRoutingFormBudgetTotalDirectAmount(KualiInteger routingFormBudgetTotalDirectAmount) {
-        this.routingFormBudgetTotalDirectAmount = routingFormBudgetTotalDirectAmount;
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+	    return m;
     }
-
-    /**
-     * Gets the routingFormBudgetTotalEndDate attribute. 
-     * @return Returns the routingFormBudgetTotalEndDate.
-     */
-    public Date getRoutingFormBudgetTotalEndDate() {
-        return routingFormBudgetTotalEndDate;
-    }
-
-    /**
-     * Sets the routingFormBudgetTotalEndDate attribute value.
-     * @param routingFormBudgetTotalEndDate The routingFormBudgetTotalEndDate to set.
-     */
-    public void setRoutingFormBudgetTotalEndDate(Date routingFormBudgetTotalEndDate) {
-        this.routingFormBudgetTotalEndDate = routingFormBudgetTotalEndDate;
-    }
-
-    /**
-     * Gets the routingFormBudgetTotalIndirectCostAmount attribute. 
-     * @return Returns the routingFormBudgetTotalIndirectCostAmount.
-     */
-    public KualiInteger getRoutingFormBudgetTotalIndirectCostAmount() {
-        return routingFormBudgetTotalIndirectCostAmount;
-    }
-
-    /**
-     * Sets the routingFormBudgetTotalIndirectCostAmount attribute value.
-     * @param routingFormBudgetTotalIndirectCostAmount The routingFormBudgetTotalIndirectCostAmount to set.
-     */
-    public void setRoutingFormBudgetTotalIndirectCostAmount(KualiInteger routingFormBudgetTotalIndirectCostAmount) {
-        this.routingFormBudgetTotalIndirectCostAmount = routingFormBudgetTotalIndirectCostAmount;
-    }
-
-    /**
-     * Gets the routingFormBudgetTotalStartDate attribute. 
-     * @return Returns the routingFormBudgetTotalStartDate.
-     */
-    public Date getRoutingFormBudgetTotalStartDate() {
-        return routingFormBudgetTotalStartDate;
-    }
-
-    /**
-     * Sets the routingFormBudgetTotalStartDate attribute value.
-     * @param routingFormBudgetTotalStartDate The routingFormBudgetTotalStartDate to set.
-     */
-    public void setRoutingFormBudgetTotalStartDate(Date routingFormBudgetTotalStartDate) {
-        this.routingFormBudgetTotalStartDate = routingFormBudgetTotalStartDate;
-    }
-
-    /**
-     * Returns the sum of routingFormBudgetDirectAmount and routingFormBudgetIndirectCostAmount.
-     * @return
-     */
-    public KualiInteger getTotalCostsCurrentPeriod() {
-        KualiInteger totalCosts = new KualiInteger(0);
-        if (this.getRoutingFormBudgetDirectAmount() != null) totalCosts = totalCosts.add(this.getRoutingFormBudgetDirectAmount());
-        if (this.getRoutingFormBudgetIndirectCostAmount() != null) totalCosts = totalCosts.add(this.getRoutingFormBudgetIndirectCostAmount());
-        
-        return totalCosts;
-    }
-    
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
-        return m;
-    }
-    
-    public void resetRoutingFormBudgetData() {
-        this.setRoutingFormBudgetDirectAmount(KualiInteger.ZERO);
-        this.setRoutingFormBudgetIndirectCostAmount(KualiInteger.ZERO);
-        this.setRoutingFormBudgetTotalDirectAmount(KualiInteger.ZERO);
-        this.setRoutingFormBudgetTotalIndirectCostAmount(KualiInteger.ZERO);
-        this.setRoutingFormBudgetStartDate(null);
-        this.setRoutingFormBudgetEndDate(null);
-        this.setRoutingFormBudgetTotalStartDate(null);
-        this.setRoutingFormBudgetTotalEndDate(null);
-
-    }
-
 }

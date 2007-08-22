@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/CreditMemoStatus.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +15,97 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.kuali.module.purap.bo;
 
+import java.util.LinkedHashMap;
+
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Credit Memo Status Code Business Object.
+ * 
  */
-public class CreditMemoStatus extends Status {
+public class CreditMemoStatus extends BusinessObjectBase {
 
-    /**
-     * Default constructor.
-     */
-    public CreditMemoStatus() {
-        super();
-        super.ojbConcreteClass = this.getClass().getName();
+	private String creditMemoStatusCode;
+	private String creditMemoStatusDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
+
+	/**
+	 * Default constructor.
+	 */
+	public CreditMemoStatus() {
+
+	}
+
+	/**
+	 * Gets the creditMemoStatusCode attribute.
+	 * 
+	 * @return Returns the creditMemoStatusCode
+	 * 
+	 */
+	public String getCreditMemoStatusCode() { 
+		return creditMemoStatusCode;
+	}
+
+	/**
+	 * Sets the creditMemoStatusCode attribute.
+	 * 
+	 * @param creditMemoStatusCode The creditMemoStatusCode to set.
+	 * 
+	 */
+	public void setCreditMemoStatusCode(String creditMemoStatusCode) {
+		this.creditMemoStatusCode = creditMemoStatusCode;
+	}
+
+
+	/**
+	 * Gets the creditMemoStatusDescription attribute.
+	 * 
+	 * @return Returns the creditMemoStatusDescription
+	 * 
+	 */
+	public String getCreditMemoStatusDescription() { 
+		return creditMemoStatusDescription;
+	}
+
+	/**
+	 * Sets the creditMemoStatusDescription attribute.
+	 * 
+	 * @param creditMemoStatusDescription The creditMemoStatusDescription to set.
+	 * 
+	 */
+	public void setCreditMemoStatusDescription(String creditMemoStatusDescription) {
+		this.creditMemoStatusDescription = creditMemoStatusDescription;
+	}
+
+
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        m.put("creditMemoStatusCode", this.creditMemoStatusCode);
+	    return m;
     }
 }

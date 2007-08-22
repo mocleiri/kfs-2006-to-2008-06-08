@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/ItemType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +20,17 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class ItemType extends PersistableBusinessObjectBase {
+public class ItemType extends BusinessObjectBase {
 
 	private String itemTypeCode;
 	private String itemTypeDescription;
-	private boolean active;
-    private boolean quantityBasedGeneralLedgerIndicator;
-    private boolean itemTypeAboveTheLineIndicator;
-    
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
+
 	/**
 	 * Default constructor.
 	 */
@@ -79,61 +79,33 @@ public class ItemType extends PersistableBusinessObjectBase {
 		this.itemTypeDescription = itemTypeDescription;
 	}
 
-    /**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
 
-    /**
-     * Sets the active attribute value.
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    /**
-     * Gets the itemTypeAboveTheLineIndicator attribute. 
-     * @return Returns the itemTypeAboveTheLineIndicator.
-     */
-    public boolean isItemTypeAboveTheLineIndicator() {
-        return itemTypeAboveTheLineIndicator;
-    }
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    /**
-     * Sets the itemTypeAboveTheLineIndicator attribute value.
-     * @param itemTypeAboveTheLineIndicator The itemTypeAboveTheLineIndicator to set.
-     */
-    public void setItemTypeAboveTheLineIndicator(boolean itemTypeAboveTheLineIndicator) {
-        this.itemTypeAboveTheLineIndicator = itemTypeAboveTheLineIndicator;
-    }
-
-    /**
-     * Gets the quantityBasedGeneralLedgerIndicator attribute. 
-     * @return Returns the quantityBasedGeneralLedgerIndicator.
-     */
-    public boolean isQuantityBasedGeneralLedgerIndicator() {
-        return quantityBasedGeneralLedgerIndicator;
-    }
-
-    /**
-     * Sets the quantityBasedGeneralLedgerIndicator attribute value.
-     * @param quantityBasedGeneralLedgerIndicator The quantityBasedGeneralLedgerIndicator to set.
-     */
-    public void setQuantityBasedGeneralLedgerIndicator(boolean quantityBasedGeneralLedgerIndicator) {
-        this.quantityBasedGeneralLedgerIndicator = quantityBasedGeneralLedgerIndicator;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();      
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("itemTypeCode", this.itemTypeCode);
-        return m;
+	    return m;
     }
-
 }

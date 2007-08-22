@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,19 @@
  */
 package org.kuali.module.financial.rules;
 
-import java.util.Map;
-
-import org.kuali.core.authorization.AuthorizationConstants;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.rules.PreRulesContinuationBase;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentAuthorizationService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
-import org.kuali.module.financial.document.authorization.BudgetAdjustmentDocumentAuthorizer;
-import org.kuali.module.financial.service.BudgetAdjustmentLaborBenefitsService;
 
 /**
  * Checks warnings and prompt conditions for ba document.
+ * 
+ * 
  */
 public class BudgetAdjustmentDocumentPreRules extends PreRulesContinuationBase {
     private KualiConfigurationService kualiConfiguration;
@@ -62,25 +55,19 @@ public class BudgetAdjustmentDocumentPreRules extends PreRulesContinuationBase {
      */
     private boolean askLaborBenefitsGeneration(BudgetAdjustmentDocument budgetDocument) {
         // before prompting, check the document contains one or more labor object codes
-        boolean hasLaborObjectCodes = SpringContext.getBean(BudgetAdjustmentLaborBenefitsService.class).hasLaborObjectCodes(budgetDocument);
-        
-        // and check that the user can edit the document
-        String documentTypeName = SpringContext.getBean(DataDictionaryService.class).getDocumentTypeNameByClass(BudgetAdjustmentDocument.class);
-        BudgetAdjustmentDocumentAuthorizer budgetAdjustmentDocumentAuthorizer = (BudgetAdjustmentDocumentAuthorizer) SpringContext.getBean(DocumentAuthorizationService.class).getDocumentAuthorizer(documentTypeName);
-        UniversalUser universalUser = GlobalVariables.getUserSession().getUniversalUser();
-        Map map = budgetAdjustmentDocumentAuthorizer.getEditMode(budgetDocument, universalUser, budgetDocument.getSourceAccountingLines(), budgetDocument.getTargetAccountingLines());
-        
-        if (map.containsKey(AuthorizationConstants.EditMode.FULL_ENTRY) && hasLaborObjectCodes) {
-            String questionText = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSKeyConstants.QUESTION_GENERATE_LABOR_BENEFIT_LINES);
-            boolean generateBenefits = super.askOrAnalyzeYesNoQuestion(KFSConstants.BudgetAdjustmentDocumentConstants.GENERATE_BENEFITS_QUESTION_ID, questionText);
+        boolean hasLaborObjectCodes = SpringServiceLocator.getBudgetAdjustmentLaborBenefitsService().hasLaborObjectCodes(budgetDocument);
+
+        if (hasLaborObjectCodes) {
+            String questionText = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.QUESTION_GENERATE_LABOR_BENEFIT_LINES);
+            boolean generateBenefits = super.askOrAnalyzeYesNoQuestion(Constants.BudgetAdjustmentDocumentConstants.GENERATE_BENEFITS_QUESTION_ID, questionText);
             if (generateBenefits) {
-                SpringContext.getBean(BudgetAdjustmentLaborBenefitsService.class).generateLaborBenefitsAccountingLines(budgetDocument);
+                SpringServiceLocator.getBudgetAdjustmentLaborBenefitsService().generateLaborBenefitsAccountingLines(budgetDocument);
                 // update baselines in form
-                ((KualiAccountingDocumentFormBase) form).setBaselineSourceAccountingLines(budgetDocument.getSourceAccountingLines());
-                ((KualiAccountingDocumentFormBase) form).setBaselineTargetAccountingLines(budgetDocument.getTargetAccountingLines());
+                ((KualiTransactionalDocumentFormBase) form).setBaselineSourceAccountingLines(budgetDocument.getSourceAccountingLines());
+                ((KualiTransactionalDocumentFormBase) form).setBaselineTargetAccountingLines(budgetDocument.getTargetAccountingLines());
 
                 // return to document after lines are generated
-                super.event.setActionForwardName(KFSConstants.MAPPING_BASIC);
+                super.event.setActionForwardName(Constants.MAPPING_BASIC);
                 return false;
             }
         }
