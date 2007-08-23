@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service.impl;
 
@@ -22,25 +29,28 @@ import org.kuali.core.service.PersistenceService;
 import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.chart.service.OffsetDefinitionService;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
-import org.kuali.module.gl.batch.collector.CollectorBatch;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.UniversityDateDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.ReportService;
-import org.kuali.module.gl.service.ScrubberProcessObjectCodeOverride;
 import org.kuali.module.gl.service.ScrubberService;
 import org.kuali.module.gl.service.ScrubberValidator;
-import org.kuali.module.gl.util.CollectorReportData;
-import org.kuali.module.gl.util.ScrubberStatus;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
-@Transactional
-public class ScrubberServiceImpl implements ScrubberService {
+/**
+ * @author Kuali General Ledger Team <kualigltech@oncourse.iu.edu>
+ * @version $Id: ScrubberServiceImpl.java,v 1.95.2.1 2006-07-26 21:51:21 abyrne Exp $
+ */
+
+public class ScrubberServiceImpl implements ScrubberService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ScrubberServiceImpl.class);
 
     private FlexibleOffsetAccountService flexibleOffsetAccountService;
     private DocumentTypeService documentTypeService;
+    private BeanFactory beanFactory;
     private OriginEntryService originEntryService;
     private OriginEntryGroupService originEntryGroupService;
     private DateTimeService dateTimeService;
@@ -51,20 +61,39 @@ public class ScrubberServiceImpl implements ScrubberService {
     private PersistenceService persistenceService;
     private ReportService reportService;
     private ScrubberValidator scrubberValidator;
-    private ScrubberProcessObjectCodeOverride scrubberProcessObjectCodeOverride;
+
+    public ScrubberServiceImpl() {
+        super();
+    }
+
+    /**
+     * This method is called by Spring after it has initialized all dependencies. It will determine if we are in a test or not. If
+     * we are in a test, replace the date time service & report service with a test version.
+     * 
+     */
+    public void init() {
+        LOG.debug("init() started");
+
+        // If we are in test mode
+        if (beanFactory.containsBean("testDateTimeService")) {
+            dateTimeService = (DateTimeService) beanFactory.getBean("testDateTimeService");
+            reportService = (ReportService) beanFactory.getBean("testReportService");
+        }
+    }
 
     /**
      * 
      * @see org.kuali.module.gl.service.ScrubberService#scrubGroupReportOnly(org.kuali.module.gl.bo.OriginEntryGroup)
      */
-    public void scrubGroupReportOnly(OriginEntryGroup group,String documentNumber) {
+    public void scrubGroupReportOnly(OriginEntryGroup group) {
         LOG.debug("scrubGroupReportOnly() started");
 
         // The logic for this was moved into another object because the process was written using
         // many instance variables which shouldn't be used for Spring services
 
-        ScrubberProcess sp = new ScrubberProcess(flexibleOffsetAccountService, documentTypeService, originEntryService, originEntryGroupService, dateTimeService, offsetDefinitionService, objectCodeService, kualiConfigurationService, universityDateDao, persistenceService, reportService, scrubberValidator, scrubberProcessObjectCodeOverride);
-        sp.scrubGroupReportOnly(group,documentNumber);
+        ScrubberProcess sp = new ScrubberProcess(flexibleOffsetAccountService, documentTypeService, beanFactory, originEntryService, originEntryGroupService, dateTimeService, offsetDefinitionService, objectCodeService, kualiConfigurationService, universityDateDao, persistenceService, reportService, scrubberValidator);
+
+        sp.scrubGroupReportOnly(group);
     }
 
     /**
@@ -77,18 +106,9 @@ public class ScrubberServiceImpl implements ScrubberService {
         // The logic for this was moved into another object because the process was written using
         // many instance variables which shouldn't be used for Spring services
 
-        ScrubberProcess sp = new ScrubberProcess(flexibleOffsetAccountService, documentTypeService, originEntryService, originEntryGroupService, dateTimeService, offsetDefinitionService, objectCodeService, kualiConfigurationService, universityDateDao, persistenceService, reportService, scrubberValidator, scrubberProcessObjectCodeOverride);
+        ScrubberProcess sp = new ScrubberProcess(flexibleOffsetAccountService, documentTypeService, beanFactory, originEntryService, originEntryGroupService, dateTimeService, offsetDefinitionService, objectCodeService, kualiConfigurationService, universityDateDao, persistenceService, reportService, scrubberValidator);
+
         sp.scrubEntries();
-    }
-    
-    
-    public ScrubberStatus scrubCollectorBatch(CollectorBatch batch, CollectorReportData collectorReportData, OriginEntryService overrideOriginEntryService, OriginEntryGroupService overrideOriginEntryGroupService) {
-        if (overrideOriginEntryService == null && overrideOriginEntryGroupService == null) {
-            throw new NullPointerException("for scrubCollectorBatch, the OriginEntryService and OriginEntryGroupService services must be specified in the parameters");
-        }
-        // this service is especially developed to support collector scrubbing, demerger, and report generation
-        ScrubberProcess sp = new ScrubberProcess(flexibleOffsetAccountService, documentTypeService, overrideOriginEntryService, overrideOriginEntryGroupService, dateTimeService, offsetDefinitionService, objectCodeService, kualiConfigurationService, universityDateDao, persistenceService, reportService, scrubberValidator, scrubberProcessObjectCodeOverride);
-        return sp.scrubCollectorBatch(batch, collectorReportData);
     }
 
     public void setFlexibleOffsetAccountService(FlexibleOffsetAccountService flexibleOffsetAccountService) {
@@ -103,10 +123,6 @@ public class ScrubberServiceImpl implements ScrubberService {
         scrubberValidator = sv;
     }
 
-    public void setScrubberProcessObjectCodeOverride(ScrubberProcessObjectCodeOverride scrubberProcessObjectCodeOverride) {
-        this.scrubberProcessObjectCodeOverride = scrubberProcessObjectCodeOverride;
-    }
-    
     public void setOriginEntryService(OriginEntryService oes) {
         this.originEntryService = oes;
     }
@@ -141,5 +157,9 @@ public class ScrubberServiceImpl implements ScrubberService {
 
     public void setReportService(ReportService reportService) {
         this.reportService = reportService;
+    }
+
+    public void setBeanFactory(BeanFactory bf) throws BeansException {
+        beanFactory = bf;
     }
 }
