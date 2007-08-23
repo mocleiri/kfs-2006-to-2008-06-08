@@ -15,36 +15,61 @@
  */
 package org.kuali.module.purap;
 
-import java.security.InvalidParameterException;
-import java.util.Arrays;
-import java.util.EnumSet;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.apache.commons.collections.EnumerationUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.enums.EnumUtils;
-import org.kuali.RiceConstants;
-import org.kuali.core.JstlConstants;
-import org.kuali.core.document.DocumentBase;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.workflow.KualiWorkflowUtils;
+import org.kuali.Constants;
 
 /**
  * Holds constants for PURAP.
  */
-public class PurapConstants extends JstlConstants {
+public class PurapConstants {
 
-    // special user used in the special ap cancel action
-    public static final String SYSTEM_AP_USER = RiceConstants.SYSTEM_USER;
-    
-    public static final KualiDecimal HUNDRED = new KualiDecimal(100);
-    
     // STANDARD PARAMETER PREFIXES
+    private static final String PURAP_PARAM_PREFIX = "PURAP.";
+
+    public static class WorkflowConstants {
+        // PARAMETER NAMES
+
+        // Global
+        public static final String DOC_ADHOC_NODE_NAME = "Adhoc Routing";
+
+        public static class AssignContractManagerDocument {
+            public static final String WORKFLOW_DOCUMENT_TITLE = "Contract Manager Assignment";
+            public static final String ASSIGN_CONTRACT_DOC_ERROR_COMPLETING_POST_PROCESSING = "Unable to save the contract manager for the following Requisitions: ";
+        }
+
+        public static class RequisitionDocument {
+            public static final String SEPARATION_OF_DUTIES_DOLLAR_AMOUNT = PURAP_PARAM_PREFIX + "SEPARATION_OF_DUTIES_DOLLAR_AMOUNT";
+
+            // Workgroups
+            public static final String SEPARATION_OF_DUTIES_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "WORKGROUP.SEPARATION_OF_DUTIES";
+        }
+
+        public static class PurchaseOrderDocument {
+            public static final String CG_RESTRICTED_OBJECT_CODE_RULE_GROUP_NAME = "PurAp.CG_Restricted_Object_Codes";
+            // Workgroups
+            public static final String INTERNAL_PURCHASING_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "INTERNAL_PURCHASING_REVIEWERS";
+            public static final String VENDOR_EMPLOYEE_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "PO_EMPLOYEE_VENDOR_REVIEWERS";
+            public static final String VENDOR_NRA_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "PO_NRA_VENDOR_REVIEWERS";
+            public static final String VENDOR_NRA_EMPLOYEE_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "PO_NRA_EMPLOYEE_VENDOR_REVIEWERS";
+        }
+
+        public static class PaymentRequestDocument {
+            // Workgroups
+            public static final String VENDOR_EMPLOYEE_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "PREQ_EMPLOYEE_VENDOR_REVIEWERS";
+            public static final String VENDOR_NRA_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "PREQ_NRA_VENDOR_REVIEWERS";
+            public static final String VENDOR_NRA_EMPLOYEE_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "PREQ_NRA_EMPLOYEE_VENDOR_REVIEWERS";
+            public static final String ACCOUNTS_PAYABLE_REVIEWER_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "PREQ_AP_REVIEWERS";
+        }
+
+        public static class CreditMemoDocument {
+            // Workgroups
+            public static final String ACCOUNTS_PAYABLE_REVIEWER_WORKGROUP_NAME = PURAP_PARAM_PREFIX + "CM_AP_REVIEWERS";
+        }
+    }
+
     public static class QuoteTypes {
         public static final String COMPETITIVE = "COMP";
         public static final String PRICE_CONFIRMATION = "CONF";
@@ -71,6 +96,14 @@ public class PurapConstants extends JstlConstants {
         public static final String NOBD = "NOBD";
         public static final String SQNA = "SQNA";
         public static final String TINC = "TINC";
+    }
+
+    public static class Workgroups {
+        public static final String WORKGROUP_ACCOUNTS_PAYABLE = "PURAP.WORKGROUP.ACCOUNTS_PAYABLE";
+        //TODO: need an accounts payable supervisor group
+        public static final String WORKGROUP_ACCOUNTS_PAYABLE_SUPERVISOR = "PURAP.WORKGROUP.ACCOUNTS_PAYABLE";
+        public static final String WORKGROUP_PURCHASING = "PURAP.WORKGROUP.PURCHASING";
+        public static final String WORKGROUP_TAXNBR_ACCESSIBLE = "PURAP.WORKGROUP.TAXNBR_ACCESSIBLE";
     }
 
     public static final String NOTE_TAB_WARNING = "noteWarning";
@@ -104,17 +137,16 @@ public class PurapConstants extends JstlConstants {
         public static String IN_PROCESS = "INPR";
         public static String CANCELLED = "CANC";
         public static String CLOSED = "CLOS";
-        public static String AWAIT_CONTENT_REVIEW = "ACNT";
-        public static String AWAIT_SUB_ACCT_REVIEW = "ASUB";
-        public static String AWAIT_FISCAL_REVIEW = "AFIS";
-        public static String AWAIT_CHART_REVIEW = "ACHA";
-        public static String AWAIT_SEP_OF_DUTY_REVIEW = "ASOD";
+        public static String AWAIT_CONTENT_APRVL = "ACNT";
+        public static String AWAIT_SUB_ACCT_APRVL = "ASUB";
+        public static String AWAIT_FISCAL_APRVL = "AFIS";
+        public static String AWAIT_CHART_APRVL = "ACHA";
+        public static String AWAIT_SEP_OF_DUTY_APRVL = "ASOD";
         public static String DAPRVD_CONTENT = "DCNT";
         public static String DAPRVD_SUB_ACCT = "DSUB";
         public static String DAPRVD_FISCAL = "DFIS";
         public static String DAPRVD_CHART = "DCHA";
         public static String DAPRVD_SEP_OF_DUTY = "DSOD";
-        public static String DAPRVD_SPECIAL = "DGEN"; // TODO delyea - added
         public static String AWAIT_CONTRACT_MANAGER_ASSGN = "ACMR";
         public static String CONTRACT_MANAGER_ASSGN = "CMRA";
     }
@@ -123,11 +155,11 @@ public class PurapConstants extends JstlConstants {
         public static String ESTIMATE = "EST";
     }
 
-    public static final class POTransmissionMethods {
-        public static final String FAX = "FAX";
-        public static final String PRINT = "PRIN";
-        public static final String NOPRINT = "NOPR";
-        public static final String ELECTRONIC = "ELEC";
+    public static class POTransmissionMethods {
+        public static String FAX = "FAX";
+        public static String PRINT = "PRIN";
+        public static String NOPRINT = "NOPR";
+        public static String ELECTRONIC = "ELEC";
     }
 
     public static String REQ_B2B_ALLOW_COPY_DAYS = "5";
@@ -152,21 +184,15 @@ public class PurapConstants extends JstlConstants {
     public static final String VENDOR_ERRORS = "document.vendor*";
     public static final String ADDITIONAL_TAB_ERRORS = "document.requestor*,document.purchaseOrderTransmissionMethodCode,document.chartOfAccountsCode,document.organizationCode,document.purchaseOrderCostSourceCode,document.purchaseOrderTotalLimit";
     public static final String ITEM_TAB_ERRORS = "document.item*,accountDistribution*";
-    public static final String ITEM_TAB_ERROR_PROPERTY = ITEM_TAB_ERRORS;  // used to be "newPurchasingItemLine"
     public static final String ACCOUNT_SUMMARY_TAB_ERRORS = "document.accountSummary*";
-    public static final String STATUS_HISTORY_TAB_ERRORS = "document.statusHistories*";
     public static final String ACCOUNT_DISTRIBUTION_ERROR_KEY = "accountDistribution";
-    public static final String RELATED_DOCS_TAB_ERRORS = "";
-    public static final String PAYMENT_HISTORY_TAB_ERRORS = "";
 
     // PO/Quotes Tab Constants
-    public static final String QUOTE_TAB_ERRORS = "document.quote*,quote*,purchaseOrderVendorQuotes*";
+    public static final String QUOTE_TAB_ERRORS = "document.quote*,quote*";
 
     // Assign Contract Manager
     public static final String ASSIGN_CONTRACT_MANAGER_DEFAULT_DESC = "Contract Manager Assigned";
     public static final String ASSIGN_CONTRACT_MANAGER_TAB_ERRORS = "document.unassignedRequisition*";
-    
-    // Credit Memo Tab Constants
 
     public static class PurchaseOrderStatuses {
         public static String IN_PROCESS = "INPR";
@@ -176,12 +202,11 @@ public class PurapConstants extends JstlConstants {
         public static String CLOSED = "CLOS";
         public static String CANCELLED = "CANC";
         public static String PAYMENT_HOLD = "PHOL";
-        public static String AWAIT_TAX_REVIEW = "WTAX";
-        public static String AWAIT_BUDGET_REVIEW = "WBUD";
-        public static String AWAIT_CONTRACTS_GRANTS_REVIEW = "WCG";
-        public static String AWAIT_PURCHASING_REVIEW = "WPUR";
-        @Deprecated
-        public static String AWAIT_SPECIAL_REVIEW = "WSPC";
+        public static String AWAIT_TAX_APRVL = "WTAX";
+        public static String AWAIT_BUDGET_APRVL = "WBUD";
+        public static String AWAIT_CONTRACTS_GRANTS_APRVL = "WCG";
+        public static String AWAIT_PURCHASING_APRVL = "WPUR";
+        public static String AWAIT_SPECIAL_APRVL = "WSPC";
         public static String DAPRVD_TAX = "DTAX";
         public static String DAPRVD_BUDGET = "DBUD";
         public static String DAPRVD_CONTRACTS_GRANTS = "DCG";
@@ -194,47 +219,17 @@ public class PurapConstants extends JstlConstants {
         public static String QUOTE = "QUOT";
         public static String VOID = "VOID";
         public static String AMENDMENT = "AMND";
-        // TODO delyea - add statuses for awaiting and disapproved 'change' docs?
-        
-        public static Set<String> INCOMPLETE_STATUSES = new HashSet<String>();
-        public static Set<String> CONTRACT_MANAGER_CHANGEABLE_STATUSES = new HashSet<String>();
-        public static Map<String,String> STATUSES_BY_TRANSMISSION_TYPE = new HashMap<String,String>();
-        static {
-            INCOMPLETE_STATUSES.add(AWAIT_TAX_REVIEW);
-            INCOMPLETE_STATUSES.add(AWAIT_BUDGET_REVIEW);
-            INCOMPLETE_STATUSES.add(AWAIT_CONTRACTS_GRANTS_REVIEW);
-            INCOMPLETE_STATUSES.add(AWAIT_PURCHASING_REVIEW);
-            INCOMPLETE_STATUSES.add(AWAIT_SPECIAL_REVIEW);
-            INCOMPLETE_STATUSES.add(QUOTE);
-            INCOMPLETE_STATUSES.add(CXML_ERROR);
-            INCOMPLETE_STATUSES.add(PENDING_CXML);
-            INCOMPLETE_STATUSES.add(IN_PROCESS);
-            INCOMPLETE_STATUSES.add(PAYMENT_HOLD);
-            INCOMPLETE_STATUSES.add(PENDING_FAX);
-            INCOMPLETE_STATUSES.add(PENDING_PRINT);
-            INCOMPLETE_STATUSES.add(WAITING_FOR_VENDOR);
-            INCOMPLETE_STATUSES.add(WAITING_FOR_DEPARTMENT);
-            
-            CONTRACT_MANAGER_CHANGEABLE_STATUSES.add(IN_PROCESS);
-            CONTRACT_MANAGER_CHANGEABLE_STATUSES.add(WAITING_FOR_VENDOR);
-            CONTRACT_MANAGER_CHANGEABLE_STATUSES.add(WAITING_FOR_DEPARTMENT);
-            
-            STATUSES_BY_TRANSMISSION_TYPE.put(PurapConstants.POTransmissionMethods.PRINT, PENDING_PRINT);
-            STATUSES_BY_TRANSMISSION_TYPE.put(PurapConstants.POTransmissionMethods.ELECTRONIC, PENDING_CXML);
-            STATUSES_BY_TRANSMISSION_TYPE.put(PurapConstants.POTransmissionMethods.FAX, PENDING_FAX);
-        }
-        
     }
 
 
     public static class ItemTypeCodes {
         // ITEM TYPES
         public static String ITEM_TYPE_ITEM_CODE = "ITEM";
-        public static String ITEM_TYPE_SERVICE_CODE = "SRVC";
         public static String ITEM_TYPE_FREIGHT_CODE = "FRHT";
         public static String ITEM_TYPE_SHIP_AND_HAND_CODE = "SPHD";
         public static String ITEM_TYPE_TRADE_IN_CODE = "TRDI";
         public static String ITEM_TYPE_ORDER_DISCOUNT_CODE = "ORDS";
+        public static String ITEM_TYPE_SERVICE_CODE = "SRVC";
         public static String ITEM_TYPE_MIN_ORDER_CODE = "MNOR";
         public static String ITEM_TYPE_MISC_CODE = "MISC";
         public static String ITEM_TYPE_PMT_TERMS_DISCOUNT_CODE = "DISC";
@@ -251,21 +246,21 @@ public class PurapConstants extends JstlConstants {
     public static int DOLLAR_AMOUNT_MIN_SCALE = 2;
     public static int UNIT_PRICE_MAX_SCALE = 4;
     public static int PREQ_DESC_LENGTH = 500;
-    public static String PREQ_DISCOUNT_MULT = "-0.01";
 
     public static class PurchaseOrderDocTypes {
-        public static String PURCHASE_ORDER_REOPEN_DOCUMENT = "PurchaseOrderReopenDocument";
-        public static String PURCHASE_ORDER_CLOSE_DOCUMENT = "PurchaseOrderCloseDocument";
-        public static String PURCHASE_ORDER_DOCUMENT = "PurchaseOrderDocument";
-        public static String PURCHASE_ORDER_RETRANSMIT_DOCUMENT = "PurchaseOrderRetransmitDocument";
-        public static String PURCHASE_ORDER_PRINT_DOCUMENT = "PurchaseOrderPrintDocument";
-        public static String PURCHASE_ORDER_VOID_DOCUMENT = "PurchaseOrderVoidDocument";
-        public static String PURCHASE_ORDER_PAYMENT_HOLD_DOCUMENT = "PurchaseOrderPaymentHoldDocument";
-        public static String PURCHASE_ORDER_REMOVE_HOLD_DOCUMENT = "PurchaseOrderRemoveHoldDocument";
-        public static String PURCHASE_ORDER_AMENDMENT_DOCUMENT = "PurchaseOrderAmendmentDocument";
+        public static String PURCHASE_ORDER_REOPEN_DOCUMENT = "KualiPurchaseOrderReopenDocument";
+        public static String PURCHASE_ORDER_CLOSE_DOCUMENT = "KualiPurchaseOrderCloseDocument";
+        public static String PURCHASE_ORDER_DOCUMENT = "KualiPurchaseOrderDocument";
+        public static String PURCHASE_ORDER_RETRANSMIT_DOCUMENT = "KualiPurchaseOrderRetransmitDocument";
+        public static String PURCHASE_ORDER_PRINT_DOCUMENT = "KualiPurchaseOrderPrintDocument";
+        public static String PURCHASE_ORDER_VOID_DOCUMENT = "KualiPurchaseOrderVoidDocument";
+        public static String PURCHASE_ORDER_PAYMENT_HOLD_DOCUMENT = "KualiPurchaseOrderPaymentHoldDocument";
+        public static String PURCHASE_ORDER_REMOVE_HOLD_DOCUMENT = "KualiPurchaseOrderRemoveHoldDocument";
+        public static String PURCHASE_ORDER_AMENDMENT_DOCUMENT = "KualiPurchaseOrderAmendmentDocument";
     }
 
-
+    public static String PAYMENT_REQUEST_DOCUMENT = "KualiPaymentRequestDocument";
+    
     private static HashMap<String, String> purchaseOrderDocTypes() {
         HashMap<String, String> mapSLF;
         mapSLF = new HashMap<String, String>();
@@ -316,110 +311,27 @@ public class PurapConstants extends JstlConstants {
         public static String CONFIRM_CANCEL_RETURN = "cancelQuote";
 
         public static String SINGLE_CONFIRMATION_QUESTION = "singleConfirmationQuestion";
-        
-        public static String MANUAL_STATUS_CHANGE_QUESTION = "manualStatusChangeQuestion";
-        public static String OPEN_STATUS = "Open";
     }
-    
-    public static String PO_OVERRIDE_NOT_TO_EXCEED_QUESTION = "OverrideNotToExceed";
 
-    // PAYMENT REQUEST
-    public static final String PAYMENT_REQUEST_DOCUMENT_DOC_TYPE = "PaymentRequestDocument";
-    
+    // PAYMENT REQUEST PAY DATE CALCULATION DAYS
     public static int PREQ_PAY_DATE_CALCULATION_DAYS = 28;
 
     // Weird PaymentTermsType is due on either the 10th or 25th with no discount
     public static String PMT_TERMS_TYP_NO_DISCOUNT_CD = "00N2T";
 
-    public static class PaymentRequestIndicatorText {
-        public static String HOLD = "HOLD";
-        public static String REQUEST_CANCEL = "REQUEST CANCEL";
-    }
     
     public static class PaymentRequestStatuses {
-        public static String INITIATE = "INIT"; 
+        public static String INITIATE = "INIT";
         public static String IN_PROCESS = "INPR";
-        public static String CANCELLED_IN_PROCESS = "CIPR";
-        public static String CANCELLED_PRIOR_TO_AP_APPROVAL = "VOID";
-        public static String CANCELLED_POST_AP_APPROVE = "CANC";
+        public static String CANCELLED_POST_APPROVE = "CANC";
+        public static String CANCELLED_IN_PROCESS = "VOID";
+        public static String AP_APPROVED = "APAD";
+        public static String AWAITING_SUB_ACCT_MGR_APPROVAL = "ASAA";
+        public static String AWAITING_FISCAL_APPROVAL = "AFOA";
         public static String DEPARTMENT_APPROVED = "DPTA";
         public static String AUTO_APPROVED = "AUTO";        
-        public static String AWAITING_ACCOUNTS_PAYABLE_REVIEW = "APAD";   // Waiting for Accounts Payable approval
-        public static String AWAITING_SUB_ACCT_MGR_REVIEW = "ASAA";   // Waiting for Sub Acct Manager approval
-        public static String AWAITING_FISCAL_REVIEW = "AFOA";   // Waiting for Fiscal Officer approval
-        public static String AWAITING_ORG_REVIEW = "ACHA";   // Waiting for Chart/Org approval
-        public static String AWAITING_TAX_REVIEW = "ATAX";   // Waiting for Vendor Tax approval
-
-        //keep these in the order of potential routing
-        //Note it doesn't make much sense to compare auto_approved and dept_approved but this is 
-        //easier than two enums plus this should primarily be used for user enterred areas
-        public enum STATUS_ORDER{
-            INITIATE (PurapConstants.PaymentRequestStatuses.INITIATE,true),
-            IN_PROCESS (PurapConstants.PaymentRequestStatuses.IN_PROCESS,true),
-            CANCELLED_IN_PROCESS (PurapConstants.PaymentRequestStatuses.CANCELLED_IN_PROCESS,false),
-            CANCELLED_PRIOR_TO_AP_APPROVAL (PurapConstants.PaymentRequestStatuses.CANCELLED_PRIOR_TO_AP_APPROVAL,false),
-            CANCELLED_POST_AP_APPROVE (PurapConstants.PaymentRequestStatuses.CANCELLED_POST_AP_APPROVE,false),
-            AWAITING_ACCOUNTS_PAYABLE_REVIEW (PurapConstants.PaymentRequestStatuses.AWAITING_ACCOUNTS_PAYABLE_REVIEW,false),
-            AWAITING_SUB_ACCT_MGR_REVIEW (PurapConstants.PaymentRequestStatuses.AWAITING_SUB_ACCT_MGR_REVIEW,false),
-            AWAITING_FISCAL_REVIEW (PurapConstants.PaymentRequestStatuses.AWAITING_FISCAL_REVIEW,false),
-            AWAITING_ORG_REVIEW (PurapConstants.PaymentRequestStatuses.AWAITING_ORG_REVIEW,false),
-            AWAITING_TAX_REVIEW (PurapConstants.PaymentRequestStatuses.AWAITING_TAX_REVIEW,false),
-            DEPARTMENT_APPROVED (PurapConstants.PaymentRequestStatuses.DEPARTMENT_APPROVED,false),
-            AUTO_APPROVED (PurapConstants.PaymentRequestStatuses.AUTO_APPROVED,false),
-            ;
-            
-            private String statusCode = new String();
-            private boolean fullEntryAllowed = false;
-            
-            STATUS_ORDER(String statusCode,boolean fullEntry) {
-                this.statusCode = statusCode;
-                this.fullEntryAllowed = fullEntry;
-            }
-            
-            public static STATUS_ORDER getByStatusCode(String statusCode)
-            {
-                for (STATUS_ORDER status : STATUS_ORDER.values()) {
-                    if(StringUtils.equals(status.statusCode,statusCode)) {
-                        return status;
-                    }
-                }
-                return null;
-            }
-            public static boolean isFullDocumentEntryCompleted(String status) {
-                return !getByStatusCode(status).fullEntryAllowed;
-            }
-        }
-
-        
-        public static String[] PREQ_STATUSES_FOR_AUTO_APPROVE = {
-            AWAITING_SUB_ACCT_MGR_REVIEW,
-            AWAITING_FISCAL_REVIEW,
-            AWAITING_ORG_REVIEW
-            };
-
-        public static String[] STATUSES_ALLOWED_FOR_EXTRACTION = {
-            AUTO_APPROVED,
-            DEPARTMENT_APPROVED
-            };
-
-        public static Set CANCELLED_STATUSES = new HashSet();
-        public static Set STATUSES_DISALLOWING_HOLD = new HashSet();
-        public static Set STATUSES_DISALLOWING_REQUEST_CANCEL = new HashSet();
-        static {
-            CANCELLED_STATUSES.add(CANCELLED_IN_PROCESS);
-            CANCELLED_STATUSES.add(CANCELLED_PRIOR_TO_AP_APPROVAL);
-            CANCELLED_STATUSES.add(CANCELLED_POST_AP_APPROVE);
-            
-            STATUSES_DISALLOWING_HOLD.add(INITIATE);
-            STATUSES_DISALLOWING_HOLD.add(IN_PROCESS);
-            STATUSES_DISALLOWING_HOLD.addAll(Arrays.asList(CANCELLED_STATUSES.toArray(new String[CANCELLED_STATUSES.size()])));
-
-            STATUSES_DISALLOWING_REQUEST_CANCEL.add(INITIATE);
-            STATUSES_DISALLOWING_REQUEST_CANCEL.add(IN_PROCESS);
-            STATUSES_DISALLOWING_REQUEST_CANCEL.add(DEPARTMENT_APPROVED);
-            STATUSES_DISALLOWING_REQUEST_CANCEL.add(AUTO_APPROVED);
-            STATUSES_DISALLOWING_REQUEST_CANCEL.addAll(Arrays.asList(CANCELLED_STATUSES.toArray(new String[CANCELLED_STATUSES.size()])));
-        }
+        public static String AWAITING_CHART_REVIEW = "ACHA";
+        public static String AWAITING_TAX_APPROVAL = "ATAX";
         /*
          * Modify as required: public static String CANCELLED = "CANC"; public static String CLOSED = "CLOS"; public static String
          * AWAIT_CONTENT_APRVL = "ACNT"; public static String AWAIT_SUB_ACCT_APRVL = "ASUB"; public static String AWAIT_FISCAL_APRVL =
@@ -449,23 +361,29 @@ public class PurapConstants extends JstlConstants {
         public static String HOLD_PREQ_QUESTION = "HoldPREQ";
         public static String CONFIRM_HOLD_QUESTION = "ConfirmHold";
         public static String HOLD_NOTE_PREFIX = "Note entered while placing Payment Request on hold : ";
-        public static String REMOVE_HOLD_PREQ_QUESTION = "RemoveHoldPREQ";
-        public static String CONFIRM_REMOVE_HOLD_QUESTION = "ConfirmRemoveHold";
-        public static String REMOVE_HOLD_NOTE_PREFIX = "Note entered while removing a hold on Payment Request : ";
         public static String CANCEL_PREQ_QUESTION = "CancelPREQ";
         public static String CONFIRM_CANCEL_QUESTION = "ConfirmCancel";
         public static String CANCEL_NOTE_PREFIX = "Note entered while requesting cancel on Payment Request : ";
         public static String REMOVE_CANCEL_PREQ_QUESTION = "RemoveCancelPREQ";
         public static String CONFIRM_REMOVE_CANCEL_QUESTION = "ConfirmRemoveCancel";
-        public static String REMOVE_CANCEL_NOTE_PREFIX = "Note entered while removing a request cancel on Payment Request : ";
-        public static String PURCHASE_ORDER_ID = "Purchase Order Identifier";
-        public static String INVOICE_DATE = "Invoice Date";
-        public static String INVOICE_NUMBER = "Invoice Number";
-        public static String IN_PROCESS = "In Process";
-        public static String VENDOR_INVOICE_AMOUNT = "Vendor Invoice Amount";
-        public static String VENDOR_STATE = "State";
-        public static String VENDOR_POSTAL_CODE = "Postal Code";
+        public static String REMOVE_CANCEL_NOTE_PREFIX = "Note entered while requesting a remove cancel on Payment Request : ";
+
     }
+
+    private static HashMap<String, String> itemTypes()
+    {
+        HashMap<String, String> map;
+        map = new HashMap<String, String>();
+        map.put("RequisitionDocument", "Kuali.FinancialTransactionProcessing.RequisitionDocument");
+        map.put("PurchaseOrderDocument", "Kuali.FinancialTransactionProcessing.PurchaseOrderDocument");
+        map.put("PaymentRequestDocument", "Kuali.FinancialTransactionProcessing.PaymentRequestDocument");
+        map.put("CreditMemoDocumentFromVendor", "Kuali.FinancialTransactionProcessing.CreditMemoDocument.FromVendor");
+        map.put("CreditMemoDocumentFromPurchaseOrder", "Kuali.FinancialTransactionProcessing.CreditMemoDocument.FromPurchaseOrder");
+        map.put("CreditMemoDocumentFromPaymentRequest", "Kuali.FinancialTransactionProcessing.CreditMemoDocument.FromPaymentRequest");
+        return map;
+    }
+    public final static HashMap<String,String> ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP =
+                        itemTypes();
 
     public static final String BELOW_THE_LINES_PARAMETER = "BELOW_THE_LINE_ITEMS";
     public static final String ITEM_ALLOWS_ZERO = "ALLOWS_ZERO";
@@ -474,7 +392,6 @@ public class PurapConstants extends JstlConstants {
     public static final String ITEM_REQUIRES_USER_ENTERED_DESCRIPTION = "REQUIRES_USER_ENTERED_DESCRIPTION";
 
     public static class ItemFields {
-        // TODO - can we not use the DataDictionaryService to get the labels (either standard, short, or error) instead of using these below
         public static final String QUANTITY = "Quantity";
         public static final String UNIT_OF_MEASURE = "Unit of Measure";
         public static final String DESCRIPTION = "Description";
@@ -484,67 +401,29 @@ public class PurapConstants extends JstlConstants {
         public static final String INVOICE_EXTENDED_PRICE = "Total Inv Cost";
     }
     
-    // CREDIT MEMO DOCUMENT
-    public static final String CREDIT_MEMO_DOCUMENT_DOC_TYPE = "CreditMemoDocument";
-
-    public final static boolean CREATE_CREDIT_MEMO = false;
-    public final static boolean CANCEL_CREDIT_MEMO = true;
-
     public static class CreditMemoStatuses {
         public static String INITIATE = "INIT";
         public static String IN_PROCESS = "INPR";
-        public static String CANCELLED_IN_PROCESS = "CIPR";
-        public static String CANCELLED_PRIOR_TO_AP_APPROVAL = "VOID";
-        public static String CANCELLED_POST_AP_APPROVE = "CANC";
-        public static String COMPLETE = "CMPT";
-        //FIXME: delyea/ckirschenman shouldn't the following two be removed?!
-        public static String AWAITING_ACCOUNTS_PAYABLE_REVIEW = "APAD";   // Waiting for Accounts Payable approval
-        public static String AWAITING_FISCAL_REVIEW = "AFOA";   // Waiting for Fiscal Officer approval
-        
-        public static String[] STATUSES_ALLOWED_FOR_EXTRACTION = {
-            COMPLETE
-            };
-
-        public static Set CANCELLED_STATUSES = new HashSet();
-        public static Set STATUSES_DISALLOWING_HOLD = new HashSet();
-        public static Set STATUSES_NOT_REQUIRING_ENTRY_REVERSAL = new HashSet();
-        static {
-            CANCELLED_STATUSES.add(CANCELLED_IN_PROCESS);
-            CANCELLED_STATUSES.add(CANCELLED_PRIOR_TO_AP_APPROVAL);
-            CANCELLED_STATUSES.add(CANCELLED_POST_AP_APPROVE);
-
-            STATUSES_DISALLOWING_HOLD.add(INITIATE);
-            STATUSES_DISALLOWING_HOLD.add(IN_PROCESS);
-            STATUSES_DISALLOWING_HOLD.addAll(Arrays.asList(CANCELLED_STATUSES.toArray(new String[CANCELLED_STATUSES.size()])));
-            
-            STATUSES_NOT_REQUIRING_ENTRY_REVERSAL.add(INITIATE);
-            STATUSES_NOT_REQUIRING_ENTRY_REVERSAL.add(IN_PROCESS);
-            STATUSES_NOT_REQUIRING_ENTRY_REVERSAL.addAll(Arrays.asList(CANCELLED_STATUSES.toArray(new String[CANCELLED_STATUSES.size()])));
-        }
+        public static String CANCELLED_POST_APPROVE = "CANC";
+        public static String CANCELLED_IN_PROCESS = "VOID";
+    }
+    
+    public static class CreditMemoTypes{
+        public static final String TYPE_VENDOR = "Vendor";
+        public static final String TYPE_PO = "PO";
+        public static final String TYPE_PREQ = "PREQ";
     }
     
     public static class CMDocumentsStrings {
         public static String DUPLICATE_CREDIT_MEMO_QUESTION = "CMDuplicateInvoice";
-        public static String HOLD_CM_QUESTION = "HoldCM";
-        public static String HOLD_NOTE_PREFIX = "Note entered while placing Credit Memo on hold: ";
-        public static String CANCEL_CM_QUESTION = "CancelCM";
-        public static String CANCEL_NOTE_PREFIX = "Note entered while requesting cancel on Credit Memo: ";
-        public static String REMOVE_HOLD_CM_QUESTION = "RemoveCM";
-        public static String REMOVE_HOLD_NOTE_PREFIX = "Note entered while removing hold on Credit Memo: ";
+        public static String HOLD_CREDIT_MEMO_QUESTION = "HoldPREQ";
+        public static String CONFIRM_HOLD_QUESTION = "ConfirmHold";
+        public static String HOLD_NOTE_PREFIX = "Note entered while placing Payment Request on hold : ";
     }
     
-    public static class CREDIT_MEMO_TYPE_LABELS {
-
-        public static final String TYPE_PO = "PO";
-        public static final String TYPE_PREQ = "PREQ";
-        public static final String TYPE_VENDOR = "Vendor";
-        
-    }
-    
-    private static HashMap<String,Class> uncopyableFields() {
-        HashMap<String,Class> fields = new HashMap<String,Class>();
-        fields.put(KFSConstants.VERSION_NUMBER, null);
-        fields.put("LOG", null);
+    private static HashMap<String,String> uncopyableFields() {
+        HashMap<String,String> fields = new HashMap<String,String>();
+        fields.put(Constants.VERSION_NUMBER, "");
         return fields;
     }
     /*
@@ -552,12 +431,11 @@ public class PurapConstants extends JstlConstants {
      * This should only contain fields that are known throughout objects not
      * item/doc specific ones
      */
-    public final static HashMap<String,Class> KNOWN_UNCOPYABLE_FIELDS = uncopyableFields();
-    
-    private static HashMap<String,Class> uncopyableItemFields() {
-        HashMap<String,Class> fields = new HashMap<String,Class>();
-        fields.put(PurapPropertyConstants.ITEM_IDENTIFIER, null);
-        fields.put(PurapPropertyConstants.ACCOUNTS, null);
+    public final static HashMap<String,String> KNOWN_UNCOPYABLE_FIELDS = uncopyableFields();
+    private static HashMap<String,String> uncopyableItemFields() {
+        HashMap<String,String> fields = new HashMap<String,String>();
+        fields.put(PurapPropertyConstants.ITEM_IDENTIFIER, "");
+        fields.put(PurapPropertyConstants.ACCOUNTS, "");
         return fields;
     }
     /*
@@ -565,53 +443,9 @@ public class PurapConstants extends JstlConstants {
      * This should only contain fields that are known throughout objects not
      * item/doc specific ones
      */
-    public final static HashMap<String,Class> ITEM_UNCOPYABLE_FIELDS = uncopyableItemFields();
+    public final static HashMap<String,String> ITEM_UNCOPYABLE_FIELDS = uncopyableItemFields();
 
-    private static HashMap<String,Class> uncopyablePREQItemFields() {
-        HashMap<String,Class> fields = new HashMap<String,Class>(ITEM_UNCOPYABLE_FIELDS);
-        fields.put(PurapPropertyConstants.QUANTITY, null);
-        fields.put(PurapPropertyConstants.EXTENDED_PRICE,null);
-        return fields;
-    }
-    /*
-     * fields that shouldn't be copied on PREQ item
-     */
-    public final static HashMap<String,Class> PREQ_ITEM_UNCOPYABLE_FIELDS = uncopyablePREQItemFields();
-    
+    public final static String PO_DOC_TYPE_CODE = "PO";
     public final static String PURAP_ORIGIN_CODE = "EP";
-
-    public static class PurapDocTypeCodes {
-        public final static String PAYMENT_REQUEST_DOCUMENT = "PREQ";
-        public final static String CREDIT_MEMO_DOCUMENT = "CM";
-        public final static String PO_DOCUMENT = "PO";
-        public final static String PO_AMENDMENT_DOCUMENT = "POA";
-        public final static String PO_CLOSE_DOCUMENT = "POC";
-        public final static String PO_REOPEN_DOCUMENT = "POR";
-        public final static String PO_VOID_DOCUMENT = "POV";
-    }
     
-    public static Integer PRORATION_SCALE = new Integer(6);
-    
-    //variables moved down so doc types are defined before this call, KULPURAP-1185
-    private static HashMap<String, String> itemTypes()
-    {
-        HashMap<String, String> map;
-        map = new HashMap<String, String>();
-        map.put("RequisitionDocument", "Kuali.PURAP.RequisitionDocument");
-        map.put("PurchaseOrderDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderCloseDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderReopenDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderAmendmentDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderPaymentHoldDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderRemoveHoldDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderRetransmitDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderVoidDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put(PAYMENT_REQUEST_DOCUMENT_DOC_TYPE, "Kuali.PURAP.PaymentRequestDocument");
-        map.put(CREDIT_MEMO_DOCUMENT_DOC_TYPE, "Kuali.PURAP.CreditMemoDocument");
-        return map;
-	}
-	    
-	public final static HashMap<String,String> ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP =
-                        itemTypes();
-
 }
