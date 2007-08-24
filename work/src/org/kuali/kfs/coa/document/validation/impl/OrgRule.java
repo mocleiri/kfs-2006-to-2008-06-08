@@ -26,7 +26,6 @@ import org.apache.commons.lang.time.DateUtils;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
@@ -328,7 +327,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     }
 
     private boolean getOrgMustReportToSelf( Org organization ) {
-    	return applyApcRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, organization.getOrganizationTypeCode());    	
+    	return applyApcRule(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, organization.getOrganizationTypeCode());    	
     }
     
     protected boolean checkSimpleRules(MaintenanceDocument document) {
@@ -417,7 +416,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                         }
                         // stop the search if we reach an org that must report to itself 
                         if ( continueSearch 
-                                && applyApcRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, tempOrg.getOrganizationTypeCode()) ) {
+                                && applyApcRule(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, tempOrg.getOrganizationTypeCode()) ) {
                             continueSearch = false;
                         }
     
@@ -430,8 +429,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                     success = false;
                 }
                 // org must be the only one of that type
-                KualiParameterRule rule = configService.getApplicationParameterRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
-                String topLevelOrgTypeCode = rule.getParameterText();
+                String topLevelOrgTypeCode = configService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
                 List<Org> topLevelOrgs = orgService.getActiveOrgsByType( topLevelOrgTypeCode );
                 if ( !topLevelOrgs.isEmpty() ) {
                     // is the new org in the topLevelOrgs list?  If not, then there's an error; if so, we're editing the top level org
@@ -463,7 +461,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
 
         if (ObjectUtils.isNotNull(newOrg.getOrganizationTypeCode())) {
             organizationTypeCode = newOrg.getOrganizationTypeCode();
-            if (applyApcRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.DEFAULT_ACCOUNT_NOT_REQUIRED_ORG_TYPES, newOrg.getOrganizationTypeCode())) {
+            if (applyApcRule(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.DEFAULT_ACCOUNT_NOT_REQUIRED_ORG_TYPES, newOrg.getOrganizationTypeCode())) {
                 exemptOrganizationTypeCode = true;
             }
         }
@@ -519,12 +517,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
      * 
      */
     protected boolean isHrmsOrgActivated() {
-
-        String flag = getConfigService().getApplicationParameterValue(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, APC_HRMS_ACTIVE_KEY);
-        if (flag.trim().equalsIgnoreCase("Y")) {
-            return true;
-        }
-        return false;
+        return configService.getIndicatorParameter(KFSConstants.CHART_NAMESPACE, APC_HRMS_ACTIVE_KEY);
     }
 
     /**
@@ -558,7 +551,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     protected boolean isPlantAuthorized(UniversalUser user) {
 
         // attempt to get the group name that grants access to the Plant fields
-        String allowedPlantWorkgroup = getConfigService().getApplicationParameterValue(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, PLANT_WORKGROUP_PARM_NAME);
+        String allowedPlantWorkgroup = getConfigService().getApplicationParameterValue(KFSConstants.CHART_NAMESPACE, PLANT_WORKGROUP_PARM_NAME);
 
         if (user.isMember( allowedPlantWorkgroup )) {
             LOG.info("User '" + user.getPersonUserIdentifier() + "' is a member of the group '" + allowedPlantWorkgroup + "', which gives them access to the Plant fields.");
