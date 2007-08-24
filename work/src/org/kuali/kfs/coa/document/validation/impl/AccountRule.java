@@ -330,7 +330,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         // (e.g. the account number cannot begin with a 3 or with 00.)
         // Only bother trying if there is an account string to test
         if (!StringUtils.isBlank(newAccount.getAccountNumber())) {
-            String[] illegalValues = getConfigService().getApplicationParameterValues(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, ACCT_PREFIX_RESTRICTION);
+            String[] illegalValues = getConfigService().getApplicationParameterValues(KFSConstants.CHART_NAMESPACE, ACCT_PREFIX_RESTRICTION);
             // test the number
             success &= accountNumberStartsWithAllowedPrefix(newAccount.getAccountNumber(), illegalValues);
         }
@@ -518,13 +518,13 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         }
 
         // user must be of the allowable statuses (A - Active)
-        if (apcRuleFails(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ACCOUNT_USER_EMP_STATUSES, user.getEmployeeStatusCode())) {
+        if (apcRuleFails(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ACCOUNT_USER_EMP_STATUSES, user.getEmployeeStatusCode())) {
             success &= false;
             putFieldError(propertyName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACTIVE_REQD_FOR_EMPLOYEE, getDdService().getAttributeLabel(Account.class, propertyName));
         }
 
         // user must be of the allowable types (P - Professional)
-        if (apcRuleFails(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ACCOUNT_USER_EMP_TYPES, user.getEmployeeTypeCode())) {
+        if (apcRuleFails(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ACCOUNT_USER_EMP_TYPES, user.getEmployeeTypeCode())) {
             success &= false;
             putFieldError(propertyName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_PRO_TYPE_REQD_FOR_EMPLOYEE, getDdService().getAttributeLabel(Account.class, propertyName));
         }
@@ -985,7 +985,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         // Attempt to get the right SubFundGroup code to check the following logic with. If the value isn't available, go ahead
         // and die, as this indicates a misconfigured app, and important business rules wont be implemented without it.
         String capitalSubFundGroup = "";
-        capitalSubFundGroup = getConfigService().getApplicationParameterValue(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, ACCT_CAPITAL_SUBFUNDGROUP);
+        capitalSubFundGroup = getConfigService().getParameterValue(KFSConstants.CHART_NAMESPACE, ACCT_CAPITAL_SUBFUNDGROUP);
 
         if (capitalSubFundGroup.equalsIgnoreCase(newAccount.getSubFundGroupCode().trim())) {
 
