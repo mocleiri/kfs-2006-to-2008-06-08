@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/Account.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,28 +32,24 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
-import org.kuali.core.bo.Campus;
-import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.Constants;
+import org.kuali.core.bo.BusinessObject;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.PostalZipCode;
+import org.kuali.core.bo.State;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.bo.PostalZipCode;
-import org.kuali.kfs.bo.State;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.cg.bo.AwardAccount;
-import org.kuali.module.cg.bo.Cfda;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
 import org.kuali.module.chart.bo.codes.ICRTypeCode;
 import org.kuali.module.chart.bo.codes.SufficientFundsCode;
-import org.kuali.module.chart.service.SubFundGroupService;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
 
 /**
  * 
  */
-public class Account extends PersistableBusinessObjectBase implements AccountIntf {
+public class Account extends BusinessObjectBase implements AccountIntf {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Account.class);
 
     private String chartOfAccountsCode;
@@ -81,9 +79,10 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     private boolean intrnlFinEncumSufficntFndIndicator;
     private boolean finPreencumSufficientFundIndicator;
     private boolean financialObjectivePrsctrlIndicator;
-    private String accountCfdaNumber;
+    private String cgCatlfFedDomestcAssistNbr;
     private boolean accountOffCampusIndicator;
     private boolean accountClosedIndicator;
+    private String programCode;
 
     private String accountFiscalOfficerSystemIdentifier;
     private String accountsSupervisorySystemsIdentifier;
@@ -129,7 +128,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     private PostalZipCode postalZipCode;
     private BudgetRecordingLevelCode budgetRecordingLevel;
     private SufficientFundsCode sufficientFundsCode;
-    private Cfda cfda;
+    private Program program;
 
     // Several kinds of Dummy Attributes for dividing sections on Inquiry page
     private String accountResponsibilitySectionBlank;
@@ -141,13 +140,12 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     private String accountDescriptionSectionBlank;
     private String accountDescriptionSection;
 
-    private boolean forContractsAndGrants;
+    private boolean isCGAccount;
 
     private AccountGuideline accountGuideline;
     private AccountDescription accountDescription;
 
     private List subAccounts;
-    private List awards;
 
     /**
      * Default no-arg constructor.
@@ -155,18 +153,62 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     public Account() {
     }
 
+    /**
+     * This tells if this account is a C&G account.
+     * 
+     * @return true if C&G account
+     */
+    public boolean isInCg() {
+        // IF C&G is a sub fund group, use this line
+        // return isInCgSubFundGroup();
+
+        // IF C&G is a fund group, use this line
+        return isInCgFundGroup();
+    }
+
+    public static boolean isInCg(SubFundGroup subFundGroup) {
+        if (subFundGroup != null) {
+            return Constants.CONTRACTS_AND_GRANTS.equals(subFundGroup.getFundGroupCode());
+        }
+        else {
+            // If sub fund group is missing
+            return false;
+        }
+    }
+    
+    private boolean isInCgFundGroup() {
+        if (getSubFundGroup() != null) {
+            return Constants.CONTRACTS_AND_GRANTS.equals(getSubFundGroup().getFundGroupCode());
+        }
+        else {
+            if (getSubFundGroupCode()!=null && getSubFundGroupCode().length()>0) {
+                throw new Error("Unable to determine whether this account is a CG account");
+            }
+            // If sub fund group is missing
+            return false;
+        }
+    }
+
+    private boolean isInCgSubFundGroup() {
+        if (true) {
+            throw new Error("You must also fix the method isInCg(SubFundGroup subFundGroup)");
+        }
+        return Constants.CONTRACTS_AND_GRANTS.equals(getSubFundGroupCode());
+    }
+
     public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
         super.afterLookup(persistenceBroker);
+
         // This is needed to put a value in the object so the persisted XML has a flag that
         // can be used in routing to determine if an account is a C&G Account
-        forContractsAndGrants = SpringContext.getBean(SubFundGroupService.class).isForContractsAndGrants(getSubFundGroup());
+        isCGAccount = isInCg();
     }
 
     /**
      * This method gathers all SubAccounts related to this account if the account is marked as closed to deactivate
      */
-    public List<PersistableBusinessObject> generateDeactivationsToPersist() {
-        BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
+    public List<BusinessObject> generateDeactivationsToPersist() {
+        BusinessObjectService boService = SpringServiceLocator.getBusinessObjectService();
 
         // retreive all the existing sub accounts for this
         List<SubAccount> bosToDeactivate = new ArrayList();
@@ -186,7 +228,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
         for (SubAccount subAccount : bosToDeactivate) {
             subAccount.setSubAccountActiveIndicator(false);
         }
-        return new ArrayList<PersistableBusinessObject>(bosToDeactivate);
+        return new ArrayList<BusinessObject>(bosToDeactivate);
     }
 
     /**
@@ -429,7 +471,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
             return false;
         }
 
-        return this.isExpired(SpringContext.getBean(DateTimeService.class).getCurrentCalendar());
+        return this.isExpired(SpringServiceLocator.getDateTimeService().getCurrentCalendar());
     }
 
     /**
@@ -803,31 +845,23 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     }
 
     /**
-     * Gets the accountCfdaNumber attribute.
+     * Gets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @return Returns the accountCfdaNumber
+     * @return Returns the cgCatlfFedDomestcAssistNbr
      * 
      */
-    public String getAccountCfdaNumber() {
-        return accountCfdaNumber;
+    public String getCgCatlfFedDomestcAssistNbr() {
+        return cgCatlfFedDomestcAssistNbr;
     }
 
     /**
-     * Sets the accountCfdaNumber attribute.
+     * Sets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @param accountCfdaNumber The accountCfdaNumber to set.
+     * @param cgCatlfFedDomestcAssistNbr The cgCatlfFedDomestcAssistNbr to set.
      * 
      */
-    public void setAccountCfdaNumber(String accountCfdaNumber) {
-        this.accountCfdaNumber = accountCfdaNumber;
-    }
-
-    public Cfda getCfda() {
-        return cfda;
-    }
-
-    public void setCfda(Cfda cfda) {
-        this.cfda = cfda;
+    public void setCgCatlfFedDomestcAssistNbr(String cgCatlfFedDomestcAssistNbr) {
+        this.cgCatlfFedDomestcAssistNbr = cgCatlfFedDomestcAssistNbr;
     }
 
     /**
@@ -1132,16 +1166,8 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
 
 
     public UniversalUser getAccountFiscalOfficerUser() {
-        accountFiscalOfficerUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountFiscalOfficerSystemIdentifier, accountFiscalOfficerUser);
+        accountFiscalOfficerUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountFiscalOfficerSystemIdentifier, accountFiscalOfficerUser);
         return accountFiscalOfficerUser;
-    }
-    
-    /**
-     * The network id of the account fiscal officer
-     * @return the network id of the account fiscal officer
-     */
-    public String getAccountFiscalOfficerUserPersonUserIdentifier() {
-        return this.getAccountFiscalOfficerUser().getPersonUserIdentifier();
     }
 
 
@@ -1154,16 +1180,8 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     }
 
     public UniversalUser getAccountManagerUser() {
-        accountManagerUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountManagerSystemIdentifier, accountManagerUser);
+        accountManagerUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountManagerSystemIdentifier, accountManagerUser);
         return accountManagerUser;
-    }
-    
-    /**
-     * Returns the network id of the account manager user
-     * @return the network id of the account manager user
-     */
-    public String getAccountManagerUserPersonUserIdentifier() {
-        return this.getAccountManagerUser().getPersonUserIdentifier();
     }
 
     /**
@@ -1176,23 +1194,11 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
 
 
     public UniversalUser getAccountSupervisoryUser() {
-        accountSupervisoryUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountsSupervisorySystemsIdentifier, accountSupervisoryUser);
+        accountSupervisoryUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountsSupervisorySystemsIdentifier, accountSupervisoryUser);
         return accountSupervisoryUser;
     }
 
-    /**
-     * So, if you've read the comments for getAccountFiscalOfficerUserPersonUserIdentifier
-     * and getAccountManagerUserPersonUserIdentifier, then you would suspect that this method
-     * would return the network id for the account supervisory user.  But--ha ha!  You'd be
-     * wrong.  This method has a devious and unexpected twist.
-     * 
-     * No, actually, I'm kidding.  This returns the network if the account supervisory user.
-     * @return Take a guess. Honestly.
-     */
-    public String getAccountSupervisoryUserPersonUserIdentifier() {
-        return this.getAccountSupervisoryUser().getPersonUserIdentifier();
-    }
-    
+
     /**
      * @param accountSupervisoryUser The accountSupervisoryUser to set.
      * @deprecated
@@ -1216,6 +1222,21 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
      */
     public void setContinuationAccount(Account continuationAccount) {
         this.continuationAccount = continuationAccount;
+    }
+
+    /**
+     * @return Returns the program.
+     */
+    public Program getProgram() {
+        return program;
+    }
+
+    /**
+     * @param program The program to set.
+     * @deprecated
+     */
+    public void setProgram(Program program) {
+        this.program = program;
     }
 
     /**
@@ -1632,6 +1653,20 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     public void setSufficientFundsCode(SufficientFundsCode sufficientFundsCode) {
         this.sufficientFundsCode = sufficientFundsCode;
     }
+
+    /**
+     * @return Returns the programCode.
+     */
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    /**
+     * @param programCode The programCode to set.
+     */
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
     
     /**
      * Gets the acctIndirectCostRcvyType attribute. 
@@ -1848,7 +1883,7 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
         try {
             // KULCOA-549: update the sufficient funds table
             // get the current data from the database
-            BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
+            BusinessObjectService boService = SpringServiceLocator.getBusinessObjectService();
             Account originalAcct = (Account) boService.retrieve(this);
 
             if (originalAcct != null) {
@@ -1867,63 +1902,5 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
             LOG.error("Problem updating sufficient funds rebuild table: ", ex);
         }
     }
-
-    /**
-     * Gets the forContractsAndGrants attribute. 
-     * @return Returns the forContractsAndGrants.
-     */
-    public boolean isForContractsAndGrants() {
-        return forContractsAndGrants;
-    }
-
-    /**
-     * 
-     * This method returns a collection of AwardAccount objects.
-     * @return Collection of assicated AwardAccounts.
-     */
-    public List<AwardAccount> getAwards() {
-        return awards;
-    }
-
-    /**
-     * 
-     * This method sets the associated collection of AwardAccounts to the local collection attribute.
-     * @param awards New collection of AwardAccounts to be assigned to this Account.
-     */
-    public void setAwards(List<AwardAccount> awards) {
-        this.awards = awards;
-    }
-
-
-    /**
-     * @return Returns the accountNameAndExtensionDescription.
-     */
-    public String getAccountNameAndExtensionDescription() {
-        String resultString;
-        AccountExtension accountExtension;
-        Program program;
-        resultString = this.getAccountName();
-        if (this.getExtension() != null){
-            accountExtension = (AccountExtension) this.getExtension();
-            if (accountExtension.getProgram() != null){
-                program = accountExtension.getProgram();
-                resultString = accountName + 
-                "[br]Program=" + 
-                program.getProgramCode() + "-" + 
-                program.getProgramName();
-            }         
-        }      
-      return  resultString;
-    }
-
-    /**
-     * Sets the accountNameAndExtensionDescription attribute value.
-     * 
-     * @param accountNameAndExtensionDescription The accountNameAndExtensionDescription to set.
-     */
-    public void setAccountNameAndExtensionDescription(String dummy ) {
-        
-    }
-
 
 }
