@@ -24,14 +24,12 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.service.EntryService;
@@ -40,8 +38,7 @@ import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.EntryInquirableImpl;
 import org.kuali.module.gl.web.inquirable.InquirableFinancialDocument;
-import org.springframework.transaction.annotation.Transactional;
-@Transactional
+
 public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EntryLookupableHelperServiceImpl.class);
 
@@ -116,10 +113,10 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
         Iterator pendingEntryIterator = getGeneralLedgerPendingEntryService().findPendingLedgerEntriesForEntry(pendingEntryFieldValues, isApproved);
 
         String pendingOption = isApproved ? Constant.APPROVED_PENDING_ENTRY : Constant.ALL_PENDING_ENTRY;
-        UniversityDate today = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+        UniversityDate today = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
         String currentFiscalPeriodCode = today.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = today.getUniversityFiscalYear();
-        Date postDate = SpringContext.getBean(DateTimeService.class).getCurrentSqlDate();
+        Date postDate = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
 
         while (pendingEntryIterator.hasNext()) {
             GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) pendingEntryIterator.next();

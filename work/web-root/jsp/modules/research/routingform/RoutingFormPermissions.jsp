@@ -13,13 +13,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRoutingFormDocument"
 	htmlFormAction="researchRoutingFormPermissions"
 	headerDispatch="save" feedbackKey="app.krafeedback.link"
-	headerTabActive="permissions" showTabButtons="true">
+	headerTabActive="permissions">
 	
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
 	

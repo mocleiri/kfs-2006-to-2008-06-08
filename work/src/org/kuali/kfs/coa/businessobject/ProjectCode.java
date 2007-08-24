@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/ProjectCode.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +18,10 @@
 package org.kuali.module.chart.bo;
 
 import org.kuali.core.bo.KualiCodeBase;
+
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * 
@@ -63,7 +66,7 @@ public class ProjectCode extends KualiCodeBase {
     }
 
     public UniversalUser getProjectManagerUniversal() {
-        projectManagerUniversal = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(projectManagerUniversalId, projectManagerUniversal);
+        projectManagerUniversal = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(projectManagerUniversalId, projectManagerUniversal);
         return projectManagerUniversal;
     }
 

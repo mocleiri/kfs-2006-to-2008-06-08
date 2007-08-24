@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/PurchasingDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +20,18 @@ package org.kuali.module.purap.document;
 import java.sql.Date;
 import java.util.List;
 
-import org.kuali.core.bo.Campus;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.Campus;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.purap.bo.DeliveryRequiredDateReason;
 import org.kuali.module.purap.bo.FundingSource;
+import org.kuali.module.purap.bo.PurchaseOrderCostSource;
 import org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.PurchasingItem;
 import org.kuali.module.purap.bo.RecurringPaymentType;
 import org.kuali.module.purap.bo.RequisitionSource;
-import org.kuali.module.vendor.bo.PurchaseOrderCostSource;
-import org.kuali.module.vendor.bo.VendorContract;
-import org.kuali.module.vendor.bo.VendorDetail;
 
 
 
@@ -319,7 +319,7 @@ public interface PurchasingDocument extends PurchasingAccountsPayableDocument {
      * @return Returns the vendorRestrictedIndicator
      * 
      */
-    public Boolean getVendorRestrictedIndicator();
+    public boolean getVendorRestrictedIndicator();
 
     /**
      * Sets the vendorRestrictedIndicator attribute.
@@ -327,7 +327,7 @@ public interface PurchasingDocument extends PurchasingAccountsPayableDocument {
      * @param vendorRestrictedIndicator The vendorRestrictedIndicator to set.
      * 
      */
-    public void setVendorRestrictedIndicator(Boolean vendorRestrictedIndicator);
+    public void setVendorRestrictedIndicator(boolean vendorRestrictedIndicator);
 
     /**
      * Gets the vendorPhoneNumber attribute.
@@ -1193,28 +1193,10 @@ public interface PurchasingDocument extends PurchasingAccountsPayableDocument {
      */
     public void setNonInstitutionFundChartOfAccounts(Chart nonInstitutionFundChartOfAccounts);
     
-    public List<PurchasingApItem> getItems();
-    public void setItems(List<PurchasingApItem> items);
-    public void addItem(PurchasingApItem item);
+    public List<PurchasingItem> getItems();
+    public void setItems(List<PurchasingItem> items);
+    public void addItem(PurchasingItem item);
     public void deleteItem(int lineNum);
-    public KualiDecimal getTotalDollarAmount(); 
-    public PurchasingApItem getItem(int pos);
-    
-    public void setVendorContractName(String vendorContractName);
-    public boolean isDeliveryBuildingOther();
-    
-    /**
-     * Convenience method to set vendor detail fields based on a given VendorDetail.
-     * 
-     * @param vendorDetail
-     */
-    public void templateVendorDetail(VendorDetail vendorDetail);
-    
-    /**
-     * Convenience method to set vendor contract fields based on a given VendorContract.
-     * 
-     * @param vendorContract
-     */
-    public void templateVendorContract(VendorContract vendorContract);
- 
+    public KualiDecimal getTotal(); 
+    public PurchasingItem getItem(int pos);
 }

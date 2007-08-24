@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/inquiry/InquirableFinancialDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +18,9 @@
 package org.kuali.module.gl.web.inquirable;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.Transaction;
 
@@ -30,7 +32,7 @@ import org.kuali.module.gl.bo.Transaction;
  */
 public class InquirableFinancialDocument {
 
-    private KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
+    private KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
 
     /**
      * get the url of inquirable financial document for the given transaction
@@ -41,7 +43,7 @@ public class InquirableFinancialDocument {
      */
     public String getInquirableDocumentUrl(Transaction transaction) {
         if (transaction == null) {
-            return KFSConstants.EMPTY_STRING;
+            return Constants.EMPTY_STRING;
         }
 
         String docNumber = transaction.getDocumentNumber();
@@ -51,10 +53,10 @@ public class InquirableFinancialDocument {
     }
 
     private String getUrl(String originCode, String docNumber) {
-        if (KFSConstants.ORIGIN_CODE_KUALI.equals(originCode) && !StringUtils.isBlank(docNumber)) {
-            return kualiConfigurationService.getPropertyString(KFSConstants.WORKFLOW_URL_KEY) + "/DocHandler.do?docId=" + docNumber + "&command=displayDocSearchView";
+        if (Constants.ORIGIN_CODE_KUALI.equals(originCode) && !StringUtils.isBlank(docNumber)) {
+            return kualiConfigurationService.getPropertyString("workflow.base.url") + "/DocHandler.do?docId=" + docNumber + "&command=displayDocSearchView";
         }
-        return KFSConstants.EMPTY_STRING;
+        return Constants.EMPTY_STRING;
     }
 
     /**
@@ -66,7 +68,7 @@ public class InquirableFinancialDocument {
      */
     public String getInquirableDocumentUrl(Encumbrance encumbrance) {
         if (encumbrance == null) {
-            return KFSConstants.EMPTY_STRING;
+            return Constants.EMPTY_STRING;
         }
 
         String docNumber = encumbrance.getDocumentNumber();

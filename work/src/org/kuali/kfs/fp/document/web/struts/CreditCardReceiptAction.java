@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
+import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 import org.kuali.module.financial.bo.CreditCardDetail;
 import org.kuali.module.financial.document.CreditCardReceiptDocument;
 import org.kuali.module.financial.rules.CreditCardReceiptDocumentRuleUtil;
@@ -32,8 +32,10 @@ import org.kuali.module.financial.web.struts.form.CreditCardReceiptForm;
 
 /**
  * This is the action class for the CreditCardReceiptDocument.
+ * 
+ * 
  */
-public class CreditCardReceiptAction extends KualiAccountingDocumentActionBase {
+public class CreditCardReceiptAction extends KualiTransactionalDocumentActionBase {
     /**
      * Adds handling for credit card receipt amount updates.
      * 
@@ -81,7 +83,7 @@ public class CreditCardReceiptAction extends KualiAccountingDocumentActionBase {
             ccrForm.setNewCreditCardReceipt(new CreditCardDetail());
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -102,7 +104,7 @@ public class CreditCardReceiptAction extends KualiAccountingDocumentActionBase {
         // delete creditCardReceipt
         ccrDoc.removeCreditCardReceipt(deleteIndex);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -112,9 +114,9 @@ public class CreditCardReceiptAction extends KualiAccountingDocumentActionBase {
      * @return boolean
      */
     private boolean validateNewCreditCardReceipt(CreditCardDetail creditCardReceipt) {
-        GlobalVariables.getErrorMap().addToErrorPath(KFSPropertyConstants.NEW_CREDIT_CARD_RECEIPT);
+        GlobalVariables.getErrorMap().addToErrorPath(PropertyConstants.NEW_CREDIT_CARD_RECEIPT);
         boolean isValid = CreditCardReceiptDocumentRuleUtil.validateCreditCardReceipt(creditCardReceipt);
-        GlobalVariables.getErrorMap().removeFromErrorPath(KFSPropertyConstants.NEW_CREDIT_CARD_RECEIPT);
+        GlobalVariables.getErrorMap().removeFromErrorPath(PropertyConstants.NEW_CREDIT_CARD_RECEIPT);
         return isValid;
     }
 }

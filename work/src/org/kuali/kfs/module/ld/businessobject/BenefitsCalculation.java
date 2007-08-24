@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@ package org.kuali.module.labor.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiPercent;
-import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
 
 /**
  * 
  */
-public class BenefitsCalculation extends PersistableBusinessObjectBase {
+public class BenefitsCalculation extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
@@ -50,7 +50,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      * 
      */
     public Integer getUniversityFiscalYear() {
@@ -71,7 +71,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -92,7 +92,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
     /**
      * Gets the positionBenefitTypeCode attribute.
      * 
-     * @return Returns the positionBenefitTypeCode
+     * @return - Returns the positionBenefitTypeCode
      * 
      */
     public String getPositionBenefitTypeCode() {
@@ -113,7 +113,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
     /**
      * Gets the positionFringeBenefitPercent attribute.
      * 
-     * @return Returns the positionFringeBenefitPercent
+     * @return - Returns the positionFringeBenefitPercent
      * 
      */
     public KualiPercent getPositionFringeBenefitPercent() {
@@ -134,7 +134,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
     /**
      * Gets the positionFringeBenefitObjectCode attribute.
      * 
-     * @return Returns the positionFringeBenefitObjectCode
+     * @return - Returns the positionFringeBenefitObjectCode
      * 
      */
     public String getPositionFringeBenefitObjectCode() {
@@ -155,7 +155,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
     /**
      * Gets the positionFringeBenefitObject attribute.
      * 
-     * @return Returns the positionFringeBenefitObject
+     * @return - Returns the positionFringeBenefitObject
      * 
      */
     public ObjectCode getPositionFringeBenefitObject() {
@@ -166,8 +166,8 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Sets the positionFringeBenefitObject attribute.
      * 
      * @param positionFringeBenefitObject The positionFringeBenefitObject to set.
+     * @deprecated
      */
-    @Deprecated
     public void setPositionFringeBenefitObject(ObjectCode positionFringeBenefitObject) {
         this.positionFringeBenefitObject = positionFringeBenefitObject;
     }
@@ -175,7 +175,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -186,8 +186,8 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Sets the chartOfAccounts attribute.
      * 
      * @param chartOfAccounts The chartOfAccounts to set.
+     * @deprecated
      */
-    @Deprecated
     public void setChartOfAccounts(Chart chartOfAccounts) {
         this.chartOfAccounts = chartOfAccounts;
     }
@@ -205,8 +205,8 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Sets the positionBenefitType attribute value.
      * 
      * @param positionBenefitType The positionBenefitType to set.
+     * @deprecated
      */
-    @Deprecated
     public void setPositionBenefitType(BenefitsType positionBenefitType) {
         this.positionBenefitType = positionBenefitType;
     }
@@ -230,7 +230,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

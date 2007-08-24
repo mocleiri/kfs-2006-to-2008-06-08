@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/Agency.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +20,14 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.kra.budget.bo.AgencyExtension;
 
 /**
- * This class defines an agency as it is used and referenced within the Contracts and Grants portion of 
- * a college or university financial system.
+ * 
  */
-public class Agency extends PersistableBusinessObjectBase {
+public class Agency extends BusinessObjectBase {
 
     private String agencyNumber;
     private String reportingName;
@@ -216,10 +217,8 @@ public class Agency extends PersistableBusinessObjectBase {
     /**
      * Sets the reportsToAgency attribute.
      * 
-     * @param reportsToAgencyNumber The reportsToAgency to set.
+     * @param reportsToAgency The reportsToAgency to set.
      * @deprecated
-     * 
-     * @todo Why is this deprecated?
      */
     public void setReportsToAgency(Agency reportsToAgencyNumber) {
         this.reportsToAgency = reportsToAgencyNumber;
@@ -240,8 +239,6 @@ public class Agency extends PersistableBusinessObjectBase {
      * 
      * @param agencyType The agencyType to set.
      * @deprecated
-     * 
-     * @todo Why is this deprecated?
      */
     public void setAgencyType(AgencyType agencyType) {
         this.agencyType = agencyType;
@@ -274,17 +271,4 @@ public class Agency extends PersistableBusinessObjectBase {
     public void setAgencyExtension(AgencyExtension agencyExtension) {
         this.agencyExtension = agencyExtension;
     }
-    
-    /**
-     * This method compares the passed in agency object against this agency 
-     * object to check for equality. Equality is defined by if the agency passed
-     * in has the same agency number as the agency being compared to.
-     * 
-     * @param agency The agency object to be compared.
-     * @return True if the agency passed in is determined to be equal, false otherwise.
-     */
-    public boolean equals(Agency agency) {
-        return this.agencyNumber.equals(agency.getAgencyNumber());
-    }
-    
 }

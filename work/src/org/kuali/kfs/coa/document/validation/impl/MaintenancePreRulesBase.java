@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 package org.kuali.module.chart.rules;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.rules.PreRulesContinuationBase;
 import org.kuali.core.service.DocumentAuthorizationService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 
@@ -39,10 +39,10 @@ public class MaintenancePreRulesBase extends PreRulesContinuationBase {
         // This approach is being used to make it simpler to convert the Rule classes
         // to spring-managed with these services injected by Spring at some later date.
         // When this happens, just remove these calls to the setters with
-        // SpringContext, and configure the bean defs for spring.
-        setAccountService(SpringContext.getBean(AccountService.class));
-        setConfigService(SpringContext.getBean(KualiConfigurationService.class));
-        setDocumentAuthorizationService(SpringContext.getBean(DocumentAuthorizationService.class));
+        // SpringServiceLocator, and configure the bean defs for spring.
+        setAccountService(SpringServiceLocator.getAccountService());
+        setConfigService(SpringServiceLocator.getKualiConfigurationService());
+        setDocumentAuthorizationService(SpringServiceLocator.getDocumentAuthorizationService());
     }
 
     public void setAccountService(AccountService accountService) {
@@ -111,7 +111,7 @@ public class MaintenancePreRulesBase extends PreRulesContinuationBase {
 
 
     protected String buildContinuationConfirmationQuestion(String accName, String expiredAccount, String continuationAccount) {
-        String result = configService.getPropertyString(KFSKeyConstants.QUESTION_CONTINUATION_ACCOUNT_SELECTION);
+        String result = configService.getPropertyString(KeyConstants.QUESTION_CONTINUATION_ACCOUNT_SELECTION);
         result = StringUtils.replace(result, "{0}", accName);
         result = StringUtils.replace(result, "{1}", expiredAccount);
         result = StringUtils.replace(result, "{2}", continuationAccount);

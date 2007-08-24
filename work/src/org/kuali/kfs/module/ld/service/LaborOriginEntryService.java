@@ -19,15 +19,14 @@ import java.io.BufferedOutputStream;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.kuali.module.gl.bo.OriginEntryGroup;
+import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.gl.util.PosterOutputSummaryEntry;
 import org.kuali.module.labor.bo.LaborOriginEntry;
-import org.kuali.module.labor.bo.LaborTransaction;
 
 /**
  * This interface provides its clients with access to labor origin entries in the backend data store.  
@@ -43,8 +42,7 @@ public interface LaborOriginEntryService {
      * Copy a set of entries into a new group
      */
     public OriginEntryGroup copyEntries(Date date, String sourceCode, boolean valid,boolean process,boolean scrub,Collection<LaborOriginEntry> entries);
-    
-    public OriginEntryGroup copyEntries(Date date, String sourceCode, boolean valid, boolean process, boolean scrub, Iterator<LaborOriginEntry> entries);
+
     /**
      * Delete entry
      * 
@@ -101,7 +99,7 @@ public interface LaborOriginEntryService {
      * @param originCode Origin Code selection
      * @return iterator to all the entries
      */
-    public Collection<LaborOriginEntry> getEntriesByDocument(OriginEntryGroup oeg, String documentNumber, String documentTypeCode, String originCode);
+    public Iterator<LaborOriginEntry> getEntriesByDocument(OriginEntryGroup oeg, String documentNumber, String documentTypeCode, String originCode);
 
     /**
      * Take a generic transaction and save it as an origin entry in a specific group
@@ -109,7 +107,7 @@ public interface LaborOriginEntryService {
      * @param tran transaction to save
      * @param group group to save the transaction
      */
-    public void createEntry(LaborTransaction laborTran, OriginEntryGroup group);
+    public void createEntry(Transaction tran, OriginEntryGroup group);
 
     /**
      * Save an origin entry
@@ -200,16 +198,4 @@ public interface LaborOriginEntryService {
      * @return the count of the origin entry collection in the given group
      */
     public int getCountOfEntriesInGroups(Collection<OriginEntryGroup> groups);
-    
-    public List<LaborOriginEntry> getEntriesByGroupId(Integer groupId);
-    
-    
-    /**
-     * get the summarized information of the entries that belong to the entry groups with the given group id list
-     * 
-     * @param groupIdList the origin entry groups
-     * @return a set of summarized information of the entries within the specified group
-     */
-    public LedgerEntryHolder getSummaryByGroupId(Collection groupIdList);
-    
 }

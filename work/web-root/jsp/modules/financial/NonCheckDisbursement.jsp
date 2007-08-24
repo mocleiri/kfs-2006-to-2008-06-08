@@ -13,10 +13,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 
 <kul:documentPage showDocumentInfo="true"
-	documentTypeName="NonCheckDisbursementDocument"
+	documentTypeName="KualiNonCheckDisbursementDocument"
 	htmlFormAction="financialNonCheckDisbursement" renderMultipart="true"
 	showTabButtons="true">
 
@@ -28,7 +28,7 @@
 		editingMode="${KualiForm.editingMode}"
 		editableAccounts="${KualiForm.editableAccounts}"
 		extraSourceRowFields="referenceNumber,financialDocumentLineDescription" />
-	<gl:generalLedgerPendingEntries />
+	<kul:generalLedgerPendingEntries />
 
 	<kul:notes />
 
