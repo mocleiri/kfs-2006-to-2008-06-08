@@ -36,7 +36,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.labor.bo.LaborObject;
 import org.kuali.module.labor.bo.PositionObjectBenefit;
-
+import org.kuali.rice.KNSServiceLocator;
 
 /**
  * TODO is this needed??? probably need to just point OJB repository to PBGL class or
@@ -68,9 +68,9 @@ public class SalarySettingExpansion extends PendingBudgetConstructionGeneralLedg
     public void zeroTotals() {
 
         csfAmountTotal = new KualiInteger(0);
-        csfFullTimeEmploymentQuantityTotal = new BigDecimal(0).setScale(5,KualiDecimal.ROUND_BEHAVIOR);
+        csfFullTimeEmploymentQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
         appointmentRequestedAmountTotal = new KualiInteger(0);
-        appointmentRequestedFteQuantityTotal = new BigDecimal(0).setScale(5,KualiDecimal.ROUND_BEHAVIOR);
+        appointmentRequestedFteQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
         percentChangeTotal = new KualiDecimal(0.00);
     }
 
@@ -149,7 +149,7 @@ public class SalarySettingExpansion extends PendingBudgetConstructionGeneralLedg
             setPercentChangeTotal(new KualiDecimal(0.00));
         } else {
             BigDecimal diffRslt = (appointmentRequestedAmountTotal.bigDecimalValue().setScale(4)).subtract(csfAmountTotal.bigDecimalValue().setScale(4));
-            BigDecimal divRslt = diffRslt.divide((csfAmountTotal.bigDecimalValue().setScale(4)),KualiDecimal.ROUND_BEHAVIOR);
+            BigDecimal divRslt = diffRslt.divide((csfAmountTotal.bigDecimalValue().setScale(4)),BigDecimal.ROUND_HALF_UP);
             setPercentChangeTotal(new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2))); 
         }
 

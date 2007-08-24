@@ -19,21 +19,25 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
-
 /**
- * This class is an interface to data access objects for general labor related inquiries 
+ * This class is an interface to data access objects for labor balance inquiries 
  */
 public interface LaborDao {
  
+    /**
+     * 
+     * This method returns CSF Tracker data
+     * @param fieldValues
+     * @return
+     */
+    Collection getCSFTrackerData(Map fieldValues);
+
     /**
      * 
      * This method returns a CSF Tracker total for a given selection criteria
      * @param fieldValues
      * @return
      */
-    @Deprecated
     Object getCSFTrackerTotal(Map fieldValues);
 
     /**
@@ -48,44 +52,23 @@ public interface LaborDao {
      * 
      * This method returns base funds data
      * @param fieldValues
-     * @param isConsolidated
-     * @return Collection
+     * @return
      */
-    @Deprecated
-    Iterator getBaseFunds(Map fieldValues, boolean isConsolidated);
+    Collection getBaseFunds(Map fieldValues);
     
     /**
      * 
      * This method returns current funds data
      * @param fieldValues
-     * @param isConsolidated
-     * @return Collection
+     * @return
      */
-    Iterator getCurrentFunds(Map fieldValues, boolean isConsolidated);
+    Collection getCurrentFunds(Map fieldValues);
     
     /**
      * 
      * This method returns current funds data
      * @param fieldValues
-     * @return Iterator
+     * @return
      */
     Iterator getEmployeeFunding(Map fieldValues);
-    
-    /**
-     * 
-     * This method returns current July1 Position Funding data
-     * @param fieldValues
-     * @return Collection
-     */
-    Collection getJuly1PositionFunding(Map fieldValues);
- 
-    
-     /**
-      * 
-      * This method is used to verify if the select labor object code is active.
-      * @param String the labor object code to be checked
-      * @return
-      */
-      public boolean isActiveLaborObjectCode(AccountingDocument accountingDocument, AccountingLine accountingLine);
-    
 }

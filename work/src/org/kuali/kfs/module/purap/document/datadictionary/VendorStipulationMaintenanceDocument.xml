@@ -27,12 +27,12 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>VendorStipulationMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiVendorStipulationMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMSI</documentTypeCode>
 
         <label>Vendor Stipulation Maintenance Document</label>

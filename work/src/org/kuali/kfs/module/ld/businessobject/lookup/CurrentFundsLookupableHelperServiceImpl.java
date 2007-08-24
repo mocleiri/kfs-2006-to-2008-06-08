@@ -15,12 +15,10 @@
  */
 package org.kuali.module.labor.web.lookupable;
 
-import static org.apache.commons.collections.IteratorUtils.toList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,49 +26,34 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
 import org.kuali.core.lookup.CollectionIncomplete;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.web.ui.Field;
 import org.kuali.core.web.ui.Row;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.gl.service.BalanceService;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.labor.LaborConstants;
-import org.kuali.module.labor.bo.AccountStatusCurrentFunds;
-import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.dao.LaborDao;
-import org.kuali.module.labor.service.LaborInquiryOptionsService;
-import org.kuali.module.labor.service.LaborLedgerBalanceService;
-import org.kuali.module.labor.util.ObjectUtil;
 import org.kuali.module.labor.web.inquirable.CurrentFundsInquirableImpl;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * The CurrentFundsLookupableHelperServiceImpl class is the front-end for all current funds balance inquiry processing.
- */
 @Transactional
 public class CurrentFundsLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CurrentFundsLookupableHelperServiceImpl.class);
-
+    private BalanceService balanceService;
+    private Map fieldValues;
     private LaborDao laborDao;
-    private LaborLedgerBalanceService balanceService;
-    private LaborInquiryOptionsService laborInquiryOptionsService;
-
-    /**
-     * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
-     */
-    @Override
-    public String getInquiryUrl(BusinessObject bo, String propertyName) {
-        return (new CurrentFundsInquirableImpl()).getInquiryUrl(bo, propertyName);
-    }
+    private KualiConfigurationService kualiConfigurationService;
 
     /**
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     @Override
     public List getSearchResults(Map fieldValues) {
-        LOG.info("getSearchResults() - Entry");
 
         boolean unbounded = false;
         Long actualCountIfTruncated = new Long(0);
@@ -79,27 +62,29 @@ public class CurrentFundsLookupableHelperServiceImpl extends AbstractLookupableH
         setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
 
         // get the pending entry option. This method must be prior to the get search results
-        String pendingEntryOption = laborInquiryOptionsService.getSelectedPendingEntryOption(fieldValues);
+        String pendingEntryOption = getSelectedPendingEntryOption(fieldValues);
+        System.out.println("pendingEntryOption:" + pendingEntryOption);
 
         // get the consolidation option
-        boolean isConsolidated = laborInquiryOptionsService.isConsolidationSelected(fieldValues, (Collection<Row>) getRows());
-
-        if (((fieldValues.get(KFSPropertyConstants.FINANCIAL_OBJECT_CODE) != null) && (fieldValues.get(KFSPropertyConstants.FINANCIAL_OBJECT_CODE).toString().length() > 0))) {
-            List emptySearchResults = new ArrayList();
-
-            // Check for a valid labor object code for this inquiry
-            if (StringUtils.indexOfAny(fieldValues.get(KFSPropertyConstants.FINANCIAL_OBJECT_CODE).toString(), LaborConstants.BalanceInquiries.VALID_LABOR_OBJECT_CODES) != 0) {
-                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, LaborConstants.BalanceInquiries.ERROR_INVALID_LABOR_OBJECT_CODE, "2");
-                return new CollectionIncomplete(emptySearchResults, actualCountIfTruncated);
-            }
-
-        }
-
-        // Parse the map and call the DAO to process the inquiry
-        Collection<AccountStatusCurrentFunds> searchResultsCollection = buildCurrentFundsCollection(toList(laborDao.getCurrentFunds(fieldValues, isConsolidated)), isConsolidated, pendingEntryOption);
+        boolean isConsolidated = isConsolidationSelected(fieldValues);
+        System.out.println("isConsolidated:" + isConsolidated);
 
         // update search results according to the selected pending entry option
-        laborInquiryOptionsService.updateByPendingLedgerEntry(searchResultsCollection, fieldValues, pendingEntryOption, isConsolidated);
+        // updateByPendingLedgerEntry(searchResultsCollection, fieldValues, pendingEntryOption, isConsolidated, false);
+
+        if (((fieldValues.get(KFSPropertyConstants.FINANCIAL_OBJECT_CODE) != null) && (fieldValues.get(KFSPropertyConstants.FINANCIAL_OBJECT_CODE).toString().length() > 0))) {
+
+            // Check for a valid labor object code for this inquiry
+            if (StringUtils.indexOfAny(fieldValues.get(KFSPropertyConstants.FINANCIAL_OBJECT_CODE).toString(), LaborConstants.BalanceInquiries.VALID_LABOR_OBJECT_CODES) != 0)
+                GlobalVariables.getErrorMap().putError(LaborConstants.BalanceInquiries.ERROR_INVALID_LABOR_OBJECT_CODE, LaborConstants.BalanceInquiries.ERROR_INVALID_LABOR_OBJECT_CODE, "2");
+            List searchResults = new ArrayList();
+
+            return new CollectionIncomplete(searchResults, actualCountIfTruncated);
+        }
+        // Parse the map and call the DAO to process the inquiry
+        BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();
+        laborDao = (LaborDao) beanFactory.getBean("laborDao");
+        Collection searchResultsCollection = laborDao.getCurrentFunds(fieldValues);
 
         // sort list if default sort column given
         List searchResults = (List) searchResultsCollection;
@@ -112,161 +97,79 @@ public class CurrentFundsLookupableHelperServiceImpl extends AbstractLookupableH
     }
 
     /**
-     * @param iterator the iterator of search results of account status
-     * @param isConsolidated determine if the consolidated result is desired
-     * @param pendingEntryOption the given pending entry option that can be no, approved or all
-     * @return the current funds collection
+     * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
-    private Collection<AccountStatusCurrentFunds> buildCurrentFundsCollection(Collection collection, boolean isConsolidated, String pendingEntryOption) {
-        Collection<AccountStatusCurrentFunds> retval = null;
+    @Override
+    public String getInquiryUrl(BusinessObject bo, String propertyName) {
+        return (new CurrentFundsInquirableImpl()).getInquiryUrl(bo, propertyName);
+    }
 
-        if (isConsolidated) {
-            retval = buildCosolidatedCurrentFundsCollection(collection, pendingEntryOption);
-        }
-        else {
-            retval = buildDetailedCurrentFundsCollection(collection, pendingEntryOption);
-        }
-        return retval;
+
+    /**
+     * This method tests if the user selects to see the general ledager pending entries
+     * 
+     * @param fieldValues the map containing the search fields and values
+     * @return the value of pending entry option
+     */
+    protected String getSelectedPendingEntryOption(Map fieldValues) {
+        // truncate the non-property filed
+        String pendingEntryOption = (String) fieldValues.get(Constant.PENDING_ENTRY_OPTION);
+        fieldValues.remove(Constant.PENDING_ENTRY_OPTION);
+
+        return pendingEntryOption;
     }
 
     /**
-     * This method builds the current funds collection with consolidation option from an iterator
+     * This method tests if the user selects to see the details or consolidated results
      * 
-     * @param iterator
-     * @param pendingEntryOption the selected pending entry option
-     * @return the consolidated current funds collection
+     * @param fieldValues the map containing the search fields and values
+     * @return true if consolidation is selected and subaccount is not specified
      */
-    private Collection<AccountStatusCurrentFunds> buildCosolidatedCurrentFundsCollection(Collection collection, String pendingEntryOption) {
-        Collection<AccountStatusCurrentFunds> retval = new ArrayList<AccountStatusCurrentFunds>();
-        for (Object collectionEntry : collection) {
-            if (collectionEntry.getClass().isArray()) {
-                int i = 0;
-                Object[] array = (Object[]) collectionEntry;
-                AccountStatusCurrentFunds cf = new AccountStatusCurrentFunds();
-                LOG.debug("element length " + array.length);
-                for (Object element : array) {
-                    LOG.debug("I found this element " + element);
+    protected boolean isConsolidationSelected(Map fieldValues) {
+        // truncate the non-property filed
+        String consolidationOption = (String) fieldValues.get(Constant.CONSOLIDATION_OPTION);
+        fieldValues.remove(Constant.CONSOLIDATION_OPTION);
+
+        // detail option would be used
+        if (Constant.DETAIL.equals(consolidationOption)) {
+            return false;
+        }
+
+        // if the subAccountNumber is specified, detail option could be used
+        String subAccountNumber = (String) fieldValues.get(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
+        if (!StringUtils.isBlank(subAccountNumber)) {
+            this.changeFieldValue(Constant.CONSOLIDATION_OPTION, Constant.DETAIL);
+            return false;
+        }
+
+        // if the subObjectCode is specified, detail option could be used
+        String subObjectCode = (String) fieldValues.get(KFSPropertyConstants.SUB_OBJECT_CODE);
+        if (!StringUtils.isBlank(subObjectCode)) {
+            this.changeFieldValue(Constant.CONSOLIDATION_OPTION, Constant.DETAIL);
+            return false;
+        }
+
+        // if the objectTypeCode is specified, detail option could be used
+        String objectTypeCode = (String) fieldValues.get(KFSPropertyConstants.OBJECT_TYPE_CODE);
+        if (!StringUtils.isBlank(objectTypeCode)) {
+            this.changeFieldValue(Constant.CONSOLIDATION_OPTION, Constant.DETAIL);
+            return false;
+        }
+        return true;
+    }
+
+    // change the value of the field with the given field name into the given field value
+    protected void changeFieldValue(String fieldName, String fieldValue) {
+        for (Iterator rowIterator = getRows().iterator(); rowIterator.hasNext();) {
+            Row row = (Row) rowIterator.next();
+
+            for (Iterator fieldIterator = row.getFields().iterator(); fieldIterator.hasNext();) {
+                Field field = (Field) fieldIterator.next();
+
+                if (field.getPropertyName().equals(fieldName)) {
+                    field.setPropertyValue(fieldValue);
                 }
-
-                if (AccountStatusCurrentFunds.class.isAssignableFrom(getBusinessObjectClass())) {
-                    try {
-                        cf = (AccountStatusCurrentFunds) getBusinessObjectClass().newInstance();
-                    }
-                    catch (Exception e) {
-                        LOG.warn("Using " + AccountStatusCurrentFunds.class + " for results because I couldn't instantiate the " + getBusinessObjectClass());
-                    }
-                }
-                else {
-                    LOG.warn("Using " + AccountStatusCurrentFunds.class + " for results because I couldn't instantiate the " + getBusinessObjectClass());
-                }
-
-                cf.setUniversityFiscalYear(new Integer(array[i++].toString()));
-                cf.setChartOfAccountsCode(array[i++].toString());
-                cf.setAccountNumber(array[i++].toString());
-
-                String subAccountNumber = Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER;
-                cf.setSubAccountNumber(subAccountNumber);
-
-                cf.setBalanceTypeCode(array[i++].toString());
-                cf.setFinancialObjectCode(array[i++].toString());
-
-                cf.setEmplid(array[i++].toString());
-                cf.setPositionNumber(array[i++].toString());
-
-                cf.setFinancialSubObjectCode(Constant.CONSOLIDATED_SUB_OBJECT_CODE);
-                cf.setObjectTypeCode(Constant.CONSOLIDATED_OBJECT_TYPE_CODE);
-
-                cf.setAccountLineAnnualBalanceAmount(new KualiDecimal(array[i++].toString()));
-                cf.setBeginningBalanceLineAmount(new KualiDecimal(array[i++].toString()));
-                cf.setContractsGrantsBeginningBalanceAmount(new KualiDecimal(array[i++].toString()));
-
-                cf.setMonth1Amount(new KualiDecimal(array[i++].toString()));
-
-                cf.setDummyBusinessObject(new TransientBalanceInquiryAttributes());
-                cf.getDummyBusinessObject().setPendingEntryOption(pendingEntryOption);
-                cf.setOutstandingEncum(getOutstandingEncum(cf));
-
-                retval.add(cf);
             }
         }
-        return retval;
     }
-
-    /**
-     * This method builds the current funds collection with detail option from an iterator
-     * 
-     * @param iterator the current funds iterator
-     * @param pendingEntryOption the selected pending entry option
-     * @return the detailed balance collection
-     */
-    private Collection<AccountStatusCurrentFunds> buildDetailedCurrentFundsCollection(Collection collection, String pendingEntryOption) {
-        Collection<AccountStatusCurrentFunds> retval = new ArrayList<AccountStatusCurrentFunds>();
-
-        for (LedgerBalance balance : ((Collection<LedgerBalance>) collection)) {
-            AccountStatusCurrentFunds cf = new AccountStatusCurrentFunds();
-            ObjectUtil.buildObject(cf, balance);
-
-            cf.setDummyBusinessObject(new TransientBalanceInquiryAttributes());
-            cf.getDummyBusinessObject().setPendingEntryOption(pendingEntryOption);
-            cf.setOutstandingEncum(getOutstandingEncum(cf));
-            retval.add(cf);
-        }
-        return retval;
-    }
-
-    /**
-     * @param AccountStatusCurrentFunds
-     * @param Map fieldValues
-     */
-    private KualiDecimal getOutstandingEncum(AccountStatusCurrentFunds bo) {
-        Map<String, String> fieldValues = new HashMap();
-        fieldValues.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, bo.getUniversityFiscalYear().toString());
-        fieldValues.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, bo.getChartOfAccountsCode());
-        fieldValues.put(KFSPropertyConstants.ACCOUNT_NUMBER, bo.getAccountNumber());
-
-        if (!bo.getSubAccountNumber().equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
-            fieldValues.put(KFSPropertyConstants.SUB_ACCOUNT_NUMBER, bo.getSubAccountNumber());
-        }
-
-        fieldValues.put(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, bo.getFinancialObjectCode());
-
-        if (!bo.getFinancialSubObjectCode().equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
-            fieldValues.put(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE, bo.getFinancialSubObjectCode());
-        }
-        fieldValues.put(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, LaborConstants.BalanceInquiries.ENCUMBERENCE_CODE); // Encumberance
-                                                                                                                                // Balance
-                                                                                                                                // Type
-        fieldValues.put(KFSPropertyConstants.EMPLID, bo.getEmplid());
-        LOG.debug("using " + fieldValues.values());
-        LOG.debug("using " + fieldValues.keySet());
-        return (KualiDecimal) laborDao.getEncumbranceTotal(fieldValues);
-    }
-
-    /**
-     * Sets the balanceService attribute value.
-     * 
-     * @param balanceService The balanceService to set.
-     */
-    public void setBalanceService(LaborLedgerBalanceService balanceService) {
-        this.balanceService = balanceService;
-    }
-
-    /**
-     * Sets the laborDao attribute value.
-     * 
-     * @param laborDao The laborDao to set.
-     */
-    public void setLaborDao(LaborDao laborDao) {
-        this.laborDao = laborDao;
-    }
-
-    /**
-     * Sets the laborInquiryOptionsService attribute value.
-     * 
-     * @param laborInquiryOptionsService The laborInquiryOptionsService to set.
-     */
-    public void setLaborInquiryOptionsService(LaborInquiryOptionsService laborInquiryOptionsService) {
-        this.laborInquiryOptionsService = laborInquiryOptionsService;
-    }
-
 }

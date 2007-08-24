@@ -20,31 +20,33 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
 
+import static org.kuali.kfs.util.SpringServiceLocator.getBusinessObjectService;
+import static org.kuali.kfs.util.SpringServiceLocator.getLockService;
+
+import org.kuali.Constants.BudgetConstructionConstants.LockStatus;
 import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.KFSConstants.BudgetConstructionConstants.LockStatus;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.budget.bo.BudgetConstructionFundingLock;
 import org.kuali.module.budget.bo.BudgetConstructionHeader;
 import org.kuali.module.budget.bo.BudgetConstructionPosition;
 import org.kuali.module.budget.bo.PendingBudgetConstructionAppointmentFunding;
 import org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb;
 import org.kuali.module.budget.service.impl.BudgetConstructionLockStatus;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.TestsWorkflowViaDatabase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * 
  * This class tests the Lock Service
  */
-@ConfigureContext
+@WithTestSpringContext
 public class LockServiceTest extends KualiTestBase {
 
     private boolean runTests() { // change this to return false to prevent running tests
         return false;
     }
 
-    @ConfigureContext(shouldCommitTransactions=true)
+    @TestsWorkflowViaDatabase
     public void testOne() {
 
         LockService lockService;
@@ -82,17 +84,17 @@ public class LockServiceTest extends KualiTestBase {
         if (!runTests()) return;
         
         // do some setup and initialize the state of things
-        lockService = SpringContext.getBean(LockService.class);
+        lockService = getLockService();
         bcHeaderDao = new BudgetConstructionDaoOjb();
         
         docHeader = null;
         Map dockey = new HashMap();
         dockey.put("documentNumber", fdocNumber);
-        docHeader = (DocumentHeader) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(DocumentHeader.class, dockey);
+        docHeader = (DocumentHeader) getBusinessObjectService().findByPrimaryKey(DocumentHeader.class, dockey);
         if (docHeader == null){
             docHeader = new DocumentHeader();
             docHeader.setDocumentNumber(fdocNumber);
-            SpringContext.getBean(BusinessObjectService.class).save(docHeader);
+            getBusinessObjectService().save(docHeader);
         } else {
             docHdrExist = true;
         }
@@ -145,7 +147,7 @@ public class LockServiceTest extends KualiTestBase {
         map.put("financialSubObjectCode", financialSubObjectCode);
         map.put("positionNumber", positionNumber);
         map.put("emplid", emplid);
-        bcAFunding = (PendingBudgetConstructionAppointmentFunding) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(PendingBudgetConstructionAppointmentFunding.class, map);
+        bcAFunding = (PendingBudgetConstructionAppointmentFunding) getBusinessObjectService().findByPrimaryKey(PendingBudgetConstructionAppointmentFunding.class, map);
         if (bcAFunding == null){
             bcAFunding = new PendingBudgetConstructionAppointmentFunding();
             bcAFunding.setUniversityFiscalYear(universityFiscalYear);
@@ -156,7 +158,7 @@ public class LockServiceTest extends KualiTestBase {
             bcAFunding.setFinancialSubObjectCode(financialSubObjectCode);
             bcAFunding.setPositionNumber(positionNumber);
             bcAFunding.setEmplid(emplid);
-            SpringContext.getBean(BusinessObjectService.class).save(bcAFunding);
+            getBusinessObjectService().save(bcAFunding);
         } else {
             bcafExist = true;    
         }
@@ -194,7 +196,7 @@ public class LockServiceTest extends KualiTestBase {
         // account unlock by other - needs account lock in previous test
         // this tests opimistic lock exception catch
         // this configuration of the test must run in a test method that
-        // is annotated as ShouldCommitTransactions 
+        // is annotated as TestsWorkflowViaDatabase 
         lockService.unlockAccount(bcHeaderTwo);
         assertFalse(lockService.isAccountLocked(bcHeaderTwo));
         assertTrue(lockService.unlockAccount(bcHeader) == LockStatus.OPTIMISTIC_EX);
@@ -345,14 +347,14 @@ public class LockServiceTest extends KualiTestBase {
             bcHeaderDao.getPersistenceBrokerTemplate().delete(bcHeader);
         }
         if (!docHdrExist){
-            SpringContext.getBean(BusinessObjectService.class).delete(docHeader);
+            getBusinessObjectService().delete(docHeader);
         }
         if (!posExist) {
             bcPosition = bcHeaderDao.getByPrimaryId(positionNumber, universityFiscalYear);
             bcHeaderDao.getPersistenceBrokerTemplate().delete(bcPosition);
         }
         if (!bcafExist) {
-            SpringContext.getBean(BusinessObjectService.class).delete(bcAFunding);
+            getBusinessObjectService().delete(bcAFunding);
         }
     }
 }

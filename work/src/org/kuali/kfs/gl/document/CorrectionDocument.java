@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,56 +22,45 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.service.BusinessObjectService;
+import org.kuali.Constants;
+import org.kuali.core.document.DocumentBase;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
-import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
-import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.service.CorrectionDocumentService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
-import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.service.ScrubberService;
-
-import edu.iu.uis.eden.clientapp.vo.DocumentRouteLevelChangeVO;
 
 /**
  * 
  */
-public class CorrectionDocument extends TransactionalDocumentBase implements AmountTotaling {
+public class CorrectionDocument extends DocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionDocument.class);
 
-    private String correctionTypeCode; // CorrectionDocumentService.CORRECTION_TYPE_MANUAL or
-                                       // CorrectionDocumentService.CORRECTION_TYPE_CRITERIA or
-                                       // CorrectionDocumentService.CORRECTION_TYPE_REMOVE_GROUP_FROM_PROCESSING
-    private boolean correctionSelection; // false if all input rows should be in the output, true if only selected rows should be
-                                            // in the output
-    private boolean correctionFileDelete; // false if the file should be processed by scrubber, true if the file should not be
-                                            // processed by scrubber
-    private Integer correctionRowCount; // Row count in output group
-    private KualiDecimal correctionDebitTotalAmount; // Debit/Budget amount total in output group
-    private KualiDecimal correctionCreditTotalAmount; // Credit amount total in output group
-    private String correctionInputFileName; // File name if uploaded
-    private String correctionOutputFileName; // Not used
-    private String correctionScriptText; // Not used
-    private Integer correctionInputGroupId; // Group ID that has input data
-    private Integer correctionOutputGroupId; // Group ID that has output data
+    private String correctionTypeCode;                      // CorrectionDocumentService.CORRECTION_TYPE_MANUAL or CorrectionDocumentService.CORRECTION_TYPE_CRITERIA
+    private boolean correctionSelection;                    // false if all input rows should be in the output, true if only selected rows should be in the output
+    private boolean correctionFileDelete;                   // false if the file should be processed by scrubber, true if the file should not be processed by scrubber
+    private Integer correctionRowCount;                     // Row count in output group
+    private KualiDecimal correctionDebitTotalAmount;        // Debit/Budget amount total in output group
+    private KualiDecimal correctionCreditTotalAmount;       // Credit amount total in output group
+    private String correctionInputFileName;                 // File name if uploaded
+    private String correctionOutputFileName;                // Not used
+    private String correctionScriptText;                    // Not used
+    private Integer correctionInputGroupId;                 // Group ID that has input data
+    private Integer correctionOutputGroupId;                // Group ID that has output data
     private Integer correctionChangeGroupNextLineNumber;
 
-    private List<CorrectionChangeGroup> correctionChangeGroup;
+    private List correctionChangeGroup;
 
     public CorrectionDocument() {
         super();
         correctionChangeGroupNextLineNumber = new Integer(0);
 
-        correctionChangeGroup = new ArrayList<CorrectionChangeGroup>();
+        correctionChangeGroup = new ArrayList();
+        addCorrectionChangeGroup(new CorrectionChangeGroup());
     }
 
     /**
@@ -80,44 +69,36 @@ public class CorrectionDocument extends TransactionalDocumentBase implements Amo
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 
     public String getMethod() {
-        if (CorrectionDocumentService.CORRECTION_TYPE_MANUAL.equals(correctionTypeCode)) {
+        if ( CorrectionDocumentService.CORRECTION_TYPE_MANUAL.equals(correctionTypeCode) ) {
             return "Manual Edit";
-        }
-        else if (CorrectionDocumentService.CORRECTION_TYPE_CRITERIA.equals(correctionTypeCode)) {
+        } else {
             return "Using Criteria";
-        }
-        else if (CorrectionDocumentService.CORRECTION_TYPE_REMOVE_GROUP_FROM_PROCESSING.equals(correctionTypeCode)) {
-            return "Remove Group from Processing";
-        }
-        else {
-            return KFSConstants.NOT_AVAILABLE_STRING;
         }
     }
 
     public String getSystem() {
         if (correctionInputFileName != null) {
             return "File Upload";
-        }
-        else {
+        } else {
             return "Database";
         }
     }
 
     public void addCorrectionChangeGroup(CorrectionChangeGroup ccg) {
-        ccg.setDocumentNumber(documentNumber);
+        ccg.setFinancialDocumentNumber(financialDocumentNumber);
         ccg.setCorrectionChangeGroupLineNumber(correctionChangeGroupNextLineNumber++);
         correctionChangeGroup.add(ccg);
     }
 
     public void removeCorrectionChangeGroup(int changeNumber) {
         for (Iterator iter = correctionChangeGroup.iterator(); iter.hasNext();) {
-            CorrectionChangeGroup element = (CorrectionChangeGroup) iter.next();
-            if (changeNumber == element.getCorrectionChangeGroupLineNumber().intValue()) {
+            CorrectionChangeGroup element = (CorrectionChangeGroup)iter.next();
+            if ( changeNumber == element.getCorrectionChangeGroupLineNumber().intValue() ) {
                 iter.remove();
             }
         }
@@ -126,12 +107,12 @@ public class CorrectionDocument extends TransactionalDocumentBase implements Amo
     public CorrectionChangeGroup getCorrectionChangeGroupItem(int groupNumber) {
         for (Iterator iter = correctionChangeGroup.iterator(); iter.hasNext();) {
             CorrectionChangeGroup element = (CorrectionChangeGroup) iter.next();
-            if (groupNumber == element.getCorrectionChangeGroupLineNumber().intValue()) {
+            if ( groupNumber == element.getCorrectionChangeGroupLineNumber().intValue() ) {
                 return element;
             }
         }
 
-        CorrectionChangeGroup ccg = new CorrectionChangeGroup(documentNumber, groupNumber);
+        CorrectionChangeGroup ccg = new CorrectionChangeGroup(financialDocumentNumber,groupNumber);
         correctionChangeGroup.add(ccg);
 
         return ccg;
@@ -145,101 +126,54 @@ public class CorrectionDocument extends TransactionalDocumentBase implements Amo
     @Override
     public void handleRouteStatusChange() {
         LOG.debug("handleRouteStatusChange() started");
+
         super.handleRouteStatusChange();
 
-        CorrectionDocumentService correctionDocumentService = SpringContext.getBean(CorrectionDocumentService.class);
-        OriginEntryGroupService originEntryGroupService = SpringContext.getBean(OriginEntryGroupService.class);
+        ReportService reportService = (ReportService) SpringServiceLocator.getBeanFactory().getBean("glReportService");
+        ScrubberService scrubberService = (ScrubberService) SpringServiceLocator.getBeanFactory().getBean("glScrubberService");
+        CorrectionDocumentService correctionDocumentService = (CorrectionDocumentService) SpringServiceLocator.getBeanFactory().getBean("glCorrectionDocumentService");
+        OriginEntryGroupService originEntryGroupService = (OriginEntryGroupService) SpringServiceLocator.getBeanFactory().getBean("glOriginEntryGroupService");
 
-        String docId = getDocumentHeader().getDocumentNumber();
+        String docId = getDocumentHeader().getFinancialDocumentNumber();
         CorrectionDocument doc = correctionDocumentService.findByCorrectionDocumentHeaderId(docId);
 
-        if (getDocumentHeader().getWorkflowDocument().stateIsFinal()) {
-            String correctionType = doc.getCorrectionTypeCode();
-            if (CorrectionDocumentService.CORRECTION_TYPE_REMOVE_GROUP_FROM_PROCESSING.equals(correctionType)) {
-                SpringContext.getBean(OriginEntryGroupService.class).dontProcessGroup(doc.getCorrectionInputGroupId());
-            }
-            else if (CorrectionDocumentService.CORRECTION_TYPE_MANUAL.equals(correctionType) || CorrectionDocumentService.CORRECTION_TYPE_CRITERIA.equals(correctionType)){
-                OriginEntryGroup outputGroup = originEntryGroupService.getExactMatchingEntryGroup(doc.getCorrectionOutputGroupId().intValue());
-                if (!doc.getCorrectionFileDelete()) {
-                    LOG.debug("handleRouteStatusChange() Mark group as to be processed");
-                    outputGroup.setProcess(true);
-                    originEntryGroupService.save(outputGroup);
-                }
-            }
-            else {
-                LOG.error("GLCP doc " + doc.getDocumentNumber() + " has an unknown correction type code: " + correctionType);
+        if ( getDocumentHeader().getWorkflowDocument().stateIsFinal() ) {
+            OriginEntryGroup outputGroup = originEntryGroupService.getExactMatchingEntryGroup(doc.getCorrectionOutputGroupId().intValue());
+            if ( ! doc.getCorrectionFileDelete() ) {
+                LOG.debug("handleRouteStatusChange() Mark group as to be processed");
+                outputGroup.setProcess(true);
+                originEntryGroupService.save(outputGroup);
             }
         }
-    }
 
-    
-    /**
-     * Constant for the workgroup approval routing level
-     */
-    private static final Integer WORKGROUP_APPROVAL_ROUTE_LEVEL = new Integer(1);
-    
-    /**
-     * @see org.kuali.core.document.DocumentBase#handleRouteLevelChange(edu.iu.uis.eden.clientapp.vo.DocumentRouteLevelChangeVO)
-     */
-    @Override
-    public void handleRouteLevelChange(DocumentRouteLevelChangeVO change) {
-        super.handleRouteLevelChange(change);
-        if(WORKGROUP_APPROVAL_ROUTE_LEVEL.equals(change.getNewRouteLevel())) {
-            String correctionType = getCorrectionTypeCode();
-            if (CorrectionDocumentService.CORRECTION_TYPE_MANUAL.equals(correctionType) || CorrectionDocumentService.CORRECTION_TYPE_CRITERIA.equals(correctionType)){
-                String docId = getDocumentHeader().getDocumentNumber();
-                // this code is performed asynchronously
-                
-                // First, save the origin entries to the origin entry table
-                DateTimeService dateTimeService = SpringContext.getBean(DateTimeService.class);
-                OriginEntryService originEntryService = SpringContext.getBean(OriginEntryService.class);
-                CorrectionDocumentService correctionDocumentService = SpringContext.getBean(CorrectionDocumentService.class);
-                
-                Iterator<OriginEntry> outputEntries = correctionDocumentService.retrievePersistedOutputOriginEntriesAsIterator(this);
-                
-                // Create output group
-                java.sql.Date today = dateTimeService.getCurrentSqlDate();
-                // Scrub is set to false when the document is initiated. When the document is final, it will be changed to true
-                OriginEntryGroup oeg = originEntryService.copyEntries(today, OriginEntrySource.GL_CORRECTION_PROCESS_EDOC, true, false, true, outputEntries);
-                
-                // Now, run the reports
-                ReportService reportService = SpringContext.getBean(ReportService.class);
-                ScrubberService scrubberService = SpringContext.getBean(ScrubberService.class);
-                
-                setCorrectionOutputGroupId(oeg.getId());
-                // not using the document service to save because it touches workflow, just save the doc BO as a regular BO
-                SpringContext.getBean(BusinessObjectService.class).save(this);
-                
+        if ( getDocumentHeader().getWorkflowDocument().stateIsEnroute() ) {
+            if ( doc.getCorrectionOutputGroupId() != null ) {
                 LOG.debug("handleRouteStatusChange() Run reports");
-    
-                reportService.correctionOnlineReport(this, today);
-    
-                // Run the scrubber on this group to generate a bunch of reports. The scrubber won't save anything when running it
-                // this way.
-                scrubberService.scrubGroupReportOnly(oeg, docId);
+
+                OriginEntryGroup outputGroup = originEntryGroupService.getExactMatchingEntryGroup(doc.getCorrectionOutputGroupId().intValue());
+                DateTimeService dateTimeService = SpringServiceLocator.getDateTimeService();
+                java.sql.Date today = dateTimeService.getCurrentSqlDate();
+
+                reportService.correctionOnlineReport(doc, today);
+
+                // Run the scrubber on this group to generate a bunch of reports.  The scrubber won't save anything when running it this way.
+                scrubberService.scrubGroupReportOnly(outputGroup,docId);
             }
         }
     }
 
-    /**
-     * @return if credit total is zero, debit total, otherwise credit total
-     */
-    public KualiDecimal getTotalDollarAmount() {
-        return getCorrectionCreditTotalAmount().add(getCorrectionDebitTotalAmount());
-    }
-    
     /**
      * We need to make sure this is set on all the child objects also
      * 
-     * @see org.kuali.core.document.DocumentBase#setDocumentNumber(java.lang.String)
+     * @see org.kuali.core.document.DocumentBase#setFinancialDocumentNumber(java.lang.String)
      */
     @Override
-    public void setDocumentNumber(String documentNumber) {
-        super.setDocumentNumber(documentNumber);
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        super.setFinancialDocumentNumber(financialDocumentNumber);
 
         for (Iterator iter = correctionChangeGroup.iterator(); iter.hasNext();) {
-            CorrectionChangeGroup element = (CorrectionChangeGroup) iter.next();
-            element.setDocumentNumber(documentNumber);
+            CorrectionChangeGroup element = (CorrectionChangeGroup)iter.next();
+            element.setFinancialDocumentNumber(financialDocumentNumber);
         }
     }
 
@@ -315,12 +249,12 @@ public class CorrectionDocument extends TransactionalDocumentBase implements Amo
         this.correctionOutputFileName = correctionOutputFileName;
     }
 
-    public List<CorrectionChangeGroup> getCorrectionChangeGroup() {
+    public List getCorrectionChangeGroup() {
         Collections.sort(correctionChangeGroup);
         return correctionChangeGroup;
     }
 
-    public void setCorrectionChangeGroup(List<CorrectionChangeGroup> correctionChangeGroup) {
+    public void setCorrectionChangeGroup(List correctionChangeGroup) {
         this.correctionChangeGroup = correctionChangeGroup;
     }
 

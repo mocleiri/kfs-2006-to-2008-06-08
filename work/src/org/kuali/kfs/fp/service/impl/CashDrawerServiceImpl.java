@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.service.CashDrawerService;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
  * CashDrawerService implementation.
+ * 
+ * 
  */
-@Transactional
 public class CashDrawerServiceImpl implements CashDrawerService {
     private BusinessObjectService businessObjectService;
 
@@ -40,14 +39,7 @@ public class CashDrawerServiceImpl implements CashDrawerService {
      */
     public void closeCashDrawer(String workgroupName) {
         CashDrawer drawer = getByWorkgroupName(workgroupName, true);
-        this.closeCashDrawer(drawer);
-    }
-    
-    /**
-     * @see org.kuali.module.financial.service.CashDrawerService#closeCashDrawer(org.kuali.module.financial.bo.CashDrawer)
-     */
-    public void closeCashDrawer(CashDrawer drawer) {
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_CLOSED);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_CLOSED);
         drawer.setReferenceFinancialDocumentNumber(null);
 
         save(drawer);
@@ -56,28 +48,16 @@ public class CashDrawerServiceImpl implements CashDrawerService {
     /**
      * @see org.kuali.module.financial.service.CashDrawerService#openCashDrawer(java.lang.String,java.lang.String)
      */
-    public CashDrawer openCashDrawer(String workgroupName, String documentId) {
+    public void openCashDrawer(String workgroupName, String documentId) {
         if (StringUtils.isBlank(documentId)) {
             throw new IllegalArgumentException("invalid (blank) documentId");
         }
 
         CashDrawer drawer = getByWorkgroupName(workgroupName, true);
-        return this.openCashDrawer(drawer, documentId);
-    }
-    
-    /**
-     * @see org.kuali.module.financial.service.CashDrawerService#openCashDrawer(org.kuali.module.financial.bo.CashDrawer, java.lang.String)
-     */
-    public CashDrawer openCashDrawer(CashDrawer drawer, String documentId) {
-        if (StringUtils.isBlank(documentId)) {
-            throw new IllegalArgumentException("invalid (blank) documentId");
-        }
-
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_OPEN);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_OPEN);
         drawer.setReferenceFinancialDocumentNumber(documentId);
 
         save(drawer);
-        return drawer;
     }
 
     /**
@@ -89,25 +69,14 @@ public class CashDrawerServiceImpl implements CashDrawerService {
         }
 
         CashDrawer drawer = getByWorkgroupName(workgroupName, true);
-        this.lockCashDrawer(drawer, documentId);
-    }
-    
-    /**
-     * @see org.kuali.module.financial.service.CashDrawerService#lockCashDrawer(org.kuali.module.financial.bo.CashDrawer, java.lang.String)
-     */
-    public void lockCashDrawer(CashDrawer drawer, String documentId) {
-        if (StringUtils.isBlank(documentId)) {
-            throw new IllegalArgumentException("invalid (blank) documentId");
-        }
-        
-        if (!StringUtils.equals(KFSConstants.CashDrawerConstants.STATUS_OPEN, drawer.getStatusCode())) {
-            throw new IllegalStateException("CashDrawer '" + drawer.getWorkgroupName() + "' cannot be locked because it is not open");
+        if (!StringUtils.equals(Constants.CashDrawerConstants.STATUS_OPEN, drawer.getStatusCode())) {
+            throw new IllegalStateException("CashDrawer '" + workgroupName + "' cannot be locked because it is not open");
         }
         if (!StringUtils.equals(documentId, drawer.getReferenceFinancialDocumentNumber())) {
-            throw new IllegalStateException("CashDrawer '" + drawer.getWorkgroupName() + "' cannot be locked because it was opened by document " + drawer.getReferenceFinancialDocumentNumber());
+            throw new IllegalStateException("CashDrawer '" + workgroupName + "' cannot be locked because it was opened by document " + drawer.getReferenceFinancialDocumentNumber());
         }
 
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_LOCKED);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_LOCKED);
         drawer.setReferenceFinancialDocumentNumber(documentId);
 
         save(drawer);
@@ -122,29 +91,19 @@ public class CashDrawerServiceImpl implements CashDrawerService {
         }
 
         CashDrawer drawer = getByWorkgroupName(workgroupName, true);
-        this.unlockCashDrawer(drawer, documentId);
-    }
-
-    /**
-     * @see org.kuali.module.financial.service.CashDrawerService#unlockCashDrawer(org.kuali.module.financial.bo.CashDrawer, java.lang.String)
-     */
-    public void unlockCashDrawer(CashDrawer drawer, String documentId) {
-        if (StringUtils.isBlank(documentId)) {
-            throw new IllegalArgumentException("invalid (blank) documentId");
-        }
-
-        if (!StringUtils.equals(KFSConstants.CashDrawerConstants.STATUS_LOCKED, drawer.getStatusCode())) {
-            throw new IllegalStateException("CashDrawer '" + drawer.getWorkgroupName() + "' cannot be unlocked because it is not locked");
+        if (!StringUtils.equals(Constants.CashDrawerConstants.STATUS_LOCKED, drawer.getStatusCode())) {
+            throw new IllegalStateException("CashDrawer '" + workgroupName + "' cannot be unlocked because it is not locked");
         }
         if (!StringUtils.equals(documentId, drawer.getReferenceFinancialDocumentNumber())) {
-            throw new IllegalStateException("CashDrawer '" + drawer.getWorkgroupName() + "' cannot be unlocked because it was locked by document " + drawer.getReferenceFinancialDocumentNumber());
+            throw new IllegalStateException("CashDrawer '" + workgroupName + "' cannot be unlocked because it was locked by document " + drawer.getReferenceFinancialDocumentNumber());
         }
 
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_OPEN);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_OPEN);
         drawer.setReferenceFinancialDocumentNumber(documentId);
 
         save(drawer);
     }
+
 
     /**
      * @see org.kuali.module.financial.service.CashDrawerService#findByWorkgroupName(java.lang.String)
@@ -182,7 +141,7 @@ public class CashDrawerServiceImpl implements CashDrawerService {
     private CashDrawer newCashDrawer(String workgroupName) {
         CashDrawer drawer = new CashDrawer();
         drawer.setWorkgroupName(workgroupName);
-        drawer.setStatusCode(KFSConstants.CashDrawerConstants.STATUS_CLOSED);
+        drawer.setStatusCode(Constants.CashDrawerConstants.STATUS_CLOSED);
 
         return drawer;
     }
@@ -197,70 +156,6 @@ public class CashDrawerServiceImpl implements CashDrawerService {
         return keyMap;
     }
 
-    /**
-     * @see org.kuali.module.financial.service.CashDrawerService#getCoinTotal(org.kuali.module.financial.bo.CashDrawer)
-     */
-    public KualiDecimal getCoinTotal(CashDrawer drawer) {
-        KualiDecimal sum = new KualiDecimal(0.0);
-        if (drawer != null) {
-            if (drawer.getFinancialDocumentHundredCentAmount() != null) {
-                sum.add(drawer.getFinancialDocumentHundredCentAmount());
-            }
-            if (drawer.getFinancialDocumentFiftyCentAmount() != null) {
-                sum.add(drawer.getFinancialDocumentFiftyCentAmount());
-            }
-            if (drawer.getFinancialDocumentTwentyFiveCentAmount() != null) {
-                sum.add(drawer.getFinancialDocumentTwentyFiveCentAmount());
-            }
-            if (drawer.getFinancialDocumentTenCentAmount() != null) {
-                sum.add(drawer.getFinancialDocumentTenCentAmount());
-            }
-            if (drawer.getFinancialDocumentFiveCentAmount() != null) {
-                sum.add(drawer.getFinancialDocumentFiveCentAmount());
-            }
-            if (drawer.getFinancialDocumentOneCentAmount() != null) {
-                sum.add(drawer.getFinancialDocumentOneCentAmount());
-            }
-            if (drawer.getFinancialDocumentOtherCentAmount() != null) {
-                sum.add(drawer.getFinancialDocumentOtherCentAmount());
-            }
-        }
-        return sum;
-    }
-
-    /**
-     * @see org.kuali.module.financial.service.CashDrawerService#getCurrencyTotal(org.kuali.module.financial.bo.CashDrawer)
-     */
-    public KualiDecimal getCurrencyTotal(CashDrawer drawer) {
-        KualiDecimal sum = new KualiDecimal(0.0);
-        if (drawer != null) {
-            if (drawer.getFinancialDocumentHundredDollarAmount() != null) {
-                sum.add(drawer.getFinancialDocumentHundredDollarAmount());
-            }
-            if (drawer.getFinancialDocumentFiftyDollarAmount() != null) {
-                sum.add(drawer.getFinancialDocumentFiftyDollarAmount());
-            }
-            if (drawer.getFinancialDocumentTwentyDollarAmount() != null) {
-                sum.add(drawer.getFinancialDocumentTwentyDollarAmount());
-            }
-            if (drawer.getFinancialDocumentTenDollarAmount() != null) {
-                sum.add(drawer.getFinancialDocumentTenDollarAmount());
-            }
-            if (drawer.getFinancialDocumentFiveDollarAmount() != null) {
-                sum.add(drawer.getFinancialDocumentFiveDollarAmount());
-            }
-            if (drawer.getFinancialDocumentTwoDollarAmount() != null) {
-                sum.add(drawer.getFinancialDocumentTwoDollarAmount());
-            }
-            if (drawer.getFinancialDocumentOneDollarAmount() != null) {
-                sum.add(drawer.getFinancialDocumentOneDollarAmount());
-            }
-            if (drawer.getFinancialDocumentOtherDollarAmount() != null) {
-                sum.add(drawer.getFinancialDocumentOtherDollarAmount());
-            }
-        }
-        return sum;
-    }
 
     // Spring injection
     /**
