@@ -723,7 +723,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
 
         StringBuffer combinedCodes = new StringBuffer("objectType=").append(accountingLine.getObjectType().getCode()).append(";objSubTyp=").append(accountingLine.getObjectCode().getFinancialObjectSubType().getCode()).append(";objLevel=").append(accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode());
         
-        retval = !getParameterRule(RESTRICTED_COMBINED_CODES).getParameterText().equals(combinedCodes.toString());
+        retval = !getParameterRule(RESTRICTED_COMBINED_CODES).getParameterValue().equals(combinedCodes.toString());
 
         if (!retval) {
             String errorObjects[] = { accountingLine.getObjectCode().getFinancialObjectCode(), accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode(), accountingLine.getObjectCode().getFinancialObjectSubType().getCode(), accountingLine.getObjectType().getCode() };
