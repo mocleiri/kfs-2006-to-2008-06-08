@@ -16,9 +16,9 @@
 package org.kuali.module.chart.rules;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.Parameter;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
@@ -79,13 +79,13 @@ public class OffsetDefinitionRule extends MaintenanceDocumentRuleBase {
 
     private boolean checkDocTypeAndFinancialObjCode(MaintenanceDocument document) {
         boolean success = true;
-        KualiParameterRule parmRule = getConfigService().getApplicationParameterRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, DOCTYPE_AND_OBJ_CODE_VAL);
+        Parameter parmRule = getConfigService().getParameter(KFSConstants.CHART_NAMESPACE, DOCTYPE_AND_OBJ_CODE_VAL);
         // we need to check to see if the values are in the right range and then
         // see if the ObjectCode is the right value
-        if (parmRule.succeedsRule(newDefinition.getFinancialDocumentTypeCode())) {
+        if (getConfigService().succeedsRule(parmRule,newDefinition.getFinancialDocumentTypeCode())) {
             if ((ObjectUtils.isNotNull(newDefinition.getFinancialObject()) && StringUtils.isNotEmpty(newDefinition.getFinancialObject().getFinancialObjectSubTypeCode()) && !newDefinition.getFinancialObject().getFinancialObjectSubTypeCode().equalsIgnoreCase("AR")) || StringUtils.isEmpty(newDefinition.getFinancialObjectCode())) {
 
-                putFieldError("financialObjectCode", KFSKeyConstants.ERROR_DOCUMENT_OFFSETDEFMAINT_INVALID_OBJ_CODE_FOR_DOCTYPE, new String[] { newDefinition.getFinancialObjectCode(), parmRule.getParameterText() });
+                putFieldError("financialObjectCode", KFSKeyConstants.ERROR_DOCUMENT_OFFSETDEFMAINT_INVALID_OBJ_CODE_FOR_DOCTYPE, new String[] { newDefinition.getFinancialObjectCode(), parmRule.getParameterValue() });
 
             }
 
@@ -97,11 +97,11 @@ public class OffsetDefinitionRule extends MaintenanceDocumentRuleBase {
 
     private boolean checkDocTypeActiveFinancialObjCode(MaintenanceDocument document) {
         boolean success = true;
-        KualiParameterRule parmRule = getConfigService().getApplicationParameterRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, DOCTYPE_AND_OBJ_CODE_ACTIVE);
-        if (parmRule.succeedsRule(newDefinition.getFinancialDocumentTypeCode())) {
+        Parameter parmRule = getConfigService().getParameter(KFSConstants.CHART_NAMESPACE, DOCTYPE_AND_OBJ_CODE_ACTIVE);
+        if (getConfigService().succeedsRule(parmRule, newDefinition.getFinancialDocumentTypeCode())) {
             if ((ObjectUtils.isNotNull(newDefinition.getFinancialObject()) && !newDefinition.getFinancialObject().isFinancialObjectActiveCode()) || ObjectUtils.isNull(newDefinition.getFinancialObject())) {
 
-                putFieldError("financialObjectCode", KFSKeyConstants.ERROR_DOCUMENT_OFFSETDEFMAINT_INACTIVE_OBJ_CODE_FOR_DOCTYPE, new String[] { newDefinition.getFinancialObjectCode(), parmRule.getParameterText() });
+                putFieldError("financialObjectCode", KFSKeyConstants.ERROR_DOCUMENT_OFFSETDEFMAINT_INACTIVE_OBJ_CODE_FOR_DOCTYPE, new String[] { newDefinition.getFinancialObjectCode(), parmRule.getParameterValue() });
                 success &= false;
             }
 
