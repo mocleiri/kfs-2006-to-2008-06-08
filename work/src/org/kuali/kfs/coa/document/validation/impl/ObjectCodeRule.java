@@ -348,17 +348,8 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
     	return verifyObjectCode(year, reportsToChartCode, reportsToObjectCode);
     }
 
-    private Set retrieveParameterSet(String parameterName) {
-
-        String[] elements = configService.getApplicationParameterValues(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, parameterName);
-
-        Set result = new HashSet();
-        if (elements != null) {
-            for (int i = 0; i < elements.length; i++) {
-                result.add(elements[i]);
-            }
-        }
-        return result;
+    private Set<String> retrieveParameterSet(String parameterName) {
+        return configService.getParameterValuesAsSet(KFSConstants.CHART_NAMESPACE, parameterName);
     }
 
 }
