@@ -67,25 +67,11 @@ public class OrgDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase {
         KualiConfigurationService configService;
         configService = SpringContext.getBean(KualiConfigurationService.class);
         KualiGroup group = null;
-        try {
-            String groupName = configService.getApplicationParameterValue(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ORG_PLANT_WORKGROUP_PARM_NAME);
-
-            // create a new KualiGroup instance with that name
-            KualiGroupService groupService = SpringContext.getBean(KualiGroupService.class);
-            try {
-                group = groupService.getByGroupName(groupName);
-            }
-            catch (GroupNotFoundException ex) {
-                LOG.error("The group by name '" + groupName + "' was not " + "found in the KualiGroupService.  This is a configuration error, and " + "authorization/business-rules cannot be processed without this.", ex);
-            }
-        }
-        catch (ApplicationParameterException ex) {
-            LOG.error("unable to load application parameter for org plant workgroup", ex);
-        }
+        String groupName = configService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ORG_PLANT_WORKGROUP_PARM_NAME);
 
         // if the user is NOT a member of the special group, then mark all the
         // ICR & CS fields read-only.
-        if (group == null || !user.isMember(group)) {
+        if (group == null || !user.isMember(groupName)) {
             auths.addReadonlyAuthField("organizationPlantChartCode");
             auths.addReadonlyAuthField("organizationPlantAccountNumber");
             auths.addReadonlyAuthField("campusPlantChartCode");
