@@ -22,21 +22,20 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.Parameter;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
-import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.service.DocumentAuthorizationService;
 import org.kuali.core.service.KeyValuesService;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
@@ -274,8 +273,8 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         // non-employee travel
 
         // retrieve nonemployee travel payment reasons
-        String[] travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DV_DOCUMENT_PARAMETERS_GROUP_NM, NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
-        if (RulesUtils.makeSet(travelNonEmplPaymentReasonCodes).contains(dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
+        Set<String> travelNonEmplPaymentReasonCodes = getKualiConfigurationService().getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+        if (travelNonEmplPaymentReasonCodes.contains(dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
             LOG.debug("validating non employee travel");
             validateNonEmployeeTravel(dvDocument);
         }
@@ -283,8 +282,8 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         // pre-paid travel
 
         // retrieve prepaid travel payment reasons
-        String[] travelPrepaidPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DV_DOCUMENT_PARAMETERS_GROUP_NM, PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
-        if (RulesUtils.makeSet(travelPrepaidPaymentReasonCodes).contains(dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
+        Set<String> travelPrepaidPaymentReasonCodes = getKualiConfigurationService().getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
+        if (travelPrepaidPaymentReasonCodes.contains(dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
             LOG.debug("validating pre paid travel");
             validatePrePaidTravel(dvDocument);
         }
@@ -707,7 +706,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
                 }
 
                 // determine if the rule is flagged off in the parm setting
-                boolean performTravelMileageLimitInd = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterIndicator(DV_DOCUMENT_PARAMETERS_GROUP_NM, NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM);
+                boolean performTravelMileageLimitInd = getKualiConfigurationService().getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM);
                 if (performTravelMileageLimitInd) {
                     // if actual amount is greater than calculated amount
                     if (currentCalcAmt.subtract(currentActualAmt).isNegative()) {
@@ -865,12 +864,12 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      */
     private boolean executePaymentReasonRestriction(String parameterGroupName, String parameterName, String restrictedFieldValue, String errorField, String errorParameter, String paymentReasonCode, CodeDescriptionFormatter restrictedFieldDescFormatter) {
         boolean rulePassed = true;
-        if (SpringContext.getBean(KualiConfigurationService.class).hasApplicationParameterRule(parameterGroupName, parameterName)) {
-            KualiParameterRule rule = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(parameterGroupName, parameterName);
-            if (rule.failsRule(restrictedFieldValue)) {
+        if (getKualiConfigurationService().parameterExists(parameterGroupName, parameterName)) {
+            Parameter rule = getKualiConfigurationService().getParameter(parameterGroupName, parameterName);
+            if (getKualiConfigurationService().failsRule(rule,restrictedFieldValue)) {
                 String errorMsgKey = null;
                 String endConjunction = null;
-                if (rule.isAllowedRule()) {
+                if (getKualiConfigurationService().isAllowedRule( rule )) {
                     errorMsgKey = KFSKeyConstants.ERROR_PAYMENT_REASON_ALLOWED_RESTRICTION;
                     endConjunction = "or";
                 }
@@ -895,7 +894,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
                     }
                 }
 
-                GlobalVariables.getErrorMap().putError(errorField, errorMsgKey, new String[] { errorParameter, restrictedFieldValue, parameterName, parameterGroupName, rule.getPrettyParameterValueString(), "Payment reason", paymentReasonCode, prName, restrictedFieldDescFormatter.getFormattedStringWithDescriptions(rule.getParameterValueSet(), null, endConjunction) });
+                GlobalVariables.getErrorMap().putError(errorField, errorMsgKey, new String[] { errorParameter, restrictedFieldValue, parameterName, parameterGroupName, getKualiConfigurationService().getPrettyParameterValueString( rule ), "Payment reason", paymentReasonCode, prName, restrictedFieldDescFormatter.getFormattedStringWithDescriptions(getKualiConfigurationService().getParameterValuesAsSet( rule ), null, endConjunction) });
                 rulePassed = false;
             }
         }
@@ -943,16 +942,16 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
 
         /* check revolving fund restrictions */
         // retrieve revolving fund payment reasons
-        String[] revolvingFundPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DV_DOCUMENT_PARAMETERS_GROUP_NM, REVOLVING_FUND_PAY_REASONS_PARM_NM);
+        Set<String> revolvingFundPaymentReasonCodes = getKualiConfigurationService().getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, REVOLVING_FUND_PAY_REASONS_PARM_NM);
 
-        if (RulesUtils.makeSet(revolvingFundPaymentReasonCodes).contains(paymentReasonCode) && !document.getDvPayeeDetail().isDvPayeeRevolvingFundCode() && !document.getDvPayeeDetail().isVendor()) {
+        if (revolvingFundPaymentReasonCodes.contains(paymentReasonCode) && !document.getDvPayeeDetail().isDvPayeeRevolvingFundCode() && !document.getDvPayeeDetail().isVendor()) {
             errors.putError(errorKey, KFSKeyConstants.ERROR_DV_REVOLVING_PAYMENT_REASON, paymentReasonCode);
         }
 
         /* if payment reason is moving, payee must be an employee or have payee ownership type I (individual) */
-        String[] movingPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DV_DOCUMENT_PARAMETERS_GROUP_NM, MOVING_PAY_REASONS_PARM_NM);
+        Set<String> movingPaymentReasonCodes = getKualiConfigurationService().getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, MOVING_PAY_REASONS_PARM_NM);
 
-        if (RulesUtils.makeSet(movingPaymentReasonCodes).contains(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
+        if ( movingPaymentReasonCodes.contains(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
             if (!document.getDvPayeeDetail().isEmployee()) {
                 boolean invalidMovingPayee = false;
                 if (document.getDvPayeeDetail().isPayee()) {
@@ -975,15 +974,15 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
 
 
         /* for research payments over a certain limit the payee must be a vendor */
-        String[] researchPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DV_DOCUMENT_PARAMETERS_GROUP_NM, RESEARCH_PAY_REASONS_PARM_NM);
+        Set<String> researchPaymentReasonCodes = getKualiConfigurationService().getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, RESEARCH_PAY_REASONS_PARM_NM);
 
-        KualiParameterRule researchPayRule = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(DV_DOCUMENT_PARAMETERS_GROUP_NM, RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM);
-        String researchPayLimit = researchPayRule.getParameterText();
-        KualiDecimal payLimit = new KualiDecimal(researchPayLimit);
+        Parameter researchPayRule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM); 
 
         // check rule is active
-        if (researchPayRule.isUsable()) {
-            if (RulesUtils.makeSet(researchPaymentReasonCodes).contains(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode()) && document.getDisbVchrCheckTotalAmount().isGreaterEqual(payLimit) && !document.getDvPayeeDetail().isVendor()) {
+        if (getKualiConfigurationService().isUsable( researchPayRule )) {
+            String researchPayLimit = researchPayRule.getParameterValue();
+            KualiDecimal payLimit = new KualiDecimal(researchPayLimit);
+            if (researchPaymentReasonCodes.contains(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode()) && document.getDisbVchrCheckTotalAmount().isGreaterEqual(payLimit) && !document.getDvPayeeDetail().isVendor()) {
                 errors.putError(KFSPropertyConstants.DV_PAYEE_DETAIL + "." + KFSPropertyConstants.DISB_VCHR_PAYEE_ID_NUMBER, KFSKeyConstants.ERROR_DV_RESEARCH_PAYMENT_PAYEE, payLimit.toString());
             }
         }
@@ -1057,18 +1056,18 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         }
 
         /* check payment reason is allowed for payee type */
-        executeApplicationParameterRestriction(PAYEE_PAYMENT_GROUP_NM, DVPAYEE_PAYEE_PAYMENT_PARM, document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
+        executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, DVPAYEE_PAYEE_PAYMENT_PARM, document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
 
         /* for payees with tax type ssn, check employee restrictions */
         if (TAX_TYPE_SSN.equals(dvPayee.getTaxpayerTypeCode())) {
             if (isActiveEmployeeSSN(dvPayee.getTaxIdNumber()) || true) {
                 // determine if the rule is flagged off in the parm setting
-                boolean performPrepaidEmployeeInd = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterIndicator(DV_DOCUMENT_PARAMETERS_GROUP_NM, PERFORM_PREPAID_EMPL_PARM_NM);
+                boolean performPrepaidEmployeeInd = getKualiConfigurationService().getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, PERFORM_PREPAID_EMPL_PARM_NM);
 
                 if (performPrepaidEmployeeInd) {
                     /* active payee employees cannot be paid for prepaid travel */
-                    String[] travelPrepaidPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DV_DOCUMENT_PARAMETERS_GROUP_NM, PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
-                    if (RulesUtils.makeSet(travelPrepaidPaymentReasonCodes).contains(payeeDetail.getDisbVchrPaymentReasonCode())) {
+                    Set<String> travelPrepaidPaymentReasonCodes = getKualiConfigurationService().getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
+                    if (travelPrepaidPaymentReasonCodes.contains(payeeDetail.getDisbVchrPaymentReasonCode())) {
                         errors.putError(KFSPropertyConstants.DISB_VCHR_PAYEE_ID_NUMBER, KFSKeyConstants.ERROR_ACTIVE_EMPLOYEE_PREPAID_TRAVEL);
                     }
 
@@ -1076,7 +1075,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
             }
             else if (isEmployeeSSN(dvPayee.getTaxIdNumber())) {
                 // check parm setting for paid outside payroll check
-                boolean performPaidOutsidePayrollInd = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterIndicator(DV_DOCUMENT_PARAMETERS_GROUP_NM, PERFORM_PREPAID_EMPL_PARM_NM);
+                boolean performPaidOutsidePayrollInd = getKualiConfigurationService().getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, PERFORM_PREPAID_EMPL_PARM_NM);
 
                 if (performPaidOutsidePayrollInd) {
                     /* If payee is type payee and employee, payee record must be flagged as paid outside of payroll */
@@ -1184,13 +1183,13 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         }
 
         /* check object type global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectTypeCode(), errorKey, "Object type");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, GLOBAL_FIELD_RESTRICTIONS_GROUP_NM+"."+OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectTypeCode(), errorKey, "Object type");
 
         /* check object sub type global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, GLOBAL_FIELD_RESTRICTIONS_GROUP_NM+"."+OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type");
 
         /* check object level global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level");
 
         String documentPaymentReason = dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode();
         if (StringUtils.isBlank(documentPaymentReason)) {
@@ -1198,16 +1197,16 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         }
 
         /* check object level is in permitted list for payment reason */
-        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(PAYMENT_OBJECT_LEVEL_GROUP_NM, PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level", documentPaymentReason, new ObjectLevelCodeDescriptionFormatter(accountingLine.getChartOfAccountsCode()));
+        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(KFSConstants.FINANCIAL_NAMESPACE, PAYMENT_OBJECT_LEVEL_GROUP_NM+"."+PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level", documentPaymentReason, new ObjectLevelCodeDescriptionFormatter(accountingLine.getChartOfAccountsCode()));
 
         /* check object code is in permitted list for payment reason */
-        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(PAYMENT_OBJECT_CODE_GROUP_NM, PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getFinancialObjectCode(), errorKey, "Object code", documentPaymentReason, new ObjectCodeDescriptionFormatter(accountingLine.getPostingYear(), accountingLine.getChartOfAccountsCode()));
+        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(KFSConstants.FINANCIAL_NAMESPACE, PAYMENT_OBJECT_CODE_GROUP_NM+"."+PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getFinancialObjectCode(), errorKey, "Object code", documentPaymentReason, new ObjectCodeDescriptionFormatter(accountingLine.getPostingYear(), accountingLine.getChartOfAccountsCode()));
 
         /* check payment reason is valid for object code */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(OBJECT_CODE_PAYMENT_GROUP_NM, OBJECT_CODE_PARM_PREFIX + accountingLine.getFinancialObjectCode(), dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DV_PAYEE_DETAIL + "." + KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, OBJECT_CODE_PARM_PREFIX + accountingLine.getFinancialObjectCode(), dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DV_PAYEE_DETAIL + "." + KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
 
         /* check payment reason is valid for object level */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(OBJECT_LEVEL_PAYMENT_GROUP_NM, OBJECT_LEVEL_PARM_PREFIX + accountingLine.getObjectCode().getFinancialObjectLevelCode(), dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DV_PAYEE_DETAIL + "." + KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, OBJECT_LEVEL_PARM_PREFIX + accountingLine.getObjectCode().getFinancialObjectLevelCode(), dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DV_PAYEE_DETAIL + "." + KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
 
         return objectCodeAllowed;
     }
@@ -1300,7 +1299,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      */
     private boolean isUserInTaxGroup() {
         if ( taxGroupName == null ) {
-            taxGroupName = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_TAX_WORKGROUP );
+            taxGroupName = getKualiConfigurationService().getParameterValue( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.FinancialApcParms.DV_TAX_WORKGROUP );
         }
         return GlobalVariables.getUserSession().getUniversalUser().isMember( taxGroupName );
     }
@@ -1312,7 +1311,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      */
     private boolean isUserInTravelGroup() {
         if ( travelGroupName == null ) {
-            travelGroupName = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_TRAVEL_WORKGROUP );
+            travelGroupName = getKualiConfigurationService().getParameterValue( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.FinancialApcParms.DV_TRAVEL_WORKGROUP );
         }
         return GlobalVariables.getUserSession().getUniversalUser().isMember( travelGroupName );
     }
@@ -1324,7 +1323,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      */
     private boolean isUserInFRNGroup() {
         if ( frnGroupName == null ) {
-            frnGroupName = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_FOREIGNDRAFT_WORKGROUP );
+            frnGroupName = getKualiConfigurationService().getParameterValue( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.FinancialApcParms.DV_FOREIGNDRAFT_WORKGROUP );
         }
         return GlobalVariables.getUserSession().getUniversalUser().isMember( frnGroupName );
     }
@@ -1336,7 +1335,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      */
     private boolean isUserInWireGroup() {
         if ( wireTransferGroupName == null ) {
-            wireTransferGroupName = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_WIRETRANSFER_WORKGROUP );
+            wireTransferGroupName = getKualiConfigurationService().getParameterValue( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.FinancialApcParms.DV_WIRETRANSFER_WORKGROUP );
         }
         return GlobalVariables.getUserSession().getUniversalUser().isMember( wireTransferGroupName );
     }
@@ -1348,7 +1347,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      */
     private boolean isUserInDvAdminGroup() {
         if ( adminGroupName == null ) {
-            adminGroupName = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue( KFSConstants.FinancialApcParms.GROUP_DV_DOCUMENT, KFSConstants.FinancialApcParms.DV_ADMIN_WORKGROUP );
+            adminGroupName = getKualiConfigurationService().getParameterValue( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.FinancialApcParms.DV_ADMIN_WORKGROUP );
         }
         return GlobalVariables.getUserSession().getUniversalUser().isMember( adminGroupName );
     }
