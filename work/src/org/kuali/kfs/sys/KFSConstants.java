@@ -33,6 +33,15 @@ public class KFSConstants {
     // special user used in the post-processor
     public static final String SYSTEM_USER = "KULUSER";
     
+    public static final String CHART_NAMESPACE = "KFS-CA";
+    public static final String FINANCIAL_NAMESPACE = "KFS-FP";
+    public static final String LABOR_NAMESPACE = "KFS-LD";
+    public static final String GL_NAMESPACE = "KFS-GL";
+    public static final String KRA_NAMESPACE = "KFS-RA";
+    public static final String CONTRACTS_AND_GRANTS_NAMESPACE = "KFS-CG";
+    public static final String PURCHASING_NAMESPACE = "KFS-PA";
+    public static final String CORE_NAMESPACE = "KR";
+    
     public static final String PARAM_MAINTENANCE_VIEW_MODE = "maintenanceViewMode";
     public static final String PARAM_MAINTENANCE_VIEW_MODE_MAINTENANCE = "maintenance";
     public static final String PARAM_MAINTENANCE_VIEW_MODE_LOOKUP = "lookup";
