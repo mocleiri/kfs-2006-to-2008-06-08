@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/ProposalSubcontractor.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +20,19 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 
 /**
  * 
  */
-public class ProposalSubcontractor extends PersistableBusinessObjectBase implements Inactivateable {
+public class ProposalSubcontractor extends BusinessObjectBase {
 
     private String proposalSubcontractorNumber;
     private Long proposalNumber;
     private String subcontractorNumber;
     private KualiDecimal proposalSubcontractorAmount;
-    private String proposalSubcontractorDescription;
-    private boolean active;
-    
+
     private Subcontractor subcontractor;
 
     /**
@@ -128,38 +126,6 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
     }
 
     /**
-     * Gets the proposalSubcontractorDescription attribute. 
-     * @return Returns the proposalSubcontractorDescription.
-     */
-    public String getProposalSubcontractorDescription() {
-        return proposalSubcontractorDescription;
-    }
-
-    /**
-     * Sets the proposalSubcontractorDescription attribute value.
-     * @param proposalSubcontractorDescription The proposalSubcontractorDescription to set.
-     */
-    public void setProposalSubcontractorDescription(String proposalSubcontractorDescription) {
-        this.proposalSubcontractorDescription = proposalSubcontractorDescription;
-    }
-
-    /**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
      * @return Returns the subcontractor.
      */
     public Subcontractor getSubcontractor() {
@@ -172,8 +138,8 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      */
     public void setSubcontractor(Subcontractor subcontractor) {
         this.subcontractor = subcontractor;
-    }    
-    
+    }
+
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -187,15 +153,5 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
         return m;
     }
 
-    /**
-     * This can be displayed by Proposal.xml lookup results.
-     * @see Object#toString()
-     */
-    @Override
-    public String toString() {
-        // todo: get "nonexistent" from ApplicationResources.properties via KFSKeyConstants?
-        String name = ObjectUtils.isNull(getSubcontractor()) ? "nonexistent" : getSubcontractor().getSubcontractorName();
-        String description = getProposalSubcontractorDescription() == null ? "" : " " + getProposalSubcontractorDescription();
-        return name + " " + getProposalSubcontractorAmount() + description;
-    }
+
 }

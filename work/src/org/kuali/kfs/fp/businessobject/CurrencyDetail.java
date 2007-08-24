@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/CurrencyDetail.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +20,18 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class CurrencyDetail extends PersistableBusinessObjectBase {
+public class CurrencyDetail extends BusinessObjectBase {
 
     private String documentNumber;
     private String financialDocumentTypeCode;
-    private String cashieringRecordSource;
+    private String financialDocumentColumnTypeCode;
     private KualiDecimal financialDocumentHundredDollarAmount;
     private KualiDecimal financialDocumentFiftyDollarAmount;
     private KualiDecimal financialDocumentTwentyDollarAmount;
@@ -90,23 +91,23 @@ public class CurrencyDetail extends PersistableBusinessObjectBase {
 
 
     /**
-     * Gets the cashieringRecordSource attribute.
+     * Gets the financialDocumentColumnTypeCode attribute.
      * 
-     * @return Returns the cashieringRecordSource
+     * @return Returns the financialDocumentColumnTypeCode
      * 
      */
-    public String getCashieringRecordSource() {
-        return cashieringRecordSource;
+    public String getFinancialDocumentColumnTypeCode() {
+        return financialDocumentColumnTypeCode;
     }
 
     /**
-     * Sets the cashieringRecordSource attribute.
+     * Sets the financialDocumentColumnTypeCode attribute.
      * 
-     * @param cashieringRecordSource The cashieringRecordSource to set.
+     * @param financialDocumentColumnTypeCode The financialDocumentColumnTypeCode to set.
      * 
      */
-    public void setCashieringRecordSource(String financialDocumentColumnTypeCode) {
-        this.cashieringRecordSource = financialDocumentColumnTypeCode;
+    public void setFinancialDocumentColumnTypeCode(String financialDocumentColumnTypeCode) {
+        this.financialDocumentColumnTypeCode = financialDocumentColumnTypeCode;
     }
 
 
@@ -130,24 +131,7 @@ public class CurrencyDetail extends PersistableBusinessObjectBase {
         this.financialDocumentHundredDollarAmount = financialDocumentHundredDollarAmount;
     }
 
-    /**
-     * Returns the actual count of hundred dollar bills
-     * @return the number of hundred dollar bills present in the drawer
-     */
-    public Integer getHundredDollarCount() {
-        return (financialDocumentHundredDollarAmount == null) ? new Integer(0) : new Integer(financialDocumentHundredDollarAmount.divide(KFSConstants.CurrencyTypeAmounts.HUNDRED_DOLLAR_AMOUNT).intValue());
-    }
-    
-    /**
-     * This sets the count of hundred dollar bills present in the drawer
-     * @param count the number of hundred dollar bills present in the drawer
-     */
-    public void setHundredDollarCount(Integer count) {
-        if (count != null) {
-            this.financialDocumentHundredDollarAmount = new KualiDecimal(count.intValue()).multiply(KFSConstants.CurrencyTypeAmounts.HUNDRED_DOLLAR_AMOUNT);
-        }
-    }
-    
+
     /**
      * Gets the financialDocumentFiftyDollarAmount attribute.
      * 
@@ -168,24 +152,7 @@ public class CurrencyDetail extends PersistableBusinessObjectBase {
         this.financialDocumentFiftyDollarAmount = financialDocumentFiftyDollarAmount;
     }
 
-    /**
-     * Returns the actual count of fifty dollar bills
-     * @return the number of fifty dollar bills present in the drawer
-     */
-    public Integer getFiftyDollarCount() {
-        return (financialDocumentFiftyDollarAmount == null) ? new Integer(0) : new Integer(financialDocumentFiftyDollarAmount.divide(KFSConstants.CurrencyTypeAmounts.FIFTY_DOLLAR_AMOUNT).intValue());
-    }
-    
-    /**
-     * This sets the count of hundred dollar bills present in the drawer
-     * @param count the number of hundred dollar bills present in the drawer
-     */
-    public void setFiftyDollarCount(Integer count) {
-        if (count != null) {
-            this.financialDocumentFiftyDollarAmount = new KualiDecimal(count.intValue()).multiply(KFSConstants.CurrencyTypeAmounts.FIFTY_DOLLAR_AMOUNT);
-        }
-    }
-    
+
     /**
      * Gets the financialDocumentTwentyDollarAmount attribute.
      * 
@@ -206,24 +173,7 @@ public class CurrencyDetail extends PersistableBusinessObjectBase {
         this.financialDocumentTwentyDollarAmount = financialDocumentTwentyDollarAmount;
     }
 
-    /**
-     * Returns the actual count of twenty dollar bills
-     * @return the number of twenty dollar bills present in the drawer
-     */
-    public Integer getTwentyDollarCount() {
-        return (financialDocumentTwentyDollarAmount == null) ? new Integer(0) : new Integer(financialDocumentTwentyDollarAmount.divide(KFSConstants.CurrencyTypeAmounts.TWENTY_DOLLAR_AMOUNT).intValue());
-    }
-    
-    /**
-     * This sets the count of twenty dollar bills present in the drawer
-     * @param count the number of twenty dollar bills present in the drawer
-     */
-    public void setTwentyDollarCount(Integer count) {
-        if (count != null) {
-            this.financialDocumentTwentyDollarAmount = new KualiDecimal(count.intValue()).multiply(KFSConstants.CurrencyTypeAmounts.TWENTY_DOLLAR_AMOUNT);
-        }
-    }
-    
+
     /**
      * Gets the financialDocumentTenDollarAmount attribute.
      * 
@@ -244,24 +194,7 @@ public class CurrencyDetail extends PersistableBusinessObjectBase {
         this.financialDocumentTenDollarAmount = financialDocumentTenDollarAmount;
     }
 
-    /**
-     * Returns the actual count of ten dollar bills
-     * @return the number of ten dollar bills present in the drawer
-     */
-    public Integer getTenDollarCount() {
-        return (financialDocumentTenDollarAmount == null) ? new Integer(0) : new Integer(financialDocumentTenDollarAmount.divide(KFSConstants.CurrencyTypeAmounts.TEN_DOLLAR_AMOUNT).intValue());
-    }
-    
-    /**
-     * This sets the count of ten dollar bills present in the drawer
-     * @param count the number of ten dollar bills present in the drawer
-     */
-    public void setTenDollarCount(Integer count) {
-        if (count != null) {
-            this.financialDocumentTenDollarAmount = new KualiDecimal(count.intValue()).multiply(KFSConstants.CurrencyTypeAmounts.TEN_DOLLAR_AMOUNT);
-        }
-    }
-    
+
     /**
      * Gets the financialDocumentFiveDollarAmount attribute.
      * 
@@ -282,24 +215,7 @@ public class CurrencyDetail extends PersistableBusinessObjectBase {
         this.financialDocumentFiveDollarAmount = financialDocumentFiveDollarAmount;
     }
 
-    /**
-     * Returns the actual count of five dollar bills
-     * @return the number of five dollar bills present in the drawer
-     */
-    public Integer getFiveDollarCount() {
-        return (financialDocumentFiveDollarAmount == null) ? new Integer(0) : new Integer(financialDocumentFiveDollarAmount.divide(KFSConstants.CurrencyTypeAmounts.FIVE_DOLLAR_AMOUNT).intValue());
-    }
-    
-    /**
-     * This sets the count of five dollar bills present in the drawer
-     * @param count the number of five dollar bills present in the drawer
-     */
-    public void setFiveDollarCount(Integer count) {
-        if (count != null) {
-            this.financialDocumentFiveDollarAmount = new KualiDecimal(count.intValue()).multiply(KFSConstants.CurrencyTypeAmounts.FIVE_DOLLAR_AMOUNT);
-        }
-    }
-    
+
     /**
      * Gets the financialDocumentTwoDollarAmount attribute.
      * 
@@ -320,24 +236,7 @@ public class CurrencyDetail extends PersistableBusinessObjectBase {
         this.financialDocumentTwoDollarAmount = financialDocumentTwoDollarAmount;
     }
 
-    /**
-     * Returns the actual count of two dollar bills
-     * @return the number of two dollar bills present in the drawer
-     */
-    public Integer getTwoDollarCount() {
-        return (financialDocumentTwoDollarAmount == null) ? new Integer(0) : new Integer(financialDocumentTwoDollarAmount.divide(KFSConstants.CurrencyTypeAmounts.TWO_DOLLAR_AMOUNT).intValue());
-    }
-    
-    /**
-     * This sets the count of two dollar bills present in the drawer
-     * @param count the number of two dollar bills present in the drawer
-     */
-    public void setTwoDollarCount(Integer count) {
-        if (count != null) {
-            this.financialDocumentTwoDollarAmount = new KualiDecimal(count.intValue()).multiply(KFSConstants.CurrencyTypeAmounts.TWO_DOLLAR_AMOUNT);
-        }
-    }
-    
+
     /**
      * Gets the financialDocumentOneDollarAmount attribute.
      * 
@@ -358,23 +257,6 @@ public class CurrencyDetail extends PersistableBusinessObjectBase {
         this.financialDocumentOneDollarAmount = financialDocumentOneDollarAmount;
     }
 
-    /**
-     * Returns the actual count of one dollar bills
-     * @return the number of one dollar bills present in the drawer
-     */
-    public Integer getOneDollarCount() {
-        return (financialDocumentOneDollarAmount == null) ? new Integer(0) : new Integer(financialDocumentOneDollarAmount.divide(KFSConstants.CurrencyTypeAmounts.ONE_DOLLAR_AMOUNT).intValue());
-    }
-    
-    /**
-     * This sets the count of one dollar bills present in the drawer
-     * @param count the number of one dollar bills present in the drawer
-     */
-    public void setOneDollarCount(Integer count) {
-        if (count != null) {
-            this.financialDocumentOneDollarAmount = new KualiDecimal(count.intValue()).multiply(KFSConstants.CurrencyTypeAmounts.ONE_DOLLAR_AMOUNT);
-        }
-    }
 
     /**
      * Gets the financialDocumentOtherDollarAmount attribute.
@@ -395,230 +277,16 @@ public class CurrencyDetail extends PersistableBusinessObjectBase {
     public void setFinancialDocumentOtherDollarAmount(KualiDecimal financialDocumentOtherDollarAmount) {
         this.financialDocumentOtherDollarAmount = financialDocumentOtherDollarAmount;
     }
-    
-    /**
-     * 
-     * This method calculates the total amount represented by all the currency listed in this detail record
-     * @return total amount of this detail
-     */
-    public KualiDecimal getTotalAmount() {
-        KualiDecimal result = new KualiDecimal(0);
-        if (this.financialDocumentHundredDollarAmount != null) {
-            result = result.add(this.financialDocumentHundredDollarAmount);
-        }
-        if (this.financialDocumentFiftyDollarAmount != null) {
-            result = result.add(this.financialDocumentFiftyDollarAmount);
-        }
-        if (this.financialDocumentTwentyDollarAmount != null) {
-            result = result.add(this.financialDocumentTwentyDollarAmount);
-        }
-        if (this.financialDocumentTenDollarAmount != null) {
-            result = result.add(this.financialDocumentTenDollarAmount);
-        }
-        if (this.financialDocumentFiveDollarAmount != null) {
-            result = result.add(this.financialDocumentFiveDollarAmount);
-        }
-        if (this.financialDocumentTwoDollarAmount != null) {
-            result = result.add(this.financialDocumentTwoDollarAmount);
-        }
-        if (this.financialDocumentOneDollarAmount != null) {
-            result = result.add(this.financialDocumentOneDollarAmount);
-        }
-        if (this.financialDocumentOtherDollarAmount != null) {
-            result = result.add(this.financialDocumentOtherDollarAmount);
-        }
-        return result;
-    }
-    
-    /**
-     * 
-     * This method sets all the amounts to zero
-     */
-    public void zeroOutAmounts() {
-        this.financialDocumentHundredDollarAmount = new KualiDecimal(0);
-        this.financialDocumentFiftyDollarAmount = new KualiDecimal(0);
-        this.financialDocumentTwentyDollarAmount = new KualiDecimal(0);
-        this.financialDocumentTenDollarAmount = new KualiDecimal(0);
-        this.financialDocumentFiveDollarAmount = new KualiDecimal(0);
-        this.financialDocumentTwoDollarAmount = new KualiDecimal(0);
-        this.financialDocumentOneDollarAmount = new KualiDecimal(0);
-        this.financialDocumentOtherDollarAmount = new KualiDecimal(0);
-    }
-    
-    /**
-     * This method sets all amounts that are null to zero
-     */
-    public void zeroOutUnpopulatedAmounts() {
-        if (financialDocumentHundredDollarAmount == null) {
-            this.financialDocumentHundredDollarAmount = new KualiDecimal(0);
-        }
-        if (financialDocumentFiftyDollarAmount == null) {
-            this.financialDocumentFiftyDollarAmount = new KualiDecimal(0);
-        }
-        if (financialDocumentTwentyDollarAmount == null) {
-            this.financialDocumentTwentyDollarAmount = new KualiDecimal(0);
-        }
-        if (financialDocumentTenDollarAmount == null) {
-            this.financialDocumentTenDollarAmount = new KualiDecimal(0);
-        }
-        if (financialDocumentFiveDollarAmount == null) {
-            this.financialDocumentFiveDollarAmount = new KualiDecimal(0);
-        }
-        if (financialDocumentTwoDollarAmount == null) {
-            this.financialDocumentTwoDollarAmount = new KualiDecimal(0);
-        }
-        if (financialDocumentOneDollarAmount == null) {
-            this.financialDocumentOneDollarAmount = new KualiDecimal(0);
-        }
-        if (financialDocumentOtherDollarAmount == null) {
-            this.financialDocumentOtherDollarAmount = new KualiDecimal(0);
-        }
-    }
-    
-    /**
-     * 
-     * This method adds the amounts from the given currency detail record to this one
-     * @param detail the currency detail to add onto this
-     */
-    public void add(CurrencyDetail detail) {
-        if (detail.financialDocumentHundredDollarAmount != null) {
-            if (this.financialDocumentHundredDollarAmount == null) {
-                this.financialDocumentHundredDollarAmount = new KualiDecimal(0).add(detail.financialDocumentHundredDollarAmount);
-            } else {
-                this.financialDocumentHundredDollarAmount = this.financialDocumentHundredDollarAmount.add(detail.financialDocumentHundredDollarAmount);
-            }
-        }
-        if (detail.financialDocumentFiftyDollarAmount != null) {
-            if (this.financialDocumentFiftyDollarAmount == null) {
-                this.financialDocumentFiftyDollarAmount = new KualiDecimal(0).add(detail.financialDocumentFiftyDollarAmount);
-            } else {
-                this.financialDocumentFiftyDollarAmount = this.financialDocumentFiftyDollarAmount.add(detail.financialDocumentFiftyDollarAmount);
-            }
-        }
-        if (detail.financialDocumentTwentyDollarAmount != null) {
-            if (this.financialDocumentTwentyDollarAmount == null) {
-                this.financialDocumentTwentyDollarAmount = new KualiDecimal(0).add(detail.financialDocumentTwentyDollarAmount);
-            } else {
-                this.financialDocumentTwentyDollarAmount = this.financialDocumentTwentyDollarAmount.add(detail.financialDocumentTwentyDollarAmount);
-            }
-        }
-        if (detail.financialDocumentTenDollarAmount != null) {
-            if (this.financialDocumentTenDollarAmount == null) {
-                this.financialDocumentTenDollarAmount = new KualiDecimal(0).add(detail.financialDocumentTenDollarAmount);
-            } else {
-                this.financialDocumentTenDollarAmount = this.financialDocumentTenDollarAmount.add(detail.financialDocumentTenDollarAmount);
-            }
-        }
-        if (detail.financialDocumentFiveDollarAmount != null) {
-            if (this.financialDocumentFiveDollarAmount == null) {
-                this.financialDocumentFiveDollarAmount = new KualiDecimal(0).add(detail.financialDocumentFiveDollarAmount);
-            } else {
-                this.financialDocumentFiveDollarAmount = this.financialDocumentFiveDollarAmount.add(detail.financialDocumentFiveDollarAmount);
-            }
-        }
-        if (detail.financialDocumentTwoDollarAmount != null) {
-            if (this.financialDocumentTwoDollarAmount == null) {
-                this.financialDocumentTwoDollarAmount = new KualiDecimal(0).add(detail.financialDocumentTwoDollarAmount);
-            } else {
-                this.financialDocumentTwoDollarAmount = this.financialDocumentTwoDollarAmount.add(detail.financialDocumentTwoDollarAmount);
-            }
-        }
-        if (detail.financialDocumentOneDollarAmount != null) {
-            if (this.financialDocumentOneDollarAmount == null) {
-                this.financialDocumentOneDollarAmount = new KualiDecimal(0).add(detail.financialDocumentOneDollarAmount);
-            } else {
-                this.financialDocumentOneDollarAmount = this.financialDocumentOneDollarAmount.add(detail.financialDocumentOneDollarAmount);
-            }
-        }
-        if (detail.financialDocumentOtherDollarAmount != null) {
-            if (this.financialDocumentOtherDollarAmount == null) {
-                this.financialDocumentOtherDollarAmount = new KualiDecimal(0).add(detail.financialDocumentOtherDollarAmount);
-            } else {
-                this.financialDocumentOtherDollarAmount = this.financialDocumentOtherDollarAmount.add(detail.financialDocumentOtherDollarAmount);
-            }
-        }
-    }
-    
-    /**
-     * 
-     * This method subtracts the given currency detail from this one
-     * @param detail the detail to subtract
-     */
-    public void subtract(CurrencyDetail detail) {
-        if (detail.financialDocumentHundredDollarAmount != null) {
-            if (this.financialDocumentHundredDollarAmount == null) {
-                this.financialDocumentHundredDollarAmount = new KualiDecimal(0).subtract(detail.financialDocumentHundredDollarAmount);
-            } else {
-                this.financialDocumentHundredDollarAmount = this.financialDocumentHundredDollarAmount.subtract(detail.financialDocumentHundredDollarAmount);
-            }
-        }
-        if (detail.financialDocumentFiftyDollarAmount != null) {
-            if (this.financialDocumentFiftyDollarAmount == null) {
-                this.financialDocumentFiftyDollarAmount = new KualiDecimal(0).subtract(detail.financialDocumentFiftyDollarAmount);
-            } else {
-                this.financialDocumentFiftyDollarAmount = this.financialDocumentFiftyDollarAmount.subtract(detail.financialDocumentFiftyDollarAmount);
-            }
-        }
-        if (detail.financialDocumentTwentyDollarAmount != null) {
-            if (this.financialDocumentTwentyDollarAmount == null) {
-                this.financialDocumentTwentyDollarAmount = new KualiDecimal(0).subtract(detail.financialDocumentTwentyDollarAmount);
-            } else {
-                this.financialDocumentTwentyDollarAmount = this.financialDocumentTwentyDollarAmount.subtract(detail.financialDocumentTwentyDollarAmount);
-            }
-        }
-        if (detail.financialDocumentTenDollarAmount != null) {
-            if (this.financialDocumentTenDollarAmount == null) {
-                this.financialDocumentTenDollarAmount = new KualiDecimal(0).subtract(detail.financialDocumentTenDollarAmount);
-            } else {
-                this.financialDocumentTenDollarAmount = this.financialDocumentTenDollarAmount.subtract(detail.financialDocumentTenDollarAmount);
-            }
-        }
-        if (detail.financialDocumentFiveDollarAmount != null) {
-            if (this.financialDocumentFiveDollarAmount == null) {
-                this.financialDocumentFiveDollarAmount = new KualiDecimal(0).subtract(detail.financialDocumentFiveDollarAmount);
-            } else {
-                this.financialDocumentFiveDollarAmount = this.financialDocumentFiveDollarAmount.subtract(detail.financialDocumentFiveDollarAmount);
-            }
-        }
-        if (detail.financialDocumentTwoDollarAmount != null) {
-            if (this.financialDocumentTwoDollarAmount == null) {
-                this.financialDocumentTwoDollarAmount = new KualiDecimal(0).subtract(detail.financialDocumentTwoDollarAmount);
-            } else {
-                this.financialDocumentTwoDollarAmount = this.financialDocumentTwoDollarAmount.subtract(detail.financialDocumentTwoDollarAmount);
-            }
-        }
-        if (detail.financialDocumentOneDollarAmount != null) {
-            if (this.financialDocumentOneDollarAmount == null) {
-                this.financialDocumentOneDollarAmount = new KualiDecimal(0).subtract(detail.financialDocumentOneDollarAmount);
-            } else {
-                this.financialDocumentOneDollarAmount = this.financialDocumentOneDollarAmount.subtract(detail.financialDocumentOneDollarAmount);
-            }
-        }
-        if (detail.financialDocumentOtherDollarAmount != null) {
-            if (this.financialDocumentOtherDollarAmount == null) {
-                this.financialDocumentOtherDollarAmount = new KualiDecimal(0).subtract(detail.financialDocumentOtherDollarAmount);
-            } else {
-                this.financialDocumentOtherDollarAmount = this.financialDocumentOtherDollarAmount.subtract(detail.financialDocumentOtherDollarAmount);
-            }
-        }
-    }
-    
-    /**
-     * Does this currency detail actually have any information in it?
-     * @return true if any field at all is not null and not zero, false if otherwise
-     */
-    public boolean isEmpty() {
-        return ((this.financialDocumentHundredDollarAmount == null || this.financialDocumentHundredDollarAmount.equals(KualiDecimal.ZERO)) && (this.financialDocumentFiftyDollarAmount == null || this.financialDocumentFiftyDollarAmount.equals(KualiDecimal.ZERO)) && (this.financialDocumentTwentyDollarAmount == null || this.financialDocumentTwentyDollarAmount.equals(KualiDecimal.ZERO)) && (this.financialDocumentTenDollarAmount == null || this.financialDocumentTenDollarAmount.equals(KualiDecimal.ZERO)) && (this.financialDocumentFiveDollarAmount == null || this.financialDocumentFiveDollarAmount.equals(KualiDecimal.ZERO)) && (this.financialDocumentTwoDollarAmount == null || this.financialDocumentTwoDollarAmount.equals(KualiDecimal.ZERO)) && (this.financialDocumentOneDollarAmount == null || this.financialDocumentOneDollarAmount.equals(KualiDecimal.ZERO)) && (this.financialDocumentOtherDollarAmount == null || this.financialDocumentOtherDollarAmount.equals(KualiDecimal.ZERO)));
-    }
+
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
-        m.put("cashieringRecordSource", this.cashieringRecordSource);
+        m.put("financialDocumentColumnTypeCode", this.financialDocumentColumnTypeCode);
         return m;
     }
 }

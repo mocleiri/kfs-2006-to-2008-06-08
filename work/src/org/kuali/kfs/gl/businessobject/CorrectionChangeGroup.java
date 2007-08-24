@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/CorrectionChangeGroup.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,21 +24,21 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class CorrectionChangeGroup extends PersistableBusinessObjectBase implements Comparable {
+public class CorrectionChangeGroup extends BusinessObjectBase implements Comparable {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeGroup.class);
 
     private String documentNumber;
     private Integer correctionChangeGroupLineNumber;
     private Integer correctionCriteriaNextLineNumber;
     private Integer correctionChangeNextLineNumber;
-    private List<CorrectionCriteria> correctionCriteria;
-    private List<CorrectionChange> correctionChange;
+    private List correctionCriteria;
+    private List correctionChange;
 
     public CorrectionChangeGroup(String documentNumber,Integer correctionChangeGroupLineNumber) {
         setCorrectionChangeGroupLineNumber(correctionChangeGroupLineNumber);
@@ -159,21 +161,21 @@ public class CorrectionChangeGroup extends PersistableBusinessObjectBase impleme
         this.correctionChangeNextLineNumber = correctionChangeNextLineNumber;
     }
 
-    public List<CorrectionCriteria> getCorrectionCriteria() {
+    public List getCorrectionCriteria() {
         Collections.sort(correctionCriteria);
         return correctionCriteria;
     }
 
-    public void setCorrectionCriteria(List<CorrectionCriteria> correctionCriteria) {
+    public void setCorrectionCriteria(List correctionCriteria) {
         this.correctionCriteria = correctionCriteria;
     }
 
-    public List<CorrectionChange> getCorrectionChange() {
+    public List getCorrectionChange() {
         Collections.sort(correctionChange);
         return correctionChange;
     }
 
-    public void setCorrectionChange(List<CorrectionChange> correctionChange) {
+    public void setCorrectionChange(List correctionChange) {
         this.correctionChange = correctionChange;
     }
 
@@ -198,7 +200,7 @@ public class CorrectionChangeGroup extends PersistableBusinessObjectBase impleme
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.correctionChangeGroupLineNumber != null) {
             m.put("correctionChangeGroupLineNumber", this.correctionChangeGroupLineNumber.toString());
         }

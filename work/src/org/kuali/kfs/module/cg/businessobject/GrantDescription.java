@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/GrantDescription.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +20,29 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class GrantDescription extends PersistableBusinessObjectBase {
+public class GrantDescription extends BusinessObjectBase {
 
     private String grantDescriptionCode;
     private String grantDescription;
-    private boolean grantDescriptionActiveCode;
+    private String grantDescriptionActiveCode;
 
     /**
      * Default constructor.
      */
-    public GrantDescription() {}
+    public GrantDescription() {
+
+    }
 
     /**
      * Gets the grantDescriptionCode attribute.
      * 
      * @return Returns the grantDescriptionCode
+     * 
      */
     public String getGrantDescriptionCode() {
         return grantDescriptionCode;
@@ -47,6 +52,7 @@ public class GrantDescription extends PersistableBusinessObjectBase {
      * Sets the grantDescriptionCode attribute.
      * 
      * @param grantDescriptionCode The grantDescriptionCode to set.
+     * 
      */
     public void setGrantDescriptionCode(String grantDescriptionCode) {
         this.grantDescriptionCode = grantDescriptionCode;
@@ -57,6 +63,7 @@ public class GrantDescription extends PersistableBusinessObjectBase {
      * Gets the grantDescription attribute.
      * 
      * @return Returns the grantDescription
+     * 
      */
     public String getGrantDescription() {
         return grantDescription;
@@ -66,6 +73,7 @@ public class GrantDescription extends PersistableBusinessObjectBase {
      * Sets the grantDescription attribute.
      * 
      * @param grantDescription The grantDescription to set.
+     * 
      */
     public void setGrantDescription(String grantDescription) {
         this.grantDescription = grantDescription;
@@ -76,8 +84,9 @@ public class GrantDescription extends PersistableBusinessObjectBase {
      * Gets the grantDescriptionActiveCode attribute.
      * 
      * @return Returns the grantDescriptionActiveCode
+     * 
      */
-    public boolean getGrantDescriptionActiveCode() {
+    public String getGrantDescriptionActiveCode() {
         return grantDescriptionActiveCode;
     }
 
@@ -85,20 +94,12 @@ public class GrantDescription extends PersistableBusinessObjectBase {
      * Sets the grantDescriptionActiveCode attribute.
      * 
      * @param grantDescriptionActiveCode The grantDescriptionActiveCode to set.
+     * 
      */
-    public void setGrantDescriptionActiveCode(boolean grantDescriptionActiveCode) {
+    public void setGrantDescriptionActiveCode(String grantDescriptionActiveCode) {
         this.grantDescriptionActiveCode = grantDescriptionActiveCode;
     }
 
-    /**
-     * This method returns a boolean identifying whether or not this grant 
-     * description is active or inactive.
-     * 
-     * @return True if the grant description is active, false if its inactive.
-     */
-    public boolean isRowActiveIndicator() {
-        return grantDescriptionActiveCode;
-    }
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()

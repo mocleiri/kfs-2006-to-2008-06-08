@@ -1,37 +1,47 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.service;
 
 import java.sql.Timestamp;
 
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBaseWithFixtures;
 
 /**
  * This class tests the DisbursementVoucherTravel service.
  * 
- * 
+ * @author Kuali Financial Transactions (kualidev@oncourse.iu.edu)
  */
-@ConfigureContext
-public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
+public class DisbursementVoucherTravelServiceTest extends KualiTestBaseWithFixtures {
+    private DisbursementVoucherTravelService disbursementVoucherTravelService;
     private DisbursementVoucherDocument dvDocument;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        this.disbursementVoucherTravelService = SpringServiceLocator.getDisbursementVoucherTravelService();
+    }
 
     /**
      * Test calculation of per diem.
@@ -119,7 +129,7 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
     }
 
     private void runPerDiemTest(Timestamp startTime, Timestamp endTime, KualiDecimal perDiemRate, KualiDecimal expectedPerDiemAmount) {
-        assertEquals("Per diem amount not correct ", expectedPerDiemAmount, SpringContext.getBean(DisbursementVoucherTravelService.class).calculatePerDiemAmount(startTime, endTime, perDiemRate));
+        assertEquals("Per diem amount not correct ", expectedPerDiemAmount, disbursementVoucherTravelService.calculatePerDiemAmount(startTime, endTime, perDiemRate));
     }
 
     /**
@@ -131,12 +141,12 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
      * @throws Exception
      */
     public void testCalculateMileageAmount() throws Exception {
-        Timestamp effectiveDate = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp effectiveDate = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
 
         runMileageAmountTest(new Integer(0), new KualiDecimal(0), effectiveDate);
         runMileageAmountTest(new Integer(1), new KualiDecimal(.38), effectiveDate);
         runMileageAmountTest(new Integer(10), new KualiDecimal(3.75), effectiveDate);
-        runMileageAmountTest(new Integer(15), new KualiDecimal(5.63), effectiveDate);
+        runMileageAmountTest(new Integer(15), new KualiDecimal(5.62), effectiveDate);
         runMileageAmountTest(new Integer(100), new KualiDecimal(37.5), effectiveDate);
         runMileageAmountTest(new Integer(200), new KualiDecimal(75.00), effectiveDate);
         runMileageAmountTest(new Integer(380), new KualiDecimal(142.5), effectiveDate);
@@ -152,7 +162,7 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
     }
 
     private void runMileageAmountTest(Integer totalMiles, KualiDecimal expectedMileageAmount, Timestamp effectiveDate) {
-        assertEquals("Mileage amount not correct ", expectedMileageAmount, SpringContext.getBean(DisbursementVoucherTravelService.class).calculateMileageAmount(totalMiles, effectiveDate));
+        assertEquals("Mileage amount not correct ", expectedMileageAmount, disbursementVoucherTravelService.calculateMileageAmount(totalMiles, effectiveDate));
     }
 
 

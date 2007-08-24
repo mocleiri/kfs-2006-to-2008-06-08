@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/document/PurchasingAccountsPayableDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,122 +19,62 @@ package org.kuali.module.purap.document;
 
 import java.util.List;
 
-import org.kuali.core.bo.Note;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.Country;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
-import org.kuali.module.purap.bo.CreditMemoView;
-import org.kuali.module.purap.bo.PaymentRequestView;
-import org.kuali.module.purap.bo.PurchaseOrderView;
-import org.kuali.module.purap.bo.PurchasingApItem;
-import org.kuali.module.purap.bo.RequisitionView;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.module.purap.bo.Status;
-import org.kuali.module.vendor.bo.VendorAddress;
-import org.kuali.module.vendor.bo.VendorDetail;
+import org.kuali.module.purap.bo.StatusHistory;
 
 
 /**
  * Purchasing-Accounts Payable Document Interface
+ * 
  */
-public interface PurchasingAccountsPayableDocument extends AccountingDocument {
+public interface PurchasingAccountsPayableDocument extends TransactionalDocument {
     
-    /**
-     * Convenience method to set vendor address fields based on a given VendorAddress.
-     * 
-     * @param vendorAddress
-     */
-    public void templateVendorAddress(VendorAddress vendorAddress);
-
-
-    public List getStatusHistories();
-    
-    /**
-     * This method adds to the document's status history collection an object of the
-     * appropriate child of StatusHistory.
-     * 
-     * @param oldStatus             A code for the old status in String form
-     * @param newStatus             A code for the new status in String form
-     * @param statusHistoryNote     An optional BO Note for the StatusHistory (can be null)
-     */
-    public void addToStatusHistories(String oldStatus, String newStatus);
-
-    public void setStatusHistories(List statusHistories);
-
-    public List<RequisitionView> getRelatedRequisitionViews();
-    public List<CreditMemoView> getRelatedCreditMemoViews();
-    public List<PaymentRequestView> getRelatedPaymentRequestViews();
-    public List<PurchaseOrderView> getRelatedPurchaseOrderViews();
-    public List<PurchasingApItem> getItems();
-    
-    public void addItem(PurchasingApItem item);
-    
-    public void setItems(List items);
-    
-    public void deleteItem(int lineNum);
-
-    public void itemSwap(int position1, int position2);
-    
-    public int getItemLinePosition();
-    
-    public PurchasingApItem getItem(int pos);
-    
-    public KualiDecimal getTotalDollarAmount();
-    
-    public abstract Class getItemClass();
-    public void renumberItems(int start);
-    
-    public Country getVendorCountry();
-    public Status getStatus();
-    public VendorDetail getVendorDetail();
-
-    public String getVendorNumber();
-    public void setVendorNumber(String vendorNumber);
     public Integer getVendorHeaderGeneratedIdentifier();
+
+    /**
+     * Sets the vendorHeaderGeneratedIdentifier attribute.
+     * 
+     * @param vendorHeaderGeneratedIdentifier The vendorHeaderGeneratedIdentifier to set.
+     * 
+     */
     public void setVendorHeaderGeneratedIdentifier(Integer vendorHeaderGeneratedIdentifier);
+
+
+    /**
+     * Gets the vendorDetailAssignedIdentifier attribute.
+     * 
+     * @return Returns the vendorDetailAssignedIdentifier
+     * 
+     */
     public Integer getVendorDetailAssignedIdentifier();
+
+    /**
+     * Sets the vendorDetailAssignedIdentifier attribute.
+     * 
+     * @param vendorDetailAssignedIdentifier The vendorDetailAssignedIdentifier to set.
+     * 
+     */
     public void setVendorDetailAssignedIdentifier(Integer vendorDetailAssignedIdentifier);
+
     public String getVendorCustomerNumber();
+
     public void setVendorCustomerNumber(String vendorCustomerNumber);
-    public Integer getPurapDocumentIdentifier();
-    public void setPurapDocumentIdentifier(Integer identifier);
+
+    public Integer getIdentifier();
+
+    public void setIdentifier(Integer identifier);
+
+    public Status getStatus();
+
+    public void setStatus(Status status);
+
     public String getStatusCode();
+
     public void setStatusCode(String statusCode);
-    public String getVendorCityName();
-    public void setVendorCityName(String vendorCityName);
-    public String getVendorCountryCode();
-    public void setVendorCountryCode(String vendorCountryCode);
-    public String getVendorLine1Address();
-    public void setVendorLine1Address(String vendorLine1Address);
-    public String getVendorLine2Address();
-    public void setVendorLine2Address(String vendorLine2Address);
-    public String getVendorName();
-    public void setVendorName(String vendorName);
-    public String getVendorPostalCode();
-    public void setVendorPostalCode(String vendorPostalCode);
-    public String getVendorStateCode();
-    public void setVendorStateCode(String vendorStateCode);
-    public Integer getAccountsPayablePurchasingDocumentLinkIdentifier();
-    public void setAccountsPayablePurchasingDocumentLinkIdentifier(Integer accountsPayablePurchasingDocumentLinkIdentifier);
-    public Integer getVendorAddressGeneratedIdentifier();
-    public void setVendorAddressGeneratedIdentifier(Integer vendorAddressGeneratedIdentifier);
 
-    /**
-     * Gets the belowTheLineTypes attribute. 
-     * @return Returns the belowTheLineTypes.
-     */
-    public String[] getBelowTheLineTypes();
+    public List<StatusHistory> getStatusHistories();
 
-    /**
-     * Sets up the summaryAccounts attribute value.
-     */
-    public void refreshAccountSummary();
-  
-    public PurchasingAccountsPayableDocument getPurApSourceDocumentIfPossible();
-    
-    public String getPurApSourceDocumentLabelIfPossible();
-    
-    public boolean isDocumentStoppedInRouteNode(NodeDetails nodeDetails);
-    
+    public void setStatusHistories(List<StatusHistory> statusHistories);
+
 }

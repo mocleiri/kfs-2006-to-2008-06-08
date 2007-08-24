@@ -17,19 +17,15 @@ package org.kuali.module.chart.dao.ojb;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.KFSUtils;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * This class is the OJB implementation of the OrganizationDao interface.
@@ -99,56 +95,6 @@ public class OrganizationDaoOjb extends PlatformAwareDaoBaseOjb implements Organ
             return Collections.EMPTY_LIST;
         }
         return orgs;
-    }
-
-    /**
-     * 
-     * @see org.kuali.module.chart.dao.OrganizationDao#getActiveOrgsByType(java.lang.String)
-     */
-    public List<Org> getActiveOrgsByType(String organizationTypeCode) {
-        List<Org> orgs = new ArrayList<Org>();
-
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo("organizationTypeCode", organizationTypeCode);
-        criteria.addEqualTo("organizationActiveIndicator", Boolean.TRUE);
-
-        orgs = (List<Org>)getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Org.class, criteria));
-
-        if (orgs.isEmpty() || orgs.size() == 0) {
-            return Collections.EMPTY_LIST;
-        }
-        return orgs;
-    }
-    /**
-     * 
-     *  get the root organization based on the root chart and the organization type
-     *  we insist that the root organization be active
-     */
-    public String[] getRootOrganizationCode(String rootChart,
-                                            String selfReportsOrgTypeCode)
-    {
-       String[] returnValues = {null, null};
-       Criteria criteria = new Criteria();
-       criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,rootChart);
-       criteria.addEqualTo(KFSPropertyConstants.ORGANIZATION_TYPE_CODE,
-                                             selfReportsOrgTypeCode);
-       //  the root organization must be active
-       criteria.addEqualTo(KFSPropertyConstants.ORGANIZATION_ACTIVE_INDICATOR,
-                           KFSConstants.ACTIVE_INDICATOR);
-       String[] attributeList = {KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
-                                 KFSPropertyConstants.ORGANIZATION_CODE};
-       ReportQueryByCriteria rptQuery = new ReportQueryByCriteria(Org.class,
-                                                                  attributeList,
-                                                                  criteria);
-       Iterator Results = 
-           getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(rptQuery); 
-       if (Results.hasNext())
-       {
-           Object[] returnList = (Object[]) KFSUtils.retrieveFirstAndExhaustIterator(Results);
-           returnValues[0] = (String) returnList[0];
-           returnValues[1] = (String) returnList[1];
-       }
-       return returnValues;
     }
 
 }

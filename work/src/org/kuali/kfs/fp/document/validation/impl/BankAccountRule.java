@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.financial.bo.BankAccount;
-import org.kuali.module.financial.service.UniversityDateService;
 
 /**
  * This is the rules class that is used for the default implementation of the Bank Account maintenance document.
@@ -142,7 +140,7 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
 
         // fail if the subAccount isnt found
         if (testSubAccount == null) {
-            putFieldError("cashOffsetSubAccountNumber", KFSKeyConstants.ERROR_EXISTENCE, getDdService().getAttributeLabel(BankAccount.class, "cashOffsetSubAccountNumber"));
+            putFieldError("cashOffsetSubAccountNumber", KeyConstants.ERROR_EXISTENCE, getDdService().getAttributeLabel(BankAccount.class, "cashOffsetSubAccountNumber"));
             success &= false;
         }
 
@@ -175,7 +173,7 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
 
         // setup the map to search on
         Map pkMap = new HashMap();
-        pkMap.put("universityFiscalYear", SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear());
+        pkMap.put("universityFiscalYear", getDateTimeService().getCurrentFiscalYear());
         pkMap.put("chartOfAccountsCode", newBankAccount.getCashOffsetFinancialChartOfAccountCode());
         pkMap.put("accountNumber", newBankAccount.getCashOffsetAccountNumber());
         pkMap.put("financialObjectCode", newBankAccount.getCashOffsetObjectCode());
@@ -186,7 +184,7 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
 
         // fail if the subObjectCode isnt found
         if (testSubObjCd == null) {
-            putFieldError("cashOffsetSubObjectCode", KFSKeyConstants.ERROR_EXISTENCE, getDdService().getAttributeLabel(BankAccount.class, "cashOffsetSubObjectCode"));
+            putFieldError("cashOffsetSubObjectCode", KeyConstants.ERROR_EXISTENCE, getDdService().getAttributeLabel(BankAccount.class, "cashOffsetSubObjectCode"));
             success &= false;
         }
 
@@ -212,7 +210,7 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
         if (StringUtils.isNotEmpty(newBankAcct.getFinancialDocumentBankCode())) {
             if (ObjectUtils.isNull(newBankAcct.getBank())) {
                 success &= false;
-                putFieldError("financialDocumentBankCode", KFSKeyConstants.ERROR_DOCUMENT_BANKACCMAINT_INVALID_BANK);
+                putFieldError("financialDocumentBankCode", KeyConstants.ERROR_DOCUMENT_BANKACCMAINT_INVALID_BANK);
             }
         }
 

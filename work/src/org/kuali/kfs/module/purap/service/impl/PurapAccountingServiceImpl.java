@@ -17,30 +17,19 @@ package org.kuali.module.purap.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchasingApItem;
-import org.kuali.module.purap.dao.PurApAccountingDao;
-import org.kuali.module.purap.document.PaymentRequestDocument;
-import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.service.PurapAccountingService;
-import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.util.PurApItemUtils;
-import org.kuali.module.purap.util.PurApObjectUtils;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class PurapAccountingServiceImpl implements PurapAccountingService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurapAccountingServiceImpl.class);
 
@@ -55,11 +44,6 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
     private static final Boolean ITEM_TYPES_EXCLUDED_VALUE = Boolean.FALSE;
     private static final Boolean ZERO_TOTALS_RETURNED_VALUE = Boolean.TRUE;
     private static final Boolean ZERO_TOTALS_NOT_RETURNED_VALUE = Boolean.FALSE;
-    private static final Boolean ALTERNATE_AMOUNT_USED = Boolean.TRUE;
-    private static final Boolean ALTERNATE_AMOUNT_NOT_USED = Boolean.FALSE;
-    
-    // Spring injection
-    PurApAccountingDao purApAccountingDao;
     
     // below works perfectly for ROUND_HALF_UP
     private BigDecimal getLowestPossibleRoundUpNumber() {
@@ -74,59 +58,34 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
         LOG.error(methodName + "  " + errorMessage);
         throw new RuntimeException(errorMessage);
     }
-
-    /**
-     * @deprecated
-     * @see org.kuali.module.purap.service.PurapAccountingService#generateAccountDistributionForProration(java.util.List, org.kuali.core.util.KualiDecimal, java.lang.Integer)
-     */
-    public List<PurApAccountingLine> generateAccountDistributionForProration(List<SourceAccountingLine> accounts, KualiDecimal totalAmount, Integer percentScale) {
-        //TODO: remove this method, use the class one below
-        return null;//generateAccountDistributionForProration(accounts, totalAmount, percentScale, null);
-    }
+    
     /**
      * TODO PURAP: Needs Unit Tests
      * 
      * @see org.kuali.module.purap.service.PurapAccountingService#generateAccountDistributionForProration(java.util.List, org.kuali.core.util.KualiDecimal, java.lang.Integer)
      */
-    public List<PurApAccountingLine> generateAccountDistributionForProration(List<SourceAccountingLine> accounts, KualiDecimal totalAmount, Integer percentScale, Class clazz) {
+    public List<PurApAccountingLine> generateAccountDistributionForProration(List<PurApAccountingLine> accounts, KualiDecimal totalAmount, Integer percentScale) {
         String methodName = "generateAccountDistributionForProration()";
         LOG.debug(methodName + " started");
         List<PurApAccountingLine> newAccounts = new ArrayList();
         
         if (totalAmount.isZero()) {
             throwRuntimeException(methodName,"Purchasing/Accounts Payable account distribution for proration does not allow zero dollar total.");
-            //TODO: check with David is this ok?!
-//            generateAccountDistributionForProrationWithZeroTotal(accounts, percentScale);
         }
         
         BigDecimal percentTotal = BigDecimal.ZERO;
         BigDecimal totalAmountBigDecimal = totalAmount.bigDecimalValue();
-        for(SourceAccountingLine accountingLine : accounts) {
+        for(PurApAccountingLine accountingLine : accounts) {
             LOG.debug(methodName + " " + accountingLine.getAccountNumber() + " " + accountingLine.getAmount() + "/" + totalAmountBigDecimal);
-            //TODO: Chris - is this scale ok?
-            BigDecimal pct = accountingLine.getAmount().bigDecimalValue().divide(totalAmountBigDecimal,percentScale,BIG_DECIMAL_ROUNDING_MODE);
+            
+            BigDecimal pct = accountingLine.getAmount().bigDecimalValue().divide(totalAmountBigDecimal,SCALE,BIG_DECIMAL_ROUNDING_MODE);
             pct = pct.multiply(ONE_HUNDRED).stripTrailingZeros();
 
             LOG.debug(methodName + " pct = " + pct + "  (trailing zeros removed)");
 
             BigDecimal lowestPossible = this.getLowestPossibleRoundUpNumber();
             if (lowestPossible.compareTo(pct) <= 0) {
-                PurApAccountingLine newAccountingLine;
-                newAccountingLine = null;
-                
-                try {
-                    newAccountingLine = (PurApAccountingLine)clazz.newInstance();
-                }
-                catch (InstantiationException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                catch (IllegalAccessException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                
-                PurApObjectUtils.populateFromBaseClass(AccountingLineBase.class, accountingLine, newAccountingLine);
+                PurApAccountingLine newAccountingLine = accountingLine.createBlankAmountsCopy();
                 newAccountingLine.setAccountLinePercent(pct);
                 LOG.debug(methodName + " adding " + newAccountingLine.getAccountLinePercent());
                 newAccounts.add(newAccountingLine);
@@ -185,7 +144,6 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
             PurApAccountingLine slushAccount = (PurApAccountingLine)newAccounts.get(newAccounts.size() - 1);
             slushAccount.setAccountLinePercent((slushAccount.getAccountLinePercent().add(difference)).stripTrailingZeros());
         }
-        LOG.debug(methodName + " ended");
         return newAccounts;
     }
 
@@ -237,7 +195,6 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
             logDisplayOnlyTotal = logDisplayOnlyTotal.add(newAccountingLine.getAccountLinePercent());
             LOG.debug(methodName + " total = " + logDisplayOnlyTotal);
         }
-        LOG.debug(methodName + " ended");
         return newAccounts;
     }
 
@@ -249,19 +206,9 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
     public List<SourceAccountingLine> generateSummary(List<PurchasingApItem> items) {
         String methodName = "generateSummary()";
         LOG.debug(methodName + " started");
-        List<SourceAccountingLine> returnList = generateAccountSummary(items, null, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
-        LOG.debug(methodName + " ended");
-        return returnList;
+        return generateAccountSummary(items, null, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE);
     }
 
-    public Map<SourceAccountingLine, List<PurchasingApItem>> generateSummaryWithItems(List<PurchasingApItem> items) {
-        String methodName = "generateSummaryWithItems()";
-        LOG.debug(methodName + " started");
-        Map<SourceAccountingLine, List<PurchasingApItem>> returnList = generateAccountSummaryWithItems(items, null, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
-        LOG.debug(methodName + " ended");
-        return returnList;
-    }
-    
     /**
      * TODO PURAP: Needs Unit Tests
      * 
@@ -270,22 +217,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
     public List<SourceAccountingLine> generateSummaryWithNoZeroTotals(List<PurchasingApItem> items) {
         String methodName = "generateSummaryWithNoZeroTotals()";
         LOG.debug(methodName + " started");
-        List<SourceAccountingLine> returnList = generateAccountSummary(items, null, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
-        LOG.debug(methodName + " ended");
-        return returnList;
-    }
-
-    /**
-     * TODO PURAP: Needs Unit Tests
-     * 
-     * @see org.kuali.module.purap.service.PurapAccountingService#generateSummaryWithNoZeroTotalsUsingAlternateAmount(java.util.List)
-     */
-    public List<SourceAccountingLine> generateSummaryWithNoZeroTotalsUsingAlternateAmount(List<PurchasingApItem> items) {
-        String methodName = "generateSummaryWithNoZeroTotals()";
-        LOG.debug(methodName + " started");
-        List<SourceAccountingLine> returnList = generateAccountSummary(items, null, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE, ALTERNATE_AMOUNT_USED);
-        LOG.debug(methodName + " ended");
-        return returnList;
+        return generateAccountSummary(items, null, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE);
     }
 
     /**
@@ -296,9 +228,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
     public List<SourceAccountingLine> generateSummaryExcludeItemTypes(List<PurchasingApItem> items, Set excludedItemTypeCodes) {
         String methodName = "generateSummaryExcludeItemTypes()";
         LOG.debug(methodName + " started");
-        List<SourceAccountingLine> returnList = generateAccountSummary(items, excludedItemTypeCodes, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
-        LOG.debug(methodName + " ended");
-        return returnList;
+        return generateAccountSummary(items, excludedItemTypeCodes, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE);
     }
 
     /**
@@ -309,9 +239,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
     public List<SourceAccountingLine> generateSummaryIncludeItemTypesAndNoZeroTotals(List<PurchasingApItem> items, Set includedItemTypeCodes) {
         String methodName = "generateSummaryExcludeItemTypesAndNoZeroTotals()";
         LOG.debug(methodName + " started");
-        List<SourceAccountingLine> returnList = generateAccountSummary(items, includedItemTypeCodes, ITEM_TYPES_INCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
-        LOG.debug(methodName + " ended");
-        return returnList;
+        return generateAccountSummary(items, includedItemTypeCodes, ITEM_TYPES_INCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE);
     }
     
     /**
@@ -322,9 +250,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
     public List<SourceAccountingLine> generateSummaryIncludeItemTypes(List<PurchasingApItem> items, Set includedItemTypeCodes) {
         String methodName = "generateSummaryIncludeItemTypes()";
         LOG.debug(methodName + " started");
-        List<SourceAccountingLine> returnList = generateAccountSummary(items, includedItemTypeCodes, ITEM_TYPES_INCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
-        LOG.debug(methodName + " ended");
-        return returnList;
+        return generateAccountSummary(items, includedItemTypeCodes, ITEM_TYPES_INCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE);
     }
 
     /**
@@ -335,9 +261,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
     public List<SourceAccountingLine> generateSummaryExcludeItemTypesAndNoZeroTotals(List<PurchasingApItem> items, Set excludedItemTypeCodes) {
         String methodName = "generateSummaryIncludeItemTypesAndNoZeroTotals()";
         LOG.debug(methodName + " started");
-        List<SourceAccountingLine> returnList = generateAccountSummary(items, excludedItemTypeCodes, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
-        LOG.debug(methodName + " ended");
-        return returnList;
+        return generateAccountSummary(items, excludedItemTypeCodes, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE);
     }
     
     /**
@@ -354,114 +278,35 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * @param useZeroTotals - value to tell whether to include zero dollar items (see {@link #ZERO_TOTALS_RETURNED_VALUE})
      * @return a list of {@link SourceAccountingLine} objects that represent a summing of all accounts across all derived processable items based on given criteria
      */
-    private Map<SourceAccountingLine, List<PurchasingApItem>> generateAccountSummaryWithItems(List<PurchasingApItem> items, Set itemTypeCodes, Boolean itemTypeCodesAreIncluded, Boolean useZeroTotals,
-            Boolean useAlternateAmount) {
-        Map<SourceAccountingLine, List<PurchasingApItem>>accountItemsMap = new HashMap();
-        List<PurchasingApItem> itemsToProcess = getProcessablePurapItems(items, itemTypeCodes, itemTypeCodesAreIncluded, useZeroTotals);
-        Set<PurApAccountingLine> accountSet = new HashSet<PurApAccountingLine>();
-        
-        for (PurchasingApItem currentItemFromDocument : items) {
-            if (PurApItemUtils.checkItemActive(currentItemFromDocument)) {
-                PurchasingApItem copyItemFromDocument = (PurchasingApItem)ObjectUtils.deepCopy(currentItemFromDocument);
-                for (PurApAccountingLine account : copyItemFromDocument.getSourceAccountingLines()) {
-                    PurchasingApItem currentItem = (PurchasingApItem)ObjectUtils.deepCopy(copyItemFromDocument);
-                    currentItem.setExtendedPriceForAccountSummary(account.getAmount());
-                    boolean thisAccountAlreadyInSet = false;
-                    for (Iterator iter = accountSet.iterator(); iter.hasNext();) {
-                        PurApAccountingLine alreadyAddedAccount = (PurApAccountingLine) iter.next();
-                        if (alreadyAddedAccount.accountStringsAreEqual(account)) {
-                            if (useAlternateAmount) {
-                                alreadyAddedAccount.setAlternateAmount(alreadyAddedAccount.getAlternateAmount().add(account.getAlternateAmount()));
-                                account.setAlternateAmount(alreadyAddedAccount.getAlternateAmount());
-                            } 
-                            else {
-                                alreadyAddedAccount.setAmount(alreadyAddedAccount.getAmount().add(account.getAmount()));
-                                account.setAmount(alreadyAddedAccount.getAmount());
-                            }
-                            thisAccountAlreadyInSet = true;
-                            break;
-                        }
-                    }
-                    
-                    PurApAccountingLine accountToAdd = (PurApAccountingLine) ObjectUtils.deepCopy(account);
-                    SourceAccountingLine sourceLine = accountToAdd.generateSourceAccountingLine();
-                    if (!thisAccountAlreadyInSet) {
-                        accountSet.add(accountToAdd);
-                        if (accountToAdd.isEmpty()) {
-                            String errorMessage = "Found an 'empty' account in summary generation " + accountToAdd.toString();
-                            LOG.error("generateAccountSummary() " + errorMessage);
-                            throw new RuntimeException(errorMessage);
-                        }
-                        if (useAlternateAmount) {
-                            sourceLine.setAmount(accountToAdd.getAlternateAmount());
-                        }
-                        List<PurchasingApItem> itemList = new ArrayList();
-                        itemList.add(currentItem);        
-                        accountItemsMap.put(sourceLine, itemList);
-                    }    
-                    else {
-                        for (Iterator mapIter = accountItemsMap.keySet().iterator(); mapIter.hasNext();) {
-                            SourceAccountingLine accountFromMap = (SourceAccountingLine)mapIter.next();
-                            SourceAccountingLine tempAccount = (SourceAccountingLine)ObjectUtils.deepCopy(accountFromMap);
-                            tempAccount.setAmount(sourceLine.getAmount());
-                            if (sourceLine.toString().equals(tempAccount.toString())) {
-                                accountFromMap.setAmount(sourceLine.getAmount());
-                                List<PurchasingApItem> itemList = accountItemsMap.get(accountFromMap);
-                                itemList.add(currentItem);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return accountItemsMap;
-    }
-    
-    private List<SourceAccountingLine> generateAccountSummary(List<PurchasingApItem> items, Set itemTypeCodes, Boolean itemTypeCodesAreIncluded, Boolean useZeroTotals,
-            Boolean useAlternateAmount) {
+    private List<SourceAccountingLine> generateAccountSummary(List<PurchasingApItem> items, Set itemTypeCodes, Boolean itemTypeCodesAreIncluded, Boolean useZeroTotals) {
         List<PurchasingApItem> itemsToProcess = getProcessablePurapItems(items, itemTypeCodes, itemTypeCodesAreIncluded, useZeroTotals);
         Set<PurApAccountingLine> accountSet = new HashSet<PurApAccountingLine>();
         
         for (PurchasingApItem currentItem : items) {
-            if (PurApItemUtils.checkItemActive(currentItem)) {
+            if(PurApItemUtils.checkItemActive(currentItem)) {
                 for (PurApAccountingLine account : currentItem.getSourceAccountingLines()) {
                     boolean thisAccountAlreadyInSet = false;
                     for (Iterator iter = accountSet.iterator(); iter.hasNext();) {
                         PurApAccountingLine alreadyAddedAccount = (PurApAccountingLine) iter.next();
                         if (alreadyAddedAccount.accountStringsAreEqual(account)) {
-                            if (useAlternateAmount) {
-                                alreadyAddedAccount.setAlternateAmount(alreadyAddedAccount.getAlternateAmount().add(account.getAlternateAmount()));
-                            } 
-                            else {
-                                alreadyAddedAccount.setAmount(alreadyAddedAccount.getAmount().add(account.getAmount()));
-                            }
+                            alreadyAddedAccount.setAmount(alreadyAddedAccount.getAmount().add(account.getAmount()));
                             thisAccountAlreadyInSet = true;
                             break;
                         }
                     }
                     if (!thisAccountAlreadyInSet) {
-                        PurApAccountingLine accountToAdd = (PurApAccountingLine) ObjectUtils.deepCopy(account);
+                        PurApAccountingLine accountToAdd = (PurApAccountingLine)ObjectUtils.deepCopy(account);
                         accountSet.add(accountToAdd);
-                    }
                 }
             }
+        }
         }
         
         // convert list of PurApAccountingLine objects to SourceAccountingLineObjects
         List<SourceAccountingLine> sourceAccounts = new ArrayList<SourceAccountingLine>();
         for (Iterator iter = accountSet.iterator(); iter.hasNext();) {
             PurApAccountingLine accountToAlter = (PurApAccountingLine) iter.next();
-            if (accountToAlter.isEmpty()) {
-                String errorMessage = "Found an 'empty' account in summary generation " + accountToAlter.toString();
-                LOG.error("generateAccountSummary() " + errorMessage);
-                throw new RuntimeException(errorMessage);
-            }
             SourceAccountingLine sourceLine = accountToAlter.generateSourceAccountingLine();
-            if (useAlternateAmount) {
-                sourceLine.setAmount(accountToAlter.getAlternateAmount());
-            }
             sourceAccounts.add(sourceLine);
         }
         return sourceAccounts;
@@ -527,10 +372,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
                     throwRuntimeException(methodName, "Invalid parameter and list of items found while trying to find processable items for dealing with purchasing/accounts payable accounts");
                 }
             }
-            //TODO check to see if we should be allowing null in the extendedPrice (hjs)
-            if ( (ZERO_TOTALS_NOT_RETURNED_VALUE.equals(useZeroTotals)) && 
-                    (ObjectUtils.isNull(currentItem.getExtendedPrice()) ||
-                    ((KualiDecimal.ZERO.compareTo(currentItem.getExtendedPrice())) == 0)) ) {
+            if ( (ZERO_TOTALS_NOT_RETURNED_VALUE.equals(useZeroTotals)) && ((KualiDecimal.ZERO.compareTo(currentItem.getExtendedPrice())) == 0) ) {
                 // if we don't return zero dollar items then skip this one
                 continue;
             }
@@ -538,69 +380,4 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
         }
         return newItemList;
     }
-    
-    /**
-     * 
-     * This method updates account amounts based on the percents.
-     * @param document the document
-     */
-    public void updateAccountAmounts(PurchasingAccountsPayableDocument document) {
-        //TODO: Chris - this should probably be injected instead of using the locator (or put in doc) also don't forget to update the percent at fiscal approve
-        //don't update if past the AP review level
-        if((document instanceof PaymentRequestDocument) && SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted(document)){
-            return;
-        }
-        for (PurchasingApItem item : document.getItems()) {
-            if ( (item.getExtendedPrice()!=null) && 
-                 KualiDecimal.ZERO.compareTo(item.getExtendedPrice()) != 0 ) {
-                //TODO: is this the best sort to use?
-                //                Collections.sort( (List)item.getSourceAccountingLines() );
-
-                KualiDecimal accountTotal = KualiDecimal.ZERO;
-                PurApAccountingLine lastAccount = null;
-
-                for (PurApAccountingLine account : item.getSourceAccountingLines()) {
-                    BigDecimal pct = new BigDecimal(account.getAccountLinePercent().toString()).divide(new BigDecimal(100));
-                    account.setAmount(new KualiDecimal(pct.multiply(new BigDecimal(item.getExtendedPrice().toString()))));
-                    accountTotal = accountTotal.add(account.getAmount());
-                    lastAccount = account;
-                }
-
-                // put excess on last account
-                if ( lastAccount != null ) {
-                  KualiDecimal difference = item.getExtendedPrice().subtract(accountTotal);
-                  lastAccount.setAmount(lastAccount.getAmount().add(difference));
-                }
-              } else {
-                //zero out if extended price is zero
-                  for (PurApAccountingLine account : item.getSourceAccountingLines()) {
-                      account.setAmount(KualiDecimal.ZERO);
-                }
-              }
-            }
-  
-        }
-
-    public List<PurApAccountingLine> getAccountsFromItem(PurchasingApItem item) {
-        // TODO Auto-generated method stub
-        return purApAccountingDao.getAccountingLinesForItem(item);
-    }
-
-    /**
-     * Gets the purApAccountingDao attribute. 
-     * @return Returns the purApAccountingDao.
-     */
-    public PurApAccountingDao getPurApAccountingDao() {
-        return purApAccountingDao;
-    }
-
-    /**
-     * Sets the purApAccountingDao attribute value.
-     * @param purApAccountingDao The purApAccountingDao to set.
-     */
-    public void setPurApAccountingDao(PurApAccountingDao purApAccountingDao) {
-        this.purApAccountingDao = purApAccountingDao;
-    }
-
-    
 }

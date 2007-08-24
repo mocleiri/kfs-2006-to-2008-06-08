@@ -20,14 +20,14 @@ import java.util.List;
 
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.Guid;
-import org.kuali.core.util.UnitTestSqlDao;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.gl.dao.UnitTestSqlDao;
 import org.kuali.module.gl.util.SufficientFundsItem;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
-@ConfigureContext
+@WithTestSpringContext
 public class SufficientFundsServiceTest extends KualiTestBase {
 
     private SufficientFundsService sufficientFundsService = null;
@@ -37,9 +37,9 @@ public class SufficientFundsServiceTest extends KualiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        sufficientFundsService = SpringContext.getBean(SufficientFundsService.class);
-        unitTestSqlDao = SpringContext.getBean(UnitTestSqlDao.class);
-        dateTimeService = SpringContext.getBean(DateTimeService.class);
+        sufficientFundsService = SpringServiceLocator.getSufficientFundsService();
+        unitTestSqlDao = (UnitTestSqlDao)SpringServiceLocator.getBeanFactory().getBean("glUnitTestSqlDao");
+        dateTimeService = SpringServiceLocator.getDateTimeService();
     }
 
     private void prepareSufficientFundsData(String accountNumber, String sfType, String sfObjCd, Integer budgetAmt, Integer actualAmt, Integer encAmt, boolean createPles) {
@@ -58,11 +58,11 @@ public class SufficientFundsServiceTest extends KualiTestBase {
      */
     private void insertPendingLedgerEntries(String accountNumber, String sfObjCd) {
         unitTestSqlDao.sqlCommand("delete from fp_doc_header_t where fdoc_nbr = '1'");
-        unitTestSqlDao.sqlCommand("insert into FP_DOC_HEADER_T (FDOC_NBR, OBJ_ID, VER_NBR, FDOC_STATUS_CD, FDOC_DESC, FDOC_TOTAL_AMT, ORG_DOC_NBR, FDOC_IN_ERR_NBR, FDOC_TMPL_NBR, TEMP_DOC_FNL_DT) values ('1','" + new Guid().toString() + "', 1, 'A', 'test', 0, '', '', '', " + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ")");
-        unitTestSqlDao.sqlCommand("insert into GL_PENDING_ENTRY_T (FS_ORIGIN_CD, FDOC_NBR, TRN_ENTR_SEQ_NBR, OBJ_ID, VER_NBR, FIN_COA_CD, ACCOUNT_NBR, SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FIN_BALANCE_TYP_CD, FIN_OBJ_TYP_CD, UNIV_FISCAL_YR, UNIV_FISCAL_PRD_CD, TRN_LDGR_ENTR_DESC, TRN_LDGR_ENTR_AMT, TRN_DEBIT_CRDT_CD, TRANSACTION_DT, FDOC_TYP_CD, ORG_DOC_NBR, PROJECT_CD, ORG_REFERENCE_ID, FDOC_REF_TYP_CD, FS_REF_ORIGIN_CD, FDOC_REF_NBR, FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD, TRNENTR_PROCESS_TM) values ('01','1',1,'" + new Guid().toString() + "',2,'BL','" + accountNumber + "','-----','5000','---','AC','EX',2007,null,               'test',500,'C'," + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ",'DI',null,'----------',null,'','','',null,'','N','" + sfObjCd + "','N'," + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ")");
-        unitTestSqlDao.sqlCommand("insert into GL_PENDING_ENTRY_T (FS_ORIGIN_CD, FDOC_NBR, TRN_ENTR_SEQ_NBR, OBJ_ID, VER_NBR, FIN_COA_CD, ACCOUNT_NBR, SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FIN_BALANCE_TYP_CD, FIN_OBJ_TYP_CD, UNIV_FISCAL_YR, UNIV_FISCAL_PRD_CD, TRN_LDGR_ENTR_DESC, TRN_LDGR_ENTR_AMT, TRN_DEBIT_CRDT_CD, TRANSACTION_DT, FDOC_TYP_CD, ORG_DOC_NBR, PROJECT_CD, ORG_REFERENCE_ID, FDOC_REF_TYP_CD, FS_REF_ORIGIN_CD, FDOC_REF_NBR, FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD, TRNENTR_PROCESS_TM) values ('01','1',3,'" + new Guid().toString() + "',2,'BL','4631638','-----','5000','---','AC','EX',2007,null,               'test',500,'D'," + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ",'DI',null,'----------',null,'','','',null,'','N','N/A' ,'N'," + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ")");
-        unitTestSqlDao.sqlCommand("insert into GL_PENDING_ENTRY_T (FS_ORIGIN_CD, FDOC_NBR, TRN_ENTR_SEQ_NBR, OBJ_ID, VER_NBR, FIN_COA_CD, ACCOUNT_NBR, SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FIN_BALANCE_TYP_CD, FIN_OBJ_TYP_CD, UNIV_FISCAL_YR, UNIV_FISCAL_PRD_CD, TRN_LDGR_ENTR_DESC, TRN_LDGR_ENTR_AMT, TRN_DEBIT_CRDT_CD, TRANSACTION_DT, FDOC_TYP_CD, ORG_DOC_NBR, PROJECT_CD, ORG_REFERENCE_ID, FDOC_REF_TYP_CD, FS_REF_ORIGIN_CD, FDOC_REF_NBR, FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD, TRNENTR_PROCESS_TM) values ('01','1',2,'" + new Guid().toString() + "',2,'BL','" + accountNumber + "','-----','8000','---','AC','AS',2007,null,'TP Generated Offset',500,'D'," + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ",'DI',null,'----------',null,'','','',null,'','N','ASST','Y'," + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ")");
-        unitTestSqlDao.sqlCommand("insert into GL_PENDING_ENTRY_T (FS_ORIGIN_CD, FDOC_NBR, TRN_ENTR_SEQ_NBR, OBJ_ID, VER_NBR, FIN_COA_CD, ACCOUNT_NBR, SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FIN_BALANCE_TYP_CD, FIN_OBJ_TYP_CD, UNIV_FISCAL_YR, UNIV_FISCAL_PRD_CD, TRN_LDGR_ENTR_DESC, TRN_LDGR_ENTR_AMT, TRN_DEBIT_CRDT_CD, TRANSACTION_DT, FDOC_TYP_CD, ORG_DOC_NBR, PROJECT_CD, ORG_REFERENCE_ID, FDOC_REF_TYP_CD, FS_REF_ORIGIN_CD, FDOC_REF_NBR, FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD, TRNENTR_PROCESS_TM) values ('01','1',4,'" + new Guid().toString() + "',2,'BL','4631638','-----','8000','---','AC','AS',2007,null,'TP Generated Offset',500,'C'," + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ",'DI',null,'----------',null,'','','',null,'','N','N/A' ,'Y'," + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ")");
+        unitTestSqlDao.sqlCommand("insert into FP_DOC_HEADER_T (FDOC_NBR, OBJ_ID, VER_NBR, FDOC_STATUS_CD, FDOC_DESC, FDOC_TOTAL_AMT, ORG_DOC_NBR, FDOC_IN_ERR_NBR, FDOC_TMPL_NBR, TEMP_DOC_FNL_DT) values ('1','" + new Guid().toString() + "', 1, 'A', 'test', 0, '', '', '', '" + dateTimeService.getCurrentTimestamp() + "')");
+        unitTestSqlDao.sqlCommand("insert into GL_PENDING_ENTRY_T (FS_ORIGIN_CD, FDOC_NBR, TRN_ENTR_SEQ_NBR, OBJ_ID, VER_NBR, FIN_COA_CD, ACCOUNT_NBR, SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FIN_BALANCE_TYP_CD, FIN_OBJ_TYP_CD, UNIV_FISCAL_YR, UNIV_FISCAL_PRD_CD, TRN_LDGR_ENTR_DESC, TRN_LDGR_ENTR_AMT, TRN_DEBIT_CRDT_CD, TRANSACTION_DT, FDOC_TYP_CD, ORG_DOC_NBR, PROJECT_CD, ORG_REFERENCE_ID, FDOC_REF_TYP_CD, FS_REF_ORIGIN_CD, FDOC_REF_NBR, FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD, TRNENTR_PROCESS_TM, BDGT_YR) values ('01','1',1,'" + new Guid().toString() + "',2,'BL','" + accountNumber + "','-----','5000','---','AC','EX',2007,null,               'test',500,'C','" + dateTimeService.getCurrentTimestamp() + "','DI',null,'----------',null,'','','',null,'','N','" + sfObjCd + "','N','" + dateTimeService.getCurrentTimestamp() + "',null)");
+        unitTestSqlDao.sqlCommand("insert into GL_PENDING_ENTRY_T (FS_ORIGIN_CD, FDOC_NBR, TRN_ENTR_SEQ_NBR, OBJ_ID, VER_NBR, FIN_COA_CD, ACCOUNT_NBR, SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FIN_BALANCE_TYP_CD, FIN_OBJ_TYP_CD, UNIV_FISCAL_YR, UNIV_FISCAL_PRD_CD, TRN_LDGR_ENTR_DESC, TRN_LDGR_ENTR_AMT, TRN_DEBIT_CRDT_CD, TRANSACTION_DT, FDOC_TYP_CD, ORG_DOC_NBR, PROJECT_CD, ORG_REFERENCE_ID, FDOC_REF_TYP_CD, FS_REF_ORIGIN_CD, FDOC_REF_NBR, FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD, TRNENTR_PROCESS_TM, BDGT_YR) values ('01','1',3,'" + new Guid().toString() + "',2,'BL','4631638','-----','5000','---','AC','EX',2007,null,               'test',500,'D','" + dateTimeService.getCurrentTimestamp() + "','DI',null,'----------',null,'','','',null,'','N','N/A' ,'N','" + dateTimeService.getCurrentTimestamp() + "',null)");
+        unitTestSqlDao.sqlCommand("insert into GL_PENDING_ENTRY_T (FS_ORIGIN_CD, FDOC_NBR, TRN_ENTR_SEQ_NBR, OBJ_ID, VER_NBR, FIN_COA_CD, ACCOUNT_NBR, SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FIN_BALANCE_TYP_CD, FIN_OBJ_TYP_CD, UNIV_FISCAL_YR, UNIV_FISCAL_PRD_CD, TRN_LDGR_ENTR_DESC, TRN_LDGR_ENTR_AMT, TRN_DEBIT_CRDT_CD, TRANSACTION_DT, FDOC_TYP_CD, ORG_DOC_NBR, PROJECT_CD, ORG_REFERENCE_ID, FDOC_REF_TYP_CD, FS_REF_ORIGIN_CD, FDOC_REF_NBR, FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD, TRNENTR_PROCESS_TM, BDGT_YR) values ('01','1',2,'" + new Guid().toString() + "',2,'BL','" + accountNumber + "','-----','8000','---','AC','AS',2007,null,'TP Generated Offset',500,'D','" + dateTimeService.getCurrentTimestamp() + "','DI',null,'----------',null,'','','',null,'','N','ASST','Y','" + dateTimeService.getCurrentTimestamp() + "',null)");
+        unitTestSqlDao.sqlCommand("insert into GL_PENDING_ENTRY_T (FS_ORIGIN_CD, FDOC_NBR, TRN_ENTR_SEQ_NBR, OBJ_ID, VER_NBR, FIN_COA_CD, ACCOUNT_NBR, SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FIN_BALANCE_TYP_CD, FIN_OBJ_TYP_CD, UNIV_FISCAL_YR, UNIV_FISCAL_PRD_CD, TRN_LDGR_ENTR_DESC, TRN_LDGR_ENTR_AMT, TRN_DEBIT_CRDT_CD, TRANSACTION_DT, FDOC_TYP_CD, ORG_DOC_NBR, PROJECT_CD, ORG_REFERENCE_ID, FDOC_REF_TYP_CD, FS_REF_ORIGIN_CD, FDOC_REF_NBR, FDOC_REVERSAL_DT, TRN_ENCUM_UPDT_CD, FDOC_APPROVED_CD, ACCT_SF_FINOBJ_CD, TRN_ENTR_OFST_CD, TRNENTR_PROCESS_TM, BDGT_YR) values ('01','1',4,'" + new Guid().toString() + "',2,'BL','4631638','-----','8000','---','AC','AS',2007,null,'TP Generated Offset',500,'C','" + dateTimeService.getCurrentTimestamp() + "','DI',null,'----------',null,'','','',null,'','N','N/A' ,'Y','" + dateTimeService.getCurrentTimestamp() + "',null)");
     }
 
 

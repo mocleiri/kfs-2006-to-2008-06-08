@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +22,17 @@ import java.util.LinkedHashMap;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 
 /**
  * Budget Fringe Rate Business Object
  * 
  * 
  */
-public class BudgetFringeRate extends PersistableBusinessObjectBase {
+public class BudgetFringeRate extends BusinessObjectBase {
 
     private static final long serialVersionUID = -1305514388024735249L;
     private String documentNumber;
@@ -79,6 +81,76 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
     /*
      * (non-Javadoc)
      * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterDelete(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterDelete(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterDelete(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterInsert(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterInsert(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterLookup(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterLookup(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterUpdate(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterUpdate(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeDelete(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeDelete(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeDelete(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeInsert(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeInsert(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeUpdate(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeUpdate(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.kuali.core.bo.BusinessObjectBase#toStringBuilder(java.util.LinkedHashMap)
      */
     protected String toStringBuilder(LinkedHashMap fieldValues) {
@@ -94,14 +166,54 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("institutionAppointmentTypeCode", this.institutionAppointmentTypeCode);
         return m;
     }
 
     /*
      * (non-Javadoc)
-     * Doesn't compare timestamps 
+     * 
+     * @see org.kuali.bo.BusinessObject#validate()
+     */
+    public void validate() {
+        // TODO Auto-generated method stub
+        super.validate();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        String hashString = this.getDocumentNumber() + "|" + this.getInstitutionAppointmentTypeCode() + "|" + this.getAppointmentType().toString() + "|" + this.getAppointmentTypeCostShareFringeRateAmount().toString() + "|" + this.getAppointmentTypeFringeRateAmount().toString() + "|" + this.getBudgetLastUpdateTimestamp().toString() + "|" + this.getContractsAndGrantsFringeRateAmount().toString() + "|" + this.getInstitutionCostShareFringeRateAmount().toString();
+        return hashString.hashCode();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#finalize()
+     */
+    protected void finalize() throws Throwable {
+        // TODO Auto-generated method stub
+        super.finalize();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#clone()
+     */
+    protected Object clone() throws CloneNotSupportedException {
+        // TODO Auto-generated method stub
+        return super.clone();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
@@ -111,6 +223,11 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
             BudgetFringeRate objCompare = (BudgetFringeRate) obj;
             equals &= this.documentNumber.equals(objCompare.getDocumentNumber());
             equals &= this.institutionAppointmentTypeCode.equals(objCompare.getInstitutionAppointmentTypeCode());
+            if (this.budgetLastUpdateTimestamp == null && objCompare.getBudgetLastUpdateTimestamp() == null) {
+            }
+            else {
+                equals &= this.budgetLastUpdateTimestamp != null && objCompare.getBudgetLastUpdateTimestamp() != null && this.budgetLastUpdateTimestamp.equals(objCompare.getBudgetLastUpdateTimestamp());
+            }
             if (this.contractsAndGrantsFringeRateAmount == null && objCompare.getContractsAndGrantsFringeRateAmount() == null) {
             }
             else {

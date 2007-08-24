@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionHeader.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +19,23 @@
 package org.kuali.module.budget.bo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.SubAccount;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
+public class BudgetConstructionHeader extends BusinessObjectBase {
 
     private String documentNumber;
     private Integer universityFiscalYear;
@@ -56,7 +55,6 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     private UniversalUser budgetTransactionLockUser;
     private Org organizationLevelOrganization;
     private DocumentHeader financialDocument;
-    private BudgetConstructionAccountReports budgetConstructionAccountReports;
     
     private List budgetConstructionAccountSelect;
 
@@ -319,7 +317,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     }
     
     public UniversalUser getBudgetLockUser() {
-        budgetLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(budgetLockUserIdentifier, budgetLockUser);
+        budgetLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(budgetLockUserIdentifier, budgetLockUser);
         return budgetLockUser;
     }
 
@@ -354,7 +352,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     }
 
     public UniversalUser getBudgetTransactionLockUser() {
-        budgetTransactionLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(budgetTransactionLockUserIdentifier, budgetTransactionLockUser);
+        budgetTransactionLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(budgetTransactionLockUserIdentifier, budgetTransactionLockUser);
         return budgetTransactionLockUser;
     }
 
@@ -423,43 +421,11 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     }    
     
     /**
-     * Gets the budgetConstructionAccountReports attribute. 
-     * @return Returns the budgetConstructionAccountReports.
-     */
-    public BudgetConstructionAccountReports getBudgetConstructionAccountReports() {
-        return budgetConstructionAccountReports;
-    }
-
-    /**
-     * Sets the budgetConstructionAccountReports attribute value.
-     * @param budgetConstructionAccountReports The budgetConstructionAccountReports to set.
-     */
-    public void setBudgetConstructionAccountReports(BudgetConstructionAccountReports budgetConstructionAccountReports) {
-        this.budgetConstructionAccountReports = budgetConstructionAccountReports;
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("documentNumber", getDocumentNumber());
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-        simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());
-        simpleValues.put("accountNumber", getAccountNumber());
-        simpleValues.put("subAccountNumber", getSubAccountNumber());
-
-        return simpleValues;
-    }
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }

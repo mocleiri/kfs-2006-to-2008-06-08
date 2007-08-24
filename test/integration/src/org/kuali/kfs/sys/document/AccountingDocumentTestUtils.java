@@ -41,10 +41,10 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.service.AccountingPeriodService;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.fixtures.UserNameFixture;
 import org.kuali.test.monitor.ChangeMonitor;
 import org.kuali.test.monitor.DocumentVersionMonitor;
@@ -175,8 +175,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      */
     public static void testRouteDocument(AccountingDocument document, DocumentService documentService) throws Exception {
         document.prepareForSave();
@@ -189,8 +189,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      * 
      */
 
@@ -270,8 +270,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      */
     public static void testSaveDocument(AccountingDocument document, DocumentService documentService) throws Exception {
         // get document parameter
@@ -287,8 +287,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      */
     public static void testConvertIntoCopy(AccountingDocument document, DocumentService documentService, int expectedPrePECount) throws Exception {
         // save the original doc, wait for status change

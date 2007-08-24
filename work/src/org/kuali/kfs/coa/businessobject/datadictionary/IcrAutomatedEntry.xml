@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.IcrAutomatedEntry">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Indirect Cost Recovery Automated Entry Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="balanceTypeCode" />
@@ -37,11 +22,15 @@
                 <field attributeName="offsetBalanceSheetObjectCodeNumber" />
                 <field attributeName="transactionDebitIndicator" />
                 <field attributeName="awardIndrCostRcvyRatePct" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Indirect Cost Recovery Automated Entry Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.IcrAutomatedEntry">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup an Indirect Cost Recovery Automated Entry</instructions>
 
@@ -61,15 +50,15 @@
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="balanceTypeCode" />
+                <field attributeName="awardIndrCostRcvyEntryNbr" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
-                <field attributeName="financialObjectCode" />
-                <field attributeName="offsetBalanceSheetObjectCodeNumber" />
-                <field attributeName="financialSubObjectCode" />
                 <field attributeName="subAccountNumber" />
-                <field attributeName="awardIndrCostRcvyEntryNbr" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="offsetBalanceSheetObjectCodeNumber" />
                 <field attributeName="transactionDebitIndicator" />
-                <field attributeName="awardIndrCostRcvyRatePct" />
+                <!--  <field attributeName="awardIndrCostRcvyRatePct" /> -->
             </resultFields>
         </lookup>
 
@@ -83,13 +72,13 @@
             <attribute name="financialIcrSeriesIdentifier" forceUppercase="true">
                 <label>Series Id</label>
                 <shortLabel>Series Id</shortLabel>
-                <maxLength>3</maxLength>
+                <maxLength>4</maxLength>
                 <validationPattern>
                     <numeric />
                 </validationPattern>
                 <required>true</required>
                 <control>
-                    <text size="3" />
+                    <text size="4" />
                 </control>
                 <summary>Series Id</summary>
                 <description>Series Id</description>
@@ -153,8 +142,7 @@
                 <validationPattern>
                     <anyCharacter />
                 </validationPattern>
-                <!-- KULRNE-4298: false for required allows for empty subaccount codes to be converted to dashes without complaint by the DictionaryValidationService. -->
-                <required>false</required>
+                <required>true</required>
                 <control>
                     <text size="5" />
                 </control>
@@ -163,41 +151,25 @@
                 <description>Sub-Account Number</description>
             </attribute>
 
-            <attribute name="financialObjectCode" forceUppercase="true">
-                <label>Object Code</label>
-                <shortLabel>Object</shortLabel>
-
-                <maxLength>4</maxLength>
-                <validationPattern>
-                    <anyCharacter />
-                </validationPattern>
+            <attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
                 <required>true</required>
-                <control>
-                    <text size="4" />
-                </control>
-
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The code for the "object" of accounting for a transaction, expressed as a 4-digit numeric text, including leading zeros. For Search Criteria, select the Help for the Object Code Lookup title.</description>
-            </attribute>
+            </attributeReference>
 
             <attribute name="financialSubObjectCode" forceUppercase="true">
-                <label>Sub-Object Code</label>
+                <label>SubObject Code</label>
                 <shortLabel>SubObject</shortLabel>
 
                 <maxLength>3</maxLength>
                 <validationPattern>
                     <anyCharacter />
                 </validationPattern>
-                <!-- KULRNE-4298: false for required allows for empty subobject codes to be converted to dashes without complaint by the DictionaryValidationService. -->
-                <required>false</required>
+                <required>true</required>
                 <control>
                     <text size="3" />
                 </control>
 
-                <summary>Sub-Object Code</summary>
-                <description>Sub-Object Code</description>
+                <summary>SubObject Code</summary>
+                <description>SubObject Code</description>
             </attribute>
 
             <attributeReference name="offsetBalanceSheetObjectCodeNumber" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -219,7 +191,7 @@
                 </validationPattern>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.kfs.lookup.keyvalues.DebitCreditValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.DebitCreditValuesFinder" />
                 </control>
                 <summary>Object Type Debit Credit Code</summary>
                 <description>The unique code indicating that the object type is a credit or a debit.</description>
@@ -238,8 +210,6 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        
-        <objectLabel>Indirect Cost Recovery Automated Entry</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

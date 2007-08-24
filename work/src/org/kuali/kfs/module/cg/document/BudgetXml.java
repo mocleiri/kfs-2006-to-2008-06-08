@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,23 +29,20 @@ import java.util.Locale;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
-import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetModular;
 import org.kuali.module.kra.budget.bo.BudgetModularPeriod;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
-import org.kuali.module.kra.budget.bo.BudgetPeriodInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetPeriodThirdPartyCostShare;
+import org.kuali.module.kra.budget.bo.BudgetPeriodInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
+import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.document.BudgetDocument;
-import org.kuali.module.kra.budget.service.BudgetIndirectCostService;
-import org.kuali.module.kra.budget.service.BudgetModularService;
-import org.kuali.module.kra.budget.service.BudgetNonpersonnelService;
 import org.kuali.module.kra.budget.web.struts.form.BudgetCostShareFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetIndirectCostFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetNonpersonnelFormHelper;
@@ -61,7 +60,7 @@ public class BudgetXml {
 
     // The following field is hard coded as checks in nih-2590, nih-398, nih-modular, and NSFSummaryProposalBudget. Hence if
     // this field name is changed, the XLTs have to be updated. This also prevents us from using the more elegant:
-    // SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue("KraDevelopmentGroup", "toBeNamedLabel");
+    // SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("KraDevelopmentGroup", "toBeNamedLabel");
     private static final String TO_BE_NAMED = "To Be Named";
     
     private static final String OUTPUT_PERCENT_SYMBOL = "%";
@@ -71,7 +70,6 @@ public class BudgetXml {
      * 
      * @param budgetDoc data representation of a budget
      * @param xmlDoc target xml representation for the budget. This field will be side effected.
-     * @param baseUrl ensures that stylesheet may be path idependent
      * @param param a parameter that is to be added to the XML as PARAMETER1. Useful for custom functions of a style sheet.
      * @throws Exception
      */
@@ -80,11 +78,11 @@ public class BudgetXml {
 
         // Initialize data needed. This is data true for the budget as global. There is some data in createTaskPeriodsElement
         // that is only true for a certain task / period.
-        List nonpersonnelCategories = SpringContext.getBean(BudgetNonpersonnelService.class).getAllNonpersonnelCategories();
+        List nonpersonnelCategories = SpringServiceLocator.getBudgetNonpersonnelService().getAllNonpersonnelCategories();
         if (budget.isAgencyModularIndicator()) {
-            SpringContext.getBean(BudgetModularService.class).generateModularBudget(budget, nonpersonnelCategories);
+            SpringServiceLocator.getBudgetModularService().generateModularBudget(budget, nonpersonnelCategories);
         }
-        SpringContext.getBean(BudgetIndirectCostService.class).refreshIndirectCost(budgetDoc);
+        SpringServiceLocator.getBudgetIndirectCostService().refreshIndirectCost(budgetDoc);
         BudgetIndirectCostFormHelper budgetIndirectCostFormHelper = new BudgetIndirectCostFormHelper(budget.getTasks(), budget.getPeriods(), budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems());
 
         // Start of XML elements
@@ -96,7 +94,7 @@ public class BudgetXml {
 
         budgetElement.setAttribute("BUDGET_NUMBER", budget.getDocumentNumber());
         budgetElement.setAttribute("CURRENT_BASE", budget.getIndirectCost().getBudgetBaseCode());
-        budgetElement.setAttribute("PURPOSE", budget.getIndirectCost().getPurpose() == null ? "" : budget.getIndirectCost().getPurpose().getPurposeDescription());
+        budgetElement.setAttribute("PURPOSE", budget.getIndirectCost().getBudgetPurposeCode());
         budgetElement.setAttribute("GRANT_NUMBER", budget.getElectronicResearchAdministrationGrantNumber());
 
         // Code to get the current date/time
@@ -425,7 +423,7 @@ public class BudgetXml {
 
                 Element thirdPartyCostSharePeriodAmount = xmlDoc.createElement("THIRD_PARTY_COST_SHARE_PERIOD_AMOUNT");
                 thirdPartyCostSharePeriodAmount.setAttribute("PERIOD_NUMBER", Integer.toString(j + 1));
-                thirdPartyCostSharePeriodAmount.appendChild(xmlDoc.createTextNode(periodThirdPartyCostShare.getBudgetCostShareAmount() != null ? periodThirdPartyCostShare.getBudgetCostShareAmount().toString() : "0"));
+                thirdPartyCostSharePeriodAmount.appendChild(xmlDoc.createTextNode(periodThirdPartyCostShare.getBudgetCostShareAmount().toString()));
 
                 thirdPartyCostShareSourcesElement.appendChild(thirdPartyCostSharePeriodAmount);
             }
@@ -588,7 +586,7 @@ public class BudgetXml {
             personElement.setAttribute("INSTITUTION_FRINGE_BENEFIT_AMOUNT", ObjectUtils.toString(budgetOverviewPersonnelHelper.getInstitutionCostShareFringeBenefitTotalAmount()));
 
             // Following calculation should probably be somewhere else.
-            /** TODO Create App KFSConstants for the below or move into Personnel? Does it already exist there? */
+            /** TODO Create App Constants for the below or move into Personnel? Does it already exist there? */
             KualiInteger agencyPercentEffortAmount = budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount() == null ? new KualiInteger(0) : budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount();
             KualiInteger institutionCostSharePercentEffortAmount = budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount() == null ? new KualiInteger(0) : budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount();
             BigDecimal combinedPercentEffort = agencyPercentEffortAmount.add(institutionCostSharePercentEffortAmount).divide(new KualiInteger(100));

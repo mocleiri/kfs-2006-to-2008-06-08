@@ -17,12 +17,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class ObjectCons extends PersistableBusinessObjectBase {
+public class ObjectCons extends BusinessObjectBase {
 
     /**
      * Default no-arg constructor.
@@ -99,7 +99,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
     /**
      * Gets the finConsolidationObjectName attribute.
      * 
-     * @return Returns the finConsolidationObjectName
+     * @return - Returns the finConsolidationObjectName
      * 
      */
     public String getFinConsolidationObjectName() {
@@ -119,7 +119,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
     /**
      * Gets the finConsolidationObjShortName attribute.
      * 
-     * @return Returns the finConsolidationObjShortName
+     * @return - Returns the finConsolidationObjShortName
      * 
      */
     public String getFinConsolidationObjShortName() {
@@ -139,7 +139,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
     /**
      * Gets the finConsolidationObjActiveIndicator attribute.
      * 
-     * @return Returns the finConsolidationObjActiveIndicator
+     * @return - Returns the finConsolidationObjActiveIndicator
      * 
      */
     public boolean isFinConsolidationObjActiveIndicator() {
@@ -159,7 +159,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
     /**
      * Gets the financialReportingSortCode attribute.
      * 
-     * @return Returns the financialReportingSortCode
+     * @return - Returns the financialReportingSortCode
      * 
      */
     public String getFinancialReportingSortCode() {
@@ -179,7 +179,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -202,9 +202,6 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * @return Returns the financialEliminationsObject.
      */
     public ObjectCodeCurrent getFinancialEliminationsObject() {
-        if (financialEliminationsObjectCode != null && (financialEliminationsObject == null || (financialEliminationsObject.getFinancialObjectCode() != null && financialEliminationsObjectCode != null && !financialEliminationsObject.getFinancialObjectCode().equalsIgnoreCase(this.financialEliminationsObjectCode)))) {
-            refreshReferenceObject("financialEliminationsObject");
-        }
         return financialEliminationsObject;
     }
 

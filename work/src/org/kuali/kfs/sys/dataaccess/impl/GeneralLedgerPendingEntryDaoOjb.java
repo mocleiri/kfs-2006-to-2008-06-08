@@ -36,11 +36,9 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.dao.GeneralLedgerPendingEntryDao;
-import org.kuali.kfs.util.KFSUtils;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.UniversityDate;
@@ -97,7 +95,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         KualiDecimal rv = null;
         Iterator iterator = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(reportQuery);
         if (iterator.hasNext()) {
-            rv = (KualiDecimal) ((Object[]) KFSUtils.retrieveFirstAndExhaustIterator(iterator))[0];
+            rv = (KualiDecimal) ((Object[]) iterator.next())[0];
         }
         return (rv == null) ? KualiDecimal.ZERO : rv;
     }
@@ -183,9 +181,34 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         KualiDecimal rv = null;
         Iterator iterator = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(reportQuery);
         if (iterator.hasNext()) {
-            rv = (KualiDecimal) ((Object[]) KFSUtils.retrieveFirstAndExhaustIterator(iterator))[0];
+            rv = (KualiDecimal) ((Object[]) iterator.next())[0];
         }
         return (rv == null) ? KualiDecimal.ZERO : rv;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.dao.GeneralLedgerPendingEntryDao#deleteEntriesForCancelledOrDisapprovedDocuments()
+     */
+    public void deleteEntriesForCancelledOrDisapprovedDocuments() {
+        LOG.debug("deleteEntriesForCancelledOrDisapprovedDocuments() started");
+
+        Criteria subCriteria = new Criteria();
+        Criteria criteria = new Criteria();
+
+        List codes = new ArrayList();
+        codes.add(KFSConstants.DocumentStatusCodes.DISAPPROVED);
+        codes.add(KFSConstants.DocumentStatusCodes.CANCELLED);
+
+        subCriteria.addIn(KFSPropertyConstants.FINANCIAL_DOCUMENT_STATUS_CODE, codes);
+        ReportQueryByCriteria subQuery = QueryFactory.newReportQuery(DocumentHeader.class, subCriteria);
+
+        subQuery.setAttributes(new String[] { KFSPropertyConstants.DOCUMENT_NUMBER });
+
+        criteria.addIn(KFSPropertyConstants.DOCUMENT_NUMBER, subQuery);
+
+        getPersistenceBrokerTemplate().deleteByQuery(QueryFactory.newQuery(this.getEntryClass(), criteria));
     }
 
     /*
@@ -250,7 +273,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
 
         // only process the document for which document status code is A (approved)
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("financialDocumentApprovedCode", KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.APPROVED);
+        this.addStatusCode(criteria, true);
 
         QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
@@ -271,7 +294,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         query.setAttributes(new String[] { "count(*)" });
         Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
         if (i.hasNext()) {
-            Object[] values = (Object[]) KFSUtils.retrieveFirstAndExhaustIterator(i);
+            Object[] values = (Object[]) i.next();
             if (values[0] instanceof BigDecimal) {
                 return ((BigDecimal)values[0]).intValue();
             } else {
@@ -496,7 +519,8 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
         if (isOnlyApproved) {
             criteria.addIn("documentHeader.financialDocumentStatusCode", this.buildApprovalCodeList());
         }
-        criteria.addNotEqualTo("financialDocumentApprovedCode", KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
+        criteria.addNotIn("documentHeader.financialDocumentStatusCode", this.buildExcludedStatusCodeList());
+        criteria.addNotEqualTo("financialDocumentApprovedCode", "X");
     }
 
     /**
@@ -512,6 +536,19 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
     }
 
     /**
+     * build a status code list including the codes that will not be processed
+     * 
+     * @return a status code list including the codes that will not be processed
+     */
+    private List buildExcludedStatusCodeList() {
+        List exclusiveCodeList = new ArrayList();
+
+        exclusiveCodeList.add(KFSConstants.DocumentStatusCodes.CANCELLED);
+        exclusiveCodeList.add(KFSConstants.DocumentStatusCodes.DISAPPROVED);
+        return exclusiveCodeList;
+    }
+
+    /**
      * This method builds an OJB query criteria based on the input field map
      * 
      * @param fieldValues the input field map
@@ -521,7 +558,7 @@ public class GeneralLedgerPendingEntryDaoOjb extends PlatformAwareDaoBaseOjb imp
     public Criteria buildCriteriaFromMap(Map fieldValues, Object businessObject) {
         Criteria criteria = new Criteria();
 
-        UniversityDate currentUniversityDate = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+        UniversityDate currentUniversityDate = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
         String currentFiscalPeriodCode = currentUniversityDate.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = currentUniversityDate.getUniversityFiscalYear();
 

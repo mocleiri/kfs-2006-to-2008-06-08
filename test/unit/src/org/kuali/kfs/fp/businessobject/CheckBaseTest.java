@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/fp/businessobject/CheckBaseTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,62 +19,53 @@ package org.kuali.module.financial.bo;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
 
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
 
 /**
  * This class...
  * 
  * 
  */
-@ConfigureContext
 public class CheckBaseTest extends KualiTestBase {
     private CheckBase crchk = null;
     private static final KualiDecimal AMOUNT = new KualiDecimal("100.27");
     private static final String GUID = "123456789012345678901234567890123456";
     private static final Long VER_NBR = new Long(1);
-    private static Date date;
+    private static final Date DATE = new Date(System.currentTimeMillis());
     private static final String CHECK_NUMBER = "123456";
     private static final String DESCRIPTION = "Description 123.";
     private static final String DOC_HDR_ID = "999999";
     private static final Integer SEQ_ID = new Integer(1);
-    private static final Integer DEPOSIT_LINE_NUMBER = new Integer(1);
-    private static final String DOCUMENT_TYPE = "CR";
-    private static final String CASHIERING_SOURCE = "R";
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        date = new Date(SpringContext.getBean(DateTimeService.class).getCurrentDate().getTime());
         crchk = new CheckBase();
         crchk.setAmount(AMOUNT);
-        crchk.setCheckDate(date);
+        crchk.setCheckDate(DATE);
         crchk.setCheckNumber(CHECK_NUMBER);
         crchk.setDescription(DESCRIPTION);
         crchk.setDocumentNumber(DOC_HDR_ID);
-        crchk.setFinancialDocumentDepositLineNumber(DEPOSIT_LINE_NUMBER);
+        crchk.setExtendedAttributeValues(new ArrayList());
+        crchk.setInterimDepositAmount(false);
         crchk.setObjectId(GUID);
         crchk.setSequenceId(SEQ_ID);
         crchk.setVersionNumber(VER_NBR);
-        crchk.setCashieringRecordSource(CASHIERING_SOURCE);
-        crchk.setFinancialDocumentTypeCode(DOCUMENT_TYPE);
     }
 
     public void testCashReceiptCheckPojo() {
         assertEquals(AMOUNT, crchk.getAmount());
-        assertEquals(date, crchk.getCheckDate());
+        assertEquals(DATE, crchk.getCheckDate());
         assertEquals(CHECK_NUMBER, crchk.getCheckNumber());
         assertEquals(DESCRIPTION, crchk.getDescription());
         assertEquals(DOC_HDR_ID, crchk.getDocumentNumber());
-        assertEquals(DEPOSIT_LINE_NUMBER, crchk.getFinancialDocumentDepositLineNumber());
+        assertEquals(0, crchk.getExtendedAttributeValues().size());
+        assertEquals(false, crchk.isInterimDepositAmount());
         assertEquals(GUID, crchk.getObjectId());
         assertEquals(SEQ_ID, crchk.getSequenceId());
         assertEquals(VER_NBR, crchk.getVersionNumber());
-        assertEquals(DOCUMENT_TYPE, crchk.getFinancialDocumentTypeCode());
-        assertEquals(CASHIERING_SOURCE, crchk.getCashieringRecordSource());
     }
 }

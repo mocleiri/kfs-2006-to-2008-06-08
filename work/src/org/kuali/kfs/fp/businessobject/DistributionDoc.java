@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/DistributionDoc.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +20,21 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class DistributionDoc extends PersistableBusinessObjectBase {
+public class DistributionDoc extends BusinessObjectBase {
 
     private String documentNumber;
     private Integer finDocumentNextFromLineNbr;
     private Integer finDocumentNextToLineNumber;
     private Integer financialDocumentPostingYear;
     private String finDocumentPostingPeriodCode;
-
+    private String finDocumentExplanationText;
     private DocumentHeader financialDocument;
 
     /**
@@ -148,6 +150,27 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
     }
 
     /**
+     * Gets the finDocumentExplanationText attribute.
+     * 
+     * @return Returns the finDocumentExplanationText
+     * 
+     */
+    public String getFinDocumentExplanationText() {
+        return finDocumentExplanationText;
+    }
+
+
+    /**
+     * Sets the finDocumentExplanationText attribute.
+     * 
+     * @param finDocumentExplanationText The finDocumentExplanationText to set.
+     * 
+     */
+    public void setFinDocumentExplanationText(String finDocumentExplanationText) {
+        this.finDocumentExplanationText = finDocumentExplanationText;
+    }
+
+    /**
      * Gets the financialDocument attribute.
      * 
      * @return Returns the financialDocument
@@ -173,7 +196,7 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 }

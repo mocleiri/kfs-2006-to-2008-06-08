@@ -13,12 +13,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 
 
 <kul:documentPage showDocumentInfo="true"
 	htmlFormAction="financialYearEndDistributionOfIncomeAndExpense"
-	documentTypeName="YearEndDistributionOfIncomeAndExpenseDocument"
+	documentTypeName="KualiYearEndDistributionOfIncomeAndExpenseDocument"
 	renderMultipart="true" showTabButtons="true">
 
 	<kul:hiddenDocumentFields />
@@ -28,7 +28,7 @@
 	<fin:accountingLines editingMode="${KualiForm.editingMode}"
 		editableAccounts="${KualiForm.editableAccounts}" />
 
-	<gl:generalLedgerPendingEntries />
+	<kul:generalLedgerPendingEntries />
 
 	<kul:notes />
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.AdvanceDepositDetail">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber" />
-            <attributeReference name="financialDocumentTypeCode" sourceClassName="org.kuali.core.bo.DocumentType" sourceAttributeName="financialDocumentTypeCode" />
+            <attributeReference name="financialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber" />
+            <attributeReference name="financialDocumentTypeCode" sourceClassName="org.kuali.core.document.DocumentType" sourceAttributeName="financialDocumentTypeCode" />
             <attribute name="financialDocumentColumnTypeCode" forceUppercase="true">
                 <label>Column Type Code</label>
                 <shortLabel>Column Type Code</shortLabel>
@@ -75,19 +75,12 @@
                 </summary>
                 <description>A brief description of the transaction. This field is for departmental use only, and does not appear on financial reports.</description>
             </attribute>
-            <attribute name="financialDocumentAdvanceDepositReferenceNumber" forceUppercase="true">
+            <attributeReference name="financialDocumentAdvanceDepositReferenceNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber">
                 <label>Reference Number</label>
                 <shortLabel>Reference Number</shortLabel>
                 <maxLength>10</maxLength>
-                <required>true</required>              
-                <control>
-                    <text size="16" />
-                </control>               
-                <summary>
-                	<![CDATA[&nbsp;]]>
-                </summary>
-                <description>The Reference Number is used to record the bank's unique transaction number for the deposit.</description>              
-            </attribute>
+                <required>true</required>
+            </attributeReference>
 			 <attributeReference name="financialDocumentBankCode" sourceClassName="org.kuali.module.financial.bo.Bank" sourceAttributeName="financialDocumentBankCode">
                 <label>Bank</label>
                 <shortLabel>Bank</shortLabel>

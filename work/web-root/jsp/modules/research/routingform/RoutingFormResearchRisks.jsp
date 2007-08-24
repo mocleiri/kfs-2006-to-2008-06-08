@@ -1,6 +1,8 @@
 <%--
  Copyright 2006 The Kuali Foundation.
  
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/research/routingform/RoutingFormResearchRisks.jsp,v $
+ 
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -13,7 +15,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRoutingFormDocument"

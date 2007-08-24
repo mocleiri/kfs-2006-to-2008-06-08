@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,39 +17,29 @@
  */
 package org.kuali.module.kra.budget.service.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DocumentService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.kra.budget.bo.AppointmentType;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetFringeRate;
 import org.kuali.module.kra.budget.bo.BudgetUser;
-import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.service.BudgetFringeRateService;
-import org.springframework.transaction.annotation.Transactional;
-
-import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * This class is the service implementation for the Account structure. This is the default, Kuali provided implementation.
+ * 
+ * 
  */
-@Transactional
 public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
     
     private KualiConfigurationService kualiConfigurationService;
     private BusinessObjectService businessObjectService;
-    private DocumentService documentService;
 
     public BudgetFringeRate getBudgetFringeRate(String documentNumber, String institutionAppointmentTypeCode) {
         
@@ -63,13 +55,10 @@ public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
     }
 
     /**
-     * @see org.kuali.module.kra.budget.service.BudgetFringeRateService#getDefaultFringeRates()
+     * @param accountDao The accountDao to set.
      */
     public Collection getDefaultFringeRates() {
-        Map fieldValues = new HashMap();
-        fieldValues.put(KFSPropertyConstants.ACTIVE, KFSConstants.ACTIVE_INDICATOR);
-        
-        return businessObjectService.findMatching(AppointmentType.class, fieldValues);
+        return businessObjectService.findAll(AppointmentType.class);
     }
 
     public BudgetFringeRate getBudgetFringeRateForDefaultAppointmentType(String documentNumber) {
@@ -102,7 +91,7 @@ public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
 
     public boolean isValidFringeRate(KualiDecimal fringeRate) {
         if (fringeRate != null) {
-            return fringeRate.isLessEqual(KFSConstants.CONTRACTS_AND_GRANTS_FRINGE_RATE_MAX);
+            return fringeRate.isLessEqual(Constants.CONTRACTS_AND_GRANTS_FRINGE_RATE_MAX);
         }
         else {
             return false;
@@ -111,7 +100,7 @@ public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
 
     public boolean isValidCostShare(KualiDecimal costShare) {
         if (costShare != null) {
-            return costShare.isLessEqual(KFSConstants.CONTRACTS_AND_GRANTS_COST_SHARE_MAX);
+            return costShare.isLessEqual(Constants.CONTRACTS_AND_GRANTS_COST_SHARE_MAX);
         }
         else {
             return false;
@@ -126,16 +115,11 @@ public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
         }
     }
 
-
     public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
         this.kualiConfigurationService = kualiConfigurationService;
     }
 
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
-    }
-
-    public void setDocumentService(DocumentService documentService) {
-        this.documentService = documentService;
     }
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/RequisitionItem.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +20,8 @@ package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
 
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.document.RequisitionDocument;
 
 /**
@@ -27,6 +29,24 @@ import org.kuali.module.purap.document.RequisitionDocument;
  */
 public class RequisitionItem extends PurchasingItemBase {
 
+    //Superclass contains
+    //private Integer itemIdentifier;
+    //private Integer itemLineNumber;
+    //private String capitalAssetTransactionTypeCode;
+    //private String itemUnitOfMeasureCode;
+    //private String itemCatalogNumber;
+    //private String itemDescription;
+    //private String itemCapitalAssetNoteText;
+    //private BigDecimal itemUnitPrice;
+    //private String itemTypeCode;
+    //private String requisitionLineIdentifier;
+    //private String itemAuxiliaryPartIdentifier;
+    //private String externalOrganizationB2bProductReferenceNumber;
+    //private String externalOrganizationB2bProductTypeName;
+    //private boolean itemAssignedToTradeInIndicator;
+
+	private Integer purapDocumentIdentifier;
+	private KualiDecimal itemQuantity;
 	private boolean itemRestrictedIndicator;
 
     private RequisitionDocument requisition;
@@ -35,12 +55,24 @@ public class RequisitionItem extends PurchasingItemBase {
 	 * Default constructor.
 	 */
 	public RequisitionItem() {
-        //add the first blank accounting line
-//        RequisitionAccount ra = new RequisitionAccount();
-//        ra.setAccountLinePercent(new Integer(99));
-//        ra.setBudgetYear("2006");
-//        getAccountingLines().add(ra);
+        
 	}
+
+    /**
+     * Gets the itemQuantity attribute. 
+     * @return Returns the itemQuantity.
+     */
+    public KualiDecimal getItemQuantity() {
+        return itemQuantity;
+    }
+
+    /**
+     * Sets the itemQuantity attribute value.
+     * @param itemQuantity The itemQuantity to set.
+     */
+    public void setItemQuantity(KualiDecimal itemQuantity) {
+        this.itemQuantity = itemQuantity;
+    }
 
     /**
      * Gets the itemRestrictedIndicator attribute. 
@@ -75,10 +107,31 @@ public class RequisitionItem extends PurchasingItemBase {
     }
 
     /**
-     * @see org.kuali.module.purap.bo.PurchasingItemBase#getAccountingLineClass()
+     * Gets the purapDocumentIdentifier attribute. 
+     * @return Returns the purapDocumentIdentifier.
+     */
+    public Integer getPurapDocumentIdentifier() {
+        return purapDocumentIdentifier;
+    }
+
+    /**
+     * Sets the purapDocumentIdentifier attribute value.
+     * @param purapDocumentIdentifier The purapDocumentIdentifier to set.
+     */
+    public void setPurapDocumentIdentifier(Integer purapDocumentIdentifier) {
+        this.purapDocumentIdentifier = purapDocumentIdentifier;
+    }
+
+    /**
+     * @see org.kuali.module.purap.bo.PurchasingItemBase#getExtendedPrice()
      */
     @Override
-    public Class getAccountingLineClass() {
-       return RequisitionAccount.class;
+    public KualiDecimal getExtendedPrice() {
+        if((this.getItemQuantity()==null) || (this.getItemUnitPrice()==null)) {
+            return new KualiDecimal("0");
+        }
+        return new KualiDecimal(this.getItemUnitPrice().multiply(new BigDecimal(this.getItemQuantity().toString())).toString());
     }
+
+    
 }

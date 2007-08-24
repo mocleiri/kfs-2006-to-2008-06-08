@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +19,16 @@ package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 
-public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements Comparable {
+public class BudgetNonpersonnel extends BusinessObjectBase implements Comparable {
     private static final long serialVersionUID = -7058371220805374107L;
 
     private String documentNumber;
@@ -411,7 +413,7 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("budgetTaskSequenceNumber", this.budgetTaskSequenceNumber);
         m.put("budgetPeriodSequenceNumber", this.budgetPeriodSequenceNumber);
         m.put("budgetNonpersonnelCategoryCode", this.budgetNonpersonnelCategoryCode);
@@ -638,8 +640,6 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
             else {
                 equals &= this.subcontractorNumber != null && objCompare.getSubcontractorNumber() != null && this.subcontractorNumber.equals(objCompare.getSubcontractorNumber());
             }
-        } else {
-            return false;
         }
 
         return equals;

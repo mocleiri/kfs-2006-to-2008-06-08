@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 package org.kuali.module.chart.rules;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.Constants;
+import org.kuali.core.authorization.MaintenanceDocumentAuthorizations;
+import org.kuali.core.authorization.MaintenanceDocumentAuthorizer;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizations;
-import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizer;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.SubAccount;
@@ -59,8 +59,8 @@ public class SubAccountPreRules extends MaintenancePreRulesBase {
            has been modified to only occur for a New and Copy Action.  
            This cannot happen on an Edit as the primary key will change.
         */        
-        if ( KFSConstants.MAINTENANCE_NEW_ACTION.equals( maintenanceAction ) || 
-             KFSConstants.MAINTENANCE_COPY_ACTION.equals( maintenanceAction ) ){
+        if ( Constants.MAINTENANCE_NEW_ACTION.equals( maintenanceAction ) || 
+             Constants.MAINTENANCE_COPY_ACTION.equals( maintenanceAction ) ){
             
             if (StringUtils.isNotBlank(newSubAccount.getAccountNumber())) {
                 Account account = checkForContinuationAccount("Account Number", newSubAccount.getChartOfAccountsCode(), newSubAccount.getAccountNumber(), "");
@@ -81,7 +81,7 @@ public class SubAccountPreRules extends MaintenancePreRulesBase {
     }
     
     private void copyICRFromAccount( MaintenanceDocument document ) {
-        UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
+        KualiUser user = GlobalVariables.getUserSession().getKualiUser();
         
         // get the correct documentAuthorizer for this document
         MaintenanceDocumentAuthorizer documentAuthorizer = (MaintenanceDocumentAuthorizer) getDocumentAuthorizationService().getDocumentAuthorizer(document);
