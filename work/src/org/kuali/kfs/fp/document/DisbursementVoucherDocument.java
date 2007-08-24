@@ -22,13 +22,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
-import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
@@ -120,7 +120,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         FlexibleOffsetAccountService flexibleOffsetAccountService = SpringContext.getBean(FlexibleOffsetAccountService.class);
         
         for (GeneralLedgerPendingEntry ple : this.getGeneralLedgerPendingEntries()) {
-            if (kualiConfigurationService.getApplicationParameterRule("SYSTEM", "SufficientFundsExpenseObjectTypes").succeedsRule(ple.getFinancialObjectTypeCode())) {
+            if (kualiConfigurationService.succeedsRule("SYSTEM", "SufficientFundsExpenseObjectTypes", ple.getFinancialObjectTypeCode())) {
                 //is an expense object type, keep checking
                 ple.refreshNonUpdateableReferences();
                 if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(KFSConstants.SF_TYPE_CASH_AT_ACCOUNT)) {
@@ -809,14 +809,14 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
             dvNonResidentAlienTax = null;
         }
 
-        String[] travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
-        if (!RulesUtils.makeSet(travelNonEmplPaymentReasonCodes).contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
+        Set<String> travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+        if (!travelNonEmplPaymentReasonCodes.contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
             SpringContext.getBean(BusinessObjectService.class).delete(dvNonEmployeeTravel);
             dvNonEmployeeTravel = null;
         }
 
-        String[] travelPrepaidPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
-        if (!RulesUtils.makeSet(travelPrepaidPaymentReasonCodes).contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
+        Set<String> travelPrepaidPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
+        if (!travelPrepaidPaymentReasonCodes.contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
             SpringContext.getBean(BusinessObjectService.class).delete(dvPreConferenceDetail);
             dvPreConferenceDetail = null;
         }
@@ -897,7 +897,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
 
         // default doc location
         if (StringUtils.isBlank(getDisbursementVoucherDocumentationLocationCode())) {
-            setDisbursementVoucherDocumentationLocationCode(SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.DEFAULT_DOC_LOCATION_PARM_NM));
+            setDisbursementVoucherDocumentationLocationCode(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.DEFAULT_DOC_LOCATION_PARM_NM));
         }
     }
 
