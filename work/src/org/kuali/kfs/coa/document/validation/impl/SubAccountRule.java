@@ -21,10 +21,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.Parameter;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
@@ -301,9 +301,9 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
         }
 
         // C&G A21 Type field must be in the allowed values
-        KualiParameterRule parmRule = getConfigService().getApplicationParameterRule(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, CG_ALLOWED_SUBACCOUNT_TYPE_CODES);
-        if (parmRule.failsRule(newSubAccount.getA21SubAccount().getSubAccountTypeCode())) {
-            putFieldError("a21SubAccount.subAccountTypeCode", KFSKeyConstants.ERROR_DOCUMENT_SUBACCTMAINT_INVALI_SUBACCOUNT_TYPE_CODES, parmRule.getParameterText());
+        Parameter parmRule = configService.getParameter(KFSConstants.CHART_NAMESPACE, CG_ALLOWED_SUBACCOUNT_TYPE_CODES);
+        if (configService.failsRule(parmRule,newSubAccount.getA21SubAccount().getSubAccountTypeCode())) {
+            putFieldError("a21SubAccount.subAccountTypeCode", KFSKeyConstants.ERROR_DOCUMENT_SUBACCTMAINT_INVALI_SUBACCOUNT_TYPE_CODES, parmRule.getParameterValue());
             success &= false;
         }
 
@@ -502,7 +502,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
     protected boolean isCgAuthorized(UniversalUser user) {
 
         // attempt to get the group name that grants access to the CG fields
-        String allowedCgWorkgroup = getConfigService().getApplicationParameterValue(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, CG_WORKGROUP_PARM_NAME);
+        String allowedCgWorkgroup = configService.getParameterValue(KFSConstants.CHART_NAMESPACE, CG_WORKGROUP_PARM_NAME);
 
         if (user.isMember( allowedCgWorkgroup )) {
             LOG.info("User '" + user.getPersonUserIdentifier() + "' is a member of the group '" + allowedCgWorkgroup + "', which gives them access to the CG fields.");
