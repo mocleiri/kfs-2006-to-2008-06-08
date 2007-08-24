@@ -1,5 +1,5 @@
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -18,13 +18,12 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.Org">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Organization Code Inquiry</title>
-			<inquirableClass>org.kuali.module.chart.maintenance.OrgInquirable</inquirableClass>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
 
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="organizationCode" />
@@ -56,6 +55,7 @@
                 <field attributeName="campusPlantChartCode" />
                 <field attributeName="campusPlantAccountNumber" />
 
+<!-- 
 		        <field attributeName="editHrmsUnitSectionBlank" />
 		        <field attributeName="editHrmsUnitSection" />     
 		        <field attributeName="organizationExtension.hrmsCompany" />       
@@ -78,22 +78,27 @@
 		        <field attributeName="organizationExtension.fiscalApproverUniversal.personName" />
 		        
 		        <field attributeName="organizationExtension.hrmsLastUpdateDate" />
-            </inquiryFields></inquirySection></inquirySections>
+-->	        
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Organization Code Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Org"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup an Organization</instructions>
 
             <defaultSort attributeName="chartOfAccountsCode" sortAscending="false" />
 
             <lookupFields>
-                <lookupField attributeName="organizationName" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="organizationCode" required="false" forceLookup="true" />
                 <lookupField attributeName="responsibilityCenterCode" required="false" />
                 <lookupField attributeName="organizationTypeCode" required="false" />
+                <lookupField attributeName="organizationName" required="false" />
                 <lookupField attributeName="reportsToChartOfAccountsCode" required="false"  />
                 <lookupField attributeName="reportsToOrganizationCode" required="false" />
                 <lookupField attributeName="organizationActiveIndicator" required="false">
@@ -167,8 +172,8 @@
 
 
             <attribute name="codeAndDescription" forceUppercase="false">
-                <label>Organization Code and Description</label>
-                <shortLabel>Org Code and Des</shortLabel>
+                <label>Organization Code</label>
+                <shortLabel>Org Code</shortLabel>
 
                 <maxLength>45</maxLength>
 
@@ -176,8 +181,8 @@
                     <text size="45" />
                 </control>
 
-                <summary>Organization Code and Des</summary>
-                <description>Organization Code and Description</description>
+                <summary>Organization Code</summary>
+                <description>Organization Code</description>
 
             </attribute>
 
@@ -227,7 +232,7 @@
                 </description>
             </attributeReference>
 
-            <attribute name="responsibilityCenterCode" forceUppercase="true">
+            <attribute name="responsibilityCenterCode" forceUppercase="false">
                 <label>Responsibility Center Code</label>
                 <shortLabel>RC</shortLabel>
 
@@ -280,7 +285,7 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.OrgTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.OrgTypeValuesFinder" />
                 </control>
 
                 <summary>Organization Type</summary>
@@ -318,7 +323,7 @@
                 <shortLabel>Plant Chart</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -532,7 +537,7 @@
                 <shortLabel>Chart Code</shortLabel>
                 <required>false</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
                 <summary>
                     <![CDATA[&nbsp;]]>
@@ -623,8 +628,8 @@
 								sourceAttributeName="hrmsIuCampusRoom" />
 								
       <attributeReference name="organizationExtension.hrmsPersonnelApproverUniversalId"
-                          sourceClassName="org.kuali.core.bo.user.UniversalUser"
-                          sourceAttributeName="personUniversalIdentifier">
+				        sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
+				        sourceAttributeName="genericSystemId">
         <label>Personnel Approver UserID</label>
         <shortLabel>Personnel Approver UserID</shortLabel>
         <required>false</required>
@@ -664,8 +669,8 @@
 		</attributeReference>
 
       <attributeReference name="organizationExtension.fiscalApproverUniversalId"
-                          sourceClassName="org.kuali.core.bo.user.UniversalUser"
-                          sourceAttributeName="personUniversalIdentifier">
+				        sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
+				        sourceAttributeName="genericSystemId">
         <label>Fiscal Approver UserID</label>
         <shortLabel>Fiscal Approver UserID</shortLabel>
         <required>false</required>
@@ -770,24 +775,9 @@
         <relationships>
             <relationship objectAttributeName="organizationManagerUniversal" >
                 <primitiveAttribute sourceName="organizationManagerUniversalId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="organizationManagerUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="organizationManagerUniversal.personName" targetName="personName" />
             </relationship>
-
-            <relationship objectAttributeName="organizationExtension.hrmsPersonnelApproverUniversal" >
-                <primitiveAttribute sourceName="organizationExtension.hrmsPersonnelApproverUniversalId" targetName="personUniversalIdentifier" />
-                <supportAttribute sourceName="organizationExtension.hrmsPersonnelApproverUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-                <supportAttribute sourceName="organizationExtension.hrmsPersonnelApproverUniversal.personName" targetName="personName" />
-            </relationship>
-
-            <relationship objectAttributeName="organizationExtension.fiscalApproverUniversal" >
-                <primitiveAttribute sourceName="organizationExtension.fiscalApproverUniversalId" targetName="personUniversalIdentifier" />
-                <supportAttribute sourceName="organizationExtension.fiscalApproverUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-                <supportAttribute sourceName="organizationExtension.fiscalApproverUniversal.personName" targetName="personName" />
-            </relationship> 
         </relationships>
 
-		<objectLabel>Organization Code</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

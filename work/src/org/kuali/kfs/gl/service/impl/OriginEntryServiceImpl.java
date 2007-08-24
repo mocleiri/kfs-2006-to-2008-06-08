@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/service/impl/OriginEntryServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +28,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.service.DateTimeService;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
@@ -44,9 +43,10 @@ import org.kuali.module.gl.util.LedgerEntry;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.gl.util.PosterOutputSummaryEntry;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ *  
+ */
 public class OriginEntryServiceImpl implements OriginEntryService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryServiceImpl.class);
 
@@ -56,8 +56,6 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
     private OriginEntryDao originEntryDao;
     private OriginEntryGroupService originEntryGroupService;
-    
-    private DateTimeService dateTimeService;
 
     /**
      * 
@@ -105,25 +103,6 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         // Create new Entries with newOriginEntryGroup
         for (OriginEntry oe : entries) {
-            oe.setEntryGroupId(newOriginEntryGroup.getId());
-            createEntry(oe, newOriginEntryGroup);
-        }
-
-        return newOriginEntryGroup;
-    }
-
-    
-    /**
-     * @see org.kuali.module.gl.service.OriginEntryService#copyEntries(java.sql.Date, java.lang.String, boolean, boolean, boolean, java.util.Iterator)
-     */
-    public OriginEntryGroup copyEntries(Date date, String sourceCode, boolean valid, boolean process, boolean scrub, Iterator<OriginEntry> entries) {
-        LOG.debug("copyEntries() started");
-
-        OriginEntryGroup newOriginEntryGroup = originEntryGroupService.createGroup(date, sourceCode, valid, process, scrub);
-
-        // Create new Entries with newOriginEntryGroup
-        while (entries.hasNext()) {
-            OriginEntry oe = entries.next();
             oe.setEntryGroupId(newOriginEntryGroup.getId());
             createEntry(oe, newOriginEntryGroup);
         }
@@ -206,7 +185,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
 
         Map criteria = new HashMap();
         criteria.put(ENTRY_GROUP_ID, originEntryGroup.getId());
-        criteria.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
         criteria.put(FINANCIAL_DOCUMENT_TYPE_CODE, documentTypeCode);
         criteria.put(FINANCIAL_SYSTEM_ORIGINATION_CODE, originCode);
 
@@ -279,7 +258,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     public void loadFlatFile(String filename, String groupSourceCode, boolean isValid, boolean isProcessed, boolean isScrub) {
         LOG.debug("loadFlatFile() started");
 
-        java.sql.Date groupDate = new java.sql.Date(dateTimeService.getCurrentDate().getTime());
+        java.sql.Date groupDate = new java.sql.Date(System.currentTimeMillis());
         OriginEntryGroup newGroup = originEntryGroupService.createGroup(groupDate, groupSourceCode, isValid, isProcessed, isScrub);
 
         BufferedReader input = null;
@@ -330,7 +309,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
     }
 
     // create or update a ledger entry with the array of information from the given entry summary object
-    public static LedgerEntry buildLedgerEntry(Object[] entrySummary) {
+    private LedgerEntry buildLedgerEntry(Object[] entrySummary) {
         // extract the data from an array and use them to populate a ledger entry
         Object oFiscalYear = entrySummary[0];
         Object oPeriodCode = entrySummary[1];
@@ -341,20 +320,20 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         Object oCount = entrySummary[6];
 
         Integer fiscalYear = oFiscalYear != null ? new Integer(oFiscalYear.toString()) : null;
-        String periodCode = oPeriodCode != null ? oPeriodCode.toString() : GLConstants.getSpaceUniversityFiscalPeriodCode();
-        String balanceType = oBalanceType != null ? oBalanceType.toString() : GLConstants.getSpaceBalanceTypeCode();
-        String originCode = oOriginCode != null ? oOriginCode.toString() : GLConstants.getSpaceFinancialSystemOriginationCode();
-        String debitCreditCode = oDebitCreditCode != null ? oDebitCreditCode.toString() : GLConstants.getSpaceDebitCreditCode();
+        String periodCode = oPeriodCode != null ? oPeriodCode.toString() : "  ";
+        String balanceType = oBalanceType != null ? oBalanceType.toString() : "  ";
+        String originCode = oOriginCode != null ? oOriginCode.toString() : "  ";
+        String debitCreditCode = oDebitCreditCode != null ? oDebitCreditCode.toString() : " ";
         KualiDecimal amount = oAmount != null ? new KualiDecimal(oAmount.toString()) : KualiDecimal.ZERO;
         int count = oCount != null ? Integer.parseInt(oCount.toString()) : 0;
 
         // construct a ledger entry with the information fetched from the given array
         LedgerEntry ledgerEntry = new LedgerEntry(fiscalYear, periodCode, balanceType, originCode);
-        if (KFSConstants.GL_CREDIT_CODE.equals(debitCreditCode)) {
+        if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             ledgerEntry.setCreditAmount(amount);
             ledgerEntry.setCreditCount(count);
         }
-        else if (KFSConstants.GL_DEBIT_CODE.equals(debitCreditCode)) {
+        else if (Constants.GL_DEBIT_CODE.equals(debitCreditCode)) {
             ledgerEntry.setDebitAmount(amount);
             ledgerEntry.setDebitCount(count);
         }
@@ -373,22 +352,13 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      */
     public void flatFile(Integer groupId, BufferedOutputStream bw) {
         LOG.debug("flatFile() started");
-        OriginEntryGroup oeg = new OriginEntryGroup();
-        oeg.setId(groupId);
-        flatFile(getEntriesByGroup(oeg), bw);
-    }
-    
-    /**
-     * This method writes origin entries into a file format.  This particular implementation
-     * will use the OriginEntry.getLine method to generate the text for this file.
-     * 
-     * @param entries An iterator of OriginEntries
-     * @param bw an opened, ready-for-output bufferedOutputStream.
-     */
-    public void flatFile(Iterator<OriginEntry> entries, BufferedOutputStream bw) {
+
         try {
-            while (entries.hasNext()) {
-                OriginEntry e = entries.next();
+            OriginEntryGroup oeg = new OriginEntryGroup();
+            oeg.setId(groupId);
+            Iterator i = getEntriesByGroup(oeg);
+            while (i.hasNext()) {
+                OriginEntry e = (OriginEntry) i.next();
                 bw.write((e.getLine() + "\n").getBytes());
             }
         }
@@ -402,28 +372,10 @@ public class OriginEntryServiceImpl implements OriginEntryService {
      * 
      * @see org.kuali.module.gl.service.OriginEntryService#getMatchingEntriesByCollection(java.util.Map)
      */
-    public Collection<OriginEntry> getMatchingEntriesByCollection(Map searchCriteria) {
+    public Collection getMatchingEntriesByCollection(Map searchCriteria) {
         LOG.debug("getMatchingEntriesByCollection() started");
 
         return originEntryDao.getMatchingEntriesByCollection(searchCriteria);
-    }
-
-    /**
-     * @see org.kuali.module.gl.service.OriginEntryService#getMatchingEntriesByList(java.util.Map)
-     */
-    public List<OriginEntry> getEntriesByGroupId(Integer groupId) {
-        if (groupId == null) {
-            throw new IllegalArgumentException("Group ID is null");
-        }
-        Map<String, Object> searchCriteria = new HashMap<String, Object>();
-        searchCriteria.put(ENTRY_GROUP_ID, groupId);
-        Collection<OriginEntry> searchResultAsCollection = getMatchingEntriesByCollection(searchCriteria);
-        if (searchResultAsCollection instanceof List) {
-            return (List<OriginEntry>) searchResultAsCollection;
-        }
-        else {
-            return new ArrayList<OriginEntry>(searchResultAsCollection);
-        }
     }
 
     /**
@@ -476,7 +428,7 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             posterOutputSummaryEntry.setObjectTypeCode(objectTypeCode);
 
             tempEntry = entrySummary[indexOfField++];
-            String debitCreditCode = (tempEntry == null) ? KFSConstants.GL_BUDGET_CODE : tempEntry.toString();
+            String debitCreditCode = (tempEntry == null) ? Constants.GL_BUDGET_CODE : tempEntry.toString();
 
             tempEntry = entrySummary[indexOfField];
             entry = (tempEntry == null) ? "0" : tempEntry.toString();            
@@ -492,17 +444,5 @@ public class OriginEntryServiceImpl implements OriginEntryService {
             }
         }
         return output;
-    }
-    
-
-    /**
-     * @see org.kuali.module.gl.service.OriginEntryService#getGroupCount(java.lang.Integer)
-     */
-    public Integer getGroupCount(Integer groupId) {
-        return originEntryDao.getGroupCount(groupId);
-    }
-
-    public void setDateTimeService(DateTimeService dateTimeService) {
-        this.dateTimeService = dateTimeService;
     }
 }

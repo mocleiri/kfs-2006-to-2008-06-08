@@ -16,16 +16,10 @@
 package org.kuali.module.labor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.gl.bo.OriginEntry;
 
 /**
  * This class contains the constants used by Labor Distribution.
@@ -108,14 +102,12 @@ public class LaborConstants {
     public static class BalanceInquiries {
         public static final String ERROR_INVALID_LABOR_OBJECT_CODE = "error.labor.invalidLaborObjectCodeError";
         public static final String[] VALID_LABOR_OBJECT_CODES = { "2000", "2001", "2400", "2401", "2500" };
-        public static final int laborLowValueObjectCode = 2000;
-        public static final int laborHighValueObjectCode = 5000;
         public static final String UnknownPersonName = "* Unknown Name *";
         public static final String ANNUAL_BALANCE = "ACLN_ANNL_BAL_AMT";
         public static final String CONTRACT_GRANT_BB_AMOUNT = "CONTR_GR_BB_AC_AMT";
-        public static final String ENCUMBERENCE_CODE = "IE";
-        public static final String ACTUALS_CODE = "AC";
-        public static final String BALANCE_CODE = "BB";
+        public static final String ENCUMBERENCE_CODE = "'IE'";
+        public static final String ACTUALS_CODE = "'AC'";
+        public static final String BALANCE_CODE = "'BB'";
         public static final String EMPLOYEE_FUNDING_EXPENSE_OBJECT_TYPE_CODE = "ES";
         public static final String EMPLOYEE_FUNDING_NORMAL_OP_EXPENSE_OBJECT_TYPE_CODE = "EX";
     }
@@ -185,40 +177,6 @@ public class LaborConstants {
         }        
     }
     
-    public static class LookupableBeanKeys {
-        static final public String PENDING_ENTRY = "laborPendingEntryLookupable";
-    }
-    
-    public static final Map<String, String> periodCodeMapping = new HashMap<String, String>();
-    static {
-        periodCodeMapping.put(KFSPropertyConstants.MONTH1_AMOUNT, KFSConstants.MONTH1);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH2_AMOUNT, KFSConstants.MONTH2);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH3_AMOUNT, KFSConstants.MONTH3);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH4_AMOUNT, KFSConstants.MONTH4);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH5_AMOUNT, KFSConstants.MONTH5);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH6_AMOUNT, KFSConstants.MONTH6);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH7_AMOUNT, KFSConstants.MONTH7);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH8_AMOUNT, KFSConstants.MONTH8);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH9_AMOUNT, KFSConstants.MONTH9);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH10_AMOUNT, KFSConstants.MONTH10);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH11_AMOUNT, KFSConstants.MONTH11);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH12_AMOUNT, KFSConstants.MONTH12);
-        periodCodeMapping.put(KFSPropertyConstants.MONTH13_AMOUNT, KFSConstants.MONTH13);
-    }
-    
     public static final String LONG_ROW_TABLE_INRUIRY_ACTION = "laborLongRowTableInquiry.do";
-    public static final String LABOR_INQUIRY_OPTIONS_SERVICE = "laborInquiryOptionsService";
-    public static final String BASE_FUNDS_LOOKUP_HELPER_SRVICE_NAME = "BaseFundsLookupableHelperService";
-    public static final String CSF_TRACKER_LOOKUP_HELPER_SRVICE_NAME = "CSFTrackerBalanceLookupableHelperService";
-    public static final String CURRENT_FUNDS_LOOKUP_HELPER_SRVICE_NAME = "CurrentFundsLookupableHelperService";
-    public static final String EXPENSE_TRANSFER_ACCOUNTING_LINE_SERVIOCE_NAME = "expenseTransferAccountingLineService";
-    public static final String DASHES_DELETE_CODE = "-";
-    public static final int LLCP_MAX_LENGTH = 294;    
-    private static String SPACE_TRANSACTION_DATE = null;
-    public static String getSpaceTransactionDate() {
-        if (SPACE_TRANSACTION_DATE == null) {
-            SPACE_TRANSACTION_DATE = StringUtils.rightPad("", SpringContext.getBean(DataDictionaryService.class).getAttributeSize(OriginEntry.class, KFSPropertyConstants.TRANSACTION_DATE), ' ');
-        }
-        return SPACE_TRANSACTION_DATE;
-    }
+    public static final String LABOR_USER_SERVICE_NAME = "laborUserService";
 }
