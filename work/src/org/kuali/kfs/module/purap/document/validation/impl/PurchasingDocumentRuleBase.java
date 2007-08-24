@@ -17,38 +17,33 @@ package org.kuali.module.purap.rules;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.validation.fieldlevel.PhoneNumberValidationPattern;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.DictionaryValidationService;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.PurapRuleConstants;
-import org.kuali.module.purap.PurapConstants.ItemFields;
 import org.kuali.module.purap.PurapConstants.ItemTypeCodes;
+import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.bo.PurchasingItemBase;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.vendor.VendorPropertyConstants;
-import org.kuali.module.vendor.bo.VendorDetail;
-import org.kuali.module.vendor.bo.VendorHeader;
-import org.kuali.module.vendor.service.VendorService;
 
 public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumentRuleBase {
+
+    BigDecimal zero = new BigDecimal("0.00");
 
     /**
      * Tabs included on Purchasing Documents are: Payment Info Delivery Additional
@@ -58,6 +53,7 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
     @Override
     public boolean processValidation(PurchasingAccountsPayableDocument purapDocument) {
         boolean valid = super.processValidation(purapDocument);
+        valid &= processItemValidation((PurchasingDocument) purapDocument);
         valid &= processPaymentInfoValidation((PurchasingDocument) purapDocument);
         valid &= processDeliveryValidation((PurchasingDocument) purapDocument);
         return valid;
@@ -69,40 +65,25 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
      * @param purDocument
      * @return
      */
-    @Override
-    public boolean processItemValidation(PurchasingAccountsPayableDocument purapDocument) {
-        boolean valid = super.processItemValidation(purapDocument);
-        List<PurchasingApItem> itemList = purapDocument.getItems();
+    public boolean processItemValidation(PurchasingDocument purDocument) {
+        boolean valid = true;
+        List<PurchasingApItem> itemList = purDocument.getItems();
         for (PurchasingApItem item : itemList) {
+            SpringServiceLocator.getDictionaryValidationService().validateBusinessObject(item);
             String identifierString = (item.getItemType().isItemTypeAboveTheLineIndicator() ?  "Item " + item.getItemLineNumber().toString() : item.getItemType().getItemTypeDescription());
-            valid &= validateItemUnitPrice(item);
-            valid &= validateUnitOfMeasure(item, identifierString);
+            valid &= validateItemUnitPrice(item, identifierString);
+            valid &= validateUniqueAccountingString(item, identifierString);
+            valid &= validateUnitOfMeasureUnitPriceAndDescription(item, identifierString);
             //This validation is applicable to the above the line items only.
             if (item.getItemType().isItemTypeAboveTheLineIndicator()) {                
                 valid &= validateItemQuantity(item, identifierString);
             }
-            else {
-                //If the item is below the line, no accounts can be entered on below the line items
-                //that have no unit cost (KULPURAP-1234)
-                valid &= validateBelowTheLineItemNoUnitCost(item, identifierString);
-            }
         }
-        valid &= validateTotalCost((PurchasingDocument)purapDocument);
-        valid &= validateContainsAtLeastOneItem((PurchasingDocument)purapDocument);
+        valid &= validateTotalCost(purDocument);
+        valid &= validateContainsAtLeastOneItem(purDocument);
         return valid;
     }
 
-    private boolean validateBelowTheLineItemNoUnitCost(PurchasingApItem item, String identifierString) {
-        if (ObjectUtils.isNull(item.getItemUnitPrice()) && 
-            ObjectUtils.isNotNull(item.getSourceAccountingLines()) &&
-            !item.getSourceAccountingLines().isEmpty()) {
-            
-            GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE_NO_UNIT_COST, identifierString);
-            return false;
-        }
-        return true;
-    }
-    
     /**
      * 
      * This method validates that the document contains at least one item.
@@ -117,51 +98,55 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
                 return true;
             }
         }
-        String documentType = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getDocumentEntry(purDocument.getDocumentHeader().getWorkflowDocument().getDocumentType()).getLabel();
-        
         if (! valid) {
-            GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_REQUIRED, documentType);
+            GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_REQUIRED);
         }
         return valid;
     }
     
     /**
-     * This method validates the unit price for all applicable item types. It also validates
-     * that the unit price and description fields were entered for all above the line items.
+     * This method validates the unit price for all applicable item types
      * 
      * @param purDocument
      * @return
      */
-    private boolean validateItemUnitPrice(PurchasingApItem item) {
+    private boolean validateItemUnitPrice(PurchasingApItem item, String identifierString) {
         boolean valid = true;
-        if (item.getItemType().isItemTypeAboveTheLineIndicator()) {
-            if (ObjectUtils.isNull(item.getItemUnitPrice())) {
-                valid = false;
-                GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, KFSKeyConstants.ERROR_REQUIRED, ItemFields.UNIT_COST + " in " + item.getItemIdentifierString());
-            }
-            if (StringUtils.isEmpty(item.getItemDescription())) {
-                valid = false;
-                GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, KFSKeyConstants.ERROR_REQUIRED, ItemFields.DESCRIPTION + " in " + item.getItemIdentifierString());
-            }
-        }
         if (ObjectUtils.isNotNull(item.getItemUnitPrice())) {
-            if ((BigDecimal.ZERO.compareTo(item.getItemUnitPrice()) > 0) && ((!item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE)) && (!item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)))) {
+            if ((zero.compareTo(item.getItemUnitPrice()) > 0) && ((!item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE)) && (!item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)))) {
                 // If the item type is not full order discount or trade in items, don't allow negative unit price.
-                GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_AMOUNT_BELOW_ZERO, ItemFields.UNIT_COST, item.getItemIdentifierString());
+                GlobalVariables.getErrorMap().putError("newPurchasingItemLine.itemUnitPrice", PurapKeyConstants.ERROR_ITEM_AMOUNT_BELOW_ZERO, "Unit Cost", identifierString);
                 valid = false;
             }
-            else if ((BigDecimal.ZERO.compareTo(item.getItemUnitPrice()) < 0) && ((item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE)) || (item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)))) {
+            else if ((zero.compareTo(item.getItemUnitPrice()) < 0) && ((item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE)) || (item.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)))) {
+
                 // If the item type is full order discount or trade in items, its unit price must be negative.
-                GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_AMOUNT_NOT_BELOW_ZERO, ItemFields.UNIT_COST, item.getItemIdentifierString());
+                GlobalVariables.getErrorMap().putError("newPurchasingItemLine.itemUnitPrice", PurapKeyConstants.ERROR_ITEM_AMOUNT_NOT_BELOW_ZERO, "Unit Cost", identifierString);
                 valid = false;
             }
         }
         return valid;
     }
 
-    public boolean processAddItemBusinessRules(AccountingDocument financialDocument, PurchasingApItem item) {
-        boolean valid = super.processAddItemBusinessRules(financialDocument, item);
-        valid &= validateItemUnitPrice(item);
+    /**
+     * This method validates that all the accounting strings in all of the items must be unique
+     * 
+     * @param itemList
+     * @return
+     */
+    private boolean validateUniqueAccountingString(PurchasingApItem item, String identifierString) {
+        boolean valid = true;
+        Set<String> accountingStringSet = new HashSet();
+        List<PurApAccountingLine> accountingLines = item.getSourceAccountingLines();
+        for (PurApAccountingLine accountingLine : accountingLines) {
+            if (accountingStringSet.contains(accountingLine.toString())) {
+                valid = false;
+                GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_ACCOUNTING_NOT_UNIQUE, identifierString);
+            }
+            else {
+                accountingStringSet.add(accountingLine.toString());
+            }
+        }
         return valid;
     }
 
@@ -173,29 +158,59 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
      */
     private boolean validateTotalCost(PurchasingDocument purDocument) {
         boolean valid = true;
-        if (purDocument.getTotalDollarAmount().isLessThan(new KualiDecimal(BigDecimal.ZERO))) {
+        if (purDocument.getTotalDollarAmount().isLessThan(new KualiDecimal(zero))) {
             valid = false;
-            GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_TOTAL_NEGATIVE);
+            GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_TOTAL_NEGATIVE);
         }
         return valid;
     }
 
     /**
      * 
-     * This method validates that if the item type is ITEM, the unit of measure
-     * is required. 
+     * This method validates that if the item type is ITEM and the item quantity is not null, the unit of measure
+     * is required. The description and unit price are also required field for item type ITEM.
+     * If the item type is not ITEM, and the unit price is entered, the description is required; likewise
+     * if the description is entered, the unit price is required.
      * 
      * @param item
      * @return
      */
-    private boolean validateUnitOfMeasure(PurchasingApItem item, String identifierString) {
+    private boolean validateUnitOfMeasureUnitPriceAndDescription(PurchasingApItem item, String identifierString) {
         boolean valid = true;
         PurchasingItemBase purItem = (PurchasingItemBase) item;
         // Validations for item type "ITEM"
         if (purItem.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_ITEM_CODE)) {
-            if (StringUtils.isEmpty(purItem.getItemUnitOfMeasureCode())) {
+            if (ObjectUtils.isNotNull(purItem.getItemQuantity())) {
+                if (zero.compareTo(purItem.getItemQuantity().bigDecimalValue()) < 0 && StringUtils.isEmpty(purItem.getItemUnitOfMeasureCode())) {
+
+                    valid = false;
+                    GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_QUANTITY_NOT_ZERO, "UOM", identifierString);
+                }
+            }
+            if (StringUtils.isEmpty(item.getItemDescription())) {
                 valid = false;
-                GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_QUANTITY_NOT_ZERO, ItemFields.UNIT_OF_MEASURE + " in ", identifierString);
+                GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_EMPTY, "Description", identifierString);
+            }
+            if (ObjectUtils.isNull(item.getItemUnitPrice())) {
+                valid = false;
+                GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_EMPTY, "Unit Cost", identifierString);
+            }
+        }
+        // Validations for non "ITEM" item type
+        else {
+            if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && (zero.compareTo(item.getItemUnitPrice()) != 0)) {
+                // if unit price is entered (non-zero), desc is required
+                if (StringUtils.isEmpty(item.getItemDescription())) {
+                    valid = false;
+                    GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_DESCRIPTION_EMPTY, "Description", identifierString);
+                }
+            }
+            else if (StringUtils.isNotEmpty(item.getItemDescription())) {
+                // if description is entered, unit price is required and cannot be zero
+                if (ObjectUtils.isNull(item.getItemUnitPrice()) || (zero.compareTo(item.getItemUnitPrice()) == 0)) {
+                    valid = false;
+                    GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_UNIT_PRICE_EMPTY, "Unit Cost", identifierString);
+                }
             }
         }
         return valid;
@@ -214,12 +229,7 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
              ( ObjectUtils.isNull(purItem.getItemQuantity()) || 
                ( ObjectUtils.isNotNull(purItem.getItemQuantity()) && purItem.getItemQuantity().isZero())) )   {
             valid = false;
-            GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, KFSKeyConstants.ERROR_REQUIRED, ItemFields.QUANTITY + " in " + identifierString);
-        }
-        else if ( purItem.getItemTypeCode().equals(ItemTypeCodes.ITEM_TYPE_SERVICE_CODE) &&
-        		  ObjectUtils.isNotNull(purItem.getItemQuantity())) {
-        	valid = false;
-        	GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_QUANTITY_NOT_ALLOWED );
+            GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_QUANTITY, "Quantity", identifierString);
         }
         return valid;
     }
@@ -287,30 +297,6 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
                     errorMap.putError(KFSConstants.DOCUMENT_PROPERTY_NAME + "." + VendorPropertyConstants.VENDOR_FAX_NUMBER, PurapKeyConstants.ERROR_FAX_NUMBER_INVALID);
                 }
             }
-        }                
-                
-        VendorDetail vendorDetail = SpringContext.getBean(VendorService.class).getVendorDetail(purDocument.getVendorHeaderGeneratedIdentifier(), purDocument.getVendorDetailAssignedIdentifier());
-        if ( ObjectUtils.isNull(vendorDetail) ) 
-            return valid;
-        VendorHeader vendorHeader = vendorDetail.getVendorHeader();
-        
-        // make sure that the vendor is not debarred
-        if (vendorHeader.getVendorDebarredIndicator()) {       
-            valid &= false;
-            errorMap.putError(VendorPropertyConstants.VENDOR_NAME, PurapKeyConstants.ERROR_DEBARRED_VENDOR);
-        }
-        
-        // make sure that the vendor is of 'PO' type
-        String allowedVendorType = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapRuleConstants.PURAP_ADMIN_GROUP, PurapRuleConstants.PURAP_VENDOR_TYPE_ALLOWED_ON_REQ_AND_PO);
-        if (!vendorHeader.getVendorTypeCode().equals(allowedVendorType)) {       
-            valid &= false;
-            errorMap.putError(VendorPropertyConstants.VENDOR_NAME, PurapKeyConstants.ERROR_INVALID_VENDOR_TYPE);
-        }
-
-        // make sure that the vendor is active
-        if (!vendorDetail.isActiveIndicator()) {       
-            valid &= false;
-            errorMap.putError(VendorPropertyConstants.VENDOR_NAME, PurapKeyConstants.ERROR_INACTIVE_VENDOR);
         }
         return valid;
     }
@@ -327,7 +313,7 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
      */
     private boolean checkBeginDateBeforeEndDate(PurchasingDocument purDocument) {
         boolean valid = true;
-        DateTimeService dateTimeService = SpringContext.getBean(DateTimeService.class);
+        DateTimeService dateTimeService = SpringServiceLocator.getDateTimeService();
 
         Date beginDate = purDocument.getPurchaseOrderBeginDate();
         Date endDate = purDocument.getPurchaseOrderEndDate();

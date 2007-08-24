@@ -56,7 +56,6 @@
                 <validationPattern>
                     <alphaNumeric/>
                 </validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="4" />

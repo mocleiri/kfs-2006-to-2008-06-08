@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.user.Options;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.document.CorrectionDocument;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
-import org.kuali.module.gl.util.Message;
 
 /**
  */
@@ -60,57 +60,57 @@ public interface ReportService {
     /**
      * Scrubber General Ledger Transaction Summary report
      * 
-     * @param runDate Run date of the report
-     * @param group Group to summarize for the report
+     * @param - runDate Run date of the report
+     * @param - group Group to summarize for the report
      */
     public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group,String documentNumber);
 
     /**
      * Scrubber General Ledger Transaction Summary report
      * 
-     * @param runDate Run date of the report
-     * @param groups Groups to summarize for the report
+     * @param - runDate Run date of the report
+     * @param - groups Groups to summarize for the report
      */
     public void generateScrubberLedgerSummaryReportBatch(Date runDate, Collection groups);
 
     /**
      * Scrubber Statistics report for batch reports
      * 
-     * @param runDate Run date of the report
-     * @param scrubberReport Summary information
-     * @param scrubberReportErrors Map of transactions with errors or warnings
+     * @param - runDate Run date of the report
+     * @param - scrubberReport Summary information
+     * @param - scrubberReportErrors Map of transactions with errors or warnings
      */
     public void generateBatchScrubberStatisticsReport(Date runDate, ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors);
 
     /**
      * Scrubber Statistics report for online reports
      * 
-     * @param runDate Run date of the report
-     * @param scrubberReport Summary information
-     * @param scrubberReportErrors Map of transactions with errors or warnings
+     * @param - runDate Run date of the report
+     * @param - scrubberReport Summary information
+     * @param - scrubberReportErrors Map of transactions with errors or warnings
      */
     public void generateOnlineScrubberStatisticsReport(Integer groupId, Date runDate, ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors,String documentNumber);
 
     /**
      * Scrubber Demerger Statistics report
      * 
-     * @param runDate Run date of the report
-     * @param demergerReport Summary information
+     * @param - runDate Run date of the report
+     * @param - demergerReport Summary information
      */
     public void generateScrubberDemergerStatisticsReports(Date runDate, DemergerReportData demergerReport);
 
     /**
      * Scrubber Bad Balance listing report
      * 
-     * @param runDate Run date of the report
-     * @param groups Groups to summarize for the report
+     * @param - runDate Run date of the report
+     * @param - groups Groups to summarize for the report
      */
     public void generateScrubberBadBalanceTypeListingReport(Date runDate, Collection groups);
 
     /**
      * Scrubber Transaction Listing report
      * 
-     * @param runDate Run date of the report
+     * @param - runDate Run date of the report
      * @param validGroup Group with transactions
      */
     public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup,String documentNumber);
@@ -118,7 +118,7 @@ public interface ReportService {
     /**
      * Scrubber Removed Transactions report
      * 
-     * @param runDate Run date of the report
+     * @param - runDate Run date of the report
      * @param errorGroup Group with error transactions
      */
     public void generateScrubberRemovedTransactions(Date runDate, OriginEntryGroup errorGroup);
@@ -202,7 +202,7 @@ public interface ReportService {
      * @param reportSummary
      * @param runDate
      */
-    public void generateBalanceForwardStatisticsReport(List reportSummary, Date runDate, OriginEntryGroup openAccountOriginEntryGroup, OriginEntryGroup closedAccountOriginEntryGroup);
+    public void generateBalanceForwardStatisticsReport(List reportSummary, Date runDate);
 
     /**
      * Encumbrance Closing Report
@@ -210,7 +210,7 @@ public interface ReportService {
      * @param reportSummary
      * @param runDate
      */
-    public void generateEncumbranceClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate, OriginEntryGroup originEntryGroup);
+    public void generateEncumbranceClosingStatisticsReport(List reportSummary, Date runDate);
 
     /**
      * Nominal Activity Closing Report
@@ -219,24 +219,13 @@ public interface ReportService {
      * @param reportSummary
      * @param runDate
      */
-    public void generateNominalActivityClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate, OriginEntryGroup originEntryGroup);
-    
-    /**
-     * 
-     * This method generates the statistics report of the organization reversion process.
-     * 
-     * @param jobParameters the parameters the org reversion process was run with
-     * @param reportSummary a list of various counts the job went through
-     * @param runDate the date the report was run
-     * @param orgReversionOriginEntryGroup the origin entry group that contains the reversion origin entries
-     */
-    public void generateOrgReversionStatisticsReport(Map jobParameters, List reportSummary, Date runDate, OriginEntryGroup orgReversionOriginEntryGroup);
+    public void generateNominalActivityClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate);
     
     /**
      * Poster Reversal Transactions Listing
      * 
-     * @param runDate Run date of the report
-     * @param group Group with valid transactions
+     * @param - runDate Run date of the report
+     * @param - group Group with valid transactions
      */
     public void generatePosterReversalTransactionsListing(Date runDate, OriginEntryGroup group);
 

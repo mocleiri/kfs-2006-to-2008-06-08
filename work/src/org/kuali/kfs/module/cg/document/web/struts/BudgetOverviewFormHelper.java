@@ -25,7 +25,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetModular;
@@ -37,10 +37,6 @@ import org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 import org.kuali.module.kra.budget.bo.UserAppointmentTask;
 import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
-import org.kuali.module.kra.budget.service.BudgetIndirectCostService;
-import org.kuali.module.kra.budget.service.BudgetModularService;
-import org.kuali.module.kra.budget.service.BudgetPeriodService;
-import org.kuali.module.kra.budget.service.BudgetTaskService;
 import org.kuali.module.kra.budget.web.struts.action.BudgetAction;
 
 /**
@@ -99,7 +95,7 @@ public class BudgetOverviewFormHelper {
      * Constructs a BudgetOverviewFormHelper. Sets necessary constants.
      */
     public BudgetOverviewFormHelper() {
-        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
+        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
         this.TO_BE_NAMED = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.TO_BE_NAMED_LABEL);
         this.HOURLY_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_HOURLY_APPOINTMENT_TYPES));
         this.GRADUATE_RA_APPOINTMENTS = Arrays.asList(kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES));
@@ -128,9 +124,9 @@ public class BudgetOverviewFormHelper {
         // set up data that reculculate requires to run
         BudgetAction.setupNonpersonnelCategories(budgetForm);
         if (isOverviewShowModular(budgetForm.getCurrentTaskNumber(), budget)) {
-            SpringContext.getBean(BudgetModularService.class).generateModularBudget(budget, budgetForm.getNonpersonnelCategories());
+            SpringServiceLocator.getBudgetModularService().generateModularBudget(budget, budgetForm.getNonpersonnelCategories());
         }
-        SpringContext.getBean(BudgetIndirectCostService.class).refreshIndirectCost(budgetForm.getBudgetDocument());
+        SpringServiceLocator.getBudgetIndirectCostService().refreshIndirectCost(budgetForm.getBudgetDocument());
         budgetForm.setBudgetIndirectCostFormHelper(new BudgetIndirectCostFormHelper(budget.getTasks(), budget.getPeriods(), budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems()));
 
         budgetForm.setBudgetNonpersonnelFormHelper(recalculate(budgetForm.getCurrentTaskNumber(), budgetForm.getCurrentPeriodNumber(), budgetForm.getNonpersonnelCategories(), budgetForm.getBudgetIndirectCostFormHelper(), budget));
@@ -156,8 +152,8 @@ public class BudgetOverviewFormHelper {
      */
     public BudgetNonpersonnelFormHelper recalculate(Integer currentTaskNumber, Integer currentPeriodNumber, List nonpersonnelCategories, BudgetIndirectCostFormHelper budgetIndirectCostFormHelper, Budget budget) {
         overviewShowModular = isOverviewShowModular(currentTaskNumber, budget);
-        Integer currentTaskNumberIndex = SpringContext.getBean(BudgetTaskService.class).getTaskIndex(currentTaskNumber, budget.getTasks());
-        Integer currentPeriodNumberIndex = SpringContext.getBean(BudgetPeriodService.class).getPeriodIndex(currentPeriodNumber, budget.getPeriods());
+        Integer currentTaskNumberIndex = SpringServiceLocator.getBudgetTaskService().getTaskIndex(currentTaskNumber, budget.getTasks());
+        Integer currentPeriodNumberIndex = SpringServiceLocator.getBudgetPeriodService().getPeriodIndex(currentPeriodNumber, budget.getPeriods());
 
         // Used for the Personnel section, note this should be called before BudgetNonpersonnelFormHelper because it will add Fee
         // Remission items to

@@ -25,13 +25,11 @@ import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.purap.bo.DeliveryRequiredDateReason;
 import org.kuali.module.purap.bo.FundingSource;
+import org.kuali.module.purap.bo.PurchaseOrderCostSource;
 import org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.bo.RecurringPaymentType;
 import org.kuali.module.purap.bo.RequisitionSource;
-import org.kuali.module.vendor.bo.PurchaseOrderCostSource;
-import org.kuali.module.vendor.bo.VendorContract;
-import org.kuali.module.vendor.bo.VendorDetail;
 
 
 
@@ -319,7 +317,7 @@ public interface PurchasingDocument extends PurchasingAccountsPayableDocument {
      * @return Returns the vendorRestrictedIndicator
      * 
      */
-    public Boolean getVendorRestrictedIndicator();
+    public boolean getVendorRestrictedIndicator();
 
     /**
      * Sets the vendorRestrictedIndicator attribute.
@@ -327,7 +325,7 @@ public interface PurchasingDocument extends PurchasingAccountsPayableDocument {
      * @param vendorRestrictedIndicator The vendorRestrictedIndicator to set.
      * 
      */
-    public void setVendorRestrictedIndicator(Boolean vendorRestrictedIndicator);
+    public void setVendorRestrictedIndicator(boolean vendorRestrictedIndicator);
 
     /**
      * Gets the vendorPhoneNumber attribute.
@@ -1197,24 +1195,6 @@ public interface PurchasingDocument extends PurchasingAccountsPayableDocument {
     public void setItems(List<PurchasingApItem> items);
     public void addItem(PurchasingApItem item);
     public void deleteItem(int lineNum);
-    public KualiDecimal getTotalDollarAmount(); 
+    public KualiDecimal getTotal(); 
     public PurchasingApItem getItem(int pos);
-    
-    public void setVendorContractName(String vendorContractName);
-    public boolean isDeliveryBuildingOther();
-    
-    /**
-     * Convenience method to set vendor detail fields based on a given VendorDetail.
-     * 
-     * @param vendorDetail
-     */
-    public void templateVendorDetail(VendorDetail vendorDetail);
-    
-    /**
-     * Convenience method to set vendor contract fields based on a given VendorContract.
-     * 
-     * @param vendorContract
-     */
-    public void templateVendorContract(VendorContract vendorContract);
- 
 }

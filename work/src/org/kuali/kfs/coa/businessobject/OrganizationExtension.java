@@ -22,8 +22,7 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * 
@@ -996,7 +995,7 @@ public class OrganizationExtension extends PersistableBusinessObjectBase {
     }
 
     public UniversalUser getHrmsPersonnelApproverUniversal() {
-        hrmsPersonnelApproverUniversal = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(hrmsPersonnelApproverUniversalId, hrmsPersonnelApproverUniversal);
+        hrmsPersonnelApproverUniversal = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(hrmsPersonnelApproverUniversalId, hrmsPersonnelApproverUniversal);
         return hrmsPersonnelApproverUniversal;
     }
 
@@ -1031,7 +1030,7 @@ public class OrganizationExtension extends PersistableBusinessObjectBase {
     }
 
     public UniversalUser getFiscalApproverUniversal() {
-        fiscalApproverUniversal = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(fiscalApproverUniversalId, fiscalApproverUniversal);
+        fiscalApproverUniversal = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(fiscalApproverUniversalId, fiscalApproverUniversal);
         return fiscalApproverUniversal;
     }
 

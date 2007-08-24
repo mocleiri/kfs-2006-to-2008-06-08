@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/DisbursementVoucherWireTransfer.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,14 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBase {
+public class DisbursementVoucherWireTransfer extends BusinessObjectBase {
 
     private String documentNumber;
     private String disbursementVoucherBankName;
@@ -44,6 +46,8 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
     private String disbursementVoucherAutomatedClearingHouseProfileNumber;
     private String disbursementVoucherForeignCurrencyTypeName;
     private String disbursementVoucherForeignCurrencyTypeCode;
+
+    private DisbursementVoucherDocument disbursementVoucherDocument;
 
 
     /**
@@ -414,6 +418,21 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
         this.disbursementVoucherAutomatedClearingHouseProfileNumber = disbursementVoucherAutomatedClearingHouseProfileNumber;
     }
 
+    /**
+     * @return Returns the disbursementVoucherDocument.
+     */
+    public DisbursementVoucherDocument getDisbursementVoucherDocument() {
+        return disbursementVoucherDocument;
+    }
+
+    /**
+     * @param disbursementVoucherDocument The disbursementVoucherDocument to set.
+     * @deprecated
+     */
+    public void setDisbursementVoucherDocument(DisbursementVoucherDocument disbursementVoucherDocument) {
+        this.disbursementVoucherDocument = disbursementVoucherDocument;
+    }
+
     public void setDisbVchrForeignBankIndicatorName(String name) {
     }
 
@@ -422,7 +441,7 @@ public class DisbursementVoucherWireTransfer extends PersistableBusinessObjectBa
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 

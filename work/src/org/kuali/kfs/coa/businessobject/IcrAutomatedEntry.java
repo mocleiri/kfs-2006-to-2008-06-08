@@ -21,9 +21,8 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiPercent;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.financial.service.UniversityDateService;
 
 /**
  * 
@@ -35,7 +34,7 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
      */
     public IcrAutomatedEntry() {
         // initialize the object fiscal year to the current fiscal year
-        universityFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        universityFiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
     }
 
     private Integer universityFiscalYear;

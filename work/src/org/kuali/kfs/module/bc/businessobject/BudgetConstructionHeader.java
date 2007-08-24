@@ -25,9 +25,8 @@ import java.util.Map;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
@@ -319,7 +318,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     }
     
     public UniversalUser getBudgetLockUser() {
-        budgetLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(budgetLockUserIdentifier, budgetLockUser);
+        budgetLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(budgetLockUserIdentifier, budgetLockUser);
         return budgetLockUser;
     }
 
@@ -354,7 +353,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     }
 
     public UniversalUser getBudgetTransactionLockUser() {
-        budgetTransactionLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(budgetTransactionLockUserIdentifier, budgetTransactionLockUser);
+        budgetTransactionLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(budgetTransactionLockUserIdentifier, budgetTransactionLockUser);
         return budgetTransactionLockUser;
     }
 

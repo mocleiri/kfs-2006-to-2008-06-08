@@ -19,7 +19,6 @@ import java.io.BufferedOutputStream;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.kuali.module.gl.bo.OriginEntry;
@@ -45,20 +44,6 @@ public interface OriginEntryService {
      */
     public OriginEntryGroup copyEntries(Date date, String sourceCode, boolean valid,boolean process,boolean scrub,Collection<OriginEntry> entries);
 
-    /**
-     * Copy a set of entries into a new group.  This method can use less space than the method that takes in a collection, because iterators can
-     * be implemented to load data one chunk at a time, similar to how java ResultSets work.
-     * 
-     * @param date
-     * @param sourceCode
-     * @param valid
-     * @param process
-     * @param scrub
-     * @param entries
-     * @return
-     */
-    public OriginEntryGroup copyEntries(Date date, String sourceCode, boolean valid,boolean process,boolean scrub,Iterator<OriginEntry> entries);
-    
     /**
      * Delete entry
      * 
@@ -168,14 +153,6 @@ public interface OriginEntryService {
     public void flatFile(Integer groupId, BufferedOutputStream bw);
 
     /**
-     * writes out a list of origin entries to an output stream.
-     * 
-     * @param entries
-     * @param bw
-     */
-    public void flatFile(Iterator<OriginEntry> entries, BufferedOutputStream bw);
-    
-    /**
      * get the summarized information of the entries that belong to the entry groups with the given group id list
      * 
      * @param groupIdList the origin entry groups
@@ -183,15 +160,7 @@ public interface OriginEntryService {
      */
     public LedgerEntryHolder getSummaryByGroupId(Collection groupIdList);
 
-    public Collection<OriginEntry> getMatchingEntriesByCollection(Map searchCriteria);
-    
-    /**
-     * Retrieves a list of origin entries that match the search criteria.
-     * 
-     * @param groupId
-     * @return
-     */
-    public List<OriginEntry> getEntriesByGroupId(Integer groupId);
+    public Collection getMatchingEntriesByCollection(Map searchCriteria);
 
     public OriginEntry getExactMatchingEntry(Integer entryId);
 
@@ -202,9 +171,4 @@ public interface OriginEntryService {
      * @return a map of summarized information of poster input entries within the specified groups
      */    
     public Map<String,PosterOutputSummaryEntry> getPosterOutputSummaryByGroupId(Collection groupIdList);
-    
-    /**
-     * Get count of transactions in a group
-     */
-    public Integer getGroupCount(Integer groupId);
 }

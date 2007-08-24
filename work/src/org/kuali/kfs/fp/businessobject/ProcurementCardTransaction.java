@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/ProcurementCardTransaction.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +24,14 @@ import java.util.LinkedHashMap;
 
 import org.apache.commons.beanutils.converters.SqlDateConverter;
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.Constants;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 
 /**
  * 
  */
-public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
+public class ProcurementCardTransaction extends BusinessObjectBase {
 
     private Integer transactionSequenceRowNumber;
     private String transactionCreditCardNumber;
@@ -648,7 +650,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     }
 
     public void setTransactionTaxExemptIndicator(String transactionTaxExemptIndicator) {
-        if (KFSConstants.ACTIVE_INDICATOR.equals(transactionTaxExemptIndicator)) {
+        if (Constants.ACTIVE_INDICATOR.equals(transactionTaxExemptIndicator)) {
             this.transactionTaxExemptIndicator = true;
         }
         else {
@@ -678,7 +680,7 @@ public class ProcurementCardTransaction extends PersistableBusinessObjectBase {
     }
 
     public void setTransactionPurchaseIdentifierIndicator(String transactionPurchaseIdentifierIndicator) {
-        if (KFSConstants.ACTIVE_INDICATOR.equals(transactionPurchaseIdentifierIndicator)) {
+        if (Constants.ACTIVE_INDICATOR.equals(transactionPurchaseIdentifierIndicator)) {
             this.transactionPurchaseIdentifierIndicator = true;
         }
         else {

@@ -18,14 +18,11 @@ package org.kuali.module.budget.bo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -46,12 +43,12 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	private String positionNumber;
 	private String emplid;
 	private String appointmentFundingDurationCode;
-	private KualiInteger appointmentRequestedCsfAmount;
+	private KualiDecimal appointmentRequestedCsfAmount;
 	private BigDecimal appointmentRequestedCsfFteQuantity;
 	private BigDecimal appointmentRequestedCsfTimePercent;
-	private KualiInteger appointmentTotalIntendedAmount;
+	private KualiDecimal appointmentTotalIntendedAmount;
 	private BigDecimal appointmentTotalIntendedFteQuantity;
-	private KualiInteger appointmentRequestedAmount;
+	private KualiDecimal appointmentRequestedAmount;
 	private BigDecimal appointmentRequestedTimePercent;
 	private BigDecimal appointmentRequestedFteQuantity;
 	private BigDecimal appointmentRequestedPayRate;
@@ -70,7 +67,6 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
     private BudgetConstructionAccountReports budgetConstructionAccountReports;
 //    private BudgetConstructionCalculatedSalaryFoundationTracker bcnCalculatedSalaryFoundationTracker;
     private BudgetConstructionIntendedIncumbent budgetConstructionIntendedIncumbent;
-    private BudgetConstructionDuration budgetConstructionDuration;
     
     private List bcnCalculatedSalaryFoundationTracker;
     private List budgetConstructionSalaryFunding;
@@ -104,7 +100,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
                 percentChange = null;
             } else {
                 BigDecimal diffRslt = (appointmentRequestedAmount.bigDecimalValue().setScale(4)).subtract(csfLine.getCsfAmount().bigDecimalValue().setScale(4));
-                BigDecimal divRslt = diffRslt.divide((csfLine.getCsfAmount().bigDecimalValue().setScale(4)),KualiDecimal.ROUND_BEHAVIOR);
+                BigDecimal divRslt = diffRslt.divide((csfLine.getCsfAmount().bigDecimalValue().setScale(4)),BigDecimal.ROUND_HALF_UP);
                 percentChange = new KualiDecimal(divRslt.multiply(BigDecimal.valueOf(100)).setScale(2)); 
             }
         }    
@@ -310,22 +306,27 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 
 
 	/**
-     * Gets the appointmentRequestedCsfAmount attribute. 
-     * @return Returns the appointmentRequestedCsfAmount.
-     */
-    public KualiInteger getAppointmentRequestedCsfAmount() {
-        return appointmentRequestedCsfAmount;
-    }
+	 * Gets the appointmentRequestedCsfAmount attribute.
+	 * 
+	 * @return Returns the appointmentRequestedCsfAmount
+	 * 
+	 */
+	public KualiDecimal getAppointmentRequestedCsfAmount() { 
+		return appointmentRequestedCsfAmount;
+	}
 
-    /**
-     * Sets the appointmentRequestedCsfAmount attribute value.
-     * @param appointmentRequestedCsfAmount The appointmentRequestedCsfAmount to set.
-     */
-    public void setAppointmentRequestedCsfAmount(KualiInteger appointmentRequestedCsfAmount) {
-        this.appointmentRequestedCsfAmount = appointmentRequestedCsfAmount;
-    }
+	/**
+	 * Sets the appointmentRequestedCsfAmount attribute.
+	 * 
+	 * @param appointmentRequestedCsfAmount The appointmentRequestedCsfAmount to set.
+	 * 
+	 */
+	public void setAppointmentRequestedCsfAmount(KualiDecimal appointmentRequestedCsfAmount) {
+		this.appointmentRequestedCsfAmount = appointmentRequestedCsfAmount;
+	}
 
-    /**
+
+	/**
 	 * Gets the appointmentRequestedCsfFteQuantity attribute.
 	 * 
 	 * @return Returns the appointmentRequestedCsfFteQuantity
@@ -368,22 +369,27 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 
 
 	/**
-     * Gets the appointmentTotalIntendedAmount attribute. 
-     * @return Returns the appointmentTotalIntendedAmount.
-     */
-    public KualiInteger getAppointmentTotalIntendedAmount() {
-        return appointmentTotalIntendedAmount;
-    }
+	 * Gets the appointmentTotalIntendedAmount attribute.
+	 * 
+	 * @return Returns the appointmentTotalIntendedAmount
+	 * 
+	 */
+	public KualiDecimal getAppointmentTotalIntendedAmount() { 
+		return appointmentTotalIntendedAmount;
+	}
 
-    /**
-     * Sets the appointmentTotalIntendedAmount attribute value.
-     * @param appointmentTotalIntendedAmount The appointmentTotalIntendedAmount to set.
-     */
-    public void setAppointmentTotalIntendedAmount(KualiInteger appointmentTotalIntendedAmount) {
-        this.appointmentTotalIntendedAmount = appointmentTotalIntendedAmount;
-    }
+	/**
+	 * Sets the appointmentTotalIntendedAmount attribute.
+	 * 
+	 * @param appointmentTotalIntendedAmount The appointmentTotalIntendedAmount to set.
+	 * 
+	 */
+	public void setAppointmentTotalIntendedAmount(KualiDecimal appointmentTotalIntendedAmount) {
+		this.appointmentTotalIntendedAmount = appointmentTotalIntendedAmount;
+	}
 
-    /**
+
+	/**
 	 * Gets the appointmentTotalIntendedFteQuantity attribute.
 	 * 
 	 * @return Returns the appointmentTotalIntendedFteQuantity
@@ -410,7 +416,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	 * @return Returns the appointmentRequestedAmount
 	 * 
 	 */
-	public KualiInteger getAppointmentRequestedAmount() { 
+	public KualiDecimal getAppointmentRequestedAmount() { 
 		return appointmentRequestedAmount;
 	}
 
@@ -420,7 +426,7 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
 	 * @param appointmentRequestedAmount The appointmentRequestedAmount to set.
 	 * 
 	 */
-	public void setAppointmentRequestedAmount(KualiInteger appointmentRequestedAmount) {
+	public void setAppointmentRequestedAmount(KualiDecimal appointmentRequestedAmount) {
 		this.appointmentRequestedAmount = appointmentRequestedAmount;
 	}
 
@@ -760,22 +766,6 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
     }    
     
     /**
-     * Gets the budgetConstructionDuration attribute. 
-     * @return Returns the budgetConstructionDuration.
-     */
-    public BudgetConstructionDuration getBudgetConstructionDuration() {
-        return budgetConstructionDuration;
-    }
-
-    /**
-     * Sets the budgetConstructionDuration attribute value.
-     * @param budgetConstructionDuration The budgetConstructionDuration to set.
-     */
-    public void setBudgetConstructionDuration(BudgetConstructionDuration budgetConstructionDuration) {
-        this.budgetConstructionDuration = budgetConstructionDuration;
-    }
-
-    /**
      * Gets the budgetConstructionIntendedIncumbent attribute. 
      * @return Returns the budgetConstructionIntendedIncumbent.
      */
@@ -809,26 +799,6 @@ public class PendingBudgetConstructionAppointmentFunding extends PersistableBusi
         this.bcnCalculatedSalaryFoundationTracker = bcnCalculatedSalaryFoundationTracker;
     }
 
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-        simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());
-        simpleValues.put("accountNumber", getAccountNumber());
-        simpleValues.put("subAccountNumber", getSubAccountNumber());
-        simpleValues.put("financialObjectCode", getFinancialObjectCode());
-        simpleValues.put("financialSubObjectCode", getFinancialSubObjectCode());
-        simpleValues.put("positionNumber", getPositionNumber());
-        simpleValues.put("emplid", getEmplid());
-
-        return simpleValues;
-    }
-  
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */

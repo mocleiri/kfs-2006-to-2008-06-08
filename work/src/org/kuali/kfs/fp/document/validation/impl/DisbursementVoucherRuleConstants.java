@@ -22,7 +22,7 @@ package org.kuali.module.financial.rules;
  * 
  */
 public interface DisbursementVoucherRuleConstants {
-    
+
     // payment methods
     public static String PAYMENT_METHOD_CHECK = "P";
     public static String PAYMENT_METHOD_WIRE = "W";
@@ -45,9 +45,7 @@ public interface DisbursementVoucherRuleConstants {
     // document location
     public static String NO_DOCUMENTATION_LOCATION = "N";
 
-    // system parameter security group constants
-    public static String DV_PDP_EXTRACT_GROUP_NM = "DVPDPExtract";
-    public static String DV_PAYMENT_REASON_CAMPUS_OVERRIDE = "DVPaymentReasonCampusOverride";
+    // apc security group constants
     public static String DV_DOCUMENT_PARAMETERS_GROUP_NM = "Kuali.FinancialTransactionProcessing.DisbursementVoucherDocument";
     public static String GLOBAL_FIELD_RESTRICTIONS_GROUP_NM = "DVGlobalFieldRestrictions";
     public static String PAYMENT_OBJECT_LEVEL_GROUP_NM = "DVPaymentObjectLevelRestrictions";
@@ -63,34 +61,7 @@ public interface DisbursementVoucherRuleConstants {
     public static String SUB_FUND_OBJECT_SUB_TYPE_GROUP_NM = "DVSubFundObjectSubTypeRestrictions";
     public static String NRA_TAX_PARM_GROUP_NM = "DVNRATaxParameters";
 
-    public static class PaymentReasonCodes {
-        public static String PRIZE = "A";
-        public static String OUT_OF_POCKET = "B";
-        public static String RESEARCH_PARTICIPANT = "C";
-        public static String DECEDENT = "D";
-        public static String SERVICES = "E";
-        public static String REFUND = "F";
-        public static String UTILITIES = "G";
-        public static String MEDICAL = "H";
-        public static String REVOLVING_FUND = "K";
-        public static String CONTRACTUAL_AGREEMENTS = "L";
-        public static String MOVING = "M";
-        public static String TRAVEL_NONEMPLOYEE = "N";
-        public static String TRAVEL_PREPAID = "P";
-        public static String ROYALTIES = "R";
-        public static String RENTAL_PAYMENT = "T";
-        public static String SUBSCRIPTIONS = "W";
-        public static String TRAVEL_HONORARIUM = "X";
-        public static String CLAIMS = "Z";
-    }
-
-    public static class DvPdpExtractGroup {
-        public static String DV_PDP_ORG_CODE = "DV.PDP.ORG.CODE";
-        public static String DV_PDP_SBUNT_CODE = "DV.PDP.SBUNT.CODE";
-        public static String DV_PDP_USER_ID = "DV.PDP.USER.ID";
-    }
-
-    // system parameter parameter constants
+    // apc parameter constants
     public static String OBJECT_CODE_PARM_PREFIX = "OBJECT_CODE_";
     public static String OBJECT_LEVEL_PARM_PREFIX = "OBJECT_LEVEL_";
     public static String PAYMENT_PARM_PREFIX = "PAYMENT_REASON_";
@@ -123,7 +94,9 @@ public interface DisbursementVoucherRuleConstants {
     public static String RESEARCH_PAY_REASONS_PARM_NM = "RESEARCH_PAYMENT_REASONS";
     public static String RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM = "RESEARCH_NON_VENDOR_PAY_LIMIT_AMOUNT";
     public static String PERFORM_PREPAID_EMPL_PARM_NM = "PERFORM_PREPAID_ACTIVE_EMPLOPYEE_IND";
+    public static String PERFORM_EMPL_OUTSIDE_PAYROLL_PARM_NM = "PERFORM_EMPL_PAID_OUTSIDE_PAYROLL_IND";
     public static String MOVING_PAY_REASONS_PARM_NM = "MOVING_PAYMENT_REASONS";
+    public static String SWITCH_DEBIT_CREDIT_ACCOUNT_TYPES_PARM_NM = "SWITCH_DEBIT_CREDIT_ACCOUNT_TYPES";
 
     public static String TAX_TYPE_SSN = "1";
     public static String TAX_TYPE_FEIN = "0";

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/DisbursementVoucherNonEmployeeTravel.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +19,20 @@
 package org.kuali.module.financial.bo;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.service.DateTimeService;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.web.format.TimestampAMPMFormatter;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class DisbursementVoucherNonEmployeeTravel extends PersistableBusinessObjectBase {
+public class DisbursementVoucherNonEmployeeTravel extends BusinessObjectBase {
 
     private String documentNumber;
     private String disbVchrTravelFromCityName;
@@ -547,7 +547,7 @@ public class DisbursementVoucherNonEmployeeTravel extends PersistableBusinessObj
      * 
      */
     public KualiDecimal getDisbVchrPersonalCarAmount() {
-        return dvPersonalCarMileageAmount == null ? null : disbVchrPersonalCarAmount;
+        return disbVchrPersonalCarAmount;
     }
 
 
@@ -673,7 +673,7 @@ public class DisbursementVoucherNonEmployeeTravel extends PersistableBusinessObj
      * 
      */
     public KualiDecimal getDisbVchrMileageCalculatedAmt() {
-        return dvPersonalCarMileageAmount == null ? null : disbVchrMileageCalculatedAmt;
+        return disbVchrMileageCalculatedAmt;
     }
 
 
@@ -747,7 +747,7 @@ public class DisbursementVoucherNonEmployeeTravel extends PersistableBusinessObj
      * @return
      */
     public String getPerDiemStartDateTime() {
-        return SpringContext.getBean(DateTimeService.class).toDateTimeString(dvPerdiemStartDttmStamp);
+        return (String) new TimestampAMPMFormatter().format(dvPerdiemStartDttmStamp);
     }
 
     /**
@@ -756,12 +756,7 @@ public class DisbursementVoucherNonEmployeeTravel extends PersistableBusinessObj
      * @param perDiemStartDateTime
      */
     public void setPerDiemStartDateTime(String perDiemStartDateTime) {
-        try {
-            this.dvPerdiemStartDttmStamp = SpringContext.getBean(DateTimeService.class).convertToSqlTimestamp(perDiemStartDateTime);
-        }
-        catch (ParseException e) {
-            this.dvPerdiemStartDttmStamp = null;
-        }
+        this.dvPerdiemStartDttmStamp = (Timestamp) new TimestampAMPMFormatter().convertFromPresentationFormat(perDiemStartDateTime);
     }
 
     /**
@@ -770,7 +765,7 @@ public class DisbursementVoucherNonEmployeeTravel extends PersistableBusinessObj
      * @return String
      */
     public String getPerDiemEndDateTime() {
-        return SpringContext.getBean(DateTimeService.class).toDateTimeString(dvPerdiemEndDttmStamp);
+        return (String) new TimestampAMPMFormatter().format(dvPerdiemEndDttmStamp);
     }
 
     /**
@@ -779,12 +774,7 @@ public class DisbursementVoucherNonEmployeeTravel extends PersistableBusinessObj
      * @param perDiemEndDateTime
      */
     public void setPerDiemEndDateTime(String perDiemEndDateTime) {
-        try {
-            this.dvPerdiemEndDttmStamp = SpringContext.getBean(DateTimeService.class).convertToSqlTimestamp(perDiemEndDateTime);
-        }
-        catch (ParseException e) {
-            this.dvPerdiemEndDttmStamp = null;
-        }
+        this.dvPerdiemEndDttmStamp = (Timestamp) new TimestampAMPMFormatter().convertFromPresentationFormat(perDiemEndDateTime);
     }
 
     /**
@@ -856,7 +846,7 @@ public class DisbursementVoucherNonEmployeeTravel extends PersistableBusinessObj
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 }

@@ -19,18 +19,13 @@ package org.kuali.module.budget.bo;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ResponsibilityCenter;
 
 /**
@@ -76,10 +71,9 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 	 */
 	public BudgetConstructionPosition() {
         budgetConstructionPositionSelect = new ArrayList();
-        setPendingBudgetConstructionAppointmentFunding(new TypedArrayList(PendingBudgetConstructionAppointmentFunding.class));
+        pendingBudgetConstructionAppointmentFunding = new ArrayList();;
 
 	}
-
 
     /**
      * Computes the positionFullTimeEquivalency attribute.
@@ -89,10 +83,10 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
      */
     public static BigDecimal getCalculatedBCPositionFTE(BigDecimal positionStandardHoursDefault, Integer iuNormalWorkMonths, Integer iuPayMonths ) { 
         if (iuPayMonths > 0){
-            BigDecimal temp1 = positionStandardHoursDefault.divide(new BigDecimal(40),4, KualiDecimal.ROUND_BEHAVIOR );
-            BigDecimal temp2 = new BigDecimal(iuNormalWorkMonths).divide(new BigDecimal(iuPayMonths), 4, KualiDecimal.ROUND_BEHAVIOR );
+            BigDecimal temp1 = positionStandardHoursDefault.divide(new BigDecimal(40),4, BigDecimal.ROUND_DOWN );
+            BigDecimal temp2 = new BigDecimal(iuNormalWorkMonths).divide(new BigDecimal(iuPayMonths), 4, BigDecimal.ROUND_DOWN );
             BigDecimal result = temp1.multiply(temp2) ;
-            result = result.setScale(2, KualiDecimal.ROUND_BEHAVIOR);
+            result = result.setScale(2, BigDecimal.ROUND_DOWN);
             return result;
         }else{
             return BigDecimal.valueOf(0.0);
@@ -689,7 +683,7 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
      * @return Returns the positionLockUser
      */
     public UniversalUser getPositionLockUser() {
-        positionLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(positionLockUserIdentifier, positionLockUser);
+        positionLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(positionLockUserIdentifier, positionLockUser);
         return positionLockUser;
     }
 
@@ -719,31 +713,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
         this.universityFiscal = universityFiscal;
     }
     
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @Override
-    public List buildListOfDeletionAwareLists() {
-
-        List managedLists =  super.buildListOfDeletionAwareLists();
-        managedLists.add(getPendingBudgetConstructionAppointmentFunding());
-        return managedLists; 
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("positionNumber", getPositionNumber());
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-
-        return simpleValues;
-    }
-  
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
