@@ -31,6 +31,7 @@ import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
 import org.kuali.module.financial.bo.Payee;
 import org.kuali.module.financial.dao.DisbursementVoucherDao;
@@ -68,7 +69,7 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
 
         Date processRunDate = dateTimeService.getCurrentDate();
 
-        String userId = kualiConfigurationService.getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_PDP_EXTRACT_GROUP_NM, DisbursementVoucherRuleConstants.DvPdpExtractGroup.DV_PDP_USER_ID);
+        String userId = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.DvPdpExtractGroup.DV_PDP_USER_ID);
         UniversalUser uuser;
         try {
             uuser = universalUserService.getUniversalUserByAuthenticationUserId(userId);
@@ -203,8 +204,8 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
     }
 
     private Batch createBatch(String campusCode,UniversalUser user,Date processRunDate) {
-        String orgCode = kualiConfigurationService.getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_PDP_EXTRACT_GROUP_NM, DisbursementVoucherRuleConstants.DvPdpExtractGroup.DV_PDP_ORG_CODE);
-        String subUnitCode = kualiConfigurationService.getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_PDP_EXTRACT_GROUP_NM, DisbursementVoucherRuleConstants.DvPdpExtractGroup.DV_PDP_SBUNT_CODE);
+        String orgCode = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.DvPdpExtractGroup.DV_PDP_ORG_CODE);
+        String subUnitCode = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.DvPdpExtractGroup.DV_PDP_SBUNT_CODE);
         CustomerProfile customer = customerProfileService.get(campusCode, orgCode, subUnitCode);
         if ( customer == null ) {
             throw new IllegalArgumentException("Unable to find customer profile for " + campusCode + "/" + orgCode + "/" + subUnitCode);
