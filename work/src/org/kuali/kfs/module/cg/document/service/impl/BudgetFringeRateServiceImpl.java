@@ -75,7 +75,7 @@ public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
     public BudgetFringeRate getBudgetFringeRateForDefaultAppointmentType(String documentNumber) {
         
         AppointmentType appointmentType = (AppointmentType) businessObjectService.retrieve(
-                new AppointmentType(kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "defaultAppointmentType")));
+                new AppointmentType(kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "defaultAppointmentType")));
         
         BudgetFringeRate defaultFringeRate = (BudgetFringeRate) businessObjectService.retrieve(
                 new BudgetFringeRate(documentNumber, appointmentType.getAppointmentTypeCode()));
