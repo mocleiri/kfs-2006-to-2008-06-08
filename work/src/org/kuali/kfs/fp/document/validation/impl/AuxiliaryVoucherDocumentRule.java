@@ -97,7 +97,6 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * 
      * @return String
      */
-    @Override
     protected String getDefaultParameterNamespace() {
         return KFSConstants.FINANCIAL_NAMESPACE;
     }
