@@ -28,6 +28,7 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.KualiGroupService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
 import org.kuali.module.purap.PurapAuthorizationConstants;
@@ -45,7 +46,7 @@ public class PaymentRequestDocumentAuthorizer extends AccountingDocumentAuthoriz
 
     @Override
     public boolean hasInitiateAuthorization(Document document, UniversalUser user) {
-        String authorizedWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
+        String authorizedWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
         try {
             return SpringContext.getBean(KualiGroupService.class).getByGroupName(authorizedWorkgroup).hasMember(user);
         }
