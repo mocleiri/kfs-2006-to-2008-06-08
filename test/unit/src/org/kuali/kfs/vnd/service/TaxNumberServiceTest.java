@@ -17,8 +17,10 @@ package org.kuali.module.vendor.service;
 
 
 import org.kuali.core.bo.BusinessRule;
+import org.kuali.core.bo.Parameter;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapRuleConstants;
@@ -42,7 +44,7 @@ public class TaxNumberServiceTest extends KualiTestBase {
     private final String allZero = "000000000";
     private final String tenDigits = "1234567890";
     private final String twoDigits = "12";
-    public static BusinessRule notAllowedTaxNumberRule;
+    public static Parameter notAllowedTaxNumberRule;
     
     protected void setUp() throws Exception {
         super.setUp();
@@ -62,10 +64,10 @@ public class TaxNumberServiceTest extends KualiTestBase {
 
     private String[] getNotAllowedTaxNumbers() {
         if (ObjectUtils.isNull(notAllowedTaxNumberRule)) {
-            notAllowedTaxNumberRule = SpringContext.getBean(KualiConfigurationService.class).getApplicationRule(
-                    PurapRuleConstants.PURAP_ADMIN_GROUP,VendorRuleConstants.PURAP_NOT_ALLOWED_TAX_NUMBERS);
+            notAllowedTaxNumberRule = SpringContext.getBean(KualiConfigurationService.class).getParameter(
+                    KFSConstants.PURAP_NAMESPACE,VendorRuleConstants.PURAP_NOT_ALLOWED_TAX_NUMBERS);
         }
-        String[] notAllowedTaxNumbers = notAllowedTaxNumberRule.getRuleText().split(";");
+        String[] notAllowedTaxNumbers = SpringContext.getBean(KualiConfigurationService.class).getParameterValues(notAllowedTaxNumberRule);
         return notAllowedTaxNumbers;
     }
     
