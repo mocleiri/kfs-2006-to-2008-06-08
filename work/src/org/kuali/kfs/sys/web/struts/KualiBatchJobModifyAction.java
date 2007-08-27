@@ -95,8 +95,9 @@ public class KualiBatchJobModifyAction extends KualiAction {
                 throw new AuthorizationException( GlobalVariables.getUserSession().getUniversalUser().getPersonUserIdentifier(), actionType, job.getFullName() );
             }
         }
-        if ( getConfigService().hasApplicationParameter(KFSConstants.ParameterGroups.SYSTEM, job.getName() + JOB_ADMIN_PARAMETER_SUFFIX) ) {
-            String jobSpecificAdminWorkgroup = getConfigService().getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, job.getName() + JOB_ADMIN_PARAMETER_SUFFIX );
+        // TODO: put the namespace on the job instead of looking at the 1st step
+        if ( getConfigService().parameterExists(job.getSteps().get(0).getNamespace(), job.getName() + JOB_ADMIN_PARAMETER_SUFFIX) ) {
+            String jobSpecificAdminWorkgroup = getConfigService().getParameterValue(job.getSteps().get(0).getNamespace(), job.getName() + JOB_ADMIN_PARAMETER_SUFFIX );
             if ( !GlobalVariables.getUserSession().getUniversalUser().isMember(jobSpecificAdminWorkgroup) ) {
                 throw new AuthorizationException( GlobalVariables.getUserSession().getUniversalUser().getPersonUserIdentifier(), actionType, job.getFullName() );
             }
