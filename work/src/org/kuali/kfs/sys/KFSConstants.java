@@ -39,7 +39,7 @@ public class KFSConstants {
     public static final String GL_NAMESPACE = "KFS-GL";
     public static final String KRA_NAMESPACE = "KFS-RA";
     public static final String CONTRACTS_AND_GRANTS_NAMESPACE = "KFS-CG";
-    public static final String PURCHASING_NAMESPACE = "KFS-PA";
+    public static final String PURAP_NAMESPACE = "KFS-PA";
     public static final String CORE_NAMESPACE = "KR";
     
     public static final String PARAM_MAINTENANCE_VIEW_MODE = "maintenanceViewMode";
