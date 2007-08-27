@@ -109,7 +109,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
         this.setPurchaseOrderTransmissionMethodCode( determinePurchaseOrderTransmissionMethod() );
 
         // set the default funding source
-        this.setFundingSourceCode(SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP,"PURAP.REQUISITION_DEFAULT_FUNDING_SOURCE"));
+        this.setFundingSourceCode(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE,"PURAP.REQUISITION_DEFAULT_FUNDING_SOURCE"));
 
         ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
         this.setChartOfAccountsCode(currentUser.getChartOfAccountsCode());
@@ -139,7 +139,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
      */
     private String determinePurchaseOrderTransmissionMethod(){
         //KULPURAP-826: Return a value based on a sys param. Perhaps later change it to more dynamic logic
-        return SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapParameterConstants.PURAP_DEFAULT_PO_TRANSMISSION_CODE);
+        return SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.PURAP_DEFAULT_PO_TRANSMISSION_CODE);
     }
     
     /**
@@ -162,7 +162,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
             // The allowed copy date is the document creation date plus a set number of days.                      
             Date createDate = wd.getCreateDate();
             c.setTime(createDate);
-            String allowedCopyDays = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP,"PURAP.REQ_B2B_ALLOW_COPY_DAYS");
+            String allowedCopyDays = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE,"PURAP.REQ_B2B_ALLOW_COPY_DAYS");
             c.add(Calendar.DATE, Integer.parseInt(allowedCopyDays));
             Date allowedCopyDate = c.getTime();
 
@@ -614,7 +614,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
     @Override
     public String getDocumentTitle() {
         String title = "";
-        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP,PurapParameterConstants.PURAP_OVERRIDE_REQ_DOC_TITLE);
+        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE,PurapParameterConstants.PURAP_OVERRIDE_REQ_DOC_TITLE);
         if (StringUtils.equalsIgnoreCase(specificTitle,Boolean.TRUE.toString())) {
             String docIdStr = "";
             if ( (this.getPurapDocumentIdentifier() != null) && (StringUtils.isNotBlank(this.getPurapDocumentIdentifier().toString())) ) {
