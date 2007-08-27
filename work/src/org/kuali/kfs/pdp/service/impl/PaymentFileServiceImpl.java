@@ -12,6 +12,7 @@ import org.kuali.core.mail.InvalidAddressException;
 import org.kuali.core.mail.MailMessage;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.MailService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.pdp.PdpConstants;
 import org.kuali.module.pdp.bo.Batch;
@@ -202,7 +203,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
     }
     StringBuffer body = new StringBuffer();
 
-    String ccAddresses = kualiConfigurationService.getApplicationParameterValue(PdpConstants.PDP_APPLICATION,PdpConstants.ApplicationParameterKeys.HARD_EDIT_CC);
+    String ccAddresses = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,PdpConstants.ApplicationParameterKeys.HARD_EDIT_CC);
     String ccAddressList[] = ccAddresses.split(",");
 
     if (header == null) {
@@ -311,7 +312,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     StringBuffer body = new StringBuffer();
 
-    String ccAddresses = kualiConfigurationService.getApplicationParameterValue(PdpConstants.PDP_APPLICATION, PdpConstants.ApplicationParameterKeys.SOFT_EDIT_CC);
+    String ccAddresses = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.SOFT_EDIT_CC);
     String ccAddressList[] = ccAddresses.split(",");
 
     // Get customer
@@ -442,7 +443,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     StringBuffer body = new StringBuffer();
 
-    String taxEmail = kualiConfigurationService.getApplicationParameterValue(PdpConstants.PDP_APPLICATION,PdpConstants.ApplicationParameterKeys.TAX_GROUP_EMAIL_ADDRESS);
+    String taxEmail = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,PdpConstants.ApplicationParameterKeys.TAX_GROUP_EMAIL_ADDRESS);
     if (GeneralUtilities.isStringEmpty(taxEmail)) {
       LOG.error("No Tax E-mail Application Setting found to send notification e-mail");
       return;
