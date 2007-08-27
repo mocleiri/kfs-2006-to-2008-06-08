@@ -38,6 +38,7 @@ import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.workflow.DocumentInitiator;
 import org.kuali.core.workflow.KualiDocumentXmlMaterializer;
 import org.kuali.core.workflow.KualiTransactionalDocumentInformation;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.cg.bo.Agency;
@@ -1947,8 +1948,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
      */
     public String buildCostShareOrgReportXml(boolean encloseContent) {
         
-        String costSharePermissionCode = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(
-                KraConstants.KRA_ADMIN_GROUP_NAME, KraConstants.ROUTING_FORM_COST_SHARE_PERMISSION_CODE);
+        String costSharePermissionCode = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.ROUTING_FORM_COST_SHARE_PERMISSION_CODE);
         
         StringBuffer xml = new StringBuffer();
         if (encloseContent) {
