@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.context.TestUtils;
 import org.kuali.module.gl.OriginEntryTestBase;
@@ -55,7 +56,7 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
         super.setUp();
 
         DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateTimeService.setCurrentDate(new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "TRANSACTION_DT")).getTime()));
+        dateTimeService.setCurrentDate(new Date(transactionDateFormat.parse(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, "TRANSACTION_DT")).getTime()));
     }
 
     /**
