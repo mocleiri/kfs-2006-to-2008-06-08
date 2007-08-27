@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.Note;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.DataDictionaryService;
@@ -35,10 +34,10 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
-import org.kuali.module.purap.PurapWorkflowConstants;
 import org.kuali.module.purap.PurapConstants.PaymentRequestStatuses;
 import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.PurapWorkflowConstants.PaymentRequestDocument.NodeDetailEnum;
@@ -742,7 +741,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
      */
     @Override
     public String getDocumentTitle() {
-        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP,PurapParameterConstants.PURAP_OVERRIDE_PREQ_DOC_TITLE);
+        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE,PurapParameterConstants.PURAP_OVERRIDE_PREQ_DOC_TITLE);
         if (StringUtils.equalsIgnoreCase(specificTitle,Boolean.TRUE.toString())) {
             return getCustomDocumentTitle();
         }
