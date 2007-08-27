@@ -67,6 +67,7 @@ import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
@@ -97,8 +98,8 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @return String
      */
     @Override
-    protected String getDefaultSecurityGrouping() {
-        return AUXILIARY_VOUCHER_SECURITY_GROUPING;
+    protected String getDefaultParameterNamespace() {
+        return KFSConstants.FINANCIAL_NAMESPACE;
     }
 
     /**
@@ -392,7 +393,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         // now set the offset entry to the specific offset object code for the AV generated offset fund balance; only if it's an
         // accrual or adjustment
         if (auxDoc.isAccrualType() || auxDoc.isAdjustmentType()) {
-            String glpeOffsetObjectCode = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(getDefaultSecurityGrouping(), getGeneralLedgerPendingEntryOffsetObjectCode());
+            String glpeOffsetObjectCode = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(getDefaultParameterNamespace(), getGeneralLedgerPendingEntryOffsetObjectCode());
             offsetEntry.setFinancialObjectCode(glpeOffsetObjectCode);
         }
 
@@ -819,7 +820,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         int todayAsComparableDate = AuxiliaryVoucherDocumentRule.comparableDateForm(today);
         int periodClose = new Integer(AuxiliaryVoucherDocumentRule.comparableDateForm(periodToCheck.getUniversityFiscalPeriodEndDate()));
         int periodBegin = AuxiliaryVoucherDocumentRule.comparableDateForm(AuxiliaryVoucherDocumentRule.calculateFirstDayOfMonth(periodToCheck.getUniversityFiscalPeriodEndDate())); 
-        int gracePeriodClose = periodClose + new Integer(SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(AUXILIARY_VOUCHER_SECURITY_GROUPING, AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD)).intValue();
+        int gracePeriodClose = periodClose + new Integer(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD)).intValue();
         return (todayAsComparableDate >= periodBegin && todayAsComparableDate <= gracePeriodClose);
     }
     
