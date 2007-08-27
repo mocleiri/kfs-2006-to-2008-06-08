@@ -52,7 +52,6 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
      * 
      * @return String
      */
-    @Override
     protected String getDefaultParameterNamespace() {
         return GENERAL_ERROR_CORRECTION_SECURITY_GROUPING;
     }
