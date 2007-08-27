@@ -316,7 +316,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @return a set of the balance type codes that are bypassed by Labor Poster
      */
     public String[] getBalanceTypesNotProcessed() {
-        return kualiConfigurationService.getApplicationParameterValues(POSTER, Poster.BALANCE_TYPES_NOT_PROCESSED);
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, Poster.BALANCE_TYPES_NOT_PROCESSED);
     }
 
     /**
@@ -325,7 +325,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @return a set of the object codes that are bypassed by Labor Poster
      */
     public String[] getObjectsNotProcessed() {
-        return kualiConfigurationService.getApplicationParameterValues(POSTER, Poster.OBJECT_CODES_NOT_PROCESSED);
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, Poster.OBJECT_CODES_NOT_PROCESSED);
     }
 
     /**
@@ -334,7 +334,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @return a set of the fiscal period codes that are bypassed by Labor Poster
      */
     public String[] getPeriodCodesNotProcessed() {
-        return kualiConfigurationService.getApplicationParameterValues(POSTER, Poster.PERIOD_CODES_NOT_PROCESSED);
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, Poster.PERIOD_CODES_NOT_PROCESSED);
     }
 
     /**
