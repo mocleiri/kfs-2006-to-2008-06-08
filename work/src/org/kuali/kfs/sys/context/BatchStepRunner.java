@@ -66,20 +66,20 @@ public class BatchStepRunner {
         GlobalVariables.setMessageList(new ArrayList());
         String stepUserParameter = stepName + "_USER";
         KualiConfigurationService configService = SpringContext.getBean(KualiConfigurationService.class);
+        LOG.debug("runStep() Retrieving step " + stepName);
+        Step step = BatchSpringContext.getStep(stepName);
         try {
-	        if (configService.hasApplicationParameter(KFSConstants.ParameterGroups.SYSTEM, stepUserParameter)) {
-	            GlobalVariables.setUserSession(new UserSession(configService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, stepUserParameter)));
+	        if (configService.parameterExists(step.getNamespace(), stepUserParameter)) {
+	            GlobalVariables.setUserSession(new UserSession(configService.getParameterValue(step.getNamespace(), stepUserParameter)));
 	        }
         } catch ( Exception ex ) {
         	// database may not be created yet, if performing the initial import - handle the database error which results
         	LOG.warn( "error checking application parameter", ex );
         }
-        LOG.debug("runStep() Retrieving step " + stepName);
-        Step step = BatchSpringContext.getStep(stepName);
         String stepRunIndicatorParameter = stepName + "_FLAG";
         boolean skipStep = false;
         try {
-        	skipStep = configService.hasApplicationParameter(KFSConstants.ParameterGroups.SYSTEM, stepRunIndicatorParameter) && !configService.getApplicationParameterIndicator(KFSConstants.ParameterGroups.SYSTEM, stepRunIndicatorParameter);
+        	skipStep = !configService.getIndicatorParameter(step.getNamespace(), stepRunIndicatorParameter);
         } catch ( Exception ex ) {
         	// database may not be created yet, if performing the initial import - handle the database error which results
         	LOG.warn( "error checking application parameter", ex );
