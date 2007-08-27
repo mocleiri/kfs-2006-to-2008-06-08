@@ -35,6 +35,7 @@ import org.kuali.core.datadictionary.DocumentEntry;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.web.ui.KeyLabelPair;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetFringeRate;
@@ -118,8 +119,8 @@ public class BudgetForm extends ResearchDocumentFormBase {
     public BudgetForm() {
         super();
 
-        DEFAULT_BUDGET_TASK_NAME = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue("KraDevelopmentGroup", "defaultBudgetTaskName");
-        TO_BE_NAMED_LABEL = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue("KraDevelopmentGroup", "toBeNamedLabel");
+        DEFAULT_BUDGET_TASK_NAME = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "defaultBudgetTaskName");
+        TO_BE_NAMED_LABEL = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "toBeNamedLabel");
 
         newPeriod = new BudgetPeriod();
         newTask = new BudgetTask();
