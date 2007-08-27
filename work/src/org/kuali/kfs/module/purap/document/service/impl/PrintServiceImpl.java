@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,9 +13,9 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.bo.CampusParameter;
 import org.kuali.module.purap.bo.PurchaseOrderContractLanguage;
 import org.kuali.module.purap.bo.PurchaseOrderVendorQuote;
@@ -162,7 +161,7 @@ public class PrintServiceImpl implements PrintService {
         String logoImage = "";
         boolean useImage = true;
         try {
-            String imageAvailable = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
+            String imageAvailable = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
             useImage = (imageAvailable.equalsIgnoreCase("Y") ? true : false);
         } 
         catch (ApplicationParameterException ape) {
@@ -170,7 +169,7 @@ public class PrintServiceImpl implements PrintService {
         }
         //We'll get the imageTempLocation and the actual images only if the useImage is true. If useImage is false, we'll leave the images as blank space
         if (useImage) {
-            imageTempLocation = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.IMAGE_TEMP_PATH);
+            imageTempLocation = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.IMAGE_TEMP_PATH);
         if ( imageTempLocation == null ) {
             LOG.debug("generatePurchaseOrderQuotePdf() ended");
             throw new PurapConfigurationException("Application Setting IMAGE_TEMP_PATH is missing");      
@@ -189,7 +188,7 @@ public class PrintServiceImpl implements PrintService {
         UniversalUser contractManagerUser = (UniversalUser) ((List) businessObjectService.findMatching(UniversalUser.class, criteria)).get(0);
         String contractManagerCampusCode = contractManagerUser.getCampusCode();
 
-        String pdfFileLocation = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.PDF_DIRECTORY);
+        String pdfFileLocation = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_DIRECTORY);
         if (pdfFileLocation == null) {
             LOG.debug("savePurchaseOrderPdf() ended");
             throw new PurapConfigurationException("Application Setting PDF_DIRECTORY is missing.");
@@ -213,7 +212,7 @@ public class PrintServiceImpl implements PrintService {
         String logoImage = "";
         boolean useImage = true;
         try {
-            String imageAvailable = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
+            String imageAvailable = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
             useImage = (imageAvailable.equalsIgnoreCase("Y") ? true : false);
         } 
         catch (ApplicationParameterException ape) {
@@ -221,7 +220,7 @@ public class PrintServiceImpl implements PrintService {
         }
         //We'll get the imageTempLocation and the actual images only if the useImage is true. If useImage is false, we'll leave the images as blank space
         if (useImage) {
-            imageTempLocation = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.IMAGE_TEMP_PATH);
+            imageTempLocation = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.IMAGE_TEMP_PATH);
         if ( imageTempLocation == null ) {
             LOG.debug("generatePurchaseOrderQuotePdf() ended");
             throw new PurapConfigurationException("Application Setting IMAGE_TEMP_PATH is missing");      
@@ -243,7 +242,7 @@ public class PrintServiceImpl implements PrintService {
             contractManagerCampusCode = contractManagerUser.getCampusCode();
         }
         
-        String pdfFileLocation = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.PDF_DIRECTORY);
+        String pdfFileLocation = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_DIRECTORY);
         if (pdfFileLocation == null) {
             LOG.debug("savePurchaseOrderPdf() ended");
             throw new PurapConfigurationException("Application Setting PDF_DIRECTORY is missing.");
@@ -354,7 +353,7 @@ public class PrintServiceImpl implements PrintService {
         String contractManagerSignatureImage = "";
         boolean useImage = true;
         try {
-            String imageAvailable = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
+            String imageAvailable = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
             useImage = (imageAvailable.equalsIgnoreCase("Y") ? true : false);
         } 
         catch (ApplicationParameterException ape) {
@@ -362,7 +361,7 @@ public class PrintServiceImpl implements PrintService {
         }
         //We'll get the imageTempLocation and the actual images only if the useImage is true. If useImage is false, we'll leave the images as blank space
         if (useImage) {
-            imageTempLocation = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.IMAGE_TEMP_PATH);
+            imageTempLocation = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.IMAGE_TEMP_PATH);
         if ( imageTempLocation == null ) {
             throw new PurapConfigurationException("IMAGE_TEMP_PATH is missing");      
         }
@@ -383,7 +382,7 @@ public class PrintServiceImpl implements PrintService {
         criteria.put(KFSPropertyConstants.CAMPUS_CODE, po.getDeliveryCampusCode());
         CampusParameter campusParameter = (CampusParameter)((List) businessObjectService.findMatching(CampusParameter.class, criteria)).get(0);
 
-        String statusInquiryUrl = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.STATUS_INQUIRY_URL);
+        String statusInquiryUrl = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.STATUS_INQUIRY_URL);
         if ( statusInquiryUrl == null ) {
             LOG.debug("generatePurchaseOrderPdf() ended");
             throw new PurapConfigurationException("Application Setting INVOICE_STATUS_INQUIRY_URL is missing.");
@@ -402,7 +401,7 @@ public class PrintServiceImpl implements PrintService {
             }
         }
         
-        String pdfFileLocation = kualiConfigurationService.getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.PDF_DIRECTORY);
+        String pdfFileLocation = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_DIRECTORY);
         if (pdfFileLocation == null) {
             LOG.debug("savePurchaseOrderPdf() ended");
             throw new PurapConfigurationException("Application Setting PDF_DIRECTORY is missing.");
