@@ -109,7 +109,7 @@ public class EnterpriseFeederNotificationServiceImpl implements EnterpriseFeeder
      */
     protected Set<String> generateToEmailAddresses(String feederProcessName, EnterpriseFeederStatus status, String doneFileDescription, String dataFileDescription, String reconFileDescription, List<Message> errorMessages) {
         Set<String> addresses = new HashSet<String> ();
-        String[] addressesArray = kualiConfigurationService.getApplicationParameterValues(KFSConstants.ParameterGroups.ENTERPRSISE_FEEDER_SECURITY_GROUP_NAME,
+        String[] addressesArray = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE,
                 KFSConstants.EnterpriseFeederApplicationParameterKeys.TO_ADDRESS);
         for (String address : addressesArray) {
             addresses.add(address);
