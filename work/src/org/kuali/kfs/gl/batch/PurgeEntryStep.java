@@ -39,7 +39,7 @@ public class PurgeEntryStep extends AbstractStep {
      * should NOT be transactional.
      */
     public boolean execute(String jobName) {
-        String yearStr = getConfigurationService().getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.PURGE_GL_ENTRY_T_BEFORE_YEAR);
+        String yearStr = getConfigurationService().getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.PURGE_GL_ENTRY_T_BEFORE_YEAR);
         int year = Integer.parseInt(yearStr);
         List charts = chartService.getAllChartCodes();
         for (Iterator iter = charts.iterator(); iter.hasNext();) {
