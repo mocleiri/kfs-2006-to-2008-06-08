@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSConstants.ParameterGroups;
 import org.kuali.kfs.KFSConstants.SystemGroupParameterNames;
 import org.kuali.kfs.batch.BatchInputFileType;
@@ -65,13 +66,13 @@ public class BatchInputServiceSystemParametersTest extends KualiTestBase {
      * Verifies system parameters needed by the batch upload process exist in the db.
      */
     public final void testSystemParametersExist() throws Exception {
-        String[] activeFileTypes = configurationService.getApplicationParameterValues(ParameterGroups.BATCH_UPLOAD_SECURITY_GROUP_NAME, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME);
+        String[] activeFileTypes = configurationService.getParameterValues(KFSConstants.GL_NAMESPACE, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME);
         assertTrue("system parameter " + SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME + " is not setup or contains no file types", activeFileTypes != null && activeFileTypes.length > 0);
 
-        String pcdoUploadWorkgroup = configurationService.getApplicationParameterValue(ParameterGroups.BATCH_UPLOAD_SECURITY_GROUP_NAME, pcdoBatchInputFileType.getWorkgroupParameterName());
+        String pcdoUploadWorkgroup = configurationService.getParameterValue(KFSConstants.GL_NAMESPACE, pcdoBatchInputFileType.getWorkgroupParameterName());
         assertTrue("system parameter " + pcdoBatchInputFileType.getWorkgroupParameterName() + " does not exist or has empty value.", StringUtils.isNotBlank(pcdoUploadWorkgroup));
 
-        String collectorUploadWorkgroup = configurationService.getApplicationParameterValue(ParameterGroups.BATCH_UPLOAD_SECURITY_GROUP_NAME, collectorBatchInputFileType.getWorkgroupParameterName());
+        String collectorUploadWorkgroup = configurationService.getParameterValue(KFSConstants.GL_NAMESPACE, collectorBatchInputFileType.getWorkgroupParameterName());
         assertTrue("system parameter " + collectorBatchInputFileType.getWorkgroupParameterName() + " does not exist or has empty value.", StringUtils.isNotBlank(collectorUploadWorkgroup));
     }
 
