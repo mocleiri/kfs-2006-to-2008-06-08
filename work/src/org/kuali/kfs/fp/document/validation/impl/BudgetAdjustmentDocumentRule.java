@@ -288,8 +288,8 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         boolean success = true;
 
         // check on-off tof flag
-        boolean generateTransfer = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterIndicator(BUDGET_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, GENERATE_TOF_GLPE_ENTRIES_PARM_NM);
-        String transferObjectCode = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(BUDGET_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, TRANSFER_OBJECT_CODE_PARM_NM);
+        boolean generateTransfer = SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, GENERATE_TOF_GLPE_ENTRIES_PARM_NM);
+        String transferObjectCode = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, TRANSFER_OBJECT_CODE_PARM_NM);
         Integer currentFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
 
         if (generateTransfer) {
