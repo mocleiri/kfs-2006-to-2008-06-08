@@ -29,6 +29,7 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.web.ui.Section;
 import org.kuali.core.web.ui.SectionBridge;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.cg.CGConstants;
 
@@ -86,13 +87,13 @@ public class ProposalInquirable extends KualiInquirableImpl {
         }
         // get the group name that we need here
         if ( centralPreAwardWorkgroupName == null ) {
-            centralPreAwardWorkgroupName = configService.getApplicationParameterValue(CGConstants.GROUP_CG_MAINT_EDOCS, "Kuali-Document.PreAward.Workgroup");
+            centralPreAwardWorkgroupName = configService.getParameterValue(KFSConstants.CONTRACTS_AND_GRANTS_NAMESPACE, "Kuali-Document.PreAward.Workgroup");
         }
         if ( centralPostAwardWorkgroupName == null ) {
-            centralPostAwardWorkgroupName = configService.getApplicationParameterValue(CGConstants.GROUP_CG_MAINT_EDOCS, "Kuali-Document.PostAward.Workgroup");
+            centralPostAwardWorkgroupName = configService.getParameterValue(KFSConstants.CONTRACTS_AND_GRANTS_NAMESPACE, "Kuali-Document.PostAward.Workgroup");
         }
 //        if ( centralReviewWorkgroupName == null ) {
-//            centralReviewWorkgroupName = configService.getApplicationParameterValue(CGConstants.GROUP_CG_MAINT_EDOCS, "");
+//            centralReviewWorkgroupName = configService.getParameterValue(KFSConstants.CONTRACTS_AND_GRANTS_NAMESPACE, "");
 //        }
     }
 
