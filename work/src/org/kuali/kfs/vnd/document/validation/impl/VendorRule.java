@@ -27,7 +27,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.authorization.FieldAuthorization;
-import org.kuali.core.bo.BusinessRule;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
@@ -37,10 +36,8 @@ import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizer;
 import org.kuali.core.exceptions.UnknownDocumentIdException;
 import org.kuali.core.maintenance.Maintainable;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
@@ -563,14 +560,12 @@ public class VendorRule extends MaintenanceDocumentRuleBase implements VendorRul
         String taxTypeCode = vendorDetail.getVendorHeader().getVendorTaxTypeCode();
         if (StringUtils.isNotEmpty(ownershipTypeCode) && StringUtils.isNotEmpty(taxTypeCode)) {
             if (VendorConstants.TAX_TYPE_FEIN.equals(taxTypeCode)) {
-                KualiParameterRule feinRule = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(PURAP_ADMIN_GROUP, PURAP_FEIN_ALLOWED_OWNERSHIP_TYPES);
-                if (feinRule.failsRule(ownershipTypeCode)) {
+                if ( getKualiConfigurationService().failsRule( KFSConstants.PURAP_NAMESPACE, PURAP_FEIN_ALLOWED_OWNERSHIP_TYPES, ownershipTypeCode ) ) {
                     valid &= false;
                 }
             }
             else if (VendorConstants.TAX_TYPE_SSN.equals(taxTypeCode)) {
-                KualiParameterRule ssnRule = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(PURAP_ADMIN_GROUP, PURAP_SSN_ALLOWED_OWNERSHIP_TYPES);
-                if (ssnRule.failsRule(ownershipTypeCode)) {
+                if ( getKualiConfigurationService().failsRule( KFSConstants.PURAP_NAMESPACE, PURAP_SSN_ALLOWED_OWNERSHIP_TYPES, ownershipTypeCode ) ) {
                     valid &= false;
                 }
             }
@@ -599,8 +594,7 @@ public class VendorRule extends MaintenanceDocumentRuleBase implements VendorRul
         KualiDecimal minimumOrderAmount = vendorDetail.getVendorMinimumOrderAmount();
         if (minimumOrderAmount != null) {
             if (ObjectUtils.isNull(VENDOR_MIN_ORDER_AMOUNT)) {
-                BusinessRule minOrderAmountRule = getKualiConfigurationService().getApplicationRule(PURAP_ADMIN_GROUP, PURAP_VENDOR_MIN_ORDER_AMOUNT);
-                VENDOR_MIN_ORDER_AMOUNT = new KualiDecimal(minOrderAmountRule.getRuleText());
+                VENDOR_MIN_ORDER_AMOUNT = new KualiDecimal(getKualiConfigurationService().getParameterValue(KFSConstants.PURAP_NAMESPACE, PURAP_VENDOR_MIN_ORDER_AMOUNT));
             }
             if ((VENDOR_MIN_ORDER_AMOUNT.compareTo(minimumOrderAmount) < 1) || (minimumOrderAmount.isNegative())) {
                 putFieldError(VendorPropertyConstants.VENDOR_MIN_ORDER_AMOUNT, VendorKeyConstants.ERROR_VENDOR_MAX_MIN_ORDER_AMOUNT, VENDOR_MIN_ORDER_AMOUNT.toString());
