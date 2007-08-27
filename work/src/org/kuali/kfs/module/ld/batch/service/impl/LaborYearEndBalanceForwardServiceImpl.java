@@ -245,7 +245,7 @@ public class LaborYearEndBalanceForwardServiceImpl implements LaborYearEndBalanc
      * @return the fund group codes that are acceptable by year-end process
      */
     private String[] getFundGroupProcessed() {
-        return kualiConfigurationService.getApplicationParameterValues(YEAR_END, YearEnd.FUND_GROUP_PROCESSED);
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, YearEnd.FUND_GROUP_PROCESSED);
     }
 
     /**
