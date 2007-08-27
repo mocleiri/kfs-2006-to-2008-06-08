@@ -551,7 +551,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     protected boolean isPlantAuthorized(UniversalUser user) {
 
         // attempt to get the group name that grants access to the Plant fields
-        String allowedPlantWorkgroup = getConfigService().getApplicationParameterValue(KFSConstants.CHART_NAMESPACE, PLANT_WORKGROUP_PARM_NAME);
+        String allowedPlantWorkgroup = getConfigService().getParameterValue(KFSConstants.CHART_NAMESPACE, PLANT_WORKGROUP_PARM_NAME);
 
         if (user.isMember( allowedPlantWorkgroup )) {
             LOG.info("User '" + user.getPersonUserIdentifier() + "' is a member of the group '" + allowedPlantWorkgroup + "', which gives them access to the Plant fields.");
