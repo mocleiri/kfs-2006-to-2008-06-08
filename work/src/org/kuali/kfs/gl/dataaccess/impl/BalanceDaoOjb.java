@@ -385,8 +385,7 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
     }
 
     private List<String> getEncumbranceBalanceTypeCodeList() {
-        String[] balanceTypesAsArray = kualiConfigurationService.getApplicationParameterValues("Kuali.GeneralLedger.AvailableBalanceInquiry", "GeneralLedger.BalanceInquiry.AvailableBalances.EncumbranceDrillDownBalanceTypes");
-        return Arrays.asList(balanceTypesAsArray);
+        return kualiConfigurationService.getParameterValuesAsList(KFSConstants.GL_NAMESPACE, "GeneralLedger.BalanceInquiry.AvailableBalances.EncumbranceDrillDownBalanceTypes");
     }
 
     /**
