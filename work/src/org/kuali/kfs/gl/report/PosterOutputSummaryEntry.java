@@ -42,7 +42,7 @@ public class PosterOutputSummaryEntry implements Comparable {
         netAmount = KualiDecimal.ZERO;
 
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        assetExpenseObjectTypeCodes = kualiConfigurationService.getApplicationParameterValues(GLConstants.GL_POSTER_OUTPUT_SUMMARY_ENTRY_GROUP, GLConstants.PosterOutputSummaryEntry.ASSET_EXPENSE_OBJECT_TYPE_CODES);
+        assetExpenseObjectTypeCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.PosterOutputSummaryEntry.ASSET_EXPENSE_OBJECT_TYPE_CODES);
     }
 
     public String getKey() {
