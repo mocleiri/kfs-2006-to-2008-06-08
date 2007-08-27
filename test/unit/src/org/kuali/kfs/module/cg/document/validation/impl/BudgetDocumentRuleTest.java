@@ -22,6 +22,7 @@ import java.util.Map;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.kra.KraConstants;
@@ -48,7 +49,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         budgetDocumentRule = new BudgetDocumentRule();
-        MINIMUM_NUMBER_OF_TASKS = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue("KraDevelopmentGroup", "minimumNumberOfTasks");
+        MINIMUM_NUMBER_OF_TASKS = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "minimumNumberOfTasks");
     }
 
     public void testValidPeriods() throws Exception {
