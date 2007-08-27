@@ -301,7 +301,7 @@ public class PurchasingDocumentRuleBase extends PurchasingAccountsPayableDocumen
         }
         
         // make sure that the vendor is of 'PO' type
-        String allowedVendorType = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapRuleConstants.PURAP_ADMIN_GROUP, PurapRuleConstants.PURAP_VENDOR_TYPE_ALLOWED_ON_REQ_AND_PO);
+        String allowedVendorType = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapRuleConstants.PURAP_VENDOR_TYPE_ALLOWED_ON_REQ_AND_PO);
         if (!vendorHeader.getVendorTypeCode().equals(allowedVendorType)) {       
             valid &= false;
             errorMap.putError(VendorPropertyConstants.VENDOR_NAME, PurapKeyConstants.ERROR_INVALID_VENDOR_TYPE);
