@@ -210,7 +210,7 @@ public class EncumbranceClosingRuleHelper {
 
         }
 
-        String[] expenseObjectCodeTypes = kualiConfigurationService.getApplicationParameterValues(KFSConstants.ParameterGroups.SYSTEM, AccountingDocumentRuleBaseConstants.APPLICATION_PARAMETER.EXPENSE_OBJECT_TYPE_CODES);
+        String[] expenseObjectCodeTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, AccountingDocumentRuleBaseConstants.APPLICATION_PARAMETER.EXPENSE_OBJECT_TYPE_CODES);
         String[] encumbranceBalanceTypeCodes = new String[] { KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE, KFSConstants.BALANCE_TYPE_INTERNAL_ENCUMBRANCE, KFSConstants.BALANCE_TYPE_PRE_ENCUMBRANCE };
 
         // the object type code must be an expense and the encumbrance balance type code must correspond to an internal, external or
