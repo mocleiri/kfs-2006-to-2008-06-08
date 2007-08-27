@@ -24,9 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.Note;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
@@ -34,7 +32,7 @@ import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowInfo;
-import org.kuali.core.workflow.service.WorkflowDocumentService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.financial.service.UniversityDateService;
@@ -210,7 +208,7 @@ public class PurapServiceImpl implements PurapService {
            
         }
         String securityGroup = (String)PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(documentType);
-        String[] itemTypes = kualiConfigurationService.getApplicationParameterValues(securityGroup, PurapConstants.BELOW_THE_LINES_PARAMETER);
+        String[] itemTypes = kualiConfigurationService.getParameterValues( KFSConstants.PURAP_NAMESPACE, securityGroup+"."+PurapConstants.BELOW_THE_LINES_PARAMETER);
         return itemTypes;
     }
     
@@ -327,7 +325,7 @@ public class PurapServiceImpl implements PurapService {
 
         java.util.Date today = dateTimeService.getCurrentDate();
         java.util.Date closingDate = universityDateService.getLastDateOfFiscalYear(universityDateService.getCurrentFiscalYear());
-        Integer allowEncumberNext = new Integer(kualiConfigurationService.getApplicationParameterValue(PurapRuleConstants.PURAP_ADMIN_GROUP, PurapRuleConstants.ALLOW_ENCUMBER_NEXT_YEAR_DAYS));
+        Integer allowEncumberNext = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapRuleConstants.ALLOW_ENCUMBER_NEXT_YEAR_DAYS));
         int diffTodayClosing = dateTimeService.dateDiff(today, closingDate, false);
 
         if (ObjectUtils.isNotNull(closingDate) && ObjectUtils.isNotNull(today) && ObjectUtils.isNotNull(allowEncumberNext)) {
