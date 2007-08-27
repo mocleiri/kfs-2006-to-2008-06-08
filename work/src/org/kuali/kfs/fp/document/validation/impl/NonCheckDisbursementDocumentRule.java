@@ -53,7 +53,6 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
      * 
      * @return String
      */
-    @Override
     protected String getDefaultParameterNamespace() {
         return NON_CHECK_DISBURSEMENT_SECURITY_GROUPING;
     }
