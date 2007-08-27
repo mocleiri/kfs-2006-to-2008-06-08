@@ -42,6 +42,7 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.datadictionary.exception.InitException;
 import org.kuali.core.exceptions.AuthorizationException;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSConstants.ParameterGroups;
 import org.kuali.kfs.KFSConstants.SystemGroupParameterNames;
 import org.kuali.kfs.batch.BatchInputFileType;
@@ -302,10 +303,10 @@ public class BatchInputFileServiceImpl implements BatchInputFileService {
             throw new IllegalArgumentException("an invalid(null) argument was given");
         }
 
-        String[] activeInputTypes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(ParameterGroups.BATCH_UPLOAD_SECURITY_GROUP_NAME, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME);
+        List<String> activeInputTypes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsList(KFSConstants.CORE_NAMESPACE, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME);
 
         boolean activeBatchType = false;
-        if (activeInputTypes.length > 0 && (Arrays.asList(activeInputTypes)).contains(batchInputFileType.getFileTypeIdentifer())) {
+        if (activeInputTypes.size() > 0 && activeInputTypes.contains(batchInputFileType.getFileTypeIdentifer() ) ) {
             activeBatchType = true;
         }
 
@@ -323,7 +324,7 @@ public class BatchInputFileServiceImpl implements BatchInputFileService {
         }
 
         String workgroupParameterName = batchInputFileType.getWorkgroupParameterName();
-        String authorizedWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(ParameterGroups.BATCH_UPLOAD_SECURITY_GROUP_NAME, workgroupParameterName);
+        String authorizedWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.CORE_NAMESPACE, workgroupParameterName);
  
         return user.isMember(authorizedWorkgroupName);
     }
