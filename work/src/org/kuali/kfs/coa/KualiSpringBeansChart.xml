@@ -370,7 +370,11 @@
 		</property>
 	</bean>
 	
-	<bean id="fiscalYearMakerStep" class="org.kuali.module.chart.batch.FiscalYearMakerStep" parent="step">
+    <bean id="chartStep" parent="step" abstract="true">
+        <property name="namespace" value="KFS-CA" />
+    </bean>
+
+	<bean id="fiscalYearMakerStep" class="org.kuali.module.chart.batch.FiscalYearMakerStep" parent="chartStep">
 		<property name="dateMakerService">
 			<ref bean="dateMakerService" />
 		</property>
