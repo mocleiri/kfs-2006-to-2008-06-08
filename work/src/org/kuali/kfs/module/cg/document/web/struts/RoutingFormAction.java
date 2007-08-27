@@ -175,11 +175,11 @@ public class RoutingFormAction extends ResearchDocumentActionBase {
         if (flags.getCanRoute() || flags.getCanApprove()) {
             UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
             if (routingForm.getRoutingFormDocument().isUserProjectDirector(user.getPersonUniversalIdentifier())) {
-                routingForm.setApprovalsMessage(SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue("KraAdminGroup", "routingFormApprovalsProjectDirectorWording"));
+                routingForm.setApprovalsMessage(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "routingFormApprovalsProjectDirectorWording"));
             } else if (routingFormDocument.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId().equalsIgnoreCase(user.getPersonUserIdentifier())) {
-                routingForm.setApprovalsMessage(SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue("KraAdminGroup", "routingFormApprovalsInitiatorWording"));
+                routingForm.setApprovalsMessage(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "routingFormApprovalsInitiatorWording"));
             } else {
-                routingForm.setApprovalsMessage(SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue("KraAdminGroup", "routingFormApprovalsDefaultWording"));
+                routingForm.setApprovalsMessage(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "routingFormApprovalsDefaultWording"));
             }
         }
     }
