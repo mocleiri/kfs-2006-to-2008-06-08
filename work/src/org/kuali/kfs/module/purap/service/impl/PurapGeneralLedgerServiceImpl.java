@@ -166,7 +166,7 @@ public class PurapGeneralLedgerServiceImpl implements PurapGeneralLedgerService 
             explicitEntry.setDocumentNumber(preq.getDocumentNumber());
 
             // PREQs created in the previous fiscal year get backdated if we're at the beginning of the new fiscal year (i.e. prior to first closing)
-            Integer allowBackpost = new Integer(kualiConfigurationService.getApplicationParameterValue(PurapRuleConstants.PURAP_ADMIN_GROUP, PurapRuleConstants.ALLOW_BACKPOST_DAYS));
+            Integer allowBackpost = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapRuleConstants.ALLOW_BACKPOST_DAYS));
             if (allowBackpost == null) {
                 throw new IllegalArgumentException("ALLOW_BACKPOST_DAYS needs to be defined in system parameters");
             }
