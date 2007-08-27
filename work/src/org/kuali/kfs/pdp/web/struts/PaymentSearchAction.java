@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.pdp.PdpConstants;
 import org.kuali.module.pdp.action.BaseAction;
@@ -55,7 +56,7 @@ public class PaymentSearchAction extends BaseAction {
     }
 
     private int getParameterInteger(String parm) {
-        String srpp = kualiConfigurationService.getApplicationParameterValue(PdpConstants.PDP_APPLICATION, parm);
+        String srpp = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE, parm);
         if ( srpp != null ) {
             try {
                 return Integer.parseInt(srpp);
