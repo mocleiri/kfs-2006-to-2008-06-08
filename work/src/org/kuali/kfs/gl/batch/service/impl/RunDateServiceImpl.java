@@ -15,12 +15,12 @@
  */
 package org.kuali.module.gl.service.impl;
 
-import java.util.Calendar;
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.StringTokenizer;
 
-import org.kuali.core.bo.FinancialSystemParameter;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.service.RunDateService;
 import org.springframework.util.StringUtils;
@@ -129,9 +129,9 @@ public class RunDateServiceImpl implements RunDateService {
      * In particular, 0 <= hour <= 23, 0 <= minute <= 59, and 0 <= second <= 59
      */
     protected String retrieveCutoffTimeValue() {
-        if (kualiConfigurationService.hasApplicationParameter(GLConstants.GL_SCRUBBER_GROUP, GLConstants.GlScrubberGroupParameters.SCRUBBER_CUTOFF_TIME)) {
+        if (kualiConfigurationService.parameterExists(KFSConstants.GL_NAMESPACE, GLConstants.GlScrubberGroupParameters.SCRUBBER_CUTOFF_TIME)) {
             try {
-                return kualiConfigurationService.getApplicationParameterValue(GLConstants.GL_SCRUBBER_GROUP, GLConstants.GlScrubberGroupParameters.SCRUBBER_CUTOFF_TIME);
+                return kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.GlScrubberGroupParameters.SCRUBBER_CUTOFF_TIME);
             }
             catch (RuntimeException e) {
                 LOG.error("Exception occured trying to retrieve parameter for GL process cutoff date.  Defaulting to no cutoff time (i.e. midnight)", e);
