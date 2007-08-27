@@ -87,9 +87,11 @@
 	<classpathentry kind="lib" path="build/external/appserver/commons-logging.jar"/>
 	<classpathentry kind="lib" path="build/external/appserver/commons-cli-1.0.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-core-0.9.0.2.jar"/>
-	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-kns-0.9.0.2.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-ksb-0.9.0.2.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-shared-0.9.0.2.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-kew-2.4.1.1-SNAPSHOT.jar"/>
+	<classpathentry excluding="**/KualiPostProcessor.java|**/Log4jLifeCycle.java" kind="src" path="kns"/>
+	<classpathentry kind="src" path="kns-r"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/rice_sys_param"/>
 	<classpathentry kind="output" path="work/web-root/WEB-INF/classes"/>
 </classpath>
