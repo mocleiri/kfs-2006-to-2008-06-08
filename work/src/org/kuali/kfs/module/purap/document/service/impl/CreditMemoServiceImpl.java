@@ -276,7 +276,7 @@ public class CreditMemoServiceImpl implements CreditMemoService {
     public boolean canHoldCreditMemo(CreditMemoDocument cmDocument, UniversalUser user) {
         boolean canHold = false;
 
-        String accountsPayableGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
+        String accountsPayableGroup = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
         if ( (!cmDocument.isHoldIndicator()) && user.isMember(accountsPayableGroup) && ObjectUtils.isNull(cmDocument.getExtractedDate()) && 
              (!PurapConstants.CreditMemoStatuses.STATUSES_DISALLOWING_HOLD.contains(cmDocument.getStatusCode())) ) {
             canHold = true;
@@ -315,7 +315,7 @@ public class CreditMemoServiceImpl implements CreditMemoService {
     public boolean canRemoveHoldCreditMemo(CreditMemoDocument cmDocument, UniversalUser user) {
         boolean canRemoveHold = false;
 
-        String accountsPayableSupervisorGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE_SUPERVISOR);
+        String accountsPayableSupervisorGroup = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE_SUPERVISOR);
         if (cmDocument.isHoldIndicator() && (user.getPersonUniversalIdentifier().equals(cmDocument.getLastActionPerformedByUniversalUserId()) || user.isMember(accountsPayableSupervisorGroup))) {
             canRemoveHold = true;
         }
@@ -355,7 +355,7 @@ public class CreditMemoServiceImpl implements CreditMemoService {
     public boolean canCancelCreditMemo(CreditMemoDocument cmDocument, UniversalUser user) {
         boolean canCancel = false;
 
-        String accountsPayableGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
+        String accountsPayableGroup = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
         if ( (!CreditMemoStatuses.CANCELLED_STATUSES.contains(cmDocument.getStatusCode())) && cmDocument.getExtractedDate() == null && !cmDocument.isHoldIndicator() && user.isMember(accountsPayableGroup)) {
             canCancel = true;
         }
