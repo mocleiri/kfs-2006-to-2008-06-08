@@ -130,6 +130,8 @@
 		<property name="organizationDao">
 			<ref bean="organizationDao" />
 		</property>
+        <property name="configService" ref="configService" />
+        <property name="chartService" ref="chartService" />
 	</bean>
 
 	<bean id="priorYearAccountService" class="org.kuali.module.chart.service.impl.PriorYearAccountServiceImpl">
