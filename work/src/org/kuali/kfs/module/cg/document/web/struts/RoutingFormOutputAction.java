@@ -184,7 +184,7 @@ public class RoutingFormOutputAction extends RoutingFormAction {
         String urlString = "";
         
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        String STYLESHEET_URL_OR_PATH = kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "outputRoutingFormStylesheetUrlOrPath");
+        String STYLESHEET_URL_OR_PATH = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputRoutingFormStylesheetUrlOrPath");
         
         // following checks if STYLESHEET_URL_OR_PATH is a URL already or path within the project
         if (STYLESHEET_URL_OR_PATH.contains("://")) {
@@ -195,7 +195,7 @@ public class RoutingFormOutputAction extends RoutingFormAction {
             urlString = APPLICATION_BASE_URL_KEY + STYLESHEET_URL_OR_PATH;
         }
 
-        urlString += kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "outputRoutingFormXslPath");
+        urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputRoutingFormXslPath");
 
         return new StreamSource(new URL(urlString).openConnection().getInputStream());
     }
