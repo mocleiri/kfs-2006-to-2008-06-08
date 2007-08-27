@@ -330,7 +330,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         // (e.g. the account number cannot begin with a 3 or with 00.)
         // Only bother trying if there is an account string to test
         if (!StringUtils.isBlank(newAccount.getAccountNumber())) {
-            String[] illegalValues = getConfigService().getApplicationParameterValues(KFSConstants.CHART_NAMESPACE, ACCT_PREFIX_RESTRICTION);
+            String[] illegalValues = getConfigService().getParameterValues(KFSConstants.CHART_NAMESPACE, ACCT_PREFIX_RESTRICTION);
             // test the number
             success &= accountNumberStartsWithAllowedPrefix(newAccount.getAccountNumber(), illegalValues);
         }
