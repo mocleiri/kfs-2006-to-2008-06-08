@@ -32,6 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.AuthorizationException;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSConstants.ParameterGroups;
 import org.kuali.kfs.KFSConstants.SystemGroupParameterNames;
 import org.kuali.kfs.batch.BatchInputFileSetType;
@@ -120,10 +121,10 @@ public class BatchInputFileSetServiceImpl implements BatchInputFileSetService {
             throw new IllegalArgumentException("an invalid(null) argument was given");
         }
 
-        String[] activeInputTypes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues(ParameterGroups.BATCH_UPLOAD_SECURITY_GROUP_NAME, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME);
+        List<String> activeInputTypes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsList(KFSConstants.CORE_NAMESPACE, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME);
 
         boolean activeBatchType = false;
-        if (activeInputTypes.length > 0 && (Arrays.asList(activeInputTypes)).contains(batchInputFileSetType.getFileSetTypeIdentifer())) {
+        if (activeInputTypes.size() > 0 && activeInputTypes.contains(batchInputFileSetType.getFileSetTypeIdentifer())) {
             activeBatchType = true;
         }
 
@@ -140,7 +141,7 @@ public class BatchInputFileSetServiceImpl implements BatchInputFileSetService {
         }
 
         String workgroupParameterName = batchInputFileSetType.getWorkgroupParameterName();
-        String authorizedWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(ParameterGroups.BATCH_UPLOAD_SECURITY_GROUP_NAME, workgroupParameterName);
+        String authorizedWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.CORE_NAMESPACE, workgroupParameterName);
  
         return user.isMember(authorizedWorkgroupName);
     }
