@@ -252,7 +252,7 @@ public class OriginEntryTestBase extends KualiTestBase {
     }
 
     protected boolean getApplicationConfigurationFlag(String name) {
-        return kualiConfigurationService.getApplicationParameterIndicator("SYSTEM", name);
+        return kualiConfigurationService.getIndicatorParameter(KFSConstants.CORE_NAMESPACE, name);
     }
 
     protected void setApplicationConfigurationFlag(String name, boolean value) throws Exception {
