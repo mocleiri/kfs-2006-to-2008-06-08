@@ -58,8 +58,7 @@ public class KraConstants extends JstlConstants {
     public static final String DROPDOWN_LIST_SELECT = "select:";
     
     // System Parameters
-    public static final String KRA_DEVELOPMENT_GROUP = "KraDevelopmentGroup";
-    public static final String KRA_ADMIN_GROUP_NAME = "KraAdminGroup";
+    public static final String KRA_NAMESPACE = "KFS-RA";
     public static final String BUDGET_PERIODS_HELP_PARAMETER_NAME = "budgetPeriodHelp";
     public static final String BUDGET_COSTSHARE_INDIRECT_HELP_PARAMETER_NAME = "budgetInstitutionCostShareIndirectHelp";
     public static final String BUDGET_OUTPUT_HELP_PARAMETER_NAME = "budgetOutputHelp";
