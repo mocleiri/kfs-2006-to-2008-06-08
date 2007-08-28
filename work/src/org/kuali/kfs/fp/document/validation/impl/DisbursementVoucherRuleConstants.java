@@ -48,7 +48,6 @@ public interface DisbursementVoucherRuleConstants {
     // system parameter security group constants
     public static String DV_PDP_EXTRACT_GROUP_NM = "DVPDPExtract";
     public static String DV_PAYMENT_REASON_CAMPUS_OVERRIDE = "DVPaymentReasonCampusOverride";
-    public static String DV_DOCUMENT_PARAMETERS_GROUP_NM = "Kuali.FinancialTransactionProcessing.DisbursementVoucherDocument";
     public static String GLOBAL_FIELD_RESTRICTIONS_GROUP_NM = "DVGlobalFieldRestrictions";
     public static String PAYMENT_OBJECT_LEVEL_GROUP_NM = "DVPaymentObjectLevelRestrictions";
     public static String PAYMENT_OBJECT_CODE_GROUP_NM = "DVPaymentObjectCodeRestrictions";
@@ -61,7 +60,6 @@ public interface DisbursementVoucherRuleConstants {
     public static String PAYMENT_DOC_LOCATION_GROUP_NM = "DVPaymentDocLocationRestrictions";
     public static String PAYMENT_SUB_FUND_GROUP_NM = "DVPaymentSubFundRestrictions";
     public static String SUB_FUND_OBJECT_SUB_TYPE_GROUP_NM = "DVSubFundObjectSubTypeRestrictions";
-    public static String NRA_TAX_PARM_GROUP_NM = "DVNRATaxParameters";
 
     public static class PaymentReasonCodes {
         public static String PRIZE = "A";
