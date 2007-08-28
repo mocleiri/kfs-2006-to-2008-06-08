@@ -21,7 +21,6 @@ package org.kuali.module.purap;
 public class PurapRuleConstants {
 
     // GROUP NAMES
-    public static final String PURAP_ADMIN_GROUP = PurapParameterConstants.PURAP_ADMIN_GROUP;
     public static String CREDIT_MEMO_RULES_GROUP = "Kuali.Purchasing.CreditMemoDocument";
 
     // RULE NAMES
