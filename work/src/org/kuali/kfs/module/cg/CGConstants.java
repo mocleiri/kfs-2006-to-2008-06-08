@@ -27,8 +27,4 @@ public class CGConstants extends JstlConstants {
      */
     public static final String CLOSE_DOCUMENT_TAB_ERRORS = "document.close*";
     
-    /**
-     * The name of the workgroup for Contracts and Grants documents.
-     */
-    public static final String GROUP_CG_MAINT_EDOCS = "CgMaintenanceEDoc";
 }
