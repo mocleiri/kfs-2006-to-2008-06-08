@@ -35,7 +35,7 @@ public class GenericOrganizationReversionCategory implements OrganizationReversi
 
     public void setCategoryCode(String code) {
         categoryCode = code;
-        isExpense = kualiConfigurationService.getApplicationParameterIndicator(KFSConstants.ORG_REVERSION, categoryCode + KFSConstants.EXPENSE_FLAG);
+        isExpense = kualiConfigurationService.getIndicatorParameter(KFSConstants.CHART_NAMESPACE, categoryCode + KFSConstants.EXPENSE_FLAG);
     }
 
     public void setCategoryName(String name) {
