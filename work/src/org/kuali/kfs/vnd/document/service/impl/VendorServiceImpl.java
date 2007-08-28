@@ -56,7 +56,17 @@ public class VendorServiceImpl implements VendorService {
     private VendorDao vendorDao;
     private BusinessObjectService businessObjectService;
     private DocumentService documentService;
+    private KualiConfigurationService configService;
+    private UniversalUserService universalUserService;
     
+    public UniversalUserService getUniversalUserService() {
+        return universalUserService;
+    }
+
+    public void setUniversalUserService(UniversalUserService universalUserService) {
+        this.universalUserService = universalUserService;
+    }
+
     public void setVendorDao(VendorDao vendorDao) {
         this.vendorDao = vendorDao;
     }
@@ -97,7 +107,7 @@ public class VendorServiceImpl implements VendorService {
             exampleContractOrg.setChartOfAccountsCode(chart);
             exampleContractOrg.setOrganizationCode(org);
             Map orgKeys = SpringContext.getBean(PersistenceService.class).getPrimaryKeyFieldValues(exampleContractOrg);
-            contractOrg = (VendorContractOrganization) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(VendorContractOrganization.class, orgKeys);
+            contractOrg = (VendorContractOrganization) businessObjectService.findByPrimaryKey(VendorContractOrganization.class, orgKeys);
             if (ObjectUtils.isNotNull(contractOrg)) {
                 if (!contractOrg.isVendorContractExcludeIndicator()) { // It's not excluded.
                     return contractOrg.getVendorContractPurchaseOrderLimitAmount();
@@ -110,7 +120,7 @@ public class VendorServiceImpl implements VendorService {
             VendorContract exampleContract = new VendorContract();
             exampleContract.setVendorContractGeneratedIdentifier(contractId);
             Map contractKeys = SpringContext.getBean(PersistenceService.class).getPrimaryKeyFieldValues(exampleContract);
-            contract = (VendorContract) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(VendorContract.class, contractKeys);
+            contract = (VendorContract) businessObjectService.findByPrimaryKey(VendorContract.class, contractKeys);
         }        
         if (ObjectUtils.isNotNull(contract)) {
             return contract.getOrganizationAutomaticPurchaseOrderLimit();
@@ -127,7 +137,7 @@ public class VendorServiceImpl implements VendorService {
         LOG.debug("Entering getParentVendor for vendorHeaderGeneratedIdentifier:"+vendorHeaderGeneratedIdentifier);
         Map criterion = new HashMap();
         criterion.put("vendorHeaderGeneratedIdentifier", vendorHeaderGeneratedIdentifier);
-        List<VendorDetail> vendors = (List<VendorDetail>)SpringContext.getBean(BusinessObjectService.class).findMatching(
+        List<VendorDetail> vendors = (List<VendorDetail>)businessObjectService.findMatching(
                 VendorDetail.class, criterion);
         VendorDetail result = null;
         if (ObjectUtils.isNull(vendors)){
@@ -299,7 +309,7 @@ public class VendorServiceImpl implements VendorService {
             if (StringUtils.isNotBlank(ssnTaxId)) {
                 try {
                     UniversalUser user = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new PersonTaxId(ssnTaxId));
-                    return (user.isFaculty() || user.isStaff() || user.isAffiliate()) && !SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(KFSConstants.ADMIN_GROUP, KFSConstants.ALLOWED_EMPLOYEE_STATUS_RULE).failsRule(user.getEmployeeStatusCode());
+                    return (user.isFaculty() || user.isStaff() || user.isAffiliate()) && !configService.failsRule(KFSConstants.CORE_NAMESPACE, KFSConstants.ALLOWED_EMPLOYEE_STATUS_RULE,user.getEmployeeStatusCode());
                 }
                 catch (UserNotFoundException e) {
                     // user is not in the system... assume non-employee
@@ -321,5 +331,13 @@ public class VendorServiceImpl implements VendorService {
             throw new RuntimeException(errorMsg);
         }
         return vendorToUse.getVendorHeader().getVendorForeignIndicator();
+    }
+
+    public KualiConfigurationService getConfigService() {
+        return configService;
+    }
+
+    public void setConfigService(KualiConfigurationService configService) {
+        this.configService = configService;
     }
 }
