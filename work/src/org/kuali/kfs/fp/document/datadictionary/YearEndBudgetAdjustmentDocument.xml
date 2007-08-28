@@ -95,7 +95,7 @@
         
         <summary><![CDATA[&nbsp;]]></summary>
         <description>The Year End version of the Budget Adjustment document.</description>
-        <help parameterNamespace="Kuali.FinancialTransactionProcessing.YearEndBudgetAdjustmentDocument" parameterName="FINANCIAL_HELP_YEAR_END_BUDGET_ADJUSTMENT_DOCUMENT" />
+        <help parameterNamespace="KFS-FP" parameterName="FINANCIAL_HELP_YEAR_END_BUDGET_ADJUSTMENT_DOCUMENT" />
         <allowsCopy>true</allowsCopy>
         <allowsErrorCorrection>true</allowsErrorCorrection>
     </transactionalDocument>

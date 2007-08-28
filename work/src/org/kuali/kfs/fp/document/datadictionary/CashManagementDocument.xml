@@ -72,7 +72,7 @@
             <![CDATA[&nbsp;]]>
         </summary>
         <description>blah blah Document blah Cash Management blah blah</description>
-        <help parameterNamespace="Kuali.FinancialTransactionProcessing.CashManagementDocument" parameterName="FINANCIAL_HELP_CASH_MANAGEMENT_DOCUMENT" />
+        <help parameterNamespace="KFS-FP" parameterName="FINANCIAL_HELP_CASH_MANAGEMENT_DOCUMENT" />
 
         <allowsCopy>false</allowsCopy>
         <allowsErrorCorrection>false</allowsErrorCorrection>
