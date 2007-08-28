@@ -32,6 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.SourceAccountingLine;
@@ -53,7 +54,7 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
      * @return String
      */
     protected String getDefaultParameterNamespace() {
-        return GENERAL_ERROR_CORRECTION_SECURITY_GROUPING;
+        return KFSConstants.FINANCIAL_NAMESPACE;
     }
 
     /**
