@@ -694,11 +694,9 @@ public class KFSConstants {
         public static final String CLEAR_FOREIGN_DRAFT_TAB_QUESTION_ID = "ClearForeignDraftTabQuestion";
     }
     
-    public static String ADMIN_GROUP = "AdminGroup";
     public static final String ALLOWED_EMPLOYEE_STATUS_RULE = "AllowedEmployeeStatuses";
 
     public static class CoreApcParms {
-        public static final String GROUP_CORE_MAINT_EDOCS = "CoreMaintenanceEDoc";
         
         // Kuali User params
         public static final String USER_INVALID_EMPLOYEE_STATUSES = "KualiUser.InvalidEmployeeStatus";
@@ -711,7 +709,6 @@ public class KFSConstants {
     }
     
     public static class ChartApcParms {
-        public static final String GROUP_CHART_MAINT_EDOCS = "ChartMaintenanceEDoc";
 
         public static final String FISCAL_YEAR_MAKER_REPLACE_MODE = "replaceMode";
         public static final String FISCAL_YEAR_MAKER_SOURCE_FISCAL_YEAR = "sourceFiscalYear";
@@ -744,7 +741,7 @@ public class KFSConstants {
     }
 
     public static class FinancialApcParms {
-        public static final String GROUP_DV_DOCUMENT = "Kuali.FinancialTransactionProcessing.DisbursementVoucherDocument";        
+//        public static final String GROUP_DV_DOCUMENT = "Kuali.FinancialTransactionProcessing.DisbursementVoucherDocument";        
         
         public static final String DV_TAX_WORKGROUP = "Workgroup.Tax"; 
         public static final String DV_ADMIN_WORKGROUP = "Workgroup.Admin"; 
@@ -754,15 +751,15 @@ public class KFSConstants {
         public static final String ACCOUNTING_LINE_IMPORT_HELP = "ACCOUNTING_LINE_IMPORT_HELP";
     }
     
-    public static class ParameterGroups {
-        public static final String SYSTEM = "SYSTEM";
-        public static final String FP_GLOBAL_PARAMETERS = "Kuali.FinancialTransactionProcessing.GlobalRules";
-        public static final String GENERAL_LEDGER_CORRECTION_PROCESS = "Kuali.FinancialTransactionProcessing.GeneralLedgerCorrectionProcessDocument";
-        public static final String BATCH_UPLOAD_SECURITY_GROUP_NAME = "Kuali.Batch.BatchInputFileUpload";
-        public static final String COLLECTOR_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.Collector";
-        public static final String ENTERPRSISE_FEEDER_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.EnterpriseFeeder";
-        public static final String CHART_FISCAL_YEAR_MAKER = "Chart.FiscalYearMaker";
-    }
+//    public static class ParameterGroups {
+//        public static final String SYSTEM = "SYSTEM";
+//        public static final String FP_GLOBAL_PARAMETERS = "Kuali.FinancialTransactionProcessing.GlobalRules";
+//        public static final String GENERAL_LEDGER_CORRECTION_PROCESS = "Kuali.FinancialTransactionProcessing.GeneralLedgerCorrectionProcessDocument";
+//        public static final String BATCH_UPLOAD_SECURITY_GROUP_NAME = "Kuali.Batch.BatchInputFileUpload";
+//        public static final String COLLECTOR_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.Collector";
+//        public static final String ENTERPRSISE_FEEDER_SECURITY_GROUP_NAME = "Kuali.GeneralLedger.EnterpriseFeeder";
+//        public static final String CHART_FISCAL_YEAR_MAKER = "Chart.FiscalYearMaker";
+//    }
 
     public static class SystemGroupParameterNames {
         public static final String FLEXIBLE_OFFSET_ENABLED_FLAG = "FLEXIBLE_OFFSET_ENABLED_FLAG";
@@ -864,8 +861,6 @@ public class KFSConstants {
     public static final String REQUEST_SEARCH_RESULTS = "reqSearchResults";
     public static final String REQUEST_SEARCH_RESULTS_SIZE = "reqSearchResultsSize";
     public static final String GL_COLLECTOR_STAGING_DIRECTORY = "collector.staging.directory";
-
-    public static final String SHEBANG = "#!";
 
     public static final String DISBURSEMENT_VOUCHER_DOCUMENTATION_LOCATION_CODE_PROPERTY_NAME = "disbursementVoucherDocumentationLocationCode";
     public static final String FUND_GROUP_CODE_PROPERTY_NAME = "code";
