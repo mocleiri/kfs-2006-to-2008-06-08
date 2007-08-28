@@ -23,8 +23,8 @@ public class PurapParameterConstants {
     private static final String PURAP_PARAM_PREFIX = "PURAP";
     private static final String STANDARD_SEPARATOR = ".";
     
-    // GROUP NAMES
-    public static final String PURAP_ADMIN_GROUP = "PurapAdminGroup";
+    // NAMESPACE NAME
+    public static final String PURAP_NAMESPACE = "KFS-PA";
     
     // PARAMETER NAMES
     public static final String PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE";
