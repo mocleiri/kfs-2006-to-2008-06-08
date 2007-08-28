@@ -103,7 +103,7 @@ public class CorrectionAction extends KualiDocumentActionBase implements KualiTa
             CorrectionAction.kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
         }
 
-        request.setAttribute("debug", Boolean.valueOf(kualiConfigurationService.getApplicationParameterIndicator("GL.GLCP", "GL.DEBUG")));
+        request.setAttribute("debug", Boolean.valueOf(kualiConfigurationService.getIndicatorParameter(KFSConstants.GL_NAMESPACE, "GL.DEBUG")));
 
         CorrectionForm rForm = (CorrectionForm) form;
         LOG.debug("execute() methodToCall: " + rForm.getMethodToCall());
