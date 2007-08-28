@@ -89,16 +89,16 @@ public class Job implements StatefulJob, InterruptableJob {
                 currentStep = step;
                 LOG.info(new StringBuffer("Started processing step: ").append(currentStepNumber).append("=").append(step.getName()));
                 String stepRunIndicatorParameter = step.getName() + STEP_RUN_INDICATOR_PARAMETER_SUFFIX;
-                if (getConfigurationService().parameterExists(KFSConstants.GL_NAMESPACE, stepRunIndicatorParameter) && !getConfigurationService().getIndicatorParameter(KFSConstants.GL_NAMESPACE, stepRunIndicatorParameter)) {
+                if (getConfigurationService().parameterExists(step.getNamespace(), stepRunIndicatorParameter) && !getConfigurationService().getIndicatorParameter(step.getNamespace(), stepRunIndicatorParameter)) {
                     LOG.info("Skipping step due to system parameter: " + stepRunIndicatorParameter);
                 }
                 else {
                     GlobalVariables.setErrorMap(new ErrorMap());
                     GlobalVariables.setMessageList(new ArrayList());
                     String stepUserParameter = step.getName() + STEP_USER_PARAMETER_SUFFIX;
-                    if (getConfigurationService().parameterExists(KFSConstants.GL_NAMESPACE, stepUserParameter)) {
-                        LOG.info(new StringBuffer("Creating user session for step: ").append(stepUserParameter).append("=").append(getConfigurationService().getParameterValue(KFSConstants.ParameterGroups.SYSTEM, stepUserParameter)));
-                        GlobalVariables.setUserSession(new UserSession(getConfigurationService().getParameterValue(KFSConstants.GL_NAMESPACE, stepUserParameter)));
+                    if (getConfigurationService().parameterExists(step.getNamespace(), stepUserParameter)) {
+                        LOG.info(new StringBuffer("Creating user session for step: ").append(stepUserParameter).append("=").append(getConfigurationService().getParameterValue(step.getNamespace(), stepUserParameter)));
+                        GlobalVariables.setUserSession(new UserSession(getConfigurationService().getParameterValue(step.getNamespace(), stepUserParameter)));
                     }
                     LOG.info(new StringBuffer("Executing step: ").append(step.getName()).append("=").append(step.getClass()));
                     step.setInterrupted( false );
