@@ -130,7 +130,7 @@
 		<property name="organizationDao">
 			<ref bean="organizationDao" />
 		</property>
-        <property name="configService" ref="configService" />
+        <property name="configService" ref="kualiConfigurationService" />
         <property name="chartService" ref="chartService" />
 	</bean>
 
