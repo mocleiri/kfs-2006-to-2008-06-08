@@ -876,7 +876,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
 
         ObjectCode objectCode = accountingLine.getObjectCode();
 
-        valid &= succeedsRule(RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode());
+        valid &= succeedsRule(AUXILIARY_VOUCHER_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode());
         if (!valid) {
             // add message
             reportError(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_AUXILIARY_VOUCHER_INVALID_OBJECT_SUB_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectSubTypeCode() });
