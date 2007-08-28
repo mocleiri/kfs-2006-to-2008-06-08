@@ -20,7 +20,6 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSConstants.ParameterGroups;
 import org.kuali.kfs.KFSConstants.SystemGroupParameterNames;
 import org.kuali.kfs.batch.BatchInputFileType;
 import org.kuali.kfs.context.KualiTestBase;
@@ -152,13 +151,13 @@ public class BatchInputServiceSystemParametersTest extends KualiTestBase {
      * Changes the text for the batch input active system parameter, stores and clears cache.
      */
     private final void setActiveSystemParameter(String parameterText, boolean multiValue) throws Exception {
-        TestUtils.setSystemParameter(ParameterGroups.BATCH_UPLOAD_SECURITY_GROUP_NAME, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME, parameterText, false, multiValue);
+        TestUtils.setSystemParameter(KFSConstants.CORE_NAMESPACE, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME, parameterText, false, multiValue);
     }
 
     /**
      * Changes the text for the given workgroup system parameter, stores and clears cache.
      */
     private final void setWorkgroupSystemParameter(String workgroupName, String parameterText) throws Exception {
-        TestUtils.setSystemParameter(ParameterGroups.BATCH_UPLOAD_SECURITY_GROUP_NAME, workgroupName, parameterText, false, false);
+        TestUtils.setSystemParameter(KFSConstants.CORE_NAMESPACE, workgroupName, parameterText, false, false);
     }
 }
