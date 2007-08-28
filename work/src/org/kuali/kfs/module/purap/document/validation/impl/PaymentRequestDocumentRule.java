@@ -31,8 +31,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.RicePropertyConstants;
 import org.kuali.core.document.Document;
-import org.kuali.core.rule.KualiParameterRule;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
@@ -332,9 +330,9 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
      */
     public void validateTotals(PaymentRequestDocument document) {
         String securityGroup = (String)PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(PurapConstants.PAYMENT_REQUEST_DOCUMENT_DOC_TYPE);
-        KualiParameterRule allowsNegativeRule = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(securityGroup, PurapConstants.ITEM_ALLOWS_NEGATIVE);
+        Set<String> allowsNegativeRule = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsSet( KFSConstants.PURAP_NAMESPACE, securityGroup+"."+PurapConstants.ITEM_ALLOWS_NEGATIVE);
         if ((ObjectUtils.isNull(document.getVendorInvoiceAmount())) || 
-            (this.getTotalExcludingItemTypes(document.getItems(), allowsNegativeRule.getParameterValueSet()).compareTo(document.getVendorInvoiceAmount()) != 0)) {
+            (this.getTotalExcludingItemTypes(document.getItems(), allowsNegativeRule).compareTo(document.getVendorInvoiceAmount()) != 0)) {
             GlobalVariables.getMessageList().add(PurapKeyConstants.MESSAGE_PAYMENT_REQUEST_VENDOR_INVOICE_AMOUNT_INVALID);
         }
         flagLineItemTotals(document.getItems());
