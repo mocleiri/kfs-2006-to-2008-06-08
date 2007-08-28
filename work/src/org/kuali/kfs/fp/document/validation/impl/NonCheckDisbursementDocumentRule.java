@@ -54,7 +54,7 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
      * @return String
      */
     protected String getDefaultParameterNamespace() {
-        return NON_CHECK_DISBURSEMENT_SECURITY_GROUPING;
+        return KFSConstants.FINANCIAL_NAMESPACE;
     }
 
     /**
