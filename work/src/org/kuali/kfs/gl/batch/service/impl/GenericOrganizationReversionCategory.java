@@ -48,14 +48,14 @@ public class GenericOrganizationReversionCategory implements OrganizationReversi
         String cons = oc.getFinancialObjectLevel().getFinancialConsolidationObjectCode();
         String level = oc.getFinancialObjectLevelCode();
         String objTyp = oc.getFinancialObjectTypeCode();
-        String objSubTyp = oc.getFinancialObjectSubType().getCode();
+        String objSubTyp = oc.getFinancialObjectSubTypeCode();
 
-        KualiParameterRule consolidationRules = kualiConfigurationService.getApplicationParameterRule(KFSConstants.ORG_REVERSION, categoryCode + KFSConstants.CONSOLIDATION);
-        KualiParameterRule levelRules = kualiConfigurationService.getApplicationParameterRule(KFSConstants.ORG_REVERSION, categoryCode + KFSConstants.LEVEL);
-        KualiParameterRule objectTypeRules = kualiConfigurationService.getApplicationParameterRule(KFSConstants.ORG_REVERSION, categoryCode + KFSConstants.OBJECT_TYPE);
-        KualiParameterRule objectSubTypeRules = kualiConfigurationService.getApplicationParameterRule(KFSConstants.ORG_REVERSION, categoryCode + KFSConstants.OBJECT_SUB_TYPE);
+        boolean consolidationRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, categoryCode + KFSConstants.CONSOLIDATION, cons);
+        boolean levelRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, categoryCode + KFSConstants.LEVEL, level);
+        boolean objectTypeRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, categoryCode + KFSConstants.OBJECT_TYPE, objTyp);
+        boolean objectSubTypeRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, categoryCode + KFSConstants.OBJECT_SUB_TYPE, objSubTyp );
 
-        return consolidationRules.succeedsRule(cons) && levelRules.succeedsRule(level) && objectTypeRules.succeedsRule(objTyp) && objectSubTypeRules.succeedsRule(objSubTyp);
+        return consolidationRulesPassed && levelRulesPassed && objectTypeRulesPassed && objectSubTypeRulesPassed;
     }
 
     public String getName() {
