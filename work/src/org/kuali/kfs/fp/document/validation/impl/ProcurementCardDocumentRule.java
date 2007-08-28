@@ -22,7 +22,6 @@ import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_BALANCE_CONSIDERING_S
 import static org.kuali.kfs.KFSKeyConstants.ERROR_ZERO_AMOUNT;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.ACCOUNT_NUMBER_GLOBAL_RESTRICTION_PARM_NM;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM;
-import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.GLOBAL_FIELD_RESTRICTIONS_GROUP_NM;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.MCC_OBJECT_CODE_GROUP_NM;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.MCC_OBJECT_SUB_TYPE_GROUP_NM;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.MCC_PARM_PREFIX;
@@ -42,6 +41,7 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
@@ -153,16 +153,16 @@ public class ProcurementCardDocumentRule extends AccountingDocumentRuleBase {
         }
 
         /* check object type global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectTypeCode(), errorKey, "Object type");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectTypeCode(), errorKey, "Object type");
 
         /* check object sub type global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type");
 
         /* check object level global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level");
 
         /* check object consolidation global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, OBJECT_CONSOLIDATION_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialConsolidationObjectCode(), errorKey, "Object consolidation code");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, OBJECT_CONSOLIDATION_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialConsolidationObjectCode(), errorKey, "Object consolidation code");
 
         /* get mcc restriction from transaction */
         String mccRestriction = "";
@@ -180,10 +180,10 @@ public class ProcurementCardDocumentRule extends AccountingDocumentRuleBase {
         }
 
         /* check object code is in permitted list for mcc */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(MCC_OBJECT_CODE_GROUP_NM, MCC_PARM_PREFIX + mccRestriction, accountingLine.getFinancialObjectCode(), errorKey, "Object code");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, MCC_PARM_PREFIX + mccRestriction, accountingLine.getFinancialObjectCode(), errorKey, "Object code");
 
         /* check object sub type is in permitted list for mcc */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(MCC_OBJECT_SUB_TYPE_GROUP_NM, MCC_PARM_PREFIX + mccRestriction, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type code");
+        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, MCC_PARM_PREFIX + mccRestriction, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type code");
 
         return objectCodeAllowed;
     }
@@ -208,13 +208,13 @@ public class ProcurementCardDocumentRule extends AccountingDocumentRuleBase {
         }
 
         /* global account number restrictions */
-        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, ACCOUNT_NUMBER_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccountNumber(), errorKey, "Account number");
+        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, ACCOUNT_NUMBER_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccountNumber(), errorKey, "Account number");
 
         /* global sub fund restrictions */
-        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, SUB_FUND_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccount().getSubFundGroupCode(), errorKey, "Sub fund code");
+        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, SUB_FUND_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccount().getSubFundGroupCode(), errorKey, "Sub fund code");
 
         /* global function code restrictions */
-        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(GLOBAL_FIELD_RESTRICTIONS_GROUP_NM, FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccount().getFinancialHigherEdFunctionCd(), errorKey, "Function code");
+        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccount().getFinancialHigherEdFunctionCd(), errorKey, "Function code");
 
         return accountNumberAllowed;
     }
