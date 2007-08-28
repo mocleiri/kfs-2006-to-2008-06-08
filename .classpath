@@ -24,6 +24,7 @@
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/backport-util-concurrent-2.1.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-fileupload-1.1.1.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/rice-testharness-0.9.0.2.jar"/>
 	<classpathentry kind="var" path="TOMCAT_LIB_HOME/servlet-api.jar"/>
 	<classpathentry kind="lib" path="test/lib/Tidy-httpunit-1.6.jar"/>
 	<classpathentry kind="lib" path="test/lib/httpunit-1.6.jar"/>
