@@ -182,7 +182,7 @@ public class DisbursementVoucherDocumentAuthorizer extends AccountingDocumentAut
 
         if ( isUserInDvAdminGroup( user ) || isUserInTravelGroup( user ) ) {
             // retrieve allow object code edit indicator
-            boolean allowObjectEdits = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterIndicator(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.ALLOW_OBJECT_CODE_EDITS);
+            boolean allowObjectEdits = SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.ALLOW_OBJECT_CODE_EDITS);
             if (allowObjectEdits) {
                 editableFields.put(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, "TRUE");
             }
