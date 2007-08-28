@@ -184,8 +184,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     // To send email or not send email
     boolean noEmail = false;
-    if ( kualiConfigurationService.hasApplicationParameter(PdpConstants.PDP_APPLICATION, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL) ) {
-        noEmail = kualiConfigurationService.getApplicationParameterIndicator(PdpConstants.PDP_APPLICATION,PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
+    if ( kualiConfigurationService.parameterExists(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL) ) {
+        noEmail = kualiConfigurationService.getIndicatorParameter(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
     }
     if ( noEmail ) {
       LOG.debug("sendErrorEmail() sending payment file email is disabled");
@@ -292,8 +292,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     //To send email or not send email
     boolean noEmail = false;
-    if ( kualiConfigurationService.hasApplicationParameter(PdpConstants.PDP_APPLICATION, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL) ) {
-        noEmail = kualiConfigurationService.getApplicationParameterIndicator(PdpConstants.PDP_APPLICATION,PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
+    if ( kualiConfigurationService.parameterExists(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL) ) {
+        noEmail = kualiConfigurationService.getIndicatorParameter(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
     }
     if ( noEmail) {
       LOG.debug("sendLoadEmail() sending payment file email is disabled");
