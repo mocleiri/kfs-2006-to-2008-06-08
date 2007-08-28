@@ -299,7 +299,7 @@ public class TestUtils {
 
         systemParameter = (Parameter)SpringContext.getBean(BusinessObjectService.class).retrieve(systemParameter);
         if (systemParameter == null) {
-            throw new RuntimeException("system parameter not found");
+            throw new RuntimeException("TestUtils.setSystemParameter()--system parameter not found: "+parameterNamespace+"/"+parameterName);
         }
 
         // update parameter text and store
@@ -307,14 +307,15 @@ public class TestUtils {
         SpringContext.getBean(BusinessObjectService.class).save(systemParameter);
 
         // clear method cache
-        String configMethodName = "getParameterValue";
         if (isIndicator) {
-            configMethodName = "getIndicatorParameter";
+            removeCachedMethod(KualiConfigurationService.class.getMethod("getIndicatorParameter", new Class[] { String.class, String.class }), new Object[] { parameterNamespace, parameterName });
+        } else if (isMultipleValue) {
+            removeCachedMethod(KualiConfigurationService.class.getMethod("getParameterValues", new Class[] { String.class, String.class }), new Object[] { parameterNamespace, parameterName });
+            removeCachedMethod(KualiConfigurationService.class.getMethod("getParameterValuesAsList", new Class[] { String.class, String.class }), new Object[] { parameterNamespace, parameterName });
+            removeCachedMethod(KualiConfigurationService.class.getMethod("getParameterValuesAsSet", new Class[] { String.class, String.class }), new Object[] { parameterNamespace, parameterName });
+        } else {
+            removeCachedMethod(KualiConfigurationService.class.getMethod("getParameterValue", new Class[] { String.class, String.class }), new Object[] { parameterNamespace, parameterName });
         }
-        else if (isMultipleValue) {
-            configMethodName = "getParameterValues";
-        }
-        removeCachedMethod(KualiConfigurationService.class.getMethod(configMethodName, new Class[] { String.class, String.class }), new Object[] { parameterNamespace, parameterName });
     }
 
     /**
