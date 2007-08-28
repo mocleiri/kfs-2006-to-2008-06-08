@@ -23,10 +23,10 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.Campus;
+import org.kuali.core.bo.Parameter;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
@@ -197,21 +197,22 @@ public class RoutingFormDocument extends ResearchDocumentBase {
             this.refreshReferenceObject("contractGrantProposal");
             if (this.getContractGrantProposal().getProposalNumber() == null) {
                 boolean createProposal = false;
-                KualiParameterRule proposalCreateRule = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(KraConstants.KRA_ADMIN_GROUP_NAME, "KraRoutingFormCreateProposalProjectTypes");
-                
+                KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
+                Parameter proposalCreateRule = kualiConfigurationService.getParameter(KFSConstants.KRA_NAMESPACE, "KraRoutingFormCreateProposalProjectTypes");
+
                 for (RoutingFormProjectType routingFormProjectType : this.getRoutingFormProjectTypes()) {
-                    if (proposalCreateRule.succeedsRule(routingFormProjectType.getProjectTypeCode())) {
+                    if (kualiConfigurationService.succeedsRule(proposalCreateRule, routingFormProjectType.getProjectTypeCode())) {
                         createProposal = true;
                         break;
-            }
-        }
-                
+                    }
+                }
+
                 if (createProposal) {
                     Long newProposalNumber = SpringContext.getBean(RoutingFormService.class).createAndRouteProposalMaintenanceDocument(this);
 
                     this.getContractGrantProposal().setProposalNumber(newProposalNumber);
                     SpringContext.getBean(BusinessObjectService.class).save(this.getContractGrantProposal());
-    }
+                }
 
             }
         }
