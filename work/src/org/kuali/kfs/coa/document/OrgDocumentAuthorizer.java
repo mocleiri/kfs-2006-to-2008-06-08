@@ -21,10 +21,7 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizations;
 import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase;
-import org.kuali.core.exceptions.ApplicationParameterException;
-import org.kuali.core.exceptions.GroupNotFoundException;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.KualiGroupService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 
