@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
@@ -160,12 +159,8 @@ public class PrintServiceImpl implements PrintService {
         String imageTempLocation = "";
         String logoImage = "";
         boolean useImage = true;
-        try {
-            String imageAvailable = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
-            useImage = (imageAvailable.equalsIgnoreCase("Y") ? true : false);
-        } 
-        catch (ApplicationParameterException ape) {
-            //if ApplicationParameterException is caught, it means we assume the default case that the useImage is true
+        if ( kualiConfigurationService.parameterExists(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR) ) {
+            useImage = kualiConfigurationService.getIndicatorParameter(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
         }
         //We'll get the imageTempLocation and the actual images only if the useImage is true. If useImage is false, we'll leave the images as blank space
         if (useImage) {
@@ -211,12 +206,8 @@ public class PrintServiceImpl implements PrintService {
         String imageTempLocation = "";
         String logoImage = "";
         boolean useImage = true;
-        try {
-            String imageAvailable = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
-            useImage = (imageAvailable.equalsIgnoreCase("Y") ? true : false);
-        } 
-        catch (ApplicationParameterException ape) {
-            //if ApplicationParameterException is caught, it means we assume the default case that the useImage is true
+        if ( kualiConfigurationService.parameterExists(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR) ) {
+            useImage = kualiConfigurationService.getIndicatorParameter(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
         }
         //We'll get the imageTempLocation and the actual images only if the useImage is true. If useImage is false, we'll leave the images as blank space
         if (useImage) {
@@ -352,12 +343,8 @@ public class PrintServiceImpl implements PrintService {
         String directorSignatureImage = "";
         String contractManagerSignatureImage = "";
         boolean useImage = true;
-        try {
-            String imageAvailable = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
-            useImage = (imageAvailable.equalsIgnoreCase("Y") ? true : false);
-        } 
-        catch (ApplicationParameterException ape) {
-            //if ApplicationParameterException is caught, it means we assume the default case that the useImage is true
+        if ( kualiConfigurationService.parameterExists(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR) ) {
+            useImage = kualiConfigurationService.getIndicatorParameter(KFSConstants.PURAP_NAMESPACE, PurapConstants.PDF_IMAGES_AVAILABLE_INDICATOR);
         }
         //We'll get the imageTempLocation and the actual images only if the useImage is true. If useImage is false, we'll leave the images as blank space
         if (useImage) {
