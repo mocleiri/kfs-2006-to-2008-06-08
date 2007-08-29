@@ -182,7 +182,7 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
         ObjectCode objectCode = accountingLine.getObjectCode();
 
         if (valid) {
-            valid = succeedsRule(RESTRICTED_OBJECT_TYPE_CODES, objectCode.getFinancialObjectTypeCode());
+            valid = succeedsRule(NON_CHECK_DISBURSEMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_TYPE_CODES, objectCode.getFinancialObjectTypeCode());
         }
 
         if (!valid) {
@@ -206,7 +206,7 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
         ObjectCode objectCode = accountingLine.getObjectCode();
 
         if (valid) {
-            valid = succeedsRule(RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode());
+            valid = succeedsRule(NON_CHECK_DISBURSEMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode());
         }
 
         if (!valid) {
