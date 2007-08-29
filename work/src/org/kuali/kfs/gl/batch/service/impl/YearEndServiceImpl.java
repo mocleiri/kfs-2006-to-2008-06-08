@@ -101,7 +101,7 @@ public class YearEndServiceImpl implements YearEndService {
 
         Map jobParameters = new HashMap();
 
-        varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR));
+        varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.LABOR_NAMESPACE, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR));
 
         // 680 003670 DISPLAY "TRANSACTION_DT" UPON ENVIRONMENT-NAME.
         // 681 003680 ACCEPT VAR-UNIV-DT FROM ENVIRONMENT-VALUE.
@@ -1050,7 +1050,7 @@ public class YearEndServiceImpl implements YearEndService {
             throw new IllegalArgumentException("Unable to parse transaction date");
         }
 
-        Integer varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR));
+        Integer varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.LABOR_NAMESPACE, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR));
 
         OriginEntryGroup unclosedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_BEGINNING_BALANCE, true, false, true);
         OriginEntryGroup closedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_BEGINNING_BALANCE_PRIOR_YEAR, true, false, true);
