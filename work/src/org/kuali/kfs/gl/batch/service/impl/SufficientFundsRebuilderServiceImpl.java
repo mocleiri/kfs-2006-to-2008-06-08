@@ -82,7 +82,7 @@ public class SufficientFundsRebuilderServiceImpl implements SufficientFundsRebui
     }
 
     private Integer getFiscalYear() {
-        String val = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR);
+        String val = kualiConfigurationService.getParameterValue(KFSConstants.LABOR_NAMESPACE, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR);
         int yr = Integer.parseInt(val);
         return new Integer(yr);
     }
