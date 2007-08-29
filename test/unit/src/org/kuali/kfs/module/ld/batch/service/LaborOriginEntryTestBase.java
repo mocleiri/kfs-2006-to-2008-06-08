@@ -226,11 +226,11 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
     }
 
     protected boolean getApplicationConfigurationFlag(String name) {
-        return kualiConfigurationService.getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, name);
+        return kualiConfigurationService.getIndicatorParameter(KFSConstants.CORE_NAMESPACE, name);
     }
 
     protected void setApplicationConfigurationFlag(String name, boolean value) throws Exception {
-        TestUtils.setSystemParameter(KFSConstants.FINANCIAL_NAMESPACE, name, value ? "Y" : "N", true, false);
+        TestUtils.setSystemParameter(KFSConstants.CORE_NAMESPACE, name, value ? "Y" : "N", true, false);
     }
 
 
