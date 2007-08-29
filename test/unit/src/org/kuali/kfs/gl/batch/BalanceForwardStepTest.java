@@ -160,6 +160,6 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
     protected void setApplicationConfigurationFlag(String name, boolean value) throws Exception {
         super.setApplicationConfigurationFlag(name, value);
         TestUtils.setSystemParameter(KFSConstants.GL_NAMESPACE, "TRANSACTION_DT", "2004-01-01", false, false);
-        TestUtils.setSystemParameter(KFSConstants.GL_NAMESPACE, "UNIV_FISCAL_YR", "2004", false, false);
+        TestUtils.setSystemParameter(KFSConstants.LABOR_NAMESPACE, "UNIV_FISCAL_YR", "2004", false, false);
     }
 }
