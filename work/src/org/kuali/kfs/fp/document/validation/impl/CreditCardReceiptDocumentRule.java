@@ -21,9 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kuali.core.document.Document;
-import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
@@ -170,7 +168,7 @@ public class CreditCardReceiptDocumentRule extends CashReceiptFamilyRule impleme
         final String parameter = CreditCardReceiptDocumentRuleConstants.CASH_OFFSET_BANK_ACCOUNT;
         final String[] parameterValues = getKualiConfigurationService().getParameterValues(parameterNamespace, parameter);
         if (parameterValues.length != 2) {
-            throw new ApplicationParameterException(parameterNamespace, parameter, "invalid parameter format: must be 'bankCode;bankAccountNumber'");
+            throw new RuntimeException( parameterNamespace+"/"+parameter+": invalid parameter format: must be 'bankCode;bankAccountNumber'");
         }
         final String bankCode = parameterValues[0];
         final String bankAccountNumber = parameterValues[1];
