@@ -72,7 +72,7 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     public KualiDecimal getExpenseSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isDebit, boolean isYearEnd) {
         LOG.debug("getExpenseSummary() started");
 
-        List<String> objectTypes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.GL_NAMESPACE, "ExpenseObjectTypeCodes");
+        List<String> objectTypes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.CORE_NAMESPACE, "ExpenseObjectTypeCodes");
 
         Options options = optionsService.getOptions(universityFiscalYear);
 
@@ -90,7 +90,7 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     public KualiDecimal getEncumbranceSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isDebit, boolean isYearEnd) {
         LOG.debug("getEncumbranceSummary() started");
 
-        List<String> objectTypes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.GL_NAMESPACE, "ExpenseObjectTypeCodes");
+        List<String> objectTypes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.CORE_NAMESPACE, "ExpenseObjectTypeCodes");
 
         Options options = optionsService.getOptions(universityFiscalYear);
 
@@ -110,7 +110,7 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     public KualiDecimal getBudgetSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isYearEnd) {
         LOG.debug("getBudgetSummary() started");
 
-        List<String> objectTypes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.GL_NAMESPACE, "ExpenseObjectTypeCodes");
+        List<String> objectTypes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.CORE_NAMESPACE, "ExpenseObjectTypeCodes");
 
         Options options = optionsService.getOptions(universityFiscalYear);
 
