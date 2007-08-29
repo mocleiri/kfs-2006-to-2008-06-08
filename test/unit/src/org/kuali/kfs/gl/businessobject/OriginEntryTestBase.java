@@ -252,11 +252,11 @@ public class OriginEntryTestBase extends KualiTestBase {
     }
 
     protected boolean getApplicationConfigurationFlag(String name) {
-        return kualiConfigurationService.getIndicatorParameter(KFSConstants.GL_NAMESPACE, name);
+        return kualiConfigurationService.getIndicatorParameter(KFSConstants.CORE_NAMESPACE, name);
     }
 
     protected void setApplicationConfigurationFlag(String name, boolean value) throws Exception {
-        TestUtils.setSystemParameter(KFSConstants.GL_NAMESPACE, name, value ? "Y" : "N", true, false);
+        TestUtils.setSystemParameter(KFSConstants.CORE_NAMESPACE, name, value ? "Y" : "N", true, false);
     }
 
 
