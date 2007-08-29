@@ -27,6 +27,7 @@ import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRul
 import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRuleConstants.RESTRICTED_OBJECT_SUB_TYPE_CODES;
 import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRuleConstants.RESTRICTED_OBJECT_TYPE_CODES;
 import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRuleConstants.TRANSACTION_LEDGER_ENTRY_DESCRIPTION_DELIMITER;
+import static org.kuali.module.financial.rules.NonCheckDisbursementDocumentRuleConstants.NON_CHECK_DISBURSEMENT_SECURITY_GROUPING;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
@@ -220,7 +221,7 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
         if (valid) {
             ObjectCode objectCode = accountingLine.getObjectCode();
 
-            if (failsRule(RESTRICTED_OBJECT_TYPE_CODES, objectCode.getFinancialObjectTypeCode())) {
+            if (failsRule(NON_CHECK_DISBURSEMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_TYPE_CODES, objectCode.getFinancialObjectTypeCode())) {
                 valid = false;
 
                 // add message
@@ -276,7 +277,7 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
         if (valid) {
             ObjectCode objectCode = accountingLine.getObjectCode();
 
-            if (failsRule(RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode())) {
+            if (failsRule( GENERAL_ERROR_CORRECTION_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode())) {
                 valid = false;
 
                 // add message
