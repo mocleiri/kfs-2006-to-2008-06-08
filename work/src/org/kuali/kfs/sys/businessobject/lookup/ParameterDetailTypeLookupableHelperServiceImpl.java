@@ -15,27 +15,31 @@
  */
 package org.kuali.kfs.lookup;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.BusinessObject;
+import org.kuali.core.bo.ParameterDetailType;
 import org.kuali.core.datadictionary.DataDictionary;
 import org.kuali.core.datadictionary.DocumentEntry;
 import org.kuali.core.datadictionary.TransactionalDocumentEntry;
+import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.lookup.KualiLookupableHelperServiceImpl;
 import org.kuali.kfs.batch.Step;
 import org.kuali.kfs.context.SpringContext;
 
 public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupableHelperServiceImpl {
 
-    private static TreeMap<String,String> components = new TreeMap<String, String>(); 
+    private static ArrayList<ParameterDetailType> components = new ArrayList<ParameterDetailType>(); 
     
     @Override
     public List<? extends BusinessObject> getSearchResults(java.util.Map<String,String> fieldValues) {
 
-        List<? extends BusinessObject> baseLookup = super.getSearchResults(fieldValues);
+        List baseLookup = super.getSearchResults(fieldValues);
         getDataDictionaryService().getDataDictionary().forceCompleteDataDictionaryLoad();
         
         // all step beans
@@ -48,22 +52,30 @@ public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupa
             DataDictionary dd = getDataDictionaryService().getDataDictionary();
             for ( String boClassName : dd.getBusinessObjectClassNames() ) {
                 String simpleName = StringUtils.substringAfterLast(boClassName, ".");
-                //simpleName = simpleName.replace( "([^A-Z][A-Z])", "_\\1" ).toUpperCase();
-                components.put( simpleName, dd.getBusinessObjectEntry(boClassName).getObjectLabel() );
+                if ( StringUtils.isBlank( simpleName ) ) continue;
+                components.add( new ParameterDetailType( "N/A", simpleName, simpleName ) );
             }
             Map<String,DocumentEntry> ddDocuments = dd.getDocumentEntries();
             for ( String transDocName : ddDocuments.keySet() ) {
+                if ( StringUtils.isBlank( transDocName ) ) continue;
                 DocumentEntry doc = ddDocuments.get(transDocName);
                 if ( doc instanceof TransactionalDocumentEntry ) {
-                    components.put(transDocName, doc.getLabel());
+                    components.add( new ParameterDetailType( "N/A", transDocName, doc.getLabel() ) );
                 }
             }
             Map<String,Step> steps = SpringContext.getBeansOfType(Step.class);
             for ( String stepName : steps.keySet() ) {
-                components.put(stepName, stepName );
+                components.add( new ParameterDetailType( steps.get(stepName).getNamespace(), stepName, stepName ) );
             }
         }
-        // TODO: incomplete at present
+        
+        if ( baseLookup instanceof CollectionIncomplete ) {
+            long originalCount = ((CollectionIncomplete)baseLookup).getActualSizeIfTruncated();
+            baseLookup = new ArrayList( baseLookup );
+            baseLookup.addAll( components );
+            baseLookup = new CollectionIncomplete( baseLookup, originalCount + components.size() );
+        }
+        
         return baseLookup;
     }
 }
