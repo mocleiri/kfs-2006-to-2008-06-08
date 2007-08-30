@@ -16,14 +16,12 @@
 package org.kuali.module.vendor.service;
 
 
-import org.kuali.core.bo.BusinessRule;
 import org.kuali.core.bo.Parameter;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.purap.PurapRuleConstants;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.VendorRuleConstants;
 import org.kuali.test.ConfigureContext;
