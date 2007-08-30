@@ -179,12 +179,8 @@ public class ScrubberProcess {
         this.scrubberValidator = scrubberValidator;
         this.unscrubbedToUnscrubbedEntries = new HashMap<OriginEntry, OriginEntry>();
         this.scrubberProcessObjectCodeOverride = scrubberProcessObjectCodeOverride;
-
-        Map<String,String> parameterCriteria = new HashMap<String, String>( 2 );
-        parameterCriteria.put("parameterNamespace", KFSConstants.GL_NAMESPACE);
-        parameterCriteria.put("parameterDetailTypeCode", GLConstants.GL_SCRUBBER_GROUP );
         
-        parameters = kualiConfigurationService.getParametersAsMap(parameterCriteria);
+        parameters = kualiConfigurationService.getParametersByDetailTypeAsMap(KFSConstants.GL_NAMESPACE, GLConstants.GL_SCRUBBER_GROUP );
         
         cutoffHour = null;
         cutoffMinute = null;
