@@ -50,7 +50,7 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends AccountingDocume
     public boolean isObjectSubTypeAllowed(AccountingLine accountingLine) {
         boolean valid = super.isObjectSubTypeAllowed(accountingLine);
         if (valid) {
-            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, DISTRIBUTION_OF_INCOME_AND_EXPENSE_DOCUMENT_SECURITY_GROUPING+"."+RESTRICTED_SUB_TYPE_GROUP_CODES);
+            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISTRIBUTION_OF_INCOME_AND_EXPENSE_DOC, RESTRICTED_SUB_TYPE_GROUP_CODES);
             String objectSubTypeCode = accountingLine.getObjectCode().getFinancialObjectSubTypeCode();
 
             ObjectCode objectCode = accountingLine.getObjectCode();
@@ -76,7 +76,7 @@ public class DistributionOfIncomeAndExpenseDocumentRule extends AccountingDocume
         boolean valid = super.isObjectTypeAllowed(accountingLine);
 
         if (valid) {
-            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, DISTRIBUTION_OF_INCOME_AND_EXPENSE_DOCUMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_TYPE_CODES);
+            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISTRIBUTION_OF_INCOME_AND_EXPENSE_DOC, RESTRICTED_OBJECT_TYPE_CODES);
 
             ObjectCode objectCode = accountingLine.getObjectCode();
 
