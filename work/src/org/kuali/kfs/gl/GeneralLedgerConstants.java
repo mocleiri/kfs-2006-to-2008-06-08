@@ -26,8 +26,14 @@ import org.kuali.kfs.bo.OriginationCode;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.chart.bo.OrganizationReversion;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.module.gl.batch.BalanceForwardStep;
+import org.kuali.module.gl.batch.EncumbranceForwardStep;
+import org.kuali.module.gl.batch.ScrubberStep;
+import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.labor.LaborConstants.Poster;
 
 
 /**
@@ -43,6 +49,17 @@ public class GLConstants {
     public static final String SELECT_CODE = "S";
     public static final String EMPTY_CODE = "";
     public static final String ERROR_CODE = "E";
+    
+    public static class Components {
+        //public final static String COLLECTOR_JOB = CollectorJob.class.getSimpleName();  //What value should we use for this component?
+        //public final static String ENTERPRISE_FEED_JOB = EnterpriseFeedJob.class.getSimpleName();
+        //public final static String POSTER = Poster.class.getSimpleName();
+        public final static String ACCOUNT_BALANCE = AccountBalance.class.getSimpleName();
+        public final static String BALANCE_FORWARD_STEP = BalanceForwardStep.class.getSimpleName();
+        public final static String ENCUMBRANCE_FORWARD_STEP = EncumbranceForwardStep.class.getSimpleName();
+        public final static String ORGANIZATION_REVERSION = OrganizationReversion.class.getSimpleName();
+        public final static String SCRUBBER_STEP = ScrubberStep.class.getSimpleName();
+    }
     
     public static class DummyBusinessObject {
         static final public String COST_SHARE_OPTION = "dummyBusinessObject.costShareOption";
