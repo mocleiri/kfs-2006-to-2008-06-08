@@ -80,7 +80,7 @@ public class IndirectCostAdjustmentDocumentRule extends AccountingDocumentRuleBa
     public boolean isObjectSubTypeAllowed(AccountingLine accountingLine) {
         boolean valid = super.isObjectSubTypeAllowed(accountingLine);
         if (valid) {
-            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, INDIRECT_COST_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING+"."+RESTRICTED_SUB_TYPE_GROUP_CODES);
+            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.INDIRECT_COST_ADJUSTMENT_DOC, RESTRICTED_SUB_TYPE_GROUP_CODES);
             String objectSubTypeCode = accountingLine.getObjectCode().getFinancialObjectSubTypeCode();
 
             ObjectCode objectCode = accountingLine.getObjectCode();
@@ -105,7 +105,7 @@ public class IndirectCostAdjustmentDocumentRule extends AccountingDocumentRuleBa
         boolean valid = super.isObjectTypeAllowed(accountingLine);
 
         if (valid) {
-            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, INDIRECT_COST_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_TYPE_CODES);
+            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.INDIRECT_COST_ADJUSTMENT_DOC, RESTRICTED_OBJECT_TYPE_CODES);
 
             ObjectCode objectCode = accountingLine.getObjectCode();
 
