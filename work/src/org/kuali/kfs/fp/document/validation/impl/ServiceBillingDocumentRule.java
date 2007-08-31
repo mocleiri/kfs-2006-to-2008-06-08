@@ -74,7 +74,7 @@ public class ServiceBillingDocumentRule extends InternalBillingDocumentRule {
      */
     @Override
     protected Parameter getObjectTypeRule() {
-        return getKualiConfigurationService().mergeParameters(super.getObjectTypeRule(), getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, SERVICE_BILLING_DOCUMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_TYPE_CODES));
+        return getKualiConfigurationService().mergeParameters(super.getObjectTypeRule(), getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.SERVICE_BILLING_DOC,RESTRICTED_OBJECT_TYPE_CODES));
     }
 
     /**
