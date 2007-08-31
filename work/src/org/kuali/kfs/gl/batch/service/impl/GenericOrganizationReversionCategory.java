@@ -49,10 +49,10 @@ public class GenericOrganizationReversionCategory implements OrganizationReversi
         String objTyp = oc.getFinancialObjectTypeCode();
         String objSubTyp = oc.getFinancialObjectSubTypeCode();
 
-        boolean consolidationRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, categoryCode + KFSConstants.CONSOLIDATION, cons);
-        boolean levelRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, categoryCode + KFSConstants.LEVEL, level);
-        boolean objectTypeRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, categoryCode + KFSConstants.OBJECT_TYPE, objTyp);
-        boolean objectSubTypeRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, categoryCode + KFSConstants.OBJECT_SUB_TYPE, objSubTyp );
+        boolean consolidationRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, categoryCode + KFSConstants.CONSOLIDATION, cons);
+        boolean levelRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, categoryCode + KFSConstants.LEVEL, level);
+        boolean objectTypeRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, categoryCode + KFSConstants.OBJECT_TYPE, objTyp);
+        boolean objectSubTypeRulesPassed = kualiConfigurationService.succeedsRule(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, categoryCode + KFSConstants.OBJECT_SUB_TYPE, objSubTyp );
 
         return consolidationRulesPassed && levelRulesPassed && objectTypeRulesPassed && objectSubTypeRulesPassed;
     }
