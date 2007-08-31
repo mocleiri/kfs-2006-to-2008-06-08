@@ -50,6 +50,16 @@ public class LaborConstants {
         public static final String EXPENSE_TRANSFER_YEST = "YEST";
         public static final String EXPENSE_TRANSFER_YEBT = "YEBT";
     }
+    
+    public static class Components {
+        
+        //Not sure which value to use.
+        /*
+        public final static String LABOR_BENEFITS_TYPE = LaborBenefitsType.class.getSimpleName();
+        public final static String LABOR_BENEFIT_CALCULATION = LaborBenefitCalculation.class.getSimpleName();
+        public final static String LABOR_OBJECT_BENEFIT = LaborObjectBenefit.class.getSimpleName();
+        */
+    }
 
     public static class DestinationNames {
         public static final String LEDGER_BALANCE = "LD_LEDGER_BALANCE_T";
