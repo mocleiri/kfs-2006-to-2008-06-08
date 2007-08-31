@@ -43,6 +43,7 @@ public class KFSConstants {
     public static final String PURAP_NAMESPACE = "KFS-PA";
     public static final String CORE_NAMESPACE = RiceConstants.KNS_NAMESPACE;
     public static final String PDP_NAMESPACE = "KFS-PD";
+    public static final String VENDOR_NAMESPACE = "KFS-VN";
     
     public static final String PARAM_MAINTENANCE_VIEW_MODE = "maintenanceViewMode";
     public static final String PARAM_MAINTENANCE_VIEW_MODE_MAINTENANCE = "maintenance";
