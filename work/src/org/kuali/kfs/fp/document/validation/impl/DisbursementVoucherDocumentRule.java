@@ -864,7 +864,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      */
     private boolean executePaymentReasonRestriction( String parameterName, String restrictedFieldValue, String errorField, String errorParameter, String paymentReasonCode, CodeDescriptionFormatter restrictedFieldDescFormatter) {
         boolean rulePassed = true;
-        Parameter rule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, , parameterName);
+        Parameter rule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, parameterName);
         if ( rule != null ) {
             if (getKualiConfigurationService().failsRule(rule,restrictedFieldValue)) {
                 String errorMsgKey = null;
@@ -894,7 +894,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
                     }
                 }
 
-                GlobalVariables.getErrorMap().putError(errorField, errorMsgKey, new String[] { errorParameter, restrictedFieldValue, parameterName, parameterGroupName, getKualiConfigurationService().getPrettyParameterValueString( rule ), "Payment reason", paymentReasonCode, prName, restrictedFieldDescFormatter.getFormattedStringWithDescriptions(getKualiConfigurationService().getParameterValuesAsSet( rule ), null, endConjunction) });
+                GlobalVariables.getErrorMap().putError(errorField, errorMsgKey, new String[] { errorParameter, restrictedFieldValue, parameterName, "", getKualiConfigurationService().getPrettyParameterValueString( rule ), "Payment reason", paymentReasonCode, prName, restrictedFieldDescFormatter.getFormattedStringWithDescriptions(getKualiConfigurationService().getParameterValuesAsSet( rule ), null, endConjunction) });
                 rulePassed = false;
             }
         }
@@ -934,7 +934,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
 
         // restrictions on payment reason when alien indicator is checked
         if (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
-            executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, ALIEN_INDICATOR_CHECKED_PARM_NM, paymentReasonCode, errorKey, "Payment reason");
+            executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, ALIEN_INDICATOR_CHECKED_PARM_NM, paymentReasonCode, errorKey, "Payment reason");
         }
 
         /* check revolving fund restrictions */
