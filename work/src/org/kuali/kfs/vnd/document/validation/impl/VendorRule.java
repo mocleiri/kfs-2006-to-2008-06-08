@@ -560,12 +560,12 @@ public class VendorRule extends MaintenanceDocumentRuleBase implements VendorRul
         String taxTypeCode = vendorDetail.getVendorHeader().getVendorTaxTypeCode();
         if (StringUtils.isNotEmpty(ownershipTypeCode) && StringUtils.isNotEmpty(taxTypeCode)) {
             if (VendorConstants.TAX_TYPE_FEIN.equals(taxTypeCode)) {
-                if ( getKualiConfigurationService().failsRule( KFSConstants.PURAP_NAMESPACE, PURAP_FEIN_ALLOWED_OWNERSHIP_TYPES, ownershipTypeCode ) ) {
+                if ( getKualiConfigurationService().failsRule( KFSConstants.VENDOR_NAMESPACE, VendorConstants.Components.VENDOR, PURAP_FEIN_ALLOWED_OWNERSHIP_TYPES, ownershipTypeCode ) ) {
                     valid &= false;
                 }
             }
             else if (VendorConstants.TAX_TYPE_SSN.equals(taxTypeCode)) {
-                if ( getKualiConfigurationService().failsRule( KFSConstants.PURAP_NAMESPACE, PURAP_SSN_ALLOWED_OWNERSHIP_TYPES, ownershipTypeCode ) ) {
+                if ( getKualiConfigurationService().failsRule( KFSConstants.VENDOR_NAMESPACE, VendorConstants.Components.VENDOR, PURAP_SSN_ALLOWED_OWNERSHIP_TYPES, ownershipTypeCode ) ) {
                     valid &= false;
                 }
             }
