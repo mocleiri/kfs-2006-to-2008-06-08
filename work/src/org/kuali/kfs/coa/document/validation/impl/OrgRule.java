@@ -327,7 +327,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     }
 
     private boolean getOrgMustReportToSelf( Org organization ) {
-    	return applyApcRule(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, organization.getOrganizationTypeCode());    	
+    	return applyApcRule(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, organization.getOrganizationTypeCode());    	
     }
     
     protected boolean checkSimpleRules(MaintenanceDocument document) {
@@ -416,7 +416,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                         }
                         // stop the search if we reach an org that must report to itself 
                         if ( continueSearch 
-                                && applyApcRule(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, tempOrg.getOrganizationTypeCode()) ) {
+                                && applyApcRule(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES, tempOrg.getOrganizationTypeCode()) ) {
                             continueSearch = false;
                         }
     
@@ -461,7 +461,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
 
         if (ObjectUtils.isNotNull(newOrg.getOrganizationTypeCode())) {
             organizationTypeCode = newOrg.getOrganizationTypeCode();
-            if (applyApcRule(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.DEFAULT_ACCOUNT_NOT_REQUIRED_ORG_TYPES, newOrg.getOrganizationTypeCode())) {
+            if (applyApcRule(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION, KFSConstants.ChartApcParms.DEFAULT_ACCOUNT_NOT_REQUIRED_ORG_TYPES, newOrg.getOrganizationTypeCode())) {
                 exemptOrganizationTypeCode = true;
             }
         }
