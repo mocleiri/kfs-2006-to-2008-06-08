@@ -120,7 +120,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         FlexibleOffsetAccountService flexibleOffsetAccountService = SpringContext.getBean(FlexibleOffsetAccountService.class);
         
         for (GeneralLedgerPendingEntry ple : this.getGeneralLedgerPendingEntries()) {
-            if (kualiConfigurationService.succeedsRule("SYSTEM", "SufficientFundsExpenseObjectTypes", ple.getFinancialObjectTypeCode())) {
+            if (kualiConfigurationService.succeedsRule(KFSConstants.GL_NAMESPACE, KFSConstants.Components.NOT_APPLICABLE, KFSConstants.SystemGroupParameterNames.SUFFICIENT_FINDS_EXPENSE_OBJECT_TYPES, ple.getFinancialObjectTypeCode())) {
                 //is an expense object type, keep checking
                 ple.refreshNonUpdateableReferences();
                 if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(KFSConstants.SF_TYPE_CASH_AT_ACCOUNT)) {
