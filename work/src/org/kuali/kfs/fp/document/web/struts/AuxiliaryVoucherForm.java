@@ -197,7 +197,7 @@ public class AuxiliaryVoucherForm extends VoucherForm {
                 
                 java.sql.Date currentDate = new java.sql.Date(new java.util.Date().getTime());
                 
-                result = configService.succeedsRule(KFSConstants.FINANCIAL_NAMESPACE, AuxiliaryVoucherDocumentRuleConstants.RESTRICTED_PERIOD_CODES, period.getUniversityFiscalPeriodCode());
+                result = configService.succeedsRule(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.AUXILARY_VOUCHER_DOC, AuxiliaryVoucherDocumentRuleConstants.RESTRICTED_PERIOD_CODES, period.getUniversityFiscalPeriodCode());
                 if (result) {
                     result = (period.getUniversityFiscalYear().equals(dateService.getCurrentFiscalYear()));
                     if (result) {
