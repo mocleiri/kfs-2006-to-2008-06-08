@@ -324,7 +324,7 @@ public class RoutingFormAuditRule {
                 }
             }
             
-            if (SpringContext.getBean(KualiConfigurationService.class).failsRule(KFSConstants.KRA_NAMESPACE, "KraRoutingFormProjectTypesValid", projectTypesString)) {
+            if (SpringContext.getBean(KualiConfigurationService.class).failsRule(KRAConstants.KRA_NAMESPACE, KRAConstants.Components.ROUTING_FORM_DOC, "KraRoutingFormProjectTypesValid", projectTypesString)) {
                 valid = false;
                 auditErrors.add(new AuditError("document.routingFormProjectTypes", KraKeyConstants.AUDIT_MAIN_PAGE_PROJECT_TYPE_INVALID, "mainpage.anchor3"));
             }
