@@ -18,6 +18,7 @@ package org.kuali.kfs;
 import java.util.HashMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.RiceConstants;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.context.SpringContext;
@@ -40,7 +41,7 @@ public class KFSConstants {
     public static final String KRA_NAMESPACE = "KFS-RA";
     public static final String CONTRACTS_AND_GRANTS_NAMESPACE = "KFS-CG";
     public static final String PURAP_NAMESPACE = "KFS-PA";
-    public static final String CORE_NAMESPACE = "KR";
+    public static final String CORE_NAMESPACE = RiceConstants.KNS_NAMESPACE;
     public static final String PDP_NAMESPACE = "KFS-PD";
     
     public static final String PARAM_MAINTENANCE_VIEW_MODE = "maintenanceViewMode";
