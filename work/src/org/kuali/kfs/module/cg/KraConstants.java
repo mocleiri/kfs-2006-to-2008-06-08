@@ -19,12 +19,18 @@ import java.util.Calendar;
 
 import org.kuali.core.JstlConstants;
 import org.kuali.core.util.KualiInteger;
+import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
 
 public class KraConstants extends JstlConstants {
     private static final long serialVersionUID = 5725060921632498564L;
 
+    public static class Components {
+        public final static String ROUTING_FORM = RoutingForm.class.getSimpleName();
+    }
+    
     public static final String SHORT_TIMESTAMP_FORMAT = "MM/dd/yyyy";
     public static final String LONG_TIMESTAMP_FORMAT = "MM/dd/yyyy HH:mm:ss";
+    
     
     public static final int maximumPeriodLengthUnits = Calendar.YEAR;
     public static final int maximumNumberOfPeriods = 20; // used on budgetPeriods.tag
