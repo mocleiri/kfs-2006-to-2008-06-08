@@ -102,7 +102,7 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
      */
     @Override
     public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
-        Parameter combinedRule = getKualiConfigurationService().mergeParameters(getGlobalObjectTypeRule(), getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, PRE_ENCUMBRANCE_DOCUMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_TYPE_CODES));
+        Parameter combinedRule = getKualiConfigurationService().mergeParameters(getGlobalObjectTypeRule(), getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.PRE_ENCUMBRANCE_DOC, RESTRICTED_OBJECT_TYPE_CODES));
         AttributeReference direct = createObjectCodeAttributeReference(accountingLine);
         AttributeReference indirect = createObjectTypeAttributeReference(accountingLine);
         boolean allowed = indirectRuleSucceeds(combinedRule, direct, indirect);
