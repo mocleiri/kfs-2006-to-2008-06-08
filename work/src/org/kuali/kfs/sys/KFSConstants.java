@@ -21,9 +21,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.maven.model.Organization;
 import org.apache.tools.ant.Project;
 import org.kuali.RiceConstants;
+import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.DocumentType;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.batch.PurgeDocumentContentsStep;
+import org.kuali.kfs.batch.ScheduleStep;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.Country;
 import org.kuali.kfs.bo.HomeOrigination;
@@ -84,6 +88,7 @@ import org.kuali.module.financial.bo.TravelMileageRate;
 import org.kuali.module.financial.bo.TravelPerDiem;
 import org.kuali.module.financial.bo.WireCharge;
 import org.kuali.module.gl.batch.PurgeCorrectionProcessFilesStep;
+import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.labor.bo.LaborOriginEntry;
@@ -109,6 +114,16 @@ public class KFSConstants {
     public static final String VENDOR_NAMESPACE = "KFS-VN";
     
 public static class Components {
+    
+    
+        public final static String CAMPUS = Campus.class.getSimpleName();
+        //public final static String SYSTEM_PARAMETER = SystemParameter.class.getSimpleName();
+        public final static String UNIVERSAL_USER = UniversalUser.class.getSimpleName();
+        public final static String OFFSET = OffsetAccount.class.getSimpleName();
+        public final static String ENCUMBRANCE = Encumbrance.class.getSimpleName();
+        public final static String PURGE_DOCUMENT_CONTENTS_STEP = PurgeDocumentContentsStep.class.getSimpleName();
+        public final static String SCHEDULE_STEP = ScheduleStep.class.getSimpleName();
+
         
         //CHART RELATED COMPONENTS
         /*
