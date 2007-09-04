@@ -113,8 +113,8 @@ public class KFSConstants {
     public static final String PDP_NAMESPACE = "KFS-PD";
     public static final String VENDOR_NAMESPACE = "KFS-VN";
     
-public static class Components {
-    
+    public static class Components {
+        public static final String NOT_APPLICABLE = RiceConstants.NA_PARM_DETAIL_TYPE;
     
         public final static String CAMPUS = Campus.class.getSimpleName();
         //public final static String SYSTEM_PARAMETER = SystemParameter.class.getSimpleName();
@@ -199,7 +199,7 @@ public static class Components {
         public final static String TRAVEL_MILEAGE_RATE = TravelMileageRate.class.getSimpleName();
         public final static String TRAVEL_PER_DIEM = TravelPerDiem.class.getSimpleName();
         public final static String WIRE_CHARGE = WireCharge.class.getSimpleName();
-        public final static String AUXILIARY_VOUCHER = AuxiliaryVoucher.class.getSimpleName();
+        public final static String AUXILIARY_VOUCHER_DOC = "AuxiliaryVoucherDocument";
         public final static String PURGE_CORRECTION_PROCESS_FILES_STEP = PurgeCorrectionProcessFilesStep.class.getSimpleName();
         public final static String ACCOUNTING_LINE = AccountingLine.class.getSimpleName();
         public final static String ADVANCE_DEPOSIT_DOC = "AdvanceDeposit";
