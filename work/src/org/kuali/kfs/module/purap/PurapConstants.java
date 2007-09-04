@@ -44,6 +44,8 @@ public class PurapConstants extends JstlConstants {
     
     public static final KualiDecimal HUNDRED = new KualiDecimal(100);
     
+    public static final String PURAP_NAMESPACE = "KFS-PA";
+    
     // STANDARD PARAMETER PREFIXES
     public static class QuoteTypes {
         public static final String COMPETITIVE = "COMP";
