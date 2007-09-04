@@ -22,6 +22,9 @@ package org.kuali.module.vendor;
  */
 public class VendorConstants {
 
+    public static class Components {
+        public static final String VENDOR = "Vendor";
+    }
     public static class Workgroups {
         public static final String WORKGROUP_ACCOUNTS_PAYABLE = "PURAP.WORKGROUP.ACCOUNTS_PAYABLE"; 
         public static final String WORKGROUP_PURCHASING = "PURAP.WORKGROUP.PURCHASING"; 
