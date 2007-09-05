@@ -18,6 +18,9 @@ package org.kuali.module.budget;
 import org.kuali.core.JstlConstants;
 
 public class BCConstants extends JstlConstants {
+    
+    public static final String DISABLE_SALARY_SETTING_FLAG = "DISABLE_SALARY_SETTING_FLAG";
+    public static final String DISABLE_BENEFITS_CALCULATION_FLAG = "DISABLE_BENEFITS_CALCULATION_FLAG";
 
     public static final String BC_SELECTION_ACTION="budgetBudgetConstructionSelection.do";
     public static final String BC_SELECTION_REFRESH_METHOD="refresh";
@@ -38,7 +41,7 @@ public class BCConstants extends JstlConstants {
     public enum OrgSelControlOption {
         NO(0,"No"), YES(1,"Yes"), 
         NOTSEL(0,"Not Sel"), ORG(1,"Org"), SUBORG(2,"Sub Org"), BOTH(3,"Both"),
-        ORGLEV(1,"Org Lev"), MGRLEV(2,"Mgr Lev"), ORGMGRLEV(3,"Org&Mgr Lev"), LEVONE(4,"Lev One"), LEVZERO(5,"Lev Zero");
+        ORGLEV(1,"Org Lev"), MGRLEV(2,"Mgr Lev"), ORGMGRLEV(3,"Org+Mgr Lev"), LEVONE(4,"Lev One"), LEVZERO(5,"Lev Zero");
         private String label;
         private Integer key;
         private OrgSelControlOption(Integer key, String label){ this.key = key; this.label = label; }
