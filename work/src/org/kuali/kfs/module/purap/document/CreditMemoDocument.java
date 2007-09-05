@@ -60,18 +60,14 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
     private Timestamp creditMemoPaidTimestamp;
     private String itemMiscellaneousCreditDescription;
     private Date purchaseOrderEndDate;
-    private boolean continuationAccountIndicator;
 
     private PaymentRequestDocument paymentRequestDocument;
-
-    private boolean unmatchedOverride; // not persisted
 
     /**
      * Default constructor.
      */
     public CreditMemoDocument() {
-        super();
-        unmatchedOverride = false;
+        super();        
     }
 
     public boolean isSourceDocumentPaymentRequest() {
@@ -225,9 +221,11 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
      * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#preProcessNodeChange(java.lang.String, java.lang.String)
      */
     public boolean processNodeChange(String newNodeName, String oldNodeName) {
-        if (NodeDetailEnum.ACCOUNTS_PAYABLE_REVIEW.equals(oldNodeName)) {
+        if (NodeDetailEnum.ADHOC_REVIEW.getName().equals(oldNodeName)) {
+            SpringContext.getBean(PurapService.class).performLogicForFullEntryCompleted(this);
+        }
+        else if (NodeDetailEnum.ACCOUNTS_PAYABLE_REVIEW.getName().equals(oldNodeName)) {
             setAccountsPayableApprovalDate(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate());
-            SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesCreditMemo(this, PurapConstants.CREATE_CREDIT_MEMO);
         }
         return true;
     }
@@ -445,22 +443,6 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
         this.creditMemoPaidTimestamp = creditMemoPaidTimestamp;
     }
 
-    /**
-     * Gets the continuationAccountIndicator attribute. 
-     * @return Returns the continuationAccountIndicator.
-     */
-    public boolean isContinuationAccountIndicator() {
-        return continuationAccountIndicator;
-    }
-
-    /**
-     * Sets the continuationAccountIndicator attribute value.
-     * @param continuationAccountIndicator The continuationAccountIndicator to set.
-     */
-    public void setContinuationAccountIndicator(boolean continuationAccountIndicator) {
-        this.continuationAccountIndicator = continuationAccountIndicator;
-    }
-
     public PaymentRequestDocument getPaymentRequestDocument() {
         if ( (ObjectUtils.isNull(paymentRequestDocument)) && (ObjectUtils.isNotNull(getPaymentRequestIdentifier())) ) {
             setPaymentRequestDocument(SpringContext.getBean(PaymentRequestService.class).getPaymentRequestById(getPaymentRequestIdentifier()));
@@ -528,24 +510,6 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
     public void setPurchaseOrderEndDate(Date purchaseOrderEndDate) {
         this.purchaseOrderEndDate = purchaseOrderEndDate;
     }
-
-    /**
-     * Gets the unmatchedOverride attribute.
-     * 
-     * @return Returns the unmatchedOverride.
-     */
-    public boolean isUnmatchedOverride() {
-        return unmatchedOverride;
-    }
-
-    /**
-     * Sets the unmatchedOverride attribute value.
-     * 
-     * @param unmatchedOverride The unmatchedOverride to set.
-     */
-    public void setUnmatchedOverride(boolean unmatchedOverride) {
-        this.unmatchedOverride = unmatchedOverride;
-    }
     
     /**
      * USED FOR ROUTING ONLY
@@ -569,4 +533,11 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
         return PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_REOPEN_DOCUMENT;
     }
 
+    /**
+     * 
+     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getInitialAmount()
+     */
+    public KualiDecimal getInitialAmount(){
+        return this.getCreditMemoAmount();
+    }
 }
