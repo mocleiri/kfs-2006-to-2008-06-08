@@ -33,7 +33,6 @@
                         <field attributeName="parameterDescription" />
                         <field attributeName="parameterType.name" />
                         <field attributeName="parameterWorkgroupName" />
-                        <field attributeName="active" />
                     </inquiryFields>
                 </inquirySection>
             </inquirySections>
@@ -51,9 +50,6 @@
                 <lookupField attributeName="parameterValue" />
                 <lookupField attributeName="parameterTypeCode" />
                 <lookupField attributeName="parameterWorkgroupName" />
-                <lookupField attributeName="active">
-                    <defaultValue>Y</defaultValue>
-                </lookupField>
             </lookupFields>
             <resultFields>
                 <field attributeName="parameterNamespaceCode" forceInquiry="true" />
@@ -64,7 +60,6 @@
                 <field attributeName="parameterDescription" />
                 <field attributeName="parameterType.name" forceInquiry="true" />
                 <field attributeName="parameterWorkgroupName" />
-                <field attributeName="active" />
             </resultFields>
         </lookup>
 
@@ -184,11 +179,6 @@
             
             <attributeReference name="parameterNamespace.codeAndDescription" sourceClassName="org.kuali.core.bo.ParameterNamespace" sourceAttributeName="codeAndDescription"></attributeReference>
             
-            <attributeReference name="active"
-                sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
-                sourceAttributeName="activeIndicator"
-            >
-            </attributeReference>
             <attributeReference name="objectId"
                 sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
                 sourceAttributeName="objectId"

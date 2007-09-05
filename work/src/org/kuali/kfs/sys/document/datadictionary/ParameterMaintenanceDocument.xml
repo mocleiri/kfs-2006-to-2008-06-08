@@ -81,9 +81,6 @@
                     <maintainableField name="parameterTypeCode" required="true" />
                     <maintainableField name="parameterConstraintCode" required="true" />
                     <maintainableField name="parameterWorkgroupName" required="true" />
-                    <maintainableField name="active">
-                        <defaultValue>Y</defaultValue>
-                    </maintainableField>
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
