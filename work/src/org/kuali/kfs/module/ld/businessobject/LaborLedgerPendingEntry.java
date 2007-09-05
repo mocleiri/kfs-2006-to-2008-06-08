@@ -43,7 +43,7 @@ import org.kuali.module.gl.bo.UniversityDate;
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class LaborLedgerPendingEntry extends GeneralLedgerPendingEntry {
+public class LaborLedgerPendingEntry extends GeneralLedgerPendingEntry implements LaborTransaction{
 
     private String financialSystemOriginationCode;
     private String documentNumber;
@@ -78,7 +78,7 @@ public class LaborLedgerPendingEntry extends GeneralLedgerPendingEntry {
 	private String payrollEndDateFiscalPeriodCode;
 	private String financialDocumentApprovedCode;
 	private String transactionEntryOffsetCode;
-	private Timestamp transactionEntryProcessedTimestamp;
+	private Date transactionEntryProcessedTimestamp;
 	private String emplid;
 	private Integer employeeRecord;
 	private String earnCode;
@@ -817,7 +817,7 @@ public class LaborLedgerPendingEntry extends GeneralLedgerPendingEntry {
 	 * @return Returns the transactionEntryProcessedTimestamp
 	 * 
 	 */
-	public Timestamp getTransactionEntryProcessedTimestamp() { 
+	public Date getTransactionEntryProcessedTimestamp() { 
 		return transactionEntryProcessedTimestamp;
 	}
 
@@ -827,7 +827,7 @@ public class LaborLedgerPendingEntry extends GeneralLedgerPendingEntry {
 	 * @param transactionEntryProcessedTimestamp The transactionEntryProcessedTimestamp to set.
 	 * 
 	 */
-	public void setTransactionEntryProcessedTimestamp(Timestamp transactionEntryProcessedTimestamp) {
+	public void setTransactionEntryProcessedTimestamp(Date transactionEntryProcessedTimestamp) {
 		this.transactionEntryProcessedTimestamp = transactionEntryProcessedTimestamp;
 	}
 
@@ -1460,23 +1460,23 @@ public class LaborLedgerPendingEntry extends GeneralLedgerPendingEntry {
 
     //Helper Methods (as in GL)
     public boolean isSubAccountNumberBlank() {
-        return subAccountNumber == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_ACCOUNT_NUMBER.equals(subAccountNumber);
+        return subAccountNumber == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankSubAccountNumber().equals(subAccountNumber);
     }
 
     public boolean isFinancialObjectCodeBlank() {
-        return financialObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_OBJECT_CODE.equals(financialObjectCode);
+        return financialObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectCode().equals(financialObjectCode);
     }
 
     public boolean isFinancialSubObjectCodeBlank() {
-        return financialSubObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_OBJECT_CODE.equals(financialSubObjectCode);
+        return financialSubObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialSubObjectCode().equals(financialSubObjectCode);
     }
 
     public boolean isProjectCodeBlank() {
-        return projectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_PROJECT_STRING.equals(projectCode);
+        return projectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankProjectCode().equals(projectCode);
     }
 
     public boolean isFinancialObjectTypeCodeBlank() {
-        return financialObjectTypeCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_OBJECT_TYPE_CODE.equals(financialObjectTypeCode);
+        return financialObjectTypeCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectType().equals(financialObjectTypeCode);
     }
 
     /**
