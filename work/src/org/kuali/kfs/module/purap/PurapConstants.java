@@ -47,7 +47,7 @@ public class PurapConstants extends JstlConstants {
     public static final String PURAP_NAMESPACE = "KFS-PA";
     
     public static class Components {
-        public static final String CREDIT_MEMO_DOC = "CreditMemoDocument";
+        public static final String CREDIT_MEMO_DOC = "CreditMemo";
     }
     
     // STANDARD PARAMETER PREFIXES
