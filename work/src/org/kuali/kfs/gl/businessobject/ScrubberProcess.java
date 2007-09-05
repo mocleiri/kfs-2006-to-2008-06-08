@@ -540,8 +540,12 @@ public class ScrubberProcess {
         scrubCostShareAmount = KualiDecimal.ZERO;
         unitOfWork = new UnitOfWorkInfo();
 
+        LOG.info("Starting Scrubber Process process group...");
         Iterator entries = originEntryService.getEntriesByGroup(originEntryGroup);
         while (entries.hasNext()) {
+            // warren: logging code
+            long start1 = System.currentTimeMillis();
+            
             OriginEntry unscrubbedEntry = (OriginEntry) entries.next();
             scrubberReport.incrementUnscrubbedRecordsRead();
 
@@ -586,10 +590,15 @@ public class ScrubberProcess {
             }
 
             if (!isFatal(transactionErrors)) {
+                // warren: testcode
+                long start2 = System.currentTimeMillis();
                 saveValidTransaction = true;
                 
                 if (collectorMode) {
                     // only populate this map in collector mode because it's only needed for the collector
+                    
+                    // the collector scrubber uses this map to apply the same changes made on an origin entry during scrubbing to 
+                    // the collector detail record
                     unscrubbedToUnscrubbedEntries.put(unscrubbedEntry, scrubbedEntry);
                     
                     // for the collector, we don't need further processing, since we're going to rescrub all of the origin entries anyways during the nightly process
@@ -619,7 +628,9 @@ public class ScrubberProcess {
     
                     // The sub account type code will only exist if there is a valid sub account
                     String subAccountTypeCode = GLConstants.getSpaceSubAccountTypeCode();
-                    if (scrubbedEntry.getA21SubAccount() != null) {
+                    // major assumption: the a21 subaccount is proxied, so we don't want to query the database if the subacct
+                    // number is dashes
+                    if (!KFSConstants.getDashSubAccountNumber().equals(scrubbedEntry.getSubAccountNumber()) && ObjectUtils.isNotNull(scrubbedEntry.getA21SubAccount())) {
                         subAccountTypeCode = scrubbedEntry.getA21SubAccount().getSubAccountTypeCode();
 
                     }
@@ -712,6 +723,8 @@ public class ScrubberProcess {
     
                     lastEntry = scrubbedEntry;
                 }
+                //LOG.fatal("non-fatal processing time: " + (System.currentTimeMillis() - start2));
+                
             }
             else {
                 // Error transaction
@@ -720,6 +733,7 @@ public class ScrubberProcess {
                 scrubberReportErrors.put(unscrubbedEntry, transactionErrors);
             }
 
+            long start3 = System.currentTimeMillis();
             if (saveValidTransaction) {
                 scrubbedEntry.setTransactionScrubberOffsetGenerationIndicator(false);
                 createOutputEntry(scrubbedEntry, validGroup);
@@ -734,6 +748,8 @@ public class ScrubberProcess {
                 createOutputEntry(errorEntry, errorGroup);
                 scrubberReport.incrementErrorRecordWritten();
             }
+            //LOG.fatal("save line processing time: " + (System.currentTimeMillis() - start3));
+            //LOG.fatal("line processing time: " + (System.currentTimeMillis() - start1));
         }
 
         if (!collectorMode) {
@@ -1442,15 +1458,13 @@ public class ScrubberProcess {
      */
     private void setCostShareObjectCode(OriginEntry costShareEntry, OriginEntry originEntry) {
 
-        if (originEntry.getFinancialObject() == null) {
             persistenceService.retrieveReferenceObject(originEntry, KFSPropertyConstants.FINANCIAL_OBJECT);
-        }
 
-        if (originEntry.getFinancialObject() == null) {
+        if (ObjectUtils.isNull(originEntry.getFinancialObject())) {
             addTransactionError(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_OBJECT_CODE_NOT_FOUND), originEntry.getFinancialObjectCode(), Message.TYPE_FATAL);
         }
 
-        String originEntryObjectLevelCode = (null == originEntry.getFinancialObject() ? "" : originEntry.getFinancialObject().getFinancialObjectLevelCode());
+        String originEntryObjectLevelCode = (ObjectUtils.isNull(originEntry.getFinancialObject()) ? "" : originEntry.getFinancialObject().getFinancialObjectLevelCode());
 
         String financialOriginEntryObjectCode = originEntry.getFinancialObjectCode();
         String originEntryObjectCode = scrubberProcessObjectCodeOverride.getOriginEntryObjectCode(originEntryObjectLevelCode, financialOriginEntryObjectCode);
