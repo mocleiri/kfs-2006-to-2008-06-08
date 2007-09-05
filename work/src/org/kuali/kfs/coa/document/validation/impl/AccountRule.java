@@ -974,23 +974,45 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         LOG.info("checkSubFundGroup called");
 
         boolean success = true;
+        
+        String subFundGroupCode = newAccount.getSubFundGroupCode();
+        
+        if( newAccount.getAccountDescription() != null ){
+            
+            String campusCode = newAccount.getAccountDescription().getCampusCode();
+            String buildingCode = newAccount.getAccountDescription().getBuildingCode();
 
-        // if we dont have a valid subFundGroupCode and subFundGroup object, we cannot proceed
-        if (StringUtils.isBlank(newAccount.getSubFundGroupCode()) || ObjectUtils.isNull(newAccount.getSubFundGroup())) {
-            return success;
-        }
+            //check if sub fund group code is blank
+            if (StringUtils.isBlank(subFundGroupCode)) {
+                
+                // check if campus code and building code are NOT blank
+                if( !StringUtils.isBlank(campusCode) || !StringUtils.isBlank(buildingCode)){
+                    
+                    // if sub_fund_grp_cd is blank, campus code should NOT be entered
+                    if (!StringUtils.isBlank(campusCode)) {
+                        putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_BLANK_SUBFUNDGROUP_WITH_CAMPUS_CD_FOR_BLDG, subFundGroupCode );
+                        success &= false;
+                    }
+    
+                    // if sub_fund_grp_cd is blank, then bldg_cd should NOT be entered
+                    if (!StringUtils.isBlank(buildingCode)) {
+                        putFieldError("accountDescription.buildingCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_BLANK_SUBFUNDGROUP_WITH_BUILDING_CD, subFundGroupCode);
+                        success &= false;
+                    }                   
+                    
+                } else {
+                    
+                    //if all sub fund group, campus code, building code are all blank return true
+                    return success;
+                }
 
-        // PFCMD (Plant Fund, Construction and Major Remodeling) SubFundCode checks
+            } else if( !StringUtils.isBlank(subFundGroupCode) && !ObjectUtils.isNull(newAccount.getSubFundGroup()) ){
 
         // Attempt to get the right SubFundGroup code to check the following logic with. If the value isn't available, go ahead
         // and die, as this indicates a misconfigured app, and important business rules wont be implemented without it.
-        String capitalSubFundGroup = "";
-        capitalSubFundGroup = getConfigService().getParameterValue(KFSConstants.CHART_NAMESPACE, ACCT_CAPITAL_SUBFUNDGROUP);
+        String capitalSubFundGroup = getConfigService().getParameterValue(KFSConstants.CHART_NAMESPACE, ACCT_CAPITAL_SUBFUNDGROUP);
 
-        if (capitalSubFundGroup.equalsIgnoreCase(newAccount.getSubFundGroupCode().trim())) {
-
-            String campusCode = newAccount.getAccountDescription().getCampusCode();
-            String buildingCode = newAccount.getAccountDescription().getBuildingCode();
+                if (capitalSubFundGroup.equalsIgnoreCase(subFundGroupCode.trim())) {
 
             // if sub_fund_grp_cd is 'PFCMR' then campus_cd must be entered
             if (StringUtils.isBlank(campusCode)) {
@@ -1000,7 +1022,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
             // if sub_fund_grp_cd is 'PFCMR' then bldg_cd must be entered
             if (StringUtils.isBlank(buildingCode)) {
-                putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CAMS_SUBFUNDGROUP_WITH_MISSING_BUILDING_CD);
+                        putFieldError("accountDescription.buildingCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CAMS_SUBFUNDGROUP_WITH_MISSING_BUILDING_CD);
                 success &= false;
             }
 
@@ -1030,6 +1052,22 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
                     success &= false;
                 }
             }
+                } else {
+                    
+                    // if sub_fund_grp_cd is NOT 'PFCMR', campus code should NOT be entered
+                    if (!StringUtils.isBlank(campusCode)) {
+                        putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_NONCAMS_SUBFUNDGROUP_WITH_CAMPUS_CD_FOR_BLDG, subFundGroupCode );
+                        success &= false;
+                    }
+    
+                    // if sub_fund_grp_cd is NOT 'PFCMR' then bldg_cd should NOT be entered
+                    if (!StringUtils.isBlank(buildingCode)) {
+                        putFieldError("accountDescription.buildingCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_NONCAMS_SUBFUNDGROUP_WITH_BUILDING_CD, subFundGroupCode);
+                        success &= false;
+                    }   
+                }            
+            }
+        
         }
 
         return success;
