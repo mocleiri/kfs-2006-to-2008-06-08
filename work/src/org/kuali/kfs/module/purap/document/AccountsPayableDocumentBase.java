@@ -29,6 +29,7 @@ import org.kuali.core.rule.event.RouteDocumentEvent;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowInfo;
 import org.kuali.kfs.context.SpringContext;
@@ -61,8 +62,11 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
     private String processingCampusCode;
     private String noteLine1Text;
     private String noteLine2Text;
-    private String noteLine3Text;
-
+    private String noteLine3Text;   
+    private boolean continuationAccountIndicator;
+    
+    private boolean unmatchedOverride; // not persisted
+    
     // NOT PERSISTED IN DB
     // BELOW USED BY ROUTING
     private String chartOfAccountsCode;
@@ -81,6 +85,7 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
 
     public AccountsPayableDocumentBase() {
         super();
+        setUnmatchedOverride(false);
     }
 
     public boolean requiresAccountsPayableReviewRouting() {
@@ -404,4 +409,50 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
         }
     }
 
+    /**
+     * Gets the unmatchedOverride attribute.
+     * 
+     * @return Returns the unmatchedOverride.
+     */
+    public boolean isUnmatchedOverride() {
+        return unmatchedOverride;
+    }
+
+    /**
+     * Sets the unmatchedOverride attribute value.
+     * 
+     * @param unmatchedOverride The unmatchedOverride to set.
+     */
+    public void setUnmatchedOverride(boolean unmatchedOverride) {
+        this.unmatchedOverride = unmatchedOverride;
+    }
+
+    public abstract KualiDecimal getGrandTotal();
+    
+    /** 
+     * This method returns the amount entered on the initial screen.
+     * 
+     * @return
+     */
+    public abstract KualiDecimal getInitialAmount();    
+
+    /**
+     * Gets the continuationAccountIndicator attribute. 
+     * @return Returns the continuationAccountIndicator.
+     */
+    public boolean isContinuationAccountIndicator() {
+        return continuationAccountIndicator;
+    }
+
+    /**
+     * Sets the continuationAccountIndicator attribute value.
+     * @param continuationAccountIndicator The continuationAccountIndicator to set.
+     */
+    public void setContinuationAccountIndicator(boolean continuationAccountIndicator) {
+        this.continuationAccountIndicator = continuationAccountIndicator;
+    }
+    
+    public boolean isExtracted() {
+        return (this.getExtractedDate()==null)?false:true;
+    }
 }
