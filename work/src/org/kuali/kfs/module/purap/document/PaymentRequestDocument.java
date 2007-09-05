@@ -19,6 +19,7 @@ package org.kuali.module.purap.document;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,9 +50,9 @@ import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.RecurringPaymentType;
 import org.kuali.module.purap.service.PaymentRequestService;
-import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.PurchaseOrderService;
+import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.bo.PaymentTermType;
 import org.kuali.module.vendor.bo.PurchaseOrderCostSource;
@@ -90,7 +91,6 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     private Integer originalVendorDetailAssignedIdentifier;
     private Integer alternateVendorHeaderGeneratedIdentifier;
     private Integer alternateVendorDetailAssignedIdentifier;
-    private boolean continuationAccountIndicator;
     private String purchaseOrderNotes;
 
     // NOT PERSISTED IN DB
@@ -115,7 +115,6 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         super();
     }
 
-
     /**
      * @see org.kuali.core.bo.PersistableBusinessObjectBase#isBoNotesSupport()
      */
@@ -123,7 +122,6 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     public boolean isBoNotesSupport() {
         return true;
     }
-
 
     /**
      * Gets the requisitionIdentifier attribute. 
@@ -140,7 +138,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     public void setRequisitionIdentifier(Integer requisitionIdentifier) {
         this.requisitionIdentifier = requisitionIdentifier;
     }
-
+    
     /**
      * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#populateDocumentForRouting()
      */
@@ -565,23 +563,6 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     }
 
     /**
-     * Gets the continuationAccountIndicator attribute. 
-     * @return Returns the continuationAccountIndicator.
-     */
-    public boolean isContinuationAccountIndicator() {
-        return continuationAccountIndicator;
-    }
-
-    /**
-     * Sets the continuationAccountIndicator attribute value.
-     * @param continuationAccountIndicator The continuationAccountIndicator to set.
-     */
-    public void setContinuationAccountIndicator(boolean continuationAccountIndicator) {
-        this.continuationAccountIndicator = continuationAccountIndicator;
-    }
-
-
-    /**
      * Gets the vendorShippingPaymentTerms attribute. 
      * @return Returns the vendorShippingPaymentTerms.
      */
@@ -734,8 +715,75 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
 
         this.refreshNonUpdateableReferences();
     }
-    
+
+    /**
+     * TODO: this should be cleaned up.. it is also a replica of the method above except it performs account replacement
+     * This method populates a preq from po
+     * @param po
+     */
+    public void populatePaymentRequestFromPurchaseOrder(PurchaseOrderDocument po, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList) {
+        this.setPurchaseOrderIdentifier(po.getPurapDocumentIdentifier());
+        this.setPostingYear(po.getPostingYear());
+        this.setVendorCustomerNumber(po.getVendorCustomerNumber());
+        if (po.getPurchaseOrderCostSource() != null ){
+            this.setPaymentRequestCostSource(po.getPurchaseOrderCostSource());
+            this.setPaymentRequestCostSourceCode(po.getPurchaseOrderCostSourceCode()); 
+        }
+        if (po.getVendorShippingPaymentTerms()!= null){
+            this.setVendorShippingPaymentTerms(po.getVendorShippingPaymentTerms());
+            this.setVendorShippingPaymentTermsCode(po.getVendorShippingPaymentTermsCode());
+        }
+        
+        if (po.getRecurringPaymentType() !=null){
+            this.setRecurringPaymentType(po.getRecurringPaymentType());
+            this.setRecurringPaymentTypeCode(po.getRecurringPaymentTypeCode());
+        }
+        
+        this.setVendorHeaderGeneratedIdentifier(po.getVendorHeaderGeneratedIdentifier());
+        this.setVendorDetailAssignedIdentifier(po.getVendorDetailAssignedIdentifier());
+        this.setVendorCustomerNumber(po.getVendorCustomerNumber());
+        this.setVendorName(po.getVendorName());
+
+        // populate preq vendor address with the default remit address type for the vendor if found
+        String userCampus = GlobalVariables.getUserSession().getUniversalUser().getCampusCode();
+        VendorAddress vendorAddress = SpringContext.getBean(VendorService.class).getVendorDefaultAddress(po.getVendorHeaderGeneratedIdentifier(), po.getVendorDetailAssignedIdentifier(), VendorConstants.AddressTypes.REMIT, userCampus);
+        if (vendorAddress != null) {
+            this.templateVendorAddress(vendorAddress);
+            this.setVendorAddressGeneratedIdentifier(vendorAddress.getVendorAddressGeneratedIdentifier());
+        }
+        else {
+            // set address from PO
+            this.setVendorAddressGeneratedIdentifier(po.getVendorAddressGeneratedIdentifier());
+        this.setVendorLine1Address(po.getVendorLine1Address());
+        this.setVendorLine2Address(po.getVendorLine2Address());
+        this.setVendorCityName(po.getVendorCityName());
+        this.setVendorStateCode(po.getVendorStateCode());
+        this.setVendorPostalCode(po.getVendorPostalCode());
+        this.setVendorCountryCode(po.getVendorCountryCode());
+        }
+
+        if ((po.getVendorPaymentTerms() == null) || ("".equals(po.getVendorPaymentTerms().getVendorPaymentTermsCode())) ) {
+            this.setVendorPaymentTerms(new PaymentTermType());
+            this.vendorPaymentTerms.setVendorPaymentTermsCode("");
+        } else {
+            this.setVendorPaymentTermsCode(po.getVendorPaymentTermsCode());
+            this.setVendorPaymentTerms(po.getVendorPaymentTerms());
+        }
+        this.setPaymentRequestPayDate(SpringContext.getBean(PaymentRequestService.class).calculatePayDate(this.getInvoiceDate(), this.getVendorPaymentTerms()));
+        for (PurchaseOrderItem poi : (List<PurchaseOrderItem>)po.getItems()) {
+            //TODO: add this back if we end up building the list of items at every load (see KULPURAP-1393)
+//            if(poi.isItemActiveIndicator()) {
+                this.getItems().add(new PaymentRequestItem(poi,this, expiredOrClosedAccountList));                
+//              }
+        }
+        //add missing below the line
+        SpringContext.getBean(PurapService.class).addBelowLineItems(this);
+        this.setAccountsPayablePurchasingDocumentLinkIdentifier(po.getAccountsPayablePurchasingDocumentLinkIdentifier());
+
+        this.refreshNonUpdateableReferences();
+    }
    
+
     /**
      * @see org.kuali.core.document.DocumentBase#getDocumentTitle()
      */
@@ -786,8 +834,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
             PaymentRequestItem itemToUse = null;
             for (Iterator iter = getItems().iterator(); iter.hasNext();) {
                 PaymentRequestItem item = (PaymentRequestItem) iter.next();
-                // TODO delyea/ckirschenman - how to identify an item that has been 'entered'
-                if ( (item.getSourceAccountingLines() != null) && (!item.getSourceAccountingLines().isEmpty()) ) {
+                if ( (item.isConsideredEntered()) && ( (item.getSourceAccountingLines() != null) && (!item.getSourceAccountingLines().isEmpty()) ) ) {
                     // accounting lines are not empty so pick the first account
                     PurApAccountingLine accountLine = item.getSourceAccountingLine(0);
                     accountLine.refreshNonUpdateableReferences();
@@ -898,9 +945,11 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
             // do nothing for an auto approval
             return false;
         }
-        if (NodeDetailEnum.ACCOUNTS_PAYABLE_REVIEW.getName().equals(oldNodeName)) {
+        if (NodeDetailEnum.ADHOC_REVIEW.getName().equals(oldNodeName)) {
+            SpringContext.getBean(PurapService.class).performLogicForFullEntryCompleted(this);
+        }
+        else if (NodeDetailEnum.ACCOUNTS_PAYABLE_REVIEW.getName().equals(oldNodeName)) {
             setAccountsPayableApprovalDate(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate());
-            SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesCreatePreq(this);
         }
         return true;
     }
@@ -1203,4 +1252,11 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         return PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_CLOSE_DOCUMENT;
     }
 
+    /**
+     * 
+     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getInitialAmount()
+     */
+    public KualiDecimal getInitialAmount(){
+        return this.getVendorInvoiceAmount();
     }
+}
