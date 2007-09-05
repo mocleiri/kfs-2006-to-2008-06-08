@@ -39,6 +39,7 @@ import org.kuali.module.cg.bo.ProposalResearchRisk;
 import org.kuali.module.cg.bo.ProposalSubcontractor;
 import org.kuali.module.cg.lookup.valuefinder.NextProposalNumberFinder;
 import org.kuali.module.cg.maintenance.ProposalMaintainableImpl;
+import org.kuali.module.cg.service.AgencyService;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
@@ -146,7 +147,9 @@ public class RoutingFormServiceImpl implements RoutingFormService {
         
         routingFormDocument.getRoutingFormAgency().setAgencyNumber(budget.getBudgetAgencyNumber());
         
-
+        // Making this call to refresh the document's attributes
+        routingFormDocument.getRoutingFormAgency().refreshReferenceObject("agency");
+       
         //Project Director
         for (Iterator i = routingFormDocument.getRoutingFormPersonnel().iterator(); i.hasNext(); ) {
             RoutingFormPersonnel routingFormPerson = (RoutingFormPersonnel) i.next();
@@ -270,6 +273,8 @@ public class RoutingFormServiceImpl implements RoutingFormService {
                 routingFormDocument.addRoutingFormSubcontractor(routingFormSubcontractor);
             }
         }
+        
+
     }
     
     
