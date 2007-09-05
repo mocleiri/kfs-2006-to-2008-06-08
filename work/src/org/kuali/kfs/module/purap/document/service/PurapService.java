@@ -19,13 +19,14 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.bo.Note;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.bo.ItemType;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
+
+import edu.iu.uis.eden.exception.WorkflowException;
 
 public interface PurapService {
 
@@ -80,16 +81,6 @@ public interface PurapService {
      */
     public KualiDecimal getApoLimit(Integer vendorContractGeneratedIdentifier, String chart, String org);
 
-    
-    /**
-     * TODO delyea - documentation
-     * @param document
-     * @param nodeDetail
-     * @param routeNodeName
-     * @return
-     */
-    public boolean willDocumentStopAtGivenFutureRouteNode(PurchasingAccountsPayableDocument document, NodeDetails givenNodeDetail);
-
     /**
      * This method returns a list of fiscal years that can be selected from on the document (built for Requisition and Purchase Order).  Typically
      * only the current year is returned.  However, if the current date falls within the allowed range to encumber in the next fiscal year, the 
@@ -112,5 +103,9 @@ public interface PurapService {
      * This method performs all the actions on an update document
      * @param purapDocument
      */
-    public  void performLogicForFullEntryCompleted(PurchasingAccountsPayableDocument purapDocument);
+    public void performLogicForFullEntryCompleted(PurchasingAccountsPayableDocument purapDocument);
+    
+    public Object performLogicWithFakedUserSession(String requiredUniversalUserPersonUserId, LogicToRunAsFakeUser logicToRun, Object... objects) throws UserNotFoundException, WorkflowException, Exception;
+    
+    public abstract interface LogicToRunAsFakeUser { public abstract Object runLogic(Object[] objects) throws Exception; }
 }
