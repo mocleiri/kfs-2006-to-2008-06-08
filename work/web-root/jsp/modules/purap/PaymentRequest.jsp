@@ -26,6 +26,9 @@
  
     <c:set var="displayInitTab" value="${KualiForm.editingMode['displayInitTab']}" scope="request" />
     
+    <!-- setting the variable to force the Posting Year in doucment overview tag to be read only -->
+    <c:set var="aPDocument" value="true" scope="request" />
+    
 
     <kul:hiddenDocumentFields excludePostingYear="true" />
 	
@@ -46,6 +49,7 @@
     <!-- html:hidden property="document.paymentRequestInitiated" /-->
 	<html:hidden property="document.processingCampusCode" />
 	<html:hidden property="calculated" />
+	<html:hidden property="document.unmatchedOverride" />
 	    
     <!-- TODO move this to where? -->
     <!-- html:hidden property="document.requisitionIdentifier" / -->
