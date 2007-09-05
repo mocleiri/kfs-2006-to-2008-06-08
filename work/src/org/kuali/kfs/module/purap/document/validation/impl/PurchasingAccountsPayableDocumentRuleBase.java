@@ -173,28 +173,28 @@ public class PurchasingAccountsPayableDocumentRuleBase extends AccountingDocumen
             if (item.isConsideredEntered()) {
                 if (!item.getItemType().isItemTypeAboveTheLineIndicator()) {
                     if (ObjectUtils.isNotNull(item.getItemUnitPrice()) &&(new KualiDecimal(item.getItemUnitPrice())).isZero()) {
-                        if (allowsZeroRule.isActive() &&
+                        if (kualiConfigurationService.isUsable( allowsZeroRule ) &&
                                 !kualiConfigurationService.getParameterValuesAsSet(allowsZeroRule).contains(item.getItemTypeCode())) {
                             valid = false;
                             GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE, item.getItemType().getItemTypeDescription(), "zero");
                         }
                     }
                     else if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && (new KualiDecimal(item.getItemUnitPrice())).isPositive()) {
-                        if (allowsPositiveRule.isActive() &&
+                        if (kualiConfigurationService.isUsable( allowsPositiveRule ) &&
                                 !kualiConfigurationService.getParameterValuesAsSet(allowsPositiveRule).contains(item.getItemTypeCode())) {
                             valid = false;
                             GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE, item.getItemType().getItemTypeDescription(), "positive");
                         }
                     }
                     else if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && (new KualiDecimal(item.getItemUnitPrice())).isNegative()) {
-                        if (allowsNegativeRule.isActive() &&
+                        if (kualiConfigurationService.isUsable( allowsNegativeRule ) &&
                                 !kualiConfigurationService.getParameterValuesAsSet(allowsNegativeRule).contains(item.getItemTypeCode())) {
                             valid = false;
                             GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE, item.getItemType().getItemTypeDescription(), "negative");
                         }
                     }
                     if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && (new KualiDecimal(item.getItemUnitPrice())).isNonZero() && StringUtils.isEmpty(item.getItemDescription())) {
-                        if (requiresDescriptionRule.isActive() &&
+                        if (kualiConfigurationService.isUsable( requiresDescriptionRule ) &&
                                 kualiConfigurationService.getParameterValuesAsSet(requiresDescriptionRule).contains(item.getItemTypeCode())) {
                             valid = false;
                             GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE, "The item description of " + item.getItemType().getItemTypeDescription(), "empty");
@@ -246,28 +246,28 @@ public class PurchasingAccountsPayableDocumentRuleBase extends AccountingDocumen
             item.refreshNonUpdateableReferences();
             if (!item.getItemType().isItemTypeAboveTheLineIndicator()) {
                 if (ObjectUtils.isNotNull(item.getItemUnitPrice()) &&(new KualiDecimal(item.getItemUnitPrice())).isZero()) {
-                    if (allowsZeroRule.isActive() &&
+                    if (kualiConfigurationService.isUsable( allowsZeroRule ) &&
                             !kualiConfigurationService.getParameterValuesAsSet(allowsZeroRule).contains(item.getItemTypeCode())) {
                         valid = false;
                         GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE, item.getItemType().getItemTypeDescription(), "zero");
                     }
                 }
                 else if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && (new KualiDecimal(item.getItemUnitPrice())).isPositive()) {
-                    if (allowsPositiveRule.isActive() &&
+                    if (kualiConfigurationService.isUsable( allowsPositiveRule ) &&
                             !kualiConfigurationService.getParameterValuesAsSet(allowsPositiveRule).contains(item.getItemTypeCode())) {
                         valid = false;
                         GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE, item.getItemType().getItemTypeDescription(), "positive");
                     }
                 }
                 else if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && (new KualiDecimal(item.getItemUnitPrice())).isNegative()) {
-                    if (allowsNegativeRule.isActive() &&
+                    if (kualiConfigurationService.isUsable(allowsNegativeRule) &&
                             !kualiConfigurationService.getParameterValuesAsSet(allowsNegativeRule).contains(item.getItemTypeCode())) {
                         valid = false;
                         GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE, item.getItemType().getItemTypeDescription(), "negative");
                     }
                 }
                 if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && (new KualiDecimal(item.getItemUnitPrice())).isNonZero() && StringUtils.isEmpty(item.getItemDescription())) {
-                    if (requiresDescriptionRule.isActive() &&
+                    if (kualiConfigurationService.isUsable( requiresDescriptionRule ) &&
                             kualiConfigurationService.getParameterValuesAsSet(requiresDescriptionRule).contains(item.getItemTypeCode())) {
                         valid = false;
                         GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE, "The item description of " + item.getItemType().getItemTypeDescription(), "empty");
