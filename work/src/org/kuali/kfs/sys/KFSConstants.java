@@ -114,7 +114,7 @@ public class KFSConstants {
     public static final String VENDOR_NAMESPACE = "KFS-VN";
     
     public static class Components {
-        public static final String NOT_APPLICABLE = RiceConstants.NA_PARM_DETAIL_TYPE;
+        public static final String NOT_APPLICABLE = RiceConstants.DetailTypes.NA_PARM_DETAIL_TYPE;
     
         public final static String CAMPUS = Campus.class.getSimpleName();
         //public final static String SYSTEM_PARAMETER = SystemParameter.class.getSimpleName();
@@ -169,7 +169,6 @@ public class KFSConstants {
         public final static String SUB_OBJECT_CODE = SubObjCd.class.getSimpleName();
         public final static String UNIVERSITY_BUDGET_OFFICE_FUNCTION = UniversityBudgetOfficeFunction.class.getSimpleName();
         public final static String UNIVERSITY_DATE = UniversityDate.class.getSimpleName();;
-        public final static String NA = RiceConstants.NA_PARM_DETAIL_TYPE;
         public final static String SUB_ACCOUNT = SubAccount.class.getSimpleName();
         public final static String CHART_USER = ChartUser.class.getSimpleName();
         public final static String ORGANIZATION_REVERSION = OrganizationReversion.class.getSimpleName();
@@ -199,7 +198,7 @@ public class KFSConstants {
         public final static String TRAVEL_MILEAGE_RATE = TravelMileageRate.class.getSimpleName();
         public final static String TRAVEL_PER_DIEM = TravelPerDiem.class.getSimpleName();
         public final static String WIRE_CHARGE = WireCharge.class.getSimpleName();
-        public final static String AUXILIARY_VOUCHER_DOC = "AuxiliaryVoucherDocument";
+        public final static String AUXILIARY_VOUCHER = "AuxiliaryVoucher";
         public final static String PURGE_CORRECTION_PROCESS_FILES_STEP = PurgeCorrectionProcessFilesStep.class.getSimpleName();
         public final static String ACCOUNTING_LINE = AccountingLine.class.getSimpleName();
         public final static String ADVANCE_DEPOSIT_DOC = "AdvanceDeposit";
