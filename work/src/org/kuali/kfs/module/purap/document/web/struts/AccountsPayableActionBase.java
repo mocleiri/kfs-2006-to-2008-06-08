@@ -37,12 +37,17 @@ import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.AccountsPayableDocument;
 import org.kuali.module.purap.document.AccountsPayableDocumentBase;
+import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
+import org.kuali.module.purap.service.AccountsPayableService;
+import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.util.PurQuestionCallback;
 import org.kuali.module.purap.web.struts.form.AccountsPayableFormBase;
 import org.kuali.module.purap.web.struts.form.PurchasingFormBase;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.bo.VendorAddress;
+
+import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * This class handles specific Actions requests for the AP.
@@ -73,6 +78,20 @@ public class AccountsPayableActionBase extends PurchasingAccountsPayableActionBa
         document.refreshNonUpdateableReferences();
 
         return super.refresh(mapping, form, request, response);
+    }
+
+    /**
+     * This method checks the continuation account indicator and generates warnings if
+     * continuation accounts were used to replace original accounts on the document.
+     * 
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#loadDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
+     */
+    @Override
+    protected void loadDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
+        super.loadDocument(kualiDocumentFormBase);
+        AccountsPayableDocument document = (AccountsPayableDocument) kualiDocumentFormBase.getDocument();
+        
+        SpringContext.getBean(AccountsPayableService.class).generateExpiredOrClosedAccountWarning(document);
     }
 
     /**
@@ -136,21 +155,45 @@ public class AccountsPayableActionBase extends PurchasingAccountsPayableActionBa
     protected void customCalculate(AccountsPayableDocument apDoc) {
         // do nothing by default
     }
+    
+    /**
+     * 
+     * This method checks if calculation is required.  Currently it is required when it has not already been calculated and full document entry
+     * status has not already passed.
+     * 
+     * @param apForm
+     * @param purapDocument
+     * @return true if calculation is required, false otherwise
+     */
+    protected boolean requiresCaculate(AccountsPayableFormBase apForm) {
+        boolean requiresCalculate = true;
+        PurchasingAccountsPayableDocument purapDocument = (PurchasingAccountsPayableDocument)apForm.getDocument();
+        requiresCalculate = !apForm.isCalculated() && !SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted(purapDocument);
+        return requiresCalculate;
+    }
 
     @Override
     public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        
         AccountsPayableFormBase apForm = (AccountsPayableFormBase) form;
-        if (apForm.isCalculated()) {
-            return super.route(mapping, form, request, response);
+        
+        //if form is not yet calculated, return and prompt user to calculate
+        if (requiresCaculate(apForm)) {
+            GlobalVariables.getErrorMap().putError(KFSConstants.DOCUMENT_ERRORS, PurapKeyConstants.ERROR_APPROVE_REQUIRES_CALCULATE);
+            return mapping.findForward(KFSConstants.MAPPING_BASIC);            
         }
-        GlobalVariables.getErrorMap().putError(KFSConstants.DOCUMENT_ERRORS, PurapKeyConstants.ERROR_APPROVE_REQUIRES_CALCULATE);
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+                
+        //recalculate
+        customCalculate( (AccountsPayableDocument)apForm.getDocument() );
+
+        //route
+        return super.route(mapping, form, request, response);               
     }
 
     @Override
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         AccountsPayableFormBase apForm = (AccountsPayableFormBase) form;
-        if (apForm.isCalculated()) {
+        if (!requiresCaculate(apForm)) {
             return super.save(mapping, form, request, response);
         }
         GlobalVariables.getErrorMap().putError(KFSConstants.DOCUMENT_ERRORS, PurapKeyConstants.ERROR_SAVE_REQUIRES_CALCULATE);
