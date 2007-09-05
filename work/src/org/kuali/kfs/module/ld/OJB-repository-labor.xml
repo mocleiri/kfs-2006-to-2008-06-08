@@ -705,7 +705,7 @@
     </collection-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.labor.document.YearEndSalaryExpenseTransferDocument" table="LD_EXP_TRNFR_DOC_T">
+<class-descriptor class="org.kuali.module.labor.document.YearEndBenefitExpenseTransferDocument" table="LD_EXP_TRNFR_DOC_T">
    <!--  common transactional document base attributes -->
 	<field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
@@ -1262,7 +1262,7 @@
 	<field-descriptor name="payrollEndDateFiscalPeriodCode" column="PYRL_DT_FSCLPRD_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="financialDocumentApprovedCode" column="FDOC_APPROVED_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="transactionEntryOffsetCode" column="TRN_ENTR_OFST_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="transactionEntryProcessedTimestamp" column="TRNENTR_PROCESS_TM" jdbc-type="TIMESTAMP"/>
+	<field-descriptor name="transactionEntryProcessedTimestamp" column="TRNENTR_PROCESS_TM" jdbc-type="DATE"/>
 	<field-descriptor name="emplid" column="EMPLID" jdbc-type="VARCHAR"/>
 	<field-descriptor name="employeeRecord" column="EMPL_RCD" jdbc-type="INTEGER"/>
 	<field-descriptor name="earnCode" column="ERNCD" jdbc-type="VARCHAR"/>
