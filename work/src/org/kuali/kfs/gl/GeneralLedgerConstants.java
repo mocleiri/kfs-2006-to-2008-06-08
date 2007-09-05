@@ -43,6 +43,8 @@ import org.kuali.module.labor.LaborConstants.Poster;
  */
 public class GLConstants {
 
+    public static final String GL_NAMESPACE = "KNS-GL";
+    
     public static final String INSERT_CODE = "I";
     public static final String UPDATE_CODE = "U";
     public static final String DELETE_CODE = "D";
