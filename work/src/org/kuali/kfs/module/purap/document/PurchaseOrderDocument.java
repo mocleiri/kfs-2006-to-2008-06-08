@@ -136,6 +136,18 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     }
 
     /**
+     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getOverrideWorkflowButtons()
+     */
+    @Override
+    public Boolean getOverrideWorkflowButtons() {
+        if (ObjectUtils.isNull(super.getOverrideWorkflowButtons())) {
+            // should only be null on the first call... never after
+            setOverrideWorkflowButtons(Boolean.TRUE);
+        }
+        return super.getOverrideWorkflowButtons();
+    }
+
+    /**
      * @see org.kuali.core.bo.PersistableBusinessObjectBase#isBoNotesSupport()
      */
     @Override
@@ -325,7 +337,6 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
             try {
                 // DOCUMENT PROCESSED
                 if (workflowDocument.stateIsProcessed()) {
-                    SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForApprovedPODocuments(this);
                     SpringContext.getBean(PurchaseOrderService.class).completePurchaseOrder(this);
                 }
                 // DOCUMENT DISAPPROVED
@@ -343,13 +354,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
                     NodeDetails currentNode = NodeDetailEnum.getNodeDetailEnumByName(nodeName);
                     if (ObjectUtils.isNotNull(currentNode)) {
                         if (StringUtils.isNotBlank(currentNode.getDisapprovedStatusCode())) {
-                            if ( (PurapConstants.PurchaseOrderStatuses.OPEN.equals(currentNode.getDisapprovedStatusCode())) && 
-                                    (!PurapConstants.PurchaseOrderStatuses.OPEN.equals(getStatusCode())) &&
-                                    (ObjectUtils.isNull(getPurchaseOrderInitialOpenDate())) ) {
-                                setPurchaseOrderInitialOpenDate(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate());
-                            }
                             SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, currentNode.getDisapprovedStatusCode());
-                            populateDocumentForRouting();
                             SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
                             return;
                         }
@@ -359,8 +364,8 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
                 }
                 // DOCUMENT CANCELED
                 else if (workflowDocument.stateIsCanceled()) {
+                    // TODO PURAP/delyea - what status to use if this cancel is a super user cancel while ENROUTE?
                     SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, PurapConstants.PurchaseOrderStatuses.CANCELLED);
-                    populateDocumentForRouting();
                     SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
                 }
             }
@@ -393,17 +398,13 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
                         PurchaseOrderService poService = SpringContext.getBean(PurchaseOrderService.class);
                         poService.setupDocumentForPendingFirstTransmission(this, willHaveRequest);
                         poService.saveDocumentNoValidation(this);
-                    } else {
+                    }
+                    else {
                         String newStatusCode = newNodeDetails.getAwaitingStatusCode();
                         if (StringUtils.isNotBlank(newStatusCode)) {
                             if (SpringContext.getBean(KualiWorkflowInfo.class).documentWillHaveAtLeastOneActionRequest(
                                     reportCriteriaVO, new String[]{EdenConstants.ACTION_REQUEST_APPROVE_REQ,EdenConstants.ACTION_REQUEST_COMPLETE_REQ})) {
                                 // if an approve or complete request will be created then we need to set the status as awaiting for the new node
-                                if ( (PurapConstants.PurchaseOrderStatuses.OPEN.equals(newStatusCode)) && 
-                                     (!PurapConstants.PurchaseOrderStatuses.OPEN.equals(getStatusCode())) &&
-                                     (ObjectUtils.isNull(getPurchaseOrderInitialOpenDate())) ) {
-                                    setPurchaseOrderInitialOpenDate(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate());
-                                }
                                 SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, newStatusCode);
                                 SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
                             }
@@ -749,7 +750,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     public void setPurchaseOrderCurrentIndicator(boolean purchaseOrderCurrentIndicator) {
         this.purchaseOrderCurrentIndicator = purchaseOrderCurrentIndicator;
     }
-
+    
     /**
      * Gets the purchaseOrderFirstTransmissionDate attribute. 
      * @return Returns the purchaseOrderFirstTransmissionDate.
