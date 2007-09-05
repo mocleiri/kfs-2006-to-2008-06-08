@@ -85,7 +85,7 @@ public class CloseBatchStep extends AbstractStep {
                     UniversalUser user = 
                         universalUserService.getUniversalUser(authId);
                     String address = user.getPersonEmailAddress();
-                    if(!StringUtils.isEmpty(address)) {
+                    if(null != address && !StringUtils.isEmpty(address)) {
                         message.addToAddress(address);
                     }
                 } catch(UserNotFoundException unfe) {
@@ -93,9 +93,15 @@ public class CloseBatchStep extends AbstractStep {
                 }
             }
             
-            message.setMessage(builder.toString());
-            message.setFromAddress(mailService.getBatchMailingList());
-            mailService.sendMessage(message);
+            // Don't send it if no recipients were specified.
+            if(0 != message.getToAddresses().size()) {
+                message.setMessage(builder.toString());
+                String from = mailService.getBatchMailingList();
+                if(null != from) {
+                    message.setFromAddress(from);
+                }
+                mailService.sendMessage(message);
+            }
 
         } catch(GroupNotFoundException gnfe) {
             LOG.fatal("Couldn't find workgroup to send notification to.", gnfe);
