@@ -213,11 +213,6 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         return originEntryDao.getMatchingEntries(criteria);
     }
 
-    /**
-     * 
-     * @see org.kuali.module.gl.service.OriginEntryService#createEntry(org.kuali.module.gl.bo.Transaction,
-     *      org.kuali.module.gl.bo.OriginEntryGroup)
-     */
     public void createEntry(Transaction transaction, OriginEntryGroup originEntryGroup) {
         LOG.debug("createEntry() started");
 
@@ -225,6 +220,9 @@ public class OriginEntryServiceImpl implements OriginEntryService {
         e.setGroup(originEntryGroup);
 
         originEntryDao.saveOriginEntry(e);
+        
+        // add 1 to the rows in the origin entry group, so we can unit test against that
+        originEntryGroup.setRows(originEntryGroup.getRows().intValue() + 1);
     }
 
     /**
