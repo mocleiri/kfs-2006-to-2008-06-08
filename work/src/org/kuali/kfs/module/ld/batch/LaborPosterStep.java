@@ -29,12 +29,19 @@ public class LaborPosterStep extends AbstractStep {
      * @see org.kuali.kfs.batch.Step#execute()
      */
     public boolean execute(String jobName) {
-        laborPosterService.postMainEntries();
+        try {
+            laborPosterService.postMainEntries();
+        }
+        catch (Exception e) {
+            LOG.fatal(e);
+            return false;
+        }
         return true;
     }
 
     /**
      * Sets the laborPosterService attribute value.
+     * 
      * @param laborPosterService The laborPosterService to set.
      */
     public void setLaborPosterService(LaborPosterService laborPosterService) {
