@@ -21,11 +21,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
+import org.kuali.core.service.PersistenceStructureService;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.spring.Logged;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
@@ -57,6 +61,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     private UniversityDateDao universityDateDao;
     private AccountService accountService;
     private OriginationCodeService originationCodeService;
+    private PersistenceStructureService persistenceStructureService;
 
     public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
 
@@ -231,11 +236,47 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         }
 
         if (errors.size() == 0) {
-            persistenceService.retrieveNonKeyFields(originEntry);
-            persistenceService.retrieveNonKeyFields(scrubbedEntry);
+            // warren: logging
+            long start = System.currentTimeMillis();
+            refreshOriginEntryReferences(originEntry);
+            refreshOriginEntryReferences(scrubbedEntry);
+            //LOG.fatal("line refreshing time: " + (System.currentTimeMillis() - start));
         }
 
         return errors;
+    }
+    
+    protected void refreshOriginEntryReferences(OriginEntry originEntry) {
+        Map<String, Class> referenceClasses = persistenceStructureService.listReferenceObjectFields(originEntry.getClass());
+        for (String reference : referenceClasses.keySet()) {
+            if (KFSPropertyConstants.PROJECT.equals(reference)) {
+                if (KFSConstants.getDashProjectCode().equals(originEntry.getProjectCode())) {
+                    originEntry.setProject(null);
+                }
+                else {
+                    persistenceService.retrieveReferenceObject(originEntry, reference);
+                }
+            }
+            else if (KFSPropertyConstants.FINANCIAL_SUB_OBJECT.equals(reference)) {
+                if (KFSConstants.getDashFinancialSubObjectCode().equals(originEntry.getFinancialSubObjectCode())) {
+                    originEntry.setFinancialSubObject(null);
+                }
+                else {
+                    persistenceService.retrieveReferenceObject(originEntry, reference);
+                }                
+            }
+            else if (KFSPropertyConstants.SUB_ACCOUNT.equals(reference)) {
+                if (KFSConstants.getDashSubAccountNumber().equals(originEntry.getSubAccountNumber())) {
+                    originEntry.setSubAccount(null);
+                }
+                else {
+                    persistenceService.retrieveReferenceObject(originEntry, reference);
+                }                
+            }
+            else {
+                persistenceService.retrieveReferenceObject(originEntry, reference);
+            }
+        }
     }
 
     /**
@@ -415,7 +456,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         if (StringUtils.hasText(originEntry.getSubAccountNumber())) {
             // sub account IS specified
             if (!KFSConstants.getDashSubAccountNumber().equals(originEntry.getSubAccountNumber())) {
-                if (originEntry.getSubAccount() == null) {
+                if (ObjectUtils.isNull(originEntry.getSubAccount())) {
                     // sub account is not valid
                     return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_SUB_ACCOUNT_NOT_FOUND) + "(" + originEntry.getChartOfAccountsCode() + "-" + originEntry.getAccountNumber() + "-" + originEntry.getSubAccountNumber() + ")", Message.TYPE_FATAL);
                 }
@@ -458,7 +499,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         LOG.debug("validateProjectCode() started");
 
         if (StringUtils.hasText(originEntry.getProjectCode()) && !KFSConstants.getDashProjectCode().equals(originEntry.getProjectCode())) {
-            if (originEntry.getProject() == null) {
+            if (ObjectUtils.isNull(originEntry.getProject())) {
                 return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_PROJECT_CODE_NOT_FOUND) + " (" + originEntry.getProjectCode() + ")", Message.TYPE_FATAL);
             }
             else {
@@ -493,22 +534,28 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         }
         else {
             workingEntry.setUniversityFiscalYear(originEntry.getUniversityFiscalYear());
+
+            persistenceService.retrieveReferenceObject(workingEntry, KFSPropertyConstants.OPTION);
+            
+            // TODO: warren: determine whether the following refresh statements are really required because the year attrib
+            // didn't change, which is part of the FK
+
+            /*// for the ojb implementation, these objcts are proxied anyways so it doesn't matter whether we retrieve the references or not because db calls aren't made
             if (originEntry.getOption() == null) {
                 persistenceService.retrieveReferenceObject(originEntry, KFSPropertyConstants.OPTION);
             }
-            if (originEntry.getFinancialSubObject() == null) {
+            if (originEntry.getFinancialSubObject() == null && StringUtils.hasText(originEntry.getFinancialSubObjectCode()) && !KFSConstants.getDashFinancialSubObjectCode().equals(originEntry.getFinancialSubObjectCode())) {
                 persistenceService.retrieveReferenceObject(originEntry, KFSPropertyConstants.FINANCIAL_SUB_OBJECT);
             }
-            if (originEntry.getFinancialObject() == null) {
+            if (originEntry.getFinancialObject() == null && StringUtils.hasText(originEntry.getFinancialObjectCode())) {
                 persistenceService.retrieveReferenceObject(originEntry, KFSPropertyConstants.FINANCIAL_OBJECT);
             }
-            if (originEntry.getAccountingPeriod() == null) {
+            if (originEntry.getAccountingPeriod() == null && StringUtils.hasText(originEntry.getUniversityFiscalPeriodCode())) {
                 persistenceService.retrieveReferenceObject(originEntry, KFSPropertyConstants.ACCOUNTING_PERIOD);
-            }
-            workingEntry.setOption(originEntry.getOption());
+            }*/
         }
 
-        if (originEntry.getOption() == null) {
+        if (ObjectUtils.isNull(originEntry.getOption())) {
             return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_UNIV_FISCAL_YR_NOT_FOUND) + " (" + originEntry.getUniversityFiscalYear() + ")", Message.TYPE_FATAL);
         }
         return null;
@@ -619,7 +666,8 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         workingEntry.setFinancialObjectCode(originEntry.getFinancialObjectCode());
         persistenceService.retrieveReferenceObject(workingEntry, "financialObject");
 
-        if (workingEntry.getFinancialObject() == null) {
+        // the fiscal year can be blank in originEntry, but we're assuming that the year attribute is populated by the validate year method
+        if (ObjectUtils.isNull(workingEntry.getFinancialObject())) {
             return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_OBJECT_CODE_NOT_FOUND) + " (" + originEntry.getUniversityFiscalYear() + "-" + originEntry.getChartOfAccountsCode() + "-" + originEntry.getFinancialObjectCode() + ")", Message.TYPE_FATAL);
         }
 
@@ -642,10 +690,10 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         }
         else {
             workingEntry.setFinancialObjectTypeCode(originEntry.getFinancialObjectTypeCode());
-            workingEntry.setObjectType(originEntry.getObjectType());
+            persistenceService.retrieveReferenceObject(workingEntry, KFSPropertyConstants.OBJECT_TYPE);
         }
 
-        if (workingEntry.getObjectType() == null) {
+        if (ObjectUtils.isNull(workingEntry.getObjectType())) {
             return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_OBJECT_TYPE_NOT_FOUND) + " (" + originEntry.getFinancialObjectTypeCode() + ")", Message.TYPE_FATAL);
         }
         return null;
@@ -661,7 +709,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         }
 
         if (!KFSConstants.getDashFinancialSubObjectCode().equals(originEntry.getFinancialSubObjectCode())) {
-            if (originEntry.getFinancialSubObject() != null) {
+            if (ObjectUtils.isNotNull(originEntry.getFinancialSubObject())) {
                 // Exists
                 if (!originEntry.getFinancialSubObject().isFinancialSubObjectActiveIndicator()) {
                     // if NOT active, set it to dashes
@@ -752,9 +800,15 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
                 workingEntry.setUniversityFiscalYear(universityRunDate.getUniversityFiscalYear());
     
                 // Retrieve these objects because the fiscal year is the primary key for them
-                persistenceService.retrieveReferenceObject(originEntry, "financialSubObject");
-                persistenceService.retrieveReferenceObject(originEntry, "financialObject");
-                persistenceService.retrieveReferenceObject(originEntry, "accountingPeriod");
+                if (StringUtils.hasText(originEntry.getFinancialSubObjectCode()) && !KFSConstants.getDashFinancialSubObjectCode().equals(originEntry.getFinancialSubObjectCode())) {
+                    persistenceService.retrieveReferenceObject(originEntry, "financialSubObject");
+                }
+                if (StringUtils.hasText(originEntry.getFinancialObjectCode())) {
+                    persistenceService.retrieveReferenceObject(originEntry, "financialObject");
+                }
+                if (StringUtils.hasText(originEntry.getUniversityFiscalPeriodCode())) {
+                    persistenceService.retrieveReferenceObject(originEntry, "accountingPeriod");
+                }
                 persistenceService.retrieveReferenceObject(originEntry, "option");
             }
             else {
@@ -764,7 +818,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
             }
         }
         else {
-            if (originEntry.getAccountingPeriod() == null) {
+            if (ObjectUtils.isNull(originEntry.getAccountingPeriod())) {
                 return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_ACCOUNTING_PERIOD_NOT_FOUND) + " (" + originEntry.getUniversityFiscalPeriodCode() + ")", Message.TYPE_FATAL);
             }
             else if (KFSConstants.ACCOUNTING_PERIOD_STATUS_CLOSED.equals(originEntry.getAccountingPeriod().getUniversityFiscalPeriodStatusCode())) {
@@ -822,7 +876,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
             }
         }
 
-        if ((workingEntry.getBalanceType() == null) || (workingEntry.getObjectType() == null)) {
+        if ((workingEntry.getBalanceType() == null) || (ObjectUtils.isNull(workingEntry.getObjectType()))) {
             // We are unable to check this because the balance type or object type is invalid.
             // It would be nice if we could still validate the entry, but we can't.
             return null;
@@ -915,5 +969,9 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
 
     public void setOriginationCodeService(OriginationCodeService ocs) {
         originationCodeService = ocs;
+    }
+
+    public void setPersistenceStructureService(PersistenceStructureService persistenceStructureService) {
+        this.persistenceStructureService = persistenceStructureService;
     }
 }
