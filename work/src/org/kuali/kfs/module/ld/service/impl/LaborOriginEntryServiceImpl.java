@@ -150,7 +150,7 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
 
     public Iterator<LaborOriginEntry> getEntriesByGroupAccountOrder(OriginEntryGroup oeg) {
         LOG.debug("getEntriesByGroupAccountOrder() started");
-        Iterator returnVal = originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_ACCOUNT);
+        Iterator returnVal = laborOriginEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_ACCOUNT);
 
         return returnVal;
     }
@@ -305,7 +305,7 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
             return ledgerEntryHolder;
         }
 
-        Iterator entrySummaryIterator = originEntryDao.getSummaryByGroupId(groupIdList);
+        Iterator entrySummaryIterator = laborOriginEntryDao.getSummaryByGroupId(groupIdList);
         while (entrySummaryIterator.hasNext()) {
             Object[] entrySummary = (Object[]) entrySummaryIterator.next();
             LedgerEntry ledgerEntry = LedgerEntry.buildLedgerEntry(entrySummary);
