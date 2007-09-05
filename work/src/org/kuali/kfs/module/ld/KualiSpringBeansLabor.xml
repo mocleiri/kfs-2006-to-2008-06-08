@@ -424,6 +424,9 @@
         <property name="kualiConfigurationService">
             <ref bean="kualiConfigurationService" />
         </property>
+        <property name="optionsService">
+			<ref bean="optionsService" />
+		</property>	
 
         <property name="laborReportService">
             <ref bean="laborReportService" />
@@ -449,6 +452,9 @@
         </property>
         <property name="originEntryGroupService">
             <ref bean="originEntryGroupService" />
+        </property>
+        <property name="laborLedgerBalanceService">
+			<ref bean="laborLedgerBalanceService" />
         </property>
     </bean>
 
@@ -500,6 +506,18 @@
         <property name="laborReportService">
             <ref bean="laborReportService" />
         </property>
+    </bean>
+        	
+	<bean id="laborNightlyOutStep" class="org.kuali.module.labor.batch.LaborNightlyOutStep" parent="step">
+		<property name="laborNightlyOutService">
+			<ref bean="laborNightlyOutService" />
+		</property>
+	</bean>  
+	
+	<bean id="clearLaborPendingStep" class="org.kuali.module.labor.batch.ClearLaborPendingStep" parent="step">
+		<property name="laborNightlyOutService">
+			<ref bean="laborNightlyOutService" />
+        </property>
     </bean>  
 
     <bean id="laborStep" parent="step" abstract="true">
@@ -523,19 +541,19 @@
 			<ref bean="laborPosterService" />
 		</property>
 	</bean>
+
+	<bean id="laborBalanceSummaryStep" class="org.kuali.module.labor.batch.LaborBalanceSummaryStep" parent="laborStep">
+		<property name="laborPosterService">
+			<ref bean="laborPosterService" />
+		</property>
+	</bean>
     
     <bean id="laborYearEndBalanceForwardStep" class="org.kuali.module.labor.batch.LaborYearEndBalanceForwardStep" parent="laborStep">
 		<property name="laborYearEndBalanceForwardService">
 			<ref bean="laborYearEndBalanceForwardService" />
 		</property>
 	</bean>
-	
-	<bean id="laborNightlyOutStep" class="org.kuali.module.labor.batch.LaborNightlyOutStep" parent="laborStep">
-		<property name="laborNightlyOutService">
-			<ref bean="laborNightlyOutService" />
-		</property>
-	</bean>
-	
+		
     <bean id="payrollAccrualService" class="org.kuali.module.labor.service.impl.PayrollAccrualServiceImpl">
         <property name="originEntryGroupService">
             <ref bean="originEntryGroupService" />
@@ -587,9 +605,11 @@
 		<property name="steps">
 			<list>
 				<ref bean="laborNightlyOutStep"/>
+				<ref bean="clearLaborPendingStep"/>
 				<ref bean="createLaborBackupGroupStep"/>
 				<ref bean="laborScrubberStep"/>
 				<ref bean="laborPosterStep"/>
+				<ref bean="laborBalanceSummaryStep"/>
 			</list>
 		</property>
 	</bean>
