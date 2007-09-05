@@ -187,7 +187,7 @@
                         <div align="right"><kul:htmlAttributeLabel attributeEntry="${documentAttributes.noteLine1Text}" /></div>
                     </th>
                     <td align=left valign=middle class="datacell">
-                        <kul:htmlControlAttribute attributeEntry="${documentAttributes.noteLine1Text}" property="document.noteLine1Text" readOnly="${not (fullEntryMode or amendmentEntry)}" />
+                        <kul:htmlControlAttribute attributeEntry="${documentAttributes.noteLine1Text}" property="document.noteLine1Text" readOnly="${not (fullEntryMode or amendmentEntry or editPreExtract)}" />
                     </td>
                 </c:if>
                 <c:if test="${not displayCreditMemoFields}">                                                 
@@ -208,7 +208,7 @@
                 <!-- left column populated by note row span for PUR docs-->
                 <c:if test="${displayPaymentRequestFields or displayCreditMemoFields}">
                     <td align=left valign=middle class="datacell">
-                        <kul:htmlControlAttribute attributeEntry="${documentAttributes.noteLine2Text}" property="document.noteLine2Text" readOnly="${not (fullEntryMode or amendmentEntry)}" />
+                        <kul:htmlControlAttribute attributeEntry="${documentAttributes.noteLine2Text}" property="document.noteLine2Text" readOnly="${not (fullEntryMode or amendmentEntry or editPreExtract)}" />
                     </td>
                 </c:if>                                                 
                 <c:if test="${not displayCreditMemoFields}">
@@ -229,7 +229,7 @@
                 <!-- left column populated by note row span for PUR docs-->
                 <c:if test="${displayPaymentRequestFields or displayCreditMemoFields}">
                     <td align=left valign=middle class="datacell">
-                        <kul:htmlControlAttribute attributeEntry="${documentAttributes.noteLine3Text}" property="document.noteLine3Text" readOnly="${not (fullEntryMode or amendmentEntry)}" />
+                        <kul:htmlControlAttribute attributeEntry="${documentAttributes.noteLine3Text}" property="document.noteLine3Text" readOnly="${not (fullEntryMode or amendmentEntry or editPreExtract)}" />
                     </td>
                 </c:if> 
                 <c:if test="${not displayCreditMemoFields}">                                                
@@ -263,7 +263,9 @@
                     <td align=left valign=middle class="datacell">
                         <kul:htmlControlAttribute attributeEntry="${documentAttributes.vendorContactsLabel}" property="document.vendorContactsLabel" readOnly="true"/>                    
                         <c:if test="${vendorReadOnly}" >
-                            <kul:lookup  boClassName="org.kuali.module.vendor.bo.VendorContact" readOnlyFields="vendorHeaderGeneratedIdentifier,vendorDetailAssignedIdentifier" autoSearch="yes" lookupParameters="document.vendorHeaderGeneratedIdentifier:vendorHeaderGeneratedIdentifier,document.vendorDetailAssignedIdentifier:vendorDetailAssignedIdentifier" hideReturnLink="true" extraButtonSource="${ConfigProperties.externalizable.images.url}buttonsmall_return.gif" />                    
+                            <kul:lookup  boClassName="org.kuali.module.vendor.bo.VendorContact" readOnlyFields="vendorHeaderGeneratedIdentifier,vendorDetailAssignedIdentifier" autoSearch="yes" 
+                            lookupParameters="document.vendorHeaderGeneratedIdentifier:vendorHeaderGeneratedIdentifier,document.vendorDetailAssignedIdentifier:vendorDetailAssignedIdentifier" 
+                            hideReturnLink="true" extraButtonSource="${ConfigProperties.externalizable.images.url}buttonsmall_return.gif" />                    
                         </c:if>
                     </td>
                 </tr>            
@@ -324,7 +326,20 @@
                     <td align=left valign=middle class="datacell">&nbsp;</td>
                 </tr> 
             </c:if>
+			<c:if test="${displayPaymentRequestFields or displayCreditMemoFields}">
+				<tr>
 
+                    <th align=right valign=middle class="bord-l-b">
+	                    <div align="right"><kul:htmlAttributeLabel attributeEntry="${documentAttributes.extractedDate}" /></div>
+	                </th>
+                    <td align=left valign=middle class="datacell">
+                        <kul:htmlControlAttribute attributeEntry="${documentAttributes.extractedDate}" property="document.extractedDate" readOnly="${true}" />
+                    </td>
+                    <th align=right valign=middle class="bord-l-b">&nbsp;</th>
+                    <td align=left valign=middle class="datacell">&nbsp;</td>
+                
+            	</tr>
+			</c:if>
         </table>
 
         <c:if test="${displayRequisitionFields}">
