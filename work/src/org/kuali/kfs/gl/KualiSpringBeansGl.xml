@@ -617,6 +617,9 @@
 		<property name="accountService">
 			<ref bean="accountService" />
 		</property>
+		<property name="persistenceStructureService">
+			<ref bean="persistenceStructureService"/>
+		</property>
 	</bean>
 
 	<bean id="glScrubberProcessObjectCodeOverride" class="org.kuali.module.gl.service.impl.ScrubberProcessObjectCodeOverrideImpl">
@@ -1142,10 +1145,10 @@
 			<list>
 				<ref bean="posterEntriesStep" />
 				<ref bean="posterReversalStep" />
-				<ref bean="posterIcrGenerationStep" />
-				<ref bean="posterIcrEntriesStep" />
-				<ref bean="icrEncumbranceGenerationStep" />
-				<ref bean="icrEncumbranceReversalStep" />
+				<ref bean="posterIndirectCostRecoveryGenerationStep" />
+				<ref bean="posterIndirectCostRecoveryEntriesStep" />
+				<ref bean="indirectCostRecoveryEncumbranceGenerationStep" />
+				<ref bean="indirectCostRecoveryEncumbranceReversalStep" />
 			</list>
 		</property>
 		<property name="dependencies">
@@ -1333,7 +1336,7 @@
 		</property>
 	</bean>
 
-	<bean id="posterIcrEntriesStep" class="org.kuali.module.gl.batch.PosterIcrEntriesStep" parent="glStep">
+	<bean id="posterIndirectCostRecoveryEntriesStep" class="org.kuali.module.gl.batch.PosterIcrEntriesStep" parent="glStep">
 		<property name="posterService">
 			<ref bean="glPosterService" />
 		</property>
@@ -1345,7 +1348,7 @@
 		</property>
 	</bean>
 
-	<bean id="posterIcrGenerationStep" class="org.kuali.module.gl.batch.PosterIcrGenerationStep" parent="glStep">
+	<bean id="posterIndirectCostRecoveryGenerationStep" class="org.kuali.module.gl.batch.PosterIcrGenerationStep" parent="glStep">
 		<property name="posterService">
 			<ref bean="glPosterService" />
 		</property>
@@ -1399,13 +1402,13 @@
 		</property>
 	</bean>
 
-	<bean id="icrEncumbranceGenerationStep" class="org.kuali.module.gl.batch.IcrEncumbranceGenerationStep" parent="glStep">
+	<bean id="indirectCostRecoveryEncumbranceGenerationStep" class="org.kuali.module.gl.batch.IcrEncumbranceGenerationStep" parent="glStep">
 		<property name="icrEncumbranceService">
 			<ref bean="glIcrEncumbranceService" />
 		</property>
 	</bean>
 
-	<bean id="icrEncumbranceReversalStep" class="org.kuali.module.gl.batch.IcrEncumbranceReversalStep" parent="glStep">
+	<bean id="indirectCostRecoveryEncumbranceReversalStep" class="org.kuali.module.gl.batch.IcrEncumbranceReversalStep" parent="glStep">
 		<property name="icrEncumbranceReversalService">
 			<ref bean="glIcrEncumbranceReversalService" />
 		</property>
