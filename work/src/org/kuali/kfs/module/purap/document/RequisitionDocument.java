@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.Note;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.service.BusinessObjectService;
@@ -288,7 +287,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
                 String newRequisitionStatus = PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN;
                 if (SpringContext.getBean(RequisitionService.class).isAutomaticPurchaseOrderAllowed(this)) {
                     newRequisitionStatus = PurapConstants.RequisitionStatuses.CLOSED;
-                    PurchaseOrderDocument poDocument = SpringContext.getBean(PurchaseOrderService.class).createAutomaticPurchaseOrderDocument(this);
+                    SpringContext.getBean(PurchaseOrderService.class).createAutomaticPurchaseOrderDocument(this);
                 }
                 updateStatusAndStatusHistoryAndSave(newRequisitionStatus);
             }
