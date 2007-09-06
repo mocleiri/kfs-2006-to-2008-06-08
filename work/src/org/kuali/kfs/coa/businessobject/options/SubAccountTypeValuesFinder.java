@@ -40,7 +40,7 @@ public class SubAccountTypeValuesFinder extends KeyValuesBase {
     public List getKeyValues() {
 
         // now we need to retrieve the parm values
-        String[] parmValues = configService.getParameterValues(KFSConstants.CHART_NAMESPACE, SubAccountRule.CG_ALLOWED_SUBACCOUNT_TYPE_CODES);
+        String[] parmValues = configService.getParameterValues(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.SUB_ACCOUNT, KFSConstants.ChartApcParms.CG_ALLOWED_SUBACCOUNT_TYPE_CODES);
 
         List activeLabels = new ArrayList();
         activeLabels.add(new KeyLabelPair("", ""));
