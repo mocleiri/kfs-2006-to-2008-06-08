@@ -1007,7 +1007,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         String docType = docTypeService.getDocumentTypeCodeByClass(financialDocument.getClass());
         //first we need to check just the doctype to see if it needs the sales tax check
         KualiConfigurationService configService = SpringContext.getBean(KualiConfigurationService.class);
-        Parameter docTypeRule = configService.getParameter( KFSConstants.FINANCIAL_NAMESPACE, APPLICATION_PARAMETER.DOCTYPE_SALES_TAX_CHECK);
+        Parameter docTypeRule = configService.getParameter( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DOCUMENT, APPLICATION_PARAMETER.DOCTYPE_SALES_TAX_CHECK);
         
         // apply the rule, see if it fails
         if (!configService.failsRule(docTypeRule,docType)) {
@@ -1016,7 +1016,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         
         //second we need to check the account and object code combination to see if it needs sales tax
         if(required) {
-            Parameter objCdAndAccountRule = configService.getParameter(KFSConstants.FINANCIAL_NAMESPACE, APPLICATION_PARAMETER.VALID_ACCOUNT_AND_OBJ_CD);
+            Parameter objCdAndAccountRule = configService.getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DOCUMENT, APPLICATION_PARAMETER.VALID_ACCOUNT_AND_OBJ_CD);
             //get the object code and account
             String objCd = accountingLine.getFinancialObjectCode();
             String account = accountingLine.getAccountNumber();
