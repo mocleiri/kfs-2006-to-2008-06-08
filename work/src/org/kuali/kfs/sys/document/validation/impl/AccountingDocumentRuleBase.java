@@ -1217,7 +1217,7 @@ public abstract class AccountingDocumentRuleBase extends GeneralLedgerPostingDoc
 
         //Parameter restrictedObjectCodes = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterRule(KUALI_TRANSACTION_PROCESSING_GLOBAL_RULES_SECURITY_GROUPING, RESTRICTED_OBJECT_CODES);
         
-        if ( getKualiConfigurationService().failsRule(KFSConstants.FINANCIAL_NAMESPACE, KUALI_TRANSACTION_PROCESSING_GLOBAL_RULES_SECURITY_GROUPING, RESTRICTED_OBJECT_CODES, objectCode) ) {
+        if ( getKualiConfigurationService().failsRule(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DOCUMENT, RESTRICTED_OBJECT_CODES, objectCode) ) {
             String objectCodeInfo = objectCode + " - " + accountingLine.getObjectCode().getFinancialObjectCodeShortName();
             GlobalVariables.getErrorMap().putError(FINANCIAL_OBJECT_CODE_PROPERTY_NAME, ERROR_DOCUMENT_INCORRECT_OBJ_CODE, new String[] { objectCodeInfo });
 
@@ -1255,7 +1255,7 @@ public abstract class AccountingDocumentRuleBase extends GeneralLedgerPostingDoc
     protected Parameter getGlobalObjectTypeRule() {
         LOG.debug("getGlobalObjectTypeRule() - start");
 
-        Parameter returnKualiParameterRule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KUALI_TRANSACTION_PROCESSING_GLOBAL_RULES_SECURITY_GROUPING, RESTRICTED_OBJECT_TYPE_CODES);
+        Parameter returnKualiParameterRule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DOCUMENT, RESTRICTED_OBJECT_TYPE_CODES);
         LOG.debug("getGlobalObjectTypeRule() - end");
         return returnKualiParameterRule;
     }
@@ -1268,7 +1268,7 @@ public abstract class AccountingDocumentRuleBase extends GeneralLedgerPostingDoc
     protected Parameter getGlobalSubFundGroupRule() {
         LOG.debug("getGlobalSubFundGroupRule() - start");
 
-        Parameter returnKualiParameterRule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KUALI_TRANSACTION_PROCESSING_GLOBAL_RULES_SECURITY_GROUPING, RESTRICTED_SUB_FUND_GROUP_CODES);
+        Parameter returnKualiParameterRule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DOCUMENT, RESTRICTED_SUB_FUND_GROUP_CODES);
         LOG.debug("getGlobalSubFundGroupRule() - end");
         return returnKualiParameterRule;
     }
