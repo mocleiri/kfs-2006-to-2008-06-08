@@ -179,7 +179,7 @@ public class CashReceiptDocumentRule extends CashReceiptFamilyRule implements Ad
      */
     private boolean validateAccountAndObjectCode(AccountingLine accountingLine, boolean source, boolean newLine, int index) {
         boolean isValid = true;
-        Parameter objCdAndAccountRule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, APPLICATION_PARAMETER.VALID_ACCOUNT_AND_OBJ_CD);
+        Parameter objCdAndAccountRule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DOCUMENT, APPLICATION_PARAMETER.VALID_ACCOUNT_AND_OBJ_CD);
         //get the object code and account
         String objCd = accountingLine.getFinancialObjectCode();
         String account = accountingLine.getAccountNumber();
