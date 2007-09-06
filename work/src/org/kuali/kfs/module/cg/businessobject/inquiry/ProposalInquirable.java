@@ -23,7 +23,6 @@ import java.util.List;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.datadictionary.InquirySectionDefinition;
-import org.kuali.core.inquiry.KualiInquirableImpl;
 import org.kuali.core.service.BusinessObjectDictionaryService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
@@ -31,12 +30,13 @@ import org.kuali.core.web.ui.Section;
 import org.kuali.core.web.ui.SectionBridge;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.inquiry.KfsInquirableImpl;
 import org.kuali.module.cg.CGConstants;
 
 /**
  * Used for wiring up {@link Proposal} for inquiries.
  */
-public class ProposalInquirable extends KualiInquirableImpl {
+public class ProposalInquirable extends KfsInquirableImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProposalInquirable.class);
     
     private transient static KualiConfigurationService configService;
