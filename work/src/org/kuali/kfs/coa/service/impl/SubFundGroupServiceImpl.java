@@ -70,11 +70,11 @@ public class SubFundGroupServiceImpl implements SubFundGroupService {
      * @see org.kuali.module.chart.service.SubFundGroupService#getContractsAndGrantsDenotingValue()
      */
     public String getContractsAndGrantsDenotingValue() {
-        return configurationService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ACCOUNT_CG_DENOTING_VALUE);
+        return configurationService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT, KFSConstants.ChartApcParms.ACCOUNT_CG_DENOTING_VALUE);
     }
 
     private boolean fundGroupDenotesContractsAndGrants() {
-        return configurationService.getIndicatorParameter(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ACCOUNT_FUND_GROUP_DENOTES_CG);
+        return configurationService.getIndicatorParameter(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNTKFSConstants.ChartApcParms.ACCOUNT_FUND_GROUP_DENOTES_CG);
     }
 
     /**
