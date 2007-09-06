@@ -392,7 +392,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         // now set the offset entry to the specific offset object code for the AV generated offset fund balance; only if it's an
         // accrual or adjustment
         if (auxDoc.isAccrualType() || auxDoc.isAdjustmentType()) {
-            String glpeOffsetObjectCode = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(getDefaultParameterNamespace(), getGeneralLedgerPendingEntryOffsetObjectCode());
+            String glpeOffsetObjectCode = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(getDefaultParameterNamespace(), KFSConstants.Components.AUXILIARY_VOUCHER, getGeneralLedgerPendingEntryOffsetObjectCode());
             offsetEntry.setFinancialObjectCode(glpeOffsetObjectCode);
         }
 
@@ -819,7 +819,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         int todayAsComparableDate = AuxiliaryVoucherDocumentRule.comparableDateForm(today);
         int periodClose = new Integer(AuxiliaryVoucherDocumentRule.comparableDateForm(periodToCheck.getUniversityFiscalPeriodEndDate()));
         int periodBegin = AuxiliaryVoucherDocumentRule.comparableDateForm(AuxiliaryVoucherDocumentRule.calculateFirstDayOfMonth(periodToCheck.getUniversityFiscalPeriodEndDate())); 
-        int gracePeriodClose = periodClose + new Integer(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD)).intValue();
+        int gracePeriodClose = periodClose + new Integer(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.AUXILIARY_VOUCHER, AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD)).intValue();
         return (todayAsComparableDate >= periodBegin && todayAsComparableDate <= gracePeriodClose);
     }
     
