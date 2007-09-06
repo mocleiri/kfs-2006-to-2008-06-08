@@ -135,6 +135,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         String selfReportsOrgType =
         getConfigService().getParameterValue(
                 KFSConstants.CHART_NAMESPACE,
+                KFSConstants.Components.ORGANIZATION,
                 ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
         return (organizationDao.getRootOrganizationCode(rootChart,
                                                         selfReportsOrgType));

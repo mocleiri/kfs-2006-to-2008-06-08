@@ -64,7 +64,7 @@ public class OrgDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase {
         KualiConfigurationService configService;
         configService = SpringContext.getBean(KualiConfigurationService.class);
         KualiGroup group = null;
-        String groupName = configService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ORG_PLANT_WORKGROUP_PARM_NAME);
+        String groupName = configService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION, KFSConstants.ChartApcParms.ORG_PLANT_WORKGROUP_PARM_NAME);
 
         // if the user is NOT a member of the special group, then mark all the
         // ICR & CS fields read-only.
