@@ -73,7 +73,7 @@ public class IndirectCostAdjustmentForm extends KualiAccountingDocumentFormBase 
     @Override
     public TargetAccountingLine createNewTargetAccountingLine(AccountingDocument financialDocument) {
         TargetAccountingLine targetAccountingLine = super.createNewTargetAccountingLine(financialDocument);
-        String objectCode = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, IndirectCostAdjustmentDocumentRuleConstants.RECEIPT_OBJECT_CODE);
+        String objectCode = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.INDIRECT_COST_ADJUSTMENT_DOC, IndirectCostAdjustmentDocumentRuleConstants.RECEIPT_OBJECT_CODE);
 
         targetAccountingLine.setFinancialObjectCode(objectCode);
         return targetAccountingLine;
