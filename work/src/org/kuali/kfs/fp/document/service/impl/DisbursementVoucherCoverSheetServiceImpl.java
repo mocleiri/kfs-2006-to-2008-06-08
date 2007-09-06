@@ -102,14 +102,14 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
             }
             // retrieve data for alien payment code
             if (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
-                String taxDocumentationLocationCode = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM);
+                String taxDocumentationLocationCode = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM);
 
                 address = retrieveAddress(taxDocumentationLocationCode);
                 alien = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM);
                 lines = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM);
             }
             // retrieve data for travel payment reasons
-            Set<String> travelNonEmplPaymentReasonCodes = kualiConfigurationService.getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+            Set<String> travelNonEmplPaymentReasonCodes = kualiConfigurationService.getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
             if (travelNonEmplPaymentReasonCodes.contains(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
                 bar = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM);
                 rlines = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM);
