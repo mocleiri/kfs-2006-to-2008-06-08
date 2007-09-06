@@ -18,9 +18,8 @@ package org.kuali.kfs;
 import java.util.HashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.maven.model.Organization;
-import org.apache.tools.ant.Project;
 import org.kuali.RiceConstants;
+import org.kuali.core.JstlConstants;
 import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.user.UniversalUser;
@@ -53,9 +52,11 @@ import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectCons;
 import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.chart.bo.OffsetDefinition;
+import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.OrgType;
 import org.kuali.module.chart.bo.OrganizationReversion;
 import org.kuali.module.chart.bo.Program;
+import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.ReportingCodes;
 import org.kuali.module.chart.bo.ResponsibilityCenter;
 import org.kuali.module.chart.bo.RestrictedStatus;
@@ -96,7 +97,7 @@ import org.kuali.module.labor.bo.LaborOriginEntry;
 /**
  * This class is used to define global constants.
  */
-public class KFSConstants {
+public class KFSConstants extends JstlConstants {
     private static final long serialVersionUID = 2882277719647128949L;
     
     // special user used in the post-processor
@@ -156,12 +157,12 @@ public class KFSConstants {
         public final static String OBJECT_SUB_TYPE = ObjSubTyp.class.getSimpleName();
         public final static String OBJECT_TYPE = ObjectType.class.getSimpleName();
         public final static String OFFSET_DEFINITION = OffsetDefinition.class.getSimpleName();
-        public final static String ORGANIZATION = Organization.class.getSimpleName();
+        public final static String ORGANIZATION = Org.class.getSimpleName();
         public final static String ORGANIZATION_TYPE = OrgType.class.getSimpleName();
         public final static String ORIGINATION = OriginationCode.class.getSimpleName();
         public final static String POSTAL_CODE = PostalZipCode.class.getSimpleName();
         public final static String PROGRAM = Program.class.getSimpleName();
-        public final static String PROJECT = Project.class.getSimpleName();
+        public final static String PROJECT = ProjectCode.class.getSimpleName();
         public final static String RESPONSIBILITY_CENTER = ResponsibilityCenter.class.getSimpleName();
         public final static String RESTRICTED_STATUS = RestrictedStatus.class.getSimpleName();
         public final static String STATE = State.class.getSimpleName();
