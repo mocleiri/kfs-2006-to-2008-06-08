@@ -809,13 +809,13 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
             dvNonResidentAlienTax = null;
         }
 
-        Set<String> travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+        Set<String> travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
         if (!travelNonEmplPaymentReasonCodes.contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
             SpringContext.getBean(BusinessObjectService.class).delete(dvNonEmployeeTravel);
             dvNonEmployeeTravel = null;
         }
 
-        Set<String> travelPrepaidPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
+        Set<String> travelPrepaidPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
         if (!travelPrepaidPaymentReasonCodes.contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
             SpringContext.getBean(BusinessObjectService.class).delete(dvPreConferenceDetail);
             dvPreConferenceDetail = null;
