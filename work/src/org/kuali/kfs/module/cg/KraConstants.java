@@ -19,6 +19,7 @@ import java.util.Calendar;
 
 import org.kuali.core.JstlConstants;
 import org.kuali.core.util.KualiInteger;
+import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
 
 public class KraConstants extends JstlConstants {
@@ -26,6 +27,8 @@ public class KraConstants extends JstlConstants {
 
     public static class Components {
         public final static String ROUTING_FORM = RoutingForm.class.getSimpleName();
+        public final static String ALL = "All";
+        public final static String BUDGET = Budget.class.getSimpleName();
     }
     
     public static final String SHORT_TIMESTAMP_FORMAT = "MM/dd/yyyy";
@@ -71,23 +74,25 @@ public class KraConstants extends JstlConstants {
     public static final String BUDGET_OVERVIEW_HELP_PARAMETER_NAME = "budgetOverviewHelp";
     public static final String BUDGET_NONPERSONNEL_COPY_OVER_HELP_PARAMETER_NAME = "budgetNonpersonnelCopyOverHelp";
     public static final String BUDGET_TEMPLATE_HELP_PARAMETER_NAME = "budgetTemplateHelp";
-    public static final String BUDGET_BASE_CODE_DEFAULT_VALUE_PARAMETER_NAME = "budgetBaseCodeDefaultValue";
-    public static final String BUDGET_MANUAL_RATE_INDICATOR_DEFAULT_VALUE_PARAMETER_NAME = "budgetManualRateIndicatorDefaultValue";
+    public static final String BUDGET_BASE_CODE_DEFAULT_VALUE_PARAMETER_NAME = "BASE_CODE_DEFAULT_VALUE";
+    public static final String BUDGET_MANUAL_RATE_INDICATOR_DEFAULT_VALUE_PARAMETER_NAME = "MANUAL_RATE_INDICATOR_DEFAULT_VALUE";
     public static final String BUDGET_PURPOSE_CODE_DEFAULT_VALUE_PARAMETER_NAME = "budgetPurposeCodeDefaultValue";
     public static final String BUDGET_MAX_INFLATION_RATE_PARAMETER_NAME = "budgetMaxInflationRate";
     public static final String PROJECT_DIRECTOR_BUDGET_PERMISSION = "projectDirectorBudgetPermission";
     public static final String PROJECT_DIRECTOR_ORG_BUDGET_PERMISSION = "projectDirectorOrgBudgetPermission";
     public static final String COST_SHARE_ORGS_BUDGET_PERMISSION = "costShareOrgsBudgetPermission";
-    public static final String BUDGET_COST_SHARE_PERMISSION_CODE = "budgetCostSharePermissionCode";
+    public static final String BUDGET_COST_SHARE_PERMISSION_CODE = "COST_SHARE_PERMISSION_CODE";
+    public static final String DEFAULT_BUDGET_TASK_NAME = "DEFAULT_BUDGET_TASK_NAME";
+    public static final String INDIRECT_COST_MAX_MANUAL_RATE = "INDIRECT_COST_MAX_MANUAL_RATE";
     
-    public static final String ALLOWED_EMPLOYEE_STATUS_RULE = "AllowedEmployeeStatuses";
+    public static final String ALLOWED_EMPLOYEE_STATUS_RULE = "EMPLOYEE_STATUSES";
     
     public static final String GRADUATE_ASSISTANT_NONPERSONNEL_DESCRIPTION = "graduateAssistantNonpersonnelDescription";
     public static final String GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE = "graduateAssistantNonpersonnelSubCategoryCode";
     public static final String GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE = "graduateAssistantNonpersonnelCategoryCode";
 
-    public static final String KRA_BUDGET_INDIRECT_COST_PROVIDED_SYSTEM = "KraBudgetIndirectCostProvidedSystem";
-    public static final String KRA_BUDGET_INDIRECT_COST_PROVIDED_MANUALLY = "KraBudgetIndirectCostProvidedManually";
+    public static final String KRA_BUDGET_INDIRECT_COST_PROVIDED_SYSTEM = "INDIRECT_COST_PROVIDED_SYSTEM";
+    public static final String KRA_BUDGET_INDIRECT_COST_PROVIDED_MANUALLY = "INDIRECT_COST_PROVIDED_MANUALLY";
     public static final String KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPES = "KraBudgetPersonnelSummerGridAppointmentTypes";
     public static final String KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPE = "KraBudgetPersonnelSummerGridAppointmentType";
     public static final String KRA_BUDGET_PERSONNEL_FULL_YEAR_APPOINTMENT_TYPES = "KraBudgetPersonnelFullYearAppointmentTypes";
@@ -108,7 +113,7 @@ public class KraConstants extends JstlConstants {
     public static final String TO_BE_NAMED_LABEL = "toBeNamedLabel";
     
     public static final String KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS = "KraBudgetNumberOfAcademicYearSubdivisions";
-    public static final String KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES = "KraBudgetAcademicYearSubdivisionNames";
+    public static final String KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES = "ACADEMIC_YEAR_SUBDIVISION_NAMES";
     
     public static final String ROUTING_FORM_COST_SHARE_PERMISSION_CODE = "routingFormCostShareRoutingCode";
     
