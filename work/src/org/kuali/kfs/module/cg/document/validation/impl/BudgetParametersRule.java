@@ -431,7 +431,7 @@ public class BudgetParametersRule {
                 if (rateForTesting != null) {
                     if (!SpringContext.getBean(BudgetGraduateAssistantRateService.class).isValidGraduateAssistantRate(rateForTesting)) {
                         if (academicYearSubdivisionNames == null) {
-                            academicYearSubdivisionNames = kcs.getParameterValues(KFSConstants.KRA_NAMESPACE, "KraBudgetAcademicYearSubdivisionNames");
+                            academicYearSubdivisionNames = kcs.getParameterValues(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES);
                         }
                         String[] graduateAssistantRateErrorMessage = { academicYearSubdivisionNames[anAcademicYearSubdivisionIndex - 1], budgetGraduateAssistantRate.getCampusCode() };
                         GlobalVariables.getErrorMap().putError("budget.graduateAssistantRate[" + i + "].campusMaximumPeriod" + anAcademicYearSubdivisionIndex + "Rate", KraKeyConstants.ERROR_GRAD_RATE_TOO_HIGH, graduateAssistantRateErrorMessage);
