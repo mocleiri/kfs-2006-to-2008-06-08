@@ -82,7 +82,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
 
         DisbursementVoucherNonEmployeeTravel dvNonEmplTrav = dvDocument.getDvNonEmployeeTravel();
 
-        List<String> travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsList(KFSConstants.FINANCIAL_NAMESPACE, NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+        List<String> travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsList(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
 
         if (hasNonEmployeeTravelValues(dvNonEmplTrav) && !travelNonEmplPaymentReasonCodes.contains(dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
             String questionText = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSKeyConstants.QUESTION_CLEAR_UNNEEDED_TAB);

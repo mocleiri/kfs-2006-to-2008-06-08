@@ -83,9 +83,9 @@ public interface DisbursementVoucherRuleConstants {
     }
 
     public static class DvPdpExtractGroup {
-        public static String DV_PDP_ORG_CODE = "DV.PDP.ORG.CODE";
-        public static String DV_PDP_SBUNT_CODE = "DV.PDP.SBUNT.CODE";
-        public static String DV_PDP_USER_ID = "DV.PDP.USER.ID";
+        public static String DV_PDP_ORG_CODE = "PRE_DISBURSEMENT_EXTRACT_ORGANIZATION";
+        public static String DV_PDP_SBUNT_CODE = "PRE_DISBURSEMENT_EXTRACT_SUB_UNIT";
+        public static String DV_PDP_USER_ID = "PRE_DISBURSEMENT_EXTRACT_USER";
     }
 
     // system parameter parameter constants
@@ -115,12 +115,12 @@ public interface DisbursementVoucherRuleConstants {
     public static String TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM = "TAX_DOCUMENTATION_LOCATION_CODE";
     public static String W9_OWNERSHIP_TYPES_PARM_NM = "W9_OWNERSHIP_TYPES";
     public static String NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM = "NONEMPLOYEE_TRAVEL_PAYMENT_REASONS";
-    public static String NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM = "NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_INDICATOR";
+    public static String NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM = "NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_IND";
     public static String PREPAID_TRAVEL_PAY_REASONS_PARM_NM = "PREPAID_TRAVEL_PAYMENT_REASONS";
     public static String REVOLVING_FUND_PAY_REASONS_PARM_NM = "REVOLVING_FUND_PAYMENT_REASONS";
     public static String RESEARCH_PAY_REASONS_PARM_NM = "RESEARCH_PAYMENT_REASONS";
     public static String RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM = "RESEARCH_NON_VENDOR_PAY_LIMIT_AMOUNT";
-    public static String PERFORM_PREPAID_EMPL_PARM_NM = "PERFORM_PREPAID_ACTIVE_EMPLOPYEE_IND";
+    public static String PERFORM_PREPAID_EMPL_PARM_NM = "CHECK_PREPAID_ACTIVE_EMPLOYEE_IND";
     public static String MOVING_PAY_REASONS_PARM_NM = "MOVING_PAYMENT_REASONS";
 
     public static String TAX_TYPE_SSN = "1";
