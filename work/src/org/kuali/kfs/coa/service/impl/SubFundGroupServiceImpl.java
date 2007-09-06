@@ -74,7 +74,7 @@ public class SubFundGroupServiceImpl implements SubFundGroupService {
     }
 
     private boolean fundGroupDenotesContractsAndGrants() {
-        return configurationService.getIndicatorParameter(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNTKFSConstants.ChartApcParms.ACCOUNT_FUND_GROUP_DENOTES_CG);
+        return configurationService.getIndicatorParameter(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT, KFSConstants.ChartApcParms.ACCOUNT_FUND_GROUP_DENOTES_CG);
     }
 
     /**
