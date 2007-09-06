@@ -56,6 +56,15 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
     protected String getDefaultParameterNamespace() {
         return KFSConstants.FINANCIAL_NAMESPACE;
     }
+    
+    /**
+     * Convenience method for accessing the most-likely requested detail type code
+     * 
+     * @return String
+     */
+    protected String getDefaultParameterDetailTypeCode() {
+        return KFSConstants.Components.NON_CHECK_DISBURSEMENT_DOC;
+    }    
 
     /**
      * Overrides to consider the object types.<br/>
@@ -182,7 +191,7 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
         ObjectCode objectCode = accountingLine.getObjectCode();
 
         if (valid) {
-            valid = succeedsRule(NON_CHECK_DISBURSEMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_TYPE_CODES, objectCode.getFinancialObjectTypeCode());
+            valid = succeedsRule(RESTRICTED_OBJECT_TYPE_CODES, objectCode.getFinancialObjectTypeCode());
         }
 
         if (!valid) {
@@ -206,7 +215,7 @@ public class NonCheckDisbursementDocumentRule extends AccountingDocumentRuleBase
         ObjectCode objectCode = accountingLine.getObjectCode();
 
         if (valid) {
-            valid = succeedsRule(NON_CHECK_DISBURSEMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode());
+            valid = succeedsRule(RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode());
         }
 
         if (!valid) {
