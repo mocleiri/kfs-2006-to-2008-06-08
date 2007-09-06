@@ -39,8 +39,6 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrgRule.class);
 
-    protected static final String APC_HRMS_ACTIVE_KEY = "Org.HrmsOrgActive";
-    protected static final String PLANT_WORKGROUP_PARM_NAME = "Org.PlantWorkgroup";
     
     private static OrganizationService orgService;
 
@@ -429,7 +427,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
                     success = false;
                 }
                 // org must be the only one of that type
-                String topLevelOrgTypeCode = configService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
+                String topLevelOrgTypeCode = configService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION, KFSConstants.ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
                 List<Org> topLevelOrgs = orgService.getActiveOrgsByType( topLevelOrgTypeCode );
                 if ( !topLevelOrgs.isEmpty() ) {
                     // is the new org in the topLevelOrgs list?  If not, then there's an error; if so, we're editing the top level org
@@ -517,7 +515,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
      * 
      */
     protected boolean isHrmsOrgActivated() {
-        return configService.getIndicatorParameter(KFSConstants.CHART_NAMESPACE, APC_HRMS_ACTIVE_KEY);
+        return configService.getIndicatorParameter(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION, KFSConstants.ChartApcParms.APC_HRMS_ACTIVE_KEY);
     }
 
     /**
@@ -551,7 +549,7 @@ public class OrgRule extends MaintenanceDocumentRuleBase {
     protected boolean isPlantAuthorized(UniversalUser user) {
 
         // attempt to get the group name that grants access to the Plant fields
-        String allowedPlantWorkgroup = getConfigService().getParameterValue(KFSConstants.CHART_NAMESPACE, PLANT_WORKGROUP_PARM_NAME);
+        String allowedPlantWorkgroup = getConfigService().getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION, KFSConstants.ChartApcParms.ORG_PLANT_WORKGROUP_PARM_NAME);
 
         if (user.isMember( allowedPlantWorkgroup )) {
             LOG.info("User '" + user.getPersonUserIdentifier() + "' is a member of the group '" + allowedPlantWorkgroup + "', which gives them access to the Plant fields.");
