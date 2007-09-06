@@ -132,7 +132,7 @@ public class KFSConstants {
         public final static String INDIRECT_COST_RECOVERY_EXCLUSION_BY_TYPE = IndirectCostRecoveryExclusionByType.class.getSimpleName();
         public final static String INDIRECT_COST_RECOVERY_TYPE = IndirectCostRecoveryType.class.getSimpleName();
         public final static String MANDITORY_TRANSFER_ELIMINATION = ManditoryTransferElimination.class.getSimpleName();
-        */        
+        */      
         public final static String FISCAL_YEAR_MAKER_STEP = FiscalYearMakerStep.class.getSimpleName();
         public final static String ACCOUNT = Account.class.getSimpleName();
         public final static String ACCOUNTING_PERIOD = AccountingPeriod.class.getSimpleName();
@@ -877,41 +877,49 @@ public class KFSConstants {
     public static class CoreApcParms {
         
         // Kuali User params
-        public static final String USER_INVALID_EMPLOYEE_STATUSES = "KualiUser.InvalidEmployeeStatus";
+        public static final String USER_INVALID_EMPLOYEE_STATUSES = "ACTIVE_KFS_USER_EMPLOYEE_STATUSES";
         
         public static final String UNIVERSAL_USER_EDIT_WORKGROUP = "UniversalUser.EditWorkgroup";
     }
     
     public static class ChartApcParms {
 
-        public static final String FISCAL_YEAR_MAKER_REPLACE_MODE = "replaceMode";
-        public static final String FISCAL_YEAR_MAKER_SOURCE_FISCAL_YEAR = "sourceFiscalYear";
-
+        public static final String FISCAL_YEAR_MAKER_REPLACE_MODE = "REPLACE_MODE";
+        public static final String FISCAL_YEAR_MAKER_SOURCE_FISCAL_YEAR = "SOURCE_FISCAL_YEAR";
+        
+        //added from parameter refactoring.
+        public static final String APC_HRMS_ACTIVE_KEY = "USE_HRMS_ORGANIZATION_ATTRIBUTES_IND";
+        public final static String OBJECT_CODE_ILLEGAL_VALUES = "OBJECTS";
+        public static final String DOCTYPE_AND_OBJ_CODE_ACTIVE = "DOCUMENT_TYPES_REQUIRING_ACTIVE_OBJECTS";
+        public static final String INVALID_DOCUMENT_TYPES_BY_OBJECT_SUB_TYPE = "INVALID_DOCUMENT_TYPES_BY_OBJECT_SUB_TYPE";
+        public static final String VALID_DOCUMENT_TYPES_BY_OBJECT_SUB_TYPE = "VALID_DOCUMENT_TYPES_BY_OBJECT_SUB_TYPE";
+        public static final String CG_ALLOWED_SUBACCOUNT_TYPE_CODES = "SUB_ACCOUNT_TYPES";
+        
         // Account parms
-        public static final String ACCOUNT_USER_EMP_STATUSES = "Account.User.AllowedEmployeeStatus";
-        public static final String ACCOUNT_USER_EMP_TYPES = "Account.User.AllowedEmployeeType";
+        public static final String ACCOUNT_USER_EMP_STATUSES = "ROLE_EMPLOYEE_STATUSES";
+        public static final String ACCOUNT_USER_EMP_TYPES = "ROLE_EMPLOYEE_TYPES";
 
         // Delegate parms
-        public static final String DELEGATE_USER_EMP_STATUSES = "Delegate.User.AllowedEmployeeStatus";
-        public static final String DELEGATE_USER_EMP_TYPES = "Delegate.User.AllowedEmployeeType";
+        public static final String DELEGATE_USER_EMP_STATUSES = "EMPLOYEE_STATUSES";
+        public static final String DELEGATE_USER_EMP_TYPES = "EMPLOYEE_TYPES";
 
         // SubAccount parms
-        public static final String SUBACCOUNT_CG_WORKGROUP_PARM_NAME = "SubAccount.CGWorkgroup";
+        public static final String SUBACCOUNT_CG_WORKGROUP_PARM_NAME = "CG_GROUP";
 
         // Org parms
-        public static final String DEFAULT_ACCOUNT_NOT_REQUIRED_ORG_TYPES = "Org.DefaultAccountNotRequired.OrgTypes";
-        public static final String ORG_MUST_REPORT_TO_SELF_ORG_TYPES = "Org.OrgMustReportToSelf.OrgTypes";
-        public static final String ORG_PLANT_WORKGROUP_PARM_NAME = "Org.PlantWorkgroup";
+        public static final String DEFAULT_ACCOUNT_NOT_REQUIRED_ORG_TYPES = "ORGANIZATION_TYPES_NOT_REQUIRING_DEFAULT_ACCOUNT";
+        public static final String ORG_MUST_REPORT_TO_SELF_ORG_TYPES = "ORGANIZATION_TYPES_THAT_MUST_REPORT_TO_SELF";
+        public static final String ORG_PLANT_WORKGROUP_PARM_NAME = "PLANT_GROUP";
 
         public static final String ADMINISTRATOR_WORKGROUP = "Maintenance.Admin.Workgroup";
         
-        public static final String ACCOUNT_FUND_GROUP_DENOTES_CG = "Account.FundGroupDenotesCG";
-        public static final String ACCOUNT_CG_DENOTING_VALUE = "Account.CGDenotingValue";
+        public static final String ACCOUNT_FUND_GROUP_DENOTES_CG = "FUND_GROUP_DENOTES_CG_IND";
+        public static final String ACCOUNT_CG_DENOTING_VALUE = "CG_DENOTING_VALUE";
         
-        public static final String DEFAULT_USER_CHART_CODE_SOURCE_ATTRIBUTE = "Default.User.ChartCode.Source.Attribute";
-        public static final String DEFAULT_USER_CHART_CODE_EXTRACTION_REGEXP = "Default.User.ChartCode.Extraction.RegExp";
-        public static final String DEFAULT_USER_ORGANIZATION_CODE_SOURCE_ATTRIBUTE = "Default.User.OrganizationCode.Source.Attribute";
-        public static final String DEFAULT_USER_ORGANIZATION_CODE_EXTRACTION_REGEXP = "Default.User.OrganizationCode.Extraction.RegExp";
+        public static final String DEFAULT_USER_CHART_CODE_SOURCE_ATTRIBUTE = "DEFAULT_CHART_SOURCE_ATTRIBUTE";
+        public static final String DEFAULT_USER_CHART_CODE_EXTRACTION_REGEXP = "DEFAULT_CHART_EXTRACTION_REG_EXP";
+        public static final String DEFAULT_USER_ORGANIZATION_CODE_SOURCE_ATTRIBUTE = "DEFAULT_ORGANIZATION_SOURCE_ATTRIBUTE";
+        public static final String DEFAULT_USER_ORGANIZATION_CODE_EXTRACTION_REGEXP = "DEFAULT_ORGANIZATION_EXTRACTION_REG_EXP";
     }
 
     public static class FinancialApcParms {
