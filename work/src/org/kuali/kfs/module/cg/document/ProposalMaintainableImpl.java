@@ -35,6 +35,7 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.web.ui.Section;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.module.cg.CGConstants;
 import org.kuali.module.cg.bo.ProjectDirector;
 import org.kuali.module.cg.bo.Proposal;
 import org.kuali.module.cg.bo.ProposalProjectDirector;
@@ -252,8 +253,8 @@ public class ProposalMaintainableImpl extends KualiMaintainableImpl {
         
         List<Section> coreSections = getCoreSections(oldMaintainable);
         
-        String preAwardWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.CONTRACTS_AND_GRANTS_NAMESPACE, "Kuali-Document.PreAward.Workgroup");
-        String postAwardWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.CONTRACTS_AND_GRANTS_NAMESPACE, "Kuali-Document.PostAward.Workgroup");
+        String preAwardWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.CONTRACTS_AND_GRANTS_NAMESPACE, KFSConstants.Components.DOCUMENT, CGConstants.PRE_AWARD_GROUP);
+        String postAwardWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.CONTRACTS_AND_GRANTS_NAMESPACE, KFSConstants.Components.DOCUMENT, CGConstants.POST_AWARD_GROUP);
         
         UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
         if(!user.isMember(preAwardWorkgroupName) && !user.isMember(postAwardWorkgroupName)) {
