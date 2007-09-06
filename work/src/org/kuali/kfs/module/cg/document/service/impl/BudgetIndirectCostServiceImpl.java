@@ -489,9 +489,9 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
             calculateTaskPeriodIdcListValues(budgetDocument);
             
             if("N".equals(budgetIndirectCost.getBudgetManualRateIndicator())) {
-                budgetIndirectCost.setBudgetManualRateIndicatorDescription(kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.KRA_BUDGET_INDIRECT_COST_PROVIDED_SYSTEM));
+                budgetIndirectCost.setBudgetManualRateIndicatorDescription(kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_INDIRECT_COST_PROVIDED_SYSTEM));
             } else {
-                budgetIndirectCost.setBudgetManualRateIndicatorDescription(kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.KRA_BUDGET_INDIRECT_COST_PROVIDED_MANUALLY));
+                budgetIndirectCost.setBudgetManualRateIndicatorDescription(kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_INDIRECT_COST_PROVIDED_MANUALLY));
             }
         }
     }
