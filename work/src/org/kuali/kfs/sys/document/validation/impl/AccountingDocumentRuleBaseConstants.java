@@ -41,14 +41,14 @@ public interface AccountingDocumentRuleBaseConstants {
         public static final String RESTRICTED_SUB_FUND_GROUP_CODES = "RestrictedSubFundGroupCodes";
         public static final String INCOME_OBJECT_TYPE_CODES = "IncomeObjectTypeCodes";
         public static final String EXPENSE_OBJECT_TYPE_CODES = "ExpenseObjectTypeCodes";
-        public static final String MANDATORY_TRANSFER_SUBTYPE_CODES = "MandatoryTransferSubTypeCodes";
-        public static final String NONMANDATORY_TRANSFER_SUBTYPE_CODES = "NonMandatoryTransferSubTypeCode";
+        public static final String MANDATORY_TRANSFER_SUBTYPE_CODES = "MANDATORY_TRANSFER_OBJECT_SUB_TYPES";
+        public static final String NONMANDATORY_TRANSFER_SUBTYPE_CODES = "NON_MANDATORY_TRANSFER_OBJECT_SUB_TYPES";
         public static final String FUND_GROUP_BALANCING_SET = "FundGroupBalancingSet";
         // doctype parameter
-        public static final String DOCTYPE_SALES_TAX_CHECK = "DocTypeSalesTaxCheck";
+        public static final String DOCTYPE_SALES_TAX_CHECK = "SALES_TAX_APPLICABLE_DOCUMENT_TYPES";
         
         // combination object code and account parameter
-        public static final String VALID_ACCOUNT_AND_OBJ_CD = "ValidAccountAndObjectCode";
+        public static final String VALID_ACCOUNT_AND_OBJ_CD = "SALES_TAX_APPLICABLE_ACCOUNTS_AND_OBJECTS";
     }
     /**
      * Constant to statically define reusable error paths
