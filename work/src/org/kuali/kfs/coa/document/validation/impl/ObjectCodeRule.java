@@ -50,9 +50,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
     private static ObjectLevelService objectLevelService;
     private static ObjectCodeService objectCodeService;
     private static ObjectConsService  objectConsService;
-
-    private final static String OBJECT_CODE_ILLEGAL_VALUES = "ObjectCodeIllegalValues";
-
+    
     private static KualiConfigurationService configService;
     private static ChartService chartService;
     private Map reportsTo;
@@ -63,7 +61,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
     	if ( objectConsService == null ) {
 	        configService = SpringContext.getBean(KualiConfigurationService.class);
 	
-	        illegalValues = retrieveParameterSet(OBJECT_CODE_ILLEGAL_VALUES);
+	        illegalValues = retrieveParameterSet(KFSConstants.ChartApcParms.OBJECT_CODE_ILLEGAL_VALUES);
 	
 	        objectLevelService = SpringContext.getBean(ObjectLevelService.class);
 	        objectCodeService = SpringContext.getBean(ObjectCodeService.class);
