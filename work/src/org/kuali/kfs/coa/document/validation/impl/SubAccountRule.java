@@ -47,8 +47,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SubAccountRule.class);
 
-    public static final String CG_WORKGROUP_PARM_NAME = "SubAccount.CGWorkgroup";
-    public static final String CG_ALLOWED_SUBACCOUNT_TYPE_CODES = "SubAccount.ValidSubAccountTypeCodes";
+    
     public static final String CG_A21_TYPE_COST_SHARING = "CS";
     public static final String CG_A21_TYPE_ICR = "EX";
 
@@ -301,7 +300,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
         }
 
         // C&G A21 Type field must be in the allowed values
-        Parameter parmRule = configService.getParameter(KFSConstants.CHART_NAMESPACE, CG_ALLOWED_SUBACCOUNT_TYPE_CODES);
+        Parameter parmRule = configService.getParameter(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.SUB_ACCOUNT, KFSConstants.ChartApcParms.CG_ALLOWED_SUBACCOUNT_TYPE_CODES);
         if (configService.failsRule(parmRule,newSubAccount.getA21SubAccount().getSubAccountTypeCode())) {
             putFieldError("a21SubAccount.subAccountTypeCode", KFSKeyConstants.ERROR_DOCUMENT_SUBACCTMAINT_INVALI_SUBACCOUNT_TYPE_CODES, parmRule.getParameterValue());
             success &= false;
@@ -502,7 +501,7 @@ public class SubAccountRule extends MaintenanceDocumentRuleBase {
     protected boolean isCgAuthorized(UniversalUser user) {
 
         // attempt to get the group name that grants access to the CG fields
-        String allowedCgWorkgroup = configService.getParameterValue(KFSConstants.CHART_NAMESPACE, CG_WORKGROUP_PARM_NAME);
+        String allowedCgWorkgroup = configService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.SUB_ACCOUNT, KFSConstants.ChartApcParms.SUBACCOUNT_CG_WORKGROUP_PARM_NAME);
 
         if (user.isMember( allowedCgWorkgroup )) {
             LOG.info("User '" + user.getPersonUserIdentifier() + "' is a member of the group '" + allowedCgWorkgroup + "', which gives them access to the CG fields.");
