@@ -305,5 +305,7 @@
         </property>
     </bean>
      -->
+
+    <bean id="kualiInquirable" class="org.kuali.kfs.inquiry.KfsInquirableImpl" singleton="false" />
     
 </beans>
