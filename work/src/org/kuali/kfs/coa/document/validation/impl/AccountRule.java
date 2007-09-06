@@ -330,7 +330,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         // (e.g. the account number cannot begin with a 3 or with 00.)
         // Only bother trying if there is an account string to test
         if (!StringUtils.isBlank(newAccount.getAccountNumber())) {
-            String[] illegalValues = getConfigService().getParameterValues(KFSConstants.CHART_NAMESPACE, ACCT_PREFIX_RESTRICTION);
+            String[] illegalValues = getConfigService().getParameterValues(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT, ACCT_PREFIX_RESTRICTION);
             // test the number
             success &= accountNumberStartsWithAllowedPrefix(newAccount.getAccountNumber(), illegalValues);
         }
@@ -1010,9 +1010,9 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
         // Attempt to get the right SubFundGroup code to check the following logic with. If the value isn't available, go ahead
         // and die, as this indicates a misconfigured app, and important business rules wont be implemented without it.
-        String capitalSubFundGroup = getConfigService().getParameterValue(KFSConstants.CHART_NAMESPACE, ACCT_CAPITAL_SUBFUNDGROUP);
+        String capitalSubFundGroup = getConfigService().getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT, ACCT_CAPITAL_SUBFUNDGROUP);
 
-                if (capitalSubFundGroup.equalsIgnoreCase(subFundGroupCode.trim())) {
+        if (capitalSubFundGroup.equalsIgnoreCase(subFundGroupCode.trim())) {
 
             // if sub_fund_grp_cd is 'PFCMR' then campus_cd must be entered
             if (StringUtils.isBlank(campusCode)) {
