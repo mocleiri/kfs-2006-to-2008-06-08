@@ -26,6 +26,6 @@ public class InternalBillingDocumentRuleConstants {
     public static final String RESTRICTED_FUND_GROUP_CODES = "RestrictedFundGroupCodes";
     public static final String RESTRICTED_OBJECT_TYPE_CODES = "RestrictedObjectTypeCodes";
     public static final String RESTRICTED_OBJECT_SUB_TYPE_CODES = "RestrictedObjectSubTypeCodes";
-    public static final String CAPITAL_OBJECT_SUB_TYPE_CODES = "CapitalObjectSubTypeCodes";
+    public static final String CAPITAL_OBJECT_SUB_TYPE_CODES = "CAPITAL_OBJECT_SUB_TYPES";
     public static final String RESTRICTED_OBJECT_LEVEL_CODES = "RestrictedObjectLevelCodes";
 }
