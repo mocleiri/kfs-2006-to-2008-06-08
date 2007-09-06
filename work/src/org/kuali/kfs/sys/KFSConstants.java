@@ -205,6 +205,9 @@ public class KFSConstants {
         public final static String ADVANCE_DEPOSIT_DOC = "AdvanceDeposit";
         public final static String PRE_ENCUMBRANCE_DOC = "PreEncumbrance";
         public final static String PROCUREMENT_CARD_DOC = "ProcurementCard";
+        public final static String PROCUREMENT_CARD_AUTO_APPROVE_DOCUMENTS_STEP = "ProcurementCardAutoApproveDocumentsStep";
+        public final static String PROCUREMENT_CARD_CREATE_DOCUMENTS_STEP = "ProcurementCardCreateDocumentsStep";
+        public final static String PROCUREMENT_CARD_LOAD_STEP = "ProcurementCardLoadStep";
         public final static String INDIRECT_COST_ADJUSTMENT_DOC = "IndirectCostAdjustment";
         public final static String INTERNAL_BILLING_DOC = "InternalBilling";
         public final static String JOURNAL_VOUCHER_DOC = "JournalVoucher";
@@ -930,7 +933,7 @@ public class KFSConstants {
         public static final String DV_FOREIGNDRAFT_WORKGROUP = "FOREIGN_DRAFT_GROUP"; 
         public static final String DV_WIRETRANSFER_WORKGROUP = "WIRE_TRANSFER_GROUP"; 
         public static final String DV_TRAVEL_WORKGROUP = "TRAVEL_GROUP"; 
-        public static final String ACCOUNTING_LINE_IMPORT_HELP = "ACCOUNTING_LINE_IMPORT_HELP";
+        public static final String ACCOUNTING_LINE_IMPORT_HELP = "ACCOUNTING_LINE_IMPORT";
     }
     
 //    public static class ParameterGroups {
