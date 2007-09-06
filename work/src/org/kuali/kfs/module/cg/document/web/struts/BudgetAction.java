@@ -198,7 +198,7 @@ public class BudgetAction extends ResearchDocumentActionBase {
         BudgetForm budgetForm = (BudgetForm) form;
 
         // Set default task name
-        String DEFAULT_BUDGET_TASK_NAME = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "defaultBudgetTaskName");
+        String DEFAULT_BUDGET_TASK_NAME = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
         budgetForm.getNewTask().setBudgetTaskName(DEFAULT_BUDGET_TASK_NAME + " " + (budgetForm.getBudgetDocument().getTaskListSize() + 1));
         
 //      New task defaults to on campus
@@ -410,7 +410,7 @@ public class BudgetAction extends ResearchDocumentActionBase {
     
     protected static void setupBudgetCostSharePermissionDisplay(BudgetForm budgetForm) {
         String costSharePermissionCode = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(
-                KFSConstants.KRA_NAMESPACE, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
+                KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
         if (costSharePermissionCode.equals(KraConstants.COST_SHARE_PERMISSION_CODE_OPTIONAL)) {
             budgetForm.setDisplayCostSharePermission(true);
         }
