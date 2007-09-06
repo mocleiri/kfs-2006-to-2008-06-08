@@ -22,6 +22,7 @@ import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.KraKeyConstants;
 import org.kuali.module.kra.budget.bo.BudgetIndirectCost;
 import org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost;
@@ -66,7 +67,7 @@ public class BudgetIndirectCostRule {
 
     private boolean verifyManualIndirectCostRate(BudgetIndirectCost idc) {
         boolean valid = true;
-        KualiDecimal maxManualIdcRate = new KualiDecimal(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "BudgetIndirectCostMaxManualRate"));
+        KualiDecimal maxManualIdcRate = new KualiDecimal(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.INDIRECT_COST_MAX_MANUAL_RATE));
         int i = 0;
         for (BudgetTaskPeriodIndirectCost budgetTaskPeriodIndirectCost : idc.getBudgetTaskPeriodIndirectCostItems()) {
             if (budgetTaskPeriodIndirectCost.getBudgetManualIndirectCostRate().isGreaterThan(maxManualIdcRate)) {

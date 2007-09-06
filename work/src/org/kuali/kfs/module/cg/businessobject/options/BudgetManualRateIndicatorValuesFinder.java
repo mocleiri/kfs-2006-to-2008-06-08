@@ -36,8 +36,8 @@ public class BudgetManualRateIndicatorValuesFinder extends KeyValuesBase {
 
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
         
-        ret.add(new KeyLabelPair("N", kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.KRA_BUDGET_INDIRECT_COST_PROVIDED_SYSTEM)));
-        ret.add(new KeyLabelPair("Y", kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.KRA_BUDGET_INDIRECT_COST_PROVIDED_MANUALLY)));
+        ret.add(new KeyLabelPair("N", kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_INDIRECT_COST_PROVIDED_SYSTEM)));
+        ret.add(new KeyLabelPair("Y", kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_INDIRECT_COST_PROVIDED_MANUALLY)));
 
         return ret;
     }
