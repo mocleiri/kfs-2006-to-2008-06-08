@@ -25,6 +25,6 @@ public interface IndirectCostAdjustmentDocumentRuleConstants {
 
     public static final String RESTRICTED_SUB_TYPE_GROUP_CODES = "RestrictedSubTypeCodes";
     public static final String RESTRICTED_OBJECT_TYPE_CODES = "RestrictedObjectTypeCodes";
-    public static final String GRANT_OBJECT_CODE = "GrantObjectCode";
-    public static final String RECEIPT_OBJECT_CODE = "ReceiptObjectCode";
+    public static final String GRANT_OBJECT_CODE = "GRANT_OBJECT";
+    public static final String RECEIPT_OBJECT_CODE = "RECEIPT_OBJECT";
 }
