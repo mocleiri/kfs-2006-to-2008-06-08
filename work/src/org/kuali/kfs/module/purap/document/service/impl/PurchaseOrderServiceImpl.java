@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.RiceConstants;
 import org.kuali.core.bo.Note;
 import org.kuali.core.document.DocumentBase;
 import org.kuali.core.exceptions.UserNotFoundException;
@@ -217,7 +216,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 //        }
 //    }
     public void createAutomaticPurchaseOrderDocument(RequisitionDocument reqDocument) {
-        String newSessionUserId = RiceConstants.SYSTEM_USER;
+        String newSessionUserId = KFSConstants.SYSTEM_USER;
         try {
             PurapService.LogicToRunAsFakeUser logicToRun = new PurapService.LogicToRunAsFakeUser() {
                 public Object runLogic(Object[] objects) throws Exception {
