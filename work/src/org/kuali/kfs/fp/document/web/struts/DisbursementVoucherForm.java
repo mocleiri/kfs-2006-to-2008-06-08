@@ -137,7 +137,7 @@ public class DisbursementVoucherForm extends KualiAccountingDocumentFormBase {
      * @return
      */
     public String getTravelPerDiemLinkPageMessage() {
-        return SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DisbursementVoucherRuleConstants.TRAVEL_PER_DIEM_MESSAGE_PARM_NM);
+        return SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.TRAVEL_PER_DIEM_MESSAGE_PARM_NM);
     }
 
 }
