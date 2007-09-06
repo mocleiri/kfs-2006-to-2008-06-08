@@ -130,7 +130,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
         valid &= super.isObjectTypeAllowed(accountingLine);
 
         if (valid) {
-            Parameter rule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, RESTRICTED_OBJECT_TYPE_CODES);
+            Parameter rule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.CASH_RECEIPT_DOC, RESTRICTED_OBJECT_TYPE_CODES);
 
             ObjectCode objectCode = accountingLine.getObjectCode();
             if (ObjectUtils.isNull(objectCode)) {
@@ -161,7 +161,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
         valid &= super.isObjectConsolidationAllowed(accountingLine);
 
         if (valid) {
-            Parameter rule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, RESTRICTED_CONSOLIDATED_OBJECT_CODES);
+            Parameter rule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.CASH_RECEIPT_DOC, RESTRICTED_CONSOLIDATED_OBJECT_CODES);
 
             ObjectCode objectCode = accountingLine.getObjectCode();
             if (ObjectUtils.isNull(objectCode)) {
@@ -199,7 +199,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
         valid &= super.isObjectSubTypeAllowed(accountingLine);
 
         if (valid) {
-            Parameter rule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, RESTRICTED_OBJECT_SUB_TYPE_CODES);
+            Parameter rule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.CASH_RECEIPT_DOC, RESTRICTED_OBJECT_SUB_TYPE_CODES);
 
             ObjectCode objectCode = accountingLine.getObjectCode();
             if (ObjectUtils.isNull(objectCode)) {
