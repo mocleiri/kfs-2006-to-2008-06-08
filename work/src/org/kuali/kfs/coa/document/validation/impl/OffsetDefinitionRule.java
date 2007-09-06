@@ -28,8 +28,8 @@ public class OffsetDefinitionRule extends MaintenanceDocumentRuleBase {
     private OffsetDefinition oldDefinition;
     private OffsetDefinition newDefinition;
 
-    public static final String DOCTYPE_AND_OBJ_CODE_VAL = "OffsetDefinition.ARDocTypes";
-    public static final String DOCTYPE_AND_OBJ_CODE_ACTIVE = "OffsetDefinition.DocTypeActiveObjectCode";
+    
+    
 
     /**
      * 
@@ -79,7 +79,7 @@ public class OffsetDefinitionRule extends MaintenanceDocumentRuleBase {
 
     private boolean checkDocTypeAndFinancialObjCode(MaintenanceDocument document) {
         boolean success = true;
-        Parameter parmRule = getConfigService().getParameter(KFSConstants.CHART_NAMESPACE, DOCTYPE_AND_OBJ_CODE_VAL);
+        Parameter parmRule = getConfigService().getParameter(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.OFFSET_DEFINITION, KFSConstants.ChartApcParms.VALID_DOCUMENT_TYPES_BY_OBJECT_SUB_TYPE);
         // we need to check to see if the values are in the right range and then
         // see if the ObjectCode is the right value
         if (getConfigService().succeedsRule(parmRule,newDefinition.getFinancialDocumentTypeCode())) {
@@ -97,7 +97,7 @@ public class OffsetDefinitionRule extends MaintenanceDocumentRuleBase {
 
     private boolean checkDocTypeActiveFinancialObjCode(MaintenanceDocument document) {
         boolean success = true;
-        Parameter parmRule = getConfigService().getParameter(KFSConstants.CHART_NAMESPACE, DOCTYPE_AND_OBJ_CODE_ACTIVE);
+        Parameter parmRule = getConfigService().getParameter(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.OFFSET_DEFINITION, KFSConstants.ChartApcParms.DOCTYPE_AND_OBJ_CODE_ACTIVE);
         if (getConfigService().succeedsRule(parmRule, newDefinition.getFinancialDocumentTypeCode())) {
             if ((ObjectUtils.isNotNull(newDefinition.getFinancialObject()) && !newDefinition.getFinancialObject().isFinancialObjectActiveCode()) || ObjectUtils.isNull(newDefinition.getFinancialObject())) {
 
