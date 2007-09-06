@@ -973,9 +973,14 @@ public class KFSConstants extends JstlConstants {
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_EXPIRATION_AGE = "multipleValueLookupResultsExpirationAge";
       
         public static final String ACTIVE_INPUT_TYPES_PARAMETER_NAME = "ACTIVE_INPUT_TYPES";
-        public static final String PCDO_FILE_TYPE_WORKGROUP_PARAMAETER_NAME = PCDO_FILE_TYPE_INDENTIFIER + ".WORKGROUP";
-        public static final String COLLECTOR_FILE_TYPE_WORKGROUP_PARAMAETER_NAME = COLLECTOR_FILE_TYPE_INDENTIFIER + ".WORKGROUP";
-        public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_WORKGROUP_PARAMAETER_NAME = ENTERPRISE_FEEDER_FILE_SET_TYPE_INDENTIFIER + ".WORKGROUP";
+        public static final String PCDO_FILE_TYPE_PARAMETER_NAMESPACE = FINANCIAL_NAMESPACE;
+        public static final String PCDO_FILE_TYPE_PARAMETER_COMPONENT = "PcdoLoadStep";
+        public static final String FILE_TYPE_WORKGROUP_PARAMETER_NAME = "FILE_TYPE_GROUP";
+        public static final String FILE_SET_TYPE_WORKGROUP_PARAMETER_NAME = "FILE_SET_TYPE_GROUP";
+        public static final String COLLECTOR_FILE_TYPE_PARAMETER_NAMESPACE = GL_NAMESPACE;
+        public static final String COLLECTOR_FILE_TYPE_PARAMETER_COMPONENT = "CollectorStep";
+        public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_PARAMETER_NAMESPACE = GL_NAMESPACE;
+        public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_PARAMETER_COMPONENT = "EnterpriseFeedStep";
         
         public static final String COLLECTOR_VALIDATOR_EMAIL_SUBJECT_PARAMETER_NAME = "ValidationEmailSubjectLine";
         public static final String COLLECTOR_DEMERGER_EMAIL_SUBJECT_PARAMETER_NAME = "DemergerEmailSubjectLine";
