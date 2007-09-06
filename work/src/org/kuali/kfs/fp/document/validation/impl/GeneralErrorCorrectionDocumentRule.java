@@ -57,6 +57,16 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
     protected String getDefaultParameterNamespace() {
         return KFSConstants.FINANCIAL_NAMESPACE;
     }
+    
+    /**
+     * Convenience method for accessing the most-likely requested detail type code
+     * 
+     * @return String
+     */
+    protected String getDefaultParameterDetailTypeCode() {
+        return KFSConstants.Components.GENERAL_ERROR_CORRECTION_DOC;
+    }    
+    
 
     /**
      * Convenience method for accessing delimiter for the <code>TransactionLedgerEntryDescription</code> of a
@@ -221,7 +231,7 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
         if (valid) {
             ObjectCode objectCode = accountingLine.getObjectCode();
 
-            if (failsRule(NON_CHECK_DISBURSEMENT_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_TYPE_CODES, objectCode.getFinancialObjectTypeCode())) {
+            if (failsRule( RESTRICTED_OBJECT_TYPE_CODES, objectCode.getFinancialObjectTypeCode())) {
                 valid = false;
 
                 // add message
@@ -277,7 +287,7 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
         if (valid) {
             ObjectCode objectCode = accountingLine.getObjectCode();
 
-            if (failsRule( GENERAL_ERROR_CORRECTION_SECURITY_GROUPING+"."+RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode())) {
+            if (failsRule( RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode())) {
                 valid = false;
 
                 // add message
