@@ -321,8 +321,10 @@ public class BatchInputFileServiceImpl implements BatchInputFileService {
             throw new IllegalArgumentException("an invalid(null) argument was given");
         }
 
+        String workgroupParameterNamespace = batchInputFileType.getWorkgroupParameterNamespace();
+        String workgroupParameterComponent = batchInputFileType.getWorkgroupParameterComponent();
         String workgroupParameterName = batchInputFileType.getWorkgroupParameterName();
-        String authorizedWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.CORE_NAMESPACE, workgroupParameterName);
+        String authorizedWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(workgroupParameterNamespace, workgroupParameterComponent , workgroupParameterName);
  
         return user.isMember(authorizedWorkgroupName);
     }
