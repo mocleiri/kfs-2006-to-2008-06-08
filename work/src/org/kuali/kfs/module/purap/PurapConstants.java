@@ -15,25 +15,17 @@
  */
 package org.kuali.module.purap;
 
-import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.EnumerationUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.enums.EnumUtils;
-import org.kuali.RiceConstants;
 import org.kuali.core.JstlConstants;
-import org.kuali.core.document.DocumentBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.workflow.KualiWorkflowUtils;
 
 /**
  * Holds constants for PURAP.
@@ -41,11 +33,11 @@ import org.kuali.workflow.KualiWorkflowUtils;
 public class PurapConstants extends JstlConstants {
 
     // special user used in the special ap cancel action
-    public static final String SYSTEM_AP_USER = RiceConstants.SYSTEM_USER;
+    public static final String SYSTEM_AP_USER = KFSConstants.SYSTEM_USER;
     
     public static final KualiDecimal HUNDRED = new KualiDecimal(100);
     
-    public static final String PURAP_NAMESPACE = "KFS-PA";
+    public static final String PURAP_NAMESPACE = KFSConstants.PURAP_NAMESPACE;
     
     public static class Components {
         public static final String CREDIT_MEMO_DOC = "CreditMemo";
