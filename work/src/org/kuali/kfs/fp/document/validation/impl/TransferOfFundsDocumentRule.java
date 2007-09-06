@@ -140,7 +140,7 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
      * @return boolean
      */
     private boolean isFundGroupsBalanceValid(TransferOfFundsDocument tofDoc) {
-        String[] fundGroupCodes = getKualiConfigurationService().getParameterValues(KFSConstants.FINANCIAL_NAMESPACE, APPLICATION_PARAMETER.FUND_GROUP_BALANCING_SET);
+        String[] fundGroupCodes = getKualiConfigurationService().getParameterValues(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.TRANSFER_OF_FUNDS_DOC, APPLICATION_PARAMETER.FUND_GROUP_BALANCING_SET);
         return isFundGroupSetBalanceValid(tofDoc, fundGroupCodes);
     }
 
