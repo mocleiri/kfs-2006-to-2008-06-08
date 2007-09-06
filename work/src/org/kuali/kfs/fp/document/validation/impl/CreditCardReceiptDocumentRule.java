@@ -166,7 +166,7 @@ public class CreditCardReceiptDocumentRule extends CashReceiptFamilyRule impleme
     private BankAccount getOffsetBankAccount() {
         final String parameterNamespace = KFSConstants.FINANCIAL_NAMESPACE;
         final String parameter = CreditCardReceiptDocumentRuleConstants.CASH_OFFSET_BANK_ACCOUNT;
-        final String[] parameterValues = getKualiConfigurationService().getParameterValues(parameterNamespace, parameter);
+        final String[] parameterValues = getKualiConfigurationService().getParameterValues(parameterNamespace, KFSConstants.Components.CREDIT_CARD_RECEIPT_DOC, parameter);
         if (parameterValues.length != 2) {
             throw new RuntimeException( parameterNamespace+"/"+parameter+": invalid parameter format: must be 'bankCode;bankAccountNumber'");
         }
