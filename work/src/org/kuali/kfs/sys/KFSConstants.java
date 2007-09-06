@@ -143,6 +143,7 @@ public class KFSConstants {
         public final static String CHART = Chart.class.getSimpleName();
         public final static String COUNTRY = Country.class.getSimpleName();
         public final static String DOCUMENT_TYPE = DocumentType.class.getSimpleName();
+        public final static String DOCUMENT = "Document";
         public final static String FEDERAL_FUNCTION = FederalFunction.class.getSimpleName();
         public final static String FEDERAL_FUNDED_CODE = FederalFundedCode.class.getSimpleName();
         public final static String FINANCIAL_REPORTING_CODE = ReportingCodes.class.getSimpleName();
@@ -218,7 +219,6 @@ public class KFSConstants {
         public final static String GENERAL_ERROR_CORRECTION_DOC = "GeneralErrorCorrection";
         public final static String GENERAL_LEDGER_CORRECTION_PROCESS_DOC = "GeneralLedgerCorrectionProcess";        
         public final static String TRANSFER_OF_FUNDS_DOC = "TransferOfFunds";
-        public final static String BUDGET_ADJUSTMEN_DOC = "BudgetAdjustment";        
     }        
     
     public static final String PARAM_MAINTENANCE_VIEW_MODE = "maintenanceViewMode";
@@ -925,11 +925,11 @@ public class KFSConstants {
     public static class FinancialApcParms {
 //        public static final String GROUP_DV_DOCUMENT = "Kuali.FinancialTransactionProcessing.DisbursementVoucherDocument";        
         
-        public static final String DV_TAX_WORKGROUP = "Workgroup.Tax"; 
-        public static final String DV_ADMIN_WORKGROUP = "Workgroup.Admin"; 
-        public static final String DV_FOREIGNDRAFT_WORKGROUP = "Workgroup.ForeignDraft"; 
-        public static final String DV_WIRETRANSFER_WORKGROUP = "Workgroup.WireTransfer"; 
-        public static final String DV_TRAVEL_WORKGROUP = "Workgroup.Travel"; 
+        public static final String DV_TAX_WORKGROUP = "TAX_GROUP"; 
+        public static final String DV_ADMIN_WORKGROUP = "ADMIN_GROUP"; 
+        public static final String DV_FOREIGNDRAFT_WORKGROUP = "FOREIGN_DRAFT_GROUP"; 
+        public static final String DV_WIRETRANSFER_WORKGROUP = "WIRE_TRANSFER_GROUP"; 
+        public static final String DV_TRAVEL_WORKGROUP = "TRAVEL_GROUP"; 
         public static final String ACCOUNTING_LINE_IMPORT_HELP = "ACCOUNTING_LINE_IMPORT_HELP";
     }
     
