@@ -478,7 +478,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         List<PurchaseOrderItem> retransmitItems = new ArrayList<PurchaseOrderItem>();
         for (PurchaseOrderItem item : items) {
             if (item.isItemSelectedForRetransmitIndicator()) {
-                item.refreshNonUpdateableReferences();
                 retransmitItems.add(item);
             }
         }
@@ -575,14 +574,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             LOG.error(errorMsg);
             throw new RuntimeException(errorMsg);
         }
-        //TODO: Chris - RESEARCH: does this have any effect?  I think it may be lost before the po is brought up again.
-        sourceDocument.setSummaryAccountsWithItems(new HashMap());
-        sourceDocument.setSummaryAccountsWithItemsKey(new ArrayList());
-        sourceDocument.setSummaryAccountsWithItemsValue(new ArrayList());
 
         PurchaseOrderDocument newPurchaseOrderChangeDocument = (PurchaseOrderDocument)documentService.getNewDocument(docType);
-        //TODO: Chris - RESEARCH: does this have any effect?  I think it may be lost before the po is brought up again.
-        newPurchaseOrderChangeDocument.refreshAccountSummary();
         
 //        PurApObjectUtils.populateFromBaseWithSuper(sourceDocument, newPurchaseOrderChangeDocument);
         Set classesToExclude = new HashSet();
@@ -596,10 +589,10 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         newPurchaseOrderChangeDocument.getDocumentHeader().setFinancialDocumentDescription(sourceDocument.getDocumentHeader().getFinancialDocumentDescription());
         newPurchaseOrderChangeDocument.getDocumentHeader().setOrganizationDocumentNumber(sourceDocument.getDocumentHeader().getOrganizationDocumentNumber());
 
-        newPurchaseOrderChangeDocument.refreshNonUpdateableReferences();
         newPurchaseOrderChangeDocument.setPurchaseOrderCurrentIndicator(false);
         newPurchaseOrderChangeDocument.setPendingActionIndicator(false);
         
+        //TODO f2f: what is this doing?
         //Need to find a way to make the ManageableArrayList to expand and populating the items and
         //accounts, otherwise it will complain about the account on item 1 is missing. 
         for (PurchasingApItem item : (List<PurchasingApItem>)newPurchaseOrderChangeDocument.getItems()) {
@@ -608,6 +601,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             break;
         }
         
+        newPurchaseOrderChangeDocument.refreshNonUpdateableReferences();
         return newPurchaseOrderChangeDocument;
     }
     
@@ -764,9 +758,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         if (ObjectUtils.isNotNull(documentNumber)) {
             try {
                 PurchaseOrderDocument doc = (PurchaseOrderDocument)documentService.getByDocumentHeaderId(documentNumber);
-                if (ObjectUtils.isNotNull(doc)) {
-                    doc.refreshNonUpdateableReferences();
-                }
                 return doc;
             }
             catch (WorkflowException e) {
