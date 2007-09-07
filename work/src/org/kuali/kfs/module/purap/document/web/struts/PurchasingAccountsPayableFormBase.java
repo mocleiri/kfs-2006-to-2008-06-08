@@ -18,13 +18,16 @@ package org.kuali.module.purap.web.struts.form;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.bo.AccountingLine;
+import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
 import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
+import org.kuali.module.purap.service.PurapAccountingService;
+import org.kuali.module.purap.util.SummaryAccount;
 
 /**
  * 
@@ -32,6 +35,22 @@ import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
  */
 public class PurchasingAccountsPayableFormBase extends KualiAccountingDocumentFormBase {
 
+    private List<SummaryAccount> summaryAccounts;
+    
+    
+
+    public PurchasingAccountsPayableFormBase() {
+        super();
+        summaryAccounts = new TypedArrayList(SummaryAccount.class);
+    }
+
+    /**
+     * this method updates the summaryAccounts that are contained in the form
+     * currently we are only calling this on load and when refreshAccountSummary is called.
+     */
+    public void refreshAccountSummmary() {
+//        summaryAccounts.addAll(SpringContext.getBean(PurapAccountingService.class).generateSummaryAccounts(((PurchasingAccountsPayableDocument)this.getDocument()).getItems()));
+    }
 
     /**
      * @see org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase#getBaselineSourceAccountingLines()
