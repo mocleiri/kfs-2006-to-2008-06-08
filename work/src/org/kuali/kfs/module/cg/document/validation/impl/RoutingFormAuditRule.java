@@ -164,7 +164,7 @@ public class RoutingFormAuditRule {
      * @return
      */
     private static boolean processRoutingFormMainPagePersonnelUnitsAuditChecks(List<AuditError> auditErrors, RoutingFormDocument routingFormDocument) {
-        final String PERSON_ROLE_CODE_OTHER = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "KraRoutingFormPersonRoleCodeOther");
+        final String PERSON_ROLE_CODE_OTHER = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PERSON_ROLE_CODE_OTHER);
         
         boolean valid = true;
         int projectDirectorCount = 0;
@@ -253,14 +253,14 @@ public class RoutingFormAuditRule {
      */
     private static boolean processRoutingFormMainPageSubmissionDetailsAuditChecks(List<AuditError> auditErrors, RoutingFormDocument routingFormDocument) {
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        final String SUBMISSION_TYPE_CHANGE = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.SUBMISSION_TYPE_CHANGE);
-        final String PROJECT_TYPE_NEW = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "KraRoutingFormProjectTypeNew");
-        final String PROJECT_TYPE_TIME_EXTENTION = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "KraRoutingFormProjectTypeTimeExtention");
-        final String PROJECT_TYPE_BUDGET_REVISION_ACTIVE = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "KraRoutingFormProjectTypeBudgetRevisionActive");
-        final String PROJECT_TYPE_BUDGET_REVISION_PENDING = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "KraRoutingFormProjectTypeBudgetRevisionPending");
-        final String PROJECT_TYPE_OTHER = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.PROJECT_TYPE_OTHER);
-        final String PURPOSE_RESEARCH = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.PURPOSE_RESEARCH);
-        final String PURPOSE_OTHER = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.PURPOSE_OTHER);
+        final String SUBMISSION_TYPE_CHANGE = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.SUBMISSION_TYPE_CHANGE);
+        final String PROJECT_TYPE_NEW = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PROJECT_TYPE_NEW);
+        final String PROJECT_TYPE_TIME_EXTENTION = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PROJECT_TYPE_TIME_EXTENTION);
+        final String PROJECT_TYPE_BUDGET_REVISION_ACTIVE = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PROJECT_TYPE_BUDGET_REVISION_ACTIVE);
+        final String PROJECT_TYPE_BUDGET_REVISION_PENDING = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PROJECT_TYPE_BUDGET_REVISION_PENDING);
+        final String PROJECT_TYPE_OTHER = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PROJECT_TYPE_OTHER);
+        final String PURPOSE_RESEARCH = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PURPOSE_RESEARCH);
+        final String PURPOSE_OTHER = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PURPOSE_OTHER);
         
         boolean valid = true;
         
