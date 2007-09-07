@@ -30,6 +30,7 @@ import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.service.ChartUserService;
+import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 
 /**
@@ -765,14 +766,14 @@ public class RoutingFormPersonnel extends PersistableBusinessObjectBase {
 
     public boolean isProjectDirector() {
        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-       final String PERSON_ROLE_CODE_PD = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "KraRoutingFormPersonRoleCodeProjectDirector");
+       final String PERSON_ROLE_CODE_PD = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PERSON_ROLE_CODE_PROJECT_DIRECTOR);
         
        return PERSON_ROLE_CODE_PD.equals(this.getPersonRoleCode());
     }
     
     public boolean isContactPerson() {
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        final String PERSON_ROLE_CODE_CP = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "KraRoutingFormPersonRoleCodeContactPerson");
+        final String PERSON_ROLE_CODE_CP = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PERSON_ROLE_CODE_CONTACT_PERSON);
          
         return PERSON_ROLE_CODE_CP.equals(this.getPersonRoleCode());
      }

@@ -57,7 +57,7 @@ public class BudgetParametersRule {
         KualiConfigurationService kcs = SpringContext.getBean(KualiConfigurationService.class);
 
         MAXIMUM_PERIOD_LENGTH = kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, "maximumPeriodLength");
-        PERIOD_IDENTIFIER = kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, "periodIdentifier");
+        PERIOD_IDENTIFIER = kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, KraConstants.PERIOD_IDENTIFIER);
         NEW_PERIOD_IDENTIFIER = kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.NEW_PERIOD_IDENTIFIER);
         
         dataDictionaryService = SpringContext.getBean(DataDictionaryService.class);
@@ -111,7 +111,7 @@ public class BudgetParametersRule {
     protected boolean isInflationRatesValid(BudgetDocument budgetDocument) {
         boolean valid = true;
         KualiDecimal MAX_INFLATION_RATE = new KualiDecimal(
-                SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.BUDGET_MAX_INFLATION_RATE_PARAMETER_NAME));
+                SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.BUDGET_MAX_INFLATION_RATE_PARAMETER_NAME));
 
         if (budgetDocument.getBudget().getBudgetPersonnelInflationRate() != null && budgetDocument.getBudget().getBudgetPersonnelInflationRate().isGreaterThan(MAX_INFLATION_RATE)) {
             GlobalVariables.getErrorMap().putError("budget.budgetPersonnelInflationRate", KraKeyConstants.ERROR_INVALID_VALUE, new String[] { dataDictionaryService.getAttributeLabel(Budget.class, "budgetPersonnelInflationRate") });
@@ -216,9 +216,9 @@ public class BudgetParametersRule {
      */
     protected boolean isNumPeriodsValid(List periods, boolean modularBudget) {
         KualiConfigurationService configurationService = SpringContext.getBean(KualiConfigurationService.class);
-        String MINIMUM_NUMBER_OF_PERIODS = configurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "minimumNumberOfPeriods");
-        String MAXIMUM_NUMBER_OF_PERIODS = configurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "maximumNumberOfPeriods");
-        String MAXIMUM_NUMBER_MODULAR_PERIODS = configurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "maximumNumberModularPeriods");
+        String MINIMUM_NUMBER_OF_PERIODS = configurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.MINIMUM_NUMBER_OF_PERIODS);
+        String MAXIMUM_NUMBER_OF_PERIODS = configurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.MAXIMUM_NUMBER_OF_PERIODS);
+        String MAXIMUM_NUMBER_MODULAR_PERIODS = configurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.MAXIMUM_NUMBER_MODULAR_PERIODS);
 
         if (periods.size() > Integer.parseInt(MAXIMUM_NUMBER_OF_PERIODS)) {
             GlobalVariables.getErrorMap().putError("budget.period.tooMany", KraKeyConstants.ERROR_TOO_MANY, new String[] { Integer.toString(KraConstants.maximumNumberOfPeriods), "period" });

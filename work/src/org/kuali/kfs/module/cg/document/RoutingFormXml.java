@@ -180,7 +180,7 @@ public class RoutingFormXml {
         Element principlesElement = xmlDoc.createElement("PRINCIPLES");
         
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        final String PERSON_ROLE_CODE_COPD = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "KraRoutingFormPersonRoleCodeCoProjectDirector");
+        final String PERSON_ROLE_CODE_COPD = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PERSON_ROLE_CODE_CO_PROJECT_DIRECTOR);
         
         RoutingFormMainPageService routingFormMainPageService = SpringContext.getBean(RoutingFormMainPageService.class);
         List<RoutingFormPersonnel> routingFormPersonnel = routingFormDocument.getRoutingFormPersonnel();
