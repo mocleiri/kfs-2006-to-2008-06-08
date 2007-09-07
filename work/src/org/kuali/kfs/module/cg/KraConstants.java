@@ -76,29 +76,37 @@ public class KraConstants extends JstlConstants {
     public static final String BUDGET_TEMPLATE_HELP_PARAMETER_NAME = "budgetTemplateHelp";
     public static final String BUDGET_BASE_CODE_DEFAULT_VALUE_PARAMETER_NAME = "BASE_CODE_DEFAULT_VALUE";
     public static final String BUDGET_MANUAL_RATE_INDICATOR_DEFAULT_VALUE_PARAMETER_NAME = "MANUAL_RATE_INDICATOR_DEFAULT_VALUE";
-    public static final String BUDGET_PURPOSE_CODE_DEFAULT_VALUE_PARAMETER_NAME = "budgetPurposeCodeDefaultValue";
+    public static final String BUDGET_PURPOSE_CODE_DEFAULT_VALUE_PARAMETER_NAME = "PURPOSE_CODE_DEFAULT_VALUE";
     public static final String BUDGET_MAX_INFLATION_RATE_PARAMETER_NAME = "budgetMaxInflationRate";
-    public static final String PROJECT_DIRECTOR_BUDGET_PERMISSION = "projectDirectorBudgetPermission";
-    public static final String PROJECT_DIRECTOR_ORG_BUDGET_PERMISSION = "projectDirectorOrgBudgetPermission";
-    public static final String COST_SHARE_ORGS_BUDGET_PERMISSION = "costShareOrgsBudgetPermission";
+    public static final String PROJECT_DIRECTOR_BUDGET_PERMISSION = "PROJECT_DIRECTOR_PERMISSION";
+    public static final String PROJECT_DIRECTOR_ORG_BUDGET_PERMISSION = "PROJECT_DIRECTOR_ORG_PERMISSION";
+    public static final String COST_SHARE_ORGS_BUDGET_PERMISSION = "COST_SHARE_ORGS_BUDGET_PERMISSION";
     public static final String BUDGET_COST_SHARE_PERMISSION_CODE = "COST_SHARE_PERMISSION_CODE";
     public static final String DEFAULT_BUDGET_TASK_NAME = "DEFAULT_BUDGET_TASK_NAME";
     public static final String INDIRECT_COST_MAX_MANUAL_RATE = "INDIRECT_COST_MAX_MANUAL_RATE";
     
+    public static final String DEFAULT_APPOINTMENT_TYPE = "DEFAULT_APPOINTMENT_TYPE";
+    public static final String DEFAULT_PERSONNEL_INFLATION_RATE = "DEFAULT_PERSONNEL_INFLATION_RATE";
+    public static final String DEFAULT_NONPERSONNEL_INFLATION_RATE = "DEFAULT_NONPERSONNEL_INFLATION_RATE";
+    
+    public static final String FIRST25K_SUBCATEGORY_CODES = "FIRST25K_SUBCATEGORY_CODES";
+    
+    public static final String NEW_PERIOD_IDENTIFIER = "NEW_PERIOD_IDENTIFIER";
+    
     public static final String ALLOWED_EMPLOYEE_STATUS_RULE = "EMPLOYEE_STATUSES";
     
-    public static final String GRADUATE_ASSISTANT_NONPERSONNEL_DESCRIPTION = "graduateAssistantNonpersonnelDescription";
-    public static final String GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE = "graduateAssistantNonpersonnelSubCategoryCode";
-    public static final String GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE = "graduateAssistantNonpersonnelCategoryCode";
+    public static final String GRADUATE_ASSISTANT_NONPERSONNEL_DESCRIPTION = "GRADUATE_ASSISTANT_NONPERSONNEL_DESCRIPTION";
+    public static final String GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE = "GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE";
+    public static final String GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE = "GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE";
 
     public static final String KRA_BUDGET_INDIRECT_COST_PROVIDED_SYSTEM = "INDIRECT_COST_PROVIDED_SYSTEM";
     public static final String KRA_BUDGET_INDIRECT_COST_PROVIDED_MANUALLY = "INDIRECT_COST_PROVIDED_MANUALLY";
-    public static final String KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPES = "KraBudgetPersonnelSummerGridAppointmentTypes";
-    public static final String KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPE = "KraBudgetPersonnelSummerGridAppointmentType";
-    public static final String KRA_BUDGET_PERSONNEL_FULL_YEAR_APPOINTMENT_TYPES = "KraBudgetPersonnelFullYearAppointmentTypes";
-    public static final String KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES = "KraBudgetPersonnelGraduateResearchAssistantAppointmentTypes";
-    public static final String KRA_BUDGET_PERSONNEL_HOURLY_APPOINTMENT_TYPES = "KraBudgetPersonnelHourlyAppointmentTypes";
-    public static final String KRA_BUDGET_PERSONNEL_ACADEMIC_YEAR_APPOINTMENT_TYPE = "KraBudgetPersonnelAcademicYearAppointmentType";
+    public static final String KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPES = "PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPES";
+    public static final String KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPE = "PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPE";
+    public static final String KRA_BUDGET_PERSONNEL_FULL_YEAR_APPOINTMENT_TYPES = "PERSONNEL_FULL_YEAR_APPOINTMENT_TYPES";
+    public static final String KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES = "PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES";
+    public static final String KRA_BUDGET_PERSONNEL_HOURLY_APPOINTMENT_TYPES = "PERSONNEL_HOURLY_APPOINTMENT_TYPES";
+    public static final String KRA_BUDGET_PERSONNEL_ACADEMIC_YEAR_APPOINTMENT_TYPE = "PERSONNEL_ACADEMIC_YEAR_APPOINTMENT_TYPE";
     public static final String GRADUATE_ASSISTANT = "gradResAssistant";
     public static final String HOURLY = "hourly";
     public static final String ACADEMIC_YEAR_SUMMER = "academicYearSummer";
@@ -112,7 +120,7 @@ public class KraConstants extends JstlConstants {
     
     public static final String TO_BE_NAMED_LABEL = "toBeNamedLabel";
     
-    public static final String KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS = "KraBudgetNumberOfAcademicYearSubdivisions";
+    public static final String KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS = "NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS";
     public static final String KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES = "ACADEMIC_YEAR_SUBDIVISION_NAMES";
     
     public static final String ROUTING_FORM_COST_SHARE_PERMISSION_CODE = "routingFormCostShareRoutingCode";
