@@ -42,7 +42,7 @@
         <description>
         	Benefit Expense Transfer Document
         </description>
-        <help parameterNamespace="KFS-FP" parameterName="FINANCIAL_HELP_TRANSFER_OF_FUNDS_DOCUMENT" />
+        
         <allowsCopy>true</allowsCopy>
         <allowsErrorCorrection>true</allowsErrorCorrection>
     </transactionalDocument>
