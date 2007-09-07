@@ -67,7 +67,6 @@ public class RequisitionServiceImpl implements RequisitionService {
     public void saveDocumentWithoutValidation(RequisitionDocument document) {
         try {
             documentService.saveDocument(document, DocumentSystemSaveEvent.class);
-//          documentService.saveDocumentWithoutRunningValidation(document);
         }
         catch (WorkflowException we) {
             String errorMsg = "Error saving document # " + document.getDocumentHeader().getDocumentNumber() + " " + we.getMessage(); 
@@ -81,9 +80,6 @@ public class RequisitionServiceImpl implements RequisitionService {
         if (ObjectUtils.isNotNull(documentNumber)) {
             try {
                 RequisitionDocument doc = (RequisitionDocument)documentService.getByDocumentHeaderId(documentNumber);
-                if (ObjectUtils.isNotNull(doc)) {
-                    doc.refreshNonUpdateableReferences();
-                }
                 return doc;
             }
             catch (WorkflowException e) {

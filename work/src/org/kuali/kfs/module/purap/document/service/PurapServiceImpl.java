@@ -47,7 +47,6 @@ import org.kuali.module.purap.document.CreditMemoDocument;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
-import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.vendor.service.VendorService;
@@ -60,7 +59,6 @@ public class PurapServiceImpl implements PurapService {
     private BusinessObjectService businessObjectService;
     private DateTimeService dateTimeService;
     private KualiConfigurationService kualiConfigurationService;
-    private PurapAccountingService purapAccountingService;
     private UniversityDateService universityDateService;
     
     public void setBusinessObjectService(BusinessObjectService boService) {
@@ -73,10 +71,6 @@ public class PurapServiceImpl implements PurapService {
 
     public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
         this.kualiConfigurationService = kualiConfigurationService;    
-    }
-    
-    public void setPurapAccountingService(PurapAccountingService purapAccountingService) {
-        this.purapAccountingService = purapAccountingService;
     }
     
     public void setUniversityDateService(UniversityDateService universityDateService) {
@@ -180,7 +174,6 @@ public class PurapServiceImpl implements PurapService {
                     }
                     PurchasingApItem newItem = (PurchasingApItem)itemClass.newInstance();                    
                     newItem.setItemTypeCode(itemTypes[i]);
-                    newItem.refreshNonUpdateableReferences();
                     existingItems.add(lastFound, newItem);
                     existingItemTypes.add(itemTypes[i]);
                 }
@@ -226,10 +219,6 @@ public class PurapServiceImpl implements PurapService {
             }
         }
         return belowTheLineItem;
-    }
-
-    public Map<SourceAccountingLine, List<PurchasingApItem>> generateSummaryWithItems(List<PurchasingApItem> items) {
-        return purapAccountingService.generateSummaryWithItems(items);
     }
     
     /**
