@@ -24,7 +24,7 @@
     <c:set var="displayInitTab" value="${KualiForm.editingMode['displayInitTab']}" scope="request" />
     
     <!-- setting the variable to force the Posting Year in doucment overview tag to be read only -->
-    <c:set var="aPDocument" value="true" scope="request" /> 
+    <c:set var="fiscalYearReadOnly" value="true" scope="request" /> 
 
     <kul:hiddenDocumentFields excludePostingYear="true" />
 	
@@ -48,12 +48,12 @@
 		  <h3>This Credit Memo has been Held by <c:out value="${KualiForm.document.lastActionPerformedByPersonName}"/></h3>		
 	    </c:if>
 	    
-		<kul:documentOverview editingMode="${KualiForm.editingMode}" includePostingYear="true" postingYearAttributes="${DataDictionary.CreditMemoDocument.attributes}" />
+		<purap:documentOverview editingMode="${KualiForm.editingMode}" includePostingYear="true" postingYearAttributes="${DataDictionary.CreditMemoDocument.attributes}" />
 	        
 		<purap:vendor documentAttributes="${DataDictionary.CreditMemoDocument.attributes}" displayPurchaseOrderFields="false" displayCreditMemoFields="true"/>
 	
 		<purap:creditMemoInfo documentAttributes="${DataDictionary.CreditMemoDocument.attributes}" />        
-	   
+
 	  	<purap:paymentRequestProcessItems 
 			documentAttributes="${DataDictionary.CreditMemoDocument.attributes}"
 			itemAttributes="${DataDictionary.CreditMemoItem.attributes}"
@@ -65,8 +65,10 @@
 	
 	    <kul:routeLog />
 	
+	    <gl:generalLedgerPendingEntries />
+
     <!-- TEMPORARILY DISABLING ACCOUNT SUMMARY FUNCTIONALITY -->
-	    <!--  purap:accountsummary
+	    <!--  purap:summaryaccounts
             itemAttributes="${DataDictionary.CreditMemoItem.attributes}"
     	    documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" / -->  
     	    	
@@ -74,6 +76,14 @@
            	
 	    <purap:paymentHistory documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
         
+
+	    <purap:statushistory 
+	        documentAttributes="${DataDictionary.CreditMemoStatusHistory.attributes}">
+	          <html:messages id="warnings" property="statusHistoryWarning" message="true">
+	            &nbsp;&nbsp;&nbsp;<bean:write name="warnings"/><br><br>
+	          </html:messages>       
+	    </purap:statushistory>
+	
         <kul:panelFooter />
 	</c:if>
 	
