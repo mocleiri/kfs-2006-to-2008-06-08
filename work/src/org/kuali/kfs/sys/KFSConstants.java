@@ -55,6 +55,7 @@ import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.OrgType;
 import org.kuali.module.chart.bo.OrganizationReversion;
+import org.kuali.module.chart.bo.OrganizationReversionCategory;
 import org.kuali.module.chart.bo.Program;
 import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.ReportingCodes;
@@ -174,6 +175,7 @@ public class KFSConstants extends JstlConstants {
         public final static String SUB_ACCOUNT = SubAccount.class.getSimpleName();
         public final static String CHART_USER = ChartUser.class.getSimpleName();
         public final static String ORGANIZATION_REVERSION = OrganizationReversion.class.getSimpleName();
+        public final static String ORGANIZATION_REVERSION_CATEGORY = OrganizationReversionCategory.class.getSimpleName();
         public final static String OPTIONS = Options.class.getSimpleName();
         
         //FINANCIAL RELATED COMPONENTS
@@ -406,12 +408,15 @@ public class KFSConstants extends JstlConstants {
      */
     public static final String CHECKBOX_PRESENT_ON_FORM_ANNOTATION = "{CheckboxPresentOnFormAnnotation}";
 
-    public static final String ORG_REVERSION = "OrgReversion";
-    public static final String EXPENSE_FLAG = "_Expense_Flag";
-    public static final String CONSOLIDATION = "_Consolidation";
-    public static final String LEVEL = "_Level";
-    public static final String OBJECT_TYPE = "_ObjectType";
-    public static final String OBJECT_SUB_TYPE = "_ObjectSubType";
+    public static class OrgReversion {
+        public static final String VALID_PREFIX = "EXTENDED_DEFINITIONS-VALID_";
+        public static final String INVALID_PREFIX = "EXTENDED_DEFINITIONS-INVALID_";
+        public static final String OBJECT_CONSOL_PARAM_SUFFIX = "OBJECT_CONSOLIDATIONS_BY_ORGANIZATION_REVERSION_CATEGORY";
+        public static final String OBJECT_LEVEL_PARAM_SUFFIX = "OBJECT_LEVELS_BY_ORGANIZATION_REVERSION_CATEGORY";
+        public static final String OBJECT_TYPE_PARAM_SUFFIX = "OBJECT_TYPES_BY_ORGANIZATION_REVERSION_CATEGORY";
+        public static final String OBJECT_SUB_TYPE_PARAM_SUFFIX = "OBJECT_SUB_TYPES_BY_ORGANIZATION_REVERSION_CATEGORY";
+        public static final String IS_EXPENSE_PARAM = "ORGANIZATION_REVERSION_CATEGORY_IS_EXPENSE";
+    }
 
     // Script for the GL batch process
     public static final String GENERAL_LEDGER_YEAR_END_SCRIPT = "fis_gl_year_end.sh";
