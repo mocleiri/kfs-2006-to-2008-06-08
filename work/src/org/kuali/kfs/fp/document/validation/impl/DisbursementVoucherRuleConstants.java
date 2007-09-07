@@ -47,7 +47,6 @@ public interface DisbursementVoucherRuleConstants {
 
     // system parameter security group constants
     public static String DV_PDP_EXTRACT_GROUP_NM = "DVPDPExtract";
-    public static String DV_PAYMENT_REASON_CAMPUS_OVERRIDE = "DVPaymentReasonCampusOverride";
     public static String GLOBAL_FIELD_RESTRICTIONS_GROUP_NM = "DVGlobalFieldRestrictions";
     public static String PAYMENT_OBJECT_LEVEL_GROUP_NM = "DVPaymentObjectLevelRestrictions";
     public static String PAYMENT_OBJECT_CODE_GROUP_NM = "DVPaymentObjectCodeRestrictions";
@@ -89,39 +88,40 @@ public interface DisbursementVoucherRuleConstants {
     }
 
     // system parameter parameter constants
-    public static String OBJECT_CODE_PARM_PREFIX = "OBJECT_CODE_";
-    public static String OBJECT_LEVEL_PARM_PREFIX = "OBJECT_LEVEL_";
-    public static String PAYMENT_PARM_PREFIX = "PAYMENT_REASON_";
-    public static String OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_TYPES";
-    public static String OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_LEVELS";
-    public static String OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_SUB_TYPES";
-    public static String SUB_FUND_GLOBAL_RESTRICTION_PARM_NM = "SUB_FUND_GROUPS";
-    public static String FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM = "FUNCTION_CODE_RESTRICTIONS";
-    public static String EMPLOYEE_PAYEE_PAYMENT_PARM = "PAYEE_TYPE_E";
-    public static String DVPAYEE_PAYEE_PAYMENT_PARM = "PAYEE_TYPE_P";
-    public static String VENDOR_PAYEE_PAYMENT_PARM = "PAYEE_TYPE_V";
-    public static String FEDERAL_TAX_ACCOUNT_PARM_NM = "FEDERAL_TAX_ACCOUNT";
-    public static String STATE_TAX_ACCOUNT_PARM_NM = "STATE_TAX_ACCOUNT";
-    public static String FEDERAL_TAX_CHART_PARM_NM = "FEDERAL_TAX_CHART";
-    public static String STATE_TAX_CHART_PARM_NM = "STATE_TAX_CHART";
-    public static String FEDERAL_OBJECT_CODE_PARM_PREFIX = "FEDERAL_OBJECT_CODE_";
-    public static String STATE_OBJECT_CODE_PARM_PREFIX = "STATE_OBJECT_CODE_";
-    public static String ALIEN_INDICATOR_CHECKED_PARM_NM = "HIGHER_ED_FUNCTIONS";
-    public static String CAMPUS_CODE_PARM_PREFIX = "CAMPUS_CODE_";
-    public static String SUB_FUND_CODE_PARM_PREFIX = "SUB_FUND_";
-    public static String TRAVEL_PER_DIEM_MESSAGE_PARM_NM = "TRAVEL_PER_DIEM_LINK_PAGE_MESSAGE";
-    public static String DEFAULT_DOC_LOCATION_PARM_NM = "DEFAULT_DOCUMENTATION_LOCATION";
-    public static String ALLOW_OBJECT_CODE_EDITS = "ALLOW_ROUTE_OBJECT_CODE_EDITS";
-    public static String TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM = "TAX_DOCUMENTATION_LOCATION_CODE";
-    public static String W9_OWNERSHIP_TYPES_PARM_NM = "W9_OWNERSHIP_TYPES";
-    public static String NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM = "NONEMPLOYEE_TRAVEL_PAYMENT_REASONS";
-    public static String NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM = "NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_IND";
-    public static String PREPAID_TRAVEL_PAY_REASONS_PARM_NM = "PREPAID_TRAVEL_PAYMENT_REASONS";
-    public static String REVOLVING_FUND_PAY_REASONS_PARM_NM = "REVOLVING_FUND_PAYMENT_REASONS";
-    public static String RESEARCH_PAY_REASONS_PARM_NM = "RESEARCH_PAYMENT_REASONS";
-    public static String RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM = "RESEARCH_NON_VENDOR_PAY_LIMIT_AMOUNT";
-    public static String PERFORM_PREPAID_EMPL_PARM_NM = "CHECK_PREPAID_ACTIVE_EMPLOYEE_IND";
-    public static String MOVING_PAY_REASONS_PARM_NM = "MOVING_PAYMENT_REASONS";
+    public static final String OBJECT_CODE_PARM_PREFIX = "OBJECT_CODE_";
+    public static final String OBJECT_LEVEL_PARM_PREFIX = "OBJECT_LEVEL_";
+    public static final String PAYMENT_PARM_PREFIX = "PAYMENT_REASON_";
+    public static final String OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_TYPES";
+    public static final String OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_LEVELS";
+    public static final String OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_SUB_TYPES";
+    public static final String SUB_FUND_GLOBAL_RESTRICTION_PARM_NM = "SUB_FUND_GROUPS";
+    public static final String FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM = "FUNCTION_CODE_RESTRICTIONS";
+    public static final String EMPLOYEE_PAYEE_PAYMENT_PARM = "PAYEE_TYPE_E";
+    public static final String DVPAYEE_PAYEE_PAYMENT_PARM = "PAYEE_TYPE_P";
+    public static final String VENDOR_PAYEE_PAYMENT_PARM = "PAYEE_TYPE_V";
+    public static final String FEDERAL_TAX_PARM_PREFIX = "NRA_TAX_FEDERAL-";
+    public static final String STATE_TAX_PARM_PREFIX = "NRA_TAX_STATE-";
+    public static final String TAX_PARM_ACCOUNT_SUFFIX = "ACCOUNT";
+    public static final String TAX_PARM_CHART_SUFFIX = "CHART";
+    public static final String TAX_PARM_OBJECT_BY_INCOME_CLASS_SUFFIX = "OBJECT_BY_INCOME_CLASS";
+    public static final String FEDERAL_OBJECT_CODE_PARM_PREFIX = "FEDERAL_OBJECT_CODE_";
+    public static final String STATE_OBJECT_CODE_PARM_PREFIX = "STATE_OBJECT_CODE_";
+    public static final String ALIEN_INDICATOR_CHECKED_PARM_NM = "HIGHER_ED_FUNCTIONS";
+    public static final String CAMPUS_CODE_PARM_PREFIX = "CAMPUS_CODE_";
+    public static final String SUB_FUND_CODE_PARM_PREFIX = "SUB_FUND_";
+    public static final String TRAVEL_PER_DIEM_MESSAGE_PARM_NM = "TRAVEL_PER_DIEM_LINK_PAGE_MESSAGE";
+    public static final String DEFAULT_DOC_LOCATION_PARM_NM = "DEFAULT_DOCUMENTATION_LOCATION";
+    public static final String ALLOW_OBJECT_CODE_EDITS = "ALLOW_ROUTE_OBJECT_CODE_EDITS";
+    public static final String TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM = "TAX_DOCUMENTATION_LOCATION_CODE";
+    public static final String W9_OWNERSHIP_TYPES_PARM_NM = "W9_OWNERSHIP_TYPES";
+    public static final String NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM = "NONEMPLOYEE_TRAVEL_PAYMENT_REASONS";
+    public static final String NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM = "NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_IND";
+    public static final String PREPAID_TRAVEL_PAY_REASONS_PARM_NM = "PREPAID_TRAVEL_PAYMENT_REASONS";
+    public static final String REVOLVING_FUND_PAY_REASONS_PARM_NM = "REVOLVING_FUND_PAYMENT_REASONS";
+    public static final String RESEARCH_PAY_REASONS_PARM_NM = "RESEARCH_PAYMENT_REASONS";
+    public static final String RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM = "RESEARCH_NON_VENDOR_PAY_LIMIT_AMOUNT";
+    public static final String PERFORM_PREPAID_EMPL_PARM_NM = "CHECK_PREPAID_ACTIVE_EMPLOYEE_IND";
+    public static final String MOVING_PAY_REASONS_PARM_NM = "MOVING_PAYMENT_REASONS";
 
     public static String TAX_TYPE_SSN = "1";
     public static String TAX_TYPE_FEIN = "0";
