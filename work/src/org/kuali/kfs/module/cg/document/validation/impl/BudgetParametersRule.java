@@ -58,7 +58,7 @@ public class BudgetParametersRule {
 
         MAXIMUM_PERIOD_LENGTH = kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, "maximumPeriodLength");
         PERIOD_IDENTIFIER = kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, "periodIdentifier");
-        NEW_PERIOD_IDENTIFIER = kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, "newPeriodIdentifier");
+        NEW_PERIOD_IDENTIFIER = kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.NEW_PERIOD_IDENTIFIER);
         
         dataDictionaryService = SpringContext.getBean(DataDictionaryService.class);
         businessObjectService = SpringContext.getBean(BusinessObjectService.class);
@@ -412,7 +412,7 @@ public class BudgetParametersRule {
     protected boolean isGraduateAssistantRateListValid(BudgetDocument budgetDocument) {
         KualiConfigurationService kcs = SpringContext.getBean(KualiConfigurationService.class);
         List graduateAssistantRateList = budgetDocument.getBudget().getGraduateAssistantRates();
-        int numberOfAcademicYearSubdivisions = Integer.parseInt(kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, "KraBudgetNumberOfAcademicYearSubdivisions"));
+        int numberOfAcademicYearSubdivisions = Integer.parseInt(kcs.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS));
         String[] academicYearSubdivisionNames = null;
         boolean rateChanged = false;
         boolean valid = true;
