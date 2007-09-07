@@ -55,12 +55,12 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
 
     public static final String DV_COVERSHEET_TEMPLATE_NM = "disbursementVoucherCoverSheetTemplate.pdf";
 
-    public static String DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM = "DV_COVER_SHEET_TEMPLATE_LINES";
-    public static String DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM = "DV_COVER_SHEET_TEMPLATE_RLINES";
-    public static String DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM = "DV_COVER_SHEET_TEMPLATE_ALIEN";
-    public static String DV_COVER_SHEET_TEMPLATE_ATTACHMENT_PARM_NM = "DV_COVER_SHEET_TEMPLATE_ATTACHMENT";
-    public static String DV_COVER_SHEET_TEMPLATE_HANDLING_PARM_NM = "DV_COVER_SHEET_TEMPLATE_HANDLING";
-    public static String DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM = "DV_COVER_SHEET_TEMPLATE_BAR";
+    public static final String DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM = "COVER_SHEET_TEMPLATE-LINES";
+    public static final String DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM = "COVER_SHEET_TEMPLATE-RLINES";
+    public static final String DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM = "COVER_SHEET_TEMPLATE-ALIEN";
+    public static final String DV_COVER_SHEET_TEMPLATE_ATTACHMENT_PARM_NM = "COVER_SHEET_TEMPLATE-ATTACHMENT";
+    public static final String DV_COVER_SHEET_TEMPLATE_HANDLING_PARM_NM = "COVER_SHEET_TEMPLATE-HANDLING";
+    public static final String DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM = "COVER_SHEET_TEMPLATE_-AR";
 
     private KualiConfigurationService kualiConfigurationService;
     private BusinessObjectService businessObjectService;
@@ -94,25 +94,25 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
 
             // retrieve attachment label
             if (document.isDisbVchrAttachmentCode()) {
-                attachment = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_ATTACHMENT_PARM_NM);
+                attachment = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DV_COVER_SHEET_TEMPLATE_ATTACHMENT_PARM_NM);
             }
             // retrieve handling label
             if (document.isDisbVchrSpecialHandlingCode()) {
-                handling = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_HANDLING_PARM_NM);
+                handling = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DV_COVER_SHEET_TEMPLATE_HANDLING_PARM_NM);
             }
             // retrieve data for alien payment code
             if (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
                 String taxDocumentationLocationCode = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM);
 
                 address = retrieveAddress(taxDocumentationLocationCode);
-                alien = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM);
-                lines = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM);
+                alien = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM);
+                lines = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM);
             }
             // retrieve data for travel payment reasons
             Set<String> travelNonEmplPaymentReasonCodes = kualiConfigurationService.getParameterValuesAsSet(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
             if (travelNonEmplPaymentReasonCodes.contains(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
-                bar = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM);
-                rlines = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM);
+                bar = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM);
+                rlines = kualiConfigurationService.getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM);
             }
 
             try {
