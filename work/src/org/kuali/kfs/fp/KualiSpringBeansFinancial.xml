@@ -234,7 +234,7 @@
         <property name="namespace" value="KFS-FP" />
     </bean>
 
-	<bean id="dvToPdpExtractStep" class="org.kuali.module.financial.batch.DvToPdpExtractStep" parent="financialStep">
+	<bean id="disbursementVoucherPreDisbursementProcessorExtractStep" class="org.kuali.module.financial.batch.DvToPdpExtractStep" parent="financialStep">
 		<property name="disbursementVoucherExtractService">
 			<ref bean="disbursementVoucherExtractService" />
 		</property>
