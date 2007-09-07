@@ -121,7 +121,7 @@ public class BudgetAuditRule {
 
     private boolean runNonpersonnelAuditErrors(List<BudgetNonpersonnel> nonpersonnelItems) {
         List<AuditError> nonpersonnelAuditErrors = new ArrayList<AuditError>();
-        List<String> first25kSubcategoryCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsList(KFSConstants.KRA_NAMESPACE, "first25kSubcategoryCodes");
+        List<String> first25kSubcategoryCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsList(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, KraConstants.FIRST25K_SUBCATEGORY_CODES);
         
         HashMap<String, BudgetNonpersonnel> hashMap = new HashMap();
         
