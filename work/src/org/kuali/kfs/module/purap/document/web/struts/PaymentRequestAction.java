@@ -96,14 +96,8 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
 
         // If we are here either there was no duplicate or there was a duplicate and the user hits continue, in either case we need
         // to validate the business rules
-        /// paymentRequestDocument.getDocumentHeader().setFinancialDocumentDescription("dummy data to pass the business rule");
-        boolean rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(new ContinueAccountsPayableEvent(paymentRequestDocument));
-
-        if (rulePassed) {
-            SpringContext.getBean(PaymentRequestService.class).populateAndSavePaymentRequest(paymentRequestDocument);
-        }
-
-        paymentRequestDocument.refreshNonUpdateableReferences();
+        SpringContext.getBean(PaymentRequestService.class).populateAndSavePaymentRequest(paymentRequestDocument);
+        
         //force calculation
         preqForm.setCalculated(false);
 
@@ -145,29 +139,6 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
         return forward;
     }
 
-
-    /**
-     * The execute method is being overriden to reevaluate on each call 
-     * which extra buttons to display.
-     * 
-     * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        ActionForward action = super.execute(mapping, form, request, response);
-
-        //generate the extra buttons
-        PaymentRequestForm preqForm = (PaymentRequestForm) form;
-        PaymentRequestDocument preq = preqForm.getPaymentRequestDocument();
-
-        //We have to do this because otherwise the paymentrequest on the item is null
-        //once we get the constraints removed to allow saving on continue
-        //see KULPURAP-825 for some related comments
-        preq.fixPreqItemReference();
-
-        return action;
-    }
 
     /**
      * This action puts a payment on hold, prompting for a reason before hand.
@@ -325,8 +296,8 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
         SpringContext.getBean(KualiRuleService.class).applyRules(new CalculateAccountsPayableEvent(preqDoc));
 
         SpringContext.getBean(PaymentRequestService.class).calculatePaymentRequest(preqDoc, true);
-        // TODO Chris - an updateAccountAmounts is done at the end of the above method... need it here?
-        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(apDoc);
+        // TODO Chris - an updateAccountAmounts is done at the end of the above method... need it here? (I don't think so)
+//        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(apDoc);
     }
 
 
