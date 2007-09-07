@@ -55,62 +55,62 @@
         	<headerNavigationTab>
         		<navigateTo>parameters</navigateTo>
         		<displayName>Parameters</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetParametersHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="PARAMETERS"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>overview</navigateTo>
         		<displayName>Overview</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetOverviewHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="OVERVIEW"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>personnel</navigateTo>
         		<displayName>Personnel</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetPersonnelHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="PERSONNEL"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>nonpersonnel</navigateTo>
         		<displayName>Nonpersonnel</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetNonpersonnelHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="NONPERSONNEL"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>costshare</navigateTo>
         		<displayName>Cost Share</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetCostShareHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="COST_SHARE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>modular</navigateTo>
         		<displayName>Modular</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetModularHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="MODULAR"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>indirectcost</navigateTo>
         		<displayName>Indirect Cost</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetIndirectCostHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="INDIRECT_COST"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>permissions</navigateTo>
         		<displayName>Permissions</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetPermissionsHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="PERMISSIONS"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>output</navigateTo>
         		<displayName>Output</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetOutputHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="OUTPUT"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>template</navigateTo>
         		<displayName>Template</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetTemplateHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="TEMPLATE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>auditmode</navigateTo>
         		<displayName>Audit Mode</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetAuditModeHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="AUDIT_MODE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>notes</navigateTo>
         		<displayName>Notes</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterName="budgetNotesHelp"/>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="NOTES"/>
         	</headerNavigationTab>
         </headerNavigation>
         
