@@ -320,10 +320,10 @@ public class RoutingFormDocumentRule extends ResearchDocumentRuleBase {
         ErrorMap errorMap = GlobalVariables.getErrorMap();
         
         String humanSubjectsActiveCode = 
-            SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.RESEARCH_RISKS_HUMAN_SUBJECTS_ACTIVE_CODE);
+            SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, KraConstants.RESEARCH_RISKS_HUMAN_SUBJECTS_ACTIVE_CODE);
         
         String animalsActiveCode = 
-            SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.RESEARCH_RISKS_ANIMALS_ACTIVE_CODE);
+            SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, KraConstants.RESEARCH_RISKS_ANIMALS_ACTIVE_CODE);
         
         // Setup dates.
         Date createDate = routingFormDocument.getRoutingFormCreateDate();
