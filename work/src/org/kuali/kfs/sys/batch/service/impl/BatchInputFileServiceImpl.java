@@ -250,16 +250,9 @@ public class BatchInputFileServiceImpl implements BatchInputFileService {
             throw new AuthorizationException(user.getPersonUserIdentifier(), "delete", batchInputFileType.getFileTypeIdentifer());
         }
 
-        File fileToDelete = new File(deleteFileName);
-        if (fileToDelete.exists()) {
+        File fileToDelete = retrieveFileToDownloadOrDelete(batchInputFileType, user, deleteFileName);
+        if (fileToDelete != null) {
             fileToDelete.delete();
-
-            // check for associated .done file and remove as well
-            String doneFileName = StringUtils.substringBeforeLast(fileToDelete.getPath(), ".") + ".done";
-            File doneFile = new File(doneFileName);
-            if (doneFile.exists()) {
-                doneFile.delete();
-            }
         }
         else {
             LOG.error("unable to delete file " + deleteFileName + " because it doesn not exist.");
@@ -283,8 +276,8 @@ public class BatchInputFileServiceImpl implements BatchInputFileService {
             throw new AuthorizationException(user.getPersonUserIdentifier(), "download", batchInputFileType.getFileTypeIdentifer());
         }
 
-        File fileToDownload = new File(downloadFileName);
-        if (!fileToDownload.exists()) {
+        File fileToDownload = retrieveFileToDownloadOrDelete(batchInputFileType, user, downloadFileName);
+        if (fileToDownload == null) {
             LOG.error("unable to download file " + downloadFileName + " because it doesn not exist.");
             throw new FileNotFoundException("Unable to download file " + downloadFileName + ". File does not exist on server.");
         }
@@ -292,6 +285,27 @@ public class BatchInputFileServiceImpl implements BatchInputFileService {
         return fileToDownload;
     }
 
+    /**
+     * This method will attempt to find the File object representing the file to delete.  USE extreme caution when
+     * overridding this method, as a badly implemented method may cause a security vulnerability.
+     * 
+     * @param batchInputFileType
+     * @param user
+     * @param fileName
+     * @return
+     */
+    protected File retrieveFileToDownloadOrDelete(BatchInputFileType batchInputFileType, UniversalUser user, String fileName) {
+        List<File> userFileList = listBatchTypeFilesForUserAsFiles(batchInputFileType, user);
+        File theFile = null;
+        for (File userFile : userFileList) {
+            if (userFile.exists() && userFile.getName().equals(fileName)) {
+                // TODO: add extension check?
+                theFile = userFile;
+            }
+        }
+        return theFile;
+    }
+    
     /**
      * @see org.kuali.kfs.service.BatchInputFileService#isBatchInputTypeActive(org.kuali.kfs.batch.BatchInputFileType)
      */
@@ -350,21 +364,33 @@ public class BatchInputFileServiceImpl implements BatchInputFileService {
 
         File[] filesInBatchDirectory = listFilesInBatchTypeDirectory(batchInputFileType);
 
-        List<String> userFileList = new ArrayList();
+        List<String> userFileNamesList = new ArrayList<String>();
+        List<File> userFileList = listBatchTypeFilesForUserAsFiles(batchInputFileType, user);
+        
+        for (File userFile : userFileList) {
+            userFileNamesList.add(userFile.getName());
+        }
+
+        return userFileNamesList;
+    }
+
+    protected List<File> listBatchTypeFilesForUserAsFiles(BatchInputFileType batchInputFileType, UniversalUser user) throws AuthorizationException {
+        File[] filesInBatchDirectory = listFilesInBatchTypeDirectory(batchInputFileType);
+
+        List<File> userFileList = new ArrayList<File>();
         for (int i = 0; i < filesInBatchDirectory.length; i++) {
             File batchFile = filesInBatchDirectory[i];
             String fileExtension = StringUtils.substringAfterLast(batchFile.getName(), ".");
             if (batchInputFileType.getFileExtension().equals(fileExtension)) {
                 boolean userAuthorizedForFile = batchInputFileType.checkAuthorization(user, batchFile);
                 if (userAuthorizedForFile) {
-                    userFileList.add(batchFile.getPath());
+                    userFileList.add(batchFile);
                 }
             }
         }
-
         return userFileList;
     }
-
+    
     /**
      * Returns List of filenames for existing files in the directory given by the batch input type.
      */
