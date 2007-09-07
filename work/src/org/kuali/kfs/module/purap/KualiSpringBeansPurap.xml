@@ -139,9 +139,6 @@
 		<property name="kualiConfigurationService">
 			<ref bean="kualiConfigurationService" />
 		</property>
-		<property name="purapAccountingService">
-			<ref bean="purapAccountingService" />
-		</property>	
         <property name="universityDateService">
             <ref bean="universityDateService" />
         </property>
@@ -372,7 +369,7 @@
         </property>
     </bean>
 
-	<bean id="extractPdpStep" class="org.kuali.module.purap.batch.ExtractPdpStep" parent="purapStep">
+	<bean id="purchasingPreDisbursementExtractStep" class="org.kuali.module.purap.batch.ExtractPdpStep" parent="purapStep">
 		<property name="pdpExtractService">
 			<ref bean="pdpExtractService"/>
 		</property>
