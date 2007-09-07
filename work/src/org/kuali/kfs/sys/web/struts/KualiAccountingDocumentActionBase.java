@@ -223,14 +223,14 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     /**
      * @param line
      */
-    protected static void processAccountingLineOverrides(AccountingLine line) {
+    protected void processAccountingLineOverrides(AccountingLine line) {
         processAccountingLineOverrides(Arrays.asList(new AccountingLine[] { line }));
     }
 
     /**
      * @param accountingLines
      */
-    protected static void processAccountingLineOverrides(List accountingLines) {
+    protected void processAccountingLineOverrides(List accountingLines) {
         if (!accountingLines.isEmpty()) {
             SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(accountingLines, AccountingLineOverride.REFRESH_FIELDS);
 
@@ -338,7 +338,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
      * 
      * @param formLine
      */
-    private static void clearOverridesThatBecameUnneeded(AccountingLine formLine) {
+    protected void clearOverridesThatBecameUnneeded(AccountingLine formLine) {
         AccountingLineOverride currentlyNeeded = AccountingLineOverride.determineNeededOverrides(formLine);
         AccountingLineOverride currentOverride = AccountingLineOverride.valueOf(formLine.getOverrideCode());
         if (!currentOverride.isValidMask(currentlyNeeded)) {
