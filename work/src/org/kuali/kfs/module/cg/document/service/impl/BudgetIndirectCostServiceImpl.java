@@ -253,10 +253,10 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
         KualiInteger personnelTotal = new KualiInteger(0);
         
         List<String> graduateAssistantAppointmentTypes =
-            kualiConfigurationService.getParameterValuesAsList(KFSConstants.KRA_NAMESPACE, KraConstants.KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES);
+            kualiConfigurationService.getParameterValuesAsList(KFSConstants.KRA_NAMESPACE,  KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES);
         
-        String graduateAssistentNonpersonnelCategoryCode = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE);
-        String graduateAssistantNonpesonnelSubcategoryCode = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE);
+        String graduateAssistentNonpersonnelCategoryCode = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE,  KFSConstants.Components.DOCUMENT, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE);
+        String graduateAssistantNonpesonnelSubcategoryCode = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE);
         
 //      Loop over user appointments to get the total amount requested for this taskPeriod.
         for (Iterator userAppointmentTaskPeriodIterator = userAppointmentTaskPeriods.iterator(); userAppointmentTaskPeriodIterator.hasNext();) {
@@ -329,9 +329,9 @@ public class BudgetIndirectCostServiceImpl implements BudgetIndirectCostService 
  
         if (budgetDocument.getBudget().getIndirectCost().getBudgetIndirectCostCostShareIndicator()) {
             List<String> graduateAssistantAppointmentTypes =
-                kualiConfigurationService.getParameterValuesAsList(KFSConstants.KRA_NAMESPACE, KraConstants.KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES);
-            String graduateAssistentNonpersonnelCategoryCode = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE);
-            String graduateAssistantNonpersonnelSubcategoryCode = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE);
+                kualiConfigurationService.getParameterValuesAsList(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES);
+            String graduateAssistentNonpersonnelCategoryCode = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE,  KFSConstants.Components.DOCUMENT, KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_CATEGORY_CODE);
+            String graduateAssistantNonpersonnelSubcategoryCode = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT,  KraConstants.GRADUATE_ASSISTANT_NONPERSONNEL_SUB_CATEGORY_CODE);
 
             List<BudgetNonpersonnel> temporaryNonpersonnelItems = new ArrayList<BudgetNonpersonnel>();
 
