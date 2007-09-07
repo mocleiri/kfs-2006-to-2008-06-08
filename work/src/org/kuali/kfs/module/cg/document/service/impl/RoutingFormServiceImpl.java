@@ -93,7 +93,7 @@ public class RoutingFormServiceImpl implements RoutingFormService {
     public void linkImportBudgetDataToRoutingForm(RoutingFormDocument routingFormDocument, String budgetDocumentHeaderId, List<BudgetOverviewFormHelper> periodOverviews) throws WorkflowException {
         
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        final String PERSON_ROLE_CODE_PD = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "KraRoutingFormPersonRoleCodeProjectDirector");       
+        final String PERSON_ROLE_CODE_PD = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PERSON_ROLE_CODE_PROJECT_DIRECTOR);       
         
         Integer minPeriod = routingFormDocument.getRoutingFormBudget().getRoutingFormBudgetMinimumPeriodNumber();
         Integer maxPeriod = routingFormDocument.getRoutingFormBudget().getRoutingFormBudgetMaximumPeriodNumber();
