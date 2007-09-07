@@ -58,19 +58,19 @@ public class BudgetDocumentAuthorizer extends ResearchDocumentAuthorizer {
         
         // Check project director
         if (u.getPersonUniversalIdentifier().equals(budgetDocument.getBudget().getBudgetProjectDirectorUniversalIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.PROJECT_DIRECTOR_BUDGET_PERMISSION));
+            permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.PROJECT_DIRECTOR_BUDGET_PERMISSION));
         }
         
         // Check default org permissions - project director
         if (!budgetDocument.getBudget().getPersonnel().isEmpty()) {
             if (permissionsService.isUserInOrgHierarchy(budgetDocument.buildProjectDirectorReportXml(true), KualiWorkflowUtils.KRA_BUDGET_DOC_TYPE, u.getPersonUniversalIdentifier())) {
-                permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.PROJECT_DIRECTOR_ORG_BUDGET_PERMISSION));
+                permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.PROJECT_DIRECTOR_ORG_BUDGET_PERMISSION));
             }
         }
         
         // Check default org permissions - cost sharing orgs
         if (permissionsService.isUserInOrgHierarchy(budgetDocument.buildCostShareOrgReportXml(true), KualiWorkflowUtils.KRA_BUDGET_DOC_TYPE, u.getPersonUniversalIdentifier())) {
-            permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.COST_SHARE_ORGS_BUDGET_PERMISSION));
+            permissionCode = getPermissionCodeByPrecedence(permissionCode, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, KraConstants.COST_SHARE_ORGS_BUDGET_PERMISSION));
         }
         
         permissionCode = getPermissionCodeByPrecedence(permissionCode, getAdHocEditMode(budgetDocument, u));
