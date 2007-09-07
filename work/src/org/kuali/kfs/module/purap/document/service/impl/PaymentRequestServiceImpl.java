@@ -32,6 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.Note;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.DateTimeService;
@@ -64,6 +65,7 @@ import org.kuali.module.purap.document.CreditMemoDocument;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.exceptions.PurError;
+import org.kuali.module.purap.rule.event.ContinueAccountsPayableEvent;
 import org.kuali.module.purap.service.AccountsPayableService;
 import org.kuali.module.purap.service.NegativePaymentRequestApprovalLimitService;
 import org.kuali.module.purap.service.PaymentRequestService;
@@ -491,9 +493,6 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         if (ObjectUtils.isNotNull(documentNumber)) {
             try {
                 PaymentRequestDocument doc = (PaymentRequestDocument)documentService.getByDocumentHeaderId(documentNumber);
-                if (ObjectUtils.isNotNull(doc)) {
-                    doc.refreshNonUpdateableReferences();
-                }
                 return doc;
             }
             catch (WorkflowException e) {
@@ -528,7 +527,8 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         try {
             documentService.saveDocument(document, DocumentSystemSaveEvent.class);
 //          documentService.saveDocumentWithoutRunningValidation(document);
-            document.refreshNonUpdateableReferences();
+            //TODO f2f: shouldn't need this (needs tested)
+//            document.refreshNonUpdateableReferences();
         }
         catch (WorkflowException we) {
             String errorMsg = "Error saving document # " + document.getDocumentHeader().getDocumentNumber() + " " + we.getMessage(); 
@@ -636,8 +636,6 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
     
     public void calculatePaymentRequest(PaymentRequestDocument paymentRequest,boolean updateDiscount) {
         LOG.debug("calculatePaymentRequest() started");
-        //refresh the payment and shipping terms
-        paymentRequest.refreshNonUpdateableReferences();
         
         if(ObjectUtils.isNull(paymentRequest.getPaymentRequestPayDate())) {
             //TODO: do some in depth tests on this
@@ -661,10 +659,9 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         
         distributeAccounting(paymentRequest);
         
+        //TODO: Chris - review but this shouldn't be necessary since it's happening in 
         //update the amounts on the accounts
-        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(paymentRequest);
-        //refresh account summary
-        paymentRequest.refreshAccountSummary();
+//        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(paymentRequest);
     }
     
     
@@ -718,6 +715,9 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
      * @param paymentRequestDocument
      */
     private void distributeAccounting(PaymentRequestDocument paymentRequestDocument) {
+        //update the account amounts before doing any distribution
+        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(paymentRequestDocument);
+        
         for (PaymentRequestItem item : (List<PaymentRequestItem>)paymentRequestDocument.getItems()) {
             KualiDecimal totalAmount = KualiDecimal.ZERO;
             List<PurApAccountingLine> distributedAccounts = null;
@@ -737,7 +737,6 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
 
                     totalAmount = paymentRequestDocument.getGrandTotal();
                     
-                    SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(paymentRequestDocument);
                     summaryAccounts = SpringContext.getBean(PurapAccountingService.class).generateSummary(paymentRequestDocument.getItems());
                     
                     distributedAccounts = SpringContext.getBean(PurapAccountingService.class).generateAccountDistributionForProration(summaryAccounts, totalAmount, PurapConstants.PRORATION_SCALE,PaymentRequestAccount.class);
@@ -768,6 +767,9 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
                 }
             }
         }
+        //FIXME Chris - this could probably be (this could probably be avoided if we updated amounts in proration
+        //update again now that distribute is finished. 
+        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(paymentRequestDocument);
     }
               
     /**
@@ -1180,9 +1182,19 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
      * @see org.kuali.module.purap.service.PaymentRequestService#populateAndSavePaymentRequest(org.kuali.module.purap.document.PaymentRequestDocument)
      */
     public void populateAndSavePaymentRequest(PaymentRequestDocument preq) throws WorkflowException {
-        preq.setStatusCode(PurapConstants.PaymentRequestStatuses.IN_PROCESS);
-        SpringContext.getBean(PaymentRequestService.class).populatePaymentRequest(preq);
-        documentService.saveDocument(preq);
+        try {
+            preq.setStatusCode(PurapConstants.PaymentRequestStatuses.IN_PROCESS);            
+            documentService.saveDocument(preq, ContinueAccountsPayableEvent.class);
+        }
+        catch(ValidationException ve){
+            preq.setStatusCode(PurapConstants.PaymentRequestStatuses.INITIATE);
+        }
+        catch (WorkflowException we) {
+            preq.setStatusCode(PurapConstants.PaymentRequestStatuses.INITIATE);
+            String errorMsg = "Error saving document # " + preq.getDocumentHeader().getDocumentNumber() + " " + we.getMessage(); 
+            LOG.error(errorMsg, we);
+            throw new RuntimeException(errorMsg, we);
+        }        
     }
     
     /*
