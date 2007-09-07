@@ -20,11 +20,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -61,6 +59,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class DisbursementVoucherExtractServiceImpl implements DisbursementVoucherExtractService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherExtractServiceImpl.class);
 
+    private static final String CAMPUS_BY_PAYMENT_REASON_PARAM = "CAMPUS_BY_PAYMENT_REASON";
+    
     private KualiConfigurationService kualiConfigurationService;
     private DisbursementVoucherDao disbursementVoucherDao;
     private DateTimeService dateTimeService;
@@ -375,12 +375,9 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
     private Set<String> getCampusListByDocumentStatusCode(String statusCode) {
         LOG.debug("getCampusListByDocumentStatusCode() started");
 
-        // Get the campus overide values
-        Map<String,String> parameterCriteria = new HashMap<String, String>( 2 );
-        parameterCriteria.put("parameterNamespace", KFSConstants.FINANCIAL_NAMESPACE);
-        parameterCriteria.put("parameterDetailTypeCode", DisbursementVoucherRuleConstants.DV_PAYMENT_REASON_CAMPUS_OVERRIDE );
-            
-
+        // Get the campus overide values        
+        Parameter campusByPaymentReasonConstraint = kualiConfigurationService.getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, CAMPUS_BY_PAYMENT_REASON_PARAM);
+        
         Set<String> campusSet = new HashSet<String>();
 
         Collection docs = disbursementVoucherDao.getDocumentsByHeaderStatus(statusCode);
@@ -390,10 +387,9 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
             String campusCode = element.getCampusCode();
             DisbursementVoucherPayeeDetail dvpd = element.getDvPayeeDetail();
             if ( dvpd != null ) {
-                parameterCriteria.put("parameterName", dvpd.getDisbVchrPaymentReasonCode() );
-                List<Parameter> paramList = kualiConfigurationService.getParameters( parameterCriteria );
-                if ( paramList.size() > 0 ) {
-                    campusCode = paramList.get(0).getParameterValue();
+                List<String> campusCodes = kualiConfigurationService.getConstrainedValues(campusByPaymentReasonConstraint, dvpd.getDisbVchrPaymentReasonCode() );
+                if ( campusCodes.size() > 0 && StringUtils.isNotBlank( campusCodes.get(0) ) ) {
+                    campusCode = campusCodes.get(0);
                 }
                 campusSet.add(campusCode);
             }
@@ -404,10 +400,8 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
     private Collection<DisbursementVoucherDocument> getListByDocumentStatusCodeCampus(String statusCode,String campusCode) {
         LOG.debug("getListByDocumentStatusCodeCampus() started");
 
-        // Get the campus overide values
-        Map<String,String> parameterCriteria = new HashMap<String, String>( 2 );
-        parameterCriteria.put("parameterNamespace", KFSConstants.FINANCIAL_NAMESPACE);
-        parameterCriteria.put("parameterDetailTypeCode", DisbursementVoucherRuleConstants.DV_PAYMENT_REASON_CAMPUS_OVERRIDE );
+        // Get the campus overide values        
+        Parameter campusByPaymentReasonConstraint = kualiConfigurationService.getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, CAMPUS_BY_PAYMENT_REASON_PARAM);
             
         Collection<DisbursementVoucherDocument> list = new ArrayList<DisbursementVoucherDocument>();
 
@@ -419,10 +413,9 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
 
             DisbursementVoucherPayeeDetail dvpd = element.getDvPayeeDetail();
             if ( dvpd != null ) {
-                parameterCriteria.put("parameterName", dvpd.getDisbVchrPaymentReasonCode() );
-                List<Parameter> paramList = kualiConfigurationService.getParameters( parameterCriteria );
-                if ( paramList.size() > 0 ) {
-                    dvdCampusCode = paramList.get(0).getParameterValue();
+                List<String> campusCodes = kualiConfigurationService.getConstrainedValues(campusByPaymentReasonConstraint, dvpd.getDisbVchrPaymentReasonCode() );
+                if ( campusCodes.size() > 0 && StringUtils.isNotBlank( campusCodes.get(0) ) ) {
+                    dvdCampusCode = campusCodes.get(0);
                 }
             }
 
