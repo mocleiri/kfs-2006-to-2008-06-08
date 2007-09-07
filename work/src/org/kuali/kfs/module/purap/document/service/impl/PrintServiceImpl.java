@@ -266,7 +266,7 @@ public class PrintServiceImpl implements PrintService {
     public Collection generatePurchaseOrderQuotePdf(PurchaseOrderDocument po, PurchaseOrderVendorQuote povq, 
         ByteArrayOutputStream byteArrayOutputStream, String environment) {
         LOG.debug("generatePurchaseOrderQuotePdf() started");
-        po.refreshNonUpdateableReferences();
+
         PurchaseOrderQuotePdf poQuotePdf = new PurchaseOrderQuotePdf();
         Collection errors = new ArrayList();
 
@@ -424,7 +424,7 @@ public class PrintServiceImpl implements PrintService {
     private Collection generatePurchaseOrderPdf(PurchaseOrderDocument po, ByteArrayOutputStream byteArrayOutputStream, 
         boolean isRetransmit, String environment) {
         LOG.debug("generatePurchaseOrderPdf() started");
-        po.refreshNonUpdateableReferences();
+
         PurchaseOrderPdf poPdf = new PurchaseOrderPdf();
         Collection errors = new ArrayList();
         try {
@@ -468,7 +468,7 @@ public class PrintServiceImpl implements PrintService {
      */
     private Collection savePurchaseOrderPdf(PurchaseOrderDocument po, boolean isRetransmit, String environment) {
         LOG.debug("savePurchaseOrderPdf() started");
-        po.refreshNonUpdateableReferences();
+
         PurchaseOrderPdf poPdf = new PurchaseOrderPdf();
         Collection errors = new ArrayList();
 
