@@ -42,7 +42,7 @@ public class PurgeCorrectionProcessFilesStep extends AbstractStep {
      * @see org.kuali.kfs.batch.Step#performStep()
      */
     public boolean execute(String jobName) {
-        int numberOfDaysFinal = Integer.parseInt(getConfigurationService().getParameterValue(KFSConstants.GL_NAMESPACE, getName() + "_NUMBER_OF_DAYS_FINAL"));
+        int numberOfDaysFinal = Integer.parseInt(getConfigurationService().getParameterValue(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.PURGE_CORRECTION_PROCESS_FILES_STEP, "NUMBER_OF_DAYS_FINAL"));
         Calendar financialDocumentFinalCalendar = getDateTimeService().getCurrentCalendar();
         financialDocumentFinalCalendar.add(GregorianCalendar.DAY_OF_YEAR, -numberOfDaysFinal);
         Collection<CorrectionDocument> documentsFinalOnDate = correctionDocumentDao.getCorrectionDocumentsFinalizedOn(new Date(financialDocumentFinalCalendar.getTimeInMillis()));
